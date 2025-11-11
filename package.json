@@ -1,0 +1,18 @@
+{
+  "name": "vagabond",
+  "version": "2.0.0",
+  "description": "CSS compiler for the Vagabond system",
+  "scripts": {
+    "build": "sass src/scss/vagabond.scss css/vagabond.css --style=expanded --no-source-map",
+    "watch": "sass src/scss/vagabond.scss css/vagabond.css --style=expanded --source-map --watch"
+  },
+  "browserslist": [
+    "last 3 versions"
+  ],
+  "author": "Asacolips",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "sass": "^1.53.0"
+  }
+}
