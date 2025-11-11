@@ -1,14 +1,11 @@
-import VagabondDataModel from "./base-model.mjs";
-
-export default class VagabondItemBase extends VagabondDataModel {
-
+export default class VagabondItemBase extends foundry.abstract
+  .TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;
     const schema = {};
 
-    schema.description = new fields.StringField({ required: true, blank: true });
+    schema.description = new fields.HTMLField();
 
     return schema;
   }
-
 }

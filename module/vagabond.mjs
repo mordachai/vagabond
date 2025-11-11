@@ -5,24 +5,35 @@ import { VagabondItem } from './documents/item.mjs';
 import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
-import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { VAGABOND } from './helpers/config.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
+
+const collections = foundry.documents.collections;
+const sheets = foundry.appv1.sheets;
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 
-Hooks.once('init', function () {
-  // Add utility classes to the global game object so that they're more easily
-  // accessible in global contexts.
-  game.vagabond = {
+// Add key classes to the global scope so they can be more easily used
+// by downstream developers
+globalThis.vagabond = {
+  documents: {
     VagabondActor,
     VagabondItem,
+  },
+  applications: {
+    VagabondActorSheet,
+    VagabondItemSheet,
+  },
+  utils: {
     rollItemMacro,
-  };
+  },
+  models,
+};
 
+Hooks.once('init', function () {
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
 
@@ -43,14 +54,14 @@ Hooks.once('init', function () {
   // with the Character/NPC as part of super.defineSchema()
   CONFIG.Actor.dataModels = {
     character: models.VagabondCharacter,
-    npc: models.VagabondNPC
-  }
+    npc: models.VagabondNPC,
+  };
   CONFIG.Item.documentClass = VagabondItem;
   CONFIG.Item.dataModels = {
-    item: models.VagabondItem,
+    gear: models.VagabondGear,
     feature: models.VagabondFeature,
-    spell: models.VagabondSpell
-  }
+    spell: models.VagabondSpell,
+  };
 
   // Active Effects are never copied to the Actor,
   // but will still apply to the Actor from within the Item
@@ -58,19 +69,16 @@ Hooks.once('init', function () {
   CONFIG.ActiveEffect.legacyTransferral = false;
 
   // Register sheet application classes
-  Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('vagabond', VagabondActorSheet, {
+  collections.Actors.unregisterSheet('core', sheets.ActorSheet);
+  collections.Actors.registerSheet('vagabond', VagabondActorSheet, {
     makeDefault: true,
     label: 'VAGABOND.SheetLabels.Actor',
   });
-  Items.unregisterSheet('core', ItemSheet);
-  Items.registerSheet('vagabond', VagabondItemSheet, {
+  collections.Items.unregisterSheet('core', sheets.ItemSheet);
+  collections.Items.registerSheet('vagabond', VagabondItemSheet, {
     makeDefault: true,
     label: 'VAGABOND.SheetLabels.Item',
   });
-
-  // Preload Handlebars templates.
-  return preloadHandlebarsTemplates();
 });
 
 /* -------------------------------------------- */
@@ -88,7 +96,7 @@ Handlebars.registerHelper('toLowerCase', function (str) {
 
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
-  Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
+  Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
 });
 
 /* -------------------------------------------- */
@@ -102,7 +110,7 @@ Hooks.once('ready', function () {
  * @param {number} slot     The hotbar slot to use
  * @returns {Promise}
  */
-async function createItemMacro(data, slot) {
+async function createDocMacro(data, slot) {
   // First, determine if this is a valid owned item.
   if (data.type !== 'Item') return;
   if (!data.uuid.includes('Actor.') && !data.uuid.includes('Token.')) {
