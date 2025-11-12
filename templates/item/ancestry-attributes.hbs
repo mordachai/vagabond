@@ -1,0 +1,105 @@
+{{! Ancestry Attributes Tab - Description and Traits combined }}
+<section
+  class='tab attributes {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='attributes'
+>
+  {{! Ancestry Basic Info }}
+  <div class='grid grid-2col' style='margin-bottom: 15px;'>
+    <div class='resource'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.size.label'}}</label>
+      <select name='system.size' data-dtype='String'>
+        <option value='tiny' {{#eq system.size 'tiny'}}selected{{/eq}}>Tiny</option>
+        <option value='small' {{#eq system.size 'small'}}selected{{/eq}}>Small</option>
+        <option value='medium' {{#eq system.size 'medium'}}selected{{/eq}}>Medium</option>
+        <option value='large' {{#eq system.size 'large'}}selected{{/eq}}>Large</option>
+        <option value='huge' {{#eq system.size 'huge'}}selected{{/eq}}>Huge</option>
+        <option value='gargantuan' {{#eq system.size 'gargantuan'}}selected{{/eq}}>Gargantuan</option>
+      </select>
+    </div>
+    <div class='resource'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.ancestryType.label'}}</label>
+      <input
+        type='text'
+        name='system.ancestryType'
+        value='{{system.ancestryType}}'
+        placeholder='Humanlike'
+      />
+    </div>
+  </div>
+
+  {{! Description Section }}
+  <div style='margin-bottom: 20px;'>
+    <h3>Description</h3>
+    {{#if editable}}
+      <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+        {{{enrichedDescription}}}
+      </prose-mirror>
+    {{else}} 
+      {{{enrichedDescription}}}
+    {{/if}}
+  </div>
+
+  {{! Traits Section }}
+  <div style='border: 1px solid #ccc; padding: 10px; border-radius: 5px;'>
+    <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;'>
+      <h3 style='margin: 0;'>Traits</h3>
+      {{#if editable}}
+        <button 
+          type='button' 
+          class='add-trait-btn'
+          data-action='addTrait'
+          title='Add New Trait'
+        >
+          <i class='fas fa-plus'></i> Add Trait
+        </button>
+      {{/if}}
+    </div>
+
+    {{#if system.traits.length}}
+      {{#each system.traits as |trait index|}}
+        <div class='trait-item' style='border: 1px solid #ddd; padding: 8px; margin-bottom: 8px; border-radius: 3px;'>
+          <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;'>
+            {{#if @root.editable}}
+              <input
+                type='text'
+                name='system.traits.{{index}}.name'
+                value='{{trait.name}}'
+                placeholder='Trait Name'
+                style='font-weight: bold; flex: 1; margin-right: 10px;'
+              />
+              <button 
+                type='button' 
+                class='remove-trait-btn'
+                data-action='removeTrait'
+                data-trait-index='{{index}}'
+                title='Remove Trait'
+                style='background: #dc3545; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer;'
+              >
+                <i class='fas fa-trash'></i>
+              </button>
+            {{else}}
+              <h4 style='margin: 0; font-weight: bold;'>{{trait.name}}</h4>
+            {{/if}}
+          </div>
+          <div>
+            {{#if @root.editable}}
+              <textarea
+                name='system.traits.{{index}}.description'
+                placeholder='Trait description...'
+                rows='2'
+                style='width: 100%; resize: vertical;'
+              >{{trait.description}}</textarea>
+            {{else}}
+              <p style='margin: 0;'>{{trait.description}}</p>
+            {{/if}}
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <p style='text-align: center; color: #666; font-style: italic;'>
+        No traits defined. {{#if editable}}Click "Add Trait" to create one.{{/if}}
+      </p>
+    {{/if}}
+  </div>
+</section>

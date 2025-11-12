@@ -106,6 +106,13 @@
         },
         "SpellLVL": "Level {level} Spells",
         "AddLVL": "Add LVL {level}"
+      },
+      "Ancestry": {
+        "FIELDS": {
+          "size": {"label": "Size"},
+          "ancestryType": {"label": "Type"},
+          "traits": {"label": "Traits"}
+        }
       }
     },
     "Effect": {
@@ -124,7 +131,8 @@
     "Item": {
       "gear": "Gear",
       "feature": "Feature",
-      "spell": "Spell"
+      "spell": "Spell",
+      "ancestry": "Ancestry"
     }
   }
 }
