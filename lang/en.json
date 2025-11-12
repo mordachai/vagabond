@@ -1,12 +1,26 @@
 {
   "VAGABOND": {
     "Ability": {
-      "Str": { "long": "Strength", "abbr": "str" },
-      "Con": { "long": "Constitution", "abbr": "con" },
-      "Dex": { "long": "Dexterity", "abbr": "dex" },
-      "Int": { "long": "Intelligence", "abbr": "int" },
-      "Wis": { "long": "Wisdom", "abbr": "wis" },
-      "Cha": { "long": "Charisma", "abbr": "cha" }
+      "Might": { "long": "Might", "abbr": "MIG" },
+      "Dexterity": { "long": "Dexterity", "abbr": "DEX" },
+      "Awareness": { "long": "Awareness", "abbr": "AWR" },
+      "Reason": { "long": "Reason", "abbr": "REA" },
+      "Presence": { "long": "Presence", "abbr": "PRE" },
+      "Luck": { "long": "Luck", "abbr": "LUK" }
+    },
+    "Skills": {
+      "Arcana": "Arcana",
+      "Brawl": "Brawl", 
+      "Craft": "Craft",
+      "Detect": "Detect",
+      "Finesse": "Finesse",
+      "Influence": "Influence",
+      "Leadership": "Leadership",
+      "Medicine": "Medicine",
+      "Mysticism": "Mysticism",
+      "Performance": "Performance",
+      "Sneak": "Sneak",
+      "Survival": "Survival"
     },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",

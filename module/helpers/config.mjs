@@ -1,23 +1,23 @@
 export const VAGABOND = {};
 
 /**
- * The set of Ability Scores used within the system.
+ * The set of Stats used within the Vagabond system.
  * @type {Object}
  */
 VAGABOND.abilities = {
-  str: 'VAGABOND.Ability.Str.long',
-  dex: 'VAGABOND.Ability.Dex.long',
-  con: 'VAGABOND.Ability.Con.long',
-  int: 'VAGABOND.Ability.Int.long',
-  wis: 'VAGABOND.Ability.Wis.long',
-  cha: 'VAGABOND.Ability.Cha.long',
+  might: 'VAGABOND.Ability.Might.long',
+  dexterity: 'VAGABOND.Ability.Dexterity.long',
+  awareness: 'VAGABOND.Ability.Awareness.long',
+  reason: 'VAGABOND.Ability.Reason.long',
+  presence: 'VAGABOND.Ability.Presence.long',
+  luck: 'VAGABOND.Ability.Luck.long',
 };
 
 VAGABOND.abilityAbbreviations = {
-  str: 'VAGABOND.Ability.Str.abbr',
-  dex: 'VAGABOND.Ability.Dex.abbr',
-  con: 'VAGABOND.Ability.Con.abbr',
-  int: 'VAGABOND.Ability.Int.abbr',
-  wis: 'VAGABOND.Ability.Wis.abbr',
-  cha: 'VAGABOND.Ability.Cha.abbr',
+  might: 'VAGABOND.Ability.Might.abbr',
+  dexterity: 'VAGABOND.Ability.Dexterity.abbr',
+  awareness: 'VAGABOND.Ability.Awareness.abbr',
+  reason: 'VAGABOND.Ability.Reason.abbr',
+  presence: 'VAGABOND.Ability.Presence.abbr',
+  luck: 'VAGABOND.Ability.Luck.abbr',
 };

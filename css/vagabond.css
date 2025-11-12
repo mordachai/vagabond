@@ -253,7 +253,7 @@
   height: 100%;
 }
 .vagabond .tab {
-  max-height: 380px;
+  max-height: 400px;
 }
 .vagabond .tab.biography {
   flex: 1;
@@ -273,8 +273,7 @@
 .vagabond .ability {
   margin-bottom: 2px;
 }
-.vagabond .ability-score,
-.vagabond .ability-mod {
+.vagabond .ability-score {
   flex: 0 0 44px;
 }
 .vagabond .items-header {
@@ -489,4 +488,4 @@
 }
 .vagabond .effects .item .effect-controls {
   border: none;
-}/*# sourceMappingURL=vagabond.css.map */
+}
