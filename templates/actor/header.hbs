@@ -10,99 +10,129 @@
     width='100'
   />
   <div class='header-fields'>
-    <div class='document-name'>
-      <input
-        name='name'
-        type='text'
-        value='{{actor.name}}'
-        placeholder='Name'
-      />
+    {{! Top row: Name, Size, Being Type }}
+    <div class='grid grid-3col' style='margin-bottom: 10px;'>
+      <div class='resource'>
+        <label class='resource-label'>Name</label>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='Character Name'
+        />
+      </div>
+      <div class='resource'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.size.label'}}</label>
+        <select name='system.attributes.size' data-dtype='String'>
+          <option value='tiny' {{#eq system.attributes.size 'tiny'}}selected{{/eq}}>Tiny</option>
+          <option value='small' {{#eq system.attributes.size 'small'}}selected{{/eq}}>Small</option>
+          <option value='medium' {{#eq system.attributes.size 'medium'}}selected{{/eq}}>Medium</option>
+          <option value='large' {{#eq system.attributes.size 'large'}}selected{{/eq}}>Large</option>
+          <option value='huge' {{#eq system.attributes.size 'huge'}}selected{{/eq}}>Huge</option>
+          <option value='gargantuan' {{#eq system.attributes.size 'gargantuan'}}selected{{/eq}}>Gargantuan</option>
+        </select>
+      </div>
+      <div class='resource'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.beingType.label'}}</label>
+        <input
+          name='system.attributes.beingType'
+          type='text'
+          value='{{system.attributes.beingType}}'
+          placeholder='Humanoid'
+        />
+      </div>
     </div>
-    {{! The grid classes are defined in scss/global/_grid.scss. To use,
-      use both the "grid" and "grid-Ncol" class where "N" can be any number
-      from 1 to 12 and will create that number of columns.  }}
-    <div class='resources grid grid-3col'>
 
-      {{! "flex-group-center" is also defined in the _grid.scss file
-        and it will add a small amount of padding, a border, and will
-        center all of its child elements content and text. }}
-      <div class='resource flex-group-center'>
-        <label for='system.health.value' class='resource-label'>
-          {{localize 'VAGABOND.Actor.base.FIELDS.health.value.label'}}
-        </label>
+    {{! Second row: Ancestry, Level, Class, XP }}
+    <div class='grid grid-4col' style='margin-bottom: 10px;'>
+      <div class='resource'>
+        <label class='resource-label'>Ancestry</label>
+        <input
+          type='text'
+          placeholder='(from item)'
+          disabled='true'
+          style='background: #f0f0f0;'
+        />
+      </div>
+      <div class='resource'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.level.value.label'}}</label>
+        <input
+          type='text'
+          name='system.attributes.level.value'
+          value='{{system.attributes.level.value}}'
+          data-dtype='Number'
+        />
+      </div>
+      <div class='resource'>
+        <label class='resource-label'>Class</label>
+        <input
+          type='text'
+          placeholder='(from item)'
+          disabled='true'
+          style='background: #f0f0f0;'
+        />
+      </div>
+      <div class='resource'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+        <input
+          type='text'
+          name='system.attributes.xp'
+          value='{{system.attributes.xp}}'
+          data-dtype='Number'
+        />
+      </div>
+    </div>
+
+    {{! Third row: Combat Stats }}
+    <div class='grid grid-5col'>
+      {{! Hit Points }}
+      <div class='resource'>
+        <label class='resource-label'>Hit Points</label>
         <div class='resource-content flexrow flex-center flex-between'>
           <input
             type='text'
             name='system.health.value'
             value='{{system.health.value}}'
             data-dtype='Number'
+            style='width: 40px;'
           />
           <span> / </span>
-          <input
-            type='text'
-            name='system.health.max'
-            value='{{system.health.max}}'
-            data-dtype='Number'
-          />
+          <span>{{system.health.max}}</span>
         </div>
       </div>
 
-      <div class='resource flex-group-center'>
-        <label for='system.power.value' class='resource-label'>
-          {{localize 'VAGABOND.Actor.base.FIELDS.power.value.label'}}
-        </label>
-        <div class='resource-content flexrow flex-center flex-between'>
-          <input
-            type='text'
-            name='system.power.value'
-            value='{{system.power.value}}'
-            data-dtype='Number'
-          />
-          <span> / </span>
-          <input
-            type='text'
-            name='system.power.max'
-            value='{{system.power.max}}'
-            data-dtype='Number'
-          />
+      {{! Armor }}
+      <div class='resource'>
+        <label class='resource-label'>Armor</label>
+        <span>{{system.armor}}</span>
+      </div>
+
+      {{! Fatigue }}
+      <div class='resource'>
+        <label class='resource-label'>Fatigue</label>
+        <input
+          type='text'
+          name='system.fatigue'
+          value='{{system.fatigue}}'
+          data-dtype='Number'
+          style='width: 40px;'
+        />
+      </div>
+
+      {{! Speed - show all three values }}
+      <div class='resource'>
+        <label class='resource-label'>Speed</label>
+        <div style='font-size: 10px;'>
+          <div>{{system.speed.base}}'</div>
+          <div>Crawl: {{system.speed.crawl}}'</div>
+          <div>Travel: {{system.speed.travel}}mi</div>
         </div>
       </div>
 
-      <div class='resource flex-group-center'>
-        {{#if (eq actor.type 'character')}}
-          <label class='resource-label'>
-            {{localize 'VAGABOND.Actor.Character.FIELDS.attributes.level.value.label'}}
-          </label>
-          <div class='resource-content flexrow flex-center flex-between'>
-            <input
-              type='text'
-              name='system.attributes.level.value'
-              value='{{system.attributes.level.value}}'
-              data-dtype='Number'
-            />
-          </div>
-        {{/if}}
-        {{#if (eq actor.type 'npc')}}
-          <label class='resource-label'>
-            {{localize 'VAGABOND.Actor.NPC.FIELDS.cr.label'}} / {{localize 'VAGABOND.Actor.NPC.xp.label'}}
-          </label>
-          <div class='resource-content flexrow flex-center flex-between'>
-            <input
-              type='text'
-              name='system.cr'
-              value='{{system.cr}}'
-              data-dtype='Number'
-            />
-            <span></span>
-            <input
-              type='text'
-              disabled='true'
-              name='system.xp'
-              value='{{system.xp}}'
-              data-dtype='Number'
-            />
-          </div>
-        {{/if}}
+      {{! Current Luck }}
+      <div class='resource'>
+        <label class='resource-label'>Current Luck</label>
+        <span>{{system.currentLuck}}</span>
       </div>
     </div>
   </div>

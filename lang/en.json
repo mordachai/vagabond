@@ -22,6 +22,20 @@
       "Sneak": "Sneak",
       "Survival": "Survival"
     },
+    "Saves": {
+      "Reflex": {
+        "name": "Reflex",
+        "description": "Avoid area effects and attacks"
+      },
+      "Endure": {
+        "name": "Endure", 
+        "description": "Withstand poison and death"
+      },
+      "Will": {
+        "name": "Will",
+        "description": "Resist curses and enthrallment"
+      }
+    },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
       "Item": "Vagabond Item Sheet"
@@ -49,7 +63,18 @@
       },
       "Character": {
         "FIELDS": {
-          "attributes.level.value": {"label": "Level"}
+          "attributes.level.value": {"label": "Level"},
+          "attributes.xp": {"label": "Experience Points"},
+          "attributes.size": {"label": "Size"},
+          "attributes.beingType": {"label": "Being Type"},
+          "combat.hitPoints.current": {"label": "Current HP"},
+          "combat.hitPoints.max": {"label": "Max HP"},
+          "combat.fatigue": {"label": "Fatigue"},
+          "combat.speed.base": {"label": "Speed"},
+          "combat.speed.crawl": {"label": "Crawl Speed"},
+          "combat.speed.travel": {"label": "Travel Speed"},
+          "combat.currentLuck": {"label": "Current Luck"},
+          "combat.armor": {"label": "Armor Rating"}
         }
       },
       "NPC": {

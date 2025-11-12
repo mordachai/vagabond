@@ -5,18 +5,17 @@
   data-tab='features'
 >
   <section class='grid grid-3col'>
+    {{! Left column: Stats }}
     <aside class='sidebar'>
-      {{! The grid classes are defined in scss/global/_grid.scss. To use,
-          use both the "grid" and "grid-Ncol" class where "N" can be any number
-          from 1 to 12 and will create that number of columns.  }}
+      <h3>Stats</h3>
       <div class='abilities flexcol'>
         {{#each system.abilities as |ability key|}}
           <div class='ability flexrow flex-group-center'>
             <label
               class='resource-label rollable flexlarge align-left'
               data-action='roll'
-              data-roll='d20+@abilities.{{key}}.value'
-              data-label='{{localize (lookup @root.config.abilities key)}}'
+              data-roll='d20'
+              data-label='{{localize (lookup @root.config.abilities key)}} Check'
             >{{localize (lookup @root.config.abilities key)}}</label>
             <input
               type='text'
@@ -25,13 +24,35 @@
               class="ability-score"
               data-dtype='Number'
             />
-            {{! Removed the modifier span since Vagabond doesn't use modifiers }}
           </div>
         {{/each}}
       </div>
+    </aside>
+
+    {{! Middle column: Saves and Skills }}
+    <section class='main grid-span-2'>
+      {{! Saves Section - Horizontal layout with border }}
+      <div class='saves' style='margin-bottom: 20px; border: 2px solid #333; padding: 10px;'>
+        <h3 style='margin-top: 0; text-align: center;'>SAVES</h3>
+        <div class='saves-row flexrow' style='justify-content: space-around;'>
+          {{#each system.saves as |save key|}}
+            <div class='save flexcol align-center' style='flex: 1; text-align: center;'>
+              <label
+                class='resource-label rollable'
+                data-action='roll'
+                data-roll='d20'
+                data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
+                data-tooltip='{{save.description}}'
+                style='cursor: pointer; margin-bottom: 5px;'
+              >{{save.label}}</label>
+              <span class='save-difficulty' style='font-weight: bold; font-size: 18px;'>[{{save.difficulty}}]</span>
+            </div>
+          {{/each}}
+        </div>
+      </div>
 
       {{! Skills Section }}
-      <div class='skills flexcol' style='margin-top: 20px;'>
+      <div class='skills flexcol'>
         <h3>Skills</h3>
         {{#each system.skills as |skill key|}}
           <div class='skill flexrow flex-group-center' style='margin-bottom: 5px;'>
@@ -52,68 +73,6 @@
           </div>
         {{/each}}
       </div>
-    </aside>
-
-    {{! For the main features list, span the right two columns }}
-    <section class='main grid-span-2'>
-      <ol class='items-list'>
-        <li class='item flexrow items-header'>
-          <div class='item-name'>{{localize 'Name'}}</div>
-          <div class='item-controls'>
-            {{#if @root.editable}}
-              <a
-                class='item-control item-create'
-                data-tooltip='Create item'
-                data-action='createDoc'
-                data-document-class='Item'
-                data-type='feature'
-              >
-                <i class='fas fa-plus'></i>
-                {{localize 'DOCUMENT.New' type='feature'}}
-              </a>
-            {{/if}}
-          </div>
-        </li>
-        {{#each features as |item id|}}
-          <li
-            class='item flexrow draggable'
-            data-item-id='{{item._id}}'
-            data-document-class='Item'
-          >
-            <div class='item-name'>
-              <div class='item-image'>
-                <a class='rollable' data-roll-type='item' data-action='roll'>
-                  <img
-                    src='{{item.img}}'
-                    data-tooltip='{{item.name}}'
-                    width='24'
-                    height='24'
-                  />
-                </a>
-              </div>
-              <div>{{item.name}}</div>
-            </div>
-            <div class='item-controls'>
-              <a
-                class='item-control item-edit'
-                data-tooltip='{{localize "DOCUMENT.Update" type='feature'}}'
-                data-action='viewDoc'
-              >
-                <i class='fas fa-edit'></i>
-              </a>
-              {{#if @root.editable}}
-                <a
-                  class='item-control item-delete'
-                  data-tooltip='{{localize "DOCUMENT.Delete" type='feature'}}'
-                  data-action='deleteDoc'
-                >
-                  <i class='fas fa-trash'></i>
-                </a>
-              {{/if}}
-            </div>
-          </li>
-        {{/each}}
-      </ol>
     </section>
   </section>
 </section>

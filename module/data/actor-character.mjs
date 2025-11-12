@@ -15,6 +15,12 @@ export default class VagabondCharacter extends VagabondActorBase {
       level: new fields.SchemaField({
         value: new fields.NumberField({ ...requiredInteger, initial: 1 }),
       }),
+      xp: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      size: new fields.StringField({
+        initial: 'medium',
+        choices: ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']
+      }),
+      beingType: new fields.StringField({ initial: 'Humanoid' })
     });
 
     // Iterate over ability names and create a new SchemaField for each.
@@ -32,6 +38,19 @@ export default class VagabondCharacter extends VagabondActorBase {
         return obj;
       }, {})
     );
+
+    // Saving Throws system - these are NOT skills, just calculated values
+    schema.saves = new fields.SchemaField({
+      reflex: new fields.SchemaField({
+        // No trained field - saves are just calculated
+      }),
+      endure: new fields.SchemaField({
+        // No trained field - saves are just calculated  
+      }),
+      will: new fields.SchemaField({
+        // No trained field - saves are just calculated
+      })
+    });
 
     // Skills system - organized by associated stats
     schema.skills = new fields.SchemaField({
@@ -106,6 +125,32 @@ export default class VagabondCharacter extends VagabondActorBase {
         game.i18n.localize(CONFIG.VAGABOND.abilities[key]) ?? key;
     }
 
+    // Calculate combat values
+    this._calculateCombatValues();
+
+    // Process saves - calculate difficulty based on Vagabond rules
+    // Reflex = DEX + AWR, Endure = MIT + MIT, Will = RSN + PRS
+    const dexValue = this.abilities.dexterity?.value || 8;
+    const awrValue = this.abilities.awareness?.value || 8;
+    const mitValue = this.abilities.might?.value || 8;
+    const rsnValue = this.abilities.reason?.value || 8;
+    const presValue = this.abilities.presence?.value || 8;
+
+    // Calculate save difficulties (no trained bonuses for saves)
+    this.saves.reflex.difficulty = 20 - (dexValue + awrValue);
+    this.saves.endure.difficulty = 20 - (mitValue + mitValue); // MIT + MIT
+    this.saves.will.difficulty = 20 - (rsnValue + presValue);
+
+    // Add labels and descriptions for saves
+    this.saves.reflex.label = game.i18n.localize('VAGABOND.Saves.Reflex.name') ?? 'Reflex';
+    this.saves.reflex.description = game.i18n.localize('VAGABOND.Saves.Reflex.description') ?? 'Avoid area effects and attacks';
+    
+    this.saves.endure.label = game.i18n.localize('VAGABOND.Saves.Endure.name') ?? 'Endure';
+    this.saves.endure.description = game.i18n.localize('VAGABOND.Saves.Endure.description') ?? 'Withstand poison and death';
+    
+    this.saves.will.label = game.i18n.localize('VAGABOND.Saves.Will.name') ?? 'Will';
+    this.saves.will.description = game.i18n.localize('VAGABOND.Saves.Will.description') ?? 'Resist curses and enthrallment';
+
     // Process skills - calculate difficulty based on Vagabond rules
     for (const key in this.skills) {
       const skill = this.skills[key];
@@ -140,8 +185,49 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
 
+    // Copy saves to the top level for roll formulas  
+    if (this.saves) {
+      for (let [k, v] of Object.entries(this.saves)) {
+        data[k] = foundry.utils.deepClone(v);
+      }
+    }
+
     data.lvl = this.attributes.level.value;
 
     return data;
+  }
+
+  _calculateCombatValues() {
+    // Get stat values
+    const mightValue = this.abilities.might?.value || 8;
+    const dexValue = this.abilities.dexterity?.value || 8;
+    const luckValue = this.abilities.luck?.value || 8;
+    const level = this.attributes.level.value || 1;
+
+    // Max HP = Might × Level (update the existing health.max)
+    this.health.max = mightValue * level;
+    
+    // Current Luck = Luck stat value
+    this.currentLuck = luckValue;
+
+    // Speed based on Dexterity (from rulebook table)
+    if (dexValue >= 2 && dexValue <= 3) {
+      this.speed = { base: 25, crawl: 7.5, travel: 5 };
+    } else if (dexValue >= 4 && dexValue <= 5) {
+      this.speed = { base: 30, crawl: 9, travel: 6 };
+    } else if (dexValue >= 6 && dexValue <= 7) {
+      this.speed = { base: 35, crawl: 10.5, travel: 7 };
+    } else if (dexValue >= 8 && dexValue <= 9) {
+      this.speed = { base: 40, crawl: 12, travel: 8 };
+    } else if (dexValue >= 10 && dexValue <= 11) {
+      this.speed = { base: 45, crawl: 13.5, travel: 9 };
+    } else if (dexValue >= 12) {
+      this.speed = { base: 50, crawl: 15, travel: 10 };
+    } else {
+      this.speed = { base: 30, crawl: 9, travel: 6 }; // Default
+    }
+
+    // Armor starts at 0 (will come from items later)
+    this.armor = 0;
   }
 }
