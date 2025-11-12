@@ -19,12 +19,16 @@
     </div>
     <div class='resource'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.ancestryType.label'}}</label>
-      <input
-        type='text'
-        name='system.ancestryType'
-        value='{{system.ancestryType}}'
-        placeholder='Humanlike'
-      />
+      <select name='system.ancestryType' data-dtype='String'>
+        <option value='Humanlike' {{#eq system.ancestryType 'Humanlike'}}selected{{/eq}}>Humanlike</option>
+        <option value='Fae' {{#eq system.ancestryType 'Fae'}}selected{{/eq}}>Fae</option>
+        <option value='Cryptid' {{#eq system.ancestryType 'Cryptid'}}selected{{/eq}}>Cryptid</option>
+        <option value='Artificials' {{#eq system.ancestryType 'Artificials'}}selected{{/eq}}>Artificials</option>
+        <option value='Beasts' {{#eq system.ancestryType 'Beasts'}}selected{{/eq}}>Beasts</option>
+        <option value='Outers' {{#eq system.ancestryType 'Outers'}}selected{{/eq}}>Outers</option>
+        <option value='Primordials' {{#eq system.ancestryType 'Primordials'}}selected{{/eq}}>Primordials</option>
+        <option value='Undead' {{#eq system.ancestryType 'Undead'}}selected{{/eq}}>Undead</option>
+      </select>
     </div>
   </div>
 

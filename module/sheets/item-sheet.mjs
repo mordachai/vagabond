@@ -55,6 +55,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     attributesSpell: {
       template: 'systems/vagabond/templates/item/attribute-parts/spell.hbs',
     },
+    attributesAncestry: {
+      template: 'systems/vagabond/templates/item/ancestry-attributes.hbs',
+    },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
     },
@@ -77,6 +80,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         break;
       case 'spell':
         options.parts.push('attributesSpell');
+        break;
+      case 'ancestry':  // ADD THIS CASE
+        options.parts.push('attributesAncestry', 'effects');
         break;
     }
   }
@@ -174,6 +180,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'attributesFeature':
         case 'attributesGear':
         case 'attributesSpell':
+        case 'attributesAncestry':
           tab.id = 'attributes';
           tab.label += 'Attributes';
           break;
