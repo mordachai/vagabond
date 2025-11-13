@@ -124,6 +124,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         // Necessary for preserving active tab on re-render
         context.tab = context.tabs[partId];
         break;
+        
       case 'ancestryDetails':
         // Ancestry gets enriched description like the description tab
         context.tab = context.tabs[partId];
@@ -136,6 +137,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           }
         );
         break;
+        
       case 'description':
         context.tab = context.tabs[partId];
         // Enrich description info for display
@@ -148,6 +150,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           }
         );
         break;
+        
       case 'effects':
         context.tab = context.tabs[partId];
         // Prepare active effects for easier access

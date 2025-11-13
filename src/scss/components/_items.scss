@@ -58,7 +58,7 @@
   // Control Buttons
   .item-controls {
     display: flex;
-    flex: 0 0 100px;
+    flex: 0 0 30px;
     justify-content: flex-end;
     a {
       font-size: 12px;
@@ -111,6 +111,15 @@
       // font-size: 16px;
     }
   }
+    .trait-description {
+      width: 100%;
+      margin-top: 5px;
+      
+      input {
+        width: 100%;
+      }
+  }
+
 }
 
 // Example style for Vagabond (can be removed if not needed).

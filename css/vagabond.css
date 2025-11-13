@@ -324,7 +324,7 @@
 }
 .vagabond .items-list .item-controls {
   display: flex;
-  flex: 0 0 100px;
+  flex: 0 0 30px;
   justify-content: flex-end;
 }
 .vagabond .items-list .item-controls a {
@@ -372,6 +372,13 @@
 .vagabond .items-list .items-header .item-name {
   padding-left: 5px;
   text-align: left;
+}
+.vagabond .items-list .trait-description {
+  width: 100%;
+  margin-top: 5px;
+}
+.vagabond .items-list .trait-description input {
+  width: 100%;
 }
 .vagabond .item-formula {
   flex: 0 0 200px;
@@ -489,3 +496,5 @@
 .vagabond .effects .item .effect-controls {
   border: none;
 }
+
+/*# sourceMappingURL=vagabond.css.map */

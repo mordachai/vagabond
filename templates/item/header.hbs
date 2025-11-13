@@ -10,26 +10,45 @@
     <div class='document-name'>
       <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
     </div>
-    {{! You may prefer to have a separate header file instead of this if statement}}
+    
     {{#if (eq item.type 'gear')}}
       <div class='grid grid-2col'>
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.quantity.label'}}</label>
-          <input
-            type='text'
-            name='system.quantity'
-            value='{{system.quantity}}'
-            data-dtype='Number'
-          />
+          <input type='text' name='system.quantity' value='{{system.quantity}}' data-dtype='Number' />
         </div>
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.weight.label'}}</label>
-          <input
-            type='text'
-            name='system.weight'
-            value='{{system.weight}}'
-            data-dtype='Number'
-          />
+          <input type='text' name='system.weight' value='{{system.weight}}' data-dtype='Number' />
+        </div>
+      </div>
+    {{/if}}
+    
+    {{#if (eq item.type 'ancestry')}}
+      <div class='grid grid-2col'>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.size.label'}}</label>
+          <select name='system.size' data-dtype='String'>
+            <option value='tiny' {{#if (eq system.size 'tiny')}}selected{{/if}}>Tiny</option>
+            <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>Small</option>
+            <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>Medium</option>
+            <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>Large</option>
+            <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>Huge</option>
+            <option value='gargantuan' {{#if (eq system.size 'gargantuan')}}selected{{/if}}>Gargantuan</option>
+          </select>
+        </div>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.ancestryType.label'}}</label>
+          <select name='system.ancestryType' data-dtype='String'>
+            <option value='Humanlike' {{#if (eq system.ancestryType 'Humanlike')}}selected{{/if}}>Humanlike</option>
+            <option value='Fae' {{#if (eq system.ancestryType 'Fae')}}selected{{/if}}>Fae</option>
+            <option value='Cryptid' {{#if (eq system.ancestryType 'Cryptid')}}selected{{/if}}>Cryptid</option>
+            <option value='Artificials' {{#if (eq system.ancestryType 'Artificials')}}selected{{/if}}>Artificials</option>
+            <option value='Beasts' {{#if (eq system.ancestryType 'Beasts')}}selected{{/if}}>Beasts</option>
+            <option value='Outers' {{#if (eq system.ancestryType 'Outers')}}selected{{/if}}>Outers</option>
+            <option value='Primordials' {{#if (eq system.ancestryType 'Primordials')}}selected{{/if}}>Primordials</option>
+            <option value='Undead' {{#if (eq system.ancestryType 'Undead')}}selected{{/if}}>Undead</option>
+          </select>
         </div>
       </div>
     {{/if}}

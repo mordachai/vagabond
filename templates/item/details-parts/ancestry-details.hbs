@@ -4,34 +4,6 @@
   data-group='primary'
   data-tab='details'
 >
-  {{! Ancestry Basic Info - Using existing grid-2col class }}
-  <div class='grid-2col'>
-    <div class='resource'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.size.label'}}</label>
-      <select name='system.size' data-dtype='String'>
-        <option value='tiny' {{#if (eq system.size 'tiny')}}selected{{/if}}>Tiny</option>
-        <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>Small</option>
-        <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>Medium</option>
-        <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>Large</option>
-        <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>Huge</option>
-        <option value='gargantuan' {{#if (eq system.size 'gargantuan')}}selected{{/if}}>Gargantuan</option>
-      </select>
-    </div>
-    <div class='resource'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.ancestryType.label'}}</label>
-      <select name='system.ancestryType' data-dtype='String'>
-        <option value='Humanlike' {{#if (eq system.ancestryType 'Humanlike')}}selected{{/if}}>Humanlike</option>
-        <option value='Fae' {{#if (eq system.ancestryType 'Fae')}}selected{{/if}}>Fae</option>
-        <option value='Cryptid' {{#if (eq system.ancestryType 'Cryptid')}}selected{{/if}}>Cryptid</option>
-        <option value='Artificials' {{#if (eq system.ancestryType 'Artificials')}}selected{{/if}}>Artificials</option>
-        <option value='Beasts' {{#if (eq system.ancestryType 'Beasts')}}selected{{/if}}>Beasts</option>
-        <option value='Outers' {{#if (eq system.ancestryType 'Outers')}}selected{{/if}}>Outers</option>
-        <option value='Primordials' {{#if (eq system.ancestryType 'Primordials')}}selected{{/if}}>Primordials</option>
-        <option value='Undead' {{#if (eq system.ancestryType 'Undead')}}selected{{/if}}>Undead</option>
-      </select>
-    </div>
-  </div>
-
   {{! Description Section }}
   <div>
     <label class='resource-label'>{{localize 'VAGABOND.Item.Tabs.Description'}}</label>
@@ -62,50 +34,61 @@
       {{/if}}
     </div>
     
-    {{! Traits list with proper height management }}
-    <ol class='items-list'>
-      {{#if system.traits.length}}
-        {{#each system.traits as |trait index|}}
+    <div class='scrollable' style='max-height: 300px;'>
+      <ol class='items-list'>
+        {{#if system.traits.length}}
+          {{#each system.traits as |trait index|}}
           <li class='item' data-trait-index='{{index}}'>
-            {{#if @root.editable}}
-              <div class='row-items'>
+            {{! First row: Trait name + delete button }}
+            <div class='flexrow'>
+              {{#if @root.editable}}
+                <div class='item-name'>
+                  <input
+                    type='text'
+                    name='system.traits.{{index}}.name'
+                    value='{{trait.name}}'
+                    placeholder='Trait Name'
+                    data-dtype='String'
+                  />
+                </div>
+                <div class='item-controls'>
+                  <a class='item-control'
+                    data-action='removeTrait'
+                    data-trait-index='{{index}}'
+                    data-tooltip='Remove Trait'
+                  >
+                    <i class='fas fa-trash'></i>
+                  </a>
+                </div>
+              {{else}}
+                <div class='item-name'>
+                  <strong>{{trait.name}}</strong>
+                </div>
+              {{/if}}
+            </div>
+            
+            {{! Second row: Description (outside flexrow) }}
+            <div class='trait-description'>
+              {{#if @root.editable}}
                 <input
-                  type='text'
-                  name='system.traits.{{index}}.name'
-                  value='{{trait.name}}'
-                  placeholder='Trait Name'
+                  type="text"
+                  name='system.traits.{{index}}.description'
+                  value='{{trait.description}}'
+                  placeholder='Trait description...'
                   data-dtype='String'
                 />
-                <button 
-                  type='button'
-                  class='item-control'
-                  data-action='removeTrait'
-                  data-trait-index='{{index}}'
-                  data-tooltip='Remove Trait'
-                >
-                  <i class='fas fa-trash'></i>
-                </button>
-              </div>
-              <input
-                type="text"
-                name='system.traits.{{index}}.description'
-                value='{{trait.description}}'
-                placeholder='Trait description...'
-                data-dtype='String'
-              />
-            {{else}}
-              <div class='item-name'>
-                <strong>{{trait.name}}</strong>
-              </div>
-              <div>{{trait.description}}</div>
-            {{/if}}
+              {{else}}
+                <div>{{trait.description}}</div>
+              {{/if}}
+            </div>
           </li>
-        {{/each}}
-      {{else}}
-        <li>
-          No traits defined.{{#if editable}} Click the + button to add one.{{/if}}
-        </li>
-      {{/if}}
-    </ol>
+          {{/each}}
+        {{else}}
+          <li>
+            No traits defined.{{#if editable}} Click the + button to add one.{{/if}}
+          </li>
+        {{/if}}
+      </ol>
+    </div>
   </div>
 </section>
