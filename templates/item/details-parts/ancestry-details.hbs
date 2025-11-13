@@ -33,8 +33,8 @@
   </div>
 
   {{! Description Section }}
-  <div style='margin: 10px 0;'>
-    <label class='resource-label'>Description</label>
+  <div>
+    <label class='resource-label'>{{localize 'VAGABOND.Item.Tabs.Description'}}</label>
     {{#if editable}}
       <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
         {{{enrichedDescription}}}
@@ -45,9 +45,8 @@
   </div>
 
   {{! Traits Section - Fixed button styling }}
-  <div style='margin: 10px 0 0.5rem 0;'>
+  <div>
     <div class='items-header'>
-      <div class='item-name'>Traits</div>
       {{#if editable}}
         <div class='item-controls'>
           <button 
@@ -55,8 +54,8 @@
             class='item-control'
             data-action='addTrait'
             data-tooltip='Add New Trait'
-            style='background: none; border: none; color: inherit; cursor: pointer; font-size: 12px; padding: 0;'
           >
+            {{localize 'VAGABOND.Item.Ancestry.FIELDS.traits.label'}}   
             <i class='fas fa-plus'></i>
           </button>
         </div>
@@ -64,19 +63,18 @@
     </div>
     
     {{! Traits list with proper height management }}
-    <ol class='items-list' style='max-height: 150px; margin-bottom: 0.5rem;'>
+    <ol class='items-list'>
       {{#if system.traits.length}}
         {{#each system.traits as |trait index|}}
-          <li class='item' data-trait-index='{{index}}' style='display: block; padding: 5px;'>
+          <li class='item' data-trait-index='{{index}}'>
             {{#if @root.editable}}
-              <div style='display: flex; align-items: center; margin-bottom: 3px;'>
+              <div>
                 <input
                   type='text'
                   name='system.traits.{{index}}.name'
                   value='{{trait.name}}'
                   placeholder='Trait Name'
                   data-dtype='String'
-                  style='flex: 1; margin-right: 8px; padding: 2px 4px; font-size: 13px; font-weight: bold;'
                 />
                 <button 
                   type='button'
@@ -84,7 +82,6 @@
                   data-action='removeTrait'
                   data-trait-index='{{index}}'
                   data-tooltip='Remove Trait'
-                  style='background: none; border: none; color: inherit; cursor: pointer; font-size: 12px; padding: 0;'
                 >
                   <i class='fas fa-trash'></i>
                 </button>
@@ -95,18 +92,17 @@
                 value='{{trait.description}}'
                 placeholder='Trait description...'
                 data-dtype='String'
-                style='width: 100%; padding: 2px 4px; font-size: 12px;'
               />
             {{else}}
               <div class='item-name'>
                 <strong>{{trait.name}}</strong>
               </div>
-              <div style='font-size: 12px; margin-top: 2px; color: var(--vagabond-c-tan);'>{{trait.description}}</div>
+              <div>{{trait.description}}</div>
             {{/if}}
           </li>
         {{/each}}
       {{else}}
-        <li style='text-align: center; color: var(--vagabond-c-tan); font-style: italic; padding: 20px; font-size: 12px;'>
+        <li>
           No traits defined.{{#if editable}} Click the + button to add one.{{/if}}
         </li>
       {{/if}}
