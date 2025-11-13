@@ -23,9 +23,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
-      viewAncestry: this._viewAncestry,
+      viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
     },
-    // Custom property that's merged into `this.options`
+    // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
     form: {
       submitOnChange: true,
@@ -104,7 +104,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       systemFields: this.document.system.schema.fields,
     };
 
-    // Add localized ancestry data for template
+    // YOUR CUSTOM: Add localized ancestry data for template
     if (this.actor.system.ancestryData) {
       context.system.ancestryDisplay = {
         name: this.actor.system.ancestryData.name,
@@ -313,7 +313,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle viewing the character's ancestry item
+   * YOUR CUSTOM: Handle viewing the character's ancestry item
    *
    * @this VagabondActorSheet
    * @param {PointerEvent} event   The originating click event
@@ -459,6 +459,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    ***************/
 
   /**
+   * MISSING FROM YOUR VERSION: Main drop handler that routes to specific drop methods
    * Handle dropping of items onto the actor sheet
    * @param {DragEvent} event     The concluding DragEvent which contains drop data
    * @returns {Promise}
@@ -484,6 +485,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * MISSING FROM YOUR VERSION: Item drop handler that routes to item creation
    * Handle dropping an item onto the actor sheet
    * @param {DragEvent} event     The concluding DragEvent which contains drop data
    * @param {object} data         The data transfer extracted from the event
@@ -500,11 +502,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (this.actor.uuid === item.parent?.uuid)
       return this._onSortItem(event, item);
 
-    // Create the owned item
+    // Create the owned item (this will call your custom ancestry logic)
     return this._onDropItemCreate(itemData, event);
   }
 
   /**
+   * MISSING FROM YOUR VERSION: Item sorting handler
    * Handle item sorting within the same actor
    * @param {DragEvent} event
    * @param {Item} item
@@ -658,7 +661,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle the final creation of dropped Item data on the Actor.
+   * YOUR CUSTOM LOGIC: Handle the final creation of dropped Item data on the Actor.
    * This method is factored out to allow downstream classes the opportunity to override item creation behavior.
    * @param {object[]|object} itemData      The item data requested for creation
    * @param {DragEvent} event               The concluding DragEvent which provided the drop data
@@ -668,22 +671,27 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onDropItemCreate(itemData, event) {
     itemData = itemData instanceof Array ? itemData : [itemData];
     
-    // Handle ancestry replacement logic BEFORE creating any items
-    const hasAncestry = itemData.some(data => data.type === 'ancestry');
-    if (hasAncestry) {
-      // Find existing ancestry and remove it
+    // YOUR CUSTOM: Handle ancestry replacement logic BEFORE creating any items
+    const ancestryItems = itemData.filter(data => data.type === 'ancestry');
+    
+    if (ancestryItems.length > 0) {
+      // Find existing ancestry and remove it FIRST, including its effects
       const existingAncestry = this.actor.items.find(item => item.type === 'ancestry');
       if (existingAncestry) {
         console.log(`Replacing existing ancestry: ${existingAncestry.name}`);
+        
+        // Delete the existing ancestry - this should also remove its effects
         await existingAncestry.delete();
       }
       
-      // Filter to only include the FIRST ancestry item if there are multiple
-      const nonAncestryItems = itemData.filter(data => data.type !== 'ancestry');
-      const firstAncestry = itemData.find(data => data.type === 'ancestry');
-      itemData = [...nonAncestryItems, firstAncestry];
+      // Only keep the FIRST ancestry if multiple are dropped
+      const selectedAncestry = ancestryItems[0];
       
-      console.log(`Adding new ancestry: ${firstAncestry.name}`);
+      // Filter out ALL ancestry items from original data, then add back only the selected one
+      const nonAncestryItems = itemData.filter(data => data.type !== 'ancestry');
+      itemData = [...nonAncestryItems, selectedAncestry];
+      
+      console.log(`Adding new ancestry: ${selectedAncestry.name}`);
     }
     
     return this.actor.createEmbeddedDocuments('Item', itemData);
