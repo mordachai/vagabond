@@ -1,11 +1,11 @@
 // Section Header
 .items-header {
   height: 28px;
-  margin: 2px 0;
+  margin: 6px 0;
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
-  border: $border-groove;
+  // border: $border-groove;
   font-weight: bold;
   > * {
     font-size: 14px;
@@ -111,15 +111,60 @@
       // font-size: 16px;
     }
   }
-    .trait-description {
-      width: 100%;
-      margin-top: 5px;
-      
-      input {
-        width: 100%;
-      }
-  }
 
+  .trait-description {
+    width: 100%;
+    margin-top: 5px;
+    
+    input {
+      width: 100%;
+    }
+  }
+}
+
+// Ancestry-specific sections
+.ancestry-description {
+  min-height: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+  
+  prose-mirror {
+    height: 100%;
+    min-height: 100px;
+  }
+  
+  // For read-only mode
+  > div {
+    min-height: 100px;
+  }
+}
+
+.traits-section {
+  .scrollable {
+    width: 100%;
+    min-height: 100px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+    padding: 8px;
+    
+    .items-list {
+      margin: 0;
+      
+      .item {
+        display: block; // Override any flex for vertical layout
+        
+        .flexrow {
+          display: flex; // Only the name + delete row should be flex
+          align-items: center;
+        }
+      }
+    }
+  }
 }
 
 // Example style for Vagabond (can be removed if not needed).

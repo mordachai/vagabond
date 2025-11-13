@@ -278,11 +278,10 @@
 }
 .vagabond .items-header {
   height: 28px;
-  margin: 2px 0;
+  margin: 6px 0;
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
-  border: 2px groove var(--vagabond-c-groove);
   font-weight: bold;
 }
 .vagabond .items-header > * {
@@ -379,6 +378,40 @@
 }
 .vagabond .items-list .trait-description input {
   width: 100%;
+}
+.vagabond .ancestry-description {
+  min-height: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+}
+.vagabond .ancestry-description prose-mirror {
+  height: 100%;
+  min-height: 100px;
+}
+.vagabond .ancestry-description > div {
+  min-height: 100px;
+}
+.vagabond .traits-section .scrollable {
+  width: 100%;
+  min-height: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 8px;
+}
+.vagabond .traits-section .scrollable .items-list {
+  margin: 0;
+}
+.vagabond .traits-section .scrollable .items-list .item {
+  display: block;
+}
+.vagabond .traits-section .scrollable .items-list .item .flexrow {
+  display: flex;
+  align-items: center;
 }
 .vagabond .item-formula {
   flex: 0 0 200px;
