@@ -529,5 +529,35 @@
 .vagabond .effects .item .effect-controls {
   border: none;
 }
-
-/*# sourceMappingURL=vagabond.css.map */
+.vagabond .vagabond .character-name-input {
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  outline: none;
+  width: 100%;
+  padding: 4px 8px;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.vagabond .vagabond .character-name-input:hover, .vagabond .vagabond .character-name-input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  background: transparent !important;
+}
+.vagabond .vagabond .character-info-row {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--vagabond-c-tan);
+  font-weight: 500;
+  line-height: 1.2;
+}
+@media (max-width: 600px) {
+  .vagabond .vagabond .character-name-input {
+    font-size: 16px;
+  }
+  .vagabond .vagabond .character-info-row {
+    font-size: 12px;
+  }
+}

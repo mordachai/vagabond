@@ -10,47 +10,40 @@
     width='100'
   />
   <div class='header-fields'>
-    {{! Top row: Name and Ancestry }}
-    <div class='grid grid-1col' style='margin-bottom: 10px;'>
-      <div class='resource'>
-        <label class='resource-label'>Name</label>
-        <input
-          name='name'
-          type='text'
-          value='{{actor.name}}'
-          placeholder='Character Name'
-        />
-      </div>
-      {{! Ancestry line - clickable if ancestry exists }}
+    {{! Character Name - Centered }}
+    <div class='character-name-section' style='text-align: center; margin-bottom: 8px;'>
+      <input
+        name='name'
+        type='text'
+        value='{{actor.name}}'
+        placeholder='Character Name'
+        class='character-name-input'
+        style='border: none; background: transparent; text-align: center; font-size: 18px; font-weight: bold; outline: none; width: 100%;'
+      />
+    </div>
+
+    {{! Character Info Row - Level, Ancestry, Class as display divs }}
+    <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan);'>
+      Level {{system.attributes.level.value}} -- 
       {{#if system.ancestryData}}
-        <div class='resource ancestry-display' 
-             data-action='viewAncestry'
-             data-tooltip='Click to view {{system.ancestryData.name}} ancestry'
-             style='cursor: pointer; padding: 5px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 3px;'>
-          {{system.ancestryDisplay.name}}, {{system.ancestryDisplay.sizeLabel}} size, {{system.ancestryDisplay.beingTypeLabel}} being
-        </div>
+        {{system.ancestryData.name}} 
+      {{else}}
+        Unknown Ancestry
+      {{/if}}
+      <span style='color: var(--vagabond-c-faint);'>Fighter</span> 
+      {{#if system.ancestryData}}
+        ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
+      {{else}}
+        (Unknown, Medium size)
       {{/if}}
     </div>
 
-    {{! Second row: Level, Class, XP }}
-    <div class='grid grid-3col' style='margin-bottom: 10px;'>
+    {{! XP Row }}
+    <div class='grid grid-1col' style='margin-bottom: 10px;'>
+      {{! Current Luck }}
       <div class='resource'>
-        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.level.value.label'}}</label>
-        <input
-          type='text'
-          name='system.attributes.level.value'
-          value='{{system.attributes.level.value}}'
-          data-dtype='Number'
-        />
-      </div>
-      <div class='resource'>
-        <label class='resource-label'>Class</label>
-        <input
-          type='text'
-          placeholder='(from item)'
-          disabled='true'
-          style='background: #f0f0f0;'
-        />
+        <label class='resource-label'>Current Luck</label>
+        <span>{{system.currentLuck}}</span>
       </div>
       <div class='resource'>
         <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
@@ -107,12 +100,6 @@
           <div>Crawl: {{system.speed.crawl}}'</div>
           <div>Travel: {{system.speed.travel}}mi</div>
         </div>
-      </div>
-
-      {{! Current Luck }}
-      <div class='resource'>
-        <label class='resource-label'>Current Luck</label>
-        <span>{{system.currentLuck}}</span>
       </div>
     </div>
   </div>

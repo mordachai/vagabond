@@ -139,7 +139,8 @@
       "Toggle": "Toggle Effect",
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
-      "Inactive": "Inactive Effects"
+      "Inactive": "Inactive Effects",
+      "Duration": "Duration"
     }
   },
   "TYPES": {

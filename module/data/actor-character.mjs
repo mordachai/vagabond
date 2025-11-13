@@ -17,10 +17,16 @@ export default class VagabondCharacter extends VagabondActorBase {
       }),
       xp: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       size: new fields.StringField({
-        initial: '',
-        choices: ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']
+        initial: null,
+        choices: ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan'],
+        required: false,
+        nullable: true
       }),
-      beingType: new fields.StringField({ initial: '' })
+      beingType: new fields.StringField({ 
+        initial: null,
+        required: false,
+        nullable: true 
+      })
     });
 
     // Iterate over ability names and create a new SchemaField for each.
