@@ -36,6 +36,24 @@
         "description": "Resist curses and enthrallment"
       }
     },
+    "Sizes": {
+      "tiny": "Tiny",
+      "small": "Small", 
+      "medium": "Medium",
+      "large": "Large",
+      "huge": "Huge",
+      "gargantuan": "Gargantuan"
+    },
+    "BeingTypes": {
+      "Humanlike": "Humanlike",
+      "Fae": "Fae",
+      "Cryptid": "Cryptid", 
+      "Artificials": "Artificials",
+      "Beasts": "Beasts",
+      "Outers": "Outers",
+      "Primordials": "Primordials",
+      "Undead": "Undead"
+    },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
       "Item": "Vagabond Item Sheet"

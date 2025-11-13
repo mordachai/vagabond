@@ -10,8 +10,8 @@
     width='100'
   />
   <div class='header-fields'>
-    {{! Top row: Name, Size, Being Type }}
-    <div class='grid grid-3col' style='margin-bottom: 10px;'>
+    {{! Top row: Name and Ancestry }}
+    <div class='grid grid-1col' style='margin-bottom: 10px;'>
       <div class='resource'>
         <label class='resource-label'>Name</label>
         <input
@@ -21,39 +21,19 @@
           placeholder='Character Name'
         />
       </div>
-      <div class='resource'>
-        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.size.label'}}</label>
-        <select name='system.attributes.size' data-dtype='String'>
-          <option value='tiny' {{#eq system.attributes.size 'tiny'}}selected{{/eq}}>Tiny</option>
-          <option value='small' {{#eq system.attributes.size 'small'}}selected{{/eq}}>Small</option>
-          <option value='medium' {{#eq system.attributes.size 'medium'}}selected{{/eq}}>Medium</option>
-          <option value='large' {{#eq system.attributes.size 'large'}}selected{{/eq}}>Large</option>
-          <option value='huge' {{#eq system.attributes.size 'huge'}}selected{{/eq}}>Huge</option>
-          <option value='gargantuan' {{#eq system.attributes.size 'gargantuan'}}selected{{/eq}}>Gargantuan</option>
-        </select>
-      </div>
-      <div class='resource'>
-        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.beingType.label'}}</label>
-        <input
-          name='system.attributes.beingType'
-          type='text'
-          value='{{system.attributes.beingType}}'
-          placeholder='Humanoid'
-        />
-      </div>
+      {{! Ancestry line - clickable if ancestry exists }}
+      {{#if system.ancestryData}}
+        <div class='resource ancestry-display' 
+             data-action='viewAncestry'
+             data-tooltip='Click to view {{system.ancestryData.name}} ancestry'
+             style='cursor: pointer; padding: 5px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 3px;'>
+          {{system.ancestryDisplay.name}}, {{system.ancestryDisplay.sizeLabel}} size, {{system.ancestryDisplay.beingTypeLabel}} being
+        </div>
+      {{/if}}
     </div>
 
-    {{! Second row: Ancestry, Level, Class, XP }}
-    <div class='grid grid-4col' style='margin-bottom: 10px;'>
-      <div class='resource'>
-        <label class='resource-label'>Ancestry</label>
-        <input
-          type='text'
-          placeholder='(from item)'
-          disabled='true'
-          style='background: #f0f0f0;'
-        />
-      </div>
+    {{! Second row: Level, Class, XP }}
+    <div class='grid grid-3col' style='margin-bottom: 10px;'>
       <div class='resource'>
         <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.level.value.label'}}</label>
         <input

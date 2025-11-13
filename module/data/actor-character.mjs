@@ -17,10 +17,10 @@ export default class VagabondCharacter extends VagabondActorBase {
       }),
       xp: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       size: new fields.StringField({
-        initial: 'medium',
+        initial: '',
         choices: ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']
       }),
-      beingType: new fields.StringField({ initial: 'Humanoid' })
+      beingType: new fields.StringField({ initial: '' })
     });
 
     // Iterate over ability names and create a new SchemaField for each.
@@ -125,6 +125,9 @@ export default class VagabondCharacter extends VagabondActorBase {
         game.i18n.localize(CONFIG.VAGABOND.abilities[key]) ?? key;
     }
 
+    // Get ancestry data for display
+    this._calculateAncestryData();
+
     // Calculate combat values
     this._calculateCombatValues();
 
@@ -165,6 +168,31 @@ export default class VagabondCharacter extends VagabondActorBase {
       // Add label for localization
       skill.label = game.i18n.localize(`VAGABOND.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
     }
+  }
+
+  /**
+   * Get ancestry data for display purposes
+   */
+  _calculateAncestryData() {
+    const ancestry = this.parent?.items?.find(item => item.type === 'ancestry');
+    if (ancestry) {
+      this.ancestryData = {
+        name: ancestry.name,
+        size: ancestry.system.size,
+        beingType: ancestry.system.ancestryType,
+        traits: ancestry.system.traits || []
+      };
+    } else {
+      this.ancestryData = null;
+    }
+  }
+
+  /**
+   * Future method for loading ancestry traits and effects
+   */
+  _loadAncestryTraits() {
+    // TODO: Process ancestry traits and apply effects
+    // Will be implemented later when we need trait effects
   }
 
   getRollData() {

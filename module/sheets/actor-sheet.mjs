@@ -23,9 +23,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
+      viewAncestry: this._viewAncestry,
     },
     // Custom property that's merged into `this.options`
-    // dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
+    dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
     form: {
       submitOnChange: true,
     },
@@ -102,6 +103,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
     };
+
+    // Add localized ancestry data for template
+    if (this.actor.system.ancestryData) {
+      context.system.ancestryDisplay = {
+        name: this.actor.system.ancestryData.name,
+        sizeLabel: game.i18n.localize(`VAGABOND.Sizes.${this.actor.system.ancestryData.size}`),
+        beingTypeLabel: game.i18n.localize(`VAGABOND.BeingTypes.${this.actor.system.ancestryData.beingType}`)
+      };
+    }
 
     // Offloading context prep to a helper function
     this._prepareItems(context);
@@ -303,6 +313,21 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle viewing the character's ancestry item
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _viewAncestry(event, target) {
+    const ancestry = this.actor.items.find(item => item.type === 'ancestry');
+    if (ancestry) {
+      ancestry.sheet.render(true);
+    }
+  }
+
+  /**
    * Renders an embedded document's sheet
    *
    * @this VagabondActorSheet
@@ -434,6 +459,94 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    ***************/
 
   /**
+   * Handle dropping of items onto the actor sheet
+   * @param {DragEvent} event     The concluding DragEvent which contains drop data
+   * @returns {Promise}
+   * @protected
+   */
+  async _onDrop(event) {
+    const data = TextEditor.getDragEventData(event);
+    const actor = this.actor;
+    const allowed = Hooks.call('dropActorSheetData', actor, this, data);
+    if (allowed === false) return;
+
+    // Handle different data types
+    switch (data.type) {
+      case 'ActiveEffect':
+        return this._onDropActiveEffect(event, data);
+      case 'Actor':
+        return this._onDropActor(event, data);
+      case 'Item':
+        return this._onDropItem(event, data);
+      case 'Folder':
+        return this._onDropFolder(event, data);
+    }
+  }
+
+  /**
+   * Handle dropping an item onto the actor sheet
+   * @param {DragEvent} event     The concluding DragEvent which contains drop data
+   * @param {object} data         The data transfer extracted from the event
+   * @returns {Promise<Item[]>}
+   * @protected
+   */
+  async _onDropItem(event, data) {
+    if (!this.actor.isOwner) return false;
+
+    const item = await Item.implementation.fromDropData(data);
+    const itemData = item.toObject();
+
+    // Handle item sorting within this Actor
+    if (this.actor.uuid === item.parent?.uuid)
+      return this._onSortItem(event, item);
+
+    // Create the owned item
+    return this._onDropItemCreate(itemData, event);
+  }
+
+  /**
+   * Handle item sorting within the same actor
+   * @param {DragEvent} event
+   * @param {Item} item
+   */
+  async _onSortItem(event, item) {
+    // Get the drop target
+    const dropTarget = event.target.closest('[data-item-id]');
+    if (!dropTarget) return;
+
+    // Get the target item
+    const target = this.actor.items.get(dropTarget.dataset.itemId);
+    if (!target) return;
+
+    // Don't sort on yourself
+    if (item.id === target.id) return;
+
+    // Identify sibling items based on adjacent HTML elements
+    const siblings = [];
+    for (const el of dropTarget.parentElement.children) {
+      const siblingId = el.dataset.itemId;
+      if (siblingId && siblingId !== item.id) {
+        siblings.push(this.actor.items.get(siblingId));
+      }
+    }
+
+    // Perform the sort
+    const sortUpdates = SortingHelpers.performIntegerSort(item, {
+      target,
+      siblings,
+    });
+
+    const updateData = sortUpdates.map((u) => {
+      const update = u.update;
+      update._id = u.target._id;
+      return update;
+    });
+
+    // Perform the update
+    return this.actor.updateEmbeddedDocuments('Item', updateData);
+  }
+
+  /**
    * Handle the dropping of ActiveEffect data onto an Actor Sheet
    * @param {DragEvent} event                  The concluding DragEvent which contains drop data
    * @param {object} data                      The data transfer extracted from the event
@@ -554,6 +667,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   async _onDropItemCreate(itemData, event) {
     itemData = itemData instanceof Array ? itemData : [itemData];
+    
+    // Handle ancestry replacement logic BEFORE creating any items
+    const hasAncestry = itemData.some(data => data.type === 'ancestry');
+    if (hasAncestry) {
+      // Find existing ancestry and remove it
+      const existingAncestry = this.actor.items.find(item => item.type === 'ancestry');
+      if (existingAncestry) {
+        console.log(`Replacing existing ancestry: ${existingAncestry.name}`);
+        await existingAncestry.delete();
+      }
+      
+      // Filter to only include the FIRST ancestry item if there are multiple
+      const nonAncestryItems = itemData.filter(data => data.type !== 'ancestry');
+      const firstAncestry = itemData.find(data => data.type === 'ancestry');
+      itemData = [...nonAncestryItems, firstAncestry];
+      
+      console.log(`Adding new ancestry: ${firstAncestry.name}`);
+    }
+    
     return this.actor.createEmbeddedDocuments('Item', itemData);
   }
 
