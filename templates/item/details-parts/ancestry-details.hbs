@@ -68,7 +68,7 @@
         {{#each system.traits as |trait index|}}
           <li class='item' data-trait-index='{{index}}'>
             {{#if @root.editable}}
-              <div>
+              <div class='row-items'>
                 <input
                   type='text'
                   name='system.traits.{{index}}.name'
