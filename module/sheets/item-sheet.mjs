@@ -23,6 +23,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       createDoc: this._createEffect,
       deleteDoc: this._deleteEffect,
       toggleEffect: this._toggleEffect,
+      addTrait: this._onAddTrait,
+      removeTrait: this._onRemoveTrait,
     },
     form: {
       submitOnChange: true,
@@ -47,16 +49,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     },
     attributesFeature: {
       template:
-        'systems/vagabond/templates/item/attribute-parts/feature.hbs',
+        'systems/vagabond/templates/item/details-parts/feature-details.hbs',
     },
     attributesGear: {
-      template: 'systems/vagabond/templates/item/attribute-parts/gear.hbs',
+      template: 'systems/vagabond/templates/item/details-parts/gear-details.hbs',
     },
     attributesSpell: {
-      template: 'systems/vagabond/templates/item/attribute-parts/spell.hbs',
+      template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
     },
-    attributesAncestry: {
-      template: 'systems/vagabond/templates/item/ancestry-attributes.hbs',
+    ancestryDetails: {
+      template: 'systems/vagabond/templates/item//details-parts/ancestry-details.hbs',
     },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
@@ -66,23 +68,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
-    // Not all parts always render
-    options.parts = ['header', 'tabs', 'description'];
-    // Don't show the other tabs if only limited view
+    console.log("Item type in _configureRenderOptions:", this.document.type);
+    options.parts = ['header', 'tabs'];
     if (this.document.limited) return;
-    // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'feature':
-        options.parts.push('attributesFeature', 'effects');
+        console.log("Loading feature template");
+        options.parts.push('description', 'attributesFeature', 'effects');
         break;
       case 'gear':
-        options.parts.push('attributesGear');
+        options.parts.push('description', 'attributesGear');
         break;
       case 'spell':
-        options.parts.push('attributesSpell');
+        options.parts.push('description', 'attributesSpell');
         break;
-      case 'ancestry':  // ADD THIS CASE
-        options.parts.push('attributesAncestry', 'effects');
+      case 'ancestry':
+        console.log("Loading ancestry template");
+        options.parts.push('ancestryDetails', 'effects');
         break;
     }
   }
@@ -122,18 +124,26 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         // Necessary for preserving active tab on re-render
         context.tab = context.tabs[partId];
         break;
-      case 'description':
+      case 'ancestryDetails':
+        // Ancestry gets enriched description like the description tab
         context.tab = context.tabs[partId];
-        // Enrich description info for display
-        // Enrichment turns text like `[[/r 1d20]]` into buttons
         context.enrichedDescription = await TextEditor.enrichHTML(
           this.item.system.description,
           {
-            // Whether to show secret blocks in the finished html
             secrets: this.document.isOwner,
-            // Data to fill in for inline rolls
             rollData: this.item.getRollData(),
-            // Relative UUID resolution
+            relativeTo: this.item,
+          }
+        );
+        break;
+      case 'description':
+        context.tab = context.tabs[partId];
+        // Enrich description info for display
+        context.enrichedDescription = await TextEditor.enrichHTML(
+          this.item.system.description,
+          {
+            secrets: this.document.isOwner,
+            rollData: this.item.getRollData(),
             relativeTo: this.item,
           }
         );
@@ -156,17 +166,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for first time it's rendered this session
-    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'description';
+    // Default tab for ancestry is details, others default to description
+    if (!this.tabGroups[tabGroup]) {
+      this.tabGroups[tabGroup] = this.document.type === 'ancestry' ? 'details' : 'description';
+    }
     return parts.reduce((tabs, partId) => {
       const tab = {
         cssClass: '',
         group: tabGroup,
-        // Matches tab property to
         id: '',
-        // FontAwesome Icon, if you so choose
         icon: '',
-        // Run through localization
         label: 'VAGABOND.Item.Tabs.',
       };
       switch (partId) {
@@ -180,9 +189,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'attributesFeature':
         case 'attributesGear':
         case 'attributesSpell':
-        case 'attributesAncestry':
           tab.id = 'attributes';
           tab.label += 'Attributes';
+          break;
+        case 'ancestryDetails':
+          tab.id = 'details';
+          tab.label += 'Details';
           break;
         case 'effects':
           tab.id = 'effects';
@@ -217,9 +229,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         drop: this._onDrop.bind(this)
       }
     }).bind(this.element);
-    // You may want to add other special handling here
-    // Foundry comes with a large number of utility classes, e.g. SearchFilter
-    // That you may want to implement yourself.
   }
 
   /**************
@@ -227,6 +236,39 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    *   ACTIONS
    *
    **************/
+
+  /**
+   * Handle adding a new trait to an ancestry item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddTrait(event, target) {
+    console.log("Add trait called!", event, target);
+    const traits = this.item.system.traits || [];
+    const newTraits = [...traits, { name: 'New Trait', description: '' }];
+    await this.item.update({ 'system.traits': newTraits });
+  }
+
+  /**
+   * Handle removing a trait from an ancestry item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveTrait(event, target) {
+    console.log("Remove trait called!", event, target);
+    const index = parseInt(target.dataset.traitIndex);
+    if (isNaN(index)) return;
+
+    const traits = this.item.system.traits || [];
+    const newTraits = traits.filter((_, i) => i !== index);
+    await this.item.update({ 'system.traits': newTraits });
+  }
 
   /**
    * Handle changing a Document's image.
@@ -294,10 +336,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     // Retrieve the configured document class for ActiveEffect
     const aeCls = getDocumentClass('ActiveEffect');
     // Prepare the document creation data by initializing it a default name.
-    // As of v12, you can define custom Active Effect subtypes just like Item subtypes if you want
     const effectData = {
       name: aeCls.defaultName({
-        // defaultName handles an undefined type gracefully
         type: target.dataset.type,
         parent: this.item,
       }),
@@ -306,9 +346,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     for (const [dataKey, value] of Object.entries(target.dataset)) {
       // These data attributes are reserved for the action handling
       if (['action', 'documentClass'].includes(dataKey)) continue;
-      // Nested properties require dot notation in the HTML, e.g. anything with `system`
-      // An example exists in spells.hbs, with `data-system.spell-level`
-      // which turns into the dataKey 'system.spellLevel'
       foundry.utils.setProperty(effectData, dataKey, value);
     }
 
@@ -343,38 +380,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   *
-   * DragDrop
-   *
-   */
-
-  /**
-   * Define whether a user is able to begin a dragstart workflow for a given drag selector
-   * @param {string} selector       The candidate HTML selector for dragging
-   * @returns {boolean}             Can the current user drag this selector?
-   * @protected
+   * DragDrop methods
    */
   _canDragStart(selector) {
-    // game.user fetches the current user
     return this.isEditable;
   }
 
-  /**
-   * Define whether a user is able to conclude a drag-and-drop workflow for a given drop selector
-   * @param {string} selector       The candidate HTML selector for the drop target
-   * @returns {boolean}             Can the current user drop on this selector?
-   * @protected
-   */
   _canDragDrop(selector) {
-    // game.user fetches the current user
     return this.isEditable;
   }
 
-  /**
-   * Callback actions which occur at the beginning of a drag start workflow.
-   * @param {DragEvent} event       The originating DragEvent
-   * @protected
-   */
   _onDragStart(event) {
     const li = event.currentTarget;
     if ('link' in event.target.dataset) return;
@@ -393,33 +408,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
   }
 
-  /**
-   * Callback actions which occur when a dragged element is over a drop target.
-   * @param {DragEvent} event       The originating DragEvent
-   * @protected
-   */
   _onDragOver(event) { }
 
-  /**
-   * Callback actions which occur when a dragged element is dropped on a target.
-   * @param {DragEvent} event       The originating DragEvent
-   * @protected
-   */
   async _onDrop(event) {
     const data = TextEditor.getDragEventData(event);
     const item = this.item;
     const allowed = Hooks.call('dropItemSheetData', item, this, data);
     if (allowed === false) return;
 
-    // Although you will find implmentations to all doc types here, it is important to keep 
-    // in mind that only Active Effects are "valid" for items.
-    // Actors have items, but items do not have actors.
-    // Items in items is not implemented on Foudry per default. If you need an implementation with that,
-    // try to search how other systems do. Basically they will use the drag and drop, but they will store
-    // the UUID of the item.
-    // Folders can only contain Actors or Items. So, fall on the cases above.
-    // We left them here so you can have an idea of how that would work, if you want to do some kind of
-    // implementation for that.
     switch (data.type) {
       case 'ActiveEffect':
         return this._onDropActiveEffect(event, data);
@@ -432,15 +428,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Handle the dropping of ActiveEffect data onto an Actor Sheet
-   * @param {DragEvent} event                  The concluding DragEvent which contains drop data
-   * @param {object} data                      The data transfer extracted from the event
-   * @returns {Promise<ActiveEffect|boolean>}  The created ActiveEffect object or false if it couldn't be created.
-   * @protected
-   */
   async _onDropActiveEffect(event, data) {
     const aeCls = getDocumentClass('ActiveEffect');
     const effect = await aeCls.fromDropData(data);
@@ -451,22 +438,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     return aeCls.create(effect, { parent: this.item });
   }
 
-  /**
-   * Sorts an Active Effect based on its surrounding attributes
-   *
-   * @param {DragEvent} event
-   * @param {ActiveEffect} effect
-   */
   _onEffectSort(event, effect) {
     const effects = this.item.effects;
     const dropTarget = event.target.closest('[data-effect-id]');
     if (!dropTarget) return;
     const target = effects.get(dropTarget.dataset.effectId);
 
-    // Don't sort on yourself
     if (effect.id === target.id) return;
 
-    // Identify sibling items based on adjacent HTML elements
     const siblings = [];
     for (let el of dropTarget.parentElement.children) {
       const siblingId = el.dataset.effectId;
@@ -474,7 +453,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         siblings.push(effects.get(el.dataset.effectId));
     }
 
-    // Perform the sort
     const sortUpdates = SortingHelpers.performIntegerSort(effect, {
       target,
       siblings,
@@ -485,47 +463,17 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       return update;
     });
 
-    // Perform the update
     return this.item.updateEmbeddedDocuments('ActiveEffect', updateData);
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Handle dropping of an Actor data onto another Actor sheet
-   * @param {DragEvent} event            The concluding DragEvent which contains drop data
-   * @param {object} data                The data transfer extracted from the event
-   * @returns {Promise<object|boolean>}  A data object which describes the result of the drop, or false if the drop was
-   *                                     not permitted.
-   * @protected
-   */
   async _onDropActor(event, data) {
     if (!this.item.isOwner) return false;
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Handle dropping of an item reference or item data onto an Actor Sheet
-   * @param {DragEvent} event            The concluding DragEvent which contains drop data
-   * @param {object} data                The data transfer extracted from the event
-   * @returns {Promise<Item[]|boolean>}  The created or updated Item instances, or false if the drop was not permitted.
-   * @protected
-   */
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Handle dropping of a Folder on an Actor Sheet.
-   * The core sheet currently supports dropping a Folder of Items to create all items as owned items.
-   * @param {DragEvent} event     The concluding DragEvent which contains drop data
-   * @param {object} data         The data transfer extracted from the event
-   * @returns {Promise<Item[]>}
-   * @protected
-   */
   async _onDropFolder(event, data) {
     if (!this.item.isOwner) return [];
   }

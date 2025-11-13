@@ -277,8 +277,11 @@
   flex: 0 0 44px;
 }
 .vagabond .items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   height: 28px;
-  margin: 2px 0;
+  margin: 4px 0;
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);

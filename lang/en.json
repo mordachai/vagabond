@@ -87,6 +87,7 @@
     "Item": {
       "Tabs": {
         "Attributes": "Attributes",
+        "Details": "Details",
         "Description": "Description",
         "Effects": "Effects"
       },

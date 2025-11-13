@@ -40,12 +40,7 @@ export default class VagabondAncestry extends VagabondItemBase {
     this.traitCount = this.traits.length;
   }
 
-  /**
-   * Get a summary of all traits for display
-   */
-  getTraitSummary() {
-    return this.traits.map(trait => trait.name).join(', ');
-  }
+  // REMOVED getTraitSummary() method that was creating comma-separated strings
 
   /**
    * Add a new trait to this ancestry
