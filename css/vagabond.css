@@ -266,14 +266,18 @@
 }
 /* Limit description editor height with scroll */
 .vagabond .tab.description .ProseMirror,
-.vagabond .tab.details .ProseMirror,
 .vagabond .class-description .ProseMirror,
 .vagabond .ancestry-description .ProseMirror {
   max-height: 350px;
   overflow-y: auto !important;
 }
+/* Class details tab - excluding level feature descriptions */
+.vagabond .tab.details .ProseMirror:not(.level-feature-description .ProseMirror) {
+  max-height: 350px;
+  overflow-y: auto !important;
+}
 /* Level feature descriptions need more height for toolbar */
-.vagabond .level-feature-description .ProseMirror {
+.vagabond .tab.details .level-feature-description .ProseMirror {
   max-height: 400px;
   overflow-y: auto !important;
 }
