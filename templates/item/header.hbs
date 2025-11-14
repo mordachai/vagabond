@@ -55,19 +55,18 @@
 
     {{#if (eq item.type 'class')}}
       <div class='class-spellcaster-fields'>
-        <div class='form-group' style='margin-bottom: 10px;'>
-          <label class='resource-label'>
-            <input
-              type='checkbox'
-              name='system.isSpellcaster'
-              {{checked system.isSpellcaster}}
-              {{#unless editable}}disabled{{/unless}}
-            />
-            Is Spellcaster
-          </label>
-        </div>
-
-        <div class='grid grid-2col'>
+        <div class='grid grid-3col'>
+          <div class='resource'>
+            <label class='resource-label'>
+              <input
+                type='checkbox'
+                name='system.isSpellcaster'
+                {{checked system.isSpellcaster}}
+                {{#unless editable}}disabled{{/unless}}
+              />
+              Is Spellcaster
+            </label>
+          </div>
           <div class='resource'>
             <label class='resource-label'>Mana Skill</label>
             <select name='system.manaSkill' {{#unless editable}}disabled{{/unless}}>
