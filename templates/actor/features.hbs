@@ -30,7 +30,7 @@
 
       {{! Features Section }}
       <h3 style='margin-top: 20px;'>Features</h3>
-      <ol class='features-list'>
+      <ul class='features-list' style='list-style: none; padding-left: 0;'>
         {{#each features as |feature id|}}
           <li class='feature' style='margin-bottom: 10px;'>
             <strong>{{feature.name}}</strong>
@@ -41,7 +41,7 @@
         {{else}}
           <li class='feature'>No features yet. Features are granted by your class as you level up.</li>
         {{/each}}
-      </ol>
+      </ul>
     </aside>
 
     {{! Middle column: Saves and Skills }}
