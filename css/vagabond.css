@@ -270,19 +270,33 @@
 .vagabond .ancestry-description .ProseMirror {
   max-height: 350px;
   overflow-y: auto !important;
+  color: var(--vagabond-c-dark);
 }
 /* Class details tab - excluding level feature descriptions */
 .vagabond .tab.details .ProseMirror:not(.level-feature-description .ProseMirror) {
   max-height: 350px;
   overflow-y: auto !important;
+  color: var(--vagabond-c-dark);
 }
 /* Level feature descriptions need more height for toolbar */
 .vagabond .tab.details .level-feature-description .ProseMirror {
   max-height: 400px;
   overflow-y: auto !important;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .level-feature-description {
+  min-height: 100px;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
 }
 .vagabond .level-feature-description prose-mirror {
   display: block;
+  height: 100%;
+  min-height: 100px;
+}
+.vagabond .level-feature-description > div {
+  min-height: 100px;
 }
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
@@ -401,6 +415,21 @@
 }
 .vagabond .items-list .trait-description input {
   width: 100%;
+}
+.vagabond .class-description {
+  min-height: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+}
+.vagabond .class-description prose-mirror {
+  height: 100%;
+  min-height: 100px;
+}
+.vagabond .class-description > div {
+  min-height: 100px;
 }
 .vagabond .ancestry-description {
   min-height: 100px;
