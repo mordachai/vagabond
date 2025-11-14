@@ -264,13 +264,13 @@
 .vagabond .tab.biography .editor {
   height: 100%;
 }
-.vagabond .tab.description prose-mirror,
-.vagabond .tab.details prose-mirror,
-.vagabond .class-description prose-mirror,
-.vagabond .ancestry-description prose-mirror {
+/* Limit description editor height with scroll */
+.vagabond .tab.description .ProseMirror,
+.vagabond .tab.details .ProseMirror,
+.vagabond .class-description .ProseMirror,
+.vagabond .ancestry-description .ProseMirror {
   max-height: 350px;
-  overflow-y: auto;
-  display: block;
+  overflow-y: auto !important;
 }
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
