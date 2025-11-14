@@ -130,6 +130,7 @@
   border: 1px solid var(--vagabond-c-faint);
   padding: 8px;
   border-radius: 4px;
+  transition: max-height 0.3s ease;
   
   prose-mirror {
     height: 100%;
@@ -139,6 +140,47 @@
   // For read-only mode
   > div {
     min-height: 100px;
+  }
+  
+  // Dynamic height adjustment when TinyMCE is active
+  &:has(.tox-tinymce) {
+    max-height: 350px; // +100px for toolbar space
+  }
+  
+  // Fallback for browsers without :has() support
+  &.mce-active {
+    max-height: 350px;
+  }
+}
+
+// Class-specific sections (similar pattern)
+.class-description {
+  min-height: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+  transition: max-height 0.3s ease;
+  
+  prose-mirror {
+    height: 100%;
+    min-height: 100px;
+  }
+  
+  // For read-only mode
+  > div {
+    min-height: 100px;
+  }
+  
+  // Dynamic height adjustment when TinyMCE is active
+  &:has(.tox-tinymce) {
+    max-height: 350px; // +100px for toolbar space
+  }
+  
+  // Fallback for browsers without :has() support  
+  &.mce-active {
+    max-height: 350px;
   }
 }
 

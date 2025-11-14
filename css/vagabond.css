@@ -235,7 +235,6 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   margin-bottom: 10px;
-  min-height: 100px;
 }
 .vagabond .sheet-header .profile-img {
   flex: 0 0 100px;
@@ -254,49 +253,13 @@
   height: 100%;
 }
 .vagabond .tab {
-  min-height: 400px;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
+  max-height: 400px;
 }
 .vagabond .tab.biography {
   flex: 1;
 }
 .vagabond .tab.biography .editor {
   height: 100%;
-}
-/* Limit description editor height with scroll */
-.vagabond .tab.description .ProseMirror,
-.vagabond .class-description .ProseMirror,
-.vagabond .ancestry-description .ProseMirror {
-  max-height: 350px;
-  overflow-y: auto !important;
-  color: var(--vagabond-c-dark);
-}
-/* Class details tab - excluding level feature descriptions */
-.vagabond .tab.details .ProseMirror:not(.level-feature-description .ProseMirror) {
-  max-height: 350px;
-  overflow-y: auto !important;
-  color: var(--vagabond-c-dark);
-}
-/* Level feature descriptions need more height for toolbar */
-.vagabond .tab.details .level-feature-description .ProseMirror {
-  max-height: 400px;
-  overflow-y: auto !important;
-  color: var(--vagabond-c-dark);
-}
-.vagabond .level-feature-description {
-  min-height: 100px;
-  border: 1px solid var(--vagabond-c-faint);
-  padding: 8px;
-  border-radius: 4px;
-}
-.vagabond .level-feature-description prose-mirror {
-  display: block;
-  height: 100%;
-  min-height: 100px;
-}
-.vagabond .level-feature-description > div {
-  min-height: 100px;
 }
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
@@ -416,6 +379,28 @@
 .vagabond .items-list .trait-description input {
   width: 100%;
 }
+.vagabond .ancestry-description {
+  min-height: 100px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+  transition: max-height 0.3s ease;
+}
+.vagabond .ancestry-description prose-mirror {
+  height: 100%;
+  min-height: 100px;
+}
+.vagabond .ancestry-description > div {
+  min-height: 100px;
+}
+.vagabond .ancestry-description:has(.tox-tinymce) {
+  max-height: 350px;
+}
+.vagabond .ancestry-description.mce-active {
+  max-height: 350px;
+}
 .vagabond .class-description {
   min-height: 100px;
   max-height: 250px;
@@ -423,6 +408,7 @@
   border: 1px solid var(--vagabond-c-faint);
   padding: 8px;
   border-radius: 4px;
+  transition: max-height 0.3s ease;
 }
 .vagabond .class-description prose-mirror {
   height: 100%;
@@ -431,20 +417,11 @@
 .vagabond .class-description > div {
   min-height: 100px;
 }
-.vagabond .ancestry-description {
-  min-height: 100px;
-  max-height: 250px;
-  overflow-y: auto;
-  border: 1px solid var(--vagabond-c-faint);
-  padding: 8px;
-  border-radius: 4px;
+.vagabond .class-description:has(.tox-tinymce) {
+  max-height: 350px;
 }
-.vagabond .ancestry-description prose-mirror {
-  height: 100%;
-  min-height: 100px;
-}
-.vagabond .ancestry-description > div {
-  min-height: 100px;
+.vagabond .class-description.mce-active {
+  max-height: 350px;
 }
 .vagabond .traits-section .scrollable {
   width: 100%;
