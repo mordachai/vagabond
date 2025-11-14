@@ -25,6 +25,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll: this._onRoll,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
+      levelUp: this._onLevelUp,  // Level up action
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -353,6 +354,64 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (classItem) {
       classItem.sheet.render(true);
     }
+  }
+
+  /**
+   * Handle leveling up the character
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onLevelUp(event, target) {
+    const currentLevel = this.actor.system.attributes.level.value;
+    const newLevel = currentLevel + 1;
+
+    if (newLevel > 10) {
+      ui.notifications.warn("Maximum level (10) already reached!");
+      return;
+    }
+
+    // Get the class item to see what features will be granted
+    const classItem = this.actor.items.find(item => item.type === 'class');
+    if (!classItem) {
+      ui.notifications.warn("Character must have a class before leveling up!");
+      return;
+    }
+
+    // Get features for the new level
+    const newFeatures = classItem.system.levelFeatures.filter(f => f.level === newLevel);
+
+    // Build the dialog content
+    let content = `<p>Level up from <strong>${currentLevel}</strong> to <strong>${newLevel}</strong>?</p>`;
+
+    if (newFeatures.length > 0) {
+      content += `<p><strong>You will gain these features:</strong></p><ul>`;
+      for (const feature of newFeatures) {
+        content += `<li><strong>${feature.name}</strong>`;
+        if (feature.description) {
+          content += `: ${feature.description}`;
+        }
+        content += `</li>`;
+      }
+      content += `</ul>`;
+    } else {
+      content += `<p><em>No new features at this level.</em></p>`;
+    }
+
+    // Confirm the level up
+    const confirmed = await Dialog.confirm({
+      title: `Level Up to ${newLevel}`,
+      content: content,
+    });
+
+    if (!confirmed) return;
+
+    // Level up!
+    await this.actor.update({ 'system.attributes.level.value': newLevel });
+
+    ui.notifications.info(`Leveled up to ${newLevel}!`);
   }
 
   /**
