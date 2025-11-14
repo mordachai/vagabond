@@ -122,65 +122,45 @@
   }
 }
 
-// Ancestry-specific sections
-.ancestry-description {
-  min-height: 100px;
-  max-height: 250px;
+// Unified item content containers
+.ancestry-item-content,
+.class-item-content {
+  min-height: 400px;
+  max-height: calc(100vh - 300px);
   overflow-y: auto;
-  border: 1px solid var(--vagabond-c-faint);
-  padding: 8px;
-  border-radius: 4px;
+  padding: 10px;
   transition: max-height 0.3s ease;
   
-  prose-mirror {
-    height: 100%;
-    min-height: 100px;
-  }
-  
-  // For read-only mode
-  > div {
-    min-height: 100px;
-  }
-  
-  // Dynamic height adjustment when TinyMCE is active
+  // Expand when any editor is active
   &:has(.tox-tinymce) {
-    max-height: 350px; // +100px for toolbar space
+    max-height: calc(100vh - 150px);
   }
   
   // Fallback for browsers without :has() support
   &.mce-active {
-    max-height: 350px;
+    max-height: calc(100vh - 150px);
   }
 }
 
-// Class-specific sections (similar pattern)
+// Remove individual scrolling from description sections  
+.ancestry-description,
 .class-description {
   min-height: 100px;
-  max-height: 250px;
-  overflow-y: auto;
+  max-height: none; // Remove height constraint
+  overflow-y: visible; // Remove individual scrolling
   border: 1px solid var(--vagabond-c-faint);
   padding: 8px;
   border-radius: 4px;
-  transition: max-height 0.3s ease;
+  margin-bottom: 20px;
   
   prose-mirror {
-    height: 100%;
+    height: auto; // Allow natural growth
     min-height: 100px;
   }
   
   // For read-only mode
   > div {
     min-height: 100px;
-  }
-  
-  // Dynamic height adjustment when TinyMCE is active
-  &:has(.tox-tinymce) {
-    max-height: 350px; // +100px for toolbar space
-  }
-  
-  // Fallback for browsers without :has() support  
-  &.mce-active {
-    max-height: 350px;
   }
 }
 
@@ -188,8 +168,8 @@
   .scrollable {
     width: 100%;
     min-height: 100px;
-    max-height: 250px;
-    overflow-y: auto;
+    max-height: none; // Remove height constraint  
+    overflow-y: visible; // Remove individual scrolling
     border: 1px solid var(--vagabond-c-faint);
     border-radius: 4px;
     padding: 8px;

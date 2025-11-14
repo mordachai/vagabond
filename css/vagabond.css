@@ -253,7 +253,9 @@
   height: 100%;
 }
 .vagabond .tab {
-  max-height: 400px;
+  min-height: 400px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 .vagabond .tab.biography {
   flex: 1;
@@ -379,58 +381,107 @@
 .vagabond .items-list .trait-description input {
   width: 100%;
 }
-.vagabond .ancestry-description {
-  min-height: 100px;
-  max-height: 250px;
-  overflow-y: auto;
-  border: 1px solid var(--vagabond-c-faint);
-  padding: 8px;
-  border-radius: 4px;
+/* Unified item content containers */
+.vagabond .ancestry-item-content,
+.vagabond .class-item-content {
+  min-height: 400px;
+  max-height: calc(100vh - 200px);
+  /* overflow-y: auto; */
+  padding: 10px;
   transition: max-height 0.3s ease;
+  height: 100%; /* Take full height of parent tab */
 }
-.vagabond .ancestry-description prose-mirror {
-  height: 100%;
-  min-height: 100px;
+
+/* Expand when any editor is active */
+.vagabond .ancestry-item-content:has(.tox-tinymce),
+.vagabond .class-item-content:has(.tox-tinymce) {
+  max-height: calc(100vh - 150px);
 }
-.vagabond .ancestry-description > div {
-  min-height: 100px;
+
+/* Fallback for browsers without :has() support */
+.vagabond .ancestry-item-content.mce-active,
+.vagabond .class-item-content.mce-active {
+  max-height: calc(100vh - 150px);
 }
-.vagabond .ancestry-description:has(.tox-tinymce) {
-  max-height: 350px;
-}
-.vagabond .ancestry-description.mce-active {
-  max-height: 350px;
-}
+
+/* Remove individual scrolling from description sections */
+.vagabond .ancestry-description,
 .vagabond .class-description {
   min-height: 100px;
-  max-height: 250px;
-  overflow-y: auto;
+  max-height: none; /* Remove height constraint */
+  overflow-y: visible; /* Remove individual scrolling */
   border: 1px solid var(--vagabond-c-faint);
   padding: 8px;
   border-radius: 4px;
-  transition: max-height 0.3s ease;
+  margin-bottom: 20px;
 }
+
+.vagabond .ancestry-description prose-mirror,
 .vagabond .class-description prose-mirror {
-  height: 100%;
+  height: auto; /* Allow natural growth */
   min-height: 100px;
 }
+
+.vagabond .ancestry-description > div,
 .vagabond .class-description > div {
   min-height: 100px;
 }
-.vagabond .class-description:has(.tox-tinymce) {
-  max-height: 350px;
-}
-.vagabond .class-description.mce-active {
-  max-height: 350px;
-}
+
+/* Remove individual scrolling from traits section */
 .vagabond .traits-section .scrollable {
   width: 100%;
   min-height: 100px;
-  max-height: 250px;
-  overflow-y: auto;
+  max-height: none; /* Remove height constraint */
+  overflow-y: visible; /* Remove individual scrolling */
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   padding: 8px;
+}
+
+/* Level features section - also remove constraints */
+.vagabond .level-features-section {
+  max-height: none;
+  overflow-y: visible;
+}
+
+.vagabond .level-header {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-bottom: 2px solid var(--vagabond-c-tan);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+}
+
+/* Compact level feature descriptions */
+.vagabond .level-feature-description {
+  min-height: 50px;                     /* Compact default size */
+  max-height: fit-content;                     /* Small when not editing */
+  overflow-y: auto;                     /* Allow scroll if content overflows */
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+  transition: max-height 0.3s ease;     /* Smooth transition */
+}
+
+/* Expand when TinyMCE is active */
+.vagabond .level-feature-description:has(.tox-tinymce) {
+  max-height: 300px;                    /* Expand when editing */
+}
+
+/* Fallback for browsers without :has() support */
+.vagabond .level-feature-description.mce-active {
+  max-height: 300px;
+}
+
+/* ProseMirror inside level features - compact by default */
+.vagabond .level-feature-description prose-mirror {
+  min-height: 30px;                     /* Small default */
+  height: auto;
+}
+
+.vagabond .level-feature-description > div {
+  min-height: 30px;                     /* Small for read-only */
 }
 .vagabond .traits-section .scrollable .items-list {
   margin: 0;
@@ -570,8 +621,9 @@
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-.vagabond .vagabond .character-name-input:hover, .vagabond .vagabond .character-name-input:focus {
-  border-bottom: 2px solid var(--vagabond-c-dark);
+.vagabond .vagabond .character-name-input:hover,
+.vagabond .vagabond .character-name-input:focus {
+  border-bottom: 2px solid var(--vagabond-c-tan);
   background: transparent !important;
 }
 .vagabond .vagabond .character-info-row {
@@ -582,6 +634,11 @@
   font-weight: 500;
   line-height: 1.2;
 }
+
+.vagabond .prosemirror .editor-content, prose-mirror .editor-content {
+    position: relative;
+}
+
 @media (max-width: 600px) {
   .vagabond .vagabond .character-name-input {
     font-size: 16px;
