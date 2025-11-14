@@ -284,8 +284,19 @@
   overflow-y: auto !important;
   color: var(--vagabond-c-dark);
 }
+.vagabond .level-feature-description {
+  min-height: 100px;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+}
 .vagabond .level-feature-description prose-mirror {
   display: block;
+  height: 100%;
+  min-height: 100px;
+}
+.vagabond .level-feature-description > div {
+  min-height: 100px;
 }
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
