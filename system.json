@@ -27,7 +27,6 @@
         }
     },
     "Item": {
-      "feature": {"htmlFields": ["description"]},
       "gear": {"htmlFields": ["description"]},
       "spell": {"htmlFields": ["description"]},
       "ancestry": {"htmlFields": ["description"]},

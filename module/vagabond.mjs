@@ -59,7 +59,6 @@ Hooks.once('init', function () {
   CONFIG.Item.documentClass = VagabondItem;
   CONFIG.Item.dataModels = {
     gear: models.VagabondGear,
-    feature: models.VagabondFeature,
     spell: models.VagabondSpell,
     ancestry: models.VagabondAncestry,
     class: models.VagabondClass,

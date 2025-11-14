@@ -152,7 +152,8 @@
       "gear": "Gear",
       "feature": "Feature",
       "spell": "Spell",
-      "ancestry": "Ancestry"
+      "ancestry": "Ancestry",
+      "class": "Class"
     }
   }
 }

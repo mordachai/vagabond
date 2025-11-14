@@ -27,6 +27,21 @@
           </div>
         {{/each}}
       </div>
+
+      {{! Features Section }}
+      <h3 style='margin-top: 20px;'>Features</h3>
+      <ul class='features-list' style='list-style: none; padding-left: 0;'>
+        {{#each features as |feature id|}}
+          <li class='feature' style='margin-bottom: 10px;'>
+            <strong>{{feature.name}}</strong>
+            {{#if feature.description}}
+              <div style='margin-top: 5px; font-size: 12px; color: var(--vagabond-c-tan);'>{{feature.description}}</div>
+            {{/if}}
+          </li>
+        {{else}}
+          <li class='feature'>No features yet. Features are granted by your class as you level up.</li>
+        {{/each}}
+      </ul>
     </aside>
 
     {{! Middle column: Saves and Skills }}

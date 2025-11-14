@@ -8,6 +8,7 @@ export default class VagabondClass extends VagabondItemBase {
 
   static defineSchema() {
     const fields = foundry.data.fields;
+    const requiredString = { required: true, nullable: false };
     const schema = super.defineSchema();
 
     // Is this class a spellcaster?
@@ -57,10 +58,69 @@ export default class VagabondClass extends VagabondItemBase {
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
 
+    // Level features - features gained at each level
+    schema.levelFeatures = new fields.ArrayField(
+      new fields.SchemaField({
+        level: new fields.NumberField({
+          required: true,
+          initial: 1,
+          min: 1,
+          max: 10,
+          integer: true
+        }),
+        name: new fields.StringField({ ...requiredString, initial: '' }),
+        description: new fields.StringField({ initial: '' })
+      }),
+      { initial: [] }
+    );
+
     return schema;
   }
 
   prepareDerivedData() {
     // Add any calculations or derived data here
+    this.featureCount = this.levelFeatures.length;
+  }
+
+  /**
+   * Get features for a specific level
+   * @param {number} level - The level to get features for
+   * @returns {Array} Array of features for that level
+   */
+  getFeaturesForLevel(level) {
+    return this.levelFeatures.filter(f => f.level === level);
+  }
+
+  /**
+   * Add a new feature to this class
+   * @param {number} level - The level this feature is gained at
+   * @param {string} name - The name of the feature
+   * @param {string} description - The description of the feature
+   */
+  async addLevelFeature(level = 1, name = 'New Feature', description = '') {
+    const newFeatures = [...this.levelFeatures, { level, name, description }];
+    await this.parent.update({ 'system.levelFeatures': newFeatures });
+  }
+
+  /**
+   * Remove a feature by index
+   * @param {number} index - The index of the feature to remove
+   */
+  async removeLevelFeature(index) {
+    if (index < 0 || index >= this.levelFeatures.length) return;
+    const newFeatures = this.levelFeatures.filter((_, i) => i !== index);
+    await this.parent.update({ 'system.levelFeatures': newFeatures });
+  }
+
+  /**
+   * Update a specific feature
+   * @param {number} index - The index of the feature to update
+   * @param {object} updates - The updates to apply
+   */
+  async updateLevelFeature(index, updates) {
+    if (index < 0 || index >= this.levelFeatures.length) return;
+    const newFeatures = [...this.levelFeatures];
+    newFeatures[index] = { ...newFeatures[index], ...updates };
+    await this.parent.update({ 'system.levelFeatures': newFeatures });
   }
 }

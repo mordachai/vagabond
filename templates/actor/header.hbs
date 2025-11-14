@@ -23,33 +23,36 @@
     </div>
 
     {{! Character Info Row - Level, Ancestry, Class as display divs }}
-    <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan);'>
-      Level {{system.attributes.level.value}},
-      {{#if system.ancestryData}}
-        <span class='ancestry-name' data-item-id='{{system.ancestryData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
-      {{else}}
-        <span style='color: var(--vagabond-c-faint);'>Unknown Ancestry</span>
-      {{/if}}
-      {{#if system.classData}}
-        <span class='class-name' data-item-id='{{system.classData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
-      {{else}}
-        <span style='color: var(--vagabond-c-faint);'>No Class</span>
-      {{/if}}
-      {{#if system.ancestryData}}
-        ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
-      {{else}}
-        (Unknown, Medium size)
+    <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan); display: flex; justify-content: center; align-items: center; gap: 8px;'>
+      <span>
+        Level {{system.attributes.level.value}},
+        {{#if system.ancestryData}}
+          <span class='ancestry-name' data-item-id='{{system.ancestryData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
+        {{else}}
+          <span style='color: var(--vagabond-c-faint);'>Unknown Ancestry</span>
+        {{/if}}
+        {{#if system.classData}}
+          <span class='class-name' data-item-id='{{system.classData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+        {{else}}
+          <span style='color: var(--vagabond-c-faint);'>No Class</span>
+        {{/if}}
+        {{#if system.ancestryData}}
+          ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
+        {{else}}
+          (Unknown, Medium size)
+        {{/if}}
+      </span>
+      {{#if (lt system.attributes.level.value 10)}}
+        <button
+          type='button'
+          data-action='levelUp'
+          data-tooltip='Level Up'
+          style='padding: 2px 8px; font-size: 11px; cursor: pointer;'
+        >
+          <i class='fas fa-level-up-alt'></i> Level Up
+        </button>
       {{/if}}
     </div>
-
-    {{! Spellcaster Info Row - Only show if class is a spellcaster }}
-    {{#if system.classData.isSpellcaster}}
-    <div class='spellcaster-info-row' style='text-align: center; margin-bottom: 10px; font-size: 12px; color: var(--vagabond-c-tan);'>
-      <strong>Spellcaster:</strong>
-      Mana Skill: {{#if system.classData.manaSkill}}<span style='text-transform: capitalize;'>{{system.classData.manaSkill}}</span>{{else}}<span style='color: var(--vagabond-c-faint);'>None</span>{{/if}} |
-      Casting Stat: {{#if system.classData.castingStat}}<span style='text-transform: capitalize;'>{{system.classData.castingStat}}</span>{{else}}<span style='color: var(--vagabond-c-faint);'>None</span>{{/if}}
-    </div>
-    {{/if}}
 
     {{! XP Row }}
     <div class='grid grid-1col' style='margin-bottom: 10px;'>
