@@ -235,6 +235,7 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   margin-bottom: 10px;
+  min-height: 100px;
 }
 .vagabond .sheet-header .profile-img {
   flex: 0 0 100px;
@@ -262,6 +263,14 @@
 }
 .vagabond .tab.biography .editor {
   height: 100%;
+}
+.vagabond .tab.description prose-mirror,
+.vagabond .tab.details prose-mirror,
+.vagabond .class-description prose-mirror,
+.vagabond .ancestry-description prose-mirror {
+  max-height: 350px;
+  overflow-y: auto;
+  display: block;
 }
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
