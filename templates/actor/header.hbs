@@ -42,15 +42,6 @@
       {{/if}}
     </div>
 
-    {{! Spellcaster Info Row - Only show if class is a spellcaster }}
-    {{#if system.classData.isSpellcaster}}
-    <div class='spellcaster-info-row' style='text-align: center; margin-bottom: 10px; font-size: 12px; color: var(--vagabond-c-tan);'>
-      <strong>Spellcaster:</strong>
-      Mana Skill: {{#if system.classData.manaSkill}}<span style='text-transform: capitalize;'>{{system.classData.manaSkill}}</span>{{else}}<span style='color: var(--vagabond-c-faint);'>None</span>{{/if}} |
-      Casting Stat: {{#if system.classData.castingStat}}<span style='text-transform: capitalize;'>{{system.classData.castingStat}}</span>{{else}}<span style='color: var(--vagabond-c-faint);'>None</span>{{/if}}
-    </div>
-    {{/if}}
-
     {{! XP Row }}
     <div class='grid grid-1col' style='margin-bottom: 10px;'>
       {{! Current Luck }}
