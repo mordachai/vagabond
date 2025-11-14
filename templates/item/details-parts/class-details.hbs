@@ -64,14 +64,15 @@
                         <i class='fas fa-trash'></i>
                       </a>
                     </div>
-                    <input
-                      type='text'
-                      name='system.levelFeatures.{{feature.index}}.description'
-                      value='{{feature.description}}'
-                      placeholder='Feature description...'
-                      data-dtype='String'
-                      style='width: 100%;'
-                    />
+                    <div class='level-feature-description'>
+                      <prose-mirror
+                        name='system.levelFeatures.{{feature.index}}.description'
+                        value='{{feature.description}}'
+                        toggled='true'
+                      >
+                        {{feature.description}}
+                      </prose-mirror>
+                    </div>
                     <input
                       type='hidden'
                       name='system.levelFeatures.{{feature.index}}.level'
@@ -80,7 +81,7 @@
                   {{else}}
                     <strong>{{feature.name}}</strong>
                     {{#if feature.description}}
-                      <div style='margin-top: 5px;'>{{feature.description}}</div>
+                      <div style='margin-top: 5px;'>{{{feature.description}}}</div>
                     {{/if}}
                   {{/if}}
                 </div>

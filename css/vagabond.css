@@ -272,6 +272,12 @@
   max-height: 350px;
   overflow-y: auto !important;
 }
+/* Level feature descriptions need more height for toolbar */
+.vagabond .level-feature-description .ProseMirror {
+  min-height: 400px;
+  max-height: 400px;
+  overflow-y: auto !important;
+}
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
 }
