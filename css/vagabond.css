@@ -253,7 +253,9 @@
   height: 100%;
 }
 .vagabond .tab {
-  max-height: 400px;
+  min-height: 400px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 .vagabond .tab.biography {
   flex: 1;
