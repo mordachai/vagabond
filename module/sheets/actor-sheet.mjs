@@ -24,6 +24,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
+      viewClass: this._viewClass,  // YOUR CUSTOM ACTION
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -273,6 +274,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onRender(context, options) {
     await super._onRender(context, options);
     this.#disableOverrides();
+
+    // Add right-click context menu handlers for ancestry and class
+    const ancestryName = this.element.querySelector('.ancestry-name');
+    if (ancestryName) {
+      ancestryName.addEventListener('contextmenu', this._onRemoveAncestry.bind(this));
+    }
+
+    const className = this.element.querySelector('.class-name');
+    if (className) {
+      className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
+    }
+
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
@@ -324,6 +337,61 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const ancestry = this.actor.items.find(item => item.type === 'ancestry');
     if (ancestry) {
       ancestry.sheet.render(true);
+    }
+  }
+
+  /**
+   * YOUR CUSTOM: Handle viewing the character's class item
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _viewClass(event, target) {
+    const classItem = this.actor.items.find(item => item.type === 'class');
+    if (classItem) {
+      classItem.sheet.render(true);
+    }
+  }
+
+  /**
+   * YOUR CUSTOM: Handle removing the character's ancestry item (right-click)
+   *
+   * @param {PointerEvent} event   The originating contextmenu event
+   * @protected
+   */
+  async _onRemoveAncestry(event) {
+    event.preventDefault();
+    const ancestry = this.actor.items.find(item => item.type === 'ancestry');
+    if (ancestry) {
+      const confirmed = await Dialog.confirm({
+        title: 'Remove Ancestry',
+        content: `<p>Are you sure you want to remove <strong>${ancestry.name}</strong>?</p>`,
+      });
+      if (confirmed) {
+        await ancestry.delete();
+      }
+    }
+  }
+
+  /**
+   * YOUR CUSTOM: Handle removing the character's class item (right-click)
+   *
+   * @param {PointerEvent} event   The originating contextmenu event
+   * @protected
+   */
+  async _onRemoveClass(event) {
+    event.preventDefault();
+    const classItem = this.actor.items.find(item => item.type === 'class');
+    if (classItem) {
+      const confirmed = await Dialog.confirm({
+        title: 'Remove Class',
+        content: `<p>Are you sure you want to remove <strong>${classItem.name}</strong>?</p>`,
+      });
+      if (confirmed) {
+        await classItem.delete();
+      }
     }
   }
 
@@ -670,30 +738,53 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   async _onDropItemCreate(itemData, event) {
     itemData = itemData instanceof Array ? itemData : [itemData];
-    
+
     // YOUR CUSTOM: Handle ancestry replacement logic BEFORE creating any items
     const ancestryItems = itemData.filter(data => data.type === 'ancestry');
-    
+
     if (ancestryItems.length > 0) {
       // Find existing ancestry and remove it FIRST, including its effects
       const existingAncestry = this.actor.items.find(item => item.type === 'ancestry');
       if (existingAncestry) {
         console.log(`Replacing existing ancestry: ${existingAncestry.name}`);
-        
+
         // Delete the existing ancestry - this should also remove its effects
         await existingAncestry.delete();
       }
-      
+
       // Only keep the FIRST ancestry if multiple are dropped
       const selectedAncestry = ancestryItems[0];
-      
+
       // Filter out ALL ancestry items from original data, then add back only the selected one
       const nonAncestryItems = itemData.filter(data => data.type !== 'ancestry');
       itemData = [...nonAncestryItems, selectedAncestry];
-      
+
       console.log(`Adding new ancestry: ${selectedAncestry.name}`);
     }
-    
+
+    // YOUR CUSTOM: Handle class replacement logic BEFORE creating any items
+    const classItems = itemData.filter(data => data.type === 'class');
+
+    if (classItems.length > 0) {
+      // Find existing class and remove it FIRST, including its effects
+      const existingClass = this.actor.items.find(item => item.type === 'class');
+      if (existingClass) {
+        console.log(`Replacing existing class: ${existingClass.name}`);
+
+        // Delete the existing class - this should also remove its effects
+        await existingClass.delete();
+      }
+
+      // Only keep the FIRST class if multiple are dropped
+      const selectedClass = classItems[0];
+
+      // Filter out ALL class items from original data, then add back only the selected one
+      const nonClassItems = itemData.filter(data => data.type !== 'class');
+      itemData = [...nonClassItems, selectedClass];
+
+      console.log(`Adding new class: ${selectedClass.name}`);
+    }
+
     return this.actor.createEmbeddedDocuments('Item', itemData);
   }
 

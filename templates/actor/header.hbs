@@ -24,19 +24,32 @@
 
     {{! Character Info Row - Level, Ancestry, Class as display divs }}
     <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan);'>
-      Level {{system.attributes.level.value}}, 
+      Level {{system.attributes.level.value}},
       {{#if system.ancestryData}}
-        {{system.ancestryData.name}} 
+        <span class='ancestry-name' data-item-id='{{system.ancestryData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
       {{else}}
-        Unknown Ancestry
+        <span style='color: var(--vagabond-c-faint);'>Unknown Ancestry</span>
       {{/if}}
-      <span style='color: var(--vagabond-c-faint);'>Fighter</span> 
+      {{#if system.classData}}
+        <span class='class-name' data-item-id='{{system.classData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+      {{else}}
+        <span style='color: var(--vagabond-c-faint);'>No Class</span>
+      {{/if}}
       {{#if system.ancestryData}}
         ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
       {{else}}
         (Unknown, Medium size)
       {{/if}}
     </div>
+
+    {{! Spellcaster Info Row - Only show if class is a spellcaster }}
+    {{#if system.classData.isSpellcaster}}
+    <div class='spellcaster-info-row' style='text-align: center; margin-bottom: 10px; font-size: 12px; color: var(--vagabond-c-tan);'>
+      <strong>Spellcaster:</strong>
+      Mana Skill: {{#if system.classData.manaSkill}}<span style='text-transform: capitalize;'>{{system.classData.manaSkill}}</span>{{else}}<span style='color: var(--vagabond-c-faint);'>None</span>{{/if}} |
+      Casting Stat: {{#if system.classData.castingStat}}<span style='text-transform: capitalize;'>{{system.classData.castingStat}}</span>{{else}}<span style='color: var(--vagabond-c-faint);'>None</span>{{/if}}
+    </div>
+    {{/if}}
 
     {{! XP Row }}
     <div class='grid grid-1col' style='margin-bottom: 10px;'>

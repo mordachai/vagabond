@@ -134,6 +134,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Get ancestry data for display
     this._calculateAncestryData();
 
+    // Get class data for display
+    this._calculateClassData();
+
     // Calculate combat values
     this._calculateCombatValues();
 
@@ -183,6 +186,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     const ancestry = this.parent?.items?.find(item => item.type === 'ancestry');
     if (ancestry) {
       this.ancestryData = {
+        id: ancestry.id,
         name: ancestry.name,
         size: ancestry.system.size,
         beingType: ancestry.system.ancestryType,
@@ -190,6 +194,24 @@ export default class VagabondCharacter extends VagabondActorBase {
       };
     } else {
       this.ancestryData = null;
+    }
+  }
+
+  /**
+   * Get class data for display purposes
+   */
+  _calculateClassData() {
+    const classItem = this.parent?.items?.find(item => item.type === 'class');
+    if (classItem) {
+      this.classData = {
+        id: classItem.id,
+        name: classItem.name,
+        isSpellcaster: classItem.system.isSpellcaster,
+        manaSkill: classItem.system.manaSkill,
+        castingStat: classItem.system.castingStat
+      };
+    } else {
+      this.classData = null;
     }
   }
 

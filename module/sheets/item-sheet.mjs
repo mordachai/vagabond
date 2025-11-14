@@ -60,6 +60,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     ancestryDetails: {
       template: 'systems/vagabond/templates/item//details-parts/ancestry-details.hbs',
     },
+    classDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/class-details.hbs',
+    },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
     },
@@ -85,6 +88,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'ancestry':
         console.log("Loading ancestry template");
         options.parts.push('ancestryDetails', 'effects');
+        break;
+      case 'class':
+        console.log("Loading class template");
+        options.parts.push('classDetails', 'effects');
         break;
     }
   }
@@ -124,7 +131,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         // Necessary for preserving active tab on re-render
         context.tab = context.tabs[partId];
         break;
-        
+
       case 'ancestryDetails':
         // Ancestry gets enriched description like the description tab
         context.tab = context.tabs[partId];
@@ -137,7 +144,20 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           }
         );
         break;
-        
+
+      case 'classDetails':
+        // Class gets enriched description like the description tab
+        context.tab = context.tabs[partId];
+        context.enrichedDescription = await TextEditor.enrichHTML(
+          this.item.system.description,
+          {
+            secrets: this.document.isOwner,
+            rollData: this.item.getRollData(),
+            relativeTo: this.item,
+          }
+        );
+        break;
+
       case 'description':
         context.tab = context.tabs[partId];
         // Enrich description info for display
@@ -150,7 +170,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           }
         );
         break;
-        
+
       case 'effects':
         context.tab = context.tabs[partId];
         // Prepare active effects for easier access
@@ -169,9 +189,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for ancestry is details, others default to description
+    // Default tab for ancestry and class is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = this.document.type === 'ancestry' ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'ancestry' || this.document.type === 'class') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -196,6 +216,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           tab.label += 'Attributes';
           break;
         case 'ancestryDetails':
+        case 'classDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;
