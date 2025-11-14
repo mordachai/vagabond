@@ -25,6 +25,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       toggleEffect: this._toggleEffect,
       addTrait: this._onAddTrait,
       removeTrait: this._onRemoveTrait,
+      addLevelFeature: this._onAddLevelFeature,
+      removeLevelFeature: this._onRemoveLevelFeature,
     },
     form: {
       submitOnChange: true,
@@ -156,6 +158,17 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             relativeTo: this.item,
           }
         );
+        // Prepare level groups (1-10) with their features
+        context.levelGroups = [];
+        for (let level = 1; level <= 10; level++) {
+          const features = this.item.system.levelFeatures
+            .map((f, index) => ({ ...f, index }))
+            .filter(f => f.level === level);
+          context.levelGroups.push({
+            level,
+            features
+          });
+        }
         break;
 
       case 'description':
@@ -292,6 +305,42 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const traits = this.item.system.traits || [];
     const newTraits = traits.filter((_, i) => i !== index);
     await this.item.update({ 'system.traits': newTraits });
+  }
+
+  /**
+   * Handle adding a new level feature to a class item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddLevelFeature(event, target) {
+    console.log("Add level feature called!", event, target);
+    const level = parseInt(target.dataset.level);
+    if (isNaN(level)) return;
+
+    const levelFeatures = this.item.system.levelFeatures || [];
+    const newFeatures = [...levelFeatures, { level, name: 'New Feature', description: '' }];
+    await this.item.update({ 'system.levelFeatures': newFeatures });
+  }
+
+  /**
+   * Handle removing a level feature from a class item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveLevelFeature(event, target) {
+    console.log("Remove level feature called!", event, target);
+    const index = parseInt(target.dataset.featureIndex);
+    if (isNaN(index)) return;
+
+    const levelFeatures = this.item.system.levelFeatures || [];
+    const newFeatures = levelFeatures.filter((_, i) => i !== index);
+    await this.item.update({ 'system.levelFeatures': newFeatures });
   }
 
   /**
