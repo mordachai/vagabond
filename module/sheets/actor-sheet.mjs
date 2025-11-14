@@ -236,15 +236,32 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       9: [],
     };
 
+    // Build features list from class levelFeatures up to current level
+    const classItem = this.document.items.find(item => item.type === 'class');
+    if (classItem) {
+      const currentLevel = this.document.system.attributes.level.value;
+      const allLevelFeatures = classItem.system.levelFeatures || [];
+
+      // Get features for levels 1 through current level
+      for (const feature of allLevelFeatures) {
+        if (feature.level <= currentLevel) {
+          features.push({
+            name: `${feature.name} (Level ${feature.level})`,
+            description: feature.description,
+            level: feature.level
+          });
+        }
+      }
+
+      // Sort by level
+      features.sort((a, b) => a.level - b.level);
+    }
+
     // Iterate through items, allocating to containers
     for (let i of this.document.items) {
       // Append to gear.
       if (i.type === 'gear') {
         gear.push(i);
-      }
-      // Append to features.
-      else if (i.type === 'feature') {
-        features.push(i);
       }
       // Append to spells.
       else if (i.type === 'spell') {

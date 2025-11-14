@@ -49,10 +49,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     description: {
       template: 'systems/vagabond/templates/item/description.hbs',
     },
-    attributesFeature: {
-      template:
-        'systems/vagabond/templates/item/details-parts/feature-details.hbs',
-    },
     attributesGear: {
       template: 'systems/vagabond/templates/item/details-parts/gear-details.hbs',
     },
@@ -77,10 +73,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     options.parts = ['header', 'tabs'];
     if (this.document.limited) return;
     switch (this.document.type) {
-      case 'feature':
-        console.log("Loading feature template");
-        options.parts.push('description', 'attributesFeature', 'effects');
-        break;
       case 'gear':
         options.parts.push('description', 'attributesGear');
         break;
@@ -127,7 +119,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   /** @override */
   async _preparePartContext(partId, context) {
     switch (partId) {
-      case 'attributesFeature':
       case 'attributesGear':
       case 'attributesSpell':
         // Necessary for preserving active tab on re-render

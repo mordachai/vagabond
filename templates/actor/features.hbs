@@ -32,24 +32,14 @@
       <h3 style='margin-top: 20px;'>Features</h3>
       <ol class='features-list'>
         {{#each features as |feature id|}}
-          <li class='feature flexrow' data-item-id='{{feature.id}}'>
-            <div class='feature-image'>
-              <img src='{{feature.img}}' alt='{{feature.name}}' width='24' height='24' />
-            </div>
-            <h4 class='feature-name flexlarge'>
-              <a class='item-name'>{{feature.name}}</a>
-            </h4>
-            <div class='item-controls'>
-              <a class='item-control item-edit' data-action='editItem' data-tooltip='Edit Item'>
-                <i class='fas fa-edit'></i>
-              </a>
-              <a class='item-control item-delete' data-action='deleteItem' data-tooltip='Delete Item'>
-                <i class='fas fa-trash'></i>
-              </a>
-            </div>
+          <li class='feature' style='margin-bottom: 10px;'>
+            <strong>{{feature.name}}</strong>
+            {{#if feature.description}}
+              <div style='margin-top: 5px; font-size: 12px; color: var(--vagabond-c-tan);'>{{feature.description}}</div>
+            {{/if}}
           </li>
         {{else}}
-          <li class='feature'>No features yet.</li>
+          <li class='feature'>No features yet. Features are granted by your class as you level up.</li>
         {{/each}}
       </ol>
     </aside>
