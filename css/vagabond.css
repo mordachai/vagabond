@@ -839,6 +839,46 @@
   text-shadow: 0 0 10px red;
 }
 
+/* Metal effect text */
+.vagabond .metal-effect-text {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* Cost inputs layout */
+.vagabond .cost-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.vagabond .cost-field {
+  flex: 1;
+}
+
+/* Calculated properties display */
+.vagabond .calculated-properties {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.vagabond .calculated-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.vagabond .calculated-cost {
+  margin-top: 8px;
+}
+
+.vagabond .metal-bonus {
+  color: #0a0;
+}
+
 @media (max-width: 600px) {
   .vagabond .vagabond .character-name-input {
     font-size: 16px;

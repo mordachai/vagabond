@@ -19,39 +19,17 @@
       </div>
     </div>
 
-    {{! Armor Type }}
+    {{! Metal Effect Display }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.armorType.label'}}</label>
-      <select name='system.armorType' data-dtype='String'>
-        {{#select system.armorType}}
-          <option value='light' title='{{lookup config.armorTypeDescriptions "light"}}'>{{localize 'VAGABOND.Armor.Type.Light'}}</option>
-          <option value='medium' title='{{lookup config.armorTypeDescriptions "medium"}}'>{{localize 'VAGABOND.Armor.Type.Medium'}}</option>
-          <option value='heavy' title='{{lookup config.armorTypeDescriptions "heavy"}}'>{{localize 'VAGABOND.Armor.Type.Heavy'}}</option>
-        {{/select}}
-      </select>
-    </div>
-
-    {{! Metal Type }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.metal.label'}}</label>
-      <select name='system.metal' data-dtype='String'>
-        {{#select system.metal}}
-          <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-          <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-          <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-          <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-          <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-          <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
-        {{/select}}
-      </select>
-      <small style='display: block; margin-top: 4px; color: #888;'>{{system.metalEffect}}</small>
+      <label class='resource-label'>Metal Effect</label>
+      <div class='metal-effect-text'>{{system.metalEffect}}</div>
     </div>
 
     {{! Base Cost Section - Single Line Layout }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.baseCost.label'}} <small>(before metal multiplier)</small></label>
-      <div class='flexrow' style='gap: 8px;'>
-        <div style='flex: 1;'>
+      <div class='cost-inputs'>
+        <div class='cost-field'>
           <label class='resource-label'>Gold</label>
           <input
             type='number'
@@ -61,7 +39,7 @@
             data-dtype='Number'
           />
         </div>
-        <div style='flex: 1;'>
+        <div class='cost-field'>
           <label class='resource-label'>Silver</label>
           <input
             type='number'
@@ -71,7 +49,7 @@
             data-dtype='Number'
           />
         </div>
-        <div style='flex: 1;'>
+        <div class='cost-field'>
           <label class='resource-label'>Copper</label>
           <input
             type='number'
@@ -87,19 +65,19 @@
     {{! Calculated Properties - Read-only Display }}
     <div class='form-group'>
       <label class='resource-label'>Calculated Properties</label>
-      <div style='background: #f5f5f5; padding: 12px; border-radius: 4px;'>
-        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;'>
+      <div class='calculated-properties'>
+        <div class='calculated-grid'>
           <div>
             <strong>Rating:</strong> {{system.rating}}
             {{#if (ne system.rating system.finalRating)}}
-              <span style='color: #0a0;'>({{system.finalRating}} with metal)</span>
+              <span class='metal-bonus'>({{system.finalRating}} with metal)</span>
             {{/if}}
           </div>
           <div><strong>Might:</strong> {{system.might}}</div>
           <div><strong>Slots:</strong> {{system.slots}}</div>
           <div><strong>Metal Multiplier:</strong> ×{{system.metalMultiplier}}</div>
         </div>
-        <div>
+        <div class='calculated-cost'>
           <strong>Final Cost:</strong> {{system.costDisplay}}
         </div>
       </div>

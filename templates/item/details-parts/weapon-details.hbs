@@ -98,14 +98,14 @@
           <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
         {{/select}}
       </select>
-      <small style='display: block; margin-top: 4px; color: #888;'>{{system.metalEffect}}</small>
+      <div class='metal-effect-text'>{{system.metalEffect}}</div>
     </div>
 
     {{! Base Cost Section - Single Line Layout }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.baseCost.label'}} <small>(before metal multiplier)</small></label>
-      <div class='flexrow' style='gap: 8px;'>
-        <div style='flex: 1;'>
+      <div class='cost-inputs'>
+        <div class='cost-field'>
           <label class='resource-label'>Gold</label>
           <input
             type='number'
@@ -115,7 +115,7 @@
             data-dtype='Number'
           />
         </div>
-        <div style='flex: 1;'>
+        <div class='cost-field'>
           <label class='resource-label'>Silver</label>
           <input
             type='number'
@@ -125,7 +125,7 @@
             data-dtype='Number'
           />
         </div>
-        <div style='flex: 1;'>
+        <div class='cost-field'>
           <label class='resource-label'>Copper</label>
           <input
             type='number'
@@ -153,12 +153,12 @@
     {{! Calculated Properties - Read-only Display }}
     <div class='form-group'>
       <label class='resource-label'>Calculated Properties</label>
-      <div style='background: #f5f5f5; padding: 12px; border-radius: 4px;'>
-        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;'>
+      <div class='calculated-properties'>
+        <div class='calculated-grid'>
           <div><strong>Final Slots:</strong> {{system.slots}}</div>
           <div><strong>Metal Multiplier:</strong> ×{{system.metalMultiplier}}</div>
         </div>
-        <div>
+        <div class='calculated-cost'>
           <strong>Final Cost:</strong> {{system.costDisplay}}
         </div>
       </div>
