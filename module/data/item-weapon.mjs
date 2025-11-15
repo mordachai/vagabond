@@ -58,15 +58,23 @@ export default class VagabondWeapon extends VagabondItemBase {
       choices: ['1H', '2H', 'F', 'V']
     });
 
-    // Cost in three currencies (same as gear)
-    schema.cost = new fields.SchemaField({
+    // Base cost in three currencies (before metal multiplier)
+    schema.baseCost = new fields.SchemaField({
       gold: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       silver: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       copper: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
     });
 
-    // Slots (inventory space)
-    schema.slots = new fields.NumberField({
+    // Metal type (affects cost multiplier and special properties)
+    schema.metal = new fields.StringField({
+      required: true,
+      blank: false,
+      initial: 'common',
+      choices: ['common', 'adamant', 'coldIron', 'silver', 'mythral', 'orichalcum']
+    });
+
+    // Base slots (before metal modifier)
+    schema.baseSlots = new fields.NumberField({
       required: true,
       nullable: false,
       integer: true,
@@ -86,6 +94,18 @@ export default class VagabondWeapon extends VagabondItemBase {
   }
 
   prepareDerivedData() {
+    // Get metal properties
+    const metalData = this._getMetalData();
+    this.metalMultiplier = metalData.multiplier;
+    this.metalEffect = metalData.effect;
+
+    // Calculate final cost with metal multiplier
+    this.cost = {
+      gold: this.baseCost.gold * this.metalMultiplier,
+      silver: this.baseCost.silver * this.metalMultiplier,
+      copper: this.baseCost.copper * this.metalMultiplier
+    };
+
     // Format cost as a human-readable string
     const costs = [];
     if (this.cost.gold > 0) costs.push(`${this.cost.gold}g`);
@@ -94,16 +114,40 @@ export default class VagabondWeapon extends VagabondItemBase {
 
     this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
 
+    // Calculate final slots with metal modifier
+    let finalSlots = this.baseSlots;
+    if (this.metal === 'adamant') {
+      finalSlots += 1; // Occupies +1 Slot
+    } else if (this.metal === 'mythral') {
+      finalSlots = Math.max(1, finalSlots - 1); // Occupies 1 fewer Slot (min 1)
+    }
+    this.slots = finalSlots;
+
     // Format properties as comma-separated string for display
     this.propertiesDisplay = this.properties.length > 0
       ? this.properties.join(', ')
       : '-';
 
     // Determine current damage based on equipment state
+    let baseDamage;
     if (this.equipmentState === 'twoHands') {
-      this.currentDamage = this.damageTwoHands;
+      baseDamage = this.damageTwoHands;
     } else {
-      this.currentDamage = this.damageOneHand;
+      baseDamage = this.damageOneHand;
+    }
+
+    // Apply adamant bonus (+1 to damage)
+    if (this.metal === 'adamant') {
+      // Parse the damage formula and add +1
+      // Handle both dice notation (d6, d8) and flat values
+      if (baseDamage.includes('d')) {
+        this.currentDamage = `${baseDamage}+1`;
+      } else {
+        const value = parseInt(baseDamage) || 0;
+        this.currentDamage = String(value + 1);
+      }
+    } else {
+      this.currentDamage = baseDamage;
     }
 
     // Determine if weapon is equipped (any state other than unequipped)
@@ -125,5 +169,29 @@ export default class VagabondWeapon extends VagabondItemBase {
       'V': 'Versatile'
     };
     this.gripDisplay = gripMap[this.grip] || this.grip;
+
+    // Format metal display
+    const metalDisplayMap = {
+      'common': 'Common',
+      'adamant': 'Adamant',
+      'coldIron': 'Cold Iron',
+      'silver': 'Silver',
+      'mythral': 'Mythral',
+      'orichalcum': 'Orichalcum'
+    };
+    this.metalDisplay = metalDisplayMap[this.metal] || this.metal;
+  }
+
+  _getMetalData() {
+    const metals = {
+      'common': { multiplier: 1, effect: '-' },
+      'adamant': { multiplier: 50, effect: 'Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.' },
+      'coldIron': { multiplier: 20, effect: 'Situational weakness (Fae).' },
+      'silver': { multiplier: 10, effect: 'Blesses weapons against the accursed.' },
+      'mythral': { multiplier: 50, effect: 'Occupies 1 fewer Slot (min 1).' },
+      'orichalcum': { multiplier: 50, effect: 'Armor reduces Cast damage.' }
+    };
+
+    return metals[this.metal] || metals.common;
   }
 }

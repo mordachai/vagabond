@@ -172,8 +172,20 @@
           "weaponSkill": {"label": "Weapon Skill"},
           "range": {"label": "Range"},
           "grip": {"label": "Grip"},
+          "metal": {"label": "Metal"},
+          "baseCost": {"label": "Base Cost"},
+          "baseSlots": {"label": "Base Slots"},
           "cost": {"label": "Cost"},
           "slots": {"label": "Slots"}
+        }
+      },
+      "Armor": {
+        "FIELDS": {
+          "armorType": {"label": "Armor Type"},
+          "metal": {"label": "Metal"},
+          "baseCost": {"label": "Base Cost"},
+          "rating": {"label": "Armor Rating"},
+          "might": {"label": "Might Requirement"}
         }
       },
       "Spell": {
@@ -235,6 +247,21 @@
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects",
       "Duration": "Duration"
+    },
+    "Armor": {
+      "Type": {
+        "Light": "Light",
+        "Medium": "Medium",
+        "Heavy": "Heavy"
+      }
+    },
+    "Metal": {
+      "Common": "Common",
+      "Adamant": "Adamant",
+      "ColdIron": "Cold Iron",
+      "Silver": "Silver",
+      "Mythral": "Mythral",
+      "Orichalcum": "Orichalcum"
     }
   },
   "TYPES": {
@@ -245,6 +272,7 @@
     "Item": {
       "gear": "Gear",
       "weapon": "Weapon",
+      "armor": "Armor",
       "feature": "Feature",
       "spell": "Spell",
       "ancestry": "Ancestry",
@@ -279,3 +307,4 @@
     }
   }
 }
+

@@ -25,6 +25,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
+      toggleArmorEquipment: this._onToggleArmorEquipment,
+      useSpell: this._onUseSpell,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -247,6 +249,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Initialize containers.
     const gear = [];
     const weapons = [];
+    const armor = [];
     const features = [];
     const perks = [];
     const spells = [];
@@ -282,6 +285,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       else if (i.type === 'weapon') {
         weapons.push(i);
       }
+      // Append to armor.
+      else if (i.type === 'armor') {
+        armor.push(i);
+      }
       // Append to spells.
       else if (i.type === 'spell') {
         spells.push(i);
@@ -295,6 +302,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.armor = armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
@@ -374,6 +382,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Right-click on row: delete weapon
       weaponItem.addEventListener('contextmenu', this._onWeaponContextMenu.bind(this));
+    });
+
+    // Add click and context menu handlers for armor items
+    const armorItems = this.element.querySelectorAll('.armor-item-row[data-item-id]');
+    armorItems.forEach(armorItem => {
+      // Left-click on image: open item sheet
+      const armorImage = armorItem.querySelector('.armor-item-image');
+      if (armorImage) {
+        armorImage.addEventListener('click', this._onArmorImageClick.bind(this));
+      }
+
+      // Left-click on name: open item sheet (armor doesn't have a roll action like weapons)
+      const armorName = armorItem.querySelector('.armor-item-name');
+      if (armorName) {
+        armorName.addEventListener('click', this._onArmorImageClick.bind(this));
+      }
+
+      // Right-click on row: delete armor
+      armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
     });
 
     // You may want to add other special handling here
@@ -752,6 +779,50 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle left-click on armor item image - opens item sheet
+   */
+  async _onArmorImageClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const armorRow = event.currentTarget.closest('.armor-item-row');
+    const itemId = armorRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item) {
+      item.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle right-click on armor item - deletes armor with confirmation
+   */
+  async _onArmorContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const armorRow = event.currentTarget;
+    const itemId = armorRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Armor' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
+    }
+  }
+
+  /**
    * Renders an embedded document's sheet
    *
    * @this VagabondActorSheet
@@ -837,6 +908,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!weapon || weapon.type !== 'weapon') {
       ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Check if weapon is equipped
+    const equipmentState = weapon.system.equipmentState || 'unequipped';
+    if (equipmentState === 'unequipped') {
+      ui.notifications.warn(`${weapon.name} is not equipped. Equip it first to attack.`);
       return;
     }
 
@@ -941,6 +1019,90 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Update the weapon's equipment state
     await weapon.update({ 'system.equipmentState': nextState });
+  }
+
+  /**
+   * Handle toggling armor equipment state.
+   * Toggles between: equipped <-> unequipped
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleArmorEquipment(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const armor = this.actor.items.get(itemId);
+
+    if (!armor || armor.type !== 'armor') {
+      ui.notifications.error('Armor not found!');
+      return;
+    }
+
+    // Toggle equipped state
+    const newState = !armor.system.equipped;
+
+    // Update the armor's equipment state
+    await armor.update({ 'system.equipped': newState });
+  }
+
+  /**
+   * Handle using a spell (post to chat).
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onUseSpell(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const spell = this.actor.items.get(itemId);
+
+    if (!spell || spell.type !== 'spell') {
+      ui.notifications.error('Spell not found!');
+      return;
+    }
+
+    // Prepare the chat message content
+    let content = `<div class="spell-use">`;
+    content += `<h3>${spell.name}</h3>`;
+
+    // Add description
+    if (spell.system.description) {
+      content += `<p>${spell.system.description}</p>`;
+    }
+
+    // Add damage type
+    if (spell.system.damageBase && spell.system.damageBase !== '-') {
+      const damageLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase] || spell.system.damageBase);
+      content += `<p><strong>Damage Type:</strong> ${damageLabel}</p>`;
+    }
+
+    // Add delivery info
+    if (spell.system.delivery?.type) {
+      const deliveryLabel = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[spell.system.delivery.type] || spell.system.delivery.type);
+      content += `<p><strong>Delivery:</strong> ${deliveryLabel}`;
+      if (spell.system.delivery.cost > 0) {
+        content += ` (${spell.system.delivery.cost} Mana)`;
+      }
+      content += `</p>`;
+    }
+
+    // Add duration
+    if (spell.system.duration) {
+      content += `<p><strong>Duration:</strong> ${spell.system.duration}</p>`;
+    }
+
+    content += `</div>`;
+
+    // Create the chat message
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: content,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+    });
   }
 
   /**

@@ -436,6 +436,48 @@
   min-height: 60px;
 }
 
+/* Spell list styling */
+.vagabond .spell-add-button {
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+.vagabond .spell-item-info {
+  margin-left: 8px;
+}
+
+.vagabond .spell-damage-badge {
+  margin-left: 8px;
+  padding: 2px 6px;
+  background: #444;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+.vagabond .spell-delivery-info {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--vagabond-c-tan);
+}
+
+.vagabond .spell-list-item-name {
+  flex: 3;
+  align-items: center;
+}
+
+.vagabond .spell-list-item-controls {
+  flex: 1;
+  text-align: right;
+}
+
+.vagabond .spell-empty-message {
+  font-style: italic;
+  color: var(--vagabond-c-tan);
+  list-style: none;
+  padding: 20px;
+  text-align: center;
+}
+
 /* Remove individual scrolling from traits section */
 .vagabond .traits-section .scrollable {
   width: 100%;
@@ -648,12 +690,117 @@
     position: relative;
 }
 
-/* Perk Card Styles */
-.perks-section {
+/* Features Tab Styles */
+.vagabond .features-section-title {
   margin-top: 20px;
 }
 
-.perks-list {
+.vagabond .features-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.vagabond .features-list .feature {
+  margin-bottom: 10px;
+}
+
+.vagabond .feature-description {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--vagabond-c-tan);
+}
+
+/* Saves Section */
+.vagabond .saves {
+  margin-bottom: 20px;
+  border: 2px solid #333;
+  padding: 10px;
+}
+
+.vagabond .saves h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.vagabond .saves-row {
+  justify-content: space-around;
+}
+
+.vagabond .save {
+  flex: 1;
+  text-align: center;
+}
+
+.vagabond .save .resource-label {
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.vagabond .save-difficulty {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Skills Section */
+.vagabond .skill {
+  margin-bottom: 5px;
+}
+
+.vagabond .skill input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.vagabond .skill .resource-label {
+  cursor: pointer;
+}
+
+.vagabond .skill-difficulty {
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Weapon Skills / Attacks Section */
+.vagabond .weapon-skill {
+  margin-bottom: 5px;
+}
+
+.vagabond .weapon-skill input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.vagabond .weapon-skill .resource-label {
+  cursor: pointer;
+}
+
+.vagabond .weapon-skill-difficulty {
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Equipped Weapons */
+.vagabond .equipped-weapon {
+  margin-bottom: 5px;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.vagabond .equipped-weapon .resource-label {
+  cursor: pointer;
+}
+
+.vagabond .weapon-info {
+  margin-left: auto;
+  font-size: 0.9em;
+}
+
+/* Perk Card Styles */
+.vagabond .perks-section {
+  margin-top: 20px;
+}
+
+.vagabond .perks-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -662,7 +809,13 @@
   margin: 0;
 }
 
-.perk-card {
+.vagabond .no-perks {
+  font-style: italic;
+  color: var(--vagabond-c-tan);
+  list-style: none;
+}
+
+.vagabond .perk-card {
   border: 2px solid var(--vagabond-c-tan);
   padding: 8px 12px;
   background: var(--vagabond-c-faint);
@@ -672,7 +825,7 @@
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.perk-card:hover {
+.vagabond .perk-card:hover {
   background: var(--vagabond-c-beige);
   border-color: var(--vagabond-c-dark);
 }
@@ -746,6 +899,49 @@
 .vagabond .inventory-col-equipped {
   flex: 0.5;
   text-align: center;
+}
+
+/* Weapon-specific columns */
+.vagabond .inventory-col-damage {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .inventory-col-range {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .inventory-col-grip {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+/* Armor-specific columns */
+.vagabond .inventory-col-armor-type {
+  flex: 0 0 70px;
+  text-align: center;
+}
+
+.vagabond .inventory-col-rating {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .inventory-col-metal {
+  flex: 0 0 80px;
+  text-align: center;
+}
+
+/* Equipment toggle cursor */
+.vagabond .equipment-toggle {
+  cursor: pointer;
+}
+
+/* Inventory add item buttons */
+.vagabond .inventory-add-item {
+  display: flex;
+  gap: 8px;
 }
 
 /* Gear equipped icon */
@@ -822,18 +1018,56 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* Inventory items interaction */
-.vagabond .gear-item-image,
-.vagabond .weapon-item-image,
-.vagabond .gear-item-name,
-.vagabond .weapon-item-name {
+/* Generic item interaction classes */
+.vagabond .item-clickable-image,
+.vagabond .item-clickable-name {
   cursor: pointer;
 }
 
-.vagabond .gear-item-name:hover,
-.vagabond .weapon-item-name:hover {
+.vagabond .item-clickable-name:hover {
   color: var(--vagabond-c-black);
   text-shadow: 0 0 10px red;
+}
+
+/* Metal effect text */
+.vagabond .metal-effect-text {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* Cost inputs layout */
+.vagabond .cost-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.vagabond .cost-field {
+  flex: 1;
+}
+
+/* Calculated properties display */
+.vagabond .calculated-properties {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+}
+
+.vagabond .calculated-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.vagabond .calculated-cost {
+  margin-top: 8px;
+}
+
+.vagabond .metal-bonus {
+  color: #0a0;
 }
 
 @media (max-width: 600px) {

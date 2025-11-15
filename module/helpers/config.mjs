@@ -148,3 +148,49 @@ VAGABOND.weaponGripDescriptions = {
   'F': 'Fist: Your hands are open while using it.',
   'V': 'Versatile: Counts as 1H, but its damage die is one size larger if 2H.'
 };
+
+/**
+ * Armor types
+ * @type {Object}
+ */
+VAGABOND.armorTypes = {
+  'light': 'VAGABOND.Armor.Type.Light',
+  'medium': 'VAGABOND.Armor.Type.Medium',
+  'heavy': 'VAGABOND.Armor.Type.Heavy'
+};
+
+/**
+ * Armor type descriptions
+ * @type {Object}
+ */
+VAGABOND.armorTypeDescriptions = {
+  'light': 'Light: Rating 1, Might 3, 1 Slot',
+  'medium': 'Medium: Rating 2, Might 4, 2 Slots',
+  'heavy': 'Heavy: Rating 3, Might 5, 3 Slots'
+};
+
+/**
+ * Metal types for weapons and armor
+ * @type {Object}
+ */
+VAGABOND.metalTypes = {
+  'common': 'VAGABOND.Metal.Common',
+  'adamant': 'VAGABOND.Metal.Adamant',
+  'coldIron': 'VAGABOND.Metal.ColdIron',
+  'silver': 'VAGABOND.Metal.Silver',
+  'mythral': 'VAGABOND.Metal.Mythral',
+  'orichalcum': 'VAGABOND.Metal.Orichalcum'
+};
+
+/**
+ * Metal type multipliers and effects
+ * @type {Object}
+ */
+VAGABOND.metalData = {
+  'common': { multiplier: 1, effect: '-' },
+  'adamant': { multiplier: 50, effect: 'Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.' },
+  'coldIron': { multiplier: 20, effect: 'Situational weakness (Fae).' },
+  'silver': { multiplier: 10, effect: 'Blesses weapons against the accursed.' },
+  'mythral': { multiplier: 50, effect: 'Occupies 1 fewer Slot (min 1).' },
+  'orichalcum': { multiplier: 50, effect: 'Armor reduces Cast damage.' }
+};

@@ -85,36 +85,52 @@
       </div>
     </div>
 
-    {{! Cost Section - Single Line Layout }}
+    {{! Metal Type }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.cost.label'}}</label>
-      <div class='flexrow' style='gap: 8px;'>
-        <div style='flex: 1;'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.metal.label'}}</label>
+      <select name='system.metal' data-dtype='String'>
+        {{#select system.metal}}
+          <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+          <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+          <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+          <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+          <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+          <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+        {{/select}}
+      </select>
+      <div class='metal-effect-text'>{{system.metalEffect}}</div>
+    </div>
+
+    {{! Base Cost Section - Single Line Layout }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.baseCost.label'}} <small>(before metal multiplier)</small></label>
+      <div class='cost-inputs'>
+        <div class='cost-field'>
           <label class='resource-label'>Gold</label>
           <input
             type='number'
-            name='system.cost.gold'
-            value='{{system.cost.gold}}'
+            name='system.baseCost.gold'
+            value='{{system.baseCost.gold}}'
             min='0'
             data-dtype='Number'
           />
         </div>
-        <div style='flex: 1;'>
+        <div class='cost-field'>
           <label class='resource-label'>Silver</label>
           <input
             type='number'
-            name='system.cost.silver'
-            value='{{system.cost.silver}}'
+            name='system.baseCost.silver'
+            value='{{system.baseCost.silver}}'
             min='0'
             data-dtype='Number'
           />
         </div>
-        <div style='flex: 1;'>
+        <div class='cost-field'>
           <label class='resource-label'>Copper</label>
           <input
             type='number'
-            name='system.cost.copper'
-            value='{{system.cost.copper}}'
+            name='system.baseCost.copper'
+            value='{{system.baseCost.copper}}'
             min='0'
             data-dtype='Number'
           />
@@ -122,16 +138,30 @@
       </div>
     </div>
 
-    {{! Slots }}
+    {{! Base Slots }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.slots.label'}}</label>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.baseSlots.label'}} <small>(before metal modifier)</small></label>
       <input
         type='number'
-        name='system.slots'
-        value='{{system.slots}}'
+        name='system.baseSlots'
+        value='{{system.baseSlots}}'
         min='0'
         data-dtype='Number'
       />
+    </div>
+
+    {{! Calculated Properties - Read-only Display }}
+    <div class='form-group'>
+      <label class='resource-label'>Calculated Properties</label>
+      <div class='calculated-properties'>
+        <div class='calculated-grid'>
+          <div><strong>Final Slots:</strong> {{system.slots}}</div>
+          <div><strong>Metal Multiplier:</strong> ×{{system.metalMultiplier}}</div>
+        </div>
+        <div class='calculated-cost'>
+          <strong>Final Cost:</strong> {{system.costDisplay}}
+        </div>
+      </div>
     </div>
   </div>
 </section>

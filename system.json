@@ -29,6 +29,7 @@
     "Item": {
       "gear": {"htmlFields": ["description"]},
       "weapon": {"htmlFields": ["description"]},
+      "armor": {"htmlFields": ["description"]},
       "spell": {"htmlFields": ["description"]},
       "ancestry": {"htmlFields": ["description"]},
       "class": {"htmlFields": ["description"]},

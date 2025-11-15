@@ -29,13 +29,13 @@
       </div>
 
       {{! Features Section }}
-      <h3 style='margin-top: 20px;'>Features</h3>
-      <ul class='features-list' style='list-style: none; padding-left: 0;'>
+      <h3 class='features-section-title'>Features</h3>
+      <ul class='features-list'>
         {{#each features as |feature id|}}
-          <li class='feature' style='margin-bottom: 10px;'>
+          <li class='feature'>
             <strong>{{feature.name}}</strong>
             {{#if feature.description}}
-              <div style='margin-top: 5px; font-size: 12px; color: var(--vagabond-c-tan);'>{{feature.description}}</div>
+              <div class='feature-description'>{{feature.description}}</div>
             {{/if}}
           </li>
         {{else}}
@@ -47,20 +47,19 @@
     {{! Middle column: Saves and Skills }}
     <section class='main grid-span-1'>
       {{! Saves Section - Horizontal layout with border }}
-      <div class='saves' style='margin-bottom: 20px; border: 2px solid #333; padding: 10px;'>
-        <h3 style='margin-top: 0; text-align: center;'>SAVES</h3>
-        <div class='saves-row flexrow' style='justify-content: space-around;'>
+      <div class='saves'>
+        <h3>SAVES</h3>
+        <div class='saves-row flexrow'>
           {{#each system.saves as |save key|}}
-            <div class='save flexcol align-center' style='flex: 1; text-align: center;'>
+            <div class='save flexcol align-center'>
               <label
                 class='resource-label rollable'
                 data-action='roll'
                 data-roll='d20'
                 data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
                 data-tooltip='{{save.description}}'
-                style='cursor: pointer; margin-bottom: 5px;'
               >{{save.label}}</label>
-              <span class='save-difficulty' style='font-weight: bold; font-size: 18px;'>[{{save.difficulty}}]</span>
+              <span class='save-difficulty'>[{{save.difficulty}}]</span>
             </div>
           {{/each}}
         </div>
@@ -70,21 +69,19 @@
       <div class='skills flexcol'>
         <h3>Skills</h3>
         {{#each system.skills as |skill key|}}
-          <div class='skill flexrow flex-group-center' style='margin-bottom: 5px;'>
+          <div class='skill flexrow flex-group-center'>
             <input
               type='checkbox'
               name='system.skills.{{key}}.trained'
               {{#if skill.trained}}checked{{/if}}
-              style='margin-right: 10px;'
             />
             <label
               class='resource-label rollable flexlarge align-left'
               data-action='roll'
               data-roll='d20'
               data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
-              style='cursor: pointer;'
             >{{skill.label}} {{#if skill.trained}}(Trained){{/if}}</label>
-            <span class='skill-difficulty' style='margin-left: auto; font-weight: bold;'>{{skill.difficulty}}</span>
+            <span class='skill-difficulty'>{{skill.difficulty}}</span>
           </div>
         {{/each}}
       </div>
@@ -96,36 +93,33 @@
       <div class='weapon-skills flexcol'>
         <h3>Attacks</h3>
         {{#each system.weaponSkills as |weaponSkill key|}}
-          <div class='weapon-skill flexrow flex-group-center' style='margin-bottom: 5px;'>
+          <div class='weapon-skill flexrow flex-group-center'>
             <input
               type='checkbox'
               name='system.weaponSkills.{{key}}.trained'
               {{#if weaponSkill.trained}}checked{{/if}}
-              style='margin-right: 10px;'
             />
             <label
               class='resource-label rollable flexlarge align-left'
               data-action='roll'
               data-roll='d20'
               data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
-              style='cursor: pointer;'
             >{{weaponSkill.label}} {{#if weaponSkill.trained}}(Trained){{/if}}</label>
-            <span class='weapon-skill-difficulty' style='margin-left: auto; font-weight: bold;'>{{weaponSkill.difficulty}}</span>
+            <span class='weapon-skill-difficulty'>{{weaponSkill.difficulty}}</span>
           </div>
         {{/each}}
 
         {{! Equipped Weapons }}
         {{#each weapons as |weapon|}}
           {{#if weapon.system.equipped}}
-            <div class='equipped-weapon flexrow flex-group-center' style='margin-bottom: 5px; margin-top: 10px; padding: 5px; background-color: rgba(0,0,0,0.1); border-radius: 3px;'>
+            <div class='equipped-weapon flexrow flex-group-center'>
               <label
                 class='resource-label rollable flexlarge align-left'
                 data-action='rollWeapon'
                 data-item-id='{{weapon._id}}'
-                style='cursor: pointer;'
                 title='{{weapon.system.propertiesDisplay}}'
               >{{weapon.name}} ({{weapon.system.currentDamage}})</label>
-              <span class='weapon-info' style='margin-left: auto; font-size: 0.9em;'>
+              <span class='weapon-info'>
                 {{weapon.system.rangeDisplay}}
                 {{#if (eq weapon.system.equipmentState 'oneHand')}}
                   <i class='fas fa-hand-fist' title='One-Handed'></i>
@@ -139,7 +133,7 @@
       </div>
 
       {{! Perks Section }}
-      <div class='perks-section flexcol' style='margin-top: 20px;'>
+      <div class='perks-section flexcol'>
         <h3>Perks</h3>
         <ol class='perks-list'>
           {{#each enrichedPerks as |perk|}}
@@ -155,7 +149,7 @@
               {{/if}}
             </li>
           {{else}}
-            <li class='no-perks' style='font-style: italic; color: var(--vagabond-c-tan); list-style: none;'>No perks yet. Drag perks from the Items directory.</li>
+            <li class='no-perks'>No perks yet. Drag perks from the Items directory.</li>
           {{/each}}
         </ol>
       </div>

@@ -60,6 +60,7 @@ Hooks.once('init', function () {
   CONFIG.Item.dataModels = {
     gear: models.VagabondGear,
     weapon: models.VagabondWeapon,
+    armor: models.VagabondArmor,
     spell: models.VagabondSpell,
     ancestry: models.VagabondAncestry,
     class: models.VagabondClass,

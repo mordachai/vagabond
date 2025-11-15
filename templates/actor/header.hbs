@@ -10,20 +10,47 @@
     width='100'
   />
   <div class='header-fields'>
-    {{! Character Name - Centered }}
-    <div class='character-name-section' style='text-align: center; margin-bottom: 8px;'>
-      <input
-        name='name'
-        type='text'
-        value='{{actor.name}}'
-        placeholder='Character Name'
-        class='character-name-input'
-        style='border: none; background: transparent; text-align: center; font-size: 18px; font-weight: bold; outline: none; width: 100%;'
-      />
+    {{! Name Row with XP and Level Up }}
+    <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 8px;'>
+      {{! Character Name - Centered }}
+      <div style='flex: 1; text-align: center;'>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='Character Name'
+          class='character-name-input'
+          style='border: none; background: transparent; text-align: center; font-size: 18px; font-weight: bold; outline: none; width: 100%;'
+        />
+      </div>
+
+      {{! XP Field with inline label }}
+      <div style='display: flex; align-items: center; gap: 4px; white-space: nowrap;'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+        <input
+          type='text'
+          name='system.attributes.xp'
+          value='{{system.attributes.xp}}'
+          data-dtype='Number'
+          style='width: 60px;'
+        />
+      </div>
+
+      {{! Level Up Button }}
+      {{#if (lt system.attributes.level.value 10)}}
+        <button
+          type='button'
+          data-action='levelUp'
+          data-tooltip='Level Up'
+          style='padding: 2px 8px; font-size: 11px; cursor: pointer;'
+        >
+          <i class='fas fa-level-up-alt'></i> Level Up
+        </button>
+      {{/if}}
     </div>
 
     {{! Character Info Row - Level, Ancestry, Class as display divs }}
-    <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan); display: flex; justify-content: center; align-items: center; gap: 8px;'>
+    <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan);'>
       <span>
         Level {{system.attributes.level.value}},
         {{#if system.ancestryData}}
@@ -42,33 +69,13 @@
           (Unknown, Medium size)
         {{/if}}
       </span>
-      {{#if (lt system.attributes.level.value 10)}}
-        <button
-          type='button'
-          data-action='levelUp'
-          data-tooltip='Level Up'
-          style='padding: 2px 8px; font-size: 11px; cursor: pointer;'
-        >
-          <i class='fas fa-level-up-alt'></i> Level Up
-        </button>
-      {{/if}}
     </div>
 
-    {{! XP Row }}
+    {{! Current Luck Row }}
     <div class='grid grid-1col' style='margin-bottom: 10px;'>
-      {{! Current Luck }}
       <div class='resource'>
         <label class='resource-label'>Current Luck</label>
         <span>{{system.currentLuck}}</span>
-      </div>
-      <div class='resource'>
-        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
-        <input
-          type='text'
-          name='system.attributes.xp'
-          value='{{system.attributes.xp}}'
-          data-dtype='Number'
-        />
       </div>
     </div>
 

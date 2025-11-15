@@ -1,0 +1,86 @@
+{{! Armor Details Tab }}
+<section
+  class='tab details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  <div class='armor-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
+      <div class='armor-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Metal Effect Display }}
+    <div class='form-group'>
+      <label class='resource-label'>Metal Effect</label>
+      <div class='metal-effect-text'>{{system.metalEffect}}</div>
+    </div>
+
+    {{! Base Cost Section - Single Line Layout }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.baseCost.label'}} <small>(before metal multiplier)</small></label>
+      <div class='cost-inputs'>
+        <div class='cost-field'>
+          <label class='resource-label'>Gold</label>
+          <input
+            type='number'
+            name='system.baseCost.gold'
+            value='{{system.baseCost.gold}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+        <div class='cost-field'>
+          <label class='resource-label'>Silver</label>
+          <input
+            type='number'
+            name='system.baseCost.silver'
+            value='{{system.baseCost.silver}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+        <div class='cost-field'>
+          <label class='resource-label'>Copper</label>
+          <input
+            type='number'
+            name='system.baseCost.copper'
+            value='{{system.baseCost.copper}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+      </div>
+    </div>
+
+    {{! Calculated Properties - Read-only Display }}
+    <div class='form-group'>
+      <label class='resource-label'>Calculated Properties</label>
+      <div class='calculated-properties'>
+        <div class='calculated-grid'>
+          <div>
+            <strong>Rating:</strong> {{system.rating}}
+            {{#if (ne system.rating system.finalRating)}}
+              <span class='metal-bonus'>({{system.finalRating}} with metal)</span>
+            {{/if}}
+          </div>
+          <div><strong>Might:</strong> {{system.might}}</div>
+          <div><strong>Slots:</strong> {{system.slots}}</div>
+          <div><strong>Metal Multiplier:</strong> ×{{system.metalMultiplier}}</div>
+        </div>
+        <div class='calculated-cost'>
+          <strong>Final Cost:</strong> {{system.costDisplay}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

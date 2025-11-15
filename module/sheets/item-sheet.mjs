@@ -65,6 +65,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     weaponDetails: {
       template: 'systems/vagabond/templates/item/details-parts/weapon-details.hbs',
     },
+    armorDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/armor-details.hbs',
+    },
     spellDetails: {
       template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
     },
@@ -95,6 +98,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'weapon':
         console.log("Loading weapon template");
         options.parts.push('weaponDetails', 'effects');
+        break;
+      case 'armor':
+        console.log("Loading armor template");
+        options.parts.push('armorDetails', 'effects');
         break;
       case 'spell':
         console.log("Loading spell template");
@@ -161,6 +168,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
       case 'weaponDetails':
         // Weapon gets enriched description like the details tab
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
+        break;
+
+      case 'armorDetails':
+        // Armor gets enriched description like the details tab
         context.tab = context.tabs[partId];
         context.enriched = {
           description: await foundry.applications.ux.TextEditor.enrichHTML(
@@ -272,9 +294,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for spell, ancestry, class, perk, gear, and weapon is details, others default to description
+    // Default tab for spell, ancestry, class, perk, gear, weapon, and armor is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'gear' || this.document.type === 'weapon') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'gear' || this.document.type === 'weapon' || this.document.type === 'armor') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -302,6 +324,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'perkDetails':
         case 'gearDetails':
         case 'weaponDetails':
+        case 'armorDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;

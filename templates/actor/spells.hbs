@@ -6,7 +6,7 @@
 >
   <div class='spells-section flexcol'>
     {{#if @root.editable}}
-      <div class='item-controls' style='margin-bottom: 10px; text-align: right;'>
+      <div class='item-controls spell-add-button'>
         <a
           class='item-control item-create'
           data-tooltip='{{localize "DOCUMENT.Create" type="Spell"}}'
@@ -27,9 +27,9 @@
           data-item-id='{{spell._id}}'
           data-document-class='Item'
         >
-          <div class='item-name flexrow' style='flex: 3; align-items: center;'>
-            <div class='item-image'>
-              <a class='rollable' data-roll-type='item' data-action='roll'>
+          <div class='item-name flexrow spell-list-item-name'>
+            <div class='item-image item-clickable-image'>
+              <a class='rollable' data-action='viewDoc' data-tooltip='Open spell sheet'>
                 <img
                   src='{{spell.img}}'
                   data-tooltip='{{spell.name}}'
@@ -38,14 +38,16 @@
                 />
               </a>
             </div>
-            <div style='margin-left: 8px;'>
-              <strong>{{spell.name}}</strong>
+            <div class='spell-item-info'>
+              <a class='item-clickable-name' data-action='useSpell' data-item-id='{{spell._id}}' data-tooltip='Use spell'>
+                <strong>{{spell.name}}</strong>
+              </a>
               {{#unless (eq spell.system.damageBase '-')}}
-                <span class='damage-badge' style='margin-left: 8px; padding: 2px 6px; background: #444; border-radius: 3px; font-size: 10px;'>
+                <span class='spell-damage-badge'>
                   {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
                 </span>
               {{/unless}}
-              <span class='delivery-info' style='margin-left: 8px; font-size: 11px; color: var(--vagabond-c-tan);'>
+              <span class='spell-delivery-info'>
                 {{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}
                 {{#if spell.system.delivery.cost}}
                   ({{spell.system.delivery.cost}} Mana)
@@ -53,7 +55,7 @@
               </span>
             </div>
           </div>
-          <div class='item-controls' style='flex: 1; text-align: right;'>
+          <div class='item-controls spell-list-item-controls'>
             <a
               class='item-control item-edit'
               data-tooltip='{{localize "DOCUMENT.Update" type="spell"}}'
@@ -73,7 +75,7 @@
           </div>
         </li>
       {{else}}
-        <li class='no-spells' style='font-style: italic; color: var(--vagabond-c-tan); list-style: none; padding: 20px; text-align: center;'>
+        <li class='no-spells spell-empty-message'>
           No spells yet. {{#if @root.editable}}Click the + button above to add a spell.{{/if}}
         </li>
       {{/each}}
