@@ -139,7 +139,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                 }
               );
               return {
-                ...perk,
+                _id: perk.id,
+                id: perk.id,
+                name: perk.name,
+                img: perk.img,
                 enrichedDescription,
                 prerequisites: perk.system.getPrerequisiteString(),
               };
@@ -517,12 +520,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onViewPerk(event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('View perk clicked', event);
     const perkCard = event.currentTarget;
     const perkId = perkCard.dataset.itemId;
-    console.log('Perk ID:', perkId);
     const perk = this.actor.items.get(perkId);
-    console.log('Found perk:', perk);
     if (perk) {
       perk.sheet.render(true);
     }
@@ -537,12 +537,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onRemovePerk(event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('Remove perk right-clicked', event);
     const perkCard = event.currentTarget;
     const perkId = perkCard.dataset.itemId;
-    console.log('Perk ID:', perkId);
     const perk = this.actor.items.get(perkId);
-    console.log('Found perk:', perk);
     if (perk) {
       const confirmed = await foundry.applications.api.DialogV2.confirm({
         window: { title: 'Remove Perk' },
@@ -551,8 +548,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (confirmed) {
         await perk.delete();
       }
-    } else {
-      console.error('Perk not found with ID:', perkId);
     }
   }
 
