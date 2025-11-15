@@ -859,8 +859,9 @@
 
 /* Calculated properties display */
 .vagabond .calculated-properties {
-  background: #f5f5f5;
+  margin-top: 10px;
   padding: 12px;
+  border: 1px solid var(--vagabond-c-tan);
   border-radius: 4px;
 }
 
