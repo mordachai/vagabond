@@ -324,9 +324,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
     });
 
-    // Add right-click context menu for gear items
+    // Add click handlers for gear items
     const gearItems = this.element.querySelectorAll('.gear-item-row[data-item-id]');
     gearItems.forEach(gearItem => {
+      // Left-click on image: open item sheet
+      const gearImage = gearItem.querySelector('.gear-item-image');
+      if (gearImage) {
+        gearImage.addEventListener('click', this._onGearImageClick.bind(this));
+      }
+
+      // Left-click on name: use item (if usable)
+      const gearName = gearItem.querySelector('.gear-item-name');
+      if (gearName) {
+        gearName.addEventListener('click', this._onGearNameClick.bind(this));
+      }
+
+      // Right-click on row: delete item
       gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
     });
 
@@ -538,7 +551,49 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle right-click context menu for gear items
+   * Handle left-click on gear item image - opens item sheet
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onGearImageClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget.closest('.gear-item-row');
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item) {
+      item.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle left-click on gear item name - uses/rolls item if applicable
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onGearNameClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget.closest('.gear-item-row');
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item && typeof item.roll === 'function') {
+      await item.roll();
+    }
+  }
+
+  /**
+   * Handle right-click on gear item - deletes item with confirmation
    *
    * @param {PointerEvent} event   The originating contextmenu event
    * @protected
@@ -550,57 +605,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const gearRow = event.currentTarget;
     const itemId = gearRow?.dataset?.itemId;
 
-    // Guard: Ensure we have a valid item ID
-    if (!itemId) {
-      console.warn('No item ID found on gear row');
-      return;
-    }
+    if (!itemId) return;
 
     const item = this.actor.items.get(itemId);
+    if (!item) return;
 
-    // Guard: Ensure the item exists
-    if (!item) {
-      console.warn(`Item with ID ${itemId} not found`);
-      return;
-    }
-
-    // Application V2 approach: Use DialogV2 with buttons
-    const result = await foundry.applications.api.DialogV2.wait({
-      window: { title: `${item.name}` },
-      content: `<p>What would you like to do with <strong>${item.name}</strong>?</p>`,
-      buttons: [
-        {
-          action: 'edit',
-          label: '<i class="fas fa-edit"></i> Edit',
-          default: true,
-          callback: () => 'edit'
-        },
-        {
-          action: 'delete',
-          label: '<i class="fas fa-trash"></i> Delete',
-          callback: () => 'delete'
-        },
-        {
-          action: 'cancel',
-          label: 'Cancel',
-          callback: () => 'cancel'
-        }
-      ],
-      default: 'edit',
-      close: () => null
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Item' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
     });
 
-    // Handle the result
-    if (result === 'edit') {
-      item.sheet.render(true);
-    } else if (result === 'delete') {
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: 'Delete Item' },
-        content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-      });
-      if (confirmed) {
-        await item.delete();
-      }
+    if (confirmed) {
+      await item.delete();
     }
   }
 

@@ -796,9 +796,17 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* Gear item row cursor */
-.vagabond .gear-item-row {
-  cursor: context-menu;
+/* Gear item interaction */
+.vagabond .gear-item-image {
+  cursor: pointer;
+}
+
+.vagabond .gear-item-name {
+  cursor: pointer;
+}
+
+.vagabond .gear-item-name:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 600px) {

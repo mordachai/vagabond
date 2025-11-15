@@ -72,17 +72,15 @@
         data-document-class='Item'
       >
         <div class='item-name inventory-col-name'>
-          <div class='item-image'>
-            <a data-action='viewDoc'>
-              <img
-                src='{{item.img}}'
-                data-tooltip='{{item.name}}'
-                width='24'
-                height='24'
-              />
-            </a>
+          <div class='item-image gear-item-image'>
+            <img
+              src='{{item.img}}'
+              data-tooltip='{{item.name}}'
+              width='24'
+              height='24'
+            />
           </div>
-          <div>{{item.name}}</div>
+          <div class='gear-item-name'>{{item.name}}</div>
         </div>
         <div class='item-type item-prop inventory-col-type'>{{item.system.type}}</div>
         <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
