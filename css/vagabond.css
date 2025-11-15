@@ -4,6 +4,7 @@
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
   --vagabond-c-tan: #444444;
+  --vagabond-c-muted: #666666;
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
   --vagabond-c-groove: #eeede0;
@@ -14,9 +15,206 @@
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;
+  --vagabond-c-muted: #999999;
   --vagabond-c-white: #000000;
   --vagabond-c-black: #ffffff;
   --vagabond-c-groove: #11121f;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-5 {
+  flex: 5;
+}
+
+.flex-1-min-60 {
+  flex: 1;
+  min-width: 60px;
+}
+
+.gap-4 {
+  gap: 4px;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.gap-12 {
+  gap: 12px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-center-gap-4 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flex-center-gap-8 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex-center-gap-10 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-center-gap-12 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mt-4 {
+  margin-top: 4px;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-4 {
+  margin-bottom: 4px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.pl-20 {
+  padding-left: 20px;
+}
+
+.px-6 {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.py-2-px-6 {
+  padding: 2px 6px;
+}
+
+.py-2-px-8 {
+  padding: 2px 8px;
+}
+
+.w-40 {
+  width: 40px;
+}
+
+.w-60 {
+  width: 60px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.text-xs {
+  font-size: 10px;
+}
+
+.text-sm {
+  font-size: 11px;
+}
+
+.text-md {
+  font-size: 12px;
+}
+
+.text-faint {
+  color: var(--vagabond-c-faint);
+}
+
+.text-tan {
+  color: var(--vagabond-c-tan);
+}
+
+.text-dark {
+  color: var(--vagabond-c-dark);
+}
+
+.text-muted {
+  color: var(--vagabond-c-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.btn-xs {
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-sm {
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable-link {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Global styles */
@@ -253,9 +451,7 @@
   height: 100%;
 }
 .vagabond .tab {
-  min-height: 200px;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
+  max-height: 400px;
 }
 .vagabond .tab.biography {
   flex: 1;
@@ -353,8 +549,8 @@
 }
 .vagabond .items-list .item-prop {
   text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-right: 1px solid var(--vagabond-c-faint);
   font-size: 12px;
 }
 .vagabond .items-list .items-header {
@@ -381,158 +577,49 @@
 .vagabond .items-list .trait-description input {
   width: 100%;
 }
-/* Unified item content containers */
 .vagabond .ancestry-item-content,
-.vagabond .class-item-content,
-.vagabond .spell-item-content,
-.vagabond .perk-item-content {
-  min-height: auto;
-  max-height: calc(100vh - 200px);
-  /* overflow-y: auto; */
+.vagabond .class-item-content {
+  min-height: 400px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
   padding: 10px;
   transition: max-height 0.3s ease;
-  height: 100%; /* Take full height of parent tab */
 }
-
-/* Expand when any editor is active */
 .vagabond .ancestry-item-content:has(.tox-tinymce),
-.vagabond .class-item-content:has(.tox-tinymce),
-.vagabond .spell-item-content:has(.tox-tinymce),
-.vagabond .perk-item-content:has(.tox-tinymce) {
+.vagabond .class-item-content:has(.tox-tinymce) {
   max-height: calc(100vh - 150px);
 }
-
-/* Fallback for browsers without :has() support */
 .vagabond .ancestry-item-content.mce-active,
-.vagabond .class-item-content.mce-active,
-.vagabond .spell-item-content.mce-active,
-.vagabond .perk-item-content.mce-active {
+.vagabond .class-item-content.mce-active {
   max-height: calc(100vh - 150px);
 }
-
-/* Remove individual scrolling from description sections */
 .vagabond .ancestry-description,
-.vagabond .class-description,
-.vagabond .spell-description {
-  min-height: 60px;
-  max-height: none; /* Remove height constraint */
-  overflow-y: visible; /* Remove individual scrolling */
+.vagabond .class-description {
+  min-height: 100px;
+  max-height: none;
+  overflow-y: visible;
   border: 1px solid var(--vagabond-c-faint);
   padding: 8px;
   border-radius: 4px;
   margin-bottom: 20px;
 }
-
 .vagabond .ancestry-description prose-mirror,
-.vagabond .class-description prose-mirror,
-.vagabond .spell-description prose-mirror {
-  height: auto; /* Allow natural growth */
-  min-height: 60px;
+.vagabond .class-description prose-mirror {
+  height: auto;
+  min-height: 100px;
 }
-
 .vagabond .ancestry-description > div,
-.vagabond .class-description > div,
-.vagabond .spell-description > div {
-  min-height: 60px;
+.vagabond .class-description > div {
+  min-height: 100px;
 }
-
-/* Spell list styling */
-.vagabond .spell-add-button {
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-.vagabond .spell-item-info {
-  margin-left: 8px;
-}
-
-.vagabond .spell-damage-badge {
-  margin-left: 8px;
-  padding: 2px 6px;
-  background: #444;
-  border-radius: 3px;
-  font-size: 10px;
-}
-
-.vagabond .spell-delivery-info {
-  margin-left: 8px;
-  font-size: 11px;
-  color: var(--vagabond-c-tan);
-}
-
-.vagabond .spell-list-item-name {
-  flex: 3;
-  align-items: center;
-}
-
-.vagabond .spell-list-item-controls {
-  flex: 1;
-  text-align: right;
-}
-
-.vagabond .spell-empty-message {
-  font-style: italic;
-  color: var(--vagabond-c-tan);
-  list-style: none;
-  padding: 20px;
-  text-align: center;
-}
-
-/* Remove individual scrolling from traits section */
 .vagabond .traits-section .scrollable {
   width: 100%;
   min-height: 100px;
-  max-height: none; /* Remove height constraint */
-  overflow-y: visible; /* Remove individual scrolling */
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-  padding: 8px;
-}
-
-/* Level features section - also remove constraints */
-.vagabond .level-features-section {
   max-height: none;
   overflow-y: visible;
-}
-
-.vagabond .level-header {
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  border-bottom: 2px solid var(--vagabond-c-tan);
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-}
-
-/* Compact level feature descriptions */
-.vagabond .level-feature-description {
-  min-height: 50px;                     /* Compact default size */
-  max-height: fit-content;                     /* Small when not editing */
-  overflow-y: auto;                     /* Allow scroll if content overflows */
   border: 1px solid var(--vagabond-c-faint);
-  padding: 8px;
   border-radius: 4px;
-  transition: max-height 0.3s ease;     /* Smooth transition */
-}
-
-/* Expand when TinyMCE is active */
-.vagabond .level-feature-description:has(.tox-tinymce) {
-  max-height: 300px;                    /* Expand when editing */
-}
-
-/* Fallback for browsers without :has() support */
-.vagabond .level-feature-description.mce-active {
-  max-height: 300px;
-}
-
-/* ProseMirror inside level features - compact by default */
-.vagabond .level-feature-description prose-mirror {
-  min-height: 30px;                     /* Small default */
-  height: auto;
-}
-
-.vagabond .level-feature-description > div {
-  min-height: 30px;                     /* Small for read-only */
+  padding: 8px;
 }
 .vagabond .traits-section .scrollable .items-list {
   margin: 0;
@@ -624,8 +711,8 @@
 }
 .vagabond .effects-list .effect-prop {
   text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-right: 1px solid var(--vagabond-c-faint);
   font-size: 12px;
 }
 .vagabond .effects-list .effects-header {
@@ -653,8 +740,8 @@
 .vagabond .effects .item .effect-duration,
 .vagabond .effects .item .effect-controls {
   text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-right: 1px solid var(--vagabond-c-faint);
   font-size: 12px;
 }
 .vagabond .effects .item .effect-controls {
@@ -672,9 +759,8 @@
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-.vagabond .vagabond .character-name-input:hover,
-.vagabond .vagabond .character-name-input:focus {
-  border-bottom: 2px solid var(--vagabond-c-tan);
+.vagabond .vagabond .character-name-input:hover, .vagabond .vagabond .character-name-input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
   background: transparent !important;
 }
 .vagabond .vagabond .character-info-row {
@@ -685,391 +771,6 @@
   font-weight: 500;
   line-height: 1.2;
 }
-
-.vagabond .prosemirror .editor-content, prose-mirror .editor-content {
-    position: relative;
-}
-
-/* Features Tab Styles */
-.vagabond .features-section-title {
-  margin-top: 20px;
-}
-
-.vagabond .features-list {
-  list-style: none;
-  padding-left: 0;
-}
-
-.vagabond .features-list .feature {
-  margin-bottom: 10px;
-}
-
-.vagabond .feature-description {
-  margin-top: 5px;
-  font-size: 12px;
-  color: var(--vagabond-c-tan);
-}
-
-/* Saves Section */
-.vagabond .saves {
-  margin-bottom: 20px;
-  border: 2px solid #333;
-  padding: 10px;
-}
-
-.vagabond .saves h3 {
-  margin-top: 0;
-  text-align: center;
-}
-
-.vagabond .saves-row {
-  justify-content: space-around;
-}
-
-.vagabond .save {
-  flex: 1;
-  text-align: center;
-}
-
-.vagabond .save .resource-label {
-  cursor: pointer;
-  margin-bottom: 5px;
-}
-
-.vagabond .save-difficulty {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-/* Skills Section */
-.vagabond .skill {
-  margin-bottom: 5px;
-}
-
-.vagabond .skill input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-.vagabond .skill .resource-label {
-  cursor: pointer;
-}
-
-.vagabond .skill-difficulty {
-  margin-left: auto;
-  font-weight: bold;
-}
-
-/* Weapon Skills / Attacks Section */
-.vagabond .weapon-skill {
-  margin-bottom: 5px;
-}
-
-.vagabond .weapon-skill input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-.vagabond .weapon-skill .resource-label {
-  cursor: pointer;
-}
-
-.vagabond .weapon-skill-difficulty {
-  margin-left: auto;
-  font-weight: bold;
-}
-
-/* Equipped Weapons */
-.vagabond .equipped-weapon {
-  margin-bottom: 5px;
-  margin-top: 10px;
-  padding: 5px;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
-}
-
-.vagabond .equipped-weapon .resource-label {
-  cursor: pointer;
-}
-
-.vagabond .weapon-info {
-  margin-left: auto;
-  font-size: 0.9em;
-}
-
-/* Perk Card Styles */
-.vagabond .perks-section {
-  margin-top: 20px;
-}
-
-.vagabond .perks-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-.vagabond .no-perks {
-  font-style: italic;
-  color: var(--vagabond-c-tan);
-  list-style: none;
-}
-
-.vagabond .perk-card {
-  border: 2px solid var(--vagabond-c-tan);
-  padding: 8px 12px;
-  background: var(--vagabond-c-faint);
-  border-radius: 4px;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.vagabond .perk-card:hover {
-  background: var(--vagabond-c-beige);
-  border-color: var(--vagabond-c-dark);
-}
-
-.perk-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.perk-name {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 0;
-  color: var(--vagabond-c-dark);
-}
-
-.perk-prerequisites {
-  font-size: 12px;
-  color: var(--vagabond-c-dark);
-  margin-bottom: 6px;
-  font-style: italic;
-  padding-left: 4px;
-}
-
-.perk-description {
-  font-size: 12px;
-  color: var(--vagabond-c-tan);
-  line-height: 1.4;
-  padding-left: 4px;
-  word-wrap: break-word;
-}
-
-.perk-description p {
-  margin: 4px 0;
-}
-
-.perk-description p:first-child {
-  margin-top: 0;
-}
-
-.perk-description p:last-child {
-  margin-bottom: 0;
-}
-
-/* Inventory column sizing */
-.vagabond .inventory-col-name {
-  flex: 4;
-}
-
-.vagabond .inventory-col-type {
-  flex: 3;
-}
-
-.vagabond .inventory-col-quantity {
-  flex: 0.5;
-  text-align: center;
-}
-
-.vagabond .inventory-col-cost {
-  flex: 0.5;
-  text-align: center;
-}
-
-.vagabond .inventory-col-slots {
-  flex: 0.5;
-  text-align: center;
-}
-
-.vagabond .inventory-col-equipped {
-  flex: 0.5;
-  text-align: center;
-}
-
-/* Weapon-specific columns */
-.vagabond .inventory-col-damage {
-  flex: 0 0 50px;
-  text-align: center;
-}
-
-.vagabond .inventory-col-range {
-  flex: 0 0 60px;
-  text-align: center;
-}
-
-.vagabond .inventory-col-grip {
-  flex: 0 0 50px;
-  text-align: center;
-}
-
-/* Armor-specific columns */
-.vagabond .inventory-col-armor-type {
-  flex: 0 0 70px;
-  text-align: center;
-}
-
-.vagabond .inventory-col-rating {
-  flex: 0 0 60px;
-  text-align: center;
-}
-
-.vagabond .inventory-col-metal {
-  flex: 0 0 80px;
-  text-align: center;
-}
-
-/* Equipment toggle cursor */
-.vagabond .equipment-toggle {
-  cursor: pointer;
-}
-
-/* Inventory add item buttons */
-.vagabond .inventory-add-item {
-  display: flex;
-  gap: 8px;
-}
-
-/* Gear equipped icon */
-.vagabond .gear-equipped-icon {
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.2s ease;
-}
-
-.vagabond .gear-equipped-icon.equipped {
-  color: #28a745;
-}
-
-.vagabond .gear-equipped-icon.unequipped {
-  color: #6c757d;
-  opacity: 0.5;
-}
-
-.vagabond .gear-equipped-icon:hover {
-  transform: scale(1.2);
-  opacity: 1;
-}
-
-/* Wealth section styling */
-.vagabond .wealth-section {
-  margin-bottom: 15px;
-}
-
-.vagabond .wealth-section .section-title {
-  text-align: center;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-.vagabond .wealth-section .currency-row {
-  justify-content: center;
-  gap: 15px;
-}
-
-.vagabond .wealth-section .currency-field {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.vagabond .wealth-section .currency-field label {
-  font-size: 11px;
-  margin-bottom: 2px;
-}
-
-.vagabond .wealth-section .currency-field input {
-  width: 60px;
-  text-align: center;
-}
-
-/* Inventory add item button */
-.vagabond .inventory-add-item {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.vagabond .inventory-add-item a {
-  display: inline-block;
-  padding: 8px 16px;
-  background: rgba(0, 0, 0, 0.05);
-  border: 2px groove var(--vagabond-c-groove);
-  border-radius: 4px;
-  font-weight: bold;
-  transition: background 0.2s ease;
-}
-
-.vagabond .inventory-add-item a:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-/* Generic item interaction classes */
-.vagabond .item-clickable-image,
-.vagabond .item-clickable-name {
-  cursor: pointer;
-}
-
-.vagabond .item-clickable-name:hover {
-  color: var(--vagabond-c-black);
-  text-shadow: 0 0 10px red;
-}
-
-/* Metal effect text */
-.vagabond .metal-effect-text {
-  display: block;
-  margin-top: 4px;
-  color: #888;
-  font-size: 0.9em;
-}
-
-/* Cost inputs layout */
-.vagabond .cost-inputs {
-  display: flex;
-  gap: 8px;
-}
-
-.vagabond .cost-field {
-  flex: 1;
-}
-
-/* Calculated properties display */
-.vagabond .calculated-properties {
-  margin-top: 10px;
-  padding: 12px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
-}
-
-.vagabond .calculated-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.vagabond .calculated-cost {
-  margin-top: 8px;
-}
-
-.vagabond .metal-bonus {
-  color: #0a0;
-}
-
 @media (max-width: 600px) {
   .vagabond .vagabond .character-name-input {
     font-size: 16px;

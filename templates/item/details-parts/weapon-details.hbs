@@ -61,8 +61,8 @@
       <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
       <div class='weapon-properties'>
         {{#each system.properties as |property index|}}
-          <div class='weapon-property flexrow' style='gap: 8px; align-items: center; margin-bottom: 4px;'>
-            <select name='system.properties.{{index}}' data-dtype='String' style='flex: 1;'>
+          <div class='weapon-property flexrow gap-8 flex-center mb-4'>
+            <select name='system.properties.{{index}}' data-dtype='String' class='flex-1'>
               {{#select property}}
                 <option value='Brawl' title='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</option>
                 <option value='Brutal' title='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</option>
@@ -77,11 +77,11 @@
                 <option value='Thrown' title='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</option>
               {{/select}}
             </select>
-            <button type='button' class='property-hint' title='{{lookup config.weaponPropertyHints property}}' style='padding: 2px 6px;'>?</button>
-            <button type='button' data-action='removeWeaponProperty' data-property-index='{{index}}' style='padding: 2px 6px;'>×</button>
+            <button type='button' class='property-hint btn-xs' title='{{lookup config.weaponPropertyHints property}}'>?</button>
+            <button type='button' class='btn-xs' data-action='removeWeaponProperty' data-property-index='{{index}}'>×</button>
           </div>
         {{/each}}
-        <button type='button' data-action='addWeaponProperty' style='margin-top: 4px;'>+ Add Property</button>
+        <button type='button' class='mt-4' data-action='addWeaponProperty'>+ Add Property</button>
       </div>
     </div>
 

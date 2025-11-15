@@ -24,10 +24,10 @@
     <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</label>
     <div class='prerequisites-list'>
       {{#each item.system.prerequisites.stats as |stat index|}}
-        <div class='prerequisite-item flexrow' style='margin-bottom: 5px; align-items: center;'>
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
           <select
             name='system.prerequisites.stats.{{index}}.stat'
-            style='flex: 1; margin-right: 5px;'
+            class='flex-1 mr-5'
           >
             <option value='might' {{#if (eq stat.stat 'might')}}selected{{/if}}>{{localize
                 'VAGABOND.Ability.Might.abbr'
@@ -54,7 +54,7 @@
             value='{{stat.value}}'
             min='1'
             max='10'
-            style='width: 60px; margin-right: 5px;'
+            class='w-60 mr-5'
           />
           <button
             type='button'
@@ -79,10 +79,10 @@
     <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</label>
     <div class='prerequisites-list'>
       {{#each item.system.prerequisites.trainedSkills as |skill index|}}
-        <div class='prerequisite-item flexrow' style='margin-bottom: 5px; align-items: center;'>
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
           <select
             name='system.prerequisites.trainedSkills.{{index}}'
-            style='flex: 1; margin-right: 5px;'
+            class='flex-1 mr-5'
           >
             <optgroup label='Skills'>
               <option value='arcana' {{#if (eq skill 'arcana')}}selected{{/if}}>{{localize
@@ -154,13 +154,13 @@
     <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</label>
     <div class='prerequisites-list'>
       {{#each item.system.prerequisites.spells as |spell index|}}
-        <div class='prerequisite-item flexrow' style='margin-bottom: 5px; align-items: center;'>
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
           <input
             type='text'
             name='system.prerequisites.spells.{{index}}'
             value='{{spell}}'
             placeholder='{{localize "VAGABOND.Item.Perk.SpellNamePlaceholder"}}'
-            style='flex: 1; margin-right: 5px;'
+            class='flex-1 mr-5'
           />
           <button
             type='button'
@@ -185,13 +185,13 @@
     <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.other.label'}}</label>
     <div class='prerequisites-list'>
       {{#each item.system.prerequisites.other as |other index|}}
-        <div class='prerequisite-item flexrow' style='margin-bottom: 5px; align-items: center;'>
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
           <input
             type='text'
             name='system.prerequisites.other.{{index}}'
             value='{{other}}'
             placeholder='{{localize "VAGABOND.Item.Perk.OtherPrerequisitePlaceholder"}}'
-            style='flex: 1; margin-right: 5px;'
+            class='flex-1 mr-5'
           />
           <button
             type='button'
