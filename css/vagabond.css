@@ -743,6 +743,32 @@
   text-align: center;
 }
 
+.vagabond .inventory-col-equipped {
+  flex: 0.5;
+  text-align: center;
+}
+
+/* Gear equipped icon */
+.vagabond .gear-equipped-icon {
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.vagabond .gear-equipped-icon.equipped {
+  color: #28a745;
+}
+
+.vagabond .gear-equipped-icon.unequipped {
+  color: #6c757d;
+  opacity: 0.5;
+}
+
+.vagabond .gear-equipped-icon:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
 /* Wealth section styling */
 .vagabond .wealth-section {
   margin-bottom: 15px;

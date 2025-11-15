@@ -64,6 +64,7 @@
       <div class='item-quantity inventory-col-quantity'>Qty</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
+      <div class='item-equipped inventory-col-equipped' data-tooltip='Equip'>E</div>
     </li>
     {{#each gear as |item id|}}
       <li
@@ -86,6 +87,9 @@
         <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
+        <div class='item-equipped inventory-col-equipped'>
+          <i class='gear-equipped-icon {{#if item.system.equipped}}fas fa-check-circle equipped{{else}}far fa-circle unequipped{{/if}}'></i>
+        </div>
       </li>
     {{/each}}
   </ol>

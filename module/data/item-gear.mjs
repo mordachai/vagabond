@@ -40,6 +40,12 @@ export default class VagabondGear extends VagabondItemBase {
       initial: 1
     });
 
+    // Equipped status
+    schema.equipped = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     return schema;
   }
 

@@ -339,6 +339,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         gearName.addEventListener('click', this._onGearNameClick.bind(this));
       }
 
+      // Click on equipped icon: toggle equipped status
+      const equippedIcon = gearItem.querySelector('.gear-equipped-icon');
+      if (equippedIcon) {
+        equippedIcon.addEventListener('click', this._onToggleEquipped.bind(this));
+      }
+
       // Right-click on row: delete item
       gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
     });
@@ -590,6 +596,28 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (item && typeof item.roll === 'function') {
       await item.roll();
     }
+  }
+
+  /**
+   * Handle click on equipped icon - toggles equipped status
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onToggleEquipped(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget.closest('.gear-item-row');
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Toggle equipped status
+    await item.update({ 'system.equipped': !item.system.equipped });
   }
 
   /**
