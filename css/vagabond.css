@@ -744,7 +744,8 @@
 }
 
 .vagabond .inventory-col-controls {
-  flex: 1.5;
+  flex: 2;
+  white-space: nowrap;
 }
 
 @media (max-width: 600px) {
