@@ -23,6 +23,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
+      rollWeapon: this._onRollWeapon,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -244,6 +245,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _prepareItems(context) {
     // Initialize containers.
     const gear = [];
+    const weapons = [];
     const features = [];
     const perks = [];
     const spells = [];
@@ -275,6 +277,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (i.type === 'gear') {
         gear.push(i);
       }
+      // Append to weapons.
+      else if (i.type === 'weapon') {
+        weapons.push(i);
+      }
       // Append to spells.
       else if (i.type === 'spell') {
         spells.push(i);
@@ -287,6 +293,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
@@ -730,6 +737,86 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _toggleEffect(event, target) {
     const effect = this._getEmbeddedDocument(target);
     await effect.update({ disabled: !effect.disabled });
+  }
+
+  /**
+   * Handle weapon attack rolls.
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onRollWeapon(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const weapon = this.actor.items.get(itemId);
+
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Get the weapon skill and difficulty
+    const weaponSkillKey = weapon.system.weaponSkill;
+    const weaponSkill = this.actor.system.weaponSkills[weaponSkillKey];
+    const difficulty = weaponSkill?.difficulty || 10;
+
+    // Roll the attack (d20)
+    const attackRoll = new Roll('d20', this.actor.getRollData());
+    await attackRoll.evaluate();
+
+    // Check if the attack succeeds
+    const isSuccess = attackRoll.total >= difficulty;
+    const isCritical = attackRoll.total === 20;
+
+    // Prepare the flavor text
+    let flavorText = `<strong>${weapon.name}</strong> Attack<br/>`;
+    flavorText += `<strong>Weapon Skill:</strong> ${weaponSkill?.label || weaponSkillKey} (Difficulty ${difficulty})<br/>`;
+    flavorText += `<strong>Attack Roll:</strong> ${attackRoll.total}`;
+
+    // If successful, roll damage
+    let damageRoll = null;
+    if (isSuccess) {
+      flavorText += ` - <span style="color: green;">SUCCESS!</span><br/>`;
+
+      // Roll damage
+      const damageFormula = weapon.system.damage;
+      damageRoll = new Roll(damageFormula, this.actor.getRollData());
+      await damageRoll.evaluate();
+
+      flavorText += `<strong>Damage:</strong> ${damageRoll.total}`;
+
+      // Add critical damage if applicable
+      if (isCritical) {
+        flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
+      }
+    } else {
+      flavorText += ` - <span style="color: red;">MISS!</span>`;
+    }
+
+    // Add weapon properties to flavor if any
+    if (weapon.system.properties && weapon.system.properties.length > 0) {
+      flavorText += `<br/><strong>Properties:</strong> ${weapon.system.propertiesDisplay}`;
+    }
+
+    // Send the attack roll to chat
+    await attackRoll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: flavorText,
+      rollMode: game.settings.get('core', 'rollMode'),
+    });
+
+    // If there was a damage roll, also send it to chat
+    if (damageRoll) {
+      await damageRoll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: `<strong>${weapon.name}</strong> Damage`,
+        rollMode: game.settings.get('core', 'rollMode'),
+      });
+    }
+
+    return attackRoll;
   }
 
   /**

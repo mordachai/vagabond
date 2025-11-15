@@ -56,7 +56,49 @@
     </div>
   </div>
 
+  {{! Weapons List }}
+  <h3 class='section-title'>Weapons</h3>
+  <ol class='items-list'>
+    <li class='item flexrow items-header'>
+      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
+      <div class='item-damage' style='flex: 0 0 50px; text-align: center;'>Damage</div>
+      <div class='item-range' style='flex: 0 0 60px; text-align: center;'>Range</div>
+      <div class='item-grip' style='flex: 0 0 50px; text-align: center;'>Grip</div>
+      <div class='item-cost inventory-col-cost'>Cost</div>
+      <div class='item-slots inventory-col-slots'>Slots</div>
+      <div class='item-equipped inventory-col-equipped' data-tooltip='Equip'>E</div>
+    </li>
+    {{#each weapons as |item id|}}
+      <li
+        class='item flexrow draggable weapon-item-row'
+        data-item-id='{{item._id}}'
+        data-document-class='Item'
+      >
+        <div class='item-name inventory-col-name'>
+          <div class='item-image weapon-item-image'>
+            <img
+              src='{{item.img}}'
+              data-tooltip='{{item.name}}'
+              width='24'
+              height='24'
+            />
+          </div>
+          <div class='weapon-item-name'>{{item.name}}</div>
+        </div>
+        <div class='item-damage item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.damage}}</div>
+        <div class='item-range item-prop' style='flex: 0 0 60px; text-align: center;'>{{item.system.range}}</div>
+        <div class='item-grip item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.grip}}</div>
+        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
+        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
+        <div class='item-equipped inventory-col-equipped'>
+          <i class='weapon-equipped-icon {{#if item.system.equipped}}fas fa-check-circle equipped{{else}}far fa-circle unequipped{{/if}}'></i>
+        </div>
+      </li>
+    {{/each}}
+  </ol>
+
   {{! Gear List }}
+  <h3 class='section-title'>Gear</h3>
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
@@ -94,18 +136,28 @@
     {{/each}}
   </ol>
 
-  {{! Add New Item Button }}
+  {{! Add New Item Buttons }}
   {{#if @root.editable}}
-    <div class='inventory-add-item'>
+    <div class='inventory-add-item' style='display: flex; gap: 8px;'>
       <a
         class='item-control item-create'
-        data-tooltip='{{localize "DOCUMENT.Create" type='Item'}}'
+        data-tooltip='Create New Weapon'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='weapon'
+      >
+        <i class='fas fa-plus'></i>
+        New Weapon
+      </a>
+      <a
+        class='item-control item-create'
+        data-tooltip='Create New Gear'
         data-action='createDoc'
         data-document-class='Item'
         data-type='gear'
       >
         <i class='fas fa-plus'></i>
-        {{localize 'DOCUMENT.New' type='item'}}
+        New Gear
       </a>
     </div>
   {{/if}}

@@ -35,6 +35,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
       addOtherPrerequisite: this._onAddOtherPrerequisite,
       removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
+      addWeaponProperty: this._onAddWeaponProperty,
+      removeWeaponProperty: this._onRemoveWeaponProperty,
     },
     form: {
       submitOnChange: true,
@@ -59,6 +61,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     },
     gearDetails: {
       template: 'systems/vagabond/templates/item/details-parts/gear-details.hbs',
+    },
+    weaponDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/weapon-details.hbs',
     },
     spellDetails: {
       template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
@@ -86,6 +91,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     switch (this.document.type) {
       case 'gear':
         options.parts.push('gearDetails', 'effects');
+        break;
+      case 'weapon':
+        console.log("Loading weapon template");
+        options.parts.push('weaponDetails', 'effects');
         break;
       case 'spell':
         console.log("Loading spell template");
@@ -137,6 +146,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     switch (partId) {
       case 'gearDetails':
         // Gear gets enriched description like the details tab
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
+        break;
+
+      case 'weaponDetails':
+        // Weapon gets enriched description like the details tab
         context.tab = context.tabs[partId];
         context.enriched = {
           description: await foundry.applications.ux.TextEditor.enrichHTML(
@@ -248,9 +272,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for spell, ancestry, class, perk, and gear is details, others default to description
+    // Default tab for spell, ancestry, class, perk, gear, and weapon is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'gear') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'gear' || this.document.type === 'weapon') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -277,6 +301,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'classDetails':
         case 'perkDetails':
         case 'gearDetails':
+        case 'weaponDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;
@@ -531,6 +556,37 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const other = this.item.system.prerequisites?.other || [];
     const newOther = other.filter((_, i) => i !== index);
     await this.item.update({ 'system.prerequisites.other': newOther });
+  }
+
+  /**
+   * Handle adding a new weapon property to a weapon item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddWeaponProperty(event, target) {
+    const properties = this.item.system.properties || [];
+    const newProperties = [...properties, 'Brawl'];
+    await this.item.update({ 'system.properties': newProperties });
+  }
+
+  /**
+   * Handle removing a weapon property from a weapon item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveWeaponProperty(event, target) {
+    const index = parseInt(target.dataset.propertyIndex);
+    if (isNaN(index)) return;
+
+    const properties = this.item.system.properties || [];
+    const newProperties = properties.filter((_, i) => i !== index);
+    await this.item.update({ 'system.properties': newProperties });
   }
 
   /**

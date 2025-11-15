@@ -1,0 +1,150 @@
+{{! Weapon Details Tab }}
+<section
+  class='tab details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  <div class='weapon-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
+      <div class='weapon-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Damage }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.damage.label'}}</label>
+      <input
+        type='text'
+        name='system.damage'
+        value='{{system.damage}}'
+        data-dtype='String'
+        placeholder='e.g., d8, d6, 2'
+      />
+    </div>
+
+    {{! Weapon Skill }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.weaponSkill.label'}}</label>
+      <select name='system.weaponSkill' data-dtype='String'>
+        {{#select system.weaponSkill}}
+          <option value='melee'>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+          <option value='brawl'>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
+          <option value='finesse'>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
+          <option value='ranged'>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
+        {{/select}}
+      </select>
+    </div>
+
+    {{! Range }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.range.label'}}</label>
+      <select name='system.range' data-dtype='String'>
+        {{#select system.range}}
+          <option value='close'>{{localize 'VAGABOND.Weapon.Range.Close'}}</option>
+          <option value='near'>{{localize 'VAGABOND.Weapon.Range.Near'}}</option>
+          <option value='far'>{{localize 'VAGABOND.Weapon.Range.Far'}}</option>
+        {{/select}}
+      </select>
+    </div>
+
+    {{! Grip }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.grip.label'}}</label>
+      <select name='system.grip' data-dtype='String'>
+        {{#select system.grip}}
+          <option value='1H' title='{{lookup config.weaponGripDescriptions "1H"}}'>1H (One-Handed)</option>
+          <option value='2H' title='{{lookup config.weaponGripDescriptions "2H"}}'>2H (Two-Handed)</option>
+          <option value='F' title='{{lookup config.weaponGripDescriptions "F"}}'>F (Fist)</option>
+          <option value='V' title='{{lookup config.weaponGripDescriptions "V"}}'>V (Versatile)</option>
+        {{/select}}
+      </select>
+    </div>
+
+    {{! Properties }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
+      <div class='weapon-properties'>
+        {{#each system.properties as |property index|}}
+          <div class='weapon-property flexrow' style='gap: 8px; align-items: center; margin-bottom: 4px;'>
+            <select name='system.properties.{{index}}' data-dtype='String' style='flex: 1;'>
+              {{#select property}}
+                <option value='Brawl' title='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</option>
+                <option value='Brutal' title='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</option>
+                <option value='Cleave' title='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</option>
+                <option value='Entangle' title='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</option>
+                <option value='Finesse' title='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</option>
+                <option value='Keen' title='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</option>
+                <option value='Long' title='{{lookup config.weaponPropertyHints "Long"}}'>Long</option>
+                <option value='Near' title='{{lookup config.weaponPropertyHints "Near"}}'>Near</option>
+                <option value='Ranged' title='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</option>
+                <option value='Shield' title='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</option>
+                <option value='Thrown' title='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</option>
+              {{/select}}
+            </select>
+            <button type='button' class='property-hint' title='{{lookup config.weaponPropertyHints property}}' style='padding: 2px 6px;'>?</button>
+            <button type='button' data-action='removeWeaponProperty' data-property-index='{{index}}' style='padding: 2px 6px;'>×</button>
+          </div>
+        {{/each}}
+        <button type='button' data-action='addWeaponProperty' style='margin-top: 4px;'>+ Add Property</button>
+      </div>
+    </div>
+
+    {{! Cost Section - Single Line Layout }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.cost.label'}}</label>
+      <div class='flexrow' style='gap: 8px;'>
+        <div style='flex: 1;'>
+          <label class='resource-label'>Gold</label>
+          <input
+            type='number'
+            name='system.cost.gold'
+            value='{{system.cost.gold}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+        <div style='flex: 1;'>
+          <label class='resource-label'>Silver</label>
+          <input
+            type='number'
+            name='system.cost.silver'
+            value='{{system.cost.silver}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+        <div style='flex: 1;'>
+          <label class='resource-label'>Copper</label>
+          <input
+            type='number'
+            name='system.cost.copper'
+            value='{{system.cost.copper}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+      </div>
+    </div>
+
+    {{! Slots }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.slots.label'}}</label>
+      <input
+        type='number'
+        name='system.slots'
+        value='{{system.slots}}'
+        min='0'
+        data-dtype='Number'
+      />
+    </div>
+  </div>
+</section>

@@ -164,6 +164,17 @@
           "slots": {"label": "Slots"}
         }
       },
+      "Weapon": {
+        "FIELDS": {
+          "damage": {"label": "Damage"},
+          "properties": {"label": "Properties"},
+          "weaponSkill": {"label": "Weapon Skill"},
+          "range": {"label": "Range"},
+          "grip": {"label": "Grip"},
+          "cost": {"label": "Cost"},
+          "slots": {"label": "Slots"}
+        }
+      },
       "Spell": {
         "FIELDS": {
           "description": {"label": "Effect Description"},
@@ -232,11 +243,38 @@
     },
     "Item": {
       "gear": "Gear",
+      "weapon": "Weapon",
       "feature": "Feature",
       "spell": "Spell",
       "ancestry": "Ancestry",
       "class": "Class",
       "perk": "Perk"
+    }
+  },
+  "Weapon": {
+    "Range": {
+      "Close": "Close",
+      "Near": "Near",
+      "Far": "Far"
+    },
+    "Grip": {
+      "1H": "1H (One-Handed)",
+      "2H": "2H (Two-Handed)",
+      "F": "F (Fist)",
+      "V": "V (Versatile)"
+    },
+    "Property": {
+      "Brawl": "Brawl",
+      "Brutal": "Brutal",
+      "Cleave": "Cleave",
+      "Entangle": "Entangle",
+      "Finesse": "Finesse",
+      "Keen": "Keen",
+      "Long": "Long",
+      "Near": "Near",
+      "Ranged": "Ranged",
+      "Shield": "Shield",
+      "Thrown": "Thrown"
     }
   }
 }
