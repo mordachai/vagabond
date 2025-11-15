@@ -120,16 +120,9 @@
         <h3>Perks</h3>
         <ol class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            <li class='perk-card' data-item-id='{{perk._id}}' data-document-class='Item'>
+            <li class='perk-card' data-item-id='{{perk._id}}' data-tooltip='Click to view, Right-click to remove'>
               <div class='perk-header flexrow'>
                 <h4 class='perk-name'>{{perk.name}}</h4>
-                <a
-                  class='item-control item-delete'
-                  data-action='deleteDoc'
-                  data-tooltip='{{localize "VAGABOND.Item.Delete"}}'
-                >
-                  <i class='fas fa-trash'></i>
-                </a>
               </div>
               {{#if perk.prerequisites}}
                 <div class='perk-prerequisites'>{{perk.prerequisites}}</div>

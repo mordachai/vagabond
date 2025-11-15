@@ -332,6 +332,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
     }
 
+    // Add click and right-click handlers for perk cards
+    const perkCards = this.element.querySelectorAll('.perk-card[data-item-id]');
+    perkCards.forEach(perkCard => {
+      // Left-click to view
+      perkCard.addEventListener('click', this._onViewPerk.bind(this));
+      // Right-click to delete
+      perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
+    });
+
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
@@ -495,6 +504,44 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
       if (confirmed) {
         await classItem.delete();
+      }
+    }
+  }
+
+  /**
+   * Handle viewing a perk item (left-click)
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onViewPerk(event) {
+    event.preventDefault();
+    const perkCard = event.currentTarget;
+    const perkId = perkCard.dataset.itemId;
+    const perk = this.actor.items.get(perkId);
+    if (perk) {
+      perk.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle removing a perk item (right-click)
+   *
+   * @param {PointerEvent} event   The originating contextmenu event
+   * @protected
+   */
+  async _onRemovePerk(event) {
+    event.preventDefault();
+    const perkCard = event.currentTarget;
+    const perkId = perkCard.dataset.itemId;
+    const perk = this.actor.items.get(perkId);
+    if (perk) {
+      const confirmed = await Dialog.confirm({
+        title: 'Remove Perk',
+        content: `<p>Are you sure you want to remove <strong>${perk.name}</strong>?</p>`,
+      });
+      if (confirmed) {
+        await perk.delete();
       }
     }
   }
