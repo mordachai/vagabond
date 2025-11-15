@@ -61,9 +61,9 @@
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
-      <div class='item-damage' style='flex: 0 0 50px; text-align: center;'>Damage</div>
-      <div class='item-range' style='flex: 0 0 60px; text-align: center;'>Range</div>
-      <div class='item-grip' style='flex: 0 0 50px; text-align: center;'>Grip</div>
+      <div class='item-damage inventory-col-damage'>Damage</div>
+      <div class='item-range inventory-col-range'>Range</div>
+      <div class='item-grip inventory-col-grip'>Grip</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
       <div class='item-equipped inventory-col-equipped' data-tooltip='Equip'>E</div>
@@ -85,12 +85,12 @@
           </div>
           <div class='weapon-item-name'>{{item.name}}</div>
         </div>
-        <div class='item-damage item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.currentDamage}}</div>
-        <div class='item-range item-prop' style='flex: 0 0 60px; text-align: center;'>{{item.system.rangeDisplay}}</div>
-        <div class='item-grip item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.gripDisplay}}</div>
+        <div class='item-damage item-prop inventory-col-damage'>{{item.system.currentDamage}}</div>
+        <div class='item-range item-prop inventory-col-range'>{{item.system.rangeDisplay}}</div>
+        <div class='item-grip item-prop inventory-col-grip'>{{item.system.gripDisplay}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='item-equipped inventory-col-equipped' data-action='toggleWeaponEquipment' data-item-id='{{item._id}}' style='cursor: pointer;'>
+        <div class='item-equipped inventory-col-equipped equipment-toggle' data-action='toggleWeaponEquipment' data-item-id='{{item._id}}'>
           {{#if (eq item.system.equipmentState 'unequipped')}}
             <i class='far fa-circle unequipped' data-tooltip='Unequipped (click to equip one-handed)'></i>
           {{else if (eq item.system.equipmentState 'oneHand')}}
@@ -108,9 +108,9 @@
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
-      <div class='item-type' style='flex: 0 0 70px; text-align: center;'>Type</div>
-      <div class='item-rating' style='flex: 0 0 60px; text-align: center;'>Rating</div>
-      <div class='item-metal' style='flex: 0 0 80px; text-align: center;'>Metal</div>
+      <div class='item-type inventory-col-armor-type'>Type</div>
+      <div class='item-rating inventory-col-rating'>Rating</div>
+      <div class='item-metal inventory-col-metal'>Metal</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
       <div class='item-equipped inventory-col-equipped' data-tooltip='Equip'>E</div>
@@ -132,17 +132,17 @@
           </div>
           <div class='armor-item-name'>{{item.name}}</div>
         </div>
-        <div class='item-type item-prop' style='flex: 0 0 70px; text-align: center;'>{{item.system.armorTypeDisplay}}</div>
-        <div class='item-rating item-prop' style='flex: 0 0 60px; text-align: center;'>
+        <div class='item-type item-prop inventory-col-armor-type'>{{item.system.armorTypeDisplay}}</div>
+        <div class='item-rating item-prop inventory-col-rating'>
           {{item.system.rating}}
           {{#if (ne item.system.rating item.system.finalRating)}}
-            <span style='color: #0a0;'>({{item.system.finalRating}})</span>
+            <span class='metal-bonus'>({{item.system.finalRating}})</span>
           {{/if}}
         </div>
-        <div class='item-metal item-prop' style='flex: 0 0 80px; text-align: center;'>{{item.system.metalDisplay}}</div>
+        <div class='item-metal item-prop inventory-col-metal'>{{item.system.metalDisplay}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='item-equipped inventory-col-equipped' data-action='toggleArmorEquipment' data-item-id='{{item._id}}' style='cursor: pointer;'>
+        <div class='item-equipped inventory-col-equipped equipment-toggle' data-action='toggleArmorEquipment' data-item-id='{{item._id}}'>
           {{#if item.system.equipped}}
             <i class='fas fa-shield-halved equipped' data-tooltip='Equipped (click to unequip)'></i>
           {{else}}
@@ -194,7 +194,7 @@
 
   {{! Add New Item Buttons }}
   {{#if @root.editable}}
-    <div class='inventory-add-item' style='display: flex; gap: 8px;'>
+    <div class='inventory-add-item'>
       <a
         class='item-control item-create'
         data-tooltip='Create New Weapon'
