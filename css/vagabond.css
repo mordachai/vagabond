@@ -648,6 +648,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
 }
 
 .perk-card {
@@ -672,17 +675,15 @@
   color: var(--vagabond-c-dark);
 }
 
-.perk-delete {
-  background: none;
-  border: none;
-  cursor: pointer;
+.perk-card .item-delete {
   padding: 2px 6px;
   color: var(--vagabond-c-tan);
   opacity: 0.6;
   transition: opacity 0.2s ease;
+  text-decoration: none;
 }
 
-.perk-delete:hover {
+.perk-card .item-delete:hover {
   opacity: 1;
   color: #d32f2f;
 }

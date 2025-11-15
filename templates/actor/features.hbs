@@ -118,19 +118,18 @@
       {{! Perks Section }}
       <div class='perks-section flexcol' style='margin-top: 20px;'>
         <h3>Perks</h3>
-        <div class='perks-list'>
+        <ol class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            <div class='perk-card' data-item-id='{{perk._id}}' data-document-class='Item'>
+            <li class='perk-card' data-item-id='{{perk._id}}' data-document-class='Item'>
               <div class='perk-header flexrow'>
                 <h4 class='perk-name'>{{perk.name}}</h4>
-                <button
-                  type='button'
-                  class='perk-delete'
+                <a
+                  class='item-control item-delete'
                   data-action='deleteDoc'
                   data-tooltip='{{localize "VAGABOND.Item.Delete"}}'
                 >
                   <i class='fas fa-trash'></i>
-                </button>
+                </a>
               </div>
               {{#if perk.prerequisites}}
                 <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
@@ -138,11 +137,11 @@
               {{#if perk.enrichedDescription}}
                 <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
               {{/if}}
-            </div>
+            </li>
           {{else}}
-            <p style='font-style: italic; color: var(--vagabond-c-tan);'>No perks yet. Drag perks from the Items directory.</p>
+            <li class='no-perks' style='font-style: italic; color: var(--vagabond-c-tan); list-style: none;'>No perks yet. Drag perks from the Items directory.</li>
           {{/each}}
-        </div>
+        </ol>
       </div>
     </section>
   </section>
