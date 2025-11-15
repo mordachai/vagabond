@@ -120,7 +120,26 @@
         <h3>Perks</h3>
         <div class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            {{> 'systems/vagabond/templates/actor/parts/perk-card.hbs' perk=perk}}
+            <div class='perk-card' data-item-id='{{perk._id}}'>
+              <div class='perk-header flexrow'>
+                <h4 class='perk-name'>{{perk.name}}</h4>
+                <button
+                  type='button'
+                  class='perk-delete'
+                  data-action='deleteItem'
+                  data-item-id='{{perk._id}}'
+                  data-tooltip='{{localize "VAGABOND.Item.Delete"}}'
+                >
+                  <i class='fas fa-trash'></i>
+                </button>
+              </div>
+              {{#if perk.prerequisites}}
+                <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
+              {{/if}}
+              {{#if perk.enrichedDescription}}
+                <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
+              {{/if}}
+            </div>
           {{else}}
             <p style='font-style: italic; color: var(--vagabond-c-tan);'>No perks yet. Drag perks from the Items directory.</p>
           {{/each}}
