@@ -60,7 +60,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     attributesGear: {
       template: 'systems/vagabond/templates/item/details-parts/gear-details.hbs',
     },
-    attributesSpell: {
+    spellDetails: {
       template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
     },
     ancestryDetails: {
@@ -88,7 +88,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         options.parts.push('description', 'attributesGear');
         break;
       case 'spell':
-        options.parts.push('description', 'attributesSpell');
+        console.log("Loading spell template");
+        options.parts.push('spellDetails', 'effects');
         break;
       case 'ancestry':
         console.log("Loading ancestry template");
@@ -135,9 +136,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'attributesGear':
-      case 'attributesSpell':
         // Necessary for preserving active tab on re-render
         context.tab = context.tabs[partId];
+        break;
+
+      case 'spellDetails':
+        // Spell gets enriched description like the details tab
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
         break;
 
       case 'ancestryDetails':
@@ -223,9 +238,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for ancestry, class, and perk is details, others default to description
+    // Default tab for spell, ancestry, class, and perk is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -245,10 +260,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           break;
         case 'attributesFeature':
         case 'attributesGear':
-        case 'attributesSpell':
           tab.id = 'attributes';
           tab.label += 'Attributes';
           break;
+        case 'spellDetails':
         case 'ancestryDetails':
         case 'classDetails':
         case 'perkDetails':
