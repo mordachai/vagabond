@@ -53,3 +53,19 @@ VAGABOND.deliveryTypes = {
   'sphere': 'VAGABOND.DeliveryTypes.Sphere',
   'touch': 'VAGABOND.DeliveryTypes.Touch'
 };
+
+/**
+ * Default delivery data by type
+ * @type {Object}
+ */
+VAGABOND.deliveryDefaults = {
+  'aura': { cost: 2, increase: '+1 per +5 feet to the radius' },
+  'cone': { cost: 2, increase: '+2 per additional 5-feet of length' },
+  'cube': { cost: 1, increase: '+1 per additional 5-foot-cube' },
+  'imbue': { cost: 0, increase: '+2 per additional Target' },
+  'glyph': { cost: 2, increase: '—' },
+  'line': { cost: 2, increase: '+1 per 10 feet of extra length' },
+  'remote': { cost: 0, increase: '+1 per additional Target' },
+  'sphere': { cost: 2, increase: '+1 per +5 feet to the radius' },
+  'touch': { cost: 0, increase: '—' }
+};

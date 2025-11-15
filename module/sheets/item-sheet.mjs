@@ -35,6 +35,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
       addOtherPrerequisite: this._onAddOtherPrerequisite,
       removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
+      updateDeliveryDefaults: this._onUpdateDeliveryDefaults,
     },
     form: {
       submitOnChange: true,
@@ -502,6 +503,26 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const other = this.item.system.prerequisites?.other || [];
     const newOther = other.filter((_, i) => i !== index);
     await this.item.update({ 'system.prerequisites.other': newOther });
+  }
+
+  /**
+   * Handle updating delivery cost and increase when delivery type changes
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating change event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onUpdateDeliveryDefaults(event, target) {
+    const deliveryType = target.value;
+    const defaults = CONFIG.VAGABOND.deliveryDefaults[deliveryType];
+
+    if (defaults) {
+      await this.item.update({
+        'system.delivery.cost': defaults.cost,
+        'system.delivery.increase': defaults.increase
+      });
+    }
   }
 
   /**

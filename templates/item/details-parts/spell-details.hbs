@@ -50,7 +50,7 @@
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</label>
       <div class='flexrow' style='gap: 8px; align-items: center;'>
-        <select name='system.delivery.type' style='flex: 2;'>
+        <select name='system.delivery.type' style='flex: 2;' data-action='updateDeliveryDefaults'>
           <option value='aura' {{#if (eq system.delivery.type 'aura')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Aura'}}</option>
           <option value='cone' {{#if (eq system.delivery.type 'cone')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cone'}}</option>
           <option value='cube' {{#if (eq system.delivery.type 'cube')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cube'}}</option>
