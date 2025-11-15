@@ -103,6 +103,56 @@
     {{/each}}
   </ol>
 
+  {{! Armor List }}
+  <h3 class='section-title'>Armor</h3>
+  <ol class='items-list'>
+    <li class='item flexrow items-header'>
+      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
+      <div class='item-type' style='flex: 0 0 70px; text-align: center;'>Type</div>
+      <div class='item-rating' style='flex: 0 0 60px; text-align: center;'>Rating</div>
+      <div class='item-metal' style='flex: 0 0 80px; text-align: center;'>Metal</div>
+      <div class='item-cost inventory-col-cost'>Cost</div>
+      <div class='item-slots inventory-col-slots'>Slots</div>
+      <div class='item-equipped inventory-col-equipped' data-tooltip='Equip'>E</div>
+    </li>
+    {{#each armor as |item id|}}
+      <li
+        class='item flexrow draggable armor-item-row'
+        data-item-id='{{item._id}}'
+        data-document-class='Item'
+      >
+        <div class='item-name inventory-col-name'>
+          <div class='item-image armor-item-image'>
+            <img
+              src='{{item.img}}'
+              data-tooltip='{{item.name}}'
+              width='24'
+              height='24'
+            />
+          </div>
+          <div class='armor-item-name'>{{item.name}}</div>
+        </div>
+        <div class='item-type item-prop' style='flex: 0 0 70px; text-align: center;'>{{item.system.armorTypeDisplay}}</div>
+        <div class='item-rating item-prop' style='flex: 0 0 60px; text-align: center;'>
+          {{item.system.rating}}
+          {{#if (ne item.system.rating item.system.finalRating)}}
+            <span style='color: #0a0;'>({{item.system.finalRating}})</span>
+          {{/if}}
+        </div>
+        <div class='item-metal item-prop' style='flex: 0 0 80px; text-align: center;'>{{item.system.metalDisplay}}</div>
+        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
+        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
+        <div class='item-equipped inventory-col-equipped' data-action='toggleArmorEquipment' data-item-id='{{item._id}}' style='cursor: pointer;'>
+          {{#if item.system.equipped}}
+            <i class='fas fa-shield-halved equipped' data-tooltip='Equipped (click to unequip)'></i>
+          {{else}}
+            <i class='far fa-circle unequipped' data-tooltip='Unequipped (click to equip)'></i>
+          {{/if}}
+        </div>
+      </li>
+    {{/each}}
+  </ol>
+
   {{! Gear List }}
   <h3 class='section-title'>Gear</h3>
   <ol class='items-list'>
@@ -154,6 +204,16 @@
       >
         <i class='fas fa-plus'></i>
         New Weapon
+      </a>
+      <a
+        class='item-control item-create'
+        data-tooltip='Create New Armor'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='armor'
+      >
+        <i class='fas fa-plus'></i>
+        New Armor
       </a>
       <a
         class='item-control item-create'

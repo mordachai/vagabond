@@ -25,6 +25,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
+      toggleArmorEquipment: this._onToggleArmorEquipment,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -247,6 +248,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Initialize containers.
     const gear = [];
     const weapons = [];
+    const armor = [];
     const features = [];
     const perks = [];
     const spells = [];
@@ -282,6 +284,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       else if (i.type === 'weapon') {
         weapons.push(i);
       }
+      // Append to armor.
+      else if (i.type === 'armor') {
+        armor.push(i);
+      }
       // Append to spells.
       else if (i.type === 'spell') {
         spells.push(i);
@@ -295,6 +301,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.armor = armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
@@ -374,6 +381,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Right-click on row: delete weapon
       weaponItem.addEventListener('contextmenu', this._onWeaponContextMenu.bind(this));
+    });
+
+    // Add click and context menu handlers for armor items
+    const armorItems = this.element.querySelectorAll('.armor-item-row[data-item-id]');
+    armorItems.forEach(armorItem => {
+      // Left-click on image: open item sheet
+      const armorImage = armorItem.querySelector('.armor-item-image');
+      if (armorImage) {
+        armorImage.addEventListener('click', this._onArmorImageClick.bind(this));
+      }
+
+      // Left-click on name: open item sheet (armor doesn't have a roll action like weapons)
+      const armorName = armorItem.querySelector('.armor-item-name');
+      if (armorName) {
+        armorName.addEventListener('click', this._onArmorImageClick.bind(this));
+      }
+
+      // Right-click on row: delete armor
+      armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
     });
 
     // You may want to add other special handling here
@@ -752,6 +778,50 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle left-click on armor item image - opens item sheet
+   */
+  async _onArmorImageClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const armorRow = event.currentTarget.closest('.armor-item-row');
+    const itemId = armorRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item) {
+      item.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle right-click on armor item - deletes armor with confirmation
+   */
+  async _onArmorContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const armorRow = event.currentTarget;
+    const itemId = armorRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Armor' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
+    }
+  }
+
+  /**
    * Renders an embedded document's sheet
    *
    * @this VagabondActorSheet
@@ -941,6 +1011,32 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Update the weapon's equipment state
     await weapon.update({ 'system.equipmentState': nextState });
+  }
+
+  /**
+   * Handle toggling armor equipment state.
+   * Toggles between: equipped <-> unequipped
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleArmorEquipment(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const armor = this.actor.items.get(itemId);
+
+    if (!armor || armor.type !== 'armor') {
+      ui.notifications.error('Armor not found!');
+      return;
+    }
+
+    // Toggle equipped state
+    const newState = !armor.system.equipped;
+
+    // Update the armor's equipment state
+    await armor.update({ 'system.equipped': newState });
   }
 
   /**
