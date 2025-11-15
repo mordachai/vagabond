@@ -125,6 +125,28 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'features':
+        context.tab = context.tabs[partId];
+        // Enrich perk descriptions and prerequisites for display
+        if (context.perks) {
+          context.enrichedPerks = await Promise.all(
+            context.perks.map(async (perk) => {
+              const enrichedDescription = await TextEditor.enrichHTML(
+                perk.system.description,
+                {
+                  secrets: this.document.isOwner,
+                  rollData: perk.getRollData(),
+                  relativeTo: perk,
+                }
+              );
+              return {
+                ...perk,
+                enrichedDescription,
+                prerequisites: perk.system.getPrerequisiteString(),
+              };
+            })
+          );
+        }
+        break;
       case 'spells':
       case 'gear':
         context.tab = context.tabs[partId];
@@ -223,6 +245,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // this sheet does with spells
     const gear = [];
     const features = [];
+    const perks = [];
     const spells = {
       0: [],
       1: [],
@@ -269,6 +292,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           spells[i.system.spellLevel].push(i);
         }
       }
+      // Append to perks.
+      else if (i.type === 'perk') {
+        perks.push(i);
+      }
     }
 
     for (const s of Object.values(spells)) {
@@ -278,6 +305,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells;
   }
 

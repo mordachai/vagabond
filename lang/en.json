@@ -138,7 +138,27 @@
           "ancestryType": {"label": "Type"},
           "traits": {"label": "Traits"}
         }
-      }
+      },
+      "Perk": {
+        "FIELDS": {
+          "description": {"label": "Description"},
+          "prerequisites": {
+            "label": "Prerequisites",
+            "stats": {"label": "Stat Prerequisites"},
+            "trainedSkills": {"label": "Trained Skill Prerequisites"},
+            "spells": {"label": "Spell Prerequisites"},
+            "other": {"label": "Other Prerequisites"}
+          }
+        },
+        "AddStatPrerequisite": "Add Stat Prerequisite",
+        "AddTrainedSkillPrerequisite": "Add Trained Skill",
+        "AddSpellPrerequisite": "Add Spell Prerequisite",
+        "AddOtherPrerequisite": "Add Other Prerequisite",
+        "RemovePrerequisite": "Remove Prerequisite",
+        "SpellNamePlaceholder": "Enter spell name...",
+        "OtherPrerequisitePlaceholder": "Enter prerequisite..."
+      },
+      "Delete": "Delete Item"
     },
     "Effect": {
       "Source": "Source",
@@ -159,7 +179,8 @@
       "feature": "Feature",
       "spell": "Spell",
       "ancestry": "Ancestry",
-      "class": "Class"
+      "class": "Class",
+      "perk": "Perk"
     }
   }
 }

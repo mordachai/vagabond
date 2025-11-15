@@ -30,7 +30,8 @@
       "gear": {"htmlFields": ["description"]},
       "spell": {"htmlFields": ["description"]},
       "ancestry": {"htmlFields": ["description"]},
-      "class": {"htmlFields": ["description"]}
+      "class": {"htmlFields": ["description"]},
+      "perk": {"htmlFields": ["description"]}
     }
   },
   "flags": {

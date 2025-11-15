@@ -90,7 +90,7 @@
       </div>
     </section>
 
-    {{! Right column: Attacks }}
+    {{! Right column: Attacks and Perks }}
     <section class='attacks-section grid-span-1'>
       {{! Weapon Skills / Attacks Section }}
       <div class='weapon-skills flexcol'>
@@ -113,6 +113,18 @@
             <span class='weapon-skill-difficulty' style='margin-left: auto; font-weight: bold;'>{{weaponSkill.difficulty}}</span>
           </div>
         {{/each}}
+      </div>
+
+      {{! Perks Section }}
+      <div class='perks-section flexcol' style='margin-top: 20px;'>
+        <h3>Perks</h3>
+        <div class='perks-list'>
+          {{#each enrichedPerks as |perk|}}
+            {{> 'systems/vagabond/templates/actor/parts/perk-card.hbs' perk=perk}}
+          {{else}}
+            <p style='font-style: italic; color: var(--vagabond-c-tan);'>No perks yet. Drag perks from the Items directory.</p>
+          {{/each}}
+        </div>
       </div>
     </section>
   </section>

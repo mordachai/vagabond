@@ -27,6 +27,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeTrait: this._onRemoveTrait,
       addLevelFeature: this._onAddLevelFeature,
       removeLevelFeature: this._onRemoveLevelFeature,
+      addStatPrerequisite: this._onAddStatPrerequisite,
+      removeStatPrerequisite: this._onRemoveStatPrerequisite,
+      addTrainedSkillPrerequisite: this._onAddTrainedSkillPrerequisite,
+      removeTrainedSkillPrerequisite: this._onRemoveTrainedSkillPrerequisite,
+      addSpellPrerequisite: this._onAddSpellPrerequisite,
+      removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
+      addOtherPrerequisite: this._onAddOtherPrerequisite,
+      removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
     },
     form: {
       submitOnChange: true,
@@ -61,6 +69,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     classDetails: {
       template: 'systems/vagabond/templates/item/details-parts/class-details.hbs',
     },
+    perkDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/perk-details.hbs',
+    },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
     },
@@ -86,6 +97,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'class':
         console.log("Loading class template");
         options.parts.push('classDetails', 'effects');
+        break;
+      case 'perk':
+        console.log("Loading perk template");
+        options.parts.push('perkDetails', 'effects');
         break;
     }
   }
@@ -162,6 +177,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         }
         break;
 
+      case 'perkDetails':
+        // Perk gets enriched description like the description tab
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
+        break;
+
       case 'description':
         context.tab = context.tabs[partId];
         // Enrich description info for display
@@ -193,9 +223,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for ancestry and class is details, others default to description
+    // Default tab for ancestry, class, and perk is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'ancestry' || this.document.type === 'class') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -221,6 +251,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           break;
         case 'ancestryDetails':
         case 'classDetails':
+        case 'perkDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;
@@ -332,6 +363,130 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const levelFeatures = this.item.system.levelFeatures || [];
     const newFeatures = levelFeatures.filter((_, i) => i !== index);
     await this.item.update({ 'system.levelFeatures': newFeatures });
+  }
+
+  /**
+   * Handle adding a new stat prerequisite to a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddStatPrerequisite(event, target) {
+    const stats = this.item.system.prerequisites?.stats || [];
+    const newStats = [...stats, { stat: 'might', value: 1 }];
+    await this.item.update({ 'system.prerequisites.stats': newStats });
+  }
+
+  /**
+   * Handle removing a stat prerequisite from a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveStatPrerequisite(event, target) {
+    const index = parseInt(target.dataset.index);
+    if (isNaN(index)) return;
+
+    const stats = this.item.system.prerequisites?.stats || [];
+    const newStats = stats.filter((_, i) => i !== index);
+    await this.item.update({ 'system.prerequisites.stats': newStats });
+  }
+
+  /**
+   * Handle adding a new trained skill prerequisite to a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddTrainedSkillPrerequisite(event, target) {
+    const skills = this.item.system.prerequisites?.trainedSkills || [];
+    const newSkills = [...skills, 'arcana'];
+    await this.item.update({ 'system.prerequisites.trainedSkills': newSkills });
+  }
+
+  /**
+   * Handle removing a trained skill prerequisite from a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveTrainedSkillPrerequisite(event, target) {
+    const index = parseInt(target.dataset.index);
+    if (isNaN(index)) return;
+
+    const skills = this.item.system.prerequisites?.trainedSkills || [];
+    const newSkills = skills.filter((_, i) => i !== index);
+    await this.item.update({ 'system.prerequisites.trainedSkills': newSkills });
+  }
+
+  /**
+   * Handle adding a new spell prerequisite to a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddSpellPrerequisite(event, target) {
+    const spells = this.item.system.prerequisites?.spells || [];
+    const newSpells = [...spells, ''];
+    await this.item.update({ 'system.prerequisites.spells': newSpells });
+  }
+
+  /**
+   * Handle removing a spell prerequisite from a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveSpellPrerequisite(event, target) {
+    const index = parseInt(target.dataset.index);
+    if (isNaN(index)) return;
+
+    const spells = this.item.system.prerequisites?.spells || [];
+    const newSpells = spells.filter((_, i) => i !== index);
+    await this.item.update({ 'system.prerequisites.spells': newSpells });
+  }
+
+  /**
+   * Handle adding a new other prerequisite to a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onAddOtherPrerequisite(event, target) {
+    const other = this.item.system.prerequisites?.other || [];
+    const newOther = [...other, ''];
+    await this.item.update({ 'system.prerequisites.other': newOther });
+  }
+
+  /**
+   * Handle removing an other prerequisite from a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveOtherPrerequisite(event, target) {
+    const index = parseInt(target.dataset.index);
+    if (isNaN(index)) return;
+
+    const other = this.item.system.prerequisites?.other || [];
+    const newOther = other.filter((_, i) => i !== index);
+    await this.item.update({ 'system.prerequisites.other': newOther });
   }
 
   /**
