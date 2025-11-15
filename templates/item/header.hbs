@@ -15,11 +15,11 @@
       <div class='grid grid-2col'>
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.quantity.label'}}</label>
-          <input type='text' name='system.quantity' value='{{system.quantity}}' data-dtype='Number' />
+          <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number' />
         </div>
         <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.weight.label'}}</label>
-          <input type='text' name='system.weight' value='{{system.weight}}' data-dtype='Number' />
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.slots.label'}}</label>
+          <input type='number' name='system.slots' value='{{system.slots}}' data-dtype='Number' />
         </div>
       </div>
     {{/if}}
