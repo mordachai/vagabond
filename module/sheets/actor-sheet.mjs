@@ -26,6 +26,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       rollWeapon: this._onRollWeapon,
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleArmorEquipment: this._onToggleArmorEquipment,
+      useSpell: this._onUseSpell,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -1037,6 +1038,64 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Update the armor's equipment state
     await armor.update({ 'system.equipped': newState });
+  }
+
+  /**
+   * Handle using a spell (post to chat).
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onUseSpell(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const spell = this.actor.items.get(itemId);
+
+    if (!spell || spell.type !== 'spell') {
+      ui.notifications.error('Spell not found!');
+      return;
+    }
+
+    // Prepare the chat message content
+    let content = `<div class="spell-use">`;
+    content += `<h3>${spell.name}</h3>`;
+
+    // Add description
+    if (spell.system.description) {
+      content += `<p>${spell.system.description}</p>`;
+    }
+
+    // Add damage type
+    if (spell.system.damageBase && spell.system.damageBase !== '-') {
+      const damageLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase] || spell.system.damageBase);
+      content += `<p><strong>Damage Type:</strong> ${damageLabel}</p>`;
+    }
+
+    // Add delivery info
+    if (spell.system.delivery?.type) {
+      const deliveryLabel = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[spell.system.delivery.type] || spell.system.delivery.type);
+      content += `<p><strong>Delivery:</strong> ${deliveryLabel}`;
+      if (spell.system.delivery.cost > 0) {
+        content += ` (${spell.system.delivery.cost} Mana)`;
+      }
+      content += `</p>`;
+    }
+
+    // Add duration
+    if (spell.system.duration) {
+      content += `<p><strong>Duration:</strong> ${spell.system.duration}</p>`;
+    }
+
+    content += `</div>`;
+
+    // Create the chat message
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: content,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+    });
   }
 
   /**
