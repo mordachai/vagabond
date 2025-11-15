@@ -165,7 +165,7 @@
             "hint": "e.g., Instant, 1 Round, Continual"
           },
           "crit": {
-            "label": "Critical Success",
+            "label": "Crit",
             "hint": "Effect on a critical success"
           }
         },

@@ -6,7 +6,7 @@
 >
   <div class='spell-item-content'>
     {{! Description Section }}
-    <div class='form-group stacked'>
+    <div>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.description.label'}}</label>
       <div class='spell-description'>
         {{#if editable}}
@@ -19,29 +19,38 @@
       </div>
     </div>
 
-    {{! Damage Base }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.damageBase.label'}}</label>
-      <select name='system.damageBase'>
-        <option value='-' {{#if (eq system.damageBase '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
-        <option value='acid' {{#if (eq system.damageBase 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
-        <option value='fire' {{#if (eq system.damageBase 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
-        <option value='shock' {{#if (eq system.damageBase 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
-        <option value='poison' {{#if (eq system.damageBase 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
-        <option value='cold' {{#if (eq system.damageBase 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
-        <option value='blunt' {{#if (eq system.damageBase 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
-        <option value='physical' {{#if (eq system.damageBase 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
-        <option value='necrotic' {{#if (eq system.damageBase 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
-      </select>
+    {{! Damage Base and Duration - Same Line }}
+    <div class='flexrow' style='gap: 8px;'>
+      <div class='form-group' style='flex: 1;'>
+        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.damageBase.label'}}</label>
+        <select name='system.damageBase'>
+          <option value='-' {{#if (eq system.damageBase '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+          <option value='acid' {{#if (eq system.damageBase 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+          <option value='fire' {{#if (eq system.damageBase 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+          <option value='shock' {{#if (eq system.damageBase 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+          <option value='poison' {{#if (eq system.damageBase 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+          <option value='cold' {{#if (eq system.damageBase 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+          <option value='blunt' {{#if (eq system.damageBase 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+          <option value='physical' {{#if (eq system.damageBase 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+          <option value='necrotic' {{#if (eq system.damageBase 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+        </select>
+      </div>
+      <div class='form-group' style='flex: 2;'>
+        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
+        <input
+          type='text'
+          name='system.duration'
+          value='{{system.duration}}'
+          placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
+        />
+      </div>
     </div>
 
-    {{! Delivery Section }}
-    <div class='form-group stacked' style='border: 1px solid #666; padding: 10px; margin-top: 10px;'>
-      <h3 style='margin-top: 0;'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</h3>
-
-      <div class='form-group'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.type.label'}}</label>
-        <select name='system.delivery.type'>
+    {{! Delivery Section - Single Line Layout }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</label>
+      <div class='flexrow' style='gap: 8px; align-items: center;'>
+        <select name='system.delivery.type' style='flex: 0 0 auto; min-width: 120px;'>
           <option value='aura' {{#if (eq system.delivery.type 'aura')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Aura'}}</option>
           <option value='cone' {{#if (eq system.delivery.type 'cone')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cone'}}</option>
           <option value='cube' {{#if (eq system.delivery.type 'cube')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cube'}}</option>
@@ -52,49 +61,34 @@
           <option value='sphere' {{#if (eq system.delivery.type 'sphere')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Sphere'}}</option>
           <option value='touch' {{#if (eq system.delivery.type 'touch')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Touch'}}</option>
         </select>
-      </div>
-
-      <div class='form-group'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.cost.label'}}</label>
         <input
           type='number'
           name='system.delivery.cost'
           value='{{system.delivery.cost}}'
           min='0'
           data-dtype='Number'
+          style='flex: 0 0 auto; width: 60px;'
+          placeholder='Cost'
         />
-      </div>
-
-      <div class='form-group'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.increase.label'}}</label>
         <input
           type='text'
           name='system.delivery.increase'
           value='{{system.delivery.increase}}'
           placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.delivery.increase.hint"}}'
+          style='flex: 1;'
         />
       </div>
-    </div>
-
-    {{! Duration }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
-      <input
-        type='text'
-        name='system.duration'
-        value='{{system.duration}}'
-        placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
-      />
     </div>
 
     {{! Crit }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>
-      <textarea
+      <input
+        type='text'
         name='system.crit'
-        rows='3'
+        value='{{system.crit}}'
         placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.crit.hint"}}'
-      >{{system.crit}}</textarea>
+      />
     </div>
   </div>
 </section>
