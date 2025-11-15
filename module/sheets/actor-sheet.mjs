@@ -548,29 +548,60 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.stopPropagation();
 
     const gearRow = event.currentTarget;
-    const itemId = gearRow.dataset.itemId;
+    const itemId = gearRow?.dataset?.itemId;
+
+    // Guard: Ensure we have a valid item ID
+    if (!itemId) {
+      console.warn('No item ID found on gear row');
+      return;
+    }
+
     const item = this.actor.items.get(itemId);
 
-    if (!item) return;
+    // Guard: Ensure the item exists
+    if (!item) {
+      console.warn(`Item with ID ${itemId} not found`);
+      return;
+    }
 
-    // Application V2 approach: Use Foundry's context menu for V2
-    const menuItems = [
-      {
-        name: 'Edit Item',
-        icon: '<i class="fas fa-edit"></i>',
-        callback: () => item.sheet.render(true)
-      },
-      {
-        name: 'Delete Item',
-        icon: '<i class="fas fa-trash"></i>',
-        callback: () => item.delete()
-      }
-    ];
-
-    // Use the proper V2 method
-    foundry.applications.context.ContextMenu.create(this, event.target, menuItems, {
-      eventType: 'contextmenu'
+    // Application V2 approach: Use DialogV2 with buttons
+    const result = await foundry.applications.api.DialogV2.wait({
+      window: { title: `${item.name}` },
+      content: `<p>What would you like to do with <strong>${item.name}</strong>?</p>`,
+      buttons: [
+        {
+          action: 'edit',
+          label: '<i class="fas fa-edit"></i> Edit',
+          default: true,
+          callback: () => 'edit'
+        },
+        {
+          action: 'delete',
+          label: '<i class="fas fa-trash"></i> Delete',
+          callback: () => 'delete'
+        },
+        {
+          action: 'cancel',
+          label: 'Cancel',
+          callback: () => 'cancel'
+        }
+      ],
+      default: 'edit',
+      close: () => null
     });
+
+    // Handle the result
+    if (result === 'edit') {
+      item.sheet.render(true);
+    } else if (result === 'delete') {
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Delete Item' },
+        content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+      });
+      if (confirmed) {
+        await item.delete();
+      }
+    }
   }
 
   /**
