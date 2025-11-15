@@ -11,40 +11,38 @@ export default class VagabondGear extends VagabondItemBase {
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
 
-    schema.quantity = new fields.NumberField({
-      ...requiredInteger,
-      initial: 1,
-      min: 1,
+    // Gear type (e.g., "Alchemy & Medicine", "Adventuring Gear")
+    schema.type = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: ''
     });
-    schema.weight = new fields.NumberField({
+
+    // Cost in three currencies
+    schema.cost = new fields.SchemaField({
+      gold: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      silver: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      copper: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
+    });
+
+    // Slots (can be negative for items that add slots like Backpack)
+    schema.slots = new fields.NumberField({
       required: true,
       nullable: false,
-      initial: 0,
-      min: 0,
+      integer: true,
+      initial: 1
     });
-
-    // Break down roll formula into three independent fields
-    schema.roll = new fields.SchemaField({
-      diceNum: new fields.NumberField({
-        ...requiredInteger,
-        initial: 1,
-        min: 1,
-      }),
-      diceSize: new fields.StringField({ initial: 'd20' }),
-      diceBonus: new fields.StringField({
-        initial: '+@str.mod+ceil(@lvl / 2)',
-      }),
-    });
-
-    schema.formula = new fields.StringField({ blank: true });
 
     return schema;
   }
 
   prepareDerivedData() {
-    // Build the formula dynamically using string interpolation
-    const roll = this.roll;
+    // Format cost as a human-readable string
+    const costs = [];
+    if (this.cost.gold > 0) costs.push(`${this.cost.gold}g`);
+    if (this.cost.silver > 0) costs.push(`${this.cost.silver}s`);
+    if (this.cost.copper > 0) costs.push(`${this.cost.copper}c`);
 
-    this.formula = `${roll.diceNum}${roll.diceSize}${roll.diceBonus}`;
+    this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
   }
 }

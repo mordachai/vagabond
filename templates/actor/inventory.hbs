@@ -1,0 +1,125 @@
+{{! Inventory Tab }}
+<section class='tab inventory scrollable {{tab.cssClass}}' data-group='primary' data-tab='inventory'>
+
+  {{! Wealth Section }}
+  <div class='wealth-section'>
+    <h3 class='section-title'>Wealth</h3>
+    <div class='currency-row flexrow'>
+      <div class='currency-field'>
+        <label class='resource-label'>Gold</label>
+        <input
+          type='text'
+          name='system.currency.gold'
+          value='{{system.currency.gold}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+      <div class='currency-field'>
+        <label class='resource-label'>Silver</label>
+        <input
+          type='text'
+          name='system.currency.silver'
+          value='{{system.currency.silver}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+      <div class='currency-field'>
+        <label class='resource-label'>Copper</label>
+        <input
+          type='text'
+          name='system.currency.copper'
+          value='{{system.currency.copper}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+    </div>
+  </div>
+
+  {{! Inventory Slots Section }}
+  <div class='inventory-slots-section'>
+    <div class='slots-info flexrow'>
+      <div class='slot-field'>
+        <label class='resource-label'>Max Slots:</label>
+        <span class='slot-value'>{{system.inventory.maxSlots}}</span>
+      </div>
+      <div class='slot-field'>
+        <label class='resource-label'>Occupied:</label>
+        <span class='slot-value'>{{system.inventory.occupiedSlots}}</span>
+      </div>
+      <div class='slot-field'>
+        <label class='resource-label'>Available:</label>
+        <span class='slot-value'>{{system.inventory.availableSlots}}</span>
+      </div>
+    </div>
+  </div>
+
+  {{! Gear List }}
+  <ol class='items-list'>
+    <li class='item flexrow items-header'>
+      <div class='item-name'>{{localize 'Name'}}</div>
+      <div class='item-type'>Type</div>
+      <div class='item-cost'>Cost</div>
+      <div class='item-slots'>Slots</div>
+      <div class='item-controls'>
+        {{#if @root.editable}}
+          <a
+            class='item-control item-create'
+            data-tooltip='{{localize "DOCUMENT.Create" type='Item'}}'
+            data-action='createDoc'
+            data-document-class='Item'
+            data-type='gear'
+          >
+            <i class='fas fa-plus'></i>
+            {{localize 'DOCUMENT.New' type='item'}}
+          </a>
+        {{/if}}
+      </div>
+    </li>
+    {{#each gear as |item id|}}
+      <li
+        class='item flexrow draggable'
+        data-item-id='{{item._id}}'
+        data-document-class='Item'
+      >
+        <div class='item-name'>
+          <div class='item-image'>
+            <a data-action='viewDoc'>
+              <img
+                src='{{item.img}}'
+                data-tooltip='{{item.name}}'
+                width='24'
+                height='24'
+              />
+            </a>
+          </div>
+          <div>{{item.name}}</div>
+        </div>
+        <div class='item-type item-prop'>{{item.system.type}}</div>
+        <div class='item-cost item-prop'>{{item.system.costDisplay}}</div>
+        <div class='item-slots item-prop'>{{item.system.slots}}</div>
+        <div class='item-controls'>
+          <a
+            class='item-control item-edit'
+            data-tooltip='{{localize "DOCUMENT.Update" type='Gear'}}'
+            data-action='viewDoc'
+          >
+            <i class='fas fa-edit'></i>
+          </a>
+          {{#if @root.editable}}
+            <a
+              class='item-control item-delete'
+              data-tooltip='{{localize "DOCUMENT.Delete" type='Gear'}}'
+              data-action='deleteDoc'
+            >
+              <i class='fas fa-trash'></i>
+            </a>
+          {{/if}}
+        </div>
+      </li>
+    {{/each}}
+  </ol>
+
+</section>

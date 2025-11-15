@@ -90,7 +90,7 @@
       "Tabs": {
         "Biography": "Biography",
         "Features": "Features",
-        "Gear": "Gear",
+        "Inventory": "Inventory",
         "Spells": "Spells",
         "Effects": "Effects"
       },
@@ -139,12 +139,9 @@
       },
       "Gear": {
         "FIELDS": {
-          "rollFormula": {"label": "Roll Formula"},
-          "numDice": {"label": "Number of Dice"},
-          "dieSize": {"label": "Die Size"},
-          "rollMod": {"label": "Roll Modifier"},
-          "quantity": {"label": "Quantity"},
-          "weight": {"label": "Weight"}
+          "type": {"label": "Type"},
+          "cost": {"label": "Cost"},
+          "slots": {"label": "Slots"}
         }
       },
       "Spell": {

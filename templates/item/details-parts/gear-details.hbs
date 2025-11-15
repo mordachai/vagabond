@@ -4,39 +4,59 @@
   data-group='primary'
   data-tab='attributes'
 >
-  {{! As you add new fields, add them in here! }}
+  {{! Gear item fields }}
   <div class='resource'>
-    <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.rollFormula.label'}}:</label>
-    <span>{{system.formula}}</span>
-    <div class='grid grid-4col'>
+    <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.type.label'}}:</label>
+    <input
+      type='text'
+      name='system.type'
+      value='{{system.type}}'
+      data-dtype='String'
+      placeholder='e.g., Alchemy & Medicine'
+    />
+  </div>
+
+  <div class='resource'>
+    <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.cost.label'}}:</label>
+    <div class='grid grid-3col'>
       <div class='grid-span-1'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.numDice.label'}}</label>
+        <label class='resource-label'>Gold</label>
         <input
           type='text'
-          name='system.roll.diceNum'
-          value='{{system.roll.diceNum}}'
+          name='system.cost.gold'
+          value='{{system.cost.gold}}'
           data-dtype='Number'
         />
       </div>
       <div class='grid-span-1'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.dieSize.label'}}</label>
+        <label class='resource-label'>Silver</label>
         <input
           type='text'
-          name='system.roll.diceSize'
-          value='{{system.roll.diceSize}}'
-          data-dtype='String'
+          name='system.cost.silver'
+          value='{{system.cost.silver}}'
+          data-dtype='Number'
         />
       </div>
-      <div class='grid-span-2'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.rollMod.label'}}</label>
+      <div class='grid-span-1'>
+        <label class='resource-label'>Copper</label>
         <input
           type='text'
-          name='system.roll.diceBonus'
-          value='{{system.roll.diceBonus}}'
-          data-dtype='String'
+          name='system.cost.copper'
+          value='{{system.cost.copper}}'
+          data-dtype='Number'
         />
       </div>
     </div>
+  </div>
 
+  <div class='resource'>
+    <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.slots.label'}}:</label>
+    <input
+      type='text'
+      name='system.slots'
+      value='{{system.slots}}'
+      data-dtype='Number'
+      placeholder='Can be negative for items that add slots'
+    />
   </div>
 </section>

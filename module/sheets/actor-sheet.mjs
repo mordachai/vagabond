@@ -51,8 +51,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/biography.hbs',
       scrollable: [""],
     },
-    gear: {
-      template: 'systems/vagabond/templates/actor/gear.hbs',
+    inventory: {
+      template: 'systems/vagabond/templates/actor/inventory.hbs',
       scrollable: [""],
     },
     spells: {
@@ -75,10 +75,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'character':
-        options.parts.push('features', 'gear', 'spells', 'effects');
+        options.parts.push('features', 'inventory', 'spells', 'effects');
         break;
       case 'npc':
-        options.parts.push('gear', 'effects');
+        options.parts.push('inventory', 'effects');
         break;
     }
   }
@@ -151,7 +151,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
         break;
       case 'spells':
-      case 'gear':
+      case 'inventory':
         context.tab = context.tabs[partId];
         break;
       case 'biography':
@@ -217,9 +217,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           tab.id = 'features';
           tab.label += 'Features';
           break;
-        case 'gear':
-          tab.id = 'gear';
-          tab.label += 'Gear';
+        case 'inventory':
+          tab.id = 'inventory';
+          tab.label += 'Inventory';
           break;
         case 'spells':
           tab.id = 'spells';
