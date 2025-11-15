@@ -247,6 +247,21 @@
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects",
       "Duration": "Duration"
+    },
+    "Armor": {
+      "Type": {
+        "Light": "Light",
+        "Medium": "Medium",
+        "Heavy": "Heavy"
+      }
+    },
+    "Metal": {
+      "Common": "Common",
+      "Adamant": "Adamant",
+      "ColdIron": "Cold Iron",
+      "Silver": "Silver",
+      "Mythral": "Mythral",
+      "Orichalcum": "Orichalcum"
     }
   },
   "TYPES": {
@@ -290,21 +305,6 @@
       "Shield": "Shield",
       "Thrown": "Thrown"
     }
-  },
-  "Armor": {
-    "Type": {
-      "Light": "Light",
-      "Medium": "Medium",
-      "Heavy": "Heavy"
-    }
-  },
-  "Metal": {
-    "Common": "Common",
-    "Adamant": "Adamant",
-    "ColdIron": "Cold Iron",
-    "Silver": "Silver",
-    "Mythral": "Mythral",
-    "Orichalcum": "Orichalcum"
   }
 }
 
