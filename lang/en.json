@@ -10,7 +10,7 @@
     },
     "Skills": {
       "Arcana": "Arcana",
-      "Brawl": "Brawl", 
+      "Brawl": "Brawl",
       "Craft": "Craft",
       "Detect": "Detect",
       "Finesse": "Finesse",
@@ -21,6 +21,12 @@
       "Performance": "Performance",
       "Sneak": "Sneak",
       "Survival": "Survival"
+    },
+    "WeaponSkills": {
+      "Melee": "Melee",
+      "Ranged": "Ranged",
+      "Brawl": "Brawl",
+      "Finesse": "Finesse"
     },
     "Saves": {
       "Reflex": {

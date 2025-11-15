@@ -89,5 +89,31 @@
         {{/each}}
       </div>
     </section>
+
+    {{! Right column: Attacks }}
+    <section class='attacks-section grid-span-1'>
+      {{! Weapon Skills / Attacks Section }}
+      <div class='weapon-skills flexcol'>
+        <h3>Attacks</h3>
+        {{#each system.weaponSkills as |weaponSkill key|}}
+          <div class='weapon-skill flexrow flex-group-center' style='margin-bottom: 5px;'>
+            <input
+              type='checkbox'
+              name='system.weaponSkills.{{key}}.trained'
+              {{#if weaponSkill.trained}}checked{{/if}}
+              style='margin-right: 10px;'
+            />
+            <label
+              class='resource-label rollable flexlarge align-left'
+              data-action='roll'
+              data-roll='d20'
+              data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
+              style='cursor: pointer;'
+            >{{weaponSkill.label}} {{#if weaponSkill.trained}}(Trained){{/if}}</label>
+            <span class='weapon-skill-difficulty' style='margin-left: auto; font-weight: bold;'>{{weaponSkill.difficulty}}</span>
+          </div>
+        {{/each}}
+      </div>
+    </section>
   </section>
 </section>
