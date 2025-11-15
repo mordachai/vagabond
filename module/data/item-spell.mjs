@@ -65,7 +65,7 @@ export default class VagabondSpell extends VagabondItemBase {
     // Duration - how long the spell lasts
     schema.duration = new fields.StringField({
       ...requiredString,
-      initial: ''
+      initial: 'Until your next turn'
     });
 
     // Crit - critical success effect
