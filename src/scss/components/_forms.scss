@@ -33,7 +33,8 @@
 }
 
 .tab {
-  max-height: 400px;
+  max-height: fit-content;
+  overflow-y: auto;
 }
 
 .tab.biography {
