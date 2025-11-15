@@ -23,6 +23,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
+      rollWeapon: this._onRollWeapon,
+      toggleWeaponEquipment: this._onToggleWeaponEquipment,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -244,6 +246,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _prepareItems(context) {
     // Initialize containers.
     const gear = [];
+    const weapons = [];
     const features = [];
     const perks = [];
     const spells = [];
@@ -275,6 +278,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (i.type === 'gear') {
         gear.push(i);
       }
+      // Append to weapons.
+      else if (i.type === 'weapon') {
+        weapons.push(i);
+      }
       // Append to spells.
       else if (i.type === 'spell') {
         spells.push(i);
@@ -287,6 +294,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
@@ -347,6 +355,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Right-click on row: delete item
       gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
+    });
+
+    // Add click and context menu handlers for weapon items
+    const weaponItems = this.element.querySelectorAll('.weapon-item-row[data-item-id]');
+    weaponItems.forEach(weaponItem => {
+      // Left-click on image: open item sheet
+      const weaponImage = weaponItem.querySelector('.weapon-item-image');
+      if (weaponImage) {
+        weaponImage.addEventListener('click', this._onWeaponImageClick.bind(this));
+      }
+
+      // Left-click on name: use weapon (attack roll)
+      const weaponName = weaponItem.querySelector('.weapon-item-name');
+      if (weaponName) {
+        weaponName.addEventListener('click', this._onWeaponNameClick.bind(this));
+      }
+
+      // Right-click on row: delete weapon
+      weaponItem.addEventListener('contextmenu', this._onWeaponContextMenu.bind(this));
     });
 
     // You may want to add other special handling here
@@ -662,6 +689,69 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle left-click on weapon item image - opens item sheet
+   */
+  async _onWeaponImageClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const weaponRow = event.currentTarget.closest('.weapon-item-row');
+    const itemId = weaponRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item) {
+      item.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle left-click on weapon item name - makes attack roll
+   */
+  async _onWeaponNameClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const weaponRow = event.currentTarget.closest('.weapon-item-row');
+    const itemId = weaponRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const weapon = this.actor.items.get(itemId);
+    if (weapon && weapon.type === 'weapon') {
+      // Call the existing weapon roll action
+      await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
+    }
+  }
+
+  /**
+   * Handle right-click on weapon item - deletes weapon with confirmation
+   */
+  async _onWeaponContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const weaponRow = event.currentTarget;
+    const itemId = weaponRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Weapon' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
+    }
+  }
+
+  /**
    * Renders an embedded document's sheet
    *
    * @this VagabondActorSheet
@@ -730,6 +820,127 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _toggleEffect(event, target) {
     const effect = this._getEmbeddedDocument(target);
     await effect.update({ disabled: !effect.disabled });
+  }
+
+  /**
+   * Handle weapon attack rolls.
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onRollWeapon(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const weapon = this.actor.items.get(itemId);
+
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Get the weapon skill and difficulty
+    const weaponSkillKey = weapon.system.weaponSkill;
+    const weaponSkill = this.actor.system.weaponSkills[weaponSkillKey];
+    const difficulty = weaponSkill?.difficulty || 10;
+
+    // Roll the attack (d20)
+    const attackRoll = new Roll('d20', this.actor.getRollData());
+    await attackRoll.evaluate();
+
+    // Check if the attack succeeds
+    const isSuccess = attackRoll.total >= difficulty;
+    const isCritical = attackRoll.total === 20;
+
+    // Prepare the flavor text
+    let flavorText = `<strong>${weapon.name}</strong> Attack<br/>`;
+    flavorText += `<strong>Weapon Skill:</strong> ${weaponSkill?.label || weaponSkillKey} (Difficulty ${difficulty})<br/>`;
+    flavorText += `<strong>Attack Roll:</strong> ${attackRoll.total}`;
+
+    // If successful, roll damage
+    let damageRoll = null;
+    if (isSuccess) {
+      flavorText += ` - <span style="color: green;">SUCCESS!</span><br/>`;
+
+      // Roll damage using current damage (based on equipment state)
+      const damageFormula = weapon.system.currentDamage;
+      damageRoll = new Roll(damageFormula, this.actor.getRollData());
+      await damageRoll.evaluate();
+
+      flavorText += `<strong>Damage:</strong> ${damageRoll.total}`;
+
+      // Add critical damage if applicable
+      if (isCritical) {
+        flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
+      }
+    } else {
+      flavorText += ` - <span style="color: red;">MISS!</span>`;
+    }
+
+    // Add weapon properties to flavor if any
+    if (weapon.system.properties && weapon.system.properties.length > 0) {
+      flavorText += `<br/><strong>Properties:</strong> ${weapon.system.propertiesDisplay}`;
+    }
+
+    // Send the attack roll to chat
+    await attackRoll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: flavorText,
+      rollMode: game.settings.get('core', 'rollMode'),
+    });
+
+    // If there was a damage roll, also send it to chat
+    if (damageRoll) {
+      await damageRoll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: `<strong>${weapon.name}</strong> Damage`,
+        rollMode: game.settings.get('core', 'rollMode'),
+      });
+    }
+
+    return attackRoll;
+  }
+
+  /**
+   * Handle toggling weapon equipment state.
+   * Cycles through: unequipped -> oneHand -> twoHands -> unequipped
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleWeaponEquipment(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const weapon = this.actor.items.get(itemId);
+
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Cycle through equipment states
+    const currentState = weapon.system.equipmentState || 'unequipped';
+    let nextState;
+
+    switch (currentState) {
+      case 'unequipped':
+        nextState = 'oneHand';
+        break;
+      case 'oneHand':
+        nextState = 'twoHands';
+        break;
+      case 'twoHands':
+        nextState = 'unequipped';
+        break;
+      default:
+        nextState = 'unequipped';
+    }
+
+    // Update the weapon's equipment state
+    await weapon.update({ 'system.equipmentState': nextState });
   }
 
   /**

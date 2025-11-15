@@ -113,6 +113,29 @@
             <span class='weapon-skill-difficulty' style='margin-left: auto; font-weight: bold;'>{{weaponSkill.difficulty}}</span>
           </div>
         {{/each}}
+
+        {{! Equipped Weapons }}
+        {{#each weapons as |weapon|}}
+          {{#if weapon.system.equipped}}
+            <div class='equipped-weapon flexrow flex-group-center' style='margin-bottom: 5px; margin-top: 10px; padding: 5px; background-color: rgba(0,0,0,0.1); border-radius: 3px;'>
+              <label
+                class='resource-label rollable flexlarge align-left'
+                data-action='rollWeapon'
+                data-item-id='{{weapon._id}}'
+                style='cursor: pointer;'
+                title='{{weapon.system.propertiesDisplay}}'
+              >{{weapon.name}} ({{weapon.system.currentDamage}})</label>
+              <span class='weapon-info' style='margin-left: auto; font-size: 0.9em;'>
+                {{weapon.system.rangeDisplay}}
+                {{#if (eq weapon.system.equipmentState 'oneHand')}}
+                  <i class='fas fa-hand-fist' title='One-Handed'></i>
+                {{else if (eq weapon.system.equipmentState 'twoHands')}}
+                  <i class='fas fa-hands' title='Two-Handed'></i>
+                {{/if}}
+              </span>
+            </div>
+          {{/if}}
+        {{/each}}
       </div>
 
       {{! Perks Section }}

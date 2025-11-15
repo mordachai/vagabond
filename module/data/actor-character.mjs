@@ -361,11 +361,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     let occupiedSlots = 0;
     if (this.parent?.items) {
       for (const item of this.parent.items) {
-        if (item.type === 'gear' && item.system.slots !== undefined) {
-          // Only count slots if the item is NOT equipped
-          if (!item.system.equipped) {
-            occupiedSlots += item.system.slots;
-          }
+        if ((item.type === 'gear' || item.type === 'weapon') && item.system.slots !== undefined) {
+          occupiedSlots += item.system.slots;
         }
       }
     }
