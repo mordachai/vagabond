@@ -53,3 +53,10 @@
     padding: 0 8px;
   }
 }
+
+// Fix Foundry's ProseMirror positioning that breaks our layout
+// This overrides Foundry's default position: relative on editor content
+.prosemirror .editor-content,
+prose-mirror .editor-content {
+  position: unset;
+}
