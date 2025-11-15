@@ -28,7 +28,7 @@
           data-document-class='Item'
         >
           <div class='item-name flexrow spell-list-item-name'>
-            <div class='item-image spell-item-image'>
+            <div class='item-image item-clickable-image'>
               <a class='rollable' data-action='viewDoc' data-tooltip='Open spell sheet'>
                 <img
                   src='{{spell.img}}'
@@ -39,7 +39,7 @@
               </a>
             </div>
             <div class='spell-item-info'>
-              <a class='spell-item-name' data-action='useSpell' data-item-id='{{spell._id}}' data-tooltip='Use spell'>
+              <a class='item-clickable-name' data-action='useSpell' data-item-id='{{spell._id}}' data-tooltip='Use spell'>
                 <strong>{{spell.name}}</strong>
               </a>
               {{#unless (eq spell.system.damageBase '-')}}

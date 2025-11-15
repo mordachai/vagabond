@@ -75,7 +75,7 @@
         data-document-class='Item'
       >
         <div class='item-name inventory-col-name'>
-          <div class='item-image weapon-item-image'>
+          <div class='item-image item-clickable-image'>
             <img
               src='{{item.img}}'
               data-tooltip='{{item.name}}'
@@ -83,7 +83,7 @@
               height='24'
             />
           </div>
-          <div class='weapon-item-name'>{{item.name}}</div>
+          <div class='item-clickable-name'>{{item.name}}</div>
         </div>
         <div class='item-damage item-prop inventory-col-damage'>{{item.system.currentDamage}}</div>
         <div class='item-range item-prop inventory-col-range'>{{item.system.rangeDisplay}}</div>
@@ -122,7 +122,7 @@
         data-document-class='Item'
       >
         <div class='item-name inventory-col-name'>
-          <div class='item-image armor-item-image'>
+          <div class='item-image item-clickable-image'>
             <img
               src='{{item.img}}'
               data-tooltip='{{item.name}}'
@@ -130,7 +130,7 @@
               height='24'
             />
           </div>
-          <div class='armor-item-name'>{{item.name}}</div>
+          <div class='item-clickable-name'>{{item.name}}</div>
         </div>
         <div class='item-type item-prop inventory-col-armor-type'>{{item.system.armorTypeDisplay}}</div>
         <div class='item-rating item-prop inventory-col-rating'>
@@ -171,7 +171,7 @@
         data-document-class='Item'
       >
         <div class='item-name inventory-col-name'>
-          <div class='item-image gear-item-image'>
+          <div class='item-image item-clickable-image'>
             <img
               src='{{item.img}}'
               data-tooltip='{{item.name}}'
@@ -179,7 +179,7 @@
               height='24'
             />
           </div>
-          <div class='gear-item-name'>{{item.name}}</div>
+          <div class='item-clickable-name'>{{item.name}}</div>
         </div>
         <div class='item-type item-prop inventory-col-type'>{{item.system.type}}</div>
         <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>

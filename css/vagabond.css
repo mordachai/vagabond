@@ -442,21 +442,6 @@
   text-align: right;
 }
 
-.vagabond .spell-item-image,
-.vagabond .spell-item-name {
-  cursor: pointer;
-}
-
-.vagabond .spell-item-name {
-  color: inherit;
-  text-decoration: none;
-}
-
-.vagabond .spell-item-name:hover {
-  color: var(--vagabond-c-tan);
-  text-decoration: underline;
-}
-
 .vagabond .spell-item-info {
   margin-left: 8px;
 }
@@ -922,19 +907,13 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* Inventory items interaction */
-.vagabond .gear-item-image,
-.vagabond .weapon-item-image,
-.vagabond .armor-item-image,
-.vagabond .gear-item-name,
-.vagabond .weapon-item-name,
-.vagabond .armor-item-name {
+/* Generic item interaction classes */
+.vagabond .item-clickable-image,
+.vagabond .item-clickable-name {
   cursor: pointer;
 }
 
-.vagabond .gear-item-name:hover,
-.vagabond .weapon-item-name:hover,
-.vagabond .armor-item-name:hover {
+.vagabond .item-clickable-name:hover {
   color: var(--vagabond-c-black);
   text-shadow: 0 0 10px red;
 }
