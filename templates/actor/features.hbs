@@ -90,7 +90,7 @@
       </div>
     </section>
 
-    {{! Right column: Attacks }}
+    {{! Right column: Attacks and Perks }}
     <section class='attacks-section grid-span-1'>
       {{! Weapon Skills / Attacks Section }}
       <div class='weapon-skills flexcol'>
@@ -113,6 +113,28 @@
             <span class='weapon-skill-difficulty' style='margin-left: auto; font-weight: bold;'>{{weaponSkill.difficulty}}</span>
           </div>
         {{/each}}
+      </div>
+
+      {{! Perks Section }}
+      <div class='perks-section flexcol' style='margin-top: 20px;'>
+        <h3>Perks</h3>
+        <ol class='perks-list'>
+          {{#each enrichedPerks as |perk|}}
+            <li class='perk-card' data-item-id='{{perk._id}}' data-tooltip='Click to view, Right-click to remove'>
+              <div class='perk-header flexrow'>
+                <h4 class='perk-name'>{{perk.name}}</h4>
+              </div>
+              {{#if perk.prerequisites}}
+                <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
+              {{/if}}
+              {{#if perk.enrichedDescription}}
+                <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
+              {{/if}}
+            </li>
+          {{else}}
+            <li class='no-perks' style='font-style: italic; color: var(--vagabond-c-tan); list-style: none;'>No perks yet. Drag perks from the Items directory.</li>
+          {{/each}}
+        </ol>
       </div>
     </section>
   </section>

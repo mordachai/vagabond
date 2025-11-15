@@ -1,0 +1,21 @@
+{{! Perk Card - Displays a single perk }}
+<div class='perk-card' data-item-id='{{perk._id}}'>
+  <div class='perk-header flexrow'>
+    <h4 class='perk-name'>{{perk.name}}</h4>
+    <button
+      type='button'
+      class='perk-delete'
+      data-action='deleteItem'
+      data-item-id='{{perk._id}}'
+      data-tooltip='{{localize "VAGABOND.Item.Delete"}}'
+    >
+      <i class='fas fa-trash'></i>
+    </button>
+  </div>
+  {{#if prerequisites}}
+    <div class='perk-prerequisites'>{{prerequisites}}</div>
+  {{/if}}
+  {{#if enrichedDescription}}
+    <div class='perk-description'>{{{enrichedDescription}}}</div>
+  {{/if}}
+</div>

@@ -639,6 +639,77 @@
     position: relative;
 }
 
+/* Perk Card Styles */
+.perks-section {
+  margin-top: 20px;
+}
+
+.perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.perk-card {
+  border: 2px solid var(--vagabond-c-tan);
+  padding: 8px 12px;
+  background: var(--vagabond-c-faint);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.perk-card:hover {
+  background: var(--vagabond-c-beige);
+  border-color: var(--vagabond-c-dark);
+}
+
+.perk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.perk-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  color: var(--vagabond-c-dark);
+}
+
+.perk-prerequisites {
+  font-size: 12px;
+  color: var(--vagabond-c-dark);
+  margin-bottom: 6px;
+  font-style: italic;
+  padding-left: 4px;
+}
+
+.perk-description {
+  font-size: 12px;
+  color: var(--vagabond-c-tan);
+  line-height: 1.4;
+  padding-left: 4px;
+  word-wrap: break-word;
+}
+
+.perk-description p {
+  margin: 4px 0;
+}
+
+.perk-description p:first-child {
+  margin-top: 0;
+}
+
+.perk-description p:last-child {
+  margin-bottom: 0;
+}
+
 @media (max-width: 600px) {
   .vagabond .vagabond .character-name-input {
     font-size: 16px;

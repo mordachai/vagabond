@@ -62,6 +62,7 @@ Hooks.once('init', function () {
     spell: models.VagabondSpell,
     ancestry: models.VagabondAncestry,
     class: models.VagabondClass,
+    perk: models.VagabondPerk,
   };
 
   // Active Effects are never copied to the Actor,

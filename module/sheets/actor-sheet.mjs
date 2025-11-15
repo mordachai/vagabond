@@ -125,6 +125,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'features':
+        context.tab = context.tabs[partId];
+        // Enrich perk descriptions and prerequisites for display
+        if (context.perks) {
+          context.enrichedPerks = await Promise.all(
+            context.perks.map(async (perk) => {
+              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+                perk.system.description,
+                {
+                  secrets: this.document.isOwner,
+                  rollData: perk.getRollData(),
+                  relativeTo: perk,
+                }
+              );
+              return {
+                _id: perk.id,
+                id: perk.id,
+                name: perk.name,
+                img: perk.img,
+                enrichedDescription,
+                prerequisites: perk.system.getPrerequisiteString(),
+              };
+            })
+          );
+        }
+        break;
       case 'spells':
       case 'gear':
         context.tab = context.tabs[partId];
@@ -133,7 +158,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         context.tab = context.tabs[partId];
         // Enrich biography info for display
         // Enrichment turns text like `[[/r 1d20]]` into buttons
-        context.enrichedBiography = await TextEditor.enrichHTML(
+        context.enrichedBiography = await foundry.applications.ux.TextEditor.enrichHTML(
           this.actor.system.biography,
           {
             // Whether to show secret blocks in the finished html
@@ -223,6 +248,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // this sheet does with spells
     const gear = [];
     const features = [];
+    const perks = [];
     const spells = {
       0: [],
       1: [],
@@ -269,6 +295,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           spells[i.system.spellLevel].push(i);
         }
       }
+      // Append to perks.
+      else if (i.type === 'perk') {
+        perks.push(i);
+      }
     }
 
     for (const s of Object.values(spells)) {
@@ -278,6 +308,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells;
   }
 
@@ -303,6 +334,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (className) {
       className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
     }
+
+    // Add click and right-click handlers for perk cards
+    const perkCards = this.element.querySelectorAll('.perk-card[data-item-id]');
+    perkCards.forEach(perkCard => {
+      // Left-click to view
+      perkCard.addEventListener('click', this._onViewPerk.bind(this));
+      // Right-click to delete
+      perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
+    });
 
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
@@ -418,8 +458,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     // Confirm the level up
-    const confirmed = await Dialog.confirm({
-      title: `Level Up to ${newLevel}`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Level Up to ${newLevel}` },
       content: content,
     });
 
@@ -441,8 +481,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.preventDefault();
     const ancestry = this.actor.items.find(item => item.type === 'ancestry');
     if (ancestry) {
-      const confirmed = await Dialog.confirm({
-        title: 'Remove Ancestry',
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Remove Ancestry' },
         content: `<p>Are you sure you want to remove <strong>${ancestry.name}</strong>?</p>`,
       });
       if (confirmed) {
@@ -461,12 +501,52 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.preventDefault();
     const classItem = this.actor.items.find(item => item.type === 'class');
     if (classItem) {
-      const confirmed = await Dialog.confirm({
-        title: 'Remove Class',
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Remove Class' },
         content: `<p>Are you sure you want to remove <strong>${classItem.name}</strong>?</p>`,
       });
       if (confirmed) {
         await classItem.delete();
+      }
+    }
+  }
+
+  /**
+   * Handle viewing a perk item (left-click)
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onViewPerk(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const perkCard = event.currentTarget;
+    const perkId = perkCard.dataset.itemId;
+    const perk = this.actor.items.get(perkId);
+    if (perk) {
+      perk.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle removing a perk item (right-click)
+   *
+   * @param {PointerEvent} event   The originating contextmenu event
+   * @protected
+   */
+  async _onRemovePerk(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const perkCard = event.currentTarget;
+    const perkId = perkCard.dataset.itemId;
+    const perk = this.actor.items.get(perkId);
+    if (perk) {
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Remove Perk' },
+        content: `<p>Are you sure you want to remove <strong>${perk.name}</strong>?</p>`,
+      });
+      if (confirmed) {
+        await perk.delete();
       }
     }
   }
@@ -610,7 +690,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
     const actor = this.actor;
     const allowed = Hooks.call('dropActorSheetData', actor, this, data);
     if (allowed === false) return;
