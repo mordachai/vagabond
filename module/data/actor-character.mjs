@@ -73,13 +73,13 @@ export default class VagabondCharacter extends VagabondActorBase {
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true })
       }),
-      
+
       // Might-based skills
       brawl: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true })
       }),
-      
+
       // Dexterity-based skills
       finesse: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
@@ -89,7 +89,7 @@ export default class VagabondCharacter extends VagabondActorBase {
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true })
       }),
-      
+
       // Awareness-based skills
       detect: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
@@ -103,7 +103,7 @@ export default class VagabondCharacter extends VagabondActorBase {
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true })
       }),
-      
+
       // Presence-based skills
       influence: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
@@ -116,6 +116,31 @@ export default class VagabondCharacter extends VagabondActorBase {
       performance: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true })
+      })
+    });
+
+    // Weapon Skills system - used for attacks
+    schema.weaponSkills = new fields.SchemaField({
+      // Might-based weapon skills
+      melee: new fields.SchemaField({
+        trained: new fields.BooleanField({ initial: false }),
+        stat: new fields.StringField({ initial: 'might', readonly: true })
+      }),
+      brawl: new fields.SchemaField({
+        trained: new fields.BooleanField({ initial: false }),
+        stat: new fields.StringField({ initial: 'might', readonly: true })
+      }),
+
+      // Dexterity-based weapon skills
+      finesse: new fields.SchemaField({
+        trained: new fields.BooleanField({ initial: false }),
+        stat: new fields.StringField({ initial: 'dexterity', readonly: true })
+      }),
+
+      // Awareness-based weapon skills
+      ranged: new fields.SchemaField({
+        trained: new fields.BooleanField({ initial: false }),
+        stat: new fields.StringField({ initial: 'awareness', readonly: true })
       })
     });
 
@@ -168,14 +193,29 @@ export default class VagabondCharacter extends VagabondActorBase {
       const skill = this.skills[key];
       const associatedStat = this.abilities[skill.stat];
       const statValue = associatedStat?.value || 8;
-      
+
       // Vagabond difficulty calculation:
       // Difficulty = 20 - Stat (untrained)
       // Difficulty = 20 - (Stat × 2) (trained)
       skill.difficulty = 20 - (skill.trained ? statValue * 2 : statValue);
-      
+
       // Add label for localization
       skill.label = game.i18n.localize(`VAGABOND.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
+    }
+
+    // Process weapon skills - calculate difficulty based on Vagabond rules (same as regular skills)
+    for (const key in this.weaponSkills) {
+      const weaponSkill = this.weaponSkills[key];
+      const associatedStat = this.abilities[weaponSkill.stat];
+      const statValue = associatedStat?.value || 8;
+
+      // Vagabond difficulty calculation:
+      // Difficulty = 20 - Stat (untrained)
+      // Difficulty = 20 - (Stat × 2) (trained)
+      weaponSkill.difficulty = 20 - (weaponSkill.trained ? statValue * 2 : statValue);
+
+      // Add label for localization
+      weaponSkill.label = game.i18n.localize(`VAGABOND.WeaponSkills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
     }
   }
 
@@ -241,7 +281,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
 
-    // Copy saves to the top level for roll formulas  
+    // Copy weapon skills to the top level for roll formulas
+    if (this.weaponSkills) {
+      for (let [k, v] of Object.entries(this.weaponSkills)) {
+        data[k] = foundry.utils.deepClone(v);
+      }
+    }
+
+    // Copy saves to the top level for roll formulas
     if (this.saves) {
       for (let [k, v] of Object.entries(this.saves)) {
         data[k] = foundry.utils.deepClone(v);
