@@ -143,7 +143,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'ancestryDetails':
         // Ancestry gets enriched description like the description tab
         context.tab = context.tabs[partId];
-        context.enrichedDescription = await TextEditor.enrichHTML(
+        context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
           this.item.system.description,
           {
             secrets: this.document.isOwner,
@@ -156,7 +156,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'classDetails':
         // Class gets enriched description like the description tab
         context.tab = context.tabs[partId];
-        context.enrichedDescription = await TextEditor.enrichHTML(
+        context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
           this.item.system.description,
           {
             secrets: this.document.isOwner,
@@ -181,7 +181,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         // Perk gets enriched description like the description tab
         context.tab = context.tabs[partId];
         context.enriched = {
-          description: await TextEditor.enrichHTML(
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
             this.item.system.description,
             {
               secrets: this.document.isOwner,
@@ -195,7 +195,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'description':
         context.tab = context.tabs[partId];
         // Enrich description info for display
-        context.enrichedDescription = await TextEditor.enrichHTML(
+        context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
           this.item.system.description,
           {
             secrets: this.document.isOwner,

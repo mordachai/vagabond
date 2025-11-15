@@ -130,7 +130,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         if (context.perks) {
           context.enrichedPerks = await Promise.all(
             context.perks.map(async (perk) => {
-              const enrichedDescription = await TextEditor.enrichHTML(
+              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
                 perk.system.description,
                 {
                   secrets: this.document.isOwner,
@@ -155,7 +155,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         context.tab = context.tabs[partId];
         // Enrich biography info for display
         // Enrichment turns text like `[[/r 1d20]]` into buttons
-        context.enrichedBiography = await TextEditor.enrichHTML(
+        context.enrichedBiography = await foundry.applications.ux.TextEditor.enrichHTML(
           this.actor.system.biography,
           {
             // Whether to show secret blocks in the finished html

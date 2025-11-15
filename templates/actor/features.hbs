@@ -120,14 +120,13 @@
         <h3>Perks</h3>
         <div class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            <div class='perk-card' data-item-id='{{perk._id}}'>
+            <div class='perk-card' data-item-id='{{perk._id}}' data-document-class='Item'>
               <div class='perk-header flexrow'>
                 <h4 class='perk-name'>{{perk.name}}</h4>
                 <button
                   type='button'
                   class='perk-delete'
-                  data-action='deleteItem'
-                  data-item-id='{{perk._id}}'
+                  data-action='deleteDoc'
                   data-tooltip='{{localize "VAGABOND.Item.Delete"}}'
                 >
                   <i class='fas fa-trash'></i>
