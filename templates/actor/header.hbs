@@ -12,6 +12,18 @@
   <div class='header-fields'>
     {{! Name Row with XP and Level Up }}
     <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 8px;'>
+      {{! Character Name - Centered }}
+      <div style='flex: 1; text-align: center;'>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='Character Name'
+          class='character-name-input'
+          style='border: none; background: transparent; text-align: center; font-size: 18px; font-weight: bold; outline: none; width: 100%;'
+        />
+      </div>
+
       {{! XP Field with inline label }}
       <div style='display: flex; align-items: center; gap: 4px; white-space: nowrap;'>
         <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
@@ -35,18 +47,6 @@
           <i class='fas fa-level-up-alt'></i> Level Up
         </button>
       {{/if}}
-
-      {{! Character Name - Centered }}
-      <div style='flex: 1; text-align: center;'>
-        <input
-          name='name'
-          type='text'
-          value='{{actor.name}}'
-          placeholder='Character Name'
-          class='character-name-input'
-          style='border: none; background: transparent; text-align: center; font-size: 18px; font-weight: bold; outline: none; width: 100%;'
-        />
-      </div>
     </div>
 
     {{! Character Info Row - Level, Ancestry, Class as display divs }}
