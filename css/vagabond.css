@@ -690,12 +690,117 @@
     position: relative;
 }
 
-/* Perk Card Styles */
-.perks-section {
+/* Features Tab Styles */
+.vagabond .features-section-title {
   margin-top: 20px;
 }
 
-.perks-list {
+.vagabond .features-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.vagabond .features-list .feature {
+  margin-bottom: 10px;
+}
+
+.vagabond .feature-description {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--vagabond-c-tan);
+}
+
+/* Saves Section */
+.vagabond .saves {
+  margin-bottom: 20px;
+  border: 2px solid #333;
+  padding: 10px;
+}
+
+.vagabond .saves h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.vagabond .saves-row {
+  justify-content: space-around;
+}
+
+.vagabond .save {
+  flex: 1;
+  text-align: center;
+}
+
+.vagabond .save .resource-label {
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.vagabond .save-difficulty {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Skills Section */
+.vagabond .skill {
+  margin-bottom: 5px;
+}
+
+.vagabond .skill input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.vagabond .skill .resource-label {
+  cursor: pointer;
+}
+
+.vagabond .skill-difficulty {
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Weapon Skills / Attacks Section */
+.vagabond .weapon-skill {
+  margin-bottom: 5px;
+}
+
+.vagabond .weapon-skill input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.vagabond .weapon-skill .resource-label {
+  cursor: pointer;
+}
+
+.vagabond .weapon-skill-difficulty {
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Equipped Weapons */
+.vagabond .equipped-weapon {
+  margin-bottom: 5px;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.vagabond .equipped-weapon .resource-label {
+  cursor: pointer;
+}
+
+.vagabond .weapon-info {
+  margin-left: auto;
+  font-size: 0.9em;
+}
+
+/* Perk Card Styles */
+.vagabond .perks-section {
+  margin-top: 20px;
+}
+
+.vagabond .perks-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -704,7 +809,13 @@
   margin: 0;
 }
 
-.perk-card {
+.vagabond .no-perks {
+  font-style: italic;
+  color: var(--vagabond-c-tan);
+  list-style: none;
+}
+
+.vagabond .perk-card {
   border: 2px solid var(--vagabond-c-tan);
   padding: 8px 12px;
   background: var(--vagabond-c-faint);
@@ -714,7 +825,7 @@
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.perk-card:hover {
+.vagabond .perk-card:hover {
   background: var(--vagabond-c-beige);
   border-color: var(--vagabond-c-dark);
 }
