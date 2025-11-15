@@ -553,31 +553,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!item) return;
 
-    // Create context menu
+    // Simple inline menu using Foundry's context menu system
     const menuItems = [
       {
         name: 'Edit Item',
         icon: '<i class="fas fa-edit"></i>',
-        callback: () => {
-          item.sheet.render(true);
-        }
+        callback: () => item.sheet.render(true)
       },
       {
         name: 'Delete Item',
         icon: '<i class="fas fa-trash"></i>',
-        callback: async () => {
-          await item.delete();
-        }
+        callback: () => item.delete()
       }
     ];
 
-    // Use Foundry's ContextMenu
-    new ContextMenu(this.element, '.gear-item-row', menuItems);
-
-    // Trigger the menu manually since we're already in the context event
-    const menu = new ContextMenu(this.element, '.gear-item-row', menuItems);
-    const pos = { clientX: event.clientX, clientY: event.clientY };
-    menu._setPosition(this.element[0] || this.element, pos);
+    // Create and display context menu at cursor position
+    const menu = ContextMenu.create(this, event.currentTarget, '.gear-item-row', menuItems);
   }
 
   /**
