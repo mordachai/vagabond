@@ -53,6 +53,32 @@
       </div>
     {{/if}}
 
+    {{#if (eq item.type 'weapon')}}
+      <div class='grid grid-2col'>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.range.label'}}</label>
+          <select name='system.range' data-dtype='String'>
+            {{#select system.range}}
+              <option value='close'>Close</option>
+              <option value='near'>Near</option>
+              <option value='far'>Far</option>
+            {{/select}}
+          </select>
+        </div>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.grip.label'}}</label>
+          <select name='system.grip' data-dtype='String'>
+            {{#select system.grip}}
+              <option value='1H' title='{{lookup config.weaponGripDescriptions "1H"}}'>1H (One-Handed)</option>
+              <option value='2H' title='{{lookup config.weaponGripDescriptions "2H"}}'>2H (Two-Handed)</option>
+              <option value='F' title='{{lookup config.weaponGripDescriptions "F"}}'>F (Fist)</option>
+              <option value='V' title='{{lookup config.weaponGripDescriptions "V"}}'>V (Versatile)</option>
+            {{/select}}
+          </select>
+        </div>
+      </div>
+    {{/if}}
+
     {{#if (eq item.type 'class')}}
       <div class='class-spellcaster-fields'>
         <div class='grid grid-3col'>

@@ -166,7 +166,8 @@
       },
       "Weapon": {
         "FIELDS": {
-          "damage": {"label": "Damage"},
+          "damageOneHand": {"label": "Damage (1H)"},
+          "damageTwoHands": {"label": "Damage (2H)"},
           "properties": {"label": "Properties"},
           "weaponSkill": {"label": "Weapon Skill"},
           "range": {"label": "Range"},

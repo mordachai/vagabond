@@ -24,6 +24,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
+      toggleWeaponEquipment: this._onToggleWeaponEquipment,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -780,8 +781,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (isSuccess) {
       flavorText += ` - <span style="color: green;">SUCCESS!</span><br/>`;
 
-      // Roll damage
-      const damageFormula = weapon.system.damage;
+      // Roll damage using current damage (based on equipment state)
+      const damageFormula = weapon.system.currentDamage;
       damageRoll = new Roll(damageFormula, this.actor.getRollData());
       await damageRoll.evaluate();
 
@@ -817,6 +818,47 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     return attackRoll;
+  }
+
+  /**
+   * Handle toggling weapon equipment state.
+   * Cycles through: unequipped -> oneHand -> twoHands -> unequipped
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleWeaponEquipment(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const weapon = this.actor.items.get(itemId);
+
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Cycle through equipment states
+    const currentState = weapon.system.equipmentState || 'unequipped';
+    let nextState;
+
+    switch (currentState) {
+      case 'unequipped':
+        nextState = 'oneHand';
+        break;
+      case 'oneHand':
+        nextState = 'twoHands';
+        break;
+      case 'twoHands':
+        nextState = 'unequipped';
+        break;
+      default:
+        nextState = 'unequipped';
+    }
+
+    // Update the weapon's equipment state
+    await weapon.update({ 'system.equipmentState': nextState });
   }
 
   /**

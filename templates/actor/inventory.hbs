@@ -85,13 +85,19 @@
           </div>
           <div class='weapon-item-name'>{{item.name}}</div>
         </div>
-        <div class='item-damage item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.damage}}</div>
-        <div class='item-range item-prop' style='flex: 0 0 60px; text-align: center;'>{{item.system.range}}</div>
-        <div class='item-grip item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.grip}}</div>
+        <div class='item-damage item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.currentDamage}}</div>
+        <div class='item-range item-prop' style='flex: 0 0 60px; text-align: center;'>{{item.system.rangeDisplay}}</div>
+        <div class='item-grip item-prop' style='flex: 0 0 50px; text-align: center;'>{{item.system.gripDisplay}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='item-equipped inventory-col-equipped'>
-          <i class='weapon-equipped-icon {{#if item.system.equipped}}fas fa-check-circle equipped{{else}}far fa-circle unequipped{{/if}}'></i>
+        <div class='item-equipped inventory-col-equipped' data-action='toggleWeaponEquipment' data-item-id='{{item._id}}' style='cursor: pointer;'>
+          {{#if (eq item.system.equipmentState 'unequipped')}}
+            <i class='far fa-circle unequipped' data-tooltip='Unequipped (click to equip one-handed)'></i>
+          {{else if (eq item.system.equipmentState 'oneHand')}}
+            <i class='fas fa-hand-fist equipped-one-hand' data-tooltip='Equipped One-Handed (click for two-handed)'></i>
+          {{else if (eq item.system.equipmentState 'twoHands')}}
+            <i class='fas fa-hands equipped-two-hands' data-tooltip='Equipped Two-Handed (click to unequip)'></i>
+          {{/if}}
         </div>
       </li>
     {{/each}}

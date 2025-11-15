@@ -11,11 +11,18 @@ export default class VagabondWeapon extends VagabondItemBase {
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
 
-    // Damage (dice notation like "d8", "d6", "d4" or flat values like "1", "2")
-    schema.damage = new fields.StringField({
+    // Damage one-handed (dice notation like "d8", "d6", "d4" or flat values like "1", "2")
+    schema.damageOneHand = new fields.StringField({
       required: true,
       blank: false,
       initial: 'd6'
+    });
+
+    // Damage two-handed (for Versatile weapons)
+    schema.damageTwoHands = new fields.StringField({
+      required: true,
+      blank: false,
+      initial: 'd8'
     });
 
     // Weapon properties (Brawl, Brutal, Cleave, Entangle, etc.)
@@ -67,10 +74,12 @@ export default class VagabondWeapon extends VagabondItemBase {
       min: 0
     });
 
-    // Equipped status
-    schema.equipped = new fields.BooleanField({
+    // Equipment state (unequipped, oneHand, twoHands)
+    schema.equipmentState = new fields.StringField({
       required: true,
-      initial: false
+      blank: false,
+      initial: 'unequipped',
+      choices: ['unequipped', 'oneHand', 'twoHands']
     });
 
     return schema;
@@ -89,5 +98,32 @@ export default class VagabondWeapon extends VagabondItemBase {
     this.propertiesDisplay = this.properties.length > 0
       ? this.properties.join(', ')
       : '-';
+
+    // Determine current damage based on equipment state
+    if (this.equipmentState === 'twoHands') {
+      this.currentDamage = this.damageTwoHands;
+    } else {
+      this.currentDamage = this.damageOneHand;
+    }
+
+    // Determine if weapon is equipped (any state other than unequipped)
+    this.equipped = this.equipmentState !== 'unequipped';
+
+    // Format range display
+    const rangeMap = {
+      'close': 'Close',
+      'near': 'Near',
+      'far': 'Far'
+    };
+    this.rangeDisplay = rangeMap[this.range] || this.range;
+
+    // Format grip display
+    const gripMap = {
+      '1H': '1H',
+      '2H': '2H',
+      'F': 'Fist',
+      'V': 'Versatile'
+    };
+    this.gripDisplay = gripMap[this.grip] || this.grip;
   }
 }
