@@ -50,7 +50,7 @@
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</label>
       <div class='flexrow' style='gap: 8px; align-items: center;'>
-        <select name='system.delivery.type' style='flex: 0 0 auto; min-width: 120px;'>
+        <select name='system.delivery.type' style='flex: 2;'>
           <option value='aura' {{#if (eq system.delivery.type 'aura')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Aura'}}</option>
           <option value='cone' {{#if (eq system.delivery.type 'cone')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cone'}}</option>
           <option value='cube' {{#if (eq system.delivery.type 'cube')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cube'}}</option>
@@ -67,7 +67,7 @@
           value='{{system.delivery.cost}}'
           min='0'
           data-dtype='Number'
-          style='flex: 0 0 auto; width: 60px;'
+          style='flex: 1; min-width: 60px;'
           placeholder='Cost'
         />
         <input
@@ -75,7 +75,7 @@
           name='system.delivery.increase'
           value='{{system.delivery.increase}}'
           placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.delivery.increase.hint"}}'
-          style='flex: 1;'
+          style='flex: 5;'
         />
       </div>
     </div>
