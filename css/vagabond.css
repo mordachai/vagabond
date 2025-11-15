@@ -806,7 +806,8 @@
 }
 
 .vagabond .gear-item-name:hover {
-  text-decoration: underline;
+  color: var(--vagabond-c-black);
+  text-shadow: 0 0 10px red;
 }
 
 @media (max-width: 600px) {
