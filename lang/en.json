@@ -137,8 +137,14 @@
         "Description": "Description",
         "Effects": "Effects"
       },
+      "base": {
+        "FIELDS": {
+          "description": {"label": "Description"}
+        }
+      },
       "Gear": {
         "FIELDS": {
+          "quantity": {"label": "Quantity"},
           "type": {"label": "Type"},
           "cost": {"label": "Cost"},
           "slots": {"label": "Slots"}

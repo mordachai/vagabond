@@ -11,6 +11,13 @@ export default class VagabondGear extends VagabondItemBase {
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
 
+    // Quantity (for stackable items and ammunition)
+    schema.quantity = new fields.NumberField({
+      ...requiredInteger,
+      initial: 1,
+      min: 0
+    });
+
     // Gear type (e.g., "Alchemy & Medicine", "Adventuring Gear")
     schema.type = new fields.StringField({
       required: false,
