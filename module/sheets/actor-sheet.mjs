@@ -553,7 +553,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!item) return;
 
-    // Simple inline menu using Foundry's context menu system
+    // Application V2 approach: Use Foundry's context menu for V2
     const menuItems = [
       {
         name: 'Edit Item',
@@ -567,8 +567,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     ];
 
-    // Create and display context menu at cursor position
-    const menu = ContextMenu.create(this, event.currentTarget, '.gear-item-row', menuItems);
+    // Use the proper V2 method
+    foundry.applications.context.ContextMenu.create(this, event.target, menuItems, {
+      eventType: 'contextmenu'
+    });
   }
 
   /**

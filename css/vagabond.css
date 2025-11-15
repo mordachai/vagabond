@@ -729,17 +729,50 @@
 }
 
 .vagabond .inventory-col-quantity {
-  flex: 1;
+  flex: 0.5;
   text-align: center;
 }
 
 .vagabond .inventory-col-cost {
-  flex: 1;
+  flex: 0.5;
   text-align: center;
 }
 
 .vagabond .inventory-col-slots {
-  flex: 1;
+  flex: 0.5;
+  text-align: center;
+}
+
+/* Wealth section styling */
+.vagabond .wealth-section {
+  margin-bottom: 15px;
+}
+
+.vagabond .wealth-section .section-title {
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.vagabond .wealth-section .currency-row {
+  justify-content: center;
+  gap: 15px;
+}
+
+.vagabond .wealth-section .currency-field {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vagabond .wealth-section .currency-field label {
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.vagabond .wealth-section .currency-field input {
+  width: 60px;
   text-align: center;
 }
 
