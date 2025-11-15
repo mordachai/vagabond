@@ -455,8 +455,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     // Confirm the level up
-    const confirmed = await Dialog.confirm({
-      title: `Level Up to ${newLevel}`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Level Up to ${newLevel}` },
       content: content,
     });
 
@@ -478,8 +478,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.preventDefault();
     const ancestry = this.actor.items.find(item => item.type === 'ancestry');
     if (ancestry) {
-      const confirmed = await Dialog.confirm({
-        title: 'Remove Ancestry',
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Remove Ancestry' },
         content: `<p>Are you sure you want to remove <strong>${ancestry.name}</strong>?</p>`,
       });
       if (confirmed) {
@@ -498,8 +498,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.preventDefault();
     const classItem = this.actor.items.find(item => item.type === 'class');
     if (classItem) {
-      const confirmed = await Dialog.confirm({
-        title: 'Remove Class',
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Remove Class' },
         content: `<p>Are you sure you want to remove <strong>${classItem.name}</strong>?</p>`,
       });
       if (confirmed) {
@@ -516,9 +516,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   async _onViewPerk(event) {
     event.preventDefault();
+    event.stopPropagation();
+    console.log('View perk clicked', event);
     const perkCard = event.currentTarget;
     const perkId = perkCard.dataset.itemId;
+    console.log('Perk ID:', perkId);
     const perk = this.actor.items.get(perkId);
+    console.log('Found perk:', perk);
     if (perk) {
       perk.sheet.render(true);
     }
@@ -532,17 +536,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   async _onRemovePerk(event) {
     event.preventDefault();
+    event.stopPropagation();
+    console.log('Remove perk right-clicked', event);
     const perkCard = event.currentTarget;
     const perkId = perkCard.dataset.itemId;
+    console.log('Perk ID:', perkId);
     const perk = this.actor.items.get(perkId);
+    console.log('Found perk:', perk);
     if (perk) {
-      const confirmed = await Dialog.confirm({
-        title: 'Remove Perk',
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Remove Perk' },
         content: `<p>Are you sure you want to remove <strong>${perk.name}</strong>?</p>`,
       });
       if (confirmed) {
         await perk.delete();
       }
+    } else {
+      console.error('Perk not found with ID:', perkId);
     }
   }
 
@@ -685,7 +695,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
     const actor = this.actor;
     const allowed = Hooks.call('dropActorSheetData', actor, this, data);
     if (allowed === false) return;
