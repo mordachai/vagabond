@@ -324,6 +324,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
     });
 
+    // Add right-click context menu for gear items
+    const gearItems = this.element.querySelectorAll('.gear-item-row[data-item-id]');
+    gearItems.forEach(gearItem => {
+      gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
+    });
+
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
@@ -529,6 +535,49 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         await perk.delete();
       }
     }
+  }
+
+  /**
+   * Handle right-click context menu for gear items
+   *
+   * @param {PointerEvent} event   The originating contextmenu event
+   * @protected
+   */
+  async _onGearContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget;
+    const itemId = gearRow.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+
+    if (!item) return;
+
+    // Create context menu
+    const menuItems = [
+      {
+        name: 'Edit Item',
+        icon: '<i class="fas fa-edit"></i>',
+        callback: () => {
+          item.sheet.render(true);
+        }
+      },
+      {
+        name: 'Delete Item',
+        icon: '<i class="fas fa-trash"></i>',
+        callback: async () => {
+          await item.delete();
+        }
+      }
+    ];
+
+    // Use Foundry's ContextMenu
+    new ContextMenu(this.element, '.gear-item-row', menuItems);
+
+    // Trigger the menu manually since we're already in the context event
+    const menu = new ContextMenu(this.element, '.gear-item-row', menuItems);
+    const pos = { clientX: event.clientX, clientY: event.clientY };
+    menu._setPosition(this.element[0] || this.element, pos);
   }
 
   /**

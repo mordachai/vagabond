@@ -64,24 +64,10 @@
       <div class='item-quantity inventory-col-quantity'>Qty</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
-      <div class='item-controls inventory-col-controls'>
-        {{#if @root.editable}}
-          <a
-            class='item-control item-create'
-            data-tooltip='{{localize "DOCUMENT.Create" type='Item'}}'
-            data-action='createDoc'
-            data-document-class='Item'
-            data-type='gear'
-          >
-            <i class='fas fa-plus'></i>
-            {{localize 'DOCUMENT.New' type='item'}}
-          </a>
-        {{/if}}
-      </div>
     </li>
     {{#each gear as |item id|}}
       <li
-        class='item flexrow draggable'
+        class='item flexrow draggable gear-item-row'
         data-item-id='{{item._id}}'
         data-document-class='Item'
       >
@@ -102,26 +88,24 @@
         <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='item-controls inventory-col-controls'>
-          <a
-            class='item-control item-edit'
-            data-tooltip='{{localize "DOCUMENT.Update" type='Gear'}}'
-            data-action='viewDoc'
-          >
-            <i class='fas fa-edit'></i>
-          </a>
-          {{#if @root.editable}}
-            <a
-              class='item-control item-delete'
-              data-tooltip='{{localize "DOCUMENT.Delete" type='Gear'}}'
-              data-action='deleteDoc'
-            >
-              <i class='fas fa-trash'></i>
-            </a>
-          {{/if}}
-        </div>
       </li>
     {{/each}}
   </ol>
+
+  {{! Add New Item Button }}
+  {{#if @root.editable}}
+    <div class='inventory-add-item'>
+      <a
+        class='item-control item-create'
+        data-tooltip='{{localize "DOCUMENT.Create" type='Item'}}'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='gear'
+      >
+        <i class='fas fa-plus'></i>
+        {{localize 'DOCUMENT.New' type='item'}}
+      </a>
+    </div>
+  {{/if}}
 
 </section>

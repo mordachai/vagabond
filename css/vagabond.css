@@ -721,31 +721,51 @@
 
 /* Inventory column sizing */
 .vagabond .inventory-col-name {
-  flex: 3;
+  flex: 4;
 }
 
 .vagabond .inventory-col-type {
-  flex: 2;
+  flex: 3;
 }
 
 .vagabond .inventory-col-quantity {
-  flex: 0.5;
-  text-align: center;
-}
-
-.vagabond .inventory-col-cost {
   flex: 1;
   text-align: center;
 }
 
-.vagabond .inventory-col-slots {
-  flex: 0.5;
+.vagabond .inventory-col-cost {
+  flex: 1.5;
   text-align: center;
 }
 
-.vagabond .inventory-col-controls {
-  flex: 2;
-  white-space: nowrap;
+.vagabond .inventory-col-slots {
+  flex: 1;
+  text-align: center;
+}
+
+/* Inventory add item button */
+.vagabond .inventory-add-item {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.vagabond .inventory-add-item a {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove var(--vagabond-c-groove);
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.vagabond .inventory-add-item a:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Gear item row cursor */
+.vagabond .gear-item-row {
+  cursor: context-menu;
 }
 
 @media (max-width: 600px) {
