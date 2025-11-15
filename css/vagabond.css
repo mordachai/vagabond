@@ -822,16 +822,16 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* Gear item interaction */
-.vagabond .gear-item-image {
+/* Inventory items interaction */
+.vagabond .gear-item-image,
+.vagabond .weapon-item-image,
+.vagabond .gear-item-name,
+.vagabond .weapon-item-name {
   cursor: pointer;
 }
 
-.vagabond .gear-item-name {
-  cursor: pointer;
-}
-
-.vagabond .gear-item-name:hover {
+.vagabond .gear-item-name:hover,
+.vagabond .weapon-item-name:hover {
   color: var(--vagabond-c-black);
   text-shadow: 0 0 10px red;
 }

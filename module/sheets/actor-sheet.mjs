@@ -357,6 +357,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
     });
 
+    // Add click and context menu handlers for weapon items
+    const weaponItems = this.element.querySelectorAll('.weapon-item-row[data-item-id]');
+    weaponItems.forEach(weaponItem => {
+      // Left-click on image: open item sheet
+      const weaponImage = weaponItem.querySelector('.weapon-item-image');
+      if (weaponImage) {
+        weaponImage.addEventListener('click', this._onWeaponImageClick.bind(this));
+      }
+
+      // Left-click on name: use weapon (attack roll)
+      const weaponName = weaponItem.querySelector('.weapon-item-name');
+      if (weaponName) {
+        weaponName.addEventListener('click', this._onWeaponNameClick.bind(this));
+      }
+
+      // Right-click on row: delete weapon
+      weaponItem.addEventListener('contextmenu', this._onWeaponContextMenu.bind(this));
+    });
+
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
@@ -661,6 +680,69 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Show delete confirmation dialog
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: { title: 'Delete Item' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
+    }
+  }
+
+  /**
+   * Handle left-click on weapon item image - opens item sheet
+   */
+  async _onWeaponImageClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const weaponRow = event.currentTarget.closest('.weapon-item-row');
+    const itemId = weaponRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item) {
+      item.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle left-click on weapon item name - makes attack roll
+   */
+  async _onWeaponNameClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const weaponRow = event.currentTarget.closest('.weapon-item-row');
+    const itemId = weaponRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const weapon = this.actor.items.get(itemId);
+    if (weapon && weapon.type === 'weapon') {
+      // Call the existing weapon roll action
+      await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
+    }
+  }
+
+  /**
+   * Handle right-click on weapon item - deletes weapon with confirmation
+   */
+  async _onWeaponContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const weaponRow = event.currentTarget;
+    const itemId = weaponRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Weapon' },
       content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
     });
 
