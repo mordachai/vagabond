@@ -24,7 +24,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
-      attackWithWeapon: this._onAttackWithWeapon,
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleArmorEquipment: this._onToggleArmorEquipment,
       useSpell: this._onUseSpell,
@@ -912,6 +911,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
+    // Check if weapon is equipped
+    const equipmentState = weapon.system.equipmentState || 'unequipped';
+    if (equipmentState === 'unequipped') {
+      ui.notifications.warn(`${weapon.name} is not equipped. Equip it first to attack.`);
+      return;
+    }
+
     // Get the weapon skill and difficulty
     const weaponSkillKey = weapon.system.weaponSkill;
     const weaponSkill = this.actor.system.weaponSkills[weaponSkillKey];
@@ -972,36 +978,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     return attackRoll;
-  }
-
-  /**
-   * Handle attacking with a weapon from inventory.
-   * Checks if weapon is equipped, then either attacks or shows notification.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onAttackWithWeapon(event, target) {
-    event.preventDefault();
-    const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    if (!weapon || weapon.type !== 'weapon') {
-      ui.notifications.error('Weapon not found!');
-      return;
-    }
-
-    // Check if weapon is equipped
-    const equipmentState = weapon.system.equipmentState || 'unequipped';
-    if (equipmentState === 'unequipped') {
-      ui.notifications.warn(`${weapon.name} is not equipped. Equip it first to attack.`);
-      return;
-    }
-
-    // Weapon is equipped, call the rollWeapon method
-    return this._onRollWeapon(event, target);
   }
 
   /**
