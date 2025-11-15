@@ -616,8 +616,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const item = this.actor.items.get(itemId);
     if (!item) return;
 
+    const newEquippedStatus = !item.system.equipped;
+
     // Toggle equipped status
-    await item.update({ 'system.equipped': !item.system.equipped });
+    await item.update({ 'system.equipped': newEquippedStatus });
+
+    // Toggle all effects on this item: disabled when unequipped, enabled when equipped
+    const updates = item.effects.map(effect => ({
+      _id: effect.id,
+      disabled: !newEquippedStatus
+    }));
+
+    if (updates.length > 0) {
+      await item.updateEmbeddedDocuments('ActiveEffect', updates);
+    }
   }
 
   /**
