@@ -71,6 +71,20 @@
       "Physical": "Physical",
       "Necrotic": "Necrotic"
     },
+    "Currency": {
+      "Gold": {
+        "long": "Gold",
+        "abbr": "g"
+      },
+      "Silver": {
+        "long": "Silver",
+        "abbr": "s"
+      },
+      "Copper": {
+        "long": "Copper",
+        "abbr": "c"
+      }
+    },
     "DeliveryTypes": {
       "Aura": "Aura",
       "Cone": "Cone",
