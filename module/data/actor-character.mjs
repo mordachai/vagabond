@@ -345,8 +345,16 @@ export default class VagabondCharacter extends VagabondActorBase {
       this.speed = { base: 30, crawl: 9, travel: 6 }; // Default
     }
 
-    // Armor starts at 0 (will come from items later)
-    this.armor = 0;
+    // Calculate armor from equipped armor items
+    let totalArmor = 0;
+    if (this.parent?.items) {
+      for (const item of this.parent.items) {
+        if (item.type === 'armor' && item.system.equipped) {
+          totalArmor += item.system.finalRating || 0;
+        }
+      }
+    }
+    this.armor = totalArmor;
   }
 
   _calculateInventorySlots() {
