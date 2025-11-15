@@ -253,7 +253,7 @@
   height: 100%;
 }
 .vagabond .tab {
-  min-height: 400px;
+  min-height: 200px;
   max-height: calc(100vh - 200px);
   overflow-y: auto;
 }
@@ -383,8 +383,10 @@
 }
 /* Unified item content containers */
 .vagabond .ancestry-item-content,
-.vagabond .class-item-content {
-  min-height: 400px;
+.vagabond .class-item-content,
+.vagabond .spell-item-content,
+.vagabond .perk-item-content {
+  min-height: auto;
   max-height: calc(100vh - 200px);
   /* overflow-y: auto; */
   padding: 10px;
@@ -394,20 +396,25 @@
 
 /* Expand when any editor is active */
 .vagabond .ancestry-item-content:has(.tox-tinymce),
-.vagabond .class-item-content:has(.tox-tinymce) {
+.vagabond .class-item-content:has(.tox-tinymce),
+.vagabond .spell-item-content:has(.tox-tinymce),
+.vagabond .perk-item-content:has(.tox-tinymce) {
   max-height: calc(100vh - 150px);
 }
 
 /* Fallback for browsers without :has() support */
 .vagabond .ancestry-item-content.mce-active,
-.vagabond .class-item-content.mce-active {
+.vagabond .class-item-content.mce-active,
+.vagabond .spell-item-content.mce-active,
+.vagabond .perk-item-content.mce-active {
   max-height: calc(100vh - 150px);
 }
 
 /* Remove individual scrolling from description sections */
 .vagabond .ancestry-description,
-.vagabond .class-description {
-  min-height: 100px;
+.vagabond .class-description,
+.vagabond .spell-description {
+  min-height: 60px;
   max-height: none; /* Remove height constraint */
   overflow-y: visible; /* Remove individual scrolling */
   border: 1px solid var(--vagabond-c-faint);
@@ -417,14 +424,16 @@
 }
 
 .vagabond .ancestry-description prose-mirror,
-.vagabond .class-description prose-mirror {
+.vagabond .class-description prose-mirror,
+.vagabond .spell-description prose-mirror {
   height: auto; /* Allow natural growth */
-  min-height: 100px;
+  min-height: 60px;
 }
 
 .vagabond .ancestry-description > div,
-.vagabond .class-description > div {
-  min-height: 100px;
+.vagabond .class-description > div,
+.vagabond .spell-description > div {
+  min-height: 60px;
 }
 
 /* Remove individual scrolling from traits section */

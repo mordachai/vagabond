@@ -1,17 +1,94 @@
-{{! Attributes Tab }}
+{{! Spell Details Tab }}
 <section
-  class='tab attributes {{tab.cssClass}}'
+  class='tab details {{tab.cssClass}}'
   data-group='primary'
-  data-tab='attributes'
+  data-tab='details'
 >
-  {{! As you add new fields, add them in here! }}
-  <div class='resource'>
-    <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.level.label'}}</label>
-    <input
-      type='text'
-      name='system.spellLevel'
-      value='{{system.spellLevel}}'
-      data-dtype='Number'
-    />
+  <div class='spell-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.description.label'}}</label>
+      <div class='spell-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Damage Base and Duration - Same Line }}
+    <div class='flexrow' style='gap: 8px;'>
+      <div class='form-group' style='flex: 1;'>
+        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.damageBase.label'}}</label>
+        <select name='system.damageBase'>
+          <option value='-' {{#if (eq system.damageBase '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+          <option value='acid' {{#if (eq system.damageBase 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+          <option value='fire' {{#if (eq system.damageBase 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+          <option value='shock' {{#if (eq system.damageBase 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+          <option value='poison' {{#if (eq system.damageBase 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+          <option value='cold' {{#if (eq system.damageBase 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+          <option value='blunt' {{#if (eq system.damageBase 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+          <option value='physical' {{#if (eq system.damageBase 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+          <option value='necrotic' {{#if (eq system.damageBase 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+        </select>
+      </div>
+      <div class='form-group' style='flex: 2;'>
+        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
+        <input
+          type='text'
+          name='system.duration'
+          value='{{system.duration}}'
+          placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
+        />
+      </div>
+    </div>
+
+    {{! Delivery Section - Single Line Layout }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</label>
+      <div class='flexrow' style='gap: 8px; align-items: center;'>
+        <select name='system.delivery.type' style='flex: 2;'>
+          <option value='aura' {{#if (eq system.delivery.type 'aura')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Aura'}}</option>
+          <option value='cone' {{#if (eq system.delivery.type 'cone')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cone'}}</option>
+          <option value='cube' {{#if (eq system.delivery.type 'cube')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cube'}}</option>
+          <option value='imbue' {{#if (eq system.delivery.type 'imbue')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Imbue'}}</option>
+          <option value='glyph' {{#if (eq system.delivery.type 'glyph')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Glyph'}}</option>
+          <option value='line' {{#if (eq system.delivery.type 'line')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Line'}}</option>
+          <option value='remote' {{#if (eq system.delivery.type 'remote')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Remote'}}</option>
+          <option value='sphere' {{#if (eq system.delivery.type 'sphere')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Sphere'}}</option>
+          <option value='touch' {{#if (eq system.delivery.type 'touch')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Touch'}}</option>
+        </select>
+        <input
+          type='number'
+          name='system.delivery.cost'
+          value='{{system.delivery.cost}}'
+          min='0'
+          data-dtype='Number'
+          style='flex: 1; min-width: 60px;'
+          placeholder='Cost'
+        />
+        <input
+          type='text'
+          name='system.delivery.increase'
+          value='{{system.delivery.increase}}'
+          placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.delivery.increase.hint"}}'
+          style='flex: 5;'
+        />
+      </div>
+    </div>
+
+    {{! Crit }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>
+      <input
+        type='text'
+        name='system.crit'
+        value='{{system.crit}}'
+        placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.crit.hint"}}'
+      />
+    </div>
   </div>
 </section>

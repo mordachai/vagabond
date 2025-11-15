@@ -243,24 +243,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   _prepareItems(context) {
     // Initialize containers.
-    // You can just use `this.document.itemTypes` instead
-    // if you don't need to subdivide a given type like
-    // this sheet does with spells
     const gear = [];
     const features = [];
     const perks = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
+    const spells = [];
 
     // Build features list from class levelFeatures up to current level
     const classItem = this.document.items.find(item => item.type === 'class');
@@ -291,9 +277,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
       // Append to spells.
       else if (i.type === 'spell') {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
-        }
+        spells.push(i);
       }
       // Append to perks.
       else if (i.type === 'perk') {
@@ -301,15 +285,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
-    for (const s of Object.values(spells)) {
-      s.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    }
-
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.spells = spells;
+    context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
   }
 
   /**
@@ -601,8 +581,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // These data attributes are reserved for the action handling
       if (['action', 'documentClass'].includes(dataKey)) continue;
       // Nested properties require dot notation in the HTML, e.g. anything with `system`
-      // An example exists in spells.hbs, with `data-system.spell-level`
-      // which turns into the dataKey 'system.spellLevel'
+      // Data attributes like `data-system.property` turn into the dataKey 'system.property'
       foundry.utils.setProperty(docData, dataKey, value);
     }
 

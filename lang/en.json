@@ -53,12 +53,34 @@
     "BeingTypes": {
       "Humanlike": "Humanlike",
       "Fae": "Fae",
-      "Cryptid": "Cryptid", 
+      "Cryptid": "Cryptid",
       "Artificials": "Artificials",
       "Beasts": "Beasts",
       "Outers": "Outers",
       "Primordials": "Primordials",
       "Undead": "Undead"
+    },
+    "DamageTypes": {
+      "None": "-",
+      "Acid": "Acid",
+      "Fire": "Fire",
+      "Shock": "Shock",
+      "Poison": "Poison",
+      "Cold": "Cold",
+      "Blunt": "Blunt",
+      "Physical": "Physical",
+      "Necrotic": "Necrotic"
+    },
+    "DeliveryTypes": {
+      "Aura": "Aura",
+      "Cone": "Cone",
+      "Cube": "Cube",
+      "Imbue": "Imbue",
+      "Glyph": "Glyph",
+      "Line": "Line",
+      "Remote": "Remote",
+      "Sphere": "Sphere",
+      "Touch": "Touch"
     },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
@@ -127,10 +149,27 @@
       },
       "Spell": {
         "FIELDS": {
-          "level": {"label": "Spell Level"}
+          "description": {"label": "Effect Description"},
+          "damageBase": {"label": "Damage Base"},
+          "delivery": {
+            "label": "Delivery",
+            "type": {"label": "Delivery Type"},
+            "cost": {"label": "Mana Cost"},
+            "increase": {
+              "label": "Increase Effect",
+              "hint": "How spending additional Mana improves this spell"
+            }
+          },
+          "duration": {
+            "label": "Duration",
+            "hint": "e.g., Instant, 1 Round, Continual"
+          },
+          "crit": {
+            "label": "Crit",
+            "hint": "Effect on a critical success"
+          }
         },
-        "SpellLVL": "Level {level} Spells",
-        "AddLVL": "Add LVL {level}"
+        "AddSpell": "Add Spell"
       },
       "Ancestry": {
         "FIELDS": {
