@@ -21,3 +21,35 @@ VAGABOND.abilityAbbreviations = {
   presence: 'VAGABOND.Ability.Presence.abbr',
   luck: 'VAGABOND.Ability.Luck.abbr',
 };
+
+/**
+ * Damage types for spells and attacks
+ * @type {Object}
+ */
+VAGABOND.damageTypes = {
+  '-': 'VAGABOND.DamageTypes.None',
+  'acid': 'VAGABOND.DamageTypes.Acid',
+  'fire': 'VAGABOND.DamageTypes.Fire',
+  'shock': 'VAGABOND.DamageTypes.Shock',
+  'poison': 'VAGABOND.DamageTypes.Poison',
+  'cold': 'VAGABOND.DamageTypes.Cold',
+  'blunt': 'VAGABOND.DamageTypes.Blunt',
+  'physical': 'VAGABOND.DamageTypes.Physical',
+  'necrotic': 'VAGABOND.DamageTypes.Necrotic'
+};
+
+/**
+ * Spell delivery types
+ * @type {Object}
+ */
+VAGABOND.deliveryTypes = {
+  'aura': 'VAGABOND.DeliveryTypes.Aura',
+  'cone': 'VAGABOND.DeliveryTypes.Cone',
+  'cube': 'VAGABOND.DeliveryTypes.Cube',
+  'imbue': 'VAGABOND.DeliveryTypes.Imbue',
+  'glyph': 'VAGABOND.DeliveryTypes.Glyph',
+  'line': 'VAGABOND.DeliveryTypes.Line',
+  'remote': 'VAGABOND.DeliveryTypes.Remote',
+  'sphere': 'VAGABOND.DeliveryTypes.Sphere',
+  'touch': 'VAGABOND.DeliveryTypes.Touch'
+};
