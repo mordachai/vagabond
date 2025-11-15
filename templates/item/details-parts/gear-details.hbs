@@ -1,42 +1,71 @@
-{{! Attributes Tab }}
+{{! Gear Details Tab }}
 <section
-  class='tab attributes {{tab.cssClass}}'
+  class='tab details {{tab.cssClass}}'
   data-group='primary'
-  data-tab='attributes'
+  data-tab='details'
 >
-  {{! As you add new fields, add them in here! }}
-  <div class='resource'>
-    <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.rollFormula.label'}}:</label>
-    <span>{{system.formula}}</span>
-    <div class='grid grid-4col'>
-      <div class='grid-span-1'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.numDice.label'}}</label>
-        <input
-          type='text'
-          name='system.roll.diceNum'
-          value='{{system.roll.diceNum}}'
-          data-dtype='Number'
-        />
-      </div>
-      <div class='grid-span-1'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.dieSize.label'}}</label>
-        <input
-          type='text'
-          name='system.roll.diceSize'
-          value='{{system.roll.diceSize}}'
-          data-dtype='String'
-        />
-      </div>
-      <div class='grid-span-2'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.rollMod.label'}}</label>
-        <input
-          type='text'
-          name='system.roll.diceBonus'
-          value='{{system.roll.diceBonus}}'
-          data-dtype='String'
-        />
+  <div class='gear-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
+      <div class='gear-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
       </div>
     </div>
 
+    {{! Type }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.type.label'}}</label>
+      <input
+        type='text'
+        name='system.type'
+        value='{{system.type}}'
+        data-dtype='String'
+        placeholder='e.g., Alchemy & Medicine'
+      />
+    </div>
+
+    {{! Cost Section - Single Line Layout }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.cost.label'}}</label>
+      <div class='flexrow' style='gap: 8px;'>
+        <div style='flex: 1;'>
+          <label class='resource-label'>Gold</label>
+          <input
+            type='number'
+            name='system.cost.gold'
+            value='{{system.cost.gold}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+        <div style='flex: 1;'>
+          <label class='resource-label'>Silver</label>
+          <input
+            type='number'
+            name='system.cost.silver'
+            value='{{system.cost.silver}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+        <div style='flex: 1;'>
+          <label class='resource-label'>Copper</label>
+          <input
+            type='number'
+            name='system.cost.copper'
+            value='{{system.cost.copper}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </section>

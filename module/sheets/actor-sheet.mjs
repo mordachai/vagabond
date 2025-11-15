@@ -51,8 +51,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/biography.hbs',
       scrollable: [""],
     },
-    gear: {
-      template: 'systems/vagabond/templates/actor/gear.hbs',
+    inventory: {
+      template: 'systems/vagabond/templates/actor/inventory.hbs',
       scrollable: [""],
     },
     spells: {
@@ -75,10 +75,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'character':
-        options.parts.push('features', 'gear', 'spells', 'effects');
+        options.parts.push('features', 'inventory', 'spells', 'effects');
         break;
       case 'npc':
-        options.parts.push('gear', 'effects');
+        options.parts.push('inventory', 'effects');
         break;
     }
   }
@@ -151,7 +151,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
         break;
       case 'spells':
-      case 'gear':
+      case 'inventory':
         context.tab = context.tabs[partId];
         break;
       case 'biography':
@@ -217,9 +217,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           tab.id = 'features';
           tab.label += 'Features';
           break;
-        case 'gear':
-          tab.id = 'gear';
-          tab.label += 'Gear';
+        case 'inventory':
+          tab.id = 'inventory';
+          tab.label += 'Inventory';
           break;
         case 'spells':
           tab.id = 'spells';
@@ -322,6 +322,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       perkCard.addEventListener('click', this._onViewPerk.bind(this));
       // Right-click to delete
       perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
+    });
+
+    // Add click handlers for gear items
+    const gearItems = this.element.querySelectorAll('.gear-item-row[data-item-id]');
+    gearItems.forEach(gearItem => {
+      // Left-click on image: open item sheet
+      const gearImage = gearItem.querySelector('.gear-item-image');
+      if (gearImage) {
+        gearImage.addEventListener('click', this._onGearImageClick.bind(this));
+      }
+
+      // Left-click on name: use item (if usable)
+      const gearName = gearItem.querySelector('.gear-item-name');
+      if (gearName) {
+        gearName.addEventListener('click', this._onGearNameClick.bind(this));
+      }
+
+      // Click on equipped icon: toggle equipped status
+      const equippedIcon = gearItem.querySelector('.gear-equipped-icon');
+      if (equippedIcon) {
+        equippedIcon.addEventListener('click', this._onToggleEquipped.bind(this));
+      }
+
+      // Right-click on row: delete item
+      gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
     });
 
     // You may want to add other special handling here
@@ -528,6 +553,111 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (confirmed) {
         await perk.delete();
       }
+    }
+  }
+
+  /**
+   * Handle left-click on gear item image - opens item sheet
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onGearImageClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget.closest('.gear-item-row');
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item) {
+      item.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle left-click on gear item name - uses/rolls item if applicable
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onGearNameClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget.closest('.gear-item-row');
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (item && typeof item.roll === 'function') {
+      await item.roll();
+    }
+  }
+
+  /**
+   * Handle click on equipped icon - toggles equipped status
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @protected
+   */
+  async _onToggleEquipped(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget.closest('.gear-item-row');
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    const newEquippedStatus = !item.system.equipped;
+
+    // Toggle equipped status
+    await item.update({ 'system.equipped': newEquippedStatus });
+
+    // Toggle all effects on this item: disabled when unequipped, enabled when equipped
+    const updates = item.effects.map(effect => ({
+      _id: effect.id,
+      disabled: !newEquippedStatus
+    }));
+
+    if (updates.length > 0) {
+      await item.updateEmbeddedDocuments('ActiveEffect', updates);
+    }
+  }
+
+  /**
+   * Handle right-click on gear item - deletes item with confirmation
+   *
+   * @param {PointerEvent} event   The originating contextmenu event
+   * @protected
+   */
+  async _onGearContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const gearRow = event.currentTarget;
+    const itemId = gearRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Item' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
     }
   }
 

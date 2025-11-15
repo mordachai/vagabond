@@ -1,0 +1,113 @@
+{{! Inventory Tab }}
+<section class='tab inventory scrollable {{tab.cssClass}}' data-group='primary' data-tab='inventory'>
+
+  {{! Wealth Section }}
+  <div class='wealth-section'>
+    <h3 class='section-title'>Wealth</h3>
+    <div class='currency-row flexrow'>
+      <div class='currency-field'>
+        <label class='resource-label'>Gold</label>
+        <input
+          type='text'
+          name='system.currency.gold'
+          value='{{system.currency.gold}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+      <div class='currency-field'>
+        <label class='resource-label'>Silver</label>
+        <input
+          type='text'
+          name='system.currency.silver'
+          value='{{system.currency.silver}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+      <div class='currency-field'>
+        <label class='resource-label'>Copper</label>
+        <input
+          type='text'
+          name='system.currency.copper'
+          value='{{system.currency.copper}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+    </div>
+  </div>
+
+  {{! Inventory Slots Section }}
+  <div class='inventory-slots-section'>
+    <div class='slots-info flexrow'>
+      <div class='slot-field'>
+        <label class='resource-label'>Max Slots:</label>
+        <span class='slot-value'>{{system.inventory.maxSlots}}</span>
+      </div>
+      <div class='slot-field'>
+        <label class='resource-label'>Occupied:</label>
+        <span class='slot-value'>{{system.inventory.occupiedSlots}}</span>
+      </div>
+      <div class='slot-field'>
+        <label class='resource-label'>Available:</label>
+        <span class='slot-value'>{{system.inventory.availableSlots}}</span>
+      </div>
+    </div>
+  </div>
+
+  {{! Gear List }}
+  <ol class='items-list'>
+    <li class='item flexrow items-header'>
+      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
+      <div class='item-type inventory-col-type'>Type</div>
+      <div class='item-quantity inventory-col-quantity'>Qty</div>
+      <div class='item-cost inventory-col-cost'>Cost</div>
+      <div class='item-slots inventory-col-slots'>Slots</div>
+      <div class='item-equipped inventory-col-equipped' data-tooltip='Equip'>E</div>
+    </li>
+    {{#each gear as |item id|}}
+      <li
+        class='item flexrow draggable gear-item-row'
+        data-item-id='{{item._id}}'
+        data-document-class='Item'
+      >
+        <div class='item-name inventory-col-name'>
+          <div class='item-image gear-item-image'>
+            <img
+              src='{{item.img}}'
+              data-tooltip='{{item.name}}'
+              width='24'
+              height='24'
+            />
+          </div>
+          <div class='gear-item-name'>{{item.name}}</div>
+        </div>
+        <div class='item-type item-prop inventory-col-type'>{{item.system.type}}</div>
+        <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
+        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
+        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
+        <div class='item-equipped inventory-col-equipped'>
+          <i class='gear-equipped-icon {{#if item.system.equipped}}fas fa-check-circle equipped{{else}}far fa-circle unequipped{{/if}}'></i>
+        </div>
+      </li>
+    {{/each}}
+  </ol>
+
+  {{! Add New Item Button }}
+  {{#if @root.editable}}
+    <div class='inventory-add-item'>
+      <a
+        class='item-control item-create'
+        data-tooltip='{{localize "DOCUMENT.Create" type='Item'}}'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='gear'
+      >
+        <i class='fas fa-plus'></i>
+        {{localize 'DOCUMENT.New' type='item'}}
+      </a>
+    </div>
+  {{/if}}
+
+</section>

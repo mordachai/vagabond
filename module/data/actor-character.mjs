@@ -22,11 +22,23 @@ export default class VagabondCharacter extends VagabondActorBase {
         required: false,
         nullable: true
       }),
-      beingType: new fields.StringField({ 
+      beingType: new fields.StringField({
         initial: null,
         required: false,
-        nullable: true 
+        nullable: true
       })
+    });
+
+    // Currency system
+    schema.currency = new fields.SchemaField({
+      gold: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      silver: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      copper: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
+    });
+
+    // Inventory system
+    schema.inventory = new fields.SchemaField({
+      bonusSlots: new fields.NumberField({ ...requiredInteger, initial: 0 })
     });
 
     // Iterate over ability names and create a new SchemaField for each.
@@ -164,6 +176,9 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Calculate combat values
     this._calculateCombatValues();
+
+    // Calculate inventory slots
+    this._calculateInventorySlots();
 
     // Process saves - calculate difficulty based on Vagabond rules
     // Reflex = DEX + AWR, Endure = MIT + MIT, Will = RSN + PRS
@@ -332,5 +347,31 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Armor starts at 0 (will come from items later)
     this.armor = 0;
+  }
+
+  _calculateInventorySlots() {
+    const mightValue = this.abilities.might?.value || 8;
+    const bonusSlots = this.inventory.bonusSlots || 0;
+
+    // Calculate max slots: 8 + Might + bonusSlots
+    this.inventory.maxSlots = 8 + mightValue + bonusSlots;
+
+    // Calculate occupied slots from all gear items
+    // Equipped items don't count toward occupied slots (they're worn/carried differently)
+    let occupiedSlots = 0;
+    if (this.parent?.items) {
+      for (const item of this.parent.items) {
+        if (item.type === 'gear' && item.system.slots !== undefined) {
+          // Only count slots if the item is NOT equipped
+          if (!item.system.equipped) {
+            occupiedSlots += item.system.slots;
+          }
+        }
+      }
+    }
+    this.inventory.occupiedSlots = occupiedSlots;
+
+    // Calculate available slots
+    this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots;
   }
 }

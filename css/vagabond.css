@@ -719,6 +719,123 @@
   margin-bottom: 0;
 }
 
+/* Inventory column sizing */
+.vagabond .inventory-col-name {
+  flex: 4;
+}
+
+.vagabond .inventory-col-type {
+  flex: 3;
+}
+
+.vagabond .inventory-col-quantity {
+  flex: 0.5;
+  text-align: center;
+}
+
+.vagabond .inventory-col-cost {
+  flex: 0.5;
+  text-align: center;
+}
+
+.vagabond .inventory-col-slots {
+  flex: 0.5;
+  text-align: center;
+}
+
+.vagabond .inventory-col-equipped {
+  flex: 0.5;
+  text-align: center;
+}
+
+/* Gear equipped icon */
+.vagabond .gear-equipped-icon {
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.vagabond .gear-equipped-icon.equipped {
+  color: #28a745;
+}
+
+.vagabond .gear-equipped-icon.unequipped {
+  color: #6c757d;
+  opacity: 0.5;
+}
+
+.vagabond .gear-equipped-icon:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+/* Wealth section styling */
+.vagabond .wealth-section {
+  margin-bottom: 15px;
+}
+
+.vagabond .wealth-section .section-title {
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.vagabond .wealth-section .currency-row {
+  justify-content: center;
+  gap: 15px;
+}
+
+.vagabond .wealth-section .currency-field {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vagabond .wealth-section .currency-field label {
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.vagabond .wealth-section .currency-field input {
+  width: 60px;
+  text-align: center;
+}
+
+/* Inventory add item button */
+.vagabond .inventory-add-item {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.vagabond .inventory-add-item a {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove var(--vagabond-c-groove);
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.vagabond .inventory-add-item a:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Gear item interaction */
+.vagabond .gear-item-image {
+  cursor: pointer;
+}
+
+.vagabond .gear-item-name {
+  cursor: pointer;
+}
+
+.vagabond .gear-item-name:hover {
+  color: var(--vagabond-c-black);
+  text-shadow: 0 0 10px red;
+}
+
 @media (max-width: 600px) {
   .vagabond .vagabond .character-name-input {
     font-size: 16px;

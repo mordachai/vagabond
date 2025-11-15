@@ -71,6 +71,20 @@
       "Physical": "Physical",
       "Necrotic": "Necrotic"
     },
+    "Currency": {
+      "Gold": {
+        "long": "Gold",
+        "abbr": "g"
+      },
+      "Silver": {
+        "long": "Silver",
+        "abbr": "s"
+      },
+      "Copper": {
+        "long": "Copper",
+        "abbr": "c"
+      }
+    },
     "DeliveryTypes": {
       "Aura": "Aura",
       "Cone": "Cone",
@@ -90,7 +104,7 @@
       "Tabs": {
         "Biography": "Biography",
         "Features": "Features",
-        "Gear": "Gear",
+        "Inventory": "Inventory",
         "Spells": "Spells",
         "Effects": "Effects"
       },
@@ -137,14 +151,17 @@
         "Description": "Description",
         "Effects": "Effects"
       },
+      "base": {
+        "FIELDS": {
+          "description": {"label": "Description"}
+        }
+      },
       "Gear": {
         "FIELDS": {
-          "rollFormula": {"label": "Roll Formula"},
-          "numDice": {"label": "Number of Dice"},
-          "dieSize": {"label": "Die Size"},
-          "rollMod": {"label": "Roll Modifier"},
           "quantity": {"label": "Quantity"},
-          "weight": {"label": "Weight"}
+          "type": {"label": "Type"},
+          "cost": {"label": "Cost"},
+          "slots": {"label": "Slots"}
         }
       },
       "Spell": {
