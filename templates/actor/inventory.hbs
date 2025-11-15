@@ -59,12 +59,12 @@
   {{! Gear List }}
   <ol class='items-list'>
     <li class='item flexrow items-header'>
-      <div class='item-name' style='flex: 3;'>{{localize 'Name'}}</div>
-      <div class='item-type' style='flex: 2;'>Type</div>
-      <div class='item-quantity' style='flex: 0.5; text-align: center;'>Qty</div>
-      <div class='item-cost' style='flex: 1; text-align: center;'>Cost</div>
-      <div class='item-slots' style='flex: 0.5; text-align: center;'>Slots</div>
-      <div class='item-controls' style='flex: 1.5;'>
+      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
+      <div class='item-type inventory-col-type'>Type</div>
+      <div class='item-quantity inventory-col-quantity'>Qty</div>
+      <div class='item-cost inventory-col-cost'>Cost</div>
+      <div class='item-slots inventory-col-slots'>Slots</div>
+      <div class='item-controls inventory-col-controls'>
         {{#if @root.editable}}
           <a
             class='item-control item-create'
@@ -85,7 +85,7 @@
         data-item-id='{{item._id}}'
         data-document-class='Item'
       >
-        <div class='item-name' style='flex: 3;'>
+        <div class='item-name inventory-col-name'>
           <div class='item-image'>
             <a data-action='viewDoc'>
               <img
@@ -98,11 +98,11 @@
           </div>
           <div>{{item.name}}</div>
         </div>
-        <div class='item-type item-prop' style='flex: 2;'>{{item.system.type}}</div>
-        <div class='item-quantity item-prop' style='flex: 0.5; text-align: center;'>{{item.system.quantity}}</div>
-        <div class='item-cost item-prop' style='flex: 1; text-align: center;'>{{item.system.costDisplay}}</div>
-        <div class='item-slots item-prop' style='flex: 0.5; text-align: center;'>{{item.system.slots}}</div>
-        <div class='item-controls' style='flex: 1.5;'>
+        <div class='item-type item-prop inventory-col-type'>{{item.system.type}}</div>
+        <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
+        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
+        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
+        <div class='item-controls inventory-col-controls'>
           <a
             class='item-control item-edit'
             data-tooltip='{{localize "DOCUMENT.Update" type='Gear'}}'

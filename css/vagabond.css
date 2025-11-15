@@ -719,6 +719,34 @@
   margin-bottom: 0;
 }
 
+/* Inventory column sizing */
+.vagabond .inventory-col-name {
+  flex: 3;
+}
+
+.vagabond .inventory-col-type {
+  flex: 2;
+}
+
+.vagabond .inventory-col-quantity {
+  flex: 0.5;
+  text-align: center;
+}
+
+.vagabond .inventory-col-cost {
+  flex: 1;
+  text-align: center;
+}
+
+.vagabond .inventory-col-slots {
+  flex: 0.5;
+  text-align: center;
+}
+
+.vagabond .inventory-col-controls {
+  flex: 1.5;
+}
+
 @media (max-width: 600px) {
   .vagabond .vagabond .character-name-input {
     font-size: 16px;
