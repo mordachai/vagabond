@@ -474,19 +474,22 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  align-items: start;
+  align-items: center;
 }
 .vagabond .cost-field {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 .vagabond .cost-field label {
   font-size: 12px;
   font-weight: bold;
+  white-space: nowrap;
 }
 .vagabond .cost-field input {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 .vagabond .resource-label {
   font-weight: bold;
