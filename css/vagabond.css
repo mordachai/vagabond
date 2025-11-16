@@ -514,35 +514,72 @@
 }
 .vagabond .property-selector-row {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   align-items: flex-start;
 }
-.vagabond .property-checkboxes {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px 8px;
-  padding: 8px;
+.vagabond .property-dropdown {
+  position: relative;
+  flex: 0 0 180px;
+}
+.vagabond .property-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 6px 12px;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: background 0.2s ease;
 }
-.vagabond .property-checkboxes .property-checkbox-item {
+.vagabond .property-dropdown summary:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .property-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+.vagabond .property-dropdown summary i {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+.vagabond .property-dropdown[open] summary i {
+  transform: rotate(180deg);
+}
+.vagabond .property-dropdown .property-checkboxes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  margin-top: 4px;
+  padding: 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 4px 6px;
   cursor: pointer;
   font-size: 12px;
+  border-radius: 2px;
 }
-.vagabond .property-checkboxes .property-checkbox-item input[type=checkbox] {
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item input[type=checkbox] {
   margin: 0;
   cursor: pointer;
 }
-.vagabond .property-checkboxes .property-checkbox-item span {
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item span {
   user-select: none;
 }
-.vagabond .property-checkboxes .property-checkbox-item:hover {
-  color: var(--vagabond-c-dark);
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 .vagabond .property-tags {
   flex: 1;
