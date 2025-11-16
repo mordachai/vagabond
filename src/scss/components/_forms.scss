@@ -55,7 +55,13 @@
   }
 }
 
-// Fix Foundry's ProseMirror positioning that breaks our layout
+// Fix Foundry's ProseMirror min-height and positioning
+// Override the --min-height CSS variable that Foundry uses
+.prosemirror,
+prose-mirror {
+  --min-height: 35px;
+}
+
 // This overrides Foundry's default position: relative on editor content
 .prosemirror .editor-content,
 prose-mirror .editor-content {

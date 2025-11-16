@@ -466,6 +466,10 @@
 .vagabond .tox .tox-edit-area {
   padding: 0 8px;
 }
+.vagabond .prosemirror,
+.vagabond prose-mirror {
+  --min-height: 35px;
+}
 .vagabond .prosemirror .editor-content,
 .vagabond prose-mirror .editor-content {
   position: unset;
