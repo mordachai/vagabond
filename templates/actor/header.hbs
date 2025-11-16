@@ -22,13 +22,11 @@
     <div class='fatigue-overlay'>
       <div class='fatigue-checkboxes'>
         {{#each fatigueBoxes as |box index|}}
-          <input
-            type='checkbox'
-            class='fatigue-box'
-            name='system.fatigue'
+          <i
+            class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
             data-index='{{index}}'
-            {{#if box.checked}}checked{{/if}}
-          />
+            data-tooltip='Fatigue Level {{add index 1}}'
+          ></i>
         {{/each}}
       </div>
       <i class='fas fa-skull fatigue-icon' data-tooltip='Fatigue'></i>

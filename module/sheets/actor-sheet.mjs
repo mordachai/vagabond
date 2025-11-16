@@ -339,13 +339,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await super._onRender(context, options);
     this.#disableOverrides();
 
-    // Add fatigue checkbox click handlers
-    const fatigueBoxes = this.element.querySelectorAll('.fatigue-box');
-    fatigueBoxes.forEach((checkbox, index) => {
-      checkbox.addEventListener('click', async (event) => {
+    // Add fatigue skull click handlers
+    const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
+    fatigueSkulls.forEach((skull, index) => {
+      skull.addEventListener('click', async (event) => {
         event.preventDefault();
-        const isChecked = checkbox.checked;
-        const newFatigue = isChecked ? index + 1 : index;
+        event.stopPropagation();
+
+        const currentFatigue = this.actor.system.fatigue || 0;
+        // If clicking on an active skull, reduce fatigue to that index
+        // If clicking on an inactive skull, increase fatigue to index + 1
+        const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
+
         await this.actor.update({ 'system.fatigue': newFatigue });
       });
     });
