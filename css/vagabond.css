@@ -750,35 +750,53 @@
 .vagabond .resource-label {
   font-weight: bold;
 }
-.vagabond .abilities-grid {
+.vagabond .skills-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
   margin-bottom: 16px;
 }
-.vagabond .ability {
+.vagabond .skills-grid .skill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+}
+.vagabond .skills-grid .skill input[type=checkbox] {
+  margin: 0;
+}
+.vagabond .skills-grid .skill .skill-difficulty {
+  margin-left: auto;
+  font-weight: bold;
+  min-width: 24px;
+  text-align: right;
+}
+.vagabond .right-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  gap: 16px;
 }
-.vagabond .ability .ability-score {
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  border: 2px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+.vagabond .right-column h3 {
+  margin-bottom: 8px;
+}
+.vagabond .saves h3 {
+  text-transform: capitalize;
+}
+.vagabond .saves .saves-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
   padding: 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
 }
-.vagabond .ability .ability-label {
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: var(--vagabond-c-muted);
+.vagabond .saves .save {
   text-align: center;
+}
+.vagabond .saves .save .save-difficulty {
+  font-weight: bold;
+  font-size: 14px;
 }
 .vagabond .features-list {
   list-style: none;
@@ -1352,6 +1370,39 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+.vagabond .stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.vagabond .stats-row .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .stats-row .stat-item .stat-score {
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 4px;
+}
+.vagabond .stats-row .stat-item .stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--vagabond-c-tan);
+  text-align: center;
+  cursor: pointer;
+}
+.vagabond .stats-row .stat-item .stat-label:hover {
+  color: var(--vagabond-c-dark);
 }
 .vagabond .character-name-input {
   border: none !important;

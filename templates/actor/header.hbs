@@ -107,7 +107,29 @@
       </span>
     </div>
 
-    {{! Third row: Combat Stats }}
+    {{! Third row: Stats - All abilities in one row }}
+    <div class='stats-row'>
+      {{#each system.abilities as |ability key|}}
+        <div class='stat-item'>
+          <input
+            type='text'
+            name='system.abilities.{{key}}.value'
+            value='{{ability.value}}'
+            class='stat-score'
+            data-dtype='Number'
+          />
+          <label
+            class='stat-label rollable'
+            data-action='roll'
+            data-roll='d20'
+            data-label='{{localize (lookup @root.config.abilities key)}} Check'
+            data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+          >{{localize (lookup @root.config.abilities key)}}</label>
+        </div>
+      {{/each}}
+    </div>
+
+    {{! Fourth row: Combat Stats }}
     <div class='grid grid-3col'>
       {{! Speed - show all three values }}
       <div class='resource'>

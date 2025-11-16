@@ -2,38 +2,66 @@
   font-weight: bold;
 }
 
-// Abilities Grid - 2 rows x 3 columns
-.abilities-grid {
+// Skills Grid - 2 column layout
+.skills-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
   margin-bottom: 16px;
+
+  .skill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+
+    input[type='checkbox'] {
+      margin: 0;
+    }
+
+    .skill-difficulty {
+      margin-left: auto;
+      font-weight: bold;
+      min-width: 24px;
+      text-align: right;
+    }
+  }
 }
 
-.ability {
+// Right column layout
+.right-column {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  gap: 16px;
 
-  .ability-score {
-    width: 44px;
-    height: 44px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    border: 2px solid $c-faint;
-    border-radius: 4px;
-    padding: 8px;
+  h3 {
+    margin-bottom: 8px;
+  }
+}
+
+// Saves Section
+.saves {
+  h3 {
+    text-transform: capitalize;
   }
 
-  .ability-label {
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: $c-muted;
+  .saves-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    padding: 8px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .save {
     text-align: center;
+
+    .save-difficulty {
+      font-weight: bold;
+      font-size: 14px;
+    }
   }
 }
 
