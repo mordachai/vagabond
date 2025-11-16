@@ -124,7 +124,7 @@ prose-mirror .editor-content {
 
 .property-dropdown {
   position: relative;
-  flex: 0 0 180px;
+  flex: 1;
 
   summary {
     list-style: none;
@@ -161,7 +161,7 @@ prose-mirror .editor-content {
     position: absolute;
     top: 100%;
     left: 0;
-    width: 200px;
+    min-width: 200px;
     margin-top: 4px;
     padding: 8px;
     border: 1px solid $c-faint;
@@ -198,7 +198,7 @@ prose-mirror .editor-content {
 }
 
 .property-tags {
-  flex: 1;
+  flex: 2;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

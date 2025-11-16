@@ -519,7 +519,7 @@
 }
 .vagabond .property-dropdown {
   position: relative;
-  flex: 0 0 180px;
+  flex: 1;
 }
 .vagabond .property-dropdown summary {
   list-style: none;
@@ -551,7 +551,7 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 200px;
+  min-width: 200px;
   margin-top: 4px;
   padding: 8px;
   border: 1px solid var(--vagabond-c-faint);
@@ -582,7 +582,7 @@
   background: rgba(0, 0, 0, 0.05);
 }
 .vagabond .property-tags {
-  flex: 1;
+  flex: 2;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
