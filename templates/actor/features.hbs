@@ -11,17 +11,21 @@
       <div class='skills-grid'>
         {{#each system.skills as |skill key|}}
           <div class='skill flexrow flex-group-center'>
-            <input
-              type='checkbox'
-              name='system.skills.{{key}}.trained'
-              {{#if skill.trained}}checked{{/if}}
-            />
+            <label class='skill-checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.skills.{{key}}.trained'
+                {{#if skill.trained}}checked{{/if}}
+                class='skill-checkbox-hidden'
+              />
+              <i class='skill-checkbox-icon {{#if skill.trained}}fas fa-circle-check{{else}}far fa-circle{{/if}}'></i>
+            </label>
             <label
-              class='resource-label rollable flexlarge align-left'
+              class='skill-label rollable flexlarge align-left'
               data-action='roll'
               data-roll='d20'
               data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
-            >{{skill.label}} {{#if skill.trained}}(Trained){{/if}}</label>
+            >{{skill.label}}</label>
             <span class='skill-difficulty'>{{skill.difficulty}}</span>
           </div>
         {{/each}}
@@ -54,17 +58,21 @@
         <h3>Attacks</h3>
         {{#each system.weaponSkills as |weaponSkill key|}}
           <div class='weapon-skill flexrow flex-group-center'>
-            <input
-              type='checkbox'
-              name='system.weaponSkills.{{key}}.trained'
-              {{#if weaponSkill.trained}}checked{{/if}}
-            />
+            <label class='skill-checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.weaponSkills.{{key}}.trained'
+                {{#if weaponSkill.trained}}checked{{/if}}
+                class='skill-checkbox-hidden'
+              />
+              <i class='skill-checkbox-icon {{#if weaponSkill.trained}}fas fa-circle-check{{else}}far fa-circle{{/if}}'></i>
+            </label>
             <label
-              class='resource-label rollable flexlarge align-left'
+              class='skill-label rollable flexlarge align-left'
               data-action='roll'
               data-roll='d20'
               data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
-            >{{weaponSkill.label}} {{#if weaponSkill.trained}}(Trained){{/if}}</label>
+            >{{weaponSkill.label}}</label>
             <span class='weapon-skill-difficulty'>{{weaponSkill.difficulty}}</span>
           </div>
         {{/each}}
