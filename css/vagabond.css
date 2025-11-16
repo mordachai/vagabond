@@ -246,6 +246,21 @@
   font-family: "Roboto", sans-serif;
 }
 
+.vagabond.application {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0% !important;
+  box-shadow: none !important;
+}
+
+.vagabond .window-header {
+  background: transparent !important;
+}
+
+.vagabond .window-content {
+  background: #121212;
+}
+
 .rollable:hover, .rollable:focus {
   color: var(--vagabond-c-black);
   text-shadow: 0 0 10px red;
@@ -479,8 +494,9 @@
   font-family: "Roboto", sans-serif;
 }
 .vagabond .sheet-header {
-  flex: 0 auto;
-  overflow: hidden;
+  flex: 0 0 auto;
+  min-height: fit-content;
+  overflow: visible;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -494,6 +510,7 @@
 }
 .vagabond .sheet-header .header-fields {
   flex: 1;
+  min-width: 0;
 }
 .vagabond .sheet-tabs {
   flex: 0;
@@ -1060,6 +1077,34 @@
   flex-shrink: 0;
   margin-left: 12px;
 }
+.vagabond .level-group {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.vagabond .level-group:last-child {
+  margin-bottom: 0;
+}
+.vagabond .feature-title {
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+.vagabond .traits-section .item {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.vagabond .traits-section .item:last-child {
+  margin-bottom: 0;
+}
+.vagabond .trait-title {
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  font-size: 16px;
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;
@@ -1172,7 +1217,7 @@
 .vagabond .effects .item .effect-controls {
   border: none;
 }
-.vagabond .vagabond .character-name-input {
+.vagabond .character-name-input {
   border: none !important;
   background: transparent !important;
   text-align: center;
@@ -1185,11 +1230,11 @@
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-.vagabond .vagabond .character-name-input:hover, .vagabond .vagabond .character-name-input:focus {
+.vagabond .character-name-input:hover, .vagabond .character-name-input:focus {
   border-bottom: 2px solid var(--vagabond-c-dark);
   background: transparent !important;
 }
-.vagabond .vagabond .character-info-row {
+.vagabond .character-info-row {
   text-align: center;
   margin-bottom: 10px;
   font-size: 14px;
@@ -1198,10 +1243,10 @@
   line-height: 1.2;
 }
 @media (max-width: 600px) {
-  .vagabond .vagabond .character-name-input {
+  .vagabond .character-name-input {
     font-size: 16px;
   }
-  .vagabond .vagabond .character-info-row {
+  .vagabond .character-info-row {
     font-size: 12px;
   }
 }

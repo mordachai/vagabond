@@ -237,3 +237,43 @@
     margin-left: 12px;
   }
 }
+
+// Level groups styling with borders and spacing
+.level-group {
+  border: 1px solid $c-tan;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Feature title styling
+.feature-title {
+  font-family: 'Manofa', serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+// Trait items styling with borders
+.traits-section {
+  .item {
+    border: 1px solid $c-tan;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Trait title styling
+.trait-title {
+  font-family: 'Manofa', serif;
+  font-weight: bold;
+  font-size: 16px;
+}
