@@ -68,23 +68,54 @@
             </span>
           {{/each}}
         </div>
-        <button type='button' class='mt-4' data-action='addWeaponProperty'>+ Add Property</button>
+        <div class='add-property-controls'>
+          <select class='property-select'>
+            <option value=''>Select a property...</option>
+            <option value='Brawl' title='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</option>
+            <option value='Brutal' title='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</option>
+            <option value='Cleave' title='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</option>
+            <option value='Entangle' title='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</option>
+            <option value='Finesse' title='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</option>
+            <option value='Keen' title='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</option>
+            <option value='Long' title='{{lookup config.weaponPropertyHints "Long"}}'>Long</option>
+            <option value='Near' title='{{lookup config.weaponPropertyHints "Near"}}'>Near</option>
+            <option value='Ranged' title='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</option>
+            <option value='Shield' title='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</option>
+            <option value='Thrown' title='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</option>
+          </select>
+          <button type='button' data-action='addWeaponProperty'>+ Add</button>
+        </div>
       </div>
     </div>
 
-    {{! Metal Type }}
+    {{! Metal Type and Base Slots - Combined Row }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.metal.label'}}</label>
-      <select name='system.metal' data-dtype='String'>
-        {{#select system.metal}}
-          <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-          <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-          <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-          <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-          <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-          <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
-        {{/select}}
-      </select>
+      <label class='resource-label'>Metal & Slots</label>
+      <div class='metal-slots-row'>
+        <div class='metal-field'>
+          <label class='resource-label'>Metal</label>
+          <select name='system.metal' data-dtype='String'>
+            {{#select system.metal}}
+              <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+              <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+              <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+              <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+              <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+              <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+            {{/select}}
+          </select>
+        </div>
+        <div class='slots-field'>
+          <label class='resource-label'>Base Slots</label>
+          <input
+            type='number'
+            name='system.baseSlots'
+            value='{{system.baseSlots}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+      </div>
       <div class='metal-effect-text'>{{system.metalEffect}}</div>
     </div>
 
@@ -123,18 +154,6 @@
           />
         </div>
       </div>
-    </div>
-
-    {{! Base Slots }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.baseSlots.label'}} <small>(before metal modifier)</small></label>
-      <input
-        type='number'
-        name='system.baseSlots'
-        value='{{system.baseSlots}}'
-        min='0'
-        data-dtype='Number'
-      />
     </div>
 
     {{! Calculated Properties - Read-only Display }}

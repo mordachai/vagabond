@@ -590,9 +590,28 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onAddWeaponProperty(event, target) {
+    // Get the selected property from the dropdown
+    const select = this.element.querySelector('.property-select');
+    const selectedProperty = select?.value;
+
+    if (!selectedProperty) {
+      ui.notifications.warn('Please select a property to add.');
+      return;
+    }
+
     const properties = this.item.system.properties || [];
-    const newProperties = [...properties, 'Brawl'];
+
+    // Check if property already exists
+    if (properties.includes(selectedProperty)) {
+      ui.notifications.warn(`${selectedProperty} is already added.`);
+      return;
+    }
+
+    const newProperties = [...properties, selectedProperty];
     await this.item.update({ 'system.properties': newProperties });
+
+    // Reset the dropdown to default
+    if (select) select.value = '';
   }
 
   /**

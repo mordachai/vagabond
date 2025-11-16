@@ -538,6 +538,54 @@
 .vagabond .property-tag i:hover {
   color: var(--vagabond-c-dark);
 }
+.vagabond .add-property-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.vagabond .add-property-controls .property-select {
+  flex: 1;
+  min-width: 200px;
+}
+.vagabond .add-property-controls button {
+  white-space: nowrap;
+}
+.vagabond .metal-slots-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.vagabond .metal-slots-row .metal-field {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .metal-slots-row .metal-field label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .metal-slots-row .metal-field select {
+  flex: 1;
+}
+.vagabond .metal-slots-row .slots-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .metal-slots-row .slots-field label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .metal-slots-row .slots-field input {
+  flex: 1;
+  min-width: 0;
+}
 .vagabond .calculated-properties {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -146,6 +146,65 @@ prose-mirror .editor-content {
   }
 }
 
+.add-property-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+
+  .property-select {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  button {
+    white-space: nowrap;
+  }
+}
+
+// Metal and slots - combined row layout
+.metal-slots-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .metal-field {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    select {
+      flex: 1;
+    }
+  }
+
+  .slots-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
 // Calculated properties - bordered grid section
 .calculated-properties {
   display: grid;
