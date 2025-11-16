@@ -2,6 +2,20 @@
   font-family: $font-primary;
 }
 
+// Make application and header backgrounds transparent for Vagabond sheets
+.vagabond.application {
+  background: transparent !important;
+}
+
+.vagabond .window-header {
+  background: transparent !important;
+}
+
+// Add background color to window-content instead
+.vagabond .window-content {
+  background: var(--color-bg-default, #f0f0f0);
+}
+
 .rollable {
   &:hover,
   &:focus {

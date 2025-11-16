@@ -246,6 +246,18 @@
   font-family: "Roboto", sans-serif;
 }
 
+.vagabond.application {
+  background: transparent !important;
+}
+
+.vagabond .window-header {
+  background: transparent !important;
+}
+
+.vagabond .window-content {
+  background: var(--color-bg-default, #f0f0f0);
+}
+
 .rollable:hover, .rollable:focus {
   color: var(--vagabond-c-black);
   text-shadow: 0 0 10px red;
