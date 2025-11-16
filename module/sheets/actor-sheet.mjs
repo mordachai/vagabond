@@ -263,9 +263,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const allLevelFeatures = classItem.system.levelFeatures || [];
 
       // Get features for levels 1 through current level
-      for (const feature of allLevelFeatures) {
+      for (let index = 0; index < allLevelFeatures.length; index++) {
+        const feature = allLevelFeatures[index];
         if (feature.level <= currentLevel) {
           features.push({
+            _id: `feature-${feature.level}-${index}`,
             name: `${feature.name} (Level ${feature.level})`,
             description: feature.description,
             level: feature.level

@@ -32,7 +32,7 @@
       <h3 class='features-section-title'>Features</h3>
       <ul class='features-list'>
         {{#each features as |feature id|}}
-          <li class='feature accordion-item' data-item-id='{{feature._id}}'>
+          <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
             <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
               <h4 class='feature-name'>{{feature.name}}</h4>
             </div>
@@ -139,7 +139,7 @@
         <h3>Perks</h3>
         <ul class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            <li class='perk-card accordion-item' data-item-id='{{perk._id}}'>
+            <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}'>
               <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
                 <h4 class='perk-name'>{{perk.name}}</h4>
               </div>
