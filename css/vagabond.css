@@ -794,16 +794,16 @@
 .vagabond .skills-list .skill {
   display: flex;
   align-items: center;
-  gap: 8px;
   padding: 4px;
   white-space: nowrap;
+  justify-content: space-between;
 }
 .vagabond .skills-list .skill .skill-checkbox-label {
   display: flex;
   align-items: center;
   cursor: pointer;
   margin: 0;
-  min-width: 18px;
+  margin-right: 6px;
   flex-shrink: 0;
 }
 .vagabond .skills-list .skill .skill-checkbox-hidden {
@@ -824,12 +824,12 @@
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-right: 12px;
 }
 .vagabond .skills-list .skill .skill-label:hover {
   text-decoration: underline;
 }
 .vagabond .skills-list .skill .skill-difficulty {
-  margin-left: auto;
   font-weight: bold;
   min-width: 28px;
   text-align: right;
@@ -849,16 +849,16 @@
 .vagabond .right-column .weapon-skill {
   display: flex;
   align-items: center;
-  gap: 8px;
   padding: 4px;
   white-space: nowrap;
+  justify-content: space-between;
 }
 .vagabond .right-column .weapon-skill .skill-checkbox-label {
   display: flex;
   align-items: center;
   cursor: pointer;
   margin: 0;
-  min-width: 18px;
+  margin-right: 6px;
   flex-shrink: 0;
 }
 .vagabond .right-column .weapon-skill .skill-checkbox-hidden {
@@ -879,12 +879,12 @@
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-right: 12px;
 }
 .vagabond .right-column .weapon-skill .skill-label:hover {
   text-decoration: underline;
 }
 .vagabond .right-column .weapon-skill .weapon-skill-difficulty {
-  margin-left: auto;
   font-weight: bold;
   min-width: 28px;
   text-align: right;

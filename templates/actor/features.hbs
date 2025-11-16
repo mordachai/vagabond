@@ -41,13 +41,13 @@
                 class='skill-checkbox-hidden'
               />
               {{#if skill.trained}}
-                <i class='skill-checkbox-icon fas fa-circle-check'></i>
+                <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
               {{else}}
                 <i class='skill-checkbox-icon far fa-circle'></i>
               {{/if}}
             </label>
             <label
-              class='skill-label rollable flexlarge align-left'
+              class='skill-label rollable'
               data-action='roll'
               data-roll='d20'
               data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
@@ -92,13 +92,13 @@
                 class='skill-checkbox-hidden'
               />
               {{#if weaponSkill.trained}}
-                <i class='skill-checkbox-icon fas fa-circle-check'></i>
+                <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
               {{else}}
                 <i class='skill-checkbox-icon far fa-circle'></i>
               {{/if}}
             </label>
             <label
-              class='skill-label rollable flexlarge align-left'
+              class='skill-label rollable'
               data-action='roll'
               data-roll='d20'
               data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
