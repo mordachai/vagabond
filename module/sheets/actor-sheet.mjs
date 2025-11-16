@@ -1,4 +1,5 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -945,73 +946,34 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // Check if weapon is equipped
-    const equipmentState = weapon.system.equipmentState || 'unequipped';
-    if (equipmentState === 'unequipped') {
-      ui.notifications.warn(`${weapon.name} is not equipped. Equip it first to attack.`);
+    try {
+      // Roll attack using weapon's method
+      const attackResult = await weapon.rollAttack(this.actor);
+
+      // Roll damage if attack hit
+      let damageRoll = null;
+      if (attackResult.isHit) {
+        damageRoll = await weapon.rollDamage(this.actor);
+      }
+
+      // Build flavor text and post attack roll to chat
+      const flavorText = weapon.buildAttackFlavor(attackResult, damageRoll);
+      await VagabondChatHelper.postRoll(this.actor, attackResult.roll, flavorText);
+
+      // If there was a damage roll, also send it to chat
+      if (damageRoll) {
+        await VagabondChatHelper.postRoll(
+          this.actor,
+          damageRoll,
+          `<strong>${weapon.name}</strong> Damage`
+        );
+      }
+
+      return attackResult.roll;
+    } catch (error) {
+      ui.notifications.warn(error.message);
       return;
     }
-
-    // Get the weapon skill and difficulty
-    const weaponSkillKey = weapon.system.weaponSkill;
-    const weaponSkill = this.actor.system.weaponSkills[weaponSkillKey];
-    const difficulty = weaponSkill?.difficulty || 10;
-
-    // Roll the attack (d20)
-    const attackRoll = new Roll('d20', this.actor.getRollData());
-    await attackRoll.evaluate();
-
-    // Check if the attack succeeds
-    const isSuccess = attackRoll.total >= difficulty;
-    const isCritical = attackRoll.total === 20;
-
-    // Prepare the flavor text
-    let flavorText = `<strong>${weapon.name}</strong> Attack<br/>`;
-    flavorText += `<strong>Weapon Skill:</strong> ${weaponSkill?.label || weaponSkillKey} (Difficulty ${difficulty})<br/>`;
-    flavorText += `<strong>Attack Roll:</strong> ${attackRoll.total}`;
-
-    // If successful, roll damage
-    let damageRoll = null;
-    if (isSuccess) {
-      flavorText += ` - <span style="color: green;">SUCCESS!</span><br/>`;
-
-      // Roll damage using current damage (based on equipment state)
-      const damageFormula = weapon.system.currentDamage;
-      damageRoll = new Roll(damageFormula, this.actor.getRollData());
-      await damageRoll.evaluate();
-
-      flavorText += `<strong>Damage:</strong> ${damageRoll.total}`;
-
-      // Add critical damage if applicable
-      if (isCritical) {
-        flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
-      }
-    } else {
-      flavorText += ` - <span style="color: red;">MISS!</span>`;
-    }
-
-    // Add weapon properties to flavor if any
-    if (weapon.system.properties && weapon.system.properties.length > 0) {
-      flavorText += `<br/><strong>Properties:</strong> ${weapon.system.propertiesDisplay}`;
-    }
-
-    // Send the attack roll to chat
-    await attackRoll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      flavor: flavorText,
-      rollMode: game.settings.get('core', 'rollMode'),
-    });
-
-    // If there was a damage roll, also send it to chat
-    if (damageRoll) {
-      await damageRoll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: `<strong>${weapon.name}</strong> Damage`,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
-    }
-
-    return attackRoll;
   }
 
   /**
@@ -1132,11 +1094,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     content += `</div>`;
 
     // Create the chat message
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: content,
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER
-    });
+    await VagabondChatHelper.postMessage(this.actor, content);
   }
 
   /**
@@ -1162,11 +1120,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (dataset.roll) {
       let label = dataset.label ? `[ability] ${dataset.label}` : '';
       let roll = new Roll(dataset.roll, this.actor.getRollData());
-      await roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
+      await roll.evaluate();
+      await VagabondChatHelper.postRoll(this.actor, roll, label);
       return roll;
     }
   }

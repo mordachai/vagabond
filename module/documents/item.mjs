@@ -1,3 +1,5 @@
+import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
+
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -36,20 +38,11 @@ export class VagabondItem extends Item {
    */
   async roll(event) {
     const item = this;
-
-    // Initialize chat data.
-    const speaker = ChatMessage.getSpeaker({ actor: this.actor });
-    const rollMode = game.settings.get('core', 'rollMode');
     const label = `[${item.type}] ${item.name}`;
 
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
-      ChatMessage.create({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-        content: item.system.description ?? '',
-      });
+      await VagabondChatHelper.postMessage(this.actor, item.system.description ?? '');
     }
     // Otherwise, create a roll and send a chat message from it.
     else {
@@ -58,14 +51,115 @@ export class VagabondItem extends Item {
 
       // Invoke the roll and submit it to chat.
       const roll = new Roll(rollData.formula, rollData.actor);
-      // If you need to store the value first, uncomment the next line.
-      // const result = await roll.evaluate();
-      roll.toMessage({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-      });
+      await roll.evaluate();
+      await VagabondChatHelper.postRoll(this.actor, roll, label);
       return roll;
     }
+  }
+
+  /**
+   * Validate that this weapon can attack
+   * @throws {Error} If weapon is not equipped or not a weapon
+   */
+  validateCanAttack() {
+    if (this.type !== 'weapon') {
+      throw new Error('Not a weapon');
+    }
+    const equipmentState = this.system.equipmentState || 'unequipped';
+    if (equipmentState === 'unequipped') {
+      throw new Error(`${this.name} is not equipped. Equip it first to attack.`);
+    }
+  }
+
+  /**
+   * Check if this weapon is equipped
+   * @returns {boolean} True if weapon is equipped (one-hand or two-hands)
+   */
+  get isEquipped() {
+    if (this.type !== 'weapon') return false;
+    const equipmentState = this.system.equipmentState || 'unequipped';
+    return equipmentState !== 'unequipped';
+  }
+
+  /**
+   * Roll an attack with this weapon
+   * @param {VagabondActor} actor - The actor making the attack
+   * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill
+   */
+  async rollAttack(actor) {
+    this.validateCanAttack();
+
+    // Get the weapon skill and difficulty
+    const weaponSkillKey = this.system.weaponSkill;
+    const weaponSkill = actor.system.weaponSkills[weaponSkillKey];
+    const difficulty = weaponSkill?.difficulty || 10;
+
+    // Roll the attack (d20)
+    const roll = new Roll('d20', actor.getRollData());
+    await roll.evaluate();
+
+    // Check if the attack succeeds
+    const isHit = roll.total >= difficulty;
+    const isCritical = roll.total === 20;
+
+    return {
+      roll,
+      difficulty,
+      isHit,
+      isCritical,
+      weaponSkill,
+      weaponSkillKey,
+    };
+  }
+
+  /**
+   * Roll damage with this weapon
+   * @param {VagabondActor} actor - The actor making the damage roll
+   * @returns {Promise<Roll>} The damage roll
+   */
+  async rollDamage(actor) {
+    if (this.type !== 'weapon') {
+      throw new Error('Not a weapon');
+    }
+
+    const damageFormula = this.system.currentDamage;
+    const roll = new Roll(damageFormula, actor.getRollData());
+    await roll.evaluate();
+    return roll;
+  }
+
+  /**
+   * Build the flavor text for an attack roll
+   * @param {Object} attackResult - The result from rollAttack()
+   * @param {Roll} damageRoll - Optional damage roll if attack hit
+   * @returns {string} HTML flavor text
+   */
+  buildAttackFlavor(attackResult, damageRoll = null) {
+    const { difficulty, isHit, isCritical, weaponSkill, weaponSkillKey } = attackResult;
+
+    let flavorText = `<strong>${this.name}</strong> Attack<br/>`;
+    flavorText += `<strong>Weapon Skill:</strong> ${weaponSkill?.label || weaponSkillKey} (Difficulty ${difficulty})<br/>`;
+    flavorText += `<strong>Attack Roll:</strong> ${attackResult.roll.total}`;
+
+    if (isHit) {
+      flavorText += ` - <span style="color: green;">SUCCESS!</span><br/>`;
+
+      if (damageRoll) {
+        flavorText += `<strong>Damage:</strong> ${damageRoll.total}`;
+
+        if (isCritical) {
+          flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
+        }
+      }
+    } else {
+      flavorText += ` - <span style="color: red;">MISS!</span>`;
+    }
+
+    // Add weapon properties to flavor if any
+    if (this.system.properties && this.system.properties.length > 0) {
+      flavorText += `<br/><strong>Properties:</strong> ${this.system.propertiesDisplay}`;
+    }
+
+    return flavorText;
   }
 }
