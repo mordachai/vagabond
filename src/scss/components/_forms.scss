@@ -115,6 +115,37 @@ prose-mirror .editor-content {
   }
 }
 
+// Weapon properties - tag-based display
+.property-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.property-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid $c-faint;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+
+  i {
+    cursor: pointer;
+    font-size: 10px;
+    color: $c-muted;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $c-dark;
+    }
+  }
+}
+
 // Calculated properties - bordered grid section
 .calculated-properties {
   display: grid;

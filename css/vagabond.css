@@ -512,6 +512,32 @@
 .vagabond .weapon-skill-damage .damage-with-icon .damage-input {
   width: 60px;
 }
+.vagabond .property-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.vagabond .property-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.vagabond .property-tag i {
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--vagabond-c-muted);
+  transition: color 0.2s ease;
+}
+.vagabond .property-tag i:hover {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .calculated-properties {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

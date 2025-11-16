@@ -60,27 +60,14 @@
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
       <div class='weapon-properties'>
-        {{#each system.properties as |property index|}}
-          <div class='weapon-property flexrow gap-8 flex-center mb-4'>
-            <select name='system.properties.{{index}}' data-dtype='String' class='flex-1'>
-              {{#select property}}
-                <option value='Brawl' title='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</option>
-                <option value='Brutal' title='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</option>
-                <option value='Cleave' title='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</option>
-                <option value='Entangle' title='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</option>
-                <option value='Finesse' title='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</option>
-                <option value='Keen' title='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</option>
-                <option value='Long' title='{{lookup config.weaponPropertyHints "Long"}}'>Long</option>
-                <option value='Near' title='{{lookup config.weaponPropertyHints "Near"}}'>Near</option>
-                <option value='Ranged' title='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</option>
-                <option value='Shield' title='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</option>
-                <option value='Thrown' title='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</option>
-              {{/select}}
-            </select>
-            <button type='button' class='property-hint btn-xs' title='{{lookup config.weaponPropertyHints property}}'>?</button>
-            <button type='button' class='btn-xs' data-action='removeWeaponProperty' data-property-index='{{index}}'>×</button>
-          </div>
-        {{/each}}
+        <div class='property-tags'>
+          {{#each system.properties as |property index|}}
+            <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
+              {{property}}
+              <i class='fas fa-times' data-action='removeWeaponProperty' data-property-index='{{index}}'></i>
+            </span>
+          {{/each}}
+        </div>
         <button type='button' class='mt-4' data-action='addWeaponProperty'>+ Add Property</button>
       </div>
     </div>
