@@ -772,6 +772,20 @@
   align-items: center;
   justify-content: center;
 }
+.vagabond .section-title-with-add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.vagabond .section-title-with-add .fa-plus {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+.vagabond .section-title-with-add .fa-plus:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;

@@ -57,7 +57,18 @@
   </div>
 
   {{! Weapons List }}
-  <h3 class='section-title'>Weapons</h3>
+  <h3 class='section-title section-title-with-add'>
+    Weapons
+    {{#if @root.editable}}
+      <i
+        class='fas fa-plus clickable'
+        data-tooltip='Create New Weapon'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='weapon'
+      ></i>
+    {{/if}}
+  </h3>
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
@@ -104,7 +115,18 @@
   </ol>
 
   {{! Armor List }}
-  <h3 class='section-title'>Armor</h3>
+  <h3 class='section-title section-title-with-add'>
+    Armor
+    {{#if @root.editable}}
+      <i
+        class='fas fa-plus clickable'
+        data-tooltip='Create New Armor'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='armor'
+      ></i>
+    {{/if}}
+  </h3>
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
@@ -154,7 +176,18 @@
   </ol>
 
   {{! Gear List }}
-  <h3 class='section-title'>Gear</h3>
+  <h3 class='section-title section-title-with-add'>
+    Gear
+    {{#if @root.editable}}
+      <i
+        class='fas fa-plus clickable'
+        data-tooltip='Create New Gear'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='gear'
+      ></i>
+    {{/if}}
+  </h3>
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
@@ -191,41 +224,5 @@
       </li>
     {{/each}}
   </ol>
-
-  {{! Add New Item Buttons }}
-  {{#if @root.editable}}
-    <div class='inventory-add-item'>
-      <a
-        class='item-control item-create'
-        data-tooltip='Create New Weapon'
-        data-action='createDoc'
-        data-document-class='Item'
-        data-type='weapon'
-      >
-        <i class='fas fa-plus'></i>
-        New Weapon
-      </a>
-      <a
-        class='item-control item-create'
-        data-tooltip='Create New Armor'
-        data-action='createDoc'
-        data-document-class='Item'
-        data-type='armor'
-      >
-        <i class='fas fa-plus'></i>
-        New Armor
-      </a>
-      <a
-        class='item-control item-create'
-        data-tooltip='Create New Gear'
-        data-action='createDoc'
-        data-document-class='Item'
-        data-type='gear'
-      >
-        <i class='fas fa-plus'></i>
-        New Gear
-      </a>
-    </div>
-  {{/if}}
 
 </section>
