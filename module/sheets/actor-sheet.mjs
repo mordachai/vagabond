@@ -33,7 +33,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       levelUp: this._onLevelUp,  // Level up action
       toggleFeature: this._onToggleFeature,  // Feature accordion toggle
       togglePerk: this._onTogglePerk,  // Perk accordion toggle
-      toggleFatigue: this._onToggleFatigue,  // Fatigue checkbox toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -340,6 +339,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await super._onRender(context, options);
     this.#disableOverrides();
 
+    // Add fatigue checkbox click handlers
+    const fatigueBoxes = this.element.querySelectorAll('.fatigue-box');
+    fatigueBoxes.forEach((checkbox, index) => {
+      checkbox.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const isChecked = checkbox.checked;
+        const newFatigue = isChecked ? index + 1 : index;
+        await this.actor.update({ 'system.fatigue': newFatigue });
+      });
+    });
+
     // Add right-click context menu handlers for ancestry and class
     const ancestryName = this.element.querySelector('.ancestry-name');
     if (ancestryName) {
@@ -488,26 +498,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (classItem) {
       classItem.sheet.render(true);
     }
-  }
-
-  /**
-   * Handle toggling fatigue checkboxes
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleFatigue(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const currentFatigue = this.actor.system.fatigue || 0;
-
-    // If clicking a checked box, set fatigue to that index
-    // If clicking an unchecked box, set fatigue to index + 1
-    const newFatigue = target.checked ? index + 1 : index;
-
-    await this.actor.update({ 'system.fatigue': newFatigue });
   }
 
   /**

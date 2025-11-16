@@ -25,13 +25,13 @@
           <input
             type='checkbox'
             class='fatigue-box'
+            name='system.fatigue'
             data-index='{{index}}'
             {{#if box.checked}}checked{{/if}}
-            data-action='toggleFatigue'
           />
         {{/each}}
       </div>
-      <i class='fas fa-skull fatigue-icon'></i>
+      <i class='fas fa-skull fatigue-icon' data-tooltip='Fatigue'></i>
     </div>
   </div>
 
@@ -46,7 +46,7 @@
     />
     <span class='hp-separator'>/</span>
     <span class='hp-max'>{{system.health.max}}</span>
-    <span class='hp-label'>hp</span>
+    <i class='fas fa-heart hp-icon'></i>
   </div>
 
   <div class='header-fields'>
