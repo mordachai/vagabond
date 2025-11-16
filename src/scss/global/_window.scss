@@ -5,6 +5,9 @@
 // Make application and header backgrounds transparent for Vagabond sheets
 .vagabond.application {
   background: transparent !important;
+  border: none !important;
+  border-radius: 0% !important;
+  box-shadow: none !important;
 }
 
 .vagabond .window-header {
@@ -13,7 +16,7 @@
 
 // Add background color to window-content instead
 .vagabond .window-content {
-  background: var(--color-bg-default, #f0f0f0);
+  background: #121212;
 }
 
 .rollable {
