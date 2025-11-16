@@ -1,0 +1,347 @@
+================================================================================
+VAGABOND ROLL SYSTEM - ARCHITECTURE DIAGRAM
+================================================================================
+
+FOUNDRY EVENT LOOP
+  │
+  └─ User clicks element with data-action attribute
+     │
+     └─ Foundry detects: <div data-action='rollWeapon' data-item-id='...'/>
+        │
+        └─ Routes to: VagabondActorSheet.DEFAULT_OPTIONS.actions['rollWeapon']
+           │
+           └─ Executes: static async _onRollWeapon(event, target)
+
+
+================================================================================
+ACTOR SHEET ACTION ROUTER
+================================================================================
+
+VagabondActorSheet (lines 19-35: DEFAULT_OPTIONS.actions)
+│
+├─ roll ────────────────> _onRoll() [lines 1150-1172]
+│                          │
+│                          ├─ Input: data-roll (formula), data-label (display)
+│                          ├─ Process: new Roll(formula).toMessage()
+│                          └─ Output: Chat message with d20 result
+│
+├─ rollWeapon ──────────> _onRollWeapon() [lines 938-1015]
+│                          │
+│                          ├─ Input: data-item-id (weapon UUID)
+│                          ├─ Process:
+│                          │   1. Fetch weapon item
+│                          │   2. Validate equipment state
+│                          │   3. Get difficulty from weapon skill
+│                          │   4. Roll d20 attack
+│                          │   5. If hit: Roll damage
+│                          │   6. Post both rolls to chat
+│                          └─ Output: Attack roll + Damage roll (if hit)
+│
+├─ useSpell ────────────> _onUseSpell() [lines 1092-1140]
+│                          │
+│                          ├─ Input: data-item-id (spell UUID)
+│                          ├─ Process: Build HTML spell info message
+│                          └─ Output: Chat message with spell details
+│
+├─ toggleFeature ───────> _onToggleFeature() [lines 582-589]
+├─ togglePerk ──────────> _onTogglePerk() [lines 598-605]
+├─ levelUp ─────────────> _onLevelUp() [lines 485-533]
+├─ viewDoc ─────────────> _viewDoc() [lines 867-870]
+├─ createDoc ────────────> _createDoc() [lines 893-915]
+└─ [other actions...]
+
+
+================================================================================
+SECONDARY CLICK HANDLERS (via _onRender)
+================================================================================
+
+_onRender() [lines 323-407] - Sets up event listeners
+
+  Gear Items:
+  │
+  ├─ _onGearImageClick() ────────────────> Opens item sheet
+  │
+  └─ _onGearNameClick() ──────────────────> item.roll()
+                                             │
+                                             └─ Calls VagabondItem.roll()
+
+  Weapons:
+  │
+  ├─ _onWeaponImageClick() ───────────────> Opens item sheet
+  │
+  └─ _onWeaponNameClick() ────────────────> _onRollWeapon()
+                                             │
+                                             └─ Routes back to main handler
+
+  Armor:
+  │
+  ├─ _onArmorImageClick() ────────────────> Opens item sheet
+  │
+  └─ _onArmorContextMenu() ───────────────> Delete with confirmation
+
+
+================================================================================
+ITEM DOCUMENT ROLL METHOD
+================================================================================
+
+VagabondItem.roll() [documents/item.mjs, lines 37-70]
+
+  Triggered by:
+  1. Click on gear item name in Features tab (_onGearNameClick)
+  2. Drag item to hotbar → VagabondChatHelper.postRoll()
+  
+  Process:
+  │
+  ├─ Check: this.system.formula exists?
+  │  │
+  │  ├─ NO:  ChatMessage.create({ content: description })
+  │  │
+  │  └─ YES: new Roll(formula, rollData).toMessage()
+  │
+  └─ Output: Chat message (description or roll result)
+
+
+================================================================================
+HOTBAR MACRO SYSTEM
+================================================================================
+
+Drag item to hotbar:
+  │
+  └─ createDocMacro() [vagabond.mjs, lines 123-150]
+     │
+     └─ Creates macro that calls: game.vagabond.rollItemMacro(uuid)
+        │
+        └─ rollItemMacro() [vagabond.mjs, lines 157-176]
+           │
+           └─ Calls: item.roll()
+
+
+================================================================================
+ROLL DATA FLOW - DETAILED WEAPON ATTACK EXAMPLE
+================================================================================
+
+UI: <div data-action='rollWeapon' data-item-id='abc123'>Sword</div>
+  │
+  └─ CLICK EVENT
+     │
+     └─ _onRollWeapon(event, { dataset: { itemId: 'abc123' } })
+        │
+        ├─ 1. FETCH ITEM
+        │  │
+        │  └─ weapon = this.actor.items.get('abc123')
+        │
+        ├─ 2. VALIDATE EQUIPMENT
+        │  │
+        │  ├─ equipmentState = weapon.system.equipmentState
+        │  │
+        │  └─ if (equipmentState === 'unequipped')
+        │     └─ ui.notifications.warn("Not equipped!")
+        │        return
+        │
+        ├─ 3. GET DIFFICULTY
+        │  │
+        │  ├─ weaponSkillKey = weapon.system.weaponSkill
+        │  │
+        │  ├─ weaponSkill = actor.system.weaponSkills[weaponSkillKey]
+        │  │
+        │  └─ difficulty = weaponSkill.difficulty || 10
+        │
+        ├─ 4. ROLL ATTACK
+        │  │
+        │  ├─ attackRoll = new Roll('d20', actor.getRollData())
+        │  │
+        │  ├─ await attackRoll.evaluate()
+        │  │
+        │  ├─ isSuccess = attackRoll.total >= difficulty
+        │  │
+        │  └─ isCritical = attackRoll.total === 20
+        │
+        ├─ 5. BUILD FLAVOR TEXT
+        │  │
+        │  └─ flavorText = `${weapon.name} Attack<br/>...`
+        │     ├─ Weapon Skill: ${skill.label} (Difficulty ${difficulty})
+        │     ├─ Attack Roll: ${attackRoll.total}
+        │     ├─ Result: SUCCESS/MISS
+        │     └─ Properties: ${properties}
+        │
+        ├─ 6. POST ATTACK ROLL
+        │  │
+        │  └─ await attackRoll.toMessage({
+        │     speaker: ChatMessage.getSpeaker({ actor }),
+        │     flavor: flavorText,
+        │     rollMode: game.settings.get('core', 'rollMode')
+        │  })
+        │
+        ├─ 7. IF HIT: ROLL DAMAGE
+        │  │
+        │  ├─ damageRoll = new Roll(weapon.system.currentDamage, ...)
+        │  │
+        │  ├─ await damageRoll.evaluate()
+        │  │
+        │  └─ if (isCritical)
+        │     └─ flavorText += " (CRITICAL!)"
+        │
+        └─ 8. POST DAMAGE ROLL
+           │
+           └─ if (damageRoll)
+              └─ await damageRoll.toMessage({...})
+                 │
+                 └─ Chat now shows both rolls
+
+
+================================================================================
+TEMPLATE LOCATIONS
+================================================================================
+
+FEATURES TAB (actor/features.hbs)
+│
+├─ STATS SECTION
+│  │
+│  └─ Abilities (STR, DEX, CON, INT, WIS, CHA)
+│     │
+│     └─ <label data-action='roll' data-roll='d20' ...>
+│
+├─ SAVES SECTION
+│  │
+│  └─ Saves (Fortitude, Reflex, Will, Mental)
+│     │
+│     └─ <label data-action='roll' data-roll='d20' ...>
+│
+├─ SKILLS SECTION
+│  │
+│  └─ Skills with trained checkbox
+│     │
+│     └─ <label data-action='roll' data-roll='d20' ...>
+│
+├─ WEAPON SKILLS
+│  │
+│  └─ Attack types with difficulty
+│     │
+│     └─ <label data-action='roll' data-roll='d20' ...>
+│
+└─ EQUIPPED WEAPONS
+   │
+   └─ <label data-action='rollWeapon' data-item-id='...' ...>
+
+INVENTORY TAB (actor/inventory.hbs)
+│
+├─ WEAPONS LIST
+│  │
+│  ├─ Click name: <div data-action='rollWeapon' ...>
+│  │
+│  └─ Click equip icon: <div data-action='toggleWeaponEquipment' ...>
+│
+└─ ARMOR LIST
+   │
+   ├─ Click name: Opens sheet
+   │
+   └─ Click equip icon: <div data-action='toggleArmorEquipment' ...>
+
+SPELLS TAB (actor/spells.hbs)
+│
+└─ SPELL LIST
+   │
+   └─ Click "Use spell": <a data-action='useSpell' data-item-id='...' ...>
+
+
+================================================================================
+CODE ORGANIZATION METRICS
+================================================================================
+
+Roll-Related Code Summary:
+  - Lines in _onRoll():           ~20 lines
+  - Lines in _onRollWeapon():     ~75 lines (HIGH COMPLEXITY)
+  - Lines in _onUseSpell():       ~48 lines (MEDIUM COMPLEXITY)
+  - Lines in VagabondItem.roll(): ~33 lines
+  - Lines in _onRender():         ~85 lines (event setup)
+  
+Total Roll Handler Code: ~150-200 lines
+
+Duplicated Code:
+  - Roll creation:     3 instances (~30 lines)
+  - Chat message:      5 instances (~50 lines)
+  - Equipment check:   1 location (should be 1+ places)
+
+Methods directly involved in rolls: 7
+  1. _onRoll()
+  2. _onRollWeapon()
+  3. _onUseSpell()
+  4. VagabondItem.roll()
+  5. _onGearNameClick()
+  6. _onWeaponNameClick()
+  7. rollItemMacro()
+
+
+================================================================================
+RECOMMENDATIONS RANKED BY PRIORITY
+================================================================================
+
+Priority 1: EXTRACT CHAT HELPER
+│
+└─ Unify 5 instances of roll.toMessage() pattern
+   └─ Create: VagabondChatHelper.postRoll(actor, roll, flavor)
+      Saves: ~40 lines, improves consistency
+
+Priority 2: EXTRACT WEAPON LOGIC
+│
+└─ Move 75 lines from sheet handler to item method
+   └─ Weapon.rollAttack(actor) -> { roll, difficulty, isHit, ... }
+   └─ Weapon.rollDamage(actor) -> damageRoll
+      Benefits: Testable, reusable, sheet logic simplified
+
+Priority 3: STANDARDIZE ITEM ROLLS
+│
+└─ Make item.roll() handle all item types
+   ├─ Weapon attacks
+   ├─ Spell usage
+   ├─ Gear formulas
+   └─ Generic descriptions
+
+Priority 4: CENTRALIZE EQUIPMENT VALIDATION
+│
+└─ Move equipment check to weapon item
+   ├─ Weapon.validateCanAttack()
+   ├─ Weapon.isEquipped (getter)
+   └─ Weapon.equipmentStateLabel (getter)
+
+Priority 5: CREATE ROLL BUILDER
+│
+└─ Centralize roll data construction
+   ├─ VagabondActor.getRollDataForSkill(skillKey)
+   ├─ VagabondActor.getRollDataForWeaponSkill(skillKey)
+   └─ Enables consistency, easier modification
+
+
+================================================================================
+FILE STRUCTURE AFTER REFACTORING
+================================================================================
+
+module/
+├─ sheets/
+│  └─ actor-sheet.mjs (SIMPLIFIED)
+│     ├─ _onRoll() - 5 lines (call helper)
+│     ├─ _onRollWeapon() - 20 lines (validate + call item)
+│     ├─ _onUseSpell() - 10 lines (call item)
+│     └─ [remove duplicated chat/roll code]
+│
+├─ documents/
+│  ├─ item.mjs (EXPANDED)
+│  │  ├─ rollAttack() - weapon logic
+│  │  ├─ rollDamage() - weapon damage
+│  │  ├─ validateCanAttack() - equipment check
+│  │  ├─ postSpellInfo() - spell display
+│  │  └─ roll() - unified interface
+│  │
+│  └─ actor.mjs
+│     ├─ getRollDataForSkill()
+│     └─ getRollDataForWeaponSkill()
+│
+└─ helpers/
+   ├─ roll-helper.mjs (NEW)
+   │  ├─ createRoll(formula, rollData)
+   │  └─ postRoll(actor, roll, flavor)
+   │
+   └─ chat-helper.mjs (NEW)
+      ├─ postRoll(actor, roll, flavor)
+      └─ postMessage(actor, content)
+
