@@ -364,12 +364,12 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Calculate max slots: 8 + Might + bonusSlots
     this.inventory.maxSlots = 8 + mightValue + bonusSlots;
 
-    // Calculate occupied slots from all gear items
-    // Equipped items don't count toward occupied slots (they're worn/carried differently)
+    // Calculate occupied slots from all inventory items
+    // Count weapons, armor, and gear
     let occupiedSlots = 0;
     if (this.parent?.items) {
       for (const item of this.parent.items) {
-        if ((item.type === 'gear' || item.type === 'weapon') && item.system.slots !== undefined) {
+        if ((item.type === 'weapon' || item.type === 'armor' || item.type === 'gear') && item.system.slots !== undefined) {
           occupiedSlots += item.system.slots;
         }
       }
