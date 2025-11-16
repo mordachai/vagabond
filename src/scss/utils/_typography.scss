@@ -1,2 +1,34 @@
+// Custom font declarations
+@font-face {
+  font-family: 'Eskapade';
+  src: url('../assets/fonts/eskapade-black.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Eskapade';
+  src: url('../assets/fonts/eskapade-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Manofa';
+  src: url('../assets/fonts/manofa-bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paradigm';
+  src: url('../assets/fonts/paradigm-bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+// Font variables
 $font-primary: 'Roboto', sans-serif;
 $font-secondary: 'Roboto', sans-serif;
+$font-title: 'Eskapade', serif;
+$font-character-name: 'Manofa', sans-serif;

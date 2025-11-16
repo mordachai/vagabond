@@ -15,6 +15,39 @@
 
 /* Styles limited to vagabond sheets */
 .vagabond {
+  // Apply Eskapade Bold to all titles
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-title;
+    font-weight: bold;
+  }
+
+  // Apply Eskapade Bold to resource labels (also titles)
+  .resource-label {
+    font-family: $font-title;
+    font-weight: bold;
+  }
+
+  // Clean input and textarea styling
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    border-radius: 0;
+    outline: none;
+    transition: border-bottom-color 0.2s ease;
+
+    &:hover {
+      cursor: text;
+    }
+
+    &:focus {
+      border-bottom-color: $c-dark;
+      cursor: text;
+    }
+  }
+
   @import 'components/forms';
   @import 'components/resource';
   @import 'components/items';

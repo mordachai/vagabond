@@ -1,4 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@font-face {
+  font-family: "Eskapade";
+  src: url("../assets/fonts/eskapade-black.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Eskapade";
+  src: url("../assets/fonts/eskapade-regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Manofa";
+  src: url("../assets/fonts/manofa-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
 :root {
   --vagabond-c-dark: #191813;
   --vagabond-c-faint: #c9c7b8;
@@ -422,6 +446,35 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+}
+.vagabond .resource-label {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+}
+.vagabond input[type=text],
+.vagabond input[type=number],
+.vagabond textarea {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  border-radius: 0;
+  outline: none;
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond input[type=text]:hover,
+.vagabond input[type=number]:hover,
+.vagabond textarea:hover {
+  cursor: text;
+}
+.vagabond input[type=text]:focus,
+.vagabond input[type=number]:focus,
+.vagabond textarea:focus {
+  border-bottom-color: var(--vagabond-c-dark);
+  cursor: text;
+}
 .vagabond .item-form {
   font-family: "Roboto", sans-serif;
 }
@@ -466,9 +519,15 @@
 .vagabond .tox .tox-edit-area {
   padding: 0 8px;
 }
+.vagabond .prosemirror,
+.vagabond prose-mirror {
+  --min-height: 35px;
+}
 .vagabond .prosemirror .editor-content,
 .vagabond prose-mirror .editor-content {
   position: unset;
+  min-height: 35px;
+  height: fit-content;
 }
 .vagabond .cost-inputs {
   display: grid;
@@ -519,7 +578,7 @@
 }
 .vagabond .property-dropdown {
   position: relative;
-  flex: 0 0 180px;
+  flex: 1;
 }
 .vagabond .property-dropdown summary {
   list-style: none;
@@ -551,12 +610,12 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 200px;
+  min-width: 200px;
   margin-top: 4px;
   padding: 8px;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  background: white;
+  background: var(--vagabond-c-white);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   max-height: 300px;
@@ -582,7 +641,7 @@
   background: rgba(0, 0, 0, 0.05);
 }
 .vagabond .property-tags {
-  flex: 1;
+  flex: 2;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -987,6 +1046,20 @@
 .vagabond .section-title-with-add .fa-plus:hover {
   background: rgba(0, 0, 0, 0.1);
 }
+.vagabond .title-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.vagabond .title-with-button h3, .vagabond .title-with-button h4 {
+  margin: 0;
+  flex: 1;
+}
+.vagabond .title-with-button button {
+  flex-shrink: 0;
+  margin-left: 12px;
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;
@@ -1104,6 +1177,7 @@
   background: transparent !important;
   text-align: center;
   font-size: 18px;
+  font-family: "Manofa", sans-serif;
   font-weight: bold;
   outline: none;
   width: 100%;
