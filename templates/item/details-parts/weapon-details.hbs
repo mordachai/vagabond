@@ -19,44 +19,41 @@
       </div>
     </div>
 
-    {{! Damage - Row Layout }}
+    {{! Weapon Skill and Damage - Combined Row Layout }}
     <div class='form-group'>
-      <label class='resource-label'>Damage</label>
-      <div class='damage-inputs'>
-        <div class='damage-field'>
-          <label class='resource-label'>One Hand</label>
+      <label class='resource-label'>Skill & Damage</label>
+      <div class='weapon-skill-damage'>
+        <select name='system.weaponSkill' data-dtype='String' class='weapon-skill-select'>
+          {{#select system.weaponSkill}}
+            <option value='melee'>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+            <option value='brawl'>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
+            <option value='finesse'>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
+            <option value='ranged'>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
+          {{/select}}
+        </select>
+        <div class='damage-with-icon'>
+          <i class='fas fa-hand-fist' data-tooltip='One Hand Damage'></i>
           <input
             type='text'
             name='system.damageOneHand'
             value='{{system.damageOneHand}}'
             data-dtype='String'
-            placeholder='e.g., d8'
+            placeholder='d8'
+            class='damage-input'
           />
         </div>
-        <div class='damage-field'>
-          <label class='resource-label'>Two Hands</label>
+        <div class='damage-with-icon'>
+          <i class='fas fa-hands' data-tooltip='Two Hands Damage'></i>
           <input
             type='text'
             name='system.damageTwoHands'
             value='{{system.damageTwoHands}}'
             data-dtype='String'
-            placeholder='e.g., d10'
+            placeholder='d10'
+            class='damage-input'
           />
         </div>
       </div>
-    </div>
-
-    {{! Weapon Skill }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.weaponSkill.label'}}</label>
-      <select name='system.weaponSkill' data-dtype='String'>
-        {{#select system.weaponSkill}}
-          <option value='melee'>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
-          <option value='brawl'>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
-          <option value='finesse'>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
-          <option value='ranged'>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
-        {{/select}}
-      </select>
     </div>
 
     {{! Properties }}

@@ -88,29 +88,30 @@ prose-mirror .editor-content {
   }
 }
 
-// Damage inputs - 2 column grid layout
-.damage-inputs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  align-items: center;
-}
-
-.damage-field {
+// Weapon skill and damage - combined row layout
+.weapon-skill-damage {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 
-  label {
-    font-size: 12px;
-    font-weight: bold;
-    white-space: nowrap;
+  .weapon-skill-select {
+    flex: 1;
+    min-width: 120px;
   }
 
-  input {
-    flex: 1;
-    min-width: 0;
+  .damage-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i {
+      font-size: 14px;
+      color: $c-muted;
+    }
+
+    .damage-input {
+      width: 60px;
+    }
   }
 }
 

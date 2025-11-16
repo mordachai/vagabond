@@ -491,26 +491,26 @@
   flex: 1;
   min-width: 0;
 }
-.vagabond .damage-inputs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  align-items: center;
-}
-.vagabond .damage-field {
+.vagabond .weapon-skill-damage {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
-.vagabond .damage-field label {
-  font-size: 12px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-.vagabond .damage-field input {
+.vagabond .weapon-skill-damage .weapon-skill-select {
   flex: 1;
-  min-width: 0;
+  min-width: 120px;
+}
+.vagabond .weapon-skill-damage .damage-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .weapon-skill-damage .damage-with-icon i {
+  font-size: 14px;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .weapon-skill-damage .damage-with-icon .damage-input {
+  width: 60px;
 }
 .vagabond .calculated-properties {
   display: grid;
