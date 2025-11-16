@@ -60,6 +60,8 @@
 .prosemirror .editor-content,
 prose-mirror .editor-content {
   position: unset;
+  min-height: 35px;
+  height: fit-content;
 }
 
 // Cost inputs - 3 column grid layout

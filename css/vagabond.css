@@ -469,6 +469,8 @@
 .vagabond .prosemirror .editor-content,
 .vagabond prose-mirror .editor-content {
   position: unset;
+  min-height: 35px;
+  height: fit-content;
 }
 .vagabond .cost-inputs {
   display: grid;
