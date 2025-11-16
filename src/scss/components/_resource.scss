@@ -29,11 +29,17 @@
   }
 
   .ability-label {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
     color: $c-muted;
     text-align: center;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $c-tan;
+    }
   }
 }
 

@@ -15,13 +15,16 @@
               type='text'
               name='system.abilities.{{key}}.value'
               value='{{ability.value}}'
-              class="ability-score rollable"
+              class="ability-score"
               data-dtype='Number'
+            />
+            <label
+              class='ability-label rollable'
               data-action='roll'
               data-roll='d20'
               data-label='{{localize (lookup @root.config.abilities key)}} Check'
-            />
-            <label class='ability-label'>{{localize (lookup @root.config.abilityAbbreviations key)}}</label>
+              data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+            >{{localize (lookup @root.config.abilityAbbreviations key)}}</label>
           </div>
         {{/each}}
       </div>
