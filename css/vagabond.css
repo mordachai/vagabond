@@ -1070,7 +1070,8 @@
   margin-bottom: 0;
 }
 .vagabond .feature-title {
-  font-family: "ManofaBold", serif;
+  font-family: "Manofa", serif;
+  font-weight: bold;
   font-size: 16px;
 }
 .vagabond .traits-section .item {
@@ -1083,7 +1084,8 @@
   margin-bottom: 0;
 }
 .vagabond .trait-title {
-  font-family: "ManofaBold", serif;
+  font-family: "Manofa", serif;
+  font-weight: bold;
   font-size: 16px;
 }
 .vagabond .effects-header {
