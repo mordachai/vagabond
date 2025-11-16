@@ -61,3 +61,26 @@
 prose-mirror .editor-content {
   position: unset;
 }
+
+// Cost inputs - 3 column grid layout
+.cost-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.cost-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  input {
+    width: 100%;
+  }
+}

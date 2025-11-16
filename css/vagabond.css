@@ -470,6 +470,24 @@
 .vagabond prose-mirror .editor-content {
   position: unset;
 }
+.vagabond .cost-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.vagabond .cost-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .cost-field label {
+  font-size: 12px;
+  font-weight: bold;
+}
+.vagabond .cost-field input {
+  width: 100%;
+}
 .vagabond .resource-label {
   font-weight: bold;
 }
