@@ -15,6 +15,18 @@
 
 /* Styles limited to vagabond sheets */
 .vagabond {
+  // Apply Eskapade Bold to all titles
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-title;
+    font-weight: bold;
+  }
+
+  // Apply Eskapade Bold to resource labels (also titles)
+  .resource-label {
+    font-family: $font-title;
+    font-weight: bold;
+  }
+
   @import 'components/forms';
   @import 'components/resource';
   @import 'components/items';

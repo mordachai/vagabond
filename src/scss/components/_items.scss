@@ -219,3 +219,21 @@
     }
   }
 }
+
+// Title with button on the same row (for class levels and ancestry traits)
+.title-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3, h4 {
+    margin: 0;
+    flex: 1;
+  }
+
+  button {
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+}

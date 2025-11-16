@@ -1,4 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@font-face {
+  font-family: "Eskapade";
+  src: url("../assets/fonts/eskapade-black.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Eskapade";
+  src: url("../assets/fonts/eskapade-regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Manofa";
+  src: url("../assets/fonts/manofa-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
 :root {
   --vagabond-c-dark: #191813;
   --vagabond-c-faint: #c9c7b8;
@@ -422,6 +446,14 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+}
+.vagabond .resource-label {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+}
 .vagabond .item-form {
   font-family: "Roboto", sans-serif;
 }
@@ -993,6 +1025,20 @@
 .vagabond .section-title-with-add .fa-plus:hover {
   background: rgba(0, 0, 0, 0.1);
 }
+.vagabond .title-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.vagabond .title-with-button h3, .vagabond .title-with-button h4 {
+  margin: 0;
+  flex: 1;
+}
+.vagabond .title-with-button button {
+  flex-shrink: 0;
+  margin-left: 12px;
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;
@@ -1110,6 +1156,7 @@
   background: transparent !important;
   text-align: center;
   font-size: 18px;
+  font-family: "Manofa", sans-serif;
   font-weight: bold;
   outline: none;
   width: 100%;

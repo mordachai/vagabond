@@ -20,25 +20,23 @@
       </div>
     </div>
 
-    {{! Traits Section - Fixed button styling }}
-    <div class='traits-section'>
-      
-      <div class='scrollable'>
-      <div class='items-header'>
+    {{! Traits Section }}
+    <div class='traits-section mt-20'>
+      <div class='title-with-button'>
+        <h3>Traits</h3>
         {{#if editable}}
-          <div class='item-controls'>
-            <button 
-              type='button'
-              class='item-control'
-              data-action='addTrait'
-              data-tooltip='Add New Trait'
-            >
-              {{localize 'VAGABOND.Item.Ancestry.FIELDS.traits.label'}}   
-              <i class='fas fa-plus'></i>
-            </button>
-          </div>
+          <button
+            type='button'
+            class='item-control btn-sm'
+            data-action='addTrait'
+            data-tooltip='Add New Trait'
+          >
+            <i class='fas fa-plus'></i> Add Trait
+          </button>
         {{/if}}
       </div>
+
+      <div class='scrollable'>
         <ol class='items-list'>
           {{#if system.traits.length}}
             {{#each system.traits as |trait index|}}
