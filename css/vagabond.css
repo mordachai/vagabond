@@ -469,6 +469,41 @@
   font-family: "Eskapade", serif;
   font-weight: bold;
 }
+.vagabond .stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .stats-row .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .stats-row .stat-item .stat-score {
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 4px;
+}
+.vagabond .stats-row .stat-item .stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--vagabond-c-tan);
+  text-align: center;
+  cursor: pointer;
+}
+.vagabond .stats-row .stat-item .stat-label:hover {
+  color: var(--vagabond-c-dark);
+}
 .vagabond input[type=text],
 .vagabond input[type=number],
 .vagabond textarea {
@@ -750,40 +785,38 @@
 .vagabond .resource-label {
   font-weight: bold;
 }
-.vagabond .skills-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+.vagabond .skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 16px;
 }
-.vagabond .skills-grid .skill {
+.vagabond .skills-list .skill {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 4px;
   white-space: nowrap;
 }
-.vagabond .skills-grid .skill .skill-checkbox-label {
+.vagabond .skills-list .skill .skill-checkbox-label {
   display: flex;
   align-items: center;
   cursor: pointer;
   margin: 0;
+  min-width: 20px;
 }
-.vagabond .skills-grid .skill .skill-checkbox-hidden {
+.vagabond .skills-list .skill .skill-checkbox-hidden {
   display: none;
 }
-.vagabond .skills-grid .skill .skill-checkbox-icon {
+.vagabond .skills-list .skill .skill-checkbox-icon {
   font-size: 16px;
-  color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-dark);
   transition: color 0.2s ease;
 }
-.vagabond .skills-grid .skill .skill-checkbox-icon.fa-circle-check {
-  color: var(--vagabond-c-dark);
+.vagabond .skills-list .skill .skill-checkbox-icon:hover {
+  color: var(--vagabond-c-tan);
 }
-.vagabond .skills-grid .skill .skill-checkbox-icon:hover {
-  color: var(--vagabond-c-dark);
-}
-.vagabond .skills-grid .skill .skill-label {
+.vagabond .skills-list .skill .skill-label {
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -791,10 +824,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.vagabond .skills-grid .skill .skill-label:hover {
+.vagabond .skills-list .skill .skill-label:hover {
   text-decoration: underline;
 }
-.vagabond .skills-grid .skill .skill-difficulty {
+.vagabond .skills-list .skill .skill-difficulty {
   margin-left: auto;
   font-weight: bold;
   min-width: 24px;
@@ -808,6 +841,8 @@
 }
 .vagabond .right-column h3 {
   margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: bold;
 }
 .vagabond .right-column .weapon-skill {
   display: flex;
@@ -821,20 +856,18 @@
   align-items: center;
   cursor: pointer;
   margin: 0;
+  min-width: 20px;
 }
 .vagabond .right-column .weapon-skill .skill-checkbox-hidden {
   display: none;
 }
 .vagabond .right-column .weapon-skill .skill-checkbox-icon {
   font-size: 16px;
-  color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-dark);
   transition: color 0.2s ease;
 }
-.vagabond .right-column .weapon-skill .skill-checkbox-icon.fa-circle-check {
-  color: var(--vagabond-c-dark);
-}
 .vagabond .right-column .weapon-skill .skill-checkbox-icon:hover {
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-tan);
 }
 .vagabond .right-column .weapon-skill .skill-label {
   font-size: 13px;
@@ -1445,39 +1478,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-.vagabond .stats-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.vagabond .stats-row .stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.vagabond .stats-row .stat-item .stat-score {
-  width: 36px;
-  height: 36px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  border: 2px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-  padding: 4px;
-}
-.vagabond .stats-row .stat-item .stat-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: capitalize;
-  color: var(--vagabond-c-tan);
-  text-align: center;
-  cursor: pointer;
-}
-.vagabond .stats-row .stat-item .stat-label:hover {
-  color: var(--vagabond-c-dark);
 }
 .vagabond .character-name-input {
   border: none !important;

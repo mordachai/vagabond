@@ -4,11 +4,33 @@
   data-group='primary'
   data-tab='features'
 >
+  {{! Stats Row - All abilities in one row, no title }}
+  <div class='stats-row'>
+    {{#each system.abilities as |ability key|}}
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.abilities.{{key}}.value'
+          value='{{ability.value}}'
+          class='stat-score'
+          data-dtype='Number'
+        />
+        <label
+          class='stat-label rollable'
+          data-action='roll'
+          data-roll='d20'
+          data-label='{{localize (lookup @root.config.abilities key)}} Check'
+          data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+        >{{localize (lookup @root.config.abilities key)}}</label>
+      </div>
+    {{/each}}
+  </div>
+
   <section class='grid grid-2col'>
-    {{! Left column: Skills (2-column layout) }}
+    {{! Left column: Skills (1-column layout) }}
     <section class='skills-section grid-span-1'>
       <h3>Skills</h3>
-      <div class='skills-grid'>
+      <div class='skills-list'>
         {{#each system.skills as |skill key|}}
           <div class='skill flexrow flex-group-center'>
             <label class='skill-checkbox-label'>
@@ -18,7 +40,9 @@
                 {{#if skill.trained}}checked{{/if}}
                 class='skill-checkbox-hidden'
               />
-              <i class='skill-checkbox-icon {{#if skill.trained}}fas fa-circle-check{{else}}far fa-circle{{/if}}'></i>
+              {{#if skill.trained}}
+                <i class='skill-checkbox-icon fas fa-circle-check'></i>
+              {{/if}}
             </label>
             <label
               class='skill-label rollable flexlarge align-left'
@@ -65,7 +89,9 @@
                 {{#if weaponSkill.trained}}checked{{/if}}
                 class='skill-checkbox-hidden'
               />
-              <i class='skill-checkbox-icon {{#if weaponSkill.trained}}fas fa-circle-check{{else}}far fa-circle{{/if}}'></i>
+              {{#if weaponSkill.trained}}
+                <i class='skill-checkbox-icon fas fa-circle-check'></i>
+              {{/if}}
             </label>
             <label
               class='skill-label rollable flexlarge align-left'

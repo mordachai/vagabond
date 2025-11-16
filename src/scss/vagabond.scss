@@ -27,6 +27,9 @@
     font-weight: bold;
   }
 
+  // Stats component
+  @import 'components/stats';
+
   // Clean input and textarea styling
   input[type="text"],
   input[type="number"],
