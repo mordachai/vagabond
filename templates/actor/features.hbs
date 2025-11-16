@@ -8,15 +8,9 @@
     {{! Left column: Stats }}
     <aside class='sidebar'>
       <h3>Stats</h3>
-      <div class='abilities flexcol'>
+      <div class='abilities abilities-grid'>
         {{#each system.abilities as |ability key|}}
-          <div class='ability flexrow flex-group-center'>
-            <label
-              class='resource-label rollable flexlarge align-left'
-              data-action='roll'
-              data-roll='d20'
-              data-label='{{localize (lookup @root.config.abilities key)}} Check'
-            >{{localize (lookup @root.config.abilities key)}}</label>
+          <div class='ability'>
             <input
               type='text'
               name='system.abilities.{{key}}.value'
@@ -24,6 +18,13 @@
               class="ability-score"
               data-dtype='Number'
             />
+            <label
+              class='ability-label rollable'
+              data-action='roll'
+              data-roll='d20'
+              data-label='{{localize (lookup @root.config.abilities key)}} Check'
+              data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+            >{{localize (lookup @root.config.abilityAbbreviations key)}}</label>
           </div>
         {{/each}}
       </div>
@@ -32,14 +33,16 @@
       <h3 class='features-section-title'>Features</h3>
       <ul class='features-list'>
         {{#each features as |feature id|}}
-          <li class='feature'>
-            <strong>{{feature.name}}</strong>
+          <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
+            <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
+              <h4 class='feature-name'>{{feature.name}}</h4>
+            </div>
             {{#if feature.description}}
-              <div class='feature-description'>{{feature.description}}</div>
+              <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.description}}}</div>
             {{/if}}
           </li>
         {{else}}
-          <li class='feature'>No features yet. Features are granted by your class as you level up.</li>
+          <li class='no-features'>No features yet. Features are granted by your class as you level up.</li>
         {{/each}}
       </ul>
     </aside>
@@ -135,23 +138,25 @@
       {{! Perks Section }}
       <div class='perks-section flexcol'>
         <h3>Perks</h3>
-        <ol class='perks-list'>
+        <ul class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            <li class='perk-card' data-item-id='{{perk._id}}' data-tooltip='Click to view, Right-click to remove'>
-              <div class='perk-header flexrow'>
+            <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}'>
+              <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
                 <h4 class='perk-name'>{{perk.name}}</h4>
               </div>
-              {{#if perk.prerequisites}}
-                <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
-              {{/if}}
-              {{#if perk.enrichedDescription}}
-                <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
-              {{/if}}
+              <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>
+                {{#if perk.prerequisites}}
+                  <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
+                {{/if}}
+                {{#if perk.enrichedDescription}}
+                  <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
+                {{/if}}
+              </div>
             </li>
           {{else}}
             <li class='no-perks'>No perks yet. Drag perks from the Items directory.</li>
           {{/each}}
-        </ol>
+        </ul>
       </div>
     </section>
   </section>

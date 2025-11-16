@@ -33,7 +33,8 @@
 }
 
 .tab {
-  max-height: 400px;
+  max-height: fit-content;
+  overflow-y: auto;
 }
 
 .tab.biography {
@@ -51,5 +52,255 @@
 
   .tox-edit-area {
     padding: 0 8px;
+  }
+}
+
+// Fix Foundry's ProseMirror positioning that breaks our layout
+// This overrides Foundry's default position: relative on editor content
+.prosemirror .editor-content,
+prose-mirror .editor-content {
+  position: unset;
+}
+
+// Cost inputs - 3 column grid layout
+.cost-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.cost-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+// Weapon skill and damage - combined row layout
+.weapon-skill-damage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .weapon-skill-select {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .damage-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i {
+      font-size: 14px;
+      color: $c-muted;
+    }
+
+    .damage-input {
+      width: 60px;
+    }
+  }
+}
+
+// Weapon properties - dropdown selector and tags on same row
+.property-selector-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.property-dropdown {
+  position: relative;
+  flex: 0 0 180px;
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    i {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &[open] summary i {
+    transform: rotate(180deg);
+  }
+
+  .property-checkboxes {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    margin-top: 4px;
+    padding: 8px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+
+    .property-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 2px;
+
+      input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+      }
+
+      span {
+        user-select: none;
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+}
+
+.property-tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+
+.property-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid $c-faint;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+
+  i {
+    cursor: pointer;
+    font-size: 10px;
+    color: $c-muted;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $c-dark;
+    }
+  }
+}
+
+// Metal and slots - combined row layout
+.metal-slots-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .metal-field {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    select {
+      flex: 1;
+    }
+  }
+
+  .slots-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+// Calculated properties - bordered grid section
+.calculated-properties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid $c-faint;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.calculated-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  .calc-label {
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .calc-value {
+    font-size: 12px;
+
+    .metal-bonus {
+      font-size: 11px;
+      color: $c-muted;
+      margin-left: 4px;
+    }
   }
 }

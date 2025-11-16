@@ -20,8 +20,8 @@
     </div>
 
     {{! Damage Base and Duration - Same Line }}
-    <div class='flexrow' style='gap: 8px;'>
-      <div class='form-group' style='flex: 1;'>
+    <div class='flexrow gap-8'>
+      <div class='form-group flex-1'>
         <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.damageBase.label'}}</label>
         <select name='system.damageBase'>
           <option value='-' {{#if (eq system.damageBase '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
@@ -35,7 +35,7 @@
           <option value='necrotic' {{#if (eq system.damageBase 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
         </select>
       </div>
-      <div class='form-group' style='flex: 2;'>
+      <div class='form-group flex-2'>
         <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
         <input
           type='text'
@@ -49,8 +49,8 @@
     {{! Delivery Section - Single Line Layout }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</label>
-      <div class='flexrow' style='gap: 8px; align-items: center;'>
-        <select name='system.delivery.type' style='flex: 2;'>
+      <div class='flexrow flex-center-gap-8'>
+        <select name='system.delivery.type' class='flex-2'>
           <option value='aura' {{#if (eq system.delivery.type 'aura')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Aura'}}</option>
           <option value='cone' {{#if (eq system.delivery.type 'cone')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cone'}}</option>
           <option value='cube' {{#if (eq system.delivery.type 'cube')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cube'}}</option>
@@ -67,7 +67,7 @@
           value='{{system.delivery.cost}}'
           min='0'
           data-dtype='Number'
-          style='flex: 1; min-width: 60px;'
+          class='flex-1-min-60'
           placeholder='Cost'
         />
         <input
@@ -75,7 +75,7 @@
           name='system.delivery.increase'
           value='{{system.delivery.increase}}'
           placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.delivery.increase.hint"}}'
-          style='flex: 5;'
+          class='flex-5'
         />
       </div>
     </div>

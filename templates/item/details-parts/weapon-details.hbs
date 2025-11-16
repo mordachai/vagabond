@@ -19,89 +19,142 @@
       </div>
     </div>
 
-    {{! Damage One Hand }}
+    {{! Weapon Skill and Damage - Combined Row Layout }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.damageOneHand.label'}}</label>
-      <input
-        type='text'
-        name='system.damageOneHand'
-        value='{{system.damageOneHand}}'
-        data-dtype='String'
-        placeholder='e.g., d8, d6, 2'
-      />
-    </div>
-
-    {{! Damage Two Hands }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.damageTwoHands.label'}}</label>
-      <input
-        type='text'
-        name='system.damageTwoHands'
-        value='{{system.damageTwoHands}}'
-        data-dtype='String'
-        placeholder='e.g., d10, d8, 3'
-      />
-    </div>
-
-    {{! Weapon Skill }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.weaponSkill.label'}}</label>
-      <select name='system.weaponSkill' data-dtype='String'>
-        {{#select system.weaponSkill}}
-          <option value='melee'>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
-          <option value='brawl'>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
-          <option value='finesse'>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
-          <option value='ranged'>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
-        {{/select}}
-      </select>
+      <label class='resource-label'>Skill & Damage</label>
+      <div class='weapon-skill-damage'>
+        <select name='system.weaponSkill' data-dtype='String' class='weapon-skill-select'>
+          {{#select system.weaponSkill}}
+            <option value='melee'>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+            <option value='brawl'>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
+            <option value='finesse'>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
+            <option value='ranged'>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
+          {{/select}}
+        </select>
+        <div class='damage-with-icon'>
+          <i class='fas fa-hand-fist' data-tooltip='One Hand Damage'></i>
+          <input
+            type='text'
+            name='system.damageOneHand'
+            value='{{system.damageOneHand}}'
+            data-dtype='String'
+            placeholder='d8'
+            class='damage-input'
+          />
+        </div>
+        <div class='damage-with-icon'>
+          <i class='fas fa-hands' data-tooltip='Two Hands Damage'></i>
+          <input
+            type='text'
+            name='system.damageTwoHands'
+            value='{{system.damageTwoHands}}'
+            data-dtype='String'
+            placeholder='d10'
+            class='damage-input'
+          />
+        </div>
+      </div>
     </div>
 
     {{! Properties }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
-      <div class='weapon-properties'>
-        {{#each system.properties as |property index|}}
-          <div class='weapon-property flexrow' style='gap: 8px; align-items: center; margin-bottom: 4px;'>
-            <select name='system.properties.{{index}}' data-dtype='String' style='flex: 1;'>
-              {{#select property}}
-                <option value='Brawl' title='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</option>
-                <option value='Brutal' title='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</option>
-                <option value='Cleave' title='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</option>
-                <option value='Entangle' title='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</option>
-                <option value='Finesse' title='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</option>
-                <option value='Keen' title='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</option>
-                <option value='Long' title='{{lookup config.weaponPropertyHints "Long"}}'>Long</option>
-                <option value='Near' title='{{lookup config.weaponPropertyHints "Near"}}'>Near</option>
-                <option value='Ranged' title='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</option>
-                <option value='Shield' title='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</option>
-                <option value='Thrown' title='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</option>
-              {{/select}}
-            </select>
-            <button type='button' class='property-hint' title='{{lookup config.weaponPropertyHints property}}' style='padding: 2px 6px;'>?</button>
-            <button type='button' data-action='removeWeaponProperty' data-property-index='{{index}}' style='padding: 2px 6px;'>×</button>
+      <div class='property-selector-row'>
+        <details class='property-dropdown'>
+          <summary class='property-dropdown-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Properties</span>
+          </summary>
+          <div class='property-checkboxes'>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Brawl' {{#if (contains system.properties 'Brawl')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brawl'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Brutal' {{#if (contains system.properties 'Brutal')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brutal'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Cleave' {{#if (contains system.properties 'Cleave')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Cleave'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Entangle' {{#if (contains system.properties 'Entangle')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Entangle'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Finesse' {{#if (contains system.properties 'Finesse')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Finesse'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Keen' {{#if (contains system.properties 'Keen')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Keen'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Long' {{#if (contains system.properties 'Long')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Long'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Long"}}'>Long</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Near' {{#if (contains system.properties 'Near')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Near'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Near"}}'>Near</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Ranged' {{#if (contains system.properties 'Ranged')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Ranged'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Shield' {{#if (contains system.properties 'Shield')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Shield'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</span>
+            </label>
+            <label class='property-checkbox-item'>
+              <input type='checkbox' value='Thrown' {{#if (contains system.properties 'Thrown')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Thrown'>
+              <span data-tooltip='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</span>
+            </label>
           </div>
-        {{/each}}
-        <button type='button' data-action='addWeaponProperty' style='margin-top: 4px;'>+ Add Property</button>
+        </details>
+        <div class='property-tags'>
+          {{#each system.properties as |property index|}}
+            <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
+              {{property}}
+              <i class='fas fa-times' data-action='removeWeaponProperty' data-property='{{property}}'></i>
+            </span>
+          {{/each}}
+        </div>
       </div>
     </div>
 
-    {{! Metal Type }}
+    {{! Metal Type and Base Slots - Combined Row }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.metal.label'}}</label>
-      <select name='system.metal' data-dtype='String'>
-        {{#select system.metal}}
-          <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-          <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-          <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-          <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-          <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-          <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
-        {{/select}}
-      </select>
+      <label class='resource-label'>Metal & Slots</label>
+      <div class='metal-slots-row'>
+        <div class='metal-field'>
+          <label class='resource-label'>Metal</label>
+          <select name='system.metal' data-dtype='String'>
+            {{#select system.metal}}
+              <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+              <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+              <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+              <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+              <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+              <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+            {{/select}}
+          </select>
+        </div>
+        <div class='slots-field'>
+          <label class='resource-label'>Base Slots</label>
+          <input
+            type='number'
+            name='system.baseSlots'
+            value='{{system.baseSlots}}'
+            min='0'
+            data-dtype='Number'
+          />
+        </div>
+      </div>
       <div class='metal-effect-text'>{{system.metalEffect}}</div>
     </div>
 
-    {{! Base Cost Section - Single Line Layout }}
+    {{! Base Cost Section - 3 Column Grid Layout }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.baseCost.label'}} <small>(before metal multiplier)</small></label>
       <div class='cost-inputs'>
@@ -138,28 +191,17 @@
       </div>
     </div>
 
-    {{! Base Slots }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.baseSlots.label'}} <small>(before metal modifier)</small></label>
-      <input
-        type='number'
-        name='system.baseSlots'
-        value='{{system.baseSlots}}'
-        min='0'
-        data-dtype='Number'
-      />
-    </div>
-
     {{! Calculated Properties - Read-only Display }}
     <div class='form-group'>
       <label class='resource-label'>Calculated Properties</label>
       <div class='calculated-properties'>
-        <div class='calculated-grid'>
-          <div><strong>Final Slots:</strong> {{system.slots}}</div>
-          <div><strong>Metal Multiplier:</strong> ×{{system.metalMultiplier}}</div>
+        <div class='calculated-item'>
+          <span class='calc-label'>Final Slots:</span>
+          <span class='calc-value'>{{system.slots}}</span>
         </div>
-        <div class='calculated-cost'>
-          <strong>Final Cost:</strong> {{system.costDisplay}}
+        <div class='calculated-item'>
+          <span class='calc-label'>Final Cost:</span>
+          <span class='calc-value'>{{system.costDisplay}}</span>
         </div>
       </div>
     </div>

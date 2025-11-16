@@ -21,21 +21,20 @@
     </div>
 
     {{! Level Features Section }}
-    <div class='level-features-section' style='margin-top: 20px;'>
+    <div class='level-features-section mt-20'>
       <h3>Level Features</h3>
 
       {{#each levelGroups as |group|}}
         <div class='level-group'>
           <div class='level-header'>
-            <h4 style='margin: 0;'>Level {{group.level}}</h4>
+            <h4 class='m-0'>Level {{group.level}}</h4>
             {{#if @root.editable}}
               <button
                 type='button'
-                class='item-control'
+                class='item-control btn-sm'
                 data-action='addLevelFeature'
                 data-level='{{group.level}}'
                 data-tooltip='Add Feature to Level {{group.level}}'
-                style='padding: 2px 8px; font-size: 12px;'
               >
                 <i class='fas fa-plus'></i> Add Feature
               </button>
@@ -43,19 +42,19 @@
           </div>
 
           {{#if group.features.length}}
-            <ol class='features-list' style='margin: 0; padding-left: 20px;'>
+            <ol class='features-list m-0 pl-20'>
               {{#each group.features as |feature|}}
-                <li class='feature-item' style='margin-bottom: 10px;' data-feature-index='{{feature.index}}'>
+                <li class='feature-item mb-10' data-feature-index='{{feature.index}}'>
                   <div class='feature-content'>
                     {{#if @root.editable}}
-                      <div style='display: flex; gap: 10px; margin-bottom: 5px; align-items: center;'>
+                      <div class='flex-center-gap-10 mb-5'>
                         <input
                           type='text'
                           name='system.levelFeatures.{{feature.index}}.name'
                           value='{{feature.name}}'
                           placeholder='Feature Name'
                           data-dtype='String'
-                          style='flex: 1;'
+                          class='flex-1'
                         />
                         <a
                           class='item-control'
@@ -83,7 +82,7 @@
                     {{else}}
                       <strong>{{feature.name}}</strong>
                       {{#if feature.description}}
-                        <div style='margin-top: 5px;'>{{{feature.description}}}</div>
+                        <div class='mt-5'>{{{feature.description}}}</div>
                       {{/if}}
                     {{/if}}
                   </div>
@@ -91,7 +90,7 @@
               {{/each}}
             </ol>
           {{else}}
-            <p style='margin: 0; font-style: italic; color: #666;'>
+            <p class='m-0 italic text-muted'>
               No features at this level.{{#if @root.editable}} Click "Add Feature" to add one.{{/if}}
             </p>
           {{/if}}

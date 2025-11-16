@@ -30,6 +30,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
+      toggleFeature: this._onToggleFeature,  // Feature accordion toggle
+      togglePerk: this._onTogglePerk,  // Perk accordion toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -261,9 +263,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const allLevelFeatures = classItem.system.levelFeatures || [];
 
       // Get features for levels 1 through current level
-      for (const feature of allLevelFeatures) {
+      for (let index = 0; index < allLevelFeatures.length; index++) {
+        const feature = allLevelFeatures[index];
         if (feature.level <= currentLevel) {
           features.push({
+            _id: `feature-${feature.level}-${index}`,
             name: `${feature.name} (Level ${feature.level})`,
             description: feature.description,
             level: feature.level
@@ -331,11 +335,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
     }
 
-    // Add click and right-click handlers for perk cards
+    // Add right-click handler for perk cards
     const perkCards = this.element.querySelectorAll('.perk-card[data-item-id]');
     perkCards.forEach(perkCard => {
-      // Left-click to view
-      perkCard.addEventListener('click', this._onViewPerk.bind(this));
       // Right-click to delete
       perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
     });
@@ -567,6 +569,38 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (confirmed) {
         await classItem.delete();
       }
+    }
+  }
+
+  /**
+   * Handle toggling feature accordion (click on feature header)
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onToggleFeature(event, target) {
+    event.preventDefault();
+    const featureId = target.dataset.featureId;
+    const accordionItem = this.element.querySelector(`.feature.accordion-item[data-item-id="${featureId}"]`);
+    if (accordionItem) {
+      accordionItem.classList.toggle('collapsed');
+    }
+  }
+
+  /**
+   * Handle toggling perk accordion (click on perk header)
+   *
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onTogglePerk(event, target) {
+    event.preventDefault();
+    const perkId = target.dataset.perkId;
+    const accordionItem = this.element.querySelector(`.perk-card.accordion-item[data-item-id="${perkId}"]`);
+    if (accordionItem) {
+      accordionItem.classList.toggle('collapsed');
     }
   }
 

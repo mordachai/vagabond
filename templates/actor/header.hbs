@@ -11,28 +11,27 @@
   />
   <div class='header-fields'>
     {{! Name Row with XP and Level Up }}
-    <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 8px;'>
+    <div class='flex-center-gap-12 mb-8'>
       {{! Character Name - Centered }}
-      <div style='flex: 1; text-align: center;'>
+      <div class='flex-1 text-center'>
         <input
           name='name'
           type='text'
           value='{{actor.name}}'
           placeholder='Character Name'
           class='character-name-input'
-          style='border: none; background: transparent; text-align: center; font-size: 18px; font-weight: bold; outline: none; width: 100%;'
         />
       </div>
 
       {{! XP Field with inline label }}
-      <div style='display: flex; align-items: center; gap: 4px; white-space: nowrap;'>
+      <div class='flex-center-gap-4 nowrap'>
         <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
         <input
           type='text'
           name='system.attributes.xp'
           value='{{system.attributes.xp}}'
           data-dtype='Number'
-          style='width: 60px;'
+          class='w-60'
         />
       </div>
 
@@ -42,26 +41,26 @@
           type='button'
           data-action='levelUp'
           data-tooltip='Level Up'
-          style='padding: 2px 8px; font-size: 11px; cursor: pointer;'
+          class='btn-sm'
         >
-          <i class='fas fa-level-up-alt'></i> Level Up
+          <i class='fas fa-level-up-alt'></i>
         </button>
       {{/if}}
     </div>
 
     {{! Character Info Row - Level, Ancestry, Class as display divs }}
-    <div class='character-info-row' style='text-align: center; margin-bottom: 10px; font-size: 14px; color: var(--vagabond-c-tan);'>
+    <div class='character-info-row'>
       <span>
         Level {{system.attributes.level.value}},
         {{#if system.ancestryData}}
-          <span class='ancestry-name' data-item-id='{{system.ancestryData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
+          <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
         {{else}}
-          <span style='color: var(--vagabond-c-faint);'>Unknown Ancestry</span>
+          <span class='text-faint'>Unknown Ancestry</span>
         {{/if}}
         {{#if system.classData}}
-          <span class='class-name' data-item-id='{{system.classData.id}}' style='cursor: pointer; text-decoration: underline;' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+          <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
         {{else}}
-          <span style='color: var(--vagabond-c-faint);'>No Class</span>
+          <span class='text-faint'>No Class</span>
         {{/if}}
         {{#if system.ancestryData}}
           ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
@@ -69,14 +68,6 @@
           (Unknown, Medium size)
         {{/if}}
       </span>
-    </div>
-
-    {{! Current Luck Row }}
-    <div class='grid grid-1col' style='margin-bottom: 10px;'>
-      <div class='resource'>
-        <label class='resource-label'>Current Luck</label>
-        <span>{{system.currentLuck}}</span>
-      </div>
     </div>
 
     {{! Third row: Combat Stats }}
@@ -90,7 +81,7 @@
             name='system.health.value'
             value='{{system.health.value}}'
             data-dtype='Number'
-            style='width: 40px;'
+            class='w-40'
           />
           <span> / </span>
           <span>{{system.health.max}}</span>
@@ -111,19 +102,26 @@
           name='system.fatigue'
           value='{{system.fatigue}}'
           data-dtype='Number'
-          style='width: 40px;'
+          class='w-40'
         />
       </div>
 
       {{! Speed - show all three values }}
       <div class='resource'>
         <label class='resource-label'>Speed</label>
-        <div style='font-size: 10px;'>
+        <div class='text-xs'>
           <div>{{system.speed.base}}'</div>
           <div>Crawl: {{system.speed.crawl}}'</div>
           <div>Travel: {{system.speed.travel}}mi</div>
         </div>
       </div>
+
+      {{! Current Luck Row }}
+      <div class='resource'>
+         <label class='resource-label'>Current Luck</label>
+         <span>{{system.currentLuck}}</span>
+      </div>
+
     </div>
   </div>
 </header>

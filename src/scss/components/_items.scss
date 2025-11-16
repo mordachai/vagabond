@@ -5,7 +5,6 @@
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
-  // border: $border-groove;
   font-weight: bold;
   > * {
     font-size: 14px;
@@ -16,7 +15,6 @@
     padding-left: 5px;
     text-align: left;
     display: flex;
-    // font-size: 16px;
   }
 }
 
@@ -87,8 +85,8 @@
 
   .item-prop {
     text-align: center;
-    border-left: 1px solid #c9c7b8;
-    border-right: 1px solid #c9c7b8;
+    border-left: 1px solid $c-faint;
+    border-right: 1px solid $c-faint;
     font-size: 12px;
   }
 
@@ -108,7 +106,6 @@
     .item-name {
       padding-left: 5px;
       text-align: left;
-      // font-size: 16px;
     }
   }
 
@@ -191,7 +188,34 @@
 
 // Example style for Vagabond (can be removed if not needed).
 .item-formula {
-  
+
   flex: 0 0 200px;
   padding: 0 8px;
+}
+
+// Inventory column sizing
+.inventory-col-equipped {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Section title with add button
+.section-title-with-add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .fa-plus {
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
 }

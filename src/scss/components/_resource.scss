@@ -2,10 +2,164 @@
   font-weight: bold;
 }
 
-.ability {
-  margin-bottom: 2px;
+// Abilities Grid - 2 rows x 3 columns
+.abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.ability-score {
-  flex: 0 0 44px;
+.ability {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .ability-score {
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid $c-faint;
+    border-radius: 4px;
+    padding: 8px;
+  }
+
+  .ability-label {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: $c-muted;
+    text-align: center;
+  }
+}
+
+// Features List - Accordion Style
+.features-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  .feature.accordion-item {
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+
+    .feature-header.accordion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    .feature-description.accordion-content {
+      padding: 12px;
+      border-top: 1px solid $c-faint;
+      display: block;
+      max-height: 500px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+    }
+
+    // Collapsed state
+    &.collapsed {
+      .accordion-content {
+        display: none;
+      }
+    }
+  }
+
+  .no-features {
+    list-style: none;
+    padding: 12px;
+    text-align: center;
+    color: $c-faint;
+    font-style: italic;
+  }
+}
+
+// Perks List - Accordion Style
+.perks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  .perk-card.accordion-item {
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+
+    .perk-header.accordion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .perk-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    .perk-content.accordion-content {
+      padding: 12px;
+      border-top: 1px solid $c-faint;
+      display: block;
+      max-height: 500px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+
+      .perk-prerequisites {
+        font-size: 12px;
+        color: $c-tan;
+        margin-bottom: 8px;
+        font-style: italic;
+      }
+
+      .perk-description {
+        font-size: 13px;
+      }
+    }
+
+    // Collapsed state
+    &.collapsed {
+      .accordion-content {
+        display: none;
+      }
+    }
+  }
+
+  .no-perks {
+    list-style: none;
+    padding: 12px;
+    text-align: center;
+    color: $c-faint;
+    font-style: italic;
+  }
 }

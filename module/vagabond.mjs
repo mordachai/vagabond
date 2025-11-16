@@ -94,6 +94,12 @@ Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
 });
 
+// Check if an array contains a value
+Handlebars.registerHelper('contains', function (array, value) {
+  if (!array || !Array.isArray(array)) return false;
+  return array.includes(value);
+});
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */

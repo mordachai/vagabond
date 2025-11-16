@@ -16,7 +16,6 @@
     padding-left: 5px;
     text-align: left;
     display: flex;
-    // font-size: 16px;
   }
 }
 
@@ -87,8 +86,8 @@
 
   .effect-prop {
     text-align: center;
-    border-left: 1px solid #c9c7b8;
-    border-right: 1px solid #c9c7b8;
+    border-left: 1px solid $c-faint;
+    border-right: 1px solid $c-faint;
     font-size: 12px;
   }
 
@@ -108,7 +107,6 @@
     .effect-name {
       padding-left: 5px;
       text-align: left;
-      // font-size: 16px;
     }
   }
 }
@@ -124,8 +122,8 @@
   .effect-duration,
   .effect-controls {
     text-align: center;
-    border-left: 1px solid #c9c7b8;
-    border-right: 1px solid #c9c7b8;
+    border-left: 1px solid $c-faint;
+    border-right: 1px solid $c-faint;
     font-size: 12px;
   }
 

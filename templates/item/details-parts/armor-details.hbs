@@ -25,7 +25,7 @@
       <div class='metal-effect-text'>{{system.metalEffect}}</div>
     </div>
 
-    {{! Base Cost Section - Single Line Layout }}
+    {{! Base Cost Section - 3 Column Grid Layout }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.baseCost.label'}} <small>(before metal multiplier)</small></label>
       <div class='cost-inputs'>
@@ -66,19 +66,26 @@
     <div class='form-group'>
       <label class='resource-label'>Calculated Properties</label>
       <div class='calculated-properties'>
-        <div class='calculated-grid'>
-          <div>
-            <strong>Rating:</strong> {{system.rating}}
+        <div class='calculated-item'>
+          <span class='calc-label'>Rating:</span>
+          <span class='calc-value'>
+            {{system.rating}}
             {{#if (ne system.rating system.finalRating)}}
               <span class='metal-bonus'>({{system.finalRating}} with metal)</span>
             {{/if}}
-          </div>
-          <div><strong>Might:</strong> {{system.might}}</div>
-          <div><strong>Slots:</strong> {{system.slots}}</div>
-          <div><strong>Metal Multiplier:</strong> ×{{system.metalMultiplier}}</div>
+          </span>
         </div>
-        <div class='calculated-cost'>
-          <strong>Final Cost:</strong> {{system.costDisplay}}
+        <div class='calculated-item'>
+          <span class='calc-label'>Might:</span>
+          <span class='calc-value'>{{system.might}}</span>
+        </div>
+        <div class='calculated-item'>
+          <span class='calc-label'>Slots:</span>
+          <span class='calc-value'>{{system.slots}}</span>
+        </div>
+        <div class='calculated-item'>
+          <span class='calc-label'>Final Cost:</span>
+          <span class='calc-value'>{{system.costDisplay}}</span>
         </div>
       </div>
     </div>
