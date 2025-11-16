@@ -59,31 +59,60 @@
     {{! Properties }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
-      <div class='weapon-properties'>
+      <div class='property-selector-row'>
+        <div class='property-checkboxes'>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Brawl' {{#if (contains system.properties 'Brawl')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brawl' data-tooltip='{{lookup config.weaponPropertyHints "Brawl"}}'>
+            <span>Brawl</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Brutal' {{#if (contains system.properties 'Brutal')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brutal' data-tooltip='{{lookup config.weaponPropertyHints "Brutal"}}'>
+            <span>Brutal</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Cleave' {{#if (contains system.properties 'Cleave')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Cleave' data-tooltip='{{lookup config.weaponPropertyHints "Cleave"}}'>
+            <span>Cleave</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Entangle' {{#if (contains system.properties 'Entangle')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Entangle' data-tooltip='{{lookup config.weaponPropertyHints "Entangle"}}'>
+            <span>Entangle</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Finesse' {{#if (contains system.properties 'Finesse')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Finesse' data-tooltip='{{lookup config.weaponPropertyHints "Finesse"}}'>
+            <span>Finesse</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Keen' {{#if (contains system.properties 'Keen')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Keen' data-tooltip='{{lookup config.weaponPropertyHints "Keen"}}'>
+            <span>Keen</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Long' {{#if (contains system.properties 'Long')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Long' data-tooltip='{{lookup config.weaponPropertyHints "Long"}}'>
+            <span>Long</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Near' {{#if (contains system.properties 'Near')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Near' data-tooltip='{{lookup config.weaponPropertyHints "Near"}}'>
+            <span>Near</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Ranged' {{#if (contains system.properties 'Ranged')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Ranged' data-tooltip='{{lookup config.weaponPropertyHints "Ranged"}}'>
+            <span>Ranged</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Shield' {{#if (contains system.properties 'Shield')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Shield' data-tooltip='{{lookup config.weaponPropertyHints "Shield"}}'>
+            <span>Shield</span>
+          </label>
+          <label class='property-checkbox-item'>
+            <input type='checkbox' value='Thrown' {{#if (contains system.properties 'Thrown')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Thrown' data-tooltip='{{lookup config.weaponPropertyHints "Thrown"}}'>
+            <span>Thrown</span>
+          </label>
+        </div>
         <div class='property-tags'>
           {{#each system.properties as |property index|}}
             <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
               {{property}}
-              <i class='fas fa-times' data-action='removeWeaponProperty' data-property-index='{{index}}'></i>
+              <i class='fas fa-times' data-action='removeWeaponProperty' data-property='{{property}}'></i>
             </span>
           {{/each}}
-        </div>
-        <div class='add-property-controls'>
-          <select class='property-select'>
-            <option value=''>Select a property...</option>
-            <option value='Brawl' title='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</option>
-            <option value='Brutal' title='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</option>
-            <option value='Cleave' title='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</option>
-            <option value='Entangle' title='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</option>
-            <option value='Finesse' title='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</option>
-            <option value='Keen' title='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</option>
-            <option value='Long' title='{{lookup config.weaponPropertyHints "Long"}}'>Long</option>
-            <option value='Near' title='{{lookup config.weaponPropertyHints "Near"}}'>Near</option>
-            <option value='Ranged' title='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</option>
-            <option value='Shield' title='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</option>
-            <option value='Thrown' title='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</option>
-          </select>
-          <button type='button' data-action='addWeaponProperty'>+ Add</button>
         </div>
       </div>
     </div>

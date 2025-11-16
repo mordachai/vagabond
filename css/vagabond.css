@@ -512,11 +512,44 @@
 .vagabond .weapon-skill-damage .damage-with-icon .damage-input {
   width: 60px;
 }
+.vagabond .property-selector-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.vagabond .property-checkboxes {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 8px;
+  padding: 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+}
+.vagabond .property-checkboxes .property-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.vagabond .property-checkboxes .property-checkbox-item input[type=checkbox] {
+  margin: 0;
+  cursor: pointer;
+}
+.vagabond .property-checkboxes .property-checkbox-item span {
+  user-select: none;
+}
+.vagabond .property-checkboxes .property-checkbox-item:hover {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .property-tags {
+  flex: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 8px;
+  align-content: flex-start;
 }
 .vagabond .property-tag {
   display: inline-flex;
@@ -537,19 +570,6 @@
 }
 .vagabond .property-tag i:hover {
   color: var(--vagabond-c-dark);
-}
-.vagabond .add-property-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-top: 8px;
-}
-.vagabond .add-property-controls .property-select {
-  flex: 1;
-  min-width: 200px;
-}
-.vagabond .add-property-controls button {
-  white-space: nowrap;
 }
 .vagabond .metal-slots-row {
   display: flex;

@@ -35,7 +35,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
       addOtherPrerequisite: this._onAddOtherPrerequisite,
       removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
-      addWeaponProperty: this._onAddWeaponProperty,
+      toggleWeaponProperty: this._onToggleWeaponProperty,
       removeWeaponProperty: this._onRemoveWeaponProperty,
     },
     form: {
@@ -589,33 +589,29 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
    * @private
    */
-  static async _onAddWeaponProperty(event, target) {
-    // Get the selected property from the dropdown
-    const select = this.element.querySelector('.property-select');
-    const selectedProperty = select?.value;
-
-    if (!selectedProperty) {
-      ui.notifications.warn('Please select a property to add.');
-      return;
-    }
-
+  static async _onToggleWeaponProperty(event, target) {
+    const property = target.dataset.property;
+    const isChecked = target.checked;
     const properties = this.item.system.properties || [];
 
-    // Check if property already exists
-    if (properties.includes(selectedProperty)) {
-      ui.notifications.warn(`${selectedProperty} is already added.`);
-      return;
+    let newProperties;
+    if (isChecked) {
+      // Add property if not already present
+      if (!properties.includes(property)) {
+        newProperties = [...properties, property];
+      } else {
+        return; // Already exists
+      }
+    } else {
+      // Remove property
+      newProperties = properties.filter(p => p !== property);
     }
 
-    const newProperties = [...properties, selectedProperty];
     await this.item.update({ 'system.properties': newProperties });
-
-    // Reset the dropdown to default
-    if (select) select.value = '';
   }
 
   /**
-   * Handle removing a weapon property from a weapon item
+   * Handle removing a weapon property from a weapon item (via tag x button)
    *
    * @this VagabondItemSheet
    * @param {PointerEvent} event   The originating click event
@@ -623,12 +619,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveWeaponProperty(event, target) {
-    const index = parseInt(target.dataset.propertyIndex);
-    if (isNaN(index)) return;
+    const property = target.dataset.property;
+    if (!property) return;
 
     const properties = this.item.system.properties || [];
-    const newProperties = properties.filter((_, i) => i !== index);
+    const newProperties = properties.filter(p => p !== property);
     await this.item.update({ 'system.properties': newProperties });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-property="${property}"]`);
+    if (checkbox) checkbox.checked = false;
   }
 
   /**
