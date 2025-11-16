@@ -1,14 +1,54 @@
 {{! Sheet Header }}
 <header class='sheet-header'>
-  <img
-    class='profile-img'
-    src='{{actor.img}}'
-    data-edit='img'
-    data-action='onEditImage'
-    data-tooltip='{{actor.name}}'
-    height='100'
-    width='100'
-  />
+  {{! Character Image Container }}
+  <div class='char-image-container'>
+    <img
+      class='profile-img'
+      src='{{actor.img}}'
+      data-edit='img'
+      data-action='onEditImage'
+      data-tooltip='{{actor.name}}'
+      width='180'
+      height='180'
+    />
+
+    {{! Armor Info Overlay (Left side) }}
+    <div class='armor-overlay'>
+      <div class='armor-value'>{{system.armor}}</div>
+      <div class='armor-type'>{{equippedArmorType}}</div>
+    </div>
+
+    {{! Fatigue Overlay (Bottom) }}
+    <div class='fatigue-overlay'>
+      <div class='fatigue-checkboxes'>
+        {{#each fatigueBoxes as |box index|}}
+          <input
+            type='checkbox'
+            class='fatigue-box'
+            data-index='{{index}}'
+            {{#if box.checked}}checked{{/if}}
+            data-action='toggleFatigue'
+          />
+        {{/each}}
+      </div>
+      <i class='fas fa-skull fatigue-icon'></i>
+    </div>
+  </div>
+
+  {{! Hit Points (Below image) }}
+  <div class='hp-display'>
+    <input
+      type='text'
+      name='system.health.value'
+      value='{{system.health.value}}'
+      data-dtype='Number'
+      class='hp-current'
+    />
+    <span class='hp-separator'>/</span>
+    <span class='hp-max'>{{system.health.max}}</span>
+    <span class='hp-label'>hp</span>
+  </div>
+
   <div class='header-fields'>
     {{! Name Row with XP and Level Up }}
     <div class='flex-center-gap-12 mb-8'>
@@ -71,41 +111,7 @@
     </div>
 
     {{! Third row: Combat Stats }}
-    <div class='grid grid-5col'>
-      {{! Hit Points }}
-      <div class='resource'>
-        <label class='resource-label'>Hit Points</label>
-        <div class='resource-content flexrow flex-center flex-between'>
-          <input
-            type='text'
-            name='system.health.value'
-            value='{{system.health.value}}'
-            data-dtype='Number'
-            class='w-40'
-          />
-          <span> / </span>
-          <span>{{system.health.max}}</span>
-        </div>
-      </div>
-
-      {{! Armor }}
-      <div class='resource'>
-        <label class='resource-label'>Armor</label>
-        <span>{{system.armor}}</span>
-      </div>
-
-      {{! Fatigue }}
-      <div class='resource'>
-        <label class='resource-label'>Fatigue</label>
-        <input
-          type='text'
-          name='system.fatigue'
-          value='{{system.fatigue}}'
-          data-dtype='Number'
-          class='w-40'
-        />
-      </div>
-
+    <div class='grid grid-3col'>
       {{! Speed - show all three values }}
       <div class='resource'>
         <label class='resource-label'>Speed</label>

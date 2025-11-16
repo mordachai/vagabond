@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 @font-face {
   font-family: "Eskapade";
@@ -1217,6 +1218,154 @@
 .vagabond .effects .item .effect-controls {
   border: none;
 }
+.vagabond .sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+}
+.vagabond .char-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+.vagabond .char-image-container .profile-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 4px;
+  border: 2px solid var(--vagabond-c-dark);
+  object-fit: cover;
+  cursor: pointer;
+}
+.vagabond .char-image-container .profile-img:hover {
+  border-color: var(--vagabond-c-tan);
+}
+.vagabond .armor-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 60px;
+  height: 70px;
+  background-image: url("/systems/vagabond/assets/images/armor.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond .armor-overlay .armor-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.vagabond .armor-overlay .armor-type {
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.vagabond .fatigue-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+}
+.vagabond .fatigue-overlay .fatigue-checkboxes {
+  display: flex;
+  gap: 4px;
+}
+.vagabond .fatigue-overlay .fatigue-box {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+.vagabond .fatigue-overlay .fatigue-box:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.5);
+}
+.vagabond .fatigue-overlay .fatigue-box:checked {
+  background: rgba(255, 50, 50, 0.7);
+  border-color: rgba(255, 100, 100, 0.9);
+}
+.vagabond .fatigue-overlay .fatigue-box:checked::after {
+  content: "✓";
+  display: block;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 16px;
+}
+.vagabond .fatigue-overlay .fatigue-icon {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+.vagabond .hp-display {
+  position: absolute;
+  top: 190px;
+  left: 0;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.vagabond .hp-display .hp-current {
+  width: 50px;
+  text-align: right;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.vagabond .hp-display .hp-separator {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .hp-display .hp-max {
+  color: var(--vagabond-c-dark);
+  min-width: 30px;
+}
+.vagabond .hp-display .hp-label {
+  font-size: 14px;
+  color: var(--vagabond-c-tan);
+  font-weight: 500;
+}
+.vagabond .header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .vagabond .character-name-input {
   border: none !important;
   background: transparent !important;
@@ -1243,6 +1392,13 @@
   line-height: 1.2;
 }
 @media (max-width: 600px) {
+  .vagabond .sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .vagabond .char-image-container {
+    margin-bottom: 40px;
+  }
   .vagabond .character-name-input {
     font-size: 16px;
   }

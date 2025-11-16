@@ -1,5 +1,179 @@
 // Character Sheet Header Styles
 
+// Sheet Header Container
+.sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+// Character Image Container (180x180 with overlays)
+.char-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+
+  .profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 4px;
+    border: 2px solid var(--vagabond-c-dark);
+    object-fit: cover;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--vagabond-c-tan);
+    }
+  }
+}
+
+// Armor Overlay (Left side, 60x70)
+.armor-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 60px;
+  height: 70px;
+  background-image: url('/systems/vagabond/assets/images/armor.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  .armor-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .armor-type {
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+}
+
+// Fatigue Overlay (Bottom)
+.fatigue-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+
+  .fatigue-checkboxes {
+    display: flex;
+    gap: 4px;
+  }
+
+  .fatigue-box {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.9);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    &:checked {
+      background: rgba(255, 50, 50, 0.7);
+      border-color: rgba(255, 100, 100, 0.9);
+
+      &::after {
+        content: '✓';
+        display: block;
+        text-align: center;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 16px;
+      }
+    }
+  }
+
+  .fatigue-icon {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  }
+}
+
+// HP Display (Below image)
+.hp-display {
+  position: absolute;
+  top: 190px;
+  left: 0;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: bold;
+
+  .hp-current {
+    width: 50px;
+    text-align: right;
+    border: 1px solid var(--vagabond-c-dark);
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .hp-separator {
+    color: var(--vagabond-c-dark);
+  }
+
+  .hp-max {
+    color: var(--vagabond-c-dark);
+    min-width: 30px;
+  }
+
+  .hp-label {
+    font-size: 14px;
+    color: var(--vagabond-c-tan);
+    font-weight: 500;
+  }
+}
+
+// Header Fields (Right side of image)
+.header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 // Character Name Input Styling
 .character-name-input {
   border: none !important;
@@ -33,6 +207,15 @@
 
 // Responsive adjustments for smaller screens
 @media (max-width: 600px) {
+  .sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .char-image-container {
+    margin-bottom: 40px;
+  }
+
   .character-name-input {
     font-size: 16px;
   }

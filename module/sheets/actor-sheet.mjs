@@ -33,6 +33,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       levelUp: this._onLevelUp,  // Level up action
       toggleFeature: this._onToggleFeature,  // Feature accordion toggle
       togglePerk: this._onTogglePerk,  // Perk accordion toggle
+      toggleFatigue: this._onToggleFatigue,  // Fatigue checkbox toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -128,6 +129,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Offloading context prep to a helper function
     this._prepareItems(context);
+
+    // Prepare equipped armor type for header display
+    const equippedArmor = this.actor.items.find(item => item.type === 'armor' && item.system.equipped);
+    context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
+
+    // Prepare fatigue boxes (5 checkboxes)
+    const fatigue = this.actor.system.fatigue || 0;
+    context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+      checked: i < fatigue
+    }));
 
     return context;
   }
@@ -477,6 +488,26 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (classItem) {
       classItem.sheet.render(true);
     }
+  }
+
+  /**
+   * Handle toggling fatigue checkboxes
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleFatigue(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const currentFatigue = this.actor.system.fatigue || 0;
+
+    // If clicking a checked box, set fatigue to that index
+    // If clicking an unchecked box, set fatigue to index + 1
+    const newFatigue = target.checked ? index + 1 : index;
+
+    await this.actor.update({ 'system.fatigue': newFatigue });
   }
 
   /**
