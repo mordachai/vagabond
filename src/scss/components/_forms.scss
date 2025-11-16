@@ -3,8 +3,9 @@
 }
 
 .sheet-header {
-  flex: 0 auto;
-  overflow: hidden;
+  flex: 0 0 auto;
+  min-height: fit-content;
+  overflow: visible;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -19,6 +20,7 @@
 
   .header-fields {
     flex: 1;
+    min-width: 0;
   }
 }
 

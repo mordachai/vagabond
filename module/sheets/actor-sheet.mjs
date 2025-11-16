@@ -76,13 +76,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     // Not all parts always render
-    options.parts = ['header', 'tabs', 'biography'];
+    options.parts = ['header', 'tabs'];
     // Don't show the other tabs if only limited view
-    if (this.document.limited) return;
+    if (this.document.limited) {
+      options.parts.push('biography');
+      return;
+    }
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'character':
-        options.parts.push('features', 'inventory', 'spells', 'effects');
+        // Order: Features | Inventory | Spells | Biography | Effects
+        options.parts.push('features', 'inventory', 'spells', 'biography', 'effects');
         break;
       case 'npc':
         options.parts.push('inventory', 'effects');
@@ -200,7 +204,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
     // Default tab for first time it's rendered this session
-    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'biography';
+    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'features';
     return parts.reduce((tabs, partId) => {
       const tab = {
         cssClass: '',
