@@ -70,14 +70,6 @@
       </span>
     </div>
 
-    {{! Current Luck Row }}
-    <div class='grid grid-1col mb-10'>
-      <div class='resource'>
-        <label class='resource-label'>Current Luck</label>
-        <span>{{system.currentLuck}}</span>
-      </div>
-    </div>
-
     {{! Third row: Combat Stats }}
     <div class='grid grid-5col'>
       {{! Hit Points }}
@@ -123,6 +115,13 @@
           <div>Travel: {{system.speed.travel}}mi</div>
         </div>
       </div>
+
+      {{! Current Luck Row }}
+      <div class='resource'>
+         <label class='resource-label'>Current Luck</label>
+         <span>{{system.currentLuck}}</span>
+      </div>
+
     </div>
   </div>
 </header>
