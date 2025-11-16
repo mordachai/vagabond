@@ -8,22 +8,20 @@
     {{! Left column: Stats }}
     <aside class='sidebar'>
       <h3>Stats</h3>
-      <div class='abilities flexcol'>
+      <div class='abilities abilities-grid'>
         {{#each system.abilities as |ability key|}}
-          <div class='ability flexrow flex-group-center'>
-            <label
-              class='resource-label rollable flexlarge align-left'
-              data-action='roll'
-              data-roll='d20'
-              data-label='{{localize (lookup @root.config.abilities key)}} Check'
-            >{{localize (lookup @root.config.abilities key)}}</label>
+          <div class='ability'>
             <input
               type='text'
               name='system.abilities.{{key}}.value'
               value='{{ability.value}}'
-              class="ability-score"
+              class="ability-score rollable"
               data-dtype='Number'
+              data-action='roll'
+              data-roll='d20'
+              data-label='{{localize (lookup @root.config.abilities key)}} Check'
             />
+            <label class='ability-label'>{{localize (lookup @root.config.abilityAbbreviations key)}}</label>
           </div>
         {{/each}}
       </div>

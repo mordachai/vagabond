@@ -2,12 +2,39 @@
   font-weight: bold;
 }
 
-.ability {
-  margin-bottom: 2px;
+// Abilities Grid - 2 rows x 3 columns
+.abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.ability-score {
-  flex: 0 0 44px;
+.ability {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .ability-score {
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid $c-faint;
+    border-radius: 4px;
+    padding: 8px;
+  }
+
+  .ability-label {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: $c-muted;
+    text-align: center;
+  }
 }
 
 // Features List - Accordion Style
