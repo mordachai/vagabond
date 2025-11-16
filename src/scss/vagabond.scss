@@ -27,6 +27,27 @@
     font-weight: bold;
   }
 
+  // Clean input and textarea styling
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    border-radius: 0;
+    outline: none;
+    transition: border-bottom-color 0.2s ease;
+
+    &:hover {
+      cursor: text;
+    }
+
+    &:focus {
+      border-bottom-color: $c-dark;
+      cursor: text;
+    }
+  }
+
   @import 'components/forms';
   @import 'components/resource';
   @import 'components/items';

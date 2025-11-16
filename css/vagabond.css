@@ -454,6 +454,27 @@
   font-family: "Eskapade", serif;
   font-weight: bold;
 }
+.vagabond input[type=text],
+.vagabond input[type=number],
+.vagabond textarea {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  border-radius: 0;
+  outline: none;
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond input[type=text]:hover,
+.vagabond input[type=number]:hover,
+.vagabond textarea:hover {
+  cursor: text;
+}
+.vagabond input[type=text]:focus,
+.vagabond input[type=number]:focus,
+.vagabond textarea:focus {
+  border-bottom-color: var(--vagabond-c-dark);
+  cursor: text;
+}
 .vagabond .item-form {
   font-family: "Roboto", sans-serif;
 }
