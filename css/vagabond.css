@@ -1060,6 +1060,32 @@
   flex-shrink: 0;
   margin-left: 12px;
 }
+.vagabond .level-group {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.vagabond .level-group:last-child {
+  margin-bottom: 0;
+}
+.vagabond .feature-title {
+  font-family: "ManofaBold", serif;
+  font-size: 16px;
+}
+.vagabond .traits-section .item {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.vagabond .traits-section .item:last-child {
+  margin-bottom: 0;
+}
+.vagabond .trait-title {
+  font-family: "ManofaBold", serif;
+  font-size: 16px;
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;
