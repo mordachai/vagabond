@@ -640,6 +640,13 @@
   flex: 0 0 200px;
   padding: 0 8px;
 }
+.vagabond .inventory-col-equipped {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;

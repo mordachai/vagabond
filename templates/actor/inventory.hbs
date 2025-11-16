@@ -66,7 +66,7 @@
       <div class='item-grip inventory-col-grip'>Grip</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
-      <div data-tooltip='Equip'>E</div>
+      <div class='inventory-col-equipped' data-tooltip='Equip'>E</div>
     </li>
     {{#each weapons as |item id|}}
       <li
@@ -90,7 +90,7 @@
         <div class='item-grip item-prop inventory-col-grip'>{{item.system.gripDisplay}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div data-action='toggleWeaponEquipment' data-item-id='{{item._id}}'>
+        <div class='inventory-col-equipped' data-action='toggleWeaponEquipment' data-item-id='{{item._id}}'>
           {{#if (eq item.system.equipmentState 'unequipped')}}
             <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip one-handed)'></i>
           {{else if (eq item.system.equipmentState 'oneHand')}}
@@ -113,7 +113,7 @@
       <div class='item-metal inventory-col-metal'>Metal</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
-      <div data-tooltip='Equip'>E</div>
+      <div class='inventory-col-equipped' data-tooltip='Equip'>E</div>
     </li>
     {{#each armor as |item id|}}
       <li
@@ -142,7 +142,7 @@
         <div class='item-metal item-prop inventory-col-metal'>{{item.system.metalDisplay}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div data-action='toggleArmorEquipment' data-item-id='{{item._id}}'>
+        <div class='inventory-col-equipped' data-action='toggleArmorEquipment' data-item-id='{{item._id}}'>
           {{#if item.system.equipped}}
             <i class='clickable fas fa-shield-halved equipped' data-tooltip='Equipped (click to unequip)'></i>
           {{else}}
@@ -162,7 +162,7 @@
       <div class='item-quantity inventory-col-quantity'>Qty</div>
       <div class='item-cost inventory-col-cost'>Cost</div>
       <div class='item-slots inventory-col-slots'>Slots</div>
-      <div data-tooltip='Equip'>E</div>
+      <div class='inventory-col-equipped' data-tooltip='Equip'>E</div>
     </li>
     {{#each gear as |item id|}}
       <li
@@ -185,7 +185,7 @@
         <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
         <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div>
+        <div class='inventory-col-equipped'>
           <i class='gear-equipped-icon clickable {{#if item.system.equipped}}fas fa-check-circle equipped{{else}}far fa-circle unequipped{{/if}}'></i>
         </div>
       </li>

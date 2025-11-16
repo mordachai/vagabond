@@ -188,7 +188,16 @@
 
 // Example style for Vagabond (can be removed if not needed).
 .item-formula {
-  
+
   flex: 0 0 200px;
   padding: 0 8px;
+}
+
+// Inventory column sizing
+.inventory-col-equipped {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
