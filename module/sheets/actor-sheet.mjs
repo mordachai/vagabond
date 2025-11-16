@@ -133,10 +133,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const equippedArmor = this.actor.items.find(item => item.type === 'armor' && item.system.equipped);
     context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
 
-    // Prepare fatigue boxes (5 checkboxes)
+    // Prepare fatigue boxes (5 skulls)
     const fatigue = this.actor.system.fatigue || 0;
     context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
-      checked: i < fatigue
+      checked: i < fatigue,
+      level: i + 1
     }));
 
     return context;
