@@ -87,3 +87,29 @@ prose-mirror .editor-content {
     min-width: 0;
   }
 }
+
+// Damage inputs - 2 column grid layout
+.damage-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.damage-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+}

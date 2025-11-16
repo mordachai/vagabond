@@ -491,6 +491,27 @@
   flex: 1;
   min-width: 0;
 }
+.vagabond .damage-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+.vagabond .damage-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .damage-field label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .damage-field input {
+  flex: 1;
+  min-width: 0;
+}
 .vagabond .resource-label {
   font-weight: bold;
 }

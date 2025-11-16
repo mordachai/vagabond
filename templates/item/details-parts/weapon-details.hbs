@@ -19,28 +19,31 @@
       </div>
     </div>
 
-    {{! Damage One Hand }}
+    {{! Damage - Row Layout }}
     <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.damageOneHand.label'}}</label>
-      <input
-        type='text'
-        name='system.damageOneHand'
-        value='{{system.damageOneHand}}'
-        data-dtype='String'
-        placeholder='e.g., d8, d6, 2'
-      />
-    </div>
-
-    {{! Damage Two Hands }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.damageTwoHands.label'}}</label>
-      <input
-        type='text'
-        name='system.damageTwoHands'
-        value='{{system.damageTwoHands}}'
-        data-dtype='String'
-        placeholder='e.g., d10, d8, 3'
-      />
+      <label class='resource-label'>Damage</label>
+      <div class='damage-inputs'>
+        <div class='damage-field'>
+          <label class='resource-label'>One Hand</label>
+          <input
+            type='text'
+            name='system.damageOneHand'
+            value='{{system.damageOneHand}}'
+            data-dtype='String'
+            placeholder='e.g., d8'
+          />
+        </div>
+        <div class='damage-field'>
+          <label class='resource-label'>Two Hands</label>
+          <input
+            type='text'
+            name='system.damageTwoHands'
+            value='{{system.damageTwoHands}}'
+            data-dtype='String'
+            placeholder='e.g., d10'
+          />
+        </div>
+      </div>
     </div>
 
     {{! Weapon Skill }}
