@@ -512,6 +512,34 @@
   flex: 1;
   min-width: 0;
 }
+.vagabond .calculated-properties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+}
+.vagabond .calculated-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .calculated-item .calc-label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .calculated-item .calc-value {
+  font-size: 12px;
+}
+.vagabond .calculated-item .calc-value .metal-bonus {
+  font-size: 11px;
+  color: var(--vagabond-c-muted);
+  margin-left: 4px;
+}
 .vagabond .resource-label {
   font-weight: bold;
 }

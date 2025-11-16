@@ -113,3 +113,37 @@ prose-mirror .editor-content {
     min-width: 0;
   }
 }
+
+// Calculated properties - bordered grid section
+.calculated-properties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid $c-faint;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.calculated-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  .calc-label {
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .calc-value {
+    font-size: 12px;
+
+    .metal-bonus {
+      font-size: 11px;
+      color: $c-muted;
+      margin-left: 4px;
+    }
+  }
+}
