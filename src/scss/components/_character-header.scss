@@ -20,12 +20,12 @@
     width: 180px;
     height: 180px;
     border-radius: 4px;
-    border: 2px solid var(--vagabond-c-dark);
+    border: none;
     object-fit: cover;
     cursor: pointer;
 
     &:hover {
-      border-color: var(--vagabond-c-tan);
+      opacity: 0.9;
     }
   }
 }
@@ -76,11 +76,9 @@
   right: 8px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
   padding: 4px 8px;
   border-radius: 4px;
-  backdrop-filter: blur(2px);
 
   .fatigue-checkboxes {
     display: flex;
@@ -113,12 +111,6 @@
         transform: scale(1.1);
       }
     }
-  }
-
-  .fatigue-icon {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
   }
 }
 

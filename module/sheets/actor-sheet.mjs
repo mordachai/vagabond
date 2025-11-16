@@ -342,17 +342,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Add fatigue skull click handlers
     const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
+    console.log(`[Fatigue] Found ${fatigueSkulls.length} fatigue skulls`);
+
     fatigueSkulls.forEach((skull, index) => {
       skull.addEventListener('click', async (event) => {
         event.preventDefault();
         event.stopPropagation();
 
         const currentFatigue = this.actor.system.fatigue || 0;
+        console.log(`[Fatigue] Clicked skull ${index}, current fatigue: ${currentFatigue}`);
+
         // If clicking on an active skull, reduce fatigue to that index
         // If clicking on an inactive skull, increase fatigue to index + 1
         const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
 
+        console.log(`[Fatigue] Setting fatigue from ${currentFatigue} to ${newFatigue}`);
         await this.actor.update({ 'system.fatigue': newFatigue });
+        console.log(`[Fatigue] Update complete, new value: ${this.actor.system.fatigue}`);
       });
     });
 
