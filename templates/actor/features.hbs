@@ -35,7 +35,6 @@
           <li class='feature accordion-item' data-item-id='{{feature._id}}'>
             <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
               <h4 class='feature-name'>{{feature.name}}</h4>
-              <i class='fas fa-chevron-down accordion-icon'></i>
             </div>
             {{#if feature.description}}
               <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.description}}}</div>
@@ -143,7 +142,6 @@
             <li class='perk-card accordion-item' data-item-id='{{perk._id}}'>
               <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
                 <h4 class='perk-name'>{{perk.name}}</h4>
-                <i class='fas fa-chevron-down accordion-icon'></i>
               </div>
               <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>
                 {{#if perk.prerequisites}}

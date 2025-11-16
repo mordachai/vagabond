@@ -507,9 +507,6 @@
   font-size: 14px;
   font-weight: bold;
 }
-.vagabond .features-list .feature.accordion-item .feature-header.accordion-header .accordion-icon {
-  transition: transform 0.3s ease;
-}
 .vagabond .features-list .feature.accordion-item .feature-description.accordion-content {
   padding: 12px;
   border-top: 1px solid var(--vagabond-c-faint);
@@ -517,9 +514,6 @@
   max-height: 500px;
   overflow-y: auto;
   transition: max-height 0.3s ease;
-}
-.vagabond .features-list .feature.accordion-item.collapsed .accordion-icon {
-  transform: rotate(-90deg);
 }
 .vagabond .features-list .feature.accordion-item.collapsed .accordion-content {
   display: none;
@@ -559,9 +553,6 @@
   font-size: 14px;
   font-weight: bold;
 }
-.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header .accordion-icon {
-  transition: transform 0.3s ease;
-}
 .vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content {
   padding: 12px;
   border-top: 1px solid var(--vagabond-c-faint);
@@ -578,9 +569,6 @@
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-description {
   font-size: 13px;
-}
-.vagabond .perks-list .perk-card.accordion-item.collapsed .accordion-icon {
-  transform: rotate(-90deg);
 }
 .vagabond .perks-list .perk-card.accordion-item.collapsed .accordion-content {
   display: none;

@@ -40,10 +40,6 @@
         font-size: 14px;
         font-weight: bold;
       }
-
-      .accordion-icon {
-        transition: transform 0.3s ease;
-      }
     }
 
     .feature-description.accordion-content {
@@ -57,10 +53,6 @@
 
     // Collapsed state
     &.collapsed {
-      .accordion-icon {
-        transform: rotate(-90deg);
-      }
-
       .accordion-content {
         display: none;
       }
@@ -106,10 +98,6 @@
         font-size: 14px;
         font-weight: bold;
       }
-
-      .accordion-icon {
-        transition: transform 0.3s ease;
-      }
     }
 
     .perk-content.accordion-content {
@@ -134,10 +122,6 @@
 
     // Collapsed state
     &.collapsed {
-      .accordion-icon {
-        transform: rotate(-90deg);
-      }
-
       .accordion-content {
         display: none;
       }

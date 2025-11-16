@@ -333,11 +333,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
     }
 
-    // Add click and right-click handlers for perk cards
+    // Add right-click handler for perk cards
     const perkCards = this.element.querySelectorAll('.perk-card[data-item-id]');
     perkCards.forEach(perkCard => {
-      // Left-click to view
-      perkCard.addEventListener('click', this._onViewPerk.bind(this));
       // Right-click to delete
       perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
     });
