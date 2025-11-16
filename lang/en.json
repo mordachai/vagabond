@@ -124,7 +124,7 @@
       "Character": {
         "FIELDS": {
           "attributes.level.value": {"label": "Level"},
-          "attributes.xp": {"label": "Experience Points"},
+          "attributes.xp": {"label": "XP"},
           "attributes.size": {"label": "Size"},
           "attributes.beingType": {"label": "Being Type"},
           "combat.hitPoints.current": {"label": "Current HP"},
