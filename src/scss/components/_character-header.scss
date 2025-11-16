@@ -30,16 +30,16 @@
   }
 }
 
-// Armor Overlay (Top right, 40x30, overflowing by 10px)
+// Armor Overlay (Top right, 40x50, overflowing by 10px)
 .armor-overlay {
   position: absolute;
   top: -10px;
   right: -10px;
   width: 40px;
-  height: 30px;
-  background-image: url('/systems/vagabond/assets/images/armor.svg');
-  background-size: cover;
-  background-position: center;
+  height: 50px;
+  background-image: url('icons/equipment/shield/heater-steel-gold.webp');
+  background-size: contain;
+  background-position: top center;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
