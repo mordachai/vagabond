@@ -502,11 +502,6 @@
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
   text-align: center;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-.vagabond .ability .ability-label:hover {
-  color: var(--vagabond-c-tan);
 }
 .vagabond .features-list {
   list-style: none;
