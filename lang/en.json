@@ -282,9 +282,9 @@
   },
   "Weapon": {
     "Range": {
-      "Close": "Close",
-      "Near": "Near",
-      "Far": "Far"
+      "Close": { "long": "Close", "abbr": "C" },
+      "Near": { "long": "Near", "abbr": "N" },
+      "Far": { "long": "Far", "abbr": "F" }
     },
     "Grip": {
       "1H": "1H (One-Handed)",

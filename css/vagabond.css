@@ -906,7 +906,6 @@
   display: flex;
   align-items: center;
   padding: 4px;
-  padding-left: 28px;
   margin-top: 4px;
   white-space: nowrap;
 }
@@ -915,6 +914,7 @@
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
+  flex: 3;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -927,6 +927,8 @@
   font-size: 13px;
   color: var(--vagabond-c-tan);
   white-space: nowrap;
+  flex: 0 0 auto;
+  text-align: right;
   margin-left: 8px;
 }
 .vagabond .right-column .weapon-info i,

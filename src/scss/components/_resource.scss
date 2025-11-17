@@ -132,7 +132,6 @@
     display: flex;
     align-items: center;
     padding: 4px;
-    padding-left: 28px; // Indent to align with weapon skill labels (account for checkbox space)
     margin-top: 4px;
     white-space: nowrap;
 
@@ -140,6 +139,7 @@
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
+      flex: 3; // Match skill-label flex to span available space
       overflow: hidden;
       text-overflow: ellipsis;
 
@@ -154,6 +154,8 @@
     font-size: 13px;
     color: $c-tan;
     white-space: nowrap;
+    flex: 0 0 auto; // Don't grow or shrink, stay at content size
+    text-align: right;
     margin-left: 8px;
 
     i {

@@ -153,11 +153,11 @@ export default class VagabondWeapon extends VagabondItemBase {
     // Determine if weapon is equipped (any state other than unequipped)
     this.equipped = this.equipmentState !== 'unequipped';
 
-    // Format range display
+    // Format range display with abbreviations
     const rangeMap = {
-      'close': 'Close',
-      'near': 'Near',
-      'far': 'Far'
+      'close': game.i18n.localize('VAGABOND.Weapon.Range.Close.abbr') ?? 'C',
+      'near': game.i18n.localize('VAGABOND.Weapon.Range.Near.abbr') ?? 'N',
+      'far': game.i18n.localize('VAGABOND.Weapon.Range.Far.abbr') ?? 'F'
     };
     this.rangeDisplay = rangeMap[this.range] || this.range;
 
