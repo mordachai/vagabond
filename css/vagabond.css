@@ -1652,6 +1652,62 @@
   font-weight: 400;
   line-height: 1.2;
 }
+
+/* Character Name at Top - Full Width */
+.vagabond .name-row-top {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.vagabond .character-name-input-large {
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-size: 28px;
+  font-family: "Manofa", sans-serif;
+  font-weight: 700;
+  color: var(--vagabond-c-dark);
+  width: 100%;
+  padding: 8px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.vagabond .character-name-input-large:hover,
+.vagabond .character-name-input-large:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  background: transparent !important;
+}
+
+/* Combined Character Info Row */
+.vagabond .character-info-combined-row {
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--vagabond-c-tan);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.vagabond .character-info-combined-row .level-input {
+  width: 15px;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vagabond-c-tan);
+  padding: 0 2px;
+  margin: 0 2px;
+}
+
+.vagabond .character-info-combined-row .level-input:hover,
+.vagabond .character-info-combined-row .level-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+
 .vagabond .speed-stats-row {
   display: flex;
   justify-content: space-around;
