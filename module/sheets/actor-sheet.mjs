@@ -15,7 +15,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     classes: ['vagabond', 'actor'],
     position: {
       width: 430,
-      height: 'calc(100vh - 450px)',
+      height: 'calc(100vh - 350px)',
     },
     actions: {
       onEditImage: this._onEditImage,
