@@ -134,7 +134,7 @@
   }
 
   .hp-current {
-    width: 50px;
+    width: 30px;
     text-align: right;
     border: none;
     background: transparent;
@@ -179,8 +179,8 @@
     gap: 4px;
 
     .xp-input {
-      width: 60px;
-      text-align: center;
+      width: 40px;
+      text-align: right;
     }
   }
 }
@@ -200,7 +200,7 @@
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 4px 0;
+  padding: 16px 0 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 

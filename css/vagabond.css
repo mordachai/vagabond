@@ -487,7 +487,7 @@
   width: 36px;
   height: 36px;
   text-align: center;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: bold;
   border: 2px solid var(--vagabond-c-faint);
   border-radius: 4px;
@@ -1451,7 +1451,7 @@
   margin-right: 4px;
 }
 .vagabond .hp-display .hp-current {
-  width: 50px;
+  width: 30px;
   text-align: right;
   border: none;
   background: transparent;
@@ -1489,8 +1489,8 @@
   gap: 4px;
 }
 .vagabond .xp-level-row .xp-field .xp-input {
-  width: 60px;
-  text-align: center;
+  width: 40px;
+  text-align: right;
 }
 .vagabond .name-row {
   margin-bottom: 2px;
@@ -1504,7 +1504,7 @@
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 4px 0;
+  padding: 16px 0 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
