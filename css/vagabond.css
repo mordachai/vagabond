@@ -1712,6 +1712,17 @@
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
+
+  /* Anti-aliasing for smooth rotation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 /* When closed, panel slides behind main sheet, only 20px trigger visible */
