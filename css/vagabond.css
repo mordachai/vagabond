@@ -482,7 +482,7 @@
   margin: 10px 0 16px 0;
   padding-bottom: 12px;
   position: relative;
-  z-index: 5;
+  z-index: 20 !important;
 }
 .vagabond .stats-row .stat-item {
   display: flex;
@@ -832,7 +832,7 @@
   gap: 6px;
   margin-bottom: 16px;
   position: relative;
-  z-index: 5;
+  z-index: 20 !important;
 }
 .vagabond .skills-list .skill {
   display: flex;
@@ -881,7 +881,7 @@
   flex-direction: column;
   gap: 16px;
   position: relative;
-  z-index: 5;
+  z-index: 20 !important;
 }
 .vagabond .right-column .weapon-skill {
   display: flex;
