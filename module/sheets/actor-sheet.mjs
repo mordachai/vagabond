@@ -14,8 +14,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static DEFAULT_OPTIONS = {
     classes: ['vagabond', 'actor'],
     position: {
-      width: 600,
-      height: 600,
+      width: 430,
+      height: 'calc(100vh - 450px)',
     },
     actions: {
       onEditImage: this._onEditImage,
@@ -128,6 +128,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Offloading context prep to a helper function
     this._prepareItems(context);
+
+    // Prepare equipped armor type for header display
+    const equippedArmor = this.actor.items.find(item => item.type === 'armor' && item.system.equipped);
+    context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
+
+    // Prepare fatigue boxes (5 skulls)
+    const fatigue = this.actor.system.fatigue || 0;
+    context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+      checked: i < fatigue,
+      level: i + 1
+    }));
 
     return context;
   }
@@ -328,6 +339,28 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onRender(context, options) {
     await super._onRender(context, options);
     this.#disableOverrides();
+
+    // Add fatigue skull click handlers
+    const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
+    console.log(`[Fatigue] Found ${fatigueSkulls.length} fatigue skulls`);
+
+    fatigueSkulls.forEach((skull, index) => {
+      skull.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentFatigue = this.actor.system.fatigue || 0;
+        console.log(`[Fatigue] Clicked skull ${index}, current fatigue: ${currentFatigue}`);
+
+        // If clicking on an active skull, reduce fatigue to that index
+        // If clicking on an inactive skull, increase fatigue to index + 1
+        const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
+
+        console.log(`[Fatigue] Setting fatigue from ${currentFatigue} to ${newFatigue}`);
+        await this.actor.update({ 'system.fatigue': newFatigue });
+        console.log(`[Fatigue] Update complete, new value: ${this.actor.system.fatigue}`);
+      });
+    });
 
     // Add right-click context menu handlers for ancestry and class
     const ancestryName = this.element.querySelector('.ancestry-name');

@@ -1,40 +1,54 @@
 {{! Sheet Header }}
 <header class='sheet-header'>
-  <img
-    class='profile-img'
-    src='{{actor.img}}'
-    data-edit='img'
-    data-action='onEditImage'
-    data-tooltip='{{actor.name}}'
-    height='100'
-    width='100'
-  />
+  {{! Character Image Container }}
+  <div class='char-image-container'>
+    <img
+      class='profile-img'
+      src='{{actor.img}}'
+      data-edit='img'
+      data-action='onEditImage'
+      data-tooltip='{{actor.name}}'
+      width='180'
+      height='180'
+    />
+
+    {{! Armor Info Overlay (Left side) }}
+    <div class='armor-overlay'>
+      <div class='armor-value'>{{system.armor}}</div>
+      <div class='armor-type'>{{equippedArmorType}}</div>
+    </div>
+
+    {{! Fatigue Overlay (Bottom) }}
+    <div class='fatigue-overlay'>
+      <div class='fatigue-checkboxes'>
+        {{#each fatigueBoxes as |box index|}}
+          <i
+            class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+            data-index='{{index}}'
+            data-tooltip='Fatigue Level {{box.level}}'
+          ></i>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+  {{! Hit Points (Below image) }}
+  <div class='hp-display'>
+    <i class='fas fa-heart hp-icon'></i>
+    <input
+      type='text'
+      name='system.health.value'
+      value='{{system.health.value}}'
+      data-dtype='Number'
+      class='hp-current'
+    />
+    <span class='hp-separator'>/</span>
+    <span class='hp-max'>{{system.health.max}}</span>
+  </div>
+
   <div class='header-fields'>
-    {{! Name Row with XP and Level Up }}
-    <div class='flex-center-gap-12 mb-8'>
-      {{! Character Name - Centered }}
-      <div class='flex-1 text-center'>
-        <input
-          name='name'
-          type='text'
-          value='{{actor.name}}'
-          placeholder='Character Name'
-          class='character-name-input'
-        />
-      </div>
-
-      {{! XP Field with inline label }}
-      <div class='flex-center-gap-4 nowrap'>
-        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
-        <input
-          type='text'
-          name='system.attributes.xp'
-          value='{{system.attributes.xp}}'
-          data-dtype='Number'
-          class='w-60'
-        />
-      </div>
-
+    {{! First Row: Level Up and XP - Aligned Right }}
+    <div class='xp-level-row'>
       {{! Level Up Button }}
       {{#if (lt system.attributes.level.value 10)}}
         <button
@@ -46,12 +60,42 @@
           <i class='fas fa-level-up-alt'></i>
         </button>
       {{/if}}
+
+      {{! XP Field with inline label }}
+      <div class='xp-field'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+        <input
+          type='text'
+          name='system.attributes.xp'
+          value='{{system.attributes.xp}}'
+          data-dtype='Number'
+          class='xp-input'
+        />
+      </div>
     </div>
 
-    {{! Character Info Row - Level, Ancestry, Class as display divs }}
+    {{! Second Row: Character Name - Aligned Left }}
+    <div class='name-row'>
+      <input
+        name='name'
+        type='text'
+        value='{{actor.name}}'
+        placeholder='Character Name'
+        class='character-name-input'
+      />
+    </div>
+
+    {{! Third Row: Level, Ancestry, Class }}
     <div class='character-info-row'>
       <span>
-        Level {{system.attributes.level.value}},
+        Level
+        <input
+          type='text'
+          name='system.attributes.level.value'
+          value='{{system.attributes.level.value}}'
+          data-dtype='Number'
+          class='level-input'
+        />,
         {{#if system.ancestryData}}
           <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
         {{else}}
@@ -62,6 +106,12 @@
         {{else}}
           <span class='text-faint'>No Class</span>
         {{/if}}
+      </span>
+    </div>
+
+    {{! Fourth Row: Being Type and Size }}
+    <div class='size-type-row'>
+      <span>
         {{#if system.ancestryData}}
           ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
         {{else}}
@@ -70,58 +120,48 @@
       </span>
     </div>
 
-    {{! Third row: Combat Stats }}
-    <div class='grid grid-5col'>
-      {{! Hit Points }}
-      <div class='resource'>
-        <label class='resource-label'>Hit Points</label>
-        <div class='resource-content flexrow flex-center flex-between'>
-          <input
-            type='text'
-            name='system.health.value'
-            value='{{system.health.value}}'
-            data-dtype='Number'
-            class='w-40'
-          />
-          <span> / </span>
-          <span>{{system.health.max}}</span>
-        </div>
-      </div>
-
-      {{! Armor }}
-      <div class='resource'>
-        <label class='resource-label'>Armor</label>
-        <span>{{system.armor}}</span>
-      </div>
-
-      {{! Fatigue }}
-      <div class='resource'>
-        <label class='resource-label'>Fatigue</label>
+    {{! Fifth Row: Speed Stats - Editable inputs on top, labels on bottom }}
+    <div class='speed-stats-row'>
+      <div class='stat-item'>
         <input
           type='text'
-          name='system.fatigue'
-          value='{{system.fatigue}}'
+          name='system.speed.base'
+          value='{{system.speed.base}}'
           data-dtype='Number'
-          class='w-40'
+          class='stat-value-input'
         />
+        <label class='stat-label'>Speed</label>
       </div>
-
-      {{! Speed - show all three values }}
-      <div class='resource'>
-        <label class='resource-label'>Speed</label>
-        <div class='text-xs'>
-          <div>{{system.speed.base}}'</div>
-          <div>Crawl: {{system.speed.crawl}}'</div>
-          <div>Travel: {{system.speed.travel}}mi</div>
-        </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.crawl'
+          value='{{system.speed.crawl}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Crawl</label>
       </div>
-
-      {{! Current Luck Row }}
-      <div class='resource'>
-         <label class='resource-label'>Current Luck</label>
-         <span>{{system.currentLuck}}</span>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.travel'
+          value='{{system.speed.travel}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Travel</label>
       </div>
-
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.currentLuck'
+          value='{{system.currentLuck}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Current<br/>Luck</label>
+      </div>
     </div>
   </div>
 </header>

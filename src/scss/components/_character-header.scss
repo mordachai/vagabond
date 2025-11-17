@@ -1,16 +1,206 @@
 // Character Sheet Header Styles
 
+// Sheet Header Container
+.sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+  height: 200px;
+}
+
+// Character Image Container (180x180 with overlays)
+.char-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+
+  .profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 4px;
+    border: none;
+    object-fit: cover;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// Armor Overlay (Top right, 40x50, overflowing by 10px)
+.armor-overlay {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 40px;
+  height: 50px;
+  background-image: url('/icons/equipment/shield/heater-steel-gold.webp');
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  .armor-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    line-height: 1;
+    margin-bottom: 1px;
+  }
+
+  .armor-type {
+    font-size: 7px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+}
+
+// Fatigue Overlay (Bottom)
+.fatigue-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  .fatigue-checkboxes {
+    display: flex;
+    gap: 4px;
+  }
+
+  .fatigue-skull {
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.fatigue-active {
+      color: #ff4444;
+      opacity: 1;
+      text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
+
+      &:hover {
+        color: #ff6666;
+        transform: scale(1.1);
+      }
+    }
+
+    &.fatigue-inactive {
+      color: rgba(255, 255, 255, 0.3);
+      opacity: 0.5;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.6);
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+// HP Display (Below image)
+.hp-display {
+  position: absolute;
+  top: 190px;
+  left: 0;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: bold;
+
+  .hp-icon {
+    font-size: 16px;
+    color: #c62828;
+    margin-right: 4px;
+  }
+
+  .hp-current {
+    width: 50px;
+    text-align: right;
+    border: none;
+    background: transparent;
+    padding: 2px 4px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--vagabond-c-dark);
+  }
+
+  .hp-separator {
+    color: var(--vagabond-c-dark);
+  }
+
+  .hp-max {
+    color: var(--vagabond-c-dark);
+    min-width: 30px;
+  }
+}
+
+// Header Fields (Right side of image)
+.header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
+}
+
+// XP and Level Row - Aligned Right
+.xp-level-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+
+  .xp-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .xp-input {
+      width: 60px;
+      text-align: center;
+    }
+  }
+}
+
+// Name Row - Aligned Left
+.name-row {
+  margin-bottom: 2px;
+}
+
 // Character Name Input Styling
 .character-name-input {
   border: none !important;
   background: transparent !important;
-  text-align: center;
-  font-size: 18px;
+  text-align: left;
+  font-size: 20px;
   font-family: $font-character-name;
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 4px 8px;
+  padding: 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 
@@ -21,18 +211,98 @@
   }
 }
 
-// Character Info Row Styling
+// Character Info Row Styling - Level, Ancestry, Class
 .character-info-row {
-  text-align: center;
-  margin-bottom: 10px;
+  text-align: left;
+  margin-bottom: 2px;
   font-size: 14px;
   color: var(--vagabond-c-tan);
   font-weight: 500;
   line-height: 1.2;
+
+  .level-input {
+    width: 15px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vagabond-c-tan);
+    padding: 0 2px;
+    margin: 0 2px;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid var(--vagabond-c-dark);
+    }
+  }
+}
+
+// Size and Type Row
+.size-type-row {
+  text-align: left;
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+// Speed Stats Row - Numbers on top, labels on bottom
+.speed-stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 4px 0;
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    .stat-value-input {
+      width: auto;
+      min-width: 25px;
+      max-width: 35px;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--vagabond-c-dark);
+      text-align: center;
+      border: none;
+      border-bottom: 1px solid transparent;
+      background: transparent;
+      padding: 2px 4px;
+
+      &:hover,
+      &:focus {
+        border-bottom: 1px solid var(--vagabond-c-dark);
+      }
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--vagabond-c-tan);
+      line-height: 1.1;
+    }
+  }
 }
 
 // Responsive adjustments for smaller screens
 @media (max-width: 600px) {
+  .sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .char-image-container {
+    margin-bottom: 40px;
+  }
+
   .character-name-input {
     font-size: 16px;
   }

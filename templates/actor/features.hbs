@@ -4,54 +4,65 @@
   data-group='primary'
   data-tab='features'
 >
-  <section class='grid grid-3col'>
-    {{! Left column: Stats }}
-    <aside class='sidebar'>
-      <h3>Stats</h3>
-      <div class='abilities abilities-grid'>
-        {{#each system.abilities as |ability key|}}
-          <div class='ability'>
-            <input
-              type='text'
-              name='system.abilities.{{key}}.value'
-              value='{{ability.value}}'
-              class="ability-score"
-              data-dtype='Number'
-            />
+  {{! Stats Row - All abilities in one row, no title }}
+  <div class='stats-row'>
+    {{#each system.abilities as |ability key|}}
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.abilities.{{key}}.value'
+          value='{{ability.value}}'
+          class='stat-score'
+          data-dtype='Number'
+        />
+        <label
+          class='stat-label rollable'
+          data-action='roll'
+          data-roll='d20'
+          data-label='{{localize (lookup @root.config.abilities key)}} Check'
+          data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+        >{{localize (lookup @root.config.abilities key)}}</label>
+      </div>
+    {{/each}}
+  </div>
+
+  <section class='grid grid-2col'>
+    {{! Left column: Skills (1-column layout) }}
+    <section class='skills-section grid-span-1'>
+      <h3>Skills</h3>
+      <div class='skills-list'>
+        {{#each system.skills as |skill key|}}
+          <div class='skill flexrow'>
+            <label class='skill-checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.skills.{{key}}.trained'
+                {{#if skill.trained}}checked{{/if}}
+                class='skill-checkbox-hidden'
+              />
+              {{#if skill.trained}}
+                <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+              {{else}}
+                <i class='skill-checkbox-icon far fa-circle'></i>
+              {{/if}}
+            </label>
             <label
-              class='ability-label rollable'
+              class='skill-label rollable'
               data-action='roll'
               data-roll='d20'
-              data-label='{{localize (lookup @root.config.abilities key)}} Check'
-              data-tooltip='{{localize (lookup @root.config.abilities key)}}'
-            >{{localize (lookup @root.config.abilityAbbreviations key)}}</label>
+              data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
+            >{{skill.label}}</label>
+            <span class='skill-difficulty'>{{skill.difficulty}}</span>
           </div>
         {{/each}}
       </div>
+    </section>
 
-      {{! Features Section }}
-      <h3 class='features-section-title'>Features</h3>
-      <ul class='features-list'>
-        {{#each features as |feature id|}}
-          <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
-            <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
-              <h4 class='feature-name'>{{feature.name}}</h4>
-            </div>
-            {{#if feature.description}}
-              <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.description}}}</div>
-            {{/if}}
-          </li>
-        {{else}}
-          <li class='no-features'>No features yet. Features are granted by your class as you level up.</li>
-        {{/each}}
-      </ul>
-    </aside>
-
-    {{! Middle column: Saves and Skills }}
-    <section class='main grid-span-1'>
-      {{! Saves Section - Horizontal layout with border }}
+    {{! Right column: Saves, Attacks, Features, Perks }}
+    <section class='right-column grid-span-1'>
+      {{! Saves Section - Horizontal layout }}
       <div class='saves'>
-        <h3>SAVES</h3>
+        <h3>Saves</h3>
         <div class='saves-row flexrow'>
           {{#each system.saves as |save key|}}
             <div class='save flexcol align-center'>
@@ -68,47 +79,31 @@
         </div>
       </div>
 
-      {{! Skills Section }}
-      <div class='skills flexcol'>
-        <h3>Skills</h3>
-        {{#each system.skills as |skill key|}}
-          <div class='skill flexrow flex-group-center'>
-            <input
-              type='checkbox'
-              name='system.skills.{{key}}.trained'
-              {{#if skill.trained}}checked{{/if}}
-            />
-            <label
-              class='resource-label rollable flexlarge align-left'
-              data-action='roll'
-              data-roll='d20'
-              data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
-            >{{skill.label}} {{#if skill.trained}}(Trained){{/if}}</label>
-            <span class='skill-difficulty'>{{skill.difficulty}}</span>
-          </div>
-        {{/each}}
-      </div>
-    </section>
-
-    {{! Right column: Attacks and Perks }}
-    <section class='attacks-section grid-span-1'>
       {{! Weapon Skills / Attacks Section }}
       <div class='weapon-skills flexcol'>
         <h3>Attacks</h3>
         {{#each system.weaponSkills as |weaponSkill key|}}
-          <div class='weapon-skill flexrow flex-group-center'>
-            <input
-              type='checkbox'
-              name='system.weaponSkills.{{key}}.trained'
-              {{#if weaponSkill.trained}}checked{{/if}}
-            />
+          <div class='weapon-skill flexrow'>
+            <label class='skill-checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.weaponSkills.{{key}}.trained'
+                {{#if weaponSkill.trained}}checked{{/if}}
+                class='skill-checkbox-hidden'
+              />
+              {{#if weaponSkill.trained}}
+                <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+              {{else}}
+                <i class='skill-checkbox-icon far fa-circle'></i>
+              {{/if}}
+            </label>
             <label
-              class='resource-label rollable flexlarge align-left'
+              class='skill-label rollable'
               data-action='roll'
               data-roll='d20'
               data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
-            >{{weaponSkill.label}} {{#if weaponSkill.trained}}(Trained){{/if}}</label>
-            <span class='weapon-skill-difficulty'>{{weaponSkill.difficulty}}</span>
+            >{{weaponSkill.label}}</label>
+            <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
           </div>
         {{/each}}
 
@@ -133,6 +128,25 @@
             </div>
           {{/if}}
         {{/each}}
+      </div>
+
+      {{! Features Section }}
+      <div class='features-section flexcol'>
+        <h3>Features</h3>
+        <ul class='features-list'>
+          {{#each features as |feature id|}}
+            <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
+              <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
+                <h4 class='feature-name'>{{feature.name}}</h4>
+              </div>
+              {{#if feature.description}}
+                <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.description}}}</div>
+              {{/if}}
+            </li>
+          {{else}}
+            <li class='no-features'>No features yet. Features are granted by your class as you level up.</li>
+          {{/each}}
+        </ul>
       </div>
 
       {{! Perks Section }}

@@ -469,6 +469,41 @@
   font-family: "Eskapade", serif;
   font-weight: bold;
 }
+.vagabond .stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .stats-row .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .stats-row .stat-item .stat-score {
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 4px;
+}
+.vagabond .stats-row .stat-item .stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--vagabond-c-tan);
+  text-align: center;
+  cursor: pointer;
+}
+.vagabond .stats-row .stat-item .stat-label:hover {
+  color: var(--vagabond-c-dark);
+}
 .vagabond input[type=text],
 .vagabond input[type=number],
 .vagabond textarea {
@@ -750,35 +785,115 @@
 .vagabond .resource-label {
   font-weight: bold;
 }
-.vagabond .abilities-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 12px;
-  margin-bottom: 16px;
+.vagabond .features h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
-.vagabond .ability {
+.vagabond .skills-list {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.vagabond .skills-list .skill {
+  display: flex;
   align-items: center;
-  gap: 4px;
+  padding: 4px;
+  white-space: nowrap;
 }
-.vagabond .ability .ability-score {
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  font-size: 18px;
+.vagabond .skills-list .skill .skill-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+  margin-right: 6px;
+  flex: 0.5;
+}
+.vagabond .skills-list .skill .skill-checkbox-hidden {
+  display: none;
+}
+.vagabond .skills-list .skill .skill-checkbox-icon {
+  font-size: 16px;
+  color: var(--vagabond-c-dark);
+  transition: color 0.2s ease;
+}
+.vagabond .skills-list .skill .skill-checkbox-icon:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .skills-list .skill .skill-label {
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .skills-list .skill .skill-label:hover {
+  text-decoration: underline;
+}
+.vagabond .skills-list .skill .skill-difficulty {
   font-weight: bold;
-  border: 2px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+  text-align: right;
+  font-size: 15px;
+  flex: 1;
+}
+.vagabond .right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.vagabond .right-column .weapon-skill {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  white-space: nowrap;
+}
+.vagabond .right-column .weapon-skill .skill-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+  margin-right: 6px;
+  flex: 0.5;
+}
+.vagabond .right-column .weapon-skill .skill-checkbox-hidden {
+  display: none;
+}
+.vagabond .right-column .weapon-skill .skill-checkbox-icon {
+  font-size: 16px;
+  color: var(--vagabond-c-dark);
+  transition: color 0.2s ease;
+}
+.vagabond .right-column .weapon-skill .skill-checkbox-icon:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .right-column .weapon-skill .skill-label {
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .right-column .weapon-skill .skill-label:hover {
+  text-decoration: underline;
+}
+.vagabond .saves .saves-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
   padding: 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
 }
-.vagabond .ability .ability-label {
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: var(--vagabond-c-muted);
+.vagabond .saves .save {
   text-align: center;
+}
+.vagabond .saves .save .save-difficulty {
+  font-weight: bold;
+  font-size: 14px;
 }
 .vagabond .features-list {
   list-style: none;
@@ -880,6 +995,11 @@
   text-align: center;
   color: var(--vagabond-c-faint);
   font-style: italic;
+}
+.vagabond .inventory h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 .vagabond .items-header {
   height: 28px;
@@ -1217,16 +1337,174 @@
 .vagabond .effects .item .effect-controls {
   border: none;
 }
+.vagabond .sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+  height: 200px;
+}
+.vagabond .char-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+.vagabond .char-image-container .profile-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 4px;
+  border: none;
+  object-fit: cover;
+  cursor: pointer;
+}
+.vagabond .char-image-container .profile-img:hover {
+  opacity: 0.9;
+}
+.vagabond .armor-overlay {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 40px;
+  height: 50px;
+  background-image: url("/icons/equipment/shield/heater-steel-gold.webp");
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond .armor-overlay .armor-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  margin-bottom: 1px;
+}
+.vagabond .armor-overlay .armor-type {
+  font-size: 7px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.vagabond .fatigue-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.vagabond .fatigue-overlay .fatigue-checkboxes {
+  display: flex;
+  gap: 4px;
+}
+.vagabond .fatigue-overlay .fatigue-skull {
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .fatigue-overlay .fatigue-skull.fatigue-active {
+  color: #ff4444;
+  opacity: 1;
+  text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
+}
+.vagabond .fatigue-overlay .fatigue-skull.fatigue-active:hover {
+  color: #ff6666;
+  transform: scale(1.1);
+}
+.vagabond .fatigue-overlay .fatigue-skull.fatigue-inactive {
+  color: rgba(255, 255, 255, 0.3);
+  opacity: 0.5;
+}
+.vagabond .fatigue-overlay .fatigue-skull.fatigue-inactive:hover {
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+.vagabond .hp-display {
+  position: absolute;
+  top: 190px;
+  left: 0;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.vagabond .hp-display .hp-icon {
+  font-size: 16px;
+  color: #c62828;
+  margin-right: 4px;
+}
+.vagabond .hp-display .hp-current {
+  width: 50px;
+  text-align: right;
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .hp-display .hp-separator {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .hp-display .hp-max {
+  color: var(--vagabond-c-dark);
+  min-width: 30px;
+}
+.vagabond .header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
+}
+.vagabond .xp-level-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.vagabond .xp-level-row .xp-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .xp-level-row .xp-field .xp-input {
+  width: 60px;
+  text-align: center;
+}
+.vagabond .name-row {
+  margin-bottom: 2px;
+}
 .vagabond .character-name-input {
   border: none !important;
   background: transparent !important;
-  text-align: center;
-  font-size: 18px;
+  text-align: left;
+  font-size: 20px;
   font-family: "Manofa", sans-serif;
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 4px 8px;
+  padding: 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
@@ -1235,14 +1513,80 @@
   background: transparent !important;
 }
 .vagabond .character-info-row {
-  text-align: center;
-  margin-bottom: 10px;
+  text-align: left;
+  margin-bottom: 2px;
   font-size: 14px;
   color: var(--vagabond-c-tan);
   font-weight: 500;
   line-height: 1.2;
 }
+.vagabond .character-info-row .level-input {
+  width: 15px;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vagabond-c-tan);
+  padding: 0 2px;
+  margin: 0 2px;
+}
+.vagabond .character-info-row .level-input:hover, .vagabond .character-info-row .level-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .size-type-row {
+  text-align: left;
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.vagabond .speed-stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 4px 0;
+}
+.vagabond .speed-stats-row .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.vagabond .speed-stats-row .stat-item .stat-value-input {
+  width: auto;
+  min-width: 25px;
+  max-width: 35px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 2px 4px;
+}
+.vagabond .speed-stats-row .stat-item .stat-value-input:hover, .vagabond .speed-stats-row .stat-item .stat-value-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .speed-stats-row .stat-item .stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--vagabond-c-tan);
+  line-height: 1.1;
+}
 @media (max-width: 600px) {
+  .vagabond .sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .vagabond .char-image-container {
+    margin-bottom: 40px;
+  }
   .vagabond .character-name-input {
     font-size: 16px;
   }

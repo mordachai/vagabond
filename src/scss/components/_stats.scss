@@ -1,0 +1,40 @@
+// Stats Row - All abilities in one row (used in Features tab)
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    .stat-score {
+      width: 36px;
+      height: 36px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      border: 2px solid var(--vagabond-c-faint);
+      border-radius: 4px;
+      padding: 4px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: capitalize;
+      color: var(--vagabond-c-tan);
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--vagabond-c-dark);
+      }
+    }
+  }
+}

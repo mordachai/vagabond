@@ -19,6 +19,12 @@ export default class VagabondActorBase extends foundry.abstract
       value: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),
       max: new fields.NumberField({ ...requiredInteger, initial: 5 }),
     });
+    schema.fatigue = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      min: 0,
+      max: 5,
+    });
     schema.biography = new fields.HTMLField();
 
     return schema;

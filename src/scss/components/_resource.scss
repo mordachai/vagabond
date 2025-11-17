@@ -2,38 +2,143 @@
   font-weight: bold;
 }
 
-// Abilities Grid - 2 rows x 3 columns
-.abilities-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 12px;
-  margin-bottom: 16px;
+// General h3 styling for Features tab sections
+.features {
+  h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
 }
 
-.ability {
+// Skills List - 1 column layout
+.skills-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  gap: 6px;
+  margin-bottom: 16px;
 
-  .ability-score {
-    width: 44px;
-    height: 44px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    border: 2px solid $c-faint;
-    border-radius: 4px;
+  .skill {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    white-space: nowrap;
+
+    .skill-checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin: 0;
+      margin-right: 6px;
+      flex: 0.5;
+    }
+
+    .skill-checkbox-hidden {
+      display: none;
+    }
+
+    .skill-checkbox-icon {
+      font-size: 16px;
+      color: var(--vagabond-c-dark);
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--vagabond-c-tan);
+      }
+    }
+
+    .skill-label {
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      flex: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .skill-difficulty {
+      font-weight: bold;
+      text-align: right;
+      font-size: 15px;
+      flex: 1;
+    }
+  }
+}
+
+// Right column layout
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  // Weapon skills styling (same as regular skills)
+  .weapon-skill {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    white-space: nowrap;
+
+    .skill-checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin: 0;
+      margin-right: 6px;
+      flex: 0.5;
+    }
+
+    .skill-checkbox-hidden {
+      display: none;
+    }
+
+    .skill-checkbox-icon {
+      font-size: 16px;
+      color: var(--vagabond-c-dark);
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--vagabond-c-tan);
+      }
+    }
+
+    .skill-label {
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      flex: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Saves Section
+.saves {
+  .saves-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
     padding: 8px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.02);
   }
 
-  .ability-label {
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: $c-muted;
+  .save {
     text-align: center;
+
+    .save-difficulty {
+      font-weight: bold;
+      font-size: 14px;
+    }
   }
 }
 
