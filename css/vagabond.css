@@ -257,6 +257,8 @@
 
 .vagabond .window-header {
   background: transparent !important;
+  position: relative;
+  z-index: 10 !important;
 }
 
 .vagabond .window-content {
@@ -264,12 +266,14 @@
   position: relative;
   overflow: visible !important;
   height: 100%;
-  z-index: 2;
+  z-index: 10 !important;
+  isolation: isolate;
 }
 
 .vagabond .sheet-body {
   position: relative;
-  z-index: 2;
+  z-index: 10 !important;
+  isolation: isolate;
 }
 
 .rollable:hover, .rollable:focus {
@@ -576,6 +580,8 @@
 }
 .vagabond .sheet-tabs {
   flex: 0;
+  position: relative;
+  z-index: 10 !important;
 }
 .vagabond .sheet-body,
 .vagabond .sheet-body .tab,
@@ -587,6 +593,8 @@
 }
 .vagabond .tab {
   overflow-y: auto;
+  position: relative;
+  z-index: 10 !important;
 }
 .vagabond .tab.biography {
   flex: 1;
@@ -1718,11 +1726,7 @@
   -moz-osx-font-smoothing: grayscale;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
   will-change: transform;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
 }
 
 /* When closed, panel slides behind main sheet, only 20px trigger visible */
