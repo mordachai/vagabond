@@ -1517,6 +1517,22 @@
   font-weight: 500;
   line-height: 1.2;
 }
+.vagabond .character-info-row .level-input {
+  width: 30px;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vagabond-c-tan);
+  padding: 0 2px;
+  margin: 0 2px;
+}
+.vagabond .character-info-row .level-input:hover, .vagabond .character-info-row .level-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
 .vagabond .size-type-row {
   text-align: left;
   margin-bottom: 8px;

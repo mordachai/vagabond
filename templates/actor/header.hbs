@@ -88,7 +88,14 @@
     {{! Third Row: Level, Ancestry, Class }}
     <div class='character-info-row'>
       <span>
-        Level {{system.attributes.level.value}},
+        Level
+        <input
+          type='text'
+          name='system.attributes.level.value'
+          value='{{system.attributes.level.value}}'
+          data-dtype='Number'
+          class='level-input'
+        />,
         {{#if system.ancestryData}}
           <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
         {{else}}

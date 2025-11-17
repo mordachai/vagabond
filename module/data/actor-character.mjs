@@ -322,8 +322,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     const luckValue = this.abilities.luck?.value || 8;
     const level = this.attributes.level.value || 1;
 
-    // Max HP = Might × Level (update the existing health.max)
-    this.health.max = mightValue * level;
+    // Max HP = Might + Level (update the existing health.max)
+    this.health.max = mightValue + level;
     
     // Current Luck = Luck stat value
     this.currentLuck = luckValue;

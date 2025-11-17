@@ -216,6 +216,25 @@
   color: var(--vagabond-c-tan);
   font-weight: 500;
   line-height: 1.2;
+
+  .level-input {
+    width: 30px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vagabond-c-tan);
+    padding: 0 2px;
+    margin: 0 2px;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid var(--vagabond-c-dark);
+    }
+  }
 }
 
 // Size and Type Row
