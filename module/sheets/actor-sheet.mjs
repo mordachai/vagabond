@@ -672,6 +672,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Update the panel classes directly on the DOM element to preserve CSS transitions
     const panel = this.element.querySelector('.sliding-panel');
     if (panel) {
+      console.log('=== PANEL TOGGLE DEBUG ===');
+      console.log('Panel Open State:', this.isPanelOpen);
+      console.log('Panel element:', panel);
+      console.log('Current classes:', panel.className);
+      console.log('Current z-index (computed):', window.getComputedStyle(panel).zIndex);
+      console.log('Current transform:', window.getComputedStyle(panel).transform);
+      console.log('Panel position:', {
+        left: window.getComputedStyle(panel).left,
+        top: window.getComputedStyle(panel).top,
+        width: window.getComputedStyle(panel).width,
+        height: window.getComputedStyle(panel).height
+      });
+
       if (this.isPanelOpen) {
         panel.classList.remove('panel-closed');
         panel.classList.add('panel-open');
@@ -679,6 +692,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         panel.classList.remove('panel-open');
         panel.classList.add('panel-closed');
       }
+
+      // Log after class change
+      setTimeout(() => {
+        console.log('After toggle:');
+        console.log('  Classes:', panel.className);
+        console.log('  Z-index:', window.getComputedStyle(panel).zIndex);
+        console.log('  Transform:', window.getComputedStyle(panel).transform);
+
+        // Check main sheet elements
+        const windowContent = this.element.querySelector('.window-content');
+        const sheetBody = this.element.querySelector('.sheet-body');
+        const panelContent = panel.querySelector('.panel-content');
+
+        console.log('Main sheet z-indexes:');
+        console.log('  window-content:', windowContent ? window.getComputedStyle(windowContent).zIndex : 'not found');
+        console.log('  sheet-body:', sheetBody ? window.getComputedStyle(sheetBody).zIndex : 'not found');
+        console.log('Panel content z-index:', panelContent ? window.getComputedStyle(panelContent).zIndex : 'not found');
+
+        console.log('Stacking context check:');
+        console.log('  Panel isolation:', window.getComputedStyle(panel).isolation);
+        console.log('  Window-content isolation:', windowContent ? window.getComputedStyle(windowContent).isolation : 'not found');
+        console.log('=========================');
+      }, 50);
     }
   }
 
