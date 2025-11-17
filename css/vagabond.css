@@ -996,6 +996,11 @@
   color: var(--vagabond-c-faint);
   font-style: italic;
 }
+.vagabond .inventory h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
 .vagabond .items-header {
   height: 28px;
   margin: 6px 0;
