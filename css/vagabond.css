@@ -1696,25 +1696,25 @@
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
-  right: -410px;
+  left: 410px;
   width: 430px;
   height: 100%;
   background: var(--vagabond-c-groove);
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 5;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
   display: flex;
   flex-direction: row;
 }
 
-/* When open, panel slides into full view to the right */
+/* When open, panel slides to the right, fully visible */
 .vagabond .sliding-panel.panel-open {
-  right: 0;
+  left: 430px;
 }
 
-/* Click zone - visible sliver on the left edge of panel (always visible) */
+/* Click zone - visible sliver on the left edge of panel (part of the panel) */
 .vagabond .panel-click-zone {
   position: absolute;
   top: 0;
