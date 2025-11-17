@@ -489,6 +489,8 @@
   justify-content: space-between;
   margin: 10px 0 16px 0;
   padding-bottom: 12px;
+  position: relative;
+  z-index: 5;
 }
 .vagabond .stats-row .stat-item {
   display: flex;
@@ -832,6 +834,8 @@
   flex-direction: column;
   gap: 6px;
   margin-bottom: 16px;
+  position: relative;
+  z-index: 5;
 }
 .vagabond .skills-list .skill {
   display: flex;
@@ -879,6 +883,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+  z-index: 5;
 }
 .vagabond .right-column .weapon-skill {
   display: flex;
@@ -1714,18 +1720,23 @@
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
   z-index: 1 !important;
   display: flex;
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
 
+  /* Smooth transition with easing */
+  -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition: -moz-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  -o-transition: -o-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
   /* Anti-aliasing for smooth rotation */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   will-change: transform;
 }
 
@@ -1763,12 +1774,16 @@
   overflow-y: auto;
   box-sizing: border-box;
   flex: 1;
+  position: relative;
+  z-index: 1;  /* Content within panel context */
 }
 
 .vagabond .panel-section {
   margin-bottom: 24px;
   padding-bottom: 24px;
   border-bottom: 2px solid var(--vagabond-c-faint);
+  position: relative;
+  z-index: 1;
 }
 
 .vagabond .panel-section:last-child {
