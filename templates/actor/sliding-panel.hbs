@@ -5,7 +5,7 @@
 
     {{! Sheet Header }}
     <header class='sheet-header'>
-      {{! Character Name - Full Width at Top }}
+      {{! Character Name with XP - Full Width at Top }}
       <div class='name-row-top'>
         <input
           name='name'
@@ -14,6 +14,16 @@
           placeholder='Character Name'
           class='character-name-input-large'
         />
+        <div class='xp-field-inline'>
+          <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+          <input
+            type='text'
+            name='system.attributes.xp'
+            value='{{system.attributes.xp}}'
+            data-dtype='Number'
+            class='xp-input'
+          />
+        </div>
       </div>
 
       {{! Level, Ancestry, Class, Being Type, Size - All in One Row }}
@@ -92,7 +102,7 @@
       </div>
 
       <div class='header-fields'>
-        {{! First Row: Level Up and XP - Aligned Right }}
+        {{! Level Up Button and Speed Stats }}
         <div class='xp-level-row'>
           {{! Level Up Button }}
           {{#if (lt system.attributes.level.value 10)}}
@@ -105,18 +115,6 @@
               <i class='fas fa-level-up-alt'></i>
             </button>
           {{/if}}
-
-          {{! XP Field with inline label }}
-          <div class='xp-field'>
-            <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
-            <input
-              type='text'
-              name='system.attributes.xp'
-              value='{{system.attributes.xp}}'
-              data-dtype='Number'
-              class='xp-input'
-            />
-          </div>
         </div>
 
         {{! Speed Stats - Editable inputs on top, labels on bottom }}

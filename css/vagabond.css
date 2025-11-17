@@ -1449,7 +1449,7 @@
 .vagabond .sheet-header {
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 4px;
   align-items: flex-start;
   height: 200px;
 }
@@ -1657,6 +1657,41 @@
 .vagabond .name-row-top {
   width: 100%;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.vagabond .xp-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.vagabond .xp-field-inline .resource-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vagabond-c-tan);
+  white-space: nowrap;
+}
+
+.vagabond .xp-field-inline .xp-input {
+  width: 35px;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vagabond-c-dark);
+  padding: 2px 4px;
+}
+
+.vagabond .xp-field-inline .xp-input:hover,
+.vagabond .xp-field-inline .xp-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
 }
 
 .vagabond .character-name-input-large {
@@ -1683,7 +1718,7 @@
 .vagabond .character-info-combined-row {
   text-align: center;
   margin-bottom: 12px;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--vagabond-c-tan);
   font-weight: 500;
   line-height: 1.4;
@@ -1696,7 +1731,7 @@
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--vagabond-c-tan);
   padding: 0 2px;
