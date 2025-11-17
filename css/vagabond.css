@@ -252,6 +252,7 @@
   border-radius: 0% !important;
   box-shadow: none !important;
   height: calc(100vh - 150px) !important;
+  overflow: visible !important;
 }
 
 .vagabond .window-header {
@@ -571,6 +572,9 @@
 .vagabond .sheet-body .tab,
 .vagabond .sheet-body .tab .editor {
   height: 100%;
+}
+.vagabond .sheet-body {
+  overflow-x: visible !important;
 }
 .vagabond .tab {
   overflow-y: auto;
@@ -1699,19 +1703,19 @@
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
-  z-index: 1;
+  z-index: 10;
   display: flex;
   flex-direction: row;
 }
 
-/* When closed, panel slides behind main sheet to the right */
+/* When closed, panel is mostly hidden to the left (behind main), only sliver visible */
 .vagabond .sliding-panel.panel-closed {
-  transform: translateX(410px);
+  transform: translateX(calc(-100% + 20px));
 }
 
-/* When open, panel is fully visible to the right */
+/* When open, panel is fully visible on the right */
 .vagabond .sliding-panel.panel-open {
-  transform: translateX(440px);
+  transform: translateX(0);
 }
 
 /* Click zone - visible sliver on the right edge of panel */
@@ -1724,7 +1728,7 @@
   background: var(--vagabond-c-beige);
   border-left: 2px solid var(--vagabond-c-tan);
   cursor: pointer;
-  z-index: 10;
+  z-index: 100;
   transition: background 0.2s ease;
   display: flex;
   align-items: center;
