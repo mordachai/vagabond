@@ -494,7 +494,7 @@
   padding: 4px;
 }
 .vagabond .stats-row .stat-item .stat-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: capitalize;
   color: var(--vagabond-c-tan);
@@ -1445,6 +1445,11 @@
   font-size: 18px;
   font-weight: bold;
 }
+.vagabond .hp-display .hp-icon {
+  font-size: 16px;
+  color: #c62828;
+  margin-right: 4px;
+}
 .vagabond .hp-display .hp-current {
   width: 50px;
   text-align: right;
@@ -1461,11 +1466,6 @@
 .vagabond .hp-display .hp-max {
   color: var(--vagabond-c-dark);
   min-width: 30px;
-}
-.vagabond .hp-display .hp-icon {
-  font-size: 16px;
-  color: #c62828;
-  margin-left: 4px;
 }
 .vagabond .header-fields {
   flex: 1;
@@ -1521,7 +1521,7 @@
   line-height: 1.2;
 }
 .vagabond .character-info-row .level-input {
-  width: 30px;
+  width: 15px;
   text-align: center;
   display: inline-block;
   border: none;
@@ -1558,9 +1558,9 @@
 }
 .vagabond .speed-stats-row .stat-item .stat-value-input {
   width: auto;
-  min-width: 30px;
-  max-width: 50px;
-  font-size: 16px;
+  min-width: 25px;
+  max-width: 35px;
+  font-size: 24px;
   font-weight: bold;
   color: var(--vagabond-c-dark);
   text-align: center;
@@ -1573,7 +1573,7 @@
   border-bottom: 1px solid var(--vagabond-c-dark);
 }
 .vagabond .speed-stats-row .stat-item .stat-label {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 600;
   text-align: center;
   color: var(--vagabond-c-tan);
