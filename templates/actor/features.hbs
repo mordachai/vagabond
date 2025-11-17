@@ -120,9 +120,17 @@
               <span class='weapon-info'>
                 {{weapon.system.rangeDisplay}}
                 {{#if (eq weapon.system.equipmentState 'oneHand')}}
-                  <i class='fas fa-hand-fist' title='One-Handed'></i>
+                  {{#if (eq weapon.system.grip 'V')}}
+                    <i class='fas fa-hand-fist clickable' title='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                  {{else}}
+                    <i class='fas fa-hand-fist' title='One-Handed'></i>
+                  {{/if}}
                 {{else if (eq weapon.system.equipmentState 'twoHands')}}
-                  <i class='fas fa-hands' title='Two-Handed'></i>
+                  {{#if (eq weapon.system.grip 'V')}}
+                    <i class='fas fa-hands clickable' title='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                  {{else}}
+                    <i class='fas fa-hands' title='Two-Handed'></i>
+                  {{/if}}
                 {{/if}}
               </span>
             </div>

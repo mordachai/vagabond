@@ -25,6 +25,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
+      toggleWeaponGrip: this._onToggleWeaponGrip,
       toggleArmorEquipment: this._onToggleArmorEquipment,
       useSpell: this._onUseSpell,
       toggleSpellFavorite: this._onToggleSpellFavorite,
@@ -1049,6 +1050,39 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       default:
         nextState = 'unequipped';
     }
+
+    // Update the weapon's equipment state
+    await weapon.update({ 'system.equipmentState': nextState });
+  }
+
+  /**
+   * Handle toggling weapon grip (for versatile weapons in features panel).
+   * Toggles between: oneHand <-> twoHands
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleWeaponGrip(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const weapon = this.actor.items.get(itemId);
+
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Only allow toggling for versatile weapons
+    if (weapon.system.grip !== 'V') {
+      ui.notifications.warn('Only versatile weapons can switch grip!');
+      return;
+    }
+
+    // Toggle between oneHand and twoHands
+    const currentState = weapon.system.equipmentState;
+    const nextState = currentState === 'oneHand' ? 'twoHands' : 'oneHand';
 
     // Update the weapon's equipment state
     await weapon.update({ 'system.equipmentState': nextState });

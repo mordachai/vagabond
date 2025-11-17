@@ -50,7 +50,8 @@
             value='{{system.damageTwoHands}}'
             data-dtype='String'
             placeholder='d10'
-            class='damage-input'
+            class='damage-input damage-two-hands'
+            {{#unless (or (eq system.grip '2H') (eq system.grip 'V'))}}disabled{{/unless}}
           />
         </div>
       </div>
