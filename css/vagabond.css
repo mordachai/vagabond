@@ -258,7 +258,7 @@
 }
 
 .vagabond .window-content {
-  background: #121212;
+  background: var(--vagabond-c-groove);
 }
 
 .rollable:hover, .rollable:focus {
