@@ -5,7 +5,7 @@
 
     {{! Sheet Header }}
     <header class='sheet-header'>
-      {{! Character Name with XP - Full Width at Top }}
+      {{! Character Name with Level Up Button and XP - Full Width at Top }}
       <div class='name-row-top'>
         <input
           name='name'
@@ -14,15 +14,28 @@
           placeholder='Character Name'
           class='character-name-input-large'
         />
-        <div class='xp-field-inline'>
-          <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
-          <input
-            type='text'
-            name='system.attributes.xp'
-            value='{{system.attributes.xp}}'
-            data-dtype='Number'
-            class='xp-input'
-          />
+        <div class='top-right-controls'>
+          {{! Level Up Button }}
+          {{#if (lt system.attributes.level.value 10)}}
+            <button
+              type='button'
+              data-action='levelUp'
+              data-tooltip='Level Up'
+              class='btn-sm'
+            >
+              <i class='fas fa-level-up-alt'></i>
+            </button>
+          {{/if}}
+          <div class='xp-field-inline'>
+            <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+            <input
+              type='text'
+              name='system.attributes.xp'
+              value='{{system.attributes.xp}}'
+              data-dtype='Number'
+              class='xp-input'
+            />
+          </div>
         </div>
       </div>
 
@@ -55,134 +68,123 @@
         </span>
       </div>
 
-      {{! Character Image Container }}
-      <div class='char-image-container'>
-        <img
-          class='profile-img'
-          src='{{actor.img}}'
-          data-edit='img'
-          data-action='onEditImage'
-          data-tooltip='{{actor.name}}'
-          width='180'
-          height='180'
-        />
+      {{! Main Row: Image and Stats Side by Side }}
+      <div class='header-main-row'>
+        {{! Character Image Container }}
+        <div class='image-column'>
+          <div class='char-image-container'>
+            <img
+              class='profile-img'
+              src='{{actor.img}}'
+              data-edit='img'
+              data-action='onEditImage'
+              data-tooltip='{{actor.name}}'
+              width='180'
+              height='180'
+            />
 
-        {{! Armor Info Overlay (Left side) }}
-        <div class='armor-overlay'>
-          <div class='armor-value'>{{system.armor}}</div>
-          <div class='armor-type'>{{equippedArmorType}}</div>
+            {{! Armor Info Overlay (Left side) }}
+            <div class='armor-overlay'>
+              <div class='armor-value'>{{system.armor}}</div>
+              <div class='armor-type'>{{equippedArmorType}}</div>
+            </div>
+
+            {{! Fatigue Overlay (Bottom) }}
+            <div class='fatigue-overlay'>
+              <div class='fatigue-checkboxes'>
+                {{#each fatigueBoxes as |box index|}}
+                  <i
+                    class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                    data-index='{{index}}'
+                    data-tooltip='Fatigue Level {{box.level}}'
+                  ></i>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+
+          {{! Hit Points (Below image) }}
+          <div class='hp-display'>
+            <i class='fas fa-heart hp-icon'></i>
+            <input
+              type='text'
+              name='system.health.value'
+              value='{{system.health.value}}'
+              data-dtype='Number'
+              class='hp-current'
+            />
+            <span class='hp-separator'>/</span>
+            <span class='hp-max'>{{system.health.max}}</span>
+          </div>
         </div>
 
-        {{! Fatigue Overlay (Bottom) }}
-        <div class='fatigue-overlay'>
-          <div class='fatigue-checkboxes'>
-            {{#each fatigueBoxes as |box index|}}
-              <i
-                class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
-                data-index='{{index}}'
-                data-tooltip='Fatigue Level {{box.level}}'
-              ></i>
-            {{/each}}
-          </div>
-        </div>
-      </div>
-
-      {{! Hit Points (Below image) }}
-      <div class='hp-display'>
-        <i class='fas fa-heart hp-icon'></i>
-        <input
-          type='text'
-          name='system.health.value'
-          value='{{system.health.value}}'
-          data-dtype='Number'
-          class='hp-current'
-        />
-        <span class='hp-separator'>/</span>
-        <span class='hp-max'>{{system.health.max}}</span>
-      </div>
-
-      <div class='header-fields'>
-        {{! Level Up Button and Speed Stats }}
-        <div class='xp-level-row'>
-          {{! Level Up Button }}
-          {{#if (lt system.attributes.level.value 10)}}
-            <button
-              type='button'
-              data-action='levelUp'
-              data-tooltip='Level Up'
-              class='btn-sm'
-            >
-              <i class='fas fa-level-up-alt'></i>
-            </button>
-          {{/if}}
-        </div>
-
-        {{! Speed Stats - Editable inputs on top, labels on bottom }}
-        <div class='speed-stats-row'>
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.speed.base'
-              value='{{system.speed.base}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label'>Speed</label>
-          </div>
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.speed.crawl'
-              value='{{system.speed.crawl}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label'>Crawl</label>
-          </div>
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.speed.travel'
-              value='{{system.speed.travel}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label'>Travel</label>
-          </div>
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.currentLuck'
-              value='{{system.currentLuck}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label'>Current<br/>Luck</label>
-          </div>
+        {{! Stats Grid - 3x2 grid of abilities }}
+        <div class='stats-grid'>
+          {{#each system.abilities as |ability key|}}
+            <div class='stat-item'>
+              <input
+                type='text'
+                name='system.abilities.{{key}}.value'
+                value='{{ability.value}}'
+                class='stat-score'
+                data-dtype='Number'
+              />
+              <label
+                class='stat-label rollable'
+                data-action='roll'
+                data-roll='d20'
+                data-label='{{localize (lookup @root.config.abilities key)}} Check'
+                data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+              >{{localize (lookup @root.config.abilities key)}}</label>
+            </div>
+          {{/each}}
         </div>
       </div>
+
     </header>
 
-    {{! Stats Row - All abilities in one row, no title }}
-    <div class='stats-row'>
-      {{#each system.abilities as |ability key|}}
-        <div class='stat-item'>
-          <input
-            type='text'
-            name='system.abilities.{{key}}.value'
-            value='{{ability.value}}'
-            class='stat-score'
-            data-dtype='Number'
-          />
-          <label
-            class='stat-label rollable'
-            data-action='roll'
-            data-roll='d20'
-            data-label='{{localize (lookup @root.config.abilities key)}} Check'
-            data-tooltip='{{localize (lookup @root.config.abilities key)}}'
-          >{{localize (lookup @root.config.abilities key)}}</label>
-        </div>
-      {{/each}}
+    {{! Speed Stats - All in one row with space around }}
+    <div class='speed-stats-row'>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.base'
+          value='{{system.speed.base}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Speed</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.crawl'
+          value='{{system.speed.crawl}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Crawl</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.travel'
+          value='{{system.speed.travel}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Travel</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.currentLuck'
+          value='{{system.currentLuck}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Current<br/>Luck</label>
+      </div>
     </div>
 
     <section class='grid grid-2col'>

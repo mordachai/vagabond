@@ -476,42 +476,6 @@
   font-family: "Eskapade", serif;
   font-weight: bold;
 }
-.vagabond .stats-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0 16px 0;
-  padding-bottom: 12px;
-  position: relative;
-  z-index: 20 !important;
-}
-.vagabond .stats-row .stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.vagabond .stats-row .stat-item .stat-score {
-  width: 50px;
-  height: 45px;
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  padding: 4px;
-  box-shadow: none;
-}
-.vagabond .stats-row .stat-item .stat-label {
-  font-size: 14px;
-  font-weight: 900;
-  text-transform: capitalize;
-  color: var(--vagabond-c-tan);
-  text-align: center;
-  cursor: pointer;
-}
-.vagabond .stats-row .stat-item .stat-label:hover {
-  color: var(--vagabond-c-dark);
-}
 .vagabond input[type=text],
 .vagabond input[type=number],
 .vagabond textarea {
@@ -1448,10 +1412,9 @@
 }
 .vagabond .sheet-header {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 4px;
-  align-items: flex-start;
-  height: 200px;
+  width: 100%;
 }
 .vagabond .char-image-container {
   position: relative;
@@ -1541,9 +1504,6 @@
   transform: scale(1.1);
 }
 .vagabond .hp-display {
-  position: absolute;
-  top: 230px;
-  left: 0;
   width: 180px;
   display: flex;
   align-items: center;
@@ -1551,7 +1511,7 @@
   gap: 4px;
   font-size: 18px;
   font-weight: bold;
-  margin-left: 18px;
+  margin-top: 8px;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 16px;
@@ -1575,26 +1535,72 @@
   color: var(--vagabond-c-dark);
   min-width: 30px;
 }
-.vagabond .header-fields {
-  flex: 1;
+.vagabond .header-main-row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.vagabond .image-column {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  justify-content: space-between;
-  height: 100%;
-  overflow: hidden;
-}
-.vagabond .xp-level-row {
-  display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 2px;
+  flex-shrink: 0;
 }
-.vagabond .xp-level-row .xp-field {
+
+.vagabond .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px 12px;
+  flex: 1;
+  align-items: start;
+  padding: 8px 0;
+}
+
+.vagabond .stats-grid .stat-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 4px;
+}
+
+.vagabond .stats-grid .stat-score {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  text-align: center;
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  padding: 4px;
+}
+
+.vagabond .stats-grid .stat-score:hover,
+.vagabond .stats-grid .stat-score:focus {
+  border-color: var(--vagabond-c-dark);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.vagabond .stats-grid .stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--vagabond-c-tan);
+  cursor: pointer;
+}
+
+.vagabond .stats-grid .stat-label:hover {
+  color: var(--vagabond-c-dark);
+}
+
+.vagabond .top-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .vagabond .xp-level-row .xp-field .xp-input {
   width: 40px;
@@ -1746,8 +1752,10 @@
 .vagabond .speed-stats-row {
   display: flex;
   justify-content: space-around;
-  gap: 8px;
-  padding: 4px 0;
+  gap: 12px;
+  padding: 12px 0;
+  width: 100%;
+  margin-top: 8px;
 }
 .vagabond .speed-stats-row .stat-item {
   display: flex;
