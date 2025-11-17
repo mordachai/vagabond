@@ -1471,18 +1471,37 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+.vagabond .xp-level-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   gap: 8px;
+  margin-bottom: 4px;
+}
+.vagabond .xp-level-row .xp-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .xp-level-row .xp-field .xp-input {
+  width: 60px;
+  text-align: center;
+}
+.vagabond .name-row {
+  margin-bottom: 4px;
 }
 .vagabond .character-name-input {
   border: none !important;
   background: transparent !important;
-  text-align: center;
-  font-size: 18px;
+  text-align: left;
+  font-size: 20px;
   font-family: "Manofa", sans-serif;
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 4px 8px;
+  padding: 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
@@ -1491,12 +1510,44 @@
   background: transparent !important;
 }
 .vagabond .character-info-row {
-  text-align: center;
-  margin-bottom: 10px;
+  text-align: left;
+  margin-bottom: 4px;
   font-size: 14px;
   color: var(--vagabond-c-tan);
   font-weight: 500;
   line-height: 1.2;
+}
+.vagabond .size-type-row {
+  text-align: left;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.vagabond .speed-stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  padding: 8px 0;
+}
+.vagabond .speed-stats-row .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .speed-stats-row .stat-item .stat-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .speed-stats-row .stat-item .stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--vagabond-c-tan);
+  line-height: 1.1;
 }
 @media (max-width: 600px) {
   .vagabond .sheet-header {

@@ -159,20 +159,45 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+
+// XP and Level Row - Aligned Right
+.xp-level-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   gap: 8px;
+  margin-bottom: 4px;
+
+  .xp-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .xp-input {
+      width: 60px;
+      text-align: center;
+    }
+  }
+}
+
+// Name Row - Aligned Left
+.name-row {
+  margin-bottom: 4px;
 }
 
 // Character Name Input Styling
 .character-name-input {
   border: none !important;
   background: transparent !important;
-  text-align: center;
-  font-size: 18px;
+  text-align: left;
+  font-size: 20px;
   font-family: $font-character-name;
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 4px 8px;
+  padding: 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 
@@ -183,14 +208,53 @@
   }
 }
 
-// Character Info Row Styling
+// Character Info Row Styling - Level, Ancestry, Class
 .character-info-row {
-  text-align: center;
-  margin-bottom: 10px;
+  text-align: left;
+  margin-bottom: 4px;
   font-size: 14px;
   color: var(--vagabond-c-tan);
   font-weight: 500;
   line-height: 1.2;
+}
+
+// Size and Type Row
+.size-type-row {
+  text-align: left;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+// Speed Stats Row - Numbers on top, labels on bottom
+.speed-stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  padding: 8px 0;
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--vagabond-c-dark);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--vagabond-c-tan);
+      line-height: 1.1;
+    }
+  }
 }
 
 // Responsive adjustments for smaller screens

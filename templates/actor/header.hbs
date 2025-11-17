@@ -47,28 +47,17 @@
   </div>
 
   <div class='header-fields'>
-    {{! Name Row with XP and Level Up }}
-    <div class='flex-center-gap-12 mb-8'>
-      {{! Character Name - Centered }}
-      <div class='flex-1 text-center'>
-        <input
-          name='name'
-          type='text'
-          value='{{actor.name}}'
-          placeholder='Character Name'
-          class='character-name-input'
-        />
-      </div>
-
+    {{! First Row: XP and Level Up - Aligned Right }}
+    <div class='xp-level-row'>
       {{! XP Field with inline label }}
-      <div class='flex-center-gap-4 nowrap'>
+      <div class='xp-field'>
         <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
         <input
           type='text'
           name='system.attributes.xp'
           value='{{system.attributes.xp}}'
           data-dtype='Number'
-          class='w-60'
+          class='xp-input'
         />
       </div>
 
@@ -85,7 +74,18 @@
       {{/if}}
     </div>
 
-    {{! Character Info Row - Level, Ancestry, Class as display divs }}
+    {{! Second Row: Character Name - Aligned Left }}
+    <div class='name-row'>
+      <input
+        name='name'
+        type='text'
+        value='{{actor.name}}'
+        placeholder='Character Name'
+        class='character-name-input'
+      />
+    </div>
+
+    {{! Third Row: Level, Ancestry, Class }}
     <div class='character-info-row'>
       <span>
         Level {{system.attributes.level.value}},
@@ -99,6 +99,12 @@
         {{else}}
           <span class='text-faint'>No Class</span>
         {{/if}}
+      </span>
+    </div>
+
+    {{! Fourth Row: Being Type and Size }}
+    <div class='size-type-row'>
+      <span>
         {{#if system.ancestryData}}
           ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
         {{else}}
@@ -107,24 +113,24 @@
       </span>
     </div>
 
-    {{! Combat Stats }}
-    <div class='grid grid-3col'>
-      {{! Speed - show all three values }}
-      <div class='resource'>
-        <label class='resource-label'>Speed</label>
-        <div class='text-xs'>
-          <div>{{system.speed.base}}'</div>
-          <div>Crawl: {{system.speed.crawl}}'</div>
-          <div>Travel: {{system.speed.travel}}mi</div>
-        </div>
+    {{! Fifth Row: Speed Stats - Numbers on top, labels on bottom }}
+    <div class='speed-stats-row'>
+      <div class='stat-item'>
+        <span class='stat-value'>{{system.speed.base}}'</span>
+        <label class='stat-label'>Speed</label>
       </div>
-
-      {{! Current Luck Row }}
-      <div class='resource'>
-         <label class='resource-label'>Current Luck</label>
-         <span>{{system.currentLuck}}</span>
+      <div class='stat-item'>
+        <span class='stat-value'>{{system.speed.crawl}}'</span>
+        <label class='stat-label'>Crawl</label>
       </div>
-
+      <div class='stat-item'>
+        <span class='stat-value'>{{system.speed.travel}}mi</span>
+        <label class='stat-label'>Travel</label>
+      </div>
+      <div class='stat-item'>
+        <span class='stat-value'>{{system.currentLuck}}</span>
+        <label class='stat-label'>Current<br/>Luck</label>
+      </div>
     </div>
   </div>
 </header>
