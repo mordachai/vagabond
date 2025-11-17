@@ -547,6 +547,23 @@
   flex: 1;
   min-width: 0;
 }
+.vagabond .sheet-header .document-name input[name=name] {
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  outline: none;
+  width: 100%;
+  padding: 16px 0 4px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.vagabond .sheet-header .document-name input[name=name]:hover, .vagabond .sheet-header .document-name input[name=name]:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  background: transparent !important;
+}
 .vagabond .sheet-tabs {
   flex: 0;
 }

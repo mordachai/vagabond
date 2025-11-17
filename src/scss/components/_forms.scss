@@ -22,6 +22,27 @@
     flex: 1;
     min-width: 0;
   }
+
+  // Item name input styling (matches character name input)
+  .document-name input[name='name'] {
+    border: none !important;
+    background: transparent !important;
+    text-align: left;
+    font-size: 20px;
+    font-family: $font-character-name;
+    font-weight: bold;
+    outline: none;
+    width: 100%;
+    padding: 16px 0 4px 0;
+    transition: border-bottom 0.2s ease;
+    border-bottom: 2px solid transparent;
+
+    &:hover,
+    &:focus {
+      border-bottom: 2px solid var(--vagabond-c-dark);
+      background: transparent !important;
+    }
+  }
 }
 
 .sheet-tabs {
