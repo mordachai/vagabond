@@ -895,6 +895,12 @@
 .vagabond .right-column .weapon-skill .skill-label:hover {
   text-decoration: underline;
 }
+.vagabond .right-column .weapon-skill .skill-difficulty {
+  font-weight: bold;
+  text-align: right;
+  font-size: 15px;
+  flex: 1;
+}
 .vagabond .right-column .equipped-weapon,
 .vagabond .right-column .favorited-spell {
   display: flex;
