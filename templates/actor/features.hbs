@@ -128,6 +128,25 @@
             </div>
           {{/if}}
         {{/each}}
+
+        {{! Favorited Spells }}
+        {{#each spells as |spell|}}
+          {{#if spell.system.favorite}}
+            <div class='favorited-spell flexrow flex-group-center'>
+              <label
+                class='resource-label rollable flexlarge align-left'
+                data-action='useSpell'
+                data-item-id='{{spell._id}}'
+                title='{{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}'
+              >{{spell.name}}{{#unless (eq spell.system.damageBase '-')}} ({{localize (lookup @root.config.damageTypes spell.system.damageBase)}}){{/unless}}</label>
+              <span class='spell-info'>
+                {{#if spell.system.delivery.cost}}
+                  <i class='fas fa-droplet' title='Mana Cost'></i> {{spell.system.delivery.cost}}
+                {{/if}}
+              </span>
+            </div>
+          {{/if}}
+        {{/each}}
       </div>
 
       {{! Features Section }}

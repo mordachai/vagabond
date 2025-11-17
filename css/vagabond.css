@@ -895,6 +895,37 @@
 .vagabond .right-column .weapon-skill .skill-label:hover {
   text-decoration: underline;
 }
+.vagabond .right-column .equipped-weapon,
+.vagabond .right-column .favorited-spell {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+.vagabond .right-column .equipped-weapon .resource-label,
+.vagabond .right-column .favorited-spell .resource-label {
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .right-column .equipped-weapon .resource-label:hover,
+.vagabond .right-column .favorited-spell .resource-label:hover {
+  text-decoration: underline;
+}
+.vagabond .right-column .weapon-info,
+.vagabond .right-column .spell-info {
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  white-space: nowrap;
+  margin-left: 8px;
+}
+.vagabond .right-column .weapon-info i,
+.vagabond .right-column .spell-info i {
+  margin-right: 2px;
+}
 .vagabond .saves .saves-row {
   display: flex;
   justify-content: space-around;
