@@ -1678,3 +1678,243 @@
     font-size: 12px;
   }
 }
+
+/* ======================================
+   SLIDING PANEL SYSTEM
+   ====================================== */
+
+.vagabond .window-content {
+  position: relative;
+  overflow: visible !important;
+}
+
+.vagabond .sliding-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 430px;
+  height: calc(100vh - 150px);
+  background: var(--vagabond-c-groove);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+/* When closed, panel slides behind main sheet to the right */
+.vagabond .sliding-panel.panel-closed {
+  transform: translateX(410px);
+}
+
+/* When open, panel is fully visible to the right */
+.vagabond .sliding-panel.panel-open {
+  transform: translateX(440px);
+}
+
+/* Click zone - visible sliver on the right edge of panel */
+.vagabond .panel-click-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: var(--vagabond-c-beige);
+  border-left: 2px solid var(--vagabond-c-tan);
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vagabond .panel-click-zone::before {
+  content: '»';
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.vagabond .sliding-panel.panel-open .panel-click-zone::before {
+  transform: rotate(180deg);
+}
+
+.vagabond .panel-click-zone:hover {
+  background: var(--vagabond-c-tan);
+}
+
+.vagabond .panel-click-zone:hover::before {
+  color: var(--vagabond-c-white);
+}
+
+/* Panel content area */
+.vagabond .panel-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  margin-right: 20px;
+}
+
+.vagabond .panel-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--vagabond-c-faint);
+}
+
+.vagabond .panel-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vagabond .panel-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--vagabond-c-dark);
+  font-family: "Eskapade", serif;
+}
+
+.vagabond .panel-section h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  margin-top: 16px;
+  color: var(--vagabond-c-dark);
+}
+
+.vagabond .panel-section h3:first-of-type {
+  margin-top: 0;
+}
+
+/* Features & Perks columns */
+.vagabond .features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+
+.vagabond .features-column,
+.vagabond .perks-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mana info row */
+.vagabond .mana-info-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+
+.vagabond .mana-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.vagabond .mana-field label {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.vagabond .mana-field input {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.vagabond .mana-field .mana-value {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--vagabond-c-dark);
+}
+
+/* Inventory column widths in sliding panel */
+.vagabond .sliding-panel .inventory-col-name {
+  flex: 2;
+  min-width: 100px;
+}
+
+.vagabond .sliding-panel .inventory-col-damage {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-range {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-grip {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-cost {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-slots {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-armor-type {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-rating {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-metal {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-type {
+  flex: 0 0 70px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-quantity {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+/* Currency fields in panel */
+.vagabond .sliding-panel .currency-row {
+  justify-content: space-around;
+}
+
+.vagabond .sliding-panel .currency-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.vagabond .sliding-panel .currency-field input {
+  width: 60px;
+  text-align: center;
+}
