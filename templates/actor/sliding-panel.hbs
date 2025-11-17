@@ -1,0 +1,330 @@
+{{! Sliding Panel - Right Side }}
+<aside class='sliding-panel {{#if isPanelOpen}}panel-open{{else}}panel-closed{{/if}}'>
+  {{! Panel Content }}
+  <div class='panel-content scrollable'>
+
+    {{! Sheet Header }}
+    <header class='sheet-header'>
+      {{! Character Name with Level Up Button and XP - Full Width at Top }}
+      <div class='name-row-top'>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='Character Name'
+          class='character-name-input-large'
+        />
+        <div class='top-right-controls'>
+          {{! Level Up Button }}
+          {{#if (lt system.attributes.level.value 10)}}
+            <button
+              type='button'
+              data-action='levelUp'
+              data-tooltip='Level Up'
+              class='btn-sm'
+            >
+              <i class='fas fa-level-up-alt'></i>
+            </button>
+          {{/if}}
+          <div class='xp-field-inline'>
+            <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+            <input
+              type='text'
+              name='system.attributes.xp'
+              value='{{system.attributes.xp}}'
+              data-dtype='Number'
+              class='xp-input'
+            />
+          </div>
+        </div>
+      </div>
+
+      {{! Level, Ancestry, Class, Being Type, Size - All in One Row }}
+      <div class='character-info-combined-row'>
+        <span>
+          Level
+          <input
+            type='text'
+            name='system.attributes.level.value'
+            value='{{system.attributes.level.value}}'
+            data-dtype='Number'
+            class='level-input'
+          />,
+          {{#if system.ancestryData}}
+            <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
+          {{else}}
+            <span class='text-faint'>Unknown Ancestry</span>
+          {{/if}}
+          {{#if system.classData}}
+            <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+          {{else}}
+            <span class='text-faint'>No Class</span>
+          {{/if}}
+          {{#if system.ancestryData}}
+            ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
+          {{else}}
+            (Unknown, Medium size)
+          {{/if}}
+        </span>
+      </div>
+
+      {{! Main Row: Image and Stats Side by Side }}
+      <div class='header-main-row'>
+        {{! Character Image Container }}
+        <div class='image-column'>
+          <div class='char-image-container'>
+            <img
+              class='profile-img'
+              src='{{actor.img}}'
+              data-edit='img'
+              data-action='onEditImage'
+              data-tooltip='{{actor.name}}'
+              width='180'
+              height='180'
+            />
+
+            {{! Armor Info Overlay (Left side) }}
+            <div class='armor-overlay'>
+              <div class='armor-value'>{{system.armor}}</div>
+              <div class='armor-type'>{{equippedArmorType}}</div>
+            </div>
+          </div>
+        </div>
+
+        {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
+        <div class='stats-column'>
+          {{! Row 1: Stats Grid - 3x2 grid of abilities }}
+          <div class='stats-grid'>
+            {{#each system.abilities as |ability key|}}
+              <div class='stat-item'>
+                <input
+                  type='text'
+                  name='system.abilities.{{key}}.value'
+                  value='{{ability.value}}'
+                  class='stat-score'
+                  data-dtype='Number'
+                />
+                <label
+                  class='stat-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-label='{{localize (lookup @root.config.abilities key)}} Check'
+                  data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+                >{{localize (lookup @root.config.abilities key)}}</label>
+              </div>
+            {{/each}}
+          </div>
+
+          {{! Row 2: Fatigue Bar }}
+          <div class='fatigue-row'>
+            <div class='fatigue-checkboxes'>
+              {{#each fatigueBoxes as |box index|}}
+                <i
+                  class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                  data-index='{{index}}'
+                  data-tooltip='Fatigue Level {{box.level}}'
+                ></i>
+              {{/each}}
+            </div>
+          </div>
+
+          {{! Row 3: Hit Points }}
+          <div class='hp-display'>
+            <i class='fas fa-heart hp-icon'></i>
+            <input
+              type='text'
+              name='system.health.value'
+              value='{{system.health.value}}'
+              data-dtype='Number'
+              class='hp-current'
+            />
+            <span class='hp-separator'>/</span>
+            <span class='hp-max'>{{system.health.max}}</span>
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    {{! Speed Stats - All in one row with space around }}
+    <div class='speed-stats-row'>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.base'
+          value='{{system.speed.base}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Speed</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.crawl'
+          value='{{system.speed.crawl}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Crawl</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.travel'
+          value='{{system.speed.travel}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Travel</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.currentLuck'
+          value='{{system.currentLuck}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Current<br/>Luck</label>
+      </div>
+    </div>
+
+    <section class='grid grid-2col'>
+      {{! Left column: Skills (1-column layout) }}
+      <section class='skills-section grid-span-1'>
+        <h3>Skills</h3>
+        <div class='skills-list'>
+          {{#each system.skills as |skill key|}}
+            <div class='skill flexrow'>
+              <label class='skill-checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.skills.{{key}}.trained'
+                  {{#if skill.trained}}checked{{/if}}
+                  class='skill-checkbox-hidden'
+                />
+                {{#if skill.trained}}
+                  <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+                {{else}}
+                  <i class='skill-checkbox-icon far fa-circle'></i>
+                {{/if}}
+              </label>
+              <label
+                class='skill-label rollable'
+                data-action='roll'
+                data-roll='d20'
+                data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
+              >{{skill.label}}</label>
+              <span class='skill-difficulty'>{{skill.difficulty}}</span>
+            </div>
+          {{/each}}
+        </div>
+      </section>
+
+      {{! Right column: Saves, Attacks }}
+      <section class='right-column grid-span-1'>
+        {{! Saves Section - Horizontal layout }}
+        <div class='saves'>
+          <h3>Saves</h3>
+          <div class='saves-row flexrow'>
+            {{#each system.saves as |save key|}}
+              <div class='save flexcol align-center'>
+                <label
+                  class='resource-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
+                  data-tooltip='{{save.description}}'
+                >{{save.label}}</label>
+                <span class='save-difficulty'>[{{save.difficulty}}]</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+        {{! Weapon Skills / Attacks Section }}
+        <div class='weapon-skills flexcol'>
+          <h3>Attacks</h3>
+          {{#each system.weaponSkills as |weaponSkill key|}}
+            <div class='weapon-skill flexrow'>
+              <label class='skill-checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.weaponSkills.{{key}}.trained'
+                  {{#if weaponSkill.trained}}checked{{/if}}
+                  class='skill-checkbox-hidden'
+                />
+                {{#if weaponSkill.trained}}
+                  <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+                {{else}}
+                  <i class='skill-checkbox-icon far fa-circle'></i>
+                {{/if}}
+              </label>
+              <label
+                class='skill-label rollable'
+                data-action='roll'
+                data-roll='d20'
+                data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
+              >{{weaponSkill.label}}</label>
+              <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
+            </div>
+          {{/each}}
+
+          {{! Equipped Weapons }}
+          {{#each weapons as |weapon|}}
+            {{#if weapon.system.equipped}}
+              <div class='equipped-weapon flexrow flex-group-center'>
+                <label
+                  class='resource-label rollable flexlarge align-left'
+                  data-action='rollWeapon'
+                  data-item-id='{{weapon._id}}'
+                  title='{{weapon.system.propertiesDisplay}}'
+                >{{weapon.name}} ({{weapon.system.currentDamage}})</label>
+                <span class='weapon-info'>
+                  {{weapon.system.rangeDisplay}}
+                  {{#if (eq weapon.system.equipmentState 'oneHand')}}
+                    {{#if (eq weapon.system.grip 'V')}}
+                      <i class='fas fa-hand-fist clickable' title='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                    {{else}}
+                      <i class='fas fa-hand-fist' title='One-Handed'></i>
+                    {{/if}}
+                  {{else if (eq weapon.system.equipmentState 'twoHands')}}
+                    {{#if (eq weapon.system.grip 'V')}}
+                      <i class='fas fa-hands clickable' title='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                    {{else}}
+                      <i class='fas fa-hands' title='Two-Handed'></i>
+                    {{/if}}
+                  {{/if}}
+                </span>
+              </div>
+            {{/if}}
+          {{/each}}
+
+          {{! Favorited Spells }}
+          {{#each spells as |spell|}}
+            {{#if spell.system.favorite}}
+              <div class='favorited-spell flexrow flex-group-center'>
+                <label
+                  class='resource-label rollable flexlarge align-left'
+                  data-action='useSpell'
+                  data-item-id='{{spell._id}}'
+                  title='{{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}'
+                >{{spell.name}}{{#unless (eq spell.system.damageBase '-')}} ({{localize (lookup @root.config.damageTypes spell.system.damageBase)}}){{/unless}}</label>
+                <span class='spell-info'>
+                  {{#if spell.system.delivery.cost}}
+                    <i class='fas fa-droplet' title='Mana Cost'></i> {{spell.system.delivery.cost}}
+                  {{/if}}
+                </span>
+              </div>
+            {{/if}}
+          {{/each}}
+        </div>
+      </section>
+    </section>
+
+  </div>
+
+  {{! Click Zone - visible sliver when closed (on the right) }}
+  <div class='panel-click-zone' data-action='togglePanel'></div>
+</aside>

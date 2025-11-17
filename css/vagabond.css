@@ -252,14 +252,20 @@
   border-radius: 0% !important;
   box-shadow: none !important;
   height: calc(100vh - 150px) !important;
+  overflow: visible !important;
 }
 
 .vagabond .window-header {
   background: transparent !important;
+  position: relative;
+  z-index: 10 !important;
 }
 
 .vagabond .window-content {
   background: var(--vagabond-c-groove);
+  position: relative;
+  overflow: visible !important;
+  height: 100%;
 }
 
 .rollable:hover, .rollable:focus {
@@ -470,40 +476,6 @@
   font-family: "Eskapade", serif;
   font-weight: bold;
 }
-.vagabond .stats-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0 16px 0;
-  padding-bottom: 12px;
-}
-.vagabond .stats-row .stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.vagabond .stats-row .stat-item .stat-score {
-  width: 50px;
-  height: 45px;
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  padding: 4px;
-  box-shadow: none;
-}
-.vagabond .stats-row .stat-item .stat-label {
-  font-size: 14px;
-  font-weight: 900;
-  text-transform: capitalize;
-  color: var(--vagabond-c-tan);
-  text-align: center;
-  cursor: pointer;
-}
-.vagabond .stats-row .stat-item .stat-label:hover {
-  color: var(--vagabond-c-dark);
-}
 .vagabond input[type=text],
 .vagabond input[type=number],
 .vagabond textarea {
@@ -566,14 +538,26 @@
 }
 .vagabond .sheet-tabs {
   flex: 0;
+  position: relative;
+  z-index: 10 !important;
 }
 .vagabond .sheet-body,
 .vagabond .sheet-body .tab,
 .vagabond .sheet-body .tab .editor {
   height: 100%;
 }
+.vagabond .sheet-body {
+  overflow-x: visible !important;
+}
 .vagabond .tab {
   overflow-y: auto;
+  position: relative;
+  width: 430px;
+  z-index: 10 !important;
+  background: var(--vagabond-c-groove);
+  margin-left: 0;
+  padding: 16px;
+  box-sizing: border-box;
 }
 .vagabond .tab.biography {
   flex: 1;
@@ -811,6 +795,8 @@
   flex-direction: column;
   gap: 6px;
   margin-bottom: 16px;
+  position: relative;
+  z-index: 20 !important;
 }
 .vagabond .skills-list .skill {
   display: flex;
@@ -858,6 +844,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+  z-index: 20 !important;
 }
 .vagabond .right-column .weapon-skill {
   display: flex;
@@ -1424,10 +1412,9 @@
 }
 .vagabond .sheet-header {
   display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: flex-start;
-  height: 200px;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
 }
 .vagabond .char-image-container {
   position: relative;
@@ -1478,56 +1465,37 @@
   text-transform: uppercase;
   line-height: 1;
 }
-.vagabond .fatigue-overlay {
-  position: absolute;
-  bottom: 4px;
-  left: 8px;
-  right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-.vagabond .fatigue-overlay .fatigue-checkboxes {
-  display: flex;
-  gap: 4px;
-}
-.vagabond .fatigue-overlay .fatigue-skull {
-  font-size: 18px;
+.vagabond .fatigue-skull {
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-active {
+.vagabond .fatigue-skull.fatigue-active {
   color: #ff4444;
   opacity: 1;
   text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-active:hover {
+.vagabond .fatigue-skull.fatigue-active:hover {
   color: #ff6666;
   transform: scale(1.1);
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-inactive {
-  color: rgba(255, 255, 255, 0.3);
-  opacity: 0.5;
+.vagabond .fatigue-skull.fatigue-inactive {
+  color: rgba(150, 150, 150, 0.4);
+  opacity: 0.6;
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-inactive:hover {
-  color: rgba(255, 255, 255, 0.6);
-  opacity: 0.7;
+.vagabond .fatigue-skull.fatigue-inactive:hover {
+  color: rgba(100, 100, 100, 0.7);
+  opacity: 0.8;
   transform: scale(1.1);
 }
 .vagabond .hp-display {
-  position: absolute;
-  top: 230px;
-  left: 0;
-  width: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
   font-size: 18px;
   font-weight: bold;
-  margin-left: 18px;
+  padding: 4px 0;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 16px;
@@ -1551,26 +1519,94 @@
   color: var(--vagabond-c-dark);
   min-width: 30px;
 }
-.vagabond .header-fields {
-  flex: 1;
+.vagabond .header-main-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.vagabond .image-column {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  justify-content: space-between;
-  height: 100%;
-  overflow: hidden;
+  align-items: center;
+  flex-shrink: 0;
 }
-.vagabond .xp-level-row {
+
+.vagabond .stats-column {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  flex: 1;
+  gap: 4px;
+}
+
+.vagabond .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 6px 10px;
+  flex: 1;
+}
+
+.vagabond .stats-grid .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.vagabond .stats-grid .stat-score {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  text-align: center;
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  padding: 2px;
+}
+
+.vagabond .stats-grid .stat-score:hover,
+.vagabond .stats-grid .stat-score:focus {
+  border-color: var(--vagabond-c-dark);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.vagabond .stats-grid .stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--vagabond-c-tan);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.vagabond .stats-grid .stat-label:hover {
+  color: var(--vagabond-c-dark);
+}
+
+.vagabond .fatigue-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.vagabond .fatigue-row .fatigue-checkboxes {
+  display: flex;
+  gap: 6px;
+}
+
+.vagabond .top-right-controls {
+  display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 2px;
-}
-.vagabond .xp-level-row .xp-field {
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 .vagabond .xp-level-row .xp-field .xp-input {
   width: 40px;
@@ -1628,11 +1664,104 @@
   font-weight: 400;
   line-height: 1.2;
 }
+
+/* Character Name at Top - Full Width */
+.vagabond .name-row-top {
+  width: 100%;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.vagabond .xp-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.vagabond .xp-field-inline .resource-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vagabond-c-tan);
+  white-space: nowrap;
+}
+
+.vagabond .xp-field-inline .xp-input {
+  width: 35px;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vagabond-c-dark);
+  padding: 2px 4px;
+}
+
+.vagabond .xp-field-inline .xp-input:hover,
+.vagabond .xp-field-inline .xp-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+
+.vagabond .character-name-input-large {
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-size: 28px;
+  font-family: "Manofa", sans-serif;
+  font-weight: 700;
+  color: var(--vagabond-c-dark);
+  width: 100%;
+  padding: 8px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.vagabond .character-name-input-large:hover,
+.vagabond .character-name-input-large:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  background: transparent !important;
+}
+
+/* Combined Character Info Row */
+.vagabond .character-info-combined-row {
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: var(--vagabond-c-tan);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.vagabond .character-info-combined-row .level-input {
+  width: 15px;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--vagabond-c-tan);
+  padding: 0 2px;
+  margin: 0 2px;
+}
+
+.vagabond .character-info-combined-row .level-input:hover,
+.vagabond .character-info-combined-row .level-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+
 .vagabond .speed-stats-row {
   display: flex;
   justify-content: space-around;
-  gap: 8px;
-  padding: 4px 0;
+  gap: 12px;
+  padding: 12px 0;
+  width: 100%;
+  margin-top: 8px;
 }
 .vagabond .speed-stats-row .stat-item {
   display: flex;
@@ -1677,4 +1806,230 @@
   .vagabond .character-info-row {
     font-size: 12px;
   }
+}
+
+/* ======================================
+   SLIDING PANEL SYSTEM
+   ====================================== */
+
+.vagabond .sliding-panel {
+  position: absolute;
+  top: 0;
+  left: 430px;  /* Base position next to main sheet when open */
+  width: 430px;
+  height: 100%;
+  background: var(--vagabond-c-groove);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: row;
+  transform-origin: left center;
+  pointer-events: all;
+  z-index: 100 !important;  /* Always on top of main sheet */
+
+  /* Smooth transition */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Anti-aliasing for smooth rotation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* When closed, panel slides behind main sheet, only 20px trigger visible */
+.vagabond .sliding-panel.panel-closed {
+  transform: translateX(-410px) rotate(0deg);
+}
+
+/* When open, panel at natural position next to main sheet */
+.vagabond .sliding-panel.panel-open {
+  transform: translateX(0) rotate(2deg);
+}
+
+/* Click zone - visible sliver on the RIGHT edge of panel when closed */
+.vagabond .panel-click-zone {
+  position: absolute;
+  top: 0;
+  right: 0;  /* Position on RIGHT edge so it's visible when panel is behind */
+  width: 20px;
+  height: 100%;
+  background: var(--vagabond-c-beige);
+  border-right: 2px solid var(--vagabond-c-tan);
+  cursor: pointer;
+  z-index: 15;  /* Always on top and clickable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panel content area */
+.vagabond .panel-content {
+  margin-right: 8px;  /* Make room for click zone on the right */
+  padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.vagabond .panel-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--vagabond-c-faint);
+}
+
+.vagabond .panel-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vagabond .panel-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--vagabond-c-dark);
+  font-family: "Eskapade", serif;
+}
+
+.vagabond .panel-section h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  margin-top: 16px;
+  color: var(--vagabond-c-dark);
+}
+
+.vagabond .panel-section h3:first-of-type {
+  margin-top: 0;
+}
+
+/* Features & Perks columns */
+.vagabond .features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+
+.vagabond .features-column,
+.vagabond .perks-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mana info row */
+.vagabond .mana-info-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+
+.vagabond .mana-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.vagabond .mana-field label {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.vagabond .mana-field input {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.vagabond .mana-field .mana-value {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--vagabond-c-dark);
+}
+
+/* Inventory column widths in sliding panel */
+.vagabond .sliding-panel .inventory-col-name {
+  flex: 2;
+  min-width: 100px;
+}
+
+.vagabond .sliding-panel .inventory-col-damage {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-range {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-grip {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-cost {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-slots {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-armor-type {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-rating {
+  flex: 0 0 50px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-metal {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-type {
+  flex: 0 0 70px;
+  text-align: center;
+}
+
+.vagabond .sliding-panel .inventory-col-quantity {
+  flex: 0 0 40px;
+  text-align: center;
+}
+
+/* Currency fields in panel */
+.vagabond .sliding-panel .currency-row {
+  justify-content: space-around;
+}
+
+.vagabond .sliding-panel .currency-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.vagabond .sliding-panel .currency-field input {
+  width: 60px;
+  text-align: center;
 }

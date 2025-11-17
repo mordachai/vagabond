@@ -34,6 +34,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       levelUp: this._onLevelUp,  // Level up action
       toggleFeature: this._onToggleFeature,  // Feature accordion toggle
       togglePerk: this._onTogglePerk,  // Perk accordion toggle
+      togglePanel: this._onTogglePanel,  // Sliding panel toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -59,17 +60,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/biography.hbs',
       scrollable: [""],
     },
-    inventory: {
-      template: 'systems/vagabond/templates/actor/inventory.hbs',
-      scrollable: [""],
-    },
-    spells: {
-      template: 'systems/vagabond/templates/actor/spells.hbs',
-      scrollable: [""],
-    },
     effects: {
       template: 'systems/vagabond/templates/actor/effects.hbs',
       scrollable: [""],
+    },
+    slidingPanel: {
+      template: 'systems/vagabond/templates/actor/sliding-panel.hbs',
+      scrollable: [".panel-content"],
     },
   };
 
@@ -77,7 +74,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     // Not all parts always render
-    options.parts = ['header', 'tabs'];
+    // Header is now inside the sliding panel, so only tabs and slidingPanel at top level
+    options.parts = ['tabs', 'slidingPanel'];
     // Don't show the other tabs if only limited view
     if (this.document.limited) {
       options.parts.push('biography');
@@ -86,11 +84,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'character':
-        // Order: Features | Inventory | Spells | Biography | Effects
-        options.parts.push('features', 'inventory', 'spells', 'biography', 'effects');
+        // Order: Features | Biography | Effects + Sliding Panel (right)
+        options.parts.push('features', 'biography', 'effects');
         break;
       case 'npc':
-        options.parts.push('inventory', 'effects');
+        options.parts.push('effects');
         break;
     }
   }
@@ -116,6 +114,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Necessary for formInput and formFields helpers
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
+      // Sliding panel state
+      isPanelOpen: this.isPanelOpen ?? false,
     };
 
     // YOUR CUSTOM: Add localized ancestry data for template
@@ -173,10 +173,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           );
         }
         break;
-      case 'spells':
-      case 'inventory':
-        context.tab = context.tabs[partId];
-        break;
       case 'biography':
         context.tab = context.tabs[partId];
         // Enrich biography info for display
@@ -201,6 +197,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           // as well as any items
           this.actor.allApplicableEffects()
         );
+        break;
+      case 'slidingPanel':
+        // Enrich perk descriptions for the sliding panel
+        if (context.perks) {
+          context.enrichedPerks = await Promise.all(
+            context.perks.map(async (perk) => {
+              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+                perk.system.description,
+                {
+                  secrets: this.document.isOwner,
+                  rollData: perk.getRollData(),
+                  relativeTo: perk,
+                }
+              );
+              return {
+                _id: perk.id,
+                id: perk.id,
+                name: perk.name,
+                img: perk.img,
+                enrichedDescription,
+                prerequisites: perk.system.getPrerequisiteString(),
+              };
+            })
+          );
+        }
         break;
     }
     return context;
@@ -231,6 +252,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       switch (partId) {
         case 'header':
         case 'tabs':
+        case 'slidingPanel':
           return tabs;
         case 'biography':
           tab.id = 'biography';
@@ -239,14 +261,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         case 'features':
           tab.id = 'features';
           tab.label += 'Features';
-          break;
-        case 'inventory':
-          tab.id = 'inventory';
-          tab.label += 'Inventory';
-          break;
-        case 'spells':
-          tab.id = 'spells';
-          tab.label += 'Spells';
           break;
         case 'effects':
           tab.id = 'effects';
@@ -640,6 +654,32 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const accordionItem = this.element.querySelector(`.perk-card.accordion-item[data-item-id="${perkId}"]`);
     if (accordionItem) {
       accordionItem.classList.toggle('collapsed');
+    }
+  }
+
+  /**
+   * Handle toggling the sliding panel (open/close)
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onTogglePanel(event, target) {
+    event.preventDefault();
+    // Toggle the panel state
+    this.isPanelOpen = !this.isPanelOpen;
+
+    // Update the panel classes directly on the DOM element to preserve CSS transitions
+    const panel = this.element.querySelector('.sliding-panel');
+    if (panel) {
+      if (this.isPanelOpen) {
+        panel.classList.remove('panel-closed');
+        panel.classList.add('panel-open');
+      } else {
+        panel.classList.remove('panel-open');
+        panel.classList.add('panel-closed');
+      }
     }
   }
 

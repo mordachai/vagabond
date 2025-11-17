@@ -41,6 +41,11 @@ export default class VagabondCharacter extends VagabondActorBase {
       bonusSlots: new fields.NumberField({ ...requiredInteger, initial: 0 })
     });
 
+    // Mana system for spellcasters
+    schema.mana = new fields.SchemaField({
+      current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+    });
+
     // Iterate over ability names and create a new SchemaField for each.
     // Now using Vagabond stats instead of D&D abilities
     schema.abilities = new fields.SchemaField(
@@ -179,6 +184,9 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Calculate inventory slots
     this._calculateInventorySlots();
+
+    // Calculate mana values for spellcasters
+    this._calculateManaValues();
 
     // Process saves - calculate difficulty based on Vagabond rules
     // Reflex = DEX + AWR, Endure = MIT + MIT, Will = RSN + PRS
@@ -378,5 +386,26 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Calculate available slots
     this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots;
+  }
+
+  _calculateManaValues() {
+    const classItem = this.parent?.items?.find(item => item.type === 'class');
+
+    if (classItem && classItem.system.isSpellcaster) {
+      // Get the casting stat value
+      const castingStat = classItem.system.castingStat || 'reason';
+      const castingStatValue = this.abilities[castingStat]?.value || 8;
+
+      // Max mana = Casting Stat value (from class)
+      this.mana.max = castingStatValue;
+
+      // Casting max = Level + Casting Stat
+      const level = this.attributes.level.value || 1;
+      this.mana.castingMax = level + castingStatValue;
+    } else {
+      // Not a spellcaster
+      this.mana.max = 0;
+      this.mana.castingMax = 0;
+    }
   }
 }
