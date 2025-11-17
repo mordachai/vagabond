@@ -120,9 +120,36 @@
               <span class='weapon-info'>
                 {{weapon.system.rangeDisplay}}
                 {{#if (eq weapon.system.equipmentState 'oneHand')}}
-                  <i class='fas fa-hand-fist' title='One-Handed'></i>
+                  {{#if (eq weapon.system.grip 'V')}}
+                    <i class='fas fa-hand-fist clickable' title='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                  {{else}}
+                    <i class='fas fa-hand-fist' title='One-Handed'></i>
+                  {{/if}}
                 {{else if (eq weapon.system.equipmentState 'twoHands')}}
-                  <i class='fas fa-hands' title='Two-Handed'></i>
+                  {{#if (eq weapon.system.grip 'V')}}
+                    <i class='fas fa-hands clickable' title='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                  {{else}}
+                    <i class='fas fa-hands' title='Two-Handed'></i>
+                  {{/if}}
+                {{/if}}
+              </span>
+            </div>
+          {{/if}}
+        {{/each}}
+
+        {{! Favorited Spells }}
+        {{#each spells as |spell|}}
+          {{#if spell.system.favorite}}
+            <div class='favorited-spell flexrow flex-group-center'>
+              <label
+                class='resource-label rollable flexlarge align-left'
+                data-action='useSpell'
+                data-item-id='{{spell._id}}'
+                title='{{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}'
+              >{{spell.name}}{{#unless (eq spell.system.damageBase '-')}} ({{localize (lookup @root.config.damageTypes spell.system.damageBase)}}){{/unless}}</label>
+              <span class='spell-info'>
+                {{#if spell.system.delivery.cost}}
+                  <i class='fas fa-droplet' title='Mana Cost'></i> {{spell.system.delivery.cost}}
                 {{/if}}
               </span>
             </div>

@@ -286,3 +286,42 @@
   font-weight: bold;
   font-size: 16px;
 }
+
+// -----------------------------------------
+// Spell Column Sizing
+// -----------------------------------------
+
+.spell-col-name {
+  flex: 3; // Bigger column for spell names
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.spell-col-delivery {
+  flex: 0 0 120px;
+  text-align: center;
+}
+
+.spell-col-damage {
+  flex: 0 0 100px;
+  text-align: center;
+}
+
+.spell-col-favorite {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .favorite-active {
+    color: gold;
+  }
+
+  .favorite-inactive {
+    color: $c-faint;
+  }
+}

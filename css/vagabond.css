@@ -251,6 +251,7 @@
   border: none !important;
   border-radius: 0% !important;
   box-shadow: none !important;
+  height: calc(100vh - 150px) !important;
 }
 
 .vagabond .window-header {
@@ -572,7 +573,6 @@
   height: 100%;
 }
 .vagabond .tab {
-  max-height: fit-content;
   overflow-y: auto;
 }
 .vagabond .tab.biography {
@@ -894,6 +894,46 @@
 }
 .vagabond .right-column .weapon-skill .skill-label:hover {
   text-decoration: underline;
+}
+.vagabond .right-column .weapon-skill .skill-difficulty {
+  font-weight: bold;
+  text-align: right;
+  font-size: 15px;
+  flex: 1;
+}
+.vagabond .right-column .equipped-weapon,
+.vagabond .right-column .favorited-spell {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+.vagabond .right-column .equipped-weapon .resource-label,
+.vagabond .right-column .favorited-spell .resource-label {
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .right-column .equipped-weapon .resource-label:hover,
+.vagabond .right-column .favorited-spell .resource-label:hover {
+  text-decoration: underline;
+}
+.vagabond .right-column .weapon-info,
+.vagabond .right-column .spell-info {
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  white-space: nowrap;
+  flex: 0 0 auto;
+  text-align: right;
+  margin-left: 8px;
+}
+.vagabond .right-column .weapon-info i,
+.vagabond .right-column .spell-info i {
+  margin-right: 2px;
 }
 .vagabond .saves .saves-row {
   display: flex;
@@ -1240,6 +1280,35 @@
   font-family: "Manofa", serif;
   font-weight: bold;
   font-size: 16px;
+}
+.vagabond .spell-col-name {
+  flex: 3;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.vagabond .spell-col-delivery {
+  flex: 0 0 120px;
+  text-align: center;
+}
+.vagabond .spell-col-damage {
+  flex: 0 0 100px;
+  text-align: center;
+}
+.vagabond .spell-col-favorite {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .spell-col-favorite .favorite-active {
+  color: gold;
+}
+.vagabond .spell-col-favorite .favorite-inactive {
+  color: var(--vagabond-c-faint);
 }
 .vagabond .effects-header {
   height: 28px;
@@ -1609,5 +1678,3 @@
     font-size: 12px;
   }
 }
-
-/*# sourceMappingURL=vagabond.css.map */

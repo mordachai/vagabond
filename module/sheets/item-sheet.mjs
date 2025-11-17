@@ -380,6 +380,20 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         });
       }
     }
+
+    // Add listener for weapon grip changes to enable/disable two-hands damage input
+    if (this.document.type === 'weapon') {
+      const gripSelect = this.element.querySelector('select[name="system.grip"]');
+      const twoHandsInput = this.element.querySelector('.damage-two-hands');
+
+      if (gripSelect && twoHandsInput) {
+        gripSelect.addEventListener('change', (event) => {
+          const grip = event.target.value;
+          // Enable only if grip is 2H or V (Versatile)
+          twoHandsInput.disabled = !(grip === '2H' || grip === 'V');
+        });
+      }
+    }
   }
 
   /**************

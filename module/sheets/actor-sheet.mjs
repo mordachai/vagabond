@@ -15,7 +15,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     classes: ['vagabond', 'actor'],
     position: {
       width: 430,
-      height: 'calc(100vh - 450px)',
     },
     actions: {
       onEditImage: this._onEditImage,
@@ -26,8 +25,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
+      toggleWeaponGrip: this._onToggleWeaponGrip,
       toggleArmorEquipment: this._onToggleArmorEquipment,
       useSpell: this._onUseSpell,
+      toggleSpellFavorite: this._onToggleSpellFavorite,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -1055,6 +1056,39 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle toggling weapon grip (for versatile weapons in features panel).
+   * Toggles between: oneHand <-> twoHands
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleWeaponGrip(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const weapon = this.actor.items.get(itemId);
+
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.error('Weapon not found!');
+      return;
+    }
+
+    // Only allow toggling for versatile weapons
+    if (weapon.system.grip !== 'V') {
+      ui.notifications.warn('Only versatile weapons can switch grip!');
+      return;
+    }
+
+    // Toggle between oneHand and twoHands
+    const currentState = weapon.system.equipmentState;
+    const nextState = currentState === 'oneHand' ? 'twoHands' : 'oneHand';
+
+    // Update the weapon's equipment state
+    await weapon.update({ 'system.equipmentState': nextState });
+  }
+
+  /**
    * Handle toggling armor equipment state.
    * Toggles between: equipped <-> unequipped
    *
@@ -1132,6 +1166,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Create the chat message
     await VagabondChatHelper.postMessage(this.actor, content);
+  }
+
+  /**
+   * Handle toggling spell favorite state.
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleSpellFavorite(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const spell = this.actor.items.get(itemId);
+
+    if (!spell || spell.type !== 'spell') {
+      ui.notifications.error('Spell not found!');
+      return;
+    }
+
+    // Toggle favorite state
+    const newState = !spell.system.favorite;
+    await spell.update({ 'system.favorite': newState });
   }
 
   /**
