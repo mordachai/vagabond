@@ -1720,17 +1720,14 @@
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-  z-index: 1 !important;
   display: flex;
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
 
-  /* Smooth transition with easing */
-  -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  -moz-transition: -moz-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  -o-transition: -o-transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Smooth transition with delayed z-index to prevent flickering */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              z-index 0s 0.2s;
 
   /* Anti-aliasing for smooth rotation */
   -webkit-font-smoothing: antialiased;
@@ -1742,12 +1739,16 @@
 
 /* When closed, panel slides behind main sheet, only 20px trigger visible */
 .vagabond .sliding-panel.panel-closed {
-  transform: translateX(-410px) rotate(0deg) !important;
+  transform: translateX(-410px) rotate(0deg);
+  z-index: 2;  /* Behind main content when closed */
 }
 
 /* When open, panel at natural position next to main sheet */
 .vagabond .sliding-panel.panel-open {
-  transform: translateX(0) rotate(2deg) !important;
+  transform: translateX(0) rotate(2deg);
+  z-index: 5;  /* Visible but still behind main content */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              z-index 0s 0s;  /* Immediate z-index change when opening */
 }
 
 /* Click zone - visible sliver on the RIGHT edge of panel when closed */
@@ -1760,7 +1761,7 @@
   background: var(--vagabond-c-beige);
   border-right: 2px solid var(--vagabond-c-tan);
   cursor: pointer;
-  z-index: 10;
+  z-index: 15;  /* Always on top and clickable */
   display: flex;
   align-items: center;
   justify-content: center;
