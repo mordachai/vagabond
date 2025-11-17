@@ -155,9 +155,9 @@ export default class VagabondWeapon extends VagabondItemBase {
 
     // Format range display with abbreviations
     const rangeMap = {
-      'close': game.i18n.localize('VAGABOND.Weapon.Range.Close.abbr') ?? 'C',
-      'near': game.i18n.localize('VAGABOND.Weapon.Range.Near.abbr') ?? 'N',
-      'far': game.i18n.localize('VAGABOND.Weapon.Range.Far.abbr') ?? 'F'
+      'close': game.i18n.localize('VAGABOND.Weapon.Range.CloseAbbr') ?? 'C',
+      'near': game.i18n.localize('VAGABOND.Weapon.Range.NearAbbr') ?? 'N',
+      'far': game.i18n.localize('VAGABOND.Weapon.Range.FarAbbr') ?? 'F'
     };
     this.rangeDisplay = rangeMap[this.range] || this.range;
 

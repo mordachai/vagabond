@@ -86,9 +86,9 @@ VAGABOND.weaponSkills = {
  * @type {Object}
  */
 VAGABOND.weaponRanges = {
-  'close': 'VAGABOND.Weapon.Range.Close',
-  'near': 'VAGABOND.Weapon.Range.Near',
-  'far': 'VAGABOND.Weapon.Range.Far'
+  'close': 'VAGABOND.Weapon.Range.Close.long',
+  'near': 'VAGABOND.Weapon.Range.Near.long',
+  'far': 'VAGABOND.Weapon.Range.Far.long'
 };
 
 /**
