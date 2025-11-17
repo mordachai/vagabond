@@ -4,81 +4,67 @@
   data-group='primary'
   data-tab='spells'
 >
-  <div class='spells-section flexcol'>
+  <h3 class='section-title section-title-with-add'>
+    Spells
     {{#if @root.editable}}
-      <div class='item-controls spell-add-button'>
-        <a
-          class='item-control item-create'
-          data-tooltip='{{localize "DOCUMENT.Create" type="Spell"}}'
-          data-action='createDoc'
-          data-document-class='Item'
-          data-type='spell'
-        >
-          <i class='fas fa-plus'></i>
-          {{localize 'VAGABOND.Item.Spell.AddSpell'}}
-        </a>
-      </div>
+      <i
+        class='fas fa-plus clickable'
+        data-tooltip='Create New Spell'
+        data-action='createDoc'
+        data-document-class='Item'
+        data-type='spell'
+      ></i>
     {{/if}}
-
-    <ol class='items-list'>
-      {{#each spells as |spell|}}
-        <li
-          class='item flexrow draggable'
-          data-item-id='{{spell._id}}'
-          data-document-class='Item'
-        >
-          <div class='item-name flexrow spell-list-item-name'>
-            <div class='item-image clickable'>
-              <a class='rollable' data-action='viewDoc' data-tooltip='Open spell sheet'>
-                <img
-                  src='{{spell.img}}'
-                  data-tooltip='{{spell.name}}'
-                  width='24'
-                  height='24'
-                />
-              </a>
-            </div>
-            <div class='spell-item-info'>
-              <a class='clickable' data-action='useSpell' data-item-id='{{spell._id}}' data-tooltip='Use spell'>
-                <strong>{{spell.name}}</strong>
-              </a>
-              {{#unless (eq spell.system.damageBase '-')}}
-                <span class='spell-damage-badge'>
-                  {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
-                </span>
-              {{/unless}}
-              <span class='spell-delivery-info'>
-                {{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}
-                {{#if spell.system.delivery.cost}}
-                  ({{spell.system.delivery.cost}} Mana)
-                {{/if}}
-              </span>
-            </div>
+  </h3>
+  <ol class='items-list'>
+    <li class='item flexrow items-header'>
+      <div class='item-name spell-col-name'>Name</div>
+      <div class='item-delivery spell-col-delivery'>Delivery</div>
+      <div class='item-damage spell-col-damage'>Damage</div>
+      <div class='spell-col-favorite' data-tooltip='Favorite'>F</div>
+    </li>
+    {{#each spells as |spell|}}
+      <li
+        class='item flexrow draggable spell-item-row'
+        data-item-id='{{spell._id}}'
+        data-document-class='Item'
+      >
+        <div class='item-name spell-col-name'>
+          <div class='item-image clickable' data-action='viewDoc'>
+            <img
+              src='{{spell.img}}'
+              data-tooltip='{{spell.name}}'
+              width='24'
+              height='24'
+            />
           </div>
-          <div class='item-controls spell-list-item-controls'>
-            <a
-              class='item-control item-edit'
-              data-tooltip='{{localize "DOCUMENT.Update" type="spell"}}'
-              data-action='viewDoc'
-            >
-              <i class='fas fa-edit'></i>
-            </a>
-            {{#if @root.editable}}
-              <a
-                class='item-control item-delete'
-                data-tooltip='{{localize "DOCUMENT.Delete" type="spell"}}'
-                data-action='deleteDoc'
-              >
-                <i class='fas fa-trash'></i>
-              </a>
-            {{/if}}
-          </div>
-        </li>
-      {{else}}
-        <li class='no-spells spell-empty-message'>
-          No spells yet. {{#if @root.editable}}Click the + button above to add a spell.{{/if}}
-        </li>
-      {{/each}}
-    </ol>
-  </div>
+          <div class='clickable' data-action='useSpell' data-item-id='{{spell._id}}' data-tooltip='Use spell'>{{spell.name}}</div>
+        </div>
+        <div class='item-delivery item-prop spell-col-delivery'>
+          {{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}
+          {{#if spell.system.delivery.cost}}
+            ({{spell.system.delivery.cost}})
+          {{/if}}
+        </div>
+        <div class='item-damage item-prop spell-col-damage'>
+          {{#unless (eq spell.system.damageBase '-')}}
+            {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
+          {{else}}
+            -
+          {{/unless}}
+        </div>
+        <div class='spell-col-favorite' data-action='toggleSpellFavorite' data-item-id='{{spell._id}}'>
+          {{#if spell.system.favorite}}
+            <i class='clickable fas fa-star favorite-active' data-tooltip='Favorite (click to unfavorite)'></i>
+          {{else}}
+            <i class='clickable far fa-star favorite-inactive' data-tooltip='Not Favorite (click to favorite)'></i>
+          {{/if}}
+        </div>
+      </li>
+    {{else}}
+      <li class='no-spells'>
+        No spells yet. {{#if @root.editable}}Click the + button above to add a spell.{{/if}}
+      </li>
+    {{/each}}
+  </ol>
 </section>

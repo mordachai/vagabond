@@ -1241,6 +1241,35 @@
   font-weight: bold;
   font-size: 16px;
 }
+.vagabond .spell-col-name {
+  flex: 3;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.vagabond .spell-col-delivery {
+  flex: 0 0 120px;
+  text-align: center;
+}
+.vagabond .spell-col-damage {
+  flex: 0 0 100px;
+  text-align: center;
+}
+.vagabond .spell-col-favorite {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .spell-col-favorite .favorite-active {
+  color: gold;
+}
+.vagabond .spell-col-favorite .favorite-inactive {
+  color: var(--vagabond-c-faint);
+}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;

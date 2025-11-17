@@ -74,6 +74,12 @@ export default class VagabondSpell extends VagabondItemBase {
       initial: ''
     });
 
+    // Favorite - mark spell as favorite
+    schema.favorite = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     return schema;
   }
 }

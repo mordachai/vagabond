@@ -27,6 +27,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleArmorEquipment: this._onToggleArmorEquipment,
       useSpell: this._onUseSpell,
+      toggleSpellFavorite: this._onToggleSpellFavorite,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
       levelUp: this._onLevelUp,  // Level up action
@@ -1131,6 +1132,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Create the chat message
     await VagabondChatHelper.postMessage(this.actor, content);
+  }
+
+  /**
+   * Handle toggling spell favorite state.
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onToggleSpellFavorite(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const spell = this.actor.items.get(itemId);
+
+    if (!spell || spell.type !== 'spell') {
+      ui.notifications.error('Spell not found!');
+      return;
+    }
+
+    // Toggle favorite state
+    const newState = !spell.system.favorite;
+    await spell.update({ 'system.favorite': newState });
   }
 
   /**
