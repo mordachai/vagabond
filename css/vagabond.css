@@ -251,6 +251,7 @@
   border: none !important;
   border-radius: 0% !important;
   box-shadow: none !important;
+  height: calc(100vh - 280px) !important;
 }
 
 .vagabond .window-header {
