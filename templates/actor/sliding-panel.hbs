@@ -88,22 +88,47 @@
               <div class='armor-value'>{{system.armor}}</div>
               <div class='armor-type'>{{equippedArmorType}}</div>
             </div>
+          </div>
+        </div>
 
-            {{! Fatigue Overlay (Bottom) }}
-            <div class='fatigue-overlay'>
-              <div class='fatigue-checkboxes'>
-                {{#each fatigueBoxes as |box index|}}
-                  <i
-                    class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
-                    data-index='{{index}}'
-                    data-tooltip='Fatigue Level {{box.level}}'
-                  ></i>
-                {{/each}}
+        {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
+        <div class='stats-column'>
+          {{! Row 1: Stats Grid - 3x2 grid of abilities }}
+          <div class='stats-grid'>
+            {{#each system.abilities as |ability key|}}
+              <div class='stat-item'>
+                <input
+                  type='text'
+                  name='system.abilities.{{key}}.value'
+                  value='{{ability.value}}'
+                  class='stat-score'
+                  data-dtype='Number'
+                />
+                <label
+                  class='stat-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-label='{{localize (lookup @root.config.abilities key)}} Check'
+                  data-tooltip='{{localize (lookup @root.config.abilities key)}}'
+                >{{localize (lookup @root.config.abilities key)}}</label>
               </div>
+            {{/each}}
+          </div>
+
+          {{! Row 2: Fatigue Bar }}
+          <div class='fatigue-row'>
+            <div class='fatigue-checkboxes'>
+              {{#each fatigueBoxes as |box index|}}
+                <i
+                  class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                  data-index='{{index}}'
+                  data-tooltip='Fatigue Level {{box.level}}'
+                ></i>
+              {{/each}}
             </div>
           </div>
 
-          {{! Hit Points (Below image) }}
+          {{! Row 3: Hit Points }}
           <div class='hp-display'>
             <i class='fas fa-heart hp-icon'></i>
             <input
@@ -116,28 +141,6 @@
             <span class='hp-separator'>/</span>
             <span class='hp-max'>{{system.health.max}}</span>
           </div>
-        </div>
-
-        {{! Stats Grid - 3x2 grid of abilities }}
-        <div class='stats-grid'>
-          {{#each system.abilities as |ability key|}}
-            <div class='stat-item'>
-              <input
-                type='text'
-                name='system.abilities.{{key}}.value'
-                value='{{ability.value}}'
-                class='stat-score'
-                data-dtype='Number'
-              />
-              <label
-                class='stat-label rollable'
-                data-action='roll'
-                data-roll='d20'
-                data-label='{{localize (lookup @root.config.abilities key)}} Check'
-                data-tooltip='{{localize (lookup @root.config.abilities key)}}'
-              >{{localize (lookup @root.config.abilities key)}}</label>
-            </div>
-          {{/each}}
         </div>
       </div>
 

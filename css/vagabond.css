@@ -1465,53 +1465,37 @@
   text-transform: uppercase;
   line-height: 1;
 }
-.vagabond .fatigue-overlay {
-  position: absolute;
-  bottom: 4px;
-  left: 8px;
-  right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-.vagabond .fatigue-overlay .fatigue-checkboxes {
-  display: flex;
-  gap: 4px;
-}
-.vagabond .fatigue-overlay .fatigue-skull {
-  font-size: 18px;
+.vagabond .fatigue-skull {
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-active {
+.vagabond .fatigue-skull.fatigue-active {
   color: #ff4444;
   opacity: 1;
   text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-active:hover {
+.vagabond .fatigue-skull.fatigue-active:hover {
   color: #ff6666;
   transform: scale(1.1);
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-inactive {
-  color: rgba(255, 255, 255, 0.3);
-  opacity: 0.5;
+.vagabond .fatigue-skull.fatigue-inactive {
+  color: rgba(150, 150, 150, 0.4);
+  opacity: 0.6;
 }
-.vagabond .fatigue-overlay .fatigue-skull.fatigue-inactive:hover {
-  color: rgba(255, 255, 255, 0.6);
-  opacity: 0.7;
+.vagabond .fatigue-skull.fatigue-inactive:hover {
+  color: rgba(100, 100, 100, 0.7);
+  opacity: 0.8;
   transform: scale(1.1);
 }
 .vagabond .hp-display {
-  width: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
   font-size: 18px;
   font-weight: bold;
-  margin-top: 8px;
+  padding: 4px 0;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 16px;
@@ -1538,7 +1522,7 @@
 .vagabond .header-main-row {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 8px;
   align-items: flex-start;
 }
 
@@ -1549,34 +1533,41 @@
   flex-shrink: 0;
 }
 
+.vagabond .stats-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  flex: 1;
+  gap: 4px;
+}
+
 .vagabond .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 8px 12px;
+  gap: 6px 10px;
   flex: 1;
-  align-items: start;
-  padding: 8px 0;
 }
 
 .vagabond .stats-grid .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .vagabond .stats-grid .stat-score {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
   font-weight: bold;
   color: var(--vagabond-c-dark);
   text-align: center;
   border: 2px solid var(--vagabond-c-tan);
   border-radius: 4px;
   background: transparent;
-  padding: 4px;
+  padding: 2px;
 }
 
 .vagabond .stats-grid .stat-score:hover,
@@ -1586,15 +1577,30 @@
 }
 
 .vagabond .stats-grid .stat-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   text-align: center;
   color: var(--vagabond-c-tan);
   cursor: pointer;
+  line-height: 1;
 }
 
 .vagabond .stats-grid .stat-label:hover {
   color: var(--vagabond-c-dark);
+}
+
+.vagabond .fatigue-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.vagabond .fatigue-row .fatigue-checkboxes {
+  display: flex;
+  gap: 6px;
 }
 
 .vagabond .top-right-controls {
@@ -1861,8 +1867,8 @@
 
 /* Panel content area */
 .vagabond .panel-content {
-  margin-right: 20px;  /* Make room for click zone on the right */
-  padding: 16px;
+  margin-right: 8px;  /* Make room for click zone on the right */
+  padding: 12px;
   height: 100%;
   overflow-y: auto;
   box-sizing: border-box;
