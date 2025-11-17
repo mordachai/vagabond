@@ -1414,7 +1414,7 @@
 }
 .vagabond .fatigue-overlay {
   position: absolute;
-  bottom: 8px;
+  bottom: 4px;
   left: 8px;
   right: 8px;
   display: flex;
@@ -1452,7 +1452,7 @@
 }
 .vagabond .hp-display {
   position: absolute;
-  top: 190px;
+  top: 230px;
   left: 0;
   width: 180px;
   display: flex;
@@ -1461,6 +1461,7 @@
   gap: 4px;
   font-size: 18px;
   font-weight: bold;
+  margin-left: 18px;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 16px;
