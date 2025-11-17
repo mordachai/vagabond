@@ -74,7 +74,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     // Not all parts always render
-    options.parts = ['header', 'tabs', 'slidingPanel'];
+    // Header is now inside the sliding panel, so only tabs and slidingPanel at top level
+    options.parts = ['tabs', 'slidingPanel'];
     // Don't show the other tabs if only limited view
     if (this.document.limited) {
       options.parts.push('biography');

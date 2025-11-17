@@ -3,6 +3,174 @@
   {{! Panel Content }}
   <div class='panel-content scrollable'>
 
+    {{! Sheet Header }}
+    <header class='sheet-header'>
+      {{! Character Image Container }}
+      <div class='char-image-container'>
+        <img
+          class='profile-img'
+          src='{{actor.img}}'
+          data-edit='img'
+          data-action='onEditImage'
+          data-tooltip='{{actor.name}}'
+          width='180'
+          height='180'
+        />
+
+        {{! Armor Info Overlay (Left side) }}
+        <div class='armor-overlay'>
+          <div class='armor-value'>{{system.armor}}</div>
+          <div class='armor-type'>{{equippedArmorType}}</div>
+        </div>
+
+        {{! Fatigue Overlay (Bottom) }}
+        <div class='fatigue-overlay'>
+          <div class='fatigue-checkboxes'>
+            {{#each fatigueBoxes as |box index|}}
+              <i
+                class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                data-index='{{index}}'
+                data-tooltip='Fatigue Level {{box.level}}'
+              ></i>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      {{! Hit Points (Below image) }}
+      <div class='hp-display'>
+        <i class='fas fa-heart hp-icon'></i>
+        <input
+          type='text'
+          name='system.health.value'
+          value='{{system.health.value}}'
+          data-dtype='Number'
+          class='hp-current'
+        />
+        <span class='hp-separator'>/</span>
+        <span class='hp-max'>{{system.health.max}}</span>
+      </div>
+
+      <div class='header-fields'>
+        {{! First Row: Level Up and XP - Aligned Right }}
+        <div class='xp-level-row'>
+          {{! Level Up Button }}
+          {{#if (lt system.attributes.level.value 10)}}
+            <button
+              type='button'
+              data-action='levelUp'
+              data-tooltip='Level Up'
+              class='btn-sm'
+            >
+              <i class='fas fa-level-up-alt'></i>
+            </button>
+          {{/if}}
+
+          {{! XP Field with inline label }}
+          <div class='xp-field'>
+            <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+            <input
+              type='text'
+              name='system.attributes.xp'
+              value='{{system.attributes.xp}}'
+              data-dtype='Number'
+              class='xp-input'
+            />
+          </div>
+        </div>
+
+        {{! Second Row: Character Name - Aligned Left }}
+        <div class='name-row'>
+          <input
+            name='name'
+            type='text'
+            value='{{actor.name}}'
+            placeholder='Character Name'
+            class='character-name-input'
+          />
+        </div>
+
+        {{! Third Row: Level, Ancestry, Class }}
+        <div class='character-info-row'>
+          <span>
+            Level
+            <input
+              type='text'
+              name='system.attributes.level.value'
+              value='{{system.attributes.level.value}}'
+              data-dtype='Number'
+              class='level-input'
+            />,
+            {{#if system.ancestryData}}
+              <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
+            {{else}}
+              <span class='text-faint'>Unknown Ancestry</span>
+            {{/if}}
+            {{#if system.classData}}
+              <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+            {{else}}
+              <span class='text-faint'>No Class</span>
+            {{/if}}
+          </span>
+        </div>
+
+        {{! Fourth Row: Being Type and Size }}
+        <div class='size-type-row'>
+          <span>
+            {{#if system.ancestryData}}
+              ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
+            {{else}}
+              (Unknown, Medium size)
+            {{/if}}
+          </span>
+        </div>
+
+        {{! Fifth Row: Speed Stats - Editable inputs on top, labels on bottom }}
+        <div class='speed-stats-row'>
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.speed.base'
+              value='{{system.speed.base}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label'>Speed</label>
+          </div>
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.speed.crawl'
+              value='{{system.speed.crawl}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label'>Crawl</label>
+          </div>
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.speed.travel'
+              value='{{system.speed.travel}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label'>Travel</label>
+          </div>
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.currentLuck'
+              value='{{system.currentLuck}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label'>Current<br/>Luck</label>
+          </div>
+        </div>
+      </div>
+    </header>
+
     {{! Stats Row - All abilities in one row, no title }}
     <div class='stats-row'>
       {{#each system.abilities as |ability key|}}
