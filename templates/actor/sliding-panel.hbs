@@ -1,8 +1,5 @@
 {{! Sliding Panel - Right Side }}
 <aside class='sliding-panel {{#if isPanelOpen}}panel-open{{else}}panel-closed{{/if}}'>
-  {{! Click Zone - visible sliver when closed }}
-  <div class='panel-click-zone' data-action='togglePanel'></div>
-
   {{! Panel Content }}
   <div class='panel-content scrollable'>
 
@@ -378,4 +375,7 @@
     </section>
 
   </div>
+
+  {{! Click Zone - visible sliver when closed (on the right) }}
+  <div class='panel-click-zone' data-action='togglePanel'></div>
 </aside>

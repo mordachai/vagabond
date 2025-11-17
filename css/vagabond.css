@@ -1699,7 +1699,7 @@
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
-  left: 410px;
+  left: 430px;  /* Base position next to main sheet when open */
   width: 430px;
   height: 100%;
   background: var(--vagabond-c-groove);
@@ -1713,21 +1713,21 @@
   transform-origin: left center;
 }
 
-/* When closed, panel is stacked behind with slight rotation */
+/* When closed, panel slides behind main sheet, only 20px trigger visible */
 .vagabond .sliding-panel.panel-closed {
-  transform: translateX(0) rotate(1.5deg);
+  transform: translateX(-410px) rotate(1.5deg);
 }
 
-/* When open, panel slides to the right with more rotation */
+/* When open, panel at natural position next to main sheet */
 .vagabond .sliding-panel.panel-open {
-  transform: translateX(20px) rotate(3deg);
+  transform: translateX(0) rotate(3deg);
 }
 
-/* Click zone - visible sliver on the left edge of panel (part of the panel) */
+/* Click zone - visible sliver on the RIGHT edge of panel when closed */
 .vagabond .panel-click-zone {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;  /* Position on RIGHT edge so it's visible when panel is behind */
   width: 20px;
   height: 100%;
   background: var(--vagabond-c-beige);
@@ -1741,11 +1741,12 @@
 
 /* Panel content area */
 .vagabond .panel-content {
-  margin-left: 20px;
+  margin-right: 20px;  /* Make room for click zone on the right */
   padding: 16px;
   height: 100%;
   overflow-y: auto;
   box-sizing: border-box;
+  flex: 1;
 }
 
 .vagabond .panel-section {
