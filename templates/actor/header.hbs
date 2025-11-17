@@ -47,20 +47,8 @@
   </div>
 
   <div class='header-fields'>
-    {{! First Row: XP and Level Up - Aligned Right }}
+    {{! First Row: Level Up and XP - Aligned Right }}
     <div class='xp-level-row'>
-      {{! XP Field with inline label }}
-      <div class='xp-field'>
-        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
-        <input
-          type='text'
-          name='system.attributes.xp'
-          value='{{system.attributes.xp}}'
-          data-dtype='Number'
-          class='xp-input'
-        />
-      </div>
-
       {{! Level Up Button }}
       {{#if (lt system.attributes.level.value 10)}}
         <button
@@ -72,6 +60,18 @@
           <i class='fas fa-level-up-alt'></i>
         </button>
       {{/if}}
+
+      {{! XP Field with inline label }}
+      <div class='xp-field'>
+        <label class='resource-label'>{{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}</label>
+        <input
+          type='text'
+          name='system.attributes.xp'
+          value='{{system.attributes.xp}}'
+          data-dtype='Number'
+          class='xp-input'
+        />
+      </div>
     </div>
 
     {{! Second Row: Character Name - Aligned Left }}

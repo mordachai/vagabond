@@ -159,7 +159,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
 }
 
 // XP and Level Row - Aligned Right
@@ -168,7 +171,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 
   .xp-field {
     display: flex;
@@ -184,7 +187,7 @@
 
 // Name Row - Aligned Left
 .name-row {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 // Character Name Input Styling
@@ -211,7 +214,7 @@
 // Character Info Row Styling - Level, Ancestry, Class
 .character-info-row {
   text-align: left;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   font-size: 14px;
   color: var(--vagabond-c-tan);
   font-weight: 500;
@@ -240,7 +243,7 @@
 // Size and Type Row
 .size-type-row {
   text-align: left;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-size: 13px;
   color: var(--vagabond-c-tan);
   font-weight: 400;
@@ -251,17 +254,19 @@
 .speed-stats-row {
   display: flex;
   justify-content: space-around;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 8px;
+  padding: 4px 0;
 
   .stat-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
 
     .stat-value-input {
-      width: 50px;
+      width: auto;
+      min-width: 30px;
+      max-width: 50px;
       font-size: 16px;
       font-weight: bold;
       color: var(--vagabond-c-dark);
@@ -269,7 +274,7 @@
       border: none;
       border-bottom: 1px solid transparent;
       background: transparent;
-      padding: 2px;
+      padding: 2px 4px;
 
       &:hover,
       &:focus {
@@ -278,7 +283,7 @@
     }
 
     .stat-label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       text-align: center;
       color: var(--vagabond-c-tan);

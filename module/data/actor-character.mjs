@@ -330,19 +330,19 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Speed based on Dexterity (from rulebook table)
     if (dexValue >= 2 && dexValue <= 3) {
-      this.speed = { base: 25, crawl: 7.5, travel: 5 };
+      this.speed = { base: 25, crawl: 75, travel: 5 };
     } else if (dexValue >= 4 && dexValue <= 5) {
-      this.speed = { base: 30, crawl: 9, travel: 6 };
+      this.speed = { base: 30, crawl: 90, travel: 6 };
     } else if (dexValue >= 6 && dexValue <= 7) {
-      this.speed = { base: 35, crawl: 10.5, travel: 7 };
+      this.speed = { base: 35, crawl: 105, travel: 7 };
     } else if (dexValue >= 8 && dexValue <= 9) {
-      this.speed = { base: 40, crawl: 12, travel: 8 };
+      this.speed = { base: 40, crawl: 120, travel: 8 };
     } else if (dexValue >= 10 && dexValue <= 11) {
-      this.speed = { base: 45, crawl: 13.5, travel: 9 };
+      this.speed = { base: 45, crawl: 135, travel: 9 };
     } else if (dexValue >= 12) {
-      this.speed = { base: 50, crawl: 15, travel: 10 };
+      this.speed = { base: 50, crawl: 150, travel: 10 };
     } else {
-      this.speed = { base: 30, crawl: 9, travel: 6 }; // Default
+      this.speed = { base: 30, crawl: 90, travel: 6 }; // Default
     }
 
     // Calculate armor from equipped armor items
