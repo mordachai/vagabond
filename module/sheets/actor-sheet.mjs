@@ -668,8 +668,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.preventDefault();
     // Toggle the panel state
     this.isPanelOpen = !this.isPanelOpen;
-    // Re-render to update panel classes
-    this.render();
+
+    // Update the panel classes directly on the DOM element to preserve CSS transitions
+    const panel = this.element.querySelector('.sliding-panel');
+    if (panel) {
+      if (this.isPanelOpen) {
+        panel.classList.remove('panel-closed');
+        panel.classList.add('panel-open');
+      } else {
+        panel.classList.remove('panel-open');
+        panel.classList.add('panel-closed');
+      }
+    }
   }
 
   /**

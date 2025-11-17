@@ -1724,6 +1724,7 @@
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
+  isolation: isolate;  /* Force children to stay within this stacking context */
 
   /* Smooth transition with delayed z-index to prevent flickering */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1741,6 +1742,8 @@
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
   z-index: 2;  /* Behind main content when closed */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              z-index 0s 0.2s;  /* Delay z-index drop when closing */
 }
 
 /* When open, panel at natural position next to main sheet */
@@ -1775,16 +1778,12 @@
   overflow-y: auto;
   box-sizing: border-box;
   flex: 1;
-  position: relative;
-  z-index: 1;  /* Content within panel context */
 }
 
 .vagabond .panel-section {
   margin-bottom: 24px;
   padding-bottom: 24px;
   border-bottom: 2px solid var(--vagabond-c-faint);
-  position: relative;
-  z-index: 1;
 }
 
 .vagabond .panel-section:last-child {
