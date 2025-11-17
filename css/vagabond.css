@@ -266,14 +266,6 @@
   position: relative;
   overflow: visible !important;
   height: 100%;
-  z-index: 10 !important;
-  isolation: isolate;
-}
-
-.vagabond .sheet-body {
-  position: relative;
-  z-index: 10 !important;
-  isolation: isolate;
 }
 
 .rollable:hover, .rollable:focus {
