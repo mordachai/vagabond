@@ -46,8 +46,6 @@
   align-items: center;
   justify-content: center;
   padding: 2px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
   .armor-value {
     font-size: 24px;
@@ -71,7 +69,7 @@
 // Fatigue Overlay (Bottom)
 .fatigue-overlay {
   position: absolute;
-  bottom: 8px;
+  bottom: 4px;
   left: 8px;
   right: 8px;
   display: flex;
@@ -117,7 +115,7 @@
 // HP Display (Below image)
 .hp-display {
   position: absolute;
-  top: 190px;
+  top: 230px;
   left: 0;
   width: 180px;
   display: flex;
@@ -126,6 +124,7 @@
   gap: 4px;
   font-size: 18px;
   font-weight: bold;
+  margin-left: 18px;
 
   .hp-icon {
     font-size: 16px;

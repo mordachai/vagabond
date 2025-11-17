@@ -258,7 +258,7 @@
 }
 
 .vagabond .window-content {
-  background: #121212;
+  background: var(--vagabond-c-groove);
 }
 
 .rollable:hover, .rollable:focus {
@@ -472,10 +472,8 @@
 .vagabond .stats-row {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 16px;
+  margin: 10px 0 16px 0;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--vagabond-c-faint);
 }
 .vagabond .stats-row .stat-item {
   display: flex;
@@ -484,18 +482,19 @@
   gap: 4px;
 }
 .vagabond .stats-row .stat-item .stat-score {
-  width: 36px;
-  height: 36px;
+  width: 50px;
+  height: 45px;
   text-align: center;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
-  border: 2px solid var(--vagabond-c-faint);
+  border: none;
   border-radius: 4px;
   padding: 4px;
+  box-shadow: none;
 }
 .vagabond .stats-row .stat-item .stat-label {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 900;
   text-transform: capitalize;
   color: var(--vagabond-c-tan);
   text-align: center;
@@ -546,6 +545,23 @@
 .vagabond .sheet-header .header-fields {
   flex: 1;
   min-width: 0;
+}
+.vagabond .sheet-header .document-name input[name=name] {
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  outline: none;
+  width: 100%;
+  padding: 16px 0 4px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.vagabond .sheet-header .document-name input[name=name]:hover, .vagabond .sheet-header .document-name input[name=name]:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  background: transparent !important;
 }
 .vagabond .sheet-tabs {
   flex: 0;
@@ -1376,8 +1392,6 @@
   align-items: center;
   justify-content: center;
   padding: 2px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 .vagabond .armor-overlay .armor-value {
   font-size: 24px;
@@ -1397,7 +1411,7 @@
 }
 .vagabond .fatigue-overlay {
   position: absolute;
-  bottom: 8px;
+  bottom: 4px;
   left: 8px;
   right: 8px;
   display: flex;
@@ -1435,7 +1449,7 @@
 }
 .vagabond .hp-display {
   position: absolute;
-  top: 190px;
+  top: 230px;
   left: 0;
   width: 180px;
   display: flex;
@@ -1444,6 +1458,7 @@
   gap: 4px;
   font-size: 18px;
   font-weight: bold;
+  margin-left: 18px;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 16px;
@@ -1594,3 +1609,5 @@
     font-size: 12px;
   }
 }
+
+/*# sourceMappingURL=vagabond.css.map */
