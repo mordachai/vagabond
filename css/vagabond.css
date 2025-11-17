@@ -261,6 +261,15 @@
 
 .vagabond .window-content {
   background: var(--vagabond-c-groove);
+  position: relative;
+  overflow: visible !important;
+  height: 100%;
+  z-index: 2;
+}
+
+.vagabond .sheet-body {
+  position: relative;
+  z-index: 2;
 }
 
 .rollable:hover, .rollable:focus {
@@ -1686,12 +1695,6 @@
 /* ======================================
    SLIDING PANEL SYSTEM
    ====================================== */
-
-.vagabond .window-content {
-  position: relative;
-  overflow: visible !important;
-  height: 100%;
-}
 
 .vagabond .sliding-panel {
   position: absolute;
