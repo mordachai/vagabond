@@ -46,10 +46,9 @@
   align-items: center;
   justify-content: center;
   padding: 2px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
   .armor-value {
+    bottom: 0;
     font-size: 16px;
     font-weight: bold;
     color: white;

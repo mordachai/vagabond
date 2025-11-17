@@ -472,10 +472,8 @@
 .vagabond .stats-row {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 16px;
+  margin: 10px 0 16px 0;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--vagabond-c-faint);
 }
 .vagabond .stats-row .stat-item {
   display: flex;
@@ -484,18 +482,19 @@
   gap: 4px;
 }
 .vagabond .stats-row .stat-item .stat-score {
-  width: 36px;
-  height: 36px;
+  width: 50px;
+  height: 45px;
   text-align: center;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
-  border: 2px solid var(--vagabond-c-faint);
+  border: none;
   border-radius: 4px;
   padding: 4px;
+  box-shadow: none;
 }
 .vagabond .stats-row .stat-item .stat-label {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 900;
   text-transform: capitalize;
   color: var(--vagabond-c-tan);
   text-align: center;
@@ -1393,10 +1392,9 @@
   align-items: center;
   justify-content: center;
   padding: 2px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 .vagabond .armor-overlay .armor-value {
+  bottom: 0;
   font-size: 16px;
   font-weight: bold;
   color: white;
@@ -1612,3 +1610,5 @@
     font-size: 12px;
   }
 }
+
+/*# sourceMappingURL=vagabond.css.map */
