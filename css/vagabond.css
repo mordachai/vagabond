@@ -1705,16 +1705,22 @@
   background: var(--vagabond-c-groove);
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
   display: flex;
   flex-direction: row;
+  transform-origin: left center;
 }
 
-/* When open, panel slides to the right, fully visible */
+/* When closed, panel is stacked behind with slight rotation */
+.vagabond .sliding-panel.panel-closed {
+  transform: translateX(0) rotate(1.5deg);
+}
+
+/* When open, panel slides to the right with more rotation */
 .vagabond .sliding-panel.panel-open {
-  left: 430px;
+  transform: translateX(20px) rotate(3deg);
 }
 
 /* Click zone - visible sliver on the left edge of panel (part of the panel) */
@@ -1735,10 +1741,11 @@
 
 /* Panel content area */
 .vagabond .panel-content {
-  flex: 1;
+  margin-left: 20px;
   padding: 16px;
+  height: 100%;
   overflow-y: auto;
-  margin-right: 20px;
+  box-sizing: border-box;
 }
 
 .vagabond .panel-section {
