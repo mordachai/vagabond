@@ -58,7 +58,7 @@
       </div>
     </section>
 
-    {{! Right column: Saves, Attacks, Features, Perks }}
+    {{! Right column: Saves, Attacks }}
     <section class='right-column grid-span-1'>
       {{! Saves Section - Horizontal layout }}
       <div class='saves'>
@@ -155,49 +155,6 @@
             </div>
           {{/if}}
         {{/each}}
-      </div>
-
-      {{! Features Section }}
-      <div class='features-section flexcol'>
-        <h3>Features</h3>
-        <ul class='features-list'>
-          {{#each features as |feature id|}}
-            <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
-              <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
-                <h4 class='feature-name'>{{feature.name}}</h4>
-              </div>
-              {{#if feature.description}}
-                <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.description}}}</div>
-              {{/if}}
-            </li>
-          {{else}}
-            <li class='no-features'>No features yet. Features are granted by your class as you level up.</li>
-          {{/each}}
-        </ul>
-      </div>
-
-      {{! Perks Section }}
-      <div class='perks-section flexcol'>
-        <h3>Perks</h3>
-        <ul class='perks-list'>
-          {{#each enrichedPerks as |perk|}}
-            <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}'>
-              <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
-                <h4 class='perk-name'>{{perk.name}}</h4>
-              </div>
-              <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>
-                {{#if perk.prerequisites}}
-                  <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
-                {{/if}}
-                {{#if perk.enrichedDescription}}
-                  <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
-                {{/if}}
-              </div>
-            </li>
-          {{else}}
-            <li class='no-perks'>No perks yet. Drag perks from the Items directory.</li>
-          {{/each}}
-        </ul>
       </div>
     </section>
   </section>

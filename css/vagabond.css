@@ -1690,70 +1690,44 @@
 .vagabond .window-content {
   position: relative;
   overflow: visible !important;
+  height: 100%;
 }
 
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
-  right: 0;
+  right: -410px;
   width: 430px;
-  height: calc(100vh - 150px);
+  height: 100%;
   background: var(--vagabond-c-groove);
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out;
-  z-index: 10;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
   display: flex;
   flex-direction: row;
 }
 
-/* When closed, panel is mostly hidden to the left (behind main), only sliver visible */
-.vagabond .sliding-panel.panel-closed {
-  transform: translateX(calc(-100% + 20px));
-}
-
-/* When open, panel is fully visible on the right */
+/* When open, panel slides into full view to the right */
 .vagabond .sliding-panel.panel-open {
-  transform: translateX(0);
+  right: 0;
 }
 
-/* Click zone - visible sliver on the right edge of panel */
+/* Click zone - visible sliver on the left edge of panel (always visible) */
 .vagabond .panel-click-zone {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   width: 20px;
   height: 100%;
   background: var(--vagabond-c-beige);
-  border-left: 2px solid var(--vagabond-c-tan);
+  border-right: 2px solid var(--vagabond-c-tan);
   cursor: pointer;
-  z-index: 100;
-  transition: background 0.2s ease;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.vagabond .panel-click-zone::before {
-  content: '»';
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--vagabond-c-dark);
-  transform: rotate(0deg);
-  transition: transform 0.3s ease;
-}
-
-.vagabond .sliding-panel.panel-open .panel-click-zone::before {
-  transform: rotate(180deg);
-}
-
-.vagabond .panel-click-zone:hover {
-  background: var(--vagabond-c-tan);
-}
-
-.vagabond .panel-click-zone:hover::before {
-  color: var(--vagabond-c-white);
 }
 
 /* Panel content area */
