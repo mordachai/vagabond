@@ -596,7 +596,12 @@
 .vagabond .tab {
   overflow-y: auto;
   position: relative;
+  width: 430px;
   z-index: 10 !important;
+  background: var(--vagabond-c-groove);
+  margin-left: 0;
+  padding: 16px;
+  box-sizing: border-box;
 }
 .vagabond .tab.biography {
   flex: 1;
@@ -1724,7 +1729,6 @@
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
-  isolation: isolate;  /* Force children to stay within this stacking context */
 
   /* Smooth transition with delayed z-index to prevent flickering */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1741,7 +1745,7 @@
 /* When closed, panel slides behind main sheet, only 20px trigger visible */
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
-  z-index: 2;  /* Behind main content when closed */
+  z-index: 1 !important;  /* Behind main content when closed */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
               z-index 0s 0.2s;  /* Delay z-index drop when closing */
 }
@@ -1749,7 +1753,7 @@
 /* When open, panel at natural position next to main sheet */
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
-  z-index: 5;  /* Visible but still behind main content */
+  z-index: 1 !important;  /* Always behind main content */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
               z-index 0s 0s;  /* Immediate z-index change when opening */
 }
