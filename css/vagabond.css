@@ -1342,7 +1342,7 @@
   flex-direction: row;
   gap: 16px;
   align-items: flex-start;
-  min-height: 220px;
+  height: 200px;
 }
 .vagabond .char-image-container {
   position: relative;
@@ -1553,10 +1553,19 @@
   align-items: center;
   gap: 4px;
 }
-.vagabond .speed-stats-row .stat-item .stat-value {
+.vagabond .speed-stats-row .stat-item .stat-value-input {
+  width: 50px;
   font-size: 16px;
   font-weight: bold;
   color: var(--vagabond-c-dark);
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 2px;
+}
+.vagabond .speed-stats-row .stat-item .stat-value-input:hover, .vagabond .speed-stats-row .stat-item .stat-value-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
 }
 .vagabond .speed-stats-row .stat-item .stat-label {
   font-size: 11px;

@@ -120,22 +120,46 @@
       </span>
     </div>
 
-    {{! Fifth Row: Speed Stats - Numbers on top, labels on bottom }}
+    {{! Fifth Row: Speed Stats - Editable inputs on top, labels on bottom }}
     <div class='speed-stats-row'>
       <div class='stat-item'>
-        <span class='stat-value'>{{system.speed.base}}'</span>
+        <input
+          type='text'
+          name='system.speed.base'
+          value='{{system.speed.base}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
         <label class='stat-label'>Speed</label>
       </div>
       <div class='stat-item'>
-        <span class='stat-value'>{{system.speed.crawl}}'</span>
+        <input
+          type='text'
+          name='system.speed.crawl'
+          value='{{system.speed.crawl}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
         <label class='stat-label'>Crawl</label>
       </div>
       <div class='stat-item'>
-        <span class='stat-value'>{{system.speed.travel}}mi</span>
+        <input
+          type='text'
+          name='system.speed.travel'
+          value='{{system.speed.travel}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
         <label class='stat-label'>Travel</label>
       </div>
       <div class='stat-item'>
-        <span class='stat-value'>{{system.currentLuck}}</span>
+        <input
+          type='text'
+          name='system.currentLuck'
+          value='{{system.currentLuck}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
         <label class='stat-label'>Current<br/>Luck</label>
       </div>
     </div>
