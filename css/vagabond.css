@@ -2090,6 +2090,7 @@
   background: transparent;
   padding: 2px 4px;
   font-size: 14px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   cursor: pointer;
   appearance: none;
@@ -2106,9 +2107,23 @@
 .vagabond .npc-type-row select:focus {
   outline: none;
   border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+}
+.vagabond .npc-type-row select:focus-visible {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row select option {
   background: var(--vagabond-c-groove);
+  color: var(--vagabond-c-dark);
+  padding: 4px 8px;
+}
+.vagabond .npc-type-row select option:checked {
+  background: var(--vagabond-c-tan);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-type-row select option:hover {
+  background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row .npc-size-select {
