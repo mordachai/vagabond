@@ -1,0 +1,63 @@
+{{! NPC Sheet Header }}
+<header class='npc-header'>
+  {{! Main Row: Image + Info }}
+  <div class='npc-top-section'>
+    {{! Left Column: Character Image }}
+    <div class='npc-image-container'>
+      <img
+        class='npc-profile-img'
+        src='{{actor.img}}'
+        data-edit='img'
+        data-action='onEditImage'
+        data-tooltip='{{actor.name}}'
+        width='120'
+        height='120'
+      />
+    </div>
+
+    {{! Right Column: Name, Size, Being Type }}
+    <div class='npc-info-column'>
+      {{! Name Row }}
+      <div class='npc-name-row'>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='NPC Name'
+          class='npc-name-input'
+        />
+      </div>
+
+      {{! Size and Being Type Row }}
+      <div class='npc-type-row'>
+        <select
+          name='system.size'
+          class='npc-size-select'
+          data-dtype='String'
+        >
+          <option value='tiny' {{#if (eq system.size 'tiny')}}selected{{/if}}>Tiny</option>
+          <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>Small</option>
+          <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>Medium</option>
+          <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>Large</option>
+          <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>Huge</option>
+          <option value='gargantuan' {{#if (eq system.size 'gargantuan')}}selected{{/if}}>Gargantuan</option>
+        </select>
+
+        <select
+          name='system.beingType'
+          class='npc-being-select'
+          data-dtype='String'
+        >
+          <option value='Humanlike' {{#if (eq system.beingType 'Humanlike')}}selected{{/if}}>Humanlike</option>
+          <option value='Fae' {{#if (eq system.beingType 'Fae')}}selected{{/if}}>Fae</option>
+          <option value='Cryptid' {{#if (eq system.beingType 'Cryptid')}}selected{{/if}}>Cryptid</option>
+          <option value='Artificials' {{#if (eq system.beingType 'Artificials')}}selected{{/if}}>Artificials</option>
+          <option value='Beasts' {{#if (eq system.beingType 'Beasts')}}selected{{/if}}>Beasts</option>
+          <option value='Outers' {{#if (eq system.beingType 'Outers')}}selected{{/if}}>Outers</option>
+          <option value='Primordials' {{#if (eq system.beingType 'Primordials')}}selected{{/if}}>Primordials</option>
+          <option value='Undead' {{#if (eq system.beingType 'Undead')}}selected{{/if}}>Undead</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</header>

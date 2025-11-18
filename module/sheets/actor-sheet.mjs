@@ -35,6 +35,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleFeature: this._onToggleFeature,  // Feature accordion toggle
       togglePerk: this._onTogglePerk,  // Perk accordion toggle
       togglePanel: this._onTogglePanel,  // Sliding panel toggle
+      toggleEffectsAccordion: this._onToggleEffectsAccordion,  // NPC effects accordion toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -68,12 +69,34 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/sliding-panel.hbs',
       scrollable: [".panel-content"],
     },
+    // NPC-specific parts
+    npcHeader: {
+      template: 'systems/vagabond/templates/actor/npc-header.hbs',
+    },
+    npcContent: {
+      template: 'systems/vagabond/templates/actor/npc-content.hbs',
+      scrollable: [""],
+    },
   };
 
   /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
+
+    // Set width based on actor type
+    if (this.document.type === 'npc') {
+      options.position = options.position || {};
+      options.position.width = 380;
+    }
+
     // Not all parts always render
+    if (this.document.type === 'npc') {
+      // NPC uses a completely different layout - no tabs, no sliding panel
+      options.parts = ['npcHeader', 'npcContent'];
+      return;
+    }
+
+    // Character sheet layout
     // Header is now inside the sliding panel, so only tabs and slidingPanel at top level
     options.parts = ['tabs', 'slidingPanel'];
     // Don't show the other tabs if only limited view
@@ -86,9 +109,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       case 'character':
         // Order: Features | Biography | Effects + Sliding Panel (right)
         options.parts.push('features', 'biography', 'effects');
-        break;
-      case 'npc':
-        options.parts.push('effects');
         break;
     }
   }
@@ -222,6 +242,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             })
           );
         }
+        break;
+      case 'npcHeader':
+        // NPC header - no special preparation needed
+        break;
+      case 'npcContent':
+        // Prepare active effects for NPC
+        context.effects = prepareActiveEffectCategories(
+          this.actor.allApplicableEffects()
+        );
         break;
     }
     return context;
@@ -680,6 +709,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         panel.classList.remove('panel-open');
         panel.classList.add('panel-closed');
       }
+    }
+  }
+
+  /**
+   * Handle toggling the NPC effects accordion (open/close)
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onToggleEffectsAccordion(event, target) {
+    event.preventDefault();
+    const accordionContent = this.element.querySelector('.npc-effects .accordion-content');
+    const accordionIcon = this.element.querySelector('.npc-effects .accordion-icon');
+
+    if (accordionContent) {
+      accordionContent.classList.toggle('collapsed');
+    }
+
+    if (accordionIcon) {
+      accordionIcon.classList.toggle('fa-chevron-right');
+      accordionIcon.classList.toggle('fa-chevron-down');
     }
   }
 
