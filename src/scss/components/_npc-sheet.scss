@@ -174,10 +174,25 @@
   }
 }
 
-// NPC Stats Row (Appearing, Senses, Armor)
+// NPC Stats Row - Appearing and Zone (space-between)
+.npc-stats-row-appearing-zone {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.npc-zone-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+// NPC Stats Row (Senses, Armor)
 .npc-stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   margin-top: 8px;
 }
@@ -191,7 +206,13 @@
 
 .npc-senses-field,
 .npc-armor-field {
-  grid-column: span 3;
+  grid-column: span 1;
+}
+
+// Zone checkboxes - single column layout
+.npc-zone-checkboxes {
+  grid-template-columns: 1fr !important;
+  min-width: 150px !important;
 }
 
 .npc-field-label {

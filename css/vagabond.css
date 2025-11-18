@@ -2132,9 +2132,21 @@
 .vagabond .npc-stats-compact-row .npc-stat-field {
   flex: 1;
 }
+.vagabond .npc-stats-row-appearing-zone {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+.vagabond .npc-zone-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
 .vagabond .npc-stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   margin-top: 8px;
 }
@@ -2146,7 +2158,11 @@
 }
 .vagabond .npc-senses-field,
 .vagabond .npc-armor-field {
-  grid-column: span 3;
+  grid-column: span 1;
+}
+.vagabond .npc-zone-checkboxes {
+  grid-template-columns: 1fr !important;
+  min-width: 150px !important;
 }
 .vagabond .npc-field-label {
   font-size: 13px;

@@ -142,8 +142,8 @@
     </div>
   </div>
 
-  {{! NPC Stats Row }}
-  <div class='npc-stats-row'>
+  {{! NPC Stats Row - Appearing and Zone }}
+  <div class='npc-stats-row-appearing-zone'>
     {{! Appearing }}
     <div class='npc-stat-field'>
       <label class='npc-field-label'>Appearing</label>
@@ -161,6 +161,42 @@
       {{/if}}
     </div>
 
+    {{! Zone }}
+    <div class='npc-zone-field'>
+      {{#if system.locked}}
+        {{#if system.zone}}
+          <label class='npc-field-label'>Zone:</label>
+          <div class='npc-immunity-text'>{{system.zone}}</div>
+        {{/if}}
+      {{else}}
+        <details class='npc-immunity-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Zone</span>
+          </summary>
+          <div class='npc-immunity-checkboxes npc-zone-checkboxes'>
+            {{#each config.combatZones as |label key|}}
+              <label class='npc-immunity-checkbox-item'>
+                <input type='radio' name='zone-selector' value='{{key}}' {{#if (eq ../system.zone key)}}checked{{/if}} data-action='selectZone' data-zone='{{key}}'>
+                <span>{{localize label}}</span>
+              </label>
+            {{/each}}
+          </div>
+        </details>
+        {{#if system.zone}}
+          <div class='npc-immunity-tags'>
+            <span class='npc-immunity-tag'>
+              {{system.zone}}
+              <i class='fas fa-times' data-action='clearZone'></i>
+            </span>
+          </div>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+
+  {{! NPC Stats Row - Senses and Armor }}
+  <div class='npc-stats-row'>
     {{! Senses }}
     <div class='npc-stat-field npc-senses-field'>
       <label class='npc-field-label'>Senses</label>

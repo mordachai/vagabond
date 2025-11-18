@@ -90,6 +90,11 @@
       "Unconscious": "Unconscious",
       "Vulnerable": "Vulnerable"
     },
+    "CombatZones": {
+      "Frontline": "Frontline",
+      "Midline": "Midline",
+      "Backline": "Backline"
+    },
     "Currency": {
       "Gold": {
         "long": "Gold",

@@ -63,6 +63,16 @@ VAGABOND.statusConditions = {
 };
 
 /**
+ * Combat zones for NPCs
+ * @type {Object}
+ */
+VAGABOND.combatZones = {
+  'frontline': 'VAGABOND.CombatZones.Frontline',
+  'midline': 'VAGABOND.CombatZones.Midline',
+  'backline': 'VAGABOND.CombatZones.Backline'
+};
+
+/**
  * Spell delivery types
  * @type {Object}
  */

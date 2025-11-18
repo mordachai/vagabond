@@ -43,6 +43,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       removeWeakness: this._onRemoveWeakness,  // NPC damage weakness remove
       toggleStatusImmunity: this._onToggleStatusImmunity,  // NPC status immunity toggle
       removeStatusImmunity: this._onRemoveStatusImmunity,  // NPC status immunity remove
+      selectZone: this._onSelectZone,  // NPC zone selection
+      clearZone: this._onClearZone,  // NPC zone clear
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -892,6 +894,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Uncheck the corresponding checkbox
     const checkbox = this.element.querySelector(`input[type="checkbox"][data-status="${status}"]`);
     if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle selecting NPC combat zone
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onSelectZone(event, target) {
+    const zone = target.dataset.zone;
+    if (!zone) return;
+
+    await this.actor.update({ 'system.zone': zone });
+  }
+
+  /**
+   * Handle clearing NPC combat zone
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClearZone(event, target) {
+    await this.actor.update({ 'system.zone': '' });
+
+    // Uncheck all radio buttons
+    const radios = this.element.querySelectorAll('input[type="radio"][name="zone-selector"]');
+    radios.forEach(radio => radio.checked = false);
   }
 
   /**
