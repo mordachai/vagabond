@@ -14,50 +14,39 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 
-// Lock/Unlock Toggle
-.npc-lock-toggle {
+// Lock/Unlock Toggle - Name Row
+.npc-lock-name-row {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+
+  .npc-name-input {
+    flex: 1;
+  }
 }
 
 .npc-lock-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
   background: transparent;
   color: var(--vagabond-c-dark);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   i {
-    font-size: 12px;
+    font-size: 16px;
   }
 
-  &.locked {
-    background: var(--vagabond-c-faint);
-    border-color: var(--vagabond-c-dark);
-    color: var(--vagabond-c-dark);
-
-    &:hover {
-      background: var(--vagabond-c-tan);
-    }
-  }
-
-  &.unlocked {
-    background: transparent;
-    border-color: var(--vagabond-c-tan);
-    color: var(--vagabond-c-muted);
-
-    &:hover {
-      border-color: var(--vagabond-c-dark);
-      color: var(--vagabond-c-dark);
-    }
+  &:hover {
+    color: var(--vagabond-c-tan);
+    transform: scale(1.1);
   }
 }
 
@@ -99,23 +88,25 @@
   flex: 1;
 }
 
-// NPC Name Row
-.npc-name-row {
-  .npc-name-input {
-    width: 100%;
-    font-size: 18px;
-    font-weight: bold;
-    border: 1px solid var(--vagabond-c-tan);
-    background: transparent;
-    padding: 4px 8px;
-    color: var(--vagabond-c-dark);
-    border-radius: 4px;
+// NPC Name Input (inside lock-name-row)
+.npc-lock-name-row .npc-name-input {
+  width: 100%;
+  font-size: 20px;
+  font-family: $font-character-name;
+  font-weight: bold;
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  padding: 2px 0 4px 0;
+  color: var(--vagabond-c-dark);
+  outline: none;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
 
-    &:hover,
-    &:focus {
-      border-color: var(--vagabond-c-dark);
-      outline: none;
-    }
+  &:hover,
+  &:focus {
+    border-bottom: 2px solid var(--vagabond-c-dark) !important;
+    background: transparent !important;
   }
 }
 
@@ -127,26 +118,38 @@
   select {
     flex: 1;
     border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
     background: transparent;
     padding: 4px 0;
     font-size: 14px;
+    font-family: $font-secondary;
     color: var(--vagabond-c-dark);
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    transition: border-bottom-color 0.2s ease;
 
     // Remove chevron/dropdown arrow styling
     &::-ms-expand {
       display: none;
     }
 
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
     &:focus {
       outline: none;
+      border-bottom-color: var(--vagabond-c-dark);
     }
 
     option {
-      background: var(--vagabond-c-light);
+      background: var(--vagabond-c-white);
+
+      &:checked {
+        background: var(--vagabond-c-faint);
+      }
     }
   }
 
@@ -189,7 +192,14 @@
   gap: 8px;
 }
 
-// NPC Stats Row (Senses, Armor)
+// NPC Stats Row (Senses) - Separate row
+.npc-stats-row-senses {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+// NPC Stats Row (Generic)
 .npc-stats-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -212,7 +222,16 @@
 // Zone checkboxes - single column layout
 .npc-zone-checkboxes {
   grid-template-columns: 1fr !important;
-  min-width: 150px !important;
+  min-width: 200px !important;
+
+  .npc-immunity-checkbox-item {
+    white-space: nowrap;
+
+    // Hide radio button circles for Zone selector
+    input[type='radio'] {
+      display: none;
+    }
+  }
 }
 
 .npc-field-label {
@@ -418,34 +437,49 @@
 
 // NPC Section (Actions, Abilities, Effects)
 .npc-section {
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
-  background: var(--vagabond-c-transparent);
+  // Clean sections with no borders or backgrounds
+  &.npc-actions,
+  &.npc-abilities,
+  &.npc-effects {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
 }
 
 .npc-section-title {
   font-size: 18px;
   font-weight: bold;
-  padding: 8px 12px;
+  font-family: $font-title;
+  padding: 8px 0;
   margin: 0;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
+
+  // Clean sections with no borders or backgrounds
+  .npc-section.npc-actions &,
+  .npc-section.npc-abilities &,
+  .npc-section.npc-effects & {
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+  }
 
   // Accordion header styling
   &.accordion-header {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    padding: 8px 0;
 
     &:hover {
-      background: var(--vagabond-c-tan);
+      color: var(--vagabond-c-tan);
     }
 
     .accordion-icon {
       font-size: 12px;
       transition: transform 0.2s ease;
+      margin-left: auto;
 
       &.fa-chevron-down {
         transform: rotate(90deg);
@@ -455,7 +489,14 @@
 }
 
 .npc-section-content {
-  padding: 12px;
+  padding: 8px 0;
+
+  // Clean sections with reduced padding
+  .npc-section.npc-actions &,
+  .npc-section.npc-abilities &,
+  .npc-section.npc-effects & {
+    padding: 8px 0;
+  }
 
   // Accordion content (collapsed by default)
   &.accordion-content {
@@ -474,18 +515,18 @@
 .npc-actions-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .npc-action-item {
-  padding: 8px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
 
   &:hover {
-    background: var(--vagabond-c-faint);
-    border-color: var(--vagabond-c-dark);
+    background: transparent;
+    color: var(--vagabond-c-tan);
   }
 }
 
@@ -634,11 +675,11 @@
 
 // Immunities Section
 .npc-immunities-section {
-  padding: 8px 12px;
+  padding: 8px 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border-top: 1px solid var(--vagabond-c-tan);
+  border: none;
 }
 
 .npc-immunity-row {
@@ -676,17 +717,20 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  background: var(--vagabond-c-faint);
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   font-size: 12px;
   font-weight: 600;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
+  transition: border-bottom-color 0.2s ease;
 
   &:hover {
-    background: var(--vagabond-c-tan);
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
   i {
