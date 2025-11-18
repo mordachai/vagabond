@@ -508,6 +508,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
     });
 
+    // Prevent immunity dropdowns from closing when clicking checkboxes
+    const immunityDropdowns = this.element.querySelectorAll('.npc-immunity-dropdown');
+    immunityDropdowns.forEach(dropdown => {
+      const checkboxItems = dropdown.querySelectorAll('.npc-immunity-checkbox-item');
+      checkboxItems.forEach(item => {
+        item.addEventListener('click', (event) => {
+          // Prevent the click from bubbling up to the details element
+          event.stopPropagation();
+
+          // Let the checkbox itself toggle naturally
+          const checkbox = item.querySelector('input[type="checkbox"], input[type="radio"]');
+          if (checkbox && event.target !== checkbox) {
+            checkbox.click();
+          }
+        });
+      });
+    });
+
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
