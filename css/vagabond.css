@@ -500,26 +500,33 @@
 .vagabond .item-form {
   font-family: "Roboto", sans-serif;
 }
-.vagabond .sheet-header {
+.vagabond .item-form .sheet-header {
   flex: 0 0 auto;
   min-height: fit-content;
   overflow: visible;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: 12px;
   margin-bottom: 10px;
 }
-.vagabond .sheet-header .profile-img {
-  flex: 0 0 100px;
-  height: 100px;
-  margin-right: 10px;
+.vagabond .item-form .sheet-header .profile-img {
+  flex: 0 0 150px;
+  height: 150px;
+  border-radius: 4px;
+  object-fit: cover;
 }
-.vagabond .sheet-header .header-fields {
+.vagabond .item-form .sheet-header .header-fields {
   flex: 1;
-  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  align-content: start;
 }
-.vagabond .sheet-header .document-name input[name=name] {
+.vagabond .item-form .sheet-header .document-name {
+  grid-column: 1/-1;
+}
+.vagabond .item-form .sheet-header .document-name input[name=name] {
   border: none !important;
   background: transparent !important;
   text-align: left;
@@ -532,9 +539,14 @@
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-.vagabond .sheet-header .document-name input[name=name]:hover, .vagabond .sheet-header .document-name input[name=name]:focus {
+.vagabond .item-form .sheet-header .document-name input[name=name]:hover, .vagabond .item-form .sheet-header .document-name input[name=name]:focus {
   border-bottom: 2px solid var(--vagabond-c-dark);
   background: transparent !important;
+}
+.vagabond .item-form .sheet-header .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .vagabond .sheet-tabs {
   flex: 0;
@@ -1525,14 +1537,12 @@
   gap: 8px;
   align-items: flex-start;
 }
-
 .vagabond .image-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
 }
-
 .vagabond .stats-column {
   display: flex;
   flex-direction: column;
@@ -1541,7 +1551,6 @@
   flex: 1;
   gap: 4px;
 }
-
 .vagabond .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1549,14 +1558,12 @@
   gap: 6px 10px;
   flex: 1;
 }
-
 .vagabond .stats-grid .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
 }
-
 .vagabond .stats-grid .stat-score {
   width: 36px;
   height: 36px;
@@ -1569,13 +1576,10 @@
   background: transparent;
   padding: 2px;
 }
-
-.vagabond .stats-grid .stat-score:hover,
-.vagabond .stats-grid .stat-score:focus {
+.vagabond .stats-grid .stat-score:hover, .vagabond .stats-grid .stat-score:focus {
   border-color: var(--vagabond-c-dark);
   background: rgba(0, 0, 0, 0.02);
 }
-
 .vagabond .stats-grid .stat-label {
   font-size: 11px;
   font-weight: 600;
@@ -1584,11 +1588,9 @@
   cursor: pointer;
   line-height: 1;
 }
-
 .vagabond .stats-grid .stat-label:hover {
   color: var(--vagabond-c-dark);
 }
-
 .vagabond .fatigue-row {
   display: flex;
   align-items: center;
@@ -1597,18 +1599,16 @@
   background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
 }
-
 .vagabond .fatigue-row .fatigue-checkboxes {
   display: flex;
   gap: 6px;
 }
-
 .vagabond .top-right-controls {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.vagabond .xp-level-row .xp-field .xp-input {
+.vagabond .top-right-controls .xp-field .xp-input {
   width: 40px;
   text-align: right;
 }
@@ -1664,8 +1664,9 @@
   font-weight: 400;
   line-height: 1.2;
 }
-
-/* Character Name at Top - Full Width */
+.vagabond {
+  /* Character Name at Top - Full Width */
+}
 .vagabond .name-row-top {
   width: 100%;
   margin-bottom: 8px;
@@ -1674,21 +1675,18 @@
   justify-content: center;
   gap: 12px;
 }
-
 .vagabond .xp-field-inline {
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 14px;
 }
-
 .vagabond .xp-field-inline .resource-label {
   font-size: 12px;
   font-weight: 500;
   color: var(--vagabond-c-tan);
   white-space: nowrap;
 }
-
 .vagabond .xp-field-inline .xp-input {
   width: 35px;
   text-align: center;
@@ -1700,12 +1698,9 @@
   color: var(--vagabond-c-dark);
   padding: 2px 4px;
 }
-
-.vagabond .xp-field-inline .xp-input:hover,
-.vagabond .xp-field-inline .xp-input:focus {
+.vagabond .xp-field-inline .xp-input:hover, .vagabond .xp-field-inline .xp-input:focus {
   border-bottom: 1px solid var(--vagabond-c-dark);
 }
-
 .vagabond .character-name-input-large {
   border: none !important;
   background: transparent !important;
@@ -1719,14 +1714,13 @@
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-
-.vagabond .character-name-input-large:hover,
-.vagabond .character-name-input-large:focus {
+.vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark);
   background: transparent !important;
 }
-
-/* Combined Character Info Row */
+.vagabond {
+  /* Combined Character Info Row */
+}
 .vagabond .character-info-combined-row {
   text-align: center;
   margin-bottom: 12px;
@@ -1735,7 +1729,6 @@
   font-weight: 500;
   line-height: 1.4;
 }
-
 .vagabond .character-info-combined-row .level-input {
   width: 15px;
   text-align: center;
@@ -1749,12 +1742,9 @@
   padding: 0 2px;
   margin: 0 2px;
 }
-
-.vagabond .character-info-combined-row .level-input:hover,
-.vagabond .character-info-combined-row .level-input:focus {
+.vagabond .character-info-combined-row .level-input:hover, .vagabond .character-info-combined-row .level-input:focus {
   border-bottom: 1px solid var(--vagabond-c-dark);
 }
-
 .vagabond .speed-stats-row {
   display: flex;
   justify-content: space-around;
@@ -1807,15 +1797,15 @@
     font-size: 12px;
   }
 }
-
-/* ======================================
-   SLIDING PANEL SYSTEM
-   ====================================== */
-
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
-  left: 430px;  /* Base position next to main sheet when open */
+  left: 430px; /* Base position next to main sheet when open */
   width: 430px;
   height: 100%;
   background: var(--vagabond-c-groove);
@@ -1826,11 +1816,9 @@
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
-  z-index: 100 !important;  /* Always on top of main sheet */
-
+  z-index: 100 !important; /* Always on top of main sheet */
   /* Smooth transition */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
   /* Anti-aliasing for smooth rotation */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1838,55 +1826,56 @@
   backface-visibility: hidden;
   will-change: transform;
 }
-
-/* When closed, panel slides behind main sheet, only 20px trigger visible */
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
-
-/* When open, panel at natural position next to main sheet */
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
 }
-
-/* Click zone - visible sliver on the RIGHT edge of panel when closed */
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+}
 .vagabond .panel-click-zone {
   position: absolute;
   top: 0;
-  right: 0;  /* Position on RIGHT edge so it's visible when panel is behind */
+  right: 0; /* Position on RIGHT edge so it's visible when panel is behind */
   width: 20px;
   height: 100%;
   background: var(--vagabond-c-beige);
   border-right: 2px solid var(--vagabond-c-tan);
   cursor: pointer;
-  z-index: 15;  /* Always on top and clickable */
+  z-index: 15; /* Always on top and clickable */
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* Panel content area */
+.vagabond {
+  /* Panel content area */
+}
 .vagabond .panel-content {
-  margin-right: 8px;  /* Make room for click zone on the right */
+  margin-right: 8px; /* Make room for click zone on the right */
   padding: 12px;
   height: 100%;
   overflow-y: auto;
   box-sizing: border-box;
   flex: 1;
 }
-
 .vagabond .panel-section {
   margin-bottom: 24px;
   padding-bottom: 24px;
   border-bottom: 2px solid var(--vagabond-c-faint);
 }
-
 .vagabond .panel-section:last-child {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
 }
-
 .vagabond .panel-title {
   font-size: 20px;
   font-weight: bold;
@@ -1895,7 +1884,6 @@
   color: var(--vagabond-c-dark);
   font-family: "Eskapade", serif;
 }
-
 .vagabond .panel-section h3 {
   font-size: 16px;
   font-weight: bold;
@@ -1903,24 +1891,24 @@
   margin-top: 16px;
   color: var(--vagabond-c-dark);
 }
-
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
-
-/* Features & Perks columns */
+.vagabond {
+  /* Features & Perks columns */
+}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
 }
-
 .vagabond .features-column,
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
 }
-
-/* Mana info row */
+.vagabond {
+  /* Mana info row */
+}
 .vagabond .mana-info-row {
   display: flex;
   justify-content: space-around;
@@ -1931,7 +1919,6 @@
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
 }
-
 .vagabond .mana-field {
   display: flex;
   flex-direction: column;
@@ -1939,96 +1926,83 @@
   gap: 4px;
   flex: 1;
 }
-
 .vagabond .mana-field label {
   font-size: 12px;
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
 }
-
 .vagabond .mana-field input {
   width: 60px;
   text-align: center;
   font-size: 16px;
   font-weight: bold;
 }
-
 .vagabond .mana-field .mana-value {
   font-size: 16px;
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
 }
-
-/* Inventory column widths in sliding panel */
+.vagabond {
+  /* Inventory column widths in sliding panel */
+}
 .vagabond .sliding-panel .inventory-col-name {
   flex: 2;
   min-width: 100px;
 }
-
 .vagabond .sliding-panel .inventory-col-damage {
   flex: 0 0 60px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-range {
   flex: 0 0 50px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-grip {
   flex: 0 0 40px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-cost {
   flex: 0 0 50px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-slots {
   flex: 0 0 40px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-armor-type {
   flex: 0 0 60px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-rating {
   flex: 0 0 50px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-metal {
   flex: 0 0 60px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-type {
   flex: 0 0 70px;
   text-align: center;
 }
-
 .vagabond .sliding-panel .inventory-col-quantity {
   flex: 0 0 40px;
   text-align: center;
 }
-
-/* Currency fields in panel */
+.vagabond .sliding-panel {
+  /* Currency fields in panel */
+}
 .vagabond .sliding-panel .currency-row {
   justify-content: space-around;
 }
-
 .vagabond .sliding-panel .currency-field {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
 }
-
 .vagabond .sliding-panel .currency-field input {
   width: 60px;
   text-align: center;

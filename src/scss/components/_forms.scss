@@ -1,52 +1,70 @@
 .item-form {
   font-family: $font-primary;
-}
 
-.sheet-header {
-  flex: 0 0 auto;
-  min-height: fit-content;
-  overflow: visible;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 10px;
+  // Item-specific header layout (different from character header)
+  .sheet-header {
+    flex: 0 0 auto;
+    min-height: fit-content;
+    overflow: visible;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-bottom: 10px;
 
-  .profile-img {
-    flex: 0 0 100px;
-    height: 100px;
-    margin-right: 10px;
-  }
+    .profile-img {
+      flex: 0 0 150px;
+      height: 150px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
 
-  .header-fields {
-    flex: 1;
-    min-width: 0;
-  }
+    .header-fields {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      align-content: start;
+    }
 
-  // Item name input styling (matches character name input)
-  .document-name input[name='name'] {
-    border: none !important;
-    background: transparent !important;
-    text-align: left;
-    font-size: 20px;
-    font-family: $font-character-name;
-    font-weight: bold;
-    outline: none;
-    width: 100%;
-    padding: 16px 0 4px 0;
-    transition: border-bottom 0.2s ease;
-    border-bottom: 2px solid transparent;
+    // Item name takes full width
+    .document-name {
+      grid-column: 1 / -1;
 
-    &:hover,
-    &:focus {
-      border-bottom: 2px solid var(--vagabond-c-dark);
-      background: transparent !important;
+      input[name='name'] {
+        border: none !important;
+        background: transparent !important;
+        text-align: left;
+        font-size: 20px;
+        font-family: $font-character-name;
+        font-weight: bold;
+        outline: none;
+        width: 100%;
+        padding: 16px 0 4px 0;
+        transition: border-bottom 0.2s ease;
+        border-bottom: 2px solid transparent;
+
+        &:hover,
+        &:focus {
+          border-bottom: 2px solid var(--vagabond-c-dark);
+          background: transparent !important;
+        }
+      }
+    }
+
+    // Other fields automatically flow in 2-column grid
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
   }
 }
 
 .sheet-tabs {
   flex: 0;
+  position: relative;
+  z-index: 10 !important;
 }
 
 .sheet-body,
@@ -55,8 +73,19 @@
   height: 100%;
 }
 
+.sheet-body {
+  overflow-x: visible !important;
+}
+
 .tab {
   overflow-y: auto;
+  position: relative;
+  width: 430px;
+  z-index: 10 !important;
+  background: $c-groove;
+  margin-left: 0;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .tab.biography {
