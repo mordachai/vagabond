@@ -405,6 +405,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await super._onRender(context, options);
     this.#disableOverrides();
 
+    // Restore open state of immunity dropdowns after re-render
+    if (this._openDropdowns) {
+      this._openDropdowns.forEach(index => {
+        const dropdowns = this.element.querySelectorAll('.npc-immunity-dropdown');
+        if (dropdowns[index]) {
+          dropdowns[index].setAttribute('open', '');
+        }
+      });
+    }
+
     // Add fatigue skull click handlers
     const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
     console.log(`[Fatigue] Found ${fatigueSkulls.length} fatigue skulls`);
@@ -506,24 +516,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Right-click on row: delete armor
       armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
-    });
-
-    // Prevent immunity dropdowns from closing when clicking checkboxes
-    const immunityDropdowns = this.element.querySelectorAll('.npc-immunity-dropdown');
-    immunityDropdowns.forEach(dropdown => {
-      const checkboxItems = dropdown.querySelectorAll('.npc-immunity-checkbox-item');
-      checkboxItems.forEach(item => {
-        item.addEventListener('click', (event) => {
-          // Prevent the click from bubbling up to the details element
-          event.stopPropagation();
-
-          // Let the checkbox itself toggle naturally
-          const checkbox = item.querySelector('input[type="checkbox"], input[type="radio"]');
-          if (checkbox && event.target !== checkbox) {
-            checkbox.click();
-          }
-        });
-      });
     });
 
     // You may want to add other special handling here
@@ -809,6 +801,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       newImmunities = immunities.filter(i => i !== immunity);
     }
 
+    this._captureDropdownState();
     await this.actor.update({ 'system.immunities': newImmunities });
   }
 
@@ -851,6 +844,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       newWeaknesses = weaknesses.filter(w => w !== weakness);
     }
 
+    this._captureDropdownState();
     await this.actor.update({ 'system.weaknesses': newWeaknesses });
   }
 
@@ -893,6 +887,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       newStatusImmunities = statusImmunities.filter(s => s !== status);
     }
 
+    this._captureDropdownState();
     await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
   }
 
@@ -923,6 +918,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const zone = target.dataset.zone;
     if (!zone) return;
 
+    this._captureDropdownState();
     await this.actor.update({ 'system.zone': zone });
   }
 
@@ -1821,9 +1817,26 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @override
    */
   async _processSubmitData(event, form, submitData) {
+    // Store which immunity dropdowns are open before update
+    this._captureDropdownState();
+
     const overrides = foundry.utils.flattenObject(this.actor.overrides);
     for (let k of Object.keys(overrides)) delete submitData[k];
     await this.document.update(submitData);
+  }
+
+  /**
+   * Capture the open state of immunity dropdowns
+   * @private
+   */
+  _captureDropdownState() {
+    this._openDropdowns = [];
+    const dropdowns = this.element.querySelectorAll('.npc-immunity-dropdown');
+    dropdowns.forEach((dropdown, index) => {
+      if (dropdown.hasAttribute('open')) {
+        this._openDropdowns.push(index);
+      }
+    });
   }
 
   /**
