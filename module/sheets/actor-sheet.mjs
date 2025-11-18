@@ -914,7 +914,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    */
   static async _onClearZone(event, target) {
-    await this.actor.update({ 'system.zone': '' });
+    await this.actor.update({ 'system.zone': null });
 
     // Uncheck all radio buttons
     const radios = this.element.querySelectorAll('input[type="radio"][name="zone-selector"]');

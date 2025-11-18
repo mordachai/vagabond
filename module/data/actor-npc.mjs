@@ -123,8 +123,8 @@ export default class VagabondNPC extends VagabondActorBase {
     // Combat zone
     schema.zone = new fields.StringField({
       required: false,
-      nullable: false,
-      initial: '',
+      nullable: true,
+      initial: null,
       choices: ['frontline', 'midline', 'backline']
     });
 
