@@ -17,6 +17,8 @@
   flex-direction: column;
   gap: 6px;
   margin-bottom: 16px;
+  position: relative;
+  z-index: 20 !important;
 
   .skill {
     display: flex;
@@ -56,14 +58,14 @@
       text-overflow: ellipsis;
 
       &:hover {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
 
     .skill-difficulty {
       font-weight: bold;
       text-align: right;
-      font-size: 15px;
+      font-size: 16px;
       flex: 1;
     }
   }
@@ -74,6 +76,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+  z-index: 20 !important;
 
   // Weapon skills styling (same as regular skills)
   .weapon-skill {
@@ -114,14 +118,14 @@
       text-overflow: ellipsis;
 
       &:hover {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
 
     .skill-difficulty {
       font-weight: bold;
       text-align: right;
-      font-size: 15px;
+      font-size: 16px;
       flex: 1;
     }
   }
@@ -178,10 +182,11 @@
 
   .save {
     text-align: center;
+    font-size: 16px;
 
     .save-difficulty {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 20px;
     }
   }
 }

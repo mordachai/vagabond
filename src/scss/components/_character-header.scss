@@ -3,10 +3,9 @@
 // Sheet Header Container
 .sheet-header {
   display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: flex-start;
-  height: 200px;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
 }
 
 // Character Image Container (180x180 with overlays)
@@ -23,6 +22,7 @@
     border: none;
     object-fit: cover;
     cursor: pointer;
+    border-radius: 50%;
 
     &:hover {
       opacity: 0.9;
@@ -33,8 +33,8 @@
 // Armor Overlay (Top right, 40x50, overflowing by 10px)
 .armor-overlay {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: -5px;
+  right: -5px;
   width: 40px;
   height: 50px;
   background-image: url('/icons/equipment/shield/heater-steel-gold.webp');
@@ -57,6 +57,8 @@
   }
 
   .armor-type {
+    position: relative;
+    bottom: 0;
     font-size: 10px;
     font-weight: 600;
     color: white;
@@ -66,117 +68,178 @@
   }
 }
 
-// Fatigue Overlay (Bottom)
-.fatigue-overlay {
-  position: absolute;
-  bottom: 4px;
-  left: 8px;
-  right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border-radius: 4px;
+// Fatigue Skull Icons (standalone, not nested in overlay)
+.fatigue-skull {
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-  .fatigue-checkboxes {
-    display: flex;
-    gap: 4px;
+  &.fatigue-active {
+    color: #ff4444;
+    opacity: 1;
+    text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
+
+    &:hover {
+      color: #ff6666;
+      transform: scale(1.1);
+    }
   }
 
-  .fatigue-skull {
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  &.fatigue-inactive {
+    color: rgba(150, 150, 150, 0.4);
+    opacity: 0.6;
 
-    &.fatigue-active {
-      color: #ff4444;
-      opacity: 1;
-      text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
-
-      &:hover {
-        color: #ff6666;
-        transform: scale(1.1);
-      }
-    }
-
-    &.fatigue-inactive {
-      color: rgba(255, 255, 255, 0.3);
-      opacity: 0.5;
-
-      &:hover {
-        color: rgba(255, 255, 255, 0.6);
-        opacity: 0.7;
-        transform: scale(1.1);
-      }
+    &:hover {
+      color: rgba(100, 100, 100, 0.7);
+      opacity: 0.8;
+      transform: scale(1.1);
     }
   }
 }
 
-// HP Display (Below image)
+// HP Display
 .hp-display {
-  position: absolute;
-  top: 230px;
-  left: 0;
-  width: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-size: 18px;
   font-weight: bold;
-  margin-left: 18px;
+  padding: 0;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 30px;
+  background-color: var(--vagabond-c-transparent);
 
   .hp-icon {
-    font-size: 16px;
+    font-size: 22px;
     color: #c62828;
-    margin-right: 4px;
   }
 
   .hp-current {
-    width: 30px;
+    width: 40px;
     text-align: right;
     border: none;
     background: transparent;
     padding: 2px 4px;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
     color: var(--vagabond-c-dark);
   }
 
   .hp-separator {
     color: var(--vagabond-c-dark);
+    font-size: 20px;
   }
 
   .hp-max {
     color: var(--vagabond-c-dark);
     min-width: 30px;
+    font-size: 20px;
   }
 }
 
-// Header Fields (Right side of image)
-.header-fields {
-  flex: 1;
+// Main Header Row - Image + Stats Side by Side
+.header-main-row {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  justify-content: space-between;
-  height: 100%;
-  overflow: hidden;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
 }
 
-// XP and Level Row - Aligned Right
-.xp-level-row {
+// Image Column (left side)
+.image-column {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+// Stats Column (right side)
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  flex: 1;
+  gap: 4px;
+}
+
+// Stats Grid - 3x2 Grid for Ability Scores
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 6px 10px;
+  flex: 1;
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .stat-score {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--vagabond-c-dark);
+    text-align: center;
+    border: 2px solid var(--vagabond-c-tan);
+    border-radius: 4px;
+    background: transparent;
+    padding: 2px;
+
+    &:hover,
+    &:focus {
+      border-color: var(--vagabond-c-dark);
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--vagabond-c-tan);
+    cursor: pointer;
+    line-height: 1.2;
+    font-family: $font-character-name;
+    padding: 4px 0;
+
+    &:hover {
+      color: var(--vagabond-c-dark);
+    }
+  }
+}
+
+// Fatigue Row (replaces old fatigue-overlay)
+.fatigue-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  background: none;
+  border-radius: 4px;
+
+  .fatigue-checkboxes {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+// Top Right Controls
+.top-right-controls {
+  display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 2px;
 
   .xp-field {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
     .xp-input {
       width: 40px;
       text-align: right;
@@ -184,12 +247,12 @@
   }
 }
 
-// Name Row - Aligned Left
+// Name Row (old positioning)
 .name-row {
   margin-bottom: 2px;
 }
 
-// Character Name Input Styling
+// Character Name Input
 .character-name-input {
   border: none !important;
   background: transparent !important;
@@ -199,18 +262,18 @@
   font-weight: bold;
   outline: none;
   width: 100%;
-  padding: 16px 0 4px 0;
+  padding: 2px 0 4px 0;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 
   &:hover,
   &:focus {
-    border-bottom: 2px solid var(--vagabond-c-dark);
+    border-bottom: 2px solid var(--vagabond-c-dark) !important;;
     background: transparent !important;
   }
 }
 
-// Character Info Row Styling - Level, Ancestry, Class
+// Character Info Row - Level, Ancestry, Class
 .character-info-row {
   text-align: left;
   margin-bottom: 2px;
@@ -249,12 +312,106 @@
   line-height: 1.2;
 }
 
-// Speed Stats Row - Numbers on top, labels on bottom
+/* Character Name at Top - Full Width */
+.name-row-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+// XP Field Inline (next to name)
+.xp-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+
+  .resource-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--vagabond-c-tan);
+    white-space: nowrap;
+  }
+
+  .xp-input {
+    width: 35px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vagabond-c-dark);
+    padding: 2px 4px;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid var(--vagabond-c-dark);
+    }
+  }
+}
+
+// Large Character Name Input (centered)
+.character-name-input-large {
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-size: 28px;
+  font-family: $font-character-name;
+  font-weight: 700;
+  color: var(--vagabond-c-dark);
+  width: 100%;
+  padding: 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+
+  &:hover,
+  &:focus {
+    border-bottom: 2px solid var(--vagabond-c-dark) !important;
+    background: transparent !important;
+  }
+}
+
+/* Combined Character Info Row */
+.character-info-combined-row {
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: var(--vagabond-c-tan);
+  font-weight: 500;
+  line-height: 1.4;
+  font-family: $font-decorative;
+
+  .level-input {
+    width: 15px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--vagabond-c-tan);
+    padding: 0 2px;
+    margin: 0 2px;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid var(--vagabond-c-dark);
+    }
+  }
+}
+
+// Speed Stats Row
 .speed-stats-row {
   display: flex;
   justify-content: space-around;
-  gap: 8px;
-  padding: 4px 0;
+  gap: 0;
+  padding: 6px 0;
+  width: 100%;
+  margin-top: 2px;
 
   .stat-item {
     display: flex;
@@ -264,9 +421,9 @@
 
     .stat-value-input {
       width: auto;
-      min-width: 25px;
-      max-width: 35px;
-      font-size: 24px;
+      min-width: 40px;
+      max-width: 50px;
+      font-size: 22px;
       font-weight: bold;
       color: var(--vagabond-c-dark);
       text-align: center;
@@ -310,3 +467,175 @@
     font-size: 12px;
   }
 }
+
+/* ======================================
+   SLIDING PANEL SYSTEM
+   ====================================== */
+
+.sliding-panel {
+  position: absolute;
+  top: 0;
+  left: 430px;  /* Base position next to main sheet when open */
+  width: 430px;
+  height: 100%;
+  background: var(--vagabond-c-groove);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: row;
+  transform-origin: left center;
+  pointer-events: all;
+  z-index: 100 !important;  /* Always on top of main sheet */
+
+  /* Smooth transition */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Anti-aliasing for smooth rotation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* When closed, panel slides behind main sheet, only 20px trigger visible */
+.sliding-panel.panel-closed {
+  transform: translateX(-410px) rotate(0deg);
+}
+
+/* When open, panel at natural position next to main sheet */
+.sliding-panel.panel-open {
+  transform: translateX(0) rotate(2deg);
+}
+
+/* Click zone - visible sliver on the RIGHT edge of panel when closed */
+.panel-click-zone {
+  position: absolute;
+  top: 0;
+  right: 0;  /* Position on RIGHT edge so it's visible when panel is behind */
+  width: 20px;
+  height: 100%;
+  background: none;
+  border-right: none;
+  cursor: pointer;
+  z-index: 15;  /* Always on top and clickable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panel content area */
+.panel-content {
+  margin-right: 8px;  /* Make room for click zone on the right */
+  padding: 25px 5px 25px 25px;
+  height: 100%;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.panel-section {
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--vagabond-c-faint);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 4px;
+  color: var(--vagabond-c-dark);
+  font-family: $font-title;
+}
+
+.panel-section h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  margin-top: 8px;
+  color: var(--vagabond-c-dark);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+/* Features & Perks columns */
+.features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+
+.features-column,
+.perks-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mana info row */
+.mana-info-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  margin-bottom: 4px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+
+.mana-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  input {
+    width: 60px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .mana-value {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: var(--vagabond-c-dark);
+  }
+}
+
+  /* Currency fields in panel */
+  .currency-row {
+    justify-content: space-around;
+    gap: 8px;
+  }
+
+  .currency-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+
+    input {
+      width: 60px;
+      text-align: center;
+    }
+  }
+

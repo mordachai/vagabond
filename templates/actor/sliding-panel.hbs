@@ -21,7 +21,7 @@
               type='button'
               data-action='levelUp'
               data-tooltip='Level Up'
-              class='btn-sm'
+              class='btn-xs'
             >
               <i class='fas fa-level-up-alt'></i>
             </button>
@@ -88,6 +88,20 @@
               <div class='armor-value'>{{system.armor}}</div>
               <div class='armor-type'>{{equippedArmorType}}</div>
             </div>
+            
+            {{! Row 3: Hit Points }}
+            <div class='hp-display'>
+              <i class='fas fa-heart hp-icon'></i>
+              <input
+                type='text'
+                name='system.health.value'
+                value='{{system.health.value}}'
+                data-dtype='Number'
+                class='hp-current'
+              />
+              <span class='hp-separator'>/</span>
+              <span class='hp-max'>{{system.health.max}}</span>
+            </div>
           </div>
         </div>
 
@@ -128,22 +142,9 @@
             </div>
           </div>
 
-          {{! Row 3: Hit Points }}
-          <div class='hp-display'>
-            <i class='fas fa-heart hp-icon'></i>
-            <input
-              type='text'
-              name='system.health.value'
-              value='{{system.health.value}}'
-              data-dtype='Number'
-              class='hp-current'
-            />
-            <span class='hp-separator'>/</span>
-            <span class='hp-max'>{{system.health.max}}</span>
-          </div>
+
         </div>
       </div>
-
     </header>
 
     {{! Speed Stats - All in one row with space around }}

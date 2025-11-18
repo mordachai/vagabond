@@ -9,15 +9,21 @@
   border-radius: 0% !important;
   box-shadow: none !important;
   height: calc(100vh - 150px) !important;
+  overflow: visible !important;
 }
 
 .vagabond .window-header {
   background: transparent !important;
+  position: relative;
+  z-index: 10 !important;
 }
 
 // Add background color to window-content instead
 .vagabond .window-content {
   background: $c-groove;
+  position: relative;
+  overflow: visible !important;
+  height: 100%;
 }
 
 .rollable {
