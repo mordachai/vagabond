@@ -93,18 +93,21 @@
       />
     </div>
 
-    {{! HP }}
+    {{! HP - Current / Max format }}
     <div class='npc-stat-field'>
       <label class='npc-field-label'>HP</label>
-      <input
-        type='text'
-        name='system.health.max'
-        value='{{system.health.max}}'
-        data-dtype='Number'
-        class='npc-field-input'
-        placeholder='{{#unless system.locked}}10{{/unless}}'
-        {{#if system.locked}}readonly{{/if}}
-      />
+      <div class='npc-hp-display'>
+        <input
+          type='text'
+          name='system.health.value'
+          value='{{system.health.value}}'
+          data-dtype='Number'
+          class='npc-hp-current'
+          placeholder='{{#unless system.locked}}10{{/unless}}'
+        />
+        <span class='npc-hp-separator'>/</span>
+        <span class='npc-hp-max'>{{system.health.max}}</span>
+      </div>
     </div>
 
     {{! Morale }}

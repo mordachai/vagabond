@@ -233,6 +233,52 @@
   line-height: 1.4;
 }
 
+// HP Display (Current / Max)
+.npc-hp-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.npc-hp-current {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  width: 50px;
+  text-align: center;
+
+  &:hover {
+    border-color: var(--vagabond-c-dark);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--vagabond-c-dark);
+    background: var(--vagabond-c-faint);
+  }
+
+  &::placeholder {
+    color: var(--vagabond-c-muted);
+    opacity: 0.5;
+  }
+}
+
+.npc-hp-separator {
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
+}
+
+.npc-hp-max {
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  font-weight: 600;
+  min-width: 20px;
+}
+
 // NPC Content
 .npc-content {
   padding: 8px;
