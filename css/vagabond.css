@@ -2119,11 +2119,11 @@
   padding: 4px 8px;
 }
 .vagabond .npc-type-row select option:checked {
-  background: var(--vagabond-c-tan);
+  background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row select option:hover {
-  background: var(--vagabond-c-faint);
+  background: var(--vagabond-c-beige);
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row .npc-size-select {
@@ -2561,17 +2561,22 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  background: var(--vagabond-c-faint);
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
-  font-size: 12px;
+  padding: 2px 4px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
   font-weight: 600;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
 }
 .vagabond .npc-immunity-toggle:hover {
-  background: var(--vagabond-c-tan);
+  background: transparent;
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-immunity-toggle i {
   font-size: 10px;
