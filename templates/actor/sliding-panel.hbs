@@ -107,14 +107,14 @@
 
         {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
         <div class='stats-column'>
-          {{! Row 1: Stats Grid - 3x2 grid of abilities }}
+          {{! Row 1: Stats Grid - 3x2 grid of stats }}
           <div class='stats-grid'>
-            {{#each system.abilities as |ability key|}}
+            {{#each system.stats as |stat key|}}
               <div class='stat-item'>
                 <input
                   type='text'
-                  name='system.abilities.{{key}}.value'
-                  value='{{ability.value}}'
+                  name='system.stats.{{key}}.value'
+                  value='{{stat.value}}'
                   class='stat-score'
                   data-dtype='Number'
                 />
@@ -122,9 +122,9 @@
                   class='stat-label rollable'
                   data-action='roll'
                   data-roll='d20'
-                  data-label='{{localize (lookup @root.config.abilities key)}} Check'
-                  data-tooltip='{{localize (lookup @root.config.abilities key)}}'
-                >{{localize (lookup @root.config.abilities key)}}</label>
+                  data-label='{{localize (lookup @root.config.stats key)}} Check'
+                  data-tooltip='{{localize (lookup @root.config.stats key)}}'
+                >{{localize (lookup @root.config.stats key)}}</label>
               </div>
             {{/each}}
           </div>

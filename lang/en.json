@@ -1,6 +1,6 @@
 {
   "VAGABOND": {
-    "Ability": {
+    "Stat": {
       "Might": { "long": "Might", "abbr": "MIG" },
       "Dexterity": { "long": "Dexterity", "abbr": "DEX" },
       "Awareness": { "long": "Awareness", "abbr": "AWR" },

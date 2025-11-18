@@ -27,20 +27,20 @@
     </div>
   </section>
 
-  {{! Abilities Section }}
-  <section class='npc-section npc-abilities'>
-    <h3 class='npc-section-title'>Abilities</h3>
+  {{! Stats Section }}
+  <section class='npc-section npc-stats'>
+    <h3 class='npc-section-title'>Stats</h3>
     <div class='npc-section-content'>
-      <div class='npc-abilities-grid'>
-        {{#each system.abilities as |ability key|}}
-          <div class='npc-ability-item'>
-            <label class='npc-ability-label'>{{ability.label}}</label>
+      <div class='npc-stats-grid'>
+        {{#each system.stats as |stat key|}}
+          <div class='npc-stat-item'>
+            <label class='npc-stat-label'>{{stat.label}}</label>
             <input
               type='text'
-              name='system.abilities.{{key}}.value'
-              value='{{ability.value}}'
+              name='system.stats.{{key}}.value'
+              value='{{stat.value}}'
               data-dtype='Number'
-              class='npc-ability-value'
+              class='npc-stat-value'
             />
           </div>
         {{/each}}

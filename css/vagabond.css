@@ -2162,24 +2162,24 @@
   content: "•";
   margin-left: 8px;
 }
-.vagabond .npc-abilities-grid {
+.vagabond .npc-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px 12px;
 }
-.vagabond .npc-ability-item {
+.vagabond .npc-stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
 }
-.vagabond .npc-ability-label {
+.vagabond .npc-stat-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
 }
-.vagabond .npc-ability-value {
+.vagabond .npc-stat-value {
   width: 50px;
   height: 50px;
   font-size: 20px;
@@ -2191,7 +2191,7 @@
   background: transparent;
   padding: 4px;
 }
-.vagabond .npc-ability-value:hover, .vagabond .npc-ability-value:focus {
+.vagabond .npc-stat-value:hover, .vagabond .npc-stat-value:focus {
   border-color: var(--vagabond-c-dark);
   outline: none;
 }

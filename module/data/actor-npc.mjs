@@ -29,10 +29,10 @@ export default class VagabondNPC extends VagabondActorBase {
       choices: ['Humanlike', 'Fae', 'Cryptid', 'Artificials', 'Beasts', 'Outers', 'Primordials', 'Undead']
     });
 
-    // NPC abilities (simplified compared to characters)
-    schema.abilities = new fields.SchemaField(
-      Object.keys(CONFIG.VAGABOND.abilities).reduce((obj, ability) => {
-        obj[ability] = new fields.SchemaField({
+    // NPC stats (simplified compared to characters)
+    schema.stats = new fields.SchemaField(
+      Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {
+        obj[stat] = new fields.SchemaField({
           value: new fields.NumberField({
             ...requiredInteger,
             initial: 8,
@@ -50,10 +50,10 @@ export default class VagabondNPC extends VagabondActorBase {
   prepareDerivedData() {
     this.xp = this.cr * this.cr * 100;
 
-    // Loop through ability scores and add labels
-    for (const key in this.abilities) {
-      this.abilities[key].label =
-        game.i18n.localize(CONFIG.VAGABOND.abilities[key]) ?? key;
+    // Loop through stats and add labels
+    for (const key in this.stats) {
+      this.stats[key].label =
+        game.i18n.localize(CONFIG.VAGABOND.stats[key]) ?? key;
     }
   }
 }

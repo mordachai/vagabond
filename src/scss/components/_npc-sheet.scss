@@ -215,28 +215,28 @@
   }
 }
 
-// Abilities Section
-.npc-abilities-grid {
+// Stats Section
+.npc-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px 12px;
 }
 
-.npc-ability-item {
+.npc-stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
 }
 
-.npc-ability-label {
+.npc-stat-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
 }
 
-.npc-ability-value {
+.npc-stat-value {
   width: 50px;
   height: 50px;
   font-size: 20px;
