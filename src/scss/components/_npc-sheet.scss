@@ -218,6 +218,7 @@
 .npc-field-label {
   font-size: 13px;
   font-weight: 600;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   min-width: fit-content;
@@ -230,6 +231,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   flex: 1;
 
@@ -264,6 +266,7 @@
 .npc-field-display {
   padding: 2px 0;
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
   flex: 1;
@@ -283,6 +286,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
@@ -305,12 +309,14 @@
 
 .npc-hp-separator {
   font-size: 14px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   font-weight: bold;
 }
 
 .npc-hp-max {
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   font-weight: 600;
   min-width: 20px;
@@ -330,6 +336,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
@@ -369,6 +376,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   flex: 1;
 
@@ -484,6 +492,7 @@
 .npc-action-name {
   font-weight: bold;
   font-size: 14px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
 }
 
@@ -491,6 +500,7 @@
   display: flex;
   gap: 8px;
   font-size: 12px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-muted);
   margin-top: 4px;
 
@@ -520,6 +530,7 @@
 .npc-stat-label {
   font-size: 12px;
   font-weight: 600;
+  font-family: $font-secondary;
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
 }
@@ -529,6 +540,7 @@
   height: 50px;
   font-size: 24px;
   font-weight: bold;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   text-align: center;
   border: 2px solid var(--vagabond-c-tan);
@@ -558,6 +570,7 @@
   .effects-category-label {
     font-size: 13px;
     font-weight: 600;
+    font-family: $font-secondary;
     margin-bottom: 4px;
     color: var(--vagabond-c-dark);
   }
@@ -581,6 +594,7 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
+    font-family: $font-secondary;
     color: var(--vagabond-c-dark);
   }
 
@@ -614,6 +628,7 @@
   color: var(--vagabond-c-muted);
   font-style: italic;
   font-size: 13px;
+  font-family: $font-secondary;
   padding: 12px;
 }
 
@@ -637,6 +652,7 @@
 .npc-immunity-text {
   flex: 1;
   font-size: 13px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
 }
@@ -719,6 +735,7 @@
 
   span {
     font-size: 12px;
+    font-family: $font-secondary;
     color: var(--vagabond-c-dark);
   }
 }
@@ -742,6 +759,7 @@
   border-radius: 3px;
   font-size: 11px;
   font-weight: 500;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
 

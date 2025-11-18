@@ -495,20 +495,6 @@
 }
 
 /* Styles limited to vagabond sheets */
-.vagabond {
-  /* Character Name at Top - Full Width */
-  /* Combined Character Info Row */
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
-  /* Panel content area */
-  /* Features & Perks columns */
-  /* Mana info row */
-  /* Currency fields in panel */
-}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1727,6 +1713,9 @@
   font-weight: 400;
   line-height: 1.2;
 }
+.vagabond {
+  /* Character Name at Top - Full Width */
+}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1776,6 +1765,9 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
+}
+.vagabond {
+  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1854,6 +1846,11 @@
     font-size: 12px;
   }
 }
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -1878,11 +1875,20 @@
   backface-visibility: hidden;
   will-change: transform;
 }
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
+}
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -1897,6 +1903,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.vagabond {
+  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -1934,6 +1943,9 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
+.vagabond {
+  /* Features & Perks columns */
+}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -1942,6 +1954,9 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
+}
+.vagabond {
+  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -1978,6 +1993,9 @@
   text-align: center;
   color: var(--vagabond-c-dark);
 }
+.vagabond {
+  /* Currency fields in panel */
+}
 .vagabond .currency-row {
   justify-content: space-around;
   gap: 8px;
@@ -2000,35 +2018,44 @@
   padding: 8px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
-.vagabond .npc-lock-name-row {
+.vagabond .npc-lock-toggle {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  justify-content: flex-end;
   margin-bottom: 8px;
-}
-.vagabond .npc-lock-name-row .npc-name-input {
-  flex: 1;
 }
 .vagabond .npc-lock-button {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
   background: transparent;
   color: var(--vagabond-c-dark);
-  font-size: 16px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .vagabond .npc-lock-button i {
-  font-size: 16px;
+  font-size: 12px;
 }
-.vagabond .npc-lock-button:hover {
-  color: var(--vagabond-c-tan);
-  transform: scale(1.1);
+.vagabond .npc-lock-button.locked {
+  background: var(--vagabond-c-faint);
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-lock-button.locked:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-lock-button.unlocked {
+  background: transparent;
+  border-color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-lock-button.unlocked:hover {
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
 }
 .vagabond .npc-top-section {
   display: flex;
@@ -2060,24 +2087,19 @@
   gap: 8px;
   flex: 1;
 }
-.vagabond .npc-lock-name-row .npc-name-input {
+.vagabond .npc-name-row .npc-name-input {
   width: 100%;
-  font-size: 20px;
-  font-family: "Manofa", sans-serif;
+  font-size: 18px;
   font-weight: bold;
-  border: none !important;
-  background: transparent !important;
-  text-align: left;
-  padding: 2px 0 4px 0;
+  border: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px 8px;
   color: var(--vagabond-c-dark);
-  outline: none;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
+  border-radius: 4px;
 }
-.vagabond .npc-lock-name-row .npc-name-input:hover,
-.vagabond .npc-lock-name-row .npc-name-input:focus {
-  border-bottom: 2px solid var(--vagabond-c-dark) !important;
-  background: transparent !important;
+.vagabond .npc-name-row .npc-name-input:hover, .vagabond .npc-name-row .npc-name-input:focus {
+  border-color: var(--vagabond-c-dark);
+  outline: none;
 }
 .vagabond .npc-type-row {
   display: flex;
@@ -2086,45 +2108,23 @@
 .vagabond .npc-type-row select {
   flex: 1;
   border: none;
-  border-bottom: 1px solid var(--vagabond-c-tan);
   background: transparent;
-  padding: 2px 4px;
+  padding: 4px 0;
   font-size: 14px;
-  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  transition: border-bottom-color 0.2s ease;
 }
 .vagabond .npc-type-row select::-ms-expand {
   display: none;
 }
-.vagabond .npc-type-row select:hover {
-  border-bottom-color: var(--vagabond-c-dark);
-}
 .vagabond .npc-type-row select:focus {
   outline: none;
-  border-bottom-color: var(--vagabond-c-dark);
-  background: transparent;
-}
-.vagabond .npc-type-row select:focus-visible {
-  outline: none;
-  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row select option {
-  background: var(--vagabond-c-groove);
-  color: var(--vagabond-c-dark);
-  padding: 4px 8px;
-}
-.vagabond .npc-type-row select option:checked {
-  background: var(--vagabond-c-faint);
-  color: var(--vagabond-c-dark);
-}
-.vagabond .npc-type-row select option:hover {
-  background: var(--vagabond-c-beige);
-  color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-light);
 }
 .vagabond .npc-type-row .npc-size-select {
   text-transform: capitalize;
@@ -2132,7 +2132,6 @@
 .vagabond .npc-type-row select:disabled {
   color: var(--vagabond-c-muted);
   cursor: not-allowed;
-  border-bottom-color: var(--vagabond-c-faint);
 }
 .vagabond .npc-stats-compact-row {
   display: flex;
@@ -2148,9 +2147,6 @@
   gap: 12px;
   margin-top: 8px;
 }
-.vagabond .npc-stats-row-appearing-zone .npc-stat-field {
-  margin-left: auto;
-}
 .vagabond .npc-zone-field {
   display: flex;
   align-items: baseline;
@@ -2162,28 +2158,24 @@
   gap: 8px;
   margin-top: 8px;
 }
-.vagabond .npc-stats-row-senses {
-  margin-top: 8px;
-}
 .vagabond .npc-stat-field {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 6px;
 }
-.vagabond .npc-senses-field {
-  width: 100%;
+.vagabond .npc-senses-field,
+.vagabond .npc-armor-field {
+  grid-column: span 1;
 }
 .vagabond .npc-zone-checkboxes {
   grid-template-columns: 1fr !important;
-  min-width: 200px !important;
-}
-.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item {
-  white-space: nowrap;
+  min-width: 150px !important;
 }
 .vagabond .npc-field-label {
   font-size: 13px;
   font-weight: 600;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   min-width: fit-content;
@@ -2195,6 +2187,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   flex: 1;
 }
@@ -2223,6 +2216,7 @@
 .vagabond .npc-field-display {
   padding: 2px 0;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
   flex: 1;
@@ -2239,6 +2233,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
@@ -2257,11 +2252,13 @@
 }
 .vagabond .npc-hp-separator {
   font-size: 14px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   font-weight: bold;
 }
 .vagabond .npc-hp-max {
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   font-weight: 600;
   min-width: 20px;
@@ -2278,6 +2275,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
@@ -2311,6 +2309,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   flex: 1;
 }
@@ -2347,13 +2346,6 @@
   border-radius: 4px;
   background: var(--vagabond-c-transparent);
 }
-.vagabond .npc-section.npc-actions,
-.vagabond .npc-section.npc-abilities,
-.vagabond .npc-section.npc-effects {
-  border: none;
-  border-radius: 0;
-  background: transparent;
-}
 .vagabond .npc-section-title {
   font-size: 18px;
   font-weight: bold;
@@ -2363,27 +2355,14 @@
   background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
 }
-.vagabond .npc-actions .npc-section-title,
-.vagabond .npc-abilities .npc-section-title,
-.vagabond .npc-effects .npc-section-title {
-  padding: 0;
-  border-bottom: none;
-  background: transparent;
-}
 .vagabond .npc-section-title.accordion-header {
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.vagabond .npc-effects .npc-section-title.accordion-header {
-  justify-content: space-between;
-}
 .vagabond .npc-section-title.accordion-header:hover {
   background: var(--vagabond-c-tan);
-}
-.vagabond .npc-effects .npc-section-title.accordion-header:hover {
-  background: transparent;
 }
 .vagabond .npc-section-title.accordion-header .accordion-icon {
   font-size: 12px;
@@ -2394,11 +2373,6 @@
 }
 .vagabond .npc-section-content {
   padding: 12px;
-}
-.vagabond .npc-actions .npc-section-content,
-.vagabond .npc-abilities .npc-section-content,
-.vagabond .npc-effects .npc-section-content {
-  padding: 0;
 }
 .vagabond .npc-section-content.accordion-content {
   max-height: 500px;
@@ -2420,27 +2394,21 @@
   border-radius: 4px;
   cursor: pointer;
 }
-.vagabond .npc-actions .npc-action-item {
-  padding: 0;
-  border: none;
-  border-radius: 0;
-}
 .vagabond .npc-action-item:hover {
   background: var(--vagabond-c-faint);
   border-color: var(--vagabond-c-dark);
 }
-.vagabond .npc-actions .npc-action-item:hover {
-  background: transparent;
-}
 .vagabond .npc-action-name {
   font-weight: bold;
   font-size: 14px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-action-details {
   display: flex;
   gap: 8px;
   font-size: 12px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-muted);
   margin-top: 4px;
 }
@@ -2463,6 +2431,7 @@
 .vagabond .npc-stat-label {
   font-size: 12px;
   font-weight: 600;
+  font-family: "Paradigm", serif;
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
 }
@@ -2471,6 +2440,7 @@
   height: 50px;
   font-size: 24px;
   font-weight: bold;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   text-align: center;
   border: 2px solid var(--vagabond-c-tan);
@@ -2493,6 +2463,7 @@
 .vagabond .npc-effects .effects-category-label {
   font-size: 13px;
   font-weight: 600;
+  font-family: "Paradigm", serif;
   margin-bottom: 4px;
   color: var(--vagabond-c-dark);
 }
@@ -2513,6 +2484,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-effects .effect-icon {
@@ -2539,14 +2511,15 @@
   color: var(--vagabond-c-muted);
   font-style: italic;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   padding: 12px;
 }
 .vagabond .npc-immunities-section {
-  padding: 8px 0;
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border-top: none;
+  border-top: 1px solid var(--vagabond-c-tan);
 }
 .vagabond .npc-immunity-row {
   display: flex;
@@ -2558,6 +2531,7 @@
 .vagabond .npc-immunity-text {
   flex: 1;
   font-size: 13px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
 }
@@ -2576,22 +2550,17 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 4px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 0;
-  font-size: 14px;
-  font-family: "Paradigm", serif;
+  padding: 4px 8px;
+  background: var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
-  cursor: pointer;
-  transition: border-bottom-color 0.2s ease;
 }
 .vagabond .npc-immunity-toggle:hover {
-  background: transparent;
-  border-bottom-color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-tan);
 }
 .vagabond .npc-immunity-toggle i {
   font-size: 10px;
@@ -2603,7 +2572,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-immunity-checkboxes {
   position: absolute;
   z-index: 10;
-  background: var(--vagabond-c-groove);
+  background: white;
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
@@ -2627,16 +2596,13 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-immunity-checkbox-item:hover {
   background: var(--vagabond-c-faint);
 }
-.vagabond .npc-immunity-checkbox-item input[type=checkbox],
-.vagabond .npc-immunity-checkbox-item input[type=radio] {
+.vagabond .npc-immunity-checkbox-item input[type=checkbox] {
   cursor: pointer;
   margin: 0;
 }
-.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item input[type=radio] {
-  display: none;
-}
 .vagabond .npc-immunity-checkbox-item span {
   font-size: 12px;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-immunity-tags {
@@ -2656,6 +2622,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   border-radius: 3px;
   font-size: 11px;
   font-weight: 500;
+  font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
 }
