@@ -2110,7 +2110,8 @@
   outline: none;
 }
 .vagabond .npc-type-row select option {
-  background: var(--vagabond-c-light);
+  background: var(--vagabond-c-groove);
+  color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row .npc-size-select {
   text-transform: capitalize;
@@ -2144,15 +2145,17 @@
   gap: 8px;
   margin-top: 8px;
 }
+.vagabond .npc-stats-row-senses {
+  margin-top: 8px;
+}
 .vagabond .npc-stat-field {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 6px;
 }
-.vagabond .npc-senses-field,
-.vagabond .npc-armor-field {
-  grid-column: span 1;
+.vagabond .npc-senses-field {
+  width: 100%;
 }
 .vagabond .npc-zone-checkboxes {
   grid-template-columns: 1fr !important;
@@ -2566,7 +2569,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-immunity-checkboxes {
   position: absolute;
   z-index: 10;
-  background: white;
+  background: var(--vagabond-c-groove);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;

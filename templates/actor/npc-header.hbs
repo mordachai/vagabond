@@ -9,7 +9,6 @@
       data-tooltip='{{#if system.locked}}Click to unlock and edit{{else}}Click to lock for play{{/if}}'
     >
       <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
-      {{#if system.locked}}Locked{{else}}Unlocked{{/if}}
     </button>
   </div>
 
@@ -195,8 +194,8 @@
     </div>
   </div>
 
-  {{! NPC Stats Row - Senses and Armor }}
-  <div class='npc-stats-row'>
+  {{! NPC Stats Row - Senses }}
+  <div class='npc-stats-row-senses'>
     {{! Senses }}
     <div class='npc-stat-field npc-senses-field'>
       <label class='npc-field-label'>Senses</label>
@@ -210,9 +209,12 @@
         {{#if system.locked}}readonly{{/if}}
       />
     </div>
+  </div>
 
-    {{! Armor - Number + Description }}
-    <div class='npc-stat-field npc-armor-field'>
+  {{! Immunities Section }}
+  <div class='npc-immunities-section'>
+    {{! Armor - Always visible }}
+    <div class='npc-immunity-row'>
       <label class='npc-field-label'>Armor</label>
       <div class='npc-armor-display'>
         <input
@@ -235,10 +237,7 @@
         />
       </div>
     </div>
-  </div>
 
-  {{! Immunities Section }}
-  <div class='npc-immunities-section'>
     {{! Damage Immunities }}
     {{#unless (and system.locked (not system.immunities.length))}}
       <div class='npc-immunity-row'>
