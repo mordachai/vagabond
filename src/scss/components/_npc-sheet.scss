@@ -164,7 +164,7 @@
   }
 }
 
-// NPC Stats Row (HD, HP, Morale, Appearing, Speed, Senses)
+// NPC Stats Row (HD, HP, Morale, Appearing, Speed, Senses, Armor)
 .npc-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -174,8 +174,9 @@
 
 .npc-stat-field {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
 
 .npc-senses-field,
@@ -184,39 +185,42 @@
 }
 
 .npc-field-label {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
-  text-transform: uppercase;
-  color: var(--vagabond-c-muted);
-  letter-spacing: 0.5px;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+  min-width: fit-content;
 }
 
 .npc-field-input {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
+  flex: 1;
 
   &:hover {
-    border-color: var(--vagabond-c-dark);
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--vagabond-c-dark);
-    background: var(--vagabond-c-faint);
+    border-bottom-color: var(--vagabond-c-dark);
+    background: transparent;
   }
 
   &[readonly] {
-    border-color: var(--vagabond-c-faint);
-    color: var(--vagabond-c-muted);
+    border: none;
+    color: var(--vagabond-c-dark);
     cursor: default;
     background: transparent;
+    padding: 2px 0;
 
     &:hover {
-      border-color: var(--vagabond-c-faint);
+      border: none;
     }
   }
 
@@ -227,11 +231,11 @@
 }
 
 .npc-field-display {
-  padding: 4px 6px;
+  padding: 2px 0;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  min-height: 25px;
   line-height: 1.4;
+  flex: 1;
 }
 
 // HP Display (Current / Max)
@@ -242,23 +246,24 @@
 }
 
 .npc-hp-current {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  width: 50px;
-  text-align: center;
+  width: 40px;
+  text-align: left;
 
   &:hover {
-    border-color: var(--vagabond-c-dark);
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--vagabond-c-dark);
-    background: var(--vagabond-c-faint);
+    border-bottom-color: var(--vagabond-c-dark);
+    background: transparent;
   }
 
   &::placeholder {
@@ -288,33 +293,35 @@
 }
 
 .npc-armor-value {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  width: 50px;
-  text-align: center;
+  width: 40px;
+  text-align: left;
 
   &:hover {
-    border-color: var(--vagabond-c-dark);
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--vagabond-c-dark);
-    background: var(--vagabond-c-faint);
+    border-bottom-color: var(--vagabond-c-dark);
+    background: transparent;
   }
 
   &[readonly] {
-    border-color: var(--vagabond-c-faint);
-    color: var(--vagabond-c-muted);
+    border: none;
+    color: var(--vagabond-c-dark);
     cursor: default;
     background: transparent;
+    padding: 2px 0;
 
     &:hover {
-      border-color: var(--vagabond-c-faint);
+      border: none;
     }
   }
 
@@ -325,32 +332,34 @@
 }
 
 .npc-armor-description {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
   flex: 1;
 
   &:hover {
-    border-color: var(--vagabond-c-dark);
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--vagabond-c-dark);
-    background: var(--vagabond-c-faint);
+    border-bottom-color: var(--vagabond-c-dark);
+    background: transparent;
   }
 
   &[readonly] {
-    border-color: var(--vagabond-c-faint);
-    color: var(--vagabond-c-muted);
+    border: none;
+    color: var(--vagabond-c-dark);
     cursor: default;
     background: transparent;
+    padding: 2px 0;
 
     &:hover {
-      border-color: var(--vagabond-c-faint);
+      border: none;
     }
   }
 

@@ -2133,55 +2133,59 @@
 }
 .vagabond .npc-stat-field {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
 .vagabond .npc-senses-field,
 .vagabond .npc-armor-field {
   grid-column: span 3;
 }
 .vagabond .npc-field-label {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
-  text-transform: uppercase;
-  color: var(--vagabond-c-muted);
-  letter-spacing: 0.5px;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+  min-width: fit-content;
 }
 .vagabond .npc-field-input {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
+  flex: 1;
 }
 .vagabond .npc-field-input:hover {
-  border-color: var(--vagabond-c-dark);
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-field-input:focus {
   outline: none;
-  border-color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-faint);
-}
-.vagabond .npc-field-input[readonly] {
-  border-color: var(--vagabond-c-faint);
-  color: var(--vagabond-c-muted);
-  cursor: default;
+  border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
 }
+.vagabond .npc-field-input[readonly] {
+  border: none;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
 .vagabond .npc-field-input[readonly]:hover {
-  border-color: var(--vagabond-c-faint);
+  border: none;
 }
 .vagabond .npc-field-input::placeholder {
   color: var(--vagabond-c-muted);
   opacity: 0.5;
 }
 .vagabond .npc-field-display {
-  padding: 4px 6px;
+  padding: 2px 0;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  min-height: 25px;
   line-height: 1.4;
+  flex: 1;
 }
 .vagabond .npc-hp-display {
   display: flex;
@@ -2189,22 +2193,23 @@
   gap: 4px;
 }
 .vagabond .npc-hp-current {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  width: 50px;
-  text-align: center;
+  width: 40px;
+  text-align: left;
 }
 .vagabond .npc-hp-current:hover {
-  border-color: var(--vagabond-c-dark);
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-hp-current:focus {
   outline: none;
-  border-color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-faint);
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
 }
 .vagabond .npc-hp-current::placeholder {
   color: var(--vagabond-c-muted);
@@ -2227,61 +2232,65 @@
   gap: 8px;
 }
 .vagabond .npc-armor-value {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  width: 50px;
-  text-align: center;
+  width: 40px;
+  text-align: left;
 }
 .vagabond .npc-armor-value:hover {
-  border-color: var(--vagabond-c-dark);
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-armor-value:focus {
   outline: none;
-  border-color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-faint);
-}
-.vagabond .npc-armor-value[readonly] {
-  border-color: var(--vagabond-c-faint);
-  color: var(--vagabond-c-muted);
-  cursor: default;
+  border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
 }
+.vagabond .npc-armor-value[readonly] {
+  border: none;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
 .vagabond .npc-armor-value[readonly]:hover {
-  border-color: var(--vagabond-c-faint);
+  border: none;
 }
 .vagabond .npc-armor-value::placeholder {
   color: var(--vagabond-c-muted);
   opacity: 0.5;
 }
 .vagabond .npc-armor-description {
-  padding: 4px 6px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
   background: transparent;
   font-size: 13px;
   color: var(--vagabond-c-dark);
   flex: 1;
 }
 .vagabond .npc-armor-description:hover {
-  border-color: var(--vagabond-c-dark);
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-armor-description:focus {
   outline: none;
-  border-color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-faint);
-}
-.vagabond .npc-armor-description[readonly] {
-  border-color: var(--vagabond-c-faint);
-  color: var(--vagabond-c-muted);
-  cursor: default;
+  border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
 }
+.vagabond .npc-armor-description[readonly] {
+  border: none;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
 .vagabond .npc-armor-description[readonly]:hover {
-  border-color: var(--vagabond-c-faint);
+  border: none;
 }
 .vagabond .npc-armor-description::placeholder {
   color: var(--vagabond-c-muted);
