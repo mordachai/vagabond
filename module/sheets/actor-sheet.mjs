@@ -37,6 +37,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       togglePanel: this._onTogglePanel,  // Sliding panel toggle
       toggleEffectsAccordion: this._onToggleEffectsAccordion,  // NPC effects accordion toggle
       toggleLock: this._onToggleLock,  // NPC lock/unlock toggle
+      toggleImmunity: this._onToggleImmunity,  // NPC damage immunity toggle
+      removeImmunity: this._onRemoveImmunity,  // NPC damage immunity remove
+      toggleWeakness: this._onToggleWeakness,  // NPC damage weakness toggle
+      removeWeakness: this._onRemoveWeakness,  // NPC damage weakness remove
+      toggleStatusImmunity: this._onToggleStatusImmunity,  // NPC status immunity toggle
+      removeStatusImmunity: this._onRemoveStatusImmunity,  // NPC status immunity remove
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -760,6 +766,132 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.preventDefault();
     const currentLocked = this.actor.system.locked;
     await this.actor.update({ 'system.locked': !currentLocked });
+  }
+
+  /**
+   * Handle toggling NPC damage immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleImmunity(event, target) {
+    const immunity = target.dataset.immunity;
+    const isChecked = target.checked;
+    const immunities = this.actor.system.immunities || [];
+
+    let newImmunities;
+    if (isChecked) {
+      if (!immunities.includes(immunity)) {
+        newImmunities = [...immunities, immunity];
+      } else {
+        return;
+      }
+    } else {
+      newImmunities = immunities.filter(i => i !== immunity);
+    }
+
+    await this.actor.update({ 'system.immunities': newImmunities });
+  }
+
+  /**
+   * Handle removing NPC damage immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveImmunity(event, target) {
+    const immunity = target.dataset.immunity;
+    if (!immunity) return;
+
+    const immunities = this.actor.system.immunities || [];
+    const newImmunities = immunities.filter(i => i !== immunity);
+    await this.actor.update({ 'system.immunities': newImmunities });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-immunity="${immunity}"]`);
+    if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle toggling NPC damage weakness
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleWeakness(event, target) {
+    const weakness = target.dataset.weakness;
+    const isChecked = target.checked;
+    const weaknesses = this.actor.system.weaknesses || [];
+
+    let newWeaknesses;
+    if (isChecked) {
+      if (!weaknesses.includes(weakness)) {
+        newWeaknesses = [...weaknesses, weakness];
+      } else {
+        return;
+      }
+    } else {
+      newWeaknesses = weaknesses.filter(w => w !== weakness);
+    }
+
+    await this.actor.update({ 'system.weaknesses': newWeaknesses });
+  }
+
+  /**
+   * Handle removing NPC damage weakness
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveWeakness(event, target) {
+    const weakness = target.dataset.weakness;
+    if (!weakness) return;
+
+    const weaknesses = this.actor.system.weaknesses || [];
+    const newWeaknesses = weaknesses.filter(w => w !== weakness);
+    await this.actor.update({ 'system.weaknesses': newWeaknesses });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-weakness="${weakness}"]`);
+    if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle toggling NPC status immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleStatusImmunity(event, target) {
+    const status = target.dataset.status;
+    const isChecked = target.checked;
+    const statusImmunities = this.actor.system.statusImmunities || [];
+
+    let newStatusImmunities;
+    if (isChecked) {
+      if (!statusImmunities.includes(status)) {
+        newStatusImmunities = [...statusImmunities, status];
+      } else {
+        return;
+      }
+    } else {
+      newStatusImmunities = statusImmunities.filter(s => s !== status);
+    }
+
+    await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
+  }
+
+  /**
+   * Handle removing NPC status immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveStatusImmunity(event, target) {
+    const status = target.dataset.status;
+    if (!status) return;
+
+    const statusImmunities = this.actor.system.statusImmunities || [];
+    const newStatusImmunities = statusImmunities.filter(s => s !== status);
+    await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-status="${status}"]`);
+    if (checkbox) checkbox.checked = false;
   }
 
   /**

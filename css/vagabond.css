@@ -2468,6 +2468,124 @@
   font-size: 13px;
   padding: 12px;
 }
+.vagabond .npc-immunities-section {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .npc-immunity-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 24px;
+}
+.vagabond .npc-immunity-text {
+  flex: 1;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  padding: 2px 0;
+  line-height: 1.4;
+}
+.vagabond .npc-immunity-dropdown {
+  min-width: fit-content;
+}
+.vagabond .npc-immunity-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond .npc-immunity-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+.vagabond .npc-immunity-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-toggle:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-immunity-toggle i {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+details[open] .vagabond .npc-immunity-toggle i {
+  transform: rotate(90deg);
+}
+.vagabond .npc-immunity-checkboxes {
+  position: absolute;
+  z-index: 10;
+  background: white;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+  padding: 8px;
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.vagabond .npc-immunity-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-checkbox-item:hover {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-immunity-checkbox-item input[type=checkbox] {
+  cursor: pointer;
+  margin: 0;
+}
+.vagabond .npc-immunity-checkbox-item span {
+  font-size: 12px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-immunity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  flex: 1;
+}
+.vagabond .npc-immunity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-tag i {
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-immunity-tag i:hover {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .item-sheet-header {
   display: flex;
   flex-direction: row;

@@ -39,6 +39,30 @@ VAGABOND.damageTypes = {
 };
 
 /**
+ * Status conditions for NPC immunities
+ * @type {Object}
+ */
+VAGABOND.statusConditions = {
+  'berserk': 'VAGABOND.StatusConditions.Berserk',
+  'blinded': 'VAGABOND.StatusConditions.Blinded',
+  'burning': 'VAGABOND.StatusConditions.Burning',
+  'charmed': 'VAGABOND.StatusConditions.Charmed',
+  'confused': 'VAGABOND.StatusConditions.Confused',
+  'dazed': 'VAGABOND.StatusConditions.Dazed',
+  'fatigued': 'VAGABOND.StatusConditions.Fatigued',
+  'frightened': 'VAGABOND.StatusConditions.Frightened',
+  'incapacitated': 'VAGABOND.StatusConditions.Incapacitated',
+  'invisible': 'VAGABOND.StatusConditions.Invisible',
+  'paralyzed': 'VAGABOND.StatusConditions.Paralyzed',
+  'prone': 'VAGABOND.StatusConditions.Prone',
+  'restrained': 'VAGABOND.StatusConditions.Restrained',
+  'sickened': 'VAGABOND.StatusConditions.Sickened',
+  'suffocating': 'VAGABOND.StatusConditions.Suffocating',
+  'unconscious': 'VAGABOND.StatusConditions.Unconscious',
+  'vulnerable': 'VAGABOND.StatusConditions.Vulnerable'
+};
+
+/**
  * Spell delivery types
  * @type {Object}
  */

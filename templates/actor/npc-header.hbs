@@ -194,4 +194,122 @@
       </div>
     </div>
   </div>
+
+  {{! Immunities Section }}
+  <div class='npc-immunities-section'>
+    {{! Damage Immunities }}
+    <div class='npc-immunity-row'>
+      {{#if system.locked}}
+        <label class='npc-field-label'>Immune:</label>
+        <div class='npc-immunity-text'>
+          {{#if system.immunities.length}}
+            {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
+          {{else}}
+            —
+          {{/if}}
+        </div>
+      {{else}}
+        <details class='npc-immunity-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Immune</span>
+          </summary>
+          <div class='npc-immunity-checkboxes'>
+            {{#each config.damageTypes as |label key|}}
+              {{#unless (eq key '-')}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/unless}}
+            {{/each}}
+          </div>
+        </details>
+        <div class='npc-immunity-tags'>
+          {{#each system.immunities as |immunity index|}}
+            <span class='npc-immunity-tag'>
+              {{immunity}}
+              <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
+            </span>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+
+    {{! Damage Weaknesses }}
+    <div class='npc-immunity-row'>
+      {{#if system.locked}}
+        <label class='npc-field-label'>Weak:</label>
+        <div class='npc-immunity-text'>
+          {{#if system.weaknesses.length}}
+            {{#each system.weaknesses as |weakness index|}}{{weakness}}{{#unless @last}}, {{/unless}}{{/each}}
+          {{else}}
+            —
+          {{/if}}
+        </div>
+      {{else}}
+        <details class='npc-immunity-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Weak</span>
+          </summary>
+          <div class='npc-immunity-checkboxes'>
+            {{#each config.damageTypes as |label key|}}
+              {{#unless (eq key '-')}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.weaknesses key)}}checked{{/if}} data-action='toggleWeakness' data-weakness='{{key}}'>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/unless}}
+            {{/each}}
+          </div>
+        </details>
+        <div class='npc-immunity-tags'>
+          {{#each system.weaknesses as |weakness index|}}
+            <span class='npc-immunity-tag'>
+              {{weakness}}
+              <i class='fas fa-times' data-action='removeWeakness' data-weakness='{{weakness}}'></i>
+            </span>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+
+    {{! Status Immunities }}
+    <div class='npc-immunity-row'>
+      {{#if system.locked}}
+        <label class='npc-field-label'>Status immunities:</label>
+        <div class='npc-immunity-text'>
+          {{#if system.statusImmunities.length}}
+            {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
+          {{else}}
+            —
+          {{/if}}
+        </div>
+      {{else}}
+        <details class='npc-immunity-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Status immunities</span>
+          </summary>
+          <div class='npc-immunity-checkboxes'>
+            {{#each config.statusConditions as |label key|}}
+              <label class='npc-immunity-checkbox-item'>
+                <input type='checkbox' value='{{key}}' {{#if (contains ../system.statusImmunities key)}}checked{{/if}} data-action='toggleStatusImmunity' data-status='{{key}}'>
+                <span>{{localize label}}</span>
+              </label>
+            {{/each}}
+          </div>
+        </details>
+        <div class='npc-immunity-tags'>
+          {{#each system.statusImmunities as |status index|}}
+            <span class='npc-immunity-tag'>
+              {{status}}
+              <i class='fas fa-times' data-action='removeStatusImmunity' data-status='{{status}}'></i>
+            </span>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
 </header>

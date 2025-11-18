@@ -71,6 +71,25 @@
       "Physical": "Physical",
       "Necrotic": "Necrotic"
     },
+    "StatusConditions": {
+      "Berserk": "Berserk",
+      "Blinded": "Blinded",
+      "Burning": "Burning",
+      "Charmed": "Charmed",
+      "Confused": "Confused",
+      "Dazed": "Dazed",
+      "Fatigued": "Fatigued",
+      "Frightened": "Frightened",
+      "Incapacitated": "Incapacitated",
+      "Invisible": "Invisible",
+      "Paralyzed": "Paralyzed",
+      "Prone": "Prone",
+      "Restrained": "Restrained",
+      "Sickened": "Sickened",
+      "Suffocating": "Suffocating",
+      "Unconscious": "Unconscious",
+      "Vulnerable": "Vulnerable"
+    },
     "Currency": {
       "Gold": {
         "long": "Gold",
