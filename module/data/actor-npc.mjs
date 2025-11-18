@@ -44,6 +44,50 @@ export default class VagabondNPC extends VagabondActorBase {
       }, {})
     );
 
+    // NPC-specific fields
+    schema.hd = new fields.NumberField({
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: 1,
+      min: 0,
+    });
+
+    schema.morale = new fields.NumberField({
+      required: false,
+      nullable: true,
+      integer: true,
+      initial: null,
+      min: 0,
+      max: 12,
+    });
+
+    schema.appearing = new fields.StringField({
+      required: false,
+      nullable: false,
+      initial: '',
+    });
+
+    schema.speed = new fields.NumberField({
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: 30,
+      min: 0,
+    });
+
+    schema.senses = new fields.StringField({
+      required: false,
+      nullable: false,
+      initial: '',
+    });
+
+    // Locked/unlocked mode toggle
+    schema.locked = new fields.BooleanField({
+      required: true,
+      initial: false,
+    });
+
     return schema;
   }
 
@@ -55,5 +99,43 @@ export default class VagabondNPC extends VagabondActorBase {
       this.stats[key].label =
         game.i18n.localize(CONFIG.VAGABOND.stats[key]) ?? key;
     }
+
+    // Calculate HP based on HD and size
+    // If size is small/tiny: HD * 1, otherwise: HD * 4.5 (rounded down)
+    const isSmall = this.size === 'tiny' || this.size === 'small';
+    const calculatedMaxHP = isSmall ? this.hd : Math.floor(this.hd * 4.5);
+
+    // Only update health.max if it hasn't been manually set
+    // (we check if it's still at the default value of 10 from base-actor)
+    if (!this.parent || this.health.max === 10) {
+      this.health.max = calculatedMaxHP;
+    }
+
+    // Format appearing for display in locked mode
+    if (this.locked && this.appearing) {
+      this.appearingFormatted = this.formatAppearing(this.appearing);
+    } else {
+      this.appearingFormatted = this.appearing;
+    }
+  }
+
+  /**
+   * Format appearing field for dice rolls
+   * Converts "d6" to "[[/r d6]]", "2d8" to "[[/r 2d8]]", etc.
+   */
+  formatAppearing(appearing) {
+    if (!appearing) return '';
+
+    // Check if it's already a roll link
+    if (appearing.includes('[[/r')) return appearing;
+
+    // Check if it matches dice notation (e.g., "d6", "2d8", "3d10")
+    const dicePattern = /^(\d*)d(\d+)$/i;
+    if (dicePattern.test(appearing.trim())) {
+      return `[[/r ${appearing.trim()}]]`;
+    }
+
+    // If it's just a number, return as-is
+    return appearing;
   }
 }

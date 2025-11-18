@@ -2010,6 +2010,45 @@
   padding: 8px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
+.vagabond .npc-lock-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.vagabond .npc-lock-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-dark);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .npc-lock-button i {
+  font-size: 12px;
+}
+.vagabond .npc-lock-button.locked {
+  background: var(--vagabond-c-faint);
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-lock-button.locked:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-lock-button.unlocked {
+  background: transparent;
+  border-color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-lock-button.unlocked:hover {
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+}
 .vagabond .npc-top-section {
   display: flex;
   flex-direction: row;
@@ -2081,6 +2120,67 @@
 }
 .vagabond .npc-type-row .npc-size-select {
   text-transform: capitalize;
+}
+.vagabond .npc-type-row select:disabled {
+  color: var(--vagabond-c-muted);
+  cursor: not-allowed;
+}
+.vagabond .npc-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.vagabond .npc-stat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vagabond .npc-senses-field {
+  grid-column: span 3;
+}
+.vagabond .npc-field-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+  letter-spacing: 0.5px;
+}
+.vagabond .npc-field-input {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-field-input:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-field-input:focus {
+  outline: none;
+  border-color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-field-input[readonly] {
+  border-color: var(--vagabond-c-faint);
+  color: var(--vagabond-c-muted);
+  cursor: default;
+  background: transparent;
+}
+.vagabond .npc-field-input[readonly]:hover {
+  border-color: var(--vagabond-c-faint);
+}
+.vagabond .npc-field-input::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+}
+.vagabond .npc-field-display {
+  padding: 4px 6px;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  min-height: 25px;
+  line-height: 1.4;
 }
 .vagabond .npc-content {
   padding: 8px;

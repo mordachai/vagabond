@@ -1,5 +1,18 @@
 {{! NPC Sheet Header }}
 <header class='npc-header'>
+  {{! Lock/Unlock Toggle }}
+  <div class='npc-lock-toggle'>
+    <button
+      type='button'
+      data-action='toggleLock'
+      class='npc-lock-button {{#if system.locked}}locked{{else}}unlocked{{/if}}'
+      data-tooltip='{{#if system.locked}}Click to unlock and edit{{else}}Click to lock for play{{/if}}'
+    >
+      <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+      {{#if system.locked}}Locked{{else}}Unlocked{{/if}}
+    </button>
+  </div>
+
   {{! Main Row: Image + Info }}
   <div class='npc-top-section'>
     {{! Left Column: Character Image }}
@@ -23,8 +36,9 @@
           name='name'
           type='text'
           value='{{actor.name}}'
-          placeholder='NPC Name'
+          placeholder='{{#unless system.locked}}NPC Name{{/unless}}'
           class='npc-name-input'
+          {{#if system.locked}}readonly{{/if}}
         />
       </div>
 
@@ -34,6 +48,7 @@
           name='system.size'
           class='npc-size-select'
           data-dtype='String'
+          {{#if system.locked}}disabled{{/if}}
         >
           <option value='tiny' {{#if (eq system.size 'tiny')}}selected{{/if}}>Tiny</option>
           <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>Small</option>
@@ -47,6 +62,7 @@
           name='system.beingType'
           class='npc-being-select'
           data-dtype='String'
+          {{#if system.locked}}disabled{{/if}}
         >
           <option value='Humanlike' {{#if (eq system.beingType 'Humanlike')}}selected{{/if}}>Humanlike</option>
           <option value='Fae' {{#if (eq system.beingType 'Fae')}}selected{{/if}}>Fae</option>
@@ -58,6 +74,96 @@
           <option value='Undead' {{#if (eq system.beingType 'Undead')}}selected{{/if}}>Undead</option>
         </select>
       </div>
+    </div>
+  </div>
+
+  {{! NPC Stats Row }}
+  <div class='npc-stats-row'>
+    {{! HD }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'>HD</label>
+      <input
+        type='text'
+        name='system.hd'
+        value='{{system.hd}}'
+        data-dtype='Number'
+        class='npc-field-input'
+        placeholder='{{#unless system.locked}}1{{/unless}}'
+        {{#if system.locked}}readonly{{/if}}
+      />
+    </div>
+
+    {{! HP }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'>HP</label>
+      <input
+        type='text'
+        name='system.health.max'
+        value='{{system.health.max}}'
+        data-dtype='Number'
+        class='npc-field-input'
+        placeholder='{{#unless system.locked}}10{{/unless}}'
+        {{#if system.locked}}readonly{{/if}}
+      />
+    </div>
+
+    {{! Morale }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'>Morale</label>
+      <input
+        type='text'
+        name='system.morale'
+        value='{{system.morale}}'
+        data-dtype='Number'
+        class='npc-field-input'
+        placeholder='{{#unless system.locked}}—{{/unless}}'
+        {{#if system.locked}}readonly{{/if}}
+      />
+    </div>
+
+    {{! Appearing }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'>Appearing</label>
+      {{#if system.locked}}
+        <div class='npc-field-display'>{{{system.appearingFormatted}}}</div>
+      {{else}}
+        <input
+          type='text'
+          name='system.appearing'
+          value='{{system.appearing}}'
+          data-dtype='String'
+          class='npc-field-input'
+          placeholder='d6 or 2d8'
+        />
+      {{/if}}
+    </div>
+
+    {{! Speed }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'>Speed</label>
+      <input
+        type='text'
+        name='system.speed'
+        value='{{system.speed}}'
+        data-dtype='Number'
+        class='npc-field-input'
+        placeholder='{{#unless system.locked}}30{{/unless}}'
+        {{#if system.locked}}readonly{{/if}}
+      />
+    </div>
+
+    {{! Senses }}
+    <div class='npc-stat-field npc-senses-field'>
+      <label class='npc-field-label'>Senses</label>
+      <input
+        type='text'
+        name='system.senses'
+        value='{{system.senses}}'
+        data-dtype='String'
+        class='npc-field-input'
+        placeholder='{{#unless system.locked}}Darkvision 60 ft{{/unless}}'
+        {{#if system.locked}}readonly{{/if}}
+      />
     </div>
   </div>
 </header>

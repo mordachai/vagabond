@@ -14,6 +14,53 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 
+// Lock/Unlock Toggle
+.npc-lock-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.npc-lock-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-dark);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 12px;
+  }
+
+  &.locked {
+    background: var(--vagabond-c-faint);
+    border-color: var(--vagabond-c-dark);
+    color: var(--vagabond-c-dark);
+
+    &:hover {
+      background: var(--vagabond-c-tan);
+    }
+  }
+
+  &.unlocked {
+    background: transparent;
+    border-color: var(--vagabond-c-tan);
+    color: var(--vagabond-c-muted);
+
+    &:hover {
+      border-color: var(--vagabond-c-dark);
+      color: var(--vagabond-c-dark);
+    }
+  }
+}
+
 // Top Section - Image + Info Row
 .npc-top-section {
   display: flex;
@@ -110,6 +157,80 @@
   .npc-being-select {
     // Inherit default styling
   }
+
+  select:disabled {
+    color: var(--vagabond-c-muted);
+    cursor: not-allowed;
+  }
+}
+
+// NPC Stats Row (HD, HP, Morale, Appearing, Speed, Senses)
+.npc-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.npc-stat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.npc-senses-field {
+  grid-column: span 3;
+}
+
+.npc-field-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+  letter-spacing: 0.5px;
+}
+
+.npc-field-input {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+
+  &:hover {
+    border-color: var(--vagabond-c-dark);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--vagabond-c-dark);
+    background: var(--vagabond-c-faint);
+  }
+
+  &[readonly] {
+    border-color: var(--vagabond-c-faint);
+    color: var(--vagabond-c-muted);
+    cursor: default;
+    background: transparent;
+
+    &:hover {
+      border-color: var(--vagabond-c-faint);
+    }
+  }
+
+  &::placeholder {
+    color: var(--vagabond-c-muted);
+    opacity: 0.5;
+  }
+}
+
+.npc-field-display {
+  padding: 4px 6px;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  min-height: 25px;
+  line-height: 1.4;
 }
 
 // NPC Content

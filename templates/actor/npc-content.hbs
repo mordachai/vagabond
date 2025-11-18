@@ -41,6 +41,7 @@
               value='{{stat.value}}'
               data-dtype='Number'
               class='npc-stat-value'
+              {{#if ../system.locked}}readonly{{/if}}
             />
           </div>
         {{/each}}

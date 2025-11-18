@@ -36,6 +36,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       togglePerk: this._onTogglePerk,  // Perk accordion toggle
       togglePanel: this._onTogglePanel,  // Sliding panel toggle
       toggleEffectsAccordion: this._onToggleEffectsAccordion,  // NPC effects accordion toggle
+      toggleLock: this._onToggleLock,  // NPC lock/unlock toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -733,6 +734,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       accordionIcon.classList.toggle('fa-chevron-right');
       accordionIcon.classList.toggle('fa-chevron-down');
     }
+  }
+
+  /**
+   * Handle toggling the NPC lock/unlock state
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onToggleLock(event, target) {
+    event.preventDefault();
+    const currentLocked = this.actor.system.locked;
+    await this.actor.update({ 'system.locked': !currentLocked });
   }
 
   /**
