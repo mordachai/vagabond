@@ -474,20 +474,6 @@
 }
 
 /* Styles limited to vagabond sheets */
-.vagabond {
-  /* Character Name at Top - Full Width */
-  /* Combined Character Info Row */
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
-  /* Panel content area */
-  /* Features & Perks columns */
-  /* Mana info row */
-  /* Currency fields in panel */
-}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1698,6 +1684,9 @@
   font-weight: 400;
   line-height: 1.2;
 }
+.vagabond {
+  /* Character Name at Top - Full Width */
+}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1747,6 +1736,9 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
+}
+.vagabond {
+  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1825,6 +1817,11 @@
     font-size: 12px;
   }
 }
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -1849,11 +1846,20 @@
   backface-visibility: hidden;
   will-change: transform;
 }
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
+}
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -1868,6 +1874,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.vagabond {
+  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -1905,6 +1914,9 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
+.vagabond {
+  /* Features & Perks columns */
+}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -1913,6 +1925,9 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
+}
+.vagabond {
+  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -1949,6 +1964,9 @@
   text-align: center;
   color: var(--vagabond-c-dark);
 }
+.vagabond {
+  /* Currency fields in panel */
+}
 .vagabond .currency-row {
   justify-content: space-around;
   gap: 8px;
@@ -1962,4 +1980,88 @@
 .vagabond .currency-field input {
   width: 60px;
   text-align: center;
+}
+.vagabond .item-sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+.vagabond .item-image-column {
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+}
+.vagabond .item-image-column .item-profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 4px;
+  border: 2px solid var(--vagabond-c-tan);
+  object-fit: cover;
+  cursor: pointer;
+}
+.vagabond .item-image-column .item-profile-img:hover {
+  opacity: 0.9;
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .item-header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.vagabond .item-document-name {
+  width: 100%;
+}
+.vagabond .item-document-name input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid var(--vagabond-c-tan);
+  background: transparent;
+  text-align: left;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  padding: 4px 8px;
+  transition: border-bottom 0.2s ease;
+}
+.vagabond .item-document-name input:hover, .vagabond .item-document-name input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  outline: none;
+}
+.vagabond .item-document-name input::placeholder {
+  color: var(--vagabond-c-faint);
+  font-style: italic;
+}
+.vagabond .class-spellcaster-fields {
+  width: 100%;
+}
+.vagabond .class-spellcaster-fields .grid {
+  gap: 8px;
+}
+.vagabond .vagabond.item .window-content {
+  min-height: 300px;
+  max-height: none;
+  height: auto;
+  overflow-y: auto;
+}
+.vagabond .vagabond.item .tab.active {
+  min-height: 200px;
+  height: auto;
+}
+@media (max-width: 600px) {
+  .vagabond .item-sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .vagabond .item-image-column {
+    margin-bottom: 12px;
+  }
+  .vagabond .item-document-name input {
+    font-size: 18px;
+    text-align: center;
+  }
 }

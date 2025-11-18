@@ -1,16 +1,26 @@
-<header class='sheet-header'>
-  <img
-    class='profile-img'
-    src='{{item.img}}'
-    data-edit='img'
-    data-action='onEditImage'
-    data-tooltip='{{item.name}}'
-  />
-  <div class='header-fields'>
-    <div class='document-name'>
+{{! Item Sheet Header - Different from Actor Header }}
+<header class='item-sheet-header'>
+  {{! Left Column: Image (150x150) }}
+  <div class='item-image-column'>
+    <img
+      class='item-profile-img'
+      src='{{item.img}}'
+      data-edit='img'
+      data-action='onEditImage'
+      data-tooltip='{{item.name}}'
+      width='150'
+      height='150'
+    />
+  </div>
+
+  {{! Right Column: Name + Two-Column Content }}
+  <div class='item-header-fields'>
+    {{! Item Name }}
+    <div class='item-document-name'>
       <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
     </div>
-    
+
+    {{! Two-Column Content for Item-Specific Fields }}
     {{#if (eq item.type 'gear')}}
       <div class='grid grid-2col'>
         <div class='resource'>
@@ -23,7 +33,7 @@
         </div>
       </div>
     {{/if}}
-    
+
     {{#if (eq item.type 'ancestry')}}
       <div class='grid grid-2col'>
         <div class='resource'>
