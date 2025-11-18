@@ -257,8 +257,17 @@
   border: none !important;
   border-radius: 0% !important;
   box-shadow: none !important;
-  height: calc(100vh - 150px) !important;
   overflow: visible !important;
+}
+
+.vagabond.actor.application {
+  height: calc(100vh - 150px) !important;
+}
+
+.vagabond.item.application {
+  height: auto !important;
+  min-height: 400px;
+  max-height: calc(100vh - 100px);
 }
 
 .vagabond .window-header {
@@ -271,7 +280,16 @@
   background: var(--vagabond-c-groove);
   position: relative;
   overflow: visible !important;
+}
+
+.vagabond.actor .window-content {
   height: 100%;
+}
+
+.vagabond.item .window-content {
+  height: auto;
+  min-height: 300px;
+  overflow-y: auto !important;
 }
 
 .rollable:hover, .rollable:focus {
@@ -2041,16 +2059,6 @@
 }
 .vagabond .class-spellcaster-fields .grid {
   gap: 8px;
-}
-.vagabond .vagabond.item .window-content {
-  min-height: 300px;
-  max-height: none;
-  height: auto;
-  overflow-y: auto;
-}
-.vagabond .vagabond.item .tab.active {
-  min-height: 200px;
-  height: auto;
 }
 @media (max-width: 600px) {
   .vagabond .item-sheet-header {

@@ -78,22 +78,6 @@
   }
 }
 
-// Ensure item sheets have adjustable height (not fixed like actor sheets)
-.vagabond.item {
-  .window-content {
-    min-height: 300px;
-    max-height: none; // Allow unlimited height
-    height: auto;
-    overflow-y: auto;
-  }
-
-  // Individual content sections should also expand
-  .tab.active {
-    min-height: 200px;
-    height: auto;
-  }
-}
-
 // Responsive adjustments for smaller screens
 @media (max-width: 600px) {
   .item-sheet-header {

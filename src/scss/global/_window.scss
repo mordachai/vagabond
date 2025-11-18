@@ -8,8 +8,19 @@
   border: none !important;
   border-radius: 0% !important;
   box-shadow: none !important;
-  height: calc(100vh - 150px) !important;
   overflow: visible !important;
+}
+
+// Actor sheets have fixed height
+.vagabond.actor.application {
+  height: calc(100vh - 150px) !important;
+}
+
+// Item sheets adjust to content height
+.vagabond.item.application {
+  height: auto !important;
+  min-height: 400px;
+  max-height: calc(100vh - 100px);
 }
 
 .vagabond .window-header {
@@ -23,7 +34,18 @@
   background: $c-groove;
   position: relative;
   overflow: visible !important;
+}
+
+// Actor sheets: fixed height
+.vagabond.actor .window-content {
   height: 100%;
+}
+
+// Item sheets: auto height to fit content
+.vagabond.item .window-content {
+  height: auto;
+  min-height: 300px;
+  overflow-y: auto !important;
 }
 
 .rollable {
