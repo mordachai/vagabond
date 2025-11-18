@@ -2136,7 +2136,8 @@
   flex-direction: column;
   gap: 2px;
 }
-.vagabond .npc-senses-field {
+.vagabond .npc-senses-field,
+.vagabond .npc-armor-field {
   grid-column: span 3;
 }
 .vagabond .npc-field-label {
@@ -2219,6 +2220,72 @@
   color: var(--vagabond-c-dark);
   font-weight: 600;
   min-width: 20px;
+}
+.vagabond .npc-armor-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-armor-value {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  width: 50px;
+  text-align: center;
+}
+.vagabond .npc-armor-value:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-armor-value:focus {
+  outline: none;
+  border-color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-armor-value[readonly] {
+  border-color: var(--vagabond-c-faint);
+  color: var(--vagabond-c-muted);
+  cursor: default;
+  background: transparent;
+}
+.vagabond .npc-armor-value[readonly]:hover {
+  border-color: var(--vagabond-c-faint);
+}
+.vagabond .npc-armor-value::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+}
+.vagabond .npc-armor-description {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  flex: 1;
+}
+.vagabond .npc-armor-description:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-armor-description:focus {
+  outline: none;
+  border-color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-armor-description[readonly] {
+  border-color: var(--vagabond-c-faint);
+  color: var(--vagabond-c-muted);
+  cursor: default;
+  background: transparent;
+}
+.vagabond .npc-armor-description[readonly]:hover {
+  border-color: var(--vagabond-c-faint);
+}
+.vagabond .npc-armor-description::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
 }
 .vagabond .npc-content {
   padding: 8px;

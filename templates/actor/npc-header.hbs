@@ -168,5 +168,30 @@
         {{#if system.locked}}readonly{{/if}}
       />
     </div>
+
+    {{! Armor - Number + Description }}
+    <div class='npc-stat-field npc-armor-field'>
+      <label class='npc-field-label'>Armor</label>
+      <div class='npc-armor-display'>
+        <input
+          type='text'
+          name='system.armor'
+          value='{{system.armor}}'
+          data-dtype='Number'
+          class='npc-armor-value'
+          placeholder='{{#unless system.locked}}0{{/unless}}'
+          {{#if system.locked}}readonly{{/if}}
+        />
+        <input
+          type='text'
+          name='system.armorDescription'
+          value='{{system.armorDescription}}'
+          data-dtype='String'
+          class='npc-armor-description'
+          placeholder='{{#unless system.locked}}Light armor{{/unless}}'
+          {{#if system.locked}}readonly{{/if}}
+        />
+      </div>
+    </div>
   </div>
 </header>

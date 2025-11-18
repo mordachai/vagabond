@@ -178,7 +178,8 @@
   gap: 2px;
 }
 
-.npc-senses-field {
+.npc-senses-field,
+.npc-armor-field {
   grid-column: span 3;
 }
 
@@ -277,6 +278,86 @@
   color: var(--vagabond-c-dark);
   font-weight: 600;
   min-width: 20px;
+}
+
+// Armor Display (Value + Description)
+.npc-armor-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.npc-armor-value {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  width: 50px;
+  text-align: center;
+
+  &:hover {
+    border-color: var(--vagabond-c-dark);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--vagabond-c-dark);
+    background: var(--vagabond-c-faint);
+  }
+
+  &[readonly] {
+    border-color: var(--vagabond-c-faint);
+    color: var(--vagabond-c-muted);
+    cursor: default;
+    background: transparent;
+
+    &:hover {
+      border-color: var(--vagabond-c-faint);
+    }
+  }
+
+  &::placeholder {
+    color: var(--vagabond-c-muted);
+    opacity: 0.5;
+  }
+}
+
+.npc-armor-description {
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  flex: 1;
+
+  &:hover {
+    border-color: var(--vagabond-c-dark);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--vagabond-c-dark);
+    background: var(--vagabond-c-faint);
+  }
+
+  &[readonly] {
+    border-color: var(--vagabond-c-faint);
+    color: var(--vagabond-c-muted);
+    cursor: default;
+    background: transparent;
+
+    &:hover {
+      border-color: var(--vagabond-c-faint);
+    }
+  }
+
+  &::placeholder {
+    color: var(--vagabond-c-muted);
+    opacity: 0.5;
+  }
 }
 
 // NPC Content
