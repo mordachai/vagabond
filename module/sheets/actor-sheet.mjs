@@ -245,7 +245,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
         break;
       case 'npcHeader':
-        // NPC header - no special preparation needed
+        // Enrich the appearing field for roll links
+        if (this.actor.system.locked && this.actor.system.appearingFormatted) {
+          context.enrichedAppearing = await foundry.applications.ux.TextEditor.enrichHTML(
+            this.actor.system.appearingFormatted,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.actor.getRollData(),
+              relativeTo: this.actor,
+            }
+          );
+        } else {
+          context.enrichedAppearing = this.actor.system.appearingFormatted;
+        }
         break;
       case 'npcContent':
         // Prepare active effects for NPC

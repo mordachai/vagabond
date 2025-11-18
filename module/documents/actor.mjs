@@ -41,4 +41,25 @@ export class VagabondActor extends Actor {
   getRollData() {
     return { ...super.getRollData(), ...(this.system.getRollData?.() ?? null) };
   }
+
+  /**
+   * @override
+   * Update tracking values for NPC HP recalculation after update
+   */
+  async _preUpdate(changed, options, user) {
+    await super._preUpdate(changed, options, user);
+
+    // For NPCs, track HD and size changes for HP recalculation
+    if (this.type === 'npc') {
+      const hdChanged = changed.system?.hd !== undefined;
+      const sizeChanged = changed.system?.size !== undefined;
+
+      if (hdChanged || sizeChanged) {
+        // Update tracking values
+        changed.system = changed.system || {};
+        changed.system._lastHD = changed.system.hd ?? this.system.hd;
+        changed.system._lastSize = changed.system.size ?? this.system.size;
+      }
+    }
+  }
 }

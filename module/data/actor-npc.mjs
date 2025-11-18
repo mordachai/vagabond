@@ -88,6 +88,19 @@ export default class VagabondNPC extends VagabondActorBase {
       initial: false,
     });
 
+    // Track last HD/size to detect changes for HP recalculation
+    schema._lastHD = new fields.NumberField({
+      required: false,
+      nullable: true,
+      initial: null,
+    });
+
+    schema._lastSize = new fields.StringField({
+      required: false,
+      nullable: true,
+      initial: null,
+    });
+
     return schema;
   }
 
@@ -103,12 +116,22 @@ export default class VagabondNPC extends VagabondActorBase {
     // Calculate HP based on HD and size
     // If size is small/tiny: HD * 1, otherwise: HD * 4.5 (rounded down)
     const isSmall = this.size === 'tiny' || this.size === 'small';
-    const calculatedMaxHP = isSmall ? this.hd : Math.floor(this.hd * 4.5);
+    this.calculatedMaxHP = isSmall ? this.hd : Math.floor(this.hd * 4.5);
 
-    // Only update health.max if it hasn't been manually set
-    // (we check if it's still at the default value of 10 from base-actor)
-    if (!this.parent || this.health.max === 10) {
-      this.health.max = calculatedMaxHP;
+    // Auto-update HP when HD or size changes
+    const hdChanged = this._lastHD !== null && this._lastHD !== this.hd;
+    const sizeChanged = this._lastSize !== null && this._lastSize !== this.size;
+
+    if (this._lastHD === null || hdChanged || sizeChanged) {
+      // First time, or HD/size changed - recalculate HP
+      this.health.max = this.calculatedMaxHP;
+    }
+
+    // Store current values for next comparison (will be persisted on next update)
+    if (this.parent && (hdChanged || sizeChanged || this._lastHD === null)) {
+      // We need to update the stored values, but we can't do it here directly
+      // The parent actor will handle this in an update hook
+      this._needsTrackingUpdate = true;
     }
 
     // Format appearing for display in locked mode
