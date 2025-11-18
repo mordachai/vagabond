@@ -16,11 +16,12 @@
   height: calc(100vh - 150px) !important;
 }
 
-// Item sheets adjust to content height
+// Item sheets adjust to content height (no outer scrollbar)
 .vagabond.item.application {
   height: auto !important;
   min-height: 400px;
-  max-height: calc(100vh - 100px);
+  max-height: none; // No max-height on application to avoid outer scrollbar
+  overflow: hidden !important; // Prevent outer scrollbar
 }
 
 .vagabond .window-header {
@@ -41,11 +42,12 @@
   height: 100%;
 }
 
-// Item sheets: auto height to fit content
+// Item sheets: auto height to fit content with internal scrollbar only
 .vagabond.item .window-content {
   height: auto;
   min-height: 300px;
-  overflow-y: auto !important;
+  max-height: calc(100vh - 150px); // Max height for internal scrolling
+  overflow-y: auto !important; // Only this scrollbar should be visible
 }
 
 .rollable {

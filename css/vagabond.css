@@ -267,7 +267,8 @@
 .vagabond.item.application {
   height: auto !important;
   min-height: 400px;
-  max-height: calc(100vh - 100px);
+  max-height: none;
+  overflow: hidden !important;
 }
 
 .vagabond .window-header {
@@ -289,6 +290,7 @@
 .vagabond.item .window-content {
   height: auto;
   min-height: 300px;
+  max-height: calc(100vh - 150px);
   overflow-y: auto !important;
 }
 
