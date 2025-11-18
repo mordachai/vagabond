@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 @font-face {
   font-family: "Eskapade";
@@ -494,6 +495,20 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond {
+  /* Character Name at Top - Full Width */
+  /* Combined Character Info Row */
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+  /* When open, panel at natural position next to main sheet */
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Panel content area */
+  /* Features & Perks columns */
+  /* Mana info row */
+  /* Currency fields in panel */
+}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1460,15 +1475,21 @@
   width: 180px;
   height: 180px;
   flex-shrink: 0;
+  background-image: url(../assets/images/portrait-frame.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 .vagabond .char-image-container .profile-img {
+  display: flex;
   width: 180px;
   height: 180px;
-  border-radius: 4px;
+  transform: scale(0.86);
   border: none;
   object-fit: cover;
   cursor: pointer;
   border-radius: 50%;
+  align-self: center;
 }
 .vagabond .char-image-container .profile-img:hover {
   opacity: 0.9;
@@ -1541,10 +1562,12 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  border: 1px solid var(--vagabond-c-dark);
-  border-radius: 30px;
-  background-color: var(--vagabond-c-transparent);
+  width: 100%;
+  height: auto;
+  background-image: url(../assets/images/hp-banner.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 22px;
@@ -1704,9 +1727,6 @@
   font-weight: 400;
   line-height: 1.2;
 }
-.vagabond {
-  /* Character Name at Top - Full Width */
-}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1756,9 +1776,6 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
-}
-.vagabond {
-  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1837,11 +1854,6 @@
     font-size: 12px;
   }
 }
-.vagabond {
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -1866,20 +1878,11 @@
   backface-visibility: hidden;
   will-change: transform;
 }
-.vagabond {
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
-.vagabond {
-  /* When open, panel at natural position next to main sheet */
-}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
-}
-.vagabond {
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -1894,9 +1897,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.vagabond {
-  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -1934,9 +1934,6 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
-.vagabond {
-  /* Features & Perks columns */
-}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -1945,9 +1942,6 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
-}
-.vagabond {
-  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -1984,9 +1978,6 @@
   text-align: center;
   color: var(--vagabond-c-dark);
 }
-.vagabond {
-  /* Currency fields in panel */
-}
 .vagabond .currency-row {
   justify-content: space-around;
   gap: 8px;
@@ -2000,6 +1991,612 @@
 .vagabond .currency-field input {
   width: 60px;
   text-align: center;
+}
+.vagabond .vagabond.actor.npc .window-content {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+.vagabond .npc-header {
+  padding: 8px;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .npc-lock-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.vagabond .npc-lock-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-dark);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .npc-lock-button i {
+  font-size: 12px;
+}
+.vagabond .npc-lock-button.locked {
+  background: var(--vagabond-c-faint);
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-lock-button.locked:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-lock-button.unlocked {
+  background: transparent;
+  border-color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-lock-button.unlocked:hover {
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-top-section {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: flex-start;
+}
+.vagabond .npc-image-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+.vagabond .npc-image-container .npc-profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 4px;
+  border: 2px solid var(--vagabond-c-tan);
+  object-fit: cover;
+  cursor: pointer;
+}
+.vagabond .npc-image-container .npc-profile-img:hover {
+  opacity: 0.9;
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.vagabond .npc-name-row .npc-name-input {
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px 8px;
+  color: var(--vagabond-c-dark);
+  border-radius: 4px;
+}
+.vagabond .npc-name-row .npc-name-input:hover, .vagabond .npc-name-row .npc-name-input:focus {
+  border-color: var(--vagabond-c-dark);
+  outline: none;
+}
+.vagabond .npc-type-row {
+  display: flex;
+  gap: 8px;
+}
+.vagabond .npc-type-row select {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.vagabond .npc-type-row select::-ms-expand {
+  display: none;
+}
+.vagabond .npc-type-row select:focus {
+  outline: none;
+}
+.vagabond .npc-type-row select option {
+  background: var(--vagabond-c-light);
+}
+.vagabond .npc-type-row .npc-size-select {
+  text-transform: capitalize;
+}
+.vagabond .npc-type-row select:disabled {
+  color: var(--vagabond-c-muted);
+  cursor: not-allowed;
+}
+.vagabond .npc-stats-compact-row {
+  display: flex;
+  gap: 12px;
+}
+.vagabond .npc-stats-compact-row .npc-stat-field {
+  flex: 1;
+}
+.vagabond .npc-stats-row-appearing-zone {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+.vagabond .npc-zone-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.vagabond .npc-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.vagabond .npc-stat-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .npc-senses-field,
+.vagabond .npc-armor-field {
+  grid-column: span 1;
+}
+.vagabond .npc-zone-checkboxes {
+  grid-template-columns: 1fr !important;
+  min-width: 150px !important;
+}
+.vagabond .npc-field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+  min-width: fit-content;
+}
+.vagabond .npc-field-input {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  flex: 1;
+}
+.vagabond .npc-field-input:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-field-input:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+}
+.vagabond .npc-field-input[readonly] {
+  border: none;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
+.vagabond .npc-field-input[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-field-input::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+}
+.vagabond .npc-field-display {
+  padding: 2px 0;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  line-height: 1.4;
+  flex: 1;
+}
+.vagabond .npc-hp-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .npc-hp-current {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  width: 40px;
+  text-align: left;
+}
+.vagabond .npc-hp-current:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-hp-current:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+}
+.vagabond .npc-hp-current::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+}
+.vagabond .npc-hp-separator {
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
+}
+.vagabond .npc-hp-max {
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  font-weight: 600;
+  min-width: 20px;
+}
+.vagabond .npc-armor-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-armor-value {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  width: 40px;
+  text-align: left;
+}
+.vagabond .npc-armor-value:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-armor-value:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+}
+.vagabond .npc-armor-value[readonly] {
+  border: none;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
+.vagabond .npc-armor-value[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-armor-value::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+}
+.vagabond .npc-armor-description {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  background: transparent;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  flex: 1;
+}
+.vagabond .npc-armor-description:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-armor-description:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+}
+.vagabond .npc-armor-description[readonly] {
+  border: none;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
+.vagabond .npc-armor-description[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-armor-description::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+}
+.vagabond .npc-content {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.vagabond .npc-section {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: var(--vagabond-c-transparent);
+}
+.vagabond .npc-section-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 8px 12px;
+  margin: 0;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: var(--vagabond-c-faint);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-section-title.accordion-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-section-title.accordion-header:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-section-title.accordion-header .accordion-icon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+.vagabond .npc-section-title.accordion-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-section-content {
+  padding: 12px;
+}
+.vagabond .npc-section-content.accordion-content {
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.vagabond .npc-section-content.accordion-content.collapsed {
+  max-height: 0;
+  padding: 0;
+}
+.vagabond .npc-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vagabond .npc-action-item {
+  padding: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.vagabond .npc-action-item:hover {
+  background: var(--vagabond-c-faint);
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-action-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-action-details {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--vagabond-c-muted);
+  margin-top: 4px;
+}
+.vagabond .npc-action-details .npc-action-damage:not(:last-child)::after,
+.vagabond .npc-action-details .npc-action-range:not(:last-child)::after {
+  content: "•";
+  margin-left: 8px;
+}
+.vagabond .npc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 12px;
+}
+.vagabond .npc-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .npc-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-stat-value {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  text-align: center;
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  padding: 4px;
+}
+.vagabond .npc-stat-value:hover, .vagabond .npc-stat-value:focus {
+  border-color: var(--vagabond-c-dark);
+  outline: none;
+}
+.vagabond .npc-effects .effects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vagabond .npc-effects .effects-category {
+  margin-bottom: 8px;
+}
+.vagabond .npc-effects .effects-category-label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-effects .effect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-effects .effect:hover {
+  background: var(--vagabond-c-transparent);
+}
+.vagabond .npc-effects .effect-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-effects .effect-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  border: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .npc-effects .effect-controls {
+  display: flex;
+  gap: 4px;
+}
+.vagabond .npc-effects .effect-control {
+  cursor: pointer;
+  color: var(--vagabond-c-muted);
+  font-size: 12px;
+  padding: 4px;
+}
+.vagabond .npc-effects .effect-control:hover {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-empty-section {
+  text-align: center;
+  color: var(--vagabond-c-muted);
+  font-style: italic;
+  font-size: 13px;
+  padding: 12px;
+}
+.vagabond .npc-immunities-section {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .npc-immunity-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 24px;
+}
+.vagabond .npc-immunity-text {
+  flex: 1;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  line-height: 1.4;
+}
+.vagabond .npc-immunity-dropdown {
+  min-width: fit-content;
+}
+.vagabond .npc-immunity-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond .npc-immunity-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+.vagabond .npc-immunity-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-toggle:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-immunity-toggle i {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+details[open] .vagabond .npc-immunity-toggle i {
+  transform: rotate(90deg);
+}
+.vagabond .npc-immunity-checkboxes {
+  position: absolute;
+  z-index: 10;
+  background: white;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+  padding: 8px;
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.vagabond .npc-immunity-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-checkbox-item:hover {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-immunity-checkbox-item input[type=checkbox] {
+  cursor: pointer;
+  margin: 0;
+}
+.vagabond .npc-immunity-checkbox-item span {
+  font-size: 12px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-immunity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  flex: 1;
+}
+.vagabond .npc-immunity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-tag i {
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-immunity-tag i:hover {
+  color: var(--vagabond-c-dark);
 }
 .vagabond .item-sheet-header {
   display: flex;

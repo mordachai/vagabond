@@ -1,0 +1,351 @@
+{{! NPC Sheet Header }}
+<header class='npc-header'>
+  {{! Lock/Unlock Toggle }}
+  <div class='npc-lock-toggle'>
+    <button
+      type='button'
+      data-action='toggleLock'
+      class='npc-lock-button {{#if system.locked}}locked{{else}}unlocked{{/if}}'
+      data-tooltip='{{#if system.locked}}Click to unlock and edit{{else}}Click to lock for play{{/if}}'
+    >
+      <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+      {{#if system.locked}}Locked{{else}}Unlocked{{/if}}
+    </button>
+  </div>
+
+  {{! Main Row: Image + Info }}
+  <div class='npc-top-section'>
+    {{! Left Column: Character Image }}
+    <div class='npc-image-container'>
+      <img
+        class='npc-profile-img'
+        src='{{actor.img}}'
+        data-edit='img'
+        data-action='onEditImage'
+        data-tooltip='{{actor.name}}'
+        width='120'
+        height='120'
+      />
+    </div>
+
+    {{! Right Column: Name, Size, Being Type, HD, HP, Morale, Speed }}
+    <div class='npc-info-column'>
+      {{! Row 1: Name }}
+      <div class='npc-name-row'>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='{{#unless system.locked}}NPC Name{{/unless}}'
+          class='npc-name-input'
+          {{#if system.locked}}readonly{{/if}}
+        />
+      </div>
+
+      {{! Row 2: Size and Being Type }}
+      <div class='npc-type-row'>
+        <select
+          name='system.size'
+          class='npc-size-select'
+          data-dtype='String'
+          {{#if system.locked}}disabled{{/if}}
+        >
+          <option value='tiny' {{#if (eq system.size 'tiny')}}selected{{/if}}>Tiny</option>
+          <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>Small</option>
+          <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>Medium</option>
+          <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>Large</option>
+          <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>Huge</option>
+          <option value='gargantuan' {{#if (eq system.size 'gargantuan')}}selected{{/if}}>Gargantuan</option>
+        </select>
+
+        <select
+          name='system.beingType'
+          class='npc-being-select'
+          data-dtype='String'
+          {{#if system.locked}}disabled{{/if}}
+        >
+          <option value='Humanlike' {{#if (eq system.beingType 'Humanlike')}}selected{{/if}}>Humanlike</option>
+          <option value='Fae' {{#if (eq system.beingType 'Fae')}}selected{{/if}}>Fae</option>
+          <option value='Cryptid' {{#if (eq system.beingType 'Cryptid')}}selected{{/if}}>Cryptid</option>
+          <option value='Artificials' {{#if (eq system.beingType 'Artificials')}}selected{{/if}}>Artificials</option>
+          <option value='Beasts' {{#if (eq system.beingType 'Beasts')}}selected{{/if}}>Beasts</option>
+          <option value='Outers' {{#if (eq system.beingType 'Outers')}}selected{{/if}}>Outers</option>
+          <option value='Primordials' {{#if (eq system.beingType 'Primordials')}}selected{{/if}}>Primordials</option>
+          <option value='Undead' {{#if (eq system.beingType 'Undead')}}selected{{/if}}>Undead</option>
+        </select>
+      </div>
+
+      {{! Row 3: HD and HP }}
+      <div class='npc-stats-compact-row'>
+        {{! HD }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>HD</label>
+          <input
+            type='text'
+            name='system.hd'
+            value='{{system.hd}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}1{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+
+        {{! HP - Current / Max format }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>HP</label>
+          <div class='npc-hp-display'>
+            <input
+              type='text'
+              name='system.health.value'
+              value='{{system.health.value}}'
+              data-dtype='Number'
+              class='npc-hp-current'
+              placeholder='{{#unless system.locked}}10{{/unless}}'
+            />
+            <span class='npc-hp-separator'>/</span>
+            <span class='npc-hp-max'>{{system.health.max}}</span>
+          </div>
+        </div>
+      </div>
+
+      {{! Row 4: Morale and Speed }}
+      <div class='npc-stats-compact-row'>
+        {{! Morale }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>Morale</label>
+          <input
+            type='text'
+            name='system.morale'
+            value='{{system.morale}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}—{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+
+        {{! Speed }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>Speed</label>
+          <input
+            type='text'
+            name='system.speed'
+            value='{{system.speed}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}30{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{! NPC Stats Row - Appearing and Zone }}
+  <div class='npc-stats-row-appearing-zone'>
+    {{! Appearing }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'>Appearing</label>
+      {{#if system.locked}}
+        <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
+      {{else}}
+        <input
+          type='text'
+          name='system.appearing'
+          value='{{system.appearing}}'
+          data-dtype='String'
+          class='npc-field-input'
+          placeholder='d6 or 2d8'
+        />
+      {{/if}}
+    </div>
+
+    {{! Zone }}
+    <div class='npc-zone-field'>
+      {{#if system.locked}}
+        {{#if system.zone}}
+          <label class='npc-field-label'>Zone:</label>
+          <div class='npc-immunity-text'>{{system.zone}}</div>
+        {{/if}}
+      {{else}}
+        <details class='npc-immunity-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Zone</span>
+          </summary>
+          <div class='npc-immunity-checkboxes npc-zone-checkboxes'>
+            {{#each config.combatZones as |label key|}}
+              <label class='npc-immunity-checkbox-item'>
+                <input type='radio' name='zone-selector' value='{{key}}' {{#if (eq ../system.zone key)}}checked{{/if}} data-action='selectZone' data-zone='{{key}}'>
+                <span>{{localize label}}</span>
+              </label>
+            {{/each}}
+          </div>
+        </details>
+        {{#if system.zone}}
+          <div class='npc-immunity-tags'>
+            <span class='npc-immunity-tag'>
+              {{system.zone}}
+              <i class='fas fa-times' data-action='clearZone'></i>
+            </span>
+          </div>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+
+  {{! NPC Stats Row - Senses and Armor }}
+  <div class='npc-stats-row'>
+    {{! Senses }}
+    <div class='npc-stat-field npc-senses-field'>
+      <label class='npc-field-label'>Senses</label>
+      <input
+        type='text'
+        name='system.senses'
+        value='{{system.senses}}'
+        data-dtype='String'
+        class='npc-field-input'
+        placeholder='{{#unless system.locked}}Darkvision 60 ft{{/unless}}'
+        {{#if system.locked}}readonly{{/if}}
+      />
+    </div>
+
+    {{! Armor - Number + Description }}
+    <div class='npc-stat-field npc-armor-field'>
+      <label class='npc-field-label'>Armor</label>
+      <div class='npc-armor-display'>
+        <input
+          type='text'
+          name='system.armor'
+          value='{{system.armor}}'
+          data-dtype='Number'
+          class='npc-armor-value'
+          placeholder='{{#unless system.locked}}0{{/unless}}'
+          {{#if system.locked}}readonly{{/if}}
+        />
+        <input
+          type='text'
+          name='system.armorDescription'
+          value='{{system.armorDescription}}'
+          data-dtype='String'
+          class='npc-armor-description'
+          placeholder='{{#unless system.locked}}Light armor{{/unless}}'
+          {{#if system.locked}}readonly{{/if}}
+        />
+      </div>
+    </div>
+  </div>
+
+  {{! Immunities Section }}
+  <div class='npc-immunities-section'>
+    {{! Damage Immunities }}
+    {{#unless (and system.locked (not system.immunities.length))}}
+      <div class='npc-immunity-row'>
+        {{#if system.locked}}
+          <label class='npc-field-label'>Immune:</label>
+          <div class='npc-immunity-text'>
+            {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
+          </div>
+        {{else}}
+          <details class='npc-immunity-dropdown'>
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>Immune</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.damageTypes as |label key|}}
+                {{#unless (eq key '-')}}
+                  <label class='npc-immunity-checkbox-item'>
+                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
+                    <span>{{localize label}}</span>
+                  </label>
+                {{/unless}}
+              {{/each}}
+            </div>
+          </details>
+          <div class='npc-immunity-tags'>
+            {{#each system.immunities as |immunity index|}}
+              <span class='npc-immunity-tag'>
+                {{immunity}}
+                <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
+              </span>
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+    {{/unless}}
+
+    {{! Damage Weaknesses }}
+    {{#unless (and system.locked (not system.weaknesses.length))}}
+      <div class='npc-immunity-row'>
+        {{#if system.locked}}
+          <label class='npc-field-label'>Weak:</label>
+          <div class='npc-immunity-text'>
+            {{#each system.weaknesses as |weakness index|}}{{weakness}}{{#unless @last}}, {{/unless}}{{/each}}
+          </div>
+        {{else}}
+          <details class='npc-immunity-dropdown'>
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>Weak</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.damageTypes as |label key|}}
+                {{#unless (eq key '-')}}
+                  <label class='npc-immunity-checkbox-item'>
+                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.weaknesses key)}}checked{{/if}} data-action='toggleWeakness' data-weakness='{{key}}'>
+                    <span>{{localize label}}</span>
+                  </label>
+                {{/unless}}
+              {{/each}}
+            </div>
+          </details>
+          <div class='npc-immunity-tags'>
+            {{#each system.weaknesses as |weakness index|}}
+              <span class='npc-immunity-tag'>
+                {{weakness}}
+                <i class='fas fa-times' data-action='removeWeakness' data-weakness='{{weakness}}'></i>
+              </span>
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+    {{/unless}}
+
+    {{! Status Immunities }}
+    {{#unless (and system.locked (not system.statusImmunities.length))}}
+      <div class='npc-immunity-row'>
+        {{#if system.locked}}
+          <label class='npc-field-label'>Status immunities:</label>
+          <div class='npc-immunity-text'>
+            {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
+          </div>
+        {{else}}
+          <details class='npc-immunity-dropdown'>
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>Status immunities</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.statusConditions as |label key|}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.statusImmunities key)}}checked{{/if}} data-action='toggleStatusImmunity' data-status='{{key}}'>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/each}}
+            </div>
+          </details>
+          <div class='npc-immunity-tags'>
+            {{#each system.statusImmunities as |status index|}}
+              <span class='npc-immunity-tag'>
+                {{status}}
+                <i class='fas fa-times' data-action='removeStatusImmunity' data-status='{{status}}'></i>
+              </span>
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
+    {{/unless}}
+  </div>
+</header>

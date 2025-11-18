@@ -14,15 +14,21 @@
   width: 180px;
   height: 180px;
   flex-shrink: 0;
+  background-image: url(../assets/images/portrait-frame.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 
   .profile-img {
+    display: flex;
     width: 180px;
     height: 180px;
-    border-radius: 4px;
+    transform: scale(0.86);
     border: none;
     object-fit: cover;
     cursor: pointer;
     border-radius: 50%;
+    align-self: center;
 
     &:hover {
       opacity: 0.9;
@@ -109,10 +115,13 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  border: 1px solid var(--vagabond-c-dark);
-  border-radius: 30px;
-  background-color: var(--vagabond-c-transparent);
+  width: 100%;
+  height: auto;
+  background-image: url(../assets/images/hp-banner.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
 
   .hp-icon {
     font-size: 22px;

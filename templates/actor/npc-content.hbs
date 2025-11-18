@@ -1,0 +1,96 @@
+{{! NPC Sheet Main Content }}
+<div class='npc-content'>
+
+  {{! Actions Section }}
+  <section class='npc-section npc-actions'>
+    <h3 class='npc-section-title'>Actions</h3>
+    <div class='npc-section-content'>
+      <div class='npc-actions-list'>
+        {{#if weapons}}
+          {{#each weapons as |weapon|}}
+            <div class='npc-action-item' data-item-id='{{weapon.id}}'>
+              <div class='npc-action-name'>{{weapon.name}}</div>
+              <div class='npc-action-details'>
+                {{#if weapon.system.damage}}
+                  <span class='npc-action-damage'>{{weapon.system.damage}}</span>
+                {{/if}}
+                {{#if weapon.system.range}}
+                  <span class='npc-action-range'>{{weapon.system.range}}</span>
+                {{/if}}
+              </div>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class='npc-empty-section'>No actions defined</div>
+        {{/if}}
+      </div>
+    </div>
+  </section>
+
+  {{! Stats Section }}
+  <section class='npc-section npc-stats'>
+    <h3 class='npc-section-title'>Stats</h3>
+    <div class='npc-section-content'>
+      <div class='npc-stats-grid'>
+        {{#each system.stats as |stat key|}}
+          <div class='npc-stat-item'>
+            <label class='npc-stat-label'>{{stat.label}}</label>
+            <input
+              type='text'
+              name='system.stats.{{key}}.value'
+              value='{{stat.value}}'
+              data-dtype='Number'
+              class='npc-stat-value'
+              {{#if ../system.locked}}readonly{{/if}}
+            />
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  {{! Effects Section - Accordion }}
+  <section class='npc-section npc-effects'>
+    <h3 class='npc-section-title accordion-header' data-action='toggleEffectsAccordion'>
+      <i class='fas fa-chevron-right accordion-icon'></i>
+      Effects
+    </h3>
+    <div class='npc-section-content accordion-content collapsed'>
+      <div class='effects-list'>
+        {{#if effects}}
+          {{#each effects as |category|}}
+            {{#if category.effects}}
+              <div class='effects-category'>
+                <h4 class='effects-category-label'>{{category.label}}</h4>
+                <ol class='effects-list'>
+                  {{#each category.effects as |effect|}}
+                    <li class='effect' data-effect-id='{{effect.id}}' data-document-class='ActiveEffect'>
+                      <div class='effect-name'>
+                        <img class='effect-icon' src='{{effect.icon}}' alt='{{effect.name}}' />
+                        <span>{{effect.name}}</span>
+                      </div>
+                      <div class='effect-controls'>
+                        <a class='effect-control' data-action='toggleEffect' data-tooltip='Toggle Effect'>
+                          <i class='fas {{#if effect.disabled}}fa-circle{{else}}fa-check-circle{{/if}}'></i>
+                        </a>
+                        <a class='effect-control' data-action='viewDoc' data-tooltip='Edit Effect'>
+                          <i class='fas fa-edit'></i>
+                        </a>
+                        <a class='effect-control' data-action='deleteDoc' data-tooltip='Delete Effect'>
+                          <i class='fas fa-trash'></i>
+                        </a>
+                      </div>
+                    </li>
+                  {{/each}}
+                </ol>
+              </div>
+            {{/if}}
+          {{/each}}
+        {{else}}
+          <div class='npc-empty-section'>No active effects</div>
+        {{/if}}
+      </div>
+    </div>
+  </section>
+
+</div>

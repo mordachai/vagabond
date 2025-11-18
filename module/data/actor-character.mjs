@@ -46,11 +46,10 @@ export default class VagabondCharacter extends VagabondActorBase {
       current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
     });
 
-    // Iterate over ability names and create a new SchemaField for each.
-    // Now using Vagabond stats instead of D&D abilities
-    schema.abilities = new fields.SchemaField(
-      Object.keys(CONFIG.VAGABOND.abilities).reduce((obj, ability) => {
-        obj[ability] = new fields.SchemaField({
+    // Define the six core stats
+    schema.stats = new fields.SchemaField(
+      Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {
+        obj[stat] = new fields.SchemaField({
           value: new fields.NumberField({
             ...requiredInteger,
             initial: 8,  // Starting value for Vagabond stats
@@ -165,12 +164,12 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   prepareDerivedData() {
-    // Loop through ability scores and add labels
-    for (const key in this.abilities) {
+    // Loop through stats and add labels
+    for (const key in this.stats) {
       // NO MODIFIER CALCULATION - Vagabond uses raw values
-      // Handle ability label localization.
-      this.abilities[key].label =
-        game.i18n.localize(CONFIG.VAGABOND.abilities[key]) ?? key;
+      // Handle stat label localization.
+      this.stats[key].label =
+        game.i18n.localize(CONFIG.VAGABOND.stats[key]) ?? key;
     }
 
     // Get ancestry data for display
@@ -190,11 +189,11 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Process saves - calculate difficulty based on Vagabond rules
     // Reflex = DEX + AWR, Endure = MIT + MIT, Will = RSN + PRS
-    const dexValue = this.abilities.dexterity?.value || 8;
-    const awrValue = this.abilities.awareness?.value || 8;
-    const mitValue = this.abilities.might?.value || 8;
-    const rsnValue = this.abilities.reason?.value || 8;
-    const presValue = this.abilities.presence?.value || 8;
+    const dexValue = this.stats.dexterity?.value || 8;
+    const awrValue = this.stats.awareness?.value || 8;
+    const mitValue = this.stats.might?.value || 8;
+    const rsnValue = this.stats.reason?.value || 8;
+    const presValue = this.stats.presence?.value || 8;
 
     // Calculate save difficulties (no trained bonuses for saves)
     this.saves.reflex.difficulty = 20 - (dexValue + awrValue);
@@ -214,7 +213,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Process skills - calculate difficulty based on Vagabond rules
     for (const key in this.skills) {
       const skill = this.skills[key];
-      const associatedStat = this.abilities[skill.stat];
+      const associatedStat = this.stats[skill.stat];
       const statValue = associatedStat?.value || 8;
 
       // Vagabond difficulty calculation:
@@ -229,7 +228,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Process weapon skills - calculate difficulty based on Vagabond rules (same as regular skills)
     for (const key in this.weaponSkills) {
       const weaponSkill = this.weaponSkills[key];
-      const associatedStat = this.abilities[weaponSkill.stat];
+      const associatedStat = this.stats[weaponSkill.stat];
       const statValue = associatedStat?.value || 8;
 
       // Vagabond difficulty calculation:
@@ -289,10 +288,10 @@ export default class VagabondCharacter extends VagabondActorBase {
   getRollData() {
     const data = {};
 
-    // Copy the ability scores to the top level, so that rolls can use
+    // Copy the stats to the top level, so that rolls can use
     // formulas like `@might + 4` (using raw values, not modifiers).
-    if (this.abilities) {
-      for (let [k, v] of Object.entries(this.abilities)) {
+    if (this.stats) {
+      for (let [k, v] of Object.entries(this.stats)) {
         data[k] = foundry.utils.deepClone(v);
       }
     }
@@ -325,9 +324,9 @@ export default class VagabondCharacter extends VagabondActorBase {
 
   _calculateCombatValues() {
     // Get stat values
-    const mightValue = this.abilities.might?.value || 8;
-    const dexValue = this.abilities.dexterity?.value || 8;
-    const luckValue = this.abilities.luck?.value || 8;
+    const mightValue = this.stats.might?.value || 8;
+    const dexValue = this.stats.dexterity?.value || 8;
+    const luckValue = this.stats.luck?.value || 8;
     const level = this.attributes.level.value || 1;
 
     // Max HP = Might + Level (update the existing health.max)
@@ -366,7 +365,7 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateInventorySlots() {
-    const mightValue = this.abilities.might?.value || 8;
+    const mightValue = this.stats.might?.value || 8;
     const bonusSlots = this.inventory.bonusSlots || 0;
 
     // Calculate max slots: 8 + Might + bonusSlots
@@ -394,7 +393,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     if (classItem && classItem.system.isSpellcaster) {
       // Get the casting stat value
       const castingStat = classItem.system.castingStat || 'reason';
-      const castingStatValue = this.abilities[castingStat]?.value || 8;
+      const castingStatValue = this.stats[castingStat]?.value || 8;
 
       // Max mana = Casting Stat value (from class)
       this.mana.max = castingStatValue;

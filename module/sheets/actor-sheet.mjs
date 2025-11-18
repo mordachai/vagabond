@@ -35,6 +35,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleFeature: this._onToggleFeature,  // Feature accordion toggle
       togglePerk: this._onTogglePerk,  // Perk accordion toggle
       togglePanel: this._onTogglePanel,  // Sliding panel toggle
+      toggleEffectsAccordion: this._onToggleEffectsAccordion,  // NPC effects accordion toggle
+      toggleLock: this._onToggleLock,  // NPC lock/unlock toggle
+      toggleImmunity: this._onToggleImmunity,  // NPC damage immunity toggle
+      removeImmunity: this._onRemoveImmunity,  // NPC damage immunity remove
+      toggleWeakness: this._onToggleWeakness,  // NPC damage weakness toggle
+      removeWeakness: this._onRemoveWeakness,  // NPC damage weakness remove
+      toggleStatusImmunity: this._onToggleStatusImmunity,  // NPC status immunity toggle
+      removeStatusImmunity: this._onRemoveStatusImmunity,  // NPC status immunity remove
+      selectZone: this._onSelectZone,  // NPC zone selection
+      clearZone: this._onClearZone,  // NPC zone clear
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -68,12 +78,34 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/sliding-panel.hbs',
       scrollable: [".panel-content"],
     },
+    // NPC-specific parts
+    npcHeader: {
+      template: 'systems/vagabond/templates/actor/npc-header.hbs',
+    },
+    npcContent: {
+      template: 'systems/vagabond/templates/actor/npc-content.hbs',
+      scrollable: [""],
+    },
   };
 
   /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
+
+    // Set width based on actor type
+    if (this.document.type === 'npc') {
+      options.position = options.position || {};
+      options.position.width = 380;
+    }
+
     // Not all parts always render
+    if (this.document.type === 'npc') {
+      // NPC uses a completely different layout - no tabs, no sliding panel
+      options.parts = ['npcHeader', 'npcContent'];
+      return;
+    }
+
+    // Character sheet layout
     // Header is now inside the sliding panel, so only tabs and slidingPanel at top level
     options.parts = ['tabs', 'slidingPanel'];
     // Don't show the other tabs if only limited view
@@ -86,9 +118,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       case 'character':
         // Order: Features | Biography | Effects + Sliding Panel (right)
         options.parts.push('features', 'biography', 'effects');
-        break;
-      case 'npc':
-        options.parts.push('effects');
         break;
     }
   }
@@ -222,6 +251,27 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             })
           );
         }
+        break;
+      case 'npcHeader':
+        // Enrich the appearing field for roll links
+        if (this.actor.system.locked && this.actor.system.appearingFormatted) {
+          context.enrichedAppearing = await foundry.applications.ux.TextEditor.enrichHTML(
+            this.actor.system.appearingFormatted,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.actor.getRollData(),
+              relativeTo: this.actor,
+            }
+          );
+        } else {
+          context.enrichedAppearing = this.actor.system.appearingFormatted;
+        }
+        break;
+      case 'npcContent':
+        // Prepare active effects for NPC
+        context.effects = prepareActiveEffectCategories(
+          this.actor.allApplicableEffects()
+        );
         break;
     }
     return context;
@@ -681,6 +731,194 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         panel.classList.add('panel-closed');
       }
     }
+  }
+
+  /**
+   * Handle toggling the NPC effects accordion (open/close)
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onToggleEffectsAccordion(event, target) {
+    event.preventDefault();
+    const accordionContent = this.element.querySelector('.npc-effects .accordion-content');
+    const accordionIcon = this.element.querySelector('.npc-effects .accordion-icon');
+
+    if (accordionContent) {
+      accordionContent.classList.toggle('collapsed');
+    }
+
+    if (accordionIcon) {
+      accordionIcon.classList.toggle('fa-chevron-right');
+      accordionIcon.classList.toggle('fa-chevron-down');
+    }
+  }
+
+  /**
+   * Handle toggling the NPC lock/unlock state
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onToggleLock(event, target) {
+    event.preventDefault();
+    const currentLocked = this.actor.system.locked;
+    await this.actor.update({ 'system.locked': !currentLocked });
+  }
+
+  /**
+   * Handle toggling NPC damage immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleImmunity(event, target) {
+    const immunity = target.dataset.immunity;
+    const isChecked = target.checked;
+    const immunities = this.actor.system.immunities || [];
+
+    let newImmunities;
+    if (isChecked) {
+      if (!immunities.includes(immunity)) {
+        newImmunities = [...immunities, immunity];
+      } else {
+        return;
+      }
+    } else {
+      newImmunities = immunities.filter(i => i !== immunity);
+    }
+
+    await this.actor.update({ 'system.immunities': newImmunities });
+  }
+
+  /**
+   * Handle removing NPC damage immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveImmunity(event, target) {
+    const immunity = target.dataset.immunity;
+    if (!immunity) return;
+
+    const immunities = this.actor.system.immunities || [];
+    const newImmunities = immunities.filter(i => i !== immunity);
+    await this.actor.update({ 'system.immunities': newImmunities });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-immunity="${immunity}"]`);
+    if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle toggling NPC damage weakness
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleWeakness(event, target) {
+    const weakness = target.dataset.weakness;
+    const isChecked = target.checked;
+    const weaknesses = this.actor.system.weaknesses || [];
+
+    let newWeaknesses;
+    if (isChecked) {
+      if (!weaknesses.includes(weakness)) {
+        newWeaknesses = [...weaknesses, weakness];
+      } else {
+        return;
+      }
+    } else {
+      newWeaknesses = weaknesses.filter(w => w !== weakness);
+    }
+
+    await this.actor.update({ 'system.weaknesses': newWeaknesses });
+  }
+
+  /**
+   * Handle removing NPC damage weakness
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveWeakness(event, target) {
+    const weakness = target.dataset.weakness;
+    if (!weakness) return;
+
+    const weaknesses = this.actor.system.weaknesses || [];
+    const newWeaknesses = weaknesses.filter(w => w !== weakness);
+    await this.actor.update({ 'system.weaknesses': newWeaknesses });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-weakness="${weakness}"]`);
+    if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle toggling NPC status immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleStatusImmunity(event, target) {
+    const status = target.dataset.status;
+    const isChecked = target.checked;
+    const statusImmunities = this.actor.system.statusImmunities || [];
+
+    let newStatusImmunities;
+    if (isChecked) {
+      if (!statusImmunities.includes(status)) {
+        newStatusImmunities = [...statusImmunities, status];
+      } else {
+        return;
+      }
+    } else {
+      newStatusImmunities = statusImmunities.filter(s => s !== status);
+    }
+
+    await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
+  }
+
+  /**
+   * Handle removing NPC status immunity
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveStatusImmunity(event, target) {
+    const status = target.dataset.status;
+    if (!status) return;
+
+    const statusImmunities = this.actor.system.statusImmunities || [];
+    const newStatusImmunities = statusImmunities.filter(s => s !== status);
+    await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-status="${status}"]`);
+    if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle selecting NPC combat zone
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onSelectZone(event, target) {
+    const zone = target.dataset.zone;
+    if (!zone) return;
+
+    await this.actor.update({ 'system.zone': zone });
+  }
+
+  /**
+   * Handle clearing NPC combat zone
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClearZone(event, target) {
+    await this.actor.update({ 'system.zone': null });
+
+    // Uncheck all radio buttons
+    const radios = this.element.querySelectorAll('input[type="radio"][name="zone-selector"]');
+    radios.forEach(radio => radio.checked = false);
   }
 
   /**

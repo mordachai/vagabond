@@ -4,22 +4,22 @@ export const VAGABOND = {};
  * The set of Stats used within the Vagabond system.
  * @type {Object}
  */
-VAGABOND.abilities = {
-  might: 'VAGABOND.Ability.Might.long',
-  dexterity: 'VAGABOND.Ability.Dexterity.long',
-  awareness: 'VAGABOND.Ability.Awareness.long',
-  reason: 'VAGABOND.Ability.Reason.long',
-  presence: 'VAGABOND.Ability.Presence.long',
-  luck: 'VAGABOND.Ability.Luck.long',
+VAGABOND.stats = {
+  might: 'VAGABOND.Stat.Might.long',
+  dexterity: 'VAGABOND.Stat.Dexterity.long',
+  awareness: 'VAGABOND.Stat.Awareness.long',
+  reason: 'VAGABOND.Stat.Reason.long',
+  presence: 'VAGABOND.Stat.Presence.long',
+  luck: 'VAGABOND.Stat.Luck.long',
 };
 
-VAGABOND.abilityAbbreviations = {
-  might: 'VAGABOND.Ability.Might.abbr',
-  dexterity: 'VAGABOND.Ability.Dexterity.abbr',
-  awareness: 'VAGABOND.Ability.Awareness.abbr',
-  reason: 'VAGABOND.Ability.Reason.abbr',
-  presence: 'VAGABOND.Ability.Presence.abbr',
-  luck: 'VAGABOND.Ability.Luck.abbr',
+VAGABOND.statAbbreviations = {
+  might: 'VAGABOND.Stat.Might.abbr',
+  dexterity: 'VAGABOND.Stat.Dexterity.abbr',
+  awareness: 'VAGABOND.Stat.Awareness.abbr',
+  reason: 'VAGABOND.Stat.Reason.abbr',
+  presence: 'VAGABOND.Stat.Presence.abbr',
+  luck: 'VAGABOND.Stat.Luck.abbr',
 };
 
 /**
@@ -36,6 +36,40 @@ VAGABOND.damageTypes = {
   'blunt': 'VAGABOND.DamageTypes.Blunt',
   'physical': 'VAGABOND.DamageTypes.Physical',
   'necrotic': 'VAGABOND.DamageTypes.Necrotic'
+};
+
+/**
+ * Status conditions for NPC immunities
+ * @type {Object}
+ */
+VAGABOND.statusConditions = {
+  'berserk': 'VAGABOND.StatusConditions.Berserk',
+  'blinded': 'VAGABOND.StatusConditions.Blinded',
+  'burning': 'VAGABOND.StatusConditions.Burning',
+  'charmed': 'VAGABOND.StatusConditions.Charmed',
+  'confused': 'VAGABOND.StatusConditions.Confused',
+  'dazed': 'VAGABOND.StatusConditions.Dazed',
+  'fatigued': 'VAGABOND.StatusConditions.Fatigued',
+  'frightened': 'VAGABOND.StatusConditions.Frightened',
+  'incapacitated': 'VAGABOND.StatusConditions.Incapacitated',
+  'invisible': 'VAGABOND.StatusConditions.Invisible',
+  'paralyzed': 'VAGABOND.StatusConditions.Paralyzed',
+  'prone': 'VAGABOND.StatusConditions.Prone',
+  'restrained': 'VAGABOND.StatusConditions.Restrained',
+  'sickened': 'VAGABOND.StatusConditions.Sickened',
+  'suffocating': 'VAGABOND.StatusConditions.Suffocating',
+  'unconscious': 'VAGABOND.StatusConditions.Unconscious',
+  'vulnerable': 'VAGABOND.StatusConditions.Vulnerable'
+};
+
+/**
+ * Combat zones for NPCs
+ * @type {Object}
+ */
+VAGABOND.combatZones = {
+  'frontline': 'VAGABOND.CombatZones.Frontline',
+  'midline': 'VAGABOND.CombatZones.Midline',
+  'backline': 'VAGABOND.CombatZones.Backline'
 };
 
 /**

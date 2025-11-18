@@ -1,6 +1,6 @@
 {
   "VAGABOND": {
-    "Ability": {
+    "Stat": {
       "Might": { "long": "Might", "abbr": "MIG" },
       "Dexterity": { "long": "Dexterity", "abbr": "DEX" },
       "Awareness": { "long": "Awareness", "abbr": "AWR" },
@@ -70,6 +70,30 @@
       "Blunt": "Blunt",
       "Physical": "Physical",
       "Necrotic": "Necrotic"
+    },
+    "StatusConditions": {
+      "Berserk": "Berserk",
+      "Blinded": "Blinded",
+      "Burning": "Burning",
+      "Charmed": "Charmed",
+      "Confused": "Confused",
+      "Dazed": "Dazed",
+      "Fatigued": "Fatigued",
+      "Frightened": "Frightened",
+      "Incapacitated": "Incapacitated",
+      "Invisible": "Invisible",
+      "Paralyzed": "Paralyzed",
+      "Prone": "Prone",
+      "Restrained": "Restrained",
+      "Sickened": "Sickened",
+      "Suffocating": "Suffocating",
+      "Unconscious": "Unconscious",
+      "Vulnerable": "Vulnerable"
+    },
+    "CombatZones": {
+      "Frontline": "Frontline",
+      "Midline": "Midline",
+      "Backline": "Backline"
     },
     "Currency": {
       "Gold": {
