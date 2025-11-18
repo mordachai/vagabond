@@ -2324,7 +2324,8 @@
   border-radius: 4px;
   background: var(--vagabond-c-transparent);
 }
-.vagabond .npc-section.npc-actions {
+.vagabond .npc-section.npc-actions,
+.vagabond .npc-section.npc-stats {
   border: none;
   border-radius: 0;
   background: transparent;
@@ -2338,7 +2339,8 @@
   background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
 }
-.vagabond .npc-actions .npc-section-title {
+.vagabond .npc-actions .npc-section-title,
+.vagabond .npc-stats .npc-section-title {
   padding: 0;
   border-bottom: none;
   background: transparent;
@@ -2362,7 +2364,8 @@
 .vagabond .npc-section-content {
   padding: 12px;
 }
-.vagabond .npc-actions .npc-section-content {
+.vagabond .npc-actions .npc-section-content,
+.vagabond .npc-stats .npc-section-content {
   padding: 0;
 }
 .vagabond .npc-section-content.accordion-content {

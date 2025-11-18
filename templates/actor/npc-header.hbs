@@ -142,25 +142,8 @@
     </div>
   </div>
 
-  {{! NPC Stats Row - Appearing and Zone }}
+  {{! NPC Stats Row - Zone and Appearing }}
   <div class='npc-stats-row-appearing-zone'>
-    {{! Appearing }}
-    <div class='npc-stat-field'>
-      <label class='npc-field-label'>Appearing</label>
-      {{#if system.locked}}
-        <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
-      {{else}}
-        <input
-          type='text'
-          name='system.appearing'
-          value='{{system.appearing}}'
-          data-dtype='String'
-          class='npc-field-input'
-          placeholder='d6 or 2d8'
-        />
-      {{/if}}
-    </div>
-
     {{! Zone }}
     <div class='npc-zone-field'>
       {{#if system.locked}}
@@ -191,6 +174,23 @@
             </span>
           </div>
         {{/if}}
+      {{/if}}
+    </div>
+
+    {{! Appearing }}
+    <div class='npc-stat-field'>
+      <label class='npc-field-label'># Appearing:</label>
+      {{#if system.locked}}
+        <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
+      {{else}}
+        <input
+          type='text'
+          name='system.appearing'
+          value='{{system.appearing}}'
+          data-dtype='String'
+          class='npc-field-input'
+          placeholder='d6 or 2d8'
+        />
       {{/if}}
     </div>
   </div>
