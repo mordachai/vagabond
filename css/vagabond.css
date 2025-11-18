@@ -2618,9 +2618,13 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-immunity-checkbox-item:hover {
   background: var(--vagabond-c-faint);
 }
-.vagabond .npc-immunity-checkbox-item input[type=checkbox] {
+.vagabond .npc-immunity-checkbox-item input[type=checkbox],
+.vagabond .npc-immunity-checkbox-item input[type=radio] {
   cursor: pointer;
   margin: 0;
+}
+.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item input[type=radio] {
+  display: none;
 }
 .vagabond .npc-immunity-checkbox-item span {
   font-size: 12px;
