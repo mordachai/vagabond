@@ -2148,6 +2148,9 @@
   gap: 12px;
   margin-top: 8px;
 }
+.vagabond .npc-stats-row-appearing-zone .npc-stat-field {
+  margin-left: auto;
+}
 .vagabond .npc-zone-field {
   display: flex;
   align-items: baseline;
@@ -2173,7 +2176,10 @@
 }
 .vagabond .npc-zone-checkboxes {
   grid-template-columns: 1fr !important;
-  min-width: 150px !important;
+  min-width: 200px !important;
+}
+.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item {
+  white-space: nowrap;
 }
 .vagabond .npc-field-label {
   font-size: 13px;
@@ -2527,11 +2533,11 @@
   padding: 12px;
 }
 .vagabond .npc-immunities-section {
-  padding: 8px 12px;
+  padding: 8px 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border-top: 1px solid var(--vagabond-c-tan);
+  border-top: none;
 }
 .vagabond .npc-immunity-row {
   display: flex;
