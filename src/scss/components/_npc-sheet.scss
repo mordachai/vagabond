@@ -598,7 +598,7 @@
 .npc-immunity-row {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: baseline;
   gap: 8px;
   min-height: 24px;
 }
@@ -607,7 +607,6 @@
   flex: 1;
   font-size: 13px;
   color: var(--vagabond-c-dark);
-  padding: 2px 0;
   line-height: 1.4;
 }
 
