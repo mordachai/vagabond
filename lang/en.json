@@ -163,7 +163,35 @@
       },
       "NPC": {
         "FIELDS": {
-          "cr": {"label": "CR"}
+          "cr": {"label": "CR"},
+          "name": {"label": "NPC Name"},
+          "size": {"label": "Size"},
+          "beingType": {"label": "Being Type"},
+          "morale": {"label": "Morale"},
+          "speed": {"label": "Speed"},
+          "hd": {"label": "HD"},
+          "hp": {"label": "HP"},
+          "zone": {"label": "Zone"},
+          "appearing": {"label": "# Appearing"},
+          "senses": {"label": "Senses"},
+          "armor": {"label": "Armor"},
+          "immunities": {"label": "Immune"},
+          "weaknesses": {"label": "Weak"},
+          "statusImmunities": {"label": "Status"}
+        },
+        "Sections": {
+          "Actions": "Actions",
+          "Abilities": "Abilities",
+          "Effects": "Effects"
+        },
+        "Messages": {
+          "NoActions": "No actions defined",
+          "UnlockToEdit": "Click to unlock and edit",
+          "LockForPlay": "Click to lock for play"
+        },
+        "Tooltips": {
+          "Unlock": "Click to unlock and edit",
+          "Lock": "Click to lock for play"
         },
         "xp": {"label": "XP"}
       }

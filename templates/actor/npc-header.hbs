@@ -6,7 +6,7 @@
       name='name'
       type='text'
       value='{{actor.name}}'
-      placeholder='{{#unless system.locked}}NPC Name{{/unless}}'
+      placeholder='{{#unless system.locked}}{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}{{/unless}}'
       class='npc-name-input'
       {{#if system.locked}}readonly{{/if}}
     />
@@ -14,7 +14,7 @@
       type='button'
       data-action='toggleLock'
       class='npc-lock-button {{#if system.locked}}locked{{else}}unlocked{{/if}}'
-      data-tooltip='{{#if system.locked}}Click to unlock and edit{{else}}Click to lock for play{{/if}}'
+      data-tooltip='{{#if system.locked}}{{localize "VAGABOND.Actor.NPC.Tooltips.Unlock"}}{{else}}{{localize "VAGABOND.Actor.NPC.Tooltips.Lock"}}{{/if}}'
     >
       <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
     </button>
@@ -74,7 +74,7 @@
       <div class='npc-stats-compact-row'>
         {{! Morale }}
         <div class='npc-stat-field'>
-          <label class='npc-field-label'>Morale</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.morale.label"}}</label>
           <input
             type='text'
             name='system.morale'
@@ -88,7 +88,7 @@
 
         {{! Speed }}
         <div class='npc-stat-field'>
-          <label class='npc-field-label'>Speed</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.speed.label"}}</label>
           <input
             type='text'
             name='system.speed'
@@ -105,7 +105,7 @@
       <div class='npc-stats-compact-row'>
         {{! HD }}
         <div class='npc-stat-field'>
-          <label class='npc-field-label'>HD</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.hd.label"}}</label>
           <input
             type='text'
             name='system.hd'
@@ -119,7 +119,7 @@
 
         {{! HP - Current / Max format }}
         <div class='npc-stat-field'>
-          <label class='npc-field-label'>HP</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.hp.label"}}</label>
           <div class='npc-hp-display'>
             <input
               type='text'
@@ -143,14 +143,14 @@
     <div class='npc-zone-field'>
       {{#if system.locked}}
         {{#if system.zone}}
-          <label class='npc-field-label'>Zone:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}:</label>
           <div class='npc-immunity-text'>{{system.zone}}</div>
         {{/if}}
       {{else}}
         <details class='npc-immunity-dropdown'>
           <summary class='npc-immunity-toggle'>
             <i class='fas fa-chevron-down'></i>
-            <span>Zone</span>
+            <span>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</span>
           </summary>
           <div class='npc-immunity-checkboxes npc-zone-checkboxes'>
             {{#each config.combatZones as |label key|}}
@@ -174,7 +174,7 @@
 
     {{! Appearing }}
     <div class='npc-stat-field'>
-      <label class='npc-field-label'># Appearing:</label>
+      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}:</label>
       {{#if system.locked}}
         <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
       {{else}}
@@ -194,7 +194,7 @@
   <div class='npc-stats-row-senses'>
     {{! Senses }}
     <div class='npc-stat-field npc-senses-field'>
-      <label class='npc-field-label'>Senses</label>
+      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</label>
       <input
         type='text'
         name='system.senses'
@@ -211,7 +211,7 @@
   <div class='npc-immunities-section'>
     {{! Armor - Always visible }}
     <div class='npc-immunity-row'>
-      <label class='npc-field-label'>Armor</label>
+      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.armor.label"}}</label>
       <div class='npc-armor-display'>
         <input
           type='text'
@@ -238,7 +238,7 @@
     {{#unless (and system.locked (not system.immunities.length))}}
       <div class='npc-immunity-row'>
         {{#if system.locked}}
-          <label class='npc-field-label'>Immune:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}:</label>
           <div class='npc-immunity-text'>
             {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
           </div>
@@ -246,7 +246,7 @@
           <details class='npc-immunity-dropdown'>
             <summary class='npc-immunity-toggle'>
               <i class='fas fa-chevron-down'></i>
-              <span>Immune</span>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</span>
             </summary>
             <div class='npc-immunity-checkboxes'>
               {{#each config.damageTypes as |label key|}}
@@ -275,7 +275,7 @@
     {{#unless (and system.locked (not system.weaknesses.length))}}
       <div class='npc-immunity-row'>
         {{#if system.locked}}
-          <label class='npc-field-label'>Weak:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}:</label>
           <div class='npc-immunity-text'>
             {{#each system.weaknesses as |weakness index|}}{{weakness}}{{#unless @last}}, {{/unless}}{{/each}}
           </div>
@@ -283,7 +283,7 @@
           <details class='npc-immunity-dropdown'>
             <summary class='npc-immunity-toggle'>
               <i class='fas fa-chevron-down'></i>
-              <span>Weak</span>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</span>
             </summary>
             <div class='npc-immunity-checkboxes'>
               {{#each config.damageTypes as |label key|}}
@@ -312,7 +312,7 @@
     {{#unless (and system.locked (not system.statusImmunities.length))}}
       <div class='npc-immunity-row'>
         {{#if system.locked}}
-          <label class='npc-field-label'>Status immunities:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}:</label>
           <div class='npc-immunity-text'>
             {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
           </div>
@@ -320,7 +320,7 @@
           <details class='npc-immunity-dropdown'>
             <summary class='npc-immunity-toggle'>
               <i class='fas fa-chevron-down'></i>
-              <span>Status immunities</span>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</span>
             </summary>
             <div class='npc-immunity-checkboxes'>
               {{#each config.statusConditions as |label key|}}

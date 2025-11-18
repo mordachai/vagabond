@@ -3,7 +3,7 @@
 
   {{! Actions Section }}
   <section class='npc-section npc-actions'>
-    <h3 class='npc-section-title'>Actions</h3>
+    <h3 class='npc-section-title'>{{localize "VAGABOND.Actor.NPC.Sections.Actions"}}</h3>
     <div class='npc-section-content'>
       <div class='npc-actions-list'>
         {{#if weapons}}
@@ -21,7 +21,7 @@
             </div>
           {{/each}}
         {{else}}
-          <div class='npc-empty-section'>No actions defined</div>
+          <div class='npc-empty-section'>{{localize "VAGABOND.Actor.NPC.Messages.NoActions"}}</div>
         {{/if}}
       </div>
     </div>
@@ -29,7 +29,7 @@
 
   {{! Abilities Section }}
   <section class='npc-section npc-abilities'>
-    <h3 class='npc-section-title'>Abilities</h3>
+    <h3 class='npc-section-title'>{{localize "VAGABOND.Actor.NPC.Sections.Abilities"}}</h3>
     <div class='npc-section-content'>
     </div>
   </section>
@@ -37,7 +37,7 @@
   {{! Effects Section - Accordion }}
   <section class='npc-section npc-effects'>
     <h3 class='npc-section-title accordion-header' data-action='toggleEffectsAccordion'>
-      Effects
+      {{localize "VAGABOND.Actor.NPC.Sections.Effects"}}
       <i class='fas fa-chevron-right accordion-icon'></i>
     </h3>
     <div class='npc-section-content accordion-content collapsed'>
