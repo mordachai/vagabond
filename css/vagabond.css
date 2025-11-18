@@ -2125,6 +2125,13 @@
   color: var(--vagabond-c-muted);
   cursor: not-allowed;
 }
+.vagabond .npc-stats-compact-row {
+  display: flex;
+  gap: 12px;
+}
+.vagabond .npc-stats-compact-row .npc-stat-field {
+  flex: 1;
+}
 .vagabond .npc-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

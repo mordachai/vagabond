@@ -28,9 +28,9 @@
       />
     </div>
 
-    {{! Right Column: Name, Size, Being Type }}
+    {{! Right Column: Name, Size, Being Type, HD, HP, Morale, Speed }}
     <div class='npc-info-column'>
-      {{! Name Row }}
+      {{! Row 1: Name }}
       <div class='npc-name-row'>
         <input
           name='name'
@@ -42,7 +42,7 @@
         />
       </div>
 
-      {{! Size and Being Type Row }}
+      {{! Row 2: Size and Being Type }}
       <div class='npc-type-row'>
         <select
           name='system.size'
@@ -74,56 +74,76 @@
           <option value='Undead' {{#if (eq system.beingType 'Undead')}}selected{{/if}}>Undead</option>
         </select>
       </div>
+
+      {{! Row 3: HD and HP }}
+      <div class='npc-stats-compact-row'>
+        {{! HD }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>HD</label>
+          <input
+            type='text'
+            name='system.hd'
+            value='{{system.hd}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}1{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+
+        {{! HP - Current / Max format }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>HP</label>
+          <div class='npc-hp-display'>
+            <input
+              type='text'
+              name='system.health.value'
+              value='{{system.health.value}}'
+              data-dtype='Number'
+              class='npc-hp-current'
+              placeholder='{{#unless system.locked}}10{{/unless}}'
+            />
+            <span class='npc-hp-separator'>/</span>
+            <span class='npc-hp-max'>{{system.health.max}}</span>
+          </div>
+        </div>
+      </div>
+
+      {{! Row 4: Morale and Speed }}
+      <div class='npc-stats-compact-row'>
+        {{! Morale }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>Morale</label>
+          <input
+            type='text'
+            name='system.morale'
+            value='{{system.morale}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}—{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+
+        {{! Speed }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>Speed</label>
+          <input
+            type='text'
+            name='system.speed'
+            value='{{system.speed}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}30{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+      </div>
     </div>
   </div>
 
   {{! NPC Stats Row }}
   <div class='npc-stats-row'>
-    {{! HD }}
-    <div class='npc-stat-field'>
-      <label class='npc-field-label'>HD</label>
-      <input
-        type='text'
-        name='system.hd'
-        value='{{system.hd}}'
-        data-dtype='Number'
-        class='npc-field-input'
-        placeholder='{{#unless system.locked}}1{{/unless}}'
-        {{#if system.locked}}readonly{{/if}}
-      />
-    </div>
-
-    {{! HP - Current / Max format }}
-    <div class='npc-stat-field'>
-      <label class='npc-field-label'>HP</label>
-      <div class='npc-hp-display'>
-        <input
-          type='text'
-          name='system.health.value'
-          value='{{system.health.value}}'
-          data-dtype='Number'
-          class='npc-hp-current'
-          placeholder='{{#unless system.locked}}10{{/unless}}'
-        />
-        <span class='npc-hp-separator'>/</span>
-        <span class='npc-hp-max'>{{system.health.max}}</span>
-      </div>
-    </div>
-
-    {{! Morale }}
-    <div class='npc-stat-field'>
-      <label class='npc-field-label'>Morale</label>
-      <input
-        type='text'
-        name='system.morale'
-        value='{{system.morale}}'
-        data-dtype='Number'
-        class='npc-field-input'
-        placeholder='{{#unless system.locked}}—{{/unless}}'
-        {{#if system.locked}}readonly{{/if}}
-      />
-    </div>
-
     {{! Appearing }}
     <div class='npc-stat-field'>
       <label class='npc-field-label'>Appearing</label>
@@ -139,20 +159,6 @@
           placeholder='d6 or 2d8'
         />
       {{/if}}
-    </div>
-
-    {{! Speed }}
-    <div class='npc-stat-field'>
-      <label class='npc-field-label'>Speed</label>
-      <input
-        type='text'
-        name='system.speed'
-        value='{{system.speed}}'
-        data-dtype='Number'
-        class='npc-field-input'
-        placeholder='{{#unless system.locked}}30{{/unless}}'
-        {{#if system.locked}}readonly{{/if}}
-      />
     </div>
 
     {{! Senses }}

@@ -164,7 +164,17 @@
   }
 }
 
-// NPC Stats Row (HD, HP, Morale, Appearing, Speed, Senses, Armor)
+// NPC Stats Compact Row (HD/HP and Morale/Speed in right column)
+.npc-stats-compact-row {
+  display: flex;
+  gap: 12px;
+
+  .npc-stat-field {
+    flex: 1;
+  }
+}
+
+// NPC Stats Row (Appearing, Senses, Armor)
 .npc-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
