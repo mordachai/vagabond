@@ -1555,9 +1555,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 2px;
   font-weight: bold;
-  padding: 0;
+  padding-bottom: 12px;
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -1567,18 +1567,18 @@
   background-image: url(../assets/images/hp-banner.webp);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
 }
 .vagabond .hp-display .hp-icon {
-  font-size: 22px;
+  font-size: 18px;
   color: #c62828;
 }
 .vagabond .hp-display .hp-current {
-  width: 40px;
+  width: 35px;
   text-align: right;
   border: none;
   background: transparent;
-  padding: 2px 4px;
+  padding: 2px 2px;
   font-size: 22px;
   font-weight: bold;
   color: var(--vagabond-c-dark);
@@ -1590,7 +1590,7 @@
 .vagabond .hp-display .hp-max {
   color: var(--vagabond-c-dark);
   min-width: 30px;
-  font-size: 20px;
+  font-size: 18px;
 }
 .vagabond .header-main-row {
   display: flex;
