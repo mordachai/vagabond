@@ -1,7 +1,15 @@
 {{! NPC Sheet Header }}
 <header class='npc-header'>
-  {{! Lock/Unlock Toggle }}
-  <div class='npc-lock-toggle'>
+  {{! Lock/Unlock Toggle and Name Row }}
+  <div class='npc-lock-name-row'>
+    <input
+      name='name'
+      type='text'
+      value='{{actor.name}}'
+      placeholder='{{#unless system.locked}}NPC Name{{/unless}}'
+      class='npc-name-input'
+      {{#if system.locked}}readonly{{/if}}
+    />
     <button
       type='button'
       data-action='toggleLock'
@@ -27,21 +35,9 @@
       />
     </div>
 
-    {{! Right Column: Name, Size, Being Type, HD, HP, Morale, Speed }}
+    {{! Right Column: Size, Being Type, Morale, Speed, HD, HP }}
     <div class='npc-info-column'>
-      {{! Row 1: Name }}
-      <div class='npc-name-row'>
-        <input
-          name='name'
-          type='text'
-          value='{{actor.name}}'
-          placeholder='{{#unless system.locked}}NPC Name{{/unless}}'
-          class='npc-name-input'
-          {{#if system.locked}}readonly{{/if}}
-        />
-      </div>
-
-      {{! Row 2: Size and Being Type }}
+      {{! Row 1: Size and Being Type }}
       <div class='npc-type-row'>
         <select
           name='system.size'
@@ -72,6 +68,37 @@
           <option value='Primordials' {{#if (eq system.beingType 'Primordials')}}selected{{/if}}>Primordials</option>
           <option value='Undead' {{#if (eq system.beingType 'Undead')}}selected{{/if}}>Undead</option>
         </select>
+      </div>
+
+      {{! Row 2: Morale and Speed }}
+      <div class='npc-stats-compact-row'>
+        {{! Morale }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>Morale</label>
+          <input
+            type='text'
+            name='system.morale'
+            value='{{system.morale}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}—{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+
+        {{! Speed }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>Speed</label>
+          <input
+            type='text'
+            name='system.speed'
+            value='{{system.speed}}'
+            data-dtype='Number'
+            class='npc-field-input'
+            placeholder='{{#unless system.locked}}30{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
       </div>
 
       {{! Row 3: HD and HP }}
@@ -105,37 +132,6 @@
             <span class='npc-hp-separator'>/</span>
             <span class='npc-hp-max'>{{system.health.max}}</span>
           </div>
-        </div>
-      </div>
-
-      {{! Row 4: Morale and Speed }}
-      <div class='npc-stats-compact-row'>
-        {{! Morale }}
-        <div class='npc-stat-field'>
-          <label class='npc-field-label'>Morale</label>
-          <input
-            type='text'
-            name='system.morale'
-            value='{{system.morale}}'
-            data-dtype='Number'
-            class='npc-field-input'
-            placeholder='{{#unless system.locked}}—{{/unless}}'
-            {{#if system.locked}}readonly{{/if}}
-          />
-        </div>
-
-        {{! Speed }}
-        <div class='npc-stat-field'>
-          <label class='npc-field-label'>Speed</label>
-          <input
-            type='text'
-            name='system.speed'
-            value='{{system.speed}}'
-            data-dtype='Number'
-            class='npc-field-input'
-            placeholder='{{#unless system.locked}}30{{/unless}}'
-            {{#if system.locked}}readonly{{/if}}
-          />
         </div>
       </div>
     </div>

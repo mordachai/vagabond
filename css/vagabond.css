@@ -2000,44 +2000,35 @@
   padding: 8px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
-.vagabond .npc-lock-toggle {
+.vagabond .npc-lock-name-row {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+}
+.vagabond .npc-lock-name-row .npc-name-input {
+  flex: 1;
 }
 .vagabond .npc-lock-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
   background: transparent;
   color: var(--vagabond-c-dark);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .vagabond .npc-lock-button i {
-  font-size: 12px;
+  font-size: 16px;
 }
-.vagabond .npc-lock-button.locked {
-  background: var(--vagabond-c-faint);
-  border-color: var(--vagabond-c-dark);
-  color: var(--vagabond-c-dark);
-}
-.vagabond .npc-lock-button.locked:hover {
-  background: var(--vagabond-c-tan);
-}
-.vagabond .npc-lock-button.unlocked {
-  background: transparent;
-  border-color: var(--vagabond-c-tan);
-  color: var(--vagabond-c-muted);
-}
-.vagabond .npc-lock-button.unlocked:hover {
-  border-color: var(--vagabond-c-dark);
-  color: var(--vagabond-c-dark);
+.vagabond .npc-lock-button:hover {
+  color: var(--vagabond-c-tan);
+  transform: scale(1.1);
 }
 .vagabond .npc-top-section {
   display: flex;
@@ -2069,7 +2060,7 @@
   gap: 8px;
   flex: 1;
 }
-.vagabond .npc-name-row .npc-name-input {
+.vagabond .npc-lock-name-row .npc-name-input {
   width: 100%;
   font-size: 20px;
   font-family: "Manofa", sans-serif;
@@ -2083,7 +2074,8 @@
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-.vagabond .npc-name-row .npc-name-input:hover, .vagabond .npc-name-row .npc-name-input:focus {
+.vagabond .npc-lock-name-row .npc-name-input:hover,
+.vagabond .npc-lock-name-row .npc-name-input:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
 }
@@ -2094,20 +2086,26 @@
 .vagabond .npc-type-row select {
   flex: 1;
   border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
   background: transparent;
-  padding: 4px 0;
+  padding: 2px 4px;
   font-size: 14px;
   color: var(--vagabond-c-dark);
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
 }
 .vagabond .npc-type-row select::-ms-expand {
   display: none;
 }
+.vagabond .npc-type-row select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
 .vagabond .npc-type-row select:focus {
   outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-type-row select option {
   background: var(--vagabond-c-groove);
@@ -2119,6 +2117,7 @@
 .vagabond .npc-type-row select:disabled {
   color: var(--vagabond-c-muted);
   cursor: not-allowed;
+  border-bottom-color: var(--vagabond-c-faint);
 }
 .vagabond .npc-stats-compact-row {
   display: flex;
