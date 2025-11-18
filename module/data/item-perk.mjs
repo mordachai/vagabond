@@ -92,7 +92,7 @@ export default class VagabondPerk extends VagabondItemBase {
     // Format stat prerequisites
     if (this.prerequisites.stats.length > 0) {
       const statStrings = this.prerequisites.stats.map(s => {
-        const abbr = CONFIG.VAGABOND.abilityAbbreviations[s.stat];
+        const abbr = CONFIG.VAGABOND.statAbbreviations[s.stat];
         const localizedAbbr = game.i18n.localize(abbr);
         return `${localizedAbbr} ${s.value}+`;
       });
