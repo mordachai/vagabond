@@ -27,25 +27,10 @@
     </div>
   </section>
 
-  {{! Stats Section }}
-  <section class='npc-section npc-stats'>
-    <h3 class='npc-section-title'>Stats</h3>
+  {{! Abilities Section }}
+  <section class='npc-section npc-abilities'>
+    <h3 class='npc-section-title'>Abilities</h3>
     <div class='npc-section-content'>
-      <div class='npc-stats-grid'>
-        {{#each system.stats as |stat key|}}
-          <div class='npc-stat-item'>
-            <label class='npc-stat-label'>{{stat.label}}</label>
-            <input
-              type='text'
-              name='system.stats.{{key}}.value'
-              value='{{stat.value}}'
-              data-dtype='Number'
-              class='npc-stat-value'
-              {{#if ../system.locked}}readonly{{/if}}
-            />
-          </div>
-        {{/each}}
-      </div>
     </div>
   </section>
 
