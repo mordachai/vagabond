@@ -144,5 +144,10 @@
 
 .clickable-link {
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
+    &:hover,
+    &:focus {
+      text-shadow: 0 0 5px red;
+      cursor: pointer;
+  }
 }

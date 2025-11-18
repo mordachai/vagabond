@@ -7,6 +7,7 @@
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
   --vagabond-c-groove: #eeede0;
+  --vagabond-c-transparent: #ffffffc0;
 }
 
 .theme-dark {
@@ -18,6 +19,7 @@
   --vagabond-c-white: #000000;
   --vagabond-c-black: #ffffff;
   --vagabond-c-groove: #11121f;
+  --vagabond-c-transparent: #000000c0;
 }
 
 $c-white: var(--vagabond-c-white);

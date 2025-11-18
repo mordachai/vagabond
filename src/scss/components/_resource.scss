@@ -58,14 +58,14 @@
       text-overflow: ellipsis;
 
       &:hover {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
 
     .skill-difficulty {
       font-weight: bold;
       text-align: right;
-      font-size: 15px;
+      font-size: 16px;
       flex: 1;
     }
   }
@@ -118,14 +118,14 @@
       text-overflow: ellipsis;
 
       &:hover {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
 
     .skill-difficulty {
       font-weight: bold;
       text-align: right;
-      font-size: 15px;
+      font-size: 16px;
       flex: 1;
     }
   }
@@ -182,10 +182,11 @@
 
   .save {
     text-align: center;
+    font-size: 16px;
 
     .save-difficulty {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 20px;
     }
   }
 }
