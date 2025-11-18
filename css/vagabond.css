@@ -2071,17 +2071,21 @@
 }
 .vagabond .npc-name-row .npc-name-input {
   width: 100%;
-  font-size: 18px;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
   font-weight: bold;
-  border: 1px solid var(--vagabond-c-tan);
-  background: transparent;
-  padding: 4px 8px;
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  padding: 2px 0 4px 0;
   color: var(--vagabond-c-dark);
-  border-radius: 4px;
+  outline: none;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
 }
 .vagabond .npc-name-row .npc-name-input:hover, .vagabond .npc-name-row .npc-name-input:focus {
-  border-color: var(--vagabond-c-dark);
-  outline: none;
+  border-bottom: 2px solid var(--vagabond-c-dark) !important;
+  background: transparent !important;
 }
 .vagabond .npc-type-row {
   display: flex;
@@ -2320,6 +2324,11 @@
   border-radius: 4px;
   background: var(--vagabond-c-transparent);
 }
+.vagabond .npc-section.npc-actions {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
 .vagabond .npc-section-title {
   font-size: 18px;
   font-weight: bold;
@@ -2328,6 +2337,11 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
+}
+.vagabond .npc-actions .npc-section-title {
+  padding: 0;
+  border-bottom: none;
+  background: transparent;
 }
 .vagabond .npc-section-title.accordion-header {
   cursor: pointer;
@@ -2347,6 +2361,9 @@
 }
 .vagabond .npc-section-content {
   padding: 12px;
+}
+.vagabond .npc-actions .npc-section-content {
+  padding: 0;
 }
 .vagabond .npc-section-content.accordion-content {
   max-height: 500px;
@@ -2368,9 +2385,17 @@
   border-radius: 4px;
   cursor: pointer;
 }
+.vagabond .npc-actions .npc-action-item {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
 .vagabond .npc-action-item:hover {
   background: var(--vagabond-c-faint);
   border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-actions .npc-action-item:hover {
+  background: transparent;
 }
 .vagabond .npc-action-name {
   font-weight: bold;
