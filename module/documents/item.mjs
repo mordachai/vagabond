@@ -108,7 +108,8 @@ export class VagabondItem extends Item {
 
     // Check if the attack succeeds
     const isHit = roll.total >= difficulty;
-    const isCritical = roll.total === 20;
+    const critNumber = actor.system.critNumber || 20;
+    const isCritical = roll.total >= critNumber;
 
     return {
       roll,

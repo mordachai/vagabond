@@ -1887,6 +1887,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await roll.evaluate();
 
     const isSuccess = roll.total >= difficulty;
+    const critNumber = this.actor.system.critNumber || 20;
+    const isCritical = roll.total >= critNumber;
 
     // If successful, deduct mana
     if (isSuccess) {
@@ -1897,7 +1899,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Failed - no mana cost (chat card will show failure)
 
     // Create chat message
-    await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess);
+    await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical);
 
     // Reset spell state (keep deliveryType)
     this.spellStates[spellId] = {
@@ -1917,9 +1919,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {Roll} roll - The roll result
    * @param {number} difficulty - Target difficulty
    * @param {boolean} isSuccess - Whether the cast succeeded
+   * @param {boolean} isCritical - Whether the roll was a critical hit
    * @private
    */
-  async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess) {
+  async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical) {
     // Import damage helper
     const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
@@ -1954,12 +1957,21 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     if (damageText) {
-      flavor += `<p><strong>Damage:</strong> ${damageText}</p>`;
+      flavor += `<p><strong>Damage:</strong> ${damageText}`;
+      if (isCritical && damageRoll) {
+        flavor += ` <span style="color: gold;">(CRITICAL!)</span>`;
+      }
+      flavor += `</p>`;
     }
     flavor += `<p><strong>Delivery:</strong> ${deliveryText}</p>`;
     flavor += `<p><strong>Mana Cost:</strong> ${costs.totalCost}</p>`;
     flavor += `<p><strong>Roll:</strong> ${roll.total} vs DC ${difficulty}</p>`;
     flavor += `<p><strong>Result:</strong> ${isSuccess ? '<span style="color: green;">SUCCESS</span>' : '<span style="color: red;">FAILED</span>'}</p>`;
+
+    // Add crit description if critical and spell has crit text
+    if (isCritical && spell.system.crit) {
+      flavor += `<p><strong style="color: gold;">Critical Effect:</strong> ${spell.system.crit}</p>`;
+    }
 
     // Add damage button if spell has damage and wasn't auto-rolled
     if (spell.system.damageBase !== '-' && !damageRoll) {

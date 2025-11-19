@@ -54,6 +54,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       nullable: false
     });
 
+    // Critical hit threshold - normally 20, but can be modified by perks/features
+    schema.critNumber = new fields.NumberField({
+      ...requiredInteger,
+      initial: 20,
+      min: 1,
+      max: 20
+    });
+
     // Define the six core stats
     schema.stats = new fields.SchemaField(
       Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {
