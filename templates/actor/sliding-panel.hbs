@@ -155,17 +155,17 @@
           type='button'
           class='favor-hinder-toggle {{system.favorHinder}}'
           data-action='toggleFavorHinder'
-          data-tooltip='{{#if (eq system.favorHinder "favor")}}Favor: +1d6 to rolls{{else if (eq system.favorHinder "hinder")}}Hinder: -1d6 from rolls{{else}}No modifier{{/if}}'
+          data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
         >
-          <img src='systems/vagabond/assets/images/hinder-die.webp' alt='Die' class='die-icon' />
+          <img src='systems/vagabond/assets/images/hinder-die.webp' alt='{{localize "VAGABOND.FavorHinder.label"}}' class='die-icon' />
         </button>
         <label class='favor-hinder-label'>
           {{#if (eq system.favorHinder "favor")}}
-            Favor
+            {{localize "VAGABOND.FavorHinder.States.favor"}}
           {{else if (eq system.favorHinder "hinder")}}
-            Hinder
+            {{localize "VAGABOND.FavorHinder.States.hinder"}}
           {{else}}
-            None
+            {{localize "VAGABOND.FavorHinder.States.none"}}
           {{/if}}
         </label>
       </div>
