@@ -1367,17 +1367,10 @@
   align-items: center;
   justify-content: center;
 }
-.vagabond .spell-col-controls {
-  flex: 0 0 30px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vagabond .spell-col-controls .favorite-active {
+.vagabond .spell-col-favorite .favorite-active {
   color: gold;
 }
-.vagabond .spell-col-controls .favorite-inactive {
+.vagabond .spell-col-favorite .favorite-inactive {
   color: var(--vagabond-c-faint);
 }
 .vagabond .effects-header {

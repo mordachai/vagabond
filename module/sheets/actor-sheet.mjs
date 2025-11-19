@@ -778,6 +778,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
     });
 
+    // Add click and context menu handlers for spell items
+    const spellItems = this.element.querySelectorAll('.spell-item-row[data-item-id]');
+    spellItems.forEach(spellItem => {
+      // Right-click on row: delete spell
+      spellItem.addEventListener('contextmenu', this._onSpellContextMenu.bind(this));
+    });
+
     // NEW: Add spell casting event handlers
     const spellRows = this.element.querySelectorAll('[data-spell-id]');
     spellRows.forEach(spellRow => {
@@ -1538,6 +1545,32 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Show delete confirmation dialog
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: { title: 'Delete Armor' },
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
+    }
+  }
+
+  /**
+   * Handle right-click on spell item - deletes spell with confirmation
+   */
+  async _onSpellContextMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const spellRow = event.currentTarget;
+    const itemId = spellRow?.dataset?.itemId;
+
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Show delete confirmation dialog
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Spell' },
       content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
     });
 
