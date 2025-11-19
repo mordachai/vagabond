@@ -22,6 +22,9 @@
       <div class='item-delivery spell-col-delivery'>Delivery</div>
       <div class='item-damage spell-col-damage'>Damage</div>
       <div class='spell-col-favorite' data-tooltip='Favorite'>F</div>
+      {{#if @root.editable}}
+        <div class='spell-col-controls' data-tooltip='Delete'>D</div>
+      {{/if}}
     </li>
     {{#each spells as |spell|}}
       <li
@@ -60,6 +63,15 @@
             <i class='clickable far fa-star favorite-inactive' data-tooltip='Not Favorite (click to favorite)'></i>
           {{/if}}
         </div>
+        {{#if @root.editable}}
+          <div class='spell-col-controls'>
+            <i
+              class='clickable fas fa-trash'
+              data-action='deleteDoc'
+              data-tooltip='Delete Spell'
+            ></i>
+          </div>
+        {{/if}}
       </li>
     {{else}}
       <li class='no-spells'>
