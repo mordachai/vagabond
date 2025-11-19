@@ -20,9 +20,21 @@
 }
 @font-face {
   font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
   src: url("../assets/fonts/paradigm-bold.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-italic.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
 }
 :root {
   --vagabond-c-dark: #191813;
@@ -2190,7 +2202,7 @@
 }
 .vagabond .npc-field-label {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: bold;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
@@ -2204,6 +2216,7 @@
   background: transparent;
   font-size: 15px;
   font-family: "Paradigm", serif;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
 }
@@ -2233,38 +2246,58 @@
   padding: 2px 0;
   font-size: 15px;
   font-family: "Paradigm", serif;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
   flex: 1;
 }
-.vagabond .npc-hp-display {
+.vagabond .npc-hp-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-hp-heart-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+.vagabond .npc-hp-heart-icon {
+  position: absolute;
+  font-size: 48px;
+  color: #c41e3a;
+  z-index: 1;
+  pointer-events: none;
+}
+.vagabond .npc-hp-heart-value {
+  position: relative;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  color: var(--vagabond-c-white);
+  text-align: center;
+  width: 36px;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  margin-top: -2px;
+}
+.vagabond .npc-hp-heart-value:focus {
+  outline: none;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+.vagabond .npc-hp-heart-value::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond .npc-hp-max-display {
   display: flex;
   align-items: center;
   gap: 4px;
-}
-.vagabond .npc-hp-current {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 0;
-  background: transparent;
-  font-size: 15px;
-  font-family: "Paradigm", serif;
-  color: var(--vagabond-c-dark);
-  width: 40px;
-  text-align: left;
-}
-.vagabond .npc-hp-current:hover {
-  border-bottom-color: var(--vagabond-c-dark);
-}
-.vagabond .npc-hp-current:focus {
-  outline: none;
-  border-bottom-color: var(--vagabond-c-dark);
-  background: transparent;
-}
-.vagabond .npc-hp-current::placeholder {
-  color: var(--vagabond-c-muted);
-  opacity: 0.5;
 }
 .vagabond .npc-hp-separator {
   font-size: 16px;
@@ -2275,8 +2308,8 @@
 .vagabond .npc-hp-max {
   font-size: 15px;
   font-family: "Paradigm", serif;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
-  font-weight: 600;
   min-width: 20px;
 }
 .vagabond .npc-armor-display {
@@ -2292,6 +2325,7 @@
   background: transparent;
   font-size: 15px;
   font-family: "Paradigm", serif;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
@@ -2326,6 +2360,7 @@
   background: transparent;
   font-size: 15px;
   font-family: "Paradigm", serif;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
 }
