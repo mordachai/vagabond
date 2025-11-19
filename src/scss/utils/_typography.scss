@@ -22,9 +22,23 @@
 
 @font-face {
   font-family: 'Paradigm';
+  src: url('../assets/fonts/paradigm-regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paradigm';
   src: url('../assets/fonts/paradigm-bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paradigm';
+  src: url('../assets/fonts/paradigm-italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
 }
 
 // Font variables
