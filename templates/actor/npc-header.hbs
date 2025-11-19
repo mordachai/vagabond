@@ -139,41 +139,8 @@
     </div>
   </div>
 
-  {{! NPC Stats Row - Zone and Appearing }}
-  <div class='npc-stats-row-appearing-zone'>
-    {{! Zone }}
-    <div class='npc-zone-field'>
-      {{#if system.locked}}
-        {{#if system.zone}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</label>
-          <div class='npc-immunity-text'>{{system.zone}}</div>
-        {{/if}}
-      {{else}}
-        <details class='npc-immunity-dropdown'>
-          <summary class='npc-immunity-toggle'>
-            <i class='fas fa-chevron-down'></i>
-            <span>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</span>
-          </summary>
-          <div class='npc-immunity-checkboxes npc-zone-checkboxes'>
-            {{#each config.combatZones as |label key|}}
-              <label class='npc-immunity-checkbox-item'>
-                <input type='radio' name='zone-selector' value='{{key}}' {{#if (eq ../system.zone key)}}checked{{/if}} data-action='selectZone' data-zone='{{key}}'>
-                <span>{{localize label}}</span>
-              </label>
-            {{/each}}
-          </div>
-        </details>
-        {{#if system.zone}}
-          <div class='npc-immunity-tags'>
-            <span class='npc-immunity-tag'>
-              {{system.zone}}
-              <i class='fas fa-times' data-action='clearZone'></i>
-            </span>
-          </div>
-        {{/if}}
-      {{/if}}
-    </div>
-
+  {{! NPC Stats Row - Appearing }}
+  <div class='npc-stats-row-appearing'>
     {{! Appearing }}
     <div class='npc-stat-field'>
       <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}</label>
@@ -192,11 +159,59 @@
     </div>
   </div>
 
-  {{! NPC Stats Row - Senses (hide when locked and empty) }}
-  {{#unless (and system.locked (not system.senses))}}
-    <div class='npc-stats-row-senses'>
-      {{! Senses }}
-      <div class='npc-stat-field npc-senses-field'>
+  {{! NPC Details Section }}
+  <div class='npc-details'>
+    {{! Description textarea - hide when locked and empty }}
+    {{#unless (and system.locked (not system.description))}}
+      <div class='npc-detail-row npc-description-row'>
+        <textarea
+          name='system.description'
+          class='npc-description-textarea'
+          rows='3'
+          placeholder='{{#unless system.locked}}{{localize "VAGABOND.Actor.NPC.FIELDS.description.label"}}{{/unless}}'
+          {{#if system.locked}}readonly{{/if}}
+        >{{system.description}}</textarea>
+      </div>
+    {{/unless}}
+
+    {{! Zone }}
+    <div class='npc-detail-row'>
+      {{#if system.locked}}
+        {{#if system.zone}}
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</label>
+          <div class='npc-immunity-text'>{{system.zone}}</div>
+        {{/if}}
+      {{else}}
+        <div class='npc-zone-field'>
+          <details class='npc-immunity-dropdown'>
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</span>
+            </summary>
+            <div class='npc-immunity-checkboxes npc-zone-checkboxes'>
+              {{#each config.combatZones as |label key|}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='radio' name='zone-selector' value='{{key}}' {{#if (eq ../system.zone key)}}checked{{/if}} data-action='selectZone' data-zone='{{key}}'>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/each}}
+            </div>
+          </details>
+          {{#if system.zone}}
+            <div class='npc-immunity-tags'>
+              <span class='npc-immunity-tag'>
+                {{system.zone}}
+                <i class='fas fa-times' data-action='clearZone'></i>
+              </span>
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+
+    {{! Senses - hide when locked and empty }}
+    {{#unless (and system.locked (not system.senses))}}
+      <div class='npc-detail-row'>
         <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</label>
         {{#if system.locked}}
           <div class='npc-field-display'>{{system.senses}}</div>
@@ -211,13 +226,10 @@
           />
         {{/if}}
       </div>
-    </div>
-  {{/unless}}
+    {{/unless}}
 
-  {{! Immunities Section }}
-  <div class='npc-immunities-section'>
     {{! Armor - Always visible }}
-    <div class='npc-immunity-row'>
+    <div class='npc-detail-row'>
       <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.armor.label"}}</label>
       <div class='npc-armor-display'>
         <input
@@ -243,7 +255,7 @@
 
     {{! Damage Immunities }}
     {{#unless (and system.locked (not system.immunities.length))}}
-      <div class='npc-immunity-row'>
+      <div class='npc-detail-row'>
         {{#if system.locked}}
           <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</label>
           <div class='npc-immunity-text'>
@@ -280,7 +292,7 @@
 
     {{! Damage Weaknesses }}
     {{#unless (and system.locked (not system.weaknesses.length))}}
-      <div class='npc-immunity-row'>
+      <div class='npc-detail-row'>
         {{#if system.locked}}
           <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</label>
           <div class='npc-immunity-text'>
@@ -317,7 +329,7 @@
 
     {{! Status Immunities }}
     {{#unless (and system.locked (not system.statusImmunities.length))}}
-      <div class='npc-immunity-row'>
+      <div class='npc-detail-row'>
         {{#if system.locked}}
           <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</label>
           <div class='npc-immunity-text'>

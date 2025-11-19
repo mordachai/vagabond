@@ -177,7 +177,8 @@
           "armor": {"label": "Armor:"},
           "immunities": {"label": "Immune:"},
           "weaknesses": {"label": "Weak:"},
-          "statusImmunities": {"label": "Status:"}
+          "statusImmunities": {"label": "Status:"},
+          "description": {"label": "Description"}
         },
         "Sections": {
           "Actions": "Actions",

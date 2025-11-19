@@ -2261,12 +2261,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
 }
 .vagabond .npc-hp-heart-icon {
   position: absolute;
-  font-size: 48px;
+  font-size: 40px;
   color: #c41e3a;
   z-index: 1;
   pointer-events: none;
@@ -2276,7 +2276,7 @@
   z-index: 2;
   border: none;
   background: transparent;
-  font-size: 18px;
+  font-size: 22px;
   font-family: "Paradigm", serif;
   font-weight: bold;
   color: var(--vagabond-c-white);
@@ -2630,19 +2630,60 @@
   font-family: "Paradigm", serif;
   padding: 12px;
 }
-.vagabond .npc-immunities-section {
+.vagabond .npc-details {
   padding: 8px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   border: none;
 }
-.vagabond .npc-immunity-row {
+.vagabond .npc-detail-row {
   display: flex;
   flex-direction: row;
   align-items: baseline;
   gap: 8px;
   min-height: 24px;
+}
+.vagabond .npc-description-row {
+  display: block;
+}
+.vagabond .npc-description-textarea {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  font-style: italic;
+  color: var(--vagabond-c-dark);
+  resize: vertical;
+  line-height: 1.4;
+}
+.vagabond .npc-description-textarea:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-description-textarea:focus {
+  outline: none;
+  border-color: var(--vagabond-c-dark);
+  background: transparent;
+}
+.vagabond .npc-description-textarea[readonly] {
+  border: 1px solid transparent;
+  color: var(--vagabond-c-dark);
+  cursor: default;
+  background: transparent;
+  padding: 4px 0;
+  resize: none;
+}
+.vagabond .npc-description-textarea[readonly]:hover {
+  border-color: transparent;
+}
+.vagabond .npc-description-textarea::placeholder {
+  color: var(--vagabond-c-muted);
+  opacity: 0.5;
+  font-style: italic;
 }
 .vagabond .npc-immunity-text {
   flex: 1;
