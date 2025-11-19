@@ -329,18 +329,55 @@
           {{! Favorited Spells }}
           {{#each spells as |spell|}}
             {{#if spell.system.favorite}}
-              <div class='favorited-spell flexrow flex-group-center'>
+              <div class='favorited-spell flexrow flex-group-center' data-spell-id='{{spell._id}}'>
+                {{! Spell Name - Left click to cast }}
                 <label
-                  class='resource-label rollable flexlarge align-left'
-                  data-action='useSpell'
-                  data-item-id='{{spell._id}}'
-                  title='{{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}'
-                >{{spell.name}}{{#unless (eq spell.system.damageBase '-')}} ({{localize (lookup @root.config.damageTypes spell.system.damageBase)}}){{/unless}}</label>
-                <span class='spell-info'>
-                  {{#if spell.system.delivery.cost}}
-                    <i class='fas fa-droplet' title='Mana Cost'></i> {{spell.system.delivery.cost}}
-                  {{/if}}
+                  class='resource-label rollable flex-2 align-left'
+                  data-action='castSpell'
+                  data-spell-id='{{spell._id}}'
+                >{{spell.name}}</label>
+
+                {{! Damage Amount - Left click increase, Right click decrease }}
+                {{#unless (eq spell.system.damageBase '-')}}
+                  <span
+                    class='spell-damage-dice clickable flex-05'
+                    data-action='modifyDamage'
+                    data-spell-id='{{spell._id}}'
+                    data-damage-type='{{spell.system.damageBase}}'
+                    title='Left click to increase damage (+1 mana per d6), Right click to decrease'
+                  >1d6</span>
+                {{else}}
+                  <span class='flex-05'>—</span>
+                {{/unless}}
+
+                {{! Damage Type - Display only }}
+                <span class='spell-damage-type flex-1'>
+                  {{#unless (eq spell.system.damageBase '-')}}
+                    {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
+                  {{/unless}}
                 </span>
+
+                {{! Delivery Type - Dropdown }}
+                <select
+                  class='spell-delivery-select flex-2'
+                  data-spell-id='{{spell._id}}'
+                >
+                  <option value=''>Delivery</option>
+                  {{#each @root.config.deliveryTypes as |label key|}}
+                    <option value='{{key}}'>{{localize label}}</option>
+                  {{/each}}
+                </select>
+
+                {{! Delivery Cost - Left click increase, Right click decrease, shows hint on hover }}
+                <span
+                  class='spell-delivery-cost disabled flex-05'
+                  data-action='modifyDelivery'
+                  data-spell-id='{{spell._id}}'
+                  title='Select a delivery type first'
+                >—</span>
+
+                {{! Mana Total - Display only }}
+                <span class='spell-mana-total flex-05'>0</span>
               </div>
             {{/if}}
           {{/each}}

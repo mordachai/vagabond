@@ -60,6 +60,10 @@
   --vagabond-c-transparent: #000000c0;
 }
 
+.flex-05 {
+  flex: 0.5;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -530,20 +534,6 @@
 }
 
 /* Styles limited to vagabond sheets */
-.vagabond {
-  /* Character Name at Top - Full Width */
-  /* Combined Character Info Row */
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
-  /* Panel content area */
-  /* Features & Perks columns */
-  /* Mana info row */
-  /* Currency fields in panel */
-}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1366,12 +1356,8 @@
   align-items: center;
   overflow: hidden;
 }
-.vagabond .spell-col-delivery {
-  flex: 0 0 120px;
-  text-align: center;
-}
 .vagabond .spell-col-damage {
-  flex: 0 0 100px;
+  flex: 0 0 120px;
   text-align: center;
 }
 .vagabond .spell-col-favorite {
@@ -1767,6 +1753,9 @@
   font-weight: 400;
   line-height: 1.2;
 }
+.vagabond {
+  /* Character Name at Top - Full Width */
+}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1816,6 +1805,9 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
+}
+.vagabond {
+  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1981,6 +1973,11 @@
     font-size: 12px;
   }
 }
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -2005,11 +2002,20 @@
   backface-visibility: hidden;
   will-change: transform;
 }
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
+}
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -2024,6 +2030,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.vagabond {
+  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -2061,6 +2070,9 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
+.vagabond {
+  /* Features & Perks columns */
+}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -2069,6 +2081,9 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
+}
+.vagabond {
+  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2104,6 +2119,9 @@
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
+}
+.vagabond {
+  /* Currency fields in panel */
 }
 .vagabond .currency-row {
   justify-content: space-around;
@@ -2973,4 +2991,120 @@ details[open] .vagabond .npc-immunity-toggle i {
     font-size: 18px;
     text-align: center;
   }
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable,
+.vagabond .favorited-spell .spell-delivery-cost.clickable {
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable:hover,
+.vagabond .favorited-spell .spell-delivery-cost.clickable:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable:active,
+.vagabond .favorited-spell .spell-delivery-cost.clickable:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+.vagabond .favorited-spell .spell-damage-dice.disabled,
+.vagabond .favorited-spell .spell-delivery-cost.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vagabond .favorited-spell .spell-damage-dice.disabled:hover,
+.vagabond .favorited-spell .spell-delivery-cost.disabled:hover {
+  background: none;
+}
+.vagabond .favorited-spell .spell-delivery-select {
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px 0;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
+}
+.vagabond .favorited-spell .spell-delivery-select::-ms-expand {
+  display: none;
+}
+.vagabond .favorited-spell .spell-delivery-select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-delivery-select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .favorited-spell .spell-delivery-select option {
+  background: var(--vagabond-c-white);
+}
+.vagabond .favorited-spell .spell-delivery-select option:checked {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .favorited-spell .spell-mana-total {
+  font-weight: bold;
+  text-align: center;
+  color: var(--vagabond-c-tan, #d4af37);
+}
+.vagabond .favorited-spell .spell-damage-type {
+  font-size: 11px;
+  text-align: left;
+}
+.vagabond .vagabond-spell-cast h3 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+.vagabond .vagabond-spell-cast p {
+  margin: 5px 0;
+}
+.vagabond .vagabond-spell-cast strong {
+  color: var(--vagabond-c-tan, #d4af37);
+}
+.vagabond .vagabond-damage-button-container {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+.vagabond .vagabond-damage-button {
+  background: linear-gradient(135deg, var(--vagabond-c-tan, #d4af37) 0%, #b8941f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: var(--vagabond-c-dark, #2c2c2c);
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond .vagabond-damage-button:hover {
+  background: linear-gradient(135deg, #e6c04a 0%, #c9a12f 100%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+.vagabond .vagabond-damage-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond .vagabond-damage-button:disabled, .vagabond .vagabond-damage-button.rolled {
+  background: linear-gradient(135deg, #666 0%, #555 100%);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.vagabond .vagabond-damage-button:disabled:hover, .vagabond .vagabond-damage-button.rolled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond .vagabond-damage-button i {
+  margin-right: 5px;
 }

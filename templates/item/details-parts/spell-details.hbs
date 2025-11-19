@@ -46,40 +46,6 @@
       </div>
     </div>
 
-    {{! Delivery Section - Single Line Layout }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.delivery.label'}}</label>
-      <div class='flexrow flex-center-gap-8'>
-        <select name='system.delivery.type' class='flex-2'>
-          <option value='aura' {{#if (eq system.delivery.type 'aura')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Aura'}}</option>
-          <option value='cone' {{#if (eq system.delivery.type 'cone')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cone'}}</option>
-          <option value='cube' {{#if (eq system.delivery.type 'cube')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Cube'}}</option>
-          <option value='imbue' {{#if (eq system.delivery.type 'imbue')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Imbue'}}</option>
-          <option value='glyph' {{#if (eq system.delivery.type 'glyph')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Glyph'}}</option>
-          <option value='line' {{#if (eq system.delivery.type 'line')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Line'}}</option>
-          <option value='remote' {{#if (eq system.delivery.type 'remote')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Remote'}}</option>
-          <option value='sphere' {{#if (eq system.delivery.type 'sphere')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Sphere'}}</option>
-          <option value='touch' {{#if (eq system.delivery.type 'touch')}}selected{{/if}}>{{localize 'VAGABOND.DeliveryTypes.Touch'}}</option>
-        </select>
-        <input
-          type='number'
-          name='system.delivery.cost'
-          value='{{system.delivery.cost}}'
-          min='0'
-          data-dtype='Number'
-          class='flex-1-min-60'
-          placeholder='Cost'
-        />
-        <input
-          type='text'
-          name='system.delivery.increase'
-          value='{{system.delivery.increase}}'
-          placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.delivery.increase.hint"}}'
-          class='flex-5'
-        />
-      </div>
-    </div>
-
     {{! Crit }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>

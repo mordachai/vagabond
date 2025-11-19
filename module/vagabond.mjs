@@ -13,6 +13,36 @@ const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
 
 /* -------------------------------------------- */
+/*  Game Settings                               */
+/* -------------------------------------------- */
+
+/**
+ * Register game settings for the Vagabond system
+ */
+function registerGameSettings() {
+  // Setting 1: Roll damage with check
+  game.settings.register('vagabond', 'rollDamageWithCheck', {
+    name: 'VAGABOND.Settings.rollDamageWithCheck.name',
+    hint: 'VAGABOND.Settings.rollDamageWithCheck.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
+  // Setting 2: Always roll damage (even on miss)
+  game.settings.register('vagabond', 'alwaysRollDamage', {
+    name: 'VAGABOND.Settings.alwaysRollDamage.name',
+    hint: 'VAGABOND.Settings.alwaysRollDamage.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+}
+
+/* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 
@@ -83,6 +113,9 @@ Hooks.once('init', function () {
     makeDefault: true,
     label: 'VAGABOND.SheetLabels.Item',
   });
+
+  // Register game settings
+  registerGameSettings();
 });
 
 /* -------------------------------------------- */
@@ -107,6 +140,30 @@ Handlebars.registerHelper('contains', function (array, value) {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+});
+
+/* -------------------------------------------- */
+/*  Chat Message Hooks                          */
+/* -------------------------------------------- */
+
+/**
+ * Handle rendering chat messages - adds event listeners for damage buttons
+ */
+Hooks.on('renderChatMessageHTML', async (message, html) => {
+  // Add click handler for damage buttons (html is now HTMLElement, not jQuery)
+  const damageButtons = html.querySelectorAll('.vagabond-damage-button');
+
+  damageButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      // Import damage helper dynamically
+      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+
+      // Roll damage from button
+      await VagabondDamageHelper.rollDamageFromButton(button, message.id);
+    });
+  });
 });
 
 /* -------------------------------------------- */

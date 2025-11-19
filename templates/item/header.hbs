@@ -119,7 +119,8 @@
 
     {{#if (eq item.type 'class')}}
       <div class='class-spellcaster-fields'>
-        <div class='grid grid-3col'>
+        {{! First row: Is Spellcaster + Mana Multiplier }}
+        <div class='grid grid-2col'>
           <div class='resource'>
             <label class='resource-label'>
               <input
@@ -132,8 +133,23 @@
             </label>
           </div>
           <div class='resource'>
+            <label class='resource-label'>Mana Multiplier</label>
+            <input
+              type='number'
+              name='system.manaMultiplier'
+              value='{{system.manaMultiplier}}'
+              min='0'
+              data-dtype='Number'
+              {{#unless editable}}disabled{{/unless}}
+              {{#unless system.isSpellcaster}}disabled{{/unless}}
+            />
+          </div>
+        </div>
+        {{! Second row: Mana Skill + Casting Stat }}
+        <div class='grid grid-2col'>
+          <div class='resource'>
             <label class='resource-label'>Mana Skill</label>
-            <select name='system.manaSkill' {{#unless editable}}disabled{{/unless}}>
+            <select name='system.manaSkill' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
               <option value=''>-- Select Skill --</option>
               <option value='arcana' {{#if (eq system.manaSkill 'arcana')}}selected{{/if}}>Arcana</option>
               <option value='craft' {{#if (eq system.manaSkill 'craft')}}selected{{/if}}>Craft</option>
@@ -151,7 +167,7 @@
           </div>
           <div class='resource'>
             <label class='resource-label'>Casting Stat</label>
-            <select name='system.castingStat' {{#unless editable}}disabled{{/unless}}>
+            <select name='system.castingStat' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
               <option value=''>-- Select Stat --</option>
               <option value='might' {{#if (eq system.castingStat 'might')}}selected{{/if}}>Might</option>
               <option value='dexterity' {{#if (eq system.castingStat 'dexterity')}}selected{{/if}}>Dexterity</option>

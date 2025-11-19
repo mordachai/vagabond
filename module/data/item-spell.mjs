@@ -28,40 +28,6 @@ export default class VagabondSpell extends VagabondItemBase {
       }
     });
 
-    // Delivery - how the spell is delivered
-    schema.delivery = new fields.SchemaField({
-      type: new fields.StringField({
-        required: true,
-        nullable: false,
-        initial: 'touch',
-        blank: false,
-        choices: {
-          'aura': 'Aura',
-          'cone': 'Cone',
-          'cube': 'Cube',
-          'imbue': 'Imbue',
-          'glyph': 'Glyph',
-          'line': 'Line',
-          'remote': 'Remote',
-          'sphere': 'Sphere',
-          'touch': 'Touch'
-        }
-      }),
-      cost: new fields.NumberField({
-        required: true,
-        nullable: false,
-        integer: true,
-        initial: 0,
-        min: 0
-      }),
-      increase: new fields.StringField({
-        required: false,
-        nullable: false,
-        initial: '',
-        blank: true
-      })
-    });
-
     // Duration - how long the spell lasts
     schema.duration = new fields.StringField({
       ...requiredString,
