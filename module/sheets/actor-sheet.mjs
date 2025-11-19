@@ -437,6 +437,79 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
     });
 
+    // Add HP heart icon click handlers for PC
+    const pcHpIcon = this.element.querySelector('.hp-icon');
+    if (pcHpIcon) {
+      // Left-click: increment HP
+      pcHpIcon.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentHP = this.actor.system.health.value || 0;
+        const maxHP = this.actor.system.health.max || 10;
+        const newHP = Math.min(currentHP + 1, maxHP);
+
+        // Trigger heartbeat animation
+        pcHpIcon.classList.add('heartbeat');
+        setTimeout(() => pcHpIcon.classList.remove('heartbeat'), 300);
+
+        await this.actor.update({ 'system.health.value': newHP });
+      });
+
+      // Right-click: decrement HP
+      pcHpIcon.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentHP = this.actor.system.health.value || 0;
+        const newHP = Math.max(currentHP - 1, 0);
+
+        // Trigger heartbeat animation
+        pcHpIcon.classList.add('heartbeat');
+        setTimeout(() => pcHpIcon.classList.remove('heartbeat'), 300);
+
+        await this.actor.update({ 'system.health.value': newHP });
+      });
+
+      // Make the heart icon clickable
+      pcHpIcon.style.cursor = 'pointer';
+    }
+
+    // Add HP heart icon click handlers for NPC
+    const npcHpIcon = this.element.querySelector('.npc-hp-heart-icon');
+    if (npcHpIcon) {
+      // Left-click: increment HP
+      npcHpIcon.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentHP = this.actor.system.health.value || 0;
+        const maxHP = this.actor.system.health.max || 10;
+        const newHP = Math.min(currentHP + 1, maxHP);
+
+        // Trigger heartbeat animation
+        npcHpIcon.classList.add('heartbeat');
+        setTimeout(() => npcHpIcon.classList.remove('heartbeat'), 300);
+
+        await this.actor.update({ 'system.health.value': newHP });
+      });
+
+      // Right-click: decrement HP
+      npcHpIcon.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentHP = this.actor.system.health.value || 0;
+        const newHP = Math.max(currentHP - 1, 0);
+
+        // Trigger heartbeat animation
+        npcHpIcon.classList.add('heartbeat');
+        setTimeout(() => npcHpIcon.classList.remove('heartbeat'), 300);
+
+        await this.actor.update({ 'system.health.value': newHP });
+      });
+    }
+
     // Add right-click context menu handlers for ancestry and class
     const ancestryName = this.element.querySelector('.ancestry-name');
     if (ancestryName) {
