@@ -335,7 +335,7 @@
   text-align: center;
   width: 36px;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-  padding: 0;
+  padding-bottom: 4px;
   margin-top: -2px;
   box-shadow: none;
 
@@ -365,7 +365,7 @@
 }
 
 .npc-hp-max {
-  font-size: 15px;
+  font-size: 20px;
   font-family: $font-secondary;
   font-weight: normal;
   color: var(--vagabond-c-dark);
