@@ -436,6 +436,7 @@
 
     .stat-value-input {
       width: auto;
+      height: 40px;
       min-width: 40px;
       max-width: 50px;
       font-size: 22px;
@@ -472,8 +473,8 @@
   margin-right: 8px;
 
   .favor-hinder-toggle {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
     border: none;
     background: transparent;

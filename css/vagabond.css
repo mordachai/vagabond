@@ -530,6 +530,20 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond {
+  /* Character Name at Top - Full Width */
+  /* Combined Character Info Row */
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+  /* When open, panel at natural position next to main sheet */
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Panel content area */
+  /* Features & Perks columns */
+  /* Mana info row */
+  /* Currency fields in panel */
+}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1753,9 +1767,6 @@
   font-weight: 400;
   line-height: 1.2;
 }
-.vagabond {
-  /* Character Name at Top - Full Width */
-}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1806,9 +1817,6 @@
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
 }
-.vagabond {
-  /* Combined Character Info Row */
-}
 .vagabond .character-info-combined-row {
   text-align: center;
   margin-bottom: 12px;
@@ -1850,6 +1858,7 @@
 }
 .vagabond .speed-stats-row .stat-item .stat-value-input {
   width: auto;
+  height: 40px;
   min-width: 40px;
   max-width: 50px;
   font-size: 22px;
@@ -1879,8 +1888,8 @@
   margin-right: 8px;
 }
 .vagabond .favor-hinder-toggle-container .favor-hinder-toggle {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 8px;
   border: none;
   background: transparent;
@@ -1937,11 +1946,6 @@
     font-size: 12px;
   }
 }
-.vagabond {
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -1966,20 +1970,11 @@
   backface-visibility: hidden;
   will-change: transform;
 }
-.vagabond {
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
-.vagabond {
-  /* When open, panel at natural position next to main sheet */
-}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
-}
-.vagabond {
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -1994,9 +1989,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.vagabond {
-  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -2034,9 +2026,6 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
-.vagabond {
-  /* Features & Perks columns */
-}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -2045,9 +2034,6 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
-}
-.vagabond {
-  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2083,9 +2069,6 @@
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
-}
-.vagabond {
-  /* Currency fields in panel */
 }
 .vagabond .currency-row {
   justify-content: space-around;
