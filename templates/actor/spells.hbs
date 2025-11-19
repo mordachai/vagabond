@@ -19,7 +19,6 @@
   <ol class='items-list'>
     <li class='item flexrow items-header'>
       <div class='item-name spell-col-name'>Name</div>
-      <div class='item-delivery spell-col-delivery'>Delivery</div>
       <div class='item-damage spell-col-damage'>Damage</div>
       <div class='spell-col-favorite' data-tooltip='Favorite'>F</div>
       {{#if @root.editable}}
@@ -41,19 +40,13 @@
               height='24'
             />
           </div>
-          <div class='clickable' data-action='useSpell' data-item-id='{{spell._id}}' data-tooltip='Use spell'>{{spell.name}}</div>
-        </div>
-        <div class='item-delivery item-prop spell-col-delivery'>
-          {{localize (lookup @root.config.deliveryTypes spell.system.delivery.type)}}
-          {{#if spell.system.delivery.cost}}
-            ({{spell.system.delivery.cost}})
-          {{/if}}
+          <div class='clickable' data-action='viewDoc' data-tooltip='View/Edit spell'>{{spell.name}}</div>
         </div>
         <div class='item-damage item-prop spell-col-damage'>
           {{#unless (eq spell.system.damageBase '-')}}
             {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
           {{else}}
-            -
+            —
           {{/unless}}
         </div>
         <div class='spell-col-favorite' data-action='toggleSpellFavorite' data-item-id='{{spell._id}}'>

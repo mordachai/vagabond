@@ -300,17 +300,20 @@
   overflow: hidden;
 }
 
-.spell-col-delivery {
+.spell-col-damage {
   flex: 0 0 120px;
   text-align: center;
 }
 
-.spell-col-damage {
-  flex: 0 0 100px;
+.spell-col-favorite {
+  flex: 0 0 30px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.spell-col-favorite {
+.spell-col-controls {
   flex: 0 0 30px;
   text-align: center;
   display: flex;

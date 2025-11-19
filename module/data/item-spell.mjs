@@ -28,28 +28,6 @@ export default class VagabondSpell extends VagabondItemBase {
       }
     });
 
-    // Delivery - how the spell is delivered (optional reference only, not enforced)
-    // Note: Delivery type, cost, and increases are determined at cast time, not stored on spell
-    schema.delivery = new fields.SchemaField({
-      type: new fields.StringField({
-        required: false,
-        nullable: true,
-        initial: null,
-        blank: true,
-        choices: {
-          'aura': 'Aura',
-          'cone': 'Cone',
-          'cube': 'Cube',
-          'imbue': 'Imbue',
-          'glyph': 'Glyph',
-          'line': 'Line',
-          'remote': 'Remote',
-          'sphere': 'Sphere',
-          'touch': 'Touch'
-        }
-      })
-    });
-
     // Duration - how long the spell lasts
     schema.duration = new fields.StringField({
       ...requiredString,

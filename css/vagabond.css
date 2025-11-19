@@ -1356,12 +1356,8 @@
   align-items: center;
   overflow: hidden;
 }
-.vagabond .spell-col-delivery {
-  flex: 0 0 120px;
-  text-align: center;
-}
 .vagabond .spell-col-damage {
-  flex: 0 0 100px;
+  flex: 0 0 120px;
   text-align: center;
 }
 .vagabond .spell-col-favorite {
@@ -1371,10 +1367,17 @@
   align-items: center;
   justify-content: center;
 }
-.vagabond .spell-col-favorite .favorite-active {
+.vagabond .spell-col-controls {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .spell-col-controls .favorite-active {
   color: gold;
 }
-.vagabond .spell-col-favorite .favorite-inactive {
+.vagabond .spell-col-controls .favorite-inactive {
   color: var(--vagabond-c-faint);
 }
 .vagabond .effects-header {
