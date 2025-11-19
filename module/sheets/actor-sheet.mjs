@@ -1656,7 +1656,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Add damage button if damage wasn't auto-rolled
       if (!damageRoll) {
-        const damageFormula = weapon.getDamageFormula(this.actor);
+        const damageFormula = weapon.system.currentDamage;
         const damageButton = VagabondDamageHelper.createDamageButton(
           this.actor.id,
           weapon.id,
@@ -1860,10 +1860,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const newMana = this.actor.system.mana.current - costs.totalCost;
       await this.actor.update({ 'system.mana.current': newMana });
       ui.notifications.info(`${spell.name} cast successfully! ${costs.totalCost} mana spent.`);
-    } else {
-      // Failed - no mana cost
-      ui.notifications.warn(`${spell.name} cast failed!`);
     }
+    // Failed - no mana cost (chat card will show failure)
 
     // Create chat message
     await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess);
