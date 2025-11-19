@@ -1886,6 +1886,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Build flavor text
     let flavor = `<div class="vagabond-spell-cast">`;
     flavor += `<h3>${spell.name}</h3>`;
+
+    // Add spell description if present
+    if (spell.system.description) {
+      flavor += `<p><em>${spell.system.description}</em></p>`;
+    }
+
     if (damageText) {
       flavor += `<p><strong>Damage:</strong> ${damageText}</p>`;
     }
