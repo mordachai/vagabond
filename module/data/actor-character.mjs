@@ -277,6 +277,7 @@ export default class VagabondCharacter extends VagabondActorBase {
         id: classItem.id,
         name: classItem.name,
         isSpellcaster: classItem.system.isSpellcaster,
+        manaMultiplier: classItem.system.manaMultiplier,
         manaSkill: classItem.system.manaSkill,
         castingStat: classItem.system.castingStat
       };
@@ -402,13 +403,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       // Get the casting stat value
       const castingStat = classItem.system.castingStat || 'reason';
       const castingStatValue = this.stats[castingStat]?.value || 8;
-
-      // Max mana = Casting Stat value (from class)
-      this.mana.max = castingStatValue;
-
-      // Casting max = Level + Casting Stat
       const level = this.attributes.level.value || 1;
-      this.mana.castingMax = level + castingStatValue;
+      const manaMultiplier = classItem.system.manaMultiplier || 2;
+
+      // Max mana = Mana Multiplier × Level
+      this.mana.max = manaMultiplier * level;
+
+      // Casting max = Casting Stat + (Half Level rounded up)
+      this.mana.castingMax = castingStatValue + Math.ceil(level / 2);
     } else {
       // Not a spellcaster
       this.mana.max = 0;

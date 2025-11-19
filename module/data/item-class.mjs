@@ -18,6 +18,17 @@ export default class VagabondClass extends VagabondItemBase {
       hint: 'VAGABOND.Item.Class.FIELDS.isSpellcaster.hint'
     });
 
+    // Mana multiplier - multiplier for max mana calculation (Max Mana = Mana Multiplier × Level)
+    schema.manaMultiplier = new fields.NumberField({
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: 2,
+      min: 0,
+      label: 'VAGABOND.Item.Class.FIELDS.manaMultiplier.label',
+      hint: 'VAGABOND.Item.Class.FIELDS.manaMultiplier.hint'
+    });
+
     // Mana skill - which skill is used for mana calculations
     schema.manaSkill = new fields.StringField({
       initial: null,
