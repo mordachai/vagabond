@@ -530,20 +530,6 @@
 }
 
 /* Styles limited to vagabond sheets */
-.vagabond {
-  /* Character Name at Top - Full Width */
-  /* Combined Character Info Row */
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
-  /* Panel content area */
-  /* Features & Perks columns */
-  /* Mana info row */
-  /* Currency fields in panel */
-}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1767,6 +1753,9 @@
   font-weight: 400;
   line-height: 1.2;
 }
+.vagabond {
+  /* Character Name at Top - Full Width */
+}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1816,6 +1805,9 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
+}
+.vagabond {
+  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1879,6 +1871,68 @@
   color: var(--vagabond-c-tan);
   line-height: 1.1;
 }
+.vagabond .favor-hinder-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  border: 2px solid var(--vagabond-c-tan);
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle .die-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle:hover {
+  transform: scale(1.05);
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.none {
+  border-color: #888;
+  background: rgba(136, 136, 136, 0.1);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.none .die-icon {
+  filter: grayscale(100%) brightness(0.7);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.favor {
+  border-color: #28a745;
+  background: rgba(40, 167, 69, 0.2);
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.favor .die-icon {
+  filter: grayscale(0%) brightness(1.1) saturate(1.2);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.hinder {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.2);
+  box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.hinder .die-icon {
+  filter: grayscale(0%) brightness(0.9) hue-rotate(180deg);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--vagabond-c-tan);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 @media (max-width: 600px) {
   .vagabond .sheet-header {
     flex-direction: column;
@@ -1893,6 +1947,11 @@
   .vagabond .character-info-row {
     font-size: 12px;
   }
+}
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
 }
 .vagabond .sliding-panel {
   position: absolute;
@@ -1918,11 +1977,20 @@
   backface-visibility: hidden;
   will-change: transform;
 }
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
+}
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -1937,6 +2005,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.vagabond {
+  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -1974,6 +2045,9 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
+.vagabond {
+  /* Features & Perks columns */
+}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -1982,6 +2056,9 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
+}
+.vagabond {
+  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2017,6 +2094,9 @@
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
+}
+.vagabond {
+  /* Currency fields in panel */
 }
 .vagabond .currency-row {
   justify-content: space-around;

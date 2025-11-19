@@ -45,6 +45,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       removeStatusImmunity: this._onRemoveStatusImmunity,  // NPC status immunity remove
       selectZone: this._onSelectZone,  // NPC zone selection
       clearZone: this._onClearZone,  // NPC zone clear
+      toggleFavorHinder: this._onToggleFavorHinder,  // Favor/Hinder toggle
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -817,6 +818,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle toggling the favor/hinder state (none -> favor -> hinder -> none)
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The clicked element
+   * @protected
+   */
+  static async _onToggleFavorHinder(event, target) {
+    event.preventDefault();
+    const currentState = this.actor.system.favorHinder || 'none';
+
+    // Cycle through states: none -> favor -> hinder -> none
+    let nextState;
+    if (currentState === 'none') {
+      nextState = 'favor';
+    } else if (currentState === 'favor') {
+      nextState = 'hinder';
+    } else {
+      nextState = 'none';
+    }
+
+    await this.actor.update({ 'system.favorHinder': nextState });
+  }
+
+  /**
    * Handle toggling the NPC effects accordion (open/close)
    *
    * @this VagabondActorSheet
@@ -1350,8 +1376,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     try {
+      // Get favor/hinder state
+      const favorHinder = this.actor.system.favorHinder || 'none';
+
       // Roll attack using weapon's method
-      const attackResult = await weapon.rollAttack(this.actor);
+      const attackResult = await weapon.rollAttack(this.actor, favorHinder);
 
       // Roll damage if attack hit
       let damageRoll = null;
@@ -1578,7 +1607,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       let label = dataset.label ? `[ability] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
+
+      // Apply favor/hinder if applicable
+      const favorHinder = this.actor.system.favorHinder || 'none';
+      let rollFormula = dataset.roll;
+
+      if (favorHinder === 'favor') {
+        rollFormula = `${dataset.roll} + 1d6`;
+        label += ' [Favor +1d6]';
+      } else if (favorHinder === 'hinder') {
+        rollFormula = `${dataset.roll} - 1d6`;
+        label += ' [Hinder -1d6]';
+      }
+
+      let roll = new Roll(rollFormula, this.actor.getRollData());
       await roll.evaluate();
       await VagabondChatHelper.postRoll(this.actor, roll, label);
       return roll;

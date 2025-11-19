@@ -149,6 +149,27 @@
 
     {{! Speed Stats - All in one row with space around }}
     <div class='speed-stats-row'>
+      {{! Favor/Hinder Toggle Button }}
+      <div class='favor-hinder-toggle-container'>
+        <button
+          type='button'
+          class='favor-hinder-toggle {{system.favorHinder}}'
+          data-action='toggleFavorHinder'
+          data-tooltip='{{#if (eq system.favorHinder "favor")}}Favor: +1d6 to rolls{{else if (eq system.favorHinder "hinder")}}Hinder: -1d6 from rolls{{else}}No modifier{{/if}}'
+        >
+          <img src='systems/vagabond/assets/images/hinder-die.webp' alt='Die' class='die-icon' />
+        </button>
+        <label class='favor-hinder-label'>
+          {{#if (eq system.favorHinder "favor")}}
+            Favor
+          {{else if (eq system.favorHinder "hinder")}}
+            Hinder
+          {{else}}
+            None
+          {{/if}}
+        </label>
+      </div>
+
       <div class='stat-item'>
         <input
           type='text'

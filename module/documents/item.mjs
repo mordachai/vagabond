@@ -86,7 +86,7 @@ export class VagabondItem extends Item {
    * @param {VagabondActor} actor - The actor making the attack
    * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill
    */
-  async rollAttack(actor) {
+  async rollAttack(actor, favorHinder = 'none') {
     this.validateCanAttack();
 
     // Get the weapon skill and difficulty
@@ -94,8 +94,16 @@ export class VagabondItem extends Item {
     const weaponSkill = actor.system.weaponSkills[weaponSkillKey];
     const difficulty = weaponSkill?.difficulty || 10;
 
-    // Roll the attack (d20)
-    const roll = new Roll('d20', actor.getRollData());
+    // Build roll formula with favor/hinder
+    let rollFormula = 'd20';
+    if (favorHinder === 'favor') {
+      rollFormula = 'd20 + 1d6';
+    } else if (favorHinder === 'hinder') {
+      rollFormula = 'd20 - 1d6';
+    }
+
+    // Roll the attack
+    const roll = new Roll(rollFormula, actor.getRollData());
     await roll.evaluate();
 
     // Check if the attack succeeds
@@ -109,6 +117,7 @@ export class VagabondItem extends Item {
       isCritical,
       weaponSkill,
       weaponSkillKey,
+      favorHinder,
     };
   }
 
@@ -135,9 +144,18 @@ export class VagabondItem extends Item {
    * @returns {string} HTML flavor text
    */
   buildAttackFlavor(attackResult, damageRoll = null) {
-    const { difficulty, isHit, isCritical, weaponSkill, weaponSkillKey } = attackResult;
+    const { difficulty, isHit, isCritical, weaponSkill, weaponSkillKey, favorHinder } = attackResult;
 
-    let flavorText = `<strong>${this.name}</strong> Attack<br/>`;
+    let flavorText = `<strong>${this.name}</strong> Attack`;
+
+    // Add favor/hinder indicator if applicable
+    if (favorHinder === 'favor') {
+      flavorText += ` [Favor +1d6]`;
+    } else if (favorHinder === 'hinder') {
+      flavorText += ` [Hinder -1d6]`;
+    }
+    flavorText += '<br/>';
+
     flavorText += `<strong>Weapon Skill:</strong> ${weaponSkill?.label || weaponSkillKey} (Difficulty ${difficulty})<br/>`;
     flavorText += `<strong>Attack Roll:</strong> ${attackResult.roll.total}`;
 
