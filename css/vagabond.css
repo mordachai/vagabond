@@ -2615,6 +2615,7 @@
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
+  text-transform: capitalize;
 }
 .vagabond .npc-immunity-dropdown {
   min-width: fit-content;
