@@ -1938,14 +1938,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
     const deliveryText = `${deliveryName} ${sizeHint}`.trim();
 
-    // Get casting stat for crit bonus
-    const castingStat = this.actor.system.classData?.castingStat || 'reason';
+    // Get the mana skill's stat for crit bonus damage
+    const manaSkillKey = this.actor.system.classData?.manaSkill;
+    const manaSkill = manaSkillKey ? this.actor.system.skills[manaSkillKey] : null;
+    const manaSkillStat = manaSkill?.stat || 'reason'; // Fallback to reason if not found
 
     // Determine if we should auto-roll damage
     let damageRoll = null;
     if (spell.system.damageBase !== '-') {
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
-        damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state, isCritical, castingStat);
+        damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state, isCritical, manaSkillStat);
       }
     }
 
@@ -1994,7 +1996,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           damageType: spell.system.damageBase,
           damageDice: state.damageDice,
           isCritical: isCritical,
-          statKey: castingStat
+          statKey: manaSkillStat
         }
       );
       flavor += damageButton;
