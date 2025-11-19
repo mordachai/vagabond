@@ -2400,13 +2400,15 @@
   padding: 8px 0;
 }
 .vagabond .npc-section-content.accordion-content {
-  max-height: 500px;
-  overflow: hidden;
+  max-height: 1000px;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: max-height 0.3s ease;
 }
 .vagabond .npc-section-content.accordion-content.collapsed {
   max-height: 0;
   padding: 0;
+  overflow: hidden;
 }
 .vagabond .npc-actions-list {
   display: flex;
@@ -2478,6 +2480,9 @@
   outline: none;
 }
 .vagabond .npc-effects .effects-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -2496,13 +2501,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px;
+  padding: 8px;
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 4px;
   background: var(--vagabond-c-faint);
 }
 .vagabond .npc-effects .effect:hover {
-  background: var(--vagabond-c-transparent);
+  background: var(--vagabond-c-beige);
+  border-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-effects .effect-name {
   display: flex;
@@ -2510,26 +2516,76 @@
   gap: 8px;
   font-size: 13px;
   font-family: "Paradigm", serif;
+  font-weight: 600;
   color: var(--vagabond-c-dark);
+  flex: 1;
 }
+.vagabond .npc-effects .effect-image,
 .vagabond .npc-effects .effect-icon {
   width: 24px;
   height: 24px;
-  border-radius: 2px;
+  border-radius: 3px;
   border: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .npc-effects .effect-source {
+  font-size: 12px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-muted);
+  min-width: 80px;
+  text-align: center;
+}
+.vagabond .npc-effects .effect-duration {
+  font-size: 12px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+  min-width: 60px;
+  text-align: center;
 }
 .vagabond .npc-effects .effect-controls {
   display: flex;
-  gap: 4px;
+  gap: 6px;
+  align-items: center;
 }
 .vagabond .npc-effects .effect-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: var(--vagabond-c-muted);
   font-size: 12px;
-  padding: 4px;
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s ease;
 }
 .vagabond .npc-effects .effect-control:hover {
   color: var(--vagabond-c-dark);
+}
+.vagabond .npc-effects .effect-control i {
+  font-size: 12px;
+}
+.vagabond .npc-effects .effect-create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  border: 1px dashed var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 12px;
+  font-family: "Paradigm", serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .npc-effects .effect-create:hover {
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-effects .effect-create i {
+  font-size: 10px;
 }
 .vagabond .npc-empty-section {
   text-align: center;

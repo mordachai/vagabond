@@ -190,22 +190,27 @@
     </div>
   </div>
 
-  {{! NPC Stats Row - Senses }}
-  <div class='npc-stats-row-senses'>
-    {{! Senses }}
-    <div class='npc-stat-field npc-senses-field'>
-      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</label>
-      <input
-        type='text'
-        name='system.senses'
-        value='{{system.senses}}'
-        data-dtype='String'
-        class='npc-field-input'
-        placeholder='{{#unless system.locked}}Darkvision 60 ft{{/unless}}'
-        {{#if system.locked}}readonly{{/if}}
-      />
+  {{! NPC Stats Row - Senses (hide when locked and empty) }}
+  {{#unless (and system.locked (not system.senses))}}
+    <div class='npc-stats-row-senses'>
+      {{! Senses }}
+      <div class='npc-stat-field npc-senses-field'>
+        <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</label>
+        {{#if system.locked}}
+          <div class='npc-field-display'>{{system.senses}}</div>
+        {{else}}
+          <input
+            type='text'
+            name='system.senses'
+            value='{{system.senses}}'
+            data-dtype='String'
+            class='npc-field-input'
+            placeholder='Darkvision 60 ft'
+          />
+        {{/if}}
+      </div>
     </div>
-  </div>
+  {{/unless}}
 
   {{! Immunities Section }}
   <div class='npc-immunities-section'>

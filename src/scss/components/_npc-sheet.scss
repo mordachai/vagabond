@@ -500,13 +500,15 @@
 
   // Accordion content (collapsed by default)
   &.accordion-content {
-    max-height: 500px;
-    overflow: hidden;
+    max-height: 1000px;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: max-height 0.3s ease;
 
     &.collapsed {
       max-height: 0;
       padding: 0;
+      overflow: hidden;
     }
   }
 }
@@ -599,6 +601,9 @@
 // Effects Section (in accordion)
 .npc-effects {
   .effects-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -620,13 +625,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px;
+    padding: 8px;
     border: 1px solid var(--vagabond-c-tan);
     border-radius: 4px;
     background: var(--vagabond-c-faint);
 
     &:hover {
-      background: var(--vagabond-c-transparent);
+      background: var(--vagabond-c-beige);
+      border-color: var(--vagabond-c-dark);
     }
   }
 
@@ -636,29 +642,85 @@
     gap: 8px;
     font-size: 13px;
     font-family: $font-secondary;
+    font-weight: 600;
     color: var(--vagabond-c-dark);
+    flex: 1;
   }
 
+  .effect-image,
   .effect-icon {
     width: 24px;
     height: 24px;
-    border-radius: 2px;
+    border-radius: 3px;
     border: 1px solid var(--vagabond-c-tan);
+  }
+
+  .effect-source {
+    font-size: 12px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-muted);
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .effect-duration {
+    font-size: 12px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-dark);
+    min-width: 60px;
+    text-align: center;
   }
 
   .effect-controls {
     display: flex;
-    gap: 4px;
+    gap: 6px;
+    align-items: center;
   }
 
   .effect-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     color: var(--vagabond-c-muted);
     font-size: 12px;
-    padding: 4px;
+    width: 20px;
+    height: 20px;
+    transition: color 0.2s ease;
 
     &:hover {
       color: var(--vagabond-c-dark);
+    }
+
+    i {
+      font-size: 12px;
+    }
+  }
+
+  .effect-create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 12px;
+    margin-top: 4px;
+    border: 1px dashed var(--vagabond-c-tan);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--vagabond-c-muted);
+    font-size: 12px;
+    font-family: $font-secondary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--vagabond-c-dark);
+      color: var(--vagabond-c-dark);
+      background: var(--vagabond-c-faint);
+    }
+
+    i {
+      font-size: 10px;
     }
   }
 }
