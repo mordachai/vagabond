@@ -128,6 +128,13 @@ export default class VagabondNPC extends VagabondActorBase {
       choices: ['frontline', 'midline', 'backline']
     });
 
+    // Description
+    schema.description = new fields.StringField({
+      required: false,
+      nullable: false,
+      initial: '',
+    });
+
     return schema;
   }
 

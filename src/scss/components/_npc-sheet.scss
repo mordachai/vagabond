@@ -781,6 +781,21 @@
   display: block;
 }
 
+.npc-zone-appearing-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.npc-appearing-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: auto;
+}
+
 .npc-description-textarea {
   width: 100%;
   padding: 4px 8px;

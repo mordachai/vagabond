@@ -139,26 +139,6 @@
     </div>
   </div>
 
-  {{! NPC Stats Row - Appearing }}
-  <div class='npc-stats-row-appearing'>
-    {{! Appearing }}
-    <div class='npc-stat-field'>
-      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}</label>
-      {{#if system.locked}}
-        <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
-      {{else}}
-        <input
-          type='text'
-          name='system.appearing'
-          value='{{system.appearing}}'
-          data-dtype='String'
-          class='npc-field-input'
-          placeholder='d6 or 2d8'
-        />
-      {{/if}}
-    </div>
-  </div>
-
   {{! NPC Details Section }}
   <div class='npc-details'>
     {{! Description textarea - hide when locked and empty }}
@@ -174,8 +154,8 @@
       </div>
     {{/unless}}
 
-    {{! Zone }}
-    <div class='npc-detail-row'>
+    {{! Zone and Appearing on same row }}
+    <div class='npc-detail-row npc-zone-appearing-row'>
       {{#if system.locked}}
         {{#if system.zone}}
           <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</label>
@@ -207,6 +187,23 @@
           {{/if}}
         </div>
       {{/if}}
+
+      {{! Appearing }}
+      <div class='npc-appearing-field'>
+        <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}</label>
+        {{#if system.locked}}
+          <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
+        {{else}}
+          <input
+            type='text'
+            name='system.appearing'
+            value='{{system.appearing}}'
+            data-dtype='String'
+            class='npc-field-input'
+            placeholder='d6 or 2d8'
+          />
+        {{/if}}
+      </div>
     </div>
 
     {{! Senses - hide when locked and empty }}
