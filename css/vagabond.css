@@ -3072,3 +3072,43 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .vagabond-spell-cast strong {
   color: var(--vagabond-c-tan, #d4af37);
 }
+.vagabond .vagabond-damage-button-container {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+.vagabond .vagabond-damage-button {
+  background: linear-gradient(135deg, var(--vagabond-c-tan, #d4af37) 0%, #b8941f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: var(--vagabond-c-dark, #2c2c2c);
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond .vagabond-damage-button:hover {
+  background: linear-gradient(135deg, #e6c04a 0%, #c9a12f 100%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+.vagabond .vagabond-damage-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond .vagabond-damage-button:disabled, .vagabond .vagabond-damage-button.rolled {
+  background: linear-gradient(135deg, #666 0%, #555 100%);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.vagabond .vagabond-damage-button:disabled:hover, .vagabond .vagabond-damage-button.rolled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond .vagabond-damage-button i {
+  margin-right: 5px;
+}

@@ -151,6 +151,16 @@
       "Actor": "Vagabond Actor Sheet",
       "Item": "Vagabond Item Sheet"
     },
+    "Settings": {
+      "rollDamageWithCheck": {
+        "name": "Roll Damage With Check",
+        "hint": "Roll damage together with attack/spell checks instead of waiting for confirmation. When disabled, a manual damage button will appear in chat."
+      },
+      "alwaysRollDamage": {
+        "name": "Always Roll Damage",
+        "hint": "When rolling damage with checks, roll damage even on misses (to show the intensity of the miss). Only applies when 'Roll Damage With Check' is enabled."
+      }
+    },
     "Actor": {
       "Tabs": {
         "Biography": "Biography",

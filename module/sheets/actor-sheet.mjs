@@ -1636,20 +1636,36 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     try {
+      // Import damage helper
+      const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
+
       // Get favor/hinder state
       const favorHinder = this.actor.system.favorHinder || 'none';
 
       // Roll attack using weapon's method
       const attackResult = await weapon.rollAttack(this.actor, favorHinder);
 
-      // Roll damage if attack hit
+      // Determine if damage should be auto-rolled
       let damageRoll = null;
-      if (attackResult.isHit) {
+      if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         damageRoll = await weapon.rollDamage(this.actor);
       }
 
       // Build flavor text and post attack roll to chat
-      const flavorText = weapon.buildAttackFlavor(attackResult, damageRoll);
+      let flavorText = weapon.buildAttackFlavor(attackResult, damageRoll);
+
+      // Add damage button if damage wasn't auto-rolled
+      if (!damageRoll) {
+        const damageFormula = weapon.getDamageFormula(this.actor);
+        const damageButton = VagabondDamageHelper.createDamageButton(
+          this.actor.id,
+          weapon.id,
+          damageFormula,
+          { type: 'weapon' }
+        );
+        flavorText += damageButton;
+      }
+
       await VagabondChatHelper.postRoll(this.actor, attackResult.roll, flavorText);
 
       // If there was a damage roll, also send it to chat
@@ -1873,15 +1889,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess) {
-    // Build damage text
-    const damageText = spell.system.damageBase !== '-'
-      ? `${state.damageDice}d6 ${game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase])}`
-      : null;
+    // Import damage helper
+    const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
     // Build delivery text with size hint
     const deliveryName = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[state.deliveryType]);
     const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
     const deliveryText = `${deliveryName} ${sizeHint}`.trim();
+
+    // Determine if we should auto-roll damage
+    let damageRoll = null;
+    if (spell.system.damageBase !== '-') {
+      if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
+        damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state);
+      }
+    }
+
+    // Build damage text
+    const damageTypeName = spell.system.damageBase !== '-'
+      ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase])
+      : null;
+    const damageText = spell.system.damageBase !== '-'
+      ? `${state.damageDice}d6 ${damageTypeName}`
+      : null;
 
     // Build flavor text
     let flavor = `<div class="vagabond-spell-cast">`;
@@ -1899,9 +1929,34 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     flavor += `<p><strong>Mana Cost:</strong> ${costs.totalCost}</p>`;
     flavor += `<p><strong>Roll:</strong> ${roll.total} vs DC ${difficulty}</p>`;
     flavor += `<p><strong>Result:</strong> ${isSuccess ? '<span style="color: green;">SUCCESS</span>' : '<span style="color: red;">FAILED</span>'}</p>`;
+
+    // Add damage button if spell has damage and wasn't auto-rolled
+    if (spell.system.damageBase !== '-' && !damageRoll) {
+      const damageButton = VagabondDamageHelper.createDamageButton(
+        this.actor.id,
+        spell.id,
+        `${state.damageDice}d6`,
+        {
+          type: 'spell',
+          damageType: spell.system.damageBase,
+          damageDice: state.damageDice
+        }
+      );
+      flavor += damageButton;
+    }
+
     flavor += `</div>`;
 
     await VagabondChatHelper.postRoll(this.actor, roll, flavor);
+
+    // If damage was auto-rolled, post it separately
+    if (damageRoll) {
+      await VagabondChatHelper.postRoll(
+        this.actor,
+        damageRoll,
+        `<strong>${spell.name}</strong> Damage (${damageTypeName})`
+      );
+    }
   }
 
   /**
