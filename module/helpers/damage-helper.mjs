@@ -81,22 +81,37 @@ export class VagabondDamageHelper {
     let damageRoll;
     let flavorText;
 
+    // Add stat bonus on critical hit
+    let finalFormula = damageFormula;
+    if (context.isCritical && context.statKey) {
+      const statValue = actor.system.stats[context.statKey]?.value || 0;
+      if (statValue > 0) {
+        finalFormula += ` + ${statValue}`;
+      }
+    }
+
     switch (context.type) {
       case 'weapon':
-        damageRoll = new Roll(damageFormula, actor.getRollData());
+        damageRoll = new Roll(finalFormula, actor.getRollData());
         await damageRoll.evaluate();
         flavorText = `<strong>${item?.name || 'Weapon'}</strong> Damage`;
+        if (context.isCritical) {
+          flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
+        }
         break;
 
       case 'spell':
-        damageRoll = new Roll(damageFormula, actor.getRollData());
+        damageRoll = new Roll(finalFormula, actor.getRollData());
         await damageRoll.evaluate();
         const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[context.damageType]);
         flavorText = `<strong>${item?.name || 'Spell'}</strong> Damage (${damageTypeName})`;
+        if (context.isCritical) {
+          flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
+        }
         break;
 
       default:
-        damageRoll = new Roll(damageFormula, actor.getRollData());
+        damageRoll = new Roll(finalFormula, actor.getRollData());
         await damageRoll.evaluate();
         flavorText = 'Damage';
     }
@@ -116,12 +131,23 @@ export class VagabondDamageHelper {
    * @param {Actor} actor - The actor casting the spell
    * @param {Item} spell - The spell item
    * @param {Object} spellState - Spell state (damageDice, deliveryType, etc.)
+   * @param {boolean} isCritical - Whether this was a critical hit
+   * @param {string} statKey - The stat used for the cast (for crit bonus)
    * @returns {Roll} The damage roll
    */
-  static async rollSpellDamage(actor, spell, spellState) {
+  static async rollSpellDamage(actor, spell, spellState, isCritical = false, statKey = null) {
     if (spell.system.damageBase === '-') return null;
 
-    const damageFormula = `${spellState.damageDice}d6`;
+    let damageFormula = `${spellState.damageDice}d6`;
+
+    // Add stat bonus on critical hit
+    if (isCritical && statKey) {
+      const statValue = actor.system.stats[statKey]?.value || 0;
+      if (statValue > 0) {
+        damageFormula += ` + ${statValue}`;
+      }
+    }
+
     const roll = new Roll(damageFormula, actor.getRollData());
     await roll.evaluate();
 

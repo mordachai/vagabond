@@ -1681,7 +1681,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Determine if damage should be auto-rolled
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
-        damageRoll = await weapon.rollDamage(this.actor);
+        // Get the stat used for the attack (for crit bonus damage)
+        const statKey = attackResult.weaponSkill?.stat || null;
+        damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
       // Build flavor text and post attack roll to chat
@@ -1690,11 +1692,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Add damage button if damage wasn't auto-rolled
       if (!damageRoll) {
         const damageFormula = weapon.system.currentDamage;
+        const statKey = attackResult.weaponSkill?.stat || null;
         const damageButton = VagabondDamageHelper.createDamageButton(
           this.actor.id,
           weapon.id,
           damageFormula,
-          { type: 'weapon' }
+          {
+            type: 'weapon',
+            isCritical: attackResult.isCritical,
+            statKey: statKey
+          }
         );
         flavorText += damageButton;
       }
@@ -1931,11 +1938,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
     const deliveryText = `${deliveryName} ${sizeHint}`.trim();
 
+    // Get casting stat for crit bonus
+    const castingStat = this.actor.system.classData?.castingStat || 'reason';
+
     // Determine if we should auto-roll damage
     let damageRoll = null;
     if (spell.system.damageBase !== '-') {
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
-        damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state);
+        damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state, isCritical, castingStat);
       }
     }
 
@@ -1982,7 +1992,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         {
           type: 'spell',
           damageType: spell.system.damageBase,
-          damageDice: state.damageDice
+          damageDice: state.damageDice,
+          isCritical: isCritical,
+          statKey: castingStat
         }
       );
       flavor += damageButton;

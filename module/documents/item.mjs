@@ -125,14 +125,25 @@ export class VagabondItem extends Item {
   /**
    * Roll damage with this weapon
    * @param {VagabondActor} actor - The actor making the damage roll
+   * @param {boolean} isCritical - Whether this was a critical hit
+   * @param {string} statKey - The stat used for the attack (for crit bonus)
    * @returns {Promise<Roll>} The damage roll
    */
-  async rollDamage(actor) {
+  async rollDamage(actor, isCritical = false, statKey = null) {
     if (this.type !== 'weapon') {
       throw new Error('Not a weapon');
     }
 
-    const damageFormula = this.system.currentDamage;
+    let damageFormula = this.system.currentDamage;
+
+    // Add stat bonus on critical hit
+    if (isCritical && statKey) {
+      const statValue = actor.system.stats[statKey]?.value || 0;
+      if (statValue > 0) {
+        damageFormula += ` + ${statValue}`;
+      }
+    }
+
     const roll = new Roll(damageFormula, actor.getRollData());
     await roll.evaluate();
     return roll;
