@@ -14,50 +14,39 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 
-// Lock/Unlock Toggle
-.npc-lock-toggle {
+// Lock/Unlock Toggle - Name Row
+.npc-lock-name-row {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+
+  .npc-name-input {
+    flex: 1;
+  }
 }
 
 .npc-lock-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
   background: transparent;
   color: var(--vagabond-c-dark);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   i {
-    font-size: 12px;
+    font-size: 16px;
   }
 
-  &.locked {
-    background: var(--vagabond-c-faint);
-    border-color: var(--vagabond-c-dark);
-    color: var(--vagabond-c-dark);
-
-    &:hover {
-      background: var(--vagabond-c-tan);
-    }
-  }
-
-  &.unlocked {
-    background: transparent;
-    border-color: var(--vagabond-c-tan);
-    color: var(--vagabond-c-muted);
-
-    &:hover {
-      border-color: var(--vagabond-c-dark);
-      color: var(--vagabond-c-dark);
-    }
+  &:hover {
+    color: var(--vagabond-c-tan);
+    transform: scale(1.1);
   }
 }
 
@@ -99,23 +88,27 @@
   flex: 1;
 }
 
-// NPC Name Row
-.npc-name-row {
-  .npc-name-input {
-    width: 100%;
-    font-size: 18px;
-    font-weight: bold;
-    border: 1px solid var(--vagabond-c-tan);
-    background: transparent;
-    padding: 4px 8px;
-    color: var(--vagabond-c-dark);
-    border-radius: 4px;
+// NPC Name Input (inside lock-name-row)
+.npc-lock-name-row .npc-name-input {
+  width: 100%;
+  font-size: 20px;
+  font-family: $font-character-name;
+  font-weight: bold;
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  padding: 2px 0 4px 0;
+  color: var(--vagabond-c-dark);
+  outline: none;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+  box-shadow: none;
 
-    &:hover,
-    &:focus {
-      border-color: var(--vagabond-c-dark);
-      outline: none;
-    }
+  &:hover,
+  &:focus {
+    border-bottom: 2px solid var(--vagabond-c-dark) !important;
+    background: transparent !important;
+    box-shadow: none;
   }
 }
 
@@ -127,26 +120,40 @@
   select {
     flex: 1;
     border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
     background: transparent;
     padding: 4px 0;
-    font-size: 14px;
+    font-size: 16px;
+    font-family: $font-secondary;
     color: var(--vagabond-c-dark);
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    transition: border-bottom-color 0.2s ease;
+    box-shadow: none;
 
     // Remove chevron/dropdown arrow styling
     &::-ms-expand {
       display: none;
     }
 
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
     &:focus {
       outline: none;
+      border-bottom-color: var(--vagabond-c-dark);
+      box-shadow: none;
     }
 
     option {
-      background: var(--vagabond-c-light);
+      background: var(--vagabond-c-white);
+
+      &:checked {
+        background: var(--vagabond-c-faint);
+      }
     }
   }
 
@@ -189,7 +196,14 @@
   gap: 8px;
 }
 
-// NPC Stats Row (Senses, Armor)
+// NPC Stats Row (Senses) - Separate row
+.npc-stats-row-senses {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+// NPC Stats Row (Generic)
 .npc-stats-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -212,12 +226,22 @@
 // Zone checkboxes - single column layout
 .npc-zone-checkboxes {
   grid-template-columns: 1fr !important;
-  min-width: 150px !important;
+  min-width: 200px !important;
+
+  .npc-immunity-checkbox-item {
+    white-space: nowrap;
+
+    // Hide radio button circles for Zone selector
+    input[type='radio'] {
+      display: none;
+    }
+  }
 }
 
 .npc-field-label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: bold;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   min-width: fit-content;
@@ -229,9 +253,12 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
+  box-shadow: none;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -241,6 +268,7 @@
     outline: none;
     border-bottom-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {
@@ -263,56 +291,84 @@
 
 .npc-field-display {
   padding: 2px 0;
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
   flex: 1;
 }
 
-// HP Display (Current / Max)
-.npc-hp-display {
+// HP Display with Heart Icon
+.npc-hp-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.npc-hp-heart-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.npc-hp-heart-icon {
+  position: absolute;
+  font-size: 40px;
+  color: #c41e3a;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.npc-hp-heart-value {
+  position: relative;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  font-family: $font-secondary;
+  font-weight: bold;
+  color: var(--vagabond-c-white);
+  text-align: center;
+  width: 36px;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  margin-top: -2px;
+  box-shadow: none;
+
+  &:focus {
+    outline: none;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.npc-hp-max-display {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.npc-hp-current {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 0;
-  background: transparent;
-  font-size: 13px;
-  color: var(--vagabond-c-dark);
-  width: 40px;
-  text-align: left;
-
-  &:hover {
-    border-bottom-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: var(--vagabond-c-dark);
-    background: transparent;
-  }
-
-  &::placeholder {
-    color: var(--vagabond-c-muted);
-    opacity: 0.5;
-  }
-}
-
 .npc-hp-separator {
-  font-size: 14px;
+  font-size: 16px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   font-weight: bold;
 }
 
 .npc-hp-max {
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
-  font-weight: 600;
   min-width: 20px;
 }
 
@@ -329,10 +385,13 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
+  box-shadow: none;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -342,6 +401,7 @@
     outline: none;
     border-bottom-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {
@@ -368,9 +428,12 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
+  font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
+  box-shadow: none;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -380,6 +443,7 @@
     outline: none;
     border-bottom-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {
@@ -410,34 +474,49 @@
 
 // NPC Section (Actions, Abilities, Effects)
 .npc-section {
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
-  background: var(--vagabond-c-transparent);
+  // Clean sections with no borders or backgrounds
+  &.npc-actions,
+  &.npc-abilities,
+  &.npc-effects {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
 }
 
 .npc-section-title {
   font-size: 18px;
   font-weight: bold;
-  padding: 8px 12px;
+  font-family: $font-title;
+  padding: 8px 0;
   margin: 0;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  background: var(--vagabond-c-faint);
   color: var(--vagabond-c-dark);
+
+  // Clean sections with no borders or backgrounds
+  .npc-section.npc-actions &,
+  .npc-section.npc-abilities &,
+  .npc-section.npc-effects & {
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+  }
 
   // Accordion header styling
   &.accordion-header {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    padding: 8px 0;
 
     &:hover {
-      background: var(--vagabond-c-tan);
+      color: var(--vagabond-c-tan);
     }
 
     .accordion-icon {
-      font-size: 12px;
+      font-size: 14px;
       transition: transform 0.2s ease;
+      margin-left: auto;
 
       &.fa-chevron-down {
         transform: rotate(90deg);
@@ -447,17 +526,26 @@
 }
 
 .npc-section-content {
-  padding: 12px;
+  padding: 8px 0;
+
+  // Clean sections with reduced padding
+  .npc-section.npc-actions &,
+  .npc-section.npc-abilities &,
+  .npc-section.npc-effects & {
+    padding: 8px 0;
+  }
 
   // Accordion content (collapsed by default)
   &.accordion-content {
-    max-height: 500px;
-    overflow: hidden;
+    max-height: 1000px;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: max-height 0.3s ease;
 
     &.collapsed {
       max-height: 0;
       padding: 0;
+      overflow: hidden;
     }
   }
 }
@@ -466,31 +554,33 @@
 .npc-actions-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .npc-action-item {
-  padding: 8px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
 
   &:hover {
-    background: var(--vagabond-c-faint);
-    border-color: var(--vagabond-c-dark);
+    background: transparent;
+    color: var(--vagabond-c-tan);
   }
 }
 
 .npc-action-name {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
 }
 
 .npc-action-details {
   display: flex;
   gap: 8px;
-  font-size: 12px;
+  font-size: 14px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-muted);
   margin-top: 4px;
 
@@ -518,8 +608,9 @@
 }
 
 .npc-stat-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
+  font-family: $font-secondary;
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
 }
@@ -529,23 +620,29 @@
   height: 50px;
   font-size: 24px;
   font-weight: bold;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   text-align: center;
   border: 2px solid var(--vagabond-c-tan);
   border-radius: 4px;
   background: transparent;
   padding: 4px;
+  box-shadow: none;
 
   &:hover,
   &:focus {
     border-color: var(--vagabond-c-dark);
     outline: none;
+    box-shadow: none;
   }
 }
 
 // Effects Section (in accordion)
 .npc-effects {
   .effects-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -556,8 +653,9 @@
   }
 
   .effects-category-label {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
+    font-family: $font-secondary;
     margin-bottom: 4px;
     color: var(--vagabond-c-dark);
   }
@@ -566,13 +664,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px;
+    padding: 8px;
     border: 1px solid var(--vagabond-c-tan);
     border-radius: 4px;
     background: var(--vagabond-c-faint);
 
     &:hover {
-      background: var(--vagabond-c-transparent);
+      background: var(--vagabond-c-beige);
+      border-color: var(--vagabond-c-dark);
     }
   }
 
@@ -580,30 +679,87 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
+    font-size: 15px;
+    font-family: $font-secondary;
+    font-weight: 600;
     color: var(--vagabond-c-dark);
+    flex: 1;
   }
 
+  .effect-image,
   .effect-icon {
     width: 24px;
     height: 24px;
-    border-radius: 2px;
+    border-radius: 3px;
     border: 1px solid var(--vagabond-c-tan);
+  }
+
+  .effect-source {
+    font-size: 14px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-muted);
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .effect-duration {
+    font-size: 14px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-dark);
+    min-width: 60px;
+    text-align: center;
   }
 
   .effect-controls {
     display: flex;
-    gap: 4px;
+    gap: 6px;
+    align-items: center;
   }
 
   .effect-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     color: var(--vagabond-c-muted);
-    font-size: 12px;
-    padding: 4px;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    transition: color 0.2s ease;
 
     &:hover {
       color: var(--vagabond-c-dark);
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+
+  .effect-create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 12px;
+    margin-top: 4px;
+    border: 1px dashed var(--vagabond-c-tan);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--vagabond-c-muted);
+    font-size: 14px;
+    font-family: $font-secondary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--vagabond-c-dark);
+      color: var(--vagabond-c-dark);
+      background: var(--vagabond-c-faint);
+    }
+
+    i {
+      font-size: 12px;
     }
   }
 }
@@ -613,20 +769,21 @@
   text-align: center;
   color: var(--vagabond-c-muted);
   font-style: italic;
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
   padding: 12px;
 }
 
-// Immunities Section
-.npc-immunities-section {
-  padding: 8px 12px;
+// NPC Details Section
+.npc-details {
+  padding: 8px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid var(--vagabond-c-tan);
+  gap: 4px;
+  border: none;
 }
 
-.npc-immunity-row {
+.npc-detail-row {
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -634,11 +791,78 @@
   min-height: 24px;
 }
 
+.npc-description-row {
+  display: block;
+}
+
+.npc-zone-appearing-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.npc-appearing-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.npc-description-textarea {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  font-size: 14px;
+  font-family: $font-secondary;
+  font-weight: normal;
+  font-style: italic;
+  color: var(--vagabond-c-dark);
+  resize: vertical;
+  line-height: 1.4;
+  box-shadow: none;
+
+  &:hover {
+    border-color: var(--vagabond-c-dark);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--vagabond-c-dark);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &[readonly] {
+    border: 1px solid transparent;
+    color: var(--vagabond-c-dark);
+    cursor: default;
+    background: transparent;
+    padding: 4px 0;
+    resize: none;
+
+    &:hover {
+      border-color: transparent;
+    }
+  }
+
+  &::placeholder {
+    color: var(--vagabond-c-muted);
+    opacity: 0.5;
+    font-style: italic;
+  }
+}
+
 .npc-immunity-text {
   flex: 1;
-  font-size: 13px;
+  font-size: 15px;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
+  text-transform: capitalize;
 }
 
 // Immunity Dropdown (unlocked mode)
@@ -660,21 +884,24 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  background: var(--vagabond-c-faint);
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
-  font-size: 12px;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  font-size: 14px;
   font-weight: 600;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
+  transition: border-bottom-color 0.2s ease;
 
   &:hover {
-    background: var(--vagabond-c-tan);
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
   i {
-    font-size: 10px;
+    font-size: 12px;
     transition: transform 0.2s ease;
   }
 
@@ -718,7 +945,8 @@
   }
 
   span {
-    font-size: 12px;
+    font-size: 14px;
+    font-family: $font-secondary;
     color: var(--vagabond-c-dark);
   }
 }
@@ -740,14 +968,15 @@
   background: var(--vagabond-c-faint);
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 3px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
+  font-family: $font-secondary;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
 
   i {
     cursor: pointer;
-    font-size: 10px;
+    font-size: 12px;
     color: var(--vagabond-c-muted);
 
     &:hover {
