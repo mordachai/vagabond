@@ -32,11 +32,44 @@
     }
   }
 
-  // Delivery dropdown
+  // Delivery dropdown (styled like NPC size dropdown)
   .spell-delivery-select {
-    font-size: 11px;
-    padding: 2px 4px;
+    border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
+    background: transparent;
+    padding: 4px 0;
+    font-size: 14px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-dark);
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-bottom-color 0.2s ease;
+    box-shadow: none;
+
+    // Remove chevron/dropdown arrow styling
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--vagabond-c-dark);
+      box-shadow: none;
+    }
+
+    option {
+      background: var(--vagabond-c-white);
+
+      &:checked {
+        background: var(--vagabond-c-faint);
+      }
+    }
   }
 
   // Mana total display

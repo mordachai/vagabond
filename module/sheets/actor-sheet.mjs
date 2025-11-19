@@ -226,7 +226,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (spell.system.damageBase !== '-') {
       const damageElement = container.querySelector('.spell-damage-dice');
       if (damageElement) {
-        damageElement.textContent = `${state.damageDice}d6`;
+        damageElement.textContent = `${state.damageDice}`;
       }
     }
 

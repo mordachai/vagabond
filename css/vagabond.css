@@ -3021,9 +3021,36 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: none;
 }
 .vagabond .favorited-spell .spell-delivery-select {
-  font-size: 11px;
-  padding: 2px 4px;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px 0;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
+}
+.vagabond .favorited-spell .spell-delivery-select::-ms-expand {
+  display: none;
+}
+.vagabond .favorited-spell .spell-delivery-select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-delivery-select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .favorited-spell .spell-delivery-select option {
+  background: var(--vagabond-c-white);
+}
+.vagabond .favorited-spell .spell-delivery-select option:checked {
+  background: var(--vagabond-c-faint);
 }
 .vagabond .favorited-spell .spell-mana-total {
   font-weight: bold;
