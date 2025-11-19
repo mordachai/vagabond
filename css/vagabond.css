@@ -1584,6 +1584,10 @@
 .vagabond .hp-display .hp-icon {
   font-size: 18px;
   color: #c62828;
+  transition: transform 0.1s ease;
+}
+.vagabond .hp-display .hp-icon.heartbeat {
+  animation: heartbeat 0.3s ease-in-out;
 }
 .vagabond .hp-display .hp-current {
   width: 35px;
@@ -2248,6 +2252,10 @@
   font-size: 18px;
   color: #c41e3a;
   cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.vagabond .npc-hp-heart-icon.heartbeat {
+  animation: heartbeat 0.3s ease-in-out;
 }
 .vagabond .npc-hp-current {
   width: 35px;
@@ -2842,6 +2850,26 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .class-spellcaster-fields .grid {
   gap: 8px;
 }
+
+/* Heartbeat Animation */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 @media (max-width: 600px) {
   .vagabond .item-sheet-header {
     flex-direction: column;

@@ -449,6 +449,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const maxHP = this.actor.system.health.max || 10;
         const newHP = Math.min(currentHP + 1, maxHP);
 
+        // Trigger heartbeat animation
+        pcHpIcon.classList.add('heartbeat');
+        setTimeout(() => pcHpIcon.classList.remove('heartbeat'), 300);
+
         await this.actor.update({ 'system.health.value': newHP });
       });
 
@@ -459,6 +463,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         const currentHP = this.actor.system.health.value || 0;
         const newHP = Math.max(currentHP - 1, 0);
+
+        // Trigger heartbeat animation
+        pcHpIcon.classList.add('heartbeat');
+        setTimeout(() => pcHpIcon.classList.remove('heartbeat'), 300);
 
         await this.actor.update({ 'system.health.value': newHP });
       });
@@ -479,6 +487,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const maxHP = this.actor.system.health.max || 10;
         const newHP = Math.min(currentHP + 1, maxHP);
 
+        // Trigger heartbeat animation
+        npcHpIcon.classList.add('heartbeat');
+        setTimeout(() => npcHpIcon.classList.remove('heartbeat'), 300);
+
         await this.actor.update({ 'system.health.value': newHP });
       });
 
@@ -489,6 +501,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         const currentHP = this.actor.system.health.value || 0;
         const newHP = Math.max(currentHP - 1, 0);
+
+        // Trigger heartbeat animation
+        npcHpIcon.classList.add('heartbeat');
+        setTimeout(() => npcHpIcon.classList.remove('heartbeat'), 300);
 
         await this.actor.update({ 'system.health.value': newHP });
       });
