@@ -492,10 +492,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         await this.actor.update({ 'system.health.value': newHP });
       });
-
-      // Make the heart icon clickable (override pointer-events: none from CSS)
-      npcHpIcon.style.cursor = 'pointer';
-      npcHpIcon.style.pointerEvents = 'auto';
     }
 
     // Add right-click context menu handlers for ancestry and class

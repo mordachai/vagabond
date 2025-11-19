@@ -2242,52 +2242,27 @@
 .vagabond .npc-hp-field {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-.vagabond .npc-hp-heart-container {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
+  gap: 4px;
 }
 .vagabond .npc-hp-heart-icon {
-  position: absolute;
-  font-size: 40px;
+  font-size: 18px;
   color: #c41e3a;
-  z-index: 1;
-  pointer-events: none;
+  cursor: pointer;
 }
-.vagabond .npc-hp-heart-value {
-  position: relative;
-  z-index: 2;
+.vagabond .npc-hp-current {
+  width: 35px;
+  text-align: right;
   border: none;
   background: transparent;
-  font-size: 22px;
+  font-size: 18px;
   font-family: "Paradigm", serif;
   font-weight: bold;
-  color: var(--vagabond-c-white);
-  text-align: center;
-  width: 36px;
-  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-  padding-bottom: 4px;
-  margin-top: -2px;
+  color: var(--vagabond-c-dark);
   box-shadow: none;
 }
-.vagabond .npc-hp-heart-value:focus {
+.vagabond .npc-hp-current:focus {
   outline: none;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   box-shadow: none;
-}
-.vagabond .npc-hp-heart-value::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-}
-.vagabond .npc-hp-max-display {
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 .vagabond .npc-hp-separator {
   font-size: 16px;
