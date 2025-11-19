@@ -244,7 +244,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         costSpan.textContent = deliveryCost;
 
         // Build hint with increase info
-        const increaseHint = CONFIG.VAGABOND.deliveryDefaults[state.deliveryType].increase;
+        const increaseHint = game.i18n.localize(CONFIG.VAGABOND.deliveryTypeHints[state.deliveryType]);
         if (state.deliveryIncrease > 0) {
           const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
           costSpan.setAttribute('title', `${increaseHint} ${sizeHint}`);

@@ -364,7 +364,7 @@
                 >
                   <option value=''>Delivery</option>
                   {{#each @root.config.deliveryTypes as |label key|}}
-                    <option value='{{key}}'>{{label}}</option>
+                    <option value='{{key}}'>{{localize label}}</option>
                   {{/each}}
                 </select>
 

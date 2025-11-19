@@ -110,15 +110,42 @@
       }
     },
     "DeliveryTypes": {
-      "Aura": "Aura",
-      "Cone": "Cone",
-      "Cube": "Cube",
-      "Imbue": "Imbue",
-      "Glyph": "Glyph",
-      "Line": "Line",
-      "Remote": "Remote",
-      "Sphere": "Sphere",
-      "Touch": "Touch"
+      "Aura": {
+        "label": "Aura",
+        "hint": "+1 per +5 feet to the radius"
+      },
+      "Cone": {
+        "label": "Cone",
+        "hint": "+2 per additional 5-feet of length"
+      },
+      "Cube": {
+        "label": "Cube",
+        "hint": "+1 per additional 5-foot-cube"
+      },
+      "Imbue": {
+        "label": "Imbue",
+        "hint": "+2 per additional Target"
+      },
+      "Glyph": {
+        "label": "Glyph",
+        "hint": "—"
+      },
+      "Line": {
+        "label": "Line",
+        "hint": "+1 per 10 feet of extra length"
+      },
+      "Remote": {
+        "label": "Remote",
+        "hint": "+1 per additional Target"
+      },
+      "Sphere": {
+        "label": "Sphere",
+        "hint": "+1 per additional 5-feet to the radius"
+      },
+      "Touch": {
+        "label": "Touch",
+        "hint": "—"
+      }
     },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
