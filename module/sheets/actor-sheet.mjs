@@ -604,7 +604,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Add fatigue skull click handlers
     const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
-    console.log(`[Fatigue] Found ${fatigueSkulls.length} fatigue skulls`);
 
     fatigueSkulls.forEach((skull, index) => {
       skull.addEventListener('click', async (event) => {
@@ -612,15 +611,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.stopPropagation();
 
         const currentFatigue = this.actor.system.fatigue || 0;
-        console.log(`[Fatigue] Clicked skull ${index}, current fatigue: ${currentFatigue}`);
 
         // If clicking on an active skull, reduce fatigue to that index
         // If clicking on an inactive skull, increase fatigue to index + 1
         const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
 
-        console.log(`[Fatigue] Setting fatigue from ${currentFatigue} to ${newFatigue}`);
         await this.actor.update({ 'system.fatigue': newFatigue });
-        console.log(`[Fatigue] Update complete, new value: ${this.actor.system.fatigue}`);
       });
     });
 
@@ -1683,7 +1679,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         // Get the stat used for the attack (for crit bonus damage)
         const statKey = attackResult.weaponSkill?.stat || null;
-        console.log(`[Weapon Attack] WeaponSkillKey: ${attackResult.weaponSkillKey}, WeaponSkill:`, attackResult.weaponSkill, `StatKey: ${statKey}, Might: ${this.actor.system.stats.might?.value}`);
         damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
@@ -2355,8 +2350,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Find existing ancestry and remove it FIRST, including its effects
       const existingAncestry = this.actor.items.find(item => item.type === 'ancestry');
       if (existingAncestry) {
-        console.log(`Replacing existing ancestry: ${existingAncestry.name}`);
-
         // Delete the existing ancestry - this should also remove its effects
         await existingAncestry.delete();
       }
@@ -2367,8 +2360,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Filter out ALL ancestry items from original data, then add back only the selected one
       const nonAncestryItems = itemData.filter(data => data.type !== 'ancestry');
       itemData = [...nonAncestryItems, selectedAncestry];
-
-      console.log(`Adding new ancestry: ${selectedAncestry.name}`);
     }
 
     // YOUR CUSTOM: Handle class replacement logic BEFORE creating any items
@@ -2378,8 +2369,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Find existing class and remove it FIRST, including its effects
       const existingClass = this.actor.items.find(item => item.type === 'class');
       if (existingClass) {
-        console.log(`Replacing existing class: ${existingClass.name}`);
-
         // Delete the existing class - this should also remove its effects
         await existingClass.delete();
       }
@@ -2390,8 +2379,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Filter out ALL class items from original data, then add back only the selected one
       const nonClassItems = itemData.filter(data => data.type !== 'class');
       itemData = [...nonClassItems, selectedClass];
-
-      console.log(`Adding new class: ${selectedClass.name}`);
     }
 
     return this.actor.createEmbeddedDocuments('Item', itemData);

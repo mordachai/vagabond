@@ -88,7 +88,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
-    console.log("Item type in _configureRenderOptions:", this.document.type);
     options.parts = ['header', 'tabs'];
     if (this.document.limited) return;
     switch (this.document.type) {
@@ -96,27 +95,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         options.parts.push('gearDetails', 'effects');
         break;
       case 'weapon':
-        console.log("Loading weapon template");
         options.parts.push('weaponDetails', 'effects');
         break;
       case 'armor':
-        console.log("Loading armor template");
         options.parts.push('armorDetails', 'effects');
         break;
       case 'spell':
-        console.log("Loading spell template");
         options.parts.push('spellDetails', 'effects');
         break;
       case 'ancestry':
-        console.log("Loading ancestry template");
         options.parts.push('ancestryDetails', 'effects');
         break;
       case 'class':
-        console.log("Loading class template");
         options.parts.push('classDetails', 'effects');
         break;
       case 'perk':
-        console.log("Loading perk template");
         options.parts.push('perkDetails', 'effects');
         break;
     }
@@ -411,7 +404,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onAddTrait(event, target) {
-    console.log("Add trait called!", event, target);
     const traits = this.item.system.traits || [];
     const newTraits = [...traits, { name: 'New Trait', description: '' }];
     await this.item.update({ 'system.traits': newTraits });
@@ -426,7 +418,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveTrait(event, target) {
-    console.log("Remove trait called!", event, target);
     const index = parseInt(target.dataset.traitIndex);
     if (isNaN(index)) return;
 
@@ -444,7 +435,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onAddLevelFeature(event, target) {
-    console.log("Add level feature called!", event, target);
     const level = parseInt(target.dataset.level);
     if (isNaN(level)) return;
 
@@ -462,7 +452,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveLevelFeature(event, target) {
-    console.log("Remove level feature called!", event, target);
     const index = parseInt(target.dataset.featureIndex);
     if (isNaN(index)) return;
 

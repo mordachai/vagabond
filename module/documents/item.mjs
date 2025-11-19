@@ -139,7 +139,6 @@ export class VagabondItem extends Item {
     // Add stat bonus on critical hit
     if (isCritical && statKey) {
       const statValue = actor.system.stats[statKey]?.value || 0;
-      console.log(`[Weapon Crit Damage] Weapon: ${this.name}, StatKey: ${statKey}, StatValue: ${statValue}, Formula: ${damageFormula} + ${statValue}`);
       if (statValue > 0) {
         damageFormula += ` + ${statValue}`;
       }
