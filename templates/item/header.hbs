@@ -119,8 +119,8 @@
 
     {{#if (eq item.type 'class')}}
       <div class='class-spellcaster-fields'>
-        {{! Single row: Is Spellcaster + Mana Multiplier + Mana Skill + Casting Stat }}
-        <div class='grid grid-4col'>
+        {{! First row: Is Spellcaster + Mana Multiplier }}
+        <div class='grid grid-2col'>
           <div class='resource'>
             <label class='resource-label'>
               <input
@@ -144,6 +144,9 @@
               {{#unless system.isSpellcaster}}disabled{{/unless}}
             />
           </div>
+        </div>
+        {{! Second row: Mana Skill + Casting Stat }}
+        <div class='grid grid-2col'>
           <div class='resource'>
             <label class='resource-label'>Mana Skill</label>
             <select name='system.manaSkill' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
