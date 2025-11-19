@@ -11,6 +11,10 @@
   overflow: visible !important;
 }
 
+.vagabond.application .controls-dropdown {
+  z-index: 150;
+}
+
 // Actor sheets have fixed height
 .vagabond.actor.application {
   height: calc(100vh - 150px) !important;
