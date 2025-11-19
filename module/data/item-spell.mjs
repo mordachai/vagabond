@@ -28,13 +28,14 @@ export default class VagabondSpell extends VagabondItemBase {
       }
     });
 
-    // Delivery - how the spell is delivered
+    // Delivery - how the spell is delivered (optional reference only, not enforced)
+    // Note: Delivery type, cost, and increases are determined at cast time, not stored on spell
     schema.delivery = new fields.SchemaField({
       type: new fields.StringField({
-        required: true,
-        nullable: false,
-        initial: 'touch',
-        blank: false,
+        required: false,
+        nullable: true,
+        initial: null,
+        blank: true,
         choices: {
           'aura': 'Aura',
           'cone': 'Cone',
@@ -46,19 +47,6 @@ export default class VagabondSpell extends VagabondItemBase {
           'sphere': 'Sphere',
           'touch': 'Touch'
         }
-      }),
-      cost: new fields.NumberField({
-        required: true,
-        nullable: false,
-        integer: true,
-        initial: 0,
-        min: 0
-      }),
-      increase: new fields.StringField({
-        required: false,
-        nullable: false,
-        initial: '',
-        blank: true
       })
     });
 

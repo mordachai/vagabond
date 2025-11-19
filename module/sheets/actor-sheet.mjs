@@ -27,7 +27,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleWeaponGrip: this._onToggleWeaponGrip,
       toggleArmorEquipment: this._onToggleArmorEquipment,
-      useSpell: this._onUseSpell,
+      castSpell: this._onCastSpell,  // NEW: Cast spell action
+      modifyDamage: this._onModifyDamage,  // NEW: Increase/decrease damage
+      modifyDelivery: this._onModifyDelivery,  // NEW: Increase/decrease delivery
       toggleSpellFavorite: this._onToggleSpellFavorite,
       viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
       viewClass: this._viewClass,  // YOUR CUSTOM ACTION
@@ -88,6 +90,190 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       scrollable: [""],
     },
   };
+
+  /**
+   * Constructor - Initialize spell states from localStorage
+   * @param {object} object - The actor document
+   * @param {object} options - Application options
+   */
+  constructor(object, options) {
+    super(object, options);
+
+    // Load spell states from localStorage (per character, per spell)
+    this.spellStates = this._loadSpellStates();
+  }
+
+  /**
+   * Load spell states from localStorage for this character
+   * @returns {Object} Spell states keyed by spell ID
+   * @private
+   */
+  _loadSpellStates() {
+    const key = `vagabond.spell-states.${this.actor.id}`;
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : {};
+  }
+
+  /**
+   * Save spell states to localStorage for this character
+   * @private
+   */
+  _saveSpellStates() {
+    const key = `vagabond.spell-states.${this.actor.id}`;
+    localStorage.setItem(key, JSON.stringify(this.spellStates));
+  }
+
+  /**
+   * Get spell state for a specific spell, creating default if needed
+   * @param {string} spellId - The spell ID
+   * @returns {Object} Spell state with damageDice, deliveryType, deliveryIncrease
+   * @private
+   */
+  _getSpellState(spellId) {
+    if (!this.spellStates[spellId]) {
+      this.spellStates[spellId] = {
+        damageDice: 1,
+        deliveryType: null,
+        deliveryIncrease: 0
+      };
+    }
+    return this.spellStates[spellId];
+  }
+
+  /**
+   * Calculate total mana cost for casting a spell
+   * @param {string} spellId - The spell ID
+   * @returns {Object} Cost breakdown: damageCost, deliveryBaseCost, deliveryIncreaseCost, totalCost
+   * @private
+   */
+  _calculateSpellCost(spellId) {
+    const state = this._getSpellState(spellId);
+    const spell = this.actor.items.get(spellId);
+
+    // Damage cost: 0 for 1d6, +1 per extra die
+    const damageCost = spell.system.damageBase !== '-' && state.damageDice > 1
+      ? state.damageDice - 1
+      : 0;
+
+    // Delivery base cost
+    const deliveryBaseCost = state.deliveryType
+      ? CONFIG.VAGABOND.deliveryDefaults[state.deliveryType].cost
+      : 0;
+
+    // Delivery increase cost
+    const increasePerStep = state.deliveryType
+      ? CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType]
+      : 0;
+    const deliveryIncreaseCost = state.deliveryIncrease * increasePerStep;
+
+    const totalCost = damageCost + deliveryBaseCost + deliveryIncreaseCost;
+
+    return { damageCost, deliveryBaseCost, deliveryIncreaseCost, totalCost };
+  }
+
+  /**
+   * Get delivery size/range hint text (e.g., "(25 foot)" for increased cone)
+   * NOTE: Distances stored in feet for future grid conversion (5 feet = 1 grid)
+   * @param {string} deliveryType - The delivery type
+   * @param {number} increaseCount - Number of increases
+   * @returns {string} Size hint text
+   * @private
+   */
+  _getDeliverySizeHint(deliveryType, increaseCount) {
+    if (!deliveryType || increaseCount === 0) return '';
+
+    const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
+    const increment = CONFIG.VAGABOND.deliveryIncrement[deliveryType];
+
+    if (!baseRange.value || increment === 0) return '';
+
+    const newValue = baseRange.value + (increment * increaseCount);
+
+    if (baseRange.type === 'count') {
+      // For imbue/remote: "2 targets"
+      return `(${newValue} ${baseRange.unit}${newValue > 1 ? 's' : ''})`;
+    } else if (baseRange.type === 'radius') {
+      // For aura/sphere: "(15-foot radius)"
+      return `(${newValue}-${baseRange.unit} ${baseRange.type})`;
+    } else if (baseRange.type === 'length') {
+      // For cone/line: "(20 foot)"
+      return `(${newValue}-${baseRange.unit})`;
+    } else if (baseRange.type === 'cube') {
+      // For cube: "(10-foot cube)"
+      return `(${newValue}-${baseRange.unit} ${baseRange.type})`;
+    } else if (baseRange.type === 'square') {
+      // For glyph: "(5-foot square)"
+      return `(${newValue}-${baseRange.unit} ${baseRange.type})`;
+    }
+
+    return '';
+  }
+
+  /**
+   * Update spell display in the UI with current state and costs
+   * @param {string} spellId - The spell ID
+   * @private
+   */
+  _updateSpellDisplay(spellId) {
+    const state = this._getSpellState(spellId);
+    const costs = this._calculateSpellCost(spellId);
+    const spell = this.actor.items.get(spellId);
+
+    const container = this.element.querySelector(`[data-spell-id="${spellId}"]`);
+    if (!container) return;
+
+    // Update damage dice display
+    if (spell.system.damageBase !== '-') {
+      const damageElement = container.querySelector('.spell-damage-dice');
+      if (damageElement) {
+        damageElement.textContent = `${state.damageDice}d6`;
+      }
+    }
+
+    // Update delivery dropdown
+    const deliverySelect = container.querySelector('.spell-delivery-select');
+    if (deliverySelect) {
+      deliverySelect.value = state.deliveryType || '';
+    }
+
+    // Update delivery cost display and hint
+    const costSpan = container.querySelector('.spell-delivery-cost');
+    if (costSpan) {
+      if (state.deliveryType) {
+        const deliveryCost = costs.deliveryBaseCost + costs.deliveryIncreaseCost;
+        costSpan.textContent = deliveryCost;
+
+        // Build hint with increase info
+        const increaseHint = CONFIG.VAGABOND.deliveryDefaults[state.deliveryType].increase;
+        if (state.deliveryIncrease > 0) {
+          const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
+          costSpan.setAttribute('title', `${increaseHint} ${sizeHint}`);
+        } else {
+          costSpan.setAttribute('title', increaseHint);
+        }
+
+        // Disable increase if delivery doesn't support it
+        if (CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType] === 0) {
+          costSpan.classList.remove('clickable');
+          costSpan.classList.add('disabled');
+        } else {
+          costSpan.classList.add('clickable');
+          costSpan.classList.remove('disabled');
+        }
+      } else {
+        costSpan.textContent = '—';
+        costSpan.setAttribute('title', 'Select a delivery type first');
+        costSpan.classList.remove('clickable');
+        costSpan.classList.add('disabled');
+      }
+    }
+
+    // Update total mana cost
+    const totalSpan = container.querySelector('.spell-mana-total');
+    if (totalSpan) {
+      totalSpan.textContent = costs.totalCost;
+    }
+  }
 
   /** @override */
   _configureRenderOptions(options) {
@@ -590,6 +776,80 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Right-click on row: delete armor
       armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
+    });
+
+    // NEW: Add spell casting event handlers
+    const spellRows = this.element.querySelectorAll('[data-spell-id]');
+    spellRows.forEach(spellRow => {
+      const spellId = spellRow.dataset.spellId;
+      if (!spellId) return;
+
+      // Initialize spell display with saved state
+      this._updateSpellDisplay(spellId);
+
+      // Delivery dropdown change
+      const deliverySelect = spellRow.querySelector('.spell-delivery-select');
+      if (deliverySelect) {
+        deliverySelect.addEventListener('change', async (event) => {
+          const state = this._getSpellState(spellId);
+          state.deliveryType = event.target.value || null;
+          state.deliveryIncrease = 0; // Reset increases when changing delivery
+          this._saveSpellStates();
+          this._updateSpellDisplay(spellId);
+        });
+      }
+
+      // Damage dice: left-click increase, right-click decrease
+      const damageElement = spellRow.querySelector('.spell-damage-dice');
+      if (damageElement) {
+        damageElement.addEventListener('click', async (event) => {
+          event.preventDefault();
+          const state = this._getSpellState(spellId);
+          state.damageDice++;
+          this._saveSpellStates();
+          this._updateSpellDisplay(spellId);
+        });
+
+        damageElement.addEventListener('contextmenu', async (event) => {
+          event.preventDefault();
+          const state = this._getSpellState(spellId);
+          state.damageDice = Math.max(1, state.damageDice - 1);
+          this._saveSpellStates();
+          this._updateSpellDisplay(spellId);
+        });
+      }
+
+      // Delivery cost: left-click increase, right-click decrease
+      const deliveryCostElement = spellRow.querySelector('.spell-delivery-cost');
+      if (deliveryCostElement) {
+        deliveryCostElement.addEventListener('click', async (event) => {
+          event.preventDefault();
+          const state = this._getSpellState(spellId);
+
+          if (!state.deliveryType) {
+            ui.notifications.warn("Select a delivery type first!");
+            return;
+          }
+
+          // Check if this delivery can be increased
+          if (CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType] === 0) {
+            ui.notifications.warn("This delivery cannot be increased!");
+            return;
+          }
+
+          state.deliveryIncrease++;
+          this._saveSpellStates();
+          this._updateSpellDisplay(spellId);
+        });
+
+        deliveryCostElement.addEventListener('contextmenu', async (event) => {
+          event.preventDefault();
+          const state = this._getSpellState(spellId);
+          state.deliveryIncrease = Math.max(0, state.deliveryIncrease - 1);
+          this._saveSpellStates();
+          this._updateSpellDisplay(spellId);
+        });
+      }
     });
 
     // You may want to add other special handling here
@@ -1509,57 +1769,159 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle using a spell (post to chat).
+   * NEW: Handle casting a spell with the inline controls
    *
    * @this VagabondActorSheet
    * @param {PointerEvent} event   The originating click event
    * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
    * @protected
    */
-  static async _onUseSpell(event, target) {
+  static async _onCastSpell(event, target) {
     event.preventDefault();
-    const itemId = target.dataset.itemId;
-    const spell = this.actor.items.get(itemId);
+    const spellId = target.dataset.spellId;
+    const spell = this.actor.items.get(spellId);
+    const state = this._getSpellState(spellId);
+    const costs = this._calculateSpellCost(spellId);
 
     if (!spell || spell.type !== 'spell') {
       ui.notifications.error('Spell not found!');
       return;
     }
 
-    // Prepare the chat message content
-    let content = `<div class="spell-use">`;
-    content += `<h3>${spell.name}</h3>`;
-
-    // Add description
-    if (spell.system.description) {
-      content += `<p>${spell.system.description}</p>`;
+    // Validation: Must select delivery
+    if (!state.deliveryType) {
+      ui.notifications.warn("Select a delivery type first!");
+      return;
     }
 
-    // Add damage type
-    if (spell.system.damageBase && spell.system.damageBase !== '-') {
-      const damageLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase] || spell.system.damageBase);
-      content += `<p><strong>Damage Type:</strong> ${damageLabel}</p>`;
+    // Validation: Enough mana
+    if (costs.totalCost > this.actor.system.mana.current) {
+      ui.notifications.error(`Not enough mana! Need ${costs.totalCost}, have ${this.actor.system.mana.current}.`);
+      return;
     }
 
-    // Add delivery info
-    if (spell.system.delivery?.type) {
-      const deliveryLabel = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[spell.system.delivery.type] || spell.system.delivery.type);
-      content += `<p><strong>Delivery:</strong> ${deliveryLabel}`;
-      if (spell.system.delivery.cost > 0) {
-        content += ` (${spell.system.delivery.cost} Mana)`;
-      }
-      content += `</p>`;
+    // Validation: Within casting max
+    if (costs.totalCost > this.actor.system.mana.castingMax) {
+      ui.notifications.error(`Cost exceeds casting max! Max: ${this.actor.system.mana.castingMax}, Cost: ${costs.totalCost}.`);
+      return;
     }
 
-    // Add duration
-    if (spell.system.duration) {
-      content += `<p><strong>Duration:</strong> ${spell.system.duration}</p>`;
+    // Get mana skill
+    const manaSkill = this.actor.system.classData?.manaSkill;
+    if (!manaSkill) {
+      ui.notifications.error("No mana skill configured for this class!");
+      return;
     }
 
-    content += `</div>`;
+    // Check if spellcaster
+    if (!this.actor.system.classData?.isSpellcaster) {
+      ui.notifications.warn("Your class cannot cast spells!");
+      return;
+    }
 
-    // Create the chat message
-    await VagabondChatHelper.postMessage(this.actor, content);
+    // Perform roll using the mana skill
+    const skill = this.actor.system.skills[manaSkill];
+    const difficulty = skill.difficulty;
+    const label = `${spell.name} (${skill.label})`;
+
+    // Apply favor/hinder
+    const favorHinder = this.actor.system.favorHinder || 'none';
+    let rollFormula = 'd20';
+
+    if (favorHinder === 'favor') {
+      rollFormula = 'd20 + 1d6';
+    } else if (favorHinder === 'hinder') {
+      rollFormula = 'd20 - 1d6';
+    }
+
+    const roll = new Roll(rollFormula, this.actor.getRollData());
+    await roll.evaluate();
+
+    const isSuccess = roll.total >= difficulty;
+
+    // If successful, deduct mana
+    if (isSuccess) {
+      const newMana = this.actor.system.mana.current - costs.totalCost;
+      await this.actor.update({ 'system.mana.current': newMana });
+      ui.notifications.info(`${spell.name} cast successfully! ${costs.totalCost} mana spent.`);
+    } else {
+      // Failed - no mana cost
+      ui.notifications.warn(`${spell.name} cast failed!`);
+    }
+
+    // Create chat message
+    await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess);
+
+    // Reset spell state (keep deliveryType)
+    this.spellStates[spellId] = {
+      damageDice: 1,
+      deliveryType: state.deliveryType, // Keep last selected delivery
+      deliveryIncrease: 0
+    };
+    this._saveSpellStates();
+    this._updateSpellDisplay(spellId);
+  }
+
+  /**
+   * NEW: Create chat card for spell cast
+   * @param {Item} spell - The spell item
+   * @param {Object} state - Spell state
+   * @param {Object} costs - Cost breakdown
+   * @param {Roll} roll - The roll result
+   * @param {number} difficulty - Target difficulty
+   * @param {boolean} isSuccess - Whether the cast succeeded
+   * @private
+   */
+  async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess) {
+    // Build damage text
+    const damageText = spell.system.damageBase !== '-'
+      ? `${state.damageDice}d6 ${game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase])}`
+      : null;
+
+    // Build delivery text with size hint
+    const deliveryName = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[state.deliveryType]);
+    const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
+    const deliveryText = `${deliveryName} ${sizeHint}`.trim();
+
+    // Build flavor text
+    let flavor = `<div class="vagabond-spell-cast">`;
+    flavor += `<h3>${spell.name}</h3>`;
+    if (damageText) {
+      flavor += `<p><strong>Damage:</strong> ${damageText}</p>`;
+    }
+    flavor += `<p><strong>Delivery:</strong> ${deliveryText}</p>`;
+    flavor += `<p><strong>Mana Cost:</strong> ${costs.totalCost}</p>`;
+    flavor += `<p><strong>Roll:</strong> ${roll.total} vs DC ${difficulty}</p>`;
+    flavor += `<p><strong>Result:</strong> ${isSuccess ? '<span style="color: green;">SUCCESS</span>' : '<span style="color: red;">FAILED</span>'}</p>`;
+    flavor += `</div>`;
+
+    await VagabondChatHelper.postRoll(this.actor, roll, flavor);
+  }
+
+  /**
+   * NEW: Handle modifying spell damage (left-click increase, right-click decrease)
+   * Note: The actual click handling is in _onRender, this is here for action registry
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onModifyDamage(event, target) {
+    // This is handled inline in _onRender for left/right click differentiation
+  }
+
+  /**
+   * NEW: Handle modifying spell delivery increase (left-click increase, right-click decrease)
+   * Note: The actual click handling is in _onRender, this is here for action registry
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onModifyDelivery(event, target) {
+    // This is handled inline in _onRender for left/right click differentiation
   }
 
   /**

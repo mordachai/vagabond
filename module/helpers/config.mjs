@@ -105,6 +105,56 @@ VAGABOND.deliveryDefaults = {
 };
 
 /**
+ * Numeric mana cost per delivery increase
+ * @type {Object}
+ */
+VAGABOND.deliveryIncreaseCost = {
+  'aura': 1,
+  'cone': 2,
+  'cube': 1,
+  'imbue': 2,
+  'glyph': 0,
+  'line': 1,
+  'remote': 1,
+  'sphere': 1,
+  'touch': 0
+};
+
+/**
+ * Base sizes/ranges for delivery types (in feet)
+ * NOTE: These are stored in feet and can be converted to grid units later (5 feet = 1 grid)
+ * @type {Object}
+ */
+VAGABOND.deliveryBaseRanges = {
+  'aura': { value: 10, unit: 'foot', type: 'radius' },
+  'cone': { value: 15, unit: 'foot', type: 'length' },
+  'cube': { value: 5, unit: 'foot', type: 'cube' },
+  'imbue': { value: 1, unit: 'target', type: 'count' },
+  'glyph': { value: 5, unit: 'foot', type: 'square' },
+  'line': { value: 30, unit: 'foot', type: 'length' },
+  'remote': { value: 1, unit: 'target', type: 'count' },
+  'sphere': { value: 5, unit: 'foot', type: 'radius' },
+  'touch': { value: null, unit: null, type: null }
+};
+
+/**
+ * Increment amounts for delivery increases (in feet or targets)
+ * NOTE: Store in feet for future grid conversion (5 feet = 1 grid)
+ * @type {Object}
+ */
+VAGABOND.deliveryIncrement = {
+  'aura': 5,
+  'cone': 5,
+  'cube': 5,
+  'imbue': 1,
+  'glyph': 0,
+  'line': 10,
+  'remote': 1,
+  'sphere': 5,
+  'touch': 0
+};
+
+/**
  * Weapon skill types
  * @type {Object}
  */

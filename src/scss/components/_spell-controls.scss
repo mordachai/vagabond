@@ -1,0 +1,71 @@
+// -----------------------------------------
+// Spell Casting Controls
+// -----------------------------------------
+// Styles for inline spell casting controls in favorited spells section
+
+.favorited-spell {
+  // Damage dice and delivery cost clickable elements
+  .spell-damage-dice,
+  .spell-delivery-cost {
+    &.clickable {
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
+
+  // Delivery dropdown
+  .spell-delivery-select {
+    font-size: 11px;
+    padding: 2px 4px;
+    cursor: pointer;
+  }
+
+  // Mana total display
+  .spell-mana-total {
+    font-weight: bold;
+    text-align: center;
+    color: var(--vagabond-c-tan, #d4af37);
+  }
+
+  // Damage type display
+  .spell-damage-type {
+    font-size: 11px;
+    text-align: left;
+  }
+}
+
+// Chat card styling for spell casts
+.vagabond-spell-cast {
+  h3 {
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+  }
+
+  p {
+    margin: 5px 0;
+  }
+
+  strong {
+    color: var(--vagabond-c-tan, #d4af37);
+  }
+}

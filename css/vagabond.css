@@ -2996,3 +2996,52 @@ details[open] .vagabond .npc-immunity-toggle i {
     text-align: center;
   }
 }
+.vagabond .favorited-spell .spell-damage-dice.clickable,
+.vagabond .favorited-spell .spell-delivery-cost.clickable {
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable:hover,
+.vagabond .favorited-spell .spell-delivery-cost.clickable:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable:active,
+.vagabond .favorited-spell .spell-delivery-cost.clickable:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+.vagabond .favorited-spell .spell-damage-dice.disabled,
+.vagabond .favorited-spell .spell-delivery-cost.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vagabond .favorited-spell .spell-damage-dice.disabled:hover,
+.vagabond .favorited-spell .spell-delivery-cost.disabled:hover {
+  background: none;
+}
+.vagabond .favorited-spell .spell-delivery-select {
+  font-size: 11px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+.vagabond .favorited-spell .spell-mana-total {
+  font-weight: bold;
+  text-align: center;
+  color: var(--vagabond-c-tan, #d4af37);
+}
+.vagabond .favorited-spell .spell-damage-type {
+  font-size: 11px;
+  text-align: left;
+}
+.vagabond .vagabond-spell-cast h3 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+.vagabond .vagabond-spell-cast p {
+  margin: 5px 0;
+}
+.vagabond .vagabond-spell-cast strong {
+  color: var(--vagabond-c-tan, #d4af37);
+}
