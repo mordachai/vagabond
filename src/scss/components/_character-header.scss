@@ -494,10 +494,10 @@
       transform: scale(1.05);
     }
 
-    // State: None (default/neutral) - muted, desaturated
+    // State: None (default/neutral) - normal image, no effects
     &.none {
       .die-icon {
-        filter: grayscale(100%) brightness(0.6) contrast(0.8) opacity(0.4);
+        filter: none;
       }
     }
 
