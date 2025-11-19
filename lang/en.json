@@ -344,6 +344,19 @@
       "Silver": "Silver",
       "Mythral": "Mythral",
       "Orichalcum": "Orichalcum"
+    },
+    "FavorHinder": {
+      "label": "Favor/Hinder",
+      "States": {
+        "none": "Favor/Hinder",
+        "favor": "Favor",
+        "hinder": "Hinder"
+      },
+      "Tooltips": {
+        "none": "Click to toggle Favor/Hinder. Currently no modifier applied.",
+        "favor": "Favor: +1d6 to all d20 rolls. Click to switch to Hinder.",
+        "hinder": "Hinder: -1d6 from all d20 rolls. Click to switch to None."
+      }
     }
   },
   "TYPES": {

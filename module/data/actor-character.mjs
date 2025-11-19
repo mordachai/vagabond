@@ -46,6 +46,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
     });
 
+    // Favor/Hinder system - toggle for roll modifiers
+    schema.favorHinder = new fields.StringField({
+      initial: 'none',
+      choices: ['none', 'favor', 'hinder'],
+      required: true,
+      nullable: false
+    });
+
     // Define the six core stats
     schema.stats = new fields.SchemaField(
       Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {

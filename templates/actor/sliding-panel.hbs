@@ -149,6 +149,27 @@
 
     {{! Speed Stats - All in one row with space around }}
     <div class='speed-stats-row'>
+      {{! Favor/Hinder Toggle Button }}
+      <div class='favor-hinder-toggle-container'>
+        <button
+          type='button'
+          class='favor-hinder-toggle {{system.favorHinder}}'
+          data-action='toggleFavorHinder'
+          data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
+        >
+          <img src='systems/vagabond/assets/images/hinder-die.webp' alt='{{localize "VAGABOND.FavorHinder.label"}}' class='die-icon' />
+        </button>
+        <label class='favor-hinder-label'>
+          {{#if (eq system.favorHinder "favor")}}
+            {{localize "VAGABOND.FavorHinder.States.favor"}}
+          {{else if (eq system.favorHinder "hinder")}}
+            {{localize "VAGABOND.FavorHinder.States.hinder"}}
+          {{else}}
+            Favor/<br/>Hinder
+          {{/if}}
+        </label>
+      </div>
+
       <div class='stat-item'>
         <input
           type='text'
@@ -179,14 +200,17 @@
         />
         <label class='stat-label'>Travel</label>
       </div>
-      <div class='stat-item'>
-        <input
-          type='text'
-          name='system.currentLuck'
-          value='{{system.currentLuck}}'
-          data-dtype='Number'
-          class='stat-value-input'
-        />
+      <div class='stat-item luck-item'>
+        <div class='luck-display'>
+          <i class='fas fa-clover luck-icon'></i>
+          <input
+            type='text'
+            name='system.currentLuck'
+            value='{{system.currentLuck}}'
+            data-dtype='Number'
+            class='luck-value'
+          />
+        </div>
         <label class='stat-label'>Current<br/>Luck</label>
       </div>
     </div>

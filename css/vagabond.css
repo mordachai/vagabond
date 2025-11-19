@@ -1858,6 +1858,7 @@
 }
 .vagabond .speed-stats-row .stat-item .stat-value-input {
   width: auto;
+  height: 40px;
   min-width: 40px;
   max-width: 50px;
   font-size: 22px;
@@ -1878,6 +1879,92 @@
   text-align: center;
   color: var(--vagabond-c-tan);
   line-height: 1.1;
+}
+.vagabond .speed-stats-row .luck-item .luck-display {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 50px;
+}
+.vagabond .speed-stats-row .luck-item .luck-display .luck-icon {
+  position: absolute;
+  font-size: 40px;
+  color: #2e7d32;
+  z-index: 1;
+  pointer-events: none;
+}
+.vagabond .speed-stats-row .luck-item .luck-display .luck-value {
+  position: relative;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+}
+.vagabond .speed-stats-row .luck-item .luck-display .luck-value:hover, .vagabond .speed-stats-row .luck-item .luck-display .luck-value:focus {
+  outline: none;
+}
+.vagabond .favor-hinder-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle .die-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle:hover {
+  transform: scale(1.05);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.none .die-icon {
+  filter: none;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.favor .die-icon {
+  filter: brightness(1.3) saturate(2) contrast(1.4) hue-rotate(90deg);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.hinder .die-icon {
+  filter: brightness(1.1) saturate(2.2) contrast(1.5) hue-rotate(-10deg);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--vagabond-c-tan);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-height: 24px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 @media (max-width: 600px) {
   .vagabond .sheet-header {
@@ -2270,10 +2357,10 @@
 .vagabond .npc-hp-field {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0;
 }
 .vagabond .npc-hp-heart-icon {
-  font-size: 18px;
+  font-size: 22px;
   color: #c41e3a;
   cursor: pointer;
   transition: transform 0.1s ease;
@@ -2282,11 +2369,11 @@
   animation: heartbeat 0.3s ease-in-out;
 }
 .vagabond .npc-hp-current {
-  width: 35px;
+  width: 40px;
   text-align: right;
   border: none;
   background: transparent;
-  font-size: 18px;
+  font-size: 22px;
   font-family: "Paradigm", serif;
   font-weight: bold;
   color: var(--vagabond-c-dark);
@@ -2297,10 +2384,10 @@
   box-shadow: none;
 }
 .vagabond .npc-hp-separator {
-  font-size: 16px;
+  font-size: 20px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
-  font-weight: bold;
+  font-weight: normal;
 }
 .vagabond .npc-hp-max {
   font-size: 20px;
