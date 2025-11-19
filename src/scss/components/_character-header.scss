@@ -462,6 +462,49 @@
       line-height: 1.1;
     }
   }
+
+  // Luck Item with Clover Icon
+  .luck-item {
+    .luck-display {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 50px;
+
+      .luck-icon {
+        position: absolute;
+        font-size: 40px;
+        color: #2e7d32;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .luck-value {
+        position: relative;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        padding: 0;
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--vagabond-c-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 2px;
+
+        &:hover,
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
 }
 
 // Favor/Hinder Toggle Button

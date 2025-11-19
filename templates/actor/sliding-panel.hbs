@@ -200,14 +200,17 @@
         />
         <label class='stat-label'>Travel</label>
       </div>
-      <div class='stat-item'>
-        <input
-          type='text'
-          name='system.currentLuck'
-          value='{{system.currentLuck}}'
-          data-dtype='Number'
-          class='stat-value-input'
-        />
+      <div class='stat-item luck-item'>
+        <div class='luck-display'>
+          <i class='fas fa-clover luck-icon'></i>
+          <input
+            type='text'
+            name='system.currentLuck'
+            value='{{system.currentLuck}}'
+            data-dtype='Number'
+            class='luck-value'
+          />
+        </div>
         <label class='stat-label'>Current<br/>Luck</label>
       </div>
     </div>
