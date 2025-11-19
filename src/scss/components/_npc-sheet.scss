@@ -102,11 +102,13 @@
   outline: none;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
+  box-shadow: none;
 
   &:hover,
   &:focus {
     border-bottom: 2px solid var(--vagabond-c-dark) !important;
     background: transparent !important;
+    box-shadow: none;
   }
 }
 
@@ -129,6 +131,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     transition: border-bottom-color 0.2s ease;
+    box-shadow: none;
 
     // Remove chevron/dropdown arrow styling
     &::-ms-expand {
@@ -142,6 +145,7 @@
     &:focus {
       outline: none;
       border-bottom-color: var(--vagabond-c-dark);
+      box-shadow: none;
     }
 
     option {
@@ -254,6 +258,7 @@
   font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
+  box-shadow: none;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -263,6 +268,7 @@
     outline: none;
     border-bottom-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {
@@ -331,10 +337,12 @@
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
   padding: 0;
   margin-top: -2px;
+  box-shadow: none;
 
   &:focus {
     outline: none;
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
   }
 
   &::placeholder {
@@ -383,6 +391,7 @@
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
+  box-shadow: none;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -392,6 +401,7 @@
     outline: none;
     border-bottom-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {
@@ -423,6 +433,7 @@
   font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
+  box-shadow: none;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -432,6 +443,7 @@
     outline: none;
     border-bottom-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {
@@ -615,11 +627,13 @@
   border-radius: 4px;
   background: transparent;
   padding: 4px;
+  box-shadow: none;
 
   &:hover,
   &:focus {
     border-color: var(--vagabond-c-dark);
     outline: none;
+    box-shadow: none;
   }
 }
 
@@ -809,6 +823,7 @@
   color: var(--vagabond-c-dark);
   resize: vertical;
   line-height: 1.4;
+  box-shadow: none;
 
   &:hover {
     border-color: var(--vagabond-c-dark);
@@ -818,6 +833,7 @@
     outline: none;
     border-color: var(--vagabond-c-dark);
     background: transparent;
+    box-shadow: none;
   }
 
   &[readonly] {

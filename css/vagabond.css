@@ -2103,10 +2103,12 @@
   outline: none;
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
+  box-shadow: none;
 }
 .vagabond .npc-lock-name-row .npc-name-input:hover, .vagabond .npc-lock-name-row .npc-name-input:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
+  box-shadow: none;
 }
 .vagabond .npc-type-row {
   display: flex;
@@ -2126,6 +2128,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
 }
 .vagabond .npc-type-row select::-ms-expand {
   display: none;
@@ -2136,6 +2139,7 @@
 .vagabond .npc-type-row select:focus {
   outline: none;
   border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
 }
 .vagabond .npc-type-row select option {
   background: var(--vagabond-c-white);
@@ -2219,6 +2223,7 @@
   font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
+  box-shadow: none;
 }
 .vagabond .npc-field-input:hover {
   border-bottom-color: var(--vagabond-c-dark);
@@ -2227,6 +2232,7 @@
   outline: none;
   border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
+  box-shadow: none;
 }
 .vagabond .npc-field-input[readonly] {
   border: none;
@@ -2285,10 +2291,12 @@
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
   padding: 0;
   margin-top: -2px;
+  box-shadow: none;
 }
 .vagabond .npc-hp-heart-value:focus {
   outline: none;
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 .vagabond .npc-hp-heart-value::placeholder {
   color: rgba(255, 255, 255, 0.7);
@@ -2329,6 +2337,7 @@
   color: var(--vagabond-c-dark);
   width: 40px;
   text-align: left;
+  box-shadow: none;
 }
 .vagabond .npc-armor-value:hover {
   border-bottom-color: var(--vagabond-c-dark);
@@ -2337,6 +2346,7 @@
   outline: none;
   border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
+  box-shadow: none;
 }
 .vagabond .npc-armor-value[readonly] {
   border: none;
@@ -2363,6 +2373,7 @@
   font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
+  box-shadow: none;
 }
 .vagabond .npc-armor-description:hover {
   border-bottom-color: var(--vagabond-c-dark);
@@ -2371,6 +2382,7 @@
   outline: none;
   border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
+  box-shadow: none;
 }
 .vagabond .npc-armor-description[readonly] {
   border: none;
@@ -2509,10 +2521,12 @@
   border-radius: 4px;
   background: transparent;
   padding: 4px;
+  box-shadow: none;
 }
 .vagabond .npc-stat-value:hover, .vagabond .npc-stat-value:focus {
   border-color: var(--vagabond-c-dark);
   outline: none;
+  box-shadow: none;
 }
 .vagabond .npc-effects .effects-list {
   list-style: none;
@@ -2673,6 +2687,7 @@
   color: var(--vagabond-c-dark);
   resize: vertical;
   line-height: 1.4;
+  box-shadow: none;
 }
 .vagabond .npc-description-textarea:hover {
   border-color: var(--vagabond-c-dark);
@@ -2681,6 +2696,7 @@
   outline: none;
   border-color: var(--vagabond-c-dark);
   background: transparent;
+  box-shadow: none;
 }
 .vagabond .npc-description-textarea[readonly] {
   border: 1px solid transparent;
