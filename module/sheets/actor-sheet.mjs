@@ -1683,6 +1683,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         // Get the stat used for the attack (for crit bonus damage)
         const statKey = attackResult.weaponSkill?.stat || null;
+        console.log(`[Weapon Attack] WeaponSkillKey: ${attackResult.weaponSkillKey}, WeaponSkill:`, attackResult.weaponSkill, `StatKey: ${statKey}, Might: ${this.actor.system.stats.might?.value}`);
         damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
