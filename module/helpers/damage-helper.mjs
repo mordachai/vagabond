@@ -85,6 +85,8 @@ export class VagabondDamageHelper {
     let finalFormula = damageFormula;
     if (context.isCritical && context.statKey) {
       const statValue = actor.system.stats[context.statKey]?.value || 0;
+      console.log(`[Damage Button] Type: ${context.type}, IsCrit: ${context.isCritical}, StatKey: ${context.statKey}, StatValue: ${statValue}, Formula: ${damageFormula} -> ${finalFormula} + ${statValue}`);
+      console.log(`[Damage Button] Actor stats:`, actor.system.stats);
       if (statValue > 0) {
         finalFormula += ` + ${statValue}`;
       }
