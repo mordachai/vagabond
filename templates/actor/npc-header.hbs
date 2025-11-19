@@ -143,7 +143,7 @@
     <div class='npc-zone-field'>
       {{#if system.locked}}
         {{#if system.zone}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</label>
           <div class='npc-immunity-text'>{{system.zone}}</div>
         {{/if}}
       {{else}}
@@ -174,7 +174,7 @@
 
     {{! Appearing }}
     <div class='npc-stat-field'>
-      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}:</label>
+      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}</label>
       {{#if system.locked}}
         <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
       {{else}}
@@ -243,7 +243,7 @@
     {{#unless (and system.locked (not system.immunities.length))}}
       <div class='npc-immunity-row'>
         {{#if system.locked}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</label>
           <div class='npc-immunity-text'>
             {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
           </div>
@@ -280,7 +280,7 @@
     {{#unless (and system.locked (not system.weaknesses.length))}}
       <div class='npc-immunity-row'>
         {{#if system.locked}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</label>
           <div class='npc-immunity-text'>
             {{#each system.weaknesses as |weakness index|}}{{weakness}}{{#unless @last}}, {{/unless}}{{/each}}
           </div>
@@ -317,7 +317,7 @@
     {{#unless (and system.locked (not system.statusImmunities.length))}}
       <div class='npc-immunity-row'>
         {{#if system.locked}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}:</label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</label>
           <div class='npc-immunity-text'>
             {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
           </div>

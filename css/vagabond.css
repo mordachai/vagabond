@@ -2106,7 +2106,7 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   background: transparent;
   padding: 4px 0;
-  font-size: 14px;
+  font-size: 16px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   cursor: pointer;
@@ -2189,7 +2189,7 @@
   display: none;
 }
 .vagabond .npc-field-label {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
@@ -2202,7 +2202,7 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   flex: 1;
@@ -2231,7 +2231,7 @@
 }
 .vagabond .npc-field-display {
   padding: 2px 0;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
@@ -2248,7 +2248,7 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   width: 40px;
@@ -2267,13 +2267,13 @@
   opacity: 0.5;
 }
 .vagabond .npc-hp-separator {
-  font-size: 14px;
+  font-size: 16px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   font-weight: bold;
 }
 .vagabond .npc-hp-max {
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   font-weight: 600;
@@ -2290,7 +2290,7 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   width: 40px;
@@ -2324,7 +2324,7 @@
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   flex: 1;
@@ -2386,7 +2386,7 @@
   color: var(--vagabond-c-tan);
 }
 .vagabond .npc-section-title.accordion-header .accordion-icon {
-  font-size: 12px;
+  font-size: 14px;
   transition: transform 0.2s ease;
   margin-left: auto;
 }
@@ -2427,14 +2427,14 @@
 }
 .vagabond .npc-action-name {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-action-details {
   display: flex;
   gap: 8px;
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-muted);
   margin-top: 4px;
@@ -2456,7 +2456,7 @@
   gap: 4px;
 }
 .vagabond .npc-stat-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   font-family: "Paradigm", serif;
   text-transform: uppercase;
@@ -2491,7 +2491,7 @@
   margin-bottom: 8px;
 }
 .vagabond .npc-effects .effects-category-label {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   font-family: "Paradigm", serif;
   margin-bottom: 4px;
@@ -2514,7 +2514,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   font-weight: 600;
   color: var(--vagabond-c-dark);
@@ -2528,14 +2528,14 @@
   border: 1px solid var(--vagabond-c-tan);
 }
 .vagabond .npc-effects .effect-source {
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-muted);
   min-width: 80px;
   text-align: center;
 }
 .vagabond .npc-effects .effect-duration {
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   min-width: 60px;
@@ -2552,7 +2552,7 @@
   justify-content: center;
   cursor: pointer;
   color: var(--vagabond-c-muted);
-  font-size: 12px;
+  font-size: 14px;
   width: 20px;
   height: 20px;
   transition: color 0.2s ease;
@@ -2561,7 +2561,7 @@
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-effects .effect-control i {
-  font-size: 12px;
+  font-size: 14px;
 }
 .vagabond .npc-effects .effect-create {
   display: flex;
@@ -2574,7 +2574,7 @@
   border-radius: 4px;
   background: transparent;
   color: var(--vagabond-c-muted);
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Paradigm", serif;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -2585,13 +2585,13 @@
   background: var(--vagabond-c-faint);
 }
 .vagabond .npc-effects .effect-create i {
-  font-size: 10px;
+  font-size: 12px;
 }
 .vagabond .npc-empty-section {
   text-align: center;
   color: var(--vagabond-c-muted);
   font-style: italic;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   padding: 12px;
 }
@@ -2611,7 +2611,7 @@
 }
 .vagabond .npc-immunity-text {
   flex: 1;
-  font-size: 13px;
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
@@ -2637,7 +2637,7 @@
   border: none;
   border-bottom: 1px solid var(--vagabond-c-tan);
   border-radius: 0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
@@ -2648,7 +2648,7 @@
   border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-immunity-toggle i {
-  font-size: 10px;
+  font-size: 12px;
   transition: transform 0.2s ease;
 }
 details[open] .vagabond .npc-immunity-toggle i {
@@ -2686,7 +2686,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   margin: 0;
 }
 .vagabond .npc-immunity-checkbox-item span {
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
@@ -2705,7 +2705,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: var(--vagabond-c-faint);
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 3px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
@@ -2713,7 +2713,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-immunity-tag i {
   cursor: pointer;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--vagabond-c-muted);
 }
 .vagabond .npc-immunity-tag i:hover {
