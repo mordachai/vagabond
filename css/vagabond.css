@@ -2737,6 +2737,140 @@
 .vagabond .action-add-row .action-add-btn i {
   font-size: 14px;
 }
+
+/* Abilities Styles */
+.vagabond .npc-abilities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vagabond .npc-ability-view {
+  padding: 4px 0;
+  line-height: 1.6;
+}
+.vagabond .npc-ability-view .ability-name {
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--vagabond-c-dark);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.vagabond .npc-ability-view .ability-name:hover {
+  color: var(--vagabond-c-primary);
+}
+.vagabond .npc-ability-view .ability-description {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-ability-edit {
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: var(--vagabond-c-tan-lite);
+  position: relative;
+}
+.vagabond .npc-ability-edit .ability-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond .npc-ability-edit .ability-edit-header:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-ability-edit .ability-edit-header .ability-edit-name {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-ability-edit .ability-edit-header .accordion-icon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-ability-edit .ability-edit-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-ability-edit .ability-edit-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.vagabond .npc-ability-edit .ability-edit-content.collapsed {
+  max-height: 0;
+}
+.vagabond .npc-ability-edit .ability-edit-content:not(.collapsed) {
+  max-height: 1000px;
+}
+.vagabond .ability-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.vagabond .ability-edit-row label {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .ability-edit-row .ability-name-with-remove {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.vagabond .ability-edit-row .ability-name-with-remove input {
+  flex: 1;
+}
+.vagabond .ability-edit-row .ability-remove-btn {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+.vagabond .ability-edit-row .ability-remove-btn:hover {
+  color: #c62828;
+}
+.vagabond .ability-edit-row textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+.vagabond .ability-add-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+  padding: 4px 0;
+  border-top: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .ability-add-row .ability-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .ability-add-row .ability-add-btn:hover {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .ability-add-row .ability-add-btn i {
+  font-size: 14px;
+}
+
 .vagabond .npc-sheet select,
 .vagabond .npc-header select,
 .vagabond .npc-content select {

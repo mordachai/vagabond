@@ -235,6 +235,11 @@
           "ExtraInfo": "Extra Info",
           "Add": "Add Action"
         },
+        "Ability": {
+          "Name": "Name",
+          "Description": "Description",
+          "Add": "Add Ability"
+        },
         "Messages": {
           "NoActions": "No actions defined",
           "UnlockToEdit": "Click to unlock and edit",

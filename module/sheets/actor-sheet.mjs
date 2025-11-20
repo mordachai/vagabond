@@ -53,6 +53,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickActionName: this._onClickActionName,  // NPC click action name
       clickActionDamageRoll: this._onClickActionDamageRoll,  // NPC click action damage roll
       toggleActionAccordion: this._onToggleActionAccordion,  // NPC toggle action accordion
+      addAbility: this._onAddAbility,  // NPC add ability
+      removeAbility: this._onRemoveAbility,  // NPC remove ability
+      clickAbilityName: this._onClickAbilityName,  // NPC click ability name
+      toggleAbilityAccordion: this._onToggleAbilityAccordion,  // NPC toggle ability accordion
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -508,6 +512,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           );
         } else {
           context.enrichedActions = [];
+        }
+
+        // Enrich ability descriptions for display in locked mode
+        if (this.actor.system.locked && this.actor.system.abilities) {
+          context.enrichedAbilities = await Promise.all(
+            this.actor.system.abilities.map(async (ability) => {
+              // Enrich description if present
+              const enrichedDescription = ability.descriptionFormatted
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    ability.descriptionFormatted,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              return {
+                descriptionFormatted: enrichedDescription,
+              };
+            })
+          );
+        } else {
+          context.enrichedAbilities = [];
         }
         break;
     }
@@ -1483,6 +1512,95 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll,
       `<strong>${action.name}</strong> Damage`
     );
+  }
+
+  /**
+   * Handle adding a new NPC ability
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onAddAbility(event, target) {
+    event.preventDefault();
+    const abilities = this.actor.system.abilities || [];
+
+    // Add a new empty ability
+    const newAbility = {
+      name: '',
+      description: ''
+    };
+
+    await this.actor.update({ 'system.abilities': [...abilities, newAbility] });
+  }
+
+  /**
+   * Handle removing an NPC ability
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveAbility(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const abilities = this.actor.system.abilities || [];
+
+    // Remove the ability at the specified index
+    const newAbilities = abilities.filter((_, i) => i !== index);
+    await this.actor.update({ 'system.abilities': newAbilities });
+  }
+
+  /**
+   * Handle toggling ability accordion in edit mode
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleAbilityAccordion(event, target) {
+    event.preventDefault();
+    const index = target.dataset.index;
+    const abilityEdit = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
+
+    if (abilityEdit) {
+      const content = abilityEdit.querySelector('.ability-edit-content');
+      const icon = abilityEdit.querySelector('.accordion-icon');
+
+      if (content && icon) {
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('fa-chevron-right');
+        icon.classList.toggle('fa-chevron-down');
+      }
+    }
+  }
+
+  /**
+   * Handle clicking on ability name (send to chat)
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClickAbilityName(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const ability = this.actor.system.abilities[index];
+
+    if (!ability || !ability.name) return;
+
+    // Build the ability description for chat
+    let content = `<div class="npc-ability-chat"><h3>${ability.name}</h3>`;
+
+    if (ability.description) {
+      // Enrich description for display (this will convert dice rolls to clickable links)
+      const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+        ability.descriptionFormatted || ability.description,
+        {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          relativeTo: this.actor,
+        }
+      );
+      content += `<p>${enrichedDescription}</p>`;
+    }
+
+    content += `</div>`;
+
+    // Post to chat
+    await VagabondChatHelper.postMessage(this.actor, content);
   }
 
   /**
