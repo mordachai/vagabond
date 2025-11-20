@@ -492,6 +492,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                   )
                 : '';
 
+              // Enrich roll damage if present
+              const enrichedRollDamage = action.rollDamageFormatted
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    action.rollDamageFormatted,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
               // Enrich extra info if present
               const enrichedExtraInfo = action.extraInfo
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
@@ -506,6 +518,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
               return {
                 rechargeFormatted: enrichedRecharge,
+                rollDamageFormatted: enrichedRollDamage,
                 extraInfoFormatted: enrichedExtraInfo,
               };
             })

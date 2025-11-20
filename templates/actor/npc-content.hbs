@@ -380,7 +380,7 @@
                           <span class='action-damage-flat'>{{action.flatDamage}}</span>
                         {{/if}}
                         {{#if action.rollDamage}}
-                          <span class='action-damage-roll' data-action='clickActionDamageRoll' data-index='{{index}}' data-roll='{{action.rollDamage}}'>({{action.rollDamage}})</span>
+                          <span class='action-damage-roll'>({{{enrichedActions.[index].rollDamageFormatted}}})</span>
                         {{/if}}
                       </span>.
                     {{/if}}

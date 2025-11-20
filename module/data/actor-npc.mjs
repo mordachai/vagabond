@@ -233,6 +233,7 @@ export default class VagabondNPC extends VagabondActorBase {
     if (this.locked && this.actions) {
       this.actions.forEach((action, index) => {
         action.rechargeFormatted = this.formatRecharge(action.recharge);
+        action.rollDamageFormatted = this.formatRollDamage(action.rollDamage);
       });
     }
 
@@ -285,6 +286,26 @@ export default class VagabondNPC extends VagabondActorBase {
 
     // If it's just a number, return as-is
     return recharge;
+  }
+
+  /**
+   * Format roll damage for inline rolls
+   * Converts dice formulas like "2d8", "2d8+2", "d6+4" to roll links "[[/r 2d8+2]]"
+   */
+  formatRollDamage(rollDamage) {
+    if (!rollDamage) return '';
+
+    // Check if it's already a roll link
+    if (rollDamage.includes('[[/r')) return rollDamage;
+
+    // Check if it contains dice notation (e.g., "2d8", "d6+2", "3d10+5")
+    const dicePattern = /\d*d\d+/i;
+    if (dicePattern.test(rollDamage.trim())) {
+      return `[[/r ${rollDamage.trim()}]]`;
+    }
+
+    // If it's not dice notation, return as-is
+    return rollDamage;
   }
 
   /**
