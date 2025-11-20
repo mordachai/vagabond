@@ -40,6 +40,7 @@
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
   --vagabond-c-tan: #444444;
+  --vagabond-c-tan-lite: #45454512;
   --vagabond-c-muted: #666666;
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
@@ -52,6 +53,7 @@
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;
+  --vagabond-c-tan-lite: #b5b3a412;
   --vagabond-c-muted: #999999;
   --vagabond-c-white: #000000;
   --vagabond-c-black: #ffffff;
@@ -533,6 +535,20 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond {
+  /* Character Name at Top - Full Width */
+  /* Combined Character Info Row */
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+  /* When open, panel at natural position next to main sheet */
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Panel content area */
+  /* Features & Perks columns */
+  /* Mana info row */
+  /* Currency fields in panel */
+}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1752,9 +1768,6 @@
   font-weight: 400;
   line-height: 1.2;
 }
-.vagabond {
-  /* Character Name at Top - Full Width */
-}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1804,9 +1817,6 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
-}
-.vagabond {
-  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1972,11 +1982,6 @@
     font-size: 12px;
   }
 }
-.vagabond {
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -2001,20 +2006,11 @@
   backface-visibility: hidden;
   will-change: transform;
 }
-.vagabond {
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
-.vagabond {
-  /* When open, panel at natural position next to main sheet */
-}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
-}
-.vagabond {
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -2029,9 +2025,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.vagabond {
-  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -2069,9 +2062,6 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
-.vagabond {
-  /* Features & Perks columns */
-}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -2080,9 +2070,6 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
-}
-.vagabond {
-  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2119,9 +2106,6 @@
   text-align: center;
   color: var(--vagabond-c-dark);
 }
-.vagabond {
-  /* Currency fields in panel */
-}
 .vagabond .currency-row {
   justify-content: space-around;
   gap: 8px;
@@ -2142,14 +2126,14 @@
   overflow-x: hidden;
 }
 .vagabond .npc-header {
-  padding: 8px;
+  padding-top: 2px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 .vagabond .npc-lock-name-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 .vagabond .npc-lock-name-row .npc-name-input {
   flex: 1;
@@ -2195,11 +2179,10 @@
   display: flex;
   width: 120px;
   height: 120px;
-  transform: scale(0.86);
+  transform: scale(0.84);
   border: none;
   object-fit: cover;
   cursor: pointer;
-  border-radius: 50%;
   align-self: center;
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
@@ -2290,7 +2273,7 @@
   border: none;
   border-bottom: 1px solid var(--vagabond-c-tan);
   background: transparent;
-  padding: 4px 0;
+  padding: 4px 8px;
   font-size: 16px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
@@ -2525,6 +2508,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
 }
 .vagabond .npc-section.npc-actions, .vagabond .npc-section.npc-abilities, .vagabond .npc-section.npc-effects {
   border: none;
@@ -2630,11 +2614,11 @@
   font-weight: bold;
 }
 .vagabond .npc-action-edit {
-  padding: 0;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 0;
-  background: transparent;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 8px;
+  background: var(--vagabond-c-tan-lite);
   position: relative;
 }
 .vagabond .npc-action-edit .action-edit-header {
@@ -2759,7 +2743,7 @@
   border: none;
   border-bottom: 1px solid var(--vagabond-c-tan);
   background: transparent;
-  padding: 4px 0;
+  padding: 4px 8px;
   font-size: 14px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);

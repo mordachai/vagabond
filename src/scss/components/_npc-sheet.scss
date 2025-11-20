@@ -11,7 +11,7 @@
 
 // NPC Header
 .npc-header {
-  padding: 8px;
+  padding-top: 2px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 
@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 
   .npc-name-input {
     flex: 1;
@@ -74,11 +74,10 @@
     display: flex;
     width: 120px;
     height: 120px;
-    transform: scale(0.86);
+    transform: scale(0.84);
     border: none;
     object-fit: cover;
     cursor: pointer;
-    border-radius: 50%;
     align-self: center;
 
     &:hover {
@@ -187,7 +186,7 @@
     border: none;
     border-bottom: 1px solid var(--vagabond-c-tan);
     background: transparent;
-    padding: 4px 0;
+    padding: 4px 8px;
     font-size: 16px;
     font-family: $font-secondary;
     color: var(--vagabond-c-dark);
@@ -481,6 +480,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
 }
 
 // NPC Section (Actions, Abilities, Effects)
@@ -627,11 +627,11 @@
 
 // Action Edit Mode (unlocked)
 .npc-action-edit {
-  padding: 0;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 0;
-  background: transparent;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 8px;
+  background: $c-tan-lite;
   position: relative;
 
   // Accordion header for named actions
@@ -790,7 +790,7 @@
     border: none;
     border-bottom: 1px solid var(--vagabond-c-tan);
     background: transparent;
-    padding: 4px 0;
+    padding: 4px 8px;
     font-size: 14px;
     font-family: $font-secondary;
     color: var(--vagabond-c-dark);
