@@ -476,6 +476,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           this.actor.allApplicableEffects()
         );
 
+        // Enrich the appearing field for roll links
+        if (this.actor.system.locked && this.actor.system.appearingFormatted) {
+          context.enrichedAppearing = await foundry.applications.ux.TextEditor.enrichHTML(
+            this.actor.system.appearingFormatted,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.actor.getRollData(),
+              relativeTo: this.actor,
+            }
+          );
+        } else {
+          context.enrichedAppearing = this.actor.system.appearingFormatted;
+        }
+
         // Enrich action fields for display in locked mode
         if (this.actor.system.locked && this.actor.system.actions) {
           context.enrichedActions = await Promise.all(
@@ -1478,7 +1492,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (action.flatDamage || action.rollDamage) {
       content += `<p><strong>Damage:</strong> `;
       if (action.flatDamage) content += action.flatDamage;
-      if (action.rollDamage) content += ` (${action.rollDamage})`;
+      if (action.rollDamage) {
+        // Use formatted version with [[/r ]] notation for inline rolls
+        const rollText = action.rollDamageFormatted || action.rollDamage;
+        content += ` (${rollText})`;
+      }
       content += `</p>`;
     }
 
