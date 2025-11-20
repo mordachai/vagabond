@@ -35,7 +35,8 @@ VAGABOND.damageTypes = {
   'cold': 'VAGABOND.DamageTypes.Cold',
   'blunt': 'VAGABOND.DamageTypes.Blunt',
   'physical': 'VAGABOND.DamageTypes.Physical',
-  'necrotic': 'VAGABOND.DamageTypes.Necrotic'
+  'necrotic': 'VAGABOND.DamageTypes.Necrotic',
+  'psychic': 'VAGABOND.DamageTypes.Psychic'
 };
 
 /**

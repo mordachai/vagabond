@@ -1,4 +1,3 @@
-@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 @font-face {
   font-family: "Eskapade";
@@ -41,6 +40,7 @@
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
   --vagabond-c-tan: #444444;
+  --vagabond-c-tan-lite: #45454512;
   --vagabond-c-muted: #666666;
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
@@ -53,6 +53,7 @@
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;
+  --vagabond-c-tan-lite: #b5b3a412;
   --vagabond-c-muted: #999999;
   --vagabond-c-white: #000000;
   --vagabond-c-black: #ffffff;
@@ -2119,19 +2120,20 @@
   width: 60px;
   text-align: center;
 }
-.vagabond .vagabond.actor.npc .window-content {
-  max-height: calc(100vh - 200px);
+.vagabond .vagabond.sheet.actor.npc .window-content {
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .vagabond .npc-header {
-  padding: 8px;
+  padding-top: 2px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 .vagabond .npc-lock-name-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 .vagabond .npc-lock-name-row .npc-name-input {
   flex: 1;
@@ -2177,11 +2179,10 @@
   display: flex;
   width: 120px;
   height: 120px;
-  transform: scale(0.86);
+  transform: scale(0.84);
   border: none;
   object-fit: cover;
   cursor: pointer;
-  border-radius: 50%;
   align-self: center;
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
@@ -2272,7 +2273,7 @@
   border: none;
   border-bottom: 1px solid var(--vagabond-c-tan);
   background: transparent;
-  padding: 4px 0;
+  padding: 4px 8px;
   font-size: 16px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
@@ -2507,6 +2508,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
 }
 .vagabond .npc-section.npc-actions, .vagabond .npc-section.npc-abilities, .vagabond .npc-section.npc-effects {
   border: none;
@@ -2564,36 +2566,226 @@
 .vagabond .npc-actions-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
-.vagabond .npc-action-item {
+.vagabond .npc-action-view {
   padding: 4px 0;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
+  line-height: 1.6;
 }
-.vagabond .npc-action-item:hover {
-  background: transparent;
-  color: var(--vagabond-c-tan);
-}
-.vagabond .npc-action-name {
-  font-weight: bold;
-  font-size: 16px;
+.vagabond .action-name-line {
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
-.vagabond .npc-action-details {
-  display: flex;
-  gap: 8px;
+.vagabond .action-name-line .action-name {
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .action-name-line .action-name:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .action-name-line .action-meta {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-display {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-flat {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-roll {
+  font-weight: normal;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .action-name-line .action-damage-roll:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .action-name-line .action-description {
+  font-weight: normal;
+}
+.vagabond .action-extra-info {
+  margin-top: 4px;
+  padding-left: 12px;
   font-size: 14px;
   font-family: "Paradigm", serif;
-  color: var(--vagabond-c-muted);
-  margin-top: 4px;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
 }
-.vagabond .npc-action-details .npc-action-damage:not(:last-child)::after,
-.vagabond .npc-action-details .npc-action-range:not(:last-child)::after {
-  content: "•";
-  margin-left: 8px;
+.vagabond .npc-action-edit {
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 8px;
+  background: var(--vagabond-c-tan-lite);
+  position: relative;
+}
+.vagabond .npc-action-edit .action-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond .npc-action-edit .action-edit-header:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-action-edit .action-edit-header .action-edit-name {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-action-edit .action-edit-header .accordion-icon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-action-edit .action-edit-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-action-edit .action-edit-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.vagabond .npc-action-edit .action-edit-content.collapsed {
+  max-height: 0;
+}
+.vagabond .npc-action-edit .action-edit-content:not(.collapsed) {
+  max-height: 1000px;
+}
+.vagabond .action-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.vagabond .action-edit-row label {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .action-edit-row .action-name-with-remove {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.vagabond .action-edit-row .action-name-with-remove input {
+  flex: 1;
+}
+.vagabond .action-edit-row .action-remove-btn {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+.vagabond .action-edit-row .action-remove-btn:hover {
+  color: #c62828;
+}
+.vagabond .action-edit-row textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+.vagabond .action-edit-row-split {
+  flex-direction: row;
+  gap: 8px;
+}
+.vagabond .action-edit-row-split .action-edit-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .action-add-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+  padding: 4px 0;
+  border-top: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .action-add-row .action-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .action-add-row .action-add-btn:hover {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .action-add-row .action-add-btn i {
+  font-size: 14px;
+}
+.vagabond .npc-sheet select,
+.vagabond .npc-header select,
+.vagabond .npc-content select {
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
+}
+.vagabond .npc-sheet select::-ms-expand,
+.vagabond .npc-header select::-ms-expand,
+.vagabond .npc-content select::-ms-expand {
+  display: none;
+}
+.vagabond .npc-sheet select:hover,
+.vagabond .npc-header select:hover,
+.vagabond .npc-content select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet select:focus,
+.vagabond .npc-header select:focus,
+.vagabond .npc-content select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .npc-sheet select option,
+.vagabond .npc-header select option,
+.vagabond .npc-content select option {
+  background: var(--vagabond-c-white);
+}
+.vagabond .npc-sheet select option:checked,
+.vagabond .npc-header select option:checked,
+.vagabond .npc-content select option:checked {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-sheet select:disabled,
+.vagabond .npc-header select:disabled,
+.vagabond .npc-content select:disabled {
+  color: var(--vagabond-c-muted);
+  cursor: not-allowed;
 }
 .vagabond .npc-stats-grid {
   display: grid;

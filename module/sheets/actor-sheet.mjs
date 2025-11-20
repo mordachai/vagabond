@@ -48,6 +48,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       selectZone: this._onSelectZone,  // NPC zone selection
       clearZone: this._onClearZone,  // NPC zone clear
       toggleFavorHinder: this._onToggleFavorHinder,  // Favor/Hinder toggle
+      addAction: this._onAddAction,  // NPC add action
+      removeAction: this._onRemoveAction,  // NPC remove action
+      clickActionName: this._onClickActionName,  // NPC click action name
+      clickActionDamageRoll: this._onClickActionDamageRoll,  // NPC click action damage roll
+      toggleActionAccordion: this._onToggleActionAccordion,  // NPC toggle action accordion
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -466,6 +471,44 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         context.effects = prepareActiveEffectCategories(
           this.actor.allApplicableEffects()
         );
+
+        // Enrich action fields for display in locked mode
+        if (this.actor.system.locked && this.actor.system.actions) {
+          context.enrichedActions = await Promise.all(
+            this.actor.system.actions.map(async (action) => {
+              // Enrich recharge if present
+              const enrichedRecharge = action.rechargeFormatted
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    action.rechargeFormatted,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              // Enrich extra info if present
+              const enrichedExtraInfo = action.extraInfo
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    action.extraInfo,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              return {
+                rechargeFormatted: enrichedRecharge,
+                extraInfoFormatted: enrichedExtraInfo,
+              };
+            })
+          );
+        } else {
+          context.enrichedActions = [];
+        }
         break;
     }
     return context;
@@ -1302,6 +1345,144 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Uncheck all radio buttons
     const radios = this.element.querySelectorAll('input[type="radio"][name="zone-selector"]');
     radios.forEach(radio => radio.checked = false);
+  }
+
+  /**
+   * Handle adding a new NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onAddAction(event, target) {
+    event.preventDefault();
+    const actions = this.actor.system.actions || [];
+
+    // Add a new empty action
+    const newAction = {
+      name: '',
+      description: '',
+      type: null,
+      range: null,
+      note: '',
+      recharge: '',
+      flatDamage: '',
+      rollDamage: '',
+      extraInfo: ''
+    };
+
+    await this.actor.update({ 'system.actions': [...actions, newAction] });
+  }
+
+  /**
+   * Handle removing an NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveAction(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const actions = this.actor.system.actions || [];
+
+    // Remove the action at the specified index
+    const newActions = actions.filter((_, i) => i !== index);
+    await this.actor.update({ 'system.actions': newActions });
+  }
+
+  /**
+   * Handle toggling action accordion in edit mode
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleActionAccordion(event, target) {
+    event.preventDefault();
+    const index = target.dataset.index;
+    const actionEdit = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
+
+    if (actionEdit) {
+      const content = actionEdit.querySelector('.action-edit-content');
+      const icon = actionEdit.querySelector('.accordion-icon');
+
+      if (content && icon) {
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('fa-chevron-right');
+        icon.classList.toggle('fa-chevron-down');
+      }
+    }
+  }
+
+  /**
+   * Handle clicking on action name (send to chat)
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClickActionName(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const action = this.actor.system.actions[index];
+
+    if (!action || !action.name) return;
+
+    // Build the action description for chat
+    let content = `<div class="npc-action-chat"><h3>${action.name}</h3>`;
+
+    if (action.note || action.type || action.range || action.recharge) {
+      content += `<p><strong>`;
+      if (action.note) content += action.note;
+      if (action.type) content += ` ${action.type}`;
+      if (action.range) content += ` ${action.range}`;
+      if (action.recharge) content += ` | Recharge: ${action.recharge}`;
+      content += `</strong></p>`;
+    }
+
+    if (action.flatDamage || action.rollDamage) {
+      content += `<p><strong>Damage:</strong> `;
+      if (action.flatDamage) content += action.flatDamage;
+      if (action.rollDamage) content += ` (${action.rollDamage})`;
+      content += `</p>`;
+    }
+
+    if (action.description) {
+      content += `<p>${action.description}</p>`;
+    }
+
+    if (action.extraInfo) {
+      // Enrich extra info for display
+      const enrichedExtraInfo = await foundry.applications.ux.TextEditor.enrichHTML(
+        action.extraInfo,
+        {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          relativeTo: this.actor,
+        }
+      );
+      content += `<div>${enrichedExtraInfo}</div>`;
+    }
+
+    content += `</div>`;
+
+    // Post to chat
+    await VagabondChatHelper.postMessage(this.actor, content);
+  }
+
+  /**
+   * Handle clicking on action damage roll (roll the dice)
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClickActionDamageRoll(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const action = this.actor.system.actions[index];
+
+    if (!action || !action.rollDamage) return;
+
+    // Roll the damage dice
+    const roll = new Roll(action.rollDamage, this.actor.getRollData());
+    await roll.evaluate();
+    await VagabondChatHelper.postRoll(
+      this.actor,
+      roll,
+      `<strong>${action.name}</strong> Damage`
+    );
   }
 
   /**

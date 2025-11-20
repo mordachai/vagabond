@@ -69,7 +69,8 @@
       "Cold": "Cold",
       "Blunt": "Blunt",
       "Physical": "Physical",
-      "Necrotic": "Necrotic"
+      "Necrotic": "Necrotic",
+      "Psychic": "Psychic"
     },
     "StatusConditions": {
       "Berserk": "Berserk",
@@ -221,6 +222,18 @@
           "Actions": "Actions",
           "Abilities": "Abilities",
           "Effects": "Effects"
+        },
+        "Action": {
+          "Name": "Name",
+          "Description": "Description",
+          "Type": "Type",
+          "Range": "Range",
+          "Note": "Note",
+          "Recharge": "Recharge",
+          "FlatDamage": "Flat Damage",
+          "RollDamage": "Roll Damage",
+          "ExtraInfo": "Extra Info",
+          "Add": "Add Action"
         },
         "Messages": {
           "NoActions": "No actions defined",

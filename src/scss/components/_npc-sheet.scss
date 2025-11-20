@@ -1,16 +1,17 @@
 // NPC Sheet Styles
 
-// NPC sheet container - set max height
-.vagabond.actor.npc {
+// NPC sheet container - set max height and enable scrolling
+.vagabond.sheet.actor.npc {
   .window-content {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
 // NPC Header
 .npc-header {
-  padding: 8px;
+  padding-top: 2px;
   border-bottom: 1px solid var(--vagabond-c-tan);
 }
 
@@ -19,7 +20,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 
   .npc-name-input {
     flex: 1;
@@ -73,11 +74,10 @@
     display: flex;
     width: 120px;
     height: 120px;
-    transform: scale(0.86);
+    transform: scale(0.84);
     border: none;
     object-fit: cover;
     cursor: pointer;
-    border-radius: 50%;
     align-self: center;
 
     &:hover {
@@ -186,7 +186,7 @@
     border: none;
     border-bottom: 1px solid var(--vagabond-c-tan);
     background: transparent;
-    padding: 4px 0;
+    padding: 4px 8px;
     font-size: 16px;
     font-family: $font-secondary;
     color: var(--vagabond-c-dark);
@@ -480,6 +480,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
 }
 
 // NPC Section (Actions, Abilities, Effects)
@@ -564,41 +565,268 @@
 .npc-actions-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
-.npc-action-item {
+// Action View Mode (locked)
+.npc-action-view {
   padding: 4px 0;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
+  line-height: 1.6;
+}
 
-  &:hover {
-    background: transparent;
-    color: var(--vagabond-c-tan);
+.action-name-line {
+  font-size: 15px;
+  font-family: $font-secondary;
+  color: var(--vagabond-c-dark);
+
+  .action-name {
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--vagabond-c-tan);
+    }
+  }
+
+  .action-meta {
+    font-weight: normal;
+  }
+
+  .action-damage-display {
+    font-weight: normal;
+  }
+
+  .action-damage-flat {
+    font-weight: normal;
+  }
+
+  .action-damage-roll {
+    font-weight: normal;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--vagabond-c-tan);
+    }
+  }
+
+  .action-description {
+    font-weight: normal;
   }
 }
 
-.npc-action-name {
-  font-weight: bold;
-  font-size: 16px;
-  font-family: $font-secondary;
-  color: var(--vagabond-c-dark);
-}
-
-.npc-action-details {
-  display: flex;
-  gap: 8px;
+.action-extra-info {
+  margin-top: 4px;
+  padding-left: 12px;
   font-size: 14px;
   font-family: $font-secondary;
-  color: var(--vagabond-c-muted);
-  margin-top: 4px;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
+}
 
-  .npc-action-damage,
-  .npc-action-range {
-    &:not(:last-child)::after {
-      content: '•';
-      margin-left: 8px;
+// Action Edit Mode (unlocked)
+.npc-action-edit {
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 8px;
+  background: $c-tan-lite;
+  position: relative;
+
+  // Accordion header for named actions
+  .action-edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
+    border-radius: 0;
+    cursor: pointer;
+    transition: border-bottom-color 0.2s ease;
+
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
+    .action-edit-name {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: $font-secondary;
+      color: var(--vagabond-c-dark);
+    }
+
+    .accordion-icon {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+      color: var(--vagabond-c-muted);
+
+      &.fa-chevron-down {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  // Accordion content (collapsible)
+  .action-edit-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    &.collapsed {
+      max-height: 0;
+    }
+
+    &:not(.collapsed) {
+      max-height: 1000px;
+    }
+  }
+}
+
+.action-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-dark);
+  }
+
+  // Name field with remove button container
+  .action-name-with-remove {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+
+    input {
+      flex: 1;
+    }
+  }
+
+  // Remove button positioning
+  .action-remove-btn {
+    flex-shrink: 0;
+    padding: 2px 6px;
+    border: none;
+    background: transparent;
+    color: var(--vagabond-c-muted);
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #c62828;
+    }
+  }
+
+  // Inputs and textareas inherit from .npc-field-input
+  input[type='text'],
+  textarea {
+    // All styling comes from .npc-field-input class
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+}
+
+.action-edit-row-split {
+  flex-direction: row;
+  gap: 8px;
+
+  .action-edit-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.action-add-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+  padding: 4px 0;
+  border-top: 1px solid var(--vagabond-c-tan);
+
+  .action-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--vagabond-c-muted);
+    font-size: 14px;
+    font-family: $font-secondary;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--vagabond-c-dark);
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+// Default dropdown styling (scoped to NPC sheet)
+.npc-sheet,
+.npc-header,
+.npc-content {
+  select {
+    border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
+    background: transparent;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-dark);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-bottom-color 0.2s ease;
+    box-shadow: none;
+
+    // Remove chevron/dropdown arrow styling
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--vagabond-c-dark);
+      box-shadow: none;
+    }
+
+    option {
+      background: var(--vagabond-c-white);
+
+      &:checked {
+        background: var(--vagabond-c-faint);
+      }
+    }
+
+    &:disabled {
+      color: var(--vagabond-c-muted);
+      cursor: not-allowed;
     }
   }
 }
