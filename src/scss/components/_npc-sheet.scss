@@ -105,7 +105,7 @@
   background-position: center;
   background-size: cover;
 
-  .npc-hp-icon {
+  .npc-hp-heart-icon {
     font-size: 14px;
     color: #c62828;
     cursor: pointer;
@@ -116,7 +116,7 @@
     }
   }
 
-  .npc-hp-current-input {
+  .npc-hp-current {
     width: 28px;
     text-align: right;
     border: none;
@@ -125,6 +125,12 @@
     font-size: 18px;
     font-weight: bold;
     color: var(--vagabond-c-dark);
+    box-shadow: none;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
   }
 
   .npc-hp-separator {
@@ -368,8 +374,13 @@
 
 .npc-fatigue-checkboxes {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
+
+  // Make NPC skulls smaller than character skulls
+  .fatigue-skull {
+    font-size: 14px;
+  }
 }
 
 // Armor Display (Value + Description)
