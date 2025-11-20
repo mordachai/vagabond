@@ -135,6 +135,54 @@ export default class VagabondNPC extends VagabondActorBase {
       initial: '',
     });
 
+    // Actions
+    schema.actions = new fields.ArrayField(
+      new fields.SchemaField({
+        name: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        description: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        type: new fields.StringField({
+          required: false,
+          nullable: true,
+          initial: null,
+          choices: ['Multi-Attack', 'Melee', 'Ranged', 'Cast']
+        }),
+        range: new fields.StringField({
+          required: false,
+          nullable: true,
+          initial: null,
+        }),
+        note: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        recharge: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        damage: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        extraInfo: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+      }),
+      { required: true, initial: [] }
+    );
+
     return schema;
   }
 
@@ -158,6 +206,13 @@ export default class VagabondNPC extends VagabondActorBase {
     } else {
       this.appearingFormatted = this.appearing;
     }
+
+    // Format actions for display in locked mode
+    if (this.locked && this.actions) {
+      this.actions.forEach((action, index) => {
+        action.rechargeFormatted = this.formatRecharge(action.recharge);
+      });
+    }
   }
 
   /**
@@ -178,5 +233,28 @@ export default class VagabondNPC extends VagabondActorBase {
 
     // If it's just a number, return as-is
     return appearing;
+  }
+
+  /**
+   * Format recharge field for dice rolls
+   * Converts "Cd6" to "[[/r d6]]", "Cd4" to "[[/r d4]]", etc.
+   * If no 'C' prefix, just returns the value as-is (plain number)
+   */
+  formatRecharge(recharge) {
+    if (!recharge) return '';
+
+    // Check if it's already a roll link
+    if (recharge.includes('[[/r')) return recharge;
+
+    // Check if it matches dice notation with C prefix (e.g., "Cd6", "Cd4", "C2d8")
+    const dicePattern = /^C(\d*)d(\d+)$/i;
+    const match = recharge.trim().match(dicePattern);
+    if (match) {
+      const diceFormula = `${match[1]}d${match[2]}`;
+      return `[[/r ${diceFormula}]]`;
+    }
+
+    // If it's just a number, return as-is
+    return recharge;
   }
 }

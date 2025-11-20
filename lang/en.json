@@ -222,6 +222,17 @@
           "Abilities": "Abilities",
           "Effects": "Effects"
         },
+        "Action": {
+          "Name": "Name",
+          "Description": "Description",
+          "Type": "Type",
+          "Range": "Range",
+          "Note": "Note",
+          "Recharge": "Recharge",
+          "Damage": "Damage",
+          "ExtraInfo": "Extra Info",
+          "Add": "Add Action"
+        },
         "Messages": {
           "NoActions": "No actions defined",
           "UnlockToEdit": "Click to unlock and edit",

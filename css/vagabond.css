@@ -1,4 +1,3 @@
-@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 @font-face {
   font-family: "Eskapade";
@@ -534,20 +533,6 @@
 }
 
 /* Styles limited to vagabond sheets */
-.vagabond {
-  /* Character Name at Top - Full Width */
-  /* Combined Character Info Row */
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
-  /* Panel content area */
-  /* Features & Perks columns */
-  /* Mana info row */
-  /* Currency fields in panel */
-}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1767,6 +1752,9 @@
   font-weight: 400;
   line-height: 1.2;
 }
+.vagabond {
+  /* Character Name at Top - Full Width */
+}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1816,6 +1804,9 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
+}
+.vagabond {
+  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1981,6 +1972,11 @@
     font-size: 12px;
   }
 }
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -2005,11 +2001,20 @@
   backface-visibility: hidden;
   will-change: transform;
 }
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
+}
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -2024,6 +2029,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.vagabond {
+  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -2061,6 +2069,9 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
+.vagabond {
+  /* Features & Perks columns */
+}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -2069,6 +2080,9 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
+}
+.vagabond {
+  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2104,6 +2118,9 @@
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
+}
+.vagabond {
+  /* Currency fields in panel */
 }
 .vagabond .currency-row {
   justify-content: space-around;
@@ -2564,36 +2581,147 @@
 .vagabond .npc-actions-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
-.vagabond .npc-action-item {
+.vagabond .npc-action-view {
   padding: 4px 0;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
+  line-height: 1.6;
 }
-.vagabond .npc-action-item:hover {
-  background: transparent;
-  color: var(--vagabond-c-tan);
-}
-.vagabond .npc-action-name {
-  font-weight: bold;
-  font-size: 16px;
+.vagabond .action-name-line {
+  font-size: 15px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
 }
-.vagabond .npc-action-details {
-  display: flex;
-  gap: 8px;
+.vagabond .action-name-line .action-name {
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .action-name-line .action-name:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .action-name-line .action-meta {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage {
+  font-weight: normal;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .action-name-line .action-damage:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .action-name-line .action-description {
+  font-weight: normal;
+}
+.vagabond .action-extra-info {
+  margin-top: 4px;
+  padding-left: 12px;
   font-size: 14px;
   font-family: "Paradigm", serif;
-  color: var(--vagabond-c-muted);
-  margin-top: 4px;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
 }
-.vagabond .npc-action-details .npc-action-damage:not(:last-child)::after,
-.vagabond .npc-action-details .npc-action-range:not(:last-child)::after {
-  content: "•";
-  margin-left: 8px;
+.vagabond .npc-action-edit {
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: var(--vagabond-c-faint);
+}
+.vagabond .action-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.vagabond .action-edit-row label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .action-edit-row input[type=text],
+.vagabond .action-edit-row textarea,
+.vagabond .action-edit-row select {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  background: white;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .action-edit-row input[type=text]:hover,
+.vagabond .action-edit-row textarea:hover,
+.vagabond .action-edit-row select:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .action-edit-row input[type=text]:focus,
+.vagabond .action-edit-row textarea:focus,
+.vagabond .action-edit-row select:focus {
+  outline: none;
+  border-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .action-edit-row textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+.vagabond .action-edit-row .action-remove-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+.vagabond .action-edit-row .action-remove-btn:hover {
+  color: #c62828;
+}
+.vagabond .action-edit-row-split {
+  flex-direction: row;
+  gap: 8px;
+}
+.vagabond .action-edit-row-split .action-edit-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .action-add-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.vagabond .action-add-row .action-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px dashed var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .action-add-row .action-add-btn:hover {
+  border-color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-faint);
+}
+.vagabond .action-add-row .action-add-btn i {
+  font-size: 14px;
 }
 .vagabond .npc-stats-grid {
   display: grid;

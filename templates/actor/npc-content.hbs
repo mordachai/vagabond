@@ -6,22 +6,118 @@
     <h3 class='npc-section-title'>{{localize "VAGABOND.Actor.NPC.Sections.Actions"}}</h3>
     <div class='npc-section-content'>
       <div class='npc-actions-list'>
-        {{#if weapons}}
-          {{#each weapons as |weapon|}}
-            <div class='npc-action-item' data-item-id='{{weapon.id}}'>
-              <div class='npc-action-name'>{{weapon.name}}</div>
-              <div class='npc-action-details'>
-                {{#if weapon.system.damage}}
-                  <span class='npc-action-damage'>{{weapon.system.damage}}</span>
-                {{/if}}
-                {{#if weapon.system.range}}
-                  <span class='npc-action-range'>{{weapon.system.range}}</span>
+        {{#if system.locked}}
+          {{! VIEW MODE }}
+          {{#if system.actions}}
+            {{#each system.actions as |action index|}}
+              {{#if action.name}}
+                <div class='npc-action-view' data-action-index='{{index}}'>
+                  <div class='action-name-line'>
+                    <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>:
+                    {{#if (or action.note action.type action.range action.recharge)}}
+                      <span class='action-meta'>
+                        {{#if action.note}}{{action.note}}{{/if}}
+                        {{#if action.type}} {{action.type}}{{/if}}
+                        {{#if action.range}} {{action.range}}{{/if}}
+                        {{#if action.recharge}}
+                          | {{{enrichedActions.[index].rechargeFormatted}}}
+                        {{/if}}
+                      </span>:
+                    {{/if}}
+                    {{#if action.damage}}
+                      <span class='action-damage' data-action='clickActionDamage' data-index='{{index}}'>{{action.damage}}</span>.
+                    {{/if}}
+                    {{#if action.description}}
+                      <span class='action-description'>{{action.description}}</span>
+                    {{/if}}
+                  </div>
+                  {{#if action.extraInfo}}
+                    <div class='action-extra-info'>{{{enrichedActions.[index].extraInfoFormatted}}}</div>
+                  {{/if}}
+                </div>
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        {{else}}
+          {{! EDIT MODE }}
+          {{#if system.actions}}
+            {{#each system.actions as |action index|}}
+              <div class='npc-action-edit' data-action-index='{{index}}'>
+                <div class='action-edit-row'>
+                  <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}</label>
+                  <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' />
+                  <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
+                    <i class='fas fa-trash'></i>
+                  </button>
+                </div>
+                {{#if action.name}}
+                  <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.Description"}}</label>
+                    <input type='text' name='system.actions.{{index}}.description' value='{{action.description}}' placeholder='Description' />
+                  </div>
+                  <div class='action-edit-row action-edit-row-split'>
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.Type"}}</label>
+                      <select name='system.actions.{{index}}.type' class='action-type-select' data-index='{{index}}'>
+                        <option value=''>-</option>
+                        <option value='Multi-Attack' {{#if (eq action.type "Multi-Attack")}}selected{{/if}}>Multi-Attack</option>
+                        <option value='Melee' {{#if (eq action.type "Melee")}}selected{{/if}}>Melee</option>
+                        <option value='Ranged' {{#if (eq action.type "Ranged")}}selected{{/if}}>Ranged</option>
+                        <option value='Cast' {{#if (eq action.type "Cast")}}selected{{/if}}>Cast</option>
+                      </select>
+                    </div>
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.Range"}}</label>
+                      <select name='system.actions.{{index}}.range' class='action-range-select' data-index='{{index}}'>
+                        <option value=''>-</option>
+                        {{#if (eq action.type "Melee")}}
+                          <option value='Near' {{#if (eq action.range "Near")}}selected{{/if}}>Near</option>
+                        {{/if}}
+                        {{#if (eq action.type "Ranged")}}
+                          <option value='Near' {{#if (eq action.range "Near")}}selected{{/if}}>Near</option>
+                          <option value='Far' {{#if (eq action.range "Far")}}selected{{/if}}>Far</option>
+                        {{/if}}
+                        {{#if (eq action.type "Cast")}}
+                          <option value='Aura' {{#if (eq action.range "Aura")}}selected{{/if}}>Aura</option>
+                          <option value='Cone' {{#if (eq action.range "Cone")}}selected{{/if}}>Cone</option>
+                          <option value='Cube' {{#if (eq action.range "Cube")}}selected{{/if}}>Cube</option>
+                          <option value='Imbue' {{#if (eq action.range "Imbue")}}selected{{/if}}>Imbue</option>
+                          <option value='Glyph' {{#if (eq action.range "Glyph")}}selected{{/if}}>Glyph</option>
+                          <option value='Line' {{#if (eq action.range "Line")}}selected{{/if}}>Line</option>
+                          <option value='Remote' {{#if (eq action.range "Remote")}}selected{{/if}}>Remote</option>
+                          <option value='Sphere' {{#if (eq action.range "Sphere")}}selected{{/if}}>Sphere</option>
+                          <option value='Touch' {{#if (eq action.range "Touch")}}selected{{/if}}>Touch</option>
+                        {{/if}}
+                      </select>
+                    </div>
+                  </div>
+                  <div class='action-edit-row action-edit-row-split'>
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}</label>
+                      <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' />
+                    </div>
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}</label>
+                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='5 or Cd6' />
+                    </div>
+                  </div>
+                  <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.Damage"}}</label>
+                    <input type='text' name='system.actions.{{index}}.damage' value='{{action.damage}}' placeholder='4 (2d8)' />
+                  </div>
+                  <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}</label>
+                    <textarea name='system.actions.{{index}}.extraInfo' rows='3' placeholder='Extra information...'>{{action.extraInfo}}</textarea>
+                  </div>
                 {{/if}}
               </div>
-            </div>
-          {{/each}}
-        {{else}}
-          <div class='npc-empty-section'>{{localize "VAGABOND.Actor.NPC.Messages.NoActions"}}</div>
+            {{/each}}
+          {{/if}}
+          <div class='action-add-row'>
+            <button type='button' class='action-add-btn' data-action='addAction'>
+              <i class='fas fa-plus'></i> {{localize "VAGABOND.Actor.NPC.Action.Add"}}
+            </button>
+          </div>
         {{/if}}
       </div>
     </div>

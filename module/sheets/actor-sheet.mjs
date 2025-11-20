@@ -48,6 +48,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       selectZone: this._onSelectZone,  // NPC zone selection
       clearZone: this._onClearZone,  // NPC zone clear
       toggleFavorHinder: this._onToggleFavorHinder,  // Favor/Hinder toggle
+      addAction: this._onAddAction,  // NPC add action
+      removeAction: this._onRemoveAction,  // NPC remove action
+      clickActionName: this._onClickActionName,  // NPC click action name
+      clickActionDamage: this._onClickActionDamage,  // NPC click action damage
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -466,6 +470,44 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         context.effects = prepareActiveEffectCategories(
           this.actor.allApplicableEffects()
         );
+
+        // Enrich action fields for display in locked mode
+        if (this.actor.system.locked && this.actor.system.actions) {
+          context.enrichedActions = await Promise.all(
+            this.actor.system.actions.map(async (action) => {
+              // Enrich recharge if present
+              const enrichedRecharge = action.rechargeFormatted
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    action.rechargeFormatted,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              // Enrich extra info if present
+              const enrichedExtraInfo = action.extraInfo
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    action.extraInfo,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              return {
+                rechargeFormatted: enrichedRecharge,
+                extraInfoFormatted: enrichedExtraInfo,
+              };
+            })
+          );
+        } else {
+          context.enrichedActions = [];
+        }
         break;
     }
     return context;
@@ -1302,6 +1344,177 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Uncheck all radio buttons
     const radios = this.element.querySelectorAll('input[type="radio"][name="zone-selector"]');
     radios.forEach(radio => radio.checked = false);
+  }
+
+  /**
+   * Handle adding a new NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onAddAction(event, target) {
+    event.preventDefault();
+    const actions = this.actor.system.actions || [];
+
+    // Add a new empty action
+    const newAction = {
+      name: '',
+      description: '',
+      type: null,
+      range: null,
+      note: '',
+      recharge: '',
+      damage: '',
+      extraInfo: ''
+    };
+
+    await this.actor.update({ 'system.actions': [...actions, newAction] });
+  }
+
+  /**
+   * Handle removing an NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveAction(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const actions = this.actor.system.actions || [];
+
+    // Remove the action at the specified index
+    const newActions = actions.filter((_, i) => i !== index);
+    await this.actor.update({ 'system.actions': newActions });
+  }
+
+  /**
+   * Handle clicking on action name (send to chat)
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClickActionName(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const action = this.actor.system.actions[index];
+
+    if (!action || !action.name) return;
+
+    // Build the action description for chat
+    let content = `<div class="npc-action-chat"><h3>${action.name}</h3>`;
+
+    if (action.note || action.type || action.range || action.recharge) {
+      content += `<p><strong>`;
+      if (action.note) content += action.note;
+      if (action.type) content += ` ${action.type}`;
+      if (action.range) content += ` ${action.range}`;
+      if (action.recharge) content += ` | Recharge: ${action.recharge}`;
+      content += `</strong></p>`;
+    }
+
+    if (action.damage) {
+      content += `<p><strong>Damage:</strong> ${action.damage}</p>`;
+    }
+
+    if (action.description) {
+      content += `<p>${action.description}</p>`;
+    }
+
+    if (action.extraInfo) {
+      // Enrich extra info for display
+      const enrichedExtraInfo = await foundry.applications.ux.TextEditor.enrichHTML(
+        action.extraInfo,
+        {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          relativeTo: this.actor,
+        }
+      );
+      content += `<div>${enrichedExtraInfo}</div>`;
+    }
+
+    content += `</div>`;
+
+    // Post to chat
+    await VagabondChatHelper.postMessage(this.actor, content);
+  }
+
+  /**
+   * Handle clicking on action damage (roll damage)
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClickActionDamage(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const action = this.actor.system.actions[index];
+
+    if (!action || !action.damage) return;
+
+    // Parse damage string to extract number and dice
+    // Format: "4 (2d8)" - both should be clickable
+    const damagePattern = /(\d+)\s*\(([^)]+)\)/;
+    const match = action.damage.match(damagePattern);
+
+    if (!match) {
+      // Try just a plain number or dice
+      const plainPattern = /^(\d+)$|^(\d*d\d+)$/;
+      const plainMatch = action.damage.match(plainPattern);
+      if (plainMatch) {
+        // Roll as dice if it's dice notation, otherwise just post the number
+        if (action.damage.includes('d')) {
+          const roll = new Roll(action.damage, this.actor.getRollData());
+          await roll.evaluate();
+          await VagabondChatHelper.postRoll(
+            this.actor,
+            roll,
+            `<strong>${action.name}</strong> Damage`
+          );
+        } else {
+          await VagabondChatHelper.postMessage(
+            this.actor,
+            `<strong>${action.name}</strong> deals <strong>${action.damage}</strong> damage`
+          );
+        }
+      }
+      return;
+    }
+
+    const flatDamage = parseInt(match[1]);
+    const diceFormula = match[2];
+
+    // Ask user whether to use flat damage or roll dice
+    const choice = await foundry.applications.api.DialogV2.wait({
+      window: { title: `${action.name} Damage` },
+      content: `<p>Use flat damage (${flatDamage}) or roll dice (${diceFormula})?</p>`,
+      buttons: [
+        {
+          action: 'flat',
+          label: `Flat (${flatDamage})`,
+          default: true,
+        },
+        {
+          action: 'roll',
+          label: `Roll (${diceFormula})`,
+        },
+        {
+          action: 'cancel',
+          label: 'Cancel',
+        },
+      ],
+    });
+
+    if (choice === 'flat') {
+      await VagabondChatHelper.postMessage(
+        this.actor,
+        `<strong>${action.name}</strong> deals <strong>${flatDamage}</strong> damage`
+      );
+    } else if (choice === 'roll') {
+      const roll = new Roll(diceFormula, this.actor.getRollData());
+      await roll.evaluate();
+      await VagabondChatHelper.postRoll(
+        this.actor,
+        roll,
+        `<strong>${action.name}</strong> Damage`
+      );
+    }
   }
 
   /**
