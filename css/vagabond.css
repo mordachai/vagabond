@@ -2136,7 +2136,7 @@
   width: 60px;
   text-align: center;
 }
-.vagabond .vagabond.actor.npc .window-content {
+.vagabond .vagabond.sheet.actor.npc .window-content {
   max-height: calc(100vh - 100px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -2604,12 +2604,18 @@
 .vagabond .action-name-line .action-meta {
   font-weight: normal;
 }
-.vagabond .action-name-line .action-damage {
+.vagabond .action-name-line .action-damage-display {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-flat {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-roll {
   font-weight: normal;
   cursor: pointer;
   transition: color 0.2s ease;
 }
-.vagabond .action-name-line .action-damage:hover {
+.vagabond .action-name-line .action-damage-roll:hover {
   color: var(--vagabond-c-tan);
 }
 .vagabond .action-name-line .action-description {
@@ -2763,6 +2769,56 @@
 }
 .vagabond .action-add-row .action-add-btn i {
   font-size: 14px;
+}
+.vagabond .npc-sheet select,
+.vagabond .npc-header select,
+.vagabond .npc-content select {
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px 0;
+  font-size: 14px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
+}
+.vagabond .npc-sheet select::-ms-expand,
+.vagabond .npc-header select::-ms-expand,
+.vagabond .npc-content select::-ms-expand {
+  display: none;
+}
+.vagabond .npc-sheet select:hover,
+.vagabond .npc-header select:hover,
+.vagabond .npc-content select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet select:focus,
+.vagabond .npc-header select:focus,
+.vagabond .npc-content select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .npc-sheet select option,
+.vagabond .npc-header select option,
+.vagabond .npc-content select option {
+  background: var(--vagabond-c-white);
+}
+.vagabond .npc-sheet select option:checked,
+.vagabond .npc-header select option:checked,
+.vagabond .npc-content select option:checked {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-sheet select:disabled,
+.vagabond .npc-header select:disabled,
+.vagabond .npc-content select:disabled {
+  color: var(--vagabond-c-muted);
+  cursor: not-allowed;
 }
 .vagabond .npc-stats-grid {
   display: grid;

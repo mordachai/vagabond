@@ -1,7 +1,7 @@
 // NPC Sheet Styles
 
 // NPC sheet container - set max height and enable scrolling
-.vagabond.actor.npc {
+.vagabond.sheet.actor.npc {
   .window-content {
     max-height: calc(100vh - 100px);
     overflow-y: auto;
@@ -593,7 +593,15 @@
     font-weight: normal;
   }
 
-  .action-damage {
+  .action-damage-display {
+    font-weight: normal;
+  }
+
+  .action-damage-flat {
+    font-weight: normal;
+  }
+
+  .action-damage-roll {
     font-weight: normal;
     cursor: pointer;
     transition: color 0.2s ease;
@@ -779,9 +787,53 @@
   }
 }
 
-.action-type-select,
-.action-range-select {
-  // Inherit default styling from action-edit-row select
+// Default dropdown styling (scoped to NPC sheet)
+.npc-sheet,
+.npc-header,
+.npc-content {
+  select {
+    border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
+    background: transparent;
+    padding: 4px 0;
+    font-size: 14px;
+    font-family: $font-secondary;
+    color: var(--vagabond-c-dark);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-bottom-color 0.2s ease;
+    box-shadow: none;
+
+    // Remove chevron/dropdown arrow styling
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--vagabond-c-dark);
+      box-shadow: none;
+    }
+
+    option {
+      background: var(--vagabond-c-white);
+
+      &:checked {
+        background: var(--vagabond-c-faint);
+      }
+    }
+
+    &:disabled {
+      color: var(--vagabond-c-muted);
+      cursor: not-allowed;
+    }
+  }
 }
 
 // Stats Section

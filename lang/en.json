@@ -230,7 +230,8 @@
           "Range": "Range",
           "Note": "Note",
           "Recharge": "Recharge",
-          "Damage": "Damage",
+          "FlatDamage": "Flat Damage",
+          "RollDamage": "Roll Damage",
           "ExtraInfo": "Extra Info",
           "Add": "Add Action"
         },

@@ -24,8 +24,15 @@
                         {{/if}}
                       </span>:
                     {{/if}}
-                    {{#if action.damage}}
-                      <span class='action-damage' data-action='clickActionDamage' data-index='{{index}}' data-damage='{{action.damage}}'>{{action.damage}}</span>.
+                    {{#if (or action.flatDamage action.rollDamage)}}
+                      <span class='action-damage-display'>
+                        {{#if action.flatDamage}}
+                          <span class='action-damage-flat'>{{action.flatDamage}}</span>
+                        {{/if}}
+                        {{#if action.rollDamage}}
+                          <span class='action-damage-roll' data-action='clickActionDamageRoll' data-index='{{index}}' data-roll='{{action.rollDamage}}'>({{action.rollDamage}})</span>
+                        {{/if}}
+                      </span>.
                     {{/if}}
                     {{#if action.description}}
                       <span class='action-description'>{{action.description}}</span>
@@ -107,9 +114,15 @@
                       <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='5 or Cd6' />
                     </div>
                   </div>
-                  <div class='action-edit-row'>
-                    <label>{{localize "VAGABOND.Actor.NPC.Action.Damage"}}</label>
-                    <input type='text' name='system.actions.{{index}}.damage' value='{{action.damage}}' placeholder='4 (2d8)' />
+                  <div class='action-edit-row action-edit-row-split'>
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.FlatDamage"}}</label>
+                      <input type='text' name='system.actions.{{index}}.flatDamage' value='{{action.flatDamage}}' placeholder='4' />
+                    </div>
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.RollDamage"}}</label>
+                      <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' />
+                    </div>
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}</label>

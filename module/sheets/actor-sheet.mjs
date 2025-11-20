@@ -51,7 +51,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       addAction: this._onAddAction,  // NPC add action
       removeAction: this._onRemoveAction,  // NPC remove action
       clickActionName: this._onClickActionName,  // NPC click action name
-      clickActionDamage: this._onClickActionDamage,  // NPC click action damage
+      clickActionDamageRoll: this._onClickActionDamageRoll,  // NPC click action damage roll
       toggleActionAccordion: this._onToggleActionAccordion,  // NPC toggle action accordion
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
@@ -1364,7 +1364,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       range: null,
       note: '',
       recharge: '',
-      damage: '',
+      flatDamage: '',
+      rollDamage: '',
       extraInfo: ''
     };
 
@@ -1432,8 +1433,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       content += `</strong></p>`;
     }
 
-    if (action.damage) {
-      content += `<p><strong>Damage:</strong> ${action.damage}</p>`;
+    if (action.flatDamage || action.rollDamage) {
+      content += `<p><strong>Damage:</strong> `;
+      if (action.flatDamage) content += action.flatDamage;
+      if (action.rollDamage) content += ` (${action.rollDamage})`;
+      content += `</p>`;
     }
 
     if (action.description) {
@@ -1460,73 +1464,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle clicking on action damage
-   * Click on number = flat damage, click on dice (parentheses) = roll
+   * Handle clicking on action damage roll (roll the dice)
    * @param {Event} event
    * @param {HTMLElement} target
    */
-  static async _onClickActionDamage(event, target) {
+  static async _onClickActionDamageRoll(event, target) {
     event.preventDefault();
     const index = parseInt(target.dataset.index);
     const action = this.actor.system.actions[index];
 
-    if (!action || !action.damage) return;
+    if (!action || !action.rollDamage) return;
 
-    // Get the text content and click position
-    const damageText = action.damage;
-    const clickX = event.offsetX;
-    const targetWidth = target.offsetWidth;
-
-    // Parse damage string to extract number and dice
-    // Format: "4 (2d8)" - number before parenthesis, dice inside
-    const damagePattern = /^(\d+)\s*\(([^)]+)\)$/;
-    const match = damageText.match(damagePattern);
-
-    if (match) {
-      const flatDamage = parseInt(match[1]);
-      const diceFormula = match[2];
-
-      // Calculate approximate position of the opening parenthesis
-      // If click is roughly in the first half, treat as number click
-      // If in second half (parentheses area), treat as dice click
-      const numberText = match[1];
-      const ratio = numberText.length / damageText.length;
-
-      if (clickX / targetWidth < ratio + 0.1) {
-        // Clicked on number - use flat damage
-        await VagabondChatHelper.postMessage(
-          this.actor,
-          `<strong>${action.name}</strong> deals <strong>${flatDamage}</strong> damage`
-        );
-      } else {
-        // Clicked on dice - roll it
-        const roll = new Roll(diceFormula, this.actor.getRollData());
-        await roll.evaluate();
-        await VagabondChatHelper.postRoll(
-          this.actor,
-          roll,
-          `<strong>${action.name}</strong> Damage`
-        );
-      }
-    } else {
-      // Plain format - check if it's a number or dice notation
-      if (damageText.includes('d')) {
-        // Roll as dice
-        const roll = new Roll(damageText, this.actor.getRollData());
-        await roll.evaluate();
-        await VagabondChatHelper.postRoll(
-          this.actor,
-          roll,
-          `<strong>${action.name}</strong> Damage`
-        );
-      } else {
-        // Use as flat damage
-        await VagabondChatHelper.postMessage(
-          this.actor,
-          `<strong>${action.name}</strong> deals <strong>${damageText}</strong> damage`
-        );
-      }
-    }
+    // Roll the damage dice
+    const roll = new Roll(action.rollDamage, this.actor.getRollData());
+    await roll.evaluate();
+    await VagabondChatHelper.postRoll(
+      this.actor,
+      roll,
+      `<strong>${action.name}</strong> Damage`
+    );
   }
 
   /**
