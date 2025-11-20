@@ -507,9 +507,21 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                 : '';
 
               // Enrich roll damage if present
-              const enrichedRollDamage = action.rollDamageFormatted
+              // If rollDamageFormatted doesn't exist, format it now
+              let rollDamageToEnrich = action.rollDamageFormatted;
+              if (!rollDamageToEnrich && action.rollDamage) {
+                // Format on the fly if not already formatted
+                const dicePattern = /\d*d\d+/i;
+                if (dicePattern.test(action.rollDamage.trim())) {
+                  rollDamageToEnrich = `[[/r ${action.rollDamage.trim()}]]`;
+                } else {
+                  rollDamageToEnrich = action.rollDamage;
+                }
+              }
+
+              const enrichedRollDamage = rollDamageToEnrich
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    action.rollDamageFormatted,
+                    rollDamageToEnrich,
                     {
                       secrets: this.document.isOwner,
                       rollData: this.actor.getRollData(),
@@ -546,9 +558,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           context.enrichedAbilities = await Promise.all(
             this.actor.system.abilities.map(async (ability) => {
               // Enrich description if present
-              const enrichedDescription = ability.descriptionFormatted
+              // If descriptionFormatted doesn't exist, format it now
+              let descriptionToEnrich = ability.descriptionFormatted;
+              if (!descriptionToEnrich && ability.description) {
+                // Format on the fly: convert dice notation to roll links
+                const dicePattern = /(\d*)d(\d+)/gi;
+                descriptionToEnrich = ability.description.replace(dicePattern, (match) => {
+                  return `[[/r ${match}]]`;
+                });
+              }
+
+              const enrichedDescription = descriptionToEnrich
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    ability.descriptionFormatted,
+                    descriptionToEnrich,
                     {
                       secrets: this.document.isOwner,
                       rollData: this.actor.getRollData(),
