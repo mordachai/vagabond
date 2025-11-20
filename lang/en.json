@@ -69,7 +69,8 @@
       "Cold": "Cold",
       "Blunt": "Blunt",
       "Physical": "Physical",
-      "Necrotic": "Necrotic"
+      "Necrotic": "Necrotic",
+      "Psychic": "Psychic"
     },
     "StatusConditions": {
       "Berserk": "Berserk",

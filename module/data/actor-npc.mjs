@@ -152,7 +152,7 @@ export default class VagabondNPC extends VagabondActorBase {
           required: false,
           nullable: true,
           initial: null,
-          choices: ['Multi-Attack', 'Melee', 'Ranged', 'Cast']
+          choices: ['Melee', 'Ranged', 'Cast']
         }),
         range: new fields.StringField({
           required: false,

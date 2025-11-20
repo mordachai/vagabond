@@ -196,22 +196,24 @@
         </div>
       {{/if}}
 
-      {{! Appearing }}
-      <div class='npc-appearing-field'>
-        <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}</label>
-        {{#if system.locked}}
-          <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
-        {{else}}
-          <input
-            type='text'
-            name='system.appearing'
-            value='{{system.appearing}}'
-            data-dtype='String'
-            class='npc-field-input'
-            placeholder='d6 or 2d8'
-          />
-        {{/if}}
-      </div>
+      {{! Appearing - hide when locked and empty }}
+      {{#unless (and system.locked (not system.appearing))}}
+        <div class='npc-appearing-field'>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}</label>
+          {{#if system.locked}}
+            <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
+          {{else}}
+            <input
+              type='text'
+              name='system.appearing'
+              value='{{system.appearing}}'
+              data-dtype='String'
+              class='npc-field-input'
+              placeholder='d6 or 2d8'
+            />
+          {{/if}}
+        </div>
+      {{/unless}}
     </div>
 
     {{! Senses - hide when locked and empty }}

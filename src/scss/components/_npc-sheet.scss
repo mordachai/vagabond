@@ -1,10 +1,11 @@
 // NPC Sheet Styles
 
-// NPC sheet container - set max height
+// NPC sheet container - set max height and enable scrolling
 .vagabond.actor.npc {
   .window-content {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
@@ -623,6 +624,55 @@
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 4px;
   background: var(--vagabond-c-faint);
+  position: relative;
+
+  // Accordion header for named actions
+  .action-edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    margin: -8px -8px 8px -8px;
+    background: var(--vagabond-c-beige);
+    border-bottom: 1px solid var(--vagabond-c-tan);
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--vagabond-c-tan);
+    }
+
+    .action-edit-name {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: $font-secondary;
+      color: var(--vagabond-c-dark);
+    }
+
+    .accordion-icon {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+      color: var(--vagabond-c-muted);
+
+      &.fa-chevron-down {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  // Accordion content (collapsible)
+  .action-edit-content {
+    max-height: 1000px;
+    overflow: visible;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+
+    &.collapsed {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0;
+    }
+  }
 }
 
 .action-edit-row {

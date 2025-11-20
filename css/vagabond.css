@@ -2137,8 +2137,9 @@
   text-align: center;
 }
 .vagabond .vagabond.actor.npc .window-content {
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .vagabond .npc-header {
   padding: 8px;
@@ -2628,6 +2629,46 @@
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 4px;
   background: var(--vagabond-c-faint);
+  position: relative;
+}
+.vagabond .npc-action-edit .action-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  margin: -8px -8px 8px -8px;
+  background: var(--vagabond-c-beige);
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.vagabond .npc-action-edit .action-edit-header:hover {
+  background: var(--vagabond-c-tan);
+}
+.vagabond .npc-action-edit .action-edit-header .action-edit-name {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-action-edit .action-edit-header .accordion-icon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-action-edit .action-edit-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-action-edit .action-edit-content {
+  max-height: 1000px;
+  overflow: visible;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+.vagabond .npc-action-edit .action-edit-content.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
 }
 .vagabond .action-edit-row {
   display: flex;

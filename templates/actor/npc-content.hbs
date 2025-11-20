@@ -25,7 +25,7 @@
                       </span>:
                     {{/if}}
                     {{#if action.damage}}
-                      <span class='action-damage' data-action='clickActionDamage' data-index='{{index}}'>{{action.damage}}</span>.
+                      <span class='action-damage' data-action='clickActionDamage' data-index='{{index}}' data-damage='{{action.damage}}'>{{action.damage}}</span>.
                     {{/if}}
                     {{#if action.description}}
                       <span class='action-description'>{{action.description}}</span>
@@ -42,16 +42,23 @@
           {{! EDIT MODE }}
           {{#if system.actions}}
             {{#each system.actions as |action index|}}
-              <div class='npc-action-edit' data-action-index='{{index}}'>
-                <div class='action-edit-row'>
-                  <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}</label>
-                  <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' />
-                  <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
-                    <i class='fas fa-trash'></i>
-                  </button>
-                </div>
+              <div class='npc-action-edit accordion-item {{#unless action.name}}expanded{{/unless}}' data-action-index='{{index}}'>
                 {{#if action.name}}
+                  <div class='action-edit-header' data-action='toggleActionAccordion' data-index='{{index}}'>
+                    <span class='action-edit-name'>{{action.name}}</span>
+                    <i class='fas fa-chevron-right accordion-icon'></i>
+                  </div>
+                {{/if}}
+                <div class='action-edit-content {{#if action.name}}collapsed{{/if}}'>
                   <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}</label>
+                    <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' />
+                    <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
+                      <i class='fas fa-trash'></i>
+                    </button>
+                  </div>
+                  {{#if action.name}}
+                    <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Description"}}</label>
                     <input type='text' name='system.actions.{{index}}.description' value='{{action.description}}' placeholder='Description' />
                   </div>
@@ -60,7 +67,6 @@
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Type"}}</label>
                       <select name='system.actions.{{index}}.type' class='action-type-select' data-index='{{index}}'>
                         <option value=''>-</option>
-                        <option value='Multi-Attack' {{#if (eq action.type "Multi-Attack")}}selected{{/if}}>Multi-Attack</option>
                         <option value='Melee' {{#if (eq action.type "Melee")}}selected{{/if}}>Melee</option>
                         <option value='Ranged' {{#if (eq action.type "Ranged")}}selected{{/if}}>Ranged</option>
                         <option value='Cast' {{#if (eq action.type "Cast")}}selected{{/if}}>Cast</option>
@@ -107,9 +113,10 @@
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}</label>
-                    <textarea name='system.actions.{{index}}.extraInfo' rows='3' placeholder='Extra information...'>{{action.extraInfo}}</textarea>
+                    <textarea name='system.actions.{{index}}.extraInfo' rows='2' placeholder='Extra information...'>{{action.extraInfo}}</textarea>
                   </div>
-                {{/if}}
+                  {{/if}}
+                </div>
               </div>
             {{/each}}
           {{/if}}
