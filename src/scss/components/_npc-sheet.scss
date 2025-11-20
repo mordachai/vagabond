@@ -93,17 +93,16 @@
   justify-content: center;
   gap: 2px;
   font-weight: bold;
-  padding-bottom: 8px;
   position: absolute;
-  bottom: 0;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: 90%;
   height: auto;
   background-image: url(../assets/images/npc-hp-banner.webp);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
 
   .npc-hp-heart-icon {
     font-size: 14px;
@@ -368,7 +367,7 @@
 .npc-fatigue-field {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex: 1;
 }
 
@@ -379,7 +378,7 @@
 
   // Make NPC skulls smaller than character skulls
   .fatigue-skull {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
