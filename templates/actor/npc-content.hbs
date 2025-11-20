@@ -59,15 +59,17 @@
                 <div class='action-edit-content {{#if action.name}}collapsed{{/if}}'>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}</label>
-                    <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' />
-                    <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
-                      <i class='fas fa-trash'></i>
-                    </button>
+                    <div class='action-name-with-remove'>
+                      <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' class='npc-field-input' />
+                      <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
+                        <i class='fas fa-trash'></i>
+                      </button>
+                    </div>
                   </div>
                   {{#if action.name}}
                     <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Description"}}</label>
-                    <input type='text' name='system.actions.{{index}}.description' value='{{action.description}}' placeholder='Description' />
+                    <input type='text' name='system.actions.{{index}}.description' value='{{action.description}}' placeholder='Description' class='npc-field-input' />
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
@@ -107,26 +109,26 @@
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}</label>
-                      <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' />
+                      <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' class='npc-field-input' />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}</label>
-                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='5 or Cd6' />
+                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='5 or Cd6' class='npc-field-input' />
                     </div>
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.FlatDamage"}}</label>
-                      <input type='text' name='system.actions.{{index}}.flatDamage' value='{{action.flatDamage}}' placeholder='4' />
+                      <input type='text' name='system.actions.{{index}}.flatDamage' value='{{action.flatDamage}}' placeholder='4' class='npc-field-input' />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.RollDamage"}}</label>
-                      <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' />
+                      <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' class='npc-field-input' />
                     </div>
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}</label>
-                    <textarea name='system.actions.{{index}}.extraInfo' rows='2' placeholder='Extra information...'>{{action.extraInfo}}</textarea>
+                    <textarea name='system.actions.{{index}}.extraInfo' rows='2' placeholder='Extra information...' class='npc-field-input'>{{action.extraInfo}}</textarea>
                   </div>
                   {{/if}}
                 </div>

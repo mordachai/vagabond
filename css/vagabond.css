@@ -2630,27 +2630,28 @@
   font-weight: bold;
 }
 .vagabond .npc-action-edit {
-  padding: 8px;
-  margin-bottom: 8px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 4px;
-  background: var(--vagabond-c-faint);
+  padding: 0;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
   position: relative;
 }
 .vagabond .npc-action-edit .action-edit-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  margin: -8px -8px 8px -8px;
-  background: var(--vagabond-c-beige);
+  padding: 4px 0;
+  margin: 0;
+  background: transparent;
+  border: none;
   border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px 3px 0 0;
+  border-radius: 0;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: border-bottom-color 0.2s ease;
 }
 .vagabond .npc-action-edit .action-edit-header:hover {
-  background: var(--vagabond-c-tan);
+  border-bottom-color: var(--vagabond-c-dark);
 }
 .vagabond .npc-action-edit .action-edit-header .action-edit-name {
   font-size: 15px;
@@ -2667,14 +2668,14 @@
   transform: rotate(90deg);
 }
 .vagabond .npc-action-edit .action-edit-content {
-  max-height: 1000px;
-  overflow: visible;
-  transition: max-height 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
 }
 .vagabond .npc-action-edit .action-edit-content.collapsed {
   max-height: 0;
-  overflow: hidden;
-  padding: 0;
+}
+.vagabond .npc-action-edit .action-edit-content:not(.collapsed) {
+  max-height: 1000px;
 }
 .vagabond .action-edit-row {
   display: flex;
@@ -2683,45 +2684,23 @@
   margin-bottom: 8px;
 }
 .vagabond .action-edit-row label {
-  font-size: 13px;
-  font-weight: 600;
-  font-family: "Paradigm", serif;
-  color: var(--vagabond-c-dark);
-}
-.vagabond .action-edit-row input[type=text],
-.vagabond .action-edit-row textarea,
-.vagabond .action-edit-row select {
-  width: 100%;
-  padding: 4px 8px;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
-  background: white;
   font-size: 14px;
+  font-weight: bold;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
-  box-shadow: none;
 }
-.vagabond .action-edit-row input[type=text]:hover,
-.vagabond .action-edit-row textarea:hover,
-.vagabond .action-edit-row select:hover {
-  border-color: var(--vagabond-c-dark);
+.vagabond .action-edit-row .action-name-with-remove {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
 }
-.vagabond .action-edit-row input[type=text]:focus,
-.vagabond .action-edit-row textarea:focus,
-.vagabond .action-edit-row select:focus {
-  outline: none;
-  border-color: var(--vagabond-c-dark);
-  box-shadow: none;
-}
-.vagabond .action-edit-row textarea {
-  resize: vertical;
-  min-height: 60px;
+.vagabond .action-edit-row .action-name-with-remove input {
+  flex: 1;
 }
 .vagabond .action-edit-row .action-remove-btn {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  padding: 4px 8px;
+  flex-shrink: 0;
+  padding: 2px 6px;
   border: none;
   background: transparent;
   color: var(--vagabond-c-muted);
@@ -2731,6 +2710,10 @@
 }
 .vagabond .action-edit-row .action-remove-btn:hover {
   color: #c62828;
+}
+.vagabond .action-edit-row textarea {
+  resize: vertical;
+  min-height: 60px;
 }
 .vagabond .action-edit-row-split {
   flex-direction: row;
@@ -2744,28 +2727,28 @@
 }
 .vagabond .action-add-row {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: 8px;
+  padding: 4px 0;
+  border-top: 1px solid var(--vagabond-c-tan);
 }
 .vagabond .action-add-row .action-add-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
-  border: 1px dashed var(--vagabond-c-tan);
-  border-radius: 4px;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
   background: transparent;
   color: var(--vagabond-c-muted);
   font-size: 14px;
   font-family: "Paradigm", serif;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 .vagabond .action-add-row .action-add-btn:hover {
-  border-color: var(--vagabond-c-dark);
   color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-faint);
 }
 .vagabond .action-add-row .action-add-btn i {
   font-size: 14px;
