@@ -216,7 +216,7 @@ export class VagabondChatCard {
     const messageData = {
       content: content,
       speaker: ChatMessage.getSpeaker({ actor: this.data.actor }),
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER,
       rollMode: game.settings.get('core', 'rollMode'),
     };
 
