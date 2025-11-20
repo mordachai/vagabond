@@ -1,0 +1,82 @@
+{{! Universal Chat Card Template }}
+<div class='vagabond-chat-card' data-card-type='{{type}}'>
+
+  {{! HEADER: Title + Icon + Subtitle }}
+  <header class='card-header'>
+    {{#if icon}}
+      <img class='card-icon' src='{{icon}}' alt='{{title}}' />
+    {{/if}}
+    <div class='card-header-text'>
+      <h3 class='card-title'>{{title}}</h3>
+      {{#if subtitle}}
+        <span class='card-subtitle'>{{subtitle}}</span>
+      {{/if}}
+    </div>
+  </header>
+
+  {{! PRIMARY CONTENT: Roll result or main info }}
+  {{#if hasRoll}}
+    <div class='card-primary'>
+      <div class='roll-result'>
+        <div class='roll-total-container'>
+          <span class='roll-total'>{{rollTotal}}</span>
+          {{#if difficulty}}
+            <span class='roll-vs'>vs {{difficulty}}</span>
+          {{/if}}
+        </div>
+        {{#if outcome}}
+          <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
+        {{/if}}
+      </div>
+      {{#if rollFormula}}
+        <div class='roll-formula'>{{rollFormula}}</div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{! DAMAGE/EFFECTS }}
+  {{#if damage}}
+    <div class='card-damage'>
+      <div class='damage-container'>
+        <i class='fas fa-burst damage-icon'></i>
+        <span class='damage-amount'>{{damage.total}}</span>
+        <span class='damage-type'>{{damage.type}}</span>
+        {{#if damage.isCritical}}
+          <span class='critical-badge'>CRITICAL!</span>
+        {{/if}}
+      </div>
+      {{#if damage.formula}}
+        <div class='damage-formula'>{{damage.formula}}</div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{! METADATA: Stats, properties, conditions }}
+  {{#if metadata.length}}
+    <div class='card-metadata'>
+      {{#each metadata}}
+        <div class='metadata-item'>
+          <span class='metadata-label'>{{label}}:</span>
+          <span class='metadata-value'>{{value}}</span>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{! DESCRIPTION: Enriched HTML }}
+  {{#if description}}
+    <div class='card-description'>
+      {{{description}}}
+    </div>
+  {{/if}}
+
+  {{! FOOTER: Properties, tags, etc. }}
+  {{#if footerTags.length}}
+    <footer class='card-footer'>
+      {{#each footerTags}}
+        <span class='tag'>{{this}}</span>
+      {{/each}}
+    </footer>
+  {{/if}}
+
+</div>

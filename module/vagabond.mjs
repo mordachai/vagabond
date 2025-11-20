@@ -6,6 +6,7 @@ import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
+import { VagabondChatCard } from './helpers/chat-card.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 
@@ -59,6 +60,7 @@ globalThis.vagabond = {
   },
   utils: {
     rollItemMacro,
+    VagabondChatCard,
   },
   models,
 };
