@@ -534,6 +534,20 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond {
+  /* Character Name at Top - Full Width */
+  /* Combined Character Info Row */
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+  /* When open, panel at natural position next to main sheet */
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Panel content area */
+  /* Features & Perks columns */
+  /* Mana info row */
+  /* Currency fields in panel */
+}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1753,9 +1767,6 @@
   font-weight: 400;
   line-height: 1.2;
 }
-.vagabond {
-  /* Character Name at Top - Full Width */
-}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -1805,9 +1816,6 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
-}
-.vagabond {
-  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -1973,11 +1981,6 @@
     font-size: 12px;
   }
 }
-.vagabond {
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -2002,20 +2005,11 @@
   backface-visibility: hidden;
   will-change: transform;
 }
-.vagabond {
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
-.vagabond {
-  /* When open, panel at natural position next to main sheet */
-}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
-}
-.vagabond {
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -2030,9 +2024,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.vagabond {
-  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -2070,9 +2061,6 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
-.vagabond {
-  /* Features & Perks columns */
-}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -2081,9 +2069,6 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
-}
-.vagabond {
-  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2119,9 +2104,6 @@
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
-}
-.vagabond {
-  /* Currency fields in panel */
 }
 .vagabond .currency-row {
   justify-content: space-around;
@@ -2186,18 +2168,74 @@
   width: 120px;
   height: 120px;
   flex-shrink: 0;
+  background-image: url(../assets/images/npc-portrait-frame.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 .vagabond .npc-image-container .npc-profile-img {
+  display: flex;
   width: 120px;
   height: 120px;
-  border-radius: 4px;
-  border: 2px solid var(--vagabond-c-tan);
+  transform: scale(0.86);
+  border: none;
   object-fit: cover;
   cursor: pointer;
+  border-radius: 50%;
+  align-self: center;
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
   opacity: 0.9;
-  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-hp-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-weight: bold;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: auto;
+  background-image: url(../assets/images/npc-hp-banner.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.vagabond .npc-hp-display .npc-hp-heart-icon {
+  font-size: 14px;
+  color: #c62828;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.vagabond .npc-hp-display .npc-hp-heart-icon.heartbeat {
+  animation: heartbeat 0.3s ease-in-out;
+}
+.vagabond .npc-hp-display .npc-hp-current {
+  width: 28px;
+  text-align: right;
+  border: none;
+  background: transparent;
+  padding: 2px 2px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .npc-hp-display .npc-hp-current:focus {
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .npc-hp-display .npc-hp-separator {
+  color: var(--vagabond-c-dark);
+  font-size: 16px;
+}
+.vagabond .npc-hp-display .npc-hp-max {
+  color: var(--vagabond-c-dark);
+  min-width: 24px;
+  font-size: 14px;
 }
 .vagabond .npc-info-column {
   display: flex;
@@ -2372,47 +2410,19 @@
   line-height: 1.4;
   flex: 1;
 }
-.vagabond .npc-hp-field {
+.vagabond .npc-fatigue-field {
   display: flex;
   align-items: center;
-  gap: 0;
+  justify-content: flex-start;
+  flex: 1;
 }
-.vagabond .npc-hp-heart-icon {
-  font-size: 22px;
-  color: #c41e3a;
-  cursor: pointer;
-  transition: transform 0.1s ease;
+.vagabond .npc-fatigue-checkboxes {
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
-.vagabond .npc-hp-heart-icon.heartbeat {
-  animation: heartbeat 0.3s ease-in-out;
-}
-.vagabond .npc-hp-current {
-  width: 40px;
-  text-align: right;
-  border: none;
-  background: transparent;
-  font-size: 22px;
-  font-family: "Paradigm", serif;
-  font-weight: bold;
-  color: var(--vagabond-c-dark);
-  box-shadow: none;
-}
-.vagabond .npc-hp-current:focus {
-  outline: none;
-  box-shadow: none;
-}
-.vagabond .npc-hp-separator {
-  font-size: 20px;
-  font-family: "Paradigm", serif;
-  color: var(--vagabond-c-dark);
-  font-weight: normal;
-}
-.vagabond .npc-hp-max {
-  font-size: 20px;
-  font-family: "Paradigm", serif;
-  font-weight: normal;
-  color: var(--vagabond-c-dark);
-  min-width: 20px;
+.vagabond .npc-fatigue-checkboxes .fatigue-skull {
+  font-size: 16px;
 }
 .vagabond .npc-armor-display {
   display: flex;

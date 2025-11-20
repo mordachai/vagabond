@@ -453,6 +453,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         } else {
           context.enrichedAppearing = this.actor.system.appearingFormatted;
         }
+
+        // Prepare fatigue boxes for NPC (5 skulls, same as character)
+        const fatigue = this.actor.system.fatigue || 0;
+        context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+          checked: i < fatigue,
+          level: i + 1
+        }));
         break;
       case 'npcContent':
         // Prepare active effects for NPC

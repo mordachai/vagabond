@@ -33,6 +33,20 @@
         width='120'
         height='120'
       />
+
+      {{! HP Display (Over portrait) }}
+      <div class='npc-hp-display'>
+        <i class='fas fa-heart npc-hp-heart-icon'></i>
+        <input
+          type='text'
+          name='system.health.value'
+          value='{{system.health.value}}'
+          data-dtype='Number'
+          class='npc-hp-current'
+        />
+        <span class='npc-hp-separator'>/</span>
+        <span class='npc-hp-max'>{{system.health.max}}</span>
+      </div>
     </div>
 
     {{! Right Column: Size, Being Type, Morale, Speed, HD, HP }}
@@ -101,7 +115,7 @@
         </div>
       </div>
 
-      {{! Row 3: HD and HP }}
+      {{! Row 3: HD and Fatigue }}
       <div class='npc-stats-compact-row'>
         {{! HD }}
         <div class='npc-stat-field'>
@@ -117,19 +131,17 @@
           />
         </div>
 
-        {{! HP - Heart icon with current/max display }}
-        <div class='npc-stat-field npc-hp-field'>
-          <i class='fas fa-heart npc-hp-heart-icon'></i>
-          <input
-            type='text'
-            name='system.health.value'
-            value='{{system.health.value}}'
-            data-dtype='Number'
-            class='npc-hp-current'
-            placeholder='{{#unless system.locked}}10{{/unless}}'
-          />
-          <span class='npc-hp-separator'>/</span>
-          <span class='npc-hp-max'>{{system.health.max}}</span>
+        {{! Fatigue - Skull icons }}
+        <div class='npc-stat-field npc-fatigue-field'>
+          <div class='npc-fatigue-checkboxes'>
+            {{#each fatigueBoxes as |box index|}}
+              <i
+                class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                data-index='{{index}}'
+                data-tooltip='Fatigue Level {{box.level}}'
+              ></i>
+            {{/each}}
+          </div>
         </div>
       </div>
     </div>
