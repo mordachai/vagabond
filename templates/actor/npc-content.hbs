@@ -379,7 +379,7 @@
                         {{#if action.flatDamage}}
                           <span class='action-damage-flat'>{{action.flatDamage}}</span>
                         {{/if}}
-                        {{#if enrichedActions.[index].rollDamageFormatted}}
+                        {{#if action.rollDamage}}
                           <span class='action-damage-roll'>({{{enrichedActions.[index].rollDamageFormatted}}})</span>
                         {{/if}}
                       </span>.
@@ -506,7 +506,7 @@
             {{#each system.abilities as |ability index|}}
               {{#if ability.name}}
                 <div class='npc-ability-view' data-ability-index='{{index}}'>
-                  <span class='ability-name' data-action='clickAbilityName' data-index='{{index}}'>{{ability.name}}</span>{{#if enrichedAbilities.[index].descriptionFormatted}}:
+                  <span class='ability-name' data-action='clickAbilityName' data-index='{{index}}'>{{ability.name}}</span>{{#if ability.description}}:
                   <span class='ability-description'>{{{enrichedAbilities.[index].descriptionFormatted}}}</span>{{/if}}
                 </div>
               {{/if}}

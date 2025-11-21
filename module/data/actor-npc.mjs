@@ -231,34 +231,16 @@ export default class VagabondNPC extends VagabondActorBase {
 
     // Format actions for display in locked mode
     if (this.locked && this.actions) {
-      console.log('=== PREPARING ACTIONS DATA (locked) ===');
       this.actions.forEach((action, index) => {
-        console.log(`Before format - Action ${index}:`, {
-          name: action.name,
-          rollDamage: action.rollDamage,
-          recharge: action.recharge
-        });
         action.rechargeFormatted = this.formatRecharge(action.recharge);
         action.rollDamageFormatted = this.formatRollDamage(action.rollDamage);
-        console.log(`After format - Action ${index}:`, {
-          rechargeFormatted: action.rechargeFormatted,
-          rollDamageFormatted: action.rollDamageFormatted
-        });
       });
     }
 
     // Format abilities for display in locked mode
     if (this.locked && this.abilities) {
-      console.log('=== PREPARING ABILITIES DATA (locked) ===');
       this.abilities.forEach((ability, index) => {
-        console.log(`Before format - Ability ${index}:`, {
-          name: ability.name,
-          description: ability.description
-        });
         ability.descriptionFormatted = this.formatAbilityDescription(ability.description);
-        console.log(`After format - Ability ${index}:`, {
-          descriptionFormatted: ability.descriptionFormatted
-        });
       });
     }
   }
