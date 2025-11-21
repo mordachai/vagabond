@@ -179,6 +179,26 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
+        damageType: new fields.StringField({
+          required: false,
+          nullable: true,
+          initial: null,
+          choices: CONFIG.VAGABOND?.damageTypes || {
+            '-': 'None',
+            'acid': 'Acid',
+            'fire': 'Fire',
+            'shock': 'Shock',
+            'poison': 'Poison',
+            'cold': 'Cold',
+            'blunt': 'Blunt',
+            'physical': 'Physical',
+            'piercing': 'Piercing',
+            'slashing': 'Slashing',
+            'necrotic': 'Necrotic',
+            'psychic': 'Psychic',
+            'healing': 'Healing'
+          }
+        }),
         extraInfo: new fields.StringField({
           required: false,
           nullable: false,

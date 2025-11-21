@@ -357,7 +357,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this._prepareItems(context);
 
     // Prepare equipped armor type for header display
-    const equippedArmor = this.actor.items.find(item => item.type === 'armor' && item.system.equipped);
+    const equippedArmor = this.actor.items.find(item => {
+      const isArmor = (item.type === 'armor') ||
+                     (item.type === 'equipment' && item.system.equipmentType === 'armor');
+      return isArmor && item.system.equipped;
+    });
     context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
 
     // Prepare fatigue boxes (5 skulls)
@@ -678,15 +682,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Iterate through items, allocating to containers
     for (let i of this.document.items) {
-      // Append to gear.
-      if (i.type === 'gear') {
+      // Handle equipment items by their equipmentType
+      if (i.type === 'equipment') {
+        if (i.system.equipmentType === 'weapon') {
+          weapons.push(i);
+        } else if (i.system.equipmentType === 'armor') {
+          armor.push(i);
+        } else if (i.system.equipmentType === 'gear') {
+          gear.push(i);
+        }
+        // Note: alchemical and relic types not shown in these lists yet
+      }
+      // Legacy: Keep supporting old item types for backward compatibility
+      else if (i.type === 'gear') {
         gear.push(i);
       }
-      // Append to weapons.
       else if (i.type === 'weapon') {
         weapons.push(i);
       }
-      // Append to armor.
       else if (i.type === 'armor') {
         armor.push(i);
       }
@@ -1500,50 +1513,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!action || !action.name) return;
 
-    // Build the action description for chat
-    let content = `<div class="npc-action-chat"><h3>${action.name}</h3>`;
-
-    if (action.note || action.type || action.range || action.recharge) {
-      content += `<p><strong>`;
-      if (action.note) content += action.note;
-      if (action.type) content += ` ${action.type}`;
-      if (action.range) content += ` ${action.range}`;
-      if (action.recharge) content += ` | Recharge: ${action.recharge}`;
-      content += `</strong></p>`;
-    }
-
-    if (action.flatDamage || action.rollDamage) {
-      content += `<p><strong>Damage:</strong> `;
-      if (action.flatDamage) content += action.flatDamage;
-      if (action.rollDamage) {
-        // Use formatted version with [[/r ]] notation for inline rolls
-        const rollText = action.rollDamageFormatted || action.rollDamage;
-        content += ` (${rollText})`;
-      }
-      content += `</p>`;
-    }
-
-    if (action.description) {
-      content += `<p>${action.description}</p>`;
-    }
-
-    if (action.extraInfo) {
-      // Enrich extra info for display
-      const enrichedExtraInfo = await foundry.applications.ux.TextEditor.enrichHTML(
-        action.extraInfo,
-        {
-          secrets: this.document.isOwner,
-          rollData: this.actor.getRollData(),
-          relativeTo: this.actor,
-        }
-      );
-      content += `<div>${enrichedExtraInfo}</div>`;
-    }
-
-    content += `</div>`;
-
-    // Post to chat
-    await VagabondChatHelper.postMessage(this.actor, content);
+    // Use the unified chat card system
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    await VagabondChatCard.npcAction(this.actor, action, index);
   }
 
   /**
@@ -1635,26 +1607,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!ability || !ability.name) return;
 
-    // Build the ability description for chat
-    let content = `<div class="npc-ability-chat"><h3>${ability.name}</h3>`;
-
-    if (ability.description) {
-      // Enrich description for display (this will convert dice rolls to clickable links)
-      const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-        ability.descriptionFormatted || ability.description,
-        {
-          secrets: this.document.isOwner,
-          rollData: this.actor.getRollData(),
-          relativeTo: this.actor,
-        }
-      );
-      content += `<p>${enrichedDescription}</p>`;
-    }
-
-    content += `</div>`;
-
-    // Post to chat
-    await VagabondChatHelper.postMessage(this.actor, content);
+    // Use the unified chat card system
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    await VagabondChatCard.npcAbility(this.actor, ability);
   }
 
   /**
@@ -2019,7 +1974,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
-    if (!weapon || weapon.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = weapon && ((weapon.type === 'weapon') ||
+                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+
+    if (!isWeapon) {
       ui.notifications.error('Weapon not found!');
       return;
     }
@@ -2066,7 +2025,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
-    if (!weapon || weapon.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = weapon && ((weapon.type === 'weapon') ||
+                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+
+    if (!isWeapon) {
       ui.notifications.error('Weapon not found!');
       return;
     }
@@ -2107,7 +2070,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
-    if (!weapon || weapon.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = weapon && ((weapon.type === 'weapon') ||
+                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+
+    if (!isWeapon) {
       ui.notifications.error('Weapon not found!');
       return;
     }
@@ -2140,7 +2107,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const armor = this.actor.items.get(itemId);
 
-    if (!armor || armor.type !== 'armor') {
+    // Check if this is armor (legacy armor item OR equipment with equipmentType='armor')
+    const isArmor = armor && ((armor.type === 'armor') ||
+                             (armor.type === 'equipment' && armor.system.equipmentType === 'armor'));
+
+    if (!isArmor) {
       ui.notifications.error('Armor not found!');
       return;
     }

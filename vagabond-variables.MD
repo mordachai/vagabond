@@ -14,6 +14,7 @@ This document lists all system variables available on Character actors in the Va
 - [Saves](#saves)
 - [Skills](#skills)
 - [Weapon Skills](#weapon-skills)
+- [Damage Mechanics](#damage-mechanics)
 - [Derived/Calculated Values](#derivedcalculated-values)
 
 ---
@@ -213,6 +214,86 @@ Weapon skills for combat. Format: `system.weaponSkills.{skillName}.trained`
 
 ---
 
+## Damage Mechanics
+
+Damage calculation follows RAW (Rules as Written) with three core mechanics: **Armor**, **Immune**, and **Weak**.
+
+### Damage Immunities and Weaknesses
+
+Characters can have immunities and weaknesses to specific damage types, typically granted via items with Active Effects.
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `system.immunities` | Array | [] | Damage types the character is immune to (take 0 damage) |
+| `system.weaknesses` | Array | [] | Damage types the character is weak to (ignores armor/immunity, extra die) |
+
+**Damage Types:**
+- `acid`, `fire`, `shock`, `poison`, `cold` (elemental)
+- `blunt`, `physical`, `piercing`, `slashing` (physical)
+- `necrotic`, `psychic`, `healing`
+
+### RAW Damage Calculation
+
+When damage is applied to a character, the system calculates final damage in this order:
+
+1. **Weak** - If target has weakness to damage type:
+   - Ignores all armor rating
+   - Ignores all immunities
+   - Takes full damage (extra die handled at roll time)
+
+2. **Immune** - If target is immune to damage type:
+   - Takes 0 damage
+   - Sources: `system.immunities` array + equipped armor immunities
+
+3. **Armor** - Physical damage types only:
+   - Armor rating subtracted from damage
+   - Only applies to: `blunt`, `physical`, `piercing`, `slashing`
+   - Formula: `finalDamage = max(0, baseDamage - armorRating)`
+
+### Equipment Immunities
+
+Armor Equipment items can grant immunities via their `immunities` array field. These are combined with the character's own immunities when calculating damage.
+
+**Example:** Fire-resistant plate armor with `immunities: ['fire']` grants fire immunity when equipped.
+
+### Active Effect Examples
+
+#### Grant Fire Immunity
+```javascript
+{
+  "key": "system.immunities",
+  "mode": CONST.ACTIVE_EFFECT_MODES.ADD,
+  "value": "fire"
+}
+```
+
+#### Grant Cold Weakness
+```javascript
+{
+  "key": "system.weaknesses",
+  "mode": CONST.ACTIVE_EFFECT_MODES.ADD,
+  "value": "cold"
+}
+```
+
+#### Grant Multiple Immunities (via multiple effects)
+```javascript
+// Effect 1
+{
+  "key": "system.immunities",
+  "mode": CONST.ACTIVE_EFFECT_MODES.ADD,
+  "value": "fire"
+}
+// Effect 2
+{
+  "key": "system.immunities",
+  "mode": CONST.ACTIVE_EFFECT_MODES.ADD,
+  "value": "poison"
+}
+```
+
+---
+
 ## Derived/Calculated Values
 
 These values are automatically calculated and should generally NOT be modified directly via Active Effects. Modify the underlying stats instead.
@@ -289,9 +370,13 @@ These values are automatically calculated and should generally NOT be modified d
 3. **Calculated Values**: Many values are derived from stats and should not be directly modified
 4. **Mana System**: Only available to characters with a spellcaster class
 5. **Speed Thresholds**: Speed is determined by DEX value ranges (see character data model)
-6. **Critical Hits**: The new `critNumber` variable affects both weapon attacks and spell casting
+6. **Critical Hits**: The `critNumber` variable affects both weapon attacks and spell casting
+7. **Damage Mechanics**: Immunities and weaknesses follow RAW (Armor/Immune/Weak) priority order
+8. **Equipment Immunities**: Armor items can grant immunities which combine with character immunities
+9. **Active Effects**: Immunities and weaknesses are typically granted by items via Active Effects
+10. **No UI for Immunities/Weaknesses**: Character sheet does not display these - they're managed via effects
 
 ---
 
-**Last Updated**: Session implementing critNumber system variable
+**Last Updated**: Session implementing Equipment items with immunities and RAW damage calculation (Armor/Immune/Weak)
 **System Version**: Vagabond 3.0.0

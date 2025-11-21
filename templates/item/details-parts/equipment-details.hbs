@@ -189,6 +189,34 @@
           </div>
         </div>
       </div>
+
+      {{! Damage Immunities }}
+      <div class='form-group'>
+        <details class='npc-immunity-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>Damage Immunities</span>
+          </summary>
+          <div class='npc-immunity-checkboxes'>
+            {{#each config.damageTypes as |label key|}}
+              {{#unless (eq key '-')}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/unless}}
+            {{/each}}
+          </div>
+        </details>
+        <div class='npc-immunity-tags'>
+          {{#each system.immunities as |immunity index|}}
+            <span class='npc-immunity-tag'>
+              {{immunity}}
+              <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
+            </span>
+          {{/each}}
+        </div>
+      </div>
     {{/if}}
 
     {{! ===== GEAR-SPECIFIC FIELDS ===== }}

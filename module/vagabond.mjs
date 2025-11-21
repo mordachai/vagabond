@@ -186,6 +186,27 @@ Hooks.on('renderChatMessage', async (message, html, data) => {
     });
   });
 
+  // Add click handler for NPC damage buttons (GM-only)
+  const npcDamageButtons = element.querySelectorAll('.vagabond-npc-damage-button');
+
+  npcDamageButtons.forEach(button => {
+    // Only show to GM
+    if (!game.user.isGM) {
+      button.style.display = 'none';
+      return;
+    }
+
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      // Import damage helper dynamically
+      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+
+      // Handle NPC damage button click (reveals damage to players)
+      await VagabondDamageHelper.handleNPCDamageButton(button, message.id);
+    });
+  });
+
   // Add click handler for property accordion toggle
   const propertyHeaders = element.querySelectorAll('[data-action="toggleProperties"]');
 

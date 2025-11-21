@@ -62,7 +62,11 @@ export class VagabondItem extends Item {
    * @throws {Error} If weapon is not equipped or not a weapon
    */
   validateCanAttack() {
-    if (this.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = (this.type === 'weapon') ||
+                    (this.type === 'equipment' && this.system.equipmentType === 'weapon');
+
+    if (!isWeapon) {
       throw new Error('Not a weapon');
     }
     const equipmentState = this.system.equipmentState || 'unequipped';
@@ -76,7 +80,11 @@ export class VagabondItem extends Item {
    * @returns {boolean} True if weapon is equipped (one-hand or two-hands)
    */
   get isEquipped() {
-    if (this.type !== 'weapon') return false;
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = (this.type === 'weapon') ||
+                    (this.type === 'equipment' && this.system.equipmentType === 'weapon');
+    if (!isWeapon) return false;
+
     const equipmentState = this.system.equipmentState || 'unequipped';
     return equipmentState !== 'unequipped';
   }
@@ -134,7 +142,11 @@ export class VagabondItem extends Item {
    * @returns {Promise<Roll>} The damage roll
    */
   async rollDamage(actor, isCritical = false, statKey = null) {
-    if (this.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = (this.type === 'weapon') ||
+                    (this.type === 'equipment' && this.system.equipmentType === 'weapon');
+
+    if (!isWeapon) {
       throw new Error('Not a weapon');
     }
 

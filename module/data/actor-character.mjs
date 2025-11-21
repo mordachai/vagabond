@@ -176,6 +176,17 @@ export default class VagabondCharacter extends VagabondActorBase {
       })
     });
 
+    // Damage immunities and weaknesses (typically set via items/active effects)
+    schema.immunities = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    schema.weaknesses = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
     return schema;
   }
 
@@ -373,7 +384,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     let totalArmor = 0;
     if (this.parent?.items) {
       for (const item of this.parent.items) {
-        if (item.type === 'armor' && item.system.equipped) {
+        // Support both equipment items with equipmentType='armor' and legacy armor items
+        const isArmor = (item.type === 'armor') ||
+                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
+        if (isArmor && item.system.equipped) {
           totalArmor += item.system.finalRating || 0;
         }
       }
@@ -389,11 +403,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.maxSlots = 8 + mightValue + bonusSlots;
 
     // Calculate occupied slots from all inventory items
-    // Count weapons, armor, and gear
+    // Count equipment items and legacy weapon/armor/gear items
     let occupiedSlots = 0;
     if (this.parent?.items) {
       for (const item of this.parent.items) {
-        if ((item.type === 'weapon' || item.type === 'armor' || item.type === 'gear') && item.system.slots !== undefined) {
+        const isInventoryItem = (item.type === 'equipment') ||
+                               (item.type === 'weapon') ||
+                               (item.type === 'armor') ||
+                               (item.type === 'gear');
+        if (isInventoryItem && item.system.slots !== undefined) {
           occupiedSlots += item.system.slots;
         }
       }
