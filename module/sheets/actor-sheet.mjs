@@ -1,5 +1,6 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 
 const { api, sheets } = foundry.applications;
 
