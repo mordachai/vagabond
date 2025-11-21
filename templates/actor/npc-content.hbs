@@ -370,7 +370,7 @@
                         {{#if action.type}} {{action.type}}{{/if}}
                         {{#if action.range}} {{action.range}}{{/if}}
                         {{#if action.recharge}}
-                          | {{{enrichedActions.[index].rechargeFormatted}}}
+                          | {{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}
                         {{/if}}
                       </span>:
                     {{/if}}
@@ -380,7 +380,7 @@
                           <span class='action-damage-flat'>{{action.flatDamage}}</span>
                         {{/if}}
                         {{#if action.rollDamage}}
-                          <span class='action-damage-roll'>({{{enrichedActions.[index].rollDamageFormatted}}})</span>
+                          <span class='action-damage-roll'>({{{lookup (lookup @root.enrichedActions index) 'rollDamageFormatted'}}})</span>
                         {{/if}}
                       </span>.
                     {{/if}}
@@ -389,7 +389,7 @@
                     {{/if}}
                   </div>
                   {{#if action.extraInfo}}
-                    <div class='action-extra-info'>{{{enrichedActions.[index].extraInfoFormatted}}}</div>
+                    <div class='action-extra-info'>{{{lookup (lookup @root.enrichedActions index) 'extraInfoFormatted'}}}</div>
                   {{/if}}
                 </div>
               {{/if}}
@@ -507,7 +507,7 @@
               {{#if ability.name}}
                 <div class='npc-ability-view' data-ability-index='{{index}}'>
                   <span class='ability-name' data-action='clickAbilityName' data-index='{{index}}'>{{ability.name}}</span>{{#if ability.description}}:
-                  <span class='ability-description'>{{{enrichedAbilities.[index].descriptionFormatted}}}</span>{{/if}}
+                  <span class='ability-description'>{{{lookup (lookup @root.enrichedAbilities index) 'descriptionFormatted'}}}</span>{{/if}}
                 </div>
               {{/if}}
             {{/each}}
