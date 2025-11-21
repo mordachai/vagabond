@@ -96,7 +96,7 @@ export default class VagabondEquipment extends VagabondItemBase {
         blank: false
       }),
       { initial: [] }
-    });
+    );
 
     // ===== WEAPON-SPECIFIC FIELDS =====
 
