@@ -319,17 +319,27 @@ export class VagabondDamageHelper {
     // Normalize damage type for lookup
     const normalizedType = damageType.toLowerCase();
 
+    // Start with base damage
+    let finalDamage = damage;
+
     // Apply resistance (half damage)
     if (resistances[normalizedType]) {
-      return Math.floor(damage / 2);
+      finalDamage = Math.floor(finalDamage / 2);
     }
 
     // Apply vulnerability (double damage)
     if (vulnerabilities[normalizedType]) {
-      return damage * 2;
+      finalDamage = finalDamage * 2;
     }
 
-    // No modification
-    return damage;
+    // Subtract armor rating (only for physical damage types)
+    // Physical damage types that armor protects against
+    const physicalDamageTypes = ['blunt', 'physical', 'piercing', 'slashing'];
+    if (physicalDamageTypes.includes(normalizedType)) {
+      const armorRating = actor.system.armor || 0;
+      finalDamage = Math.max(0, finalDamage - armorRating);
+    }
+
+    return finalDamage;
   }
 }
