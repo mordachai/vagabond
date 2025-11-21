@@ -184,19 +184,17 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: true,
           initial: null,
           choices: CONFIG.VAGABOND?.damageTypes || {
-            '-': 'None',
-            'acid': 'Acid',
-            'fire': 'Fire',
-            'shock': 'Shock',
-            'poison': 'Poison',
-            'cold': 'Cold',
-            'blunt': 'Blunt',
-            'physical': 'Physical',
-            'piercing': 'Piercing',
-            'slashing': 'Slashing',
-            'necrotic': 'Necrotic',
-            'psychic': 'Psychic',
-            'healing': 'Healing'
+            '-': 'VAGABOND.DamageTypes.None',
+            'acid': 'VAGABOND.DamageTypes.Acid',
+            'fire': 'VAGABOND.DamageTypes.Fire',
+            'shock': 'VAGABOND.DamageTypes.Shock',
+            'poison': 'VAGABOND.DamageTypes.Poison',
+            'cold': 'VAGABOND.DamageTypes.Cold',
+            'blunt': 'VAGABOND.DamageTypes.Blunt',
+            'physical': 'VAGABOND.DamageTypes.Physical',
+            'necrotic': 'VAGABOND.DamageTypes.Necrotic',
+            'psychic': 'VAGABOND.DamageTypes.Psychic',
+            'healing': 'VAGABOND.DamageTypes.Healing'
           }
         }),
         extraInfo: new fields.StringField({

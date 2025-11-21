@@ -485,9 +485,17 @@
                     <label>{{localize "VAGABOND.Actor.NPC.Action.DamageType"}}</label>
                     <select name='system.actions.{{index}}.damageType' class='npc-field-input'>
                       {{#select action.damageType}}
-                        {{#each config.damageTypes as |label key|}}
-                          <option value='{{key}}'>{{localize label}}</option>
-                        {{/each}}
+                        <option value='-'>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+                        <option value='acid'>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+                        <option value='fire'>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+                        <option value='shock'>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+                        <option value='poison'>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+                        <option value='cold'>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+                        <option value='blunt'>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+                        <option value='physical'>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+                        <option value='necrotic'>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+                        <option value='psychic'>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+                        <option value='healing'>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
                       {{/select}}
                     </select>
                   </div>
