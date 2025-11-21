@@ -151,9 +151,12 @@ Hooks.once('ready', function () {
 /**
  * Handle rendering chat messages - adds event listeners for damage buttons
  */
-Hooks.on('renderChatMessageHTML', async (message, html) => {
+Hooks.on('renderChatMessage', async (message, html, data) => {
+  // html is a jQuery object, convert to element if needed
+  const element = html[0] || html;
+
   // Add click handler for damage roll buttons
-  const damageButtons = html.querySelectorAll('.vagabond-damage-button');
+  const damageButtons = element.querySelectorAll('.vagabond-damage-button');
 
   damageButtons.forEach(button => {
     button.addEventListener('click', async (event) => {
@@ -168,7 +171,7 @@ Hooks.on('renderChatMessageHTML', async (message, html) => {
   });
 
   // Add click handler for apply damage buttons
-  const applyDamageButtons = html.querySelectorAll('.vagabond-apply-damage-button');
+  const applyDamageButtons = element.querySelectorAll('.vagabond-apply-damage-button');
 
   applyDamageButtons.forEach(button => {
     button.addEventListener('click', async (event) => {
@@ -183,7 +186,7 @@ Hooks.on('renderChatMessageHTML', async (message, html) => {
   });
 
   // Add click handler for property accordion toggle
-  const propertyHeaders = html.querySelectorAll('[data-action="toggleProperties"]');
+  const propertyHeaders = element.querySelectorAll('[data-action="toggleProperties"]');
 
   propertyHeaders.forEach(header => {
     header.addEventListener('click', (event) => {
