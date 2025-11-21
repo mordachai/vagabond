@@ -2042,36 +2042,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
-      // Build flavor text and post attack roll to chat
-      let flavorText = weapon.buildAttackFlavor(attackResult, damageRoll);
-
-      // Add damage button if damage wasn't auto-rolled
-      if (!damageRoll) {
-        const damageFormula = weapon.system.currentDamage;
-        const statKey = attackResult.weaponSkill?.stat || null;
-        const damageButton = VagabondDamageHelper.createDamageButton(
-          this.actor.id,
-          weapon.id,
-          damageFormula,
-          {
-            type: 'weapon',
-            isCritical: attackResult.isCritical,
-            statKey: statKey
-          }
-        );
-        flavorText += damageButton;
-      }
-
-      await VagabondChatHelper.postRoll(this.actor, attackResult.roll, flavorText);
-
-      // If there was a damage roll, also send it to chat
-      if (damageRoll) {
-        await VagabondChatHelper.postRoll(
-          this.actor,
-          damageRoll,
-          `<strong>${weapon.name}</strong> Damage`
-        );
-      }
+      // Send attack to chat using VagabondChatCard
+      await VagabondChatCard.weaponAttack(this.actor, weapon, attackResult, damageRoll);
 
       return attackResult.roll;
     } catch (error) {

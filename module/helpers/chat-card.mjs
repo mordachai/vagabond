@@ -316,4 +316,47 @@ export class VagabondChatCard {
 
     return await card.send();
   }
+
+  /**
+   * Static helper: Create and send a weapon attack card
+   * @param {VagabondActor} actor - The actor
+   * @param {VagabondItem} weapon - The weapon item
+   * @param {Object} attackResult - The attack result from weapon.rollAttack()
+   * @param {Roll} damageRoll - Optional damage roll if attack hit
+   * @returns {Promise<ChatMessage>}
+   */
+  static async weaponAttack(actor, weapon, attackResult, damageRoll = null) {
+    const { roll, difficulty, isHit, isCritical, weaponSkill, weaponSkillKey } = attackResult;
+
+    const card = new VagabondChatCard()
+      .setType('weapon-attack')
+      .setActor(actor)
+      .setItem(weapon)
+      .setTitle(`${weapon.name} Attack`)
+      .setSubtitle(actor.name)
+      .addRoll(roll, difficulty)
+      .setOutcome(isHit ? 'HIT' : 'MISS', isCritical);
+
+    // Add weapon skill metadata
+    const skillLabel = weaponSkill?.label || weaponSkillKey;
+    card.addMetadata('Weapon Skill', `${skillLabel} (Difficulty ${difficulty})`);
+
+    // Add weapon properties
+    if (weapon.system.rangeDisplay) {
+      card.addMetadata('Range', weapon.system.rangeDisplay);
+    }
+    if (weapon.system.gripDisplay) {
+      card.addMetadata('Grip', weapon.system.gripDisplay);
+    }
+    if (weapon.system.propertiesDisplay) {
+      card.addMetadata('Properties', weapon.system.propertiesDisplay);
+    }
+
+    // Add damage if provided
+    if (damageRoll) {
+      card.addDamage(damageRoll, 'Physical', isCritical);
+    }
+
+    return await card.send();
+  }
 }
