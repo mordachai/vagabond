@@ -220,6 +220,19 @@ export class VagabondChatCard {
   }
 
   /**
+   * Extract the d20 result from a roll (for critical checking)
+   * @param {Roll} roll - The Roll object
+   * @param {Actor} actor - The actor (for critNumber)
+   * @returns {boolean} Whether the d20 result is a critical
+   */
+  static isRollCritical(roll, actor) {
+    const critNumber = actor?.system?.critNumber || 20;
+    const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
+    const d20Result = d20Term?.results?.[0]?.result || 0;
+    return d20Result >= critNumber;
+  }
+
+  /**
    * Format a roll result with die images
    * @param {Roll} roll - The Roll object
    * @returns {string} HTML string with die results
@@ -324,13 +337,14 @@ export class VagabondChatCard {
    */
   static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
     const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[statKey]) || statKey;
+    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
     const card = new VagabondChatCard()
       .setType('stat-roll')
       .setActor(actor)
       .setTitle(`${statLabel} Check`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', roll.total >= 20);
+      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
 
     // Add stat value metadata
     const statValue = actor.system.stats[statKey]?.value || 0;
@@ -351,6 +365,7 @@ export class VagabondChatCard {
   static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
     const save = actor.system.saves?.[saveKey];
     const saveLabel = save?.label || saveKey;
+    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
 
     const card = new VagabondChatCard()
       .setType('save-roll')
@@ -358,7 +373,7 @@ export class VagabondChatCard {
       .setTitle(`${saveLabel} Save`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', roll.total >= 20);
+      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
 
     return await card.send();
   }
@@ -376,6 +391,7 @@ export class VagabondChatCard {
     // Check if it's a regular skill or weapon skill
     const skill = actor.system.skills?.[skillKey] || actor.system.weaponSkills?.[skillKey];
     const skillLabel = skill?.label || skillKey;
+    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
 
     const card = new VagabondChatCard()
       .setType('skill-roll')
@@ -383,7 +399,7 @@ export class VagabondChatCard {
       .setTitle(`${skillLabel} Check`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', roll.total >= 20);
+      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
 
     if (skill) {
       if (skill.stat) {
@@ -504,8 +520,8 @@ export class VagabondChatCard {
     card.addMetadata('Delivery', deliveryText);
 
     // Add damage dice and type if spell has damage
-    if (spell.system.damageBase !== '-') {
-      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase]);
+    if (spell.system.damageType !== '-') {
+      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageType]);
       card.addMetadata('Damage', `${spellState.damageDice}d6 ${damageTypeName}`);
     }
 
@@ -538,10 +554,10 @@ export class VagabondChatCard {
     }
 
     // Add damage if provided
-    if (damageRoll && spell.system.damageBase !== '-') {
-      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase]);
+    if (damageRoll && spell.system.damageType !== '-') {
+      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageType]);
       card.addDamage(damageRoll, damageTypeName, isCritical);
-    } else if (isSuccess && spell.system.damageBase !== '-') {
+    } else if (isSuccess && spell.system.damageType !== '-') {
       // If succeeded but no damage roll (auto-roll disabled), add damage button
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
       const damageFormula = `${spellState.damageDice}d6`;
@@ -552,7 +568,7 @@ export class VagabondChatCard {
         damageFormula,
         {
           type: 'spell',
-          damageType: spell.system.damageBase,
+          damageType: spell.system.damageType,
           isCritical: isCritical,
           statKey: statKey
         }

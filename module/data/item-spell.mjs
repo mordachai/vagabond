@@ -11,11 +11,12 @@ export default class VagabondSpell extends VagabondItemBase {
     const requiredString = { required: true, nullable: false, blank: true };
     const schema = super.defineSchema();
 
-    // Damage Base - type of damage the spell deals
-    schema.damageBase = new fields.StringField({
+    // Damage Type - type of damage/healing the spell provides
+    // Uses centralized CONFIG.VAGABOND.damageTypes
+    schema.damageType = new fields.StringField({
       ...requiredString,
       initial: '-',
-      choices: {
+      choices: CONFIG.VAGABOND?.damageTypes || {
         '-': 'None',
         'acid': 'Acid',
         'fire': 'Fire',
@@ -24,7 +25,9 @@ export default class VagabondSpell extends VagabondItemBase {
         'cold': 'Cold',
         'blunt': 'Blunt',
         'physical': 'Physical',
-        'necrotic': 'Necrotic'
+        'necrotic': 'Necrotic',
+        'psychic': 'Psychic',
+        'healing': 'Healing'
       }
     });
 

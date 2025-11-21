@@ -351,12 +351,12 @@
                 >{{spell.name}}</label>
 
                 {{! Damage Amount - Left click increase, Right click decrease }}
-                {{#unless (eq spell.system.damageBase '-')}}
+                {{#unless (eq spell.system.damageType '-')}}
                   <span
                     class='spell-damage-dice clickable flex-05'
                     data-action='modifyDamage'
                     data-spell-id='{{spell._id}}'
-                    data-damage-type='{{spell.system.damageBase}}'
+                    data-damage-type='{{spell.system.damageType}}'
                     title='Left click to increase damage (+1 mana per d6), Right click to decrease'
                   >1d6</span>
                 {{else}}
@@ -365,8 +365,8 @@
 
                 {{! Damage Type - Display only }}
                 <span class='spell-damage-type flex-1'>
-                  {{#unless (eq spell.system.damageBase '-')}}
-                    {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
+                  {{#unless (eq spell.system.damageType '-')}}
+                    {{localize (lookup @root.config.damageTypes spell.system.damageType)}}
                   {{/unless}}
                 </span>
 

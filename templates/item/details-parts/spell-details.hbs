@@ -22,17 +22,19 @@
     {{! Damage Base and Duration - Same Line }}
     <div class='flexrow gap-8'>
       <div class='form-group flex-1'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.damageBase.label'}}</label>
-        <select name='system.damageBase'>
-          <option value='-' {{#if (eq system.damageBase '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
-          <option value='acid' {{#if (eq system.damageBase 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
-          <option value='fire' {{#if (eq system.damageBase 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
-          <option value='shock' {{#if (eq system.damageBase 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
-          <option value='poison' {{#if (eq system.damageBase 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
-          <option value='cold' {{#if (eq system.damageBase 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
-          <option value='blunt' {{#if (eq system.damageBase 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
-          <option value='physical' {{#if (eq system.damageBase 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
-          <option value='necrotic' {{#if (eq system.damageBase 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+        <label class='resource-label'>Damage Base</label>
+        <select name='system.damageType'>
+          <option value='-' {{#if (eq system.damageType '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+          <option value='acid' {{#if (eq system.damageType 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+          <option value='fire' {{#if (eq system.damageType 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+          <option value='shock' {{#if (eq system.damageType 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+          <option value='poison' {{#if (eq system.damageType 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+          <option value='cold' {{#if (eq system.damageType 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+          <option value='blunt' {{#if (eq system.damageType 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+          <option value='physical' {{#if (eq system.damageType 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+          <option value='necrotic' {{#if (eq system.damageType 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+          <option value='psychic' {{#if (eq system.damageType 'psychic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+          <option value='healing' {{#if (eq system.damageType 'healing')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
         </select>
       </div>
       <div class='form-group flex-2'>

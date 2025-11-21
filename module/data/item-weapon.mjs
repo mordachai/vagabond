@@ -90,6 +90,28 @@ export default class VagabondWeapon extends VagabondItemBase {
       choices: ['unequipped', 'oneHand', 'twoHands']
     });
 
+    // Damage Type - type of damage the weapon deals
+    // Uses centralized CONFIG.VAGABOND.damageTypes
+    schema.damageType = new fields.StringField({
+      required: true,
+      nullable: false,
+      blank: false,
+      initial: 'physical',
+      choices: CONFIG.VAGABOND?.damageTypes || {
+        '-': 'None',
+        'acid': 'Acid',
+        'fire': 'Fire',
+        'shock': 'Shock',
+        'poison': 'Poison',
+        'cold': 'Cold',
+        'blunt': 'Blunt',
+        'physical': 'Physical',
+        'necrotic': 'Necrotic',
+        'psychic': 'Psychic',
+        'healing': 'Healing'
+      }
+    });
+
     return schema;
   }
 

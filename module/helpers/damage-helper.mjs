@@ -182,7 +182,7 @@ export class VagabondDamageHelper {
    * @returns {Roll} The damage roll
    */
   static async rollSpellDamage(actor, spell, spellState, isCritical = false, statKey = null) {
-    if (spell.system.damageBase === '-') return null;
+    if (spell.system.damageType === '-') return null;
 
     let damageFormula = `${spellState.damageDice}d6`;
 

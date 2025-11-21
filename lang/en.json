@@ -70,7 +70,8 @@
       "Blunt": "Blunt",
       "Physical": "Physical",
       "Necrotic": "Necrotic",
-      "Psychic": "Psychic"
+      "Psychic": "Psychic",
+      "Healing": "Healing"
     },
     "StatusConditions": {
       "Berserk": "Berserk",
@@ -299,7 +300,7 @@
       "Spell": {
         "FIELDS": {
           "description": {"label": "Effect Description"},
-          "damageBase": {"label": "Damage Base"},
+          "damageType": {"label": "Damage Base"},
           "delivery": {
             "label": "Delivery",
             "type": {"label": "Delivery Type"},

@@ -161,7 +161,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const spell = this.actor.items.get(spellId);
 
     // Damage cost: 0 for 1d6, +1 per extra die
-    const damageCost = spell.system.damageBase !== '-' && state.damageDice > 1
+    const damageCost = spell.system.damageType !== '-' && state.damageDice > 1
       ? state.damageDice - 1
       : 0;
 
@@ -233,7 +233,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (!container) return;
 
     // Update damage dice display
-    if (spell.system.damageBase !== '-') {
+    if (spell.system.damageType !== '-') {
       const damageElement = container.querySelector('.spell-damage-dice');
       if (damageElement) {
         damageElement.textContent = `${state.damageDice}`;
@@ -2222,8 +2222,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await roll.evaluate();
 
     const isSuccess = roll.total >= difficulty;
+
+    // Check critical - ONLY the d20 result, not including favor/hinder
     const critNumber = this.actor.system.critNumber || 20;
-    const isCritical = roll.total >= critNumber;
+    const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
+    const d20Result = d20Term?.results?.[0]?.result || 0;
+    const isCritical = d20Result >= critNumber;
 
     // If successful, deduct mana
     if (isSuccess) {
@@ -2273,7 +2277,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Determine if we should auto-roll damage
     let damageRoll = null;
-    if (spell.system.damageBase !== '-') {
+    if (spell.system.damageType !== '-') {
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state, isCritical, manaSkillStat);
       }
