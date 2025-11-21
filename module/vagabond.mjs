@@ -170,17 +170,17 @@ Hooks.on('renderChatMessage', async (message, html, data) => {
     });
   });
 
-  // Add click handler for apply damage buttons
-  const applyDamageButtons = element.querySelectorAll('.vagabond-apply-damage-button');
+  // Add click handler for apply damage and healing buttons
+  const applyButtons = element.querySelectorAll('.vagabond-apply-damage-button, .vagabond-apply-healing-button');
 
-  applyDamageButtons.forEach(button => {
+  applyButtons.forEach(button => {
     button.addEventListener('click', async (event) => {
       event.preventDefault();
 
       // Import damage helper dynamically
       const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
 
-      // Apply damage to targets
+      // Apply damage or healing to targets
       await VagabondDamageHelper.applyDamageToTargets(button);
     });
   });

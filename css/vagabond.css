@@ -3488,6 +3488,49 @@ details[open] .vagabond .npc-immunity-toggle i {
   margin-right: 5px;
 }
 
+/* Apply Healing Button */
+.vagabond-apply-healing-button {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.vagabond-apply-healing-button:hover {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.vagabond-apply-healing-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.vagabond-apply-healing-button:disabled,
+.vagabond-apply-healing-button.applied {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.vagabond-apply-healing-button:disabled:hover,
+.vagabond-apply-healing-button.applied:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.vagabond-apply-healing-button i {
+  margin-right: 5px;
+}
+
 /* ========================================
    Universal Chat Cards
    ======================================== */

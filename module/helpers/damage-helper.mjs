@@ -219,26 +219,33 @@ export class VagabondDamageHelper {
    * @returns {string} HTML button string
    */
   static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null) {
+    // Check if this is healing
+    const isHealing = damageType.toLowerCase() === 'healing';
+    const icon = isHealing ? 'fa-heart-pulse' : 'fa-heart-crack';
+    const text = isHealing ? `Apply ${damageAmount} Healing` : `Apply ${damageAmount} Damage`;
+    const buttonClass = isHealing ? 'vagabond-apply-healing-button' : 'vagabond-apply-damage-button';
+
     return `
       <button
-        class="vagabond-apply-damage-button"
+        class="${buttonClass}"
         data-damage-amount="${damageAmount}"
         data-damage-type="${damageType}"
         data-actor-id="${actorId}"
         data-item-id="${itemId || ''}"
       >
-        <i class="fas fa-heart-crack"></i> Apply ${damageAmount} Damage
+        <i class="fas ${icon}"></i> ${text}
       </button>
     `;
   }
 
   /**
-   * Apply damage to selected or targeted tokens
+   * Apply damage or healing to selected or targeted tokens
    * @param {HTMLElement} button - The clicked button element
    */
   static async applyDamageToTargets(button) {
-    const damageAmount = parseInt(button.dataset.damageAmount);
+    const amount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType;
+    const isHealing = damageType.toLowerCase() === 'healing';
 
     // Get user's selected/targeted tokens
     const targets = Array.from(game.user.targets);
@@ -248,7 +255,7 @@ export class VagabondDamageHelper {
       return;
     }
 
-    // Apply damage to each target
+    // Apply damage or healing to each target
     for (const target of targets) {
       const targetActor = target.actor;
       if (!targetActor) continue;
@@ -259,25 +266,41 @@ export class VagabondDamageHelper {
         continue;
       }
 
-      // Calculate final damage (considering resistances/vulnerabilities)
-      const finalDamage = this.calculateFinalDamage(targetActor, damageAmount, damageType);
-
-      // Apply damage to HP
       const currentHP = targetActor.system.health?.value || 0;
-      const newHP = Math.max(0, currentHP - finalDamage);
+      const maxHP = targetActor.system.health?.max || currentHP;
+      let newHP;
+      let finalAmount;
+
+      if (isHealing) {
+        // Healing: Add HP (capped at max)
+        newHP = Math.min(maxHP, currentHP + amount);
+        finalAmount = newHP - currentHP; // Actual healing applied
+      } else {
+        // Damage: Calculate with resistances/vulnerabilities and subtract
+        finalAmount = this.calculateFinalDamage(targetActor, amount, damageType);
+        newHP = Math.max(0, currentHP - finalAmount);
+      }
 
       await targetActor.update({ 'system.health.value': newHP });
 
       // Show notification
-      const damageText = finalDamage !== damageAmount
-        ? `${finalDamage} (modified from ${damageAmount})`
-        : finalDamage;
-      ui.notifications.info(`Applied ${damageText} ${damageType} damage to ${targetActor.name}`);
+      if (isHealing) {
+        const healText = finalAmount !== amount
+          ? `${finalAmount} (capped at max HP)`
+          : finalAmount;
+        ui.notifications.info(`Restored ${healText} HP to ${targetActor.name}`);
+      } else {
+        const damageText = finalAmount !== amount
+          ? `${finalAmount} (modified from ${amount})`
+          : finalAmount;
+        ui.notifications.info(`Applied ${damageText} ${damageType} damage to ${targetActor.name}`);
+      }
     }
 
     // Disable button after applying
     button.disabled = true;
-    button.innerHTML = '<i class="fas fa-check"></i> Damage Applied';
+    const successText = isHealing ? 'Healing Applied' : 'Damage Applied';
+    button.innerHTML = `<i class="fas fa-check"></i> ${successText}`;
     button.classList.add('applied');
   }
 
