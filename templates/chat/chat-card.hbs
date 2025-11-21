@@ -34,22 +34,24 @@
     </div>
   {{/if}}
 
-  {{! DAMAGE/EFFECTS }}
-  {{#if damage}}
-    <div class='card-damage'>
-      <div class='damage-container'>
-        <i class='fas fa-burst damage-icon'></i>
-        <span class='damage-amount'>{{damage.total}}</span>
-        <span class='damage-type'>{{damage.type}}</span>
-        {{#if damage.isCritical}}
-          <span class='critical-badge'>CRITICAL!</span>
+  {{! DAMAGE/EFFECTS - Placeholder that can be filled dynamically }}
+  <div class='card-damage-section' data-damage-section>
+    {{#if damage}}
+      <div class='card-damage'>
+        <div class='damage-container'>
+          <i class='fas fa-burst damage-icon'></i>
+          <span class='damage-amount'>{{damage.total}}</span>
+          <span class='damage-type'>{{damage.type}}</span>
+          {{#if damage.isCritical}}
+            <span class='critical-badge'>CRITICAL!</span>
+          {{/if}}
+        </div>
+        {{#if damage.formula}}
+          <div class='damage-formula'>{{damage.formula}}</div>
         {{/if}}
       </div>
-      {{#if damage.formula}}
-        <div class='damage-formula'>{{damage.formula}}</div>
-      {{/if}}
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
 
   {{! METADATA: Stats, properties, conditions }}
   {{#if metadata.length}}

@@ -152,7 +152,7 @@ Hooks.once('ready', function () {
  * Handle rendering chat messages - adds event listeners for damage buttons
  */
 Hooks.on('renderChatMessageHTML', async (message, html) => {
-  // Add click handler for damage buttons (html is now HTMLElement, not jQuery)
+  // Add click handler for damage roll buttons
   const damageButtons = html.querySelectorAll('.vagabond-damage-button');
 
   damageButtons.forEach(button => {
@@ -164,6 +164,21 @@ Hooks.on('renderChatMessageHTML', async (message, html) => {
 
       // Roll damage from button
       await VagabondDamageHelper.rollDamageFromButton(button, message.id);
+    });
+  });
+
+  // Add click handler for apply damage buttons
+  const applyDamageButtons = html.querySelectorAll('.vagabond-apply-damage-button');
+
+  applyDamageButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      // Import damage helper dynamically
+      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+
+      // Apply damage to targets
+      await VagabondDamageHelper.applyDamageToTargets(button);
     });
   });
 
