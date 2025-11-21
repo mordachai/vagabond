@@ -305,35 +305,58 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Calculate final damage considering resistances and vulnerabilities
+   * Calculate final damage per RAW rules: Armor/Immune/Weak
+   *
+   * RAW Rules:
+   * - Armor: Subtracted from Attack damage (physical types only)
+   * - Immune: Unharmed by the damage type (take 0 damage)
+   * - Weak: Ignores Armor and Immune, deals extra damage die (extra die handled at roll time)
+   *
    * @param {Actor} actor - The target actor
    * @param {number} damage - Base damage amount
    * @param {string} damageType - Type of damage
    * @returns {number} Final damage amount
    */
   static calculateFinalDamage(actor, damage, damageType) {
-    // Check for resistances
-    const resistances = actor.system.resistances || {};
-    const vulnerabilities = actor.system.vulnerabilities || {};
-
     // Normalize damage type for lookup
     const normalizedType = damageType.toLowerCase();
+
+    // Get immunities and weaknesses arrays (for NPCs and from equipped armor)
+    let immunities = actor.system.immunities || [];
+    const weaknesses = actor.system.weaknesses || [];
+
+    // For PCs, also check equipped armor for immunities
+    if (actor.type === 'character') {
+      const equippedArmor = actor.items.find(item => {
+        const isArmor = (item.type === 'armor') ||
+                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
+        return isArmor && item.system.equipped;
+      });
+
+      if (equippedArmor && equippedArmor.system.immunities) {
+        // Combine actor immunities with armor immunities
+        immunities = [...immunities, ...equippedArmor.system.immunities];
+      }
+    }
 
     // Start with base damage
     let finalDamage = damage;
 
-    // Apply resistance (half damage)
-    if (resistances[normalizedType]) {
-      finalDamage = Math.floor(finalDamage / 2);
+    // RAW: Weak - Ignores Armor and Immune, and deals an extra damage die
+    // Note: Extra damage die should be handled at roll time, not here
+    // Here we just ensure armor/immunity are bypassed
+    if (weaknesses.includes(normalizedType)) {
+      // Weakness: Ignore armor and immunities, damage goes through as-is
+      // (Extra die is handled during damage roll, not here)
+      return finalDamage;
     }
 
-    // Apply vulnerability (double damage)
-    if (vulnerabilities[normalizedType]) {
-      finalDamage = finalDamage * 2;
+    // RAW: Immune - Unharmed by the damage type
+    if (immunities.includes(normalizedType)) {
+      return 0;
     }
 
-    // Subtract armor rating (only for physical damage types)
-    // Physical damage types that armor protects against
+    // RAW: Armor - Subtracted from Attack damage (only for physical damage types)
     const physicalDamageTypes = ['blunt', 'physical', 'piercing', 'slashing'];
     if (physicalDamageTypes.includes(normalizedType)) {
       const armorRating = actor.system.armor || 0;
