@@ -22,12 +22,6 @@
       "Sneak": "Sneak",
       "Survival": "Survival"
     },
-    "WeaponSkills": {
-      "Melee": "Melee",
-      "Ranged": "Ranged",
-      "Brawl": "Brawl",
-      "Finesse": "Finesse"
-    },
     "Saves": {
       "Reflex": {
         "name": "Reflex",
@@ -434,10 +428,7 @@
       "npc": "NPC"
     },
     "Item": {
-      "gear": "Gear",
-      "weapon": "Weapon",
-      "armor": "Armor",
-      "feature": "Feature",
+      "equipment": "Equipment",
       "spell": "Spell",
       "ancestry": "Ancestry",
       "class": "Class",
