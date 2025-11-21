@@ -1513,50 +1513,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!action || !action.name) return;
 
-    // Build the action description for chat
-    let content = `<div class="npc-action-chat"><h3>${action.name}</h3>`;
-
-    if (action.note || action.type || action.range || action.recharge) {
-      content += `<p><strong>`;
-      if (action.note) content += action.note;
-      if (action.type) content += ` ${action.type}`;
-      if (action.range) content += ` ${action.range}`;
-      if (action.recharge) content += ` | Recharge: ${action.recharge}`;
-      content += `</strong></p>`;
-    }
-
-    if (action.flatDamage || action.rollDamage) {
-      content += `<p><strong>Damage:</strong> `;
-      if (action.flatDamage) content += action.flatDamage;
-      if (action.rollDamage) {
-        // Use formatted version with [[/r ]] notation for inline rolls
-        const rollText = action.rollDamageFormatted || action.rollDamage;
-        content += ` (${rollText})`;
-      }
-      content += `</p>`;
-    }
-
-    if (action.description) {
-      content += `<p>${action.description}</p>`;
-    }
-
-    if (action.extraInfo) {
-      // Enrich extra info for display
-      const enrichedExtraInfo = await foundry.applications.ux.TextEditor.enrichHTML(
-        action.extraInfo,
-        {
-          secrets: this.document.isOwner,
-          rollData: this.actor.getRollData(),
-          relativeTo: this.actor,
-        }
-      );
-      content += `<div>${enrichedExtraInfo}</div>`;
-    }
-
-    content += `</div>`;
-
-    // Post to chat
-    await VagabondChatHelper.postMessage(this.actor, content);
+    // Use the unified chat card system
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    await VagabondChatCard.npcAction(this.actor, action, index);
   }
 
   /**
@@ -1648,26 +1607,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!ability || !ability.name) return;
 
-    // Build the ability description for chat
-    let content = `<div class="npc-ability-chat"><h3>${ability.name}</h3>`;
-
-    if (ability.description) {
-      // Enrich description for display (this will convert dice rolls to clickable links)
-      const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-        ability.descriptionFormatted || ability.description,
-        {
-          secrets: this.document.isOwner,
-          rollData: this.actor.getRollData(),
-          relativeTo: this.actor,
-        }
-      );
-      content += `<p>${enrichedDescription}</p>`;
-    }
-
-    content += `</div>`;
-
-    // Post to chat
-    await VagabondChatHelper.postMessage(this.actor, content);
+    // Use the unified chat card system
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    await VagabondChatCard.npcAbility(this.actor, ability);
   }
 
   /**

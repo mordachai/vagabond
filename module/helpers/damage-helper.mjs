@@ -211,6 +211,155 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Create a GM-only NPC damage button (flat or roll)
+   * @param {string} actorId - NPC actor ID
+   * @param {number} actionIndex - Index of the action in the actions array
+   * @param {string} damageValue - Flat damage value or roll formula
+   * @param {string} damageMode - 'flat' or 'roll'
+   * @param {string} damageType - Type of damage
+   * @param {string} damageTypeLabel - Localized damage type label
+   * @returns {string} HTML button string
+   */
+  static createNPCDamageButton(actorId, actionIndex, damageValue, damageMode, damageType, damageTypeLabel) {
+    const isFlat = damageMode === 'flat';
+    const icon = isFlat ? 'fa-hashtag' : 'fa-dice-d20';
+    const label = isFlat ? `Apply ${damageValue} Damage` : `Roll ${damageValue} Damage`;
+
+    return `
+      <button
+        class="vagabond-npc-damage-button gm-only"
+        data-actor-id="${actorId}"
+        data-action-index="${actionIndex}"
+        data-damage-value="${damageValue}"
+        data-damage-mode="${damageMode}"
+        data-damage-type="${damageType}"
+        data-damage-type-label="${damageTypeLabel}"
+      >
+        <i class="fas ${icon}"></i> ${label}
+      </button>
+    `;
+  }
+
+  /**
+   * Handle NPC damage button click (GM reveals damage to players)
+   * @param {HTMLElement} button - The clicked button element
+   * @param {string} messageId - The chat message ID
+   */
+  static async handleNPCDamageButton(button, messageId) {
+    const actorId = button.dataset.actorId;
+    const actionIndex = parseInt(button.dataset.actionIndex);
+    const damageValue = button.dataset.damageValue;
+    const damageMode = button.dataset.damageMode;
+    const damageType = button.dataset.damageType;
+    const damageTypeLabel = button.dataset.damageTypeLabel || damageType;
+
+    const actor = game.actors.get(actorId);
+    if (!actor) {
+      ui.notifications.error('NPC not found!');
+      return;
+    }
+
+    const action = actor.system.actions[actionIndex];
+    if (!action) {
+      ui.notifications.error('Action not found!');
+      return;
+    }
+
+    let damageRoll;
+    let finalDamage;
+
+    if (damageMode === 'flat') {
+      // Flat damage - just use the value directly
+      finalDamage = parseInt(damageValue);
+      damageRoll = null;
+    } else {
+      // Roll damage
+      damageRoll = new Roll(damageValue, actor.getRollData());
+      await damageRoll.evaluate();
+      finalDamage = damageRoll.total;
+    }
+
+    // Update the chat message to show the damage
+    await this.updateNPCActionDamage(
+      messageId,
+      damageRoll,
+      finalDamage,
+      damageTypeLabel,
+      actor,
+      action
+    );
+
+    // Disable the buttons
+    const message = game.messages.get(messageId);
+    if (message) {
+      const allButtons = $(message.content).find('.vagabond-npc-damage-button');
+      allButtons.each(function() {
+        $(this).prop('disabled', true).addClass('used');
+      });
+    }
+  }
+
+  /**
+   * Update NPC action chat card with damage
+   * @param {string} messageId - The chat message ID
+   * @param {Roll} damageRoll - The damage roll (or null for flat damage)
+   * @param {number} finalDamage - The final damage amount
+   * @param {string} damageTypeLabel - Localized damage type label
+   * @param {Actor} actor - The NPC actor
+   * @param {Object} action - The action object
+   */
+  static async updateNPCActionDamage(messageId, damageRoll, finalDamage, damageTypeLabel, actor, action) {
+    const message = game.messages.get(messageId);
+    if (!message) {
+      console.error('VagabondDamageHelper: Message not found:', messageId);
+      return;
+    }
+
+    // Get the current message content
+    let content = message.content;
+
+    // Format dice display if rolling
+    let diceDisplay = '';
+    if (damageRoll) {
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+      diceDisplay = VagabondChatCard.formatRollWithDice(damageRoll);
+    }
+
+    // Build damage HTML
+    const damageHTML = `
+      <div class='card-damage'>
+        <div class='damage-container'>
+          <i class='fas fa-burst damage-icon'></i>
+          <span class='damage-amount'>${finalDamage}</span>
+          <span class='damage-type'>${damageTypeLabel}</span>
+        </div>
+        ${diceDisplay ? `<div class='damage-dice-display'>${diceDisplay}</div>` : ''}
+      </div>
+    `;
+
+    // Build apply damage button HTML
+    const applyButton = this.createApplyDamageButton(
+      finalDamage,
+      damageTypeLabel,
+      actor.id,
+      null
+    );
+
+    // Replace the GM-only buttons with the damage display + apply button
+    // Look for the footer-actions div and replace its contents
+    content = content.replace(
+      /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
+      `$1${damageHTML}${applyButton}$3`
+    );
+
+    // Update the message's rolls array to include the damage roll
+    const rolls = damageRoll ? [...(message.rolls || []), damageRoll] : message.rolls;
+
+    // Update the message with new content and rolls
+    await message.update({ content, rolls });
+  }
+
+  /**
    * Create an "Apply Damage" button
    * @param {number} damageAmount - The amount of damage
    * @param {string} damageType - Type of damage

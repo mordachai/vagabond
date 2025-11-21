@@ -578,4 +578,126 @@ export class VagabondChatCard {
 
     return await card.send();
   }
+
+  /**
+   * Static helper: Create and send an NPC action card
+   * @param {VagabondActor} actor - The NPC actor
+   * @param {Object} action - The action object
+   * @param {number} actionIndex - Index of the action in the actions array
+   * @returns {Promise<ChatMessage>}
+   */
+  static async npcAction(actor, action, actionIndex) {
+    const card = new VagabondChatCard()
+      .setType('npc-action')
+      .setActor(actor)
+      .setTitle(action.name || 'Unnamed Action')
+      .setSubtitle(actor.name);
+
+    // Add action metadata
+    if (action.type || action.range) {
+      let actionInfo = [];
+      if (action.type) actionInfo.push(action.type);
+      if (action.range) actionInfo.push(action.range);
+      card.addMetadata('Type', actionInfo.join(' • '));
+    }
+
+    if (action.note) {
+      card.addMetadata('Note', action.note);
+    }
+
+    if (action.recharge) {
+      card.addMetadata('Recharge', action.recharge);
+    }
+
+    // Add description if present
+    if (action.description) {
+      const enriched = await TextEditor.enrichHTML(action.description, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: actor
+      });
+      card.setDescription(enriched);
+    }
+
+    // Add extra info if present
+    if (action.extraInfo) {
+      const enrichedExtra = await TextEditor.enrichHTML(action.extraInfo, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: actor
+      });
+      const currentDesc = card.data.description || '';
+      card.setDescription(
+        currentDesc +
+        (currentDesc ? '<hr class="action-divider">' : '') +
+        `<div class="action-extra-info">${enrichedExtra}</div>`
+      );
+    }
+
+    // Add damage buttons (GM-only) if action has damage
+    if (action.flatDamage || action.rollDamage) {
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+
+      // Get damage type label if set
+      let damageTypeLabel = '';
+      if (action.damageType && action.damageType !== '-') {
+        damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[action.damageType]) || action.damageType;
+      }
+
+      // Create GM-only damage buttons
+      if (action.flatDamage) {
+        const flatButton = VagabondDamageHelper.createNPCDamageButton(
+          actor.id,
+          actionIndex,
+          action.flatDamage,
+          'flat',
+          action.damageType || 'physical',
+          damageTypeLabel
+        );
+        card.addFooterAction(flatButton);
+      }
+
+      if (action.rollDamage) {
+        const rollButton = VagabondDamageHelper.createNPCDamageButton(
+          actor.id,
+          actionIndex,
+          action.rollDamage,
+          'roll',
+          action.damageType || 'physical',
+          damageTypeLabel
+        );
+        card.addFooterAction(rollButton);
+      }
+    }
+
+    return await card.send();
+  }
+
+  /**
+   * Static helper: Create and send an NPC ability card
+   * @param {VagabondActor} actor - The NPC actor
+   * @param {Object} ability - The ability object
+   * @returns {Promise<ChatMessage>}
+   */
+  static async npcAbility(actor, ability) {
+    const card = new VagabondChatCard()
+      .setType('npc-ability')
+      .setActor(actor)
+      .setTitle(ability.name || 'Unnamed Ability')
+      .setSubtitle(actor.name);
+
+    // Add description if present
+    if (ability.description) {
+      // Use formatted version if available (with dice rolls converted to roll links)
+      const descToEnrich = ability.descriptionFormatted || ability.description;
+      const enriched = await TextEditor.enrichHTML(descToEnrich, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: actor
+      });
+      card.setDescription(enriched);
+    }
+
+    return await card.send();
+  }
 }
