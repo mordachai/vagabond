@@ -235,15 +235,15 @@ export class VagabondChatCard {
   }
 
   /**
-   * Static helper: Create a stat roll card
+   * Static helper: Create and send a stat roll card
    * @param {VagabondActor} actor - The actor
    * @param {string} statKey - The stat key (might, dexterity, etc.)
    * @param {Roll} roll - The roll result
    * @param {number} difficulty - The difficulty
    * @param {boolean} isSuccess - Whether the roll succeeded
-   * @returns {VagabondChatCard}
+   * @returns {Promise<ChatMessage>}
    */
-  static statRoll(actor, statKey, roll, difficulty, isSuccess) {
+  static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
     const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[statKey]) || statKey;
     const card = new VagabondChatCard()
       .setType('stat-roll')
@@ -257,25 +257,21 @@ export class VagabondChatCard {
     const statValue = actor.system.stats[statKey]?.value || 0;
     card.addMetadata('Stat Value', statValue.toString());
 
-    return card;
+    return await card.send();
   }
 
   /**
-   * Static helper: Create a save roll card
+   * Static helper: Create and send a save roll card
    * @param {VagabondActor} actor - The actor
    * @param {string} saveKey - The save key (reflex, endure, will)
    * @param {Roll} roll - The roll result
    * @param {number} difficulty - The difficulty
    * @param {boolean} isSuccess - Whether the roll succeeded
-   * @returns {VagabondChatCard}
+   * @returns {Promise<ChatMessage>}
    */
-  static saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
-    const saveLabels = {
-      reflex: 'Reflex',
-      endure: 'Endure',
-      will: 'Will'
-    };
-    const saveLabel = saveLabels[saveKey] || saveKey;
+  static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
+    const save = actor.system.saves?.[saveKey];
+    const saveLabel = save?.label || saveKey;
 
     const card = new VagabondChatCard()
       .setType('save-roll')
@@ -285,21 +281,22 @@ export class VagabondChatCard {
       .addRoll(roll, difficulty)
       .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', roll.total >= 20);
 
-    return card;
+    return await card.send();
   }
 
   /**
-   * Static helper: Create a skill roll card
+   * Static helper: Create and send a skill roll card
    * @param {VagabondActor} actor - The actor
    * @param {string} skillKey - The skill key
    * @param {Roll} roll - The roll result
    * @param {number} difficulty - The difficulty
    * @param {boolean} isSuccess - Whether the roll succeeded
-   * @returns {VagabondChatCard}
+   * @returns {Promise<ChatMessage>}
    */
-  static skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
-    const skill = actor.system.skills?.[skillKey];
-    const skillLabel = game.i18n.localize(`VAGABOND.Skills.${skillKey}`) || skillKey;
+  static async skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
+    // Check if it's a regular skill or weapon skill
+    const skill = actor.system.skills?.[skillKey] || actor.system.weaponSkills?.[skillKey];
+    const skillLabel = skill?.label || skillKey;
 
     const card = new VagabondChatCard()
       .setType('skill-roll')
@@ -310,11 +307,13 @@ export class VagabondChatCard {
       .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', roll.total >= 20);
 
     if (skill) {
-      const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[skill.stat]) || skill.stat;
-      card.addMetadata('Skill', `${skillLabel} (${statLabel})`);
+      if (skill.stat) {
+        const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[skill.stat]) || skill.stat;
+        card.addMetadata('Skill', `${skillLabel} (${statLabel})`);
+      }
       card.addMetadata('Trained', skill.trained ? 'Yes' : 'No');
     }
 
-    return card;
+    return await card.send();
   }
 }

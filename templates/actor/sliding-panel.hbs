@@ -122,6 +122,8 @@
                   class='stat-label rollable'
                   data-action='roll'
                   data-roll='d20'
+                  data-roll-type='stat'
+                  data-stat-key='{{key}}'
                   data-label='{{localize (lookup @root.config.stats key)}} Check'
                   data-tooltip='{{localize (lookup @root.config.stats key)}}'
                 >{{localize (lookup @root.config.stats key)}}</label>
@@ -239,6 +241,10 @@
                 class='skill-label rollable'
                 data-action='roll'
                 data-roll='d20'
+                data-roll-type='skill'
+                data-skill-key='{{key}}'
+                data-difficulty='{{skill.difficulty}}'
+                data-trained='{{skill.trained}}'
                 data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
               >{{skill.label}}</label>
               <span class='skill-difficulty'>{{skill.difficulty}}</span>
@@ -259,6 +265,9 @@
                   class='resource-label rollable'
                   data-action='roll'
                   data-roll='d20'
+                  data-roll-type='save'
+                  data-save-key='{{key}}'
+                  data-difficulty='{{save.difficulty}}'
                   data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
                   data-tooltip='{{save.description}}'
                 >{{save.label}}</label>
@@ -290,6 +299,10 @@
                 class='skill-label rollable'
                 data-action='roll'
                 data-roll='d20'
+                data-roll-type='weapon-skill'
+                data-skill-key='{{key}}'
+                data-difficulty='{{weaponSkill.difficulty}}'
+                data-trained='{{weaponSkill.trained}}'
                 data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
               >{{weaponSkill.label}}</label>
               <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>

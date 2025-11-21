@@ -2441,24 +2441,75 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : '';
-
       // Apply favor/hinder if applicable
       const favorHinder = this.actor.system.favorHinder || 'none';
       let rollFormula = dataset.roll;
 
       if (favorHinder === 'favor') {
         rollFormula = `${dataset.roll} + 1d6`;
-        label += ' [Favor +1d6]';
       } else if (favorHinder === 'hinder') {
         rollFormula = `${dataset.roll} - 1d6`;
-        label += ' [Hinder -1d6]';
       }
 
       let roll = new Roll(rollFormula, this.actor.getRollData());
       await roll.evaluate();
-      await VagabondChatHelper.postRoll(this.actor, roll, label);
-      return roll;
+
+      // Determine roll type and use VagabondChatCard for stats, saves, and skills
+      const rollType = dataset.rollType;
+
+      if (rollType === 'stat') {
+        // Stat roll
+        const statKey = dataset.statKey;
+        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
+        const isSuccess = difficulty ? roll.total >= difficulty : null;
+
+        await VagabondChatCard.statRoll(
+          this.actor,
+          statKey,
+          roll,
+          difficulty,
+          isSuccess
+        );
+        return roll;
+      } else if (rollType === 'save') {
+        // Save roll
+        const saveKey = dataset.saveKey;
+        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
+        const isSuccess = difficulty ? roll.total >= difficulty : null;
+
+        await VagabondChatCard.saveRoll(
+          this.actor,
+          saveKey,
+          roll,
+          difficulty,
+          isSuccess
+        );
+        return roll;
+      } else if (rollType === 'skill' || rollType === 'weapon-skill') {
+        // Skill roll (including weapon skills)
+        const skillKey = dataset.skillKey;
+        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
+        const isSuccess = difficulty ? roll.total >= difficulty : null;
+
+        await VagabondChatCard.skillRoll(
+          this.actor,
+          skillKey,
+          roll,
+          difficulty,
+          isSuccess
+        );
+        return roll;
+      } else {
+        // Fallback to old behavior for other rolls
+        let label = dataset.label ? `[ability] ${dataset.label}` : '';
+        if (favorHinder === 'favor') {
+          label += ' [Favor +1d6]';
+        } else if (favorHinder === 'hinder') {
+          label += ' [Hinder -1d6]';
+        }
+        await VagabondChatHelper.postRoll(this.actor, roll, label);
+        return roll;
+      }
     }
   }
 
