@@ -37,6 +37,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
       toggleWeaponProperty: this._onToggleWeaponProperty,
       removeWeaponProperty: this._onRemoveWeaponProperty,
+      toggleImmunity: this._onToggleImmunity,
+      removeImmunity: this._onRemoveImmunity,
       toggleLock: this._onToggleLock,
     },
     form: {
@@ -661,6 +663,56 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
     // Uncheck the corresponding checkbox
     const checkbox = this.element.querySelector(`input[type="checkbox"][data-property="${property}"]`);
+    if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle adding/removing immunity from armor (via checkbox)
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onToggleImmunity(event, target) {
+    const immunity = target.dataset.immunity;
+    const isChecked = target.checked;
+    const immunities = this.item.system.immunities || [];
+
+    let newImmunities;
+    if (isChecked) {
+      // Add immunity if not already present
+      if (!immunities.includes(immunity)) {
+        newImmunities = [...immunities, immunity];
+      } else {
+        return; // Already exists
+      }
+    } else {
+      // Remove immunity
+      newImmunities = immunities.filter(i => i !== immunity);
+    }
+
+    await this.item.update({ 'system.immunities': newImmunities });
+  }
+
+  /**
+   * Handle removing an immunity from armor (via tag x button)
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveImmunity(event, target) {
+    const immunity = target.dataset.immunity;
+    if (!immunity) return;
+
+    const immunities = this.item.system.immunities || [];
+    const newImmunities = immunities.filter(i => i !== immunity);
+    await this.item.update({ 'system.immunities': newImmunities });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-immunity="${immunity}"]`);
     if (checkbox) checkbox.checked = false;
   }
 

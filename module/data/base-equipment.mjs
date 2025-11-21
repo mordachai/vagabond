@@ -162,6 +162,12 @@ export default class VagabondEquipment extends VagabondItemBase {
       choices: ['light', 'medium', 'heavy']
     });
 
+    // Damage immunities (armor provides immunity to these damage types)
+    schema.immunities = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
     // ===== GEAR-SPECIFIC FIELDS =====
 
     // Gear category (e.g., "Alchemy & Medicine", "Adventuring Gear")

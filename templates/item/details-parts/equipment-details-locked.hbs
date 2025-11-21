@@ -75,6 +75,15 @@
             <span class='stat-label'>Might Req:</span>
             <span class='stat-value'>{{system.might}}</span>
           </div>
+          {{! Damage Immunities (Read-Only) }}
+          {{#if system.immunities.length}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Immunities:</span>
+              <span class='stat-value'>
+                {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
+              </span>
+            </div>
+          {{/if}}
         </div>
       </div>
     {{/if}}
