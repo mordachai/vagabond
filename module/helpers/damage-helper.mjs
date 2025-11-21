@@ -116,14 +116,13 @@ export class VagabondDamageHelper {
    */
   static async updateChatCardDamage(messageId, damageRoll, damageType, isCritical, actor, item) {
     const message = game.messages.get(messageId);
-    if (!message) return;
+    if (!message) {
+      console.error('VagabondDamageHelper: Message not found:', messageId);
+      return;
+    }
 
-    // Find the damage section in the message
-    const messageElement = document.querySelector(`.chat-message[data-message-id="${messageId}"]`);
-    if (!messageElement) return;
-
-    const damageSection = messageElement.querySelector('[data-damage-section]');
-    if (!damageSection) return;
+    // Get the current message content
+    let content = message.content;
 
     // Build damage HTML
     const damageHTML = `
@@ -138,25 +137,35 @@ export class VagabondDamageHelper {
       </div>
     `;
 
-    // Inject damage into the section
-    damageSection.innerHTML = damageHTML;
+    // Build apply damage button HTML
+    const applyButton = this.createApplyDamageButton(
+      damageRoll.total,
+      damageType,
+      actor.id,
+      item?.id
+    );
 
-    // Add apply damage button to footer
-    const footerActions = messageElement.querySelector('.footer-actions');
-    if (footerActions) {
-      const applyButton = this.createApplyDamageButton(
-        damageRoll.total,
-        damageType,
-        actor.id,
-        item?.id
+    // Replace the damage section placeholder with actual damage
+    // The pattern matches: <div class='card-damage-section' data-damage-section>...</div>
+    content = content.replace(
+      /(<div class=['"]card-damage-section['"] data-damage-section>)([\s\S]*?)(<\/div>)/,
+      `$1${damageHTML}$3`
+    );
+
+    // Add apply damage button to footer-actions if it exists
+    // The pattern matches: <div class='footer-actions'>...</div>
+    if (content.includes('footer-actions')) {
+      content = content.replace(
+        /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
+        `$1$2${applyButton}$3`
       );
-      footerActions.insertAdjacentHTML('beforeend', applyButton);
     }
 
     // Update the message's rolls array to include the damage roll
-    const rolls = message.rolls || [];
-    rolls.push(damageRoll);
-    await message.update({ rolls });
+    const rolls = [...(message.rolls || []), damageRoll];
+
+    // Update the message with new content and rolls
+    await message.update({ content, rolls });
   }
 
   /**

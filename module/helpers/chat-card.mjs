@@ -468,7 +468,7 @@ export class VagabondChatCard {
     }
 
     // Add critical effect if critical and spell has crit text
-    if (isCritical && spell.system.crit) {
+    if (isCritical && spell.system.crit && spell.system.crit.trim() !== '') {
       const critEnriched = await TextEditor.enrichHTML(spell.system.crit, {
         async: true,
         secrets: actor.isOwner,
