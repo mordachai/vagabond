@@ -357,7 +357,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this._prepareItems(context);
 
     // Prepare equipped armor type for header display
-    const equippedArmor = this.actor.items.find(item => item.type === 'armor' && item.system.equipped);
+    const equippedArmor = this.actor.items.find(item => {
+      const isArmor = (item.type === 'armor') ||
+                     (item.type === 'equipment' && item.system.equipmentType === 'armor');
+      return isArmor && item.system.equipped;
+    });
     context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
 
     // Prepare fatigue boxes (5 skulls)
@@ -678,15 +682,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Iterate through items, allocating to containers
     for (let i of this.document.items) {
-      // Append to gear.
-      if (i.type === 'gear') {
+      // Handle equipment items by their equipmentType
+      if (i.type === 'equipment') {
+        if (i.system.equipmentType === 'weapon') {
+          weapons.push(i);
+        } else if (i.system.equipmentType === 'armor') {
+          armor.push(i);
+        } else if (i.system.equipmentType === 'gear') {
+          gear.push(i);
+        }
+        // Note: alchemical and relic types not shown in these lists yet
+      }
+      // Legacy: Keep supporting old item types for backward compatibility
+      else if (i.type === 'gear') {
         gear.push(i);
       }
-      // Append to weapons.
       else if (i.type === 'weapon') {
         weapons.push(i);
       }
-      // Append to armor.
       else if (i.type === 'armor') {
         armor.push(i);
       }
