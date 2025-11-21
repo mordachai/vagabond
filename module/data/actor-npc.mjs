@@ -82,21 +82,6 @@ export default class VagabondNPC extends VagabondActorBase {
       initial: '',
     });
 
-    // Armor value and description
-    schema.armor = new fields.NumberField({
-      required: true,
-      nullable: false,
-      integer: true,
-      initial: 0,
-      min: 0,
-    });
-
-    schema.armorDescription = new fields.StringField({
-      required: false,
-      nullable: false,
-      initial: '',
-    });
-
     // Locked/unlocked mode toggle
     schema.locked = new fields.BooleanField({
       required: true,

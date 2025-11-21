@@ -79,59 +79,7 @@
   position: relative;
   z-index: 20 !important;
 
-  // Weapon skills styling (same as regular skills)
-  .weapon-skill {
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    white-space: nowrap;
-
-    .skill-checkbox-label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      margin: 0;
-      margin-right: 6px;
-      flex: 0.5;
-    }
-
-    .skill-checkbox-hidden {
-      display: none;
-    }
-
-    .skill-checkbox-icon {
-      font-size: 16px;
-      color: var(--vagabond-c-dark);
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: var(--vagabond-c-tan);
-      }
-    }
-
-    .skill-label {
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      flex: 3;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
-
-    .skill-difficulty {
-      font-weight: bold;
-      text-align: right;
-      font-size: 16px;
-      flex: 1;
-    }
-  }
-
-  // Equipped weapons and favorited spells styling
-  .equipped-weapon,
+  // Favorited spells styling
   .favorited-spell {
     display: flex;
     align-items: center;
@@ -153,7 +101,6 @@
     }
   }
 
-  .weapon-info,
   .spell-info {
     font-size: 13px;
     color: $c-tan;

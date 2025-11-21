@@ -282,8 +282,7 @@
   gap: 6px;
 }
 
-.npc-senses-field,
-.npc-armor-field {
+.npc-senses-field {
   grid-column: span 1;
 }
 
@@ -379,98 +378,6 @@
   // Make NPC skulls smaller than character skulls
   .fatigue-skull {
     font-size: 16px;
-  }
-}
-
-// Armor Display (Value + Description)
-.npc-armor-display {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.npc-armor-value {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 0;
-  background: transparent;
-  font-size: 15px;
-  font-family: $font-secondary;
-  font-weight: normal;
-  color: var(--vagabond-c-dark);
-  width: 40px;
-  text-align: left;
-  box-shadow: none;
-
-  &:hover {
-    border-bottom-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: var(--vagabond-c-dark);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &[readonly] {
-    border: none;
-    color: var(--vagabond-c-dark);
-    cursor: default;
-    background: transparent;
-    padding: 2px 0;
-
-    &:hover {
-      border: none;
-    }
-  }
-
-  &::placeholder {
-    color: var(--vagabond-c-muted);
-    opacity: 0.5;
-  }
-}
-
-.npc-armor-description {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 0;
-  background: transparent;
-  font-size: 15px;
-  font-family: $font-secondary;
-  font-weight: normal;
-  color: var(--vagabond-c-dark);
-  flex: 1;
-  box-shadow: none;
-
-  &:hover {
-    border-bottom-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: var(--vagabond-c-dark);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &[readonly] {
-    border: none;
-    color: var(--vagabond-c-dark);
-    cursor: default;
-    background: transparent;
-    padding: 2px 0;
-
-    &:hover {
-      border: none;
-    }
-  }
-
-  &::placeholder {
-    color: var(--vagabond-c-muted);
-    opacity: 0.5;
   }
 }
 

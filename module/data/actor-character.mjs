@@ -151,31 +151,6 @@ export default class VagabondCharacter extends VagabondActorBase {
       })
     });
 
-    // Weapon Skills system - used for attacks
-    schema.weaponSkills = new fields.SchemaField({
-      // Might-based weapon skills
-      melee: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'might', readonly: true })
-      }),
-      brawl: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'might', readonly: true })
-      }),
-
-      // Dexterity-based weapon skills
-      finesse: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'dexterity', readonly: true })
-      }),
-
-      // Awareness-based weapon skills
-      ranged: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'awareness', readonly: true })
-      })
-    });
-
     return schema;
   }
 
@@ -239,21 +214,6 @@ export default class VagabondCharacter extends VagabondActorBase {
 
       // Add label for localization
       skill.label = game.i18n.localize(`VAGABOND.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
-    }
-
-    // Process weapon skills - calculate difficulty based on Vagabond rules (same as regular skills)
-    for (const key in this.weaponSkills) {
-      const weaponSkill = this.weaponSkills[key];
-      const associatedStat = this.stats[weaponSkill.stat];
-      const statValue = associatedStat?.value || 8;
-
-      // Vagabond difficulty calculation:
-      // Difficulty = 20 - Stat (untrained)
-      // Difficulty = 20 - (Stat × 2) (trained)
-      weaponSkill.difficulty = 20 - (weaponSkill.trained ? statValue * 2 : statValue);
-
-      // Add label for localization
-      weaponSkill.label = game.i18n.localize(`VAGABOND.WeaponSkills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
     }
   }
 
@@ -320,13 +280,6 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
 
-    // Copy weapon skills to the top level for roll formulas
-    if (this.weaponSkills) {
-      for (let [k, v] of Object.entries(this.weaponSkills)) {
-        data[k] = foundry.utils.deepClone(v);
-      }
-    }
-
     // Copy saves to the top level for roll formulas
     if (this.saves) {
       for (let [k, v] of Object.entries(this.saves)) {
@@ -368,17 +321,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     } else {
       this.speed = { base: 30, crawl: 90, travel: 6 }; // Default
     }
-
-    // Calculate armor from equipped armor items
-    let totalArmor = 0;
-    if (this.parent?.items) {
-      for (const item of this.parent.items) {
-        if (item.type === 'armor' && item.system.equipped) {
-          totalArmor += item.system.finalRating || 0;
-        }
-      }
-    }
-    this.armor = totalArmor;
   }
 
   _calculateInventorySlots() {
@@ -389,11 +331,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.maxSlots = 8 + mightValue + bonusSlots;
 
     // Calculate occupied slots from all inventory items
-    // Count weapons, armor, and gear
     let occupiedSlots = 0;
     if (this.parent?.items) {
       for (const item of this.parent.items) {
-        if ((item.type === 'weapon' || item.type === 'armor' || item.type === 'gear') && item.system.slots !== undefined) {
+        if (item.type === 'equipment' && item.system.slots !== undefined) {
           occupiedSlots += item.system.slots;
         }
       }

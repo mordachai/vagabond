@@ -48,19 +48,6 @@
       </div>
     {{/if}}
 
-    {{#if (eq item.type 'gear')}}
-      <div class='grid grid-2col'>
-        <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.quantity.label'}}</label>
-          <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number' />
-        </div>
-        <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.slots.label'}}</label>
-          <input type='number' name='system.slots' value='{{system.slots}}' data-dtype='Number' />
-        </div>
-      </div>
-    {{/if}}
-
     {{#if (eq item.type 'ancestry')}}
       <div class='grid grid-2col'>
         <div class='resource'>
@@ -85,60 +72,6 @@
             <option value='Outers' {{#if (eq system.ancestryType 'Outers')}}selected{{/if}}>Outers</option>
             <option value='Primordials' {{#if (eq system.ancestryType 'Primordials')}}selected{{/if}}>Primordials</option>
             <option value='Undead' {{#if (eq system.ancestryType 'Undead')}}selected{{/if}}>Undead</option>
-          </select>
-        </div>
-      </div>
-    {{/if}}
-
-    {{#if (eq item.type 'weapon')}}
-      <div class='grid grid-2col'>
-        <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.range.label'}}</label>
-          <select name='system.range' data-dtype='String'>
-            {{#select system.range}}
-              <option value='close'>Close</option>
-              <option value='near'>Near</option>
-              <option value='far'>Far</option>
-            {{/select}}
-          </select>
-        </div>
-        <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.grip.label'}}</label>
-          <select name='system.grip' data-dtype='String'>
-            {{#select system.grip}}
-              <option value='1H' title='{{lookup config.weaponGripDescriptions "1H"}}'>1H (One-Handed)</option>
-              <option value='2H' title='{{lookup config.weaponGripDescriptions "2H"}}'>2H (Two-Handed)</option>
-              <option value='F' title='{{lookup config.weaponGripDescriptions "F"}}'>F (Fist)</option>
-              <option value='V' title='{{lookup config.weaponGripDescriptions "V"}}'>V (Versatile)</option>
-            {{/select}}
-          </select>
-        </div>
-      </div>
-    {{/if}}
-
-    {{#if (eq item.type 'armor')}}
-      <div class='grid grid-2col'>
-        <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.armorType.label'}}</label>
-          <select name='system.armorType' data-dtype='String'>
-            {{#select system.armorType}}
-              <option value='light' title='{{lookup config.armorTypeDescriptions "light"}}'>{{localize 'VAGABOND.Armor.Type.Light'}}</option>
-              <option value='medium' title='{{lookup config.armorTypeDescriptions "medium"}}'>{{localize 'VAGABOND.Armor.Type.Medium'}}</option>
-              <option value='heavy' title='{{lookup config.armorTypeDescriptions "heavy"}}'>{{localize 'VAGABOND.Armor.Type.Heavy'}}</option>
-            {{/select}}
-          </select>
-        </div>
-        <div class='resource'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.metal.label'}}</label>
-          <select name='system.metal' data-dtype='String'>
-            {{#select system.metal}}
-              <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-              <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-              <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-              <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-              <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-              <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
-            {{/select}}
           </select>
         </div>
       </div>

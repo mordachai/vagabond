@@ -513,10 +513,6 @@
   }
 
   /* Type-specific styling */
-  &[data-card-type="weapon-attack"] .card-header {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  }
-
   &[data-card-type="spell-cast"] .card-header {
     background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
   }

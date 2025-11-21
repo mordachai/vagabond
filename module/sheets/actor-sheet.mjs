@@ -24,10 +24,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
-      rollWeapon: this._onRollWeapon,
-      toggleWeaponEquipment: this._onToggleWeaponEquipment,
-      toggleWeaponGrip: this._onToggleWeaponGrip,
-      toggleArmorEquipment: this._onToggleArmorEquipment,
       castSpell: this._onCastSpell,  // NEW: Cast spell action
       modifyDamage: this._onModifyDamage,  // NEW: Increase/decrease damage
       modifyDelivery: this._onModifyDelivery,  // NEW: Increase/decrease delivery
@@ -356,10 +352,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Offloading context prep to a helper function
     this._prepareItems(context);
 
-    // Prepare equipped armor type for header display
-    const equippedArmor = this.actor.items.find(item => item.type === 'armor' && item.system.equipped);
-    context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
-
     // Prepare fatigue boxes (5 skulls)
     const fatigue = this.actor.system.fatigue || 0;
     context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
@@ -646,12 +638,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   _prepareItems(context) {
     // Initialize containers.
-    const gear = [];
-    const weapons = [];
-    const armor = [];
     const features = [];
     const perks = [];
     const spells = [];
+    const equipment = [];
 
     // Build features list from class levelFeatures up to current level
     const classItem = this.document.items.find(item => item.type === 'class');
@@ -678,17 +668,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Iterate through items, allocating to containers
     for (let i of this.document.items) {
-      // Append to gear.
-      if (i.type === 'gear') {
-        gear.push(i);
-      }
-      // Append to weapons.
-      else if (i.type === 'weapon') {
-        weapons.push(i);
-      }
-      // Append to armor.
-      else if (i.type === 'armor') {
-        armor.push(i);
+      // Append to equipment.
+      if (i.type === 'equipment') {
+        equipment.push(i);
       }
       // Append to spells.
       else if (i.type === 'spell') {
@@ -701,9 +683,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     // Sort then assign
-    context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.armor = armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.equipment = equipment.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
@@ -838,69 +818,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     perkCards.forEach(perkCard => {
       // Right-click to delete
       perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
-    });
-
-    // Add click handlers for gear items
-    const gearItems = this.element.querySelectorAll('.gear-item-row[data-item-id]');
-    gearItems.forEach(gearItem => {
-      // Left-click on image: open item sheet
-      const gearImage = gearItem.querySelector('.gear-item-image');
-      if (gearImage) {
-        gearImage.addEventListener('click', this._onGearImageClick.bind(this));
-      }
-
-      // Left-click on name: use item (if usable)
-      const gearName = gearItem.querySelector('.gear-item-name');
-      if (gearName) {
-        gearName.addEventListener('click', this._onGearNameClick.bind(this));
-      }
-
-      // Click on equipped icon: toggle equipped status
-      const equippedIcon = gearItem.querySelector('.gear-equipped-icon');
-      if (equippedIcon) {
-        equippedIcon.addEventListener('click', this._onToggleEquipped.bind(this));
-      }
-
-      // Right-click on row: delete item
-      gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
-    });
-
-    // Add click and context menu handlers for weapon items
-    const weaponItems = this.element.querySelectorAll('.weapon-item-row[data-item-id]');
-    weaponItems.forEach(weaponItem => {
-      // Left-click on image: open item sheet
-      const weaponImage = weaponItem.querySelector('.weapon-item-image');
-      if (weaponImage) {
-        weaponImage.addEventListener('click', this._onWeaponImageClick.bind(this));
-      }
-
-      // Left-click on name: use weapon (attack roll)
-      const weaponName = weaponItem.querySelector('.weapon-item-name');
-      if (weaponName) {
-        weaponName.addEventListener('click', this._onWeaponNameClick.bind(this));
-      }
-
-      // Right-click on row: delete weapon
-      weaponItem.addEventListener('contextmenu', this._onWeaponContextMenu.bind(this));
-    });
-
-    // Add click and context menu handlers for armor items
-    const armorItems = this.element.querySelectorAll('.armor-item-row[data-item-id]');
-    armorItems.forEach(armorItem => {
-      // Left-click on image: open item sheet
-      const armorImage = armorItem.querySelector('.armor-item-image');
-      if (armorImage) {
-        armorImage.addEventListener('click', this._onArmorImageClick.bind(this));
-      }
-
-      // Left-click on name: open item sheet (armor doesn't have a roll action like weapons)
-      const armorName = armorItem.querySelector('.armor-item-name');
-      if (armorName) {
-        armorName.addEventListener('click', this._onArmorImageClick.bind(this));
-      }
-
-      // Right-click on row: delete armor
-      armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
     });
 
     // Add click and context menu handlers for spell items
@@ -1698,218 +1615,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle left-click on gear item image - opens item sheet
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onGearImageClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget.closest('.gear-item-row');
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item) {
-      item.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle left-click on gear item name - uses/rolls item if applicable
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onGearNameClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget.closest('.gear-item-row');
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item && typeof item.roll === 'function') {
-      await item.roll();
-    }
-  }
-
-  /**
-   * Handle click on equipped icon - toggles equipped status
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onToggleEquipped(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget.closest('.gear-item-row');
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    const newEquippedStatus = !item.system.equipped;
-
-    // Toggle equipped status
-    await item.update({ 'system.equipped': newEquippedStatus });
-
-    // Toggle all effects on this item: disabled when unequipped, enabled when equipped
-    const updates = item.effects.map(effect => ({
-      _id: effect.id,
-      disabled: !newEquippedStatus
-    }));
-
-    if (updates.length > 0) {
-      await item.updateEmbeddedDocuments('ActiveEffect', updates);
-    }
-  }
-
-  /**
-   * Handle right-click on gear item - deletes item with confirmation
-   *
-   * @param {PointerEvent} event   The originating contextmenu event
-   * @protected
-   */
-  async _onGearContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget;
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Item' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
-   * Handle left-click on weapon item image - opens item sheet
-   */
-  async _onWeaponImageClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const weaponRow = event.currentTarget.closest('.weapon-item-row');
-    const itemId = weaponRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item) {
-      item.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle left-click on weapon item name - makes attack roll
-   */
-  async _onWeaponNameClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const weaponRow = event.currentTarget.closest('.weapon-item-row');
-    const itemId = weaponRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const weapon = this.actor.items.get(itemId);
-    if (weapon && weapon.type === 'weapon') {
-      // Call the existing weapon roll action
-      await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
-    }
-  }
-
-  /**
-   * Handle right-click on weapon item - deletes weapon with confirmation
-   */
-  async _onWeaponContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const weaponRow = event.currentTarget;
-    const itemId = weaponRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Weapon' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
-   * Handle left-click on armor item image - opens item sheet
-   */
-  async _onArmorImageClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const armorRow = event.currentTarget.closest('.armor-item-row');
-    const itemId = armorRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item) {
-      item.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle right-click on armor item - deletes armor with confirmation
-   */
-  async _onArmorContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const armorRow = event.currentTarget;
-    const itemId = armorRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Armor' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
    * Handle right-click on spell item - deletes spell with confirmation
    */
   async _onSpellContextMenu(event) {
@@ -2004,152 +1709,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _toggleEffect(event, target) {
     const effect = this._getEmbeddedDocument(target);
     await effect.update({ disabled: !effect.disabled });
-  }
-
-  /**
-   * Handle weapon attack rolls.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onRollWeapon(event, target) {
-    event.preventDefault();
-    const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    if (!weapon || weapon.type !== 'weapon') {
-      ui.notifications.error('Weapon not found!');
-      return;
-    }
-
-    try {
-      // Import damage helper
-      const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
-
-      // Get favor/hinder state
-      const favorHinder = this.actor.system.favorHinder || 'none';
-
-      // Roll attack using weapon's method
-      const attackResult = await weapon.rollAttack(this.actor, favorHinder);
-
-      // Determine if damage should be auto-rolled
-      let damageRoll = null;
-      if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
-        // Get the stat used for the attack (for crit bonus damage)
-        const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
-      }
-
-      // Send attack to chat using VagabondChatCard
-      await VagabondChatCard.weaponAttack(this.actor, weapon, attackResult, damageRoll);
-
-      return attackResult.roll;
-    } catch (error) {
-      ui.notifications.warn(error.message);
-      return;
-    }
-  }
-
-  /**
-   * Handle toggling weapon equipment state.
-   * Cycles through: unequipped -> oneHand -> twoHands -> unequipped
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleWeaponEquipment(event, target) {
-    event.preventDefault();
-    const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    if (!weapon || weapon.type !== 'weapon') {
-      ui.notifications.error('Weapon not found!');
-      return;
-    }
-
-    // Cycle through equipment states
-    const currentState = weapon.system.equipmentState || 'unequipped';
-    let nextState;
-
-    switch (currentState) {
-      case 'unequipped':
-        nextState = 'oneHand';
-        break;
-      case 'oneHand':
-        nextState = 'twoHands';
-        break;
-      case 'twoHands':
-        nextState = 'unequipped';
-        break;
-      default:
-        nextState = 'unequipped';
-    }
-
-    // Update the weapon's equipment state
-    await weapon.update({ 'system.equipmentState': nextState });
-  }
-
-  /**
-   * Handle toggling weapon grip (for versatile weapons in features panel).
-   * Toggles between: oneHand <-> twoHands
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleWeaponGrip(event, target) {
-    event.preventDefault();
-    const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    if (!weapon || weapon.type !== 'weapon') {
-      ui.notifications.error('Weapon not found!');
-      return;
-    }
-
-    // Only allow toggling for versatile weapons
-    if (weapon.system.grip !== 'V') {
-      ui.notifications.warn('Only versatile weapons can switch grip!');
-      return;
-    }
-
-    // Toggle between oneHand and twoHands
-    const currentState = weapon.system.equipmentState;
-    const nextState = currentState === 'oneHand' ? 'twoHands' : 'oneHand';
-
-    // Update the weapon's equipment state
-    await weapon.update({ 'system.equipmentState': nextState });
-  }
-
-  /**
-   * Handle toggling armor equipment state.
-   * Toggles between: equipped <-> unequipped
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleArmorEquipment(event, target) {
-    event.preventDefault();
-    const itemId = target.dataset.itemId;
-    const armor = this.actor.items.get(itemId);
-
-    if (!armor || armor.type !== 'armor') {
-      ui.notifications.error('Armor not found!');
-      return;
-    }
-
-    // Toggle equipped state
-    const newState = !armor.system.equipped;
-
-    // Update the armor's equipment state
-    await armor.update({ 'system.equipped': newState });
   }
 
   /**

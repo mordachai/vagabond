@@ -83,12 +83,6 @@
               height='180'
             />
 
-            {{! Armor Info Overlay (Left side) }}
-            <div class='armor-overlay'>
-              <div class='armor-value'>{{system.armor}}</div>
-              <div class='armor-type'>{{equippedArmorType}}</div>
-            </div>
-            
             {{! Row 3: Hit Points }}
             <div class='hp-display'>
               <i class='fas fa-heart hp-icon'></i>
@@ -277,67 +271,9 @@
           </div>
         </div>
 
-        {{! Weapon Skills / Attacks Section }}
+        {{! Attacks Section }}
         <div class='weapon-skills flexcol'>
           <h3>Attacks</h3>
-          {{#each system.weaponSkills as |weaponSkill key|}}
-            <div class='weapon-skill flexrow'>
-              <label class='skill-checkbox-label'>
-                <input
-                  type='checkbox'
-                  name='system.weaponSkills.{{key}}.trained'
-                  {{#if weaponSkill.trained}}checked{{/if}}
-                  class='skill-checkbox-hidden'
-                />
-                {{#if weaponSkill.trained}}
-                  <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
-                {{else}}
-                  <i class='skill-checkbox-icon far fa-circle'></i>
-                {{/if}}
-              </label>
-              <label
-                class='skill-label rollable'
-                data-action='roll'
-                data-roll='d20'
-                data-roll-type='weapon-skill'
-                data-skill-key='{{key}}'
-                data-difficulty='{{weaponSkill.difficulty}}'
-                data-trained='{{weaponSkill.trained}}'
-                data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
-              >{{weaponSkill.label}}</label>
-              <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
-            </div>
-          {{/each}}
-
-          {{! Equipped Weapons }}
-          {{#each weapons as |weapon|}}
-            {{#if weapon.system.equipped}}
-              <div class='equipped-weapon flexrow flex-group-center'>
-                <label
-                  class='resource-label rollable flexlarge align-left'
-                  data-action='rollWeapon'
-                  data-item-id='{{weapon._id}}'
-                  title='{{weapon.system.propertiesDisplay}}'
-                >{{weapon.name}} ({{weapon.system.currentDamage}})</label>
-                <span class='weapon-info'>
-                  {{weapon.system.rangeDisplay}}
-                  {{#if (eq weapon.system.equipmentState 'oneHand')}}
-                    {{#if (eq weapon.system.grip 'V')}}
-                      <i class='fas fa-hand-fist clickable' title='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
-                    {{else}}
-                      <i class='fas fa-hand-fist' title='One-Handed'></i>
-                    {{/if}}
-                  {{else if (eq weapon.system.equipmentState 'twoHands')}}
-                    {{#if (eq weapon.system.grip 'V')}}
-                      <i class='fas fa-hands clickable' title='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
-                    {{else}}
-                      <i class='fas fa-hands' title='Two-Handed'></i>
-                    {{/if}}
-                  {{/if}}
-                </span>
-              </div>
-            {{/if}}
-          {{/each}}
 
           {{! Favorited Spells }}
           {{#each spells as |spell|}}

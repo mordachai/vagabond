@@ -36,44 +36,6 @@
   }
 }
 
-// Armor Overlay (Top right, 40x50, overflowing by 10px)
-.armor-overlay {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 40px;
-  height: 50px;
-  background-image: url('/icons/equipment/shield/heater-steel-gold.webp');
-  background-size: contain;
-  background-position: top center;
-  background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
-
-  .armor-value {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-    line-height: 1;
-    margin-bottom: 1px;
-  }
-
-  .armor-type {
-    position: relative;
-    bottom: 0;
-    font-size: 10px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-    text-transform: uppercase;
-    line-height: 1;
-  }
-}
-
 // Fatigue Skull Icons (standalone, not nested in overlay)
 .fatigue-skull {
   font-size: 20px;

@@ -216,31 +216,6 @@
       </div>
     {{/unless}}
 
-    {{! Armor - Always visible }}
-    <div class='npc-detail-row'>
-      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.armor.label"}}</label>
-      <div class='npc-armor-display'>
-        <input
-          type='text'
-          name='system.armor'
-          value='{{system.armor}}'
-          data-dtype='Number'
-          class='npc-armor-value'
-          placeholder='{{#unless system.locked}}0{{/unless}}'
-          {{#if system.locked}}readonly{{/if}}
-        />
-        <input
-          type='text'
-          name='system.armorDescription'
-          value='{{system.armorDescription}}'
-          data-dtype='String'
-          class='npc-armor-description'
-          placeholder='{{#unless system.locked}}Light armor{{/unless}}'
-          {{#if system.locked}}readonly{{/if}}
-        />
-      </div>
-    </div>
-
     {{! Damage Immunities }}
     {{#unless (and system.locked (not system.immunities.length))}}
       <div class='npc-detail-row'>
