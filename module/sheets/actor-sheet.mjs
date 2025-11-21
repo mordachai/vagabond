@@ -2032,7 +2032,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
-    if (!weapon || weapon.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = weapon && ((weapon.type === 'weapon') ||
+                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+
+    if (!isWeapon) {
       ui.notifications.error('Weapon not found!');
       return;
     }
@@ -2079,7 +2083,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
-    if (!weapon || weapon.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = weapon && ((weapon.type === 'weapon') ||
+                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+
+    if (!isWeapon) {
       ui.notifications.error('Weapon not found!');
       return;
     }
@@ -2120,7 +2128,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
-    if (!weapon || weapon.type !== 'weapon') {
+    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    const isWeapon = weapon && ((weapon.type === 'weapon') ||
+                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+
+    if (!isWeapon) {
       ui.notifications.error('Weapon not found!');
       return;
     }
@@ -2153,7 +2165,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const itemId = target.dataset.itemId;
     const armor = this.actor.items.get(itemId);
 
-    if (!armor || armor.type !== 'armor') {
+    // Check if this is armor (legacy armor item OR equipment with equipmentType='armor')
+    const isArmor = armor && ((armor.type === 'armor') ||
+                             (armor.type === 'equipment' && armor.system.equipmentType === 'armor'));
+
+    if (!isArmor) {
       ui.notifications.error('Armor not found!');
       return;
     }
