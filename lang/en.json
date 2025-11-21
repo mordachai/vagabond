@@ -383,6 +383,19 @@
       "Ranged": "Ranged",
       "Shield": "Shield",
       "Thrown": "Thrown"
+    },
+    "PropertyHints": {
+      "Brawl": "Unarmed weapon usable with Brawl skill.",
+      "Brutal": "Crits deal 1 extra damage die.",
+      "Cleave": "Can deal half damage to two Targets.",
+      "Entangle": "On hit, target is Entangled until end of their next turn.",
+      "Finesse": "Can use Dexterity instead of Might for attack rolls.",
+      "Keen": "Critical hit on 19-20 instead of just 20.",
+      "Long": "Extended reach, can attack from 10ft away.",
+      "Near": "Ranged weapon with Near range.",
+      "Ranged": "Ranged weapon, uses Ranged skill.",
+      "Shield": "Can be used defensively to block attacks.",
+      "Thrown": "Can be thrown as a ranged attack."
     }
     },
     "Armor": {

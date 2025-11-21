@@ -3680,6 +3680,19 @@ details[open] .vagabond .npc-immunity-toggle i {
   gap: 6px;
 }
 
+.vagabond-chat-card .card-footer .footer-actions {
+  flex: 1 1 100%;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.vagabond-chat-card .card-footer .footer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .vagabond-chat-card .card-footer .tag {
   padding: 4px 8px;
   background: white;
@@ -3690,6 +3703,58 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-dark);
   text-transform: uppercase;
   letter-spacing: 0.3px;
+}
+
+/* Property Accordion */
+.vagabond-chat-card .metadata-item-expandable {
+  flex-direction: column;
+}
+
+.vagabond-chat-card .metadata-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vagabond-chat-card .metadata-header:hover {
+  background: var(--vagabond-c-faint);
+}
+
+.vagabond-chat-card .expand-icon {
+  margin-left: auto;
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+
+.vagabond-chat-card .property-details {
+  margin-top: 8px;
+  padding-left: 16px;
+  border-left: 2px solid var(--vagabond-c-tan);
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.vagabond-chat-card .property-details.collapsed {
+  max-height: 0;
+  margin-top: 0;
+}
+
+.vagabond-chat-card .property-detail {
+  padding: 4px 0;
+}
+
+.vagabond-chat-card .property-name {
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  margin-right: 4px;
+}
+
+.vagabond-chat-card .property-hint {
+  color: var(--vagabond-c-darkgray);
+  font-size: 0.95em;
 }
 
 /* Type-specific styling */

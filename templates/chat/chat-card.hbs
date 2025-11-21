@@ -55,10 +55,30 @@
   {{#if metadata.length}}
     <div class='card-metadata'>
       {{#each metadata}}
-        <div class='metadata-item'>
-          <span class='metadata-label'>{{label}}:</span>
-          <span class='metadata-value'>{{value}}</span>
-        </div>
+        {{#if (and (eq label 'Properties') ../propertyDetails)}}
+          {{! Property accordion - clickable to expand/collapse }}
+          <div class='metadata-item metadata-item-expandable'>
+            <div class='metadata-header' data-action='toggleProperties'>
+              <span class='metadata-label'>{{label}}:</span>
+              <span class='metadata-value'>{{value}}</span>
+              <i class='fas fa-chevron-right expand-icon'></i>
+            </div>
+            <div class='property-details collapsed'>
+              {{#each ../propertyDetails}}
+                <div class='property-detail'>
+                  <span class='property-name'>{{name}}:</span>
+                  <span class='property-hint'>{{hint}}</span>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{else}}
+          {{! Regular metadata }}
+          <div class='metadata-item'>
+            <span class='metadata-label'>{{label}}:</span>
+            <span class='metadata-value'>{{value}}</span>
+          </div>
+        {{/if}}
       {{/each}}
     </div>
   {{/if}}
@@ -70,12 +90,23 @@
     </div>
   {{/if}}
 
-  {{! FOOTER: Properties, tags, etc. }}
-  {{#if footerTags.length}}
+  {{! FOOTER: Actions + Tags }}
+  {{#if (or footerActions.length footerTags.length)}}
     <footer class='card-footer'>
-      {{#each footerTags}}
-        <span class='tag'>{{this}}</span>
-      {{/each}}
+      {{#if footerActions.length}}
+        <div class='footer-actions'>
+          {{#each footerActions}}
+            {{{this}}}
+          {{/each}}
+        </div>
+      {{/if}}
+      {{#if footerTags.length}}
+        <div class='footer-tags'>
+          {{#each footerTags}}
+            <span class='tag'>{{this}}</span>
+          {{/each}}
+        </div>
+      {{/if}}
     </footer>
   {{/if}}
 

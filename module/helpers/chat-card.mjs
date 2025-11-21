@@ -17,8 +17,10 @@ export class VagabondChatCard {
       outcomeClass: null,
       damage: null,
       metadata: [],
+      propertyDetails: null, // For expandable property hints
       description: null,
       footerTags: [],
+      footerActions: [], // For buttons like "Roll Damage"
       actor: null,
       item: null
     };
@@ -190,6 +192,26 @@ export class VagabondChatCard {
   }
 
   /**
+   * Set property details for expandable accordion (weapon properties with hints)
+   * @param {Array<Object>} properties - Array of {name, hint} objects
+   * @returns {VagabondChatCard}
+   */
+  setPropertyDetails(properties) {
+    this.data.propertyDetails = properties;
+    return this;
+  }
+
+  /**
+   * Add a footer action (button HTML)
+   * @param {string} actionHtml - HTML string for the action button
+   * @returns {VagabondChatCard}
+   */
+  addFooterAction(actionHtml) {
+    this.data.footerActions.push(actionHtml);
+    return this;
+  }
+
+  /**
    * Build the card data
    * @returns {Object} Card data object
    */
@@ -348,13 +370,37 @@ export class VagabondChatCard {
     if (weapon.system.gripDisplay) {
       card.addMetadata('Grip', weapon.system.gripDisplay);
     }
-    if (weapon.system.propertiesDisplay) {
+
+    // Add properties with expandable hints
+    if (weapon.system.properties && weapon.system.properties.length > 0) {
+      const propertyDetails = weapon.system.properties.map(prop => ({
+        name: prop,
+        hint: game.i18n.localize(`VAGABOND.Weapon.PropertyHints.${prop}`) || ''
+      }));
+      card.setPropertyDetails(propertyDetails);
+      // Also add the simple display as metadata for the label
       card.addMetadata('Properties', weapon.system.propertiesDisplay);
     }
 
     // Add damage if provided
     if (damageRoll) {
       card.addDamage(damageRoll, 'Physical', isCritical);
+    } else if (isHit) {
+      // If hit but no damage roll (auto-roll disabled), add damage button
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      const damageFormula = weapon.system.currentDamage;
+      const statKey = weaponSkill?.stat || null;
+      const damageButton = VagabondDamageHelper.createDamageButton(
+        actor.id,
+        weapon.id,
+        damageFormula,
+        {
+          type: 'weapon',
+          isCritical: isCritical,
+          statKey: statKey
+        }
+      );
+      card.addFooterAction(damageButton);
     }
 
     return await card.send();

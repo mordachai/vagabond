@@ -166,6 +166,23 @@ Hooks.on('renderChatMessageHTML', async (message, html) => {
       await VagabondDamageHelper.rollDamageFromButton(button, message.id);
     });
   });
+
+  // Add click handler for property accordion toggle
+  const propertyHeaders = html.querySelectorAll('[data-action="toggleProperties"]');
+
+  propertyHeaders.forEach(header => {
+    header.addEventListener('click', (event) => {
+      event.preventDefault();
+      const expandable = header.closest('.metadata-item-expandable');
+      const details = expandable.querySelector('.property-details');
+      const icon = header.querySelector('.expand-icon');
+
+      // Toggle collapsed state
+      details.classList.toggle('collapsed');
+      icon.classList.toggle('fa-chevron-right');
+      icon.classList.toggle('fa-chevron-down');
+    });
+  });
 });
 
 /* -------------------------------------------- */
