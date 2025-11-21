@@ -492,8 +492,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         // Enrich action fields for display in locked mode
         if (this.actor.system.locked && this.actor.system.actions) {
+          console.log('=== ENRICHING ACTIONS DEBUG ===');
+          console.log('Number of actions:', this.actor.system.actions.length);
+          this.actor.system.actions.forEach((action, idx) => {
+            console.log(`Action ${idx}:`, {
+              name: action.name,
+              rollDamage: action.rollDamage,
+              rollDamageFormatted: action.rollDamageFormatted,
+              flatDamage: action.flatDamage,
+              description: action.description
+            });
+          });
+
           context.enrichedActions = await Promise.all(
-            this.actor.system.actions.map(async (action) => {
+            this.actor.system.actions.map(async (action, idx) => {
               // Enrich recharge if present
               const enrichedRecharge = action.rechargeFormatted
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
@@ -509,11 +521,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
               // Enrich roll damage if present
               // If rollDamageFormatted doesn't exist, format it now
               let rollDamageToEnrich = action.rollDamageFormatted;
+              console.log(`Action ${idx} rollDamageToEnrich (before fallback):`, rollDamageToEnrich);
+
               if (!rollDamageToEnrich && action.rollDamage) {
                 // Format on the fly if not already formatted
                 const dicePattern = /\d*d\d+/i;
                 if (dicePattern.test(action.rollDamage.trim())) {
                   rollDamageToEnrich = `[[/r ${action.rollDamage.trim()}]]`;
+                  console.log(`Action ${idx} formatted on the fly:`, rollDamageToEnrich);
                 } else {
                   rollDamageToEnrich = action.rollDamage;
                 }
@@ -530,6 +545,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                   )
                 : '';
 
+              console.log(`Action ${idx} enrichedRollDamage:`, enrichedRollDamage);
+
               // Enrich extra info if present
               const enrichedExtraInfo = action.extraInfo
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
@@ -542,30 +559,47 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                   )
                 : '';
 
-              return {
+              const result = {
                 rechargeFormatted: enrichedRecharge,
                 rollDamageFormatted: enrichedRollDamage,
                 extraInfoFormatted: enrichedExtraInfo,
               };
+              console.log(`Action ${idx} result:`, result);
+              return result;
             })
           );
+
+          console.log('Final enrichedActions:', context.enrichedActions);
         } else {
           context.enrichedActions = [];
         }
 
         // Enrich ability descriptions for display in locked mode
         if (this.actor.system.locked && this.actor.system.abilities) {
+          console.log('=== ENRICHING ABILITIES DEBUG ===');
+          console.log('Number of abilities:', this.actor.system.abilities.length);
+          this.actor.system.abilities.forEach((ability, idx) => {
+            console.log(`Ability ${idx}:`, {
+              name: ability.name,
+              description: ability.description,
+              descriptionFormatted: ability.descriptionFormatted
+            });
+          });
+
           context.enrichedAbilities = await Promise.all(
-            this.actor.system.abilities.map(async (ability) => {
+            this.actor.system.abilities.map(async (ability, idx) => {
               // Enrich description if present
               // If descriptionFormatted doesn't exist, format it now
               let descriptionToEnrich = ability.descriptionFormatted;
+              console.log(`Ability ${idx} descriptionToEnrich (before fallback):`, descriptionToEnrich);
+
               if (!descriptionToEnrich && ability.description) {
                 // Format on the fly: convert dice notation to roll links
                 const dicePattern = /(\d*)d(\d+)/gi;
                 descriptionToEnrich = ability.description.replace(dicePattern, (match) => {
                   return `[[/r ${match}]]`;
                 });
+                console.log(`Ability ${idx} formatted on the fly:`, descriptionToEnrich);
               }
 
               const enrichedDescription = descriptionToEnrich
@@ -579,11 +613,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                   )
                 : '';
 
-              return {
+              console.log(`Ability ${idx} enrichedDescription:`, enrichedDescription);
+
+              const result = {
                 descriptionFormatted: enrichedDescription,
               };
+              console.log(`Ability ${idx} result:`, result);
+              return result;
             })
           );
+
+          console.log('Final enrichedAbilities:', context.enrichedAbilities);
         } else {
           context.enrichedAbilities = [];
         }
