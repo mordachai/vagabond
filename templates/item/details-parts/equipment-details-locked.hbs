@@ -1,0 +1,196 @@
+{{! Locked Equipment View - Clean formatted text display }}
+<section
+  class='tab details {{tab.cssClass}} equipment-locked-view'
+  data-group='primary'
+  data-tab='details'
+>
+  <div class='equipment-locked-content'>
+    {{! Description - Always show if present }}
+    {{#if system.description}}
+      <div class='locked-section'>
+        <div class='locked-description'>
+          {{{enriched.description}}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{! ===== WEAPON-SPECIFIC DISPLAY ===== }}
+    {{#if (eq system.equipmentType 'weapon')}}
+      <div class='locked-section'>
+        <h3 class='section-header'>Weapon Stats</h3>
+        <div class='locked-stats-grid'>
+          <div class='locked-stat'>
+            <span class='stat-label'>Skill:</span>
+            <span class='stat-value'>{{lookup config.weaponSkills system.weaponSkill}}</span>
+          </div>
+          <div class='locked-stat'>
+            <span class='stat-label'>Range:</span>
+            <span class='stat-value'>{{system.range}}</span>
+          </div>
+          <div class='locked-stat'>
+            <span class='stat-label'>Grip:</span>
+            <span class='stat-value'>{{system.gripDisplay}}</span>
+          </div>
+          <div class='locked-stat'>
+            <span class='stat-label'>Damage (1H):</span>
+            <span class='stat-value'>{{system.damageOneHand}}</span>
+          </div>
+          {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Damage (2H):</span>
+              <span class='stat-value'>{{system.damageTwoHands}}</span>
+            </div>
+          {{/if}}
+        </div>
+
+        {{#if system.properties.length}}
+          <div class='locked-properties'>
+            <span class='stat-label'>Properties:</span>
+            <div class='property-tags-locked'>
+              {{#each system.properties as |property|}}
+                <span class='property-tag-locked' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
+                  {{property}}
+                </span>
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{! ===== ARMOR-SPECIFIC DISPLAY ===== }}
+    {{#if (eq system.equipmentType 'armor')}}
+      <div class='locked-section'>
+        <h3 class='section-header'>Armor Stats</h3>
+        <div class='locked-stats-grid'>
+          <div class='locked-stat'>
+            <span class='stat-label'>Type:</span>
+            <span class='stat-value'>{{system.armorTypeDisplay}}</span>
+          </div>
+          <div class='locked-stat'>
+            <span class='stat-label'>Rating:</span>
+            <span class='stat-value'>{{system.finalRating}}</span>
+          </div>
+          <div class='locked-stat'>
+            <span class='stat-label'>Might Req:</span>
+            <span class='stat-value'>{{system.might}}</span>
+          </div>
+        </div>
+      </div>
+    {{/if}}
+
+    {{! ===== GEAR-SPECIFIC DISPLAY ===== }}
+    {{#if (eq system.equipmentType 'gear')}}
+      {{#if system.gearCategory}}
+        <div class='locked-section'>
+          <div class='locked-stat'>
+            <span class='stat-label'>Category:</span>
+            <span class='stat-value'>{{system.gearCategory}}</span>
+          </div>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{! ===== ALCHEMICAL-SPECIFIC DISPLAY ===== }}
+    {{#if (eq system.equipmentType 'alchemical')}}
+      <div class='locked-section'>
+        <h3 class='section-header'>Alchemical Properties</h3>
+        <div class='locked-stats-grid'>
+          {{#if system.consumable}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Type:</span>
+              <span class='stat-value'>Consumable</span>
+            </div>
+          {{/if}}
+          {{#if (gt system.uses.max 0)}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Uses:</span>
+              <span class='stat-value'>{{system.uses.value}} / {{system.uses.max}}</span>
+            </div>
+          {{/if}}
+          {{#if system.duration}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Duration:</span>
+              <span class='stat-value'>{{system.duration}}</span>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{! ===== RELIC-SPECIFIC DISPLAY ===== }}
+    {{#if (eq system.equipmentType 'relic')}}
+      <div class='locked-section'>
+        <h3 class='section-header'>Relic Properties</h3>
+        <div class='locked-stats-grid'>
+          {{#if system.requiresAttunement}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Attunement:</span>
+              <span class='stat-value'>Required</span>
+            </div>
+          {{/if}}
+          {{#if (gt system.charges.max 0)}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Charges:</span>
+              <span class='stat-value'>{{system.charges.value}} / {{system.charges.max}}</span>
+            </div>
+          {{/if}}
+        </div>
+        {{#if system.magicalEffects}}
+          <div class='locked-text-block'>
+            <span class='stat-label'>Magical Effects:</span>
+            <p>{{system.magicalEffects}}</p>
+          </div>
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{! ===== UNIVERSAL FIELDS ===== }}
+
+    {{! Damage/Healing if present }}
+    {{#unless (eq system.damageType '-')}}
+      <div class='locked-section'>
+        <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}Healing{{else}}Damage{{/if}}</h3>
+        <div class='locked-stats-grid'>
+          <div class='locked-stat'>
+            <span class='stat-label'>Type:</span>
+            <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
+          </div>
+          {{#if system.damageAmount}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Amount:</span>
+              <span class='stat-value'>{{system.damageAmount}}</span>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    {{/unless}}
+
+    {{! Equipment Details }}
+    <div class='locked-section'>
+      <h3 class='section-header'>Details</h3>
+      <div class='locked-stats-grid'>
+        {{#unless (eq system.metal 'none')}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Metal:</span>
+            <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
+          </div>
+        {{/unless}}
+        <div class='locked-stat'>
+          <span class='stat-label'>Slots:</span>
+          <span class='stat-value'>{{system.slots}}</span>
+        </div>
+        {{#if (gt system.quantity 1)}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Quantity:</span>
+            <span class='stat-value'>{{system.quantity}}</span>
+          </div>
+        {{/if}}
+        <div class='locked-stat'>
+          <span class='stat-label'>Cost:</span>
+          <span class='stat-value'>{{system.costDisplay}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

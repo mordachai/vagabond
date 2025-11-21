@@ -37,6 +37,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
       toggleWeaponProperty: this._onToggleWeaponProperty,
       removeWeaponProperty: this._onRemoveWeaponProperty,
+      toggleLock: this._onToggleLock,
     },
     form: {
       submitOnChange: true,
@@ -61,6 +62,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     },
     equipmentDetails: {
       template: 'systems/vagabond/templates/item/details-parts/equipment-details.hbs',
+    },
+    equipmentDetailsLocked: {
+      template: 'systems/vagabond/templates/item/details-parts/equipment-details-locked.hbs',
     },
     gearDetails: {
       template: 'systems/vagabond/templates/item/details-parts/gear-details.hbs',
@@ -95,7 +99,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.document.limited) return;
     switch (this.document.type) {
       case 'equipment':
-        options.parts.push('equipmentDetails', 'effects');
+        // Use locked or unlocked template based on system.locked state
+        const detailsPart = this.document.system.locked ? 'equipmentDetailsLocked' : 'equipmentDetails';
+        options.parts.push(detailsPart, 'effects');
         break;
       case 'gear':
         options.parts.push('gearDetails', 'effects');
@@ -151,6 +157,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'equipmentDetails':
+      case 'equipmentDetailsLocked':
         // Equipment gets enriched description like the details tab
         context.tab = context.tabs[partId];
         context.enriched = {
@@ -337,6 +344,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'classDetails':
         case 'perkDetails':
         case 'equipmentDetails':
+        case 'equipmentDetailsLocked':
         case 'gearDetails':
         case 'weaponDetails':
         case 'armorDetails':
@@ -654,6 +662,20 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     // Uncheck the corresponding checkbox
     const checkbox = this.element.querySelector(`input[type="checkbox"][data-property="${property}"]`);
     if (checkbox) checkbox.checked = false;
+  }
+
+  /**
+   * Handle toggling lock state for equipment items
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onToggleLock(event, target) {
+    if (this.item.type !== 'equipment') return;
+    const currentLocked = this.item.system.locked || false;
+    await this.item.update({ 'system.locked': !currentLocked });
   }
 
   /**

@@ -23,6 +23,12 @@ export default class VagabondEquipment extends VagabondItemBase {
       choices: ['weapon', 'armor', 'gear', 'alchemical', 'relic']
     });
 
+    // Locked state - when true, displays as formatted text instead of inputs
+    schema.locked = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     // ===== UNIVERSAL FIELDS (ALL EQUIPMENT) =====
 
     // Equipped status

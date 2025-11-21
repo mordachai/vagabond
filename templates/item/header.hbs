@@ -11,6 +11,16 @@
       width='150'
       height='150'
     />
+    {{#if (eq item.type 'equipment')}}
+      <button
+        type='button'
+        class='equipment-lock-toggle'
+        data-action='toggleLock'
+        data-tooltip='{{#if system.locked}}Unlock to edit{{else}}Lock to view{{/if}}'
+      >
+        <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+      </button>
+    {{/if}}
   </div>
 
   {{! Right Column: Name + Two-Column Content }}
