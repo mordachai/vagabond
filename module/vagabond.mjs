@@ -90,6 +90,7 @@ Hooks.once('init', function () {
   };
   CONFIG.Item.documentClass = VagabondItem;
   CONFIG.Item.dataModels = {
+    equipment: models.VagabondEquipment,
     gear: models.VagabondGear,
     weapon: models.VagabondWeapon,
     armor: models.VagabondArmor,

@@ -27,6 +27,7 @@
         }
     },
     "Item": {
+      "equipment": {"htmlFields": ["description"]},
       "gear": {"htmlFields": ["description"]},
       "weapon": {"htmlFields": ["description"]},
       "armor": {"htmlFields": ["description"]},
