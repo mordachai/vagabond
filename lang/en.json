@@ -233,6 +233,7 @@
           "Recharge": "Recharge",
           "FlatDamage": "Flat Damage",
           "RollDamage": "Roll Damage",
+          "DamageType": "Damage Type",
           "ExtraInfo": "Extra Info",
           "Add": "Add Action"
         },

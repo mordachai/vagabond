@@ -382,6 +382,11 @@
                         {{#if action.rollDamage}}
                           <span class='action-damage-roll'>({{{lookup (lookup @root.enrichedActions index) 'rollDamageFormatted'}}})</span>
                         {{/if}}
+                        {{#if action.damageType}}
+                          {{#unless (eq action.damageType '-')}}
+                            <span class='action-damage-type'>{{localize (lookup config.damageTypes action.damageType)}}</span>
+                          {{/unless}}
+                        {{/if}}
                       </span>.
                     {{/if}}
                     {{#if action.description}}
@@ -475,6 +480,16 @@
                       <label>{{localize "VAGABOND.Actor.NPC.Action.RollDamage"}}</label>
                       <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' class='npc-field-input' />
                     </div>
+                  </div>
+                  <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.DamageType"}}</label>
+                    <select name='system.actions.{{index}}.damageType' class='npc-field-input'>
+                      {{#select action.damageType}}
+                        {{#each config.damageTypes as |label key|}}
+                          <option value='{{key}}'>{{localize label}}</option>
+                        {{/each}}
+                      {{/select}}
+                    </select>
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}</label>
