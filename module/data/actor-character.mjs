@@ -176,6 +176,17 @@ export default class VagabondCharacter extends VagabondActorBase {
       })
     });
 
+    // Damage immunities and weaknesses (typically set via items/active effects)
+    schema.immunities = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    schema.weaknesses = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
     return schema;
   }
 
