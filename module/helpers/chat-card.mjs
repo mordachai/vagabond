@@ -220,10 +220,67 @@ export class VagabondChatCard {
   }
 
   /**
+   * Format a roll result with die images
+   * @param {Roll} roll - The Roll object
+   * @returns {string} HTML string with die results
+   */
+  static formatRollWithDice(roll) {
+    if (!roll) return '';
+
+    const parts = [];
+    let previousOperator = '';
+
+    for (const term of roll.terms) {
+      // Handle operators
+      if (typeof term === 'string') {
+        previousOperator = term;
+        continue;
+      }
+
+      // Handle dice terms
+      if (term.constructor.name === 'Die') {
+        const dieType = term.faces;
+        const dieIcon = `icons/svg/d${dieType}-grey.svg`;
+
+        for (const result of term.results) {
+          if (previousOperator && previousOperator !== '+') {
+            parts.push(`<span class="roll-operator">${previousOperator}</span>`);
+          }
+          parts.push(`
+            <span class="roll-die" data-die="d${dieType}" style="background-image: url('${dieIcon}')">
+              ${result.result}
+            </span>
+          `);
+          previousOperator = '+';
+        }
+      }
+      // Handle numeric terms (modifiers)
+      else if (term.constructor.name === 'NumericTerm') {
+        const value = term.number;
+        if (value !== 0) {
+          const operator = value > 0 ? '+' : '';
+          parts.push(`<span class="roll-modifier">${operator}${value}</span>`);
+        }
+        previousOperator = '';
+      }
+    }
+
+    return parts.join(' ');
+  }
+
+  /**
    * Render the card to HTML
    * @returns {Promise<string>} Rendered HTML
    */
   async render() {
+    // Format roll results with die images before rendering
+    if (this.data.roll) {
+      this.data.rollDiceDisplay = VagabondChatCard.formatRollWithDice(this.data.roll);
+    }
+    if (this.data.damage?.roll) {
+      this.data.damage.diceDisplay = VagabondChatCard.formatRollWithDice(this.data.damage.roll);
+    }
+
     const templatePath = 'systems/vagabond/templates/chat/chat-card.hbs';
     return await renderTemplate(templatePath, this.data);
   }

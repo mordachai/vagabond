@@ -28,7 +28,9 @@
           <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
         {{/if}}
       </div>
-      {{#if rollFormula}}
+      {{#if rollDiceDisplay}}
+        <div class='roll-dice-display'>{{{rollDiceDisplay}}}</div>
+      {{else if rollFormula}}
         <div class='roll-formula'>{{rollFormula}}</div>
       {{/if}}
     </div>
@@ -46,7 +48,9 @@
             <span class='critical-badge'>CRITICAL!</span>
           {{/if}}
         </div>
-        {{#if damage.formula}}
+        {{#if damage.diceDisplay}}
+          <div class='damage-dice-display'>{{{damage.diceDisplay}}}</div>
+        {{else if damage.formula}}
           <div class='damage-formula'>{{damage.formula}}</div>
         {{/if}}
       </div>
@@ -65,7 +69,7 @@
               <span class='metadata-value'>{{value}}</span>
               <i class='fas fa-chevron-right expand-icon'></i>
             </div>
-            <div class='property-details collapsed'>
+            <div class='property-details'>
               {{#each ../propertyDetails}}
                 <div class='property-detail'>
                   <span class='property-name'>{{name}}:</span>

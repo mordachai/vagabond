@@ -124,6 +124,10 @@ export class VagabondDamageHelper {
     // Get the current message content
     let content = message.content;
 
+    // Format dice display
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    const diceDisplay = VagabondChatCard.formatRollWithDice(damageRoll);
+
     // Build damage HTML
     const damageHTML = `
       <div class='card-damage'>
@@ -133,7 +137,7 @@ export class VagabondDamageHelper {
           <span class='damage-type'>${damageType}</span>
           ${isCritical ? '<span class="critical-badge">CRITICAL!</span>' : ''}
         </div>
-        <div class='damage-formula'>${damageRoll.formula}</div>
+        <div class='damage-dice-display'>${diceDisplay}</div>
       </div>
     `;
 

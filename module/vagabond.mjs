@@ -192,13 +192,9 @@ Hooks.on('renderChatMessage', async (message, html, data) => {
     header.addEventListener('click', (event) => {
       event.preventDefault();
       const expandable = header.closest('.metadata-item-expandable');
-      const details = expandable.querySelector('.property-details');
-      const icon = header.querySelector('.expand-icon');
 
-      // Toggle collapsed state
-      details.classList.toggle('collapsed');
-      icon.classList.toggle('fa-chevron-right');
-      icon.classList.toggle('fa-chevron-down');
+      // Toggle expanded state
+      expandable.classList.toggle('expanded');
     });
   });
 });
