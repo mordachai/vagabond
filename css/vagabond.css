@@ -3809,6 +3809,20 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
 }
 
+/* Spell critical effect styling */
+.vagabond-chat-card .spell-crit-effect {
+  margin-top: 12px;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+  border-left: 3px solid gold;
+  border-radius: 3px;
+}
+
+.vagabond-chat-card .spell-crit-effect strong {
+  color: gold;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
 .vagabond-chat-card[data-card-type="npc-action"] .card-header {
   background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
 }

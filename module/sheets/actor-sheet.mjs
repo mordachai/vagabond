@@ -2279,69 +2279,21 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
-    // Build damage text
-    const damageTypeName = spell.system.damageBase !== '-'
-      ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase])
-      : null;
-    const damageText = spell.system.damageBase !== '-'
-      ? `${state.damageDice}d6 ${damageTypeName}`
-      : null;
+    // Build spell cast result object
+    const spellCastResult = {
+      roll,
+      difficulty,
+      isSuccess,
+      isCritical,
+      manaSkill,
+      manaSkillKey,
+      spellState: state,
+      costs,
+      deliveryText
+    };
 
-    // Build flavor text
-    let flavor = `<div class="vagabond-spell-cast">`;
-    flavor += `<h3>${spell.name}</h3>`;
-
-    // Add spell description if present
-    if (spell.system.description) {
-      flavor += `<p><em>${spell.system.description}</em></p>`;
-    }
-
-    if (damageText) {
-      flavor += `<p><strong>Damage:</strong> ${damageText}`;
-      if (isCritical && damageRoll) {
-        flavor += ` <span style="color: gold;">(CRITICAL!)</span>`;
-      }
-      flavor += `</p>`;
-    }
-    flavor += `<p><strong>Delivery:</strong> ${deliveryText}</p>`;
-    flavor += `<p><strong>Mana Cost:</strong> ${costs.totalCost}</p>`;
-    flavor += `<p><strong>Roll:</strong> ${roll.total} vs DC ${difficulty}</p>`;
-    flavor += `<p><strong>Result:</strong> ${isSuccess ? '<span style="color: green;">SUCCESS</span>' : '<span style="color: red;">FAILED</span>'}</p>`;
-
-    // Add crit description if critical and spell has crit text
-    if (isCritical && spell.system.crit) {
-      flavor += `<p><strong style="color: gold;">Critical Effect:</strong> ${spell.system.crit}</p>`;
-    }
-
-    // Add damage button if spell has damage and wasn't auto-rolled
-    if (spell.system.damageBase !== '-' && !damageRoll) {
-      const damageButton = VagabondDamageHelper.createDamageButton(
-        this.actor.id,
-        spell.id,
-        `${state.damageDice}d6`,
-        {
-          type: 'spell',
-          damageType: spell.system.damageBase,
-          damageDice: state.damageDice,
-          isCritical: isCritical,
-          statKey: manaSkillStat
-        }
-      );
-      flavor += damageButton;
-    }
-
-    flavor += `</div>`;
-
-    await VagabondChatHelper.postRoll(this.actor, roll, flavor);
-
-    // If damage was auto-rolled, post it separately
-    if (damageRoll) {
-      await VagabondChatHelper.postRoll(
-        this.actor,
-        damageRoll,
-        `<strong>${spell.name}</strong> Damage (${damageTypeName})`
-      );
-    }
+    // Use universal chat card
+    await VagabondChatCard.spellCast(this.actor, spell, spellCastResult, damageRoll);
   }
 
   /**

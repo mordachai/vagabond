@@ -405,4 +405,104 @@ export class VagabondChatCard {
 
     return await card.send();
   }
+
+  /**
+   * Static helper: Create and send a spell cast card
+   * @param {VagabondActor} actor - The actor
+   * @param {VagabondItem} spell - The spell item
+   * @param {Object} spellCastResult - The spell cast result
+   * @param {Roll} damageRoll - Optional damage roll if spell succeeded
+   * @returns {Promise<ChatMessage>}
+   */
+  static async spellCast(actor, spell, spellCastResult, damageRoll = null) {
+    const {
+      roll,
+      difficulty,
+      isSuccess,
+      isCritical,
+      manaSkill,
+      manaSkillKey,
+      spellState,
+      costs,
+      deliveryText
+    } = spellCastResult;
+
+    const card = new VagabondChatCard()
+      .setType('spell-cast')
+      .setActor(actor)
+      .setItem(spell)
+      .setTitle(`${spell.name}`)
+      .setSubtitle(actor.name)
+      .addRoll(roll, difficulty)
+      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
+
+    // Add mana skill metadata
+    const skillLabel = manaSkill?.label || manaSkillKey;
+    card.addMetadata('Mana Skill', `${skillLabel} (Difficulty ${difficulty})`);
+
+    // Add mana cost
+    card.addMetadata('Mana Cost', costs.totalCost.toString());
+
+    // Add delivery type
+    card.addMetadata('Delivery', deliveryText);
+
+    // Add damage dice and type if spell has damage
+    if (spell.system.damageBase !== '-') {
+      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase]);
+      card.addMetadata('Damage', `${spellState.damageDice}d6 ${damageTypeName}`);
+    }
+
+    // Add duration if present
+    if (spell.system.duration) {
+      card.addMetadata('Duration', spell.system.duration);
+    }
+
+    // Add enriched description
+    if (spell.system.description) {
+      const enriched = await TextEditor.enrichHTML(spell.system.description, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: spell
+      });
+      card.setDescription(enriched);
+    }
+
+    // Add critical effect if critical and spell has crit text
+    if (isCritical && spell.system.crit) {
+      const critEnriched = await TextEditor.enrichHTML(spell.system.crit, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: spell
+      });
+      card.setDescription(
+        (card.data.description || '') +
+        `<div class="spell-crit-effect"><strong>Critical Effect:</strong> ${critEnriched}</div>`
+      );
+    }
+
+    // Add damage if provided
+    if (damageRoll && spell.system.damageBase !== '-') {
+      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase]);
+      card.addDamage(damageRoll, damageTypeName, isCritical);
+    } else if (isSuccess && spell.system.damageBase !== '-') {
+      // If succeeded but no damage roll (auto-roll disabled), add damage button
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      const damageFormula = `${spellState.damageDice}d6`;
+      const statKey = manaSkill?.stat || null;
+      const damageButton = VagabondDamageHelper.createDamageButton(
+        actor.id,
+        spell.id,
+        damageFormula,
+        {
+          type: 'spell',
+          damageType: spell.system.damageBase,
+          isCritical: isCritical,
+          statKey: statKey
+        }
+      );
+      card.addFooterAction(damageButton);
+    }
+
+    return await card.send();
+  }
 }
