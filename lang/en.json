@@ -434,10 +434,7 @@
       "npc": "NPC"
     },
     "Item": {
-      "gear": "Gear",
-      "weapon": "Weapon",
-      "armor": "Armor",
-      "feature": "Feature",
+      "equipment": "Equipment",
       "spell": "Spell",
       "ancestry": "Ancestry",
       "class": "Class",
