@@ -1,0 +1,543 @@
+/* ========================================
+   CHAT CARDS & BUTTONS
+   ======================================== */
+
+/* Damage Roll Button */
+.vagabond-damage-button-container {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.vagabond-damage-button {
+  background: linear-gradient(135deg, $c-tan 0%, #b8941f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  font-family: $font-title;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, lighten($c-tan, 5%) 0%, #c9a530 100%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled {
+    background: linear-gradient(135deg, lighten($c-tan, 10%) 0%, lighten(#b8941f, 10%) 100%);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+/* Apply Damage Button */
+.vagabond-apply-damage-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  font-family: $font-title;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #f15546 0%, #d14436 100%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled,
+  &.applied {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  &:disabled:hover,
+  &.applied:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+/* Apply Healing Button */
+.vagabond-apply-healing-button {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  font-family: $font-title;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled,
+  &.applied {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  &:disabled:hover,
+  &.applied:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+/* ========================================
+   UNIVERSAL CHAT CARDS
+   ======================================== */
+
+.vagabond-chat-card {
+  background: $c-white;
+  border: 2px solid $c-tan;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: $font-title;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+
+  /* Card Header */
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, $c-faint 0%, darken($c-faint, 5%) 100%);
+    border-bottom: 2px solid $c-tan;
+  }
+
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 2px solid $c-tan;
+  }
+
+  .card-header-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: $c-dark;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .card-subtitle {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    color: $c-darkgray;
+    font-weight: normal;
+  }
+
+  /* Primary Content - Roll Results */
+  .card-primary {
+    padding: 16px;
+    background: white;
+  }
+
+  .roll-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .roll-total-container {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .roll-total {
+    font-size: 36px;
+    font-weight: 700;
+    color: $c-dark;
+    line-height: 1;
+  }
+
+  .roll-vs {
+    font-size: 16px;
+    color: $c-darkgray;
+    font-weight: 600;
+  }
+
+  .roll-outcome {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .roll-outcome-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .roll-outcome-failure {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  .roll-outcome-critical {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe082 100%);
+    color: #f57c00;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+  }
+
+  .roll-outcome-neutral {
+    background: $c-faint;
+    color: $c-dark;
+  }
+
+  .roll-formula {
+    margin-top: 8px;
+    font-size: 13px;
+    color: $c-muted;
+    font-family: monospace;
+  }
+
+  /* Dice Display */
+  .roll-dice-display,
+  .damage-dice-display {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .roll-die {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    position: relative;
+  }
+
+  .roll-operator {
+    font-size: 18px;
+    font-weight: 600;
+    color: $c-dark;
+    margin: 0 4px;
+  }
+
+  .roll-modifier {
+    font-size: 16px;
+    font-weight: 600;
+    color: $c-tan;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  /* Damage Section */
+  .card-damage {
+    padding: 16px;
+    background: #fff3e0;
+    border-top: 1px solid $c-tan;
+    border-bottom: 1px solid $c-tan;
+  }
+
+  .damage-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .damage-icon {
+    font-size: 24px;
+    color: #ff6b35;
+  }
+
+  .damage-amount {
+    font-size: 28px;
+    font-weight: 700;
+    color: #d84315;
+  }
+
+  .damage-type {
+    font-size: 16px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .critical-badge {
+    padding: 4px 10px;
+    background: linear-gradient(135deg, gold 0%, #ffd700 100%);
+    color: #8b4513;
+    font-weight: 700;
+    font-size: 11px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .damage-formula {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
+    font-family: monospace;
+  }
+
+  /* Metadata Section */
+  .card-metadata {
+    padding: 12px 16px;
+    background: $c-faint;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .metadata-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .metadata-label {
+    font-weight: 600;
+    color: $c-dark;
+    min-width: 80px;
+  }
+
+  .metadata-value {
+    color: $c-darkgray;
+  }
+
+  /* Description Section */
+  .card-description {
+    padding: 16px;
+    background: white;
+    border-top: 1px solid $c-faint;
+    font-size: 14px;
+    line-height: 1.5;
+    color: $c-darkgray;
+
+    p {
+      margin: 8px 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  /* Footer Section */
+  .card-footer {
+    padding: 8px 16px;
+    background: $c-faint;
+    border-top: 1px solid $c-tan;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .footer-actions {
+    flex: 1 1 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    background: white;
+    border: 1px solid $c-tan;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: $c-dark;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* Property Accordion */
+  .metadata-item-expandable {
+    flex-direction: column;
+  }
+
+  .metadata-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $c-faint;
+    }
+
+    .metadata-value {
+      transition: opacity 0.2s, max-height 0.2s;
+    }
+  }
+
+  .metadata-item-expandable.expanded .metadata-header .metadata-value {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  .expand-icon {
+    margin-left: auto;
+    font-size: 10px;
+    transition: transform 0.2s;
+  }
+
+  .metadata-item-expandable.expanded .expand-icon {
+    transform: rotate(90deg);
+  }
+
+  .property-details {
+    padding-left: 16px;
+    border-left: 2px solid $c-tan;
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 0;
+    transition: max-height 0.3s ease-out, margin-top 0.3s ease-out;
+  }
+
+  .metadata-item-expandable.expanded .property-details {
+    max-height: 500px;
+    margin-top: 8px;
+  }
+
+  .property-detail {
+    padding: 4px 0;
+  }
+
+  .property-name {
+    font-weight: 600;
+    color: $c-dark;
+    margin-right: 4px;
+  }
+
+  .property-hint {
+    color: $c-darkgray;
+    font-size: 0.95em;
+  }
+
+  /* Spell critical effect styling */
+  .spell-crit-effect {
+    margin-top: 12px;
+    padding: 10px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+    border-left: 3px solid gold;
+    border-radius: 3px;
+
+    strong {
+      color: gold;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    }
+  }
+
+  /* Type-specific styling */
+  &[data-card-type="weapon-attack"] .card-header {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  }
+
+  &[data-card-type="spell-cast"] .card-header {
+    background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+  }
+
+  &[data-card-type="npc-action"] .card-header {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+  }
+
+  &[data-card-type="npc-ability"] .card-header {
+    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .roll-result {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .damage-container {
+      flex-wrap: wrap;
+    }
+  }
+}
