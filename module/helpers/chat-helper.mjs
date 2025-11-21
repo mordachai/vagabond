@@ -27,7 +27,7 @@ export class VagabondChatHelper {
     return ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       content: content,
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER,
     });
   }
 }

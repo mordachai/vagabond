@@ -23,7 +23,8 @@ VAGABOND.statAbbreviations = {
 };
 
 /**
- * Damage types for spells and attacks
+ * Damage types for spells, weapons, and attacks
+ * Universal list used across the entire system
  * @type {Object}
  */
 VAGABOND.damageTypes = {
@@ -36,7 +37,8 @@ VAGABOND.damageTypes = {
   'blunt': 'VAGABOND.DamageTypes.Blunt',
   'physical': 'VAGABOND.DamageTypes.Physical',
   'necrotic': 'VAGABOND.DamageTypes.Necrotic',
-  'psychic': 'VAGABOND.DamageTypes.Psychic'
+  'psychic': 'VAGABOND.DamageTypes.Psychic',
+  'healing': 'VAGABOND.DamageTypes.Healing'
 };
 
 /**

@@ -50,7 +50,7 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Roll damage from a chat message button
+   * Roll damage from a chat message button and update the card in-place
    * @param {HTMLElement} button - The clicked button element
    * @param {string} messageId - The chat message ID
    */
@@ -77,10 +77,6 @@ export class VagabondDamageHelper {
       item = actor.items.get(itemId);
     }
 
-    // Roll based on context type
-    let damageRoll;
-    let flavorText;
-
     // Add stat bonus on critical hit
     let finalFormula = damageFormula;
     if (context.isCritical && context.statKey) {
@@ -90,40 +86,90 @@ export class VagabondDamageHelper {
       }
     }
 
-    switch (context.type) {
-      case 'weapon':
-        damageRoll = new Roll(finalFormula, actor.getRollData());
-        await damageRoll.evaluate();
-        flavorText = `<strong>${item?.name || 'Weapon'}</strong> Damage`;
-        if (context.isCritical) {
-          flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
-        }
-        break;
+    // Roll damage
+    const damageRoll = new Roll(finalFormula, actor.getRollData());
+    await damageRoll.evaluate();
 
-      case 'spell':
-        damageRoll = new Roll(finalFormula, actor.getRollData());
-        await damageRoll.evaluate();
-        const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[context.damageType]);
-        flavorText = `<strong>${item?.name || 'Spell'}</strong> Damage (${damageTypeName})`;
-        if (context.isCritical) {
-          flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
-        }
-        break;
-
-      default:
-        damageRoll = new Roll(finalFormula, actor.getRollData());
-        await damageRoll.evaluate();
-        flavorText = 'Damage';
+    // Determine damage type
+    let damageType = 'Physical';
+    if (context.type === 'spell' && context.damageType) {
+      damageType = game.i18n.localize(CONFIG.VAGABOND.damageTypes[context.damageType]) || context.damageType;
     }
 
-    // Post damage roll to chat
-    const VagabondChatHelper = (await import('./chat-helper.mjs')).VagabondChatHelper;
-    await VagabondChatHelper.postRoll(actor, damageRoll, flavorText);
+    // Update the chat message in-place
+    await this.updateChatCardDamage(messageId, damageRoll, damageType, context.isCritical, actor, item);
 
-    // Disable the button to prevent duplicate rolls
+    // Disable the roll damage button
     button.disabled = true;
     button.innerHTML = '<i class="fas fa-check"></i> Damage Rolled';
     button.classList.add('rolled');
+  }
+
+  /**
+   * Update a chat card with damage information
+   * @param {string} messageId - The chat message ID
+   * @param {Roll} damageRoll - The damage roll
+   * @param {string} damageType - Type of damage
+   * @param {boolean} isCritical - Whether this is critical damage
+   * @param {Actor} actor - The actor dealing damage
+   * @param {Item} item - The item used (optional)
+   */
+  static async updateChatCardDamage(messageId, damageRoll, damageType, isCritical, actor, item) {
+    const message = game.messages.get(messageId);
+    if (!message) {
+      console.error('VagabondDamageHelper: Message not found:', messageId);
+      return;
+    }
+
+    // Get the current message content
+    let content = message.content;
+
+    // Format dice display
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    const diceDisplay = VagabondChatCard.formatRollWithDice(damageRoll);
+
+    // Build damage HTML
+    const damageHTML = `
+      <div class='card-damage'>
+        <div class='damage-container'>
+          <i class='fas fa-burst damage-icon'></i>
+          <span class='damage-amount'>${damageRoll.total}</span>
+          <span class='damage-type'>${damageType}</span>
+          ${isCritical ? '<span class="critical-badge">CRITICAL!</span>' : ''}
+        </div>
+        <div class='damage-dice-display'>${diceDisplay}</div>
+      </div>
+    `;
+
+    // Build apply damage button HTML
+    const applyButton = this.createApplyDamageButton(
+      damageRoll.total,
+      damageType,
+      actor.id,
+      item?.id
+    );
+
+    // Replace the damage section placeholder with actual damage
+    // The pattern matches: <div class='card-damage-section' data-damage-section>...</div>
+    content = content.replace(
+      /(<div class=['"]card-damage-section['"] data-damage-section>)([\s\S]*?)(<\/div>)/,
+      `$1${damageHTML}$3`
+    );
+
+    // Add apply damage button to footer-actions if it exists
+    // The pattern matches: <div class='footer-actions'>...</div>
+    if (content.includes('footer-actions')) {
+      content = content.replace(
+        /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
+        `$1$2${applyButton}$3`
+      );
+    }
+
+    // Update the message's rolls array to include the damage roll
+    const rolls = [...(message.rolls || []), damageRoll];
+
+    // Update the message with new content and rolls
+    await message.update({ content, rolls });
   }
 
   /**
@@ -136,7 +182,7 @@ export class VagabondDamageHelper {
    * @returns {Roll} The damage roll
    */
   static async rollSpellDamage(actor, spell, spellState, isCritical = false, statKey = null) {
-    if (spell.system.damageBase === '-') return null;
+    if (spell.system.damageType === '-') return null;
 
     let damageFormula = `${spellState.damageDice}d6`;
 
@@ -162,5 +208,128 @@ export class VagabondDamageHelper {
    */
   static async rollWeaponDamage(actor, weapon) {
     return await weapon.rollDamage(actor);
+  }
+
+  /**
+   * Create an "Apply Damage" button
+   * @param {number} damageAmount - The amount of damage
+   * @param {string} damageType - Type of damage
+   * @param {string} actorId - Source actor ID
+   * @param {string} itemId - Item ID (optional)
+   * @returns {string} HTML button string
+   */
+  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null) {
+    // Check if this is healing
+    const isHealing = damageType.toLowerCase() === 'healing';
+    const icon = isHealing ? 'fa-heart-pulse' : 'fa-heart-crack';
+    const text = isHealing ? `Apply ${damageAmount} Healing` : `Apply ${damageAmount} Damage`;
+    const buttonClass = isHealing ? 'vagabond-apply-healing-button' : 'vagabond-apply-damage-button';
+
+    return `
+      <button
+        class="${buttonClass}"
+        data-damage-amount="${damageAmount}"
+        data-damage-type="${damageType}"
+        data-actor-id="${actorId}"
+        data-item-id="${itemId || ''}"
+      >
+        <i class="fas ${icon}"></i> ${text}
+      </button>
+    `;
+  }
+
+  /**
+   * Apply damage or healing to selected or targeted tokens
+   * @param {HTMLElement} button - The clicked button element
+   */
+  static async applyDamageToTargets(button) {
+    const amount = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType;
+    const isHealing = damageType.toLowerCase() === 'healing';
+
+    // Get user's selected/targeted tokens
+    const targets = Array.from(game.user.targets);
+
+    if (targets.length === 0) {
+      ui.notifications.warn('No targets selected. Please target a token first.');
+      return;
+    }
+
+    // Apply damage or healing to each target
+    for (const target of targets) {
+      const targetActor = target.actor;
+      if (!targetActor) continue;
+
+      // Check permissions
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
+        continue;
+      }
+
+      const currentHP = targetActor.system.health?.value || 0;
+      const maxHP = targetActor.system.health?.max || currentHP;
+      let newHP;
+      let finalAmount;
+
+      if (isHealing) {
+        // Healing: Add HP (capped at max)
+        newHP = Math.min(maxHP, currentHP + amount);
+        finalAmount = newHP - currentHP; // Actual healing applied
+      } else {
+        // Damage: Calculate with resistances/vulnerabilities and subtract
+        finalAmount = this.calculateFinalDamage(targetActor, amount, damageType);
+        newHP = Math.max(0, currentHP - finalAmount);
+      }
+
+      await targetActor.update({ 'system.health.value': newHP });
+
+      // Show notification
+      if (isHealing) {
+        const healText = finalAmount !== amount
+          ? `${finalAmount} (capped at max HP)`
+          : finalAmount;
+        ui.notifications.info(`Restored ${healText} HP to ${targetActor.name}`);
+      } else {
+        const damageText = finalAmount !== amount
+          ? `${finalAmount} (modified from ${amount})`
+          : finalAmount;
+        ui.notifications.info(`Applied ${damageText} ${damageType} damage to ${targetActor.name}`);
+      }
+    }
+
+    // Disable button after applying
+    button.disabled = true;
+    const successText = isHealing ? 'Healing Applied' : 'Damage Applied';
+    button.innerHTML = `<i class="fas fa-check"></i> ${successText}`;
+    button.classList.add('applied');
+  }
+
+  /**
+   * Calculate final damage considering resistances and vulnerabilities
+   * @param {Actor} actor - The target actor
+   * @param {number} damage - Base damage amount
+   * @param {string} damageType - Type of damage
+   * @returns {number} Final damage amount
+   */
+  static calculateFinalDamage(actor, damage, damageType) {
+    // Check for resistances
+    const resistances = actor.system.resistances || {};
+    const vulnerabilities = actor.system.vulnerabilities || {};
+
+    // Normalize damage type for lookup
+    const normalizedType = damageType.toLowerCase();
+
+    // Apply resistance (half damage)
+    if (resistances[normalizedType]) {
+      return Math.floor(damage / 2);
+    }
+
+    // Apply vulnerability (double damage)
+    if (vulnerabilities[normalizedType]) {
+      return damage * 2;
+    }
+
+    // No modification
+    return damage;
   }
 }

@@ -1,5 +1,6 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -53,6 +54,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickActionName: this._onClickActionName,  // NPC click action name
       clickActionDamageRoll: this._onClickActionDamageRoll,  // NPC click action damage roll
       toggleActionAccordion: this._onToggleActionAccordion,  // NPC toggle action accordion
+      addAbility: this._onAddAbility,  // NPC add ability
+      removeAbility: this._onRemoveAbility,  // NPC remove ability
+      clickAbilityName: this._onClickAbilityName,  // NPC click ability name
+      toggleAbilityAccordion: this._onToggleAbilityAccordion,  // NPC toggle ability accordion
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -156,7 +161,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const spell = this.actor.items.get(spellId);
 
     // Damage cost: 0 for 1d6, +1 per extra die
-    const damageCost = spell.system.damageBase !== '-' && state.damageDice > 1
+    const damageCost = spell.system.damageType !== '-' && state.damageDice > 1
       ? state.damageDice - 1
       : 0;
 
@@ -228,7 +233,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (!container) return;
 
     // Update damage dice display
-    if (spell.system.damageBase !== '-') {
+    if (spell.system.damageType !== '-') {
       const damageElement = container.querySelector('.spell-damage-dice');
       if (damageElement) {
         damageElement.textContent = `${state.damageDice}`;
@@ -472,6 +477,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           this.actor.allApplicableEffects()
         );
 
+        // Enrich the appearing field for roll links
+        if (this.actor.system.locked && this.actor.system.appearingFormatted) {
+          context.enrichedAppearing = await foundry.applications.ux.TextEditor.enrichHTML(
+            this.actor.system.appearingFormatted,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.actor.getRollData(),
+              relativeTo: this.actor,
+            }
+          );
+        } else {
+          context.enrichedAppearing = this.actor.system.appearingFormatted;
+        }
+
         // Enrich action fields for display in locked mode
         if (this.actor.system.locked && this.actor.system.actions) {
           context.enrichedActions = await Promise.all(
@@ -480,6 +499,30 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
               const enrichedRecharge = action.rechargeFormatted
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
                     action.rechargeFormatted,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              // Enrich roll damage if present
+              // If rollDamageFormatted doesn't exist, format it now
+              let rollDamageToEnrich = action.rollDamageFormatted;
+              if (!rollDamageToEnrich && action.rollDamage) {
+                // Format on the fly if not already formatted
+                const dicePattern = /\d*d\d+/i;
+                if (dicePattern.test(action.rollDamage.trim())) {
+                  rollDamageToEnrich = `[[/r ${action.rollDamage.trim()}]]`;
+                } else {
+                  rollDamageToEnrich = action.rollDamage;
+                }
+              }
+
+              const enrichedRollDamage = rollDamageToEnrich
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    rollDamageToEnrich,
                     {
                       secrets: this.document.isOwner,
                       rollData: this.actor.getRollData(),
@@ -502,12 +545,48 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
               return {
                 rechargeFormatted: enrichedRecharge,
+                rollDamageFormatted: enrichedRollDamage,
                 extraInfoFormatted: enrichedExtraInfo,
               };
             })
           );
         } else {
           context.enrichedActions = [];
+        }
+
+        // Enrich ability descriptions for display in locked mode
+        if (this.actor.system.locked && this.actor.system.abilities) {
+          context.enrichedAbilities = await Promise.all(
+            this.actor.system.abilities.map(async (ability) => {
+              // Enrich description if present
+              // If descriptionFormatted doesn't exist, format it now
+              let descriptionToEnrich = ability.descriptionFormatted;
+              if (!descriptionToEnrich && ability.description) {
+                // Format on the fly: convert dice notation to roll links
+                const dicePattern = /(\d*)d(\d+)/gi;
+                descriptionToEnrich = ability.description.replace(dicePattern, (match) => {
+                  return `[[/r ${match}]]`;
+                });
+              }
+
+              const enrichedDescription = descriptionToEnrich
+                ? await foundry.applications.ux.TextEditor.enrichHTML(
+                    descriptionToEnrich,
+                    {
+                      secrets: this.document.isOwner,
+                      rollData: this.actor.getRollData(),
+                      relativeTo: this.actor,
+                    }
+                  )
+                : '';
+
+              return {
+                descriptionFormatted: enrichedDescription,
+              };
+            })
+          );
+        } else {
+          context.enrichedAbilities = [];
         }
         break;
     }
@@ -1436,7 +1515,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (action.flatDamage || action.rollDamage) {
       content += `<p><strong>Damage:</strong> `;
       if (action.flatDamage) content += action.flatDamage;
-      if (action.rollDamage) content += ` (${action.rollDamage})`;
+      if (action.rollDamage) {
+        // Use formatted version with [[/r ]] notation for inline rolls
+        const rollText = action.rollDamageFormatted || action.rollDamage;
+        content += ` (${rollText})`;
+      }
       content += `</p>`;
     }
 
@@ -1483,6 +1566,95 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll,
       `<strong>${action.name}</strong> Damage`
     );
+  }
+
+  /**
+   * Handle adding a new NPC ability
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onAddAbility(event, target) {
+    event.preventDefault();
+    const abilities = this.actor.system.abilities || [];
+
+    // Add a new empty ability
+    const newAbility = {
+      name: '',
+      description: ''
+    };
+
+    await this.actor.update({ 'system.abilities': [...abilities, newAbility] });
+  }
+
+  /**
+   * Handle removing an NPC ability
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveAbility(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const abilities = this.actor.system.abilities || [];
+
+    // Remove the ability at the specified index
+    const newAbilities = abilities.filter((_, i) => i !== index);
+    await this.actor.update({ 'system.abilities': newAbilities });
+  }
+
+  /**
+   * Handle toggling ability accordion in edit mode
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleAbilityAccordion(event, target) {
+    event.preventDefault();
+    const index = target.dataset.index;
+    const abilityEdit = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
+
+    if (abilityEdit) {
+      const content = abilityEdit.querySelector('.ability-edit-content');
+      const icon = abilityEdit.querySelector('.accordion-icon');
+
+      if (content && icon) {
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('fa-chevron-right');
+        icon.classList.toggle('fa-chevron-down');
+      }
+    }
+  }
+
+  /**
+   * Handle clicking on ability name (send to chat)
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onClickAbilityName(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const ability = this.actor.system.abilities[index];
+
+    if (!ability || !ability.name) return;
+
+    // Build the ability description for chat
+    let content = `<div class="npc-ability-chat"><h3>${ability.name}</h3>`;
+
+    if (ability.description) {
+      // Enrich description for display (this will convert dice rolls to clickable links)
+      const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+        ability.descriptionFormatted || ability.description,
+        {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          relativeTo: this.actor,
+        }
+      );
+      content += `<p>${enrichedDescription}</p>`;
+    }
+
+    content += `</div>`;
+
+    // Post to chat
+    await VagabondChatHelper.postMessage(this.actor, content);
   }
 
   /**
@@ -1870,36 +2042,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
-      // Build flavor text and post attack roll to chat
-      let flavorText = weapon.buildAttackFlavor(attackResult, damageRoll);
-
-      // Add damage button if damage wasn't auto-rolled
-      if (!damageRoll) {
-        const damageFormula = weapon.system.currentDamage;
-        const statKey = attackResult.weaponSkill?.stat || null;
-        const damageButton = VagabondDamageHelper.createDamageButton(
-          this.actor.id,
-          weapon.id,
-          damageFormula,
-          {
-            type: 'weapon',
-            isCritical: attackResult.isCritical,
-            statKey: statKey
-          }
-        );
-        flavorText += damageButton;
-      }
-
-      await VagabondChatHelper.postRoll(this.actor, attackResult.roll, flavorText);
-
-      // If there was a damage roll, also send it to chat
-      if (damageRoll) {
-        await VagabondChatHelper.postRoll(
-          this.actor,
-          damageRoll,
-          `<strong>${weapon.name}</strong> Damage`
-        );
-      }
+      // Send attack to chat using VagabondChatCard
+      await VagabondChatCard.weaponAttack(this.actor, weapon, attackResult, damageRoll);
 
       return attackResult.roll;
     } catch (error) {
@@ -2078,8 +2222,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await roll.evaluate();
 
     const isSuccess = roll.total >= difficulty;
+
+    // Check critical - ONLY the d20 result, not including favor/hinder
     const critNumber = this.actor.system.critNumber || 20;
-    const isCritical = roll.total >= critNumber;
+    const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
+    const d20Result = d20Term?.results?.[0]?.result || 0;
+    const isCritical = d20Result >= critNumber;
 
     // If successful, deduct mana
     if (isSuccess) {
@@ -2129,75 +2277,27 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Determine if we should auto-roll damage
     let damageRoll = null;
-    if (spell.system.damageBase !== '-') {
+    if (spell.system.damageType !== '-') {
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state, isCritical, manaSkillStat);
       }
     }
 
-    // Build damage text
-    const damageTypeName = spell.system.damageBase !== '-'
-      ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[spell.system.damageBase])
-      : null;
-    const damageText = spell.system.damageBase !== '-'
-      ? `${state.damageDice}d6 ${damageTypeName}`
-      : null;
+    // Build spell cast result object
+    const spellCastResult = {
+      roll,
+      difficulty,
+      isSuccess,
+      isCritical,
+      manaSkill,
+      manaSkillKey,
+      spellState: state,
+      costs,
+      deliveryText
+    };
 
-    // Build flavor text
-    let flavor = `<div class="vagabond-spell-cast">`;
-    flavor += `<h3>${spell.name}</h3>`;
-
-    // Add spell description if present
-    if (spell.system.description) {
-      flavor += `<p><em>${spell.system.description}</em></p>`;
-    }
-
-    if (damageText) {
-      flavor += `<p><strong>Damage:</strong> ${damageText}`;
-      if (isCritical && damageRoll) {
-        flavor += ` <span style="color: gold;">(CRITICAL!)</span>`;
-      }
-      flavor += `</p>`;
-    }
-    flavor += `<p><strong>Delivery:</strong> ${deliveryText}</p>`;
-    flavor += `<p><strong>Mana Cost:</strong> ${costs.totalCost}</p>`;
-    flavor += `<p><strong>Roll:</strong> ${roll.total} vs DC ${difficulty}</p>`;
-    flavor += `<p><strong>Result:</strong> ${isSuccess ? '<span style="color: green;">SUCCESS</span>' : '<span style="color: red;">FAILED</span>'}</p>`;
-
-    // Add crit description if critical and spell has crit text
-    if (isCritical && spell.system.crit) {
-      flavor += `<p><strong style="color: gold;">Critical Effect:</strong> ${spell.system.crit}</p>`;
-    }
-
-    // Add damage button if spell has damage and wasn't auto-rolled
-    if (spell.system.damageBase !== '-' && !damageRoll) {
-      const damageButton = VagabondDamageHelper.createDamageButton(
-        this.actor.id,
-        spell.id,
-        `${state.damageDice}d6`,
-        {
-          type: 'spell',
-          damageType: spell.system.damageBase,
-          damageDice: state.damageDice,
-          isCritical: isCritical,
-          statKey: manaSkillStat
-        }
-      );
-      flavor += damageButton;
-    }
-
-    flavor += `</div>`;
-
-    await VagabondChatHelper.postRoll(this.actor, roll, flavor);
-
-    // If damage was auto-rolled, post it separately
-    if (damageRoll) {
-      await VagabondChatHelper.postRoll(
-        this.actor,
-        damageRoll,
-        `<strong>${spell.name}</strong> Damage (${damageTypeName})`
-      );
-    }
+    // Use universal chat card
+    await VagabondChatCard.spellCast(this.actor, spell, spellCastResult, damageRoll);
   }
 
   /**
@@ -2270,24 +2370,75 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : '';
-
       // Apply favor/hinder if applicable
       const favorHinder = this.actor.system.favorHinder || 'none';
       let rollFormula = dataset.roll;
 
       if (favorHinder === 'favor') {
         rollFormula = `${dataset.roll} + 1d6`;
-        label += ' [Favor +1d6]';
       } else if (favorHinder === 'hinder') {
         rollFormula = `${dataset.roll} - 1d6`;
-        label += ' [Hinder -1d6]';
       }
 
       let roll = new Roll(rollFormula, this.actor.getRollData());
       await roll.evaluate();
-      await VagabondChatHelper.postRoll(this.actor, roll, label);
-      return roll;
+
+      // Determine roll type and use VagabondChatCard for stats, saves, and skills
+      const rollType = dataset.rollType;
+
+      if (rollType === 'stat') {
+        // Stat roll
+        const statKey = dataset.statKey;
+        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
+        const isSuccess = difficulty ? roll.total >= difficulty : null;
+
+        await VagabondChatCard.statRoll(
+          this.actor,
+          statKey,
+          roll,
+          difficulty,
+          isSuccess
+        );
+        return roll;
+      } else if (rollType === 'save') {
+        // Save roll
+        const saveKey = dataset.saveKey;
+        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
+        const isSuccess = difficulty ? roll.total >= difficulty : null;
+
+        await VagabondChatCard.saveRoll(
+          this.actor,
+          saveKey,
+          roll,
+          difficulty,
+          isSuccess
+        );
+        return roll;
+      } else if (rollType === 'skill' || rollType === 'weapon-skill') {
+        // Skill roll (including weapon skills)
+        const skillKey = dataset.skillKey;
+        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
+        const isSuccess = difficulty ? roll.total >= difficulty : null;
+
+        await VagabondChatCard.skillRoll(
+          this.actor,
+          skillKey,
+          roll,
+          difficulty,
+          isSuccess
+        );
+        return roll;
+      } else {
+        // Fallback to old behavior for other rolls
+        let label = dataset.label ? `[ability] ${dataset.label}` : '';
+        if (favorHinder === 'favor') {
+          label += ' [Favor +1d6]';
+        } else if (favorHinder === 'hinder') {
+          label += ' [Hinder -1d6]';
+        }
+        await VagabondChatHelper.postRoll(this.actor, roll, label);
+        return roll;
+      }
     }
   }
 

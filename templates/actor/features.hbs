@@ -117,8 +117,8 @@
             <div data-action='viewDoc'>{{spell.name}}</div>
           </div>
           <div class='item-damage item-prop spell-col-damage'>
-            {{#unless (eq spell.system.damageBase '-')}}
-              {{localize (lookup @root.config.damageTypes spell.system.damageBase)}}
+            {{#unless (eq spell.system.damageType '-')}}
+              {{localize (lookup @root.config.damageTypes spell.system.damageType)}}
             {{else}}
               —
             {{/unless}}

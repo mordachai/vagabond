@@ -46,6 +46,35 @@ export default class VagabondGear extends VagabondItemBase {
       initial: false
     });
 
+    // Damage Type - type of damage the gear can deal (e.g., alchemical items)
+    // Uses centralized CONFIG.VAGABOND.damageTypes
+    schema.damageType = new fields.StringField({
+      required: true,
+      nullable: false,
+      blank: false,
+      initial: '-',
+      choices: CONFIG.VAGABOND?.damageTypes || {
+        '-': 'None',
+        'acid': 'Acid',
+        'fire': 'Fire',
+        'shock': 'Shock',
+        'poison': 'Poison',
+        'cold': 'Cold',
+        'blunt': 'Blunt',
+        'physical': 'Physical',
+        'necrotic': 'Necrotic',
+        'psychic': 'Psychic',
+        'healing': 'Healing'
+      }
+    });
+
+    // Damage Amount - amount of damage/healing for gear that deals damage
+    schema.damageAmount = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: ''
+    });
+
     return schema;
   }
 

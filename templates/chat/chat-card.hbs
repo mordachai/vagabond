@@ -1,0 +1,119 @@
+{{! Universal Chat Card Template }}
+<div class='vagabond-chat-card' data-card-type='{{type}}'>
+
+  {{! HEADER: Title + Icon + Subtitle }}
+  <header class='card-header'>
+    {{#if icon}}
+      <img class='card-icon' src='{{icon}}' alt='{{title}}' />
+    {{/if}}
+    <div class='card-header-text'>
+      <h3 class='card-title'>{{title}}</h3>
+      {{#if subtitle}}
+        <span class='card-subtitle'>{{subtitle}}</span>
+      {{/if}}
+    </div>
+  </header>
+
+  {{! PRIMARY CONTENT: Roll result or main info }}
+  {{#if hasRoll}}
+    <div class='card-primary'>
+      <div class='roll-result'>
+        <div class='roll-total-container'>
+          <span class='roll-total'>{{rollTotal}}</span>
+          {{#if difficulty}}
+            <span class='roll-vs'>vs {{difficulty}}</span>
+          {{/if}}
+        </div>
+        {{#if outcome}}
+          <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
+        {{/if}}
+      </div>
+      {{#if rollDiceDisplay}}
+        <div class='roll-dice-display'>{{{rollDiceDisplay}}}</div>
+      {{else if rollFormula}}
+        <div class='roll-formula'>{{rollFormula}}</div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{! DAMAGE/EFFECTS - Placeholder that can be filled dynamically }}
+  <div class='card-damage-section' data-damage-section>
+    {{#if damage}}
+      <div class='card-damage'>
+        <div class='damage-container'>
+          <i class='fas fa-burst damage-icon'></i>
+          <span class='damage-amount'>{{damage.total}}</span>
+          <span class='damage-type'>{{damage.type}}</span>
+          {{#if damage.isCritical}}
+            <span class='critical-badge'>CRITICAL!</span>
+          {{/if}}
+        </div>
+        {{#if damage.diceDisplay}}
+          <div class='damage-dice-display'>{{{damage.diceDisplay}}}</div>
+        {{else if damage.formula}}
+          <div class='damage-formula'>{{damage.formula}}</div>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+
+  {{! METADATA: Stats, properties, conditions }}
+  {{#if metadata.length}}
+    <div class='card-metadata'>
+      {{#each metadata}}
+        {{#if (and (eq label 'Properties') ../propertyDetails)}}
+          {{! Property accordion - clickable to expand/collapse }}
+          <div class='metadata-item metadata-item-expandable'>
+            <div class='metadata-header' data-action='toggleProperties'>
+              <span class='metadata-label'>{{label}}:</span>
+              <span class='metadata-value'>{{value}}</span>
+              <i class='fas fa-chevron-right expand-icon'></i>
+            </div>
+            <div class='property-details'>
+              {{#each ../propertyDetails}}
+                <div class='property-detail'>
+                  <span class='property-name'>{{name}}:</span>
+                  <span class='property-hint'>{{hint}}</span>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{else}}
+          {{! Regular metadata }}
+          <div class='metadata-item'>
+            <span class='metadata-label'>{{label}}:</span>
+            <span class='metadata-value'>{{value}}</span>
+          </div>
+        {{/if}}
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{! DESCRIPTION: Enriched HTML }}
+  {{#if description}}
+    <div class='card-description'>
+      {{{description}}}
+    </div>
+  {{/if}}
+
+  {{! FOOTER: Actions + Tags }}
+  {{#if (or footerActions.length footerTags.length)}}
+    <footer class='card-footer'>
+      {{#if footerActions.length}}
+        <div class='footer-actions'>
+          {{#each footerActions}}
+            {{{this}}}
+          {{/each}}
+        </div>
+      {{/if}}
+      {{#if footerTags.length}}
+        <div class='footer-tags'>
+          {{#each footerTags}}
+            <span class='tag'>{{this}}</span>
+          {{/each}}
+        </div>
+      {{/if}}
+    </footer>
+  {{/if}}
+
+</div>

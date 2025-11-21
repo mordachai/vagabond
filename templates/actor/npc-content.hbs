@@ -370,7 +370,7 @@
                         {{#if action.type}} {{action.type}}{{/if}}
                         {{#if action.range}} {{action.range}}{{/if}}
                         {{#if action.recharge}}
-                          | {{{enrichedActions.[index].rechargeFormatted}}}
+                          | {{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}
                         {{/if}}
                       </span>:
                     {{/if}}
@@ -380,7 +380,7 @@
                           <span class='action-damage-flat'>{{action.flatDamage}}</span>
                         {{/if}}
                         {{#if action.rollDamage}}
-                          <span class='action-damage-roll' data-action='clickActionDamageRoll' data-index='{{index}}' data-roll='{{action.rollDamage}}'>({{action.rollDamage}})</span>
+                          <span class='action-damage-roll'>({{{lookup (lookup @root.enrichedActions index) 'rollDamageFormatted'}}})</span>
                         {{/if}}
                       </span>.
                     {{/if}}
@@ -389,7 +389,7 @@
                     {{/if}}
                   </div>
                   {{#if action.extraInfo}}
-                    <div class='action-extra-info'>{{{enrichedActions.[index].extraInfoFormatted}}}</div>
+                    <div class='action-extra-info'>{{{lookup (lookup @root.enrichedActions index) 'extraInfoFormatted'}}}</div>
                   {{/if}}
                 </div>
               {{/if}}
@@ -499,6 +499,57 @@
   <section class='npc-section npc-abilities'>
     <h3 class='npc-section-title'>{{localize "VAGABOND.Actor.NPC.Sections.Abilities"}}</h3>
     <div class='npc-section-content'>
+      <div class='npc-abilities-list'>
+        {{#if system.locked}}
+          {{! VIEW MODE }}
+          {{#if system.abilities}}
+            {{#each system.abilities as |ability index|}}
+              {{#if ability.name}}
+                <div class='npc-ability-view' data-ability-index='{{index}}'>
+                  <span class='ability-name' data-action='clickAbilityName' data-index='{{index}}'>{{ability.name}}</span>{{#if ability.description}}:
+                  <span class='ability-description'>{{{lookup (lookup @root.enrichedAbilities index) 'descriptionFormatted'}}}</span>{{/if}}
+                </div>
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        {{else}}
+          {{! EDIT MODE }}
+          {{#if system.abilities}}
+            {{#each system.abilities as |ability index|}}
+              <div class='npc-ability-edit accordion-item {{#unless ability.name}}expanded{{/unless}}' data-ability-index='{{index}}'>
+                {{#if ability.name}}
+                  <div class='ability-edit-header' data-action='toggleAbilityAccordion' data-index='{{index}}'>
+                    <span class='ability-edit-name'>{{ability.name}}</span>
+                    <i class='fas fa-chevron-right accordion-icon'></i>
+                  </div>
+                {{/if}}
+                <div class='ability-edit-content {{#if ability.name}}collapsed{{/if}}'>
+                  <div class='ability-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Ability.Name"}}</label>
+                    <div class='ability-name-with-remove'>
+                      <input type='text' name='system.abilities.{{index}}.name' value='{{ability.name}}' placeholder='Ability Name' class='npc-field-input' />
+                      <button type='button' class='ability-remove-btn' data-action='removeAbility' data-index='{{index}}' title='Remove Ability'>
+                        <i class='fas fa-trash'></i>
+                      </button>
+                    </div>
+                  </div>
+                  {{#if ability.name}}
+                    <div class='ability-edit-row'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Ability.Description"}}</label>
+                      <textarea name='system.abilities.{{index}}.description' rows='3' placeholder='Description (dice like d6 or 2d8 will be clickable)' class='npc-field-input'>{{ability.description}}</textarea>
+                    </div>
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          {{/if}}
+          <div class='ability-add-row'>
+            <button type='button' class='ability-add-btn' data-action='addAbility'>
+              <i class='fas fa-plus'></i> {{localize "VAGABOND.Actor.NPC.Ability.Add"}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
     </div>
   </section>
 

@@ -31,6 +31,41 @@
       />
     </div>
 
+    {{! Damage Type and Amount - Combined Row }}
+    <div class='form-group'>
+      <label class='resource-label'>Damage Type & Amount</label>
+      <div class='flexrow gap-8'>
+        <div class='flex-2'>
+          <label class='resource-label'>Type</label>
+          <select name='system.damageType' data-dtype='String'>
+            {{#select system.damageType}}
+              <option value='-'>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+              <option value='acid'>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+              <option value='fire'>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+              <option value='shock'>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+              <option value='poison'>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+              <option value='cold'>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+              <option value='blunt'>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+              <option value='physical'>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+              <option value='necrotic'>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+              <option value='psychic'>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+              <option value='healing'>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
+            {{/select}}
+          </select>
+        </div>
+        <div class='flex-1'>
+          <label class='resource-label'>Amount</label>
+          <input
+            type='text'
+            name='system.damageAmount'
+            value='{{system.damageAmount}}'
+            data-dtype='String'
+            placeholder='e.g., 2d6, 1d8+2'
+          />
+        </div>
+      </div>
+    </div>
+
     {{! Cost Section - 3 Column Grid Layout }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.cost.label'}}</label>

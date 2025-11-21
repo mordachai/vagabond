@@ -188,6 +188,23 @@ export default class VagabondNPC extends VagabondActorBase {
       { required: true, initial: [] }
     );
 
+    // Abilities
+    schema.abilities = new fields.ArrayField(
+      new fields.SchemaField({
+        name: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        description: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+      }),
+      { required: true, initial: [] }
+    );
+
     return schema;
   }
 
@@ -216,6 +233,14 @@ export default class VagabondNPC extends VagabondActorBase {
     if (this.locked && this.actions) {
       this.actions.forEach((action, index) => {
         action.rechargeFormatted = this.formatRecharge(action.recharge);
+        action.rollDamageFormatted = this.formatRollDamage(action.rollDamage);
+      });
+    }
+
+    // Format abilities for display in locked mode
+    if (this.locked && this.abilities) {
+      this.abilities.forEach((ability, index) => {
+        ability.descriptionFormatted = this.formatAbilityDescription(ability.description);
       });
     }
   }
@@ -261,5 +286,42 @@ export default class VagabondNPC extends VagabondActorBase {
 
     // If it's just a number, return as-is
     return recharge;
+  }
+
+  /**
+   * Format roll damage for inline rolls
+   * Converts dice formulas like "2d8", "2d8+2", "d6+4" to roll links "[[/r 2d8+2]]"
+   */
+  formatRollDamage(rollDamage) {
+    if (!rollDamage) return '';
+
+    // Check if it's already a roll link
+    if (rollDamage.includes('[[/r')) return rollDamage;
+
+    // Check if it contains dice notation (e.g., "2d8", "d6+2", "3d10+5")
+    const dicePattern = /\d*d\d+/i;
+    if (dicePattern.test(rollDamage.trim())) {
+      return `[[/r ${rollDamage.trim()}]]`;
+    }
+
+    // If it's not dice notation, return as-is
+    return rollDamage;
+  }
+
+  /**
+   * Format ability description for dice rolls
+   * Converts dice notation like "d4", "d6", "2d8" to roll links "[[/r d4]]"
+   * Handles multiple dice in the same string
+   */
+  formatAbilityDescription(description) {
+    if (!description) return '';
+
+    // Replace all dice notation with roll links
+    // Matches patterns like: d4, d6, d8, d10, d12, d20, 2d6, 3d8, etc.
+    const dicePattern = /(\d*)d(\d+)/gi;
+
+    return description.replace(dicePattern, (match) => {
+      return `[[/r ${match}]]`;
+    });
   }
 }

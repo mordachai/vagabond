@@ -6,6 +6,7 @@ import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
+import { VagabondChatCard } from './helpers/chat-card.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 
@@ -59,6 +60,7 @@ globalThis.vagabond = {
   },
   utils: {
     rollItemMacro,
+    VagabondChatCard,
   },
   models,
 };
@@ -88,6 +90,7 @@ Hooks.once('init', function () {
   };
   CONFIG.Item.documentClass = VagabondItem;
   CONFIG.Item.dataModels = {
+    equipment: models.VagabondEquipment,
     gear: models.VagabondGear,
     weapon: models.VagabondWeapon,
     armor: models.VagabondArmor,
@@ -149,9 +152,12 @@ Hooks.once('ready', function () {
 /**
  * Handle rendering chat messages - adds event listeners for damage buttons
  */
-Hooks.on('renderChatMessageHTML', async (message, html) => {
-  // Add click handler for damage buttons (html is now HTMLElement, not jQuery)
-  const damageButtons = html.querySelectorAll('.vagabond-damage-button');
+Hooks.on('renderChatMessage', async (message, html, data) => {
+  // html is a jQuery object, convert to element if needed
+  const element = html[0] || html;
+
+  // Add click handler for damage roll buttons
+  const damageButtons = element.querySelectorAll('.vagabond-damage-button');
 
   damageButtons.forEach(button => {
     button.addEventListener('click', async (event) => {
@@ -162,6 +168,34 @@ Hooks.on('renderChatMessageHTML', async (message, html) => {
 
       // Roll damage from button
       await VagabondDamageHelper.rollDamageFromButton(button, message.id);
+    });
+  });
+
+  // Add click handler for apply damage and healing buttons
+  const applyButtons = element.querySelectorAll('.vagabond-apply-damage-button, .vagabond-apply-healing-button');
+
+  applyButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      // Import damage helper dynamically
+      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+
+      // Apply damage or healing to targets
+      await VagabondDamageHelper.applyDamageToTargets(button);
+    });
+  });
+
+  // Add click handler for property accordion toggle
+  const propertyHeaders = element.querySelectorAll('[data-action="toggleProperties"]');
+
+  propertyHeaders.forEach(header => {
+    header.addEventListener('click', (event) => {
+      event.preventDefault();
+      const expandable = header.closest('.metadata-item-expandable');
+
+      // Toggle expanded state
+      expandable.classList.toggle('expanded');
     });
   });
 });
