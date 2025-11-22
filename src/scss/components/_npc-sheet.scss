@@ -625,6 +625,29 @@
   font-weight: bold;
 }
 
+// Ability View Mode (locked)
+.npc-ability-view {
+  padding: 4px 0;
+  line-height: 1.6;
+  font-size: 15px;
+  font-family: $font-secondary;
+  color: var(--vagabond-c-dark);
+
+  .ability-name {
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--vagabond-c-tan);
+    }
+  }
+
+  .ability-description {
+    font-weight: normal;
+  }
+}
+
 // Action Edit Mode (unlocked)
 .npc-action-edit {
   padding: 8px;

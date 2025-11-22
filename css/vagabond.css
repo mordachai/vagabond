@@ -3133,6 +3133,24 @@
   color: var(--vagabond-c-dark);
   font-weight: bold;
 }
+.vagabond .npc-ability-view {
+  padding: 4px 0;
+  line-height: 1.6;
+  font-size: 15px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-ability-view .ability-name {
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .npc-ability-view .ability-name:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .npc-ability-view .ability-description {
+  font-weight: normal;
+}
 .vagabond .npc-action-edit {
   padding: 8px;
   margin-bottom: 8px;
