@@ -86,46 +86,5 @@
     </div>
   </div>
 
-  {{! Add Item Controls }}
-  {{#if @root.editable}}
-    <div class='inventory-controls'>
-      <h4 class='controls-title'>Add Equipment</h4>
-      <div class='add-item-buttons'>
-        <button
-          type='button'
-          class='add-item-btn'
-          data-action='createDoc'
-          data-document-class='Item'
-          data-type='equipment'
-          data-system.equipmentType='weapon'
-          data-tooltip='Create New Weapon'
-        >
-          <i class='fas fa-sword'></i> Weapon
-        </button>
-        <button
-          type='button'
-          class='add-item-btn'
-          data-action='createDoc'
-          data-document-class='Item'
-          data-type='equipment'
-          data-system.equipmentType='armor'
-          data-tooltip='Create New Armor'
-        >
-          <i class='fas fa-shield-halved'></i> Armor
-        </button>
-        <button
-          type='button'
-          class='add-item-btn'
-          data-action='createDoc'
-          data-document-class='Item'
-          data-type='equipment'
-          data-system.equipmentType='gear'
-          data-tooltip='Create New Gear'
-        >
-          <i class='fas fa-box'></i> Gear
-        </button>
-      </div>
-    </div>
-  {{/if}}
 
 </section>

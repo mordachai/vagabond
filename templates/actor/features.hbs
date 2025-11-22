@@ -211,7 +211,101 @@
       <div class='inventory-grid' data-max-slots='{{system.inventory.maxSlots}}'>
         {{! Render inventory items }}
         {{#each inventoryItems as |itemData|}}
-          {{> 'systems/vagabond/templates/actor/parts/inventory-card.hbs' itemData}}
+          {{! Inventory Card - Visual slot-based item card }}
+          <div
+            class='inventory-card {{#if itemData.equipped}}equipped{{/if}}'
+            data-item-id='{{itemData.item._id}}'
+            data-item-slots='{{itemData.item.system.slots}}'
+            data-item-type='{{itemData.item.type}}'
+            data-grid-position='{{itemData.gridPosition}}'
+            style='grid-column: span {{itemData.item.system.slots}};'
+            draggable='true'
+          >
+            <div class='inventory-card-content'>
+              {{! Top row: Weapon skill icon and item name }}
+              <div class='inventory-card-header'>
+                {{#if (eq itemData.item.type 'equipment')}}
+                  {{#if (eq itemData.item.system.equipmentType 'weapon')}}
+                    {{! Weapon skill icon with metal color }}
+                    <div
+                      class='weapon-skill-icon'
+                      style='background-color: {{itemData.metalColor}};'
+                      data-tooltip='{{itemData.item.system.weaponSkill}}'
+                    >
+                      <img src='{{itemData.weaponSkillIcon}}' alt='{{itemData.item.system.weaponSkill}}' />
+                    </div>
+                  {{else if (eq itemData.item.system.equipmentType 'armor')}}
+                    {{! Armor icon }}
+                    <div class='armor-icon' data-tooltip='Armor'>
+                      <i class='fas fa-shield-halved'></i>
+                    </div>
+                  {{else}}
+                    {{! Generic gear icon }}
+                    <div class='gear-icon' data-tooltip='Gear'>
+                      <i class='fas fa-box'></i>
+                    </div>
+                  {{/if}}
+                {{else}}
+                  {{! Other item types }}
+                  <div class='gear-icon' data-tooltip='{{itemData.item.type}}'>
+                    <i class='fas fa-box'></i>
+                  </div>
+                {{/if}}
+
+                <div class='item-name-display' data-tooltip='{{itemData.item.name}}'>{{itemData.item.name}}</div>
+              </div>
+
+              {{! Bottom row: Damage, Grip, Range, Cost }}
+              <div class='inventory-card-stats'>
+                {{#if (or (eq itemData.item.type 'equipment') (eq itemData.item.type 'weapon'))}}
+                  {{#if (or (eq itemData.item.system.equipmentType 'weapon') (eq itemData.item.type 'weapon'))}}
+                    {{! Damage display with damage type icon }}
+                    <div class='stat-group damage-group'>
+                      <span class='stat-label'>{{itemData.item.system.currentDamage}}</span>
+                      {{#if itemData.damageTypeIcon}}
+                        <img class='damage-type-icon' src='{{itemData.damageTypeIcon}}' alt='{{itemData.item.system.damageType}}' data-tooltip='{{itemData.item.system.damageType}}' />
+                      {{/if}}
+                      {{#if itemData.item.system.grip}}
+                        <span class='stat-value grip-display' data-tooltip='{{itemData.item.system.gripDisplay}}'>{{itemData.item.system.grip}}</span>
+                      {{/if}}
+                    </div>
+
+                    {{! Range and Cost }}
+                    <div class='stat-group range-cost-group'>
+                      {{#if itemData.item.system.rangeAbbr}}
+                        <span class='stat-value range-display' data-tooltip='{{itemData.item.system.rangeDisplay}}'>{{itemData.item.system.rangeAbbr}}</span>
+                      {{/if}}
+                      <span class='stat-value cost-display'>s{{itemData.item.system.costDisplay}}</span>
+                    </div>
+                  {{else if (eq itemData.item.system.equipmentType 'armor')}}
+                    {{! Armor stats }}
+                    <div class='stat-group armor-stats'>
+                      <span class='stat-label'>Rating {{itemData.item.system.finalRating}}</span>
+                      <span class='stat-value cost-display'>s{{itemData.item.system.costDisplay}}</span>
+                    </div>
+                  {{else}}
+                    {{! Generic gear stats }}
+                    <div class='stat-group gear-stats'>
+                      {{#if itemData.item.system.quantity}}
+                        <span class='stat-label'>Qty: {{itemData.item.system.quantity}}</span>
+                      {{/if}}
+                      <span class='stat-value cost-display'>s{{itemData.item.system.costDisplay}}</span>
+                    </div>
+                  {{/if}}
+                {{else}}
+                  {{! Fallback for other item types }}
+                  <div class='stat-group generic-stats'>
+                    <span class='stat-value cost-display'>s{{itemData.item.system.costDisplay}}</span>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+
+            {{! Equipped indicator (using internal box-shadow) }}
+            {{#if itemData.equipped}}
+              <div class='equipped-indicator'></div>
+            {{/if}}
+          </div>
         {{/each}}
 
         {{! Render empty slots }}
@@ -226,47 +320,5 @@
         {{/each}}
       </div>
     </div>
-
-    {{! Add Item Controls }}
-    {{#if @root.editable}}
-      <div class='inventory-controls'>
-        <h4 class='controls-title'>Add Equipment</h4>
-        <div class='add-item-buttons'>
-          <button
-            type='button'
-            class='add-item-btn'
-            data-action='createDoc'
-            data-document-class='Item'
-            data-type='equipment'
-            data-system.equipmentType='weapon'
-            data-tooltip='Create New Weapon'
-          >
-            <i class='fas fa-sword'></i> Weapon
-          </button>
-          <button
-            type='button'
-            class='add-item-btn'
-            data-action='createDoc'
-            data-document-class='Item'
-            data-type='equipment'
-            data-system.equipmentType='armor'
-            data-tooltip='Create New Armor'
-          >
-            <i class='fas fa-shield-halved'></i> Armor
-          </button>
-          <button
-            type='button'
-            class='add-item-btn'
-            data-action='createDoc'
-            data-document-class='Item'
-            data-type='equipment'
-            data-system.equipmentType='gear'
-            data-tooltip='Create New Gear'
-          >
-            <i class='fas fa-box'></i> Gear
-          </button>
-        </div>
-      </div>
-    {{/if}}
   </section>
 </section>
