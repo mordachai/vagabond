@@ -435,14 +435,15 @@
       "npc": "NPC"
     },
     "Item": {
-      "gear": "Gear",
+      "gear": "- Remove",
       "weapon": "Weapon",
       "armor": "Armor",
       "feature": "Feature",
       "spell": "Spell",
       "ancestry": "Ancestry",
       "class": "Class",
-      "perk": "Perk"
+      "perk": "Perk",
+      "equipment": "Gear"
     }
   }
 
