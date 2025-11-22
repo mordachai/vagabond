@@ -1,0 +1,409 @@
+// ==========================================
+// Inventory Grid - Visual Slot-Based System
+// ==========================================
+
+// Inventory Slots Info Section
+.inventory-slots-section {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+
+  .slots-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    .slot-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .resource-label {
+        font-weight: bold;
+        font-size: 13px;
+      }
+
+      .slot-value {
+        font-size: 14px;
+        font-weight: bold;
+        color: $c-tan;
+      }
+    }
+
+    .slot-warning {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #d9534f;
+      font-weight: bold;
+      font-size: 12px;
+
+      i {
+        font-size: 14px;
+      }
+    }
+
+    .auto-arrange-button {
+      padding: 6px 12px;
+      background: $c-beige;
+      border: 1px solid $c-faint;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $c-faint;
+        transform: translateY(-1px);
+      }
+
+      i {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Inventory Grid Container
+.inventory-grid-container {
+  margin-bottom: 16px;
+}
+
+// 6 rows × 3 columns grid (18 slots)
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 50px; // Reduced height for 2 lines
+  gap: 0; // No gaps, use borders instead
+  padding: 0;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid $c-faint;
+  border-radius: 2px;
+  width: 100%;
+}
+
+// Empty Slot
+.inventory-slot.empty-slot {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: relative;
+  transition: all 0.15s ease;
+
+  // Add top border to first row
+  &:nth-child(-n + 3) {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  // Add left border to first column
+  &:nth-child(3n + 1) {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .slot-number {
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+  }
+
+  // Unavailable (darker) slots
+  &.unavailable {
+    background: rgba(0, 0, 0, 0.2);
+
+    .slot-number {
+      color: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  // Drag-over state
+  &.drag-over {
+    background: rgba(100, 200, 100, 0.2);
+    border-color: #5cb85c;
+  }
+}
+
+// Inventory Card (Item)
+.inventory-card {
+  background: $c-groove;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  padding: 3px 4px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  // Span multiple columns based on item slots
+  // grid-column: span is set inline in HBS
+
+  // Hover effect
+  &:hover {
+    background: lighten(#666, 5%);
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  // Equipped state - internal glow effect
+  &.equipped {
+    box-shadow:
+      inset 0 0 8px rgba(92, 184, 92, 0.6),
+      inset 0 0 0 2px rgba(92, 184, 92, 0.8);
+
+    &:hover {
+      box-shadow:
+        inset 0 0 8px rgba(92, 184, 92, 0.6),
+        inset 0 0 0 2px rgba(92, 184, 92, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // Dragging state
+  &.dragging {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+
+  // Card content wrapper
+  .inventory-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: 100%;
+  }
+}
+
+// Inventory Card Header (Icon + Name)
+.inventory-card-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+
+  // Weapon skill icon (colored by metal)
+  .weapon-skill-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+  }
+
+  // Armor icon
+  .armor-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    background: #8b7355;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+  }
+
+  // Gear icon
+  .gear-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    background: #666;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+  }
+
+  // Item name
+  .item-name-display {
+    flex: 1;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $c-dark;
+  }
+}
+
+// Inventory Card Stats (Damage, Grip, Range, Cost)
+.inventory-card-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: $c-tan;
+  margin-top: auto;
+
+  .stat-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+  }
+
+  .stat-label {
+    font-weight: bold;
+    font-size: 10px;
+  }
+
+  .stat-value {
+    font-size: 10px;
+  }
+
+  // Damage group (damage + damage type icon)
+  .damage-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    .damage-type-icon {
+      width: 12px;
+      height: 12px;
+      object-fit: contain;
+    }
+
+    .grip-display {
+      margin-left: 1px;
+      font-weight: bold;
+    }
+  }
+
+  // Range and cost group
+  .range-cost-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: auto;
+
+    .range-display {
+      font-weight: bold;
+      padding: 1px 2px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      font-size: 9px;
+    }
+
+    .cost-display {
+      font-weight: bold;
+      color: #d4af37; // Gold color
+      font-size: 10px;
+    }
+  }
+
+  // Armor stats
+  .armor-stats {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  // Gear stats
+  .gear-stats {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+// Hover Tooltip (2 second delay)
+.inventory-card-tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 250px;
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  .tooltip-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #ffd700;
+  }
+
+  .tooltip-description {
+    margin-bottom: 6px;
+  }
+
+  .tooltip-stats {
+    font-size: 11px;
+    color: #ccc;
+
+    div {
+      margin-bottom: 2px;
+    }
+  }
+}
+
+// Context Menu (Right-click)
+.inventory-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: $c-beige;
+  border: 2px solid $c-dark;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  overflow: hidden;
+
+  .context-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: $c-dark;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: $c-tan-lite;
+      color: $c-black;
+    }
+
+    i {
+      width: 16px;
+      text-align: center;
+      color: inherit;
+    }
+
+    &.danger {
+      color: #d9534f;
+
+      &:hover {
+        background: rgba(217, 83, 79, 0.1);
+      }
+    }
+  }
+}

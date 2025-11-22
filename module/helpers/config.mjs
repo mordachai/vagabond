@@ -297,3 +297,64 @@ VAGABOND.metalData = {
   'mythral': { multiplier: 50, effect: 'Occupies 1 fewer Slot (min 1).' },
   'orichalcum': { multiplier: 50, effect: 'Armor reduces Cast damage.' }
 };
+
+/**
+ * Metal type colors for visual inventory
+ * Used for weapon skill icon colors
+ * @type {Object}
+ */
+VAGABOND.metalColors = {
+  'common': '#8b7355',      // Brown/tan for common metal
+  'adamant': '#2d2d44',     // Dark blue-grey for adamant
+  'coldIron': '#708090',    // Slate grey for cold iron
+  'silver': '#c0c0c0',      // Silver
+  'mythral': '#e0e0ff',     // Light blue-white for mythral
+  'orichalcum': '#daa520'   // Golden for orichalcum
+};
+
+/**
+ * Icon paths for inventory visual grid
+ * @type {Object}
+ */
+VAGABOND.icons = {
+  // Weapon skill icons
+  weaponSkills: {
+    'melee': 'systems/vagabond/assets/ui/weapon-skill-melee.webp',
+    'ranged': 'systems/vagabond/assets/ui/weapon-skill-ranged.webp',
+    'brawl': 'systems/vagabond/assets/ui/weapon-skill-brawl.webp',
+    'finesse': 'systems/vagabond/assets/ui/weapon-skill-finesse.webp'
+  },
+
+  // Damage type icons
+  damageTypes: {
+    '-': 'systems/vagabond/assets/ui/none-dmg-icn.webp',
+    'acid': 'systems/vagabond/assets/ui/acid-dmg-icn.webp',
+    'fire': 'systems/vagabond/assets/ui/fire-dmg-icn.webp',
+    'shock': 'systems/vagabond/assets/ui/shock-dmg-icn.webp',
+    'poison': 'systems/vagabond/assets/ui/poison-dmg-icn.webp',
+    'cold': 'systems/vagabond/assets/ui/cold-dmg-icn.webp',
+    'blunt': 'systems/vagabond/assets/ui/blunt-dmg-icn.webp',
+    'physical': 'systems/vagabond/assets/ui/physical-dmg-icn.webp',
+    'necrotic': 'systems/vagabond/assets/ui/necrotic-dmg-icn.webp',
+    'psychic': 'systems/vagabond/assets/ui/psychic-dmg-icn.webp',
+    'healing': 'systems/vagabond/assets/ui/healing-dmg-icn.webp'
+  },
+
+  // Grip icons
+  grips: {
+    '1H': 'systems/vagabond/assets/ui/grip-1h.webp',
+    '2H': 'systems/vagabond/assets/ui/grip-2h.webp',
+    'F': 'systems/vagabond/assets/ui/grip-fist.webp',
+    'V': 'systems/vagabond/assets/ui/grip-versatile.webp'
+  }
+};
+
+/**
+ * Range abbreviations for display
+ * @type {Object}
+ */
+VAGABOND.rangeAbbreviations = {
+  'close': 'C',
+  'near': 'N',
+  'far': 'F'
+};

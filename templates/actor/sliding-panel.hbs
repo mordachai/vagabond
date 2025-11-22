@@ -308,6 +308,11 @@
               <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
             </div>
           {{/each}}
+        </div>
+
+        {{! Favorites Section - Equipped Items }}
+        <div class='favorites-section flexcol'>
+          <h3>Favorites</h3>
 
           {{! Equipped Weapons }}
           {{#each weapons as |weapon|}}
@@ -322,17 +327,21 @@
                 >{{weapon.name}} ({{weapon.system.currentDamage}}{{#unless (eq weapon.system.damageType '-')}} - {{localize (lookup @root.config.damageTypes weapon.system.damageType)}}{{/unless}})</label>
                 <span class='weapon-info'>
                   <span data-tooltip='{{weapon.system.rangeDisplay}}'>{{weapon.system.rangeAbbrev}}</span>
-                  {{#if (eq weapon.system.equipmentState 'oneHand')}}
-                    {{#if (eq weapon.system.grip 'V')}}
+                  {{#if (eq weapon.system.grip '1H')}}
+                    {{! One-handed weapons - static icon }}
+                    <i class='fas fa-hand-fist' data-tooltip='One-Handed'></i>
+                  {{else if (eq weapon.system.grip '2H')}}
+                    {{! Two-handed weapons - static icon }}
+                    <i class='fas fa-hands' data-tooltip='Two-Handed'></i>
+                  {{else if (eq weapon.system.grip 'F')}}
+                    {{! Finesse weapons - static one hand icon }}
+                    <i class='fas fa-hand-fist' data-tooltip='Finesse (One-Handed)'></i>
+                  {{else if (eq weapon.system.grip 'V')}}
+                    {{! Versatile weapons - toggleable based on equipmentState }}
+                    {{#if (eq weapon.system.equipmentState 'oneHand')}}
                       <i class='fas fa-hand-fist clickable' data-tooltip='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
-                    {{else}}
-                      <i class='fas fa-hand-fist' data-tooltip='One-Handed'></i>
-                    {{/if}}
-                  {{else if (eq weapon.system.equipmentState 'twoHands')}}
-                    {{#if (eq weapon.system.grip 'V')}}
+                    {{else if (eq weapon.system.equipmentState 'twoHands')}}
                       <i class='fas fa-hands clickable' data-tooltip='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
-                    {{else}}
-                      <i class='fas fa-hands' data-tooltip='Two-Handed'></i>
                     {{/if}}
                   {{/if}}
                 </span>
@@ -340,6 +349,40 @@
             {{/if}}
           {{/each}}
 
+          {{! Equipped Gear }}
+          {{#each gear as |item|}}
+            {{#if item.system.equipped}}
+              <div class='equipped-gear flexrow flex-group-center'>
+                <label
+                  class='resource-label rollable flexlarge align-left'
+                  data-action='useItem'
+                  data-item-id='{{item._id}}'
+                  title='{{item.system.description}}'
+                >{{item.name}}</label>
+                <span class='item-info'>
+                  {{#if item.system.quantity}}
+                    <span data-tooltip='Quantity'>×{{item.system.quantity}}</span>
+                  {{/if}}
+                </span>
+              </div>
+            {{/if}}
+          {{/each}}
+
+          {{! Equipped Armor }}
+          {{#each armor as |item|}}
+            {{#if item.system.worn}}
+              <div class='equipped-armor flexrow flex-group-center'>
+                <label
+                  class='resource-label flexlarge align-left'
+                  title='{{item.system.description}}'
+                >{{item.name}} (AV: {{item.system.armorValue}})</label>
+              </div>
+            {{/if}}
+          {{/each}}
+        </div>
+
+        {{! Weapon Skills / Spells Section }}
+        <div class='weapon-skills flexcol'>
           {{! Favorited Spells }}
           {{#each spells as |spell|}}
             {{#if spell.system.favorite}}

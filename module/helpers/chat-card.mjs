@@ -457,7 +457,10 @@ export class VagabondChatCard {
 
     // Add damage if provided
     if (damageRoll) {
-      card.addDamage(damageRoll, 'Physical', isCritical);
+      // Get damage type from weapon, default to 'physical' if not set
+      const damageType = weapon.system.damageType || 'physical';
+      const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
+      card.addDamage(damageRoll, damageTypeLabel, isCritical);
     } else if (isHit) {
       // If hit but no damage roll (auto-roll disabled), add damage button
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');

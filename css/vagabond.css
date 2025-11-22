@@ -670,6 +670,16 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 8px 0;
   /* Header Section */
+  /* Primary Content - Roll Results */
+  /* Dice Display */
+  /* Damage Section */
+  /* Metadata Section */
+  /* Description Section */
+  /* Footer Section - Tags */
+  /* Property Accordion */
+  /* Spell critical effect styling */
+  /* Type-specific styling */
+  /* Responsive adjustments */
 }
 .vagabond-chat-card .card-header {
   display: flex;
@@ -704,9 +714,6 @@
   color: var(--vagabond-c-muted);
   font-style: italic;
   margin-top: 2px;
-}
-.vagabond-chat-card {
-  /* Primary Content - Roll Results */
 }
 .vagabond-chat-card .card-primary {
   padding: 16px;
@@ -766,9 +773,6 @@
   color: var(--vagabond-c-muted);
   font-family: monospace;
 }
-.vagabond-chat-card {
-  /* Dice Display */
-}
 .vagabond-chat-card .roll-dice-display,
 .vagabond-chat-card .damage-dice-display {
   margin-top: 10px;
@@ -806,9 +810,6 @@
   padding: 4px 8px;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-}
-.vagabond-chat-card {
-  /* Damage Section */
 }
 .vagabond-chat-card .card-damage {
   padding: 16px;
@@ -857,9 +858,6 @@
   color: #666;
   font-family: monospace;
 }
-.vagabond-chat-card {
-  /* Metadata Section */
-}
 .vagabond-chat-card .card-metadata {
   padding: 12px 16px;
   background: var(--vagabond-c-faint);
@@ -883,9 +881,6 @@
   color: var(--vagabond-c-dark);
   flex: 1;
 }
-.vagabond-chat-card {
-  /* Description Section */
-}
 .vagabond-chat-card .card-description {
   padding: 12px 16px;
   background: var(--vagabond-c-white);
@@ -899,9 +894,6 @@
 }
 .vagabond-chat-card .card-description p:last-child {
   margin-bottom: 0;
-}
-.vagabond-chat-card {
-  /* Footer Section - Tags */
 }
 .vagabond-chat-card .card-footer {
   padding: 8px 16px;
@@ -933,9 +925,6 @@
   color: var(--vagabond-c-dark);
   text-transform: uppercase;
   letter-spacing: 0.3px;
-}
-.vagabond-chat-card {
-  /* Property Accordion */
 }
 .vagabond-chat-card .metadata-item-expandable {
   flex-direction: column;
@@ -991,9 +980,6 @@
   color: var(--vagabond-c-darkgray);
   font-size: 0.95em;
 }
-.vagabond-chat-card {
-  /* Spell critical effect styling */
-}
 .vagabond-chat-card .spell-crit-effect {
   margin-top: 12px;
   padding: 10px;
@@ -1004,9 +990,6 @@
 .vagabond-chat-card .spell-crit-effect strong {
   color: gold;
   text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
-}
-.vagabond-chat-card {
-  /* Type-specific styling */
 }
 .vagabond-chat-card[data-card-type=weapon-attack] .card-header {
   background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
@@ -1019,9 +1002,6 @@
 }
 .vagabond-chat-card[data-card-type=npc-ability] .card-header {
   background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-}
-.vagabond-chat-card {
-  /* Responsive adjustments */
 }
 @media (max-width: 600px) {
   .vagabond-chat-card .roll-result {
@@ -1037,6 +1017,20 @@
 }
 
 /* Styles limited to vagabond sheets */
+.vagabond {
+  /* Character Name at Top - Full Width */
+  /* Combined Character Info Row */
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+  /* When open, panel at natural position next to main sheet */
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Panel content area */
+  /* Features & Perks columns */
+  /* Mana info row */
+  /* Currency fields in panel */
+}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
@@ -1471,6 +1465,8 @@
   flex: 1;
 }
 .vagabond .right-column .equipped-weapon,
+.vagabond .right-column .equipped-gear,
+.vagabond .right-column .equipped-armor,
 .vagabond .right-column .favorited-spell {
   display: flex;
   align-items: center;
@@ -1479,6 +1475,8 @@
   white-space: nowrap;
 }
 .vagabond .right-column .equipped-weapon .resource-label,
+.vagabond .right-column .equipped-gear .resource-label,
+.vagabond .right-column .equipped-armor .resource-label,
 .vagabond .right-column .favorited-spell .resource-label {
   font-size: 15px;
   font-weight: 500;
@@ -1488,10 +1486,13 @@
   text-overflow: ellipsis;
 }
 .vagabond .right-column .equipped-weapon .resource-label:hover,
+.vagabond .right-column .equipped-gear .resource-label:hover,
+.vagabond .right-column .equipped-armor .resource-label:hover,
 .vagabond .right-column .favorited-spell .resource-label:hover {
   text-decoration: underline;
 }
 .vagabond .right-column .weapon-info,
+.vagabond .right-column .item-info,
 .vagabond .right-column .spell-info {
   font-size: 13px;
   color: var(--vagabond-c-tan);
@@ -1501,8 +1502,17 @@
   margin-left: 8px;
 }
 .vagabond .right-column .weapon-info i,
+.vagabond .right-column .item-info i,
 .vagabond .right-column .spell-info i {
   margin-right: 2px;
+}
+.vagabond .favorites-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .favorites-section h3 {
+  margin-bottom: 8px;
 }
 .vagabond .saves .saves-row {
   display: flex;
@@ -1875,6 +1885,322 @@
 }
 .vagabond .spell-col-favorite .favorite-inactive {
   color: var(--vagabond-c-faint);
+}
+.vagabond .inventory-slots-section {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+.vagabond .inventory-slots-section .slots-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-field .resource-label {
+  font-weight: bold;
+  font-size: 13px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-field .slot-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--vagabond-c-tan);
+}
+.vagabond .inventory-slots-section .slots-info .slot-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #d9534f;
+  font-weight: bold;
+  font-size: 12px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-warning i {
+  font-size: 14px;
+}
+.vagabond .inventory-slots-section .slots-info .auto-arrange-button {
+  padding: 6px 12px;
+  background: var(--vagabond-c-beige);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.vagabond .inventory-slots-section .slots-info .auto-arrange-button:hover {
+  background: var(--vagabond-c-faint);
+  transform: translateY(-1px);
+}
+.vagabond .inventory-slots-section .slots-info .auto-arrange-button i {
+  margin-right: 4px;
+}
+.vagabond .inventory-grid-container {
+  margin-bottom: 16px;
+}
+.vagabond .inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 50px;
+  gap: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 2px;
+  width: 100%;
+}
+.vagabond .inventory-slot.empty-slot {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.vagabond .inventory-slot.empty-slot:nth-child(-n+3) {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.vagabond .inventory-slot.empty-slot:nth-child(3n+1) {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+.vagabond .inventory-slot.empty-slot .slot-number {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.15);
+  font-weight: bold;
+}
+.vagabond .inventory-slot.empty-slot.unavailable {
+  background: rgba(0, 0, 0, 0.2);
+}
+.vagabond .inventory-slot.empty-slot.unavailable .slot-number {
+  color: rgba(0, 0, 0, 0.25);
+}
+.vagabond .inventory-slot.empty-slot.drag-over {
+  background: rgba(100, 200, 100, 0.2);
+  border-color: #5cb85c;
+}
+.vagabond .inventory-card {
+  background: var(--vagabond-c-groove);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  padding: 3px 4px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.vagabond .inventory-card:hover {
+  background: #737373;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+.vagabond .inventory-card.equipped {
+  box-shadow: inset 0 0 8px rgba(92, 184, 92, 0.6), inset 0 0 0 2px rgba(92, 184, 92, 0.8);
+}
+.vagabond .inventory-card.equipped:hover {
+  box-shadow: inset 0 0 8px rgba(92, 184, 92, 0.6), inset 0 0 0 2px rgba(92, 184, 92, 0.8), 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+.vagabond .inventory-card.dragging {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+.vagabond .inventory-card .inventory-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+}
+.vagabond .inventory-card-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+.vagabond .inventory-card-header .weapon-skill-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.vagabond .inventory-card-header .weapon-skill-icon img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+.vagabond .inventory-card-header .armor-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background: #8b7355;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+}
+.vagabond .inventory-card-header .gear-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background: #666;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+}
+.vagabond .inventory-card-header .item-name-display {
+  flex: 1;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .inventory-card-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: var(--vagabond-c-tan);
+  margin-top: auto;
+}
+.vagabond .inventory-card-stats .stat-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: nowrap;
+}
+.vagabond .inventory-card-stats .stat-label {
+  font-weight: bold;
+  font-size: 10px;
+}
+.vagabond .inventory-card-stats .stat-value {
+  font-size: 10px;
+}
+.vagabond .inventory-card-stats .damage-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.vagabond .inventory-card-stats .damage-group .damage-type-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+.vagabond .inventory-card-stats .damage-group .grip-display {
+  margin-left: 1px;
+  font-weight: bold;
+}
+.vagabond .inventory-card-stats .range-cost-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+.vagabond .inventory-card-stats .range-cost-group .range-display {
+  font-weight: bold;
+  padding: 1px 2px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  font-size: 9px;
+}
+.vagabond .inventory-card-stats .range-cost-group .cost-display {
+  font-weight: bold;
+  color: #d4af37;
+  font-size: 10px;
+}
+.vagabond .inventory-card-stats .armor-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.vagabond .inventory-card-stats .gear-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.vagabond .inventory-card-tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 250px;
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.vagabond .inventory-card-tooltip .tooltip-title {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #ffd700;
+}
+.vagabond .inventory-card-tooltip .tooltip-description {
+  margin-bottom: 6px;
+}
+.vagabond .inventory-card-tooltip .tooltip-stats {
+  font-size: 11px;
+  color: #ccc;
+}
+.vagabond .inventory-card-tooltip .tooltip-stats div {
+  margin-bottom: 2px;
+}
+.vagabond .inventory-context-menu {
+  position: absolute;
+  z-index: 1001;
+  background: white;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  min-width: 150px;
+  overflow: hidden;
+}
+.vagabond .inventory-context-menu .context-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: background 0.15s ease;
+}
+.vagabond .inventory-context-menu .context-menu-item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.vagabond .inventory-context-menu .context-menu-item i {
+  width: 16px;
+  text-align: center;
+}
+.vagabond .inventory-context-menu .context-menu-item.danger {
+  color: #d9534f;
+}
+.vagabond .inventory-context-menu .context-menu-item.danger:hover {
+  background: rgba(217, 83, 79, 0.1);
 }
 .vagabond .effects-header {
   height: 28px;
@@ -2256,9 +2582,6 @@
   font-weight: 400;
   line-height: 1.2;
 }
-.vagabond {
-  /* Character Name at Top - Full Width */
-}
 .vagabond .name-row-top {
   width: 100%;
   display: flex;
@@ -2308,9 +2631,6 @@
 .vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
   border-bottom: 2px solid var(--vagabond-c-dark) !important;
   background: transparent !important;
-}
-.vagabond {
-  /* Combined Character Info Row */
 }
 .vagabond .character-info-combined-row {
   text-align: center;
@@ -2476,11 +2796,6 @@
     font-size: 12px;
   }
 }
-.vagabond {
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -2505,20 +2820,11 @@
   backface-visibility: hidden;
   will-change: transform;
 }
-.vagabond {
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
-.vagabond {
-  /* When open, panel at natural position next to main sheet */
-}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
-}
-.vagabond {
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -2533,9 +2839,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.vagabond {
-  /* Panel content area */
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -2573,9 +2876,6 @@
 .vagabond .panel-section h3:first-of-type {
   margin-top: 0;
 }
-.vagabond {
-  /* Features & Perks columns */
-}
 .vagabond .features-perks-section .grid {
   margin: 0;
   gap: 16px;
@@ -2584,9 +2884,6 @@
 .vagabond .perks-column {
   display: flex;
   flex-direction: column;
-}
-.vagabond {
-  /* Mana info row */
 }
 .vagabond .mana-info-row {
   display: flex;
@@ -2622,9 +2919,6 @@
   font-weight: bold;
   text-align: center;
   color: var(--vagabond-c-dark);
-}
-.vagabond {
-  /* Currency fields in panel */
 }
 .vagabond .currency-row {
   justify-content: space-around;

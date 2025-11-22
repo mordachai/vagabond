@@ -43,202 +43,48 @@
   <div class='inventory-slots-section'>
     <div class='slots-info flexrow'>
       <div class='slot-field'>
-        <label class='resource-label'>Max Slots:</label>
-        <span class='slot-value'>{{system.inventory.maxSlots}}</span>
+        <label class='resource-label'>Slots:</label>
+        <span class='slot-value'>{{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}</span>
       </div>
-      <div class='slot-field'>
-        <label class='resource-label'>Occupied:</label>
-        <span class='slot-value'>{{system.inventory.occupiedSlots}}</span>
-      </div>
-      <div class='slot-field'>
-        <label class='resource-label'>Available:</label>
-        <span class='slot-value'>{{system.inventory.availableSlots}}</span>
-      </div>
+      {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
+        <div class='slot-warning'>
+          <i class='fas fa-exclamation-triangle'></i>
+          <span>Overloaded!</span>
+        </div>
+      {{/if}}
+      {{#if @root.editable}}
+        <button
+          type='button'
+          class='auto-arrange-button'
+          data-action='autoArrangeInventory'
+          data-tooltip='Automatically arrange items in inventory grid'
+        >
+          <i class='fas fa-sort'></i> Auto-Arrange
+        </button>
+      {{/if}}
     </div>
   </div>
 
-  {{! Weapons List }}
-  <h3 class='section-title section-title-with-add'>
-    Weapons
-    {{#if @root.editable}}
-      <i
-        class='fas fa-plus clickable'
-        data-tooltip='Create New Weapon'
-        data-action='createDoc'
-        data-document-class='Item'
-        data-type='equipment'
-        data-system.equipmentType='weapon'
-      ></i>
-    {{/if}}
-  </h3>
-  <ol class='items-list'>
-    <li class='item flexrow items-header'>
-      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
-      <div class='item-damage inventory-col-damage'>Damage</div>
-      <div class='item-range inventory-col-range'>Range</div>
-      <div class='item-grip inventory-col-grip'>Grip</div>
-      <div class='item-cost inventory-col-cost'>Cost</div>
-      <div class='item-slots inventory-col-slots'>Slots</div>
-      <div class='inventory-col-equipped' data-tooltip='Equip'>E</div>
-    </li>
-    {{#each weapons as |item id|}}
-      <li
-        class='item flexrow draggable weapon-item-row'
-        data-item-id='{{item._id}}'
-        data-document-class='Item'
-      >
-        <div class='item-name inventory-col-name'>
-          <div class='item-image clickable' data-action='viewDoc'>
-            <img
-              src='{{item.img}}'
-              data-tooltip='{{item.name}}'
-              width='24'
-              height='24'
-            />
-          </div>
-          <div class='clickable rollable' data-action='rollWeapon' data-item-id='{{item._id}}'>{{item.name}}</div>
-        </div>
-        <div class='item-damage item-prop inventory-col-damage'>{{item.system.currentDamage}}</div>
-        <div class='item-range item-prop inventory-col-range'>{{item.system.rangeDisplay}}</div>
-        <div class='item-grip item-prop inventory-col-grip'>{{item.system.gripDisplay}}</div>
-        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
-        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='inventory-col-equipped' data-action='toggleWeaponEquipment' data-item-id='{{item._id}}'>
-          {{#if (eq item.system.equipmentState 'unequipped')}}
-            {{#if (eq item.system.grip '2H')}}
-              <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip two-handed)'></i>
-            {{else}}
-              <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip one-handed)'></i>
-            {{/if}}
-          {{else if (eq item.system.equipmentState 'oneHand')}}
-            {{#if (eq item.system.grip 'V')}}
-              <i class='clickable fas fa-hand-fist equipped-one-hand' data-tooltip='Equipped One-Handed (click for two-handed)'></i>
-            {{else}}
-              <i class='clickable fas fa-hand-fist equipped-one-hand' data-tooltip='Equipped One-Handed (click to unequip)'></i>
-            {{/if}}
-          {{else if (eq item.system.equipmentState 'twoHands')}}
-            {{#if (eq item.system.grip 'V')}}
-              <i class='clickable fas fa-hands equipped-two-hands' data-tooltip='Equipped Two-Handed (click to unequip)'></i>
-            {{else}}
-              <i class='clickable fas fa-hands equipped-two-hands' data-tooltip='Equipped Two-Handed (click to unequip)'></i>
-            {{/if}}
-          {{/if}}
-        </div>
-      </li>
-    {{/each}}
-  </ol>
+  {{! Visual Inventory Grid - 5 rows × 4 columns }}
+  <div class='inventory-grid-container'>
+    <div class='inventory-grid' data-max-slots='{{system.inventory.maxSlots}}'>
+      {{! Render inventory items }}
+      {{#each inventoryItems as |itemData|}}
+        {{> 'systems/vagabond/templates/actor/parts/inventory-card.hbs' itemData}}
+      {{/each}}
 
-  {{! Armor List }}
-  <h3 class='section-title section-title-with-add'>
-    Armor
-    {{#if @root.editable}}
-      <i
-        class='fas fa-plus clickable'
-        data-tooltip='Create New Armor'
-        data-action='createDoc'
-        data-document-class='Item'
-        data-type='equipment'
-        data-system.equipmentType='armor'
-      ></i>
-    {{/if}}
-  </h3>
-  <ol class='items-list'>
-    <li class='item flexrow items-header'>
-      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
-      <div class='item-type inventory-col-armor-type'>Type</div>
-      <div class='item-rating inventory-col-rating'>Rating</div>
-      <div class='item-metal inventory-col-metal'>Metal</div>
-      <div class='item-cost inventory-col-cost'>Cost</div>
-      <div class='item-slots inventory-col-slots'>Slots</div>
-      <div class='inventory-col-equipped' data-tooltip='Equip'>E</div>
-    </li>
-    {{#each armor as |item id|}}
-      <li
-        class='item flexrow draggable armor-item-row'
-        data-item-id='{{item._id}}'
-        data-document-class='Item'
-      >
-        <div class='item-name inventory-col-name'>
-          <div class='item-image clickable' data-action='viewDoc'>
-            <img
-              src='{{item.img}}'
-              data-tooltip='{{item.name}}'
-              width='24'
-              height='24'
-            />
-          </div>
-          <div class='clickable' data-action='viewDoc'>{{item.name}}</div>
+      {{! Render empty slots }}
+      {{#each emptySlots as |slot|}}
+        <div
+          class='inventory-slot empty-slot {{#if slot.unavailable}}unavailable{{/if}}'
+          data-slot-index='{{slot.index}}'
+          data-droppable='true'
+        >
+          <div class='slot-number'>{{slot.displayNumber}}</div>
         </div>
-        <div class='item-type item-prop inventory-col-armor-type'>{{item.system.armorTypeDisplay}}</div>
-        <div class='item-rating item-prop inventory-col-rating'>
-          {{item.system.rating}}
-          {{#if (ne item.system.rating item.system.finalRating)}}
-            <span class='metal-bonus'>({{item.system.finalRating}})</span>
-          {{/if}}
-        </div>
-        <div class='item-metal item-prop inventory-col-metal'>{{item.system.metalDisplay}}</div>
-        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
-        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='inventory-col-equipped' data-action='toggleArmorEquipment' data-item-id='{{item._id}}'>
-          {{#if item.system.equipped}}
-            <i class='clickable fas fa-shield-halved equipped' data-tooltip='Equipped (click to unequip)'></i>
-          {{else}}
-            <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip)'></i>
-          {{/if}}
-        </div>
-      </li>
-    {{/each}}
-  </ol>
+      {{/each}}
+    </div>
+  </div>
 
-  {{! Gear List }}
-  <h3 class='section-title section-title-with-add'>
-    Gear
-    {{#if @root.editable}}
-      <i
-        class='fas fa-plus clickable'
-        data-tooltip='Create New Gear'
-        data-action='createDoc'
-        data-document-class='Item'
-        data-type='equipment'
-        data-system.equipmentType='gear'
-      ></i>
-    {{/if}}
-  </h3>
-  <ol class='items-list'>
-    <li class='item flexrow items-header'>
-      <div class='item-name inventory-col-name'>{{localize 'Name'}}</div>
-      <div class='item-type inventory-col-type'>Type</div>
-      <div class='item-quantity inventory-col-quantity'>Qty</div>
-      <div class='item-cost inventory-col-cost'>Cost</div>
-      <div class='item-slots inventory-col-slots'>Slots</div>
-      <div class='inventory-col-equipped' data-tooltip='Equip'>E</div>
-    </li>
-    {{#each gear as |item id|}}
-      <li
-        class='item flexrow draggable gear-item-row'
-        data-item-id='{{item._id}}'
-        data-document-class='Item'
-      >
-        <div class='item-name inventory-col-name'>
-          <div class='item-image clickable' data-action='viewDoc'>
-            <img
-              src='{{item.img}}'
-              data-tooltip='{{item.name}}'
-              width='24'
-              height='24'
-            />
-          </div>
-          <div class='clickable' data-action='viewDoc'>{{item.name}}</div>
-        </div>
-        <div class='item-type item-prop inventory-col-type'>{{item.system.type}}</div>
-        <div class='item-quantity item-prop inventory-col-quantity'>{{item.system.quantity}}</div>
-        <div class='item-cost item-prop inventory-col-cost'>{{item.system.costDisplay}}</div>
-        <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
-        <div class='inventory-col-equipped'>
-          <i class='gear-equipped-icon clickable {{#if item.system.equipped}}fas fa-check-circle equipped{{else}}far fa-circle unequipped{{/if}}'></i>
-        </div>
-      </li>
-    {{/each}}
-  </ol>
 
 </section>
