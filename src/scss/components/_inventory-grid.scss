@@ -317,48 +317,6 @@
   }
 }
 
-// Inventory Controls (Add Item Buttons)
-.inventory-controls {
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.03);
-  border-radius: 4px;
-
-  .controls-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  .add-item-buttons {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-
-    .add-item-btn {
-      padding: 6px 12px;
-      background: $c-beige;
-      border: 1px solid $c-faint;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: bold;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-
-      &:hover {
-        background: $c-faint;
-        transform: translateY(-1px);
-      }
-
-      i {
-        font-size: 13px;
-      }
-    }
-  }
-}
-
 // Hover Tooltip (2 second delay)
 .inventory-card-tooltip {
   position: absolute;
