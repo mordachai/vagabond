@@ -1118,12 +1118,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _attachInventoryGridListeners() {
     const inventoryCards = this.element.querySelectorAll('.inventory-card');
 
+    console.log(`Attaching listeners to ${inventoryCards.length} inventory cards`);
+
     inventoryCards.forEach(card => {
       const itemId = card.dataset.itemId;
 
       // Double-click: Open item sheet
       card.addEventListener('dblclick', (event) => {
         event.preventDefault();
+        console.log('Double-click detected on item:', itemId);
         const item = this.actor.items.get(itemId);
         if (item) item.sheet.render(true);
       });
@@ -1131,6 +1134,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Right-click: Show context menu
       card.addEventListener('contextmenu', (event) => {
         event.preventDefault();
+        console.log('Right-click detected on item:', itemId);
         this._showInventoryContextMenu(event, itemId, card);
       });
 
@@ -1138,6 +1142,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       let hoverTimeout;
       card.addEventListener('mouseenter', (event) => {
         hoverTimeout = setTimeout(() => {
+          console.log('Showing tooltip for item:', itemId);
           this._showInventoryTooltip(event, itemId, card);
         }, 2000);
       });
@@ -1149,6 +1154,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Drag start
       card.addEventListener('dragstart', (event) => {
+        console.log('Drag start:', itemId);
         event.dataTransfer.effectAllowed = 'move';
         event.dataTransfer.setData('text/plain', itemId);
         card.classList.add('dragging');
@@ -1156,12 +1162,48 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Drag end
       card.addEventListener('dragend', (event) => {
+        console.log('Drag end:', itemId);
         card.classList.remove('dragging');
+      });
+
+      // Allow dropping on other cards (to swap positions)
+      card.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        card.classList.add('drag-over');
+      });
+
+      card.addEventListener('dragleave', (event) => {
+        card.classList.remove('drag-over');
+      });
+
+      card.addEventListener('drop', async (event) => {
+        event.preventDefault();
+        card.classList.remove('drag-over');
+
+        const draggedItemId = event.dataTransfer.getData('text/plain');
+        const targetItemId = card.dataset.itemId;
+
+        if (draggedItemId !== targetItemId) {
+          console.log(`Swapping items: ${draggedItemId} <-> ${targetItemId}`);
+
+          const draggedItem = this.actor.items.get(draggedItemId);
+          const targetItem = this.actor.items.get(targetItemId);
+
+          if (draggedItem && targetItem) {
+            const draggedPos = draggedItem.system.gridPosition || 0;
+            const targetPos = targetItem.system.gridPosition || 0;
+
+            await draggedItem.update({ 'system.gridPosition': targetPos });
+            await targetItem.update({ 'system.gridPosition': draggedPos });
+          }
+        }
       });
     });
 
     // Handle drops on empty slots
     const emptySlots = this.element.querySelectorAll('.inventory-slot.empty-slot');
+    console.log(`Attaching listeners to ${emptySlots.length} empty slots`);
+
     emptySlots.forEach(slot => {
       slot.addEventListener('dragover', (event) => {
         event.preventDefault();
@@ -1178,6 +1220,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         const itemId = event.dataTransfer.getData('text/plain');
         const slotIndex = parseInt(slot.dataset.slotIndex);
+
+        console.log(`Dropping item ${itemId} on slot ${slotIndex}`);
 
         const item = this.actor.items.get(itemId);
         if (item) {
