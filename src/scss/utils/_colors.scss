@@ -9,6 +9,7 @@
   --vagabond-c-black: #000000;
   --vagabond-c-groove: #eeede0;
   --vagabond-c-transparent: #ffffffc0;
+  --vagabond-c-darkgray: #666666;
 }
 
 .theme-dark {
@@ -22,6 +23,7 @@
   --vagabond-c-black: #ffffff;
   --vagabond-c-groove: #11121f;
   --vagabond-c-transparent: #000000c0;
+  --vagabond-c-darkgray: #999999;
 }
 
 $c-white: var(--vagabond-c-white);
@@ -33,5 +35,6 @@ $c-beige: var(--vagabond-c-beige);
 $c-tan: var(--vagabond-c-tan);
 $c-tan-lite: var(--vagabond-c-tan-lite);
 $c-muted: var(--vagabond-c-muted);
+$c-darkgray: var(--vagabond-c-darkgray);
 $c-transparent: var(--vagabond-c-transparent);
 $c-groove: var(--vagabond-c-groove);
