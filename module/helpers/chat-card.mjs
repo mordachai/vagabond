@@ -473,7 +473,8 @@ export class VagabondChatCard {
         {
           type: 'weapon',
           isCritical: isCritical,
-          statKey: statKey
+          statKey: statKey,
+          damageType: weapon.system.damageType
         }
       );
       card.addFooterAction(damageButton);

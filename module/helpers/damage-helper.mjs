@@ -93,9 +93,16 @@ export class VagabondDamageHelper {
     // Determine damage type
     let damageTypeLabel = 'Physical';
 
-    // For weapons, get damage type from item
-    if (context.type === 'weapon' && item && item.system.damageType) {
-      const damageTypeKey = item.system.damageType;
+    // For weapons, get damage type from context first, then item
+    if (context.type === 'weapon') {
+      // Check context first (from button creation)
+      let damageTypeKey = context.damageType;
+      
+      // Fallback to item damage type if context doesn't have it
+      if ((!damageTypeKey || damageTypeKey === '-') && item && item.system.damageType) {
+        damageTypeKey = item.system.damageType;
+      }
+      
       if (damageTypeKey && damageTypeKey !== '-') {
         damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]) || damageTypeKey;
       }
