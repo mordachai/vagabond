@@ -319,33 +319,33 @@ VAGABOND.metalColors = {
 VAGABOND.icons = {
   // Weapon skill icons
   weaponSkills: {
-    'melee': 'assets/ui/weapon-skill-melee.webp',
-    'ranged': 'assets/ui/weapon-skill-ranged.webp',
-    'brawl': 'assets/ui/weapon-skill-brawl.webp',
-    'finesse': 'assets/ui/weapon-skill-finesse.webp'
+    'melee': 'systems/vagabond/ui/assets/weapon-skill-melee.webp',
+    'ranged': 'systems/vagabond/ui/assets/weapon-skill-ranged.webp',
+    'brawl': 'systems/vagabond/ui/assets/weapon-skill-brawl.webp',
+    'finesse': 'systems/vagabond/ui/assets/weapon-skill-finesse.webp'
   },
 
   // Damage type icons
   damageTypes: {
-    '-': 'assets/ui/none-dmg-icn.webp',
-    'acid': 'assets/ui/acid-dmg-icn.webp',
-    'fire': 'assets/ui/fire-dmg-icn.webp',
-    'shock': 'assets/ui/shock-dmg-icn.webp',
-    'poison': 'assets/ui/poison-dmg-icn.webp',
-    'cold': 'assets/ui/cold-dmg-icn.webp',
-    'blunt': 'assets/ui/blunt-dmg-icn.webp',
-    'physical': 'assets/ui/physical-dmg-icn.webp',
-    'necrotic': 'assets/ui/necrotic-dmg-icn.webp',
-    'psychic': 'assets/ui/psychic-dmg-icn.webp',
-    'healing': 'assets/ui/healing-dmg-icn.webp'
+    '-': 'systems/vagabond/ui/assets/none-dmg-icn.webp',
+    'acid': 'systems/vagabond/ui/assets/acid-dmg-icn.webp',
+    'fire': 'systems/vagabond/ui/assets/fire-dmg-icn.webp',
+    'shock': 'systems/vagabond/ui/assets/shock-dmg-icn.webp',
+    'poison': 'systems/vagabond/ui/assets/poison-dmg-icn.webp',
+    'cold': 'systems/vagabond/ui/assets/cold-dmg-icn.webp',
+    'blunt': 'systems/vagabond/ui/assets/blunt-dmg-icn.webp',
+    'physical': 'systems/vagabond/ui/assets/physical-dmg-icn.webp',
+    'necrotic': 'systems/vagabond/ui/assets/necrotic-dmg-icn.webp',
+    'psychic': 'systems/vagabond/ui/assets/psychic-dmg-icn.webp',
+    'healing': 'systems/vagabond/ui/assets/healing-dmg-icn.webp'
   },
 
   // Grip icons
   grips: {
-    '1H': 'assets/ui/grip-1h.webp',
-    '2H': 'assets/ui/grip-2h.webp',
-    'F': 'assets/ui/grip-fist.webp',
-    'V': 'assets/ui/grip-versatile.webp'
+    '1H': 'systems/vagabond/ui/assets/grip-1h.webp',
+    '2H': 'systems/vagabond/ui/assets/grip-2h.webp',
+    'F': 'systems/vagabond/ui/assets/grip-fist.webp',
+    'V': 'systems/vagabond/ui/assets/grip-versatile.webp'
   }
 };
 

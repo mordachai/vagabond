@@ -1243,13 +1243,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this._hideInventoryContextMenu();
 
     const item = this.actor.items.get(itemId);
-    if (!item) return;
+    if (!item) {
+      console.log('Item not found for context menu:', itemId);
+      return;
+    }
 
     const menu = document.createElement('div');
     menu.className = 'inventory-context-menu';
-    menu.style.position = 'absolute';
-    menu.style.left = `${event.pageX}px`;
-    menu.style.top = `${event.pageY}px`;
+    menu.style.position = 'fixed'; // Use fixed instead of absolute for better positioning
+    menu.style.left = `${event.clientX}px`;
+    menu.style.top = `${event.clientY}px`;
+    menu.style.zIndex = '10000'; // Very high z-index to ensure visibility
 
     const isEquipped = this._isItemEquipped(item);
 
@@ -1270,6 +1274,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     document.body.appendChild(menu);
     this._currentContextMenu = menu;
+
+    console.log('Context menu created and appended:', menu, 'at position:', event.clientX, event.clientY);
 
     // Add click handlers
     menu.querySelector('[data-action="equip"]').addEventListener('click', async () => {
