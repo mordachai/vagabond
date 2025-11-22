@@ -101,13 +101,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.document.limited) return;
     switch (this.document.type) {
       case 'equipment':
-        // Use locked or unlocked template based on system.locked state
-        // Only add ONE of the two equipment templates
-        if (this.document.system.locked) {
-          options.parts.push('equipmentDetailsLocked', 'effects');
-        } else {
-          options.parts.push('equipmentDetails', 'effects');
-        }
+        // Equipment template now handles both locked and unlocked states internally
+        options.parts.push('equipmentDetails', 'effects');
         break;
       case 'gear':
         options.parts.push('gearDetails', 'effects');
@@ -732,10 +727,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type !== 'equipment') return;
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
-    // Close and reopen the sheet to force parts reconfiguration
-    // ApplicationV2 only reconfigures parts on initial render
-    await this.close();
-    this.item.sheet.render(true);
+    // No need to close/reopen - template handles both states with conditionals
   }
 
   /**
