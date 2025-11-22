@@ -368,12 +368,12 @@
 
 // Context Menu (Right-click)
 .inventory-context-menu {
-  position: absolute;
-  z-index: 1001;
-  background: white;
-  border: 1px solid $c-faint;
+  position: fixed;
+  z-index: 10000;
+  background: $c-beige;
+  border: 2px solid $c-dark;
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   min-width: 150px;
   overflow: hidden;
 
@@ -384,15 +384,18 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
+    color: $c-dark;
     transition: background 0.15s ease;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.1);
+      background: $c-tan-lite;
+      color: $c-black;
     }
 
     i {
       width: 16px;
       text-align: center;
+      color: inherit;
     }
 
     &.danger {
