@@ -58,6 +58,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       removeAbility: this._onRemoveAbility,  // NPC remove ability
       clickAbilityName: this._onClickAbilityName,  // NPC click ability name
       toggleAbilityAccordion: this._onToggleAbilityAccordion,  // NPC toggle ability accordion
+      autoArrangeInventory: this._onAutoArrangeInventory,  // Auto-arrange inventory grid
+      equipItem: this._onEquipItem,  // Equip item from context menu
+      editItem: this._onEditItem,  // Edit item from context menu
+      deleteItem: this._onDeleteItem,  // Delete item from context menu
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -720,6 +724,104 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+
+    // Prepare inventory grid data
+    this._prepareInventoryGrid(context, gear, weapons, armor);
+  }
+
+  /**
+   * Prepare inventory grid data for visual display
+   * @param {Object} context - The template context
+   * @param {Array} gear - Gear items
+   * @param {Array} weapons - Weapon items
+   * @param {Array} armor - Armor items
+   * @private
+   */
+  _prepareInventoryGrid(context, gear, weapons, armor) {
+    // Combine all inventory items
+    const allInventoryItems = [...weapons, ...armor, ...gear];
+
+    // Prepare item data for inventory cards
+    context.inventoryItems = allInventoryItems.map((item, index) => {
+      const itemData = {
+        item: item,
+        gridPosition: item.system.gridPosition || index,
+        equipped: this._isItemEquipped(item),
+        metalColor: this._getMetalColor(item),
+        weaponSkillIcon: this._getWeaponSkillIcon(item),
+        damageTypeIcon: this._getDamageTypeIcon(item),
+      };
+
+      // Add range abbreviation for weapons
+      if (item.system.range) {
+        itemData.item.system.rangeAbbr = CONFIG.VAGABOND.rangeAbbreviations[item.system.range] || item.system.range;
+      }
+
+      return itemData;
+    });
+
+    // Sort by grid position
+    context.inventoryItems.sort((a, b) => a.gridPosition - b.gridPosition);
+
+    // Calculate empty slots (20 total slots in 5x4 grid)
+    const maxSlots = this.document.system.inventory?.maxSlots || 20;
+    const occupiedSlots = context.inventoryItems.reduce((sum, item) => sum + (item.item.system.slots || 1), 0);
+    const emptySlotCount = Math.max(0, 20 - occupiedSlots);
+
+    context.emptySlots = Array.from({ length: 20 }, (_, i) => ({
+      index: i,
+      displayNumber: i + 1,
+      unavailable: i >= maxSlots
+    }));
+  }
+
+  /**
+   * Check if an item is equipped
+   * @param {Item} item - The item to check
+   * @returns {boolean} Whether the item is equipped
+   * @private
+   */
+  _isItemEquipped(item) {
+    if (item.system.equipped !== undefined) {
+      return item.system.equipped;
+    }
+    if (item.system.equipmentState) {
+      return item.system.equipmentState !== 'unequipped';
+    }
+    return false;
+  }
+
+  /**
+   * Get metal color for weapon skill icon
+   * @param {Item} item - The item
+   * @returns {string} Hex color code
+   * @private
+   */
+  _getMetalColor(item) {
+    if (!item.system.metal) return CONFIG.VAGABOND.metalColors?.common || '#8b7355';
+    return CONFIG.VAGABOND.metalColors?.[item.system.metal] || CONFIG.VAGABOND.metalColors?.common || '#8b7355';
+  }
+
+  /**
+   * Get weapon skill icon path
+   * @param {Item} item - The item
+   * @returns {string} Icon path
+   * @private
+   */
+  _getWeaponSkillIcon(item) {
+    if (!item.system.weaponSkill) return null;
+    return CONFIG.VAGABOND.icons?.weaponSkills?.[item.system.weaponSkill] || null;
+  }
+
+  /**
+   * Get damage type icon path
+   * @param {Item} item - The item
+   * @returns {string} Icon path
+   * @private
+   */
+  _getDamageTypeIcon(item) {
+    if (!item.system.damageType) return null;
+    return CONFIG.VAGABOND.icons?.damageTypes?.[item.system.damageType] || null;
   }
 
   /**
@@ -997,9 +1099,231 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     });
 
+    // Inventory Grid Event Listeners
+    this._attachInventoryGridListeners();
+
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
+  }
+
+  /**
+   * Attach event listeners for inventory grid interactions
+   * @private
+   */
+  _attachInventoryGridListeners() {
+    const inventoryCards = this.element.querySelectorAll('.inventory-card');
+
+    inventoryCards.forEach(card => {
+      const itemId = card.dataset.itemId;
+
+      // Double-click: Open item sheet
+      card.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        const item = this.actor.items.get(itemId);
+        if (item) item.sheet.render(true);
+      });
+
+      // Right-click: Show context menu
+      card.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        this._showInventoryContextMenu(event, itemId, card);
+      });
+
+      // Hover with 2-second delay: Show tooltip
+      let hoverTimeout;
+      card.addEventListener('mouseenter', (event) => {
+        hoverTimeout = setTimeout(() => {
+          this._showInventoryTooltip(event, itemId, card);
+        }, 2000);
+      });
+
+      card.addEventListener('mouseleave', (event) => {
+        clearTimeout(hoverTimeout);
+        this._hideInventoryTooltip();
+      });
+
+      // Drag start
+      card.addEventListener('dragstart', (event) => {
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', itemId);
+        card.classList.add('dragging');
+      });
+
+      // Drag end
+      card.addEventListener('dragend', (event) => {
+        card.classList.remove('dragging');
+      });
+    });
+
+    // Handle drops on empty slots
+    const emptySlots = this.element.querySelectorAll('.inventory-slot.empty-slot');
+    emptySlots.forEach(slot => {
+      slot.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        slot.classList.add('drag-over');
+      });
+
+      slot.addEventListener('dragleave', (event) => {
+        slot.classList.remove('drag-over');
+      });
+
+      slot.addEventListener('drop', async (event) => {
+        event.preventDefault();
+        slot.classList.remove('drag-over');
+
+        const itemId = event.dataTransfer.getData('text/plain');
+        const slotIndex = parseInt(slot.dataset.slotIndex);
+
+        const item = this.actor.items.get(itemId);
+        if (item) {
+          await item.update({ 'system.gridPosition': slotIndex });
+        }
+      });
+    });
+  }
+
+  /**
+   * Show context menu for inventory item
+   * @param {Event} event - The context menu event
+   * @param {string} itemId - The item ID
+   * @param {HTMLElement} card - The inventory card element
+   * @private
+   */
+  _showInventoryContextMenu(event, itemId, card) {
+    // Remove any existing context menu
+    this._hideInventoryContextMenu();
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    const menu = document.createElement('div');
+    menu.className = 'inventory-context-menu';
+    menu.style.position = 'absolute';
+    menu.style.left = `${event.pageX}px`;
+    menu.style.top = `${event.pageY}px`;
+
+    const isEquipped = this._isItemEquipped(item);
+
+    menu.innerHTML = `
+      <div class="context-menu-item" data-action="equip">
+        <i class="fas fa-${isEquipped ? 'times' : 'check'}"></i>
+        <span>${isEquipped ? 'Unequip' : 'Equip'}</span>
+      </div>
+      <div class="context-menu-item" data-action="edit">
+        <i class="fas fa-edit"></i>
+        <span>Edit</span>
+      </div>
+      <div class="context-menu-item danger" data-action="delete">
+        <i class="fas fa-trash"></i>
+        <span>Delete</span>
+      </div>
+    `;
+
+    document.body.appendChild(menu);
+    this._currentContextMenu = menu;
+
+    // Add click handlers
+    menu.querySelector('[data-action="equip"]').addEventListener('click', async () => {
+      if (item.system.equipped !== undefined) {
+        await item.update({ 'system.equipped': !isEquipped });
+      } else if (item.system.equipmentState) {
+        const newState = isEquipped ? 'unequipped' : 'oneHand';
+        await item.update({ 'system.equipmentState': newState });
+      }
+      this._hideInventoryContextMenu();
+    });
+
+    menu.querySelector('[data-action="edit"]').addEventListener('click', () => {
+      item.sheet.render(true);
+      this._hideInventoryContextMenu();
+    });
+
+    menu.querySelector('[data-action="delete"]').addEventListener('click', async () => {
+      const confirmed = await Dialog.confirm({
+        title: `Delete ${item.name}?`,
+        content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+      });
+      if (confirmed) {
+        await item.delete();
+        ui.notifications.info(`Deleted ${item.name}`);
+      }
+      this._hideInventoryContextMenu();
+    });
+
+    // Close menu when clicking elsewhere
+    setTimeout(() => {
+      document.addEventListener('click', this._hideInventoryContextMenu.bind(this), { once: true });
+    }, 10);
+  }
+
+  /**
+   * Hide context menu
+   * @private
+   */
+  _hideInventoryContextMenu() {
+    if (this._currentContextMenu) {
+      this._currentContextMenu.remove();
+      this._currentContextMenu = null;
+    }
+  }
+
+  /**
+   * Show tooltip for inventory item
+   * @param {Event} event - The mouse event
+   * @param {string} itemId - The item ID
+   * @param {HTMLElement} card - The inventory card element
+   * @private
+   */
+  _showInventoryTooltip(event, itemId, card) {
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    // Remove any existing tooltip
+    this._hideInventoryTooltip();
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'inventory-card-tooltip';
+
+    let statsHtml = '';
+    if (item.system.currentDamage) {
+      statsHtml += `<div>Damage: ${item.system.currentDamage}</div>`;
+    }
+    if (item.system.rangeDisplay) {
+      statsHtml += `<div>Range: ${item.system.rangeDisplay}</div>`;
+    }
+    if (item.system.gripDisplay) {
+      statsHtml += `<div>Grip: ${item.system.gripDisplay}</div>`;
+    }
+    if (item.system.slots) {
+      statsHtml += `<div>Slots: ${item.system.slots}</div>`;
+    }
+
+    tooltip.innerHTML = `
+      <div class="tooltip-title">${item.name}</div>
+      ${item.system.description ? `<div class="tooltip-description">${item.system.description}</div>` : ''}
+      ${statsHtml ? `<div class="tooltip-stats">${statsHtml}</div>` : ''}
+    `;
+
+    // Position tooltip
+    const cardRect = card.getBoundingClientRect();
+    tooltip.style.position = 'fixed';
+    tooltip.style.left = `${cardRect.right + 10}px`;
+    tooltip.style.top = `${cardRect.top}px`;
+
+    document.body.appendChild(tooltip);
+    this._currentTooltip = tooltip;
+  }
+
+  /**
+   * Hide tooltip
+   * @private
+   */
+  _hideInventoryTooltip() {
+    if (this._currentTooltip) {
+      this._currentTooltip.remove();
+      this._currentTooltip = null;
+    }
   }
 
   /**************
@@ -2706,6 +3030,126 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     return this.actor.createEmbeddedDocuments('Item', itemData);
+  }
+
+  /********************
+   *
+   * Inventory Grid Interactions
+   *
+   ********************/
+
+  /**
+   * Auto-arrange inventory items in the grid
+   * @param {Event} event - The click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onAutoArrangeInventory(event, target) {
+    const sheet = target.closest('.vagabond.actor');
+    if (!sheet) return;
+
+    const actor = game.actors.get(sheet.dataset.actorId);
+    if (!actor) return;
+
+    // Sort items by slots (largest first) for optimal packing
+    const items = actor.items.filter(i =>
+      i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear'
+    ).sort((a, b) => (b.system.slots || 1) - (a.system.slots || 1));
+
+    // Assign grid positions sequentially
+    const updates = items.map((item, index) => ({
+      _id: item.id,
+      'system.gridPosition': index
+    }));
+
+    await actor.updateEmbeddedDocuments('Item', updates);
+    ui.notifications.info('Inventory auto-arranged');
+  }
+
+  /**
+   * Equip an item from context menu
+   * @param {Event} event - The click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onEquipItem(event, target) {
+    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+
+    const sheet = target.closest('.vagabond.actor');
+    if (!sheet) return;
+
+    const actor = game.actors.get(sheet.dataset.actorId);
+    if (!actor) return;
+
+    const item = actor.items.get(itemId);
+    if (!item) return;
+
+    // Toggle equipped state
+    const isEquipped = item.system.equipped !== undefined
+      ? item.system.equipped
+      : item.system.equipmentState !== 'unequipped';
+
+    if (item.system.equipped !== undefined) {
+      await item.update({ 'system.equipped': !isEquipped });
+    } else if (item.system.equipmentState) {
+      const newState = isEquipped ? 'unequipped' : 'oneHand';
+      await item.update({ 'system.equipmentState': newState });
+    }
+  }
+
+  /**
+   * Edit an item from context menu
+   * @param {Event} event - The click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onEditItem(event, target) {
+    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+
+    const sheet = target.closest('.vagabond.actor');
+    if (!sheet) return;
+
+    const actor = game.actors.get(sheet.dataset.actorId);
+    if (!actor) return;
+
+    const item = actor.items.get(itemId);
+    if (!item) return;
+
+    item.sheet.render(true);
+  }
+
+  /**
+   * Delete an item from context menu
+   * @param {Event} event - The click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onDeleteItem(event, target) {
+    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+
+    const sheet = target.closest('.vagabond.actor');
+    if (!sheet) return;
+
+    const actor = game.actors.get(sheet.dataset.actorId);
+    if (!actor) return;
+
+    const item = actor.items.get(itemId);
+    if (!item) return;
+
+    const confirmed = await Dialog.confirm({
+      title: `Delete ${item.name}?`,
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+      yes: () => true,
+      no: () => false
+    });
+
+    if (confirmed) {
+      await item.delete();
+      ui.notifications.info(`Deleted ${item.name}`);
+    }
   }
 
   /********************

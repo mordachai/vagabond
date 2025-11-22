@@ -297,3 +297,64 @@ VAGABOND.metalData = {
   'mythral': { multiplier: 50, effect: 'Occupies 1 fewer Slot (min 1).' },
   'orichalcum': { multiplier: 50, effect: 'Armor reduces Cast damage.' }
 };
+
+/**
+ * Metal type colors for visual inventory
+ * Used for weapon skill icon colors
+ * @type {Object}
+ */
+VAGABOND.metalColors = {
+  'common': '#8b7355',      // Brown/tan for common metal
+  'adamant': '#2d2d44',     // Dark blue-grey for adamant
+  'coldIron': '#708090',    // Slate grey for cold iron
+  'silver': '#c0c0c0',      // Silver
+  'mythral': '#e0e0ff',     // Light blue-white for mythral
+  'orichalcum': '#daa520'   // Golden for orichalcum
+};
+
+/**
+ * Icon paths for inventory visual grid
+ * @type {Object}
+ */
+VAGABOND.icons = {
+  // Weapon skill icons
+  weaponSkills: {
+    'melee': 'assets/ui/weapon-skill-melee.webp',
+    'ranged': 'assets/ui/weapon-skill-ranged.webp',
+    'brawl': 'assets/ui/weapon-skill-brawl.webp',
+    'finesse': 'assets/ui/weapon-skill-finesse.webp'
+  },
+
+  // Damage type icons
+  damageTypes: {
+    '-': 'assets/ui/none-dmg-icn.webp',
+    'acid': 'assets/ui/acid-dmg-icn.webp',
+    'fire': 'assets/ui/fire-dmg-icn.webp',
+    'shock': 'assets/ui/shock-dmg-icn.webp',
+    'poison': 'assets/ui/poison-dmg-icn.webp',
+    'cold': 'assets/ui/cold-dmg-icn.webp',
+    'blunt': 'assets/ui/blunt-dmg-icn.webp',
+    'physical': 'assets/ui/physical-dmg-icn.webp',
+    'necrotic': 'assets/ui/necrotic-dmg-icn.webp',
+    'psychic': 'assets/ui/psychic-dmg-icn.webp',
+    'healing': 'assets/ui/healing-dmg-icn.webp'
+  },
+
+  // Grip icons
+  grips: {
+    '1H': 'assets/ui/grip-1h.webp',
+    '2H': 'assets/ui/grip-2h.webp',
+    'F': 'assets/ui/grip-fist.webp',
+    'V': 'assets/ui/grip-versatile.webp'
+  }
+};
+
+/**
+ * Range abbreviations for display
+ * @type {Object}
+ */
+VAGABOND.rangeAbbreviations = {
+  'close': 'C',
+  'near': 'N',
+  'far': 'F'
+};
