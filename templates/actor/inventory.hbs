@@ -105,11 +105,23 @@
         <div class='item-slots item-prop inventory-col-slots'>{{item.system.slots}}</div>
         <div class='inventory-col-equipped' data-action='toggleWeaponEquipment' data-item-id='{{item._id}}'>
           {{#if (eq item.system.equipmentState 'unequipped')}}
-            <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip one-handed)'></i>
+            {{#if (eq item.system.grip '2H')}}
+              <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip two-handed)'></i>
+            {{else}}
+              <i class='clickable far fa-circle unequipped' data-tooltip='Unequipped (click to equip one-handed)'></i>
+            {{/if}}
           {{else if (eq item.system.equipmentState 'oneHand')}}
-            <i class='clickable fas fa-hand-fist equipped-one-hand' data-tooltip='Equipped One-Handed (click for two-handed)'></i>
+            {{#if (eq item.system.grip 'V')}}
+              <i class='clickable fas fa-hand-fist equipped-one-hand' data-tooltip='Equipped One-Handed (click for two-handed)'></i>
+            {{else}}
+              <i class='clickable fas fa-hand-fist equipped-one-hand' data-tooltip='Equipped One-Handed (click to unequip)'></i>
+            {{/if}}
           {{else if (eq item.system.equipmentState 'twoHands')}}
-            <i class='clickable fas fa-hands equipped-two-hands' data-tooltip='Equipped Two-Handed (click to unequip)'></i>
+            {{#if (eq item.system.grip 'V')}}
+              <i class='clickable fas fa-hands equipped-two-hands' data-tooltip='Equipped Two-Handed (click to unequip)'></i>
+            {{else}}
+              <i class='clickable fas fa-hands equipped-two-hands' data-tooltip='Equipped Two-Handed (click to unequip)'></i>
+            {{/if}}
           {{/if}}
         </div>
       </li>

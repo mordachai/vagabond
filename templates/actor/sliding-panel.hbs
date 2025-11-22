@@ -317,21 +317,22 @@
                   class='resource-label rollable flexlarge align-left'
                   data-action='rollWeapon'
                   data-item-id='{{weapon._id}}'
+                  data-tooltip='{{localize (lookup @root.config.weaponSkills weapon.system.weaponSkill)}}'
                   title='{{weapon.system.propertiesDisplay}}'
-                >{{weapon.name}} ({{weapon.system.currentDamage}})</label>
+                >{{weapon.name}} ({{weapon.system.currentDamage}}{{#unless (eq weapon.system.damageType '-')}} - {{localize (lookup @root.config.damageTypes weapon.system.damageType)}}{{/unless}})</label>
                 <span class='weapon-info'>
-                  {{weapon.system.rangeDisplay}}
+                  <span data-tooltip='{{weapon.system.rangeDisplay}}'>{{weapon.system.rangeAbbrev}}</span>
                   {{#if (eq weapon.system.equipmentState 'oneHand')}}
                     {{#if (eq weapon.system.grip 'V')}}
-                      <i class='fas fa-hand-fist clickable' title='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                      <i class='fas fa-hand-fist clickable' data-tooltip='One-Handed (click to switch to two-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
                     {{else}}
-                      <i class='fas fa-hand-fist' title='One-Handed'></i>
+                      <i class='fas fa-hand-fist' data-tooltip='One-Handed'></i>
                     {{/if}}
                   {{else if (eq weapon.system.equipmentState 'twoHands')}}
                     {{#if (eq weapon.system.grip 'V')}}
-                      <i class='fas fa-hands clickable' title='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                      <i class='fas fa-hands clickable' data-tooltip='Two-Handed (click to switch to one-handed)' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
                     {{else}}
-                      <i class='fas fa-hands' title='Two-Handed'></i>
+                      <i class='fas fa-hands' data-tooltip='Two-Handed'></i>
                     {{/if}}
                   {{/if}}
                 </span>

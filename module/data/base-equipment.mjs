@@ -277,6 +277,9 @@ export default class VagabondEquipment extends VagabondItemBase {
   }
 
   _prepareWeaponData() {
+    // Determine if weapon is equipped (any state other than unequipped)
+    this.equipped = this.equipmentState !== 'unequipped';
+
     // Determine current damage based on equipment state
     let baseDamage;
     if (this.equipmentState === 'twoHands') {
@@ -298,13 +301,19 @@ export default class VagabondEquipment extends VagabondItemBase {
       this.currentDamage = baseDamage;
     }
 
-    // Format range display
-    const rangeMap = {
-      'close': game.i18n.localize('VAGABOND.Weapon.Range.CloseAbbr') ?? 'C',
-      'near': game.i18n.localize('VAGABOND.Weapon.Range.NearAbbr') ?? 'N',
-      'far': game.i18n.localize('VAGABOND.Weapon.Range.FarAbbr') ?? 'F'
+    // Format range display with abbreviations and full names
+    const rangeAbbrMap = {
+      'close': 'C',
+      'near': 'N',
+      'far': 'F'
     };
-    this.rangeDisplay = rangeMap[this.range] || this.range;
+    const rangeFullMap = {
+      'close': 'Close',
+      'near': 'Near',
+      'far': 'Far'
+    };
+    this.rangeAbbrev = rangeAbbrMap[this.range] || this.range;
+    this.rangeDisplay = rangeFullMap[this.range] || this.range;
 
     // Format grip display
     const gripMap = {

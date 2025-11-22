@@ -39,9 +39,20 @@
   min-width: 0; // Allow flex item to shrink below content size
 }
 
+// Item Name Row - Contains name input and lock button
+.item-name-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
 // Item Name Input
 .item-document-name {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 
   input {
     width: 100%;

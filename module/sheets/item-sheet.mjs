@@ -101,9 +101,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.document.limited) return;
     switch (this.document.type) {
       case 'equipment':
-        // Use locked or unlocked template based on system.locked state
-        const detailsPart = this.document.system.locked ? 'equipmentDetailsLocked' : 'equipmentDetails';
-        options.parts.push(detailsPart, 'effects');
+        // Equipment template now handles both locked and unlocked states internally
+        options.parts.push('equipmentDetails', 'effects');
         break;
       case 'gear':
         options.parts.push('gearDetails', 'effects');
@@ -728,6 +727,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type !== 'equipment') return;
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
+    // No need to close/reopen - template handles both states with conditionals
   }
 
   /**
@@ -871,7 +871,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _onDragOver(event) { }
 
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
     const item = this.item;
     const allowed = Hooks.call('dropItemSheetData', item, this, data);
     if (allowed === false) return;

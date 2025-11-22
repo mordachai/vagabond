@@ -2034,22 +2034,36 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // Cycle through equipment states
+    // Get the weapon's grip type
+    const grip = weapon.system.grip;
     const currentState = weapon.system.equipmentState || 'unequipped';
     let nextState;
 
-    switch (currentState) {
-      case 'unequipped':
-        nextState = 'oneHand';
-        break;
-      case 'oneHand':
-        nextState = 'twoHands';
-        break;
-      case 'twoHands':
-        nextState = 'unequipped';
-        break;
-      default:
-        nextState = 'unequipped';
+    // Cycle through equipment states based on grip type
+    if (grip === '2H') {
+      // Two-handed only weapons: unequipped <-> twoHands
+      nextState = currentState === 'unequipped' ? 'twoHands' : 'unequipped';
+    } else if (grip === '1H' || grip === 'F') {
+      // One-handed only or fist weapons: unequipped <-> oneHand
+      nextState = currentState === 'unequipped' ? 'oneHand' : 'unequipped';
+    } else if (grip === 'V') {
+      // Versatile weapons: full cycle unequipped -> oneHand -> twoHands -> unequipped
+      switch (currentState) {
+        case 'unequipped':
+          nextState = 'oneHand';
+          break;
+        case 'oneHand':
+          nextState = 'twoHands';
+          break;
+        case 'twoHands':
+          nextState = 'unequipped';
+          break;
+        default:
+          nextState = 'unequipped';
+      }
+    } else {
+      // Unknown grip type - default to one-handed behavior
+      nextState = currentState === 'unequipped' ? 'oneHand' : 'unequipped';
     }
 
     // Update the weapon's equipment state

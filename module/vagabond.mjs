@@ -152,73 +152,84 @@ Hooks.once('ready', function () {
 /**
  * Handle rendering chat messages - adds event listeners for damage buttons
  */
-Hooks.on('renderChatMessage', async (message, html, data) => {
-  // html is a jQuery object, convert to element if needed
-  const element = html[0] || html;
+Hooks.on('renderChatMessageHTML', async (message, html) => {
+  // html is an HTMLElement in V13
+  if (!html || !html.querySelectorAll) return;
+
+  const element = html;
 
   // Add click handler for damage roll buttons
   const damageButtons = element.querySelectorAll('.vagabond-damage-button');
+  if (damageButtons) {
+    damageButtons.forEach(button => {
+      if (!button) return;
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-  damageButtons.forEach(button => {
-    button.addEventListener('click', async (event) => {
-      event.preventDefault();
+        // Import damage helper dynamically
+        const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
 
-      // Import damage helper dynamically
-      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-
-      // Roll damage from button
-      await VagabondDamageHelper.rollDamageFromButton(button, message.id);
+        // Roll damage from button
+        await VagabondDamageHelper.rollDamageFromButton(button, message.id);
+      });
     });
-  });
+  }
 
   // Add click handler for apply damage and healing buttons
   const applyButtons = element.querySelectorAll('.vagabond-apply-damage-button, .vagabond-apply-healing-button');
+  if (applyButtons) {
+    applyButtons.forEach(button => {
+      if (!button) return;
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-  applyButtons.forEach(button => {
-    button.addEventListener('click', async (event) => {
-      event.preventDefault();
+        // Import damage helper dynamically
+        const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
 
-      // Import damage helper dynamically
-      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-
-      // Apply damage or healing to targets
-      await VagabondDamageHelper.applyDamageToTargets(button);
+        // Apply damage or healing to targets
+        await VagabondDamageHelper.applyDamageToTargets(button);
+      });
     });
-  });
+  }
 
   // Add click handler for NPC damage buttons (GM-only)
   const npcDamageButtons = element.querySelectorAll('.vagabond-npc-damage-button');
+  if (npcDamageButtons) {
+    npcDamageButtons.forEach(button => {
+      if (!button) return;
+      // Only show to GM
+      if (!game.user.isGM) {
+        button.style.display = 'none';
+        return;
+      }
 
-  npcDamageButtons.forEach(button => {
-    // Only show to GM
-    if (!game.user.isGM) {
-      button.style.display = 'none';
-      return;
-    }
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-    button.addEventListener('click', async (event) => {
-      event.preventDefault();
+        // Import damage helper dynamically
+        const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
 
-      // Import damage helper dynamically
-      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-
-      // Handle NPC damage button click (reveals damage to players)
-      await VagabondDamageHelper.handleNPCDamageButton(button, message.id);
+        // Handle NPC damage button click (reveals damage to players)
+        await VagabondDamageHelper.handleNPCDamageButton(button, message.id);
+      });
     });
-  });
+  }
 
   // Add click handler for property accordion toggle
   const propertyHeaders = element.querySelectorAll('[data-action="toggleProperties"]');
+  if (propertyHeaders) {
+    propertyHeaders.forEach(header => {
+      if (!header) return;
+      header.addEventListener('click', (event) => {
+        event.preventDefault();
+        const expandable = header.closest('.metadata-item-expandable');
+        if (!expandable) return;
 
-  propertyHeaders.forEach(header => {
-    header.addEventListener('click', (event) => {
-      event.preventDefault();
-      const expandable = header.closest('.metadata-item-expandable');
-
-      // Toggle expanded state
-      expandable.classList.toggle('expanded');
+        // Toggle expanded state
+        expandable.classList.toggle('expanded');
+      });
     });
-  });
+  }
 });
 
 /* -------------------------------------------- */

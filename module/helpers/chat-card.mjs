@@ -295,7 +295,7 @@ export class VagabondChatCard {
     }
 
     const templatePath = 'systems/vagabond/templates/chat/chat-card.hbs';
-    return await renderTemplate(templatePath, this.data);
+    return await foundry.applications.handlebars.renderTemplate(templatePath, this.data);
   }
 
   /**
@@ -532,7 +532,7 @@ export class VagabondChatCard {
 
     // Add enriched description
     if (spell.system.description) {
-      const enriched = await TextEditor.enrichHTML(spell.system.description, {
+      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(spell.system.description, {
         async: true,
         secrets: actor.isOwner,
         relativeTo: spell
@@ -542,7 +542,7 @@ export class VagabondChatCard {
 
     // Add critical effect if critical and spell has crit text
     if (isCritical && spell.system.crit && spell.system.crit.trim() !== '') {
-      const critEnriched = await TextEditor.enrichHTML(spell.system.crit, {
+      const critEnriched = await foundry.applications.ux.TextEditor.enrichHTML(spell.system.crit, {
         async: true,
         secrets: actor.isOwner,
         relativeTo: spell
@@ -611,7 +611,7 @@ export class VagabondChatCard {
 
     // Add description if present
     if (action.description) {
-      const enriched = await TextEditor.enrichHTML(action.description, {
+      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(action.description, {
         async: true,
         secrets: actor.isOwner,
         relativeTo: actor
@@ -621,7 +621,7 @@ export class VagabondChatCard {
 
     // Add extra info if present
     if (action.extraInfo) {
-      const enrichedExtra = await TextEditor.enrichHTML(action.extraInfo, {
+      const enrichedExtra = await foundry.applications.ux.TextEditor.enrichHTML(action.extraInfo, {
         async: true,
         secrets: actor.isOwner,
         relativeTo: actor
@@ -690,7 +690,7 @@ export class VagabondChatCard {
     if (ability.description) {
       // Use formatted version if available (with dice rolls converted to roll links)
       const descToEnrich = ability.descriptionFormatted || ability.description;
-      const enriched = await TextEditor.enrichHTML(descToEnrich, {
+      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(descToEnrich, {
         async: true,
         secrets: actor.isOwner,
         relativeTo: actor
