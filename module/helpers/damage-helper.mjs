@@ -91,19 +91,25 @@ export class VagabondDamageHelper {
     await damageRoll.evaluate();
 
     // Determine damage type
-    let damageType = 'Physical';
+    let damageTypeLabel = 'Physical';
 
     // For weapons, get damage type from item
     if (context.type === 'weapon' && item && item.system.damageType) {
-      damageType = game.i18n.localize(CONFIG.VAGABOND.damageTypes[item.system.damageType]) || item.system.damageType;
+      const damageTypeKey = item.system.damageType;
+      if (damageTypeKey && damageTypeKey !== '-') {
+        damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]) || damageTypeKey;
+      }
     }
     // For spells, get damage type from context
     else if (context.type === 'spell' && context.damageType) {
-      damageType = game.i18n.localize(CONFIG.VAGABOND.damageTypes[context.damageType]) || context.damageType;
+      const damageTypeKey = context.damageType;
+      if (damageTypeKey && damageTypeKey !== '-') {
+        damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]) || damageTypeKey;
+      }
     }
 
     // Update the chat message in-place
-    await this.updateChatCardDamage(messageId, damageRoll, damageType, context.isCritical, actor, item);
+    await this.updateChatCardDamage(messageId, damageRoll, damageTypeLabel, context.isCritical, actor, item);
 
     // Disable the roll damage button
     button.disabled = true;
