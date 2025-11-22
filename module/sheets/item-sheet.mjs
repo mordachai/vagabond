@@ -102,8 +102,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     switch (this.document.type) {
       case 'equipment':
         // Use locked or unlocked template based on system.locked state
-        const detailsPart = this.document.system.locked ? 'equipmentDetailsLocked' : 'equipmentDetails';
-        options.parts.push(detailsPart, 'effects');
+        // Only add ONE of the two equipment templates
+        if (this.document.system.locked) {
+          options.parts.push('equipmentDetailsLocked', 'effects');
+        } else {
+          options.parts.push('equipmentDetails', 'effects');
+        }
         break;
       case 'gear':
         options.parts.push('gearDetails', 'effects');
@@ -728,6 +732,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type !== 'equipment') return;
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
+    // Force a full re-render to switch between locked/unlocked templates
+    this.render(false);
   }
 
   /**

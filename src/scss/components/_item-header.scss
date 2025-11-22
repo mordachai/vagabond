@@ -43,6 +43,7 @@
 .item-name-row {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   gap: 8px;
   align-items: center;
   width: 100%;
@@ -51,6 +52,7 @@
 // Item Name Input
 .item-document-name {
   flex: 1;
+  min-width: 0;
 
   input {
     width: 100%;
