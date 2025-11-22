@@ -92,7 +92,13 @@ export class VagabondDamageHelper {
 
     // Determine damage type
     let damageType = 'Physical';
-    if (context.type === 'spell' && context.damageType) {
+
+    // For weapons, get damage type from item
+    if (context.type === 'weapon' && item && item.system.damageType) {
+      damageType = game.i18n.localize(CONFIG.VAGABOND.damageTypes[item.system.damageType]) || item.system.damageType;
+    }
+    // For spells, get damage type from context
+    else if (context.type === 'spell' && context.damageType) {
       damageType = game.i18n.localize(CONFIG.VAGABOND.damageTypes[context.damageType]) || context.damageType;
     }
 
