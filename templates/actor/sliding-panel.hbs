@@ -308,6 +308,11 @@
               <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
             </div>
           {{/each}}
+        </div>
+
+        {{! Favorites Section - Equipped Items }}
+        <div class='favorites-section flexcol'>
+          <h3>Favorites</h3>
 
           {{! Equipped Weapons }}
           {{#each weapons as |weapon|}}
@@ -340,6 +345,40 @@
             {{/if}}
           {{/each}}
 
+          {{! Equipped Gear }}
+          {{#each gear as |item|}}
+            {{#if item.system.equipped}}
+              <div class='equipped-gear flexrow flex-group-center'>
+                <label
+                  class='resource-label rollable flexlarge align-left'
+                  data-action='useItem'
+                  data-item-id='{{item._id}}'
+                  title='{{item.system.description}}'
+                >{{item.name}}</label>
+                <span class='item-info'>
+                  {{#if item.system.quantity}}
+                    <span data-tooltip='Quantity'>×{{item.system.quantity}}</span>
+                  {{/if}}
+                </span>
+              </div>
+            {{/if}}
+          {{/each}}
+
+          {{! Equipped Armor }}
+          {{#each armor as |item|}}
+            {{#if item.system.worn}}
+              <div class='equipped-armor flexrow flex-group-center'>
+                <label
+                  class='resource-label flexlarge align-left'
+                  title='{{item.system.description}}'
+                >{{item.name}} (AV: {{item.system.armorValue}})</label>
+              </div>
+            {{/if}}
+          {{/each}}
+        </div>
+
+        {{! Weapon Skills / Spells Section }}
+        <div class='weapon-skills flexcol'>
           {{! Favorited Spells }}
           {{#each spells as |spell|}}
             {{#if spell.system.favorite}}

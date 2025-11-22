@@ -132,6 +132,8 @@
 
   // Equipped weapons and favorited spells styling
   .equipped-weapon,
+  .equipped-gear,
+  .equipped-armor,
   .favorited-spell {
     display: flex;
     align-items: center;
@@ -154,6 +156,7 @@
   }
 
   .weapon-info,
+  .item-info,
   .spell-info {
     font-size: 13px;
     color: $c-tan;
@@ -165,6 +168,17 @@
     i {
       margin-right: 2px;
     }
+  }
+}
+
+// Favorites Section
+.favorites-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid $c-faint;
+
+  h3 {
+    margin-bottom: 8px;
   }
 }
 
