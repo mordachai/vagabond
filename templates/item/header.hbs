@@ -34,20 +34,22 @@
 
     {{! Two-Column Content for Item-Specific Fields }}
     {{#if (eq item.type 'equipment')}}
-      <div class='grid grid-1col'>
-        <div class='resource'>
-          <label class='resource-label'>Equipment Type</label>
-          <select name='system.equipmentType' data-dtype='String'>
-            {{#select system.equipmentType}}
-              <option value='weapon'>Weapon</option>
-              <option value='armor'>Armor</option>
-              <option value='gear'>Gear</option>
-              <option value='alchemical'>Alchemical</option>
-              <option value='relic'>Relic</option>
-            {{/select}}
-          </select>
+      {{#unless system.locked}}
+        <div class='grid grid-1col'>
+          <div class='resource'>
+            <label class='resource-label'>Equipment Type</label>
+            <select name='system.equipmentType' data-dtype='String'>
+              {{#select system.equipmentType}}
+                <option value='weapon'>Weapon</option>
+                <option value='armor'>Armor</option>
+                <option value='gear'>Gear</option>
+                <option value='alchemical'>Alchemical</option>
+                <option value='relic'>Relic</option>
+              {{/select}}
+            </select>
+          </div>
         </div>
-      </div>
+      {{/unless}}
     {{/if}}
 
     {{#if (eq item.type 'gear')}}
