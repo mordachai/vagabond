@@ -871,7 +871,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _onDragOver(event) { }
 
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
     const item = this.item;
     const allowed = Hooks.call('dropItemSheetData', item, this, data);
     if (allowed === false) return;
