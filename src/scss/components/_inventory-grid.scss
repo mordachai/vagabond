@@ -76,43 +76,50 @@
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(80px, auto);
-  gap: 6px;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.02);
-  border: 2px solid $c-faint;
-  border-radius: 4px;
-  min-height: 440px; // 5 rows × 80px + gaps
-
-  // Ensure grid fills horizontal space
+  grid-auto-rows: 65px; // Fixed height for compactness
+  gap: 0; // No gaps, use borders instead
+  padding: 0;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid $c-faint;
+  border-radius: 2px;
   width: 100%;
 }
 
 // Empty Slot
 .inventory-slot.empty-slot {
   background: rgba(255, 255, 255, 0.3);
-  border: 1px dashed $c-faint;
-  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 80px;
+  height: 65px;
   position: relative;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+
+  // Add top border to first row
+  &:nth-child(-n + 4) {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  // Add left border to first column
+  &:nth-child(4n + 1) {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+  }
 
   .slot-number {
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.15);
     font-weight: bold;
   }
 
   // Unavailable (darker) slots
   &.unavailable {
-    background: rgba(0, 0, 0, 0.15);
-    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
 
     .slot-number {
-      color: rgba(0, 0, 0, 0.2);
+      color: rgba(0, 0, 0, 0.25);
     }
   }
 
@@ -120,54 +127,54 @@
   &.drag-over {
     background: rgba(100, 200, 100, 0.2);
     border-color: #5cb85c;
-    border-style: solid;
   }
 }
 
 // Inventory Card (Item)
 .inventory-card {
   background: $c-groove;
-  border: 2px solid $c-faint;
-  border-radius: 4px;
-  padding: 6px;
-  min-height: 80px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  padding: 4px;
+  height: 65px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 
   // Span multiple columns based on item slots
   // grid-column: span is set inline in HBS
 
   // Hover effect
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-color: $c-tan;
+    background: lighten($c-groove, 5%);
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   }
 
   // Equipped state - use internal box-shadow instead of border
   &.equipped {
-    box-shadow: inset 0 0 0 2px #5cb85c, 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 0 2px #5cb85c;
 
     &:hover {
-      box-shadow: inset 0 0 0 2px #5cb85c, 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 0 0 2px #5cb85c, 0 2px 4px rgba(0, 0, 0, 0.15);
     }
   }
 
   // Dragging state
   &.dragging {
-    opacity: 0.5;
-    transform: scale(0.95);
+    opacity: 0.6;
+    transform: scale(0.98);
   }
 
   // Card content wrapper
   .inventory-card-content {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     height: 100%;
   }
 }
@@ -176,14 +183,14 @@
 .inventory-card-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 4px;
+  margin-bottom: 2px;
 
   // Weapon skill icon (colored by metal)
   .weapon-skill-icon {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 2px;
     display: flex;
     align-items: center;
@@ -191,8 +198,8 @@
     overflow: hidden;
 
     img {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       object-fit: contain;
     }
   }
@@ -200,37 +207,37 @@
   // Armor icon
   .armor-icon {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background: #8b7355;
     border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 12px;
+    font-size: 10px;
   }
 
   // Gear icon
   .gear-icon {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background: #666;
     border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 12px;
+    font-size: 10px;
   }
 
   // Item name
   .item-name-display {
     flex: 1;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
-    line-height: 1.2;
+    line-height: 1.1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -243,41 +250,41 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
+  gap: 2px;
+  font-size: 9px;
   color: $c-tan;
   margin-top: auto;
 
   .stat-group {
     display: flex;
     align-items: center;
-    gap: 3px;
-    flex-wrap: wrap;
+    gap: 2px;
+    flex-wrap: nowrap;
   }
 
   .stat-label {
     font-weight: bold;
-    font-size: 11px;
+    font-size: 9px;
   }
 
   .stat-value {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   // Damage group (damage + damage type icon)
   .damage-group {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
 
     .damage-type-icon {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       object-fit: contain;
     }
 
     .grip-display {
-      margin-left: 2px;
+      margin-left: 1px;
       font-weight: bold;
     }
   }
@@ -286,19 +293,21 @@
   .range-cost-group {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
     margin-left: auto;
 
     .range-display {
       font-weight: bold;
-      padding: 1px 3px;
+      padding: 1px 2px;
       background: rgba(0, 0, 0, 0.1);
       border-radius: 2px;
+      font-size: 8px;
     }
 
     .cost-display {
       font-weight: bold;
       color: #d4af37; // Gold color
+      font-size: 9px;
     }
   }
 

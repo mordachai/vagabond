@@ -763,16 +763,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Sort by grid position
     context.inventoryItems.sort((a, b) => a.gridPosition - b.gridPosition);
 
-    // Calculate empty slots (20 total slots in 5x4 grid)
+    // Calculate empty slots to fill the grid (max 20 total)
     const maxSlots = this.document.system.inventory?.maxSlots || 20;
-    const occupiedSlots = context.inventoryItems.reduce((sum, item) => sum + (item.item.system.slots || 1), 0);
-    const emptySlotCount = Math.max(0, 20 - occupiedSlots);
+    const occupiedSlotCount = context.inventoryItems.reduce((sum, item) => sum + (item.item.system.slots || 1), 0);
 
-    context.emptySlots = Array.from({ length: 20 }, (_, i) => ({
-      index: i,
-      displayNumber: i + 1,
-      unavailable: i >= maxSlots
-    }));
+    // Create empty slots to fill up to 20 total (5 rows × 4 columns)
+    const emptySlotCount = Math.max(0, 20 - occupiedSlotCount);
+    context.emptySlots = Array.from({ length: emptySlotCount }, (_, i) => {
+      const slotIndex = occupiedSlotCount + i;
+      return {
+        index: slotIndex,
+        displayNumber: slotIndex + 1,
+        unavailable: slotIndex >= maxSlots
+      };
+    });
   }
 
   /**
