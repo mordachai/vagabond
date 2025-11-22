@@ -2,12 +2,10 @@
 
 // Lock toggle button
 .equipment-lock-toggle {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 32px;
-  height: 32px;
-  padding: 6px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
   background: $c-tan;
   border: 2px solid $c-dark;
   border-radius: 4px;
@@ -18,7 +16,7 @@
   justify-content: center;
 
   i {
-    font-size: 16px;
+    font-size: 18px;
     color: $c-dark;
   }
 

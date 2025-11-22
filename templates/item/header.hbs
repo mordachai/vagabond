@@ -11,23 +11,25 @@
       width='150'
       height='150'
     />
-    {{#if (eq item.type 'equipment')}}
-      <button
-        type='button'
-        class='equipment-lock-toggle'
-        data-action='toggleLock'
-        data-tooltip='{{#if system.locked}}Unlock to edit{{else}}Lock to view{{/if}}'
-      >
-        <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
-      </button>
-    {{/if}}
   </div>
 
   {{! Right Column: Name + Two-Column Content }}
   <div class='item-header-fields'>
-    {{! Item Name }}
-    <div class='item-document-name'>
-      <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
+    {{! Item Name and Lock (for equipment) }}
+    <div class='item-name-row'>
+      <div class='item-document-name'>
+        <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
+      </div>
+      {{#if (eq item.type 'equipment')}}
+        <button
+          type='button'
+          class='equipment-lock-toggle'
+          data-action='toggleLock'
+          data-tooltip='{{#if system.locked}}Unlock to edit{{else}}Lock to view{{/if}}'
+        >
+          <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+        </button>
+      {{/if}}
     </div>
 
     {{! Two-Column Content for Item-Specific Fields }}
