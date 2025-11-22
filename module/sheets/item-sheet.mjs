@@ -732,8 +732,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type !== 'equipment') return;
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
-    // Force a full re-render to switch between locked/unlocked templates
-    this.render(false);
+    // Close and reopen the sheet to force parts reconfiguration
+    // ApplicationV2 only reconfigures parts on initial render
+    await this.close();
+    this.item.sheet.render(true);
   }
 
   /**
