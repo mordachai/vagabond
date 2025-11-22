@@ -152,9 +152,9 @@ Hooks.once('ready', function () {
 /**
  * Handle rendering chat messages - adds event listeners for damage buttons
  */
-Hooks.on('renderChatMessage', async (message, html, data) => {
-  // html is a jQuery object, convert to element if needed
-  const element = html[0] || html;
+Hooks.on('renderChatMessageHTML', async (message, html, data) => {
+  // html is now an HTMLElement in V13+
+  const element = html;
 
   // Add click handler for damage roll buttons
   const damageButtons = element.querySelectorAll('.vagabond-damage-button');
