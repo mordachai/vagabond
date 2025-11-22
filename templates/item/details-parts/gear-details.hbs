@@ -38,19 +38,17 @@
         <div class='flex-2'>
           <label class='resource-label'>Type</label>
           <select name='system.damageType' data-dtype='String'>
-            {{#select system.damageType}}
-              <option value='-'>{{localize 'VAGABOND.DamageTypes.None'}}</option>
-              <option value='acid'>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
-              <option value='fire'>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
-              <option value='shock'>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
-              <option value='poison'>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
-              <option value='cold'>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
-              <option value='blunt'>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
-              <option value='physical'>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
-              <option value='necrotic'>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
-              <option value='psychic'>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
-              <option value='healing'>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
-            {{/select}}
+            <option value='-' {{#if (eq system.damageType '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+            <option value='acid' {{#if (eq system.damageType 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+            <option value='fire' {{#if (eq system.damageType 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+            <option value='shock' {{#if (eq system.damageType 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+            <option value='poison' {{#if (eq system.damageType 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+            <option value='cold' {{#if (eq system.damageType 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+            <option value='blunt' {{#if (eq system.damageType 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+            <option value='physical' {{#if (eq system.damageType 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+            <option value='necrotic' {{#if (eq system.damageType 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+            <option value='psychic' {{#if (eq system.damageType 'psychic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+            <option value='healing' {{#if (eq system.damageType 'healing')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
           </select>
         </div>
         <div class='flex-1'>
