@@ -152,8 +152,8 @@ Hooks.once('ready', function () {
 /**
  * Handle rendering chat messages - adds event listeners for damage buttons
  */
-Hooks.on('renderChatMessageHTML', async (message, html, data) => {
-  // html is now an HTMLElement in V13+
+Hooks.on('renderChatMessageHTML', async (message, html) => {
+  // html is an HTMLElement in V13
   const element = html;
 
   // Add click handler for damage roll buttons

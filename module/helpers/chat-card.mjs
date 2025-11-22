@@ -295,7 +295,7 @@ export class VagabondChatCard {
     }
 
     const templatePath = 'systems/vagabond/templates/chat/chat-card.hbs';
-    return await renderTemplate(templatePath, this.data);
+    return await foundry.applications.handlebars.renderTemplate(templatePath, this.data);
   }
 
   /**
