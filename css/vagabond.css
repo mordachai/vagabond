@@ -1465,6 +1465,8 @@
   flex: 1;
 }
 .vagabond .right-column .equipped-weapon,
+.vagabond .right-column .equipped-gear,
+.vagabond .right-column .equipped-armor,
 .vagabond .right-column .favorited-spell {
   display: flex;
   align-items: center;
@@ -1473,6 +1475,8 @@
   white-space: nowrap;
 }
 .vagabond .right-column .equipped-weapon .resource-label,
+.vagabond .right-column .equipped-gear .resource-label,
+.vagabond .right-column .equipped-armor .resource-label,
 .vagabond .right-column .favorited-spell .resource-label {
   font-size: 15px;
   font-weight: 500;
@@ -1482,10 +1486,13 @@
   text-overflow: ellipsis;
 }
 .vagabond .right-column .equipped-weapon .resource-label:hover,
+.vagabond .right-column .equipped-gear .resource-label:hover,
+.vagabond .right-column .equipped-armor .resource-label:hover,
 .vagabond .right-column .favorited-spell .resource-label:hover {
   text-decoration: underline;
 }
 .vagabond .right-column .weapon-info,
+.vagabond .right-column .item-info,
 .vagabond .right-column .spell-info {
   font-size: 13px;
   color: var(--vagabond-c-tan);
@@ -1495,8 +1502,17 @@
   margin-left: 8px;
 }
 .vagabond .right-column .weapon-info i,
+.vagabond .right-column .item-info i,
 .vagabond .right-column .spell-info i {
   margin-right: 2px;
+}
+.vagabond .favorites-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .favorites-section h3 {
+  margin-bottom: 8px;
 }
 .vagabond .saves .saves-row {
   display: flex;
@@ -1929,8 +1945,8 @@
 }
 .vagabond .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 65px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 50px;
   gap: 0;
   padding: 0;
   background: rgba(0, 0, 0, 0.05);
@@ -1946,14 +1962,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 65px;
+  height: 50px;
   position: relative;
   transition: all 0.15s ease;
 }
-.vagabond .inventory-slot.empty-slot:nth-child(-n+4) {
+.vagabond .inventory-slot.empty-slot:nth-child(-n+3) {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
-.vagabond .inventory-slot.empty-slot:nth-child(4n+1) {
+.vagabond .inventory-slot.empty-slot:nth-child(3n+1) {
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 .vagabond .inventory-slot.empty-slot .slot-number {
@@ -1976,8 +1992,8 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-top: none;
   border-left: none;
-  padding: 4px;
-  height: 65px;
+  padding: 3px 4px;
+  height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1991,10 +2007,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 .vagabond .inventory-card.equipped {
-  box-shadow: inset 0 0 0 2px #5cb85c;
+  box-shadow: inset 0 0 8px rgba(92, 184, 92, 0.6), inset 0 0 0 2px rgba(92, 184, 92, 0.8);
 }
 .vagabond .inventory-card.equipped:hover {
-  box-shadow: inset 0 0 0 2px #5cb85c, 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0 8px rgba(92, 184, 92, 0.6), inset 0 0 0 2px rgba(92, 184, 92, 0.8), 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 .vagabond .inventory-card.dragging {
   opacity: 0.6;
@@ -2014,8 +2030,8 @@
 }
 .vagabond .inventory-card-header .weapon-skill-icon {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 2px;
   display: flex;
   align-items: center;
@@ -2023,37 +2039,37 @@
   overflow: hidden;
 }
 .vagabond .inventory-card-header .weapon-skill-icon img {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
 }
 .vagabond .inventory-card-header .armor-icon {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   background: #8b7355;
   border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 10px;
+  font-size: 11px;
 }
 .vagabond .inventory-card-header .gear-icon {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   background: #666;
   border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 10px;
+  font-size: 11px;
 }
 .vagabond .inventory-card-header .item-name-display {
   flex: 1;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   line-height: 1.1;
   overflow: hidden;
@@ -2066,7 +2082,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 2px;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--vagabond-c-tan);
   margin-top: auto;
 }
@@ -2078,10 +2094,10 @@
 }
 .vagabond .inventory-card-stats .stat-label {
   font-weight: bold;
-  font-size: 9px;
+  font-size: 10px;
 }
 .vagabond .inventory-card-stats .stat-value {
-  font-size: 9px;
+  font-size: 10px;
 }
 .vagabond .inventory-card-stats .damage-group {
   display: flex;
@@ -2089,8 +2105,8 @@
   gap: 2px;
 }
 .vagabond .inventory-card-stats .damage-group .damage-type-icon {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   object-fit: contain;
 }
 .vagabond .inventory-card-stats .damage-group .grip-display {
@@ -2108,12 +2124,12 @@
   padding: 1px 2px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
-  font-size: 8px;
+  font-size: 9px;
 }
 .vagabond .inventory-card-stats .range-cost-group .cost-display {
   font-weight: bold;
   color: #d4af37;
-  font-size: 9px;
+  font-size: 10px;
 }
 .vagabond .inventory-card-stats .armor-stats {
   display: flex;
