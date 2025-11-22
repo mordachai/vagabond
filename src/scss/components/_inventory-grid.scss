@@ -150,7 +150,7 @@
 
   // Hover effect
   &:hover {
-    background: lighten($c-groove, 5%);
+    background: lighten(#666, 5%);
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   }
