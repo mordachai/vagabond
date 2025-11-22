@@ -1279,11 +1279,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Add click handlers
     menu.querySelector('[data-action="equip"]').addEventListener('click', async () => {
-      if (item.system.equipped !== undefined) {
-        await item.update({ 'system.equipped': !isEquipped });
-      } else if (item.system.equipmentState) {
+      // For weapons, update equipmentState (equipped is a derived property)
+      if (item.type === 'weapon' && item.system.equipmentState !== undefined) {
         const newState = isEquipped ? 'unequipped' : 'oneHand';
         await item.update({ 'system.equipmentState': newState });
+      }
+      // For armor, update worn state
+      else if (item.type === 'armor') {
+        await item.update({ 'system.worn': !isEquipped });
+      }
+      // For other items (gear, etc), update equipped
+      else if (item.system.equipped !== undefined) {
+        await item.update({ 'system.equipped': !isEquipped });
       }
       this._hideInventoryContextMenu();
     });
