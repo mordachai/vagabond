@@ -72,11 +72,11 @@
   margin-bottom: 16px;
 }
 
-// 5 rows × 4 columns grid (20 slots)
+// 6 rows × 3 columns grid (18 slots)
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 65px; // Fixed height for compactness
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 50px; // Reduced height for 2 lines
   gap: 0; // No gaps, use borders instead
   padding: 0;
   background: rgba(0, 0, 0, 0.05);
@@ -94,17 +94,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 65px;
+  height: 50px;
   position: relative;
   transition: all 0.15s ease;
 
   // Add top border to first row
-  &:nth-child(-n + 4) {
+  &:nth-child(-n + 3) {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   // Add left border to first column
-  &:nth-child(4n + 1) {
+  &:nth-child(3n + 1) {
     border-left: 1px solid rgba(0, 0, 0, 0.1);
   }
 
@@ -136,8 +136,8 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-top: none;
   border-left: none;
-  padding: 4px;
-  height: 65px;
+  padding: 3px 4px;
+  height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -189,8 +189,8 @@
   // Weapon skill icon (colored by metal)
   .weapon-skill-icon {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 2px;
     display: flex;
     align-items: center;
@@ -198,8 +198,8 @@
     overflow: hidden;
 
     img {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       object-fit: contain;
     }
   }
@@ -207,35 +207,35 @@
   // Armor icon
   .armor-icon {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     background: #8b7355;
     border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 10px;
+    font-size: 11px;
   }
 
   // Gear icon
   .gear-icon {
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     background: #666;
     border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 10px;
+    font-size: 11px;
   }
 
   // Item name
   .item-name-display {
     flex: 1;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     line-height: 1.1;
     overflow: hidden;
@@ -251,7 +251,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 2px;
-  font-size: 9px;
+  font-size: 10px;
   color: $c-tan;
   margin-top: auto;
 
@@ -264,11 +264,11 @@
 
   .stat-label {
     font-weight: bold;
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .stat-value {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   // Damage group (damage + damage type icon)
@@ -278,8 +278,8 @@
     gap: 2px;
 
     .damage-type-icon {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       object-fit: contain;
     }
 
@@ -301,13 +301,13 @@
       padding: 1px 2px;
       background: rgba(0, 0, 0, 0.1);
       border-radius: 2px;
-      font-size: 8px;
+      font-size: 9px;
     }
 
     .cost-display {
       font-weight: bold;
       color: #d4af37; // Gold color
-      font-size: 9px;
+      font-size: 10px;
     }
   }
 
