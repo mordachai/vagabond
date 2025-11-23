@@ -65,9 +65,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     equipmentDetails: {
       template: 'systems/vagabond/templates/item/details-parts/equipment-details.hbs',
     },
-    equipmentDetailsLocked: {
-      template: 'systems/vagabond/templates/item/details-parts/equipment-details-locked.hbs',
-    },
     spellDetails: {
       template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
     },
@@ -140,7 +137,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'equipmentDetails':
-      case 'equipmentDetailsLocked':
         // Equipment gets enriched description like the details tab
         context.tab = context.tabs[partId];
         context.enriched = {
@@ -282,7 +278,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'classDetails':
         case 'perkDetails':
         case 'equipmentDetails':
-        case 'equipmentDetailsLocked':
           tab.id = 'details';
           tab.label += 'Details';
           break;
