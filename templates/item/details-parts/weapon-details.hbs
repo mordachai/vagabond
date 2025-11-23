@@ -24,12 +24,10 @@
       <label class='resource-label'>Skill & Damage</label>
       <div class='weapon-skill-damage'>
         <select name='system.weaponSkill' data-dtype='String' class='weapon-skill-select'>
-          {{#select system.weaponSkill}}
-            <option value="melee" {{#if (eq system.weaponSkill 'melee')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
-            <option value="brawl" {{#if (eq system.weaponSkill 'brawl')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
-            <option value="finesse" {{#if (eq system.weaponSkill 'finesse')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
-            <option value="ranged" {{#if (eq system.weaponSkill 'ranged')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
-          {{/select}}
+          <option value="melee" {{#if (eq system.weaponSkill 'melee')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+          <option value="brawl" {{#if (eq system.weaponSkill 'brawl')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
+          <option value="finesse" {{#if (eq system.weaponSkill 'finesse')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
+          <option value="ranged" {{#if (eq system.weaponSkill 'ranged')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
         </select>
         <div class='damage-with-icon'>
           <i class='fas fa-hand-fist' data-tooltip='One Hand Damage'></i>
@@ -61,19 +59,17 @@
     <div class='form-group'>
       <label class='resource-label'>Damage Type</label>
       <select name='system.damageType' data-dtype='String'>
-        {{#select system.damageType}}
-          <option value="-" {{#if (eq system.damageType '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
-          <option value="acid" {{#if (eq system.damageType 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
-          <option value="fire" {{#if (eq system.damageType 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
-          <option value="shock" {{#if (eq system.damageType 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
-          <option value="poison" {{#if (eq system.damageType 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
-          <option value="cold" {{#if (eq system.damageType 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
-          <option value="blunt" {{#if (eq system.damageType 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
-          <option value="physical" {{#if (eq system.damageType 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
-          <option value="necrotic" {{#if (eq system.damageType 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
-          <option value="psychic" {{#if (eq system.damageType 'psychic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
-          <option value="healing" {{#if (eq system.damageType 'healing')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
-        {{/select}}
+        <option value="-" {{#if (eq system.damageType '-')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+        <option value="acid" {{#if (eq system.damageType 'acid')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+        <option value="fire" {{#if (eq system.damageType 'fire')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+        <option value="shock" {{#if (eq system.damageType 'shock')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+        <option value="poison" {{#if (eq system.damageType 'poison')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+        <option value="cold" {{#if (eq system.damageType 'cold')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+        <option value="blunt" {{#if (eq system.damageType 'blunt')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+        <option value="physical" {{#if (eq system.damageType 'physical')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+        <option value="necrotic" {{#if (eq system.damageType 'necrotic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+        <option value="psychic" {{#if (eq system.damageType 'psychic')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+        <option value="healing" {{#if (eq system.damageType 'healing')}}selected{{/if}}>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
       </select>
     </div>
 
@@ -151,14 +147,12 @@
         <div class='metal-field'>
           <label class='resource-label'>Metal</label>
           <select name='system.metal' data-dtype='String'>
-            {{#select system.metal}}
-              <option value="common" {{#if (eq system.metal 'common')}}selected{{/if}} title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-              <option value="adamant" {{#if (eq system.metal 'adamant')}}selected{{/if}} title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-              <option value="coldIron" {{#if (eq system.metal 'coldIron')}}selected{{/if}} title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-              <option value="silver" {{#if (eq system.metal 'silver')}}selected{{/if}} title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-              <option value="mythral" {{#if (eq system.metal 'mythral')}}selected{{/if}} title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-              <option value="orichalcum" {{#if (eq system.metal 'orichalcum')}}selected{{/if}} title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
-            {{/select}}
+            <option value="common" {{#if (eq system.metal 'common')}}selected{{/if}} title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+            <option value="adamant" {{#if (eq system.metal 'adamant')}}selected{{/if}} title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+            <option value="coldIron" {{#if (eq system.metal 'coldIron')}}selected{{/if}} title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+            <option value="silver" {{#if (eq system.metal 'silver')}}selected{{/if}} title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+            <option value="mythral" {{#if (eq system.metal 'mythral')}}selected{{/if}} title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+            <option value="orichalcum" {{#if (eq system.metal 'orichalcum')}}selected{{/if}} title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
           </select>
         </div>
         <div class='slots-field'>
