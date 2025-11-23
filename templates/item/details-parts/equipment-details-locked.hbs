@@ -171,11 +171,13 @@
     <div class='locked-section'>
       <h3 class='section-header'>Details</h3>
       <div class='locked-stats-grid'>
-        {{#unless (eq system.metal 'none')}}
-          <div class='locked-stat'>
-            <span class='stat-label'>Metal:</span>
-            <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
-          </div>
+        {{#unless (eq system.equipmentType 'relic')}}
+          {{#unless (eq system.metal 'none')}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Metal:</span>
+              <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
+            </div>
+          {{/unless}}
         {{/unless}}
         <div class='locked-stat'>
           <span class='stat-label'>Slots:</span>

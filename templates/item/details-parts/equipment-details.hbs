@@ -485,12 +485,13 @@
         {{! Lore }}
         <div class='form-group'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}</label>
-          <textarea
+          <input
+            type='text'
             name='system.lore'
-            rows='3'
+            value='{{system.lore}}'
             data-dtype='String'
             placeholder='Enter the relic lore and history...'
-          >{{system.lore}}</textarea>
+          />
         </div>
 
         {{! Value (Cost) }}
@@ -569,82 +570,114 @@
       </div>
 
       {{! Metal, Slots, and Quantity Row }}
-      <div class='form-group'>
-        <label class='resource-label'>Equipment Details</label>
-        <div class='grid grid-3col gap-8'>
-          <div class='metal-field'>
-            <label class='resource-label'>Metal</label>
-            <select name='system.metal' data-dtype='String'>
-              {{#select system.metal}}
-                <option value='none' title='No special material'>None</option>
-                <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-                <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-                <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-                <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-                <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-                <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
-              {{/select}}
-            </select>
+      {{#unless (eq system.equipmentType 'relic')}}
+        <div class='form-group'>
+          <label class='resource-label'>Equipment Details</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='metal-field'>
+              <label class='resource-label'>Metal</label>
+              <select name='system.metal' data-dtype='String'>
+                {{#select system.metal}}
+                  <option value='none' title='No special material'>None</option>
+                  <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+                  <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+                  <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+                  <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+                  <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+                  <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+                {{/select}}
+              </select>
+            </div>
+            <div class='slots-field'>
+              <label class='resource-label'>Base Slots</label>
+              <input
+                type='number'
+                name='system.baseSlots'
+                value='{{system.baseSlots}}'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='quantity-field'>
+              <label class='resource-label'>Quantity</label>
+              <input
+                type='number'
+                name='system.quantity'
+                value='{{system.quantity}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
           </div>
-          <div class='slots-field'>
-            <label class='resource-label'>Base Slots</label>
-            <input
-              type='number'
-              name='system.baseSlots'
-              value='{{system.baseSlots}}'
-              data-dtype='Number'
-            />
-          </div>
-          <div class='quantity-field'>
-            <label class='resource-label'>Quantity</label>
-            <input
-              type='number'
-              name='system.quantity'
-              value='{{system.quantity}}'
-              min='0'
-              data-dtype='Number'
-            />
-          </div>
+          <div class='metal-effect-text'>{{system.metalEffect}}</div>
         </div>
-        <div class='metal-effect-text'>{{system.metalEffect}}</div>
-      </div>
+      {{/unless}}
 
-      {{! Cost Section (3 Columns) }}
-      <div class='form-group'>
-        <label class='resource-label'>Base Cost <small>(before metal multiplier)</small></label>
-        <div class='grid grid-3col gap-8'>
-          <div class='cost-field'>
-            <label class='resource-label'>Gold</label>
-            <input
-              type='number'
-              name='system.baseCost.gold'
-              value='{{system.baseCost.gold}}'
-              min='0'
-              data-dtype='Number'
-            />
-          </div>
-          <div class='cost-field'>
-            <label class='resource-label'>Silver</label>
-            <input
-              type='number'
-              name='system.baseCost.silver'
-              value='{{system.baseCost.silver}}'
-              min='0'
-              data-dtype='Number'
-            />
-          </div>
-          <div class='cost-field'>
-            <label class='resource-label'>Copper</label>
-            <input
-              type='number'
-              name='system.baseCost.copper'
-              value='{{system.baseCost.copper}}'
-              min='0'
-              data-dtype='Number'
-            />
+      {{! Slots and Quantity for Relics (no metal) }}
+      {{#if (eq system.equipmentType 'relic')}}
+        <div class='form-group'>
+          <label class='resource-label'>Equipment Details</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='slots-field'>
+              <label class='resource-label'>Base Slots</label>
+              <input
+                type='number'
+                name='system.baseSlots'
+                value='{{system.baseSlots}}'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='quantity-field'>
+              <label class='resource-label'>Quantity</label>
+              <input
+                type='number'
+                name='system.quantity'
+                value='{{system.quantity}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
           </div>
         </div>
-      </div>
+      {{/if}}
+
+      {{! Cost Section (3 Columns) - not for relics, they have their own }}
+      {{#unless (eq system.equipmentType 'relic')}}
+        <div class='form-group'>
+          <label class='resource-label'>Base Cost <small>(before metal multiplier)</small></label>
+          <div class='grid grid-3col gap-8'>
+            <div class='cost-field'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+        </div>
+      {{/unless}}
 
       {{! Calculated Properties Display }}
       <div class='form-group'>
