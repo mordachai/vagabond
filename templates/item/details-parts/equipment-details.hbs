@@ -460,6 +460,7 @@
                   <option value='physical'>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
                   <option value='necrotic'>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
                   <option value='psychic'>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+                  <option value='healing'>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
                 {{/select}}
               </select>
             </div>
@@ -679,8 +680,8 @@
         </div>
       {{/if}}
 
-      {{! Cost Section (3 Columns) - not for relics, they have their own }}
-      {{#unless (eq system.equipmentType 'relic')}}
+      {{! Cost Section (3 Columns) - not for relics or alchemicals, they have their own }}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
         <div class='form-group'>
           <label class='resource-label'>Base Cost <small>(before metal multiplier)</small></label>
           <div class='grid grid-3col gap-8'>
@@ -718,8 +719,8 @@
         </div>
       {{/unless}}
 
-      {{! Calculated Properties Display - not needed for relics }}
-      {{#unless (eq system.equipmentType 'relic')}}
+      {{! Calculated Properties Display - not needed for relics or alchemicals }}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
         <div class='form-group'>
           <label class='resource-label'>Calculated Properties</label>
           <div class='calculated-properties'>
