@@ -692,10 +692,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           weapons.push(i);
         } else if (i.system.equipmentType === 'armor') {
           armor.push(i);
-        } else if (i.system.equipmentType === 'gear') {
+        } else {
+          // Gear, alchemicals, and relics all go in the gear array
           gear.push(i);
         }
-        // Note: alchemical and relic types not shown in these lists yet
       }
       // Legacy: Keep supporting old item types for backward compatibility
       else if (i.type === 'gear') {
