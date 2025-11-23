@@ -185,10 +185,12 @@
             <span class='stat-value'>{{system.quantity}}</span>
           </div>
         {{/if}}
-        <div class='locked-stat'>
-          <span class='stat-label'>Cost:</span>
-          <span class='stat-value'>{{system.costDisplay}}</span>
-        </div>
+        {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Cost:</span>
+            <span class='stat-value'>{{system.costDisplay}}</span>
+          </div>
+        {{/unless}}
       </div>
     </div>
   </div>
