@@ -28,6 +28,9 @@
     },
     "Item": {
       "equipment": {"htmlFields": ["description"]},
+      "weapon": {"htmlFields": ["description"]},
+      "armor": {"htmlFields": ["description"]},
+      "gear": {"htmlFields": ["description"]},
       "spell": {"htmlFields": ["description"]},
       "ancestry": {"htmlFields": ["description"]},
       "class": {"htmlFields": ["description"]},
