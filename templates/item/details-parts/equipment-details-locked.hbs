@@ -144,23 +144,25 @@
 
     {{! ===== UNIVERSAL FIELDS ===== }}
 
-    {{! Damage/Healing if present }}
-    {{#unless (eq system.damageType '-')}}
-      <div class='locked-section'>
-        <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}Healing{{else}}Damage{{/if}}</h3>
-        <div class='locked-stats-grid'>
-          <div class='locked-stat'>
-            <span class='stat-label'>Type:</span>
-            <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
-          </div>
-          {{#if system.damageAmount}}
+    {{! Damage/Healing if present - not for alchemicals or relics, they have their own }}
+    {{#unless (or (eq system.equipmentType 'alchemical') (eq system.equipmentType 'relic'))}}
+      {{#unless (eq system.damageType '-')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}Healing{{else}}Damage{{/if}}</h3>
+          <div class='locked-stats-grid'>
             <div class='locked-stat'>
-              <span class='stat-label'>Amount:</span>
-              <span class='stat-value'>{{system.damageAmount}}</span>
+              <span class='stat-label'>Type:</span>
+              <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
             </div>
-          {{/if}}
+            {{#if system.damageAmount}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Amount:</span>
+                <span class='stat-value'>{{system.damageAmount}}</span>
+              </div>
+            {{/if}}
+          </div>
         </div>
-      </div>
+      {{/unless}}
     {{/unless}}
 
     {{! Equipment Details }}
