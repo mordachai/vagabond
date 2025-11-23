@@ -568,9 +568,10 @@
 
       {{! ===== UNIVERSAL FIELDS (ALL EQUIPMENT) ===== }}
 
-      {{! Damage Type and Amount Row (Universal) }}
-      <div class='form-group'>
-        <label class='resource-label'>Damage / Healing</label>
+      {{! Damage Type and Amount Row (Universal) - not for alchemicals or relics, they have their own }}
+      {{#unless (or (eq system.equipmentType 'alchemical') (eq system.equipmentType 'relic'))}}
+        <div class='form-group'>
+          <label class='resource-label'>Damage / Healing</label>
         <div class='grid grid-2col gap-8'>
           <div class='damage-type-field'>
             <label class='resource-label'>Type</label>
@@ -601,7 +602,8 @@
             />
           </div>
         </div>
-      </div>
+        </div>
+      {{/unless}}
 
       {{! Metal, Slots, and Quantity Row }}
       {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
