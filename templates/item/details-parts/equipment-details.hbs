@@ -679,20 +679,22 @@
         </div>
       {{/unless}}
 
-      {{! Calculated Properties Display }}
-      <div class='form-group'>
-        <label class='resource-label'>Calculated Properties</label>
-        <div class='calculated-properties'>
-          <div class='calculated-item'>
-            <span class='calc-label'>Final Slots:</span>
-            <span class='calc-value'>{{system.slots}}</span>
-          </div>
-          <div class='calculated-item'>
-            <span class='calc-label'>Final Cost:</span>
-            <span class='calc-value'>{{system.costDisplay}}</span>
+      {{! Calculated Properties Display - not needed for relics }}
+      {{#unless (eq system.equipmentType 'relic')}}
+        <div class='form-group'>
+          <label class='resource-label'>Calculated Properties</label>
+          <div class='calculated-properties'>
+            <div class='calculated-item'>
+              <span class='calc-label'>Final Slots:</span>
+              <span class='calc-value'>{{system.slots}}</span>
+            </div>
+            <div class='calculated-item'>
+              <span class='calc-label'>Final Cost:</span>
+              <span class='calc-value'>{{system.costDisplay}}</span>
+            </div>
           </div>
         </div>
-      </div>
+      {{/unless}}
     </div>
   {{/if}}
 </section>
