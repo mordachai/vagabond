@@ -355,6 +355,33 @@
           "baseCost": {"label": "Value"}
         }
       },
+      "Alchemical": {
+        "FIELDS": {
+          "alchemicalType": {"label": "Type"},
+          "damageType": {"label": "Damage Type"},
+          "damageAmount": {"label": "Damage"},
+          "description": {"label": "Description"},
+          "baseCost": {"label": "Cost"}
+        },
+        "Types": {
+          "Acid": "Acid",
+          "Concoction": "Concoction",
+          "Explosive": "Explosive",
+          "Oil": "Oil",
+          "Poison": "Poison",
+          "Potion": "Potion",
+          "Torch": "Torch"
+        },
+        "TypeHints": {
+          "Acid": "Corrosive substances.",
+          "Concoction": "General substances.",
+          "Explosive": "Bombs and combustibles.",
+          "Oil": "Coats a Weapon, up to 5 ammo, a 5-foot square, or a Small to Large Being. Coating lasts one Shift, or until another oil is applied.",
+          "Poison": "Affect a Target that is subjected to it in indicated ways. A weapon coated with it remains coated until it hits with an Attack or up to a Shift (whichever comes first).",
+          "Potion": "Concoctions that cause magical effects when consumed.",
+          "Torch": "Provides Near Light for 1 hour."
+        }
+      },
       "Delete": "Delete Item"
     },
     "Effect": {

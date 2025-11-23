@@ -179,23 +179,12 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== ALCHEMICAL-SPECIFIC FIELDS =====
 
-    // Consumable status
-    schema.consumable = new fields.BooleanField({
-      required: true,
-      initial: false
-    });
-
-    // Number of uses
-    schema.uses = new fields.SchemaField({
-      value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 }),
-      max: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 })
-    });
-
-    // Duration (for effects)
-    schema.duration = new fields.StringField({
+    // Alchemical type
+    schema.alchemicalType = new fields.StringField({
       required: false,
       blank: true,
-      initial: ''
+      initial: 'concoction',
+      choices: ['acid', 'concoction', 'explosive', 'oil', 'poison', 'potion', 'torch']
     });
 
     // ===== RELIC-SPECIFIC FIELDS =====

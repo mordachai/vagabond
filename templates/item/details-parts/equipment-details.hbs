@@ -105,26 +105,22 @@
       {{! ===== ALCHEMICAL-SPECIFIC DISPLAY ===== }}
       {{#if (eq system.equipmentType 'alchemical')}}
         <div class='locked-section'>
-          <h3 class='section-header'>Alchemical Properties</h3>
+          <h3 class='section-header'>Alchemical</h3>
           <div class='locked-stats-grid'>
-            {{#if system.consumable}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Type:</span>
+              <span class='stat-value'>{{localize (concat "VAGABOND.Item.Alchemical.Types." (capitalize system.alchemicalType))}}</span>
+            </div>
+            {{#unless (eq system.damageType '-')}}
               <div class='locked-stat'>
-                <span class='stat-label'>Type:</span>
-                <span class='stat-value'>Consumable</span>
+                <span class='stat-label'>Damage:</span>
+                <span class='stat-value'>{{system.damageAmount}} {{localize (concat "VAGABOND.DamageTypes." (capitalize system.damageType))}}</span>
               </div>
-            {{/if}}
-            {{#if (gt system.uses.max 0)}}
-              <div class='locked-stat'>
-                <span class='stat-label'>Uses:</span>
-                <span class='stat-value'>{{system.uses.value}} / {{system.uses.max}}</span>
-              </div>
-            {{/if}}
-            {{#if system.duration}}
-              <div class='locked-stat'>
-                <span class='stat-label'>Duration:</span>
-                <span class='stat-value'>{{system.duration}}</span>
-              </div>
-            {{/if}}
+            {{/unless}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Cost:</span>
+              <span class='stat-value'>{{system.costDisplay}}</span>
+            </div>
           </div>
         </div>
       {{/if}}
@@ -430,50 +426,88 @@
 
       {{! ===== ALCHEMICAL-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'alchemical')}}
-        {{! Alchemical Properties Row }}
+        {{! Alchemical Type }}
         <div class='form-group'>
-          <label class='resource-label'>Alchemical Properties</label>
-          <div class='grid grid-3col gap-8'>
-            <div class='consumable-field'>
-              <label class='resource-label'>
-                <input
-                  type='checkbox'
-                  name='system.consumable'
-                  {{checked system.consumable}}
-                />
-                Consumable
-              </label>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.alchemicalType.label'}}</label>
+          <select name='system.alchemicalType' data-dtype='String'>
+            {{#select system.alchemicalType}}
+              <option value='acid' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Acid"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Acid'}}</option>
+              <option value='concoction' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Concoction"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Concoction'}}</option>
+              <option value='explosive' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Explosive"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Explosive'}}</option>
+              <option value='oil' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Oil"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Oil'}}</option>
+              <option value='poison' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Poison"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Poison'}}</option>
+              <option value='potion' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Potion"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Potion'}}</option>
+              <option value='torch' title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Torch"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Torch'}}</option>
+            {{/select}}
+          </select>
+        </div>
+
+        {{! Damage Type and Amount }}
+        <div class='form-group'>
+          <label class='resource-label'>Damage</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='damage-type-field'>
+              <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageType.label'}}</label>
+              <select name='system.damageType' data-dtype='String'>
+                {{#select system.damageType}}
+                  <option value='-'>{{localize 'VAGABOND.DamageTypes.None'}}</option>
+                  <option value='acid'>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+                  <option value='fire'>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+                  <option value='shock'>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+                  <option value='poison'>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+                  <option value='cold'>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+                  <option value='blunt'>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+                  <option value='physical'>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+                  <option value='necrotic'>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+                  <option value='psychic'>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+                {{/select}}
+              </select>
             </div>
-            <div class='uses-field'>
-              <label class='resource-label'>Uses</label>
-              <div class='flexrow gap-4'>
-                <input
-                  type='number'
-                  name='system.uses.value'
-                  value='{{system.uses.value}}'
-                  min='0'
-                  data-dtype='Number'
-                  style='flex: 1'
-                />
-                <span>/</span>
-                <input
-                  type='number'
-                  name='system.uses.max'
-                  value='{{system.uses.max}}'
-                  min='0'
-                  data-dtype='Number'
-                  style='flex: 1'
-                />
-              </div>
-            </div>
-            <div class='duration-field'>
-              <label class='resource-label'>Duration</label>
+            <div class='damage-amount-field'>
+              <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageAmount.label'}}</label>
               <input
                 type='text'
-                name='system.duration'
-                value='{{system.duration}}'
+                name='system.damageAmount'
+                value='{{system.damageAmount}}'
                 data-dtype='String'
-                placeholder='e.g., 1 hour'
+                placeholder='e.g., 2d6'
+              />
+            </div>
+          </div>
+        </div>
+
+        {{! Cost }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.baseCost.label'}}</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='cost-field'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                min='0'
+                data-dtype='Number'
               />
             </div>
           </div>
@@ -570,7 +604,7 @@
       </div>
 
       {{! Metal, Slots, and Quantity Row }}
-      {{#unless (eq system.equipmentType 'relic')}}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
         <div class='form-group'>
           <label class='resource-label'>Equipment Details</label>
           <div class='grid grid-3col gap-8'>

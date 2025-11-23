@@ -103,26 +103,22 @@
     {{! ===== ALCHEMICAL-SPECIFIC DISPLAY ===== }}
     {{#if (eq system.equipmentType 'alchemical')}}
       <div class='locked-section'>
-        <h3 class='section-header'>Alchemical Properties</h3>
+        <h3 class='section-header'>Alchemical</h3>
         <div class='locked-stats-grid'>
-          {{#if system.consumable}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Type:</span>
+            <span class='stat-value'>{{localize (concat "VAGABOND.Item.Alchemical.Types." (capitalize system.alchemicalType))}}</span>
+          </div>
+          {{#unless (eq system.damageType '-')}}
             <div class='locked-stat'>
-              <span class='stat-label'>Type:</span>
-              <span class='stat-value'>Consumable</span>
+              <span class='stat-label'>Damage:</span>
+              <span class='stat-value'>{{system.damageAmount}} {{localize (concat "VAGABOND.DamageTypes." (capitalize system.damageType))}}</span>
             </div>
-          {{/if}}
-          {{#if (gt system.uses.max 0)}}
-            <div class='locked-stat'>
-              <span class='stat-label'>Uses:</span>
-              <span class='stat-value'>{{system.uses.value}} / {{system.uses.max}}</span>
-            </div>
-          {{/if}}
-          {{#if system.duration}}
-            <div class='locked-stat'>
-              <span class='stat-label'>Duration:</span>
-              <span class='stat-value'>{{system.duration}}</span>
-            </div>
-          {{/if}}
+          {{/unless}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Cost:</span>
+            <span class='stat-value'>{{system.costDisplay}}</span>
+          </div>
         </div>
       </div>
     {{/if}}
