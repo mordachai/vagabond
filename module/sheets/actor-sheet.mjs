@@ -25,6 +25,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
+      useItem: this._onUseItem,  // Use item (gear/relic/alchemical) to post chat card
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleWeaponGrip: this._onToggleWeaponGrip,
       toggleArmorEquipment: this._onToggleArmorEquipment,
@@ -2442,6 +2443,76 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       ui.notifications.warn(error.message);
       return;
     }
+  }
+
+  /**
+   * Handle using an item (gear, relic, or alchemical) to post to chat.
+   * Creates a chat card displaying the item's details.
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onUseItem(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+
+    if (!item) {
+      ui.notifications.error('Item not found!');
+      return;
+    }
+
+    // Build item details based on type
+    let detailsHtml = '';
+
+    if (item.system.equipmentType === 'alchemical') {
+      const typeLabel = game.i18n.localize(`VAGABOND.Item.Alchemical.Types.${item.system.alchemicalType.charAt(0).toUpperCase() + item.system.alchemicalType.slice(1)}`);
+      detailsHtml += `<div class="item-property"><strong>Type:</strong> ${typeLabel}</div>`;
+
+      if (item.system.damageType !== '-') {
+        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[item.system.damageType]);
+        detailsHtml += `<div class="item-property"><strong>${damageTypeLabel}:</strong> ${item.system.damageAmount}</div>`;
+      }
+    } else if (item.system.equipmentType === 'relic') {
+      if (item.system.lore) {
+        detailsHtml += `<div class="item-property"><strong>Lore:</strong> ${item.system.lore}</div>`;
+      }
+    }
+
+    // Add description if present
+    const description = await foundry.applications.ux.TextEditor.enrichHTML(
+      item.system.description || '',
+      {
+        secrets: this.actor.isOwner,
+        rollData: item.getRollData?.() || {},
+        relativeTo: item
+      }
+    );
+
+    if (description) {
+      detailsHtml += `<div class="item-description">${description}</div>`;
+    }
+
+    // Create chat message
+    const chatData = {
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `
+        <div class="vagabond-chat-card item-use">
+          <header class="card-header">
+            <img src="${item.img}" alt="${item.name}" />
+            <h3>${item.name}</h3>
+          </header>
+          <div class="card-content">
+            ${detailsHtml}
+          </div>
+        </div>
+      `
+    };
+
+    await ChatMessage.create(chatData);
   }
 
   /**
