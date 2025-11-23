@@ -25,6 +25,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
+      useItem: this._onUseItem,  // Use item (gear/relic/alchemical) to post chat card
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleWeaponGrip: this._onToggleWeaponGrip,
       toggleArmorEquipment: this._onToggleArmorEquipment,
@@ -692,10 +693,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           weapons.push(i);
         } else if (i.system.equipmentType === 'armor') {
           armor.push(i);
-        } else if (i.system.equipmentType === 'gear') {
+        } else {
+          // Gear, alchemicals, and relics all go in the gear array
           gear.push(i);
         }
-        // Note: alchemical and relic types not shown in these lists yet
       }
       // Legacy: Keep supporting old item types for backward compatibility
       else if (i.type === 'gear') {
@@ -1304,9 +1305,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     });
 
     menu.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-      const confirmed = await Dialog.confirm({
-        title: `Delete ${item.name}?`,
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: `Delete ${item.name}?` },
         content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+        rejectClose: false,
+        modal: true
       });
       if (confirmed) {
         await item.delete();
@@ -2360,18 +2363,61 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onRollWeapon(event, target) {
     event.preventDefault();
     const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
+    const item = this.actor.items.get(itemId);
+
+    if (!item) {
+      ui.notifications.error('Item not found!');
+      return;
+    }
 
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
-    const isWeapon = weapon && ((weapon.type === 'weapon') ||
-                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+    const isWeapon = (item.type === 'weapon') ||
+                     (item.type === 'equipment' && item.system.equipmentType === 'weapon');
 
-    if (!isWeapon) {
-      ui.notifications.error('Weapon not found!');
+    // Check if this is an alchemical with damage
+    const isAlchemical = item.type === 'equipment' &&
+                        item.system.equipmentType === 'alchemical' &&
+                        item.system.damageType !== '-';
+
+    if (!isWeapon && !isAlchemical) {
+      ui.notifications.error('Item cannot be rolled!');
       return;
     }
 
     try {
+      // Handle alchemicals (just roll damage, no attack)
+      if (isAlchemical) {
+        const roll = new Roll(item.system.damageAmount);
+        await roll.evaluate();
+
+        const damageType = item.system.damageType;
+        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]);
+
+        const chatData = {
+          user: game.user.id,
+          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+          content: `
+            <div class="vagabond-chat-card alchemical-use">
+              <header class="card-header">
+                <img src="${item.img}" alt="${item.name}" />
+                <h3>${item.name}</h3>
+              </header>
+              <div class="card-content">
+                <div class="damage-roll">
+                  <strong>${damageTypeLabel}:</strong> ${roll.total}
+                </div>
+                <div class="roll-formula">${roll.formula}</div>
+              </div>
+            </div>
+          `,
+          rolls: [roll]
+        };
+
+        await ChatMessage.create(chatData);
+        return roll;
+      }
+
+      // Handle weapons (normal attack + damage flow)
       // Import damage helper
       const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
@@ -2379,24 +2425,94 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const favorHinder = this.actor.system.favorHinder || 'none';
 
       // Roll attack using weapon's method
-      const attackResult = await weapon.rollAttack(this.actor, favorHinder);
+      const attackResult = await item.rollAttack(this.actor, favorHinder);
 
       // Determine if damage should be auto-rolled
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         // Get the stat used for the attack (for crit bonus damage)
         const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
+        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
       // Send attack to chat using VagabondChatCard
-      await VagabondChatCard.weaponAttack(this.actor, weapon, attackResult, damageRoll);
+      await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll);
 
       return attackResult.roll;
     } catch (error) {
       ui.notifications.warn(error.message);
       return;
     }
+  }
+
+  /**
+   * Handle using an item (gear, relic, or alchemical) to post to chat.
+   * Creates a chat card displaying the item's details.
+   *
+   * @this VagabondActorSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @protected
+   */
+  static async _onUseItem(event, target) {
+    event.preventDefault();
+    const itemId = target.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+
+    if (!item) {
+      ui.notifications.error('Item not found!');
+      return;
+    }
+
+    // Build item details based on type
+    let detailsHtml = '';
+
+    if (item.system.equipmentType === 'alchemical') {
+      const typeLabel = game.i18n.localize(`VAGABOND.Item.Alchemical.Types.${item.system.alchemicalType.charAt(0).toUpperCase() + item.system.alchemicalType.slice(1)}`);
+      detailsHtml += `<div class="item-property"><strong>Type:</strong> ${typeLabel}</div>`;
+
+      if (item.system.damageType !== '-') {
+        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[item.system.damageType]);
+        detailsHtml += `<div class="item-property"><strong>${damageTypeLabel}:</strong> ${item.system.damageAmount}</div>`;
+      }
+    } else if (item.system.equipmentType === 'relic') {
+      if (item.system.lore) {
+        detailsHtml += `<div class="item-property"><strong>Lore:</strong> ${item.system.lore}</div>`;
+      }
+    }
+
+    // Add description if present
+    const description = await foundry.applications.ux.TextEditor.enrichHTML(
+      item.system.description || '',
+      {
+        secrets: this.actor.isOwner,
+        rollData: item.getRollData?.() || {},
+        relativeTo: item
+      }
+    );
+
+    if (description) {
+      detailsHtml += `<div class="item-description">${description}</div>`;
+    }
+
+    // Create chat message
+    const chatData = {
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `
+        <div class="vagabond-chat-card item-use">
+          <header class="card-header">
+            <img src="${item.img}" alt="${item.name}" />
+            <h3>${item.name}</h3>
+          </header>
+          <div class="card-content">
+            ${detailsHtml}
+          </div>
+        </div>
+      `
+    };
+
+    await ChatMessage.create(chatData);
   }
 
   /**
@@ -3203,11 +3319,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const item = actor.items.get(itemId);
     if (!item) return;
 
-    const confirmed = await Dialog.confirm({
-      title: `Delete ${item.name}?`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Delete ${item.name}?` },
       content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-      yes: () => true,
-      no: () => false
+      rejectClose: false,
+      modal: true
     });
 
     if (confirmed) {

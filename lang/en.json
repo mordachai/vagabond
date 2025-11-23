@@ -71,7 +71,9 @@
       "Physical": "Physical",
       "Necrotic": "Necrotic",
       "Psychic": "Psychic",
-      "Healing": "Healing"
+      "Healing": "Healing",
+      "Recover": "Recover",
+      "Recharge": "Recharge"
     },
     "StatusConditions": {
       "Berserk": "Berserk",

@@ -95,15 +95,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         // Equipment template now handles both locked and unlocked states internally
         options.parts.push('equipmentDetails', 'effects');
         break;
-      case 'gear':
-        options.parts.push('gearDetails', 'effects');
-        break;
-      case 'weapon':
-        options.parts.push('weaponDetails', 'effects');
-        break;
-      case 'armor':
-        options.parts.push('armorDetails', 'effects');
-        break;
       case 'spell':
         options.parts.push('spellDetails', 'effects');
         break;
@@ -149,53 +140,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'equipmentDetails':
-      case 'equipmentDetailsLocked':
         // Equipment gets enriched description like the details tab
-        context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
-        break;
-
-      case 'gearDetails':
-        // Gear gets enriched description like the details tab
-        context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
-        break;
-
-      case 'weaponDetails':
-        // Weapon gets enriched description like the details tab
-        context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
-        break;
-
-      case 'armorDetails':
-        // Armor gets enriched description like the details tab
         context.tab = context.tabs[partId];
         context.enriched = {
           description: await foundry.applications.ux.TextEditor.enrichHTML(
@@ -307,9 +252,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for spell, ancestry, class, perk, equipment, gear, weapon, and armor is details, others default to description
+    // Default tab for spell, ancestry, class, perk, and equipment is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment' || this.document.type === 'gear' || this.document.type === 'weapon' || this.document.type === 'armor') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -336,10 +281,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'classDetails':
         case 'perkDetails':
         case 'equipmentDetails':
-        case 'equipmentDetailsLocked':
-        case 'gearDetails':
-        case 'weaponDetails':
-        case 'armorDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;
@@ -397,7 +338,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     }
 
     // Add listener for weapon grip changes to enable/disable two-hands damage input
-    if (this.document.type === 'weapon') {
+    if (this.document.type === 'equipment' && this.document.system.equipmentType === 'weapon') {
       const gripSelect = this.element.querySelector('select[name="system.grip"]');
       const twoHandsInput = this.element.querySelector('.damage-two-hands');
 
