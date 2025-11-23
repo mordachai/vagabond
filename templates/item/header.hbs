@@ -100,9 +100,9 @@
           <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.range.label'}}</label>
           <select name='system.range' data-dtype='String'>
             {{#select system.range}}
-              <option value='close'>Close</option>
-              <option value='near'>Near</option>
-              <option value='far'>Far</option>
+              <option value="close" {{#if (eq system.range 'close')}}selected{{/if}}>Close</option>
+              <option value="near" {{#if (eq system.range 'near')}}selected{{/if}}>Near</option>
+              <option value="far" {{#if (eq system.range 'far')}}selected{{/if}}>Far</option>
             {{/select}}
           </select>
         </div>
@@ -136,12 +136,12 @@
           <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.metal.label'}}</label>
           <select name='system.metal' data-dtype='String'>
             {{#select system.metal}}
-              <option value='common' title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-              <option value='adamant' title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-              <option value='coldIron' title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-              <option value='silver' title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-              <option value='mythral' title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-              <option value='orichalcum' title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+              <option value="common" {{#if (eq system.metal 'common')}}selected{{/if}} title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+              <option value="adamant" {{#if (eq system.metal 'adamant')}}selected{{/if}} title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+              <option value="coldIron" {{#if (eq system.metal 'coldIron')}}selected{{/if}} title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+              <option value="silver" {{#if (eq system.metal 'silver')}}selected{{/if}} title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+              <option value="mythral" {{#if (eq system.metal 'mythral')}}selected{{/if}} title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+              <option value="orichalcum" {{#if (eq system.metal 'orichalcum')}}selected{{/if}} title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
             {{/select}}
           </select>
         </div>
