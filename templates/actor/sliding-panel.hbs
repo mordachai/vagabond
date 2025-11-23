@@ -349,22 +349,53 @@
             {{/if}}
           {{/each}}
 
-          {{! Equipped Gear }}
+          {{! Equipped Gear, Alchemicals, and Relics }}
           {{#each gear as |item|}}
             {{#if item.system.equipped}}
-              <div class='equipped-gear flexrow flex-group-center'>
-                <label
-                  class='resource-label rollable flexlarge align-left'
-                  data-action='useItem'
-                  data-item-id='{{item._id}}'
-                  title='{{item.system.description}}'
-                >{{item.name}}</label>
-                <span class='item-info'>
-                  {{#if item.system.quantity}}
-                    <span data-tooltip='Quantity'>×{{item.system.quantity}}</span>
-                  {{/if}}
-                </span>
-              </div>
+              {{#if (eq item.system.equipmentType 'alchemical')}}
+                {{! Alchemicals with damage are rollable like weapons }}
+                {{#unless (eq item.system.damageType '-')}}
+                  <div class='equipped-gear flexrow flex-group-center'>
+                    <label
+                      class='resource-label rollable flexlarge align-left'
+                      data-action='rollWeapon'
+                      data-item-id='{{item._id}}'
+                      title='{{item.system.description}}'
+                    >{{item.name}} ({{item.system.damageAmount}} {{localize (lookup @root.config.damageTypes item.system.damageType)}})</label>
+                    <span class='item-info'>
+                      {{#if item.system.quantity}}
+                        <span data-tooltip='Quantity'>×{{item.system.quantity}}</span>
+                      {{/if}}
+                    </span>
+                  </div>
+                {{else}}
+                  {{! Alchemicals without damage are not rollable }}
+                  <div class='equipped-gear flexrow flex-group-center'>
+                    <label
+                      class='resource-label flexlarge align-left'
+                      title='{{item.system.description}}'
+                    >{{item.name}}</label>
+                    <span class='item-info'>
+                      {{#if item.system.quantity}}
+                        <span data-tooltip='Quantity'>×{{item.system.quantity}}</span>
+                      {{/if}}
+                    </span>
+                  </div>
+                {{/unless}}
+              {{else}}
+                {{! Regular gear and relics }}
+                <div class='equipped-gear flexrow flex-group-center'>
+                  <label
+                    class='resource-label flexlarge align-left'
+                    title='{{item.system.description}}'
+                  >{{item.name}}</label>
+                  <span class='item-info'>
+                    {{#if item.system.quantity}}
+                      <span data-tooltip='Quantity'>×{{item.system.quantity}}</span>
+                    {{/if}}
+                  </span>
+                </div>
+              {{/if}}
             {{/if}}
           {{/each}}
 
