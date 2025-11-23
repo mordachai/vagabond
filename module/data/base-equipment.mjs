@@ -84,7 +84,9 @@ export default class VagabondEquipment extends VagabondItemBase {
         'physical': 'Physical',
         'necrotic': 'Necrotic',
         'psychic': 'Psychic',
-        'healing': 'Healing'
+        'healing': 'Healing',
+        'recover': 'Recover',
+        'recharge': 'Recharge'
       }
     });
 

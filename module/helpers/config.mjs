@@ -38,7 +38,9 @@ VAGABOND.damageTypes = {
   'physical': 'VAGABOND.DamageTypes.Physical',
   'necrotic': 'VAGABOND.DamageTypes.Necrotic',
   'psychic': 'VAGABOND.DamageTypes.Psychic',
-  'healing': 'VAGABOND.DamageTypes.Healing'
+  'healing': 'VAGABOND.DamageTypes.Healing',
+  'recover': 'VAGABOND.DamageTypes.Recover',
+  'recharge': 'VAGABOND.DamageTypes.Recharge'
 };
 
 /**
