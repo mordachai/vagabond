@@ -68,15 +68,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     equipmentDetailsLocked: {
       template: 'systems/vagabond/templates/item/details-parts/equipment-details-locked.hbs',
     },
-    gearDetails: {
-      template: 'systems/vagabond/templates/item/details-parts/gear-details.hbs',
-    },
-    weaponDetails: {
-      template: 'systems/vagabond/templates/item/details-parts/weapon-details.hbs',
-    },
-    armorDetails: {
-      template: 'systems/vagabond/templates/item/details-parts/armor-details.hbs',
-    },
     spellDetails: {
       template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
     },
