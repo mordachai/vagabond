@@ -221,7 +221,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
+      padding: 0;
       background: rgba(0, 0, 0, 0.05);
       cursor: pointer;
       transition: background 0.2s ease;
@@ -238,12 +238,14 @@
     }
 
     .feature-description.accordion-content {
-      padding: 12px;
+      padding: 2px;
       border-top: 1px solid $c-faint;
       display: block;
       max-height: 500px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
+      font-family: $font-primary;
+      font-size: 12px;
     }
 
     // Collapsed state
@@ -279,7 +281,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
+      padding: 0;
       background: rgba(0, 0, 0, 0.05);
       cursor: pointer;
       transition: background 0.2s ease;
@@ -296,12 +298,13 @@
     }
 
     .perk-content.accordion-content {
-      padding: 12px;
+      padding: 2px;
       border-top: 1px solid $c-faint;
       display: block;
       max-height: 500px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
+      font-family: $font-primary;
 
       .perk-prerequisites {
         font-size: 12px;
@@ -311,7 +314,7 @@
       }
 
       .perk-description {
-        font-size: 13px;
+        font-size: 12px;
       }
     }
 
