@@ -179,41 +179,18 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== ALCHEMICAL-SPECIFIC FIELDS =====
 
-    // Consumable status
-    schema.consumable = new fields.BooleanField({
-      required: true,
-      initial: false
-    });
-
-    // Number of uses
-    schema.uses = new fields.SchemaField({
-      value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 }),
-      max: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 })
-    });
-
-    // Duration (for effects)
-    schema.duration = new fields.StringField({
+    // Alchemical type
+    schema.alchemicalType = new fields.StringField({
       required: false,
       blank: true,
-      initial: ''
+      initial: 'concoction',
+      choices: ['acid', 'concoction', 'explosive', 'oil', 'poison', 'potion', 'torch']
     });
 
     // ===== RELIC-SPECIFIC FIELDS =====
 
-    // Attunement required
-    schema.requiresAttunement = new fields.BooleanField({
-      required: true,
-      initial: false
-    });
-
-    // Charges
-    schema.charges = new fields.SchemaField({
-      value: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
-      max: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
-    });
-
-    // Magical effects description
-    schema.magicalEffects = new fields.StringField({
+    // Lore - historical/mystical background
+    schema.lore = new fields.StringField({
       required: false,
       blank: true,
       initial: ''
@@ -223,12 +200,20 @@ export default class VagabondEquipment extends VagabondItemBase {
   }
 
   prepareDerivedData() {
-    // Get metal properties
-    const metalData = this._getMetalData();
-    this.metalMultiplier = metalData.multiplier;
-    this.metalEffect = metalData.effect;
+    // Relics don't use metal - skip metal calculations
+    const isRelic = this.equipmentType === 'relic';
 
-    // Calculate final cost with metal multiplier
+    // Get metal properties (skip for relics)
+    if (!isRelic) {
+      const metalData = this._getMetalData();
+      this.metalMultiplier = metalData.multiplier;
+      this.metalEffect = metalData.effect;
+    } else {
+      this.metalMultiplier = 1;
+      this.metalEffect = '-';
+    }
+
+    // Calculate final cost (with metal multiplier for non-relics)
     this.cost = {
       gold: this.baseCost.gold * this.metalMultiplier,
       silver: this.baseCost.silver * this.metalMultiplier,
@@ -242,12 +227,14 @@ export default class VagabondEquipment extends VagabondItemBase {
     if (this.cost.copper > 0) costs.push(`${this.cost.copper}c`);
     this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
 
-    // Calculate final slots with metal modifier
+    // Calculate final slots (with metal modifier for non-relics)
     let finalSlots = this.baseSlots;
-    if (this.metal === 'adamant') {
-      finalSlots += 1; // Occupies +1 Slot
-    } else if (this.metal === 'mythral') {
-      finalSlots = Math.max(1, finalSlots - 1); // Occupies 1 fewer Slot (min 1)
+    if (!isRelic) {
+      if (this.metal === 'adamant') {
+        finalSlots += 1; // Occupies +1 Slot
+      } else if (this.metal === 'mythral') {
+        finalSlots = Math.max(1, finalSlots - 1); // Occupies 1 fewer Slot (min 1)
+      }
     }
     this.slots = finalSlots;
 
