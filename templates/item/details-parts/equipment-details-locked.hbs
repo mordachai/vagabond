@@ -130,27 +130,19 @@
     {{! ===== RELIC-SPECIFIC DISPLAY ===== }}
     {{#if (eq system.equipmentType 'relic')}}
       <div class='locked-section'>
-        <h3 class='section-header'>Relic Properties</h3>
-        <div class='locked-stats-grid'>
-          {{#if system.requiresAttunement}}
-            <div class='locked-stat'>
-              <span class='stat-label'>Attunement:</span>
-              <span class='stat-value'>Required</span>
-            </div>
-          {{/if}}
-          {{#if (gt system.charges.max 0)}}
-            <div class='locked-stat'>
-              <span class='stat-label'>Charges:</span>
-              <span class='stat-value'>{{system.charges.value}} / {{system.charges.max}}</span>
-            </div>
-          {{/if}}
-        </div>
-        {{#if system.magicalEffects}}
+        <h3 class='section-header'>Relic</h3>
+        {{#if system.lore}}
           <div class='locked-text-block'>
-            <span class='stat-label'>Magical Effects:</span>
-            <p>{{system.magicalEffects}}</p>
+            <span class='stat-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}:</span>
+            <p>{{system.lore}}</p>
           </div>
         {{/if}}
+        <div class='locked-stats-grid'>
+          <div class='locked-stat'>
+            <span class='stat-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}:</span>
+            <span class='stat-value'>{{system.costDisplay}}</span>
+          </div>
+        </div>
       </div>
     {{/if}}
 

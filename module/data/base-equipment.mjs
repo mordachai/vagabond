@@ -200,20 +200,8 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== RELIC-SPECIFIC FIELDS =====
 
-    // Attunement required
-    schema.requiresAttunement = new fields.BooleanField({
-      required: true,
-      initial: false
-    });
-
-    // Charges
-    schema.charges = new fields.SchemaField({
-      value: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
-      max: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
-    });
-
-    // Magical effects description
-    schema.magicalEffects = new fields.StringField({
+    // Lore - historical/mystical background
+    schema.lore = new fields.StringField({
       required: false,
       blank: true,
       initial: ''

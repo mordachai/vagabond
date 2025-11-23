@@ -132,27 +132,19 @@
       {{! ===== RELIC-SPECIFIC DISPLAY ===== }}
       {{#if (eq system.equipmentType 'relic')}}
         <div class='locked-section'>
-          <h3 class='section-header'>Relic Properties</h3>
-          <div class='locked-stats-grid'>
-            {{#if system.requiresAttunement}}
-              <div class='locked-stat'>
-                <span class='stat-label'>Attunement:</span>
-                <span class='stat-value'>Required</span>
-              </div>
-            {{/if}}
-            {{#if (gt system.charges.max 0)}}
-              <div class='locked-stat'>
-                <span class='stat-label'>Charges:</span>
-                <span class='stat-value'>{{system.charges.value}} / {{system.charges.max}}</span>
-              </div>
-            {{/if}}
-          </div>
-          {{#if system.magicalEffects}}
+          <h3 class='section-header'>Relic</h3>
+          {{#if system.lore}}
             <div class='locked-text-block'>
-              <span class='stat-label'>Magical Effects:</span>
-              <p>{{system.magicalEffects}}</p>
+              <span class='stat-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}:</span>
+              <p>{{system.lore}}</p>
             </div>
           {{/if}}
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}:</span>
+              <span class='stat-value'>{{system.costDisplay}}</span>
+            </div>
+          </div>
         </div>
       {{/if}}
 
@@ -490,54 +482,52 @@
 
       {{! ===== RELIC-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'relic')}}
-        {{! Relic Properties Row }}
+        {{! Lore }}
         <div class='form-group'>
-          <label class='resource-label'>Relic Properties</label>
-          <div class='grid grid-2col gap-8'>
-            <div class='attunement-field'>
-              <label class='resource-label'>
-                <input
-                  type='checkbox'
-                  name='system.requiresAttunement'
-                  {{checked system.requiresAttunement}}
-                />
-                Requires Attunement
-              </label>
-            </div>
-            <div class='charges-field'>
-              <label class='resource-label'>Charges</label>
-              <div class='flexrow gap-4'>
-                <input
-                  type='number'
-                  name='system.charges.value'
-                  value='{{system.charges.value}}'
-                  min='0'
-                  data-dtype='Number'
-                  style='flex: 1'
-                />
-                <span>/</span>
-                <input
-                  type='number'
-                  name='system.charges.max'
-                  value='{{system.charges.max}}'
-                  min='0'
-                  data-dtype='Number'
-                  style='flex: 1'
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {{! Magical Effects }}
-        <div class='form-group'>
-          <label class='resource-label'>Magical Effects</label>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}</label>
           <textarea
-            name='system.magicalEffects'
+            name='system.lore'
             rows='3'
             data-dtype='String'
-            placeholder='Describe the relic magical effects...'
-          >{{system.magicalEffects}}</textarea>
+            placeholder='Enter the relic lore and history...'
+          >{{system.lore}}</textarea>
+        </div>
+
+        {{! Value (Cost) }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='cost-field'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
         </div>
       {{/if}}
 

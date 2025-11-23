@@ -348,6 +348,13 @@
         "SpellNamePlaceholder": "Enter spell name...",
         "OtherPrerequisitePlaceholder": "Enter prerequisite..."
       },
+      "Relic": {
+        "FIELDS": {
+          "lore": {"label": "Lore"},
+          "description": {"label": "Description"},
+          "baseCost": {"label": "Value"}
+        }
+      },
       "Delete": "Delete Item"
     },
     "Effect": {
