@@ -127,6 +127,12 @@ Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
 });
 
+// Capitalize first letter of a string
+Handlebars.registerHelper('capitalize', function (str) {
+  if (!str || typeof str !== 'string') return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
+});
+
 // Check if an array contains a value
 Handlebars.registerHelper('contains', function (array, value) {
   if (!array || !Array.isArray(array)) return false;
