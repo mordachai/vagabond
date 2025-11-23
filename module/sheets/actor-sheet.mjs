@@ -1304,9 +1304,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     });
 
     menu.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-      const confirmed = await Dialog.confirm({
-        title: `Delete ${item.name}?`,
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: `Delete ${item.name}?` },
         content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+        rejectClose: false,
+        modal: true
       });
       if (confirmed) {
         await item.delete();
@@ -3246,11 +3248,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const item = actor.items.get(itemId);
     if (!item) return;
 
-    const confirmed = await Dialog.confirm({
-      title: `Delete ${item.name}?`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Delete ${item.name}?` },
       content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-      yes: () => true,
-      no: () => false
+      rejectClose: false,
+      modal: true
     });
 
     if (confirmed) {
