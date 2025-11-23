@@ -2360,18 +2360,61 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onRollWeapon(event, target) {
     event.preventDefault();
     const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
+    const item = this.actor.items.get(itemId);
+
+    if (!item) {
+      ui.notifications.error('Item not found!');
+      return;
+    }
 
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
-    const isWeapon = weapon && ((weapon.type === 'weapon') ||
-                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
+    const isWeapon = (item.type === 'weapon') ||
+                     (item.type === 'equipment' && item.system.equipmentType === 'weapon');
 
-    if (!isWeapon) {
-      ui.notifications.error('Weapon not found!');
+    // Check if this is an alchemical with damage
+    const isAlchemical = item.type === 'equipment' &&
+                        item.system.equipmentType === 'alchemical' &&
+                        item.system.damageType !== '-';
+
+    if (!isWeapon && !isAlchemical) {
+      ui.notifications.error('Item cannot be rolled!');
       return;
     }
 
     try {
+      // Handle alchemicals (just roll damage, no attack)
+      if (isAlchemical) {
+        const roll = new Roll(item.system.damageAmount);
+        await roll.evaluate();
+
+        const damageType = item.system.damageType;
+        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]);
+
+        const chatData = {
+          user: game.user.id,
+          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+          content: `
+            <div class="vagabond-chat-card alchemical-use">
+              <header class="card-header">
+                <img src="${item.img}" alt="${item.name}" />
+                <h3>${item.name}</h3>
+              </header>
+              <div class="card-content">
+                <div class="damage-roll">
+                  <strong>${damageTypeLabel}:</strong> ${roll.total}
+                </div>
+                <div class="roll-formula">${roll.formula}</div>
+              </div>
+            </div>
+          `,
+          rolls: [roll]
+        };
+
+        await ChatMessage.create(chatData);
+        return roll;
+      }
+
+      // Handle weapons (normal attack + damage flow)
       // Import damage helper
       const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
@@ -2379,18 +2422,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const favorHinder = this.actor.system.favorHinder || 'none';
 
       // Roll attack using weapon's method
-      const attackResult = await weapon.rollAttack(this.actor, favorHinder);
+      const attackResult = await item.rollAttack(this.actor, favorHinder);
 
       // Determine if damage should be auto-rolled
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         // Get the stat used for the attack (for crit bonus damage)
         const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(this.actor, attackResult.isCritical, statKey);
+        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
       // Send attack to chat using VagabondChatCard
-      await VagabondChatCard.weaponAttack(this.actor, weapon, attackResult, damageRoll);
+      await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll);
 
       return attackResult.roll;
     } catch (error) {
