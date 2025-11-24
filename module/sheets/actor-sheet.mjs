@@ -1249,6 +1249,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
+    event.preventDefault();
+    event.stopPropagation();
+
     const menu = document.createElement('div');
     menu.className = 'inventory-context-menu';
     menu.style.position = 'fixed'; // Use fixed instead of absolute for better positioning
@@ -1273,7 +1276,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       </div>
     `;
 
-    document.body.appendChild(menu);
+    this.element.appendChild(menu);
     this._currentContextMenu = menu;
 
     console.log('Context menu created and appended:', menu, 'at position:', event.clientX, event.clientY);

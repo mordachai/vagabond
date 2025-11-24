@@ -28,10 +28,13 @@
   overflow: hidden !important; // Prevent outer scrollbar
 }
 
-.vagabond .window-header {
+.vagabond .window-header,
+.vagabond .header-control {
   background: transparent !important;
   position: relative;
   z-index: 10 !important;
+  text-shadow: 1px 1px 4px #000;
+  font-size: 14px;
 }
 
 // Add background color to window-content instead

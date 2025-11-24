@@ -295,10 +295,13 @@
   overflow: hidden !important;
 }
 
-.vagabond .window-header {
+.vagabond .window-header,
+.vagabond .header-control {
   background: transparent !important;
   position: relative;
   z-index: 10 !important;
+  text-shadow: 1px 1px 4px #000;
+  font-size: 14px;
 }
 
 .vagabond .window-content {
@@ -1418,7 +1421,6 @@
 .vagabond .right-column {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   position: relative;
   z-index: 20 !important;
 }
@@ -1470,15 +1472,13 @@
 .vagabond .right-column .favorited-spell {
   display: flex;
   align-items: center;
-  padding: 4px;
-  margin-top: 4px;
   white-space: nowrap;
 }
 .vagabond .right-column .equipped-weapon .resource-label,
 .vagabond .right-column .equipped-gear .resource-label,
 .vagabond .right-column .equipped-armor .resource-label,
 .vagabond .right-column .favorited-spell .resource-label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   flex: 3;
@@ -3431,7 +3431,7 @@
   font-size: 14px;
   font-family: "Paradigm", serif;
   color: var(--vagabond-c-dark);
-  font-weight: bold;
+  font-weight: normal;
 }
 .vagabond .npc-ability-view {
   padding: 4px 0;
@@ -4117,3 +4117,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .vagabond-spell-cast strong {
   color: var(--vagabond-c-tan, #d4af37);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

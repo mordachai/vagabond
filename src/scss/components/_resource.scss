@@ -75,7 +75,6 @@
 .right-column {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   position: relative;
   z-index: 20 !important;
 
@@ -137,12 +136,10 @@
   .favorited-spell {
     display: flex;
     align-items: center;
-    padding: 4px;
-    margin-top: 4px;
     white-space: nowrap;
 
     .resource-label {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
       cursor: pointer;
       flex: 3; // Match skill-label flex to span available space
