@@ -84,8 +84,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/features.hbs',
       scrollable: [""],
     },
-    biography: {
-      template: 'systems/vagabond/templates/actor/biography.hbs',
+    spells: {
+      template: 'systems/vagabond/templates/actor/spells.hbs',
       scrollable: [""],
     },
     effects: {
@@ -312,14 +312,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     options.parts = ['tabs', 'slidingPanel'];
     // Don't show the other tabs if only limited view
     if (this.document.limited) {
-      options.parts.push('biography');
+      options.parts.push('spells');
       return;
     }
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'character':
-        // Order: Features | Biography | Effects + Sliding Panel (right)
-        options.parts.push('features', 'biography', 'effects');
+        // Order: Features | Spells | Effects + Sliding Panel (right)
+        options.parts.push('features', 'spells', 'effects');
         break;
     }
   }
@@ -408,21 +408,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           );
         }
         break;
-      case 'biography':
+      case 'spells':
         context.tab = context.tabs[partId];
-        // Enrich biography info for display
-        // Enrichment turns text like `[[/r 1d20]]` into buttons
-        context.enrichedBiography = await foundry.applications.ux.TextEditor.enrichHTML(
-          this.actor.system.biography,
-          {
-            // Whether to show secret blocks in the finished html
-            secrets: this.document.isOwner,
-            // Data to fill in for inline rolls
-            rollData: this.actor.getRollData(),
-            // Relative UUID resolution
-            relativeTo: this.actor,
-          }
-        );
         break;
       case 'effects':
         context.tab = context.tabs[partId];
@@ -629,9 +616,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         case 'tabs':
         case 'slidingPanel':
           return tabs;
-        case 'biography':
-          tab.id = 'biography';
-          tab.label += 'Biography';
+        case 'spells':
+          tab.id = 'spells';
+          tab.label += 'Spells';
           break;
         case 'features':
           tab.id = 'features';
