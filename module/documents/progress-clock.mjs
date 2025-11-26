@@ -10,12 +10,13 @@ export class ProgressClock {
    * @param {number} data.segments - Number of segments (4, 6, 8, 10, or 12)
    * @param {string} data.size - Size preset ("S", "M", "L") or custom pixel value
    * @param {string} data.defaultPosition - Corner position ("top-right", "top-left", etc.)
+   * @param {Object} data.ownership - Ownership configuration
    * @returns {Promise<JournalEntry>} The created clock journal
    */
   static async create(data = {}) {
     const defaultPosition = game.settings.get('vagabond', 'defaultClockPosition') || 'top-right';
 
-    const journal = await JournalEntry.create({
+    const journalData = {
       name: data.name || "New Clock",
       flags: {
         vagabond: {
@@ -30,7 +31,13 @@ export class ProgressClock {
           }
         }
       }
-    });
+    };
+
+    if (data.ownership) {
+      journalData.ownership = data.ownership;
+    }
+
+    const journal = await JournalEntry.create(journalData);
 
     return journal;
   }
@@ -47,14 +54,44 @@ export class ProgressClock {
 
   /**
    * Get clocks for a specific scene
-   * @param {string} sceneId - Scene ID to filter by
+   * @param {string} sceneId - Scene ID to filter by (defaults to current scene)
    * @returns {JournalEntry[]} Clocks that have been positioned on this scene
    */
   static getForScene(sceneId) {
+    if (!sceneId) sceneId = canvas.scene?.id;
+    if (!sceneId) return [];
+
     return this.getAll().filter(clock => {
-      const positions = clock.flags.vagabond.progressClock.positions;
-      return positions && positions[sceneId];
+      const data = clock.flags.vagabond.progressClock;
+      // Include all visible clocks - they'll get default positions if not yet positioned
+      if (!data.visible) return false;
+
+      // Check permissions
+      if (!clock.testUserPermission(game.user, 'LIMITED')) return false;
+
+      return true;
     });
+  }
+
+  /**
+   * Get the SVG path for a clock with specific segments and filled amount
+   * @param {number} segments - Number of segments (4, 6, 8, 10, or 12)
+   * @param {number} filled - Number of filled segments
+   * @returns {string} Path to SVG file
+   */
+  static getSVGPath(segments, filled) {
+    return `systems/vagabond/assets/ui/clocks/${segments}clock_${filled}.svg`;
+  }
+
+  /**
+   * Convert size preset to pixel value
+   * @param {string|number} size - Size preset ("S", "M", "L") or pixel value
+   * @returns {number} Size in pixels
+   */
+  static getClockSize(size) {
+    if (typeof size === 'number') return size;
+    const sizeMap = CONFIG.VAGABOND.clockSizes;
+    return sizeMap[size] || sizeMap.M;
   }
 
   /**

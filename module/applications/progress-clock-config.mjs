@@ -1,3 +1,5 @@
+import { ProgressClock } from '../documents/progress-clock.mjs';
+
 const { api } = foundry.applications;
 
 /**
@@ -44,37 +46,70 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
   };
 
   get title() {
+    if (!this.#clockJournal) {
+      return game.i18n.localize('VAGABOND.ProgressClock.Create');
+    }
     return `Configure: ${this.#clockJournal.name}`;
   }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const data = this.#clockJournal.flags.vagabond.progressClock;
 
-    context.clock = {
-      id: this.#clockJournal.id,
-      name: this.#clockJournal.name,
-      segments: data.segments,
-      size: data.size,
-      customSize: typeof data.size === 'number' ? data.size : '',
-      defaultPosition: data.defaultPosition,
-      visible: data.visible
-    };
+    // Handle creating new clock
+    if (!this.#clockJournal) {
+      const defaultPosition = game.settings.get('vagabond', 'defaultClockPosition') || 'top-right';
+      context.clock = {
+        id: null,
+        name: 'New Clock',
+        segments: 4,
+        size: 'M',
+        customSize: '',
+        defaultPosition: defaultPosition,
+        visible: true
+      };
+      context.isNew = true;
+    } else {
+      const data = this.#clockJournal.flags.vagabond.progressClock;
+
+      context.clock = {
+        id: this.#clockJournal.id,
+        name: this.#clockJournal.name,
+        segments: data.segments,
+        size: data.size,
+        customSize: typeof data.size === 'number' ? data.size : '',
+        defaultPosition: data.defaultPosition,
+        visible: data.visible
+      };
+      context.isNew = false;
+    }
 
     context.segmentOptions = [4, 6, 8, 10, 12];
     context.sizeOptions = CONFIG.VAGABOND.clockSizes;
     context.positionOptions = CONFIG.VAGABOND.clockPositions;
 
     // Ownership configuration
-    context.ownership = {
-      users: game.users.map(user => ({
-        user: user,
-        level: this.#clockJournal.ownership[user.id] ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
-        name: user.name,
-        isGM: user.isGM
-      })),
-      defaultLevel: this.#clockJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
-    };
+    if (!this.#clockJournal) {
+      // Default ownership for new clocks
+      context.ownership = {
+        users: game.users.map(user => ({
+          user: user,
+          level: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+          name: user.name,
+          isGM: user.isGM
+        })),
+        defaultLevel: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER
+      };
+    } else {
+      context.ownership = {
+        users: game.users.map(user => ({
+          user: user,
+          level: this.#clockJournal.ownership[user.id] ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+          name: user.name,
+          isGM: user.isGM
+        })),
+        defaultLevel: this.#clockJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
+      };
+    }
 
     return context;
   }
@@ -99,15 +134,28 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       }
     }
 
-    // Update the journal
-    await this.#clockJournal.update({
-      name: expandedData.name,
-      ownership: ownership,
-      "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
-      "flags.vagabond.progressClock.size": finalSize,
-      "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
-      "flags.vagabond.progressClock.visible": expandedData.visible === true || expandedData.visible === 'on'
-    });
+    // Check if creating new clock or updating existing
+    if (!this.#clockJournal) {
+      // Create new clock
+      await ProgressClock.create({
+        name: expandedData.name,
+        segments: parseInt(expandedData.segments),
+        size: finalSize,
+        defaultPosition: expandedData.defaultPosition,
+        visible: expandedData.visible === true || expandedData.visible === 'on',
+        ownership: ownership
+      });
+    } else {
+      // Update the journal
+      await this.#clockJournal.update({
+        name: expandedData.name,
+        ownership: ownership,
+        "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
+        "flags.vagabond.progressClock.size": finalSize,
+        "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
+        "flags.vagabond.progressClock.visible": expandedData.visible === true || expandedData.visible === 'on'
+      });
+    }
 
     return this.close();
   }

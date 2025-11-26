@@ -1,6 +1,7 @@
 // Import document classes.
 import { VagabondActor } from './documents/actor.mjs';
 import { VagabondItem } from './documents/item.mjs';
+import { ProgressClock } from './documents/progress-clock.mjs';
 // Import sheet classes.
 import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
@@ -9,6 +10,11 @@ import { VAGABOND } from './helpers/config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
+// Import canvas layer classes
+import { ProgressClockLayer } from './canvas/progress-clock-layer.mjs';
+// Import application classes
+import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
+import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -41,6 +47,22 @@ function registerGameSettings() {
     default: false,
     requiresReload: false,
   });
+
+  // Setting 3: Default clock position
+  game.settings.register('vagabond', 'defaultClockPosition', {
+    name: 'VAGABOND.Settings.defaultClockPosition.name',
+    hint: 'VAGABOND.Settings.defaultClockPosition.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      'top-right': 'VAGABOND.ProgressClock.Position.TopRight',
+      'top-left': 'VAGABOND.ProgressClock.Position.TopLeft',
+      'bottom-right': 'VAGABOND.ProgressClock.Position.BottomRight',
+      'bottom-left': 'VAGABOND.ProgressClock.Position.BottomLeft'
+    },
+    default: 'top-right',
+  });
 }
 
 /* -------------------------------------------- */
@@ -53,10 +75,16 @@ globalThis.vagabond = {
   documents: {
     VagabondActor,
     VagabondItem,
+    ProgressClock,
   },
   applications: {
     VagabondActorSheet,
     VagabondItemSheet,
+    ProgressClockConfig,
+    ProgressClockDeleteDialog,
+  },
+  canvas: {
+    ProgressClockLayer,
   },
   utils: {
     rollItemMacro,
@@ -102,6 +130,12 @@ Hooks.once('init', function () {
   // if the transfer property on the Active Effect is true.
   CONFIG.ActiveEffect.legacyTransferral = false;
 
+  // Register custom canvas layers
+  CONFIG.Canvas.layers.progressClocks = {
+    layerClass: ProgressClockLayer,
+    group: "interface"
+  };
+
   // Register sheet application classes
   collections.Actors.unregisterSheet('core', sheets.ActorSheet);
   collections.Actors.registerSheet('vagabond', VagabondActorSheet, {
@@ -146,6 +180,73 @@ Handlebars.registerHelper('contains', function (array, value) {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+});
+
+/* -------------------------------------------- */
+/*  Canvas Hooks - Progress Clocks              */
+/* -------------------------------------------- */
+
+/**
+ * Add scene controls for progress clocks
+ */
+Hooks.on('getSceneControlButtons', (controls) => {
+  // Add progress clocks control button
+  const clockControl = {
+    name: 'progressClocks',
+    title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Layer'),
+    icon: 'fas fa-clock',
+    layer: 'progressClocks',
+    tools: [
+      {
+        name: 'create',
+        title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
+        icon: 'fas fa-plus-circle',
+        onClick: () => {
+          new ProgressClockConfig(null).render(true);
+        },
+        button: true
+      },
+      {
+        name: 'delete',
+        title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.DeleteTool'),
+        icon: 'fas fa-trash',
+        onClick: () => {
+          new ProgressClockDeleteDialog().render(true);
+        },
+        button: true
+      }
+    ]
+  };
+
+  // In Foundry v13, controls is an object with control groups as properties
+  controls[clockControl.name] = clockControl;
+});
+
+/**
+ * Refresh clock layer when journals are updated
+ */
+Hooks.on('updateJournalEntry', (journal, changes, options, userId) => {
+  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
+    canvas.progressClocks?.refreshClock(journal.id);
+  }
+});
+
+/**
+ * Remove clock sprite when journal is deleted
+ */
+Hooks.on('deleteJournalEntry', (journal, options, userId) => {
+  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
+    canvas.progressClocks?.removeClock(journal.id);
+  }
+});
+
+/**
+ * Redraw clocks when a journal is created
+ */
+Hooks.on('createJournalEntry', (journal, options, userId) => {
+  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
+    canvas.progressClocks?.drawClocks();
+  }
 });
 
 /* -------------------------------------------- */
