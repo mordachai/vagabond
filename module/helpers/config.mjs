@@ -36,6 +36,25 @@ VAGABOND.sizes = {
 };
 
 /**
+ * Progress Clock configurations
+ * @type {Object}
+ */
+VAGABOND.clockSizes = {
+  'S': 100,
+  'M': 150,
+  'L': 200
+};
+
+VAGABOND.clockPositions = {
+  'top-right': 'VAGABOND.ProgressClock.Position.TopRight',
+  'top-left': 'VAGABOND.ProgressClock.Position.TopLeft',
+  'bottom-right': 'VAGABOND.ProgressClock.Position.BottomRight',
+  'bottom-left': 'VAGABOND.ProgressClock.Position.BottomLeft'
+};
+
+VAGABOND.clockSegments = [4, 6, 8, 10, 12];
+
+/**
  * Damage types for spells, weapons, and attacks
  * Universal list used across the entire system
  * @type {Object}
