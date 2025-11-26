@@ -23,6 +23,19 @@ VAGABOND.statAbbreviations = {
 };
 
 /**
+ * Size categories for actors
+ * @type {Object}
+ */
+VAGABOND.sizes = {
+  'small': 'VAGABOND.Sizes.small',
+  'medium': 'VAGABOND.Sizes.medium',
+  'large': 'VAGABOND.Sizes.large',
+  'huge': 'VAGABOND.Sizes.huge',
+  'giant': 'VAGABOND.Sizes.giant',
+  'colossal': 'VAGABOND.Sizes.colossal'
+};
+
+/**
  * Damage types for spells, weapons, and attacks
  * Universal list used across the entire system
  * @type {Object}

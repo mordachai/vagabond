@@ -18,7 +18,7 @@ export default class VagabondCharacter extends VagabondActorBase {
       xp: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       size: new fields.StringField({
         initial: null,
-        choices: ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan'],
+        choices: ['small', 'medium', 'large', 'huge', 'giant', 'colossal'],
         required: false,
         nullable: true
       }),
@@ -270,6 +270,7 @@ export default class VagabondCharacter extends VagabondActorBase {
 
   /**
    * Get ancestry data for display purposes
+   * Uses override values from attributes if set, otherwise uses ancestry values
    */
   _calculateAncestryData() {
     const ancestry = this.parent?.items?.find(item => item.type === 'ancestry');
@@ -277,12 +278,19 @@ export default class VagabondCharacter extends VagabondActorBase {
       this.ancestryData = {
         id: ancestry.id,
         name: ancestry.name,
-        size: ancestry.system.size,
-        beingType: ancestry.system.ancestryType,
+        size: this.attributes.size || ancestry.system.size,  // Use override if set
+        beingType: this.attributes.beingType || ancestry.system.ancestryType,  // Use override if set
         traits: ancestry.system.traits || []
       };
     } else {
-      this.ancestryData = null;
+      // No ancestry - use overrides or defaults
+      this.ancestryData = {
+        id: null,
+        name: null,
+        size: this.attributes.size || 'medium',
+        beingType: this.attributes.beingType || 'Humanlike',
+        traits: []
+      };
     }
   }
 

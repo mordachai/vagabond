@@ -112,11 +112,38 @@
     {{! Fourth Row: Being Type and Size }}
     <div class='size-type-row'>
       <span>
-        {{#if system.ancestryData}}
-          ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
-        {{else}}
-          (Unknown, Medium size)
-        {{/if}}
+        (
+        <select
+          name='system.attributes.beingType'
+          class='being-type-select'
+          data-dtype='String'
+          title='Override being type (leave blank to use ancestry default)'
+        >
+          <option value=''>{{#if system.ancestryData.name}}{{system.ancestryData.beingType}} (from ancestry){{else}}Humanlike (default){{/if}}</option>
+          <option value='Humanlike' {{#if (eq system.attributes.beingType 'Humanlike')}}selected{{/if}}>Humanlike</option>
+          <option value='Fae' {{#if (eq system.attributes.beingType 'Fae')}}selected{{/if}}>Fae</option>
+          <option value='Cryptid' {{#if (eq system.attributes.beingType 'Cryptid')}}selected{{/if}}>Cryptid</option>
+          <option value='Artificials' {{#if (eq system.attributes.beingType 'Artificials')}}selected{{/if}}>Artificials</option>
+          <option value='Beasts' {{#if (eq system.attributes.beingType 'Beasts')}}selected{{/if}}>Beasts</option>
+          <option value='Outers' {{#if (eq system.attributes.beingType 'Outers')}}selected{{/if}}>Outers</option>
+          <option value='Primordials' {{#if (eq system.attributes.beingType 'Primordials')}}selected{{/if}}>Primordials</option>
+          <option value='Undead' {{#if (eq system.attributes.beingType 'Undead')}}selected{{/if}}>Undead</option>
+        </select>,
+        <select
+          name='system.attributes.size'
+          class='size-select'
+          data-dtype='String'
+          title='Override size (leave blank to use ancestry default)'
+        >
+          <option value=''>{{#if system.ancestryData.name}}{{localize (lookup config.sizes system.ancestryData.size)}} (from ancestry){{else}}{{localize "VAGABOND.Sizes.medium"}} (default){{/if}}</option>
+          <option value='small' {{#if (eq system.attributes.size 'small')}}selected{{/if}}>{{localize "VAGABOND.Sizes.small"}}</option>
+          <option value='medium' {{#if (eq system.attributes.size 'medium')}}selected{{/if}}>{{localize "VAGABOND.Sizes.medium"}}</option>
+          <option value='large' {{#if (eq system.attributes.size 'large')}}selected{{/if}}>{{localize "VAGABOND.Sizes.large"}}</option>
+          <option value='huge' {{#if (eq system.attributes.size 'huge')}}selected{{/if}}>{{localize "VAGABOND.Sizes.huge"}}</option>
+          <option value='giant' {{#if (eq system.attributes.size 'giant')}}selected{{/if}}>{{localize "VAGABOND.Sizes.giant"}}</option>
+          <option value='colossal' {{#if (eq system.attributes.size 'colossal')}}selected{{/if}}>{{localize "VAGABOND.Sizes.colossal"}}</option>
+        </select>
+        size)
       </span>
     </div>
 

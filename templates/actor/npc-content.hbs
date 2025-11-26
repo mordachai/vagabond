@@ -40,12 +40,12 @@
           data-dtype='String'
           {{#if system.locked}}disabled{{/if}}
         >
-          <option value='tiny' {{#if (eq system.size 'tiny')}}selected{{/if}}>Tiny</option>
-          <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>Small</option>
-          <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>Medium</option>
-          <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>Large</option>
-          <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>Huge</option>
-          <option value='gargantuan' {{#if (eq system.size 'gargantuan')}}selected{{/if}}>Gargantuan</option>
+          <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>{{localize "VAGABOND.Sizes.small"}}</option>
+          <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>{{localize "VAGABOND.Sizes.medium"}}</option>
+          <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>{{localize "VAGABOND.Sizes.large"}}</option>
+          <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>{{localize "VAGABOND.Sizes.huge"}}</option>
+          <option value='giant' {{#if (eq system.size 'giant')}}selected{{/if}}>{{localize "VAGABOND.Sizes.giant"}}</option>
+          <option value='colossal' {{#if (eq system.size 'colossal')}}selected{{/if}}>{{localize "VAGABOND.Sizes.colossal"}}</option>
         </select>
 
         <select

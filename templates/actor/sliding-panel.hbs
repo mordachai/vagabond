@@ -61,9 +61,9 @@
             <span class='text-faint'>No Class</span>
           {{/if}}
           {{#if system.ancestryData}}
-            ({{system.ancestryData.beingType}}, {{system.ancestryData.size}} size)
+            ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} size)
           {{else}}
-            (Unknown, Medium size)
+            (Unknown, {{localize "VAGABOND.Sizes.medium"}} size)
           {{/if}}
         </span>
       </div>

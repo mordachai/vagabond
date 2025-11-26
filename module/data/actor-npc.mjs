@@ -20,7 +20,7 @@ export default class VagabondNPC extends VagabondActorBase {
     // NPC size
     schema.size = new fields.StringField({
       initial: 'medium',
-      choices: ['tiny', 'small', 'medium', 'large', 'huge', 'gargantuan']
+      choices: ['small', 'medium', 'large', 'huge', 'giant', 'colossal']
     });
 
     // NPC being type
@@ -236,8 +236,8 @@ export default class VagabondNPC extends VagabondActorBase {
     }
 
     // Calculate HP max based on HD and size
-    // If size is small/tiny: HD * 1, otherwise: HD * 4.5 (rounded down)
-    const isSmall = this.size === 'tiny' || this.size === 'small';
+    // If size is small: HD * 1, otherwise: HD * 4.5 (rounded down)
+    const isSmall = this.size === 'small';
     this.health.max = isSmall ? this.hd : Math.floor(this.hd * 4.5);
 
     // Format appearing for display in locked mode
