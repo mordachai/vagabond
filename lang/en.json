@@ -163,6 +163,10 @@
       "alwaysRollDamage": {
         "name": "Always Roll Damage",
         "hint": "When rolling damage with checks, roll damage even on misses (to show the intensity of the miss). Only applies when 'Roll Damage With Check' is enabled."
+      },
+      "defaultClockPosition": {
+        "name": "Default Clock Position",
+        "hint": "Default corner position for new progress clocks."
       }
     },
     "Actor": {
@@ -462,6 +466,50 @@
         "none": "Click to toggle Favor/Hinder. Currently no modifier applied.",
         "favor": "Favor: +1d6 to all d20 rolls. Click to switch to Hinder.",
         "hinder": "Hinder: -1d6 from all d20 rolls. Click to switch to None."
+      }
+    },
+    "ProgressClock": {
+      "Name": "Progress Clock",
+      "Segments": "Segments",
+      "SegmentsLabel": "segments",
+      "Size": "Size",
+      "SizeSmall": "Small",
+      "SizeMedium": "Medium",
+      "SizeLarge": "Large",
+      "SizeCustom": "Custom",
+      "CustomSizePlaceholder": "Pixels",
+      "DefaultPosition": "Default Position",
+      "Position": {
+        "TopRight": "Top Right",
+        "TopLeft": "Top Left",
+        "BottomRight": "Bottom Right",
+        "BottomLeft": "Bottom Left"
+      },
+      "PlayerPermissions": "Player Permissions",
+      "PermissionNoneDesc": "Hidden from players",
+      "PermissionObserverDesc": "Players can see only",
+      "PermissionOwnerDesc": "Players can interact",
+      "IndividualPermissions": "Individual Player Permissions (Optional)",
+      "Save": "Save Changes",
+      "Delete": "Delete",
+      "Create": "Create Clock",
+      "ConfigDialog": {
+        "Title": "Configure Progress Clock"
+      },
+      "DeleteDialog": {
+        "Title": "Delete Progress Clock",
+        "Instructions": "Select a clock to delete:",
+        "ConfirmTitle": "Confirm Deletion",
+        "ConfirmMessage": "Are you sure you want to delete '{name}'?",
+        "DeleteTooltip": "Delete this clock",
+        "NotFound": "Clock not found"
+      },
+      "NoClocksExist": "No progress clocks exist yet.",
+      "NoPermission": "You do not have permission to modify this clock.",
+      "SceneControls": {
+        "Layer": "Progress Clocks",
+        "Create": "Create Progress Clock",
+        "DeleteTool": "Delete Progress Clock"
       }
     }
   },

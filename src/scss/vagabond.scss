@@ -16,6 +16,9 @@
 /* Chat cards - imported at top level because they render outside sheets */
 @import 'components/chat-cards';
 
+/* Progress clocks - imported at top level because config dialog is outside sheets */
+@import 'components/progress-clock';
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

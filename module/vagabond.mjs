@@ -1,6 +1,7 @@
 // Import document classes.
 import { VagabondActor } from './documents/actor.mjs';
 import { VagabondItem } from './documents/item.mjs';
+import { ProgressClock } from './documents/progress-clock.mjs';
 // Import sheet classes.
 import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
@@ -9,6 +10,11 @@ import { VAGABOND } from './helpers/config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
+// Import UI classes
+import { ProgressClockOverlay } from './ui/progress-clock-overlay.mjs';
+// Import application classes
+import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
+import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -41,6 +47,22 @@ function registerGameSettings() {
     default: false,
     requiresReload: false,
   });
+
+  // Setting 3: Default clock position
+  game.settings.register('vagabond', 'defaultClockPosition', {
+    name: 'VAGABOND.Settings.defaultClockPosition.name',
+    hint: 'VAGABOND.Settings.defaultClockPosition.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      'top-right': 'VAGABOND.ProgressClock.Position.TopRight',
+      'top-left': 'VAGABOND.ProgressClock.Position.TopLeft',
+      'bottom-right': 'VAGABOND.ProgressClock.Position.BottomRight',
+      'bottom-left': 'VAGABOND.ProgressClock.Position.BottomLeft'
+    },
+    default: 'top-right',
+  });
 }
 
 /* -------------------------------------------- */
@@ -53,10 +75,16 @@ globalThis.vagabond = {
   documents: {
     VagabondActor,
     VagabondItem,
+    ProgressClock,
   },
   applications: {
     VagabondActorSheet,
     VagabondItemSheet,
+    ProgressClockConfig,
+    ProgressClockDeleteDialog,
+  },
+  ui: {
+    ProgressClockOverlay,
   },
   utils: {
     rollItemMacro,
@@ -146,6 +174,118 @@ Handlebars.registerHelper('contains', function (array, value) {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+});
+
+/* -------------------------------------------- */
+/*  UI Hooks - Progress Clocks Overlay          */
+/* -------------------------------------------- */
+
+// Global overlay instance
+let clockOverlay = null;
+
+/**
+ * Initialize the progress clocks HTML overlay when ready
+ */
+Hooks.once('ready', () => {
+  clockOverlay = new ProgressClockOverlay();
+  clockOverlay.initialize();
+
+  // Store in global for easy access
+  globalThis.vagabond.ui.clockOverlay = clockOverlay;
+});
+
+/**
+ * Draw progress clocks when canvas is ready
+ */
+Hooks.on('canvasReady', async () => {
+  // Ensure overlay is initialized
+  if (!clockOverlay) {
+    clockOverlay = new ProgressClockOverlay();
+    clockOverlay.initialize();
+    globalThis.vagabond.ui.clockOverlay = clockOverlay;
+  }
+
+  if (clockOverlay) {
+    await clockOverlay.draw();
+  }
+});
+
+/**
+ * Add scene controls for Vagabond tools
+ */
+Hooks.on('getSceneControlButtons', (controls) => {
+  // Ensure our base group exists
+  controls['vagabond'] ??= {
+    name: 'vagabond',
+    title: 'Vagabond Tools',
+    icon: 'fas fa-toolbox',
+    tools: {}
+  };
+
+  // Add create clock button
+  controls['vagabond'].tools['createClock'] ??= {
+    name: 'createClock',
+    title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
+    icon: 'fas fa-clock',
+    button: true,
+    visible: true,
+    onChange: async () => {
+      try {
+        const { ProgressClockConfig } = globalThis.vagabond.applications;
+        const dialog = new ProgressClockConfig(null);
+        await dialog.render(true);
+      } catch (error) {
+        ui.notifications.error("Failed to open clock config: " + error.message);
+      }
+    }
+  };
+});
+
+/**
+ * Refresh clock when journals are updated
+ */
+Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
+  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
+    if (clockOverlay) {
+      const clockChanges = changes.flags?.vagabond?.progressClock;
+
+      // If only progress (filled) changed, just refresh the image
+      if (clockChanges?.filled !== undefined && Object.keys(clockChanges).length === 1) {
+        clockOverlay.refreshClock(journal.id);
+      }
+      // If only positions changed (dragging), don't do anything - element already moved in DOM
+      else if (clockChanges?.positions !== undefined && Object.keys(clockChanges).length === 1 && !clockChanges.size && !clockChanges.segments && !clockChanges.defaultPosition && !clockChanges.faded) {
+        // Position was already updated by drag handler, no need to redraw
+        return;
+      }
+      // For other changes (name, size, segments, ownership, fade, etc.), redraw all clocks
+      else if (clockChanges || changes.name || changes.ownership) {
+        await clockOverlay.draw();
+      }
+    }
+  }
+});
+
+/**
+ * Remove clock when journal is deleted
+ */
+Hooks.on('deleteJournalEntry', (journal, options, userId) => {
+  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
+    if (clockOverlay) {
+      clockOverlay.removeClock(journal.id);
+    }
+  }
+});
+
+/**
+ * Redraw clocks when a journal is created
+ */
+Hooks.on('createJournalEntry', async (journal, options, userId) => {
+  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
+    if (clockOverlay) {
+      await clockOverlay.draw();
+    }
+  }
 });
 
 /* -------------------------------------------- */

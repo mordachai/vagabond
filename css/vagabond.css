@@ -1019,6 +1019,51 @@
   }
 }
 
+/* Progress clocks - imported at top level because config dialog is outside sheets */
+.progress-clock-config-form .form-row {
+  display: flex;
+  gap: 12px;
+}
+.progress-clock-config-form .form-row .form-field {
+  flex: 1;
+}
+.progress-clock-config-form .size-controls {
+  display: flex;
+  gap: 8px;
+}
+.progress-clock-config-form .size-controls select {
+  flex: 1;
+}
+.progress-clock-config-form .size-controls input {
+  width: 80px;
+}
+.progress-clock-config-form .individual-permissions {
+  margin-top: 8px;
+}
+.progress-clock-config-form .individual-permissions summary {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 8px;
+}
+.progress-clock-config-form .individual-permissions summary:hover {
+  color: var(--color-text-hyperlink);
+}
+.progress-clock-config-form .ownership-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding-left: 16px;
+}
+.progress-clock-config-form .ownership-row select {
+  flex: 1;
+}
+.progress-clock-config-form .ownership-label {
+  flex: 0 0 auto;
+  min-width: 100px;
+}
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   /* Character Name at Top - Full Width */
@@ -4117,5 +4162,3 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .vagabond-spell-cast strong {
   color: var(--vagabond-c-tan, #d4af37);
 }
-
-/*# sourceMappingURL=vagabond.css.map */

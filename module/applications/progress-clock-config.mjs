@@ -1,3 +1,5 @@
+import { ProgressClock } from '../documents/progress-clock.mjs';
+
 const { api } = foundry.applications;
 
 /**
@@ -17,7 +19,6 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
   static DEFAULT_OPTIONS = {
     id: "progress-clock-config-{id}",
     classes: ["vagabond", "progress-clock-config"],
-    tag: "form",
     window: {
       title: "VAGABOND.ProgressClock.ConfigDialog.Title",
       icon: "fas fa-cog",
@@ -27,13 +28,9 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       width: 500,
       height: "auto"
     },
-    actions: {
-      save: ProgressClockConfig._onSave
-    },
     form: {
       submitOnChange: false,
-      closeOnSubmit: true,
-      handler: ProgressClockConfig._onSubmit
+      closeOnSubmit: true
     }
   };
 
@@ -44,37 +41,100 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
   };
 
   get title() {
+    if (!this.#clockJournal) {
+      return game.i18n.localize('VAGABOND.ProgressClock.Create');
+    }
     return `Configure: ${this.#clockJournal.name}`;
+  }
+
+  /**
+   * Attach event listeners after rendering
+   * @override
+   */
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    // Attach form submit handler
+    const form = this.element.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', this._onFormSubmit.bind(this));
+    }
+
+    // Sync individual permissions when default permission changes
+    const defaultPermissionSelect = this.element.querySelector('select[name="ownership.default"]');
+    if (defaultPermissionSelect) {
+      defaultPermissionSelect.addEventListener('change', (event) => {
+        const newDefaultLevel = event.target.value;
+
+        // Update all individual player permission dropdowns to match
+        const individualSelects = this.element.querySelectorAll('select[name^="ownership.users."]');
+        individualSelects.forEach(select => {
+          select.value = newDefaultLevel;
+        });
+      });
+    }
   }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const data = this.#clockJournal.flags.vagabond.progressClock;
 
-    context.clock = {
-      id: this.#clockJournal.id,
-      name: this.#clockJournal.name,
-      segments: data.segments,
-      size: data.size,
-      customSize: typeof data.size === 'number' ? data.size : '',
-      defaultPosition: data.defaultPosition,
-      visible: data.visible
-    };
+    // Handle creating new clock
+    if (!this.#clockJournal) {
+      const defaultPosition = game.settings.get('vagabond', 'defaultClockPosition') || 'top-right';
+      context.clock = {
+        id: null,
+        name: 'New Clock',
+        segments: 4,
+        size: 'M',
+        customSize: '',
+        defaultPosition: defaultPosition
+      };
+      context.isNew = true;
+    } else {
+      const data = this.#clockJournal.flags.vagabond.progressClock;
+
+      context.clock = {
+        id: this.#clockJournal.id,
+        name: this.#clockJournal.name,
+        segments: data.segments,
+        size: data.size,
+        customSize: typeof data.size === 'number' ? data.size : '',
+        defaultPosition: data.defaultPosition
+      };
+      context.isNew = false;
+    }
 
     context.segmentOptions = [4, 6, 8, 10, 12];
     context.sizeOptions = CONFIG.VAGABOND.clockSizes;
     context.positionOptions = CONFIG.VAGABOND.clockPositions;
 
     // Ownership configuration
-    context.ownership = {
-      users: game.users.map(user => ({
-        user: user,
-        level: this.#clockJournal.ownership[user.id] ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
-        name: user.name,
-        isGM: user.isGM
-      })),
-      defaultLevel: this.#clockJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
-    };
+    if (!this.#clockJournal) {
+      // Default ownership for new clocks
+      const defaultLevel = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
+      context.ownership = {
+        users: game.users.map(user => ({
+          user: user,
+          level: defaultLevel, // Initialize to match default
+          name: user.name,
+          isGM: user.isGM
+        })),
+        defaultLevel: defaultLevel
+      };
+    } else {
+      // Existing clock - get saved default level
+      const defaultLevel = this.#clockJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE;
+      context.ownership = {
+        users: game.users.map(user => ({
+          user: user,
+          // Use individual override if exists, otherwise use default
+          level: this.#clockJournal.ownership[user.id] ?? defaultLevel,
+          name: user.name,
+          isGM: user.isGM
+        })),
+        defaultLevel: defaultLevel
+      };
+    }
 
     return context;
   }
@@ -82,42 +142,77 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
   /**
    * Handle form submission
    */
-  static async _onSubmit(event, form, formData) {
-    const expandedData = foundry.utils.expandObject(formData.object);
+  async _onFormSubmit(event) {
+    try {
+      // Prevent default form submission
+      event.preventDefault();
+      event.stopPropagation();
 
-    // Determine final size value
-    let finalSize = expandedData.size;
-    if (finalSize === 'custom' && expandedData.customSize) {
-      finalSize = parseInt(expandedData.customSize);
-    }
+      // Use native FormData and expand it manually
+      const formData = new FormData(event.target);
+      const formObject = {};
 
-    // Build ownership object
-    const ownership = { default: parseInt(expandedData.ownership.default) };
-    if (expandedData.ownership.users) {
-      for (const [userId, level] of Object.entries(expandedData.ownership.users)) {
-        ownership[userId] = parseInt(level);
+      for (const [key, value] of formData.entries()) {
+        formObject[key] = value;
       }
+
+      const expandedData = foundry.utils.expandObject(formObject);
+
+      // Determine final size value
+      let finalSize = expandedData.size;
+      if (finalSize === 'custom' && expandedData.customSize) {
+        finalSize = parseInt(expandedData.customSize);
+      }
+
+      // Build ownership object
+      const defaultLevel = parseInt(expandedData.ownership.default);
+      const ownership = { default: defaultLevel };
+
+      // Get all non-GM users
+      const players = game.users.filter(u => !u.isGM);
+
+      // Set all players to the default level first
+      for (const player of players) {
+        ownership[player.id] = defaultLevel;
+      }
+
+      // Then apply individual overrides from the details section
+      if (expandedData.ownership?.users) {
+        for (const [userId, level] of Object.entries(expandedData.ownership.users)) {
+          ownership[userId] = parseInt(level);
+        }
+      }
+
+      // Check if creating new clock or updating existing
+      if (!this.#clockJournal) {
+        // Create new clock
+        await ProgressClock.create({
+          name: expandedData.name,
+          segments: parseInt(expandedData.segments),
+          size: finalSize,
+          defaultPosition: expandedData.defaultPosition,
+          ownership: ownership
+        });
+
+        ui.notifications.info(`Progress Clock "${expandedData.name}" created!`);
+      } else {
+        // Update the journal
+        await this.#clockJournal.update({
+          name: expandedData.name,
+          ownership: ownership,
+          "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
+          "flags.vagabond.progressClock.size": finalSize,
+          "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition
+        });
+
+        ui.notifications.info(`Progress Clock "${expandedData.name}" updated!`);
+      }
+
+      // Close the dialog
+      await this.close();
+    } catch (error) {
+      console.error('Error in _onSubmitForm:', error);
+      ui.notifications.error(`Failed to save clock: ${error.message}`);
     }
-
-    // Update the journal
-    await this.#clockJournal.update({
-      name: expandedData.name,
-      ownership: ownership,
-      "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
-      "flags.vagabond.progressClock.size": finalSize,
-      "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
-      "flags.vagabond.progressClock.visible": expandedData.visible === true || expandedData.visible === 'on'
-    });
-
-    return this.close();
-  }
-
-  /**
-   * Handle save button click
-   */
-  static async _onSave(event, target) {
-    // Form submission is handled by the form handler
-    const form = this.element.querySelector('form');
-    form.requestSubmit();
   }
 }
