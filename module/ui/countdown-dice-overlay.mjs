@@ -148,9 +148,29 @@ export class CountdownDiceOverlay {
     // Get position
     let position;
     if (sceneId && flags.positions && flags.positions[sceneId]) {
+      // Use saved position for this scene
       position = flags.positions[sceneId];
     } else {
-      position = CountdownDice.defaultPositionCoords(flags.size, order);
+      // Check if dice is already on screen (during redraw)
+      const existingElement = this.container?.querySelector(`[data-dice-id="${dice.id}"]`);
+      if (existingElement) {
+        // Preserve current screen position during redraw
+        position = {
+          x: parseInt(existingElement.style.left) || 0,
+          y: parseInt(existingElement.style.top) || 0,
+          order: flags.positions?.[sceneId]?.order || order
+        };
+
+        // Save this position to avoid recalculating next time
+        if (sceneId) {
+          await dice.update({
+            [`flags.vagabond.countdownDice.positions.${sceneId}`]: position
+          });
+        }
+      } else {
+        // Brand new dice - calculate default position
+        position = CountdownDice.defaultPositionCoords(flags.size, order);
+      }
     }
 
     // Get size
@@ -518,5 +538,9 @@ export class CountdownDiceOverlay {
       }
       element.remove();
     }
+
+    // Force a complete redraw to ensure no phantom dice remain
+    // This ensures only dice with valid journal entries are displayed
+    this.draw();
   }
 }

@@ -94,7 +94,7 @@ export class CountdownDice {
    * @returns {string} Path to image
    */
   static getDiceImagePath(diceType) {
-    return `systems/vagabond/assets/ui/dice/${diceType}.png`;
+    return `systems/vagabond/assets/ui/dice/${diceType}.webp`;
   }
 
   /**
@@ -118,10 +118,17 @@ export class CountdownDice {
    * @returns {Object} {x, y} coordinates
    */
   static defaultPositionCoords(size, order = 0) {
-    const sidebarWidth = document.querySelector('.sidebar')?.offsetWidth || 0;
-    const sidebarExpanded = document.querySelector('.sidebar-content.expanded') ? 350 : 0;
+    const sidebarContent = document.getElementById('sidebar-content');
+    const isSidebarExpanded = sidebarContent?.classList.contains('expanded');
+    const MIN_DISTANCE_FROM_RIGHT = 350; // Minimum distance from right edge when sidebar is expanded
 
-    const x = window.innerWidth - sidebarWidth - sidebarExpanded - 120;
+    // Calculate x position accounting for sidebar state
+    let x = window.innerWidth - 120; // Base position from right edge
+
+    if (isSidebarExpanded) {
+      // If sidebar is expanded, ensure we stay clear of it
+      x = window.innerWidth - this.getSize(size) - MIN_DISTANCE_FROM_RIGHT;
+    }
 
     // Calculate vertical spacing: dice height + name height (~20px) + 10px margin
     const diceHeight = this.getSize(size);

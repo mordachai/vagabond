@@ -26,6 +26,7 @@ npm run createSymlinks  # Create symlinks to Foundry data directory (optional)
 - **Actors**: `character` and `npc` types
 - **Items**: `equipment` (weapons/armor/gear), `spell`, `ancestry`, `class`, `perk`
 - **Progress Clocks**: Custom journal-based overlay system for tracking progress
+- **Countdown Dice**: Custom journal-based overlay system for countdown mechanics
 
 ### Key File Locations
 
@@ -37,7 +38,8 @@ npm run createSymlinks  # Create symlinks to Foundry data directory (optional)
 **Document Classes**:
 - `module/documents/actor.mjs` - VagabondActor class
 - `module/documents/item.mjs` - VagabondItem class with roll() method
-- `module/documents/progress-clock.mjs` - Progress clock document
+- `module/documents/progress-clock.mjs` - Progress clock static helper
+- `module/documents/countdown-dice.mjs` - Countdown dice static helper
 
 **DataModels**:
 - `module/data/actor-character.mjs` - Character data model
@@ -60,6 +62,11 @@ npm run createSymlinks  # Create symlinks to Foundry data directory (optional)
 - `module/applications/progress-clock-config.mjs` - Clock creation/editing dialog
 - `module/ui/progress-clock-overlay.mjs` - HTML overlay rendering system
 - `module/canvas/progress-clock-layer.mjs`, `progress-clock-sprite.mjs` - Canvas integration
+
+**Countdown Dice**:
+- `module/applications/countdown-dice-config.mjs` - Dice creation/editing dialog (ApplicationV2)
+- `module/ui/countdown-dice-overlay.mjs` - HTML overlay rendering system
+- `src/scss/components/_countdown-dice.scss` - Countdown dice styling
 
 **Templates**:
 - `templates/actor/sliding-panel.hbs` - Right-side sliding panel with stats, skills, saves, favorites
@@ -238,6 +245,19 @@ All game data is defined in `module/helpers/config.mjs`:
 - Scene-independent, can be positioned per-scene
 - Use hooks for create/update/delete synchronization
 
+**Countdown Dice**:
+- Stored as JournalEntry documents with `flags.vagabond.countdownDice`
+- HTML overlay system (z-index 100) positioned middle-right by default
+- Owner-only visibility (creator sees their dice, GM can delete via journals)
+- Dice progression: d20 → d12 → d10 → d8 → d6 → d4 → end (shrinks on rolling 1)
+- Integrates with Dice So Nice via `rolls: [roll]` in ChatMessage.create()
+- Per-scene position persistence with sidebar collision detection
+- Interaction: click image to roll, double-click for context menu, drag to move
+- Context menu: Fade, Configure, Delete options (unified with progress clocks)
+- Chat cards display: dice image, name, roll result, current state, status message
+- Uses MutationObserver to watch sidebar expand/collapse and reposition dice
+- Automatic vertical stacking with dynamic spacing based on dice size
+
 ## Development Notes
 
 ### SCSS Structure
@@ -278,9 +298,9 @@ Weapons/armor have equipment states:
 The system exposes a global `vagabond` object:
 ```javascript
 globalThis.vagabond = {
-  documents: { VagabondActor, VagabondItem, ProgressClock },
-  applications: { VagabondActorSheet, VagabondItemSheet, ProgressClockConfig, ProgressClockDeleteDialog },
-  ui: { ProgressClockOverlay, clockOverlay },
+  documents: { VagabondActor, VagabondItem, ProgressClock, CountdownDice },
+  applications: { VagabondActorSheet, VagabondItemSheet, ProgressClockConfig, ProgressClockDeleteDialog, CountdownDiceConfig },
+  ui: { ProgressClockOverlay, clockOverlay, CountdownDiceOverlay, diceOverlay },
   utils: { rollItemMacro, VagabondChatCard },
   models: { /* all DataModel classes */ }
 }
