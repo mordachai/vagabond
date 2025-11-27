@@ -19,7 +19,6 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
   static DEFAULT_OPTIONS = {
     id: "progress-clock-config-{id}",
     classes: ["vagabond", "progress-clock-config"],
-    tag: "form",
     window: {
       title: "VAGABOND.ProgressClock.ConfigDialog.Title",
       icon: "fas fa-cog",
@@ -29,13 +28,9 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       width: 500,
       height: "auto"
     },
-    actions: {
-      save: ProgressClockConfig._onSave
-    },
     form: {
       submitOnChange: false,
-      closeOnSubmit: true,
-      handler: ProgressClockConfig._onSubmit
+      closeOnSubmit: true
     }
   };
 
@@ -52,6 +47,20 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
     return `Configure: ${this.#clockJournal.name}`;
   }
 
+  /**
+   * Attach event listeners after rendering
+   * @override
+   */
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    // Attach form submit handler
+    const form = this.element.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', this._onFormSubmit.bind(this));
+    }
+  }
+
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
 
@@ -64,8 +73,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         segments: 4,
         size: 'M',
         customSize: '',
-        defaultPosition: defaultPosition,
-        visible: true
+        defaultPosition: defaultPosition
       };
       context.isNew = true;
     } else {
@@ -77,8 +85,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         segments: data.segments,
         size: data.size,
         customSize: typeof data.size === 'number' ? data.size : '',
-        defaultPosition: data.defaultPosition,
-        visible: data.visible
+        defaultPosition: data.defaultPosition
       };
       context.isNew = false;
     }
@@ -117,55 +124,77 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
   /**
    * Handle form submission
    */
-  static async _onSubmit(event, form, formData) {
-    const expandedData = foundry.utils.expandObject(formData.object);
+  async _onFormSubmit(event) {
+    try {
+      // Prevent default form submission
+      event.preventDefault();
+      event.stopPropagation();
 
-    // Determine final size value
-    let finalSize = expandedData.size;
-    if (finalSize === 'custom' && expandedData.customSize) {
-      finalSize = parseInt(expandedData.customSize);
-    }
+      // Use native FormData and expand it manually
+      const formData = new FormData(event.target);
+      const formObject = {};
 
-    // Build ownership object
-    const ownership = { default: parseInt(expandedData.ownership.default) };
-    if (expandedData.ownership.users) {
-      for (const [userId, level] of Object.entries(expandedData.ownership.users)) {
-        ownership[userId] = parseInt(level);
+      for (const [key, value] of formData.entries()) {
+        formObject[key] = value;
       }
+
+      const expandedData = foundry.utils.expandObject(formObject);
+
+      // Determine final size value
+      let finalSize = expandedData.size;
+      if (finalSize === 'custom' && expandedData.customSize) {
+        finalSize = parseInt(expandedData.customSize);
+      }
+
+      // Build ownership object
+      const defaultLevel = parseInt(expandedData.ownership.default);
+      const ownership = { default: defaultLevel };
+
+      // Get all non-GM users
+      const players = game.users.filter(u => !u.isGM);
+
+      // Set all players to the default level first
+      for (const player of players) {
+        ownership[player.id] = defaultLevel;
+      }
+
+      // Then apply individual overrides from the details section
+      if (expandedData.ownership?.users) {
+        for (const [userId, level] of Object.entries(expandedData.ownership.users)) {
+          ownership[userId] = parseInt(level);
+        }
+      }
+
+      // Check if creating new clock or updating existing
+      if (!this.#clockJournal) {
+        // Create new clock
+        await ProgressClock.create({
+          name: expandedData.name,
+          segments: parseInt(expandedData.segments),
+          size: finalSize,
+          defaultPosition: expandedData.defaultPosition,
+          ownership: ownership
+        });
+
+        ui.notifications.info(`Progress Clock "${expandedData.name}" created!`);
+      } else {
+        // Update the journal
+        await this.#clockJournal.update({
+          name: expandedData.name,
+          ownership: ownership,
+          "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
+          "flags.vagabond.progressClock.size": finalSize,
+          "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition
+        });
+
+        ui.notifications.info(`Progress Clock "${expandedData.name}" updated!`);
+      }
+
+      // Close the dialog
+      await this.close();
+    } catch (error) {
+      console.error('Error in _onSubmitForm:', error);
+      ui.notifications.error(`Failed to save clock: ${error.message}`);
     }
-
-    // Check if creating new clock or updating existing
-    if (!this.#clockJournal) {
-      // Create new clock
-      await ProgressClock.create({
-        name: expandedData.name,
-        segments: parseInt(expandedData.segments),
-        size: finalSize,
-        defaultPosition: expandedData.defaultPosition,
-        visible: expandedData.visible === true || expandedData.visible === 'on',
-        ownership: ownership
-      });
-    } else {
-      // Update the journal
-      await this.#clockJournal.update({
-        name: expandedData.name,
-        ownership: ownership,
-        "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
-        "flags.vagabond.progressClock.size": finalSize,
-        "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
-        "flags.vagabond.progressClock.visible": expandedData.visible === true || expandedData.visible === 'on'
-      });
-    }
-
-    return this.close();
-  }
-
-  /**
-   * Handle save button click
-   */
-  static async _onSave(event, target) {
-    // Form submission is handled by the form handler
-    const form = this.element.querySelector('form');
-    form.requestSubmit();
   }
 }

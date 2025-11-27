@@ -26,7 +26,7 @@ export class ProgressClock {
             filled: 0,
             defaultPosition: data.defaultPosition || defaultPosition,
             size: data.size || "M",
-            visible: data.visible !== undefined ? data.visible : true,
+            faded: data.faded || false,
             positions: {}
           }
         }
@@ -62,11 +62,8 @@ export class ProgressClock {
     if (!sceneId) return [];
 
     return this.getAll().filter(clock => {
-      const data = clock.flags.vagabond.progressClock;
-      // Include all visible clocks - they'll get default positions if not yet positioned
-      if (!data.visible) return false;
-
-      // Check permissions
+      // Check permissions - user must have at least LIMITED (can view) permission
+      // This replaces the old "visible" flag - if user has permission, they can see it
       if (!clock.testUserPermission(game.user, 'LIMITED')) return false;
 
       return true;
@@ -107,13 +104,14 @@ export class ProgressClock {
     const pixelSize = typeof size === 'number' ? size : (sizeMap[size] || sizeMap.M);
 
     const margin = 20; // Spacing between clocks
-    const padding = 40; // Padding from canvas edge
+    const padding = 40; // Padding from screen edge
 
     // Calculate horizontal offset based on order
     const horizontalOffset = order * (pixelSize + margin);
 
-    const canvasWidth = canvas.dimensions.width;
-    const canvasHeight = canvas.dimensions.height;
+    // Use screen dimensions, not canvas dimensions (for fixed UI positioning)
+    const canvasWidth = window.innerWidth;
+    const canvasHeight = window.innerHeight;
 
     switch (position) {
       case 'top-right':

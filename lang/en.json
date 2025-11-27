@@ -485,8 +485,11 @@
         "BottomRight": "Bottom Right",
         "BottomLeft": "Bottom Left"
       },
-      "Visible": "Visible",
-      "Ownership": "Ownership",
+      "PlayerPermissions": "Player Permissions",
+      "PermissionNoneDesc": "Hidden from players",
+      "PermissionObserverDesc": "Players can see only",
+      "PermissionOwnerDesc": "Players can interact",
+      "IndividualPermissions": "Individual Player Permissions (Optional)",
       "Save": "Save Changes",
       "Delete": "Delete",
       "Create": "Create Clock",

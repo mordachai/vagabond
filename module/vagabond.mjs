@@ -10,8 +10,8 @@ import { VAGABOND } from './helpers/config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
-// Import canvas layer classes
-import { ProgressClockLayer } from './canvas/progress-clock-layer.mjs';
+// Import UI classes
+import { ProgressClockOverlay } from './ui/progress-clock-overlay.mjs';
 // Import application classes
 import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
 import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
@@ -83,8 +83,8 @@ globalThis.vagabond = {
     ProgressClockConfig,
     ProgressClockDeleteDialog,
   },
-  canvas: {
-    ProgressClockLayer,
+  ui: {
+    ProgressClockOverlay,
   },
   utils: {
     rollItemMacro,
@@ -129,12 +129,6 @@ Hooks.once('init', function () {
   // but will still apply to the Actor from within the Item
   // if the transfer property on the Active Effect is true.
   CONFIG.ActiveEffect.legacyTransferral = false;
-
-  // Register custom canvas layers
-  CONFIG.Canvas.layers.progressClocks = {
-    layerClass: ProgressClockLayer,
-    group: "interface"
-  };
 
   // Register sheet application classes
   collections.Actors.unregisterSheet('core', sheets.ActorSheet);
@@ -183,26 +177,58 @@ Hooks.once('ready', function () {
 });
 
 /* -------------------------------------------- */
-/*  Canvas Hooks - Progress Clocks              */
+/*  UI Hooks - Progress Clocks Overlay          */
 /* -------------------------------------------- */
+
+// Global overlay instance
+let clockOverlay = null;
+
+/**
+ * Initialize the progress clocks HTML overlay when ready
+ */
+Hooks.once('ready', () => {
+  clockOverlay = new ProgressClockOverlay();
+  clockOverlay.initialize();
+
+  // Store in global for easy access
+  globalThis.vagabond.ui.clockOverlay = clockOverlay;
+});
+
+/**
+ * Draw progress clocks when canvas is ready
+ */
+Hooks.on('canvasReady', async () => {
+  // Ensure overlay is initialized
+  if (!clockOverlay) {
+    clockOverlay = new ProgressClockOverlay();
+    clockOverlay.initialize();
+    globalThis.vagabond.ui.clockOverlay = clockOverlay;
+  }
+
+  if (clockOverlay) {
+    await clockOverlay.draw();
+  }
+});
 
 /**
  * Add scene controls for progress clocks
  */
 Hooks.on('getSceneControlButtons', (controls) => {
-  // Add progress clocks control button
   const clockControl = {
     name: 'progressClocks',
     title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Layer'),
     icon: 'fas fa-clock',
     layer: 'progressClocks',
+    order: 11, // Place after notes (which is order 10)
     tools: [
       {
         name: 'create',
         title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
         icon: 'fas fa-plus-circle',
         onClick: () => {
-          new ProgressClockConfig(null).render(true);
+          const { ProgressClockConfig } = globalThis.vagabond.applications;
+          const dialog = new ProgressClockConfig(null);
+          dialog.render(true);
         },
         button: true
       },
@@ -211,6 +237,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.DeleteTool'),
         icon: 'fas fa-trash',
         onClick: () => {
+          const { ProgressClockDeleteDialog } = globalThis.vagabond.applications;
           new ProgressClockDeleteDialog().render(true);
         },
         button: true
@@ -218,34 +245,54 @@ Hooks.on('getSceneControlButtons', (controls) => {
     ]
   };
 
-  // In Foundry v13, controls is an object with control groups as properties
-  controls[clockControl.name] = clockControl;
+  // In V13, controls is an object, not an array
+  controls.progressClocks = clockControl;
 });
 
 /**
- * Refresh clock layer when journals are updated
+ * Refresh clock when journals are updated
  */
-Hooks.on('updateJournalEntry', (journal, changes, options, userId) => {
+Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
-    canvas.progressClocks?.refreshClock(journal.id);
+    if (clockOverlay) {
+      const clockChanges = changes.flags?.vagabond?.progressClock;
+
+      // If only progress (filled) changed, just refresh the image
+      if (clockChanges?.filled !== undefined && Object.keys(clockChanges).length === 1) {
+        clockOverlay.refreshClock(journal.id);
+      }
+      // If only positions changed (dragging), don't do anything - element already moved in DOM
+      else if (clockChanges?.positions !== undefined && Object.keys(clockChanges).length === 1 && !clockChanges.size && !clockChanges.segments && !clockChanges.defaultPosition && !clockChanges.faded) {
+        // Position was already updated by drag handler, no need to redraw
+        return;
+      }
+      // For other changes (name, size, segments, ownership, fade, etc.), redraw all clocks
+      else if (clockChanges || changes.name || changes.ownership) {
+        await clockOverlay.draw();
+      }
+    }
   }
 });
 
 /**
- * Remove clock sprite when journal is deleted
+ * Remove clock when journal is deleted
  */
 Hooks.on('deleteJournalEntry', (journal, options, userId) => {
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
-    canvas.progressClocks?.removeClock(journal.id);
+    if (clockOverlay) {
+      clockOverlay.removeClock(journal.id);
+    }
   }
 });
 
 /**
  * Redraw clocks when a journal is created
  */
-Hooks.on('createJournalEntry', (journal, options, userId) => {
+Hooks.on('createJournalEntry', async (journal, options, userId) => {
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
-    canvas.progressClocks?.drawClocks();
+    if (clockOverlay) {
+      await clockOverlay.draw();
+    }
   }
 });
 

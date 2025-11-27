@@ -40,9 +40,9 @@ VAGABOND.sizes = {
  * @type {Object}
  */
 VAGABOND.clockSizes = {
-  'S': 100,
-  'M': 150,
-  'L': 200
+  'S': 75,
+  'M': 100,
+  'L': 150
 };
 
 VAGABOND.clockPositions = {

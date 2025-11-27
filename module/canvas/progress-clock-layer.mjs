@@ -3,15 +3,9 @@ import { ProgressClockSprite } from './progress-clock-sprite.mjs';
 
 /**
  * Canvas Layer for rendering Progress Clocks
- * Extends InteractionLayer to manage clock sprites and handle interactions
+ * Extends InterfaceCanvasGroup to render as fixed UI overlay (not part of world canvas)
  */
-export class ProgressClockLayer extends InteractionLayer {
-  /**
-   * @override
-   * @type {string}
-   */
-  static documentName = 'JournalEntry';
-
+export class ProgressClockLayer extends foundry.canvas.groups.InterfaceCanvasGroup {
   /**
    * Map of clock sprites by journal ID
    * @type {Map<string, ProgressClockSprite>}
@@ -21,19 +15,22 @@ export class ProgressClockLayer extends InteractionLayer {
   /**
    * @override
    */
-  static get layerOptions() {
-    return foundry.utils.mergeObject(super.layerOptions, {
-      name: 'progressClocks',
-      zIndex: 300
-    });
-  }
+  static groupName = 'progressClocks';
 
   /**
-   * Draw the layer
    * @override
    */
-  async _draw(options) {
-    await super._draw(options);
+  static tearDownChildren = true;
+
+  /**
+   * Draw the interface group
+   * @override
+   */
+  async draw(options) {
+    console.log('ProgressClockLayer draw called');
+    console.log('ProgressClockLayer parent:', this.parent);
+    console.log('ProgressClockLayer position:', this.x, this.y);
+    console.log('ProgressClockLayer transform:', this.transform);
     await this.drawClocks();
   }
 
@@ -108,6 +105,8 @@ export class ProgressClockLayer extends InteractionLayer {
       sprite.y = coords.y;
     }
 
+    console.log(`Clock sprite positioned at: ${sprite.x}, ${sprite.y}`);
+
     // Add to layer
     this.addChild(sprite);
     this.sprites.set(clock.id, sprite);
@@ -152,8 +151,8 @@ export class ProgressClockLayer extends InteractionLayer {
   /**
    * @override
    */
-  async _tearDown(options) {
+  async tearDown(options) {
+    console.log('ProgressClockLayer tearDown called');
     this.clearClocks();
-    return super._tearDown(options);
   }
 }
