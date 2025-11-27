@@ -59,6 +59,20 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
     if (form) {
       form.addEventListener('submit', this._onFormSubmit.bind(this));
     }
+
+    // Sync individual permissions when default permission changes
+    const defaultPermissionSelect = this.element.querySelector('select[name="ownership.default"]');
+    if (defaultPermissionSelect) {
+      defaultPermissionSelect.addEventListener('change', (event) => {
+        const newDefaultLevel = event.target.value;
+
+        // Update all individual player permission dropdowns to match
+        const individualSelects = this.element.querySelectorAll('select[name^="ownership.users."]');
+        individualSelects.forEach(select => {
+          select.value = newDefaultLevel;
+        });
+      });
+    }
   }
 
   async _prepareContext(options) {
@@ -97,24 +111,28 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
     // Ownership configuration
     if (!this.#clockJournal) {
       // Default ownership for new clocks
+      const defaultLevel = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
       context.ownership = {
         users: game.users.map(user => ({
           user: user,
-          level: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+          level: defaultLevel, // Initialize to match default
           name: user.name,
           isGM: user.isGM
         })),
-        defaultLevel: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER
+        defaultLevel: defaultLevel
       };
     } else {
+      // Existing clock - get saved default level
+      const defaultLevel = this.#clockJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE;
       context.ownership = {
         users: game.users.map(user => ({
           user: user,
-          level: this.#clockJournal.ownership[user.id] ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+          // Use individual override if exists, otherwise use default
+          level: this.#clockJournal.ownership[user.id] ?? defaultLevel,
           name: user.name,
           isGM: user.isGM
         })),
-        defaultLevel: this.#clockJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE
+        defaultLevel: defaultLevel
       };
     }
 
