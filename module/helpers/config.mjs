@@ -392,3 +392,19 @@ VAGABOND.rangeAbbreviations = {
   'near': 'N',
   'far': 'F'
 };
+
+/**
+ * Countdown dice types
+ * @type {Array}
+ */
+VAGABOND.countdownDiceTypes = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+
+/**
+ * Countdown dice sizes
+ * @type {Object}
+ */
+VAGABOND.countdownDiceSizes = {
+  'S': 50,
+  'M': 75,
+  'L': 100
+};

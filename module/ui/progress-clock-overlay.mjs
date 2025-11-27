@@ -496,7 +496,6 @@ export class ProgressClockOverlay {
 
       if (confirm) {
         await clock.delete();
-        ui.notifications.info(`Progress Clock "${clock.name}" deleted.`);
       }
       menu.remove();
     });

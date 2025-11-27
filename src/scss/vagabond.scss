@@ -19,6 +19,9 @@
 /* Progress clocks - imported at top level because config dialog is outside sheets */
 @import 'components/progress-clock';
 
+/* Countdown dice - imported at top level because overlay and config are outside sheets */
+@import 'components/countdown-dice';
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

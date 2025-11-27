@@ -47,6 +47,7 @@
   --vagabond-c-groove: #eeede0;
   --vagabond-c-transparent: #ffffffc0;
   --vagabond-c-darkgray: #666666;
+  --vagabond-c-red: #9d0000;
 }
 
 .theme-dark {
@@ -61,6 +62,7 @@
   --vagabond-c-groove: #11121f;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
+  --vagabond-c-red: #c90000;
 }
 
 .flex-05 {
@@ -1062,6 +1064,128 @@
 .progress-clock-config-form .ownership-label {
   flex: 0 0 auto;
   min-width: 100px;
+}
+
+/* Countdown dice - imported at top level because overlay and config are outside sheets */
+.countdown-dice-overlay {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+}
+.countdown-dice-overlay .countdown-dice {
+  position: absolute;
+  pointer-events: all;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.countdown-dice-overlay .countdown-dice.faded {
+  opacity: 0.1;
+}
+.countdown-dice-overlay .countdown-dice.faded:hover {
+  opacity: 1;
+}
+.countdown-dice-overlay .countdown-dice.dragging {
+  opacity: 0.5;
+}
+.countdown-dice-overlay .countdown-dice .dice-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 4px var(--vagabond-c-black));
+}
+.countdown-dice-overlay .countdown-dice .dice-image:hover {
+  filter: drop-shadow(2px 2px 8px var(--vagabond-c-white));
+}
+.countdown-dice-overlay .countdown-dice .dice-name {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 2px var(--vagabond-c-black);
+  cursor: grab;
+}
+
+.countdown-dice-context-menu {
+  background: var(--vagabond-c-dark);
+  border: 1px solid var(--vagabond-c-muted);
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.countdown-dice-context-menu .context-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  color: var(--vagabond-c-faint);
+  font-family: "Paradigm", serif;
+}
+.countdown-dice-context-menu .context-item:hover {
+  background: var(--vagabond-c-tan);
+}
+
+.countdown-dice-chat {
+  border: 2px solid var(--vagabond-c-muted);
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--vagabond-c-tan-lite);
+  font-family: "Paradigm", serif;
+  display: flex;
+  flex-direction: column;
+}
+.countdown-dice-chat .chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.countdown-dice-chat .chat-header h4 {
+  margin: 0;
+  color: var(--vagabond-c-faint);
+  font-family: "Eskapade", serif;
+  flex: 1;
+  word-wrap: break-word;
+}
+.countdown-dice-chat .chat-header .dice-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.countdown-dice-chat p {
+  margin: 4px 0;
+  text-align: center;
+  color: var(--vagabond-c-faint);
+}
+.countdown-dice-chat .die-result {
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Manofa", serif;
+}
+.countdown-dice-chat .status-message {
+  font-size: large;
+  font-weight: bold;
+  margin-top: 8px;
+  text-align: center;
+}
+.countdown-dice-chat .status-message.continues {
+  color: #4a90e2;
+}
+.countdown-dice-chat .status-message.reduced {
+  color: #f5a623;
+}
+.countdown-dice-chat .status-message.ended {
+  color: #d0021b;
+}
+
+.countdown-dice-config-form .form-row {
+  display: flex;
+  gap: 12px;
+}
+.countdown-dice-config-form .form-row .form-field {
+  flex: 1;
 }
 
 /* Styles limited to vagabond sheets */
@@ -3140,7 +3264,7 @@
   background: transparent;
   padding: 4px 8px;
   font-size: 16px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   cursor: pointer;
   appearance: none;
@@ -3226,7 +3350,7 @@
 .vagabond .npc-field-label {
   font-size: 15px;
   font-weight: bold;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   min-width: fit-content;
@@ -3238,7 +3362,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
@@ -3270,7 +3394,7 @@
 .vagabond .npc-field-display {
   padding: 2px 0;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: normal;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
@@ -3302,7 +3426,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: normal;
   color: var(--vagabond-c-dark);
   width: 40px;
@@ -3339,7 +3463,7 @@
   border-radius: 0;
   background: transparent;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: normal;
   color: var(--vagabond-c-dark);
   flex: 1;
@@ -3439,7 +3563,7 @@
 }
 .vagabond .action-name-line {
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .action-name-line .action-name {
@@ -3474,7 +3598,7 @@
   margin-top: 4px;
   padding-left: 12px;
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   font-weight: normal;
 }
@@ -3482,7 +3606,7 @@
   padding: 4px 0;
   line-height: 1.6;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-ability-view .ability-name {
@@ -3523,7 +3647,7 @@
 .vagabond .npc-action-edit .action-edit-header .action-edit-name {
   font-size: 15px;
   font-weight: 600;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-action-edit .action-edit-header .accordion-icon {
@@ -3553,7 +3677,7 @@
 .vagabond .action-edit-row label {
   font-size: 14px;
   font-weight: bold;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .action-edit-row .action-name-with-remove {
@@ -3609,7 +3733,7 @@
   background: transparent;
   color: var(--vagabond-c-muted);
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: 600;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -3628,7 +3752,7 @@
   background: transparent;
   padding: 4px 8px;
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   cursor: pointer;
   appearance: none;
@@ -3684,7 +3808,7 @@
 .vagabond .npc-stat-label {
   font-size: 14px;
   font-weight: 600;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   text-transform: uppercase;
   color: var(--vagabond-c-muted);
 }
@@ -3693,7 +3817,7 @@
   height: 50px;
   font-size: 24px;
   font-weight: bold;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   text-align: center;
   border: 2px solid var(--vagabond-c-tan);
@@ -3721,7 +3845,7 @@
 .vagabond .npc-effects .effects-category-label {
   font-size: 15px;
   font-weight: 600;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   margin-bottom: 4px;
   color: var(--vagabond-c-dark);
 }
@@ -3743,7 +3867,7 @@
   align-items: center;
   gap: 8px;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: 600;
   color: var(--vagabond-c-dark);
   flex: 1;
@@ -3757,14 +3881,14 @@
 }
 .vagabond .npc-effects .effect-source {
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-muted);
   min-width: 80px;
   text-align: center;
 }
 .vagabond .npc-effects .effect-duration {
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   min-width: 60px;
   text-align: center;
@@ -3803,7 +3927,7 @@
   background: transparent;
   color: var(--vagabond-c-muted);
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -3820,7 +3944,7 @@
   color: var(--vagabond-c-muted);
   font-style: italic;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   padding: 12px;
 }
 .vagabond .npc-details {
@@ -3860,7 +3984,7 @@
   border-radius: 4px;
   background: transparent;
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   font-weight: normal;
   font-style: italic;
   color: var(--vagabond-c-dark);
@@ -3896,7 +4020,7 @@
 .vagabond .npc-immunity-text {
   flex: 1;
   font-size: 15px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.4;
   text-transform: capitalize;
@@ -3923,7 +4047,7 @@
   border-radius: 0;
   font-size: 14px;
   font-weight: 600;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   transition: border-bottom-color 0.2s ease;
@@ -3971,7 +4095,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-immunity-checkbox-item span {
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-immunity-tags {
@@ -3991,7 +4115,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   border-radius: 3px;
   font-size: 13px;
   font-weight: 500;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
 }
@@ -4002,6 +4126,20 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-immunity-tag i:hover {
   color: var(--vagabond-c-dark);
+}
+.vagabond .countdown-dice-trigger {
+  cursor: pointer;
+  color: var(--vagabond-c-red);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--vagabond-c-muted);
+  transition: all 0.2s ease;
+}
+.vagabond .countdown-dice-trigger:hover {
+  text-decoration-style: solid;
+  text-decoration-color: var(--vagabond-c-faint);
+  opacity: 0.8;
 }
 .vagabond .item-sheet-header {
   display: flex;
@@ -4116,7 +4254,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: transparent;
   padding: 4px 0;
   font-size: 14px;
-  font-family: "Paradigm", serif;
+  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   cursor: pointer;
   appearance: none;
@@ -4162,3 +4300,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .vagabond-spell-cast strong {
   color: var(--vagabond-c-tan, #d4af37);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

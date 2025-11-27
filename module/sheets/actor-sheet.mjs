@@ -59,6 +59,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       removeAbility: this._onRemoveAbility,  // NPC remove ability
       clickAbilityName: this._onClickAbilityName,  // NPC click ability name
       toggleAbilityAccordion: this._onToggleAbilityAccordion,  // NPC toggle ability accordion
+      createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from NPC recharge
       autoArrangeInventory: this._onAutoArrangeInventory,  // Auto-arrange inventory grid
       equipItem: this._onEquipItem,  // Equip item from context menu
       editItem: this._onEditItem,  // Edit item from context menu
@@ -527,10 +528,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                   )
                 : '';
 
-              // Enrich extra info if present
-              const enrichedExtraInfo = action.extraInfo
+              // Enrich extra info if present (use pre-formatted from data model)
+              const enrichedExtraInfo = action.extraInfoFormatted
                 ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    action.extraInfo,
+                    action.extraInfoFormatted,
                     {
                       secrets: this.document.isOwner,
                       rollData: this.actor.getRollData(),
@@ -1991,6 +1992,68 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Use the unified chat card system
     const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     await VagabondChatCard.npcAbility(this.actor, ability);
+  }
+
+  /**
+   * Create countdown dice from NPC action/ability recharge
+   * Triggered when clicking on CdX recharge text in locked NPC sheet
+   * @param {Event} event - Click event
+   * @param {HTMLElement} target - The clicked element
+   */
+  static async _onCreateCountdownFromRecharge(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Extract dice type from data attribute
+    // Can be data-dice-type (from recharge) or data-dice-size (from descriptions)
+    let diceType = target.dataset.diceType || target.dataset.diceSize;
+
+    // If we got just a number (from data-dice-size), add the "d" prefix
+    if (diceType && !diceType.startsWith('d')) {
+      diceType = 'd' + diceType;
+    }
+
+    if (!diceType) return;
+
+    // Validate dice type
+    const validDiceTypes = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+    if (!validDiceTypes.includes(diceType)) {
+      console.warn(`Invalid dice type for countdown: ${diceType}`);
+      return;
+    }
+
+    // Find the parent action/ability container
+    const actionView = target.closest('[data-action-index], [data-ability-index]');
+    if (!actionView) {
+      console.warn('Could not find action/ability container');
+      return;
+    }
+
+    // Determine if it's an action or ability
+    const actionIndex = actionView.dataset.actionIndex;
+    const abilityIndex = actionView.dataset.abilityIndex;
+
+    let name;
+    if (actionIndex !== undefined) {
+      const action = this.actor.system.actions[parseInt(actionIndex)];
+      name = `${this.actor.name}: ${action.name}`;
+    } else if (abilityIndex !== undefined) {
+      const ability = this.actor.system.abilities[parseInt(abilityIndex)];
+      name = `${this.actor.name}: ${ability.name}`;
+    } else {
+      console.warn('Could not determine action or ability');
+      return;
+    }
+
+    // Create countdown dice
+    const { CountdownDice } = globalThis.vagabond.documents;
+    await CountdownDice.create({
+      name: name,
+      diceType: diceType,
+      size: 'S', // Small size as requested
+    });
+
+    ui.notifications.info(`Created countdown dice: ${name}`);
   }
 
   /**

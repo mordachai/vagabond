@@ -511,6 +511,26 @@
         "Create": "Create Progress Clock",
         "DeleteTool": "Delete Progress Clock"
       }
+    },
+    "CountdownDice": {
+      "Name": "Dice Name",
+      "DefaultName": "Countdown",
+      "DiceType": "Dice Type",
+      "Size": "Size",
+      "Create": "Create Countdown Dice",
+      "Configure": "Configure",
+      "Delete": "Delete Countdown Dice",
+      "DeleteConfirm": "Are you sure you want to delete this countdown dice?",
+      "Fade": "Toggle Fade",
+      "SceneControls": {
+        "Create": "Create Countdown Dice"
+      },
+      "Chat": {
+        "Continues": "Countdown continues",
+        "Reduced": "Countdown reduced!",
+        "Ended": "Countdown ended!",
+        "CurrentState": "Results"
+      }
     }
   },
   "TYPES": {
@@ -528,6 +548,25 @@
       "class": "Class",
       "perk": "Perk",
       "equipment": "Gear"
+    },
+    "CountdownDice": {
+      "SceneControls": {
+        "Create": "Create Countdown Dice"
+      },
+      "Create": "Create Countdown Dice",
+      "Name": "Dice Name",
+      "DiceType": "Dice Type",
+      "Size": "Size",
+      "Fade": "Fade",
+      "Configure": "Configure",
+      "Delete": "Delete",
+      "DeleteConfirm": "Delete this countdown dice?",
+      "Chat": {
+        "Continues": "Countdown continues",
+        "Reduced": "Countdown reduced!",
+        "Ended": "Countdown ended!",
+        "CurrentState": "Current State"
+      }
     }
   }
 
