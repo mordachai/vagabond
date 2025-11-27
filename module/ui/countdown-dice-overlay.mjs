@@ -206,33 +206,18 @@ export class CountdownDiceOverlay {
     const img = element.querySelector('.dice-image');
     const nameDiv = element.querySelector('.dice-name');
 
-    // Left click on image: Roll dice
-    img.addEventListener('click', async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      await this._onRollDice(dice);
-    });
-
-    // Right click on name: Show context menu
-    nameDiv.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this._showContextMenu(event, dice);
-    });
-
-    // Drag functionality (matches progress clock pattern)
+    // Drag and double-click functionality (matches progress clock pattern)
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
     let containerStartX = 0;
     let containerStartY = 0;
+    let clickTimeout = null;
+    let clickCount = 0;
 
     const onMouseDown = (e) => {
       // Only left mouse button
       if (e.button !== 0) return;
-
-      // Don't start drag when clicking the image itself (for rolling)
-      if (e.target === img) return;
 
       isDragging = false;
       dragStartX = e.clientX;
@@ -277,10 +262,29 @@ export class CountdownDiceOverlay {
             }
           });
         }
+      } else {
+        // Handle click (not a drag)
+        clickCount++;
+
+        if (clickCount === 1) {
+          // Wait to see if it's a double click
+          clickTimeout = setTimeout(() => {
+            // Single click on image: roll dice
+            if (e.target === img) {
+              this._onRollDice(dice);
+            }
+            clickCount = 0;
+          }, 300);
+        } else if (clickCount === 2) {
+          // Double click: show context menu
+          clearTimeout(clickTimeout);
+          clickCount = 0;
+          this._showContextMenu(e, dice);
+        }
       }
 
       container.style.opacity = '1';
-      container.style.cursor = 'pointer';
+      container.style.cursor = 'grab';
       isDragging = false;
       dragStartX = 0;
       dragStartY = 0;
@@ -295,6 +299,7 @@ export class CountdownDiceOverlay {
       container.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      if (clickTimeout) clearTimeout(clickTimeout);
     };
   }
 
@@ -363,10 +368,15 @@ export class CountdownDiceOverlay {
       stateMessage = `${currentDiceType} countdown complete`;
     }
 
+    const diceImagePath = CountdownDice.getDiceImagePath(currentDiceType);
+
     const content = `
       <div class="countdown-dice-chat">
-        <h3>${flags.name}</h3>
-        <p><strong>Rolled:</strong> ${rollResult}</p>
+        <div class="chat-header">
+          <img src="${diceImagePath}" alt="${currentDiceType}" class="dice-icon" />
+          <h4>${flags.name}</h4>
+        </div>
+        <div class="die-result">${rollResult}</div>
         <p><strong>${game.i18n.localize('VAGABOND.CountdownDice.Chat.CurrentState')}:</strong> ${stateMessage}</p>
         <p class="status-message ${statusClass}">${statusMessage}</p>
       </div>

@@ -183,6 +183,11 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         }
       }
 
+      // Ensure creator is always OWNER (only for new clocks)
+      if (!this.#clockJournal) {
+        ownership[game.user.id] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+      }
+
       // Check if creating new clock or updating existing
       if (!this.#clockJournal) {
         // Create new clock
@@ -193,8 +198,6 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           defaultPosition: expandedData.defaultPosition,
           ownership: ownership
         });
-
-        ui.notifications.info(`Progress Clock "${expandedData.name}" created!`);
       } else {
         // Update the journal
         await this.#clockJournal.update({
@@ -204,15 +207,12 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           "flags.vagabond.progressClock.size": finalSize,
           "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition
         });
-
-        ui.notifications.info(`Progress Clock "${expandedData.name}" updated!`);
       }
 
       // Close the dialog
       await this.close();
     } catch (error) {
       console.error('Error in _onSubmitForm:', error);
-      ui.notifications.error(`Failed to save clock: ${error.message}`);
     }
   }
 }

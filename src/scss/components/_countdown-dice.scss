@@ -38,16 +38,12 @@
 
     .dice-name {
       margin-top: 4px;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: bold;
       font-family: $font-primary;
       color: $c-white;
       text-shadow: 1px 1px 2px $c-black;
       cursor: grab;
-
-      &:active {
-        cursor: grabbing;
-      }
     }
   }
 }
@@ -78,23 +74,49 @@
   padding: $padding-md;
   background: $c-tan-lite;
   font-family: $font-primary;
+  display: flex;
+  flex-direction: column;
 
-  h3 {
-    margin: 0 0 8px 0;
-    color: $c-faint;
-    font-family: $font-title;
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    h4 {
+      margin: 0;
+      color: $c-faint;
+      font-family: $font-title;
+      flex: 1;
+      word-wrap: break-word;
+    }
+
+    .dice-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
   }
 
   p {
     margin: 4px 0;
+    text-align: center;
     color: $c-faint;
   }
 
+  .die-result{
+    text-align: center;
+    font-size: 2rem;
+    font-family: $font-secondary;
+  }
+
   .status-message {
+    font-size: large;
     font-weight: bold;
     margin-top: 8px;
+    text-align: center;
 
-    // TODO: Confirm status colors with design system
     // These may need to use existing semantic color variables
     &.continues {
       color: #4a90e2;
