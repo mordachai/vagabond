@@ -1064,6 +1064,107 @@
   min-width: 100px;
 }
 
+/* Countdown dice - imported at top level because overlay and config are outside sheets */
+.countdown-dice-overlay {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+}
+.countdown-dice-overlay .countdown-dice {
+  position: absolute;
+  pointer-events: all;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.countdown-dice-overlay .countdown-dice.faded {
+  opacity: 0.1;
+}
+.countdown-dice-overlay .countdown-dice.faded:hover {
+  opacity: 1;
+}
+.countdown-dice-overlay .countdown-dice.dragging {
+  opacity: 0.5;
+}
+.countdown-dice-overlay .countdown-dice .dice-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 4px var(--vagabond-c-black));
+}
+.countdown-dice-overlay .countdown-dice .dice-image:hover {
+  filter: drop-shadow(2px 2px 8px var(--vagabond-c-white));
+}
+.countdown-dice-overlay .countdown-dice .dice-name {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 2px var(--vagabond-c-black);
+  cursor: grab;
+}
+.countdown-dice-overlay .countdown-dice .dice-name:active {
+  cursor: grabbing;
+}
+
+.countdown-dice-context-menu {
+  background: var(--vagabond-c-dark);
+  border: 1px solid var(--vagabond-c-muted);
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.countdown-dice-context-menu .context-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  color: var(--vagabond-c-faint);
+  font-family: "Paradigm", serif;
+}
+.countdown-dice-context-menu .context-item:hover {
+  background: var(--vagabond-c-tan);
+}
+
+.countdown-dice-chat {
+  border: 2px solid var(--vagabond-c-muted);
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--vagabond-c-tan-lite);
+  font-family: "Paradigm", serif;
+}
+.countdown-dice-chat h3 {
+  margin: 0 0 8px 0;
+  color: var(--vagabond-c-faint);
+  font-family: "Eskapade", serif;
+}
+.countdown-dice-chat p {
+  margin: 4px 0;
+  color: var(--vagabond-c-faint);
+}
+.countdown-dice-chat .status-message {
+  font-weight: bold;
+  margin-top: 8px;
+}
+.countdown-dice-chat .status-message.continues {
+  color: #4a90e2;
+}
+.countdown-dice-chat .status-message.reduced {
+  color: #f5a623;
+}
+.countdown-dice-chat .status-message.ended {
+  color: #d0021b;
+}
+
+.countdown-dice-config-form .form-row {
+  display: flex;
+  gap: 12px;
+}
+.countdown-dice-config-form .form-row .form-field {
+  flex: 1;
+}
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   /* Character Name at Top - Full Width */
@@ -4162,3 +4263,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .vagabond-spell-cast strong {
   color: var(--vagabond-c-tan, #d4af37);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

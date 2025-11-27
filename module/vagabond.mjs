@@ -2,6 +2,7 @@
 import { VagabondActor } from './documents/actor.mjs';
 import { VagabondItem } from './documents/item.mjs';
 import { ProgressClock } from './documents/progress-clock.mjs';
+import { CountdownDice } from './documents/countdown-dice.mjs';
 // Import sheet classes.
 import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
@@ -12,9 +13,11 @@ import { VagabondChatCard } from './helpers/chat-card.mjs';
 import * as models from './data/_module.mjs';
 // Import UI classes
 import { ProgressClockOverlay } from './ui/progress-clock-overlay.mjs';
+import { CountdownDiceOverlay } from './ui/countdown-dice-overlay.mjs';
 // Import application classes
 import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
 import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
+import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -76,15 +79,18 @@ globalThis.vagabond = {
     VagabondActor,
     VagabondItem,
     ProgressClock,
+    CountdownDice,
   },
   applications: {
     VagabondActorSheet,
     VagabondItemSheet,
     ProgressClockConfig,
     ProgressClockDeleteDialog,
+    CountdownDiceConfig,
   },
   ui: {
     ProgressClockOverlay,
+    CountdownDiceOverlay,
   },
   utils: {
     rollItemMacro,
@@ -210,6 +216,40 @@ Hooks.on('canvasReady', async () => {
   }
 });
 
+/* -------------------------------------------- */
+/*  UI Hooks - Countdown Dice Overlay           */
+/* -------------------------------------------- */
+
+// Global overlay instance
+let diceOverlay = null;
+
+/**
+ * Initialize the countdown dice HTML overlay when ready
+ */
+Hooks.once('ready', () => {
+  diceOverlay = new CountdownDiceOverlay();
+  diceOverlay.initialize();
+
+  // Store in global for easy access
+  globalThis.vagabond.ui.countdownDiceOverlay = diceOverlay;
+});
+
+/**
+ * Draw countdown dice when canvas is ready
+ */
+Hooks.on('canvasReady', async () => {
+  // Ensure overlay is initialized
+  if (!diceOverlay) {
+    diceOverlay = new CountdownDiceOverlay();
+    diceOverlay.initialize();
+    globalThis.vagabond.ui.countdownDiceOverlay = diceOverlay;
+  }
+
+  if (diceOverlay) {
+    await diceOverlay.draw();
+  }
+});
+
 /**
  * Add scene controls for Vagabond tools
  */
@@ -239,12 +279,31 @@ Hooks.on('getSceneControlButtons', (controls) => {
       }
     }
   };
+
+  // Add create countdown dice button
+  controls['vagabond'].tools['createCountdownDice'] ??= {
+    name: 'createCountdownDice',
+    title: game.i18n.localize('VAGABOND.CountdownDice.SceneControls.Create'),
+    icon: 'fas fa-dice-d20',
+    button: true,
+    visible: true,
+    onChange: async () => {
+      try {
+        const { CountdownDiceConfig } = globalThis.vagabond.applications;
+        const dialog = new CountdownDiceConfig(null);
+        await dialog.render(true);
+      } catch (error) {
+        ui.notifications.error("Failed to open countdown dice config: " + error.message);
+      }
+    }
+  };
 });
 
 /**
  * Refresh clock when journals are updated
  */
 Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
+  // Handle progress clocks
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
     if (clockOverlay) {
       const clockChanges = changes.flags?.vagabond?.progressClock;
@@ -264,15 +323,40 @@ Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
       }
     }
   }
+
+  // Handle countdown dice
+  if (journal.flags?.vagabond?.countdownDice?.type === 'countdownDice') {
+    if (diceOverlay) {
+      const diceChanges = changes.flags?.vagabond?.countdownDice;
+
+      // If only positions changed (dragging), don't do anything - element already moved in DOM
+      if (diceChanges?.positions !== undefined && Object.keys(diceChanges).length === 1 && !diceChanges.diceType && !diceChanges.name && !diceChanges.size && !diceChanges.faded) {
+        // Position was already updated by drag handler, no need to redraw
+        return;
+      }
+      // For other changes (name, diceType, size, ownership, fade, etc.), redraw all dice
+      else if (diceChanges || changes.name || changes.ownership) {
+        await diceOverlay.draw();
+      }
+    }
+  }
 });
 
 /**
  * Remove clock when journal is deleted
  */
 Hooks.on('deleteJournalEntry', (journal, options, userId) => {
+  // Handle progress clocks
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
     if (clockOverlay) {
       clockOverlay.removeClock(journal.id);
+    }
+  }
+
+  // Handle countdown dice
+  if (journal.flags?.vagabond?.countdownDice?.type === 'countdownDice') {
+    if (diceOverlay) {
+      diceOverlay.removeDice(journal.id);
     }
   }
 });
@@ -281,9 +365,17 @@ Hooks.on('deleteJournalEntry', (journal, options, userId) => {
  * Redraw clocks when a journal is created
  */
 Hooks.on('createJournalEntry', async (journal, options, userId) => {
+  // Handle progress clocks
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
     if (clockOverlay) {
       await clockOverlay.draw();
+    }
+  }
+
+  // Handle countdown dice
+  if (journal.flags?.vagabond?.countdownDice?.type === 'countdownDice') {
+    if (diceOverlay) {
+      await diceOverlay.draw();
     }
   }
 });
