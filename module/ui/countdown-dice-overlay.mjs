@@ -529,7 +529,8 @@ export class CountdownDiceOverlay {
    * Remove a dice from display
    * @param {string} diceId - The dice ID
    */
-  removeDice(diceId) {
+  async removeDice(diceId) {
+    // Find and remove the element
     const element = this.container?.querySelector(`[data-dice-id="${diceId}"]`);
     if (element) {
       // Clean up event listeners
@@ -541,6 +542,8 @@ export class CountdownDiceOverlay {
 
     // Force a complete redraw to ensure no phantom dice remain
     // This ensures only dice with valid journal entries are displayed
-    this.draw();
+    // Use a small delay to ensure the journal deletion has fully propagated
+    await new Promise(resolve => setTimeout(resolve, 50));
+    await this.draw();
   }
 }

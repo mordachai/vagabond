@@ -343,20 +343,20 @@ Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
 });
 
 /**
- * Remove clock when journal is deleted
+ * Remove clock/dice when journal is deleted
  */
-Hooks.on('deleteJournalEntry', (journal, options, userId) => {
+Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
   // Handle progress clocks
   if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
     if (clockOverlay) {
-      clockOverlay.removeClock(journal.id);
+      await clockOverlay.removeClock(journal.id);
     }
   }
 
   // Handle countdown dice
   if (journal.flags?.vagabond?.countdownDice?.type === 'countdownDice') {
     if (diceOverlay) {
-      diceOverlay.removeDice(journal.id);
+      await diceOverlay.removeDice(journal.id);
     }
   }
 });
