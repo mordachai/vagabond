@@ -211,42 +211,34 @@ Hooks.on('canvasReady', async () => {
 });
 
 /**
- * Add scene controls for progress clocks
+ * Add scene controls for Vagabond tools
  */
 Hooks.on('getSceneControlButtons', (controls) => {
-  const clockControl = {
-    name: 'progressClocks',
-    title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Layer'),
-    icon: 'fas fa-clock',
-    layer: 'progressClocks',
-    order: 11, // Place after notes (which is order 10)
-    tools: [
-      {
-        name: 'create',
-        title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
-        icon: 'fas fa-plus-circle',
-        onClick: () => {
-          const { ProgressClockConfig } = globalThis.vagabond.applications;
-          const dialog = new ProgressClockConfig(null);
-          dialog.render(true);
-        },
-        button: true
-      },
-      {
-        name: 'delete',
-        title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.DeleteTool'),
-        icon: 'fas fa-trash',
-        onClick: () => {
-          const { ProgressClockDeleteDialog } = globalThis.vagabond.applications;
-          new ProgressClockDeleteDialog().render(true);
-        },
-        button: true
-      }
-    ]
+  // Ensure our base group exists
+  controls['vagabond'] ??= {
+    name: 'vagabond',
+    title: 'Vagabond Tools',
+    icon: 'fas fa-toolbox',
+    tools: {}
   };
 
-  // In V13, controls is an object, not an array
-  controls.progressClocks = clockControl;
+  // Add create clock button
+  controls['vagabond'].tools['createClock'] ??= {
+    name: 'createClock',
+    title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
+    icon: 'fas fa-clock',
+    button: true,
+    visible: true,
+    onChange: async () => {
+      try {
+        const { ProgressClockConfig } = globalThis.vagabond.applications;
+        const dialog = new ProgressClockConfig(null);
+        await dialog.render(true);
+      } catch (error) {
+        ui.notifications.error("Failed to open clock config: " + error.message);
+      }
+    }
+  };
 });
 
 /**
