@@ -252,6 +252,7 @@ export default class VagabondNPC extends VagabondActorBase {
       this.actions.forEach((action, index) => {
         action.rechargeFormatted = this.formatRecharge(action.recharge);
         action.rollDamageFormatted = this.formatRollDamage(action.rollDamage);
+        action.extraInfoFormatted = this.formatExtraInfo(action.extraInfo);
       });
     }
 
@@ -266,12 +267,19 @@ export default class VagabondNPC extends VagabondActorBase {
   /**
    * Format appearing field for dice rolls
    * Converts "d6" to "[[/r d6]]", "2d8" to "[[/r 2d8]]", etc.
+   * DOES NOT convert "Cdx" patterns - those are for countdown dice
    */
   formatAppearing(appearing) {
     if (!appearing) return '';
 
     // Check if it's already a roll link
     if (appearing.includes('[[/r')) return appearing;
+
+    // Check for countdown dice pattern first - don't convert these
+    const countdownPattern = /^Cd(\d+)$/i;
+    if (countdownPattern.test(appearing.trim())) {
+      return appearing; // Return as-is, don't convert to roll
+    }
 
     // Check if it matches dice notation (e.g., "d6", "2d8", "3d10")
     const dicePattern = /^(\d*)d(\d+)$/i;
@@ -284,8 +292,9 @@ export default class VagabondNPC extends VagabondActorBase {
   }
 
   /**
-   * Format recharge field for dice rolls
-   * Converts "Cd6" to "[[/r d6]]", "Cd4" to "[[/r d4]]", etc.
+   * Format recharge field for dice rolls or countdown dice triggers
+   * Converts "Cd6" to clickable span for countdown dice creation
+   * Converts "C2d6" to "[[/r 2d6]]" for roll links
    * If no 'C' prefix, just returns the value as-is (plain number)
    */
   formatRecharge(recharge) {
@@ -294,27 +303,48 @@ export default class VagabondNPC extends VagabondActorBase {
     // Check if it's already a roll link
     if (recharge.includes('[[/r')) return recharge;
 
-    // Check if it matches dice notation with C prefix (e.g., "Cd6", "Cd4", "C2d8")
-    const dicePattern = /^C(\d*)d(\d+)$/i;
-    const match = recharge.trim().match(dicePattern);
-    if (match) {
-      const diceFormula = `${match[1]}d${match[2]}`;
+    // Check for countdown dice pattern: Cd4, Cd6, Cd8, Cd10, Cd12, Cd20
+    // This matches single dice only (no quantity prefix)
+    const countdownPattern = /^Cd(\d+)$/i;
+    const countdownMatch = recharge.trim().match(countdownPattern);
+
+    if (countdownMatch) {
+      const diceSize = countdownMatch[1];
+      // Wrap in a clickable span with data-action for ApplicationV2 action routing
+      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-type="d${diceSize}">${recharge}</span>`;
+    }
+
+    // Check if it matches dice notation with C prefix and quantity (e.g., "C2d8")
+    // This won't match the countdown pattern above since it has no quantity
+    const dicePattern = /^C(\d+)d(\d+)$/i;
+    const rollMatch = recharge.trim().match(dicePattern);
+    if (rollMatch) {
+      const quantity = rollMatch[1];
+      const diceSize = rollMatch[2];
+      const diceFormula = `${quantity}d${diceSize}`;
       return `[[/r ${diceFormula}]]`;
     }
 
-    // If it's just a number, return as-is
+    // If it's just a number or other text, return as-is
     return recharge;
   }
 
   /**
    * Format roll damage for inline rolls
    * Converts dice formulas like "2d8", "2d8+2", "d6+4" to roll links "[[/r 2d8+2]]"
+   * DOES NOT convert "Cdx" patterns - those are for countdown dice
    */
   formatRollDamage(rollDamage) {
     if (!rollDamage) return '';
 
     // Check if it's already a roll link
     if (rollDamage.includes('[[/r')) return rollDamage;
+
+    // Check for countdown dice pattern first - don't convert these
+    const countdownPattern = /^Cd(\d+)$/i;
+    if (countdownPattern.test(rollDamage.trim())) {
+      return rollDamage; // Return as-is, don't convert to roll
+    }
 
     // Check if it contains dice notation (e.g., "2d8", "d6+2", "3d10+5")
     const dicePattern = /\d*d\d+/i;
@@ -327,19 +357,61 @@ export default class VagabondNPC extends VagabondActorBase {
   }
 
   /**
-   * Format ability description for dice rolls
+   * Format ability description for dice rolls and countdown dice
    * Converts dice notation like "d4", "d6", "2d8" to roll links "[[/r d4]]"
+   * Converts "Cdx" or "cdx" patterns to clickable spans for countdown dice creation
    * Handles multiple dice in the same string
    */
   formatAbilityDescription(description) {
     if (!description) return '';
 
-    // Replace all dice notation with roll links
-    // Matches patterns like: d4, d6, d8, d10, d12, d20, 2d6, 3d8, etc.
-    const dicePattern = /(\d*)d(\d+)/gi;
+    // First, replace countdown dice patterns with clickable spans
+    // Matches: Cd4, Cd6, cd8, CD10, etc. (case-insensitive)
+    // Use data-dice-size instead of data-dice-type to avoid enrichment issues
+    const countdownPattern = /C(d\d+)/gi;
+    let formattedDescription = description.replace(countdownPattern, (match, diceNotation) => {
+      // Extract just the number (4, 6, 8, etc.) to avoid "dX" being treated as a roll
+      const diceSize = diceNotation.match(/\d+/)[0];
+      // match is the full match "Cd6", "CD4", etc.
+      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}">${match}</span>`;
+    });
 
-    return description.replace(dicePattern, (match) => {
+    // Then replace remaining dice notation with roll links
+    // Matches patterns like: d4, d6, d8, d10, d12, d20, 2d6, 3d8, etc.
+    // Uses negative lookbehind to exclude patterns preceded by 'C' or 'c'
+    const dicePattern = /(?<![Cc])(\d*)d(\d+)/gi;
+    formattedDescription = formattedDescription.replace(dicePattern, (match) => {
+      // Skip if this is inside a span tag (already processed as countdown dice)
+      if (match.includes('span')) return match;
       return `[[/r ${match}]]`;
     });
+
+    return formattedDescription;
+  }
+
+  /**
+   * Format extra info field for dice rolls and countdown dice
+   * Same logic as formatAbilityDescription
+   */
+  formatExtraInfo(extraInfo) {
+    if (!extraInfo) return '';
+
+    // First, replace countdown dice patterns with clickable spans
+    // Use data-dice-size instead of data-dice-type to avoid enrichment issues
+    const countdownPattern = /C(d\d+)/gi;
+    let formattedExtraInfo = extraInfo.replace(countdownPattern, (match, diceNotation) => {
+      // Extract just the number (4, 6, 8, etc.) to avoid "dX" being treated as a roll
+      const diceSize = diceNotation.match(/\d+/)[0];
+      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}">${match}</span>`;
+    });
+
+    // Then replace remaining dice notation with roll links
+    const dicePattern = /(?<![Cc])(\d*)d(\d+)/gi;
+    formattedExtraInfo = formattedExtraInfo.replace(dicePattern, (match) => {
+      if (match.includes('span')) return match;
+      return `[[/r ${match}]]`;
+    });
+
+    return formattedExtraInfo;
   }
 }

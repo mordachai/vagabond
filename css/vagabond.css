@@ -47,6 +47,7 @@
   --vagabond-c-groove: #eeede0;
   --vagabond-c-transparent: #ffffffc0;
   --vagabond-c-darkgray: #666666;
+  --vagabond-c-red: #9d0000;
 }
 
 .theme-dark {
@@ -61,6 +62,7 @@
   --vagabond-c-groove: #11121f;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
+  --vagabond-c-red: #c90000;
 }
 
 .flex-05 {
@@ -4124,6 +4126,20 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-immunity-tag i:hover {
   color: var(--vagabond-c-dark);
+}
+.vagabond .countdown-dice-trigger {
+  cursor: pointer;
+  color: var(--vagabond-c-red);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--vagabond-c-muted);
+  transition: all 0.2s ease;
+}
+.vagabond .countdown-dice-trigger:hover {
+  text-decoration-style: solid;
+  text-decoration-color: var(--vagabond-c-faint);
+  opacity: 0.8;
 }
 .vagabond .item-sheet-header {
   display: flex;
