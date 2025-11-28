@@ -2265,11 +2265,12 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-top: none;
   border-left: none;
-  padding: 3px 4px;
+  border-radius: 3px;
+  padding: 2px;
   height: 50px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
   position: relative;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -2289,130 +2290,27 @@
   opacity: 0.6;
   transform: scale(0.98);
 }
-.vagabond .inventory-card .inventory-card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  height: 100%;
-}
-.vagabond .inventory-card-header {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 2px;
-}
-.vagabond .inventory-card-header .weapon-skill-icon {
+.vagabond .inventory-card .item-image {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
   border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  border: none;
 }
-.vagabond .inventory-card-header .weapon-skill-icon img {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-}
-.vagabond .inventory-card-header .armor-icon {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  background: #8b7355;
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 11px;
-}
-.vagabond .inventory-card-header .gear-icon {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  background: #666;
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 11px;
-}
-.vagabond .inventory-card-header .item-name-display {
+.vagabond .inventory-card .item-name-display {
   flex: 1;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
-  line-height: 1.1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-family: "Eskapade", serif;
+  text-align: center;
+  line-height: 1.2;
   color: var(--vagabond-c-dark);
-}
-.vagabond .inventory-card-stats {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  color: var(--vagabond-c-tan);
-  margin-top: auto;
-}
-.vagabond .inventory-card-stats .stat-group {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-wrap: nowrap;
-}
-.vagabond .inventory-card-stats .stat-label {
-  font-weight: bold;
-  font-size: 10px;
-}
-.vagabond .inventory-card-stats .stat-value {
-  font-size: 10px;
-}
-.vagabond .inventory-card-stats .damage-group {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-.vagabond .inventory-card-stats .damage-group .damage-type-icon {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
-}
-.vagabond .inventory-card-stats .damage-group .grip-display {
-  margin-left: 1px;
-  font-weight: bold;
-}
-.vagabond .inventory-card-stats .range-cost-group {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  margin-left: auto;
-}
-.vagabond .inventory-card-stats .range-cost-group .range-display {
-  font-weight: bold;
-  padding: 1px 2px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
-  font-size: 9px;
-}
-.vagabond .inventory-card-stats .range-cost-group .cost-display {
-  font-weight: bold;
-  color: #d4af37;
-  font-size: 10px;
-}
-.vagabond .inventory-card-stats .armor-stats {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.vagabond .inventory-card-stats .gear-stats {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 .vagabond .inventory-context-menu {
   position: fixed;

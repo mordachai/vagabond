@@ -130,32 +130,31 @@
   }
 }
 
-// Inventory Card (Item)
+// Inventory Card (Item) - Simplified: Image (50px left) + Name (wrapping)
 .inventory-card {
   background: $c-groove;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-top: none;
   border-left: none;
-  padding: 3px 4px;
+  border-radius: 3px;
+  padding: 2px;
   height: 50px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
   position: relative;
   cursor: pointer;
   transition: all 0.15s ease;
 
-  // Span multiple columns based on item slots
-  // grid-column: span is set inline in HBS
+  // Span multiple columns based on item slots (set inline in HBS)
+  // grid-column: span X;
 
-  // Hover effect
   &:hover {
     background: lighten(#666, 5%);
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   }
 
-  // Equipped state - internal glow effect
   &.equipped {
     box-shadow:
       inset 0 0 8px rgba(92, 184, 92, 0.6),
@@ -169,165 +168,35 @@
     }
   }
 
-  // Dragging state
   &.dragging {
     opacity: 0.6;
     transform: scale(0.98);
   }
 
-  // Card content wrapper
-  .inventory-card-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    height: 100%;
-  }
-}
-
-// Inventory Card Header (Icon + Name)
-.inventory-card-header {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 2px;
-
-  // Weapon skill icon (colored by metal)
-  .weapon-skill-icon {
+  .item-image {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
     flex-shrink: 0;
-    width: 18px;
-    height: 18px;
     border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-
-    img {
-      width: 16px;
-      height: 16px;
-      object-fit: contain;
-    }
+    border: none;
+    //filter for make it monochrome
+    //filter: grayscale(1) saturate(0) blur(1px) brightness(1.3) contrast(2.9) sepia(0.28);
   }
 
-  // Armor icon
-  .armor-icon {
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    background: #8b7355;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 11px;
-  }
-
-  // Gear icon
-  .gear-icon {
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    background: #666;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 11px;
-  }
-
-  // Item name
   .item-name-display {
     flex: 1;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
-    line-height: 1.1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-family: $font-title;
+    text-align: center;
+    line-height: 1.2;
     color: $c-dark;
-  }
-}
-
-// Inventory Card Stats (Damage, Grip, Range, Cost)
-.inventory-card-stats {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  color: $c-tan;
-  margin-top: auto;
-
-  .stat-group {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    flex-wrap: nowrap;
-  }
-
-  .stat-label {
-    font-weight: bold;
-    font-size: 10px;
-  }
-
-  .stat-value {
-    font-size: 10px;
-  }
-
-  // Damage group (damage + damage type icon)
-  .damage-group {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-
-    .damage-type-icon {
-      width: 12px;
-      height: 12px;
-      object-fit: contain;
-    }
-
-    .grip-display {
-      margin-left: 1px;
-      font-weight: bold;
-    }
-  }
-
-  // Range and cost group
-  .range-cost-group {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    margin-left: auto;
-
-    .range-display {
-      font-weight: bold;
-      padding: 1px 2px;
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 2px;
-      font-size: 9px;
-    }
-
-    .cost-display {
-      font-weight: bold;
-      color: #d4af37; // Gold color
-      font-size: 10px;
-    }
-  }
-
-  // Armor stats
-  .armor-stats {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  // Gear stats
-  .gear-stats {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 }
 
