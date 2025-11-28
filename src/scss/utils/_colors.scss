@@ -12,6 +12,7 @@
   --vagabond-c-transparent: #ffffffc0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
+  --vagabond-bg-paper: url('../assets/images/white-paper.webp');
 }
 
 .theme-dark {
@@ -28,6 +29,7 @@
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
   --vagabond-c-red: #c90000;
+  --vagabond-bg-paper: url('../assets/images/old-paper.webp');
 }
 
 $c-white: var(--vagabond-c-white);
@@ -44,3 +46,5 @@ $c-muted: var(--vagabond-c-muted);
 $c-darkgray: var(--vagabond-c-darkgray);
 $c-transparent: var(--vagabond-c-transparent);
 $c-groove: var(--vagabond-c-groove);
+
+$bg-paper: var(--vagabond-bg-paper);
