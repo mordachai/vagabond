@@ -1206,6 +1206,7 @@
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
+  margin-bottom: 4px;
 }
 .vagabond .resource-label {
   font-family: "Eskapade", serif;
@@ -1540,15 +1541,14 @@
 .vagabond .skills-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
+  gap: 2px;
   position: relative;
   z-index: 20 !important;
 }
 .vagabond .skills-list .skill {
   display: flex;
   align-items: center;
-  padding: 4px;
   white-space: nowrap;
 }
 .vagabond .skills-list .skill .skill-checkbox-label {
@@ -1571,7 +1571,7 @@
   color: var(--vagabond-c-tan);
 }
 .vagabond .skills-list .skill .skill-label {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   flex: 3;
@@ -1584,7 +1584,7 @@
 .vagabond .skills-list .skill .skill-difficulty {
   font-weight: bold;
   text-align: right;
-  font-size: 16px;
+  font-size: 18px;
   flex: 1;
 }
 .vagabond .right-column {
@@ -1592,48 +1592,6 @@
   flex-direction: column;
   position: relative;
   z-index: 20 !important;
-}
-.vagabond .right-column .weapon-skill {
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  white-space: nowrap;
-}
-.vagabond .right-column .weapon-skill .skill-checkbox-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin: 0;
-  margin-right: 6px;
-  flex: 0.5;
-}
-.vagabond .right-column .weapon-skill .skill-checkbox-hidden {
-  display: none;
-}
-.vagabond .right-column .weapon-skill .skill-checkbox-icon {
-  font-size: 16px;
-  color: var(--vagabond-c-dark);
-  transition: color 0.2s ease;
-}
-.vagabond .right-column .weapon-skill .skill-checkbox-icon:hover {
-  color: var(--vagabond-c-tan);
-}
-.vagabond .right-column .weapon-skill .skill-label {
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  flex: 3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.vagabond .right-column .weapon-skill .skill-label:hover {
-  text-decoration: none;
-}
-.vagabond .right-column .weapon-skill .skill-difficulty {
-  font-weight: bold;
-  text-align: right;
-  font-size: 16px;
-  flex: 1;
 }
 .vagabond .right-column .equipped-weapon,
 .vagabond .right-column .equipped-gear,
@@ -1676,12 +1634,9 @@
   margin-right: 2px;
 }
 .vagabond .favorites-section {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--vagabond-c-faint);
-}
-.vagabond .favorites-section h3 {
-  margin-bottom: 8px;
+  border-top: 2px solid var(--vagabond-c-faint);
+  margin-top: 4px;
+  padding-top: 4px;
 }
 .vagabond .saves .saves-row {
   display: flex;

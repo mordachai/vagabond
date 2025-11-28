@@ -220,7 +220,7 @@
     <section class='grid grid-2col'>
       {{! Left column: Skills (1-column layout) }}
       <section class='skills-section grid-span-1'>
-        <h3>Skills</h3>
+        <h4>Skills</h4>
         <div class='skills-list'>
           {{#each system.skills as |skill key|}}
             <div class='skill flexrow'>
@@ -257,7 +257,7 @@
       <section class='right-column grid-span-1'>
         {{! Saves Section - Horizontal layout }}
         <div class='saves'>
-          <h3>Saves</h3>
+          {{!-- <h4>Saves</h4> --}}
           <div class='saves-row flexrow'>
             {{#each system.saves as |save key|}}
               <div class='save flexcol align-center'>
@@ -279,40 +279,42 @@
 
         {{! Weapon Skills / Attacks Section }}
         <div class='weapon-skills flexcol'>
-          <h3>Attacks</h3>
-          {{#each system.weaponSkills as |weaponSkill key|}}
-            <div class='weapon-skill flexrow'>
-              <label class='skill-checkbox-label'>
-                <input
-                  type='checkbox'
-                  name='system.weaponSkills.{{key}}.trained'
-                  {{#if weaponSkill.trained}}checked{{/if}}
-                  class='skill-checkbox-hidden'
-                />
-                {{#if weaponSkill.trained}}
-                  <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
-                {{else}}
-                  <i class='skill-checkbox-icon far fa-circle'></i>
-                {{/if}}
-              </label>
-              <label
-                class='skill-label rollable'
-                data-action='roll'
-                data-roll='d20'
-                data-roll-type='weapon-skill'
-                data-skill-key='{{key}}'
-                data-difficulty='{{weaponSkill.difficulty}}'
-                data-trained='{{weaponSkill.trained}}'
-                data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
-              >{{weaponSkill.label}}</label>
-              <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
-            </div>
-          {{/each}}
+          <h4>Attacks</h4>
+          <div class='skills-list'>
+            {{#each system.weaponSkills as |weaponSkill key|}}
+              <div class='skill flexrow'>
+                <label class='skill-checkbox-label'>
+                  <input
+                    type='checkbox'
+                    name='system.weaponSkills.{{key}}.trained'
+                    {{#if weaponSkill.trained}}checked{{/if}}
+                    class='skill-checkbox-hidden'
+                  />
+                  {{#if weaponSkill.trained}}
+                    <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+                  {{else}}
+                    <i class='skill-checkbox-icon far fa-circle'></i>
+                  {{/if}}
+                </label>
+                <label
+                  class='skill-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-roll-type='weapon-skill'
+                  data-skill-key='{{key}}'
+                  data-difficulty='{{weaponSkill.difficulty}}'
+                  data-trained='{{weaponSkill.trained}}'
+                  data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
+                >{{weaponSkill.label}}</label>
+                <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
+              </div>
+            {{/each}}
+          </div>
         </div>
 
         {{! Favorites Section - Equipped Items }}
         <div class='favorites-section flexcol'>
-
+        <h4>Equipped</h4>
           {{! Equipped Weapons }}
           {{#each weapons as |weapon|}}
             {{#if weapon.system.equipped}}
