@@ -1092,9 +1092,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     });
 
-    // Inventory Grid Event Listeners
-    this._attachInventoryGridListeners();
-
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.

@@ -2989,22 +2989,10 @@
   padding-bottom: 0;
 }
 .vagabond .panel-title {
-  font-size: 20px;
-  font-weight: bold;
   text-align: center;
   margin-bottom: 4px;
   color: var(--vagabond-c-dark);
   font-family: "Eskapade", serif;
-}
-.vagabond .panel-section h3 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 4px;
-  margin-top: 8px;
-  color: var(--vagabond-c-dark);
-}
-.vagabond .panel-section h3:first-of-type {
-  margin-top: 0;
 }
 .vagabond .features-perks-section .grid {
   margin: 0;
@@ -3051,7 +3039,7 @@
   color: var(--vagabond-c-dark);
 }
 .vagabond .currency-row {
-  justify-content: space-around;
+  justify-content: flex-end;
   gap: 8px;
 }
 .vagabond .currency-field {

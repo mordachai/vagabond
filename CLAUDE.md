@@ -70,11 +70,10 @@ npm run createSymlinks  # Create symlinks to Foundry data directory (optional)
 
 **Templates**:
 - `templates/actor/sliding-panel.hbs` - Right-side sliding panel with stats, skills, saves, favorites
-- `templates/actor/inventory.hbs` - Visual inventory grid (main content area)
-- `templates/actor/parts/inventory-card.hbs` - Individual inventory item cards
-- `templates/actor/features.hbs` - Abilities and features (deprecated in favor of sliding panel)
+- `templates/actor/features.hbs` - Features & Perks tab (includes inventory grid with wealth and slots)
 - `templates/actor/spells.hbs` - Spell list tab
-- `templates/actor/biography.hbs` - Biography tab
+- `templates/actor/effects.hbs` - Active effects tab
+- `templates/actor/parts/inventory-card.hbs` - Individual inventory item cards (used in inventory grid)
 
 ## Character Sheet Architecture
 
@@ -120,59 +119,24 @@ The character sheet uses a **right-side sliding panel** design (`templates/actor
 
 ### Visual Inventory Grid System
 
-Located in `templates/actor/inventory.hbs`, this is a **slot-based visual grid** (3 columns × 6 rows = 18 total slots) similar to classic RPG inventories.
+Located in the **Features tab** (`templates/actor/features.hbs`), this is a **slot-based visual grid** (3 columns × 6 rows = 18 total slots) similar to classic RPG inventories.
+
+**Key Features**:
+- **Wealth Section**: Gold/Silver/Copper currency inputs
+- **Slots Display**: Shows occupied/max slots with overload warning
+- **Visual Grid**: 3×6 grid displaying all weapons, armor, and gear items
+- **Item Cards**: Each card shows icon, name, stats (damage/armor/quantity), and equipped state
 
 **Architecture** (see `docs/INVENTORY_SYSTEM.md` for full details):
-
-**Data Preparation** (`module/sheets/actor-sheet.mjs`):
-- `_prepareInventoryGrid()` method combines weapons, armor, gear into single array
-- Enriches each item with visual data:
-  - `metalColor` - Background color for weapon skill icon (from `VAGABOND.metalColors`)
-  - `weaponSkillIcon` - Icon path (from `VAGABOND.icons.weaponSkills`)
-  - `damageTypeIcon` - Icon path (from `VAGABOND.icons.damageTypes`)
-  - `equipped` - Boolean for equipped state
-- Sorts by `gridPosition` field (0-17)
-- Calculates empty slots to fill grid to 18 total
-- Marks slots beyond `maxSlots` capacity as unavailable
-
-**Inventory Card Template** (`templates/actor/parts/inventory-card.hbs`):
-- **Header row**: Icon (weapon skill/armor/gear type) + item name
-- **Stats row**:
-  - Weapons: Damage, damage type icon, grip icon, range abbreviation, cost
-  - Armor: Armor value, slots occupied
-  - Gear: Slots occupied, quantity
-
-**Visual Features**:
-- Multi-slot items use `style='grid-column: span X'` to occupy 1-3 slots
-- Equipped items have `.equipped` class (can be styled differently)
-- Empty slots show slot number (1-18)
-- Unavailable slots (beyond capacity) have `.unavailable` class with darkened background
-
-**Slot Capacity System**:
-- Max slots formula: `8 + Might stat + bonus` (typically ~17)
-- Header shows: "Slots: X / Y" with overload warning if X > Y
-- Wealth section shows gold/silver/copper currency inputs
-- Auto-Arrange button (not yet implemented)
+- `_prepareInventoryGrid()` method in `actor-sheet.mjs` prepares the inventory data
+- Items are enriched with visual data (metal colors, weapon skill icons, damage type icons)
+- Sorted by `gridPosition` field
+- Empty slots calculated to fill grid to 18 total
 
 **Current Limitations**:
-- **Drag-and-drop rearrangement is NOT YET IMPLEMENTED** - items cannot be manually repositioned by players
-- Items auto-arrange based on `gridPosition` value but players cannot change this via UI
-- Double-click, right-click context menus, and hover tooltips are NOT YET IMPLEMENTED
-- Future enhancement: Allow players to drag items to rearrange their positions in the grid
-
-**Data Structure**:
-- Each item has `system.gridPosition` (0-17) to determine placement
-- Weapons: `system.equipped` (boolean)
-- Armor: `system.worn` (boolean, not `equipped`)
-- Gear: `system.equipped` (boolean)
-- All equipment: `system.slots` (1-3, how many grid slots it occupies)
-
-**Visual Configuration** (`module/helpers/config.mjs`):
-- `VAGABOND.metalColors` - Color codes for metal types (common, adamant, coldIron, silver, mythral, orichalcum)
-- `VAGABOND.icons.weaponSkills` - Icon paths for melee, ranged, brawl, finesse
-- `VAGABOND.icons.damageTypes` - Icon paths for all damage types
-- `VAGABOND.icons.grips` - Icon paths for 1H, 2H, Fist, Versatile
-- `VAGABOND.rangeAbbreviations` - Single-letter codes (C, N, F)
+- Drag-and-drop rearrangement is NOT YET IMPLEMENTED
+- Context menus and tooltips are NOT YET IMPLEMENTED
+- Items display but cannot be repositioned via UI
 
 ### Roll System Architecture
 
