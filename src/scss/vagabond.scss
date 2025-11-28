@@ -22,6 +22,9 @@
 /* Countdown dice - imported at top level because overlay and config are outside sheets */
 @import 'components/countdown-dice';
 
+/* Inventory mini-sheet - imported at top level because it renders outside sheets */
+@import 'components/inventory-mini-sheet';
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

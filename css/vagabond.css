@@ -1190,6 +1190,150 @@
   flex: 1;
 }
 
+/* Inventory mini-sheet - imported at top level because it renders outside sheets */
+.inventory-mini-sheet {
+  width: 300px;
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--vagabond-c-lite);
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: "Manofa", serif;
+  color: var(--vagabond-c-dark);
+  padding: 12px;
+}
+.inventory-mini-sheet .mini-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  border: 2px solid var(--vagabond-c-dark);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title {
+  flex: 1;
+  min-width: 0;
+  padding-top: 8px;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-type {
+  font-size: 10px;
+  color: var(--vagabond-c-dark);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  display: block;
+  font-family: "Manofa", serif;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--vagabond-c-dark);
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--vagabond-c-dark);
+  margin-top: 6px;
+  font-style: italic;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore strong {
+  font-style: normal;
+  font-weight: 700;
+}
+.inventory-mini-sheet .mini-sheet-description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--vagabond-c-dark);
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 4px;
+  font-family: "Paradigm", serif;
+}
+.inventory-mini-sheet .mini-sheet-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin-bottom: 12px;
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  font-size: 14px;
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row .stat-name {
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-family: "Eskapade", serif;
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row .stat-name::after {
+  content: ":";
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row .stat-value {
+  color: var(--vagabond-c-dark);
+  text-transform: capitalize;
+  font-family: "Paradigm", serif;
+}
+.inventory-mini-sheet .mini-sheet-properties {
+  padding-top: 12px;
+  border-top: 1px solid var(--vagabond-c-dark);
+}
+.inventory-mini-sheet .mini-sheet-properties .mini-sheet-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list .property-row {
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list .property-row .property-name {
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  flex-shrink: 0;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list .property-row .property-description {
+  flex: 1;
+  font-family: "Paradigm", serif;
+}
+.inventory-mini-sheet::-webkit-scrollbar {
+  width: 8px;
+}
+.inventory-mini-sheet::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0 8px 8px 0;
+}
+.inventory-mini-sheet::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+.inventory-mini-sheet::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   /* Character Name at Top - Full Width */
@@ -2269,35 +2413,6 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-}
-.vagabond .inventory-card-tooltip {
-  position: absolute;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  max-width: 250px;
-  font-size: 12px;
-  line-height: 1.4;
-  pointer-events: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-.vagabond .inventory-card-tooltip .tooltip-title {
-  font-weight: bold;
-  font-size: 13px;
-  margin-bottom: 6px;
-  color: #ffd700;
-}
-.vagabond .inventory-card-tooltip .tooltip-description {
-  margin-bottom: 6px;
-}
-.vagabond .inventory-card-tooltip .tooltip-stats {
-  font-size: 11px;
-  color: #ccc;
-}
-.vagabond .inventory-card-tooltip .tooltip-stats div {
-  margin-bottom: 2px;
 }
 .vagabond .inventory-context-menu {
   position: fixed;

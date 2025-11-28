@@ -17,18 +17,17 @@
           <div
             class='weapon-skill-icon'
             style='background-color: {{metalColor}};'
-            data-tooltip='{{item.system.weaponSkill}}'
           >
             <img src='{{weaponSkillIcon}}' alt='{{item.system.weaponSkill}}' />
           </div>
         {{else if (eq item.system.equipmentType 'armor')}}
           {{! Armor icon }}
-          <div class='armor-icon' data-tooltip='Armor'>
+          <div class='armor-icon'>
             <i class='fas fa-shield-halved'></i>
           </div>
         {{else}}
           {{! Generic gear icon }}
-          <div class='gear-icon' data-tooltip='Gear'>
+          <div class='gear-icon'>
             <i class='fas fa-box'></i>
           </div>
         {{/if}}
@@ -37,23 +36,22 @@
         <div
           class='weapon-skill-icon'
           style='background-color: {{metalColor}};'
-          data-tooltip='{{item.system.weaponSkill}}'
         >
           <img src='{{weaponSkillIcon}}' alt='{{item.system.weaponSkill}}' />
         </div>
       {{else if (eq item.type 'armor')}}
         {{! Legacy armor support }}
-        <div class='armor-icon' data-tooltip='Armor'>
+        <div class='armor-icon'>
           <i class='fas fa-shield-halved'></i>
         </div>
       {{else}}
         {{! Other item types }}
-        <div class='gear-icon' data-tooltip='{{item.type}}'>
+        <div class='gear-icon'>
           <i class='fas fa-box'></i>
         </div>
       {{/if}}
 
-      <div class='item-name-display' data-tooltip='{{item.name}}'>{{item.name}}</div>
+      <div class='item-name-display'>{{item.name}}</div>
     </div>
 
     {{! Bottom row: Damage, Grip, Range, Cost }}
@@ -64,17 +62,17 @@
           <div class='stat-group damage-group'>
             <span class='stat-label'>{{item.system.currentDamage}}</span>
             {{#if damageTypeIcon}}
-              <img class='damage-type-icon' src='{{damageTypeIcon}}' alt='{{item.system.damageType}}' data-tooltip='{{item.system.damageType}}' />
+              <img class='damage-type-icon' src='{{damageTypeIcon}}' alt='{{item.system.damageType}}' />
             {{/if}}
             {{#if item.system.grip}}
-              <span class='stat-value grip-display' data-tooltip='{{item.system.gripDisplay}}'>{{item.system.grip}}</span>
+              <span class='stat-value grip-display'>{{item.system.grip}}</span>
             {{/if}}
           </div>
 
           {{! Range and Cost }}
           <div class='stat-group range-cost-group'>
             {{#if item.system.rangeAbbr}}
-              <span class='stat-value range-display' data-tooltip='{{item.system.rangeDisplay}}'>{{item.system.rangeAbbr}}</span>
+              <span class='stat-value range-display'>{{item.system.rangeAbbr}}</span>
             {{/if}}
             <span class='stat-value cost-display'>s{{item.system.costDisplay}}</span>
           </div>

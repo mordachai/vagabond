@@ -1109,6 +1109,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     inventoryCards.forEach(card => {
       const itemId = card.dataset.itemId;
 
+      // Single-click: Show mini-sheet (FOR TESTING)
+      card.addEventListener('click', (event) => {
+        event.preventDefault();
+        console.log('Click detected on item:', itemId);
+        this._showInventoryMiniSheet(event, itemId);
+      });
+
       // Double-click: Open item sheet
       card.addEventListener('dblclick', (event) => {
         event.preventDefault();
@@ -1122,20 +1129,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.preventDefault();
         console.log('Right-click detected on item:', itemId);
         this._showInventoryContextMenu(event, itemId, card);
-      });
-
-      // Hover with 2-second delay: Show tooltip
-      let hoverTimeout;
-      card.addEventListener('mouseenter', (event) => {
-        hoverTimeout = setTimeout(() => {
-          console.log('Showing tooltip for item:', itemId);
-          this._showInventoryTooltip(event, itemId, card);
-        }, 2000);
-      });
-
-      card.addEventListener('mouseleave', (event) => {
-        clearTimeout(hoverTimeout);
-        this._hideInventoryTooltip();
       });
 
       // Drag start
@@ -1324,60 +1317,244 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Show tooltip for inventory item
-   * @param {Event} event - The mouse event
+   * Show mini-sheet popup for inventory item
+   * @param {Event} event - The click event
    * @param {string} itemId - The item ID
-   * @param {HTMLElement} card - The inventory card element
    * @private
    */
-  _showInventoryTooltip(event, itemId, card) {
+  _showInventoryMiniSheet(event, itemId) {
     const item = this.actor.items.get(itemId);
     if (!item) return;
 
-    // Remove any existing tooltip
-    this._hideInventoryTooltip();
+    // Remove any existing mini-sheet
+    this._hideInventoryMiniSheet();
 
-    const tooltip = document.createElement('div');
-    tooltip.className = 'inventory-card-tooltip';
+    const miniSheet = document.createElement('div');
+    miniSheet.className = 'inventory-mini-sheet';
+    miniSheet.style.position = 'fixed';
+    miniSheet.style.zIndex = '10000';
 
-    let statsHtml = '';
-    if (item.system.currentDamage) {
-      statsHtml += `<div>Damage: ${item.system.currentDamage}</div>`;
-    }
-    if (item.system.rangeDisplay) {
-      statsHtml += `<div>Range: ${item.system.rangeDisplay}</div>`;
-    }
-    if (item.system.gripDisplay) {
-      statsHtml += `<div>Grip: ${item.system.gripDisplay}</div>`;
-    }
-    if (item.system.slots) {
-      statsHtml += `<div>Slots: ${item.system.slots}</div>`;
-    }
+    // Position near the click
+    const x = Math.min(event.clientX + 10, window.innerWidth - 360);
+    const y = Math.min(event.clientY + 10, window.innerHeight - 400);
+    miniSheet.style.left = `${x}px`;
+    miniSheet.style.top = `${y}px`;
 
-    tooltip.innerHTML = `
-      <div class="tooltip-title">${item.name}</div>
-      ${item.system.description ? `<div class="tooltip-description">${item.system.description}</div>` : ''}
-      ${statsHtml ? `<div class="tooltip-stats">${statsHtml}</div>` : ''}
-    `;
+    // Build content based on item type
+    const content = this._buildMiniSheetContent(item);
+    miniSheet.innerHTML = content;
 
-    // Position tooltip
-    const cardRect = card.getBoundingClientRect();
-    tooltip.style.position = 'fixed';
-    tooltip.style.left = `${cardRect.right + 10}px`;
-    tooltip.style.top = `${cardRect.top}px`;
+    document.body.appendChild(miniSheet);
+    this._currentMiniSheet = miniSheet;
 
-    document.body.appendChild(tooltip);
-    this._currentTooltip = tooltip;
+    // Close on click outside
+    setTimeout(() => {
+      document.addEventListener('click', this._hideInventoryMiniSheet.bind(this), { once: true });
+    }, 10);
+
+    // Prevent the click from immediately closing it
+    event.stopPropagation();
   }
 
   /**
-   * Hide tooltip
+   * Build HTML content for mini-sheet based on item type
+   * @param {VagabondItem} item - The item
+   * @returns {string} HTML content
    * @private
    */
-  _hideInventoryTooltip() {
-    if (this._currentTooltip) {
-      this._currentTooltip.remove();
-      this._currentTooltip = null;
+  _buildMiniSheetContent(item) {
+    const isWeapon = (item.type === 'weapon') || (item.type === 'equipment' && item.system.equipmentType === 'weapon');
+    const isArmor = (item.type === 'armor') || (item.type === 'equipment' && item.system.equipmentType === 'armor');
+    const isRelic = (item.type === 'equipment' && item.system.equipmentType === 'relic');
+    const isGear = (item.type === 'equipment' && ['gear', 'alchemical'].includes(item.system.equipmentType));
+
+    // Header: Image (100x100) + Type above Name + Lore (if relic)
+    let html = `
+      <div class="mini-sheet-header">
+        <img src="${item.img}" alt="${item.name}" class="mini-sheet-image" />
+        <div class="mini-sheet-title">
+          <span class="mini-sheet-type">${this._formatItemType(item)}</span>
+          <h3>${item.name}</h3>
+          ${isRelic && item.system.lore ? `<div class="mini-sheet-lore">${item.system.lore}</div>` : ''}
+        </div>
+      </div>
+    `;
+
+    // Description (full width, no label)
+    if (item.system.description) {
+      html += `<div class="mini-sheet-description">${item.system.description}</div>`;
+    }
+
+    // Stats (two columns)
+    if (isWeapon) {
+      html += this._buildWeaponStats(item);
+    } else if (isArmor) {
+      html += this._buildArmorStats(item);
+    } else if (isGear || isRelic) {
+      html += this._buildGearStats(item);
+    }
+
+    // Properties with descriptions (full width at bottom)
+    if (isWeapon && item.system.properties && item.system.properties.length > 0) {
+      html += this._buildWeaponProperties(item);
+    }
+
+    return html;
+  }
+
+  /**
+   * Format item type for display
+   * @param {VagabondItem} item - The item
+   * @returns {string} Formatted type
+   * @private
+   */
+  _formatItemType(item) {
+    if (item.type === 'equipment') {
+      return item.system.equipmentType.charAt(0).toUpperCase() + item.system.equipmentType.slice(1);
+    }
+    return item.type.charAt(0).toUpperCase() + item.type.slice(1);
+  }
+
+  /**
+   * Build weapon stats HTML (two-column grid)
+   * @param {VagabondItem} item - The weapon item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildWeaponStats(item) {
+    return `
+      <div class="mini-sheet-stats">
+        <div class="stat-row">
+          <span class="stat-name">Damage</span>
+          <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${item.system.damageType || ''}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Range</span>
+          <span class="stat-value">${item.system.rangeDisplay || item.system.range || '—'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Grip</span>
+          <span class="stat-value">${item.system.gripDisplay || item.system.grip || '—'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Weapon Skill</span>
+          <span class="stat-value">${item.system.weaponSkill || '—'}</span>
+        </div>
+        ${item.system.metal && item.system.metal !== 'common' ? `
+        <div class="stat-row">
+          <span class="stat-name">Metal</span>
+          <span class="stat-value">${item.system.metal}</span>
+        </div>
+        ` : ''}
+        <div class="stat-row">
+          <span class="stat-name">Cost</span>
+          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Slots</span>
+          <span class="stat-value">${item.system.slots || 1}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Build armor stats HTML (two-column grid)
+   * @param {VagabondItem} item - The armor item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildArmorStats(item) {
+    return `
+      <div class="mini-sheet-stats">
+        <div class="stat-row">
+          <span class="stat-name">Armor Rating</span>
+          <span class="stat-value">${item.system.finalRating || item.system.rating || '—'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Type</span>
+          <span class="stat-value">${item.system.armorType || '—'}</span>
+        </div>
+        ${item.system.metal && item.system.metal !== 'common' ? `
+        <div class="stat-row">
+          <span class="stat-name">Metal</span>
+          <span class="stat-value">${item.system.metal}</span>
+        </div>
+        ` : ''}
+        <div class="stat-row">
+          <span class="stat-name">Cost</span>
+          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Slots</span>
+          <span class="stat-value">${item.system.slots || 1}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Build gear stats HTML (two-column grid)
+   * @param {VagabondItem} item - The gear item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildGearStats(item) {
+    return `
+      <div class="mini-sheet-stats">
+        ${item.system.quantity ? `
+        <div class="stat-row">
+          <span class="stat-name">Quantity</span>
+          <span class="stat-value">${item.system.quantity}</span>
+        </div>
+        ` : ''}
+        <div class="stat-row">
+          <span class="stat-name">Cost</span>
+          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Slots</span>
+          <span class="stat-value">${item.system.slots || 1}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Build weapon properties with descriptions
+   * @param {VagabondItem} item - The weapon item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildWeaponProperties(item) {
+    const config = CONFIG.VAGABOND;
+
+    return `
+      <div class="mini-sheet-properties">
+        <div class="mini-sheet-label">Properties</div>
+        <div class="property-list">
+          ${item.system.properties.map(prop => {
+            const description = config.weaponPropertyHints?.[prop] || '';
+            return `
+              <div class="property-row">
+                <span class="property-name">${prop}:</span>
+                <span class="property-description">${description}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Hide mini-sheet
+   * @private
+   */
+  _hideInventoryMiniSheet() {
+    if (this._currentMiniSheet) {
+      this._currentMiniSheet.remove();
+      this._currentMiniSheet = null;
     }
   }
 

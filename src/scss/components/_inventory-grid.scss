@@ -331,41 +331,6 @@
   }
 }
 
-// Hover Tooltip (2 second delay)
-.inventory-card-tooltip {
-  position: absolute;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  max-width: 250px;
-  font-size: 12px;
-  line-height: 1.4;
-  pointer-events: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-
-  .tooltip-title {
-    font-weight: bold;
-    font-size: 13px;
-    margin-bottom: 6px;
-    color: #ffd700;
-  }
-
-  .tooltip-description {
-    margin-bottom: 6px;
-  }
-
-  .tooltip-stats {
-    font-size: 11px;
-    color: #ccc;
-
-    div {
-      margin-bottom: 2px;
-    }
-  }
-}
-
 // Context Menu (Right-click)
 .inventory-context-menu {
   position: fixed;
