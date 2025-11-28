@@ -36,7 +36,8 @@
   font-style: italic;
 }
 :root {
-  --vagabond-c-dark: #191813;
+  --vagabond-c-dark: #1c1b18;
+  --vagabond-c-lite: #e3e2dd;
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
   --vagabond-c-tan: #444444;
@@ -51,7 +52,8 @@
 }
 
 .theme-dark {
-  --vagabond-c-dark: #c9c7b8;
+  --vagabond-c-dark: #cac9c2;
+  --vagabond-c-lite: #21211f;
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;
@@ -3563,7 +3565,9 @@
 .vagabond .npc-ability-view .ability-description {
   font-weight: normal;
 }
-.vagabond .npc-action-edit {
+.vagabond .npc-edit-item,
+.vagabond .npc-action-edit,
+.vagabond .npc-ability-edit {
   padding: 8px;
   margin-bottom: 8px;
   border: 1px solid var(--vagabond-c-tan);
@@ -3571,7 +3575,9 @@
   background: var(--vagabond-c-tan-lite);
   position: relative;
 }
-.vagabond .npc-action-edit .action-edit-header {
+.vagabond .npc-edit-header,
+.vagabond .action-edit-header,
+.vagabond .ability-edit-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3584,55 +3590,85 @@
   cursor: pointer;
   transition: border-bottom-color 0.2s ease;
 }
-.vagabond .npc-action-edit .action-edit-header:hover {
+.vagabond .npc-edit-header:hover,
+.vagabond .action-edit-header:hover,
+.vagabond .ability-edit-header:hover {
   border-bottom-color: var(--vagabond-c-dark);
 }
-.vagabond .npc-action-edit .action-edit-header .action-edit-name {
+.vagabond .npc-edit-header .accordion-icon,
+.vagabond .action-edit-header .accordion-icon,
+.vagabond .ability-edit-header .accordion-icon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-edit-header .accordion-icon.fa-chevron-down,
+.vagabond .action-edit-header .accordion-icon.fa-chevron-down,
+.vagabond .ability-edit-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-edit-name,
+.vagabond .action-edit-name,
+.vagabond .ability-edit-name {
   font-size: 15px;
   font-weight: 600;
   font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
-.vagabond .npc-action-edit .action-edit-header .accordion-icon {
-  font-size: 12px;
-  transition: transform 0.2s ease;
-  color: var(--vagabond-c-muted);
-}
-.vagabond .npc-action-edit .action-edit-header .accordion-icon.fa-chevron-down {
-  transform: rotate(90deg);
-}
-.vagabond .npc-action-edit .action-edit-content {
+.vagabond .npc-edit-content,
+.vagabond .action-edit-content,
+.vagabond .ability-edit-content {
   overflow: hidden;
   transition: max-height 0.3s ease;
 }
-.vagabond .npc-action-edit .action-edit-content.collapsed {
+.vagabond .npc-edit-content.collapsed,
+.vagabond .action-edit-content.collapsed,
+.vagabond .ability-edit-content.collapsed {
   max-height: 0;
 }
-.vagabond .npc-action-edit .action-edit-content:not(.collapsed) {
+.vagabond .npc-edit-content:not(.collapsed),
+.vagabond .action-edit-content:not(.collapsed),
+.vagabond .ability-edit-content:not(.collapsed) {
   max-height: 1000px;
 }
-.vagabond .action-edit-row {
+.vagabond .npc-edit-row,
+.vagabond .action-edit-row,
+.vagabond .ability-edit-row {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-bottom: 8px;
 }
-.vagabond .action-edit-row label {
+.vagabond .npc-edit-row label,
+.vagabond .action-edit-row label,
+.vagabond .ability-edit-row label {
   font-size: 14px;
   font-weight: bold;
   font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
 }
-.vagabond .action-edit-row .action-name-with-remove {
+.vagabond .npc-edit-row textarea,
+.vagabond .action-edit-row textarea,
+.vagabond .ability-edit-row textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+.vagabond .npc-name-with-remove,
+.vagabond .action-name-with-remove,
+.vagabond .ability-name-with-remove {
   display: flex;
   align-items: center;
   gap: 8px;
   position: relative;
 }
-.vagabond .action-edit-row .action-name-with-remove input {
+.vagabond .npc-name-with-remove input,
+.vagabond .action-name-with-remove input,
+.vagabond .ability-name-with-remove input {
   flex: 1;
 }
-.vagabond .action-edit-row .action-remove-btn {
+.vagabond .npc-remove-btn,
+.vagabond .action-remove-btn,
+.vagabond .ability-remove-btn {
   flex-shrink: 0;
   padding: 2px 6px;
   border: none;
@@ -3642,12 +3678,10 @@
   font-size: 14px;
   transition: color 0.2s ease;
 }
-.vagabond .action-edit-row .action-remove-btn:hover {
+.vagabond .npc-remove-btn:hover,
+.vagabond .action-remove-btn:hover,
+.vagabond .ability-remove-btn:hover {
   color: #c62828;
-}
-.vagabond .action-edit-row textarea {
-  resize: vertical;
-  min-height: 60px;
 }
 .vagabond .action-edit-row-split {
   flex-direction: row;
@@ -3659,14 +3693,18 @@
   flex-direction: column;
   gap: 4px;
 }
-.vagabond .action-add-row {
+.vagabond .npc-add-row,
+.vagabond .action-add-row,
+.vagabond .ability-add-row {
   display: flex;
   justify-content: flex-start;
   margin-top: 8px;
   padding: 4px 0;
   border-top: 1px solid var(--vagabond-c-tan);
 }
-.vagabond .action-add-row .action-add-btn {
+.vagabond .npc-add-btn,
+.vagabond .action-add-btn,
+.vagabond .ability-add-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -3681,10 +3719,14 @@
   cursor: pointer;
   transition: color 0.2s ease;
 }
-.vagabond .action-add-row .action-add-btn:hover {
+.vagabond .npc-add-btn:hover,
+.vagabond .action-add-btn:hover,
+.vagabond .ability-add-btn:hover {
   color: var(--vagabond-c-dark);
 }
-.vagabond .action-add-row .action-add-btn i {
+.vagabond .npc-add-btn i,
+.vagabond .action-add-btn i,
+.vagabond .ability-add-btn i {
   font-size: 14px;
 }
 .vagabond .npc-sheet select,
@@ -4008,7 +4050,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-immunity-checkboxes {
   position: absolute;
   z-index: 10;
-  background: white;
+  background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
@@ -4020,6 +4062,9 @@ details[open] .vagabond .npc-immunity-toggle i {
   min-width: 200px;
   max-height: 300px;
   overflow-y: auto;
+  color: var(--vagabond-c-dark);
+  font-size: 14px;
+  font-family: "Manofa", serif;
 }
 .vagabond .npc-immunity-checkbox-item {
   display: flex;
@@ -4030,16 +4075,13 @@ details[open] .vagabond .npc-immunity-toggle i {
   white-space: nowrap;
 }
 .vagabond .npc-immunity-checkbox-item:hover {
-  background: var(--vagabond-c-faint);
+  background: var(--vagabond-c-tan);
+  color: var(--vagabond-c-lite);
+  border-radius: 4px;
 }
 .vagabond .npc-immunity-checkbox-item input[type=checkbox] {
   cursor: pointer;
   margin: 0;
-}
-.vagabond .npc-immunity-checkbox-item span {
-  font-size: 14px;
-  font-family: "Manofa", serif;
-  color: var(--vagabond-c-dark);
 }
 .vagabond .npc-immunity-tags {
   display: flex;

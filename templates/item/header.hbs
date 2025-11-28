@@ -67,27 +67,11 @@
       <div class='grid grid-2col'>
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.size.label'}}</label>
-          <select name='system.size' data-dtype='String'>
-            <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>{{localize "VAGABOND.Sizes.small"}}</option>
-            <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>{{localize "VAGABOND.Sizes.medium"}}</option>
-            <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>{{localize "VAGABOND.Sizes.large"}}</option>
-            <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>{{localize "VAGABOND.Sizes.huge"}}</option>
-            <option value='giant' {{#if (eq system.size 'giant')}}selected{{/if}}>{{localize "VAGABOND.Sizes.giant"}}</option>
-            <option value='colossal' {{#if (eq system.size 'colossal')}}selected{{/if}}>{{localize "VAGABOND.Sizes.colossal"}}</option>
-          </select>
+          {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size}}
         </div>
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.ancestryType.label'}}</label>
-          <select name='system.ancestryType' data-dtype='String'>
-            <option value='Humanlike' {{#if (eq system.ancestryType 'Humanlike')}}selected{{/if}}>Humanlike</option>
-            <option value='Fae' {{#if (eq system.ancestryType 'Fae')}}selected{{/if}}>Fae</option>
-            <option value='Cryptid' {{#if (eq system.ancestryType 'Cryptid')}}selected{{/if}}>Cryptid</option>
-            <option value='Artificials' {{#if (eq system.ancestryType 'Artificials')}}selected{{/if}}>Artificials</option>
-            <option value='Beasts' {{#if (eq system.ancestryType 'Beasts')}}selected{{/if}}>Beasts</option>
-            <option value='Outers' {{#if (eq system.ancestryType 'Outers')}}selected{{/if}}>Outers</option>
-            <option value='Primordials' {{#if (eq system.ancestryType 'Primordials')}}selected{{/if}}>Primordials</option>
-            <option value='Undead' {{#if (eq system.ancestryType 'Undead')}}selected{{/if}}>Undead</option>
-          </select>
+          {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.ancestryType" selected=system.ancestryType}}
         </div>
       </div>
     {{/if}}

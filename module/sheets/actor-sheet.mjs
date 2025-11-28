@@ -74,9 +74,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /** @override */
   static PARTS = {
-    header: {
-      template: 'systems/vagabond/templates/actor/header.hbs',
-    },
     tabs: {
       // Foundry-provided generic template
       template: 'templates/generic/tab-navigation.hbs',
@@ -1091,6 +1088,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         });
       }
     });
+
+    // Inventory Grid Event Listeners
+    this._attachInventoryGridListeners();
 
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter

@@ -648,67 +648,79 @@
   }
 }
 
-// Action Edit Mode (unlocked)
-.npc-action-edit {
+// Shared Edit Mode Styles (actions, abilities, etc.)
+.npc-edit-item,
+.npc-action-edit,
+.npc-ability-edit {
   padding: 8px;
   margin-bottom: 8px;
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 8px;
   background: $c-tan-lite;
   position: relative;
+}
 
-  // Accordion header for named actions
-  .action-edit-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4px 0;
-    margin: 0;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--vagabond-c-tan);
-    border-radius: 0;
-    cursor: pointer;
-    transition: border-bottom-color 0.2s ease;
+// Shared accordion header for named items
+.npc-edit-header,
+.action-edit-header,
+.ability-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
 
-    &:hover {
-      border-bottom-color: var(--vagabond-c-dark);
-    }
-
-    .action-edit-name {
-      font-size: 15px;
-      font-weight: 600;
-      font-family: $font-secondary;
-      color: var(--vagabond-c-dark);
-    }
-
-    .accordion-icon {
-      font-size: 12px;
-      transition: transform 0.2s ease;
-      color: var(--vagabond-c-muted);
-
-      &.fa-chevron-down {
-        transform: rotate(90deg);
-      }
-    }
+  &:hover {
+    border-bottom-color: var(--vagabond-c-dark);
   }
 
-  // Accordion content (collapsible)
-  .action-edit-content {
-    overflow: hidden;
-    transition: max-height 0.3s ease;
+  .accordion-icon {
+    font-size: 12px;
+    transition: transform 0.2s ease;
+    color: var(--vagabond-c-muted);
 
-    &.collapsed {
-      max-height: 0;
-    }
-
-    &:not(.collapsed) {
-      max-height: 1000px;
+    &.fa-chevron-down {
+      transform: rotate(90deg);
     }
   }
 }
 
-.action-edit-row {
+// Shared edit name styling
+.npc-edit-name,
+.action-edit-name,
+.ability-edit-name {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: $font-secondary;
+  color: var(--vagabond-c-dark);
+}
+
+// Shared accordion content (collapsible)
+.npc-edit-content,
+.action-edit-content,
+.ability-edit-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+
+  &.collapsed {
+    max-height: 0;
+  }
+
+  &:not(.collapsed) {
+    max-height: 1000px;
+  }
+}
+
+// Shared edit row styles
+.npc-edit-row,
+.action-edit-row,
+.ability-edit-row {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -719,34 +731,6 @@
     font-weight: bold;
     font-family: $font-secondary;
     color: var(--vagabond-c-dark);
-  }
-
-  // Name field with remove button container
-  .action-name-with-remove {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-
-    input {
-      flex: 1;
-    }
-  }
-
-  // Remove button positioning
-  .action-remove-btn {
-    flex-shrink: 0;
-    padding: 2px 6px;
-    border: none;
-    background: transparent;
-    color: var(--vagabond-c-muted);
-    cursor: pointer;
-    font-size: 14px;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #c62828;
-    }
   }
 
   // Inputs and textareas inherit from .npc-field-input
@@ -761,6 +745,39 @@
   }
 }
 
+// Shared name field with remove button container
+.npc-name-with-remove,
+.action-name-with-remove,
+.ability-name-with-remove {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+
+  input {
+    flex: 1;
+  }
+}
+
+// Shared remove button styling
+.npc-remove-btn,
+.action-remove-btn,
+.ability-remove-btn {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #c62828;
+  }
+}
+
+// Split row layout (for actions with multiple columns)
 .action-edit-row-split {
   flex-direction: row;
   gap: 8px;
@@ -773,35 +790,41 @@
   }
 }
 
-.action-add-row {
+// Shared styles for add-row containers (actions, abilities, etc.)
+.npc-add-row,
+.action-add-row,
+.ability-add-row {
   display: flex;
   justify-content: flex-start;
   margin-top: 8px;
   padding: 4px 0;
   border-top: 1px solid var(--vagabond-c-tan);
+}
 
-  .action-add-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 0;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    color: var(--vagabond-c-muted);
+// Shared styles for add buttons
+.npc-add-btn,
+.action-add-btn,
+.ability-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 14px;
+  font-family: $font-secondary;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--vagabond-c-dark);
+  }
+
+  i {
     font-size: 14px;
-    font-family: $font-secondary;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: var(--vagabond-c-dark);
-    }
-
-    i {
-      font-size: 14px;
-    }
   }
 }
 
@@ -1174,7 +1197,7 @@
 .npc-immunity-checkboxes {
   position: absolute;
   z-index: 10;
-  background: white;
+  background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
@@ -1186,6 +1209,9 @@
   min-width: 200px;
   max-height: 300px;
   overflow-y: auto;
+    color: var(--vagabond-c-dark);
+  font-size: 14px;
+  font-family: $font-secondary;
 }
 
 .npc-immunity-checkbox-item {
@@ -1197,18 +1223,14 @@
   white-space: nowrap;
 
   &:hover {
-    background: var(--vagabond-c-faint);
+    background: var(--vagabond-c-tan);
+    color: var(--vagabond-c-lite);
+    border-radius: 4px;
   }
 
   input[type='checkbox'] {
     cursor: pointer;
     margin: 0;
-  }
-
-  span {
-    font-size: 14px;
-    font-family: $font-secondary;
-    color: var(--vagabond-c-dark);
   }
 }
 

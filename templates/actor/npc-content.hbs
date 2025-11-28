@@ -34,35 +34,9 @@
     <div class='npc-info-column'>
       {{! Row 1: Size and Being Type }}
       <div class='npc-type-row'>
-        <select
-          name='system.size'
-          class='npc-size-select'
-          data-dtype='String'
-          {{#if system.locked}}disabled{{/if}}
-        >
-          <option value='small' {{#if (eq system.size 'small')}}selected{{/if}}>{{localize "VAGABOND.Sizes.small"}}</option>
-          <option value='medium' {{#if (eq system.size 'medium')}}selected{{/if}}>{{localize "VAGABOND.Sizes.medium"}}</option>
-          <option value='large' {{#if (eq system.size 'large')}}selected{{/if}}>{{localize "VAGABOND.Sizes.large"}}</option>
-          <option value='huge' {{#if (eq system.size 'huge')}}selected{{/if}}>{{localize "VAGABOND.Sizes.huge"}}</option>
-          <option value='giant' {{#if (eq system.size 'giant')}}selected{{/if}}>{{localize "VAGABOND.Sizes.giant"}}</option>
-          <option value='colossal' {{#if (eq system.size 'colossal')}}selected{{/if}}>{{localize "VAGABOND.Sizes.colossal"}}</option>
-        </select>
+        {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
 
-        <select
-          name='system.beingType'
-          class='npc-being-select'
-          data-dtype='String'
-          {{#if system.locked}}disabled{{/if}}
-        >
-          <option value='Humanlike' {{#if (eq system.beingType 'Humanlike')}}selected{{/if}}>Humanlike</option>
-          <option value='Fae' {{#if (eq system.beingType 'Fae')}}selected{{/if}}>Fae</option>
-          <option value='Cryptid' {{#if (eq system.beingType 'Cryptid')}}selected{{/if}}>Cryptid</option>
-          <option value='Artificials' {{#if (eq system.beingType 'Artificials')}}selected{{/if}}>Artificials</option>
-          <option value='Beasts' {{#if (eq system.beingType 'Beasts')}}selected{{/if}}>Beasts</option>
-          <option value='Outers' {{#if (eq system.beingType 'Outers')}}selected{{/if}}>Outers</option>
-          <option value='Primordials' {{#if (eq system.beingType 'Primordials')}}selected{{/if}}>Primordials</option>
-          <option value='Undead' {{#if (eq system.beingType 'Undead')}}selected{{/if}}>Undead</option>
-        </select>
+        {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
       </div>
 
       {{! Row 2: Morale and Speed }}
@@ -483,21 +457,7 @@
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.DamageType"}}</label>
-                    <select name='system.actions.{{index}}.damageType' class='npc-field-input'>
-                      {{#select action.damageType}}
-                        <option value='-'>{{localize 'VAGABOND.DamageTypes.None'}}</option>
-                        <option value='acid'>{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
-                        <option value='fire'>{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
-                        <option value='shock'>{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
-                        <option value='poison'>{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
-                        <option value='cold'>{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
-                        <option value='blunt'>{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
-                        <option value='physical'>{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
-                        <option value='necrotic'>{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
-                        <option value='psychic'>{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
-                        <option value='healing'>{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
-                      {{/select}}
-                    </select>
+                    {{> "systems/vagabond/templates/shared/damage-type-select.hbs" name=(concat "system.actions." index ".damageType") selected=action.damageType includeNone=true cssClass="npc-field-input"}}
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}</label>

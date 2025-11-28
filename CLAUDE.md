@@ -69,11 +69,18 @@ npm run createSymlinks  # Create symlinks to Foundry data directory (optional)
 - `src/scss/components/_countdown-dice.scss` - Countdown dice styling
 
 **Templates**:
-- `templates/actor/sliding-panel.hbs` - Right-side sliding panel with stats, skills, saves, favorites
+- `templates/actor/sliding-panel.hbs` - Right-side sliding panel with stats, skills, saves, favorites (replaces deprecated header.hbs)
 - `templates/actor/features.hbs` - Features & Perks tab (includes inventory grid with wealth and slots)
 - `templates/actor/spells.hbs` - Spell list tab
 - `templates/actor/effects.hbs` - Active effects tab
 - `templates/actor/parts/inventory-card.hbs` - Individual inventory item cards (used in inventory grid)
+
+**Shared Partials** (`templates/shared/`):
+- `damage-type-select.hbs` - Damage type dropdown (11 types + optional "None")
+- `size-select.hbs` - Size dropdown (6 sizes, supports ancestry defaults)
+- `being-type-select.hbs` - Being type dropdown (8 types, supports ancestry defaults)
+
+These reusable partials are used across multiple templates (actor sheets, item sheets, NPC sheets) to ensure consistency.
 
 ## Character Sheet Architecture
 

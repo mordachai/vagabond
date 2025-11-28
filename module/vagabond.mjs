@@ -69,6 +69,26 @@ function registerGameSettings() {
 }
 
 /* -------------------------------------------- */
+/*  Template Preloading                         */
+/* -------------------------------------------- */
+
+/**
+ * Preload Handlebars templates for partials
+ */
+async function preloadHandlebarsTemplates() {
+  const templatePaths = [
+    // Shared partials
+    'systems/vagabond/templates/shared/damage-type-select.hbs',
+    'systems/vagabond/templates/shared/size-select.hbs',
+    'systems/vagabond/templates/shared/being-type-select.hbs',
+    // Actor partials
+    'systems/vagabond/templates/actor/parts/inventory-card.hbs',
+  ];
+
+  return loadTemplates(templatePaths);
+}
+
+/* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 
@@ -99,9 +119,12 @@ globalThis.vagabond = {
   models,
 };
 
-Hooks.once('init', function () {
+Hooks.once('init', async function () {
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
+
+  // Preload Handlebars templates
+  await preloadHandlebarsTemplates();
 
   /**
    * Set an initiative formula for the system

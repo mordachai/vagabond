@@ -1,0 +1,17 @@
+<select
+  name='{{name}}'
+  {{#if cssClass}}class='{{cssClass}}'{{/if}}
+  data-dtype='String'
+  {{#if title}}title='{{title}}'{{/if}}
+  {{#if disabled}}disabled{{/if}}
+>
+  {{#if showAncestryDefault}}
+    <option value=''>{{#if ancestryName}}{{localize (lookup config.sizes ancestrySize)}} (from ancestry){{else}}{{localize "VAGABOND.Sizes.medium"}} (default){{/if}}</option>
+  {{/if}}
+  <option value='small' {{#if (eq selected 'small')}}selected{{/if}}>{{localize "VAGABOND.Sizes.small"}}</option>
+  <option value='medium' {{#if (eq selected 'medium')}}selected{{/if}}>{{localize "VAGABOND.Sizes.medium"}}</option>
+  <option value='large' {{#if (eq selected 'large')}}selected{{/if}}>{{localize "VAGABOND.Sizes.large"}}</option>
+  <option value='huge' {{#if (eq selected 'huge')}}selected{{/if}}>{{localize "VAGABOND.Sizes.huge"}}</option>
+  <option value='giant' {{#if (eq selected 'giant')}}selected{{/if}}>{{localize "VAGABOND.Sizes.giant"}}</option>
+  <option value='colossal' {{#if (eq selected 'colossal')}}selected{{/if}}>{{localize "VAGABOND.Sizes.colossal"}}</option>
+</select>

@@ -1,5 +1,6 @@
 :root {
-  --vagabond-c-dark: #191813;
+  --vagabond-c-dark: #1c1b18;
+  --vagabond-c-lite: #e3e2dd;
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
   --vagabond-c-tan: #444444;
@@ -14,7 +15,8 @@
 }
 
 .theme-dark {
-  --vagabond-c-dark: #c9c7b8;
+  --vagabond-c-dark: #cac9c2;
+  --vagabond-c-lite: #21211f;
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;
@@ -33,6 +35,7 @@ $c-black: var(--vagabond-c-black);
 $c-red: var(--vagabond-c-red);
 
 $c-dark: var(--vagabond-c-dark);
+$c-lite: var(--vagabond-c-lite);
 $c-faint: var(--vagabond-c-faint);
 $c-beige: var(--vagabond-c-beige);
 $c-tan: var(--vagabond-c-tan);
