@@ -14,7 +14,7 @@
   width: 180px;
   height: 180px;
   flex-shrink: 0;
-  background-image: url(../assets/images/portrait-frame.webp);
+  background-image: url('../assets/images/portrait-frame.webp');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -29,6 +29,7 @@
     cursor: pointer;
     border-radius: 50%;
     align-self: center;
+    mix-blend-mode: normal;
 
     &:hover {
       opacity: 0.9;
@@ -39,11 +40,11 @@
 // Armor Overlay (Top right, 40x50, overflowing by 10px)
 .armor-overlay {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 40px;
-  height: 50px;
-  background-image: url('/icons/equipment/shield/heater-steel-gold.webp');
+  top: -15px;
+  right: -10px;
+  width: 76px;
+  height: 90px;
+  background-image: url('../assets/images/armor-frame.webp');
   background-size: contain;
   background-position: top center;
   background-repeat: no-repeat;
@@ -51,25 +52,26 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2px;
+  padding-left: 12px;
+
+  // .armor-type {
+  //   position: relative;
+  //   top: 0;
+  //   font-size: 9px;
+  //   font-weight: 700;
+  //   color: $c-dark;
+  //   text-transform: uppercase;
+  //   line-height: 1;
+  //   font-family: $font-primary;
+  // }
 
   .armor-value {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-    line-height: 1;
-    margin-bottom: 1px;
-  }
-
-  .armor-type {
     position: relative;
-    bottom: 0;
-    font-size: 10px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-    text-transform: uppercase;
+    bottom: 4px;
+    font-size: 28px;
+    font-weight: bold;
+    color: $c-dark;
+    text-shadow: 1px 1px 2px rgba(33, 33, 33, 0.424);
     line-height: 1;
   }
 }
@@ -83,7 +85,7 @@
   &.fatigue-active {
     color: #ff4444;
     opacity: 1;
-    text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
+    text-shadow: 0 0 2px rgba(255, 68, 68, 0.6);
 
     &:hover {
       color: #ff6666;
@@ -92,8 +94,8 @@
   }
 
   &.fatigue-inactive {
-    color: rgba(150, 150, 150, 0.4);
-    opacity: 0.6;
+    color: $c-dark;
+    opacity: 0.4;
 
     &:hover {
       color: rgba(100, 100, 100, 0.7);
@@ -101,6 +103,14 @@
       transform: scale(1.1);
     }
   }
+}
+
+.fatigue-label {
+  font-family: $font-secondary;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 4px;
+  text-transform: uppercase;
 }
 
 // HP Display
@@ -201,7 +211,7 @@
   .stat-score {
     width: 40px;
     height: 40px;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     color: var(--vagabond-c-dark);
     text-align: center;
@@ -237,14 +247,16 @@
 .fatigue-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   padding: 4px 0;
   background: none;
   border-radius: 4px;
+  width: 100%;
 
   .fatigue-checkboxes {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
   }
 }
 
@@ -393,22 +405,22 @@
 .character-info-combined-row {
   text-align: center;
   margin-bottom: 12px;
-  font-size: 16px;
-  color: var(--vagabond-c-tan);
-  font-weight: 500;
+  font-size: 18px;
+  color: $c-dark;
+  font-weight: 600;
   line-height: 1.4;
   font-family: $font-decorative;
 
   .level-input {
-    width: 15px;
+    width: 18px;
     text-align: center;
     display: inline-block;
     border: none;
     border-bottom: 1px solid transparent;
     background: transparent;
+    font-family: $font-secondary;
     font-size: 16px;
-    font-weight: 500;
-    color: var(--vagabond-c-tan);
+    font-weight: 600;
     padding: 0 2px;
     margin: 0 2px;
 
@@ -606,10 +618,12 @@
   left: 430px;  /* Base position next to main sheet when open */
   width: 430px;
   height: 100%;
-  background: var(--vagabond-c-groove);
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+  background: none;
+  background-image: $bg-paper;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+  filter: blur(0);
   display: flex;
   flex-direction: row;
   transform-origin: left center;

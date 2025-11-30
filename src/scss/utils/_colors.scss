@@ -1,5 +1,6 @@
 :root {
-  --vagabond-c-dark: #1c1b18;
+  //--vagabond-c-dark: #1c1b18;
+  --vagabond-c-dark: #231302e8;
   --vagabond-c-lite: #e3e2dd;
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
@@ -12,12 +13,13 @@
   --vagabond-c-transparent: #ffffffc0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
-  --vagabond-bg-paper: url('../assets/images/white-paper.webp');
+  --vagabond-bg-paper: url('../assets/images/old-paper.webp');
 }
 
 .theme-dark {
   --vagabond-c-dark: #cac9c2;
-  --vagabond-c-lite: #21211f;
+  --vagabond-c-lite: #e3e2dd;
+  //--vagabond-c-lite: #21211f;
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;

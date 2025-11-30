@@ -151,21 +151,31 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
 
   .feature.accordion-item {
-    border: 1px solid $c-faint;
-    border-radius: 4px;
+    padding: 2px;
+    border-radius: 2px;
     margin-bottom: 8px;
     overflow: hidden;
 
     .feature-header.accordion-header {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
-      padding: 0;
-      background: rgba(0, 0, 0, 0.05);
       cursor: pointer;
       transition: background 0.2s ease;
+
+      &::before {
+        font-family: var(--font-awesome);
+        content: "\f219";   // CHANGE THIS VALUE to change the marker
+        margin-right: 4px;  // Space between marker and text
+        // 900 = Solid, 400 = Regular, 300 = Light (Pro only)
+        font-weight: 900; // Make it pop
+        font-size: 0.6em;   // Size relative to text
+        line-height: 1;     // Fix vertical alignment
+        flex-shrink: 0;     // Prevents marker from shrinking on small screens
+      }
 
       &:hover {
         background: rgba(0, 0, 0, 0.1);
@@ -173,20 +183,19 @@
 
       .feature-name {
         margin: 0;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
       }
     }
 
     .feature-description.accordion-content {
       padding: 2px;
-      border-top: 1px solid $c-faint;
       display: block;
       max-height: 500px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
       font-family: $font-primary;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     // Collapsed state
@@ -199,7 +208,7 @@
 
   .no-features {
     list-style: none;
-    padding: 12px;
+    padding: 14px;
     text-align: center;
     color: $c-faint;
     font-style: italic;
@@ -213,19 +222,28 @@
   padding: 0;
 
   .perk-card.accordion-item {
-    border: 1px solid $c-faint;
-    border-radius: 4px;
+    padding: 2px;
+    border-radius: 2px;
     margin-bottom: 8px;
-    overflow: hidden;
 
     .perk-header.accordion-header {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
-      padding: 0;
-      background: rgba(0, 0, 0, 0.05);
+      padding: 0 0 0 2px;
       cursor: pointer;
       transition: background 0.2s ease;
+
+      &::before {
+        font-family: var(--font-awesome);
+        content: "\f219";   // CHANGE THIS VALUE to change the marker
+        margin-right: 4px;  // Space between marker and text
+        // 900 = Solid, 400 = Regular, 300 = Light (Pro only)
+        font-weight: 900; // Make it pop
+        font-size: 0.6em;   // Size relative to text
+        line-height: 1;     // Fix vertical alignment
+        flex-shrink: 0;     // Prevents marker from shrinking on small screens
+      }
 
       &:hover {
         background: rgba(0, 0, 0, 0.1);
@@ -233,14 +251,13 @@
 
       .perk-name {
         margin: 0;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
       }
     }
 
     .perk-content.accordion-content {
       padding: 2px;
-      border-top: 1px solid $c-faint;
       display: block;
       max-height: 500px;
       overflow-y: auto;
@@ -248,14 +265,14 @@
       font-family: $font-primary;
 
       .perk-prerequisites {
-        font-size: 12px;
+        font-size: 14px;
         color: $c-tan;
         margin-bottom: 8px;
         font-style: italic;
       }
 
       .perk-description {
-        font-size: 12px;
+        font-size: 14px;
       }
     }
 
@@ -269,7 +286,7 @@
 
   .no-perks {
     list-style: none;
-    padding: 12px;
+    padding: 14px;
     text-align: center;
     color: $c-faint;
     font-style: italic;

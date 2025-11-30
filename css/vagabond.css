@@ -36,7 +36,7 @@
   font-style: italic;
 }
 :root {
-  --vagabond-c-dark: #1c1b18;
+  --vagabond-c-dark: #231302e8;
   --vagabond-c-lite: #e3e2dd;
   --vagabond-c-faint: #c9c7b8;
   --vagabond-c-beige: #b5b3a4;
@@ -49,12 +49,12 @@
   --vagabond-c-transparent: #ffffffc0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
-  --vagabond-bg-paper: url("../assets/images/white-paper.webp");
+  --vagabond-bg-paper: url("../assets/images/old-paper.webp");
 }
 
 .theme-dark {
   --vagabond-c-dark: #cac9c2;
-  --vagabond-c-lite: #21211f;
+  --vagabond-c-lite: #e3e2dd;
   --vagabond-c-faint: #191813;
   --vagabond-c-beige: #444444;
   --vagabond-c-tan: #b5b3a4;
@@ -311,7 +311,10 @@
 }
 
 .vagabond .window-content {
-  background: var(--vagabond-c-groove);
+  background: none;
+  background-image: var(--vagabond-bg-paper);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   position: relative;
   overflow: visible !important;
   box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
@@ -1354,7 +1357,25 @@
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
   font-weight: bold;
+  margin: 0;
   margin-bottom: 4px;
+  color: var(--vagabond-c-dark);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+.vagabond h4 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.vagabond h4::after {
+  content: "";
+  flex-grow: 1;
+  margin-left: 4px;
+  height: 18px;
+  background-image: url("../assets/images/line-01.svg");
+  background-repeat: repeat-x;
+  background-size: 200px 100%;
 }
 .vagabond .resource-label {
   font-family: "Eskapade", serif;
@@ -1436,6 +1457,9 @@
   flex: 0;
   position: relative;
   z-index: 10 !important;
+  font-family: "Eskapade", serif;
+  font-size: 16px;
+  font-weight: bold;
 }
 .vagabond .sheet-body,
 .vagabond .sheet-body .tab,
@@ -1450,7 +1474,7 @@
   position: relative;
   width: 430px;
   z-index: 10 !important;
-  background: var(--vagabond-c-groove);
+  background: none;
   margin-left: 0;
   padding: 16px;
   box-sizing: border-box;
@@ -1807,46 +1831,53 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
 }
 .vagabond .features-list .feature.accordion-item {
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+  padding: 2px;
+  border-radius: 2px;
   margin-bottom: 8px;
   overflow: hidden;
 }
 .vagabond .features-list .feature.accordion-item .feature-header.accordion-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  padding: 0;
-  background: rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: background 0.2s ease;
+}
+.vagabond .features-list .feature.accordion-item .feature-header.accordion-header::before {
+  font-family: var(--font-awesome);
+  content: "\f219";
+  margin-right: 4px;
+  font-weight: 900;
+  font-size: 0.6em;
+  line-height: 1;
+  flex-shrink: 0;
 }
 .vagabond .features-list .feature.accordion-item .feature-header.accordion-header:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 .vagabond .features-list .feature.accordion-item .feature-header.accordion-header .feature-name {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
 }
 .vagabond .features-list .feature.accordion-item .feature-description.accordion-content {
   padding: 2px;
-  border-top: 1px solid var(--vagabond-c-faint);
   display: block;
   max-height: 500px;
   overflow-y: auto;
   transition: max-height 0.3s ease;
   font-family: "Paradigm", serif;
-  font-size: 12px;
+  font-size: 14px;
 }
 .vagabond .features-list .feature.accordion-item.collapsed .accordion-content {
   display: none;
 }
 .vagabond .features-list .no-features {
   list-style: none;
-  padding: 12px;
+  padding: 14px;
   text-align: center;
   color: var(--vagabond-c-faint);
   font-style: italic;
@@ -1857,31 +1888,37 @@
   padding: 0;
 }
 .vagabond .perks-list .perk-card.accordion-item {
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+  padding: 2px;
+  border-radius: 2px;
   margin-bottom: 8px;
-  overflow: hidden;
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  padding: 0;
-  background: rgba(0, 0, 0, 0.05);
+  padding: 0 0 0 2px;
   cursor: pointer;
   transition: background 0.2s ease;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header::before {
+  font-family: var(--font-awesome);
+  content: "\f219";
+  margin-right: 4px;
+  font-weight: 900;
+  font-size: 0.6em;
+  line-height: 1;
+  flex-shrink: 0;
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header .perk-name {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content {
   padding: 2px;
-  border-top: 1px solid var(--vagabond-c-faint);
   display: block;
   max-height: 500px;
   overflow-y: auto;
@@ -1889,20 +1926,20 @@
   font-family: "Paradigm", serif;
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-prerequisites {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--vagabond-c-tan);
   margin-bottom: 8px;
   font-style: italic;
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-description {
-  font-size: 12px;
+  font-size: 14px;
 }
 .vagabond .perks-list .perk-card.accordion-item.collapsed .accordion-content {
   display: none;
 }
 .vagabond .perks-list .no-perks {
   list-style: none;
-  padding: 12px;
+  padding: 14px;
   text-align: center;
   color: var(--vagabond-c-faint);
   font-style: italic;
@@ -2164,7 +2201,6 @@
 .vagabond .inventory-slots-section {
   margin-bottom: 12px;
   padding: 8px;
-  background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
 }
 .vagabond .inventory-slots-section .slots-info {
@@ -2220,18 +2256,18 @@
 }
 .vagabond .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 50px;
   gap: 0;
-  padding: 0;
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 2px;
+  padding: 1px;
+  background: none;
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 4px;
   width: 100%;
 }
 .vagabond .inventory-slot.empty-slot {
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: none;
+  border: 2px solid rgba(0, 0, 0, 0.1);
   border-top: none;
   border-left: none;
   display: flex;
@@ -2241,11 +2277,11 @@
   position: relative;
   transition: all 0.15s ease;
 }
-.vagabond .inventory-slot.empty-slot:nth-child(-n+3) {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+.vagabond .inventory-slot.empty-slot:nth-child(-n+4) {
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
 }
-.vagabond .inventory-slot.empty-slot:nth-child(3n+1) {
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
+.vagabond .inventory-slot.empty-slot:nth-child(4n+1) {
+  border-left: 2px solid rgba(0, 0, 0, 0.1);
 }
 .vagabond .inventory-slot.empty-slot .slot-number {
   font-size: 18px;
@@ -2263,10 +2299,8 @@
   border-color: #5cb85c;
 }
 .vagabond .inventory-card {
-  background: var(--vagabond-c-groove);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-top: none;
-  border-left: none;
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 3px;
   padding: 2px;
   height: 50px;
@@ -2278,15 +2312,20 @@
   transition: all 0.15s ease;
 }
 .vagabond .inventory-card:hover {
-  background: #737373;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0 8px rgba(205, 117, 9, 0.708), inset 0 0 0 2px rgba(124, 75, 11, 0.891), 0 2px 4px rgba(0, 0, 0, 0.15);
+  background: rgba(171, 97, 32, 0.4431372549);
+  mix-blend-mode: multiply;
 }
 .vagabond .inventory-card.equipped {
-  box-shadow: inset 0 0 8px rgba(92, 184, 92, 0.6), inset 0 0 0 2px rgba(92, 184, 92, 0.8);
+  box-shadow: inset 0 0 12px rgba(75, 39, 12, 0.9), inset 0 0 0 2px rgba(123, 76, 15, 0.8);
+  background: rgba(129, 61, 30, 0.1490196078);
+  mix-blend-mode: multiply;
 }
 .vagabond .inventory-card.equipped:hover {
-  box-shadow: inset 0 0 8px rgba(92, 184, 92, 0.6), inset 0 0 0 2px rgba(92, 184, 92, 0.8), 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0 8px rgba(205, 117, 9, 0.708), inset 0 0 0 2px rgba(41, 23, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.15);
+  background: rgba(143, 92, 47, 0.6196078431);
+  mix-blend-mode: multiply;
 }
 .vagabond .inventory-card.dragging {
   opacity: 0.6;
@@ -2299,16 +2338,16 @@
   flex-shrink: 0;
   border-radius: 2px;
   border: none;
+  mix-blend-mode: color-dodge;
 }
 .vagabond .inventory-card .item-name-display {
   flex: 1;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
   font-family: "Eskapade", serif;
   text-align: center;
-  line-height: 1.2;
+  line-height: 0.95;
   color: var(--vagabond-c-dark);
-  word-wrap: break-word;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -2472,7 +2511,7 @@
   width: 180px;
   height: 180px;
   flex-shrink: 0;
-  background-image: url(../assets/images/portrait-frame.webp);
+  background-image: url("../assets/images/portrait-frame.webp");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -2487,17 +2526,18 @@
   cursor: pointer;
   border-radius: 50%;
   align-self: center;
+  mix-blend-mode: normal;
 }
 .vagabond .char-image-container .profile-img:hover {
   opacity: 0.9;
 }
 .vagabond .armor-overlay {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 40px;
-  height: 50px;
-  background-image: url("/icons/equipment/shield/heater-steel-gold.webp");
+  top: -15px;
+  right: -10px;
+  width: 76px;
+  height: 90px;
+  background-image: url("../assets/images/armor-frame.webp");
   background-size: contain;
   background-position: top center;
   background-repeat: no-repeat;
@@ -2505,24 +2545,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2px;
+  padding-left: 12px;
 }
 .vagabond .armor-overlay .armor-value {
-  font-size: 24px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-  line-height: 1;
-  margin-bottom: 1px;
-}
-.vagabond .armor-overlay .armor-type {
   position: relative;
-  bottom: 0;
-  font-size: 10px;
-  font-weight: 600;
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  text-transform: uppercase;
+  bottom: 4px;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark);
+  text-shadow: 1px 1px 2px rgba(33, 33, 33, 0.424);
   line-height: 1;
 }
 .vagabond .fatigue-skull {
@@ -2533,20 +2564,27 @@
 .vagabond .fatigue-skull.fatigue-active {
   color: #ff4444;
   opacity: 1;
-  text-shadow: 0 0 4px rgba(255, 68, 68, 0.6);
+  text-shadow: 0 0 2px rgba(255, 68, 68, 0.6);
 }
 .vagabond .fatigue-skull.fatigue-active:hover {
   color: #ff6666;
   transform: scale(1.1);
 }
 .vagabond .fatigue-skull.fatigue-inactive {
-  color: rgba(150, 150, 150, 0.4);
-  opacity: 0.6;
+  color: var(--vagabond-c-dark);
+  opacity: 0.4;
 }
 .vagabond .fatigue-skull.fatigue-inactive:hover {
   color: rgba(100, 100, 100, 0.7);
   opacity: 0.8;
   transform: scale(1.1);
+}
+.vagabond .fatigue-label {
+  font-family: "Manofa", serif;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 4px;
+  text-transform: uppercase;
 }
 .vagabond .hp-display {
   display: flex;
@@ -2630,7 +2668,7 @@
 .vagabond .stats-grid .stat-score {
   width: 40px;
   height: 40px;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   color: var(--vagabond-c-dark);
   text-align: center;
@@ -2659,14 +2697,16 @@
 .vagabond .fatigue-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   padding: 4px 0;
   background: none;
   border-radius: 4px;
+  width: 100%;
 }
 .vagabond .fatigue-row .fatigue-checkboxes {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
 }
 .vagabond .top-right-controls {
   display: flex;
@@ -2782,22 +2822,22 @@
 .vagabond .character-info-combined-row {
   text-align: center;
   margin-bottom: 12px;
-  font-size: 16px;
-  color: var(--vagabond-c-tan);
-  font-weight: 500;
+  font-size: 18px;
+  color: var(--vagabond-c-dark);
+  font-weight: 600;
   line-height: 1.4;
   font-family: "Paradigm", serif;
 }
 .vagabond .character-info-combined-row .level-input {
-  width: 15px;
+  width: 18px;
   text-align: center;
   display: inline-block;
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
+  font-family: "Manofa", serif;
   font-size: 16px;
-  font-weight: 500;
-  color: var(--vagabond-c-tan);
+  font-weight: 600;
   padding: 0 2px;
   margin: 0 2px;
 }
@@ -2949,10 +2989,12 @@
   left: 430px; /* Base position next to main sheet when open */
   width: 430px;
   height: 100%;
-  background: var(--vagabond-c-groove);
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+  background: none;
+  background-image: var(--vagabond-bg-paper);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+  filter: blur(0);
   display: flex;
   flex-direction: row;
   transform-origin: left center;

@@ -65,6 +65,9 @@
   flex: 0;
   position: relative;
   z-index: 10 !important;
+  font-family: $font-title;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .sheet-body,
@@ -82,7 +85,7 @@
   position: relative;
   width: 430px;
   z-index: 10 !important;
-  background: $c-groove;
+  background: none;
   margin-left: 0;
   padding: 16px;
   box-sizing: border-box;

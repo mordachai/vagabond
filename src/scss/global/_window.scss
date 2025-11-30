@@ -39,7 +39,10 @@
 
 // Add background color to window-content instead
 .vagabond .window-content {
-  background: $c-groove;
+  background: none;
+  background-image: $bg-paper;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   position: relative;
   overflow: visible !important;
   box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);

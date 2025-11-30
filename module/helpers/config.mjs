@@ -223,9 +223,9 @@ VAGABOND.weaponSkills = {
  * @type {Object}
  */
 VAGABOND.weaponRanges = {
-  'close': 'VAGABOND.Weapon.Range.Close.long',
-  'near': 'VAGABOND.Weapon.Range.Near.long',
-  'far': 'VAGABOND.Weapon.Range.Far.long'
+  'close': 'VAGABOND.Weapon.Range.Close',
+  'near': 'VAGABOND.Weapon.Range.Near',
+  'far': 'VAGABOND.Weapon.Range.Far'
 };
 
 /**
@@ -262,17 +262,17 @@ VAGABOND.weaponProperties = {
  * @type {Object}
  */
 VAGABOND.weaponPropertyHints = {
-  'Brawl': 'Attacks with Brawl, can Grapple/Shove.',
-  'Brutal': 'Crits deal 1 extra damage die.',
-  'Cleave': 'Can deal half damage to two Targets.',
-  'Entangle': 'Can Grapple.',
-  'Finesse': 'Can attack with Finesse.',
-  'Keen': 'Crit on Attack Checks 1 lower.',
-  'Long': 'Its Range is 5 feet further.',
-  'Near': 'Can only Target up to Near.',
-  'Ranged': 'Attacks with Ranged. Attacking a Close Target Hinders the Check.',
-  'Shield': 'Ignores Hinder from Blocking Ranged Attacks. Can Shove.',
-  'Thrown': 'Can throw attack up to Near, or Far with Hinder.'
+  'Brawl': 'VAGABOND.Weapon.PropertyHints.Brawl',
+  'Brutal': 'VAGABOND.Weapon.PropertyHints.Brutal',
+  'Cleave': 'VAGABOND.Weapon.PropertyHints.Cleave',
+  'Entangle': 'VAGABOND.Weapon.PropertyHints.Entangle',
+  'Finesse': 'VAGABOND.Weapon.PropertyHints.Finesse',
+  'Keen': 'VAGABOND.Weapon.PropertyHints.Keen',
+  'Long': 'VAGABOND.Weapon.PropertyHints.Long',
+  'Near': 'VAGABOND.Weapon.PropertyHints.Near',
+  'Ranged': 'VAGABOND.Weapon.PropertyHints.Ranged',
+  'Shield': 'VAGABOND.Weapon.PropertyHints.Shield',
+  'Thrown': 'VAGABOND.Weapon.PropertyHints.Thrown'
 };
 
 /**
@@ -280,10 +280,10 @@ VAGABOND.weaponPropertyHints = {
  * @type {Object}
  */
 VAGABOND.weaponGripDescriptions = {
-  '1H': 'One-Handed: Requires one hand.',
-  '2H': 'Two-Handed: Requires two hands.',
-  'F': 'Fist: Your hands are open while using it.',
-  'V': 'Versatile: Counts as 1H, but its damage die is one size larger if 2H.'
+  '1H': 'VAGABOND.Weapon.GripDescriptions.1H',
+  '2H': 'VAGABOND.Weapon.GripDescriptions.2H',
+  'F': 'VAGABOND.Weapon.GripDescriptions.F',
+  'V': 'VAGABOND.Weapon.GripDescriptions.V'
 };
 
 /**
@@ -324,12 +324,12 @@ VAGABOND.metalTypes = {
  * @type {Object}
  */
 VAGABOND.metalData = {
-  'common': { multiplier: 1, effect: '-' },
-  'adamant': { multiplier: 50, effect: 'Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.' },
-  'coldIron': { multiplier: 20, effect: 'Situational weakness (Fae).' },
-  'silver': { multiplier: 10, effect: 'Blesses weapons against the accursed.' },
-  'mythral': { multiplier: 50, effect: 'Occupies 1 fewer Slot (min 1).' },
-  'orichalcum': { multiplier: 50, effect: 'Armor reduces Cast damage.' }
+  'common': { multiplier: 1, effect: 'VAGABOND.MetalDescriptions.Common' },
+  'adamant': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Adamant' },
+  'coldIron': { multiplier: 20, effect: 'VAGABOND.MetalDescriptions.ColdIron' },
+  'silver': { multiplier: 10, effect: 'VAGABOND.MetalDescriptions.Silver' },
+  'mythral': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Mythral' },
+  'orichalcum': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Orichalcum' }
 };
 
 /**
@@ -388,9 +388,9 @@ VAGABOND.icons = {
  * @type {Object}
  */
 VAGABOND.rangeAbbreviations = {
-  'close': 'C',
-  'near': 'N',
-  'far': 'F'
+  'close': 'VAGABOND.Weapon.Range.CloseAbbr',
+  'near': 'VAGABOND.Weapon.Range.NearAbbr',
+  'far': 'VAGABOND.Weapon.Range.FarAbbr'
 };
 
 /**

@@ -83,10 +83,10 @@
               height='180'
             />
 
-            {{! Armor Info Overlay (Left side) }}
+            {{! Armor Info Overlay (Right side) }}
             <div class='armor-overlay'>
+              {{!-- <div class='armor-type'>{{equippedArmorType}}</div> --}}
               <div class='armor-value'>{{system.armor}}</div>
-              <div class='armor-type'>{{equippedArmorType}}</div>
             </div>
             
             {{! Row 3: Hit Points }}
@@ -133,6 +133,7 @@
 
           {{! Row 2: Fatigue Bar }}
           <div class='fatigue-row'>
+            <div class="fatigue-label">{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}: </div>
             <div class='fatigue-checkboxes'>
               {{#each fatigueBoxes as |box index|}}
                 <i

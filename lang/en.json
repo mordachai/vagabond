@@ -413,6 +413,12 @@
       "F": "F (Fist)",
       "V": "V (Versatile)"
     },
+    "GripDescriptions": {
+      "1H": "One-Handed: Requires one hand.",
+      "2H": "Two-Handed: Requires two hands.",
+      "F": "Fist: Your hands are open while using it.",
+      "V": "Versatile: Counts as 1H, but its damage die is one size larger if 2H."
+    },
     "Property": {
       "Brawl": "Brawl",
       "Brutal": "Brutal",
@@ -454,6 +460,14 @@
       "Silver": "Silver",
       "Mythral": "Mythral",
       "Orichalcum": "Orichalcum"
+    },
+    "MetalDescriptions": {
+      "Common": "",
+      "Adamant": "Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.",
+      "ColdIron": "Situational weakness (Fae).",
+      "Silver": "Blesses weapons against the accursed.",
+      "Mythral": "Occupies 1 fewer Slot (min 1).",
+      "Orichalcum": "Armor reduces Cast damage."
     },
     "FavorHinder": {
       "label": "Favor/Hinder",
