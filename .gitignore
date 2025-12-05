@@ -20,4 +20,6 @@ node_modules/
 /docs
 .claude
 CLAUDE.md
-
+package.json
+package-lock.json
+jsconfig.json
