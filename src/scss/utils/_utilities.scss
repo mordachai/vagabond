@@ -1,0 +1,157 @@
+// -----------------------------------------
+// Utility Classes
+// -----------------------------------------
+// Reusable utility classes to replace inline styles
+// and provide consistent styling across the application
+
+// -----------------------------------------
+// Flexbox Utilities
+// -----------------------------------------
+
+// Flex sizing
+.flex-025 { flex: 0.25; }
+.flex-05 { flex: 0.5; }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+.flex-5 { flex: 5; }
+
+// Flex with minimum width
+.flex-1-min-60 {
+  flex: 1;
+  min-width: 60px;
+}
+
+// Gap utilities
+.gap-4 { gap: 4px; }
+.gap-8 { gap: 8px; }
+.gap-10 { gap: 10px; }
+.gap-12 { gap: 12px; }
+
+// Flexbox alignment helpers
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-center-gap-4 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flex-center-gap-8 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex-center-gap-10 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-center-gap-12 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+// -----------------------------------------
+// Spacing Utilities
+// -----------------------------------------
+
+// Margin top
+.mt-4 { margin-top: 4px; }
+.mt-5 { margin-top: 5px; }
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+
+// Margin bottom
+.mb-4 { margin-bottom: 4px; }
+.mb-5 { margin-bottom: 5px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-10 { margin-bottom: 10px; }
+
+// Margin right
+.mr-5 { margin-right: 5px; }
+
+// Margin zero
+.m-0 { margin: 0; }
+
+// Padding
+.p-0 { padding: 0; }
+.pl-20 { padding-left: 20px; }
+.px-6 { padding-left: 6px; padding-right: 6px; }
+.py-2-px-6 { padding: 2px 6px; }
+.py-2-px-8 { padding: 2px 8px; }
+
+// -----------------------------------------
+// Width Utilities
+// -----------------------------------------
+
+.w-40 { width: 40px; }
+.w-60 { width: 60px; }
+.w-100 { width: 100%; }
+
+// -----------------------------------------
+// Typography Utilities
+// -----------------------------------------
+
+// Font sizes
+.text-xs { font-size: 10px; }
+.text-sm { font-size: 11px; }
+.text-md { font-size: 12px; }
+
+// Text color utilities (using CSS variables for theme support)
+.text-faint { color: var(--vagabond-c-faint); }
+.text-tan { color: var(--vagabond-c-tan); }
+.text-dark { color: var(--vagabond-c-dark); }
+.text-muted { color: var(--vagabond-c-muted); }
+
+// Text alignment
+.text-center { text-align: center; }
+
+// Text decoration
+.text-underline { text-decoration: underline; }
+
+// Font style
+.italic { font-style: italic; }
+
+// White space
+.nowrap { white-space: nowrap; }
+
+// -----------------------------------------
+// Button Utilities
+// -----------------------------------------
+
+.btn-xs {
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-sm {
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+// -----------------------------------------
+// Interactive Utilities
+// -----------------------------------------
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable-link {
+  cursor: pointer;
+  text-decoration: none;
+    &:hover,
+    &:focus {
+      text-shadow: 0 0 5px red;
+      cursor: pointer;
+  }
+}
+

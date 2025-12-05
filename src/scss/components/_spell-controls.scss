@@ -1,0 +1,191 @@
+// -----------------------------------------
+// Spell Casting Controls
+// -----------------------------------------
+// Styles for inline spell casting controls in favorited spells section
+
+.favorited-spell {
+  display: flex;
+  align-items: baseline;
+  
+  gap: 2px;
+  padding: 0;
+  width: 100%;
+  height: 20px;
+
+  // Column 1: Spell name (flexible, takes remaining space)
+  .spell-name {
+    flex: 1 1 auto;
+    min-width: 60px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: $font-title;
+    color: $c-dark;
+  }
+
+  // Column 2: Damage dice (fixed width, centered)
+  .spell-damage-dice {
+    flex: 0 0 11px;
+    text-align: center;
+    font-family: $font-secondary;
+    color: $c-dark;
+
+    &.clickable {
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+
+  // Column 2.5: Fx (Effect) Icon - clickable checkbox
+  .spell-fx-icon {
+    flex: 0 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s, color 0.2s;
+
+    i {
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    // Inactive state (not using effect)
+    &.fx-inactive {
+      opacity: 0.3;
+
+      i {
+        color: $c-dark;
+      }
+
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+
+    // Active state (using effect)
+    &.fx-active {
+      opacity: 1.0;
+      color: $c-red;
+      font-weight: 500;
+
+      i {
+        color: $c-red;
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  // Column 3: Damage icon (fixed width, centered)
+  .spell-damage-icon {
+    flex: 0 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 13px;
+      color: $c-dark;
+    }
+  }
+
+  // Column 4: Delivery select (fixed width)
+  .spell-delivery-select {
+    flex: 0 0 40px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    font-family: $font-title;
+    font-weight: 500;
+    color: $c-dark;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: none;
+    outline: none;
+
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    option {
+      background: $c-tan-lite;
+      color: $c-dark;
+      font-family: $font-title;
+
+      &:checked {
+        background: $c-red;
+        color: $c-white;
+      }
+    }
+  }
+
+  // Column 5: Delivery cost (fixed width, centered)
+  .spell-delivery-cost {
+    flex: 0 0 11px;
+    text-align: center;
+    font-family: $font-secondary;
+    font-weight: normal;
+    color: $c-dark;
+
+    &.clickable {
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Column 6: Mana total (fixed width, centered, bold)
+  .spell-mana-total {
+    flex: 0 0 13px;
+    text-align: center;
+    font-family: $font-secondary;
+    font-weight: bold;
+    color: $c-red;
+  }
+}
+
+// Chat card styling for spell casts
+.vagabond-spell-cast {
+  h3 {
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+  }
+
+  p {
+    margin: 5px 0;
+  }
+
+  strong {
+    color: var(--vagabond-c-tan, #d4af37);
+  }
+}
+
+// Note: Damage button styling is now in components/chat-cards.scss

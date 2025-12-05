@@ -1,0 +1,4882 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@font-face {
+  font-family: "Eskapade";
+  src: url("../assets/fonts/eskapade-black.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Eskapade";
+  src: url("../assets/fonts/eskapade-regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Manofa";
+  src: url("../assets/fonts/manofa-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Paradigm";
+  src: url("../assets/fonts/paradigm-italic.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+}
+:root {
+  --vagabond-c-dark: #1b1b1b;
+  --vagabond-c-lite: #e3e2dd;
+  --vagabond-c-faint: #c5beb8e9;
+  --vagabond-c-tan: #a2a2a2;
+  --vagabond-c-tan-lite: #acacac6c;
+  --vagabond-c-muted: #666666;
+  --vagabond-c-white: #ffffff;
+  --vagabond-c-black: #000000;
+  --vagabond-c-transparent: #ffffffc0;
+  --vagabond-c-darkgray: #666666;
+  --vagabond-c-red: #9d0000;
+  --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
+  --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
+  --vagabond-bg-paper: url("../assets/images/white-paper.webp");
+  --vagabond-stat-bg: #1b1b1b;
+  --vagabond-c-stat: #f1f1f1;
+}
+
+.theme-dark {
+  --vagabond-c-dark: #231308ec;
+  --vagabond-c-lite: #cbc5af;
+  --vagabond-c-faint: #c2bea9;
+  --vagabond-c-tan: #706d65;
+  --vagabond-c-tan-lite: #c5c3b832;
+  --vagabond-c-muted: #999999;
+  --vagabond-c-white: #ffffff;
+  --vagabond-c-black: #000000;
+  --vagabond-c-transparent: #000000c0;
+  --vagabond-c-darkgray: #999999;
+  --vagabond-c-red: #a10000;
+  --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
+  --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
+  --vagabond-bg-paper: url("../assets/images/old-paper.webp");
+  --vagabond-stat-bg: #231308ec;
+  --vagabond-c-stat: #ffd07d;
+}
+
+.flex-025 {
+  flex: 0.25;
+}
+
+.flex-05 {
+  flex: 0.5;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-5 {
+  flex: 5;
+}
+
+.flex-1-min-60 {
+  flex: 1;
+  min-width: 60px;
+}
+
+.gap-4 {
+  gap: 4px;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.gap-12 {
+  gap: 12px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-center-gap-4 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flex-center-gap-8 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex-center-gap-10 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-center-gap-12 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mt-4 {
+  margin-top: 4px;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-4 {
+  margin-bottom: 4px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.pl-20 {
+  padding-left: 20px;
+}
+
+.px-6 {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.py-2-px-6 {
+  padding: 2px 6px;
+}
+
+.py-2-px-8 {
+  padding: 2px 8px;
+}
+
+.w-40 {
+  width: 40px;
+}
+
+.w-60 {
+  width: 60px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.text-xs {
+  font-size: 10px;
+}
+
+.text-sm {
+  font-size: 11px;
+}
+
+.text-md {
+  font-size: 12px;
+}
+
+.text-faint {
+  color: var(--vagabond-c-faint);
+}
+
+.text-tan {
+  color: var(--vagabond-c-tan);
+}
+
+.text-dark {
+  color: var(--vagabond-c-dark);
+}
+
+.text-muted {
+  color: var(--vagabond-c-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.btn-xs {
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-sm {
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+.clickable-link:hover, .clickable-link:focus {
+  text-shadow: 0 0 5px red;
+  cursor: pointer;
+}
+
+/* Global styles */
+.window-app {
+  font-family: "Paradigm", serif;
+}
+
+.vagabond.application {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0% !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.vagabond.application .controls-dropdown {
+  z-index: 150;
+}
+
+.vagabond.item.application {
+  height: auto !important;
+  min-height: 400px;
+  max-height: none;
+  overflow: hidden !important;
+}
+
+.vagabond .window-header,
+.vagabond .header-control {
+  background: transparent !important;
+  position: relative;
+  z-index: 10 !important;
+  text-shadow: 1px 1px 4px #000;
+  font-size: 14px;
+}
+.vagabond .window-header .window-title,
+.vagabond .header-control .window-title {
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 2px #000;
+}
+
+.vagabond .window-content {
+  background: none;
+  background-image: var(--vagabond-bg-paper);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+  color: var(--vagabond-c-dark);
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+.vagabond.actor .window-content:has(.sliding-panel) {
+  min-height: 820px;
+  max-height: 820px;
+  overflow: visible !important;
+}
+
+.vagabond.actor .window-content:has(.npc-content) {
+  height: auto;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto !important;
+}
+
+.vagabond.item .window-content {
+  height: auto;
+  min-height: 300px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto !important;
+}
+
+/* Target the main container and the list of tabs */
+.vagabond nav.tabs {
+  /* Target the individual tab header elements */
+}
+.vagabond nav.tabs [data-tab] {
+  transition: opacity 0.2s ease-in-out;
+  color: var(--vagabond-c-dark);
+  font-weight: 700;
+  opacity: 0.9;
+  font-size: 1.4rem;
+  overflow: visible;
+  padding: 5px 15px;
+  /* --- STATES --- */
+}
+.vagabond nav.tabs [data-tab]:hover {
+  cursor: pointer;
+  font-weight: 900;
+  opacity: 1;
+  text-shadow: 0 0 6px var(--vagabond-c-red);
+}
+.vagabond nav.tabs [data-tab].active {
+  font-weight: 700;
+  opacity: 1;
+  background-image: url("../assets/ui/tab-marker.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
+  mix-blend-mode: color-burn;
+}
+
+.rollable:hover, .rollable:focus {
+  color: var(--vagabond-c-black);
+  text-shadow: 0 0 10px red;
+  cursor: pointer;
+}
+
+/* Heartbeat Animation */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.grid-skills,
+.grid-skills-2col {
+  display: grid;
+  grid-column: span 2/span 2;
+  grid-template-columns: 40% 1fr;
+  gap: 15px;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.grid,
+.grid-2col {
+  display: grid;
+  grid-column: span 2/span 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.grid-3col {
+  grid-column: span 3/span 3;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4col {
+  grid-column: span 4/span 4;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-5col {
+  grid-column: span 5/span 5;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-6col {
+  grid-column: span 6/span 6;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-7col {
+  grid-column: span 7/span 7;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-8col {
+  grid-column: span 8/span 8;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-9col {
+  grid-column: span 9/span 9;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-10col {
+  grid-column: span 10/span 10;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-11col {
+  grid-column: span 11/span 11;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-12col {
+  grid-column: span 12/span 12;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid-start-2 {
+  grid-column-start: 2;
+}
+
+.grid-start-3 {
+  grid-column-start: 3;
+}
+
+.grid-start-4 {
+  grid-column-start: 4;
+}
+
+.grid-start-5 {
+  grid-column-start: 5;
+}
+
+.grid-start-6 {
+  grid-column-start: 6;
+}
+
+.grid-start-7 {
+  grid-column-start: 7;
+}
+
+.grid-start-8 {
+  grid-column-start: 8;
+}
+
+.grid-start-9 {
+  grid-column-start: 9;
+}
+
+.grid-start-10 {
+  grid-column-start: 10;
+}
+
+.grid-start-11 {
+  grid-column-start: 11;
+}
+
+.grid-start-12 {
+  grid-column-start: 12;
+}
+
+.grid-span-2 {
+  grid-column-end: span 2;
+}
+
+.grid-span-3 {
+  grid-column-end: span 3;
+}
+
+.grid-span-4 {
+  grid-column-end: span 4;
+}
+
+.grid-span-5 {
+  grid-column-end: span 5;
+}
+
+.grid-span-6 {
+  grid-column-end: span 6;
+}
+
+.grid-span-7 {
+  grid-column-end: span 7;
+}
+
+.grid-span-8 {
+  grid-column-end: span 8;
+}
+
+.grid-span-9 {
+  grid-column-end: span 9;
+}
+
+.grid-span-10 {
+  grid-column-end: span 10;
+}
+
+.grid-span-11 {
+  grid-column-end: span 11;
+}
+
+.grid-span-12 {
+  grid-column-end: span 12;
+}
+
+.flex-group-center,
+.flex-group-left,
+.flex-group-right {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.flex-group-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.flex-group-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.flexshrink {
+  flex: 0;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flexlarge {
+  flex: 2;
+}
+
+.align-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.align-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.align-center {
+  justify-content: center;
+  text-align: center;
+}
+
+/* Chat cards - imported at top level because they render outside sheets */
+/* ========================================
+   CHAT CARDS & BUTTONS
+   ======================================== */
+/* IMPORTANT: Most of this file should be imported at TOP LEVEL (outside .vagabond)
+   because chat messages render outside the character sheet container.
+   Only .vagabond-damage-button-container and .vagabond-damage-button
+   need to be scoped under .vagabond for sheet usage. */
+/* Damage Roll Button Container (Sheet-scoped) */
+.vagabond .vagabond-damage-button-container {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+/* Damage Roll Button (Top-level - for both chat messages and sheets) */
+.vagabond-damage-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  color: var(--vagabond-c-white, #dddddd);
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+.vagabond-damage-button:hover {
+  background: linear-gradient(135deg, #e6c04a 0%, #c9a12f 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.vagabond-damage-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.vagabond-damage-button:disabled, .vagabond-damage-button.rolled {
+  background: linear-gradient(135deg, #777 0%, #555 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+  border-color: rgba(0, 0, 0, 0.3);
+  text-shadow: none;
+}
+.vagabond-damage-button:disabled:hover, .vagabond-damage-button.rolled:hover {
+  transform: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.vagabond-damage-button i {
+  margin-right: 5px;
+}
+
+/* Apply Damage Button (Top-level - for chat messages) */
+.vagabond-apply-damage-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond-apply-damage-button:hover {
+  background: linear-gradient(135deg, #f15546 0%, #d14436 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.vagabond-apply-damage-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.vagabond-apply-damage-button:disabled, .vagabond-apply-damage-button.applied {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  cursor: not-allowed;
+  opacity: 0.8;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+.vagabond-apply-damage-button:disabled:hover, .vagabond-apply-damage-button.applied:hover {
+  transform: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.vagabond-apply-damage-button i {
+  margin-right: 5px;
+}
+
+/* Apply Healing Button (Top-level - for chat messages) */
+.vagabond-apply-healing-button {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond-apply-healing-button:hover {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.vagabond-apply-healing-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.vagabond-apply-healing-button:disabled, .vagabond-apply-healing-button.applied {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  cursor: not-allowed;
+  opacity: 0.8;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+.vagabond-apply-healing-button:disabled:hover, .vagabond-apply-healing-button.applied:hover {
+  transform: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.vagabond-apply-healing-button i {
+  margin-right: 5px;
+}
+
+/* NPC Damage Buttons (Top-level - for GM-only chat actions) */
+.vagabond-npc-damage-button {
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond-npc-damage-button:hover {
+  background: linear-gradient(135deg, #a569bd 0%, #9b59b6 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.vagabond-npc-damage-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.vagabond-npc-damage-button:disabled, .vagabond-npc-damage-button.rolled {
+  background: linear-gradient(135deg, #777 0%, #555 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+  border-color: rgba(0, 0, 0, 0.3);
+  text-shadow: none;
+}
+.vagabond-npc-damage-button:disabled:hover, .vagabond-npc-damage-button.rolled:hover {
+  transform: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.vagabond-npc-damage-button i {
+  margin-right: 5px;
+}
+
+/* ========================================
+   Universal Chat Cards
+   ======================================== */
+.vagabond-chat-card {
+  background: var(--vagabond-c-white);
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: "Paradigm", serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+  /* Header Section */
+  /* Metadata Bar - Compact info below header */
+  /* Primary Content - Roll Results */
+  /* Dice Display */
+  /* Damage Section */
+  /* Metadata Section */
+  /* Description Section */
+  /* Footer Section - Tags */
+  /* Property Accordion */
+  /* Spell critical effect styling */
+  /* Type-specific styling */
+  /* Responsive adjustments */
+}
+.vagabond-chat-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--vagabond-c-tan-lite);
+  border-bottom: 1px solid var(--vagabond-c-tan);
+}
+.vagabond-chat-card .card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background: linear-gradient(0deg, #001011 0%, #a9b6bb 100%);
+  border: 1px solid var(--vagabond-c-white);
+  object-fit: cover;
+  object-position: top center;
+  flex-shrink: 0;
+}
+.vagabond-chat-card .card-header-text {
+  flex: 1;
+  min-width: 0;
+}
+.vagabond-chat-card .card-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--vagabond-c-white);
+}
+.vagabond-chat-card .card-subtitle {
+  display: block;
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 2px;
+  color: var(--vagabond-c-white);
+}
+.vagabond-chat-card .card-metadata-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--vagabond-c-dark);
+  border-top: 1px solid var(--vagabond-c-tan);
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--vagabond-c-white);
+  font-family: "Eskapade", serif;
+}
+.vagabond-chat-card .card-metadata-bar.align-mana-end {
+  justify-content: space-between;
+}
+.vagabond-chat-card .meta-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+  font-style: italic;
+}
+.vagabond-chat-card .meta-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+.vagabond-chat-card .meta-mana-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond-chat-card .meta-item {
+  display: inline-flex;
+  align-items: center;
+}
+.vagabond-chat-card .meta-icon {
+  font-size: 14px;
+}
+.vagabond-chat-card .meta-icon.meta-damage-type {
+  font-size: 16px;
+}
+.vagabond-chat-card .meta-icon.meta-fx {
+  font-size: 15px;
+}
+.vagabond-chat-card .meta-icon.meta-grip {
+  font-size: 14px;
+}
+.vagabond-chat-card .meta-icon.meta-mana {
+  font-size: 18px;
+}
+.vagabond-chat-card .meta-label {
+  margin-right: 3px;
+  opacity: 0.7;
+}
+.vagabond-chat-card .meta-skill {
+  font-weight: 700;
+}
+.vagabond-chat-card .meta-damage {
+  font-weight: 700;
+}
+.vagabond-chat-card .meta-delivery {
+  font-style: italic;
+}
+.vagabond-chat-card .meta-lore {
+  font-style: italic;
+  opacity: 0.9;
+}
+.vagabond-chat-card .meta-alchemical {
+  font-style: italic;
+}
+.vagabond-chat-card .meta-alchemical-type {
+  font-weight: 700;
+}
+.vagabond-chat-card .card-primary {
+  padding: 16px;
+  background: var(--vagabond-c-white);
+}
+.vagabond-chat-card .roll-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.vagabond-chat-card .roll-total-container {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.vagabond-chat-card .roll-total {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+.vagabond-chat-card .roll-vs {
+  font-size: 16px;
+  font-weight: 600;
+}
+.vagabond-chat-card .roll-outcome {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.vagabond-chat-card .roll-outcome-success {
+  background: #4caf50;
+  color: white;
+}
+.vagabond-chat-card .roll-outcome-failure {
+  background: #f44336;
+  color: white;
+}
+.vagabond-chat-card .roll-outcome-critical {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #333;
+  box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+}
+.vagabond-chat-card .roll-outcome-neutral {
+  background: var(--vagabond-c-faint);
+}
+.vagabond-chat-card .roll-formula {
+  margin-top: 8px;
+  font-size: 13px;
+  font-family: monospace;
+}
+.vagabond-chat-card .roll-dice-display,
+.vagabond-chat-card .damage-dice-display {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.vagabond-chat-card .roll-die {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: "Manofa", serif;
+  font-weight: 600;
+  font-size: 18px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  position: relative;
+}
+.vagabond-chat-card .roll-operator {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 4px;
+}
+.vagabond-chat-card .roll-modifier {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--vagabond-c-tan);
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+.vagabond-chat-card .card-damage {
+  padding: 16px;
+  background: #fff3e0;
+  border-top: 1px solid var(--vagabond-c-tan);
+  border-bottom: 1px solid var(--vagabond-c-tan);
+}
+.vagabond-chat-card .damage-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: 12px;
+}
+.vagabond-chat-card .damage-icon {
+  font-size: 24px;
+  color: #ff6b35;
+}
+.vagabond-chat-card .damage-amount {
+  font-size: 28px;
+  font-weight: 700;
+  color: #d84315;
+  line-height: 1;
+  word-break: keep-all;
+}
+.vagabond-chat-card .damage-type {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-tan);
+}
+.vagabond-chat-card .critical-badge {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vagabond-chat-card .damage-formula {
+  margin-top: 8px;
+  font-size: 13px;
+  font-family: monospace;
+}
+.vagabond-chat-card .card-metadata {
+  padding: 12px 16px;
+  background: var(--vagabond-c-faint);
+  border-top: 1px solid var(--vagabond-c-tan);
+  color: var(--vagabond-c-tan);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vagabond-chat-card .metadata-item {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.vagabond-chat-card .metadata-label {
+  font-weight: 700;
+  min-width: 100px;
+}
+.vagabond-chat-card .metadata-value {
+  flex: 1;
+}
+.vagabond-chat-card .card-description {
+  padding: 12px 16px;
+  background: var(--vagabond-c-white);
+  border-top: 1px solid var(--vagabond-c-tan);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.vagabond-chat-card .card-description p {
+  margin: 0 0 8px 0;
+}
+.vagabond-chat-card .card-description p:last-child {
+  margin-bottom: 0;
+}
+.vagabond-chat-card .card-footer {
+  padding: 8px 16px;
+  background: var(--vagabond-c-faint);
+  border-top: 1px solid var(--vagabond-c-tan);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vagabond-chat-card .card-footer .footer-actions {
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.vagabond-chat-card .card-footer .footer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vagabond-chat-card .card-footer .tag {
+  padding: 4px 8px;
+  background: white;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.vagabond-chat-card .metadata-item-expandable {
+  flex-direction: column;
+}
+.vagabond-chat-card .metadata-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.vagabond-chat-card .metadata-header:hover {
+  background: var(--vagabond-c-faint);
+}
+.vagabond-chat-card .metadata-header .metadata-value {
+  transition: opacity 0.2s, max-height 0.2s;
+}
+.vagabond-chat-card .metadata-item-expandable.expanded .metadata-header .metadata-value {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+.vagabond-chat-card .expand-icon {
+  margin-left: auto;
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+.vagabond-chat-card .metadata-item-expandable.expanded .expand-icon {
+  transform: rotate(90deg);
+}
+.vagabond-chat-card .property-details {
+  padding-left: 16px;
+  border-left: 2px solid var(--vagabond-c-tan);
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  transition: max-height 0.3s ease-out, margin-top 0.3s ease-out;
+}
+.vagabond-chat-card .metadata-item-expandable.expanded .property-details {
+  max-height: 500px;
+  margin-top: 8px;
+}
+.vagabond-chat-card .property-detail {
+  padding: 4px 0;
+}
+.vagabond-chat-card .property-name {
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  margin-right: 4px;
+}
+.vagabond-chat-card .property-hint {
+  font-size: 0.95em;
+}
+.vagabond-chat-card .spell-crit-effect {
+  margin-top: 12px;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+  border-left: 3px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+}
+.vagabond-chat-card .spell-crit-effect strong {
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+.vagabond-chat-card[data-card-type=weapon-attack] .card-header, .vagabond-chat-card[data-card-type=spell-cast] .card-header, .vagabond-chat-card[data-card-type=npc-action] .card-header, .vagabond-chat-card[data-card-type=npc-ability] .card-header {
+  background: var(--vagabond-c-dark);
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+@media (max-width: 600px) {
+  .vagabond-chat-card .roll-result {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .vagabond-chat-card .damage-container {
+    flex-wrap: wrap;
+  }
+  .vagabond-chat-card .metadata-label {
+    min-width: auto;
+  }
+}
+
+/* ========================================
+   Luck Spend Chat Card
+   ======================================== */
+.luck-spend-card .card-header {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+.luck-spend-card .actor-portrait {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-tan);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.luck-spend-card .header-text {
+  flex: 1;
+  min-width: 0;
+}
+.luck-spend-card .actor-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--vagabond-c-dark);
+  line-height: 1.2;
+}
+.luck-spend-card .item-name {
+  display: block;
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 2px;
+}
+.luck-spend-card .card-content {
+  background: var(--vagabond-c-white);
+}
+.luck-spend-card .luck-message {
+  padding: 12px;
+  background: var(--vagabond-c-white);
+  border-bottom: 1px solid var(--vagabond-c-tan);
+}
+.luck-spend-card .luck-message p {
+  margin: 4px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--vagabond-c-dark);
+}
+.luck-spend-card .luck-message .luck-pool {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--vagabond-c-dark);
+}
+.luck-spend-card .luck-message .luck-pool strong {
+  color: #2e7d32;
+  font-size: 16px;
+}
+.luck-spend-card .luck-rules {
+  padding: 12px;
+  background: var(--vagabond-c-white);
+}
+.luck-spend-card .luck-rules h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vagabond-c-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.luck-spend-card .luck-rules ul {
+  margin: 0 0 12px 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+.luck-spend-card .luck-rules ul:last-child {
+  margin-bottom: 0;
+}
+.luck-spend-card .luck-rules ul li {
+  margin: 4px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.luck-spend-card .luck-rules ul li strong {
+  color: var(--vagabond-c-dark);
+  font-weight: 600;
+}
+
+/* Progress clocks - imported at top level because config dialog is outside sheets */
+.progress-clock {
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.75));
+}
+
+.progress-clock-config-form .form-row {
+  display: flex;
+  gap: 12px;
+}
+.progress-clock-config-form .form-row .form-field {
+  flex: 1;
+}
+.progress-clock-config-form .size-controls {
+  display: flex;
+  gap: 8px;
+}
+.progress-clock-config-form .size-controls select {
+  flex: 1;
+}
+.progress-clock-config-form .size-controls input {
+  width: 80px;
+}
+.progress-clock-config-form .individual-permissions {
+  margin-top: 8px;
+}
+.progress-clock-config-form .individual-permissions summary {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 8px;
+}
+.progress-clock-config-form .individual-permissions summary:hover {
+  color: var(--color-text-hyperlink);
+}
+.progress-clock-config-form .ownership-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding-left: 16px;
+}
+.progress-clock-config-form .ownership-row select {
+  flex: 1;
+}
+.progress-clock-config-form .ownership-label {
+  flex: 0 0 auto;
+  min-width: 100px;
+}
+
+/* Countdown dice - imported at top level because overlay and config are outside sheets */
+.countdown-dice-overlay {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+}
+.countdown-dice-overlay .countdown-dice {
+  position: absolute;
+  pointer-events: all;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.countdown-dice-overlay .countdown-dice.faded {
+  opacity: 0.25;
+}
+.countdown-dice-overlay .countdown-dice.faded:hover {
+  opacity: 1;
+}
+.countdown-dice-overlay .countdown-dice.dragging {
+  opacity: 0.5;
+}
+.countdown-dice-overlay .countdown-dice .dice-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  filter: drop-shadow(2px 2px 4px var(--vagabond-c-black));
+}
+.countdown-dice-overlay .countdown-dice .dice-image:hover {
+  filter: drop-shadow(2px 2px 8px var(--vagabond-c-white));
+}
+.countdown-dice-overlay .countdown-dice .dice-name {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 2px var(--vagabond-c-black);
+  cursor: grab;
+}
+
+.countdown-dice-context-menu {
+  background: var(--vagabond-c-dark);
+  border: 1px solid var(--vagabond-c-muted);
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.countdown-dice-context-menu .context-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: "Paradigm", serif;
+}
+.countdown-dice-context-menu .context-item:hover {
+  background: var(--vagabond-c-tan);
+}
+
+.countdown-dice-chat {
+  border: 2px solid var(--vagabond-c-muted);
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--vagabond-c-tan-lite);
+  font-family: "Paradigm", serif;
+  display: flex;
+  flex-direction: column;
+}
+.countdown-dice-chat .chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.countdown-dice-chat .chat-header h4 {
+  margin: 0;
+  font-family: "Eskapade", serif;
+  flex: 1;
+  word-wrap: break-word;
+}
+.countdown-dice-chat .chat-header .dice-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.countdown-dice-chat p {
+  margin: 4px 0;
+  text-align: center;
+}
+.countdown-dice-chat .die-result {
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Manofa", serif;
+}
+.countdown-dice-chat .status-message {
+  font-size: large;
+  font-weight: bold;
+  margin-top: 8px;
+  text-align: center;
+}
+.countdown-dice-chat .status-message.continues {
+  color: #4a90e2;
+}
+.countdown-dice-chat .status-message.reduced {
+  color: #f5a623;
+}
+.countdown-dice-chat .status-message.ended {
+  color: #d0021b;
+}
+
+.countdown-dice-config-form .form-row {
+  display: flex;
+  gap: 12px;
+}
+.countdown-dice-config-form .form-row .form-field {
+  flex: 1;
+}
+.countdown-dice-config-form .form-footer {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid var(--vagabond-c-muted);
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+}
+.countdown-dice-config-form .form-footer button {
+  min-width: 80px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+.countdown-dice-config-form .form-footer button[type=submit] {
+  order: 2;
+}
+.countdown-dice-config-form .form-footer button[data-action=cancel] {
+  order: 1;
+}
+
+/* Inventory mini-sheet - imported at top level because it renders outside sheets */
+.inventory-mini-sheet {
+  width: 300px;
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--vagabond-c-lite);
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: "Manofa", serif;
+  padding: 12px;
+  color: var(--vagabond-c-dark);
+}
+.inventory-mini-sheet .mini-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  border: 2px solid var(--vagabond-c-dark);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title {
+  flex: 1;
+  min-width: 0;
+  padding-top: 8px;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  display: block;
+  font-family: "Manofa", serif;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore {
+  font-size: 12px;
+  line-height: 1.4;
+  font-style: italic;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore strong {
+  font-style: normal;
+  font-weight: 700;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  opacity: 0.85;
+  cursor: pointer;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-close:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-close i {
+  pointer-events: none;
+}
+.inventory-mini-sheet .mini-sheet-description {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 4px;
+  font-family: "Paradigm", serif;
+}
+.inventory-mini-sheet .mini-sheet-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin-bottom: 12px;
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  font-size: 14px;
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row .stat-name {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-family: "Eskapade", serif;
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row .stat-name::after {
+  content: ":";
+}
+.inventory-mini-sheet .mini-sheet-stats .stat-row .stat-value {
+  text-transform: capitalize;
+  font-family: "Paradigm", serif;
+}
+.inventory-mini-sheet .mini-sheet-properties {
+  padding-top: 12px;
+  border-top: 1px solid var(--vagabond-c-dark);
+}
+.inventory-mini-sheet .mini-sheet-properties .mini-sheet-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list .property-row {
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list .property-row .property-name {
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.inventory-mini-sheet .mini-sheet-properties .property-list .property-row .property-description {
+  flex: 1;
+  font-family: "Paradigm", serif;
+}
+.inventory-mini-sheet::-webkit-scrollbar {
+  width: 8px;
+}
+.inventory-mini-sheet::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0 8px 8px 0;
+}
+.inventory-mini-sheet::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+.inventory-mini-sheet::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Styles limited to vagabond sheets */
+.vagabond {
+  /* Character Name at Top - Full Width */
+  /* Combined Character Info Row */
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+  /* When open, panel at natural position next to main sheet */
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Panel content area */
+  /* Features & Perks columns */
+  /* Mana info row */
+  /* Currency fields in panel */
+}
+.vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 4px;
+  color: var(--vagabond-c-dark);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+.vagabond h4 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.vagabond h4::after {
+  content: "";
+  flex-grow: 1;
+  margin-left: 4px;
+  height: 18px;
+  background-image: url("../assets/images/line-01.svg");
+  background-repeat: repeat-x;
+  background-size: 200px 100%;
+}
+.vagabond .resource-label {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+}
+.vagabond input[type=text],
+.vagabond input[type=number],
+.vagabond textarea {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  border-radius: 0;
+  outline: none;
+  color: var(--vagabond-c-dark);
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond input[type=text]:hover,
+.vagabond input[type=number]:hover,
+.vagabond textarea:hover {
+  cursor: text;
+}
+.vagabond input[type=text]:focus,
+.vagabond input[type=number]:focus,
+.vagabond textarea:focus {
+  border-bottom-color: var(--vagabond-c-dark);
+  cursor: text;
+}
+.vagabond .item-form {
+  font-family: "Paradigm", serif;
+}
+.vagabond .item-form .sheet-header {
+  flex: 0 0 auto;
+  min-height: fit-content;
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.vagabond .item-form .sheet-header .profile-img {
+  flex: 0 0 150px;
+  height: 150px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.vagabond .item-form .sheet-header .header-fields {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  align-content: start;
+}
+.vagabond .item-form .sheet-header .document-name {
+  grid-column: 1/-1;
+}
+.vagabond .item-form .sheet-header .document-name input[name=name] {
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  outline: none;
+  width: 100%;
+  padding: 16px 0 4px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.vagabond .item-form .sheet-header .document-name input[name=name]:hover, .vagabond .item-form .sheet-header .document-name input[name=name]:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  background: transparent !important;
+}
+.vagabond .item-form .sheet-header .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .sheet-tabs {
+  flex: 0;
+  position: relative;
+  z-index: 10 !important;
+  font-family: "Eskapade", serif;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-bottom: 2px solid var(--vagabond-c-dark);
+}
+.vagabond .sheet-body,
+.vagabond .sheet-body .tab,
+.vagabond .sheet-body .tab .editor {
+  height: 100%;
+}
+.vagabond .sheet-body {
+  overflow-x: visible !important;
+}
+.vagabond .tab {
+  overflow-y: auto;
+  position: relative;
+  width: 430px;
+  z-index: 10 !important;
+  background: none;
+  margin-left: 0;
+  padding: 8px 32px 8px 8px;
+  box-sizing: border-box;
+}
+.vagabond .tox .tox-editor-container {
+  background: var(--vagabond-c-white);
+}
+.vagabond .tox .tox-edit-area {
+  padding: 0 8px;
+}
+.vagabond .prosemirror,
+.vagabond prose-mirror {
+  --min-height: 35px;
+}
+.vagabond .prosemirror .editor-content,
+.vagabond prose-mirror .editor-content {
+  position: unset;
+  min-height: 35px;
+  height: fit-content;
+}
+.vagabond .cost-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+.vagabond .cost-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .cost-field label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .cost-field input {
+  flex: 1;
+  min-width: 0;
+}
+.vagabond .weapon-skill-damage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.vagabond .weapon-skill-damage .weapon-skill-select {
+  flex: 1;
+  min-width: 120px;
+}
+.vagabond .weapon-skill-damage .damage-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .weapon-skill-damage .damage-with-icon i {
+  font-size: 14px;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .weapon-skill-damage .damage-with-icon .damage-input {
+  width: 60px;
+}
+.vagabond .property-selector-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.vagabond .property-dropdown {
+  position: relative;
+  flex: 1;
+}
+.vagabond .property-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+.vagabond .property-dropdown summary:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .property-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+.vagabond .property-dropdown summary i {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+.vagabond .property-dropdown[open] summary i {
+  transform: rotate(180deg);
+}
+.vagabond .property-dropdown .property-checkboxes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  margin-top: 4px;
+  padding: 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 2px;
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item input[type=checkbox] {
+  margin: 0;
+  cursor: pointer;
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item span {
+  user-select: none;
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .property-tags {
+  flex: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+.vagabond .property-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.vagabond .property-tag i {
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--vagabond-c-muted);
+  transition: color 0.2s ease;
+}
+.vagabond .property-tag i:hover {
+  color: var(--vagabond-c-red);
+}
+.vagabond .metal-slots-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.vagabond .metal-slots-row .metal-field {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .metal-slots-row .metal-field label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .metal-slots-row .metal-field select {
+  flex: 1;
+}
+.vagabond .metal-slots-row .slots-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .metal-slots-row .slots-field label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .metal-slots-row .slots-field input {
+  flex: 1;
+  min-width: 0;
+}
+.vagabond .calculated-properties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+}
+.vagabond .calculated-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .calculated-item .calc-label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.vagabond .calculated-item .calc-value {
+  font-size: 12px;
+}
+.vagabond .calculated-item .calc-value .metal-bonus {
+  font-size: 11px;
+  margin-left: 4px;
+}
+.vagabond .resource-label {
+  font-weight: bold;
+}
+.vagabond .features h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.vagabond .skills-container {
+  gap: 20px;
+  color: var(--vagabond-c-dark) !important;
+  font-family: "Paradigm", serif;
+}
+.vagabond .skills-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4px;
+  gap: 2px;
+  position: relative;
+  z-index: 20 !important;
+}
+.vagabond .skills-list .skill {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  line-height: 1.2rem;
+}
+.vagabond .skills-list .skill .skill-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+  margin-right: 6px;
+  flex: 0.5;
+}
+.vagabond .skills-list .skill .skill-checkbox-hidden {
+  display: none;
+}
+.vagabond .skills-list .skill .skill-checkbox-icon {
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+.vagabond .skills-list .skill .skill-checkbox-icon:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .skills-list .skill .skill-label {
+  display: flex;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .skills-list .skill .skill-label::after {
+  content: "";
+  display: flex;
+  margin-left: 6px;
+  flex-grow: 1;
+  border-bottom: 1px dotted var(--vagabond-c-dark);
+  margin-bottom: 2px;
+  opacity: 0.4;
+  width: 100%;
+}
+.vagabond .skills-list .skill .skill-label:hover {
+  text-decoration: none;
+}
+.vagabond .skills-list .skill .skill-difficulty {
+  font-weight: bold;
+  text-align: right;
+  font-size: 20px;
+  flex: 0.5;
+}
+.vagabond .right-column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 20 !important;
+}
+.vagabond .right-column .equipped-weapon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  width: 100%;
+  height: 20px;
+}
+.vagabond .right-column .equipped-weapon .weapon-name {
+  flex: 1 1 auto;
+  min-width: 60px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-weapon .weapon-name:hover {
+  text-decoration: none;
+}
+.vagabond .right-column .equipped-weapon .weapon-damage {
+  flex: 0 0 30px;
+  text-align: right;
+  font-family: "Manofa", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-weapon .weapon-damage-icon {
+  flex: 0 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .right-column .equipped-weapon .weapon-damage-icon i {
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-weapon .weapon-range {
+  flex: 0 0 11px;
+  text-align: center;
+  font-family: "Manofa", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-weapon .weapon-grip-icon {
+  flex: 0 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .right-column .equipped-weapon .weapon-grip-icon i {
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-weapon .weapon-grip-icon i.clickable {
+  cursor: pointer;
+}
+.vagabond .right-column .equipped-weapon .weapon-grip-icon i.clickable:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .right-column .equipped-gear {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  width: 100%;
+  height: 20px;
+}
+.vagabond .right-column .equipped-gear .item-name {
+  flex: 1 1 auto;
+  min-width: 60px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-gear .item-name:hover {
+  text-decoration: none;
+}
+.vagabond .right-column .equipped-gear .item-damage {
+  flex: 0 0 32px;
+  text-align: right;
+  font-family: "Manofa", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-gear .item-damage-icon {
+  flex: 0 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .right-column .equipped-gear .item-damage-icon i {
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .right-column .equipped-gear .item-quantity {
+  flex: 0 0 14px;
+  text-align: center;
+  font-family: "Manofa", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+  padding-right: 4px;
+}
+.vagabond .right-column .equipped-armor {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  width: 100%;
+  height: 20px;
+}
+.vagabond .right-column .equipped-armor .resource-label {
+  flex: 1 1 auto;
+  min-width: 60px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-dark);
+  width: 100%;
+}
+.vagabond .right-column .equipped-armor .resource-label:hover {
+  text-decoration: none;
+}
+.vagabond .right-column .weapon-info,
+.vagabond .right-column .item-info,
+.vagabond .right-column .spell-info {
+  font-size: 13px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  text-align: right;
+  margin-left: 8px;
+}
+.vagabond .right-column .weapon-info i,
+.vagabond .right-column .item-info i,
+.vagabond .right-column .spell-info i {
+  margin-right: 2px;
+}
+.vagabond .favorites-section {
+  margin-top: 4px;
+}
+.vagabond .saves .saves-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 13px var(--vagabond-c-inset-1), inset 0 0 0 5px var(--vagabond-c-inset-2);
+}
+.vagabond .saves .save {
+  text-align: center;
+  font-size: 16px;
+}
+.vagabond .saves .save .save-difficulty {
+  font-weight: bold;
+  font-size: 20px;
+}
+.vagabond .features-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+.vagabond .features-list .feature.accordion-item {
+  padding: 2px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.vagabond .features-list .feature.accordion-item .feature-header.accordion-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.vagabond .features-list .feature.accordion-item .feature-header.accordion-header::before {
+  font-family: var(--font-awesome);
+  content: "\f219";
+  margin-right: 4px;
+  font-weight: 900;
+  font-size: 0.6em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.vagabond .features-list .feature.accordion-item .feature-header.accordion-header:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.vagabond .features-list .feature.accordion-item .feature-header.accordion-header .feature-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vagabond .features-list .feature.accordion-item .feature-description.accordion-content {
+  padding: 2px;
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+  font-family: "Paradigm", serif;
+  font-size: 14px;
+}
+.vagabond .features-list .feature.accordion-item.collapsed .accordion-content {
+  display: none;
+}
+.vagabond .features-list .no-features {
+  list-style: none;
+  padding: 14px;
+  text-align: center;
+  font-style: italic;
+}
+.vagabond .traits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 16px;
+}
+.vagabond .traits-list .trait.accordion-item {
+  padding: 2px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header::before {
+  font-family: var(--font-awesome);
+  content: "\f219";
+  margin-right: 4px;
+  font-weight: 900;
+  font-size: 0.6em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header .trait-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vagabond .traits-list .trait.accordion-item .trait-description.accordion-content {
+  padding: 2px;
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+  font-family: "Paradigm", serif;
+  font-size: 14px;
+}
+.vagabond .traits-list .trait.accordion-item.collapsed .accordion-content {
+  display: none;
+}
+.vagabond .traits-list .no-traits {
+  list-style: none;
+  padding: 14px;
+  text-align: center;
+  font-style: italic;
+}
+.vagabond .perks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vagabond .perks-list .perk-card.accordion-item {
+  padding: 2px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 0 0 2px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header::before {
+  font-family: var(--font-awesome);
+  content: "\f219";
+  margin-right: 4px;
+  font-weight: 900;
+  font-size: 0.6em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header .perk-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content {
+  padding: 2px;
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+  font-family: "Paradigm", serif;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-prerequisites {
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-description {
+  font-size: 14px;
+}
+.vagabond .perks-list .perk-card.accordion-item.collapsed .accordion-content {
+  display: none;
+}
+.vagabond .perks-list .no-perks {
+  list-style: none;
+  padding: 14px;
+  text-align: center;
+  font-style: italic;
+}
+.vagabond .inventory h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.vagabond .items-header {
+  height: 28px;
+  margin: 6px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: bold;
+}
+.vagabond .items-header > * {
+  font-size: 14px;
+  text-align: center;
+}
+.vagabond .items-header .item-name {
+  font-weight: bold;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+}
+.vagabond .items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .items-list .item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vagabond .items-list .item-name {
+  flex: 2;
+  margin: 0;
+  overflow: hidden;
+  font-size: 13px;
+  text-align: left;
+  align-items: center;
+  display: flex;
+}
+.vagabond .items-list .item-name h3, .vagabond .items-list .item-name h4 {
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+.vagabond .items-list .item-controls {
+  display: flex;
+  flex: 0 0 30px;
+  justify-content: flex-end;
+}
+.vagabond .items-list .item-controls a {
+  font-size: 12px;
+  text-align: center;
+  margin: 0 6px;
+}
+.vagabond .items-list .item {
+  align-items: center;
+  padding: 0 2px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .items-list .item:last-child {
+  border-bottom: none;
+}
+.vagabond .items-list .item .item-name {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .items-list .item .item-name .item-image {
+  flex: 0 0 30px;
+  height: 30px;
+  background-size: 30px;
+  border: none;
+  margin-right: 5px;
+}
+.vagabond .items-list .item-prop {
+  text-align: center;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-right: 1px solid var(--vagabond-c-faint);
+  font-size: 12px;
+}
+.vagabond .items-list .items-header {
+  height: 28px;
+  margin: 2px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove var(--vagabond-c-dark);
+  font-weight: bold;
+}
+.vagabond .items-list .items-header > * {
+  font-size: 12px;
+  text-align: center;
+}
+.vagabond .items-list .items-header .item-name {
+  padding-left: 5px;
+  text-align: left;
+}
+.vagabond .items-list .trait-description {
+  width: 100%;
+  margin-top: 5px;
+}
+.vagabond .items-list .trait-description input {
+  width: 100%;
+}
+.vagabond .ancestry-item-content,
+.vagabond .class-item-content {
+  min-height: 400px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding: 10px;
+  transition: max-height 0.3s ease;
+}
+.vagabond .ancestry-item-content:has(.tox-tinymce),
+.vagabond .class-item-content:has(.tox-tinymce) {
+  max-height: calc(100vh - 150px);
+}
+.vagabond .ancestry-item-content.mce-active,
+.vagabond .class-item-content.mce-active {
+  max-height: calc(100vh - 150px);
+}
+.vagabond .ancestry-description,
+.vagabond .class-description {
+  min-height: 100px;
+  max-height: none;
+  overflow-y: visible;
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.vagabond .ancestry-description prose-mirror,
+.vagabond .class-description prose-mirror {
+  height: auto;
+  min-height: 100px;
+}
+.vagabond .ancestry-description > div,
+.vagabond .class-description > div {
+  min-height: 100px;
+}
+.vagabond .traits-section .scrollable {
+  width: 100%;
+  min-height: 100px;
+  max-height: none;
+  overflow-y: visible;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 8px;
+}
+.vagabond .traits-section .scrollable .items-list {
+  margin: 0;
+}
+.vagabond .traits-section .scrollable .items-list .item {
+  display: block;
+}
+.vagabond .traits-section .scrollable .items-list .item .flexrow {
+  display: flex;
+  align-items: center;
+}
+.vagabond .item-formula {
+  flex: 0 0 200px;
+  padding: 0 8px;
+}
+.vagabond .inventory-col-equipped {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .section-title-with-add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.vagabond .section-title-with-add .fa-plus {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+.vagabond .section-title-with-add .fa-plus:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.vagabond .title-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.vagabond .title-with-button h3, .vagabond .title-with-button h4 {
+  margin: 0;
+  flex: 1;
+}
+.vagabond .title-with-button button {
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.vagabond .level-group {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.vagabond .level-group:last-child {
+  margin-bottom: 0;
+}
+.vagabond .feature-title {
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+.vagabond .traits-section .item {
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.vagabond .traits-section .item:last-child {
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .trait-title {
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+.vagabond .spell-col-name {
+  flex: 3;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.vagabond .spell-col-damage {
+  flex: 0 0 120px;
+  text-align: center;
+}
+.vagabond .spell-col-favorite {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .spell-col-favorite .favorite-active {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .spell-col-favorite .favorite-inactive {
+  color: var(--vagabond-c-faint);
+}
+.vagabond .inventory-slots-section {
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 4px;
+}
+.vagabond .inventory-slots-section .slots-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-field .resource-label {
+  font-weight: bold;
+  font-size: 14px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-field .slot-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+.vagabond .inventory-slots-section .slots-info .slot-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--vagabond-c-red);
+  font-weight: bold;
+  font-size: 12px;
+}
+.vagabond .inventory-slots-section .slots-info .slot-warning i {
+  font-size: 14px;
+}
+.vagabond .inventory-slots-section .slots-info .auto-arrange-button {
+  padding: 6px 12px;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.vagabond .inventory-slots-section .slots-info .auto-arrange-button:hover {
+  background: var(--vagabond-c-dark);
+  transform: translateY(-1px);
+}
+.vagabond .inventory-slots-section .slots-info .auto-arrange-button i {
+  margin-right: 4px;
+}
+.vagabond .inventory-grid-container {
+  margin-bottom: 16px;
+}
+.vagabond .inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 50px;
+  gap: 0;
+  padding: 1px;
+  background: none;
+  border-radius: 4px;
+  width: 100%;
+}
+.vagabond .inventory-slot.empty-slot {
+  background: none;
+  border: 2px solid rgba(44, 18, 8, 0.1);
+  border-top: none;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.vagabond .inventory-slot.empty-slot:nth-child(-n+4) {
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+.vagabond .inventory-slot.empty-slot:nth-child(4n+1) {
+  border-left: 2px solid rgba(0, 0, 0, 0.1);
+}
+.vagabond .inventory-slot.empty-slot .slot-number {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Manofa", serif;
+  opacity: 0.7;
+  mix-blend-mode: multiply;
+}
+.vagabond .inventory-slot.empty-slot.unavailable {
+  background: rgba(0, 0, 0, 0.2);
+}
+.vagabond .inventory-slot.empty-slot.unavailable .slot-number {
+  color: rgba(0, 0, 0, 0.25);
+}
+.vagabond .inventory-slot.empty-slot.drag-over {
+  background: rgba(100, 200, 100, 0.2);
+  border-color: #5cb85c;
+}
+.vagabond .inventory-card {
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  padding: 2px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.vagabond .inventory-card:hover {
+  z-index: 10;
+  box-shadow: inset 0 0 8px var(--vagabond-c-inset-1), inset 0 0 0 2px var(--vagabond-c-inset-2), 0 2px 4px rgba(0, 0, 0, 0.15);
+  background: rgba(171, 97, 32, 0.4431372549);
+  mix-blend-mode: multiply;
+}
+.vagabond .inventory-card.equipped {
+  box-shadow: inset 0 0 12px var(--vagabond-c-inset-1), inset 0 0 0 2px var(--vagabond-c-inset-2);
+  background: rgba(129, 61, 30, 0.1490196078);
+  mix-blend-mode: multiply;
+}
+.vagabond .inventory-card.equipped:hover {
+  box-shadow: inset 0 0 8px var(--vagabond-c-inset-1), inset 0 0 0 2px var(--vagabond-c-inset-2), 0 2px 4px rgba(0, 0, 0, 0.15);
+  background: rgba(143, 92, 47, 0.6196078431);
+  mix-blend-mode: multiply;
+}
+.vagabond .inventory-card.dragging {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+.vagabond .inventory-card .item-image {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 2px;
+  border: none;
+  mix-blend-mode: color-dodge;
+}
+.vagabond .inventory-card .item-name-display {
+  flex: 1;
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Eskapade", serif;
+  text-align: center;
+  line-height: 0.95;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.vagabond .inventory-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: var(--vagabond-c-faint);
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  overflow: hidden;
+}
+.vagabond .inventory-context-menu .context-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: background 0.15s ease;
+}
+.vagabond .inventory-context-menu .context-menu-item:hover {
+  background: var(--vagabond-c-tan-lite);
+  color: var(--vagabond-c-black);
+}
+.vagabond .inventory-context-menu .context-menu-item i {
+  width: 16px;
+  text-align: center;
+  color: inherit;
+}
+.vagabond .inventory-context-menu .context-menu-item.danger {
+  color: #d9534f;
+}
+.vagabond .inventory-context-menu .context-menu-item.danger:hover {
+  background: rgba(217, 83, 79, 0.1);
+}
+.vagabond .effects-header {
+  height: 28px;
+  margin: 2px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove var(--vagabond-c-dark);
+  font-weight: bold;
+}
+.vagabond .effects-header > * {
+  font-size: 14px;
+  text-align: center;
+}
+.vagabond .effects-header .effect-name {
+  font-weight: bold;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+}
+.vagabond .effects-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.vagabond .effects-list .effect-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vagabond .effects-list .effect-name {
+  flex: 2;
+  margin: 0;
+  overflow: hidden;
+  font-size: 13px;
+  text-align: left;
+  align-items: center;
+  display: flex;
+}
+.vagabond .effects-list .effect-name h3, .vagabond .effects-list .effect-name h4 {
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+.vagabond .effects-list .effect-controls {
+  display: flex;
+  flex: 0 0 100px;
+  justify-content: flex-end;
+}
+.vagabond .effects-list .effect-controls a {
+  font-size: 12px;
+  text-align: center;
+  margin: 0 6px;
+}
+.vagabond .effects-list .effect {
+  align-items: center;
+  padding: 0 2px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond .effects-list .effect:last-child {
+  border-bottom: none;
+}
+.vagabond .effects-list .effect .effect-name .effect-image {
+  flex: 0 0 30px;
+  height: 30px;
+  background-size: 30px;
+  border: none;
+  margin-right: 5px;
+}
+.vagabond .effects-list .effect-prop {
+  text-align: center;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-right: 1px solid var(--vagabond-c-faint);
+  font-size: 12px;
+}
+.vagabond .effects-list .effects-header {
+  height: 28px;
+  margin: 2px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove var(--vagabond-c-dark);
+  font-weight: bold;
+}
+.vagabond .effects-list .effects-header > * {
+  font-size: 12px;
+  text-align: center;
+}
+.vagabond .effects-list .effects-header .effect-name {
+  padding-left: 5px;
+  text-align: left;
+}
+.vagabond .effect-formula {
+  flex: 0 0 200px;
+  padding: 0 8px;
+}
+.vagabond .effects .item .effect-source,
+.vagabond .effects .item .effect-duration,
+.vagabond .effects .item .effect-controls {
+  text-align: center;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-right: 1px solid var(--vagabond-c-faint);
+  font-size: 12px;
+}
+.vagabond .effects .item .effect-controls {
+  border: none;
+}
+.vagabond .sheet-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+.vagabond .char-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+  background-image: url("../assets/images/portrait-frame.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.vagabond .char-image-container .profile-img {
+  display: flex;
+  width: 180px;
+  height: 180px;
+  transform: scale(0.86);
+  border: none;
+  object-fit: cover;
+  object-position: top center;
+  cursor: pointer;
+  border-radius: 50%;
+  align-self: center;
+  mix-blend-mode: normal;
+}
+.vagabond .char-image-container .profile-img:hover {
+  opacity: 0.9;
+}
+.vagabond .armor-overlay {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  width: 76px;
+  height: 90px;
+  background-image: url("../assets/images/armor-frame.webp");
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 12px;
+}
+.vagabond .armor-overlay .armor-value {
+  position: relative;
+  bottom: 4px;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(33, 33, 33, 0.424);
+  line-height: 1;
+}
+.vagabond .fatigue-skull {
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .fatigue-skull.fatigue-active {
+  color: var(--vagabond-c-red);
+  opacity: 1;
+  text-shadow: 0 0 2px rgba(255, 68, 68, 0.6);
+}
+.vagabond .fatigue-skull.fatigue-active:hover {
+  color: var(--vagabond-c-red);
+  transform: scale(1.1);
+}
+.vagabond .fatigue-skull.fatigue-inactive {
+  opacity: 0.4;
+}
+.vagabond .fatigue-skull.fatigue-inactive:hover {
+  color: rgba(100, 100, 100, 0.7);
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+.vagabond .fatigue-label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 4px;
+  text-transform: uppercase;
+}
+.vagabond .hp-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-weight: bold;
+  padding-bottom: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+  background-image: url(../assets/images/hp-banner.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.vagabond .hp-display .hp-icon {
+  font-size: 18px;
+  color: var(--vagabond-c-red);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.vagabond .hp-display .hp-icon.heartbeat {
+  animation: heartbeat 0.3s ease-in-out;
+}
+.vagabond .hp-display .hp-current {
+  width: 35px;
+  text-align: right;
+  border: none;
+  background: transparent;
+  padding: 2px 2px;
+  font-size: 22px;
+  font-weight: bold;
+}
+.vagabond .hp-display .hp-separator {
+  font-size: 20px;
+}
+.vagabond .hp-display .hp-max {
+  min-width: 30px;
+  font-size: 18px;
+}
+.vagabond .header-main-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+}
+.vagabond .image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.vagabond .stats-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  flex: 1;
+  gap: 4px;
+}
+.vagabond .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 6px 10px;
+  flex: 1;
+}
+.vagabond .stats-grid .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.vagabond .stats-grid .stat-score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 2px;
+  background: var(--vagabond-stat-bg);
+  padding-top: 5px;
+  color: var(--vagabond-c-stat);
+  font-family: "Manofa", serif;
+}
+.vagabond .stats-grid .stat-score:hover, .vagabond .stats-grid .stat-score:focus {
+  text-shadow: 0 0 3px var(--vagabond-c-white);
+}
+.vagabond .stats-grid .stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  line-height: 1.2;
+  font-family: "Manofa", sans-serif;
+  padding: 4px 0;
+}
+.vagabond .fatigue-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 4px 0;
+  background: none;
+  border-radius: 4px;
+  width: 100%;
+}
+.vagabond .fatigue-row .fatigue-checkboxes {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.vagabond .name-row {
+  margin-bottom: 2px;
+}
+.vagabond .character-name-input {
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  outline: none;
+  width: 100%;
+  padding: 2px 0 4px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.vagabond .character-name-input:hover, .vagabond .character-name-input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark) !important;
+  background: transparent !important;
+}
+.vagabond .character-info-row {
+  text-align: left;
+  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.vagabond .character-info-row .level-input {
+  width: 15px;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0 2px;
+  margin: 0 2px;
+}
+.vagabond .character-info-row .level-input:hover, .vagabond .character-info-row .level-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .size-type-row {
+  text-align: left;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.vagabond .name-row-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.vagabond .xp-field-inline {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+.vagabond .xp-field-inline .resource-label {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+.vagabond .xp-field-inline .resource-label .level-up-icon {
+  animation: pulse 1.5s ease-in-out infinite;
+  color: var(--vagabond-c-red);
+}
+.vagabond .xp-field-inline .xp-input {
+  width: 35px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 2px 4px;
+  flex-shrink: 0;
+  cursor: text;
+  pointer-events: auto;
+}
+.vagabond .xp-field-inline .xp-input:hover, .vagabond .xp-field-inline .xp-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .xp-field-inline .xp-required {
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.vagabond .xp-field-inline.level-up-ready {
+  color: var(--vagabond-c-red);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+.vagabond .xp-field-inline.level-up-ready .resource-label {
+  color: var(--vagabond-c-red);
+  text-shadow: 0 0 4px var(--vagabond-c-red);
+}
+.vagabond .xp-field-inline.level-up-ready .resource-label:hover {
+  opacity: 0.85;
+}
+.vagabond .xp-field-inline.level-up-ready .xp-input {
+  font-weight: 700;
+  cursor: text;
+}
+.vagabond .xp-field-inline.level-up-ready .xp-input:hover, .vagabond .xp-field-inline.level-up-ready .xp-input:focus {
+  border-bottom-color: var(--vagabond-c-red);
+}
+.vagabond .xp-field-inline.level-up-ready .xp-required {
+  font-weight: 600;
+  font-size: 14px;
+}
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+.vagabond .character-name-input-large {
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-size: 28px;
+  font-family: "Manofa", sans-serif;
+  font-weight: 700;
+  width: 100%;
+  padding: 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+.vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark) !important;
+  background: transparent !important;
+}
+.vagabond .character-info-combined-row {
+  text-align: center;
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  font-family: "Paradigm", serif;
+}
+.vagabond .character-info-combined-row .level-input {
+  width: 18px;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-family: "Manofa", serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 2px;
+  margin: 0 2px;
+}
+.vagabond .character-info-combined-row .level-input:hover, .vagabond .character-info-combined-row .level-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .speed-stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 0;
+  padding: 6px 0;
+  width: 100%;
+  margin-top: 2px;
+}
+.vagabond .speed-stats-row .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.vagabond .speed-stats-row .stat-item .stat-value-input {
+  width: auto;
+  height: 40px;
+  min-width: 40px;
+  max-width: 50px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 2px 4px;
+}
+.vagabond .speed-stats-row .stat-item .stat-value-input:hover, .vagabond .speed-stats-row .stat-item .stat-value-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .speed-stats-row .stat-item .stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.1;
+}
+.vagabond .speed-stats-row .luck-item .luck-display {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+}
+.vagabond .speed-stats-row .luck-item .luck-display .luck-icon {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+.vagabond .speed-stats-row .luck-item .luck-display .luck-value {
+  position: relative;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background-image: url("../assets/images/luck-frame.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  mix-blend-mode: multiply;
+}
+.vagabond .favor-hinder-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle i {
+  font-size: 32px;
+  transition: color 0.3s ease, transform 0.3s ease;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle:hover {
+  transform: scale(1.05);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.none i {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.favor i {
+  color: #005a02;
+  text-shadow: 0 0 2px rgba(0, 90, 2, 0.8666666667);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-toggle.hinder i {
+  color: #900000;
+  text-shadow: 0 0 2px rgba(144, 0, 0, 0.7960784314);
+}
+.vagabond .favor-hinder-toggle-container .favor-hinder-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-height: 24px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 600px) {
+  .vagabond .sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .vagabond .char-image-container {
+    margin-bottom: 40px;
+  }
+  .vagabond .character-name-input {
+    font-size: 16px;
+  }
+  .vagabond .character-info-row {
+    font-size: 12px;
+  }
+}
+.vagabond .sliding-panel {
+  position: absolute;
+  top: 0;
+  left: 430px; /* Base position next to main sheet when open */
+  width: 430px;
+  height: 100%;
+  background: none;
+  background-image: var(--vagabond-bg-paper);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+  filter: blur(0);
+  display: flex;
+  flex-direction: row;
+  transform-origin: left center;
+  pointer-events: all;
+  z-index: 100 !important; /* Always on top of main sheet */
+  /* Smooth transition */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Anti-aliasing for smooth rotation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.vagabond .sliding-panel.panel-closed {
+  transform: translateX(-410px) rotate(0deg);
+}
+.vagabond .sliding-panel.panel-open {
+  transform: translateX(0) rotate(2deg);
+}
+.vagabond .panel-click-zone {
+  position: absolute;
+  top: 0;
+  right: 0; /* Position on RIGHT edge so it's visible when panel is behind */
+  width: 20px;
+  height: 100%;
+  background: none;
+  border-right: none;
+  cursor: pointer;
+  z-index: 15; /* Always on top and clickable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .panel-content {
+  margin-right: 8px; /* Make room for click zone on the right */
+  padding: 25px 5px 25px 25px;
+  height: 100%;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  flex: 1;
+}
+.vagabond .panel-section {
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--vagabond-c-faint);
+}
+.vagabond .panel-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.vagabond .panel-title {
+  text-align: center;
+  margin-bottom: 4px;
+  font-family: "Eskapade", serif;
+}
+.vagabond .features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+.vagabond .features-column,
+.vagabond .perks-column {
+  display: flex;
+  flex-direction: column;
+}
+.vagabond .mana-info-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  margin-bottom: 4px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+.vagabond .mana-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+.vagabond .mana-field label {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+.vagabond .mana-field input {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vagabond .mana-field .mana-value {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+.vagabond .currency-row {
+  justify-content: flex-end;
+  gap: 8px;
+}
+.vagabond .currency-field {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 4px;
+}
+.vagabond .currency-field input {
+  flex: 1;
+  min-width: 50px;
+  text-align: center;
+}
+.vagabond .currency-field .gold {
+  color: #ffb100;
+  text-shadow: 0 0 3px rgb(125, 90, 0);
+  font-size: 1.3rem;
+  padding-bottom: 4px;
+}
+.vagabond .currency-field .silver {
+  color: rgb(144, 144, 144);
+  text-shadow: 0 0 3px rgb(98, 100, 101);
+  font-size: 1.3rem;
+  padding-bottom: 4px;
+}
+.vagabond .currency-field .copper {
+  color: #9a3716;
+  text-shadow: 0 0 3px rgb(83, 54, 46);
+  font-size: 1.3rem;
+  padding-bottom: 4px;
+}
+.vagabond .vagabond.sheet.actor.npc .window-content {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.vagabond .npc-header {
+  padding-top: 2px;
+}
+.vagabond .npc-lock-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-lock-name-row .npc-name-input {
+  flex: 1;
+}
+.vagabond .npc-lock-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .npc-lock-button i {
+  font-size: 16px;
+}
+.vagabond .npc-lock-button:hover {
+  color: var(--vagabond-c-tan);
+  transform: scale(1.1);
+}
+.vagabond .npc-top-section {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.vagabond .npc-image-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  background-image: url(../assets/images/npc-portrait-frame.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.vagabond .npc-image-container .npc-profile-img {
+  display: flex;
+  width: 120px;
+  height: 120px;
+  transform: scale(0.84);
+  border: none;
+  object-fit: cover;
+  object-position: top center;
+  cursor: pointer;
+  align-self: flex;
+}
+.vagabond .npc-image-container .npc-profile-img:hover {
+  opacity: 0.9;
+}
+.vagabond .npc-hp-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-weight: bold;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: auto;
+  background-image: url(../assets/images/npc-hp-banner.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.vagabond .npc-hp-display .npc-hp-heart-icon {
+  font-size: 14px;
+  color: #c62828;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.vagabond .npc-hp-display .npc-hp-heart-icon.heartbeat {
+  animation: heartbeat 0.3s ease-in-out;
+}
+.vagabond .npc-hp-display .npc-hp-current {
+  width: 28px;
+  text-align: right;
+  border: none;
+  background: transparent;
+  padding: 2px 2px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: none;
+}
+.vagabond .npc-hp-display .npc-hp-current:focus {
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .npc-hp-display .npc-hp-separator {
+  font-size: 16px;
+}
+.vagabond .npc-hp-display .npc-hp-max {
+  min-width: 24px;
+  font-size: 14px;
+}
+.vagabond .npc-info-column {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+.vagabond .npc-lock-name-row .npc-name-input {
+  width: 100%;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  padding: 2px 0 4px 0;
+  outline: none;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+  box-shadow: none;
+}
+.vagabond .npc-lock-name-row .npc-name-input:hover, .vagabond .npc-lock-name-row .npc-name-input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark) !important;
+  background: transparent !important;
+  box-shadow: none;
+}
+.vagabond .npc-stats-compact-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.vagabond .npc-stats-compact-row .npc-stat-field {
+  flex: 1;
+}
+.vagabond .npc-stats-row-appearing-zone {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+.vagabond .npc-zone-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.vagabond .npc-stats-row-senses {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.vagabond .npc-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.vagabond .npc-stat-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .npc-senses-field,
+.vagabond .npc-armor-field {
+  grid-column: span 1;
+}
+.vagabond .npc-zone-checkboxes {
+  grid-template-columns: 1fr !important;
+  min-width: 200px !important;
+}
+.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item {
+  white-space: nowrap;
+}
+.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item input[type=radio] {
+  display: none;
+}
+.vagabond .npc-field-label {
+  font-size: 15px;
+  font-weight: bold;
+  font-family: "Manofa", serif;
+  white-space: nowrap;
+  min-width: fit-content;
+}
+.vagabond .npc-field-input {
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  border-radius: 0;
+  background: transparent;
+  font-size: 18px;
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+  flex: 1;
+  box-shadow: none;
+}
+.vagabond .npc-field-input:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-field-input:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+  box-shadow: none;
+}
+.vagabond .npc-field-input[readonly] {
+  border: none;
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
+.vagabond .npc-field-input[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-field-input::placeholder {
+  color: var(--vagabond-c-red);
+  opacity: 0.9;
+}
+.vagabond .npc-field-display {
+  padding: 2px 0;
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  flex: 1;
+}
+.vagabond .npc-fatigue-field {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+}
+.vagabond .npc-fatigue-checkboxes {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.vagabond .npc-fatigue-checkboxes .fatigue-skull {
+  font-size: 16px;
+}
+.vagabond .npc-armor-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-armor-value {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  background: transparent;
+  font-size: 15px;
+  font-family: "Manofa", serif;
+  font-weight: normal;
+  width: 40px;
+  text-align: left;
+  box-shadow: none;
+}
+.vagabond .npc-armor-value:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-armor-value:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+  box-shadow: none;
+}
+.vagabond .npc-armor-value[readonly] {
+  border: none;
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+  width: 16px;
+  text-align: right;
+}
+.vagabond .npc-armor-value[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-armor-value::placeholder {
+  color: var(--vagabond-c-red);
+  opacity: 0.5;
+}
+.vagabond .npc-armor-description {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  border-radius: 0;
+  background: transparent;
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  flex: 1;
+  box-shadow: none;
+}
+.vagabond .npc-armor-description:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-armor-description:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+  box-shadow: none;
+}
+.vagabond .npc-armor-description[readonly] {
+  border: none;
+  cursor: default;
+  background: transparent;
+  padding: 2px 0;
+}
+.vagabond .npc-armor-description[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-armor-description::placeholder {
+  color: var(--vagabond-c-red);
+  opacity: 0.5;
+}
+.vagabond .npc-content {
+  padding: 8px 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.vagabond .npc-section.npc-actions, .vagabond .npc-section.npc-abilities, .vagabond .npc-section.npc-effects {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+.npc-section.npc-actions .vagabond .npc-section-title, .npc-section.npc-abilities .vagabond .npc-section-title, .npc-section.npc-effects .vagabond .npc-section-title {
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+}
+.vagabond .npc-section-title.accordion-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+.vagabond .npc-section-title.accordion-header:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .npc-section-title.accordion-header .accordion-icon {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+  margin-left: auto;
+}
+.vagabond .npc-section-title.accordion-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-section-content {
+  padding: 4px 0;
+}
+.npc-section.npc-actions .vagabond .npc-section-content, .npc-section.npc-abilities .vagabond .npc-section-content, .npc-section.npc-effects .vagabond .npc-section-content {
+  padding: 4px 0;
+}
+.vagabond .npc-section-content.accordion-content {
+  max-height: 1000px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: max-height 0.3s ease;
+}
+.vagabond .npc-section-content.accordion-content.collapsed {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.vagabond .npc-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vagabond .npc-action-view {
+  padding: 4px 0;
+  line-height: 1.6;
+}
+.vagabond .action-name-line {
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-dark);
+  line-height: 1.1rem;
+  padding-left: 4px;
+}
+.vagabond .action-name-line .action-name {
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: "Manofa", sans-serif;
+}
+.vagabond .action-name-line .action-name:hover {
+  color: var(--vagabond-c-red);
+}
+.vagabond .action-name-line .action-meta {
+  font-weight: bold;
+  padding-left: 5px;
+}
+.vagabond .action-name-line .action-damage-type {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-type .damage-type-icon-prefix {
+  margin-right: 4px;
+}
+.vagabond .action-name-line .action-damage-display {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-flat {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-damage-roll {
+  font-weight: normal;
+}
+.vagabond .action-name-line .action-description {
+  font-weight: normal;
+}
+.vagabond .action-extra-info {
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+}
+.vagabond .npc-ability-view {
+  padding: 4px 0;
+  font-size: 15px;
+  font-family: "Manofa", serif;
+}
+.vagabond .npc-ability-view .ability-name {
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .npc-ability-view .ability-name:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .npc-ability-view .ability-description {
+  font-weight: normal;
+  font-family: "Paradigm", serif;
+  font-size: 16px;
+}
+.vagabond .npc-edit-item,
+.vagabond .npc-action-edit,
+.vagabond .npc-ability-edit {
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 8px;
+  background: var(--vagabond-c-tan-lite);
+  position: relative;
+}
+.vagabond .npc-edit-header,
+.vagabond .action-edit-header,
+.vagabond .ability-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 0;
+  cursor: pointer;
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond .npc-edit-header:hover,
+.vagabond .action-edit-header:hover,
+.vagabond .ability-edit-header:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-edit-header .accordion-icon,
+.vagabond .action-edit-header .accordion-icon,
+.vagabond .ability-edit-header .accordion-icon {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-edit-header .accordion-icon.fa-chevron-down,
+.vagabond .action-edit-header .accordion-icon.fa-chevron-down,
+.vagabond .ability-edit-header .accordion-icon.fa-chevron-down {
+  transform: rotate(90deg);
+}
+.vagabond .npc-type-row {
+  display: flex;
+  width: fit-content;
+  justify-content: flex-start;
+  font-style: italic;
+}
+.vagabond .npc-type-row .npc-size-select {
+  text-transform: capitalize;
+}
+.vagabond .npc-type-row select:disabled {
+  color: var(--vagabond-c-muted);
+  cursor: not-allowed;
+}
+.vagabond .npc-edit-name,
+.vagabond .action-edit-name,
+.vagabond .ability-edit-name {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+}
+.vagabond .npc-edit-content,
+.vagabond .action-edit-content,
+.vagabond .ability-edit-content {
+  overflow: hidden;
+  max-height: 1500px;
+  opacity: 1;
+  transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+}
+.vagabond .npc-edit-content.collapsed,
+.vagabond .action-edit-content.collapsed,
+.vagabond .ability-edit-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.vagabond .npc-edit-row,
+.vagabond .action-edit-row,
+.vagabond .ability-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.vagabond .npc-edit-row label,
+.vagabond .action-edit-row label,
+.vagabond .ability-edit-row label {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Manofa", serif;
+}
+.vagabond .npc-edit-row textarea,
+.vagabond .action-edit-row textarea,
+.vagabond .ability-edit-row textarea {
+  resize: vertical;
+  height: auto;
+}
+.vagabond .npc-name-with-remove,
+.vagabond .action-name-with-remove,
+.vagabond .ability-name-with-remove {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.vagabond .npc-name-with-remove input,
+.vagabond .action-name-with-remove input,
+.vagabond .ability-name-with-remove input {
+  flex: 1;
+}
+.vagabond .npc-remove-btn,
+.vagabond .action-remove-btn,
+.vagabond .ability-remove-btn {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+.vagabond .npc-remove-btn:hover,
+.vagabond .action-remove-btn:hover,
+.vagabond .ability-remove-btn:hover {
+  color: #c62828;
+}
+.vagabond .action-edit-row-split {
+  flex-direction: row;
+  gap: 8px;
+}
+.vagabond .action-edit-row-split .action-edit-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .npc-add-row,
+.vagabond .action-add-row,
+.vagabond .ability-add-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 4px;
+  padding: 4px 0;
+  border-top: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .npc-add-btn,
+.vagabond .action-add-btn,
+.vagabond .ability-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--vagabond-c-dark);
+  font-size: 14px;
+  font-family: "Manofa", serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.vagabond .npc-add-btn i,
+.vagabond .action-add-btn i,
+.vagabond .ability-add-btn i {
+  font-size: 14px;
+}
+.vagabond .npc-sheet select,
+.vagabond .npc-header select,
+.vagabond .npc-content select {
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
+  width: auto;
+}
+.vagabond .npc-sheet select::-ms-expand,
+.vagabond .npc-header select::-ms-expand,
+.vagabond .npc-content select::-ms-expand {
+  display: none;
+}
+.vagabond .npc-sheet select:hover,
+.vagabond .npc-header select:hover,
+.vagabond .npc-content select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet select:focus,
+.vagabond .npc-header select:focus,
+.vagabond .npc-content select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .npc-sheet select option,
+.vagabond .npc-header select option,
+.vagabond .npc-content select option {
+  background: var(--vagabond-c-lite);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet select option:checked,
+.vagabond .npc-header select option:checked,
+.vagabond .npc-content select option:checked {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-sheet select:disabled,
+.vagabond .npc-header select:disabled,
+.vagabond .npc-content select:disabled {
+  color: var(--vagabond-c-dark);
+  border: none;
+  padding: 0;
+}
+.vagabond .npc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 12px;
+}
+.vagabond .npc-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .npc-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .npc-stat-value {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Manofa", serif;
+  text-align: center;
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  padding: 4px;
+  box-shadow: none;
+}
+.vagabond .npc-stat-value:hover, .vagabond .npc-stat-value:focus {
+  border-color: var(--vagabond-c-dark);
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .npc-effects .effects-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vagabond .npc-effects .effects-category {
+  margin-bottom: 8px;
+}
+.vagabond .npc-effects .effects-category-label {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+  margin-bottom: 4px;
+}
+.vagabond .npc-effects .effect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-effects .effect:hover {
+  background: var(--vagabond-c-beige);
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-effects .effect-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-family: "Manofa", serif;
+  font-weight: 600;
+  flex: 1;
+}
+.vagabond .npc-effects .effect-image,
+.vagabond .npc-effects .effect-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid var(--vagabond-c-tan);
+}
+.vagabond .npc-effects .effect-source {
+  font-size: 14px;
+  font-family: "Manofa", serif;
+  color: var(--vagabond-c-muted);
+  min-width: 80px;
+  text-align: center;
+}
+.vagabond .npc-effects .effect-duration {
+  font-size: 14px;
+  font-family: "Manofa", serif;
+  min-width: 60px;
+  text-align: center;
+}
+.vagabond .npc-effects .effect-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.vagabond .npc-effects .effect-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--vagabond-c-muted);
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s ease;
+}
+.vagabond .npc-effects .effect-control i {
+  font-size: 14px;
+}
+.vagabond .npc-effects .effect-create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  border: 1px dashed var(--vagabond-c-tan);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 14px;
+  font-family: "Manofa", serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .npc-effects .effect-create:hover {
+  border-color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-effects .effect-create i {
+  font-size: 12px;
+}
+.vagabond .npc-empty-section {
+  text-align: center;
+  font-style: italic;
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  padding: 12px;
+}
+.vagabond .npc-details {
+  display: flex;
+  flex-direction: column;
+  border: none;
+}
+.vagabond .npc-detail-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 24px;
+}
+.vagabond .npc-description-row {
+  display: block;
+}
+.vagabond .npc-zone-appearing-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  justify-content: space-between;
+}
+.vagabond .npc-appearing-field {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: auto;
+}
+.vagabond .npc-description-textarea {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+  background: transparent;
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  font-style: italic;
+  resize: vertical;
+  line-height: 1.1;
+  box-shadow: none;
+}
+.vagabond .npc-description-textarea:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-description-textarea:focus {
+  outline: none;
+  border-color: var(--vagabond-c-dark);
+  background: transparent;
+  box-shadow: none;
+}
+.vagabond .npc-description-textarea[readonly] {
+  border: 1px solid transparent;
+  cursor: default;
+  background: transparent;
+  padding: 4px 0;
+  resize: none;
+}
+.vagabond .npc-description-textarea[readonly]:hover {
+  border-color: transparent;
+}
+.vagabond .npc-description-textarea::placeholder {
+  color: var(--vagabond-c-red);
+  opacity: 0.5;
+  font-style: italic;
+}
+.vagabond .npc-immunity-text {
+  flex: 1;
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  line-height: 0.9;
+  text-transform: capitalize;
+}
+.vagabond .npc-immunity-text .damage-type-icon-prefix {
+  margin-right: 4px;
+}
+.vagabond .npc-immunity-dropdown {
+  min-width: fit-content;
+}
+.vagabond .npc-immunity-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond .npc-immunity-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+.vagabond .npc-immunity-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+  color: var(--vagabond-c-dark);
+  white-space: nowrap;
+  transition: border-bottom-color 0.2s ease;
+}
+.vagabond .npc-immunity-toggle:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-immunity-toggle i {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+details[open] .vagabond .npc-immunity-toggle i {
+  transform: rotate(90deg);
+}
+.vagabond .npc-immunity-checkboxes {
+  position: absolute;
+  z-index: 10;
+  background: var(--vagabond-c-lite);
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+  padding: 8px;
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 14px;
+  font-family: "Manofa", serif;
+}
+.vagabond .npc-immunity-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-checkbox-item:hover {
+  background: var(--vagabond-c-tan);
+  color: var(--vagabond-c-lite);
+  border-radius: 4px;
+}
+.vagabond .npc-immunity-checkbox-item input[type=checkbox] {
+  cursor: pointer;
+  margin: 0;
+}
+.vagabond .npc-immunity-checkbox-item .damage-type-icon-prefix {
+  font-size: 14px;
+  margin-left: 2px;
+  margin-right: 4px;
+}
+.vagabond .npc-immunity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  flex: 1;
+}
+.vagabond .npc-immunity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Manofa", serif;
+  white-space: nowrap;
+}
+.vagabond .npc-immunity-tag .damage-type-icon-prefix {
+  font-size: 12px;
+  margin-right: 2px;
+}
+.vagabond .countdown-dice-trigger {
+  cursor: pointer;
+  color: var(--vagabond-c-red);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--vagabond-c-muted);
+  transition: all 0.2s ease;
+}
+.vagabond .countdown-dice-trigger:hover {
+  text-decoration-style: solid;
+  text-decoration-color: var(--vagabond-c-faint);
+  opacity: 0.8;
+}
+.vagabond .item-sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+.vagabond .item-image-column {
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+}
+.vagabond .item-image-column .item-profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 4px;
+  border: 2px solid var(--vagabond-c-tan);
+  object-fit: cover;
+  cursor: pointer;
+}
+.vagabond .item-image-column .item-profile-img:hover {
+  opacity: 0.9;
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .item-header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.vagabond .item-name-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+.vagabond .item-document-name {
+  flex: 1;
+  min-width: 0;
+}
+.vagabond .item-document-name input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid var(--vagabond-c-tan);
+  background: transparent;
+  text-align: left;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  padding: 4px 8px;
+  transition: border-bottom 0.2s ease;
+}
+.vagabond .item-document-name input:hover, .vagabond .item-document-name input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  outline: none;
+}
+.vagabond .item-document-name input::placeholder {
+  color: var(--vagabond-c-faint);
+  font-style: italic;
+}
+.vagabond .class-spellcaster-fields {
+  width: 100%;
+}
+.vagabond .class-spellcaster-fields .grid {
+  gap: 8px;
+}
+@media (max-width: 600px) {
+  .vagabond .item-sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .vagabond .item-image-column {
+    margin-bottom: 12px;
+  }
+  .vagabond .item-document-name input {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+.vagabond .favorited-spell {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 0;
+  width: 100%;
+  height: 20px;
+}
+.vagabond .favorited-spell .spell-name {
+  flex: 1 1 auto;
+  min-width: 60px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-damage-dice {
+  flex: 0 0 11px;
+  text-align: center;
+  font-family: "Manofa", serif;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable {
+  cursor: pointer;
+}
+.vagabond .favorited-spell .spell-damage-dice.clickable:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .favorited-spell .spell-fx-icon {
+  flex: 0 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s, color 0.2s;
+}
+.vagabond .favorited-spell .spell-fx-icon i {
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.vagabond .favorited-spell .spell-fx-icon.fx-inactive {
+  opacity: 0.3;
+}
+.vagabond .favorited-spell .spell-fx-icon.fx-inactive i {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-fx-icon.fx-inactive:hover {
+  opacity: 0.5;
+}
+.vagabond .favorited-spell .spell-fx-icon.fx-active {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+  font-weight: 500;
+}
+.vagabond .favorited-spell .spell-fx-icon.fx-active i {
+  color: var(--vagabond-c-red);
+}
+.vagabond .favorited-spell .spell-fx-icon.fx-active:hover {
+  opacity: 0.8;
+}
+.vagabond .favorited-spell .spell-damage-icon {
+  flex: 0 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .favorited-spell .spell-damage-icon i {
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-delivery-select {
+  flex: 0 0 40px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  font-family: "Eskapade", serif;
+  font-weight: 500;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: none;
+  outline: none;
+}
+.vagabond .favorited-spell .spell-delivery-select::-ms-expand {
+  display: none;
+}
+.vagabond .favorited-spell .spell-delivery-select:focus {
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .favorited-spell .spell-delivery-select option {
+  background: var(--vagabond-c-tan-lite);
+  color: var(--vagabond-c-dark);
+  font-family: "Eskapade", serif;
+}
+.vagabond .favorited-spell .spell-delivery-select option:checked {
+  background: var(--vagabond-c-red);
+  color: var(--vagabond-c-white);
+}
+.vagabond .favorited-spell .spell-delivery-cost {
+  flex: 0 0 11px;
+  text-align: center;
+  font-family: "Manofa", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .favorited-spell .spell-delivery-cost.clickable {
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+.vagabond .favorited-spell .spell-delivery-cost.clickable:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .favorited-spell .spell-delivery-cost.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vagabond .favorited-spell .spell-mana-total {
+  flex: 0 0 13px;
+  text-align: center;
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  color: var(--vagabond-c-red);
+}
+.vagabond .vagabond-spell-cast h3 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+.vagabond .vagabond-spell-cast p {
+  margin: 5px 0;
+}
+.vagabond .vagabond-spell-cast strong {
+  color: var(--vagabond-c-tan, #d4af37);
+}
+.vagabond .content-link, .vagabond .inline-roll {
+  background: var(--vagabond-c-faint);
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+  color: var(--vagabond-c-dark);
+  margin: -1px 0;
+  padding: 1px 4px 0;
+  white-space: nowrap;
+  word-break: break-all;
+}
+
+/*# sourceMappingURL=vagabond.css.map */

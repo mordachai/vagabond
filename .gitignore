@@ -1,0 +1,23 @@
+packs/*
+!packs/_source/
+dist/
+
+# IDE
+.idea/
+.nova/
+.vs/
+.vscode/
+*.code-workspace
+*.iml
+*.swp
+
+# Node Modules
+node_modules/
+
+# OS Specific
+.DS_Store
+
+/docs
+.claude
+CLAUDE.md
+

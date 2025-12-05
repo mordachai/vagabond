@@ -1,0 +1,27 @@
+{{! Progress Clock Delete Dialog Template }}
+<div class="progress-clock-delete-list">
+  {{#if clocks.length}}
+    <p class="dialog-instructions">{{localize "VAGABOND.ProgressClock.DeleteDialog.Instructions"}}</p>
+    <ul class="clock-list">
+      {{#each clocks}}
+        <li class="clock-item">
+          <span class="clock-info">
+            <strong>{{this.name}}</strong>
+            <small class="clock-progress">({{this.filled}}/{{this.segments}})</small>
+          </span>
+          <button
+            type="button"
+            class="delete-btn"
+            data-action="deleteClock"
+            data-clock-id="{{this.id}}"
+            data-tooltip="{{localize 'VAGABOND.ProgressClock.DeleteDialog.DeleteTooltip'}}"
+          >
+            <i class="fas fa-trash"></i> {{localize "VAGABOND.ProgressClock.Delete"}}
+          </button>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="no-clocks-message">{{localize "VAGABOND.ProgressClock.NoClocksExist"}}</p>
+  {{/if}}
+</div>

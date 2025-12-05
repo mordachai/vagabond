@@ -1,0 +1,49 @@
+// Custom font declarations
+@font-face {
+  font-family: 'Eskapade';
+  src: url('../assets/fonts/eskapade-black.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Eskapade';
+  src: url('../assets/fonts/eskapade-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Manofa';
+  src: url('../assets/fonts/manofa-bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paradigm';
+  src: url('../assets/fonts/paradigm-regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paradigm';
+  src: url('../assets/fonts/paradigm-bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Paradigm';
+  src: url('../assets/fonts/paradigm-italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+// Font variables
+$font-primary: 'Paradigm', serif;
+$font-secondary: 'Manofa', serif;
+$font-title: 'Eskapade', serif;
+$font-character-name: 'Manofa', sans-serif;
+$font-decorative: 'Paradigm', serif;

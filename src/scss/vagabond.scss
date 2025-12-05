@@ -1,0 +1,100 @@
+// Add custom fonts by visiting and search https://fonts.google.com
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+// Import utilities.
+@import 'utils/typography';
+@import 'utils/colors';
+@import 'utils/mixins';
+@import 'utils/variables';
+@import 'utils/utilities';
+
+/* Global styles */
+@import 'global/window';
+@import 'global/grid';
+@import 'global/flex';
+
+/* Chat cards - imported at top level because they render outside sheets */
+@import 'components/chat-cards';
+
+/* Progress clocks - imported at top level because config dialog is outside sheets */
+@import 'components/progress-clock';
+
+/* Countdown dice - imported at top level because overlay and config are outside sheets */
+@import 'components/countdown-dice';
+
+/* Inventory mini-sheet - imported at top level because it renders outside sheets */
+@import 'components/inventory-mini-sheet';
+
+/* Styles limited to vagabond sheets */
+.vagabond {
+  // Apply Eskapade Bold to all titles
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-title;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 4px;
+    color: $c-dark;
+    mix-blend-mode: multiply;
+    opacity: 0.85;
+  }
+
+  h4 {
+    display: flex; 
+    align-items: center; 
+    width: 100%; 
+
+    &::after {
+      content: "";
+      flex-grow: 1; 
+      margin-left: 4px;
+      height: 18px; 
+      background-image: url('../assets/images/line-01.svg');
+      background-repeat: repeat-x;
+      background-size: 200px 100%;
+    }
+  }
+
+  // Apply Eskapade Bold to resource labels (also titles)
+  .resource-label {
+    font-family: $font-title;
+    font-weight: bold;
+  }
+
+  // Stats component
+  @import 'components/stats';
+
+  // Clean input and textarea styling
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    border-radius: 0;
+    outline: none;
+    color: $c-dark;
+    transition: border-bottom-color 0.2s ease;
+
+    &:hover {
+      cursor: text;
+    }
+
+    &:focus {
+      border-bottom-color: $c-dark;
+      cursor: text;
+    }
+  }
+
+  @import 'components/forms';
+  @import 'components/resource';
+  @import 'components/items';
+  @import 'components/inventory-grid';
+  @import 'components/effects';
+  @import 'components/character-header';
+  @import 'components/npc-sheet';
+  @import 'components/item-header';
+  @import 'components/spell-controls';
+  @import 'components/foundry-formats';
+
+  // @import 'components/equipment-locked'; // Disabled - not in current CSS, has build errors
+}

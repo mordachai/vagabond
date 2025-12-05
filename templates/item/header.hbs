@@ -1,0 +1,189 @@
+{{! Item Sheet Header - Different from Actor Header }}
+<header class='item-sheet-header'>
+  {{! Left Column: Image (150x150) }}
+  <div class='item-image-column'>
+    <img
+      class='item-profile-img'
+      src='{{item.img}}'
+      data-edit='img'
+      data-action='onEditImage'
+      data-tooltip='{{item.name}}'
+      width='150'
+      height='150'
+    />
+  </div>
+
+  {{! Right Column: Name + Two-Column Content }}
+  <div class='item-header-fields'>
+    {{! Item Name and Lock (for equipment) }}
+    <div class='item-name-row'>
+      <div class='item-document-name'>
+        <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
+      </div>
+      {{#if (eq item.type 'equipment')}}
+        <button
+          type='button'
+          class='equipment-lock-toggle'
+          data-action='toggleLock'
+          data-tooltip='{{#if system.locked}}Unlock to edit{{else}}Lock to view{{/if}}'
+        >
+          <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+        </button>
+      {{/if}}
+    </div>
+
+    {{! Two-Column Content for Item-Specific Fields }}
+    {{#if (eq item.type 'equipment')}}
+      {{#unless system.locked}}
+        <div class='grid grid-1col'>
+          <div class='resource'>
+            <label class='resource-label'>Equipment Type</label>
+            <select name='system.equipmentType' data-dtype='String'>
+              <option value='weapon' {{#if (eq system.equipmentType 'weapon')}}selected{{/if}}>Weapon</option>
+              <option value='armor' {{#if (eq system.equipmentType 'armor')}}selected{{/if}}>Armor</option>
+              <option value='gear' {{#if (eq system.equipmentType 'gear')}}selected{{/if}}>Gear</option>
+              <option value='alchemical' {{#if (eq system.equipmentType 'alchemical')}}selected{{/if}}>Alchemical</option>
+              <option value='relic' {{#if (eq system.equipmentType 'relic')}}selected{{/if}}>Relic</option>
+            </select>
+          </div>
+        </div>
+      {{/unless}}
+    {{/if}}
+
+    {{#if (eq item.type 'gear')}}
+      <div class='grid grid-2col'>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.quantity.label'}}</label>
+          <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number' />
+        </div>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Gear.FIELDS.slots.label'}}</label>
+          <input type='number' name='system.slots' value='{{system.slots}}' data-dtype='Number' />
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if (eq item.type 'ancestry')}}
+      <div class='grid grid-2col'>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.size.label'}}</label>
+          {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size}}
+        </div>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.ancestryType.label'}}</label>
+          {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.ancestryType" selected=system.ancestryType}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if (eq item.type 'weapon')}}
+      <div class='grid grid-2col'>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.range.label'}}</label>
+          <select name='system.range' data-dtype='String'>
+            <option value="close" {{#if (eq system.range 'close')}}selected{{/if}}>Close</option>
+            <option value="near" {{#if (eq system.range 'near')}}selected{{/if}}>Near</option>
+            <option value="far" {{#if (eq system.range 'far')}}selected{{/if}}>Far</option>
+          </select>
+        </div>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.grip.label'}}</label>
+          <select name='system.grip' data-dtype='String'>
+            <option value='1H' {{#if (eq system.grip '1H')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "1H"}}'>1H (One-Handed)</option>
+            <option value='2H' {{#if (eq system.grip '2H')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "2H"}}'>2H (Two-Handed)</option>
+            <option value='F' {{#if (eq system.grip 'F')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "F"}}'>F (Fist)</option>
+            <option value='V' {{#if (eq system.grip 'V')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "V"}}'>V (Versatile)</option>
+          </select>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if (eq item.type 'armor')}}
+      <div class='grid grid-2col'>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.armorType.label'}}</label>
+          <select name='system.armorType' data-dtype='String'>
+            <option value='light' {{#if (eq system.armorType 'light')}}selected{{/if}} title='{{lookup config.armorTypeDescriptions "light"}}'>{{localize 'VAGABOND.Armor.Type.Light'}}</option>
+            <option value='medium' {{#if (eq system.armorType 'medium')}}selected{{/if}} title='{{lookup config.armorTypeDescriptions "medium"}}'>{{localize 'VAGABOND.Armor.Type.Medium'}}</option>
+            <option value='heavy' {{#if (eq system.armorType 'heavy')}}selected{{/if}} title='{{lookup config.armorTypeDescriptions "heavy"}}'>{{localize 'VAGABOND.Armor.Type.Heavy'}}</option>
+          </select>
+        </div>
+        <div class='resource'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Armor.FIELDS.metal.label'}}</label>
+          <select name='system.metal' data-dtype='String'>
+            <option value="common" {{#if (eq system.metal 'common')}}selected{{/if}} title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+            <option value="adamant" {{#if (eq system.metal 'adamant')}}selected{{/if}} title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+            <option value="coldIron" {{#if (eq system.metal 'coldIron')}}selected{{/if}} title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+            <option value="silver" {{#if (eq system.metal 'silver')}}selected{{/if}} title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+            <option value="mythral" {{#if (eq system.metal 'mythral')}}selected{{/if}} title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+            <option value="orichalcum" {{#if (eq system.metal 'orichalcum')}}selected{{/if}} title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+          </select>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if (eq item.type 'class')}}
+      <div class='class-spellcaster-fields'>
+        {{! First row: Is Spellcaster + Mana Multiplier }}
+        <div class='grid grid-2col'>
+          <div class='resource'>
+            <label class='resource-label'>
+              <input
+                type='checkbox'
+                name='system.isSpellcaster'
+                {{checked system.isSpellcaster}}
+                {{#unless editable}}disabled{{/unless}}
+              />
+              Is Spellcaster
+            </label>
+          </div>
+          <div class='resource'>
+            <label class='resource-label'>Mana Multiplier</label>
+            <input
+              type='number'
+              name='system.manaMultiplier'
+              value='{{system.manaMultiplier}}'
+              min='0'
+              data-dtype='Number'
+              {{#unless editable}}disabled{{/unless}}
+              {{#unless system.isSpellcaster}}disabled{{/unless}}
+            />
+          </div>
+        </div>
+        {{! Second row: Mana Skill + Casting Stat }}
+        <div class='grid grid-2col'>
+          <div class='resource'>
+            <label class='resource-label'>Mana Skill</label>
+            <select name='system.manaSkill' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
+              <option value=''>-- Select Skill --</option>
+              <option value='arcana' {{#if (eq system.manaSkill 'arcana')}}selected{{/if}}>Arcana</option>
+              <option value='craft' {{#if (eq system.manaSkill 'craft')}}selected{{/if}}>Craft</option>
+              <option value='medicine' {{#if (eq system.manaSkill 'medicine')}}selected{{/if}}>Medicine</option>
+              <option value='brawl' {{#if (eq system.manaSkill 'brawl')}}selected{{/if}}>Brawl</option>
+              <option value='finesse' {{#if (eq system.manaSkill 'finesse')}}selected{{/if}}>Finesse</option>
+              <option value='sneak' {{#if (eq system.manaSkill 'sneak')}}selected{{/if}}>Sneak</option>
+              <option value='detect' {{#if (eq system.manaSkill 'detect')}}selected{{/if}}>Detect</option>
+              <option value='mysticism' {{#if (eq system.manaSkill 'mysticism')}}selected{{/if}}>Mysticism</option>
+              <option value='survival' {{#if (eq system.manaSkill 'survival')}}selected{{/if}}>Survival</option>
+              <option value='influence' {{#if (eq system.manaSkill 'influence')}}selected{{/if}}>Influence</option>
+              <option value='leadership' {{#if (eq system.manaSkill 'leadership')}}selected{{/if}}>Leadership</option>
+              <option value='performance' {{#if (eq system.manaSkill 'performance')}}selected{{/if}}>Performance</option>
+            </select>
+          </div>
+          <div class='resource'>
+            <label class='resource-label'>Casting Stat</label>
+            <select name='system.castingStat' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
+              <option value=''>-- Select Stat --</option>
+              <option value='might' {{#if (eq system.castingStat 'might')}}selected{{/if}}>Might</option>
+              <option value='dexterity' {{#if (eq system.castingStat 'dexterity')}}selected{{/if}}>Dexterity</option>
+              <option value='reason' {{#if (eq system.castingStat 'reason')}}selected{{/if}}>Reason</option>
+              <option value='awareness' {{#if (eq system.castingStat 'awareness')}}selected{{/if}}>Awareness</option>
+              <option value='presence' {{#if (eq system.castingStat 'presence')}}selected{{/if}}>Presence</option>
+              <option value='luck' {{#if (eq system.castingStat 'luck')}}selected{{/if}}>Luck</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</header>

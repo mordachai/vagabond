@@ -1,0 +1,19 @@
+<select
+  name='{{name}}'
+  {{#if cssClass}}class='{{cssClass}}'{{/if}}
+  data-dtype='String'
+  {{#if title}}title='{{title}}'{{/if}}
+  {{#if disabled}}disabled{{/if}}
+>
+  {{#if showAncestryDefault}}
+    <option value=''>{{#if ancestryName}}{{ancestryBeingType}} (from ancestry){{else}}Humanlike (default){{/if}}</option>
+  {{/if}}
+  <option value='Humanlike' {{#if (eq selected 'Humanlike')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Humanlike"}}</option>
+  <option value='Fae' {{#if (eq selected 'Fae')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Fae"}}</option>
+  <option value='Cryptid' {{#if (eq selected 'Cryptid')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Cryptid"}}</option>
+  <option value='Artificials' {{#if (eq selected 'Artificials')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Artificials"}}</option>
+  <option value='Beasts' {{#if (eq selected 'Beasts')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Beasts"}}</option>
+  <option value='Outers' {{#if (eq selected 'Outers')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Outers"}}</option>
+  <option value='Primordials' {{#if (eq selected 'Primordials')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Primordials"}}</option>
+  <option value='Undead' {{#if (eq selected 'Undead')}}selected{{/if}}>{{localize "VAGABOND.BeingTypes.Undead"}}</option>
+</select>

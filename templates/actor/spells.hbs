@@ -1,0 +1,90 @@
+{{! Spells Tab - Magic and Spellcasting }}
+<section
+  class='tab spells scrollable {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='spells'
+>
+  {{! Magic Section }}
+  <section class='magic-section'>
+    <h2 class='panel-title'>{{localize "VAGABOND.UI.Sections.Magic"}}</h2>
+    {{! Mana Info Row }}
+    <div class='mana-info-row'>
+      <div class='mana-field'>
+        <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.current.label"}}</label>
+        <input
+          type='text'
+          name='system.mana.current'
+          value='{{system.mana.current}}'
+          data-dtype='Number'
+          {{#unless @root.editable}}disabled{{/unless}}
+        />
+      </div>
+      <div class='mana-field'>
+        <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.max.label"}}</label>
+        <span class='mana-value'>{{system.mana.max}}</span>
+      </div>
+      <div class='mana-field'>
+        <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}</label>
+        <span class='mana-value'>{{system.mana.castingMax}}</span>
+      </div>
+    </div>
+
+    {{! Spells List }}
+    <h4 class='panel-title section-title-with-add'>
+      {{localize "VAGABOND.UI.Sections.Spells"}}
+      {{#if @root.editable}}
+        <i
+          class='fas fa-plus clickable'
+          data-tooltip='Create New Spell'
+          data-action='createDoc'
+          data-document-class='Item'
+          data-type='spell'
+        ></i>
+      {{/if}}
+    </h4>
+    <ol class='items-list'>
+      <li class='item flexrow items-header'>
+        <div class='item-name spell-col-name'>{{localize "VAGABOND.UI.Sections.Name"}}</div>
+        <div class='item-damage spell-col-damage'>{{localize "VAGABOND.UI.Sections.Damage"}}</div>
+        <div class='spell-col-favorite' data-tooltip='{{localize "VAGABOND.UI.Sections.Favorite"}}'>F</div>
+      </li>
+      {{#each spells as |spell|}}
+        <li
+          class='item flexrow draggable spell-item-row'
+          data-item-id='{{spell._id}}'
+          data-document-class='Item'
+        >
+          <div class='item-name spell-col-name'>
+            <div class='item-image clickable' data-action='viewDoc'>
+              <img
+                src='{{spell.img}}'
+                data-tooltip='{{spell.name}}'
+                width='24'
+                height='24'
+              />
+            </div>
+            <div data-action='viewDoc'>{{spell.name}}</div>
+          </div>
+          <div class='item-damage item-prop spell-col-damage'>
+            {{#unless (eq spell.system.damageType '-')}}
+              {{localize (lookup @root.config.damageTypes spell.system.damageType)}}
+            {{else}}
+              —
+            {{/unless}}
+          </div>
+          <div class='spell-col-favorite' data-action='toggleSpellFavorite' data-item-id='{{spell._id}}'>
+            {{#if spell.system.favorite}}
+              <i class='clickable fas fa-star favorite-active' data-tooltip='Favorite (click to unfavorite)'></i>
+            {{else}}
+              <i class='clickable far fa-star favorite-inactive' data-tooltip='Not Favorite (click to favorite)'></i>
+            {{/if}}
+          </div>
+        </li>
+      {{else}}
+        <li class='no-spells'>
+          No spells yet. {{#if @root.editable}}Click the + button above to add a spell.{{/if}}
+        </li>
+      {{/each}}
+    </ol>
+  </section>
+</section>

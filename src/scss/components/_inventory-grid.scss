@@ -1,0 +1,246 @@
+// ==========================================
+// Inventory Grid - Visual Slot-Based System
+// ==========================================
+
+// Inventory Slots Info Section
+.inventory-slots-section {
+  margin-bottom: 12px;
+  padding: 8px;
+
+  border-radius: 4px;
+
+  .slots-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    .slot-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .resource-label {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .slot-value {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .slot-warning {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: $c-red;
+      font-weight: bold;
+      font-size: 12px;
+
+      i {
+        font-size: 14px;
+      }
+    }
+
+    .auto-arrange-button {
+      padding: 6px 12px;
+      border: 1px solid $c-dark;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $c-dark;
+        transform: translateY(-1px);
+      }
+
+      i {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Inventory Grid Container
+.inventory-grid-container {
+  margin-bottom: 16px;
+}
+
+// 6 rows × 3 columns grid (18 slots)
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 50px; // Reduced height for 2 lines
+  gap: 0; // No gaps, use borders instead
+  padding: 1px;
+  background: none;
+  border-radius: 4px;
+  width: 100%;
+}
+
+// Empty Slot
+.inventory-slot.empty-slot {
+  background: none;
+  border: 2px solid rgba(44, 18, 8, 0.1);
+  border-top: none;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: relative;
+  transition: all 0.15s ease;
+
+  // Add top border to first row
+  &:nth-child(-n + 4) {
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  // Add left border to first column
+  &:nth-child(4n + 1) {
+    border-left: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .slot-number {
+    font-size: 18px;
+    font-weight: bold;
+    font-family: $font-secondary;
+    opacity: 0.7;
+    mix-blend-mode: multiply;
+  }
+
+  // Unavailable (darker) slots
+  &.unavailable {
+    background: rgba(0, 0, 0, 0.2);
+
+    .slot-number {
+      color: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  // Drag-over state
+  &.drag-over {
+    background: rgba(100, 200, 100, 0.2);
+    border-color: #5cb85c;
+  }
+}
+
+// Inventory Card (Item) - Simplified: Image (50px left) + Name (wrapping)
+.inventory-card {
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  padding: 2px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  // Span multiple columns based on item slots (set inline in HBS)
+  // grid-column: span X;
+
+  &:hover {
+    z-index: 10;
+    box-shadow:
+      inset 0 0 8px $c-inset-1,
+      inset 0 0 0 2px $c-inset-2,
+      0 2px 4px rgba(0, 0, 0, 0.15);
+    background: #ab612071;
+    mix-blend-mode: multiply;
+  }
+
+  &.equipped {
+    box-shadow:
+      inset 0 0 12px $c-inset-1,
+      inset 0 0 0 2px $c-inset-2;
+      background: #813d1e26;
+      mix-blend-mode: multiply;
+
+    &:hover {
+      box-shadow:
+        inset 0 0 8px $c-inset-1,
+        inset 0 0 0 2px $c-inset-2,
+        0 2px 4px rgba(0, 0, 0, 0.15);
+      background: #8f5c2f9e;
+      mix-blend-mode: multiply;
+    }
+  }
+
+  &.dragging {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+
+  .item-image {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 2px;
+    border: none;
+    //filter for make it monochrome
+    //filter: grayscale(100%) saturate(0) blur(1px) brightness(1.2) contrast(2.9) sepia(0.28);
+    mix-blend-mode: color-dodge;
+  }
+
+  .item-name-display {
+    flex: 1;
+    font-size: 14px;
+    font-weight: normal;
+    font-family: $font-title;
+    text-align: center;
+    line-height: 0.95;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
+
+// Context Menu (Right-click)
+.inventory-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: $c-faint;
+  border: 2px solid $c-dark;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  overflow: hidden;
+
+  .context-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: $c-tan-lite;
+      color: $c-black;
+    }
+
+    i {
+      width: 16px;
+      text-align: center;
+      color: inherit;
+    }
+
+    &.danger {
+      color: #d9534f;
+
+      &:hover {
+        background: rgba(217, 83, 79, 0.1);
+      }
+    }
+  }
+}

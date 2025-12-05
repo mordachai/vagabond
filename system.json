@@ -1,0 +1,196 @@
+{
+  "id": "vagabond",
+  "title": "Vagabond",
+  "version": "0.9.9",
+  "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
+  "authors": [
+    {
+      "name": "Gus",
+      "discord": "gus4294"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+        "character": {
+            "htmlFields": ["spells"]
+        },
+        "npc": {
+            "htmlFields": ["biography"]
+        }
+    },
+    "Item": {
+      "equipment": {"htmlFields": ["description"]},
+      "spell": {"htmlFields": ["description"]},
+      "ancestry": {"htmlFields": ["description"]},
+      "class": {"htmlFields": ["description"]},
+      "perk": {"htmlFields": ["description"]}
+    }
+  },
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "html", "hbs", "json"],
+      "paths": ["css", "lang", "templates"]
+    }
+  },
+  "url": "Replace this with a link to your public repository",
+  "license": "LICENSE.txt",
+  "readme": "README.md",
+  "bugs": "Replace this with a link to file issues or tickets",
+  "changelog": "CHANGELOG.md",
+  "media": [
+    {
+      "type": "setup",
+      "url": "systems/vagabond/assets/splash.png",
+      "thumbnail": "systems/vagabond/assets/splash.png"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13.351",
+    "verified": "13.351"
+  },
+  "esmodules": ["module/vagabond.mjs"],
+  "styles": ["css/vagabond.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [
+    {
+        "name": "ancestries",
+        "label": "Ancestries",
+        "system": "vagabond",
+        "path": "packs/ancestries.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "classes",
+        "label": "Classes",
+        "system": "vagabond",
+        "path": "packs/classes.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "perks",
+        "label": "Perks",
+        "system": "vagabond",
+        "path": "packs/perks.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "alchemical-items",
+        "label": "Alchemical items",
+        "system": "vagabond",
+        "path": "packs/items/alchemical-items.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "armor",
+        "label": "Armor",
+        "system": "vagabond",
+        "path": "packs/items/armor.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "weapons",
+        "label": "Weapons",
+        "system": "vagabond",
+        "path": "packs/items/weapons.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "relics",
+        "label": "Relics",
+        "system": "vagabond",
+        "path": "packs/items/relics.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "spells",
+        "label": "Spells",
+        "system": "vagabond",
+        "path": "packs/items/spells.db",
+        "type": "Item",
+        "private": false,
+        "flags": {}
+    },
+    {
+        "name": "bestiary",
+        "label": "Bestiary",
+        "system": "vagabond",
+        "path": "packs/characters/bestiary.db",
+        "type": "Actor",
+        "private": false,
+        "flags": {}
+    }        
+    ],
+  "packFolders": [
+      {
+          "name": "Vagabond",
+          "sorting": "m",
+          "color": "#08718c",
+          "packs": [
+          ],
+          "folders": [
+              {
+                  "name": "Character creation",
+                  "sorting": "m",
+                  "color": "#000000",
+                  "packs": [
+                      "ancestries",
+                      "classes",
+                      "perks"
+                  ]
+              },
+              {
+                  "name": "Items",
+                  "sorting": "m",
+                  "color": "#000000",
+                  "packs": [
+                      "alchemical-items",
+                      "armor",
+                      "weapons",
+                      "relics",
+                      "spells"
+                  ]
+              },
+              {
+                  "name": "Characters",
+                  "sorting": "m",
+                  "color": "#000000",
+                  "packs": [
+                      "bestiary"
+                  ]
+              }
+          ]
+      }
+  ],
+  "socket": false,
+  "manifest": "Replace this with a link to the /latest release system.json so people can receive updates after they've installed the system",
+  "download": "This must link to a .zip file of the current version",
+  "background": "systems/vagabond/assets/splash.png",
+  "grid": {
+    "type": 1,
+    "distance": 5,
+    "units": "ft",
+    "diagonals": 0
+  },
+  "primaryTokenAttribute": "health",
+  "secondaryTokenAttribute": "power"
+}

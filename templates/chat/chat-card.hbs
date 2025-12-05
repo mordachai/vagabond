@@ -1,0 +1,172 @@
+{{! Universal Chat Card Template }}
+<div class='vagabond-chat-card' data-card-type='{{type}}'>
+
+  {{! HEADER: Title + Icon + Subtitle }}
+  <header class='card-header'>
+    {{#if icon}}
+      <img class='card-icon' src='{{icon}}' alt='{{title}}' />
+    {{/if}}
+    <div class='card-header-text'>
+      <h3 class='card-title'>{{title}}</h3>
+      {{#if subtitle}}
+        <span class='card-subtitle'>{{subtitle}}</span>
+      {{/if}}
+    </div>
+  </header>
+
+  {{! METADATA BAR: Compact info display (below header, before roll) }}
+  {{#if metadataBar}}
+    <div class='card-metadata-bar {{#if metadataBar.alignManaEnd}}align-mana-end{{/if}}'>
+      <div class='meta-left'>
+        {{#if metadataBar.skill}}
+          <span class='meta-item meta-skill'>{{metadataBar.skill}}</span>
+        {{/if}}
+        {{#if metadataBar.damage}}
+          <span class='meta-item meta-damage'>{{metadataBar.damage}}</span>
+        {{/if}}
+        {{#if metadataBar.damageTypeIcon}}
+          <i class='{{metadataBar.damageTypeIcon}} meta-icon meta-damage-type'></i>
+        {{/if}}
+        {{#if metadataBar.fxIcon}}
+          <span class="meta-icon meta-fx">
+            {{#if (eq @root.config.fxIcon.type "txt")}}
+              <span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
+            {{else if (eq @root.config.fxIcon.type "img")}}
+              <img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
+            {{else}}
+              <i class="{{@root.config.fxIcon.value}}"></i>
+            {{/if}}
+          </span>
+        {{/if}}
+        {{#if metadataBar.gripIcon}}
+          <i class='{{metadataBar.gripIcon}} meta-icon meta-grip'></i>
+        {{/if}}
+        {{#if metadataBar.range}}
+          <span class='meta-item meta-range'>{{metadataBar.range}}</span>
+        {{/if}}
+        {{#if metadataBar.delivery}}
+          <span class='meta-item meta-delivery'>{{metadataBar.delivery}}</span>
+        {{/if}}
+        {{#if metadataBar.lore}}
+          <span class='meta-item meta-lore'>{{metadataBar.lore}}</span>
+        {{/if}}
+        {{#if metadataBar.alchemicalType}}
+          <span class='meta-item meta-alchemical'>Alchemical item</span>
+          <span class='meta-item meta-alchemical-type'>{{metadataBar.alchemicalType}}</span>
+        {{/if}}
+        {{#if metadataBar.rating}}
+          <span class='meta-item meta-rating'><span class='meta-label'>Rating:</span> {{metadataBar.rating}}</span>
+        {{/if}}
+        {{#if metadataBar.might}}
+          <span class='meta-item meta-might'><span class='meta-label'>Might:</span> {{metadataBar.might}}</span>
+        {{/if}}
+        {{#if metadataBar.qty}}
+          <span class='meta-item meta-qty'><span class='meta-label'>Qty:</span> {{metadataBar.qty}}</span>
+        {{/if}}
+        {{#if metadataBar.slots}}
+          <span class='meta-item meta-slots'><span class='meta-label'>Slots:</span> {{metadataBar.slots}}</span>
+        {{/if}}
+        {{#if metadataBar.cost}}
+          <span class='meta-item meta-cost'><span class='meta-label'>Cost:</span> {{metadataBar.cost}}</span>
+        {{/if}}
+      </div>
+      {{#if metadataBar.mana}}
+        <div class='meta-right'>
+          <div class='meta-mana-container'>
+            <i class='fas fa-star-christmas meta-icon meta-mana'></i>
+            <span class='meta-item meta-mana-value'>{{metadataBar.mana}}</span>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{! PRIMARY CONTENT: Roll result or main info }}
+  {{#if hasRoll}}
+    <div class='card-primary'>
+      <div class='roll-result'>
+        <div class='roll-total-container'>
+          <span class='roll-total'>{{rollTotal}}</span>
+          {{#if difficulty}}
+            <span class='roll-vs'>vs {{difficulty}}</span>
+          {{/if}}
+        </div>
+        {{#if outcome}}
+          <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
+        {{/if}}
+      </div>
+      {{#if rollDiceDisplay}}
+        <div class='roll-dice-display'>{{{rollDiceDisplay}}}</div>
+      {{else if rollFormula}}
+        <div class='roll-formula'>{{rollFormula}}</div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{! DAMAGE/EFFECTS - Can be filled on initial render or dynamically updated }}
+  <div class='card-damage-section' data-damage-section>
+    {{#if damage}}
+      {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
+    {{/if}}
+  </div>
+
+  {{! METADATA: Stats, properties, conditions }}
+  {{#if metadata.length}}
+    <div class='card-metadata'>
+      {{#each metadata}}
+        {{#if (and (eq label 'Properties') ../propertyDetails)}}
+          {{! Property accordion - clickable to expand/collapse }}
+          <div class='metadata-item metadata-item-expandable'>
+            <div class='metadata-header' data-action='toggleProperties'>
+              <span class='metadata-label'>{{label}}:</span>
+              <span class='metadata-value'>{{value}}</span>
+              <i class='fas fa-chevron-right expand-icon'></i>
+            </div>
+            <div class='property-details'>
+              {{#each ../propertyDetails}}
+                <div class='property-detail'>
+                  <span class='property-name'>{{name}}:</span>
+                  <span class='property-hint'>{{hint}}</span>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        {{else}}
+          {{! Regular metadata }}
+          <div class='metadata-item'>
+            <span class='metadata-label'>{{label}}:</span>
+            <span class='metadata-value'>{{value}}</span>
+          </div>
+        {{/if}}
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{! DESCRIPTION: Enriched HTML }}
+  {{#if description}}
+    <div class='card-description'>
+      {{{description}}}
+    </div>
+  {{/if}}
+
+  {{! FOOTER: Actions + Tags }}
+  {{#if (or footerActions.length footerTags.length)}}
+    <footer class='card-footer'>
+      {{#if footerActions.length}}
+        <div class='footer-actions'>
+          {{#each footerActions}}
+            {{{this}}}
+          {{/each}}
+        </div>
+      {{/if}}
+      {{#if footerTags.length}}
+        <div class='footer-tags'>
+          {{#each footerTags}}
+            <span class='tag'>{{this}}</span>
+          {{/each}}
+        </div>
+      {{/if}}
+    </footer>
+  {{/if}}
+
+</div>

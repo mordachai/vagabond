@@ -1,0 +1,831 @@
+// Character Sheet Header Styles
+
+// Sheet Header Container
+.sheet-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+// Character Image Container (180x180 with overlays)
+.char-image-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+  background-image: url('../assets/images/portrait-frame.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  .profile-img {
+    display: flex;
+    width: 180px;
+    height: 180px;
+    transform: scale(0.86);
+    border: none;
+    object-fit: cover;
+    object-position: top center;
+    cursor: pointer;
+    border-radius: 50%;
+    align-self: center;
+    mix-blend-mode: normal;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// Armor Overlay (Top right, 40x50, overflowing by 10px)
+.armor-overlay {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  width: 76px;
+  height: 90px;
+  background-image: url('../assets/images/armor-frame.webp');
+  background-size: contain;
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 12px;
+
+  // .armor-type {
+  //   position: relative;
+  //   top: 0;
+  //   font-size: 9px;
+  //   font-weight: 700;
+  //   color: $c-dark;
+  //   text-transform: uppercase;
+  //   line-height: 1;
+  //   font-family: $font-primary;
+  // }
+
+  .armor-value {
+    position: relative;
+    bottom: 4px;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(33, 33, 33, 0.424);
+    line-height: 1;
+  }
+}
+
+// Fatigue Skull Icons (standalone, not nested in overlay)
+.fatigue-skull {
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.fatigue-active {
+    color: $c-red;
+    opacity: 1;
+    text-shadow: 0 0 2px rgba(255, 68, 68, 0.6);
+
+    &:hover {
+      color: $c-red;
+      transform: scale(1.1);
+    }
+  }
+
+  &.fatigue-inactive {
+    opacity: 0.4;
+
+    &:hover {
+      color: rgba(100, 100, 100, 0.7);
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.fatigue-label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 4px;
+  text-transform: uppercase;
+}
+
+// HP Display
+.hp-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-weight: bold;
+  padding-bottom: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+  background-image: url(../assets/images/hp-banner.webp);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+
+  .hp-icon {
+    font-size: 18px;
+    color: $c-red;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+
+    &.heartbeat {
+      animation: heartbeat 0.3s ease-in-out;
+    }
+  }
+
+  .hp-current {
+    width: 35px;
+    text-align: right;
+    border: none;
+    background: transparent;
+    padding: 2px 2px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  .hp-separator {
+    font-size: 20px;
+  }
+
+  .hp-max {
+    min-width: 30px;
+    font-size: 18px;
+  }
+}
+
+// Main Header Row - Image + Stats Side by Side
+.header-main-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+// Image Column (left side)
+.image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+// Stats Column (right side)
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  flex: 1;
+  gap: 4px;
+}
+
+// Stats Grid - 3x2 Grid for Ability Scores
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 6px 10px;
+  flex: 1;
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .stat-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 2px;
+    background: $bg-stat;
+    padding-top: 5px;
+    color: $c-stat;
+    font-family: $font-secondary;
+    
+    &:hover,
+    &:focus {
+      text-shadow: 0 0 3px $c-white;
+
+    }
+  }
+
+  .stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    line-height: 1.2;
+    font-family: $font-character-name;
+    padding: 4px 0;
+  }
+}
+
+// Fatigue Row (replaces old fatigue-overlay)
+.fatigue-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 4px 0;
+  background: none;
+  border-radius: 4px;
+  width: 100%;
+
+  .fatigue-checkboxes {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+// Name Row (old positioning)
+.name-row {
+  margin-bottom: 2px;
+}
+
+// Character Name Input
+.character-name-input {
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  font-size: 20px;
+  font-family: $font-character-name;
+  font-weight: bold;
+  outline: none;
+  width: 100%;
+  padding: 2px 0 4px 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+
+  &:hover,
+  &:focus {
+    border-bottom: 2px solid $c-dark !important;;
+    background: transparent !important;
+  }
+}
+
+// Character Info Row - Level, Ancestry, Class
+.character-info-row {
+  text-align: left;
+  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+
+  .level-input {
+    width: 15px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 2px;
+    margin: 0 2px;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid $c-dark;
+    }
+  }
+}
+
+// Size and Type Row
+.size-type-row {
+  text-align: left;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Character Name at Top - Full Width */
+.name-row-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+// XP Field Inline (next to name)
+.xp-field-inline {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: none;
+
+  .resource-label {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+
+    .level-up-icon {
+      animation: pulse 1.5s ease-in-out infinite;
+      color: $c-red;
+    }
+  }
+
+  .xp-input {
+    width: 35px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 2px 4px;
+    flex-shrink: 0;
+    cursor: text;
+    pointer-events: auto;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid $c-dark;
+    }
+  }
+
+  .xp-required {
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  // Level Up Ready State
+  &.level-up-ready {
+    color: $c-red;
+    animation: glow-pulse 2s ease-in-out infinite;
+
+    .resource-label {
+      color: $c-red;
+      text-shadow: 0 0 4px $c-red;
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+
+    .xp-input {
+      font-weight: 700;
+      cursor: text;
+
+      &:hover,
+      &:focus {
+        border-bottom-color: $c-red;
+      }
+    }
+
+    .xp-required {
+      font-weight: 600;
+      font-size: 14px;
+    }
+  }
+}
+
+// Keyframe animations
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+// Large Character Name Input (centered)
+.character-name-input-large {
+  border: none !important;
+  background: transparent !important;
+  text-align: center;
+  font-size: 28px;
+  font-family: $font-character-name;
+  font-weight: 700;
+  width: 100%;
+  padding: 0;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+
+  &:hover,
+  &:focus {
+    border-bottom: 2px solid $c-dark !important;
+    background: transparent !important;
+  }
+}
+
+/* Combined Character Info Row */
+.character-info-combined-row {
+  text-align: center;
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  font-family: $font-decorative;
+
+  .level-input {
+    width: 18px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-family: $font-secondary;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0 2px;
+    margin: 0 2px;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid $c-dark;
+    }
+  }
+}
+
+// Speed Stats Row
+.speed-stats-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 0;
+  padding: 6px 0;
+  width: 100%;
+  margin-top: 2px;
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    .stat-value-input {
+      width: auto;
+      height: 40px;
+      min-width: 40px;
+      max-width: 50px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      border: none;
+      border-bottom: 1px solid transparent;
+      background: transparent;
+      padding: 2px 4px;
+
+      &:hover,
+      &:focus {
+        border-bottom: 1px solid $c-dark;
+      }
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.1;
+    }
+  }
+
+  // Luck Item with Clover Icon
+  .luck-item {
+    .luck-display {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+
+      .luck-icon {
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .luck-value {
+        position: relative;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        padding: 0;
+        font-size: 22px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        background-image: url('../assets/images/luck-frame.webp');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        mix-blend-mode: multiply;
+      }
+    }
+  }
+}
+
+// Favor/Hinder Toggle Button
+.favor-hinder-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+
+  .favor-hinder-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 32px;
+      transition: color 0.3s ease, transform 0.3s ease;
+      color: $c-dark;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    // State: None (default/neutral) - gray
+    &.none {
+      i {
+        color: $c-dark;
+      }
+    }
+
+    // State: Favor (green/positive)
+    &.favor {
+      i {
+        color: #005a02;
+        text-shadow: 0 0 2px #005a02dd;
+      }
+    }
+
+    // State: Hinder (red/negative)
+    &.hinder {
+      i {
+        color: #900000;
+        text-shadow: 0 0 2px #900000cb;
+      }
+    }
+  }
+
+  .favor-hinder-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-height: 24px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Responsive adjustments for smaller screens
+@media (max-width: 600px) {
+  .sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .char-image-container {
+    margin-bottom: 40px;
+  }
+
+  .character-name-input {
+    font-size: 16px;
+  }
+
+  .character-info-row {
+    font-size: 12px;
+  }
+}
+
+/* ======================================
+   SLIDING PANEL SYSTEM
+   ====================================== */
+
+.sliding-panel {
+  position: absolute;
+  top: 0;
+  left: 430px;  /* Base position next to main sheet when open */
+  width: 430px;
+  height: 100%;
+  background: none;
+  background-image: $bg-paper;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+  filter: blur(0);
+  display: flex;
+  flex-direction: row;
+  transform-origin: left center;
+  pointer-events: all;
+  z-index: 100 !important;  /* Always on top of main sheet */
+
+  /* Smooth transition */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Anti-aliasing for smooth rotation */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* When closed, panel slides behind main sheet, only 20px trigger visible */
+.sliding-panel.panel-closed {
+  transform: translateX(-410px) rotate(0deg);
+}
+
+/* When open, panel at natural position next to main sheet */
+.sliding-panel.panel-open {
+  transform: translateX(0) rotate(2deg);
+}
+
+/* Click zone - visible sliver on the RIGHT edge of panel when closed */
+.panel-click-zone {
+  position: absolute;
+  top: 0;
+  right: 0;  /* Position on RIGHT edge so it's visible when panel is behind */
+  width: 20px;
+  height: 100%;
+  background: none;
+  border-right: none;
+  cursor: pointer;
+  z-index: 15;  /* Always on top and clickable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panel content area */
+.panel-content {
+  margin-right: 8px;  /* Make room for click zone on the right */
+  padding: 25px 5px 25px 25px;
+  height: 100%;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.panel-section {
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--vagabond-c-faint);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.panel-title {
+  text-align: center;
+  margin-bottom: 4px;
+  font-family: $font-title;
+}
+
+/* Features & Perks columns */
+.features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+
+.features-column,
+.perks-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mana info row */
+.mana-info-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  margin-bottom: 4px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+
+.mana-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  input {
+    width: 60px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .mana-value {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  }
+}
+
+  /* Currency fields in panel */
+  .currency-row {
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .currency-field {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 4px;
+
+    input {
+      flex:1;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .gold{
+      color: #ffb100;
+      text-shadow: 0 0 3px rgb(125, 90, 0);
+      font-size: 1.3rem;
+      padding-bottom: 4px;
+    }
+
+    .silver{
+      color: rgb(144, 144, 144);
+      text-shadow: 0 0 3px rgb(98, 100, 101);
+      font-size: 1.3rem;
+      padding-bottom: 4px;
+    }
+
+    .copper{
+      color: #9a3716;
+      text-shadow: 0 0 3px rgb(83, 54, 46);
+      font-size: 1.3rem;
+      padding-bottom: 4px;      
+    }
+  }
+

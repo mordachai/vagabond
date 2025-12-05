@@ -1,0 +1,36 @@
+{{! Luck Spend Card Template }}
+<div class='vagabond-chat-card luck-spend-card' data-card-type='luck-spend'>
+
+  {{! HEADER: Actor portrait + name + "Luck Spent" }}
+  <header class='card-header'>
+    {{#if icon}}
+      <img class='card-icon' src='{{icon}}' alt='{{title}}' />
+    {{/if}}
+    <div class='card-header-text'>
+      <h3 class='card-title'>{{actorName}}</h3>
+      <span class='card-subtitle'>{{title}}</span>
+    </div>
+  </header>
+
+  {{! LUCK MESSAGE: Current pool status }}
+  <div class='card-content'>
+    <div class='luck-message'>
+      <p><strong>{{actorName}}</strong> spent 1 Luck point.</p>
+      <p class='luck-pool'>Luck Pool: <strong>{{luckData.currentLuck}}</strong> / {{luckData.maxLuck}}</p>
+    </div>
+
+    {{! LUCK RULES: How to use luck }}
+    <div class='luck-rules'>
+      <h4>Luck Uses:</h4>
+      <ul>
+        <li><strong>Advantage:</strong> Grant Favor on a d20 roll.</li>
+        <li><strong>Fluke:</strong> Reroll an unresolved die you rolled.</li>
+      </ul>
+      <h4>Optional:</h4>
+      <ul>
+        <li><strong>Plot Armor:</strong> Once per Round, if you are reduced to 0 HP, you can spend 1 Luck to regain d6 HP.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>

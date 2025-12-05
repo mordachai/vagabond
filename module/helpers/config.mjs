@@ -1,0 +1,495 @@
+export const VAGABOND = {};
+
+/**
+ * The set of Stats used within the Vagabond system.
+ * @type {Object}
+ */
+VAGABOND.stats = {
+  might: 'VAGABOND.Stat.Might.long',
+  dexterity: 'VAGABOND.Stat.Dexterity.long',
+  awareness: 'VAGABOND.Stat.Awareness.long',
+  reason: 'VAGABOND.Stat.Reason.long',
+  presence: 'VAGABOND.Stat.Presence.long',
+  luck: 'VAGABOND.Stat.Luck.long',
+};
+
+VAGABOND.statAbbreviations = {
+  might: 'VAGABOND.Stat.Might.abbr',
+  dexterity: 'VAGABOND.Stat.Dexterity.abbr',
+  awareness: 'VAGABOND.Stat.Awareness.abbr',
+  reason: 'VAGABOND.Stat.Reason.abbr',
+  presence: 'VAGABOND.Stat.Presence.abbr',
+  luck: 'VAGABOND.Stat.Luck.abbr',
+};
+
+/**
+ * Size categories for actors
+ * @type {Object}
+ */
+VAGABOND.sizes = {
+  'small': 'VAGABOND.Sizes.small',
+  'medium': 'VAGABOND.Sizes.medium',
+  'large': 'VAGABOND.Sizes.large',
+  'huge': 'VAGABOND.Sizes.huge',
+  'giant': 'VAGABOND.Sizes.giant',
+  'colossal': 'VAGABOND.Sizes.colossal'
+};
+
+/**
+ * Progress Clock configurations
+ * @type {Object}
+ */
+VAGABOND.clockSizes = {
+  'S': 75,
+  'M': 100,
+  'L': 150
+};
+
+VAGABOND.clockPositions = {
+  'top-right': 'VAGABOND.ProgressClock.Position.TopRight',
+  'top-left': 'VAGABOND.ProgressClock.Position.TopLeft',
+  'bottom-right': 'VAGABOND.ProgressClock.Position.BottomRight',
+  'bottom-left': 'VAGABOND.ProgressClock.Position.BottomLeft'
+};
+
+VAGABOND.clockSegments = [4, 6, 8, 10, 12];
+
+/**
+ * Saves againts damage of spells, weapons, and attacks
+ * Universal list used across the entire system
+ * @type {Object}
+ */
+VAGABOND.saves = {
+  'reflex': 'VAGABOND.Saves.Reflex.name',
+  'endure': 'VAGABOND.Saves.Endure.name',
+  'will': 'VAGABOND.Saves.Will.name'
+};
+
+/**
+ * Damage types for spells, weapons, and attacks
+ * Universal list used across the entire system
+ * @type {Object}
+ */
+VAGABOND.damageTypes = {
+  '-': 'VAGABOND.DamageTypes.None',
+  'acid': 'VAGABOND.DamageTypes.Acid',
+  'fire': 'VAGABOND.DamageTypes.Fire',
+  'shock': 'VAGABOND.DamageTypes.Shock',
+  'poison': 'VAGABOND.DamageTypes.Poison',
+  'cold': 'VAGABOND.DamageTypes.Cold',
+  'blunt': 'VAGABOND.DamageTypes.Blunt',
+  'physical': 'VAGABOND.DamageTypes.Physical',
+  'necrotic': 'VAGABOND.DamageTypes.Necrotic',
+  'psychic': 'VAGABOND.DamageTypes.Psychic',
+  'magical': 'VAGABOND.DamageTypes.Magical',
+  'healing': 'VAGABOND.DamageTypes.Healing',
+  'recover': 'VAGABOND.DamageTypes.Recover',
+  'recharge': 'VAGABOND.DamageTypes.Recharge'
+};
+
+/**
+ * Material weaknesses - special metals that can trigger weakness
+ * These are checked against weapon.system.metal during damage calculation
+ * @type {Object}
+ */
+VAGABOND.materialWeaknesses = {
+  'coldIron': 'VAGABOND.MaterialWeaknesses.ColdIron',
+  'silver': 'VAGABOND.MaterialWeaknesses.Silver'
+};
+
+/**
+ * All weakness types (damage types + material weaknesses combined)
+ * Used in UI for weakness selection dropdowns
+ * @type {Object}
+ */
+VAGABOND.allWeaknessTypes = {
+  ...VAGABOND.damageTypes,
+  ...VAGABOND.materialWeaknesses
+};
+
+/**
+ * Status conditions for NPC immunities
+ * @type {Object}
+ */
+VAGABOND.statusConditions = {
+  'berserk': 'VAGABOND.StatusConditions.Berserk',
+  'blinded': 'VAGABOND.StatusConditions.Blinded',
+  'burning': 'VAGABOND.StatusConditions.Burning',
+  'charmed': 'VAGABOND.StatusConditions.Charmed',
+  'confused': 'VAGABOND.StatusConditions.Confused',
+  'dazed': 'VAGABOND.StatusConditions.Dazed',
+  'fatigued': 'VAGABOND.StatusConditions.Fatigued',
+  'frightened': 'VAGABOND.StatusConditions.Frightened',
+  'incapacitated': 'VAGABOND.StatusConditions.Incapacitated',
+  'invisible': 'VAGABOND.StatusConditions.Invisible',
+  'paralyzed': 'VAGABOND.StatusConditions.Paralyzed',
+  'prone': 'VAGABOND.StatusConditions.Prone',
+  'restrained': 'VAGABOND.StatusConditions.Restrained',
+  'sickened': 'VAGABOND.StatusConditions.Sickened',
+  'suffocating': 'VAGABOND.StatusConditions.Suffocating',
+  'unconscious': 'VAGABOND.StatusConditions.Unconscious',
+  'vulnerable': 'VAGABOND.StatusConditions.Vulnerable'
+};
+
+/**
+ * Combat zones for NPCs
+ * @type {Object}
+ */
+VAGABOND.combatZones = {
+  'frontline': 'VAGABOND.CombatZones.Frontline',
+  'midline': 'VAGABOND.CombatZones.Midline',
+  'backline': 'VAGABOND.CombatZones.Backline'
+};
+
+/**
+ * Spell delivery types
+ * @type {Object}
+ */
+VAGABOND.deliveryTypes = {
+  'aura': 'VAGABOND.DeliveryTypes.Aura.label',
+  'cone': 'VAGABOND.DeliveryTypes.Cone.label',
+  'cube': 'VAGABOND.DeliveryTypes.Cube.label',
+  'imbue': 'VAGABOND.DeliveryTypes.Imbue.label',
+  'glyph': 'VAGABOND.DeliveryTypes.Glyph.label',
+  'line': 'VAGABOND.DeliveryTypes.Line.label',
+  'remote': 'VAGABOND.DeliveryTypes.Remote.label',
+  'sphere': 'VAGABOND.DeliveryTypes.Sphere.label',
+  'touch': 'VAGABOND.DeliveryTypes.Touch.label'
+};
+
+/**
+ * Spell delivery type hints (increase descriptions)
+ * @type {Object}
+ */
+VAGABOND.deliveryTypeHints = {
+  'aura': 'VAGABOND.DeliveryTypes.Aura.hint',
+  'cone': 'VAGABOND.DeliveryTypes.Cone.hint',
+  'cube': 'VAGABOND.DeliveryTypes.Cube.hint',
+  'imbue': 'VAGABOND.DeliveryTypes.Imbue.hint',
+  'glyph': 'VAGABOND.DeliveryTypes.Glyph.hint',
+  'line': 'VAGABOND.DeliveryTypes.Line.hint',
+  'remote': 'VAGABOND.DeliveryTypes.Remote.hint',
+  'sphere': 'VAGABOND.DeliveryTypes.Sphere.hint',
+  'touch': 'VAGABOND.DeliveryTypes.Touch.hint'
+};
+
+/**
+ * Default delivery data by type
+ * @type {Object}
+ */
+VAGABOND.deliveryDefaults = {
+  'aura': { cost: 2 },
+  'cone': { cost: 2 },
+  'cube': { cost: 1 },
+  'imbue': { cost: 0 },
+  'glyph': { cost: 2 },
+  'line': { cost: 2 },
+  'remote': { cost: 0 },
+  'sphere': { cost: 2 },
+  'touch': { cost: 0 }
+};
+
+/**
+ * Numeric mana cost per delivery increase
+ * @type {Object}
+ */
+VAGABOND.deliveryIncreaseCost = {
+  'aura': 1,
+  'cone': 2,
+  'cube': 1,
+  'imbue': 2,
+  'glyph': 0,
+  'line': 1,
+  'remote': 1,
+  'sphere': 1,
+  'touch': 0
+};
+
+/**
+ * Base sizes/ranges for delivery types (in feet)
+ * NOTE: These are stored in feet and can be converted to grid units later (5 feet = 1 grid)
+ * @type {Object}
+ */
+VAGABOND.deliveryBaseRanges = {
+  'aura': { value: 10, unit: 'foot', type: 'radius' },
+  'cone': { value: 15, unit: 'foot', type: 'length' },
+  'cube': { value: 5, unit: 'foot', type: 'cube' },
+  'imbue': { value: 1, unit: 'target', type: 'count' },
+  'glyph': { value: 5, unit: 'foot', type: 'square' },
+  'line': { value: 30, unit: 'foot', type: 'length' },
+  'remote': { value: 1, unit: 'target', type: 'count' },
+  'sphere': { value: 5, unit: 'foot', type: 'radius' },
+  'touch': { value: null, unit: null, type: null }
+};
+
+/**
+ * Increment amounts for delivery increases (in feet or targets)
+ * NOTE: Store in feet for future grid conversion (5 feet = 1 grid)
+ * @type {Object}
+ */
+VAGABOND.deliveryIncrement = {
+  'aura': 5,
+  'cone': 5,
+  'cube': 5,
+  'imbue': 1,
+  'glyph': 0,
+  'line': 10,
+  'remote': 1,
+  'sphere': 5,
+  'touch': 0
+};
+
+/**
+ * Weapon skill types
+ * @type {Object}
+ */
+VAGABOND.weaponSkills = {
+  'melee': 'VAGABOND.WeaponSkills.Melee',
+  'brawl': 'VAGABOND.WeaponSkills.Brawl',
+  'finesse': 'VAGABOND.WeaponSkills.Finesse',
+  'ranged': 'VAGABOND.WeaponSkills.Ranged'
+};
+
+/**
+ * Weapon range options
+ * @type {Object}
+ */
+VAGABOND.weaponRanges = {
+  'close': 'VAGABOND.Weapon.Range.Close',
+  'near': 'VAGABOND.Weapon.Range.Near',
+  'far': 'VAGABOND.Weapon.Range.Far'
+};
+
+/**
+ * Weapon grip types
+ * @type {Object}
+ */
+VAGABOND.weaponGrips = {
+  '1H': 'VAGABOND.Weapon.Grip.1H',
+  '2H': 'VAGABOND.Weapon.Grip.2H',
+  'F': 'VAGABOND.Weapon.Grip.F',
+  'V': 'VAGABOND.Weapon.Grip.V'
+};
+
+/**
+ * Weapon properties and their descriptions
+ * @type {Object}
+ */
+VAGABOND.weaponProperties = {
+  'Brawl': 'VAGABOND.Weapon.Property.Brawl',
+  'Brutal': 'VAGABOND.Weapon.Property.Brutal',
+  'Cleave': 'VAGABOND.Weapon.Property.Cleave',
+  'Entangle': 'VAGABOND.Weapon.Property.Entangle',
+  'Finesse': 'VAGABOND.Weapon.Property.Finesse',
+  'Keen': 'VAGABOND.Weapon.Property.Keen',
+  'Long': 'VAGABOND.Weapon.Property.Long',
+  'Near': 'VAGABOND.Weapon.Property.Near',
+  'Ranged': 'VAGABOND.Weapon.Property.Ranged',
+  'Shield': 'VAGABOND.Weapon.Property.Shield',
+  'Thrown': 'VAGABOND.Weapon.Property.Thrown'
+};
+
+/**
+ * Weapon property hints/descriptions
+ * @type {Object}
+ */
+VAGABOND.weaponPropertyHints = {
+  'Brawl': 'VAGABOND.Weapon.PropertyHints.Brawl',
+  'Brutal': 'VAGABOND.Weapon.PropertyHints.Brutal',
+  'Cleave': 'VAGABOND.Weapon.PropertyHints.Cleave',
+  'Entangle': 'VAGABOND.Weapon.PropertyHints.Entangle',
+  'Finesse': 'VAGABOND.Weapon.PropertyHints.Finesse',
+  'Keen': 'VAGABOND.Weapon.PropertyHints.Keen',
+  'Long': 'VAGABOND.Weapon.PropertyHints.Long',
+  'Near': 'VAGABOND.Weapon.PropertyHints.Near',
+  'Ranged': 'VAGABOND.Weapon.PropertyHints.Ranged',
+  'Shield': 'VAGABOND.Weapon.PropertyHints.Shield',
+  'Thrown': 'VAGABOND.Weapon.PropertyHints.Thrown'
+};
+
+/**
+ * Weapon grip descriptions
+ * @type {Object}
+ */
+VAGABOND.weaponGripDescriptions = {
+  '1H': 'VAGABOND.Weapon.GripDescriptions.1H',
+  '2H': 'VAGABOND.Weapon.GripDescriptions.2H',
+  'F': 'VAGABOND.Weapon.GripDescriptions.F',
+  'V': 'VAGABOND.Weapon.GripDescriptions.V'
+};
+
+/**
+ * Armor types
+ * @type {Object}
+ */
+VAGABOND.armorTypes = {
+  'light': 'VAGABOND.Armor.Type.Light',
+  'medium': 'VAGABOND.Armor.Type.Medium',
+  'heavy': 'VAGABOND.Armor.Type.Heavy'
+};
+
+/**
+ * Armor type descriptions
+ * @type {Object}
+ */
+VAGABOND.armorTypeDescriptions = {
+  'light': 'Light: Rating 1, Might 3, 1 Slot',
+  'medium': 'Medium: Rating 2, Might 4, 2 Slots',
+  'heavy': 'Heavy: Rating 3, Might 5, 3 Slots'
+};
+
+/**
+ * Metal types for weapons and armor
+ * @type {Object}
+ */
+VAGABOND.metalTypes = {
+  'common': 'VAGABOND.Metal.Common',
+  'adamant': 'VAGABOND.Metal.Adamant',
+  'coldIron': 'VAGABOND.Metal.ColdIron',
+  'silver': 'VAGABOND.Metal.Silver',
+  'mythral': 'VAGABOND.Metal.Mythral',
+  'orichalcum': 'VAGABOND.Metal.Orichalcum'
+};
+
+/**
+ * Metal type multipliers and effects
+ * @type {Object}
+ */
+VAGABOND.metalData = {
+  'common': { multiplier: 1, effect: 'VAGABOND.MetalDescriptions.Common' },
+  'adamant': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Adamant' },
+  'coldIron': { multiplier: 20, effect: 'VAGABOND.MetalDescriptions.ColdIron' },
+  'silver': { multiplier: 10, effect: 'VAGABOND.MetalDescriptions.Silver' },
+  'mythral': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Mythral' },
+  'orichalcum': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Orichalcum' }
+};
+
+/**
+ * Metal type colors for visual inventory
+ * Used for weapon skill icon colors
+ * @type {Object}
+ */
+VAGABOND.metalColors = {
+  'common': '#8b7355',      // Brown/tan for common metal
+  'adamant': '#2d2d44',     // Dark blue-grey for adamant
+  'coldIron': '#708090',    // Slate grey for cold iron
+  'silver': '#c0c0c0',      // Silver
+  'mythral': '#e0e0ff',     // Light blue-white for mythral
+  'orichalcum': '#daa520'   // Golden for orichalcum
+};
+
+/**
+ * Font Awesome icon classes for damage types
+ * @type {Object}
+ */
+VAGABOND.damageTypeIcons = {
+  '-': 'fa-solid fa-dot',
+  'acid': 'fa-solid fa-chart-scatter-bubble',
+  'fire': 'fa-solid fa-fire',
+  'shock': 'fa-solid fa-bolt',
+  'poison': 'fa-solid fa-flask-round-poison',
+  'cold': 'fa-solid fa-snowflake',
+  'blunt': 'fa-solid fa-hammer',
+  'physical': 'fa-solid fa-hand-back-fist',
+  'necrotic': 'fa-solid fa-skull',
+  'psychic': 'fa-solid fa-brain',
+  'magical': 'fa-solid fa-stars',
+  'healing': 'fa-solid fa-heart',
+  'recover': 'fa-solid fa-arrows-rotate',
+  'recharge': 'fa-solid fa-hourglass-half',
+  'coldIron': 'fa-solid fa-square-i',
+  'silver': 'fa-solid fa-square-s'
+};
+
+/**
+ * Fx (Effect) Icon Configuration
+ * You can use either a Font Awesome icon class OR an image path
+ *
+ * For Font Awesome icon (default):
+ *   type: 'fa'
+ *   value: 'fa-solid fa-square-e'
+ *
+ * For custom image:
+ *   type: 'img'
+ *   value: 'systems/vagabond/assets/icons/fx-icon.png'
+ *
+ * @type {Object}
+ */
+VAGABOND.fxIcon = {
+  type: 'txt',                      // 'fa' for Font Awesome, 'img' for image
+  value: 'Fx'    // FA class or image path
+};
+
+/**
+ * Font Awesome icon classes for weapon skills
+ * @type {Object}
+ */
+VAGABOND.weaponSkillIcons = {
+  'melee': 'fa-solid fa-sword',
+  'ranged': 'fa-solid fa-bow-arrow',
+  'brawl': 'fa-solid fa-hand-back-fist',
+  'finesse': 'fa-solid fa-dagger'
+};
+
+/**
+ * Icon paths for inventory visual grid
+ * @type {Object}
+ */
+VAGABOND.icons = {
+  // TO CLAUDE: REPLACE FOR FONT AWESOME ICONS IF USED ANYWHERE
+  weaponSkills: {
+    'melee': 'systems/vagabond/assets/ui/weapon-skill-melee.webp',
+    'ranged': 'systems/vagabond/assets/ui/weapon-skill-ranged.webp',
+    'brawl': 'systems/vagabond/assets/ui/weapon-skill-brawl.webp',
+    'finesse': 'systems/vagabond/assets/ui/weapon-skill-finesse.webp'
+  },
+
+  // TO CLAUDE: SHOULD NOT BE USED ANYMORE
+  damageTypes: {
+    '-': 'systems/vagabond/assets/ui/none-dmg-icn.webp',
+    'acid': 'systems/vagabond/assets/ui/acid-dmg-icn.webp',
+    'fire': 'systems/vagabond/assets/ui/fire-dmg-icn.webp',
+    'shock': 'systems/vagabond/assets/ui/shock-dmg-icn.webp',
+    'poison': 'systems/vagabond/assets/ui/poison-dmg-icn.webp',
+    'cold': 'systems/vagabond/assets/ui/cold-dmg-icn.webp',
+    'blunt': 'systems/vagabond/assets/ui/blunt-dmg-icn.webp',
+    'physical': 'systems/vagabond/assets/ui/physical-dmg-icn.webp',
+    'necrotic': 'systems/vagabond/assets/ui/necrotic-dmg-icn.webp',
+    'psychic': 'systems/vagabond/assets/ui/psychic-dmg-icn.webp',
+    'healing': 'systems/vagabond/assets/ui/healing-dmg-icn.webp'
+  },
+
+  // TO CLAUDE: Grip icons >> REPLACE FOR FONT AWESOME ICONS
+  grips: {
+    '1H': 'systems/vagabond/assets/ui/grip-1h.webp',
+    '2H': 'systems/vagabond/assets/ui/grip-2h.webp',
+    'F': 'systems/vagabond/assets/ui/grip-fist.webp',
+    'V': 'systems/vagabond/assets/ui/grip-versatile.webp'
+  }
+};
+
+/**
+ * Range abbreviations for display
+ * @type {Object}
+ */
+VAGABOND.rangeAbbreviations = {
+  'close': 'VAGABOND.Weapon.Range.CloseAbbr',
+  'near': 'VAGABOND.Weapon.Range.NearAbbr',
+  'far': 'VAGABOND.Weapon.Range.FarAbbr'
+};
+
+/**
+ * Countdown dice types
+ * @type {Array}
+ */
+VAGABOND.countdownDiceTypes = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+
+/**
+ * Countdown dice sizes
+ * @type {Object}
+ */
+VAGABOND.countdownDiceSizes = {
+  'S': 50,
+  'M': 75,
+  'L': 100
+};

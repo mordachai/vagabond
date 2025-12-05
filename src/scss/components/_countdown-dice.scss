@@ -1,0 +1,163 @@
+// Countdown Dice Overlay Styles
+// Uses existing color/typography variables - do not hard-code colors or fonts
+
+.countdown-dice-overlay {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+
+  .countdown-dice {
+    position: absolute;
+    pointer-events: all;
+    cursor: pointer;
+    text-align: center;
+    transition: opacity 0.3s;
+
+    &.faded {
+      opacity: 0.25;
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &.dragging {
+      opacity: 0.5;
+    }
+
+    .dice-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      filter: drop-shadow(2px 2px 4px $c-black);
+
+      &:hover {
+        filter: drop-shadow(2px 2px 8px $c-white);
+      }
+    }
+
+    .dice-name {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: $font-primary;
+      color: $c-white;
+      text-shadow: 1px 1px 2px $c-black;
+      cursor: grab;
+    }
+  }
+}
+
+.countdown-dice-context-menu {
+  background: $c-dark;
+  border: 1px solid $c-muted;
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+  .context-item {
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: $font-primary;
+
+    &:hover {
+      background: $c-tan;
+    }
+  }
+}
+
+.countdown-dice-chat {
+  border: 2px solid $c-muted;
+  border-radius: 4px;
+  padding: $padding-md;
+  background: $c-tan-lite;
+  font-family: $font-primary;
+  display: flex;
+  flex-direction: column;
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    h4 {
+      margin: 0;
+      font-family: $font-title;
+      flex: 1;
+      word-wrap: break-word;
+    }
+
+    .dice-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+  }
+
+  p {
+    margin: 4px 0;
+    text-align: center;
+  }
+
+  .die-result{
+    text-align: center;
+    font-size: 2rem;
+    font-family: $font-secondary;
+  }
+
+  .status-message {
+    font-size: large;
+    font-weight: bold;
+    margin-top: 8px;
+    text-align: center;
+
+    // These may need to use existing semantic color variables
+    &.continues {
+      color: #4a90e2;
+    }
+    &.reduced {
+      color: #f5a623;
+    }
+    &.ended {
+      color: #d0021b;
+    }
+  }
+}
+
+// Config form - follow progress-clock-config-form pattern
+.countdown-dice-config-form {
+  .form-row {
+    display: flex;
+    gap: 12px;
+
+    .form-field {
+      flex: 1;
+    }
+  }
+
+  .form-footer {
+    margin-top: $padding-lg;
+    padding-top: $padding-md;
+    border-top: 1px solid $c-muted;
+    display: flex;
+    gap: $padding-sm;
+    justify-content: flex-end;
+
+    button {
+      min-width: 80px;
+      padding: $padding-sm $padding-md;
+      font-size: 14px;
+
+      &[type="submit"] {
+        order: 2;
+      }
+
+      &[data-action="cancel"] {
+        order: 1;
+      }
+    }
+  }
+}

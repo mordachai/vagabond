@@ -1,0 +1,46 @@
+<form class="countdown-dice-config-form">
+  <div class="form-row">
+    <div class="form-field">
+      <label for="dice-name">{{localize 'VAGABOND.CountdownDice.Name'}}</label>
+      <input
+        type="text"
+        id="dice-name"
+        name="name"
+        value="{{name}}"
+        required
+        placeholder="{{localize 'VAGABOND.CountdownDice.Name'}}"
+      />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-field">
+      <label for="dice-type">{{localize 'VAGABOND.CountdownDice.DiceType'}}</label>
+      <select id="dice-type" name="diceType">
+        {{#each diceTypes as |type|}}
+          <option value="{{type}}" {{#if (eq type ../diceType)}}selected{{/if}}>
+            {{type}}
+          </option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="dice-size">{{localize 'VAGABOND.CountdownDice.Size'}}</label>
+      <select id="dice-size" name="size">
+        <option value="S" {{#if (eq size "S")}}selected{{/if}}>Small (50px)</option>
+        <option value="M" {{#if (eq size "M")}}selected{{/if}}>Medium (75px)</option>
+        <option value="L" {{#if (eq size "L")}}selected{{/if}}>Large (100px)</option>
+      </select>
+    </div>
+  </div>
+
+  <footer class="form-footer">
+    <button type="button" data-action="cancel">
+      <i class="fas fa-times"></i> {{localize 'Cancel'}}
+    </button>
+    <button type="submit" class="default">
+      <i class="fas fa-check"></i> {{#if isEdit}}{{localize 'Update'}}{{else}}{{localize 'Create'}}{{/if}}
+    </button>
+  </footer>
+</form>

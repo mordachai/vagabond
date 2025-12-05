@@ -1,0 +1,27 @@
+{{! NPC Sheet Header }}
+<header class='npc-header'>
+  {{! Lock/Unlock Toggle and Name Row }}
+  <div class='npc-lock-name-row'>
+    <input
+      name='name'
+      type='text'
+      value='{{actor.name}}'
+      placeholder='{{#unless system.locked}}{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}{{/unless}}'
+      class='npc-name-input'
+      {{#if system.locked}}readonly{{/if}}
+    />
+    <button
+      type='button'
+      data-action='toggleLock'
+      class='npc-lock-button {{#if system.locked}}locked{{else}}unlocked{{/if}}'
+      data-tooltip='{{#if system.locked}}{{localize "VAGABOND.Actor.NPC.Tooltips.Unlock"}}{{else}}{{localize "VAGABOND.Actor.NPC.Tooltips.Lock"}}{{/if}}'
+    >
+      <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+    </button>
+  </div>
+  {{! Row 1: Size and Being Type }}
+  <div class='npc-type-row'>
+        {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
+        {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
+  </div>
+</header>

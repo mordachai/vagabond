@@ -1,0 +1,323 @@
+// General h3 styling for Inventory tab sections
+.inventory {
+  h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+}
+
+// Section Header
+.items-header {
+  height: 28px;
+  margin: 6px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: bold;
+  > * {
+    font-size: 14px;
+    text-align: center;
+  }
+  .item-name {
+    font-weight: bold;
+    padding-left: 5px;
+    text-align: left;
+    display: flex;
+  }
+}
+
+// -----------------------------------------
+// Items Lists
+// -----------------------------------------
+
+.items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  color: $c-dark;
+
+  // Child lists
+  .item-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Item Name
+  .item-name {
+    flex: 2;
+    margin: 0;
+    overflow: hidden;
+    font-size: 13px;
+    text-align: left;
+    align-items: center;
+    display: flex;
+    h3, h4 {
+      margin: 0;
+      white-space: nowrap;
+      overflow-x: hidden;
+    }
+  }
+
+  // Control Buttons
+  .item-controls {
+    display: flex;
+    flex: 0 0 30px;
+    justify-content: flex-end;
+    a {
+      font-size: 12px;
+      text-align: center;
+      margin: 0 6px;
+    }
+  }
+
+  // Individual Item
+  .item {
+    align-items: center;
+    padding: 0 2px; // to align with the header border
+    border-bottom: 1px solid $c-faint;
+    &:last-child { border-bottom: none; }
+    .item-name {
+      color: $c-dark;
+      .item-image {
+        flex: 0 0 30px;
+        height: 30px;
+        background-size: 30px;
+        border: none;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .item-prop {
+    text-align: center;
+    border-left: 1px solid $c-faint;
+    border-right: 1px solid $c-faint;
+    font-size: 12px;
+  }
+
+  // Section Header
+  .items-header {
+    height: 28px;
+    margin: 2px 0;
+    padding: 0;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.05);
+    border: $border-groove;
+    font-weight: bold;
+    > * {
+      font-size: 12px;
+      text-align: center;
+    }
+    .item-name {
+      padding-left: 5px;
+      text-align: left;
+    }
+  }
+
+  .trait-description {
+    width: 100%;
+    margin-top: 5px;
+    
+    input {
+      width: 100%;
+    }
+  }
+}
+
+// Unified item content containers
+.ancestry-item-content,
+.class-item-content {
+  min-height: 400px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding: 10px;
+  transition: max-height 0.3s ease;
+  
+  // Expand when any editor is active
+  &:has(.tox-tinymce) {
+    max-height: calc(100vh - 150px);
+  }
+  
+  // Fallback for browsers without :has() support
+  &.mce-active {
+    max-height: calc(100vh - 150px);
+  }
+}
+
+// Remove individual scrolling from description sections  
+.ancestry-description,
+.class-description {
+  min-height: 100px;
+  max-height: none; // Remove height constraint
+  overflow-y: visible; // Remove individual scrolling
+  border: 1px solid var(--vagabond-c-faint);
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  
+  prose-mirror {
+    height: auto; // Allow natural growth
+    min-height: 100px;
+  }
+  
+  // For read-only mode
+  > div {
+    min-height: 100px;
+  }
+}
+
+.traits-section {
+  .scrollable {
+    width: 100%;
+    min-height: 100px;
+    max-height: none; // Remove height constraint  
+    overflow-y: visible; // Remove individual scrolling
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+    padding: 8px;
+    
+    .items-list {
+      margin: 0;
+      
+      .item {
+        display: block; // Override any flex for vertical layout
+        
+        .flexrow {
+          display: flex; // Only the name + delete row should be flex
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+// Example style for Vagabond (can be removed if not needed).
+.item-formula {
+
+  flex: 0 0 200px;
+  padding: 0 8px;
+}
+
+// Inventory column sizing
+.inventory-col-equipped {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Section title with add button
+.section-title-with-add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .fa-plus {
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Title with button on the same row (for class levels and ancestry traits)
+.title-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3, h4 {
+    margin: 0;
+    flex: 1;
+  }
+
+  button {
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+}
+
+// Level groups styling with borders and spacing
+.level-group {
+  border: 1px solid $c-tan;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Feature title styling
+.feature-title {
+  font-family: 'Manofa', serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+// Trait items styling with borders
+.traits-section {
+  .item {
+    border: 1px solid $c-tan;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+      border-bottom: 1px solid $c-faint;
+    }
+  }
+}
+
+// Trait title styling
+.trait-title {
+  font-family: 'Manofa', serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+// -----------------------------------------
+// Spell Column Sizing
+// -----------------------------------------
+
+.spell-col-name {
+  flex: 3; // Bigger column for spell names
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.spell-col-damage {
+  flex: 0 0 120px;
+  text-align: center;
+}
+
+.spell-col-favorite {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .favorite-active {
+    color: $c-dark;
+  }
+
+  .favorite-inactive {
+    color: $c-faint;
+  }
+}

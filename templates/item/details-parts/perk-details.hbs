@@ -1,0 +1,214 @@
+{{! Perk Details }}
+<section
+  class='tab details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  <div class='perk-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Perk.FIELDS.description.label'}}</label>
+      <div class='perk-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+  {{! Stat Prerequisites }}
+  <div class='form-group stacked'>
+    <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</label>
+    <div class='prerequisites-list'>
+      {{#each item.system.prerequisites.stats as |stat index|}}
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
+          <select
+            name='system.prerequisites.stats.{{index}}.stat'
+            class='flex-1 mr-5'
+          >
+            <option value='might' {{#if (eq stat.stat 'might')}}selected{{/if}}>{{localize
+                'VAGABOND.Ability.Might.abbr'
+              }}</option>
+            <option value='dexterity' {{#if (eq stat.stat 'dexterity')}}selected{{/if}}>{{localize
+                'VAGABOND.Ability.Dexterity.abbr'
+              }}</option>
+            <option value='awareness' {{#if (eq stat.stat 'awareness')}}selected{{/if}}>{{localize
+                'VAGABOND.Ability.Awareness.abbr'
+              }}</option>
+            <option value='reason' {{#if (eq stat.stat 'reason')}}selected{{/if}}>{{localize
+                'VAGABOND.Ability.Reason.abbr'
+              }}</option>
+            <option value='presence' {{#if (eq stat.stat 'presence')}}selected{{/if}}>{{localize
+                'VAGABOND.Ability.Presence.abbr'
+              }}</option>
+            <option value='luck' {{#if (eq stat.stat 'luck')}}selected{{/if}}>{{localize
+                'VAGABOND.Ability.Luck.abbr'
+              }}</option>
+          </select>
+          <input
+            type='number'
+            name='system.prerequisites.stats.{{index}}.value'
+            value='{{stat.value}}'
+            min='1'
+            max='10'
+            class='w-60 mr-5'
+          />
+          <button
+            type='button'
+            class='delete-button'
+            data-action='removeStatPrerequisite'
+            data-index='{{index}}'
+            data-tooltip='{{localize "VAGABOND.Item.Perk.RemovePrerequisite"}}'
+          >
+            <i class='fas fa-trash'></i>
+          </button>
+        </div>
+      {{/each}}
+      <button type='button' data-action='addStatPrerequisite' class='add-button'>
+        <i class='fas fa-plus'></i>
+        {{localize 'VAGABOND.Item.Perk.AddStatPrerequisite'}}
+      </button>
+    </div>
+  </div>
+
+  {{! Trained Skill Prerequisites }}
+  <div class='form-group stacked'>
+    <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</label>
+    <div class='prerequisites-list'>
+      {{#each item.system.prerequisites.trainedSkills as |skill index|}}
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
+          <select
+            name='system.prerequisites.trainedSkills.{{index}}'
+            class='flex-1 mr-5'
+          >
+            <optgroup label='Skills'>
+              <option value='arcana' {{#if (eq skill 'arcana')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Arcana'
+                }}</option>
+              <option value='craft' {{#if (eq skill 'craft')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Craft'
+                }}</option>
+              <option value='medicine' {{#if (eq skill 'medicine')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Medicine'
+                }}</option>
+              <option value='brawl' {{#if (eq skill 'brawl')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Brawl'
+                }}</option>
+              <option value='finesse' {{#if (eq skill 'finesse')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Finesse'
+                }}</option>
+              <option value='sneak' {{#if (eq skill 'sneak')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Sneak'
+                }}</option>
+              <option value='detect' {{#if (eq skill 'detect')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Detect'
+                }}</option>
+              <option value='mysticism' {{#if (eq skill 'mysticism')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Mysticism'
+                }}</option>
+              <option value='survival' {{#if (eq skill 'survival')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Survival'
+                }}</option>
+              <option value='influence' {{#if (eq skill 'influence')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Influence'
+                }}</option>
+              <option value='leadership' {{#if (eq skill 'leadership')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Leadership'
+                }}</option>
+              <option value='performance' {{#if (eq skill 'performance')}}selected{{/if}}>{{localize
+                  'VAGABOND.Skills.Performance'
+                }}</option>
+            </optgroup>
+            <optgroup label='Weapon Skills'>
+              <option value='melee' {{#if (eq skill 'melee')}}selected{{/if}}>{{localize
+                  'VAGABOND.WeaponSkills.Melee'
+                }}</option>
+              <option value='ranged' {{#if (eq skill 'ranged')}}selected{{/if}}>{{localize
+                  'VAGABOND.WeaponSkills.Ranged'
+                }}</option>
+            </optgroup>
+          </select>
+          <button
+            type='button'
+            class='delete-button'
+            data-action='removeTrainedSkillPrerequisite'
+            data-index='{{index}}'
+            data-tooltip='{{localize "VAGABOND.Item.Perk.RemovePrerequisite"}}'
+          >
+            <i class='fas fa-trash'></i>
+          </button>
+        </div>
+      {{/each}}
+      <button type='button' data-action='addTrainedSkillPrerequisite' class='add-button'>
+        <i class='fas fa-plus'></i>
+        {{localize 'VAGABOND.Item.Perk.AddTrainedSkillPrerequisite'}}
+      </button>
+    </div>
+  </div>
+
+  {{! Spell Prerequisites }}
+  <div class='form-group stacked'>
+    <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</label>
+    <div class='prerequisites-list'>
+      {{#each item.system.prerequisites.spells as |spell index|}}
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
+          <input
+            type='text'
+            name='system.prerequisites.spells.{{index}}'
+            value='{{spell}}'
+            placeholder='{{localize "VAGABOND.Item.Perk.SpellNamePlaceholder"}}'
+            class='flex-1 mr-5'
+          />
+          <button
+            type='button'
+            class='delete-button'
+            data-action='removeSpellPrerequisite'
+            data-index='{{index}}'
+            data-tooltip='{{localize "VAGABOND.Item.Perk.RemovePrerequisite"}}'
+          >
+            <i class='fas fa-trash'></i>
+          </button>
+        </div>
+      {{/each}}
+      <button type='button' data-action='addSpellPrerequisite' class='add-button'>
+        <i class='fas fa-plus'></i>
+        {{localize 'VAGABOND.Item.Perk.AddSpellPrerequisite'}}
+      </button>
+    </div>
+  </div>
+
+  {{! Other Prerequisites }}
+  <div class='form-group stacked'>
+    <label>{{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.other.label'}}</label>
+    <div class='prerequisites-list'>
+      {{#each item.system.prerequisites.other as |other index|}}
+        <div class='prerequisite-item flexrow mb-5 flex-center'>
+          <input
+            type='text'
+            name='system.prerequisites.other.{{index}}'
+            value='{{other}}'
+            placeholder='{{localize "VAGABOND.Item.Perk.OtherPrerequisitePlaceholder"}}'
+            class='flex-1 mr-5'
+          />
+          <button
+            type='button'
+            class='delete-button'
+            data-action='removeOtherPrerequisite'
+            data-index='{{index}}'
+            data-tooltip='{{localize "VAGABOND.Item.Perk.RemovePrerequisite"}}'
+          >
+            <i class='fas fa-trash'></i>
+          </button>
+        </div>
+      {{/each}}
+      <button type='button' data-action='addOtherPrerequisite' class='add-button'>
+        <i class='fas fa-plus'></i>
+        {{localize 'VAGABOND.Item.Perk.AddOtherPrerequisite'}}
+      </button>
+    </div>
+  </div>
+  </div>
+</section>

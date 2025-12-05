@@ -1,0 +1,98 @@
+{{! Ancestry Details Tab - Unified scrolling container }}
+<section
+  class='tab details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  {{! Unified content container with single scroll }}
+  <div class='ancestry-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Tabs.Description'}}</label>
+      <div class='ancestry-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enrichedDescription}}}
+          </prose-mirror>
+        {{else}} 
+          <div>{{{enrichedDescription}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Traits Section }}
+    <div class='traits-section mt-20'>
+      <div class='title-with-button'>
+        <h3>{{localize "VAGABOND.UI.Sections.Traits"}}</h3>
+        {{#if editable}}
+          <button
+            type='button'
+            class='item-control btn-sm'
+            data-action='addTrait'
+            data-tooltip='Add New Trait'
+          >
+            <i class='fas fa-plus'></i> Add Trait
+          </button>
+        {{/if}}
+      </div>
+
+      <div class='scrollable'>
+        <ol class='items-list'>
+          {{#if system.traits.length}}
+            {{#each system.traits as |trait index|}}
+            <li class='item' data-trait-index='{{index}}'>
+              {{! First row: Trait name + delete button }}
+              <div class='flexrow'>
+                {{#if @root.editable}}
+                  <div class='item-name'>
+                    <input
+                      type='text'
+                      name='system.traits.{{index}}.name'
+                      value='{{trait.name}}'
+                      placeholder='Trait Name'
+                      data-dtype='String'
+                      class='trait-title'
+                    />
+                  </div>
+                  <div class='item-controls'>
+                    <a class='item-control'
+                      data-action='removeTrait'
+                      data-trait-index='{{index}}'
+                      data-tooltip='Remove Trait'
+                    >
+                      <i class='fas fa-trash'></i>
+                    </a>
+                  </div>
+                {{else}}
+                  <div class='item-name'>
+                    <strong class='trait-title'>{{trait.name}}</strong>
+                  </div>
+                {{/if}}
+              </div>
+              
+              {{! Second row: Description (outside flexrow) }}
+              <div class='trait-description'>
+                {{#if @root.editable}}
+                  <input
+                    type="text"
+                    name='system.traits.{{index}}.description'
+                    value='{{trait.description}}'
+                    placeholder='Trait description...'
+                    data-dtype='String'
+                  />
+                {{else}}
+                  <div>{{trait.description}}</div>
+                {{/if}}
+              </div>
+            </li>
+            {{/each}}
+          {{else}}
+            <li>
+              No traits defined.{{#if editable}} Click the + button to add one.{{/if}}
+            </li>
+          {{/if}}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>

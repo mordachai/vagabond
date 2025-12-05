@@ -1,0 +1,182 @@
+{{! Features Tab }}
+<section
+  class='tab features scrollable {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='features'
+>
+
+  {{! Inventory Section }}
+  <section class='inventory-section'>
+
+    {{! Wealth Section }}
+    <div class='wealth-section'>
+      <div class='currency-row flexrow'>
+        <h5>{{localize "VAGABOND.UI.Sections.Wealth"}}:</h5>
+        <div class='currency-field'>
+          <label class='resource-label'
+          title="{{localize "VAGABOND.Currency.Gold.long"}}">
+          <i class="gold fa-duotone fa-solid fa-coins"></i></label>
+          <input
+            type='text'
+            name='system.currency.gold'
+            value='{{system.currency.gold}}'
+            data-dtype='Number'
+            {{#unless @root.editable}}disabled{{/unless}}
+          />
+        </div>
+        <div class='currency-field'>
+          <label class='resource-label'
+          title="{{localize "VAGABOND.Currency.Silver.long"}}">
+          <i class="silver fa-duotone fa-solid fa-coins"></i></label>
+          <input
+            type='text'
+            name='system.currency.silver'
+            value='{{system.currency.silver}}'
+            data-dtype='Number'
+            {{#unless @root.editable}}disabled{{/unless}}
+          />
+        </div>
+        <div class='currency-field'>
+          <label class='resource-label'
+          title="{{localize "VAGABOND.Currency.Copper.long"}}">
+          <i class="copper fa-duotone fa-solid fa-coins"></i></label>
+          <input
+            type='text'
+            name='system.currency.copper'
+            value='{{system.currency.copper}}'
+            data-dtype='Number'
+            {{#unless @root.editable}}disabled{{/unless}}
+          />
+        </div>
+      </div>
+    </div>
+
+    <h4 class='panel-title section-title-with-add'>
+      {{localize "VAGABOND.UI.Sections.Inventory"}}
+      {{#if @root.editable}}
+        <i
+          class='fas fa-plus clickable'
+          data-tooltip='Add Gear'
+          data-action='createDoc'
+          data-document-class='Item'
+          data-type='equipment'
+        ></i>
+      {{/if}}
+    </h4>
+    {{! Inventory Slots Section }}
+    <div class='inventory-slots-section'>
+      <div class='slots-info flexrow'>
+        <div class='slot-field'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
+          <span class='slot-value'>{{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}</span>
+        </div>
+        {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
+          <div class='slot-warning'>
+            <i class='fas fa-exclamation-triangle'></i>
+            <span>Overloaded!</span>
+          </div>
+        {{/if}}
+        {{#if @root.editable}}
+          <button
+            type='button'
+            class='auto-arrange-button'
+            data-action='autoArrangeInventory'
+            data-tooltip='Automatically arrange items in inventory grid'
+          >
+            <i class='fas fa-sort'></i> Auto-Arrange
+          </button>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Visual Inventory Grid - 5 rows × 4 columns }}
+    <div class='inventory-grid-container'>
+      <div class='inventory-grid' data-max-slots='{{system.inventory.maxSlots}}'>
+        {{! Render inventory items }}
+        {{#each inventoryItems as |itemData|}}
+          {{> "systems/vagabond/templates/actor/parts/inventory-card.hbs" item=itemData.item equipped=itemData.equipped gridPosition=itemData.gridPosition metalColor=itemData.metalColor weaponSkillIcon=itemData.weaponSkillIcon damageTypeIcon=itemData.damageTypeIcon}}
+        {{/each}}
+
+        {{! Render empty slots }}
+        {{#each emptySlots as |slot|}}
+          <div
+            class='inventory-slot empty-slot {{#if slot.unavailable}}unavailable{{/if}}'
+            data-slot-index='{{slot.index}}'
+            data-droppable='true'
+          >
+            <div class='slot-number'>{{slot.displayNumber}}</div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+  
+  {{! Features & Perks Section }}
+  <section class='features-perks-section'>
+    {{!-- <h3 class='panel-title'>Features & Perks</h3> --}}
+
+    <div class='grid grid-2col'>
+      {{! Left Column: Features }}
+      <div class='features-column grid-span-1'>
+        <h4>{{localize "VAGABOND.UI.Sections.Features"}}</h4>
+        <ul class='features-list'>
+          {{#each enrichedFeatures as |feature id|}}
+            <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
+              <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
+                <h5 class='feature-name'>{{feature.name}}</h5>
+              </div>
+              {{#if feature.enrichedDescription}}
+                <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.enrichedDescription}}}</div>
+              {{/if}}
+            </li>
+          {{else}}
+            <li class='no-features'>No features yet. Features are granted by your class as you level up.</li>
+          {{/each}}
+        </ul>
+      </div>
+
+      {{! Right Column: Traits & Perks }}
+      <div class='perks-column grid-span-1'>
+        {{! Traits Section }}
+        <h4>{{localize "VAGABOND.UI.Sections.Traits"}}</h4>
+        <ul class='traits-list'>
+          {{#each enrichedTraits as |trait|}}
+            <li class='trait accordion-item collapsed' data-item-id='{{trait._id}}'>
+              <div class='trait-header accordion-header clickable' data-action='toggleTrait' data-trait-id='{{trait._id}}'>
+                <h5 class='trait-name'>{{trait.name}}</h5>
+              </div>
+              {{#if trait.enrichedDescription}}
+                <div class='trait-description accordion-content' data-trait-id='{{trait._id}}'>{{{trait.enrichedDescription}}}</div>
+              {{/if}}
+            </li>
+          {{else}}
+            <li class='no-traits'>No traits yet. Traits are granted by your ancestry.</li>
+          {{/each}}
+        </ul>
+
+        {{! Perks Section }}
+        <h4>{{localize "VAGABOND.UI.Sections.Perks"}}</h4>
+        <ul class='perks-list'>
+          {{#each enrichedPerks as |perk|}}
+            <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}'>
+              <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
+                <h5 class='perk-name'>{{perk.name}}</h5>
+              </div>
+              <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>
+                {{#if perk.prerequisites}}
+                  <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
+                {{/if}}
+                {{#if perk.enrichedDescription}}
+                  <div class='perk-description'>{{{perk.enrichedDescription}}}</div>
+                {{/if}}
+              </div>
+            </li>
+          {{else}}
+            <li class='no-perks'>No perks yet. Drag perks from the Items directory.</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</section>

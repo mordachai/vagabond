@@ -1,0 +1,121 @@
+{{! Progress Clock Configuration Dialog Template }}
+<div class="progress-clock-config-wrapper">
+<form class="vagabond progress-clock-config-form">
+  {{! Clock Name }}
+  <div class="form-group">
+    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Name"}}</label>
+    <input type="text" name="name" value="{{clock.name}}" placeholder="Clock Name" required />
+  </div>
+
+  {{! Segments and Size - Same Row }}
+  <div class="form-group form-row">
+    <div class="form-field">
+      <label class="resource-label">{{localize "VAGABOND.ProgressClock.Segments"}}</label>
+      <select name="segments" data-dtype="Number">
+        {{#each segmentOptions}}
+        <option value="{{this}}" {{#if (eq this ../clock.segments)}}selected{{/if}}>
+          {{this}} {{localize "VAGABOND.ProgressClock.SegmentsLabel"}}
+        </option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label class="resource-label">{{localize "VAGABOND.ProgressClock.Size"}}</label>
+      <div class="size-controls">
+        <select name="size" data-dtype="String">
+          <option value="S" {{#if (eq clock.size "S")}}selected{{/if}}>
+            {{localize "VAGABOND.ProgressClock.SizeSmall"}} ({{lookup sizeOptions "S"}}px)
+          </option>
+          <option value="M" {{#if (eq clock.size "M")}}selected{{/if}}>
+            {{localize "VAGABOND.ProgressClock.SizeMedium"}} ({{lookup sizeOptions "M"}}px)
+          </option>
+          <option value="L" {{#if (eq clock.size "L")}}selected{{/if}}>
+            {{localize "VAGABOND.ProgressClock.SizeLarge"}} ({{lookup sizeOptions "L"}}px)
+          </option>
+          <option value="custom" {{#if clock.customSize}}selected{{/if}}>
+            {{localize "VAGABOND.ProgressClock.SizeCustom"}}
+          </option>
+        </select>
+        <input
+          type="number"
+          name="customSize"
+          value="{{clock.customSize}}"
+          placeholder="{{localize 'VAGABOND.ProgressClock.CustomSizePlaceholder'}}"
+          min="50"
+          max="500"
+          data-dtype="Number"
+        />
+      </div>
+    </div>
+  </div>
+
+  {{! Default Position and Player Permissions - Same Row }}
+  <div class="form-group form-row">
+    <div class="form-field">
+      <label class="resource-label">{{localize "VAGABOND.ProgressClock.DefaultPosition"}}</label>
+      <select name="defaultPosition" data-dtype="String">
+        <option value="top-right" {{#if (eq clock.defaultPosition "top-right")}}selected{{/if}}>
+          {{localize "VAGABOND.ProgressClock.Position.TopRight"}}
+        </option>
+        <option value="top-left" {{#if (eq clock.defaultPosition "top-left")}}selected{{/if}}>
+          {{localize "VAGABOND.ProgressClock.Position.TopLeft"}}
+        </option>
+        <option value="bottom-right" {{#if (eq clock.defaultPosition "bottom-right")}}selected{{/if}}>
+          {{localize "VAGABOND.ProgressClock.Position.BottomRight"}}
+        </option>
+        <option value="bottom-left" {{#if (eq clock.defaultPosition "bottom-left")}}selected{{/if}}>
+          {{localize "VAGABOND.ProgressClock.Position.BottomLeft"}}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label class="resource-label">{{localize "VAGABOND.ProgressClock.PlayerPermissions"}}</label>
+      <select name="ownership.default" data-dtype="Number">
+        <option value="0" {{#if (eq ownership.defaultLevel 0)}}selected{{/if}}>
+          {{localize "OWNERSHIP.NONE"}} - {{localize "VAGABOND.ProgressClock.PermissionNoneDesc"}}
+        </option>
+        <option value="2" {{#if (eq ownership.defaultLevel 2)}}selected{{/if}}>
+          {{localize "OWNERSHIP.OBSERVER"}} - {{localize "VAGABOND.ProgressClock.PermissionObserverDesc"}}
+        </option>
+        <option value="3" {{#if (eq ownership.defaultLevel 3)}}selected{{/if}}>
+          {{localize "OWNERSHIP.OWNER"}} - {{localize "VAGABOND.ProgressClock.PermissionOwnerDesc"}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  {{! Individual Player Permissions - Collapsible }}
+  {{#if ownership.users}}
+  <details class="form-group individual-permissions">
+    <summary class="resource-label">{{localize "VAGABOND.ProgressClock.IndividualPermissions"}}</summary>
+    {{#each ownership.users}}
+    {{#unless this.isGM}}
+    <div class="ownership-row">
+      <span class="ownership-label">{{this.name}}</span>
+      <select name="ownership.users.{{this.user.id}}" data-dtype="Number">
+        <option value="0" {{#if (eq this.level 0)}}selected{{/if}}>
+          {{localize "OWNERSHIP.NONE"}}
+        </option>
+        <option value="2" {{#if (eq this.level 2)}}selected{{/if}}>
+          {{localize "OWNERSHIP.OBSERVER"}}
+        </option>
+        <option value="3" {{#if (eq this.level 3)}}selected{{/if}}>
+          {{localize "OWNERSHIP.OWNER"}}
+        </option>
+      </select>
+    </div>
+    {{/unless}}
+    {{/each}}
+  </details>
+  {{/if}}
+
+  {{! Save Button }}
+  <div class="form-group">
+    <button type="submit">
+      <i class="fas fa-save"></i> {{localize "VAGABOND.ProgressClock.Save"}}
+    </button>
+  </div>
+</form>
+</div>

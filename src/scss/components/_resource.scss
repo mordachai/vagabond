@@ -1,0 +1,520 @@
+.resource-label {
+  font-weight: bold;
+}
+
+// General h3 styling for Features tab sections
+.features {
+  h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+}
+
+// Skills List - 1 column layout
+.skills-container {
+  gap: 20px;
+  color: $c-dark !important;
+  font-family: $font-primary;
+}
+
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4px;
+  gap: 2px;
+  position: relative;
+  z-index: 20 !important;
+
+  .skill {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    line-height: 1.2rem;
+
+    .skill-checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin: 0;
+      margin-right: 6px;
+      flex: 0.5;
+    }
+
+    .skill-checkbox-hidden {
+      display: none;
+    }
+
+    .skill-checkbox-icon {
+      font-size: 16px;
+      transition: color 0.2s ease;
+
+      &:hover {
+      color: $c-tan;
+      }
+    }
+
+    .skill-label {
+      display: flex;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      flex: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &::after{
+        content: '';
+        display: flex;
+        margin-left: 6px;
+        flex-grow: 1;
+        border-bottom: 1px dotted $c-dark;
+        margin-bottom: 2px;
+        opacity: 0.4;
+        width: 100%;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .skill-difficulty {
+      font-weight: bold;
+      text-align: right;
+      font-size: 20px;
+      flex: 0.5;
+    }
+  }
+}
+
+// Right column layout
+.right-column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 20 !important;
+
+  // Equipped weapons - follows same pattern as gear and spells
+  .equipped-weapon {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    width: 100%;
+    height: 20px;
+
+    // Column 1: Weapon name (flexible, takes remaining space)
+    .weapon-name {
+      flex: 1 1 auto;
+      min-width: 60px;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: $font-title;
+      color: $c-dark;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    // Column 2: Damage amount (fixed width)
+    .weapon-damage {
+      flex: 0 0 30px;
+      text-align: right;
+      font-family: $font-secondary;
+      font-weight: normal;
+      color: $c-dark;
+    }
+
+    // Column 3: Damage type icon (fixed width, centered)
+    .weapon-damage-icon {
+      flex: 0 0 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 13px;
+        color: $c-dark;
+      }
+    }
+
+    // Column 4: Range abbreviation (fixed width, centered)
+    .weapon-range {
+      flex: 0 0 11px;
+      text-align: center;
+      font-family: $font-secondary;
+      font-weight: normal;
+      color: $c-dark;
+    }
+
+    // Column 5: Grip icon (fixed width, centered)
+    .weapon-grip-icon {
+      flex: 0 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 13px;
+        color: $c-dark;
+
+        &.clickable {
+          cursor: pointer;
+
+          &:hover {
+            color: $c-tan;
+          }
+        }
+      }
+    }
+  }
+
+  // Equipped gear - follows same pattern as weapons and spells
+  .equipped-gear {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    width: 100%;
+    height: 20px;
+
+    // Column 1: Item name (flexible, takes remaining space)
+    .item-name {
+      flex: 1 1 auto;
+      min-width: 60px;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: $font-title;
+      color: $c-dark;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    // Column 2: Damage amount (fixed width)
+    .item-damage {
+      flex: 0 0 32px;
+      text-align: right;
+      font-family: $font-secondary;
+      font-weight: normal;
+      color: $c-dark;
+    }
+
+    // Column 3: Damage type icon (fixed width, centered)
+    .item-damage-icon {
+      flex: 0 0 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 13px;
+        color: $c-dark;
+      }
+    }
+
+    // Column 4: Quantity (fixed width)
+    .item-quantity {
+      flex: 0 0 14px;
+      text-align: center;
+      font-family: $font-secondary;
+      font-weight: normal;
+      color: $c-dark;
+      padding-right: 4px;
+    }
+  }
+
+  // Equipped armor - different layout, simpler
+  .equipped-armor {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+    width: 100%;
+    height: 20px;
+
+    .resource-label {
+      flex: 1 1 auto;
+      min-width: 60px;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: $font-title;
+      color: $c-dark;
+      width: 100%;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .weapon-info,
+  .item-info,
+  .spell-info {
+    font-size: 13px;
+    white-space: nowrap;
+    flex: 0 0 auto; // Don't grow or shrink, stay at content size
+    text-align: right;
+    margin-left: 8px;
+
+    i {
+      margin-right: 2px;
+    }
+  }
+}
+
+// Favorites Section
+.favorites-section {
+  margin-top: 4px;
+}
+
+// Saves Section
+.saves {
+  .saves-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    padding: 12px; 
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow:
+      inset 0 0 13px $c-inset-1,
+      inset 0 0 0 5px $c-inset-2;
+    }
+
+  .save {
+    text-align: center;
+    font-size: 16px;
+
+    .save-difficulty {
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+}
+
+// Features List - Accordion Style
+.features-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+
+  .feature.accordion-item {
+    padding: 2px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    overflow: hidden;
+
+    .feature-header.accordion-header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &::before {
+        font-family: var(--font-awesome);
+        content: "\f219";   // CHANGE THIS VALUE to change the marker
+        margin-right: 4px;  // Space between marker and text
+        // 900 = Solid, 400 = Regular, 300 = Light (Pro only)
+        font-weight: 900; // Make it pop
+        font-size: 0.6em;   // Size relative to text
+        line-height: 1;     // Fix vertical alignment
+        flex-shrink: 0;     // Prevents marker from shrinking on small screens
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .feature-description.accordion-content {
+      padding: 2px;
+      display: block;
+      max-height: 500px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+      font-family: $font-primary;
+      font-size: 14px;
+    }
+
+    // Collapsed state
+    &.collapsed {
+      .accordion-content {
+        display: none;
+      }
+    }
+  }
+
+  .no-features {
+    list-style: none;
+    padding: 14px;
+    text-align: center;
+    font-style: italic;
+  }
+}
+
+// Traits List - Accordion Style
+.traits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 16px;
+
+  .trait.accordion-item {
+    padding: 2px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    overflow: hidden;
+
+    .trait-header.accordion-header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &::before {
+        font-family: var(--font-awesome);
+        content: "\f219";   // Circle marker
+        margin-right: 4px;  // Space between marker and text
+        font-weight: 900;   // Solid style
+        font-size: 0.6em;   // Size relative to text
+        line-height: 1;     // Fix vertical alignment
+        flex-shrink: 0;     // Prevents marker from shrinking on small screens
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .trait-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .trait-description.accordion-content {
+      padding: 2px;
+      display: block;
+      max-height: 500px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+      font-family: $font-primary;
+      font-size: 14px;
+    }
+
+    // Collapsed state
+    &.collapsed {
+      .accordion-content {
+        display: none;
+      }
+    }
+  }
+
+  .no-traits {
+    list-style: none;
+    padding: 14px;
+    text-align: center;
+    font-style: italic;
+  }
+}
+
+// Perks List - Accordion Style
+.perks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  .perk-card.accordion-item {
+    padding: 2px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+
+    .perk-header.accordion-header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 0 0 2px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &::before {
+        font-family: var(--font-awesome);
+        content: "\f219";   // CHANGE THIS VALUE to change the marker
+        margin-right: 4px;  // Space between marker and text
+        // 900 = Solid, 400 = Regular, 300 = Light (Pro only)
+        font-weight: 900; // Make it pop
+        font-size: 0.6em;   // Size relative to text
+        line-height: 1;     // Fix vertical alignment
+        flex-shrink: 0;     // Prevents marker from shrinking on small screens
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .perk-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .perk-content.accordion-content {
+      padding: 2px;
+      display: block;
+      max-height: 500px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+      font-family: $font-primary;
+
+      .perk-prerequisites {
+        font-size: 14px;
+        margin-bottom: 8px;
+        font-style: italic;
+      }
+
+      .perk-description {
+        font-size: 14px;
+      }
+    }
+
+    // Collapsed state
+    &.collapsed {
+      .accordion-content {
+        display: none;
+      }
+    }
+  }
+
+  .no-perks {
+    list-style: none;
+    padding: 14px;
+    text-align: center;
+    font-style: italic;
+  }
+}

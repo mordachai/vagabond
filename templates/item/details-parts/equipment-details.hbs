@@ -1,0 +1,700 @@
+{{! Unified Equipment Details Tab - Switches between locked/unlocked views }}
+<section
+  class='tab details {{tab.cssClass}} {{#if system.locked}}equipment-locked-view{{/if}}'
+  data-group='primary'
+  data-tab='details'
+>
+  {{#if system.locked}}
+    {{! ===== LOCKED VIEW ===== }}
+    <div class='equipment-locked-content'>
+      {{! Description - Always show if present }}
+      {{#if system.description}}
+        <div class='locked-section'>
+          <div class='locked-description'>
+            {{{enriched.description}}}
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== WEAPON-SPECIFIC DISPLAY ===== }}
+      {{#if (eq system.equipmentType 'weapon')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.WeaponStats"}}</h3>
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>Skill:</span>
+              <span class='stat-value'>{{localize (lookup config.weaponSkills system.weaponSkill)}}</span>
+            </div>
+            <div class='locked-stat'>
+              <span class='stat-label'>Range:</span>
+              <span class='stat-value'>{{system.range}}</span>
+            </div>
+            <div class='locked-stat'>
+              <span class='stat-label'>Grip:</span>
+              <span class='stat-value'>{{system.gripDisplay}}</span>
+            </div>
+            <div class='locked-stat'>
+              <span class='stat-label'>Damage (1H):</span>
+              <span class='stat-value'>{{system.damageOneHand}}</span>
+            </div>
+            {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Damage (2H):</span>
+                <span class='stat-value'>{{system.damageTwoHands}}</span>
+              </div>
+            {{/if}}
+          </div>
+
+          {{#if system.properties.length}}
+            <div class='locked-properties'>
+              <span class='stat-label'>Properties:</span>
+              <div class='property-tags-locked'>
+                {{#each system.properties as |property|}}
+                  <span class='property-tag-locked' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
+                    {{property}}
+                  </span>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{! ===== ARMOR-SPECIFIC DISPLAY ===== }}
+      {{#if (eq system.equipmentType 'armor')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.ArmorStats"}}</h3>
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>Type:</span>
+              <span class='stat-value'>{{system.armorTypeDisplay}}</span>
+            </div>
+            <div class='locked-stat'>
+              <span class='stat-label'>Rating:</span>
+              <span class='stat-value'>{{system.finalRating}}</span>
+            </div>
+            <div class='locked-stat'>
+              <span class='stat-label'>Might Req:</span>
+              <span class='stat-value'>{{system.might}}</span>
+            </div>
+            {{! Damage Immunities (Read-Only) }}
+            {{#if system.immunities.length}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Immunities:</span>
+                <span class='stat-value'>
+                  {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
+                </span>
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== GEAR-SPECIFIC DISPLAY ===== }}
+      {{#if (eq system.equipmentType 'gear')}}
+        {{#if system.gearCategory}}
+          <div class='locked-section'>
+            <div class='locked-stat'>
+              <span class='stat-label'>Category:</span>
+              <span class='stat-value'>{{system.gearCategory}}</span>
+            </div>
+          </div>
+        {{/if}}
+      {{/if}}
+
+      {{! ===== ALCHEMICAL-SPECIFIC DISPLAY ===== }}
+      {{#if (eq system.equipmentType 'alchemical')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Alchemical"}}</h3>
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>Type:</span>
+              <span class='stat-value'>{{localize (concat "VAGABOND.Item.Alchemical.Types." (capitalize system.alchemicalType))}}</span>
+            </div>
+            {{#unless (eq system.damageType '-')}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Damage:</span>
+                <span class='stat-value'>{{system.damageAmount}} {{localize (concat "VAGABOND.DamageTypes." (capitalize system.damageType))}}</span>
+              </div>
+            {{/unless}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Cost:</span>
+              <span class='stat-value'>{{system.costDisplay}}</span>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== RELIC-SPECIFIC DISPLAY ===== }}
+      {{#if (eq system.equipmentType 'relic')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Relic"}}</h3>
+          {{#if system.lore}}
+            <div class='locked-text-block'>
+              <span class='stat-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}:</span>
+              <p>{{system.lore}}</p>
+            </div>
+          {{/if}}
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}:</span>
+              <span class='stat-value'>{{system.costDisplay}}</span>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== UNIVERSAL FIELDS ===== }}
+
+      {{! Damage/Healing if present }}
+      {{#unless (eq system.damageType '-')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}{{localize "VAGABOND.UI.Sections.Healing"}}{{else}}{{localize "VAGABOND.UI.Sections.Damage"}}{{/if}}</h3>
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>Type:</span>
+              <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
+            </div>
+            {{#if system.damageAmount}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Amount:</span>
+                <span class='stat-value'>{{system.damageAmount}}</span>
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      {{/unless}}
+
+      {{! Equipment Details }}
+      <div class='locked-section'>
+        <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Details"}}</h3>
+        <div class='locked-stats-grid'>
+          {{#unless (eq system.metal 'none')}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Metal:</span>
+              <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
+            </div>
+          {{/unless}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Slots:</span>
+            <span class='stat-value'>{{system.slots}}</span>
+          </div>
+          {{#if (gt system.quantity 1)}}
+            <div class='locked-stat'>
+              <span class='stat-label'>Quantity:</span>
+              <span class='stat-value'>{{system.quantity}}</span>
+            </div>
+          {{/if}}
+          <div class='locked-stat'>
+            <span class='stat-label'>Cost:</span>
+            <span class='stat-value'>{{system.costDisplay}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
+    <div class='equipment-item-content'>
+      {{! Description Section - Universal }}
+      <div class='form-group'>
+        <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
+        <div class='equipment-description'>
+          {{#if editable}}
+            <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+              {{{enriched.description}}}
+            </prose-mirror>
+          {{else}}
+            <div>{{{enriched.description}}}</div>
+          {{/if}}
+        </div>
+      </div>
+
+      {{! ===== WEAPON-SPECIFIC FIELDS ===== }}
+      {{#if (eq system.equipmentType 'weapon')}}
+        {{! Weapon Skill and Damage Row }}
+        <div class='form-group'>
+          <label class='resource-label'>Weapon Configuration</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='weapon-skill-field'>
+              <label class='resource-label'>Skill</label>
+              <select name='system.weaponSkill' data-dtype='String'>
+                  <option value="melee" {{#if (eq system.weaponSkill 'melee')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+                  <option value="brawl" {{#if (eq system.weaponSkill 'brawl')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
+                  <option value="finesse" {{#if (eq system.weaponSkill 'finesse')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
+                  <option value="ranged" {{#if (eq system.weaponSkill 'ranged')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
+              </select>
+            </div>
+            <div class='weapon-range-field'>
+              <label class='resource-label'>Range</label>
+              <select name='system.range' data-dtype='String'>
+                  <option value="close" {{#if (eq system.range 'close')}}selected{{/if}}>Close</option>
+                  <option value="near" {{#if (eq system.range 'near')}}selected{{/if}}>Near</option>
+                  <option value="far" {{#if (eq system.range 'far')}}selected{{/if}}>Far</option>
+              </select>
+            </div>
+            <div class='weapon-grip-field'>
+              <label class='resource-label'>Grip</label>
+              <select name='system.grip' data-dtype='String'>
+                  <option value="1H" {{#if (eq system.grip '1H')}}selected{{/if}}>1H (One-Handed)</option>
+                  <option value="2H" {{#if (eq system.grip '2H')}}selected{{/if}}>2H (Two-Handed)</option>
+                  <option value="F" {{#if (eq system.grip 'F')}}selected{{/if}}>F (Fist)</option>
+                  <option value="V" {{#if (eq system.grip 'V')}}selected{{/if}}>V (Versatile)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {{! Weapon Damage Fields }}
+        <div class='form-group'>
+          <label class='resource-label'>Damage</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='damage-with-icon'>
+              <label class='resource-label'><i class='fas fa-hand-fist'></i> One Hand</label>
+              <input
+                type='text'
+                name='system.damageOneHand'
+                value='{{system.damageOneHand}}'
+                data-dtype='String'
+                placeholder='d8'
+              />
+            </div>
+            <div class='damage-with-icon'>
+              <label class='resource-label'><i class='fas fa-hands'></i> Two Hands</label>
+              <input
+                type='text'
+                name='system.damageTwoHands'
+                value='{{system.damageTwoHands}}'
+                data-dtype='String'
+                placeholder='d10'
+                {{#unless (or (eq system.grip '2H') (eq system.grip 'V'))}}disabled{{/unless}}
+              />
+            </div>
+          </div>
+        </div>
+
+        {{! Weapon Properties }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
+          <div class='property-selector-row'>
+            <details class='property-dropdown'>
+              <summary class='property-dropdown-toggle'>
+                <i class='fas fa-chevron-down'></i>
+                <span>Select Properties</span>
+              </summary>
+              <div class='property-checkboxes'>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Brawl' {{#if (contains system.properties 'Brawl')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brawl'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Brutal' {{#if (contains system.properties 'Brutal')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brutal'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Cleave' {{#if (contains system.properties 'Cleave')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Cleave'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Entangle' {{#if (contains system.properties 'Entangle')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Entangle'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Finesse' {{#if (contains system.properties 'Finesse')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Finesse'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Keen' {{#if (contains system.properties 'Keen')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Keen'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Long' {{#if (contains system.properties 'Long')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Long'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Long"}}'>Long</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Near' {{#if (contains system.properties 'Near')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Near'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Near"}}'>Near</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Ranged' {{#if (contains system.properties 'Ranged')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Ranged'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Shield' {{#if (contains system.properties 'Shield')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Shield'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</span>
+                </label>
+                <label class='property-checkbox-item'>
+                  <input type='checkbox' value='Thrown' {{#if (contains system.properties 'Thrown')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Thrown'>
+                  <span data-tooltip='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</span>
+                </label>
+              </div>
+            </details>
+            <div class='property-tags'>
+              {{#each system.properties as |property index|}}
+                <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
+                  {{property}}
+                  <i class='fas fa-times' data-action='removeWeaponProperty' data-property='{{property}}'></i>
+                </span>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== ARMOR-SPECIFIC FIELDS ===== }}
+      {{#if (eq system.equipmentType 'armor')}}
+        {{! Armor Type }}
+        <div class='form-group'>
+          <label class='resource-label'>Armor Configuration</label>
+          <div class='grid grid-1col'>
+            <div class='armor-type-field'>
+              <label class='resource-label'>Armor Type</label>
+              <select name='system.armorType' data-dtype='String'>
+                  <option value="light" {{#if (eq system.armorType 'light')}}selected{{/if}}>Light (Rating 1, Might 3)</option>
+                  <option value="medium" {{#if (eq system.armorType 'medium')}}selected{{/if}}>Medium (Rating 2, Might 4)</option>
+                  <option value="heavy" {{#if (eq system.armorType 'heavy')}}selected{{/if}}>Heavy (Rating 3, Might 5)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {{! Calculated Armor Properties }}
+        <div class='form-group'>
+          <label class='resource-label'>Armor Properties</label>
+          <div class='calculated-properties'>
+            <div class='calculated-item'>
+              <span class='calc-label'>Rating:</span>
+              <span class='calc-value'>{{system.finalRating}}</span>
+            </div>
+            <div class='calculated-item'>
+              <span class='calc-label'>Might Requirement:</span>
+              <span class='calc-value'>{{system.might}}</span>
+            </div>
+          </div>
+        </div>
+
+        {{! Damage Immunities }}
+        <div class='form-group'>
+          <details class='npc-immunity-dropdown'>
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>Damage Immunities</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.damageTypes as |label key|}}
+                {{#unless (eq key '-')}}
+                  <label class='npc-immunity-checkbox-item'>
+                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
+                    <span>{{localize label}}</span>
+                  </label>
+                {{/unless}}
+              {{/each}}
+            </div>
+          </details>
+          <div class='npc-immunity-tags'>
+            {{#each system.immunities as |immunity index|}}
+              <span class='npc-immunity-tag'>
+                {{immunity}}
+                <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
+              </span>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== GEAR-SPECIFIC FIELDS ===== }}
+      {{#if (eq system.equipmentType 'gear')}}
+        {{! Gear Category }}
+        <div class='form-group'>
+          <label class='resource-label'>Gear Category</label>
+          <input
+            type='text'
+            name='system.gearCategory'
+            value='{{system.gearCategory}}'
+            data-dtype='String'
+            placeholder='e.g., Alchemy & Medicine'
+          />
+        </div>
+      {{/if}}
+
+      {{! ===== ALCHEMICAL-SPECIFIC FIELDS ===== }}
+      {{#if (eq system.equipmentType 'alchemical')}}
+        {{! Alchemical Type }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.alchemicalType.label'}}</label>
+          <select name='system.alchemicalType' data-dtype='String'>
+            <option value='acid' {{#if (eq system.alchemicalType 'acid')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Acid"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Acid'}}</option>
+            <option value='concoction' {{#if (eq system.alchemicalType 'concoction')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Concoction"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Concoction'}}</option>
+            <option value='explosive' {{#if (eq system.alchemicalType 'explosive')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Explosive"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Explosive'}}</option>
+            <option value='oil' {{#if (eq system.alchemicalType 'oil')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Oil"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Oil'}}</option>
+            <option value='poison' {{#if (eq system.alchemicalType 'poison')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Poison"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Poison'}}</option>
+            <option value='potion' {{#if (eq system.alchemicalType 'potion')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Potion"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Potion'}}</option>
+            <option value='torch' {{#if (eq system.alchemicalType 'torch')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Torch"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Torch'}}</option>
+          </select>
+        </div>
+
+        {{! Damage Type and Amount }}
+        <div class='form-group'>
+          <label class='resource-label'>Damage</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='damage-type-field'>
+              <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageType.label'}}</label>
+              {{> "systems/vagabond/templates/shared/damage-type-select.hbs" name="system.damageType" selected=system.damageType includeNone=true}}
+            </div>
+            <div class='damage-amount-field'>
+              <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageAmount.label'}}</label>
+              <input
+                type='text'
+                name='system.damageAmount'
+                value='{{system.damageAmount}}'
+                data-dtype='String'
+                placeholder='e.g., 2d6'
+              />
+            </div>
+          </div>
+        </div>
+
+        {{! Cost }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.baseCost.label'}}</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='cost-field'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                step="1"
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                step="1"
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                step="1"
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== RELIC-SPECIFIC FIELDS ===== }}
+      {{#if (eq system.equipmentType 'relic')}}
+        {{! Lore }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}</label>
+          <input
+            type='text'
+            name='system.lore'
+            value='{{system.lore}}'
+            data-dtype='String'
+            placeholder='Enter the relic lore and history...'
+          />
+        </div>
+
+        {{! Value (Cost) }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='cost-field'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! ===== UNIVERSAL FIELDS (ALL EQUIPMENT) ===== }}
+
+      {{! Damage Type and Amount Row (Universal) - not for alchemicals or relics, they have their own }}
+      {{#unless (or (eq system.equipmentType 'alchemical') (eq system.equipmentType 'relic'))}}
+        <div class='form-group'>
+          <label class='resource-label'>Damage / Healing</label>
+        <div class='grid grid-2col gap-8'>
+          <div class='damage-type-field'>
+            <label class='resource-label'>Type</label>
+            {{> "systems/vagabond/templates/shared/damage-type-select.hbs" name="system.damageType" selected=system.damageType includeNone=true}}
+          </div>
+          <div class='damage-amount-field'>
+            <label class='resource-label'>Amount</label>
+            <input
+              type='text'
+              name='system.damageAmount'
+              value='{{system.damageAmount}}'
+              data-dtype='String'
+              placeholder='e.g., 2d6, 1d8+2'
+            />
+          </div>
+        </div>
+        </div>
+      {{/unless}}
+
+      {{! Metal, Slots, and Quantity Row }}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+        <div class='form-group'>
+          <label class='resource-label'>Equipment Details</label>
+          <div class='grid grid-3col gap-8'>
+            <div class='metal-field'>
+              <label class='resource-label'>Metal</label>
+              <select name='system.metal' data-dtype='String'>
+                  <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}} title='No special material'>None</option>
+                  <option value="common" {{#if (eq system.metal 'common')}}selected{{/if}} title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
+                  <option value="adamant" {{#if (eq system.metal 'adamant')}}selected{{/if}} title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
+                  <option value="coldIron" {{#if (eq system.metal 'coldIron')}}selected{{/if}} title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
+                  <option value="silver" {{#if (eq system.metal 'silver')}}selected{{/if}} title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
+                  <option value="mythral" {{#if (eq system.metal 'mythral')}}selected{{/if}} title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
+                  <option value="orichalcum" {{#if (eq system.metal 'orichalcum')}}selected{{/if}} title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+              </select>
+            </div>
+            <div class='slots-field'>
+              <label class='resource-label'>Base Slots</label>
+              <input
+                type='number'
+                name='system.baseSlots'
+                value='{{system.baseSlots}}'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='quantity-field'>
+              <label class='resource-label'>Quantity</label>
+              <input
+                type='number'
+                name='system.quantity'
+                value='{{system.quantity}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+          <div class='metal-effect-text'>{{system.metalEffect}}</div>
+        </div>
+      {{/unless}}
+
+      {{! Slots and Quantity for Relics (no metal) }}
+      {{#if (eq system.equipmentType 'relic')}}
+        <div class='form-group'>
+          <label class='resource-label'>Equipment Details</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='slots-field'>
+              <label class='resource-label'>Base Slots</label>
+              <input
+                type='number'
+                name='system.baseSlots'
+                value='{{system.baseSlots}}'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='quantity-field'>
+              <label class='resource-label'>Quantity</label>
+              <input
+                type='number'
+                name='system.quantity'
+                value='{{system.quantity}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! Cost Section (3 Columns) - not for relics or alchemicals, they have their own }}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+        <div class='form-group'>
+          <label class='resource-label'>Base Cost <small>(before metal multiplier)</small></label>
+          <div class='grid grid-3col gap-8'>
+            <div class='cost-field'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='cost-field'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+        </div>
+      {{/unless}}
+
+      {{! Calculated Properties Display - not needed for relics or alchemicals }}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+        <div class='form-group'>
+          <label class='resource-label'>Calculated Properties</label>
+          <div class='calculated-properties'>
+            <div class='calculated-item'>
+              <span class='calc-label'>Final Slots:</span>
+              <span class='calc-value'>{{system.slots}}</span>
+            </div>
+            <div class='calculated-item'>
+              <span class='calc-label'>Final Cost:</span>
+              <span class='calc-value'>{{system.costDisplay}}</span>
+            </div>
+          </div>
+        </div>
+      {{/unless}}
+    </div>
+  {{/if}}
+</section>

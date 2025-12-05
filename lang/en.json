@@ -1,0 +1,648 @@
+{
+  "VAGABOND": {
+    "Stat": {
+      "Might": { "long": "Might", "abbr": "MIG" },
+      "Dexterity": { "long": "Dexterity", "abbr": "DEX" },
+      "Awareness": { "long": "Awareness", "abbr": "AWR" },
+      "Reason": { "long": "Reason", "abbr": "REA" },
+      "Presence": { "long": "Presence", "abbr": "PRE" },
+      "Luck": { "long": "Luck", "abbr": "LUK" }
+    },
+    "Skills": {
+      "Arcana": "Arcana",
+      "Brawl": "Brawl",
+      "Craft": "Craft",
+      "Detect": "Detect",
+      "Finesse": "Finesse",
+      "Influence": "Influence",
+      "Leadership": "Leadership",
+      "Medicine": "Medicine",
+      "Mysticism": "Mysticism",
+      "Performance": "Performance",
+      "Sneak": "Sneak",
+      "Survival": "Survival"
+    },
+    "WeaponSkills": {
+      "Melee": "Melee",
+      "Ranged": "Ranged",
+      "Brawl": "Brawl",
+      "Finesse": "Finesse"
+    },
+    "Saves": {
+      "savesTitle": "Saves",
+      "savesPlaceholder": "Reflex, Endure or Will",
+      "Reflex": {
+        "name": "Reflex",
+        "description": "Avoid area effects and attacks"
+      },
+      "Endure": {
+        "name": "Endure", 
+        "description": "Withstand poison and death"
+      },
+      "Will": {
+        "name": "Will",
+        "description": "Resist curses and enthrallment"
+      }
+    },
+    "Sizes": {
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "huge": "Huge",
+      "giant": "Giant",
+      "colossal": "Colossal"
+    },
+    "BeingTypes": {
+      "Humanlike": "Humanlike",
+      "Fae": "Fae",
+      "Cryptid": "Cryptid",
+      "Artificials": "Artificials",
+      "Beasts": "Beasts",
+      "Outers": "Outers",
+      "Primordials": "Primordials",
+      "Undead": "Undead"
+    },
+    "DamageTypes": {
+      "None": "-",
+      "Acid": "Acid",
+      "Fire": "Fire",
+      "Shock": "Shock",
+      "Poison": "Poison",
+      "Cold": "Cold",
+      "Blunt": "Blunt",
+      "Physical": "Physical",
+      "Necrotic": "Necrotic",
+      "Psychic": "Psychic",
+      "Magical": "Magical",
+      "Healing": "Healing",
+      "Recover": "Recover",
+      "Recharge": "Recharge"
+    },
+    "MaterialWeaknesses": {
+      "ColdIron": "Cold Iron",
+      "Silver": "Silver"
+    },
+    "StatusConditions": {
+      "Berserk": "Berserk",
+      "Blinded": "Blinded",
+      "Burning": "Burning",
+      "Charmed": "Charmed",
+      "Confused": "Confused",
+      "Dazed": "Dazed",
+      "Fatigued": "Fatigued",
+      "Frightened": "Frightened",
+      "Incapacitated": "Incapacitated",
+      "Invisible": "Invisible",
+      "Paralyzed": "Paralyzed",
+      "Prone": "Prone",
+      "Restrained": "Restrained",
+      "Sickened": "Sickened",
+      "Suffocating": "Suffocating",
+      "Unconscious": "Unconscious",
+      "Vulnerable": "Vulnerable"
+    },
+    "CombatZones": {
+      "Frontline": "Frontline",
+      "Midline": "Midline",
+      "Backline": "Backline"
+    },
+    "Currency": {
+      "Gold": {
+        "long": "Gold",
+        "abbr": "g"
+      },
+      "Silver": {
+        "long": "Silver",
+        "abbr": "s"
+      },
+      "Copper": {
+        "long": "Copper",
+        "abbr": "c"
+      }
+    },
+    "DeliveryTypes": {
+      "Aura": {
+        "label": "Aura",
+        "hint": "+1 per +5 feet to the radius"
+      },
+      "Cone": {
+        "label": "Cone",
+        "hint": "+2 per additional 5-feet of length"
+      },
+      "Cube": {
+        "label": "Cube",
+        "hint": "+1 per additional 5-foot-cube"
+      },
+      "Imbue": {
+        "label": "Imbue",
+        "hint": "+2 per additional Target"
+      },
+      "Glyph": {
+        "label": "Glyph",
+        "hint": "—"
+      },
+      "Line": {
+        "label": "Line",
+        "hint": "+1 per 10 feet of extra length"
+      },
+      "Remote": {
+        "label": "Remote",
+        "hint": "+1 per additional Target"
+      },
+      "Sphere": {
+        "label": "Sphere",
+        "hint": "+1 per additional 5-feet to the radius"
+      },
+      "Touch": {
+        "label": "Touch",
+        "hint": "—"
+      }
+    },
+    "SheetLabels": {
+      "Actor": "Vagabond Actor Sheet",
+      "Item": "Vagabond Item Sheet"
+    },
+    "Settings": {
+      "rollDamageWithCheck": {
+        "name": "Roll Damage With Check",
+        "hint": "Roll damage together with attack/spell checks instead of waiting for confirmation. When disabled, a manual damage button will appear in chat."
+      },
+      "alwaysRollDamage": {
+        "name": "Always Roll Damage",
+        "hint": "When rolling damage with checks, roll damage even on misses (to show the intensity of the miss). Only applies when 'Roll Damage With Check' is enabled."
+      },
+      "defaultClockPosition": {
+        "name": "Default Clock Position",
+        "hint": "Default corner position for new progress clocks."
+      },
+      "levelPacing": {
+        "name": "Level Pacing",
+        "hint": "Controls how much XP is required to level up. This affects the pace of character progression throughout your campaign.",
+        "quick": "Quick (5 XP/Level) - Est. 2-5 Months",
+        "normal": "Normal (5 × Next Level) - Est. 5-12 Months",
+        "epic": "Epic (7 × Next Level) - Est. 1-2 Years",
+        "saga": "Saga (10 × Next Level) - Est. 2+ Years"
+      }
+    },
+    "Actor": {
+      "Tabs": {
+        "Biography": "Biography",
+        "Features": "Features",
+        "Inventory": "Inventory",
+        "Spells": "Spells",
+        "Effects": "Effects"
+      },
+      "base": {
+        "FIELDS": {
+          "biography": {"label": "Biography"},
+          "health": {
+            "value": {"label": "Health"},
+            "max": {"label": "Maximum Health"}
+          },
+          "power": {
+            "value": {"label": "Power"},
+            "max": {"label": "Maximum Power"}
+          }
+        }
+      },
+      "Character": {
+        "FIELDS": {
+          "attributes.level.value": {"label": "Level"},
+          "attributes.xp": {"label": "XP"},
+          "attributes.size": {"label": "Size"},
+          "attributes.beingType": {"label": "Being Type"},
+          "combat.hitPoints.current": {"label": "Current HP"},
+          "combat.hitPoints.max": {"label": "Max HP"},
+          "combat.fatigue": {"label": "Fatigue"},
+          "combat.speed.base": {"label": "Speed"},
+          "combat.speed.crawl": {"label": "Crawl Speed"},
+          "combat.speed.travel": {"label": "Travel Speed"},
+          "combat.currentLuck": {"label": "Current Luck"},
+          "combat.armor": {"label": "Armor Rating"},
+          "mana.current": {"label": "Current Mana"},
+          "mana.max": {"label": "Max Mana"},
+          "mana.castingMax": {"label": "Casting Max"}
+        }
+      },
+      "NPC": {
+        "FIELDS": {
+          "cr": {"label": "CR"},
+          "name": {"label": "NPC Name"},
+          "size": {"label": "Size"},
+          "beingType": {"label": "Being Type"},
+          "morale": {"label": "Morale:"},
+          "speed": {"label": "Speed:"},
+          "hd": {"label": "HD:"},
+          "hp": {"label": "HP:"},
+          "zone": {"label": "Zone:"},
+          "appearing": {"label": "# Appearing:"},
+          "senses": {"label": "Senses:"},
+          "armor": {"label": "Armor:"},
+          "immunities": {"label": "Immune:"},
+          "weaknesses": {"label": "Weak:"},
+          "statusImmunities": {"label": "Status:"},
+          "description": {"label": "Description"}
+        },
+        "Sections": {
+          "Actions": "Actions",
+          "Abilities": "Abilities",
+          "Effects": "Effects"
+        },
+        "Action": {
+          "Name": "Name",
+          "Description": "Description",
+          "Type": "Type",
+          "Range": "Range",
+          "Note": "Note (before damage)",
+          "Recharge": "Recharge",
+          "FlatDamage": "Flat Damage",
+          "RollDamage": "Roll Damage",
+          "DamageType": "Damage Type",
+          "ExtraInfo": "Extra Info",
+          "Add": "Add Action"
+        },
+        "Ability": {
+          "Name": "Name",
+          "Description": "Description",
+          "Add": "Add Ability"
+        },
+        "Messages": {
+          "NoActions": "No actions defined",
+          "UnlockToEdit": "Click to unlock and edit",
+          "LockForPlay": "Click to lock for play"
+        },
+        "Tooltips": {
+          "Unlock": "Click to unlock and edit",
+          "Lock": "Click to lock for play"
+        },
+        "MoraleCheck": {
+          "Title": "Morale Check",
+          "tooltip": "Check Morale (2d6 vs Morale)\n\nWhen to roll:\n• Their Leader is defeated.\n• They are alone and at half HP or lower.\n• Half or more are defeated.",
+          "Target": "Morale Target",
+          "Roll": "Roll Result",
+          "Passed": "Morale holds! The NPC continues fighting.",
+          "Failed": "Morale breaks! The NPC retreats.",
+          "NoMorale": "This NPC has no Morale value set."
+        },
+        "xp": {"label": "XP"}
+      }
+    },
+    "Item": {
+      "Tabs": {
+        "Attributes": "Attributes",
+        "Details": "Details",
+        "Description": "Description",
+        "Effects": "Effects"
+      },
+      "base": {
+        "FIELDS": {
+          "description": {"label": "Description"}
+        }
+      },
+      "Gear": {
+        "FIELDS": {
+          "quantity": {"label": "Quantity"},
+          "type": {"label": "Type"},
+          "cost": {"label": "Cost"},
+          "slots": {"label": "Slots"}
+        }
+      },
+      "Weapon": {
+        "FIELDS": {
+          "damageOneHand": {"label": "Damage (1H)"},
+          "damageTwoHands": {"label": "Damage (2H)"},
+          "properties": {"label": "Properties"},
+          "weaponSkill": {"label": "Weapon Skill"},
+          "range": {"label": "Range"},
+          "grip": {"label": "Grip"},
+          "metal": {"label": "Metal"},
+          "baseCost": {"label": "Base Cost"},
+          "baseSlots": {"label": "Base Slots"},
+          "cost": {"label": "Cost"},
+          "slots": {"label": "Slots"}
+        }
+      },
+      "Armor": {
+        "FIELDS": {
+          "armorType": {"label": "Armor Type"},
+          "metal": {"label": "Metal"},
+          "baseCost": {"label": "Base Cost"},
+          "rating": {"label": "Armor Rating"},
+          "might": {"label": "Might Requirement"}
+        }
+      },
+      "Spell": {
+        "FIELDS": {
+          "description": {"label": "Effect Description"},
+          "damageType": {"label": "Damage Base"},
+          "delivery": {
+            "label": "Delivery",
+            "type": {"label": "Delivery Type"},
+            "cost": {"label": "Mana Cost"},
+            "increase": {
+              "label": "Increase Effect",
+              "hint": "How spending additional Mana improves this spell"
+            }
+          },
+          "duration": {
+            "label": "Duration",
+            "hint": "e.g., Instant, 1 Round, Continual"
+          },
+          "crit": {
+            "label": "Crit",
+            "hint": "Effect on a critical success"
+          }
+        },
+        "AddSpell": "Add Spell"
+      },
+      "Ancestry": {
+        "FIELDS": {
+          "size": {"label": "Size"},
+          "ancestryType": {"label": "Type"},
+          "traits": {"label": "Traits"}
+        }
+      },
+      "Perk": {
+        "FIELDS": {
+          "description": {"label": "Description"},
+          "prerequisites": {
+            "label": "Prerequisites",
+            "stats": {"label": "Stat Prerequisites"},
+            "trainedSkills": {"label": "Trained Skill Prerequisites"},
+            "spells": {"label": "Spell Prerequisites"},
+            "other": {"label": "Other Prerequisites"}
+          }
+        },
+        "AddStatPrerequisite": "Add Stat Prerequisite",
+        "AddTrainedSkillPrerequisite": "Add Trained Skill",
+        "AddSpellPrerequisite": "Add Spell Prerequisite",
+        "AddOtherPrerequisite": "Add Other Prerequisite",
+        "RemovePrerequisite": "Remove Prerequisite",
+        "SpellNamePlaceholder": "Enter spell name...",
+        "OtherPrerequisitePlaceholder": "Enter prerequisite..."
+      },
+      "Relic": {
+        "FIELDS": {
+          "lore": {"label": "Lore"},
+          "description": {"label": "Description"},
+          "baseCost": {"label": "Value"}
+        }
+      },
+      "Alchemical": {
+        "FIELDS": {
+          "alchemicalType": {"label": "Type"},
+          "damageType": {"label": "Damage Type"},
+          "damageAmount": {"label": "Damage"},
+          "description": {"label": "Description"},
+          "baseCost": {"label": "Cost"}
+        },
+        "Types": {
+          "Acid": "Acid",
+          "Concoction": "Concoction",
+          "Explosive": "Explosive",
+          "Oil": "Oil",
+          "Poison": "Poison",
+          "Potion": "Potion",
+          "Torch": "Torch"
+        },
+        "TypeHints": {
+          "Acid": "Corrosive substances.",
+          "Concoction": "General substances.",
+          "Explosive": "Bombs and combustibles.",
+          "Oil": "Coats a Weapon, up to 5 ammo, a 5-foot square, or a Small to Large Being. Coating lasts one Shift, or until another oil is applied.",
+          "Poison": "Affect a Target that is subjected to it in indicated ways. A weapon coated with it remains coated until it hits with an Attack or up to a Shift (whichever comes first).",
+          "Potion": "Concoctions that cause magical effects when consumed.",
+          "Torch": "Provides Near Light for 1 hour."
+        }
+      },
+      "Delete": "Delete Item"
+    },
+    "Effect": {
+      "Source": "Source",
+      "Toggle": "Toggle Effect",
+      "Temporary": "Temporary Effects",
+      "Passive": "Passive Effects",
+      "Inactive": "Inactive Effects",
+      "Duration": "Duration"
+    },
+    "Weapon": {
+    "Range": {
+      "Close": "Close",
+      "CloseAbbr": "C",
+      "Near": "Near",
+      "NearAbbr": "N",
+      "Far": "Far",
+      "FarAbbr": "F"
+    },
+    "Grip": {
+      "1H": "1H (One-Handed)",
+      "2H": "2H (Two-Handed)",
+      "F": "F (Fist)",
+      "V": "V (Versatile)"
+    },
+    "GripDescriptions": {
+      "1H": "One-Handed: Requires one hand.",
+      "2H": "Two-Handed: Requires two hands.",
+      "F": "Fist: Your hands are open while using it.",
+      "V": "Versatile: Counts as 1H, but its damage die is one size larger if 2H."
+    },
+    "Property": {
+      "Brawl": "Brawl",
+      "Brutal": "Brutal",
+      "Cleave": "Cleave",
+      "Entangle": "Entangle",
+      "Finesse": "Finesse",
+      "Keen": "Keen",
+      "Long": "Long",
+      "Near": "Near",
+      "Ranged": "Ranged",
+      "Shield": "Shield",
+      "Thrown": "Thrown"
+    },
+    "PropertyHints": {
+      "Brawl": "Unarmed weapon usable with Brawl skill.",
+      "Brutal": "Crits deal 1 extra damage die.",
+      "Cleave": "Can deal half damage to two Targets.",
+      "Entangle": "On hit, target is Entangled until end of their next turn.",
+      "Finesse": "Can use Dexterity instead of Might for attack rolls.",
+      "Keen": "Critical hit on 19-20 instead of just 20.",
+      "Long": "Extended reach, can attack from 10ft away.",
+      "Near": "Ranged weapon with Near range.",
+      "Ranged": "Ranged weapon, uses Ranged skill.",
+      "Shield": "Can be used defensively to block attacks.",
+      "Thrown": "Can be thrown as a ranged attack."
+    }
+    },
+    "Armor": {
+      "Type": {
+        "Light": "Light",
+        "Medium": "Medium",
+        "Heavy": "Heavy"
+      }
+    },
+    "Metal": {
+      "Common": "Common",
+      "Adamant": "Adamant",
+      "ColdIron": "Cold Iron",
+      "Silver": "Silver",
+      "Mythral": "Mythral",
+      "Orichalcum": "Orichalcum"
+    },
+    "MetalDescriptions": {
+      "Common": "",
+      "Adamant": "Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.",
+      "ColdIron": "Situational weakness (Fae).",
+      "Silver": "Blesses weapons against the accursed.",
+      "Mythral": "Occupies 1 fewer Slot (min 1).",
+      "Orichalcum": "Armor reduces Cast damage."
+    },
+    "FavorHinder": {
+      "label": "Favor/Hinder",
+      "States": {
+        "none": "Favor/Hinder",
+        "favor": "Favor",
+        "hinder": "Hinder"
+      },
+      "Tooltips": {
+        "none": "Click to toggle Favor/Hinder. Currently no modifier applied.",
+        "favor": "Favor: +1d6 to all d20 rolls. Click to switch to Hinder.",
+        "hinder": "Hinder: -1d6 from all d20 rolls. Click to switch to None."
+      }
+    },
+    "ProgressClock": {
+      "Name": "Progress Clock",
+      "Segments": "Segments",
+      "SegmentsLabel": "segments",
+      "Size": "Size",
+      "SizeSmall": "Small",
+      "SizeMedium": "Medium",
+      "SizeLarge": "Large",
+      "SizeCustom": "Custom",
+      "CustomSizePlaceholder": "Pixels",
+      "DefaultPosition": "Default Position",
+      "Position": {
+        "TopRight": "Top Right",
+        "TopLeft": "Top Left",
+        "BottomRight": "Bottom Right",
+        "BottomLeft": "Bottom Left"
+      },
+      "PlayerPermissions": "Player Permissions",
+      "PermissionNoneDesc": "Hidden from players",
+      "PermissionObserverDesc": "Players can see only",
+      "PermissionOwnerDesc": "Players can interact",
+      "IndividualPermissions": "Individual Player Permissions (Optional)",
+      "Save": "Save Changes",
+      "Delete": "Delete",
+      "Create": "Create Clock",
+      "ConfigDialog": {
+        "Title": "Configure Progress Clock"
+      },
+      "DeleteDialog": {
+        "Title": "Delete Progress Clock",
+        "Instructions": "Select a clock to delete:",
+        "ConfirmTitle": "Confirm Deletion",
+        "ConfirmMessage": "Are you sure you want to delete '{name}'?",
+        "DeleteTooltip": "Delete this clock",
+        "NotFound": "Clock not found"
+      },
+      "NoClocksExist": "No progress clocks exist yet.",
+      "NoPermission": "You do not have permission to modify this clock.",
+      "SceneControls": {
+        "Layer": "Progress Clocks",
+        "Create": "Create Progress Clock",
+        "DeleteTool": "Delete Progress Clock"
+      }
+    },
+    "CountdownDice": {
+      "Name": "Dice Name",
+      "DefaultName": "Countdown",
+      "DiceType": "Dice Type",
+      "Size": "Size",
+      "Create": "Create Countdown Dice",
+      "Configure": "Configure",
+      "Delete": "Delete Countdown Dice",
+      "DeleteConfirm": "Are you sure you want to delete this countdown dice?",
+      "Fade": "Toggle Fade",
+      "SceneControls": {
+        "Create": "Create Countdown Dice"
+      },
+      "Chat": {
+        "Continues": "Countdown continues",
+        "Reduced": "Countdown reduced!",
+        "Ended": "Countdown ended!",
+        "CurrentState": "Results"
+      }
+    },
+    "UI": {
+      "Sections": {
+        "Magic": "Magic",
+        "Spells": "Spells",
+        "Inventory": "Inventory",
+        "Skills": "Skills",
+        "Attacks": "Attacks",
+        "Equipped": "Equipped",
+        "Features": "Features",
+        "Traits": "Traits",
+        "Perks": "Perks",
+        "LevelFeatures": "Level Features",
+        "Level": "Level",
+        "WeaponStats": "Weapon Stats",
+        "ArmorStats": "Armor Stats",
+        "Alchemical": "Alchemical",
+        "Relic": "Relic",
+        "Healing": "Healing",
+        "Damage": "Damage",
+        "Details": "Details",
+        "Name": "Name",
+        "Favorite": "Favorite",
+        "Wealth": "Wealth",
+        "Speed": "Speed",
+        "Crawl": "Crawl",
+        "Travel": "Travel",
+        "LuckPool": "Luck Pool"
+      }
+    },
+    "Notifications": {
+      "NoLuckRemaining": "No Luck remaining to spend!",
+      "LuckAlreadyMax": "Luck is already at maximum!"
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "npc": "NPC"
+    },
+    "Item": {
+      "gear": "- Remove",
+      "weapon": "Weapon",
+      "armor": "Armor",
+      "feature": "Feature",
+      "spell": "Spell",
+      "ancestry": "Ancestry",
+      "class": "Class",
+      "perk": "Perk",
+      "equipment": "Gear"
+    },
+    "CountdownDice": {
+      "SceneControls": {
+        "Create": "Create Countdown Dice"
+      },
+      "Create": "Create Countdown Dice",
+      "Name": "Dice Name",
+      "DiceType": "Dice Type",
+      "Size": "Size",
+      "Fade": "Fade",
+      "Configure": "Configure",
+      "Delete": "Delete",
+      "DeleteConfirm": "Delete this countdown dice?",
+      "Chat": {
+        "Continues": "Countdown continues",
+        "Reduced": "Countdown reduced!",
+        "Ended": "Countdown ended!",
+        "CurrentState": "Current State"
+      }
+    }
+  }
+
+}
+

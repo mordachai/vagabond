@@ -1,0 +1,63 @@
+// Progress Clock Overlay Styles
+
+.progress-clock {
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.75));
+}
+
+// Progress Clock Configuration Form Styles
+
+.progress-clock-config-form {
+  .form-row {
+    display: flex;
+    gap: 12px;
+
+    .form-field {
+      flex: 1;
+    }
+  }
+
+  .size-controls {
+    display: flex;
+    gap: 8px;
+
+    select {
+      flex: 1;
+    }
+
+    input {
+      width: 80px;
+    }
+  }
+
+  .individual-permissions {
+    margin-top: 8px;
+
+    summary {
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 8px;
+
+      &:hover {
+        color: var(--color-text-hyperlink);
+      }
+    }
+  }
+
+  .ownership-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding-left: 16px;
+
+    select {
+      flex: 1;
+    }
+  }
+
+  .ownership-label {
+    flex: 0 0 auto;
+    min-width: 100px;
+  }
+}

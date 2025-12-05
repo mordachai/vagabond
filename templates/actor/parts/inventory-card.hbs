@@ -1,0 +1,13 @@
+{{! Inventory Card - Simplified: Image (50px) + Name }}
+<div
+  class='inventory-card {{#if equipped}}equipped{{/if}}'
+  data-item-id='{{item._id}}'
+  data-item-slots='{{item.system.slots}}'
+  data-item-type='{{item.type}}'
+  data-grid-position='{{gridPosition}}'
+  style='grid-column: span {{item.system.slots}};'
+  draggable='true'
+>
+  <img src='{{item.img}}' alt='{{item.name}}' class='item-image' />
+  <div class='item-name-display'>{{item.name}}</div>
+</div>

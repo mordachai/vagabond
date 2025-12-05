@@ -1,0 +1,527 @@
+{{! Sliding Panel - Right Side }}
+<aside class='sliding-panel {{#if isPanelOpen}}panel-open{{else}}panel-closed{{/if}}'>
+  {{! Panel Content }}
+  <div class='panel-content scrollable'>
+
+    {{! Sheet Header }}
+    <header class='sheet-header'>
+      {{! Character Name with Level Up Button and XP - Full Width at Top }}
+      <div class='name-row-top'>
+        <input
+          name='name'
+          type='text'
+          value='{{actor.name}}'
+          placeholder='Character Name'
+          class='character-name-input-large'
+        />
+        <div class='top-right-controls'>
+          {{! XP Field with Level Up Indicator }}
+          <div class='xp-field-inline {{#if system.attributes.canLevelUp}}level-up-ready{{/if}}' data-tooltip='{{#if system.attributes.canLevelUp}}Click label to Level Up!{{else}}XP: {{system.attributes.xp}} / {{system.attributes.xpRequired}}{{/if}}'>
+            <label class='resource-label' {{#if (and system.attributes.canLevelUp (lt system.attributes.level.value 10))}}data-action='levelUp'{{/if}}>
+              {{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}
+              {{#if system.attributes.canLevelUp}}
+                <i class='fas fa-arrow-up level-up-icon'></i>
+              {{/if}}
+            </label>
+            <input
+              type='text'
+              name='system.attributes.xp'
+              value='{{system.attributes.xp}}'
+              data-dtype='Number'
+              class='xp-input'
+            />
+            <span class='xp-required'>/ {{system.attributes.xpRequired}}</span>
+          </div>
+        </div>
+      </div>
+
+      {{! Level, Ancestry, Class, Being Type, Size - All in One Row }}
+      <div class='character-info-combined-row'>
+        <span>
+          Level
+          <input
+            type='text'
+            name='system.attributes.level.value'
+            value='{{system.attributes.level.value}}'
+            data-dtype='Number'
+            class='level-input'
+          />,
+          {{#if system.ancestryData}}
+            <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
+          {{else}}
+            <span class='text-faint'>Unknown Ancestry</span>
+          {{/if}}
+          {{#if system.classData}}
+            <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+          {{else}}
+            <span class='text-faint'>No Class</span>
+          {{/if}}
+          {{#if system.ancestryData}}
+            ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} size)
+          {{else}}
+            (Unknown, {{localize "VAGABOND.Sizes.medium"}} size)
+          {{/if}}
+        </span>
+      </div>
+
+      {{! Main Row: Image and Stats Side by Side }}
+      <div class='header-main-row'>
+        {{! Character Image Container }}
+        <div class='image-column'>
+          <div class='char-image-container'>
+            <img
+              class='profile-img'
+              src='{{actor.img}}'
+              data-edit='img'
+              data-action='onEditImage'
+              data-tooltip='{{actor.name}}'
+              width='180'
+              height='180'
+            />
+
+            {{! Armor Info Overlay (Right side) }}
+            <div class='armor-overlay'>
+              {{!-- <div class='armor-type'>{{equippedArmorType}}</div> --}}
+              <div class='armor-value'>{{system.armor}}</div>
+            </div>
+            
+            {{! Row 3: Hit Points }}
+            <div class='hp-display'>
+              <i class='fas fa-heart hp-icon'></i>
+              <input
+                type='text'
+                name='system.health.value'
+                value='{{system.health.value}}'
+                data-dtype='Number'
+                class='hp-current'
+              />
+              <span class='hp-separator'>/</span>
+              <span class='hp-max'>{{system.health.max}}</span>
+            </div>
+          </div>
+        </div>
+
+        {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
+        <div class='stats-column'>
+          {{! Row 1: Stats Grid - 3x2 grid of stats }}
+          <div class='stats-grid'>
+            {{#each system.stats as |stat key|}}
+              <div class='stat-item'>
+                <input
+                  type='text'
+                  name='system.stats.{{key}}.value'
+                  value='{{stat.value}}'
+                  class='stat-score'
+                  data-dtype='Number'
+                />
+                <label
+                  class='stat-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-roll-type='stat'
+                  data-stat-key='{{key}}'
+                  data-label='{{localize (lookup @root.config.stats key)}} Check'
+                  data-tooltip='{{localize (lookup @root.config.stats key)}}'
+                >{{localize (lookup @root.config.stats key)}}</label>
+              </div>
+            {{/each}}
+          </div>
+
+          {{! Row 2: Fatigue Bar }}
+          <div class='fatigue-row'>
+            <div class="fatigue-label">{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}: </div>
+            <div class='fatigue-checkboxes'>
+              {{#each fatigueBoxes as |box index|}}
+                <i
+                  class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                  data-index='{{index}}'
+                  data-tooltip='Fatigue Level {{box.level}}'
+                ></i>
+              {{/each}}
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </header>
+
+    {{! Speed Stats - All in one row with space around }}
+    <div class='speed-stats-row'>
+      {{! Favor/Hinder Toggle Button }}
+      <div class='favor-hinder-toggle-container'>
+        <button
+          type='button'
+          class='favor-hinder-toggle {{system.favorHinder}}'
+          data-action='toggleFavorHinder'
+          data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
+        >
+          <i class='fa-duotone fa-light fa-cube'></i>
+        </button>
+        <label class='favor-hinder-label'>
+          {{#if (eq system.favorHinder "favor")}}
+            {{localize "VAGABOND.FavorHinder.States.favor"}}
+          {{else if (eq system.favorHinder "hinder")}}
+            {{localize "VAGABOND.FavorHinder.States.hinder"}}
+          {{else}}
+            Favor/<br/>Hinder
+          {{/if}}
+        </label>
+      </div>
+
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.base'
+          value='{{system.speed.base}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Speed</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.crawl'
+          value='{{system.speed.crawl}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Crawl</label>
+      </div>
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.speed.travel'
+          value='{{system.speed.travel}}'
+          data-dtype='Number'
+          class='stat-value-input'
+        />
+        <label class='stat-label'>Travel</label>
+      </div>
+      <div class='stat-item luck-item'>
+        <div class='luck-display'>
+          <i class='luck-icon'></i>
+          <input
+            type='text'
+            name='system.currentLuck'
+            value='{{system.currentLuck}}'
+            data-dtype='Number'
+            class='luck-value'
+          />
+        </div>
+        <label class='stat-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>Luck<br/>Pool</label>
+      </div>
+    </div>
+
+    <section class='skills-container grid-skills grid-skills-2col'>
+      {{! Left column: Skills (1-column layout) }}
+      <section class='skills-section grid-span-1'>
+        <h4>{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
+        <div class='skills-list'>
+          {{#each system.skills as |skill key|}}
+            <div class='skill flexrow'>
+              <label class='skill-checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.skills.{{key}}.trained'
+                  {{#if skill.trained}}checked{{/if}}
+                  class='skill-checkbox-hidden'
+                />
+                {{#if skill.trained}}
+                  <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+                {{else}}
+                  <i class='skill-checkbox-icon far fa-circle'></i>
+                {{/if}}
+              </label>
+              <label
+                class='skill-label rollable'
+                data-action='roll'
+                data-roll='d20'
+                data-roll-type='skill'
+                data-skill-key='{{key}}'
+                data-difficulty='{{skill.difficulty}}'
+                data-trained='{{skill.trained}}'
+                data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
+              >{{skill.label}}</label>
+              <span class='skill-difficulty'>{{skill.difficulty}}</span>
+            </div>
+          {{/each}}
+        </div>
+
+                {{! Weapon Skills / Attacks Section }}
+        <div class='weapon-skills flexcol mt-10'>
+          <h4>{{localize "VAGABOND.UI.Sections.Attacks"}}</h4>
+          <div class='skills-list'>
+            {{#each system.weaponSkills as |weaponSkill key|}}
+              <div class='skill flexrow'>
+                <label class='skill-checkbox-label'>
+                  <input
+                    type='checkbox'
+                    name='system.weaponSkills.{{key}}.trained'
+                    {{#if weaponSkill.trained}}checked{{/if}}
+                    class='skill-checkbox-hidden'
+                  />
+                  {{#if weaponSkill.trained}}
+                    <i class='skill-checkbox-icon fa-solid fa-circle-t'></i>
+                  {{else}}
+                    <i class='skill-checkbox-icon far fa-circle'></i>
+                  {{/if}}
+                </label>
+                <label
+                  class='skill-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-roll-type='weapon-skill'
+                  data-skill-key='{{key}}'
+                  data-difficulty='{{weaponSkill.difficulty}}'
+                  data-trained='{{weaponSkill.trained}}'
+                  data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
+                >{{weaponSkill.label}}</label>
+                <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </section>
+
+      {{! Right column: Saves, Attacks }}
+      <section class='right-column grid-span-1'>
+        {{! Saves Section - Horizontal layout }}
+        <div class='saves'>
+          {{!-- <h4>Saves</h4> --}}
+          <div class='saves-row flexrow'>
+            {{#each system.saves as |save key|}}
+              <div class='save flexcol align-center'>
+                <label
+                  class='resource-label rollable'
+                  data-action='roll'
+                  data-roll='d20'
+                  data-roll-type='save'
+                  data-save-key='{{key}}'
+                  data-difficulty='{{save.difficulty}}'
+                  data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
+                  data-tooltip='{{save.description}}'
+                >{{save.label}}</label>
+                <span class='save-difficulty'>{{save.difficulty}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+        {{! Favorites Section - Equipped Items }}
+        <div class='favorites-section flexcol'>
+        <h4>{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
+          {{! Equipped Weapons }}
+          {{#each weapons as |weapon|}}
+            {{#if weapon.system.equipped}}
+              <div class='equipped-weapon' data-weapon-id='{{weapon._id}}'>
+                {{! Weapon Name - Left click to roll }}
+                <label
+                  class='weapon-name rollable'
+                  data-action='rollWeapon'
+                  data-item-id='{{weapon._id}}'
+                  {{#if weapon.system.propertiesDisplay}}
+                    data-tooltip='Properties: {{weapon.system.propertiesDisplay}}'
+                  {{/if}}
+                >{{weapon.name}}</label>
+
+                {{! Damage Amount }}
+                <div class='weapon-damage'>{{weapon.system.currentDamage}}</div>
+
+                {{! Damage Type Icon }}
+                <div class='weapon-damage-icon'>
+                  <i
+                    class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'
+                  ></i>
+                </div>
+
+                {{! Range Abbreviation }}
+                <div class='weapon-range'>{{weapon.system.rangeAbbrev}}</div>
+
+                {{! Grip Icon }}
+                <div class='weapon-grip-icon'>
+                  {{#if (eq weapon.system.grip '1H')}}
+                    <i class='fas fa-hand-fist'></i>
+                  {{else if (eq weapon.system.grip '2H')}}
+                    <i class='fas fa-hands'></i>
+                  {{else if (eq weapon.system.grip 'F')}}
+                    <i class='fas fa-hand-fist'></i>
+                  {{else if (eq weapon.system.grip 'V')}}
+                    {{#if (eq weapon.system.equipmentState 'oneHand')}}
+                      <i class='fas fa-hand-fist clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                    {{else if (eq weapon.system.equipmentState 'twoHands')}}
+                      <i class='fas fa-hands clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                    {{/if}}
+                  {{/if}}
+                </div>
+              </div>
+            {{/if}}
+          {{/each}}
+
+          {{! Equipped Gear, Alchemicals, and Relics }}
+          {{#each gear as |item|}}
+            {{#if item.system.equipped}}
+              {{#if (eq item.system.equipmentType 'alchemical')}}
+                {{! Alchemicals with damage are rollable like weapons }}
+                {{#unless (eq item.system.damageType '-')}}
+                  <div class='equipped-gear' data-item-id='{{item._id}}'>
+                    {{! Item Name - Left click to roll }}
+                    <label
+                      class='item-name rollable'
+                      data-action='rollWeapon'
+                      data-item-id='{{item._id}}'
+                    >{{item.name}}</label>
+
+                    {{! Damage Amount }}
+                    <div class='item-damage'>{{item.system.damageAmount}}</div>
+
+                    {{! Damage Type Icon }}
+                    <div class='item-damage-icon'>
+                      <i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i>
+                    </div>
+
+                    {{! Quantity }}
+                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  </div>
+                {{else}}
+                  {{! Alchemicals without damage post to chat }}
+                  <div class='equipped-gear' data-item-id='{{item._id}}'>
+                    {{! Item Name - Left click to use }}
+                    <label
+                      class='item-name rollable'
+                      data-action='useItem'
+                      data-item-id='{{item._id}}'
+                    >{{item.name}}</label>
+
+                    {{! Empty damage (for alignment) }}
+                    <div class='item-damage'>—</div>
+
+                    {{! Empty damage type icon (for alignment) }}
+                    <div class='item-damage-icon'>
+                      <i class='{{lookup @root.config.damageTypeIcons "-"}}'></i>
+                    </div>
+
+                    {{! Quantity }}
+                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  </div>
+                {{/unless}}
+              {{else}}
+                {{! Regular gear and relics post to chat }}
+                <div class='equipped-gear' data-item-id='{{item._id}}'>
+                  {{! Item Name - Left click to use }}
+                  <label
+                    class='item-name rollable'
+                    data-action='useItem'
+                    data-item-id='{{item._id}}'
+                  >{{item.name}}</label>
+
+                  {{! Empty damage (for alignment) }}
+                  <div class='item-damage'>—</div>
+
+                  {{! Empty damage type icon (for alignment) }}
+                  <div class='item-damage-icon'>
+                    <i class='{{lookup @root.config.damageTypeIcons "-"}}'></i>
+                  </div>
+
+                  {{! Quantity }}
+                  <div class='item-quantity'>×{{item.system.quantity}}</div>
+                </div>
+              {{/if}}
+            {{/if}}
+          {{/each}}
+
+          {{! Spells Section }}
+          <div class='weapon-skills flexcol mt-10'>
+            <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
+            {{! Favorited Spells }}
+            {{#each spells as |spell|}}
+              {{#if spell.system.favorite}}
+                <div class='favorited-spell' data-spell-id='{{spell._id}}'>
+                  {{! Spell Name - Left click to cast }}
+                  <label
+                    class='spell-name rollable'
+                    data-action='castSpell'
+                    data-spell-id='{{spell._id}}'
+                  >{{spell.name}}</label>
+
+                  {{! Damage Amount - Left click increase, Right click decrease }}
+                  <div
+                    class='spell-damage-dice {{#unless (eq spell.system.damageType "-")}}clickable{{/unless}}'
+                    {{#unless (eq spell.system.damageType '-')}}
+                      data-action='modifyDamage'
+                      data-spell-id='{{spell._id}}'
+                      data-damage-type='{{spell.system.damageType}}'
+                      title='Left click to increase damage (+1 mana per d6), Right click to decrease'
+                    {{/unless}}
+                  >{{#unless (eq spell.system.damageType '-')}}1d6{{else}}0{{/unless}}</div>
+
+                  {{! Fx (Effect) Checkbox Icon }}
+                  <div
+                    class='spell-fx-icon fx-inactive'
+                    data-action='toggleFx'
+                    data-spell-id='{{spell._id}}'
+                    title='Toggle spell effect (adds +1 mana when combined with damage)'>
+                      {{#if (eq @root.config.fxIcon.type "txt")}}
+                        <span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
+                      {{else if (eq @root.config.fxIcon.type "img")}}
+                        <img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
+                      {{else}}
+                        <i class="{{@root.config.fxIcon.value}}"></i>
+                      {{/if}}
+                  </div>
+
+                  {{! Damage Type - Font Awesome Icon }}
+                  <div class='spell-damage-icon'>
+                    <i
+                      class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}'
+                      data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'
+                    ></i>
+                  </div>
+
+                  {{! Delivery Type - Dropdown }}
+                  <select
+                    class='spell-delivery-select'
+                    data-spell-id='{{spell._id}}'
+                  >
+                    <option value=''>Delivery</option>
+                    {{#each @root.config.deliveryTypes as |label key|}}
+                      <option value='{{key}}'>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+
+                  {{! Delivery Cost - Left click increase, Right click decrease, shows hint on hover }}
+                  <div
+                    class='spell-delivery-cost disabled'
+                    data-action='modifyDelivery'
+                    data-spell-id='{{spell._id}}'
+                    title='Select a delivery type first'
+                  >0</div>
+
+                  {{! Mana Total - Display only }}
+                  <div class='spell-mana-total'>0</div>
+                </div>
+              {{/if}}
+            {{/each}}
+          </div>
+
+          {{! Equipped Armor }}
+          {{#each armor as |item|}}
+            {{#if item.system.worn}}
+              <div class='equipped-armor flexrow flex-group-center'>
+                <label
+                  class='resource-label flexlarge align-left'
+                  title='{{item.system.description}}'
+                >{{item.name}} (AV: {{item.system.armorValue}})</label>
+              </div>
+            {{/if}}
+          {{/each}}
+        </div>
+      </section>
+    </section>
+
+  </div>
+
+  {{! Click Zone - visible sliver when closed (on the right) }}
+  <div class='panel-click-zone' data-action='togglePanel'></div>
+</aside>

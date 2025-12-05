@@ -1,0 +1,101 @@
+{{! Class Details Tab - Unified scrolling container }}
+<section
+  class='tab details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  {{! Unified content container with single scroll }}
+  <div class='class-item-content'>
+    {{! Description Section }}
+    <div>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.Tabs.Description'}}</label>
+      <div class='class-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enrichedDescription}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enrichedDescription}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Level Features Section }}
+    <div class='level-features-section mt-20'>
+      <h3>{{localize "VAGABOND.UI.Sections.LevelFeatures"}}</h3>
+
+      {{#each levelGroups as |group|}}
+        <div class='level-group'>
+          <div class='level-header title-with-button'>
+            <h4 class='m-0'>{{localize "VAGABOND.UI.Sections.Level"}} {{group.level}}</h4>
+            {{#if @root.editable}}
+              <button
+                type='button'
+                class='item-control btn-sm'
+                data-action='addLevelFeature'
+                data-level='{{group.level}}'
+                data-tooltip='Add Feature to Level {{group.level}}'
+              >
+                <i class='fas fa-plus'></i> Add Feature
+              </button>
+            {{/if}}
+          </div>
+
+          {{#if group.features.length}}
+            <ol class='features-list m-0 pl-20'>
+              {{#each group.features as |feature|}}
+                <li class='feature-item mb-10' data-feature-index='{{feature.index}}'>
+                  <div class='feature-content'>
+                    {{#if @root.editable}}
+                      <div class='flex-center-gap-10 mb-5'>
+                        <input
+                          type='text'
+                          name='system.levelFeatures.{{feature.index}}.name'
+                          value='{{feature.name}}'
+                          placeholder='Feature Name'
+                          data-dtype='String'
+                          class='flex-1 feature-title'
+                        />
+                        <a
+                          class='item-control'
+                          data-action='removeLevelFeature'
+                          data-feature-index='{{feature.index}}'
+                          data-tooltip='Remove Feature'
+                        >
+                          <i class='fas fa-trash'></i>
+                        </a>
+                      </div>
+                      <div class='level-feature-description'>
+                        <prose-mirror
+                          name='system.levelFeatures.{{feature.index}}.description'
+                          value='{{feature.description}}'
+                          toggled='true'
+                        >
+                          {{{feature.description}}}
+                        </prose-mirror>
+                      </div>
+                      <input
+                        type='hidden'
+                        name='system.levelFeatures.{{feature.index}}.level'
+                        value='{{feature.level}}'
+                      />
+                    {{else}}
+                      <strong class='feature-title'>{{feature.name}}</strong>
+                      {{#if feature.description}}
+                        <div class='mt-5'>{{{feature.description}}}</div>
+                      {{/if}}
+                    {{/if}}
+                  </div>
+                </li>
+              {{/each}}
+            </ol>
+          {{else}}
+            <p class='m-0 italic text-muted'>
+              No features at this level.{{#if @root.editable}} Click "Add Feature" to add one.{{/if}}
+            </p>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>

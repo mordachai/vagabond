@@ -1,0 +1,369 @@
+.item-form {
+  font-family: $font-primary;
+
+  // Item-specific header layout (different from character header)
+  .sheet-header {
+    flex: 0 0 auto;
+    min-height: fit-content;
+    overflow: visible;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-bottom: 10px;
+
+    .profile-img {
+      flex: 0 0 150px;
+      height: 150px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .header-fields {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      align-content: start;
+    }
+
+    // Item name takes full width
+    .document-name {
+      grid-column: 1 / -1;
+
+      input[name='name'] {
+        border: none !important;
+        background: transparent !important;
+        text-align: left;
+        font-size: 20px;
+        font-family: $font-character-name;
+        font-weight: bold;
+        outline: none;
+        width: 100%;
+        padding: 16px 0 4px 0;
+        transition: border-bottom 0.2s ease;
+        border-bottom: 2px solid transparent;
+
+        &:hover,
+        &:focus {
+          border-bottom: 2px solid var(--vagabond-c-dark);
+          background: transparent !important;
+        }
+      }
+    }
+
+    // Other fields automatically flow in 2-column grid
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+}
+
+.sheet-tabs {
+  flex: 0;
+  position: relative;
+  z-index: 10 !important;
+  font-family: $font-title;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-bottom: 2px solid $c-dark;
+}
+
+.sheet-body,
+.sheet-body .tab,
+.sheet-body .tab .editor {
+  height: 100%;
+}
+
+.sheet-body {
+  overflow-x: visible !important;
+}
+
+.tab {
+  overflow-y: auto;
+  position: relative;
+  width: 430px;
+  z-index: 10 !important;
+  background: none;
+  margin-left: 0;
+  padding:  8px 32px 8px 8px;
+  box-sizing: border-box;
+}
+
+// .tab.biography {
+//   flex: 1;
+
+//   .editor {
+//     height: 100%;
+//   }
+// }
+
+.tox {
+  .tox-editor-container {
+    background: $c-white;
+  }
+
+  .tox-edit-area {
+    padding: 0 8px;
+  }
+}
+
+// Fix Foundry's ProseMirror min-height and positioning
+// Override the --min-height CSS variable that Foundry uses
+.prosemirror,
+prose-mirror {
+  --min-height: 35px;
+}
+
+// This overrides Foundry's default position: relative on editor content
+.prosemirror .editor-content,
+prose-mirror .editor-content {
+  position: unset;
+  min-height: 35px;
+  height: fit-content;
+}
+
+// Cost inputs - 3 column grid layout
+.cost-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.cost-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+// Weapon skill and damage - combined row layout
+.weapon-skill-damage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .weapon-skill-select {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .damage-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i {
+      font-size: 14px;
+      color: $c-muted;
+    }
+
+    .damage-input {
+      width: 60px;
+    }
+  }
+}
+
+// Weapon properties - dropdown selector and tags on same row
+.property-selector-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.property-dropdown {
+  position: relative;
+  flex: 1;
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    i {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &[open] summary i {
+    transform: rotate(180deg);
+  }
+
+  .property-checkboxes {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    margin-top: 4px;
+    padding: 8px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: $c-white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+
+    .property-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 2px;
+
+      input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+      }
+
+      span {
+        user-select: none;
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+}
+
+.property-tags {
+  flex: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+
+.property-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid $c-faint;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+
+  i {
+    cursor: pointer;
+    font-size: 10px;
+    color: $c-muted;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $c-red;
+    }
+  }
+}
+
+// Metal and slots - combined row layout
+.metal-slots-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .metal-field {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    select {
+      flex: 1;
+    }
+  }
+
+  .slots-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    label {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+// Calculated properties - bordered grid section
+.calculated-properties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid $c-faint;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.calculated-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  .calc-label {
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .calc-value {
+    font-size: 12px;
+
+    .metal-bonus {
+      font-size: 11px;
+      margin-left: 4px;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<select name='{{name}}' data-dtype='String' {{#if cssClass}}class='{{cssClass}}'{{/if}}>
+  {{#if includeNone}}
+    <option value="-" {{#if (eq selected '-')}}selected{{/if}} data-icon="fa-regular fa-circle-0">{{localize 'VAGABOND.DamageTypes.None'}}</option>
+  {{/if}}
+  <option value="acid" {{#if (eq selected 'acid')}}selected{{/if}} data-icon="fa-solid fa-chart-scatter-bubble">{{localize 'VAGABOND.DamageTypes.Acid'}}</option>
+  <option value="fire" {{#if (eq selected 'fire')}}selected{{/if}} data-icon="fa-solid fa-fire">{{localize 'VAGABOND.DamageTypes.Fire'}}</option>
+  <option value="shock" {{#if (eq selected 'shock')}}selected{{/if}} data-icon="fa-solid fa-bolt">{{localize 'VAGABOND.DamageTypes.Shock'}}</option>
+  <option value="poison" {{#if (eq selected 'poison')}}selected{{/if}} data-icon="fa-solid fa-flask-round-poison">{{localize 'VAGABOND.DamageTypes.Poison'}}</option>
+  <option value="cold" {{#if (eq selected 'cold')}}selected{{/if}} data-icon="fa-solid fa-snowflake">{{localize 'VAGABOND.DamageTypes.Cold'}}</option>
+  <option value="blunt" {{#if (eq selected 'blunt')}}selected{{/if}} data-icon="fa-solid fa-hammer">{{localize 'VAGABOND.DamageTypes.Blunt'}}</option>
+  <option value="physical" {{#if (eq selected 'physical')}}selected{{/if}} data-icon="fa-solid fa-hand-fist">{{localize 'VAGABOND.DamageTypes.Physical'}}</option>
+  <option value="necrotic" {{#if (eq selected 'necrotic')}}selected{{/if}} data-icon="fa-solid fa-skull">{{localize 'VAGABOND.DamageTypes.Necrotic'}}</option>
+  <option value="psychic" {{#if (eq selected 'psychic')}}selected{{/if}} data-icon="fa-solid fa-brain">{{localize 'VAGABOND.DamageTypes.Psychic'}}</option>
+  <option value="magical" {{#if (eq selected 'magical')}}selected{{/if}} data-icon="fa-solid fa-stars">{{localize 'VAGABOND.DamageTypes.Magical'}}</option>
+  <option value="healing" {{#if (eq selected 'healing')}}selected{{/if}} data-icon="fa-solid fa-heart">{{localize 'VAGABOND.DamageTypes.Healing'}}</option>
+</select>

@@ -1,0 +1,133 @@
+.window-app {
+  font-family: $font-primary;
+}
+
+// Make application and header backgrounds transparent for Vagabond sheets
+.vagabond.application {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0% !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.vagabond.application .controls-dropdown {
+  z-index: 150;
+}
+
+// Item sheets adjust to content height (no outer scrollbar)
+.vagabond.item.application {
+  height: auto !important;
+  min-height: 400px;
+  max-height: none; // No max-height on application to avoid outer scrollbar
+  overflow: hidden !important; // Prevent outer scrollbar
+}
+
+.vagabond .window-header,
+.vagabond .header-control {
+  background: transparent !important;
+  position: relative;
+  z-index: 10 !important;
+  text-shadow: 1px 1px 4px #000;
+  font-size: 14px;
+
+  .window-title{
+    color: $c-white;
+    text-shadow: 1px 1px 2px #000;
+  }
+}
+
+// Add background color to window-content instead
+.vagabond .window-content {
+  background: none;
+  background-image: $bg-paper;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+  color: $c-dark;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+// Character sheets: fixed height with scrolling
+.vagabond.actor .window-content:has(.sliding-panel) {
+ // height: calc(100vh - 150px);
+  min-height: 820px;
+  max-height: 820px;
+  overflow: visible !important;
+}
+
+// NPC sheets: auto height with scrolling (detected by .npc-content)
+.vagabond.actor .window-content:has(.npc-content) {
+  height: auto;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto !important;
+}
+
+// Item sheets: auto height to fit content with internal scrollbar only
+.vagabond.item .window-content {
+  height: auto;
+  min-height: 300px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto !important;
+}
+
+/* Target the main container and the list of tabs */
+.vagabond nav.tabs {
+  
+  /* Target the individual tab header elements */
+  [data-tab] {
+    transition: opacity 0.2s ease-in-out; 
+    color: $c-dark;
+    font-weight: 700;
+    opacity: 0.9;
+    font-size: 1.4rem;
+    overflow: visible;
+    padding: 5px 15px;
+
+    /* --- STATES --- */
+    &:hover {
+      cursor: pointer;
+      font-weight: 900;
+      opacity: 1;
+      text-shadow: 0 0 6px $c-red;
+    }
+
+    &.active {
+      font-weight: 700;
+      opacity: 1;
+      background-image: url('../assets/ui/tab-marker.svg');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-position: center center;
+      mix-blend-mode: color-burn;
+    }    
+  }
+}
+
+.rollable {
+  &:hover,
+  &:focus {
+    color: $c-black;
+    text-shadow: 0 0 10px red;
+    cursor: pointer;
+  }
+}
+
+/* Heartbeat Animation */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

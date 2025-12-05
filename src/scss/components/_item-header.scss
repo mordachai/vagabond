@@ -1,0 +1,106 @@
+// Item Sheet Header Styles (Different from Actor Sheet Header)
+
+// Item Sheet Header Container - Two Column Layout
+.item-sheet-header {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+// Left Column: Item Image (150x150)
+.item-image-column {
+  flex-shrink: 0;
+  width: 150px;
+  height: 150px;
+
+  .item-profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 4px;
+    border: 2px solid var(--vagabond-c-tan);
+    object-fit: cover;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+      border-color: var(--vagabond-c-dark);
+    }
+  }
+}
+
+// Right Column: Name + Two-Column Content
+.item-header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0; // Allow flex item to shrink below content size
+}
+
+// Item Name Row - Contains name input and lock button
+.item-name-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+// Item Name Input
+.item-document-name {
+  flex: 1;
+  min-width: 0;
+
+  input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid var(--vagabond-c-tan);
+    background: transparent;
+    text-align: left;
+    font-size: 20px;
+    font-family: $font-character-name;
+    font-weight: bold;
+    padding: 4px 8px;
+    transition: border-bottom 0.2s ease;
+
+    &:hover,
+    &:focus {
+      border-bottom: 2px solid var(--vagabond-c-dark);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: var(--vagabond-c-faint);
+      font-style: italic;
+    }
+  }
+}
+
+// Item-specific: Class spellcaster fields
+.class-spellcaster-fields {
+  width: 100%;
+
+  .grid {
+    gap: 8px;
+  }
+}
+
+// Responsive adjustments for smaller screens
+@media (max-width: 600px) {
+  .item-sheet-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .item-image-column {
+    margin-bottom: 12px;
+  }
+
+  .item-document-name input {
+    font-size: 18px;
+    text-align: center;
+  }
+}
