@@ -2,4 +2,4 @@
 
 # Vagabond - Pulp Fantasy Roleplaying Game for Foundry VTT
 
-This is an adaptation for Foundry VTT of Indestructoboy RPG system Vagabond.
+This is an non-official adaptation for Foundry VTT of Indestructoboy (Taron Pounds) RPG system Vagabond.
