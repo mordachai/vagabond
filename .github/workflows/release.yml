@@ -1,0 +1,61 @@
+name: Create Release from system.json
+
+on:
+  push:
+    branches:
+      - main
+    # Only run this workflow if system.json is modified
+    paths:
+      - 'system.json'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Extract the version from system.json using jq
+      - name: Get Version
+        id: get_version
+        run: |
+          VERSION=$(jq -r .version system.json)
+          echo "Detected version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      # 2. Check if this tag already exists to prevent errors
+      - name: Check if Tag Exists
+        uses: mukunku/tag-exists-action@v1.6.0
+        id: check_tag
+        with:
+          tag: 'v${{ steps.get_version.outputs.version }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. Create the Zip file (Only if tag doesn't exist)
+      # ------------------------------------------------------------------
+      # UPDATED: Zips only the folders shown in your image, ignoring dev files
+      # ------------------------------------------------------------------
+      - name: Zip Files
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          zip -r module.zip system.json assets css lang module templates packs
+
+      # 4. Create Release
+      - name: Create Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          files: |
+            module.zip
+            system.json
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
