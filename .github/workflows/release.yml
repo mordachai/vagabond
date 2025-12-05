@@ -38,11 +38,12 @@ jobs:
       # 3. Create the Zip file (Only if tag doesn't exist)
       # ------------------------------------------------------------------
       # UPDATED: Zips only the folders shown in your image, ignoring dev files
+      # Renamed to system.zip
       # ------------------------------------------------------------------
       - name: Zip Files
         if: steps.check_tag.outputs.exists == 'false'
         run: |
-          zip -r module.zip system.json assets css lang module templates packs
+          zip -r system.zip system.json assets css lang module templates packs
 
       # 4. Create Release
       - name: Create Release
@@ -52,7 +53,7 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: Release v${{ steps.get_version.outputs.version }}
           files: |
-            module.zip
+            system.zip
             system.json
           draft: false
           prerelease: false
