@@ -23,6 +23,11 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.attributes.xp': 'Experience Points',
       'system.attributes.size': 'Size Category',
       'system.attributes.beingType': 'Being Type',
+      
+      // -- NEW: Spellcasting --
+      'system.attributes.isSpellcaster': 'Spellcasting: Is Spellcaster (Override)',
+      'system.attributes.manaMultiplier': 'Spellcasting: Mana Multiplier',
+      'system.attributes.castingStat': 'Spellcasting: Casting Stat (reason, might, etc.)',
 
       // ===== CURRENCY =====
       'system.currency.gold': 'Currency: Gold',
@@ -34,12 +39,17 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== MANA =====
       'system.mana.current': 'Mana: Current',
+      // -- NEW: Mana Bonus --
+      'system.mana.bonus': 'Mana: Max Bonus (Flat Add)', 
 
       // ===== GAME MECHANICS =====
       'system.favorHinder': 'Favor/Hinder State',
       'system.critNumber': 'Critical Hit Threshold',
       'system.bonusLuck': 'Bonus Luck',
       'system.currentLuck': 'Current Luck Pool',
+      
+      // -- NEW: Speed Bonus --
+      'system.speed.bonus': 'Speed: Bonus (Flat Add)',
 
       // ===== STATS =====
       'system.stats.might.value': 'Stat: Might',
@@ -99,7 +109,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.hd': 'NPC: Hit Dice',
       'system.morale': 'NPC: Morale',
       'system.appearing': 'NPC: Number Appearing',
-      'system.speed': 'NPC: Speed',
+      // 'system.speed': 'NPC: Speed', // Commented out to prefer the detailed speed object below if applicable, or keep for NPC specific string
       'system.senses': 'NPC: Senses',
       'system.armor': 'NPC: Armor Value',
       'system.armorDescription': 'NPC: Armor Description',
@@ -109,13 +119,13 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== DERIVED VALUES (Generally not recommended to modify directly) =====
       // These are included for advanced use cases
-      'system.armor': 'Armor (Calculated)',
-      'system.speed.base': 'Speed: Base',
-      'system.speed.crawl': 'Speed: Crawl',
-      'system.speed.travel': 'Speed: Travel',
+      // 'system.armor': 'Armor (Calculated)', // Duplicate
+      'system.speed.base': 'Speed: Base (Calculated)',
+      'system.speed.crawl': 'Speed: Crawl (Calculated)',
+      'system.speed.travel': 'Speed: Travel (Calculated)',
       'system.maxLuck': 'Max Luck (Calculated)',
       'system.inventory.maxSlots': 'Inventory: Max Slots (Calculated)',
-      'system.mana.max': 'Mana: Max (Calculated)',
+      'system.mana.max': 'Mana: Max Total (Class + Bonus)',
       'system.mana.castingMax': 'Mana: Casting Max (Calculated)',
     };
 

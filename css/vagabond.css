@@ -816,8 +816,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: var(--vagabond-c-tan-lite);
-  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: var(--vagabond-c-dark);
+  border-bottom: 1px solid var(--vagabond-c-faint);
 }
 .vagabond-chat-card .card-icon {
   width: 48px;

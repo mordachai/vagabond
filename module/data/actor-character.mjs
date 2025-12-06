@@ -26,7 +26,11 @@ export default class VagabondCharacter extends VagabondActorBase {
         initial: null,
         required: false,
         nullable: true
-      })
+      }),
+      // NEW: Explicit fields for Spellcasting so Active Effects can target them
+      isSpellcaster: new fields.BooleanField({ initial: false }),
+      manaMultiplier: new fields.NumberField({ ...requiredInteger, initial: 0 }),
+      castingStat: new fields.StringField({ initial: 'reason' }),
     });
 
     // Currency system
@@ -44,6 +48,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Mana system for spellcasters
     schema.mana = new fields.SchemaField({
       current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      // NEW: Bonus field for Active Effects to add flat mana
+      bonus: new fields.NumberField({ ...requiredInteger, initial: 0 }), 
+      // Defined here so they appear in token structure, calculated in derived
+      max: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      castingMax: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
     });
 
     // Speed system - with explicit bonus field for Active Effects
@@ -212,11 +221,38 @@ export default class VagabondCharacter extends VagabondActorBase {
     return schema;
   }
 
+  /** * V13 Best Practice: prepareBaseData is where we load defaults from Items (Class/Ancestry).
+   * This happens BEFORE Active Effects are applied.
+   */
   prepareBaseData() {
-    // V13 Cycle compliance: Base data is raw data.
-    // Calculations depending on Items MUST be in prepareDerivedData.
+    super.prepareBaseData();
+
+    // 1. Reset Defaults (Crucial so removing a class removes the values)
+    this.attributes.isSpellcaster = false;
+    this.attributes.manaMultiplier = 0;
+    // Note: We don't reset castingStat string default unless we want to force 'reason'
+    // this.attributes.castingStat = 'reason'; 
+
+    // 2. Apply Class Data
+    const classItem = this.parent.items.find(item => item.type === 'class');
+    if (classItem) {
+      if (classItem.system.isSpellcaster) {
+        this.attributes.isSpellcaster = true;
+      }
+      
+      // Load multiplier (use nullish coalescing in case it's 0)
+      this.attributes.manaMultiplier = classItem.system.manaMultiplier ?? 0;
+      
+      if (classItem.system.castingStat) {
+        this.attributes.castingStat = classItem.system.castingStat;
+      }
+    }
   }
 
+  /**
+   * V13 Best Practice: prepareDerivedData is for calculations.
+   * This happens AFTER Active Effects.
+   */
   prepareDerivedData() {
     // ------------------------------------------------------------------
     // 1. Calculate derived values that depend on Embedded Items/Effects
@@ -236,7 +272,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
 
     this._calculateAncestryData();
-    this._calculateClassData();
+    // this._calculateClassData(); // Simplified: We just grab ID/Name now.
+    this._prepareClassDisplayData();
     this._calculateXPRequirements();
 
     // Process Saves
@@ -308,16 +345,22 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
   }
 
-  _calculateClassData() {
+  /**
+   * Only gathers metadata for display.
+   * Real stats are handled in prepareBaseData.
+   */
+  _prepareClassDisplayData() {
     const classItem = this.parent?.items?.find(item => item.type === 'class');
     if (classItem) {
       this.classData = {
         id: classItem.id,
         name: classItem.name,
-        isSpellcaster: classItem.system.isSpellcaster,
-        manaMultiplier: classItem.system.manaMultiplier,
-        manaSkill: classItem.system.manaSkill,
-        castingStat: classItem.system.castingStat
+        // We read from 'this' because it might have been modified by AE, 
+        // unlike reading from classItem.system
+        isSpellcaster: this.attributes.isSpellcaster,
+        manaMultiplier: this.attributes.manaMultiplier,
+        manaSkill: classItem.system.manaSkill, 
+        castingStat: this.attributes.castingStat
       };
     } else {
       this.classData = null;
@@ -436,17 +479,33 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateManaValues() {
-    const classItem = this.parent?.items?.find(item => item.type === 'class');
+    // Note: 'this' IS the system data in TypeDataModel
 
-    if (classItem && classItem.system.isSpellcaster) {
-      const castingStat = classItem.system.castingStat || 'reason';
+    // 1. Check isSpellcaster 
+    // This value is now determined in prepareBaseData (from Class)
+    // AND modified by Active Effects before we get here.
+    if (this.attributes.isSpellcaster) {
+    
+      // Retrieve stats
+      const castingStat = this.attributes.castingStat || 'reason';
       const castingStatValue = this.stats[castingStat]?.value || 0;
-      const level = this.attributes.level.value || 1;
-      const manaMultiplier = classItem.system.manaMultiplier || 2;
+      const level = this.attributes.level?.value || 1;
+      
+      // Multiplier (Base from Class + AE modifications)
+      const multiplier = this.attributes.manaMultiplier || 0;
 
-      this.mana.max = manaMultiplier * level;
+      // Bonus (Purely from AEs)
+      const bonus = this.mana.bonus || 0;
+
+      // 2. Calculate Max Mana
+      // Formula: (Class Base * Level) + (Active Effect Flat Bonuses)
+      this.mana.max = (multiplier * level) + bonus;
+
+      // 3. Calculate Casting Max
       this.mana.castingMax = castingStatValue + Math.ceil(level / 2);
+
     } else {
+      // Not a spellcaster
       this.mana.max = 0;
       this.mana.castingMax = 0;
     }
