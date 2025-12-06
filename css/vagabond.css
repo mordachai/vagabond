@@ -1210,7 +1210,8 @@
    Luck Spend Chat Card
    ======================================== */
 .luck-spend-card .card-header {
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  background: var(--vagabond-c-dark);
+  border-bottom: 1px solid var(--vagabond-c-faint);
 }
 .luck-spend-card .actor-portrait {
   width: 48px;
