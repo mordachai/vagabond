@@ -805,7 +805,7 @@
   /* Damage Section */
   /* Metadata Section */
   /* Description Section */
-  /* Footer Section - Tags */
+  /* Footer Section - Actions & Tags */
   /* Property Accordion */
   /* Spell critical effect styling */
   /* Type-specific styling */
@@ -1097,23 +1097,56 @@
   margin-bottom: 0;
 }
 .vagabond-chat-card .card-footer {
-  padding: 8px 16px;
+  padding: 8px 12px;
   background: var(--vagabond-c-faint);
   border-top: 1px solid var(--vagabond-c-tan);
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-direction: column;
+  gap: 8px;
+  /* Action Buttons Container */
+  /* Tags Container */
 }
 .vagabond-chat-card .card-footer .footer-actions {
-  flex: 1 1 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* * TARGET THE NESTED CONTAINER
+   * We reset margins/borders here because they might be inherited from sheet styles
+   */
+  /* Fallback for direct buttons (if any exist without the container) */
+}
+.vagabond-chat-card .card-footer .footer-actions .vagabond-damage-button-container {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; /* Space between buttons */
+  /* Reset potential sheet styles that cause issues */
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  /* Force buttons inside to share width equally */
+}
+.vagabond-chat-card .card-footer .footer-actions .vagabond-damage-button-container button {
+  flex: 1;
+  width: 100%; /* Ensure they try to fill the flex item */
+  margin: 0;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: center;
+  white-space: nowrap;
+}
+.vagabond-chat-card .card-footer .footer-actions > button {
+  flex: 1;
+  width: 100%;
 }
 .vagabond-chat-card .card-footer .footer-tags {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 6px;
 }
 .vagabond-chat-card .card-footer .tag {
@@ -2580,10 +2613,6 @@
   display: flex;
   align-items: center;
 }
-.vagabond .item-formula {
-  flex: 0 0 200px;
-  padding: 0 8px;
-}
 .vagabond .inventory-col-equipped {
   flex: 0 0 30px;
   text-align: center;
@@ -2672,6 +2701,128 @@
 }
 .vagabond .spell-col-favorite .favorite-inactive {
   color: var(--vagabond-c-faint);
+}
+.vagabond .perk-details-wrapper {
+  padding: 5px;
+}
+.vagabond .perk-details-wrapper .section-header {
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.vagabond .perk-details-wrapper .perk-section {
+  margin-bottom: 10px;
+}
+.vagabond .perk-details-wrapper .perk-section .editor-container {
+  min-height: 100px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 5px;
+}
+.vagabond .perk-details-wrapper .perk-section .editor-container .editor-content {
+  min-height: 100px;
+  padding: 5px;
+}
+.vagabond .perk-details-wrapper .perk-divider {
+  border: 0;
+  border-top: 1px solid var(--vagabond-c-faint);
+  margin: 10px 0;
+}
+.vagabond .perk-details-wrapper .perk-prerequisites-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  align-items: start;
+}
+.vagabond .perk-details-wrapper .perk-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vagabond .perk-details-wrapper .prereq-group {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 5px;
+  padding: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.vagabond .perk-details-wrapper .prereq-group .group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+  padding-bottom: 4px;
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  font-size: 13px;
+}
+.vagabond .perk-details-wrapper .prereq-group .group-header .add-btn-mini {
+  font-size: 10px;
+  background: var(--vagabond-c-dark);
+  color: var(--vagabond-c-white);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.vagabond .perk-details-wrapper .prereq-group .group-header .add-btn-mini:hover {
+  filter: brightness(1.5);
+  transform: scale(1.1);
+}
+.vagabond .perk-details-wrapper .prereq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.vagabond .perk-details-wrapper .prereq-list .empty-placeholder {
+  font-style: italic;
+  color: var(--vagabond-c-faint);
+  font-size: 12px;
+  text-align: center;
+  padding: 5px 0;
+}
+.vagabond .perk-details-wrapper .prereq-list .prereq-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.vagabond .perk-details-wrapper .prereq-list .prereq-row select {
+  flex: 2;
+  height: 24px;
+  font-size: 16px;
+}
+.vagabond .perk-details-wrapper .prereq-list .prereq-row input[type=text] {
+  flex: 3;
+  height: 24px;
+  font-size: 16px;
+}
+.vagabond .perk-details-wrapper .prereq-list .prereq-row input[type=number] {
+  flex: 0 0 40px;
+  text-align: center;
+  height: 24px;
+  font-size: 16px;
+}
+.vagabond .perk-details-wrapper .prereq-list .prereq-row .delete-btn {
+  flex: 0 0 18px;
+  color: #b93636;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+}
+.vagabond .perk-details-wrapper .prereq-list .prereq-row .delete-btn:hover {
+  color: var(--vagabond-c-red);
+  text-shadow: 0 0 2px var(--vagabond-c-red);
 }
 .vagabond .inventory-slots-section {
   margin-bottom: 12px;

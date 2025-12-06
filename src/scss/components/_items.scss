@@ -195,12 +195,11 @@
   }
 }
 
-// Example style for Vagabond (can be removed if not needed).
-.item-formula {
-
-  flex: 0 0 200px;
-  padding: 0 8px;
-}
+// Unused - Commented out
+// .item-formula {
+//   flex: 0 0 200px;
+//   padding: 0 8px;
+// }
 
 // Inventory column sizing
 .inventory-col-equipped {
@@ -319,5 +318,152 @@
 
   .favorite-inactive {
     color: $c-faint;
+  }
+}
+
+// -----------------------------------------
+// Perk Details (Two-Column Grid Layout)
+// -----------------------------------------
+
+.perk-details-wrapper {
+  padding: 5px;
+
+  .section-header {
+    font-family: 'Manofa', serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: $c-dark;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .perk-section {
+    margin-bottom: 10px;
+
+    .editor-container {
+      min-height: 100px;
+      border: 1px solid $c-faint;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 5px;
+      
+      .editor-content {
+        min-height: 100px;
+        padding: 5px;
+      }
+    }
+  }
+
+  .perk-divider {
+    border: 0;
+    border-top: 1px solid $c-faint;
+    margin: 10px 0;
+  }
+
+  .perk-prerequisites-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: start;
+  }
+
+  .perk-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prereq-group {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid $c-tan;
+    border-radius: 5px;
+    padding: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 1px solid $c-faint;
+      padding-bottom: 4px;
+      font-family: 'Manofa', serif;
+      font-weight: bold;
+      font-size: 13px;
+
+      // FIXED: Using filter instead of lighten() to support CSS variables
+      .add-btn-mini {
+        font-size: 10px;
+        background: $c-dark;
+        color: $c-white;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          filter: brightness(1.5); // Brighter on hover
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .prereq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .empty-placeholder {
+      font-style: italic;
+      color: $c-faint;
+      font-size: 12px;
+      text-align: center;
+      padding: 5px 0;
+    }
+
+    .prereq-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      select {
+        flex: 2;
+        height: 24px;
+        font-size: 16px;
+      }
+
+      input[type="text"] {
+        flex: 3;
+        height: 24px;
+        font-size: 16px;
+      }
+
+      input[type="number"] {
+        flex: 0 0 40px;
+        text-align: center;
+        height: 24px;
+        font-size: 16px;
+      }
+
+      .delete-btn {
+        flex: 0 0 18px;
+        color: #b93636;
+        cursor: pointer;
+        text-align: center;
+        font-size: 16px;
+        
+        &:hover {
+          color: $c-red;
+          text-shadow: 0 0 2px $c-red;
+        }
+      }
+    }
   }
 }

@@ -565,26 +565,64 @@
     }
   }
 
-  /* Footer Section - Tags */
+
+  /* Footer Section - Actions & Tags */
   .card-footer {
-    padding: 8px 16px;
+    padding: 8px 12px;
     background: $c-faint;
     border-top: 1px solid $c-tan;
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-direction: column;
+    gap: 8px;
 
+    /* Action Buttons Container */
     .footer-actions {
-      flex: 1 1 100%;
+      width: 100%;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       gap: 8px;
-      margin-bottom: 8px;
+
+      /* * TARGET THE NESTED CONTAINER
+       * We reset margins/borders here because they might be inherited from sheet styles
+       */
+      .vagabond-damage-button-container {
+        width: 95%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px; /* Space between buttons */
+        
+        /* Reset potential sheet styles that cause issues */
+        margin: 0 !important; 
+        padding: 0 !important;
+        border: none !important;
+        
+        /* Force buttons inside to share width equally */
+        button {
+          flex: 1;
+          width: 100%; /* Ensure they try to fill the flex item */
+          margin: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          white-space: nowrap;
+        }
+      }
+
+      /* Fallback for direct buttons (if any exist without the container) */
+      > button {
+        flex: 1;
+        width: 100%;
+      }
     }
 
+    /* Tags Container */
     .footer-tags {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 6px;
     }
 
