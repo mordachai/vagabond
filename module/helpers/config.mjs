@@ -421,6 +421,19 @@ VAGABOND.fxIcon = {
 };
 
 /**
+ * Speed Calculation Table
+ * Keys represent the MINIMUM Dexterity required for that tier.
+ * Logic will use the highest key that is <= the actor's Dexterity.
+ * @type {Object}
+ */
+VAGABOND.speedTable = {
+  0: { base: 25, crawl: 75,  travel: 5 }, // Default / Dex 0-1
+  2: { base: 25, crawl: 75,  travel: 5 }, // Dex 2-3
+  4: { base: 30, crawl: 90,  travel: 6 }, // Dex 4-5
+  6: { base: 35, crawl: 105, travel: 7 }  // Dex 6+ (Caps here if higher entries are removed)
+};
+
+/**
  * Font Awesome icon classes for weapon skills
  * @type {Object}
  */
