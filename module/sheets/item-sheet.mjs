@@ -48,6 +48,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
   };
 
+  /** * V13 Standard: Define Event Listeners here.
+   * This maps the "change" event on elements with data-action="update-grip" 
+   * to the _onUpdateGrip function.
+   */
+  static EVENTS = {
+    'change [data-action="update-grip"]': "_onUpdateGrip",
+  }
+
   /* -------------------------------------------- */
 
   /** @override */
@@ -334,26 +342,33 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
-    // Add listener for weapon grip changes to enable/disable two-hands damage input
-    if (this.document.type === 'equipment' && this.document.system.equipmentType === 'weapon') {
-      const gripSelect = this.element.querySelector('select[name="system.grip"]');
-      const twoHandsInput = this.element.querySelector('.damage-two-hands');
-
-      if (gripSelect && twoHandsInput) {
-        gripSelect.addEventListener('change', (event) => {
-          const grip = event.target.value;
-          // Enable only if grip is 2H or V (Versatile)
-          twoHandsInput.disabled = !(grip === '2H' || grip === 'V');
-        });
-      }
-    }
+    // --- REMOVED THE OLD EQUIPMENT GRIP LISTENER BLOCK HERE ---
+    // The previous listener code was manual and buggy. 
+    // We now use static EVENTS and _onUpdateGrip below.
   }
 
   /**************
    *
-   *   ACTIONS
+   * ACTIONS
    *
    **************/
+
+  /**
+   * Handle updating the grip.
+   * We do this explicitly to ensure the update commits and the sheet re-renders
+   * to update the "disabled" state of the 2H input.
+   * * @param {Event} event 
+   * @param {HTMLElement} target 
+   */
+  async _onUpdateGrip(event, target) {
+    event.preventDefault();
+    const newGrip = target.value;
+    
+    // Explicitly update the document
+    await this.document.update({ "system.grip": newGrip });
+    
+    // This await ensures the data is saved before the UI refreshes
+  }
 
   /**
    * Handle adding a new trait to an ancestry item

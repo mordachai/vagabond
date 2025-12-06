@@ -234,7 +234,7 @@
             </div>
             <div class='weapon-grip-field'>
               <label class='resource-label'>Grip</label>
-              <select name='system.grip' data-dtype='String'>
+              <select name='system.grip' data-dtype='String' data-action="update-grip">
                   <option value="1H" {{#if (eq system.grip '1H')}}selected{{/if}}>1H (One-Handed)</option>
                   <option value="2H" {{#if (eq system.grip '2H')}}selected{{/if}}>2H (Two-Handed)</option>
                   <option value="F" {{#if (eq system.grip 'F')}}selected{{/if}}>F (Fist)</option>

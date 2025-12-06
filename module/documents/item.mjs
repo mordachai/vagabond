@@ -83,6 +83,30 @@ export class VagabondItem extends Item {
   }
 
   /**
+   * This function runs AUTOMATICALLY whenever an item is updated.
+   */
+  async _preUpdate(changed, options, user) {
+    // 1. Run standard Foundry checks first
+    await super._preUpdate(changed, options, user);
+
+    // 2. Check: "Is the user changing the Grip?"
+    if (foundry.utils.hasProperty(changed, "system.grip")) {
+      const newGrip = foundry.utils.getProperty(changed, "system.grip");
+
+      // 3. Logic: If Grip becomes "1H" or "Fist", FORCE state to "equipped" (1H)
+      // This prevents the "2H" state from getting stuck on a 1H weapon.
+      if (["1H", "F"].includes(newGrip)) {
+        foundry.utils.setProperty(changed, "system.equipmentState", "oneHand");
+      }
+      
+      // Optional: If Grip becomes "2H" (Strict Two-Handed), FORCE state to "twoHands"
+      if (newGrip === "2H") {
+        foundry.utils.setProperty(changed, "system.equipmentState", "twoHands");
+      }
+    }
+  }
+
+  /**
    * Check if this weapon is equipped
    * @returns {boolean} True if weapon is equipped (one-hand or two-hands)
    */

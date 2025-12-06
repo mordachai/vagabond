@@ -472,6 +472,10 @@
     background: #fff3e0;
     border-top: 1px solid $c-tan;
     border-bottom: 1px solid $c-tan;
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    align-items: center;
   }
 
   .damage-container {
@@ -495,14 +499,15 @@
     word-break: keep-all;
   }
 
-  .damage-type {
-    font-size: 14px;
-    font-weight: 600;
-    padding: 4px 8px;
-    background: white;
-    border-radius: 4px;
-    border: 1px solid $c-tan;
-  }
+  // NOT IN USE ANYMORE
+  // .damage-type {
+  //   font-size: 14px;
+  //   font-weight: 600;
+  //   padding: 4px 8px;
+  //   background: white;
+  //   border-radius: 4px;
+  //   border: 1px solid $c-tan;
+  // }
 
   .critical-badge {
     margin-left: auto;
