@@ -17,10 +17,8 @@ node_modules/
 .DS_Store
 
 /docs
-/src
 .claude
 CLAUDE.md
-package.json
 package-lock.json
 jsconfig.json
 *.zip
