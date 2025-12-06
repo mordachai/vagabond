@@ -124,7 +124,7 @@ export class VagabondDamageHelper {
     await this.updateChatCardDamage(messageId, damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey);
   }
 
-  /**
+/**
    * Update a chat card with damage information
    * @param {string} messageId - The chat message ID
    * @param {Roll} damageRoll - The damage roll
@@ -155,25 +155,33 @@ export class VagabondDamageHelper {
       item?.id
     );
 
-    // Replace the damage section with actual damage (injected into the placeholder)
+    // 1. Inject Damage Display
+    // Replace the empty damage section placeholder with the actual damage HTML
     content = content.replace(
       /(<div class=['"]card-damage-section['"] data-damage-section>)([\s\S]*?)(<\/div>)/,
       `$1${damageHTML}$3`
     );
 
-    // Remove the "Roll Damage" button container from footer-actions
-    content = content.replace(
-      /<div class=['"]vagabond-damage-button-container['"]>[\s\S]*?<\/div>/,
-      ''
-    );
-
-    // Add apply damage button to footer-actions if it exists
-    // The pattern matches: <div class='footer-actions'>...</div>
+    // 2. Replace Footer Actions
+    // Instead of complex regex to find/remove specific buttons, we locate the .footer-actions container
+    // and completely replace its inner HTML with just the new Apply button (and any other persistent actions if we had them).
+    // This ensures a clean state and prevents weird text-node nesting issues.
+    
     if (content.includes('footer-actions')) {
       content = content.replace(
         /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
-        `$1$2${applyButton}$3`
+        `$1${applyButton}$3`
       );
+    } else {
+      // Fallback: If no footer actions existed (unlikely if Roll Damage was there), inject it before footer tags or end of footer
+      // This is a safety catch.
+      const footerOpen = `<footer class='card-footer'>`;
+      if (content.includes(footerOpen)) {
+         content = content.replace(
+           footerOpen,
+           `${footerOpen}<div class='footer-actions'>${applyButton}</div>`
+         );
+      }
     }
 
     // Update the message's rolls array to include the damage roll

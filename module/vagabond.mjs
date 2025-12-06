@@ -429,96 +429,49 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
   }
 });
 
+
 /* -------------------------------------------- */
-/*  Chat Message Hooks                          */
+/* Chat Message Hooks                          */
 /* -------------------------------------------- */
 
-/**
- * Handle rendering chat messages - adds event listeners for damage buttons
- */
-Hooks.on('renderChatMessageHTML', async (message, html) => {
-  try {
-    // html is an HTMLElement in V13
-    if (!html || !html.querySelectorAll) return;
+Hooks.on('renderChatMessage', (message, html, data) => {
+  // 1. Accordion Toggle Handler
+  html.find('.metadata-header[data-action="toggleProperties"]').click(ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    const header = $(ev.currentTarget);
+    const container = header.closest('.metadata-item-expandable');
+    container.toggleClass('expanded');
+  });
 
-    const element = html;
+  // 2. Damage Roll Button Handler
+  html.find('.vagabond-damage-button').click(ev => {
+    ev.preventDefault();
+    const button = ev.currentTarget;
+    // Disable button immediately to prevent double-clicks
+    button.disabled = true;
+    import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+      VagabondDamageHelper.rollDamageFromButton(button, message.id);
+    });
+  });
 
-    // Add click handler for damage roll buttons
-    const damageButtons = element.querySelectorAll('.vagabond-damage-button');
-    if (damageButtons && damageButtons.length > 0) {
-      damageButtons.forEach(button => {
-        if (!button || !button.classList) return;
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-
-          // Import damage helper dynamically
-          const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-
-          // Roll damage from button
-          await VagabondDamageHelper.rollDamageFromButton(button, message.id);
-        });
-      });
-    }
-
-    // Add click handler for apply damage and healing buttons
-    const applyButtons = element.querySelectorAll('.vagabond-apply-damage-button, .vagabond-apply-healing-button');
-    if (applyButtons && applyButtons.length > 0) {
-      applyButtons.forEach(button => {
-        if (!button || !button.classList) return;
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-
-          // Import damage helper dynamically
-          const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-
-          // Apply damage or healing to targets
-          await VagabondDamageHelper.applyDamageToTargets(button);
-        });
-      });
-    }
-
-    // Add click handler for NPC damage buttons (GM-only)
-    const npcDamageButtons = element.querySelectorAll('.vagabond-npc-damage-button');
-    if (npcDamageButtons && npcDamageButtons.length > 0) {
-      npcDamageButtons.forEach(button => {
-        if (!button || !button.classList) return;
-        // Only show to GM
-        if (!game.user.isGM) {
-          button.style.display = 'none';
-          return;
-        }
-
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-
-          // Import damage helper dynamically
-          const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-
-          // Handle NPC damage button click (reveals damage to players)
-          await VagabondDamageHelper.handleNPCDamageButton(button, message.id);
-        });
-      });
-    }
-
-    // Add click handler for property accordion toggle
-    const propertyHeaders = element.querySelectorAll('[data-action="toggleProperties"]');
-    if (propertyHeaders && propertyHeaders.length > 0) {
-      propertyHeaders.forEach(header => {
-        if (!header || !header.classList) return;
-        header.addEventListener('click', (event) => {
-          event.preventDefault();
-          const expandable = header.closest('.metadata-item-expandable');
-          if (!expandable || !expandable.classList) return;
-
-          // Toggle expanded state
-          expandable.classList.toggle('expanded');
-        });
-      });
-    }
-  } catch (error) {
-    // Silently catch errors to prevent breaking other modules
-    console.warn('Vagabond | Error in renderChatMessageHTML hook:', error);
-  }
+  // 3. Apply Damage Button Handler
+  html.find('.vagabond-apply-damage-button, .vagabond-apply-healing-button').click(ev => {
+    ev.preventDefault();
+    const button = ev.currentTarget;
+    import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+      VagabondDamageHelper.applyDamageToTargets(button);
+    });
+  });
+  
+  // 4. NPC Damage Button Handler (GM Only)
+  html.find('.vagabond-npc-damage-button').click(ev => {
+    ev.preventDefault();
+    const button = ev.currentTarget;
+    import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+      VagabondDamageHelper.handleNPCDamageButton(button, message.id);
+    });
+  });
 });
 
 /* -------------------------------------------- */
