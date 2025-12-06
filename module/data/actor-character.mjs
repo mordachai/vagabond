@@ -400,13 +400,13 @@ export default class VagabondCharacter extends VagabondActorBase {
 
   _calculateCombatValues() {
     // Get stat values
-    const mightValue = this.stats.might?.value || 8;
-    const dexValue = this.stats.dexterity?.value || 8;
-    const luckValue = this.stats.luck?.value || 8;
+    const mightValue = this.stats.might?.value || 0;
+    const dexValue = this.stats.dexterity?.value || 0;
+    const luckValue = this.stats.luck?.value || 0;
     const level = this.attributes.level.value || 1;
 
     // Max HP = Might + Level (update the existing health.max)
-    this.health.max = mightValue + level;
+    this.health.max = mightValue * level;
 
     // Max Luck pool = Luck stat value + bonusLuck from active effects
     const bonusLuck = this.bonusLuck || 0;
