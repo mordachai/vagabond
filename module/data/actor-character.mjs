@@ -214,20 +214,31 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   prepareBaseData() {
-    // Calculate base values BEFORE active effects are applied
-    // This allows active effects to modify these values
-
-    // Mana values for spellcasters
-    this._calculateManaValues();
-
-    // Combat values (HP, armor, speed, luck pool)
-    this._calculateCombatValues();
-
-    // Inventory slots
-    this._calculateInventorySlots();
+    // FIXED: DO NOT calculate values here that depend on Items.
+    // Base data is prepared BEFORE embedded documents (Items/Effects).
+    // Accessing item.system.finalRating here would return undefined or stale data.
   }
 
   prepareDerivedData() {
+    // -------------------------------------------------------------
+    // MOVED FROM PREPAREBASEDATA
+    // These methods aggregate data from Embedded Documents (Items).
+    // They MUST be called here, after items have prepared their own derived data.
+    // -------------------------------------------------------------
+
+    // Mana values for spellcasters (Depends on Class Item)
+    this._calculateManaValues();
+
+    // Combat values (Armor, etc.) (Depends on Equipment Items)
+    this._calculateCombatValues();
+
+    // Inventory slots (Depends on Equipment/Weapon/Armor Items)
+    this._calculateInventorySlots();
+
+    // -------------------------------------------------------------
+    // EXISTING DERIVED LOGIC
+    // -------------------------------------------------------------
+
     // Loop through stats and add labels
     for (const key in this.stats) {
       // NO MODIFIER CALCULATION - Vagabond uses raw values
@@ -449,6 +460,8 @@ export default class VagabondCharacter extends VagabondActorBase {
         const isArmor = (item.type === 'armor') ||
                        (item.type === 'equipment' && item.system.equipmentType === 'armor');
         if (isArmor && item.system.equipped) {
+          // finalRating is a DERIVED property of the Equipment Item.
+          // It is only available after embedded documents preparation.
           totalArmor += item.system.finalRating || 0;
         }
       }
