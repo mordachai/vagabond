@@ -49,12 +49,12 @@
           {{#if system.ancestryData}}
             <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
           {{else}}
-            <span class='text-faint'>Unknown Ancestry</span>
+            <span>Unknown Ancestry</span>
           {{/if}}
           {{#if system.classData}}
             <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
           {{else}}
-            <span class='text-faint'>No Class</span>
+            <span>No Class</span>
           {{/if}}
           {{#if system.ancestryData}}
             ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} size)
@@ -405,7 +405,7 @@
 
           {{else}}
             {{!-- Placeholder Text for Equipped --}}
-            <div class="no-items text-faint" style="padding: 0 5px;">{{localize 'VAGABOND.UI.Sections.equippedPlaceholder'}}</div>
+            <div class="no-perks italic py-2-px-8">{{localize 'VAGABOND.UI.Sections.equippedPlaceholder'}}</div>
           {{/if}}
 
           {{! Spells Section }}
@@ -415,7 +415,7 @@
                 <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
                 <div class="title-right-group">
                   <i class='fas fa-star-christmas mana-icon' title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
-                  <span class='mana-display'>{{system.mana.current}}/{{system.mana.max}}</span>
+                  <span class='mana-display'><span class="mana-current">{{system.mana.current}}</span>/{{system.mana.max}}</span>
                 </div>
               </div>
 
@@ -442,7 +442,7 @@
                 {{/each}}
               {{else}}
                 {{!-- Placeholder Text for Spells --}}
-                <div class="no-items text-faint" style="padding: 0 5px;">{{localize 'VAGABOND.UI.Sections.spellsPlaceholder'}}</div>
+                <div class="no-perks italic py-2-px-8">{{localize 'VAGABOND.UI.Sections.spellsPlaceholder'}}</div>
               {{/if}}
             </div>
           {{/if}}

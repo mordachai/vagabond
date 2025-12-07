@@ -595,7 +595,7 @@
       "Sections": {
         "Magic": "Magic",
         "Spells": "Spells",
-        "spellsPlaceholder": "No spells loaded yet. Favorite ⭐ you spells in the Spells tab.",
+        "spellsPlaceholder": "No spells loaded. Favorite your spells in the Spells tab.",
         "Inventory": "Inventory",
         "Skills": "Skills",
         "Attacks": "Attacks",

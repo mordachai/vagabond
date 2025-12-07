@@ -55,7 +55,7 @@
 }
 
 .theme-dark {
-  --vagabond-c-dark: #231308ec;
+  --vagabond-c-dark: #231308fa;
   --vagabond-c-lite: #cbc5af;
   --vagabond-c-faint: #c2bea9;
   --vagabond-c-tan: #706d65;
@@ -316,6 +316,7 @@
   z-index: 10 !important;
   text-shadow: 1px 1px 4px #000;
   font-size: 14px;
+  border: none;
 }
 .vagabond .window-header .window-title,
 .vagabond .header-control .window-title {
@@ -330,7 +331,7 @@
   background-size: 100% 100%;
   position: relative;
   color: var(--vagabond-c-dark);
-  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
+  filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
 }
 
 .vagabond.actor .window-content:has(.sliding-panel) {
@@ -2088,7 +2089,7 @@
 }
 .vagabond .skills-list .skill .skill-label .mana-skill-icon {
   font-size: 13px;
-  color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-dark);
   margin-left: 4px;
   flex-shrink: 0;
   opacity: 0.8;
@@ -2288,6 +2289,11 @@
   margin-left: 8px;
   gap: 2px;
   font-size: 16px;
+  font-family: "Manofa", serif;
+  opacity: 0.9;
+}
+.vagabond .favorites-section .title-right-group .mana-current {
+  font-size: 18px;
 }
 .vagabond .saves .saves-row {
   display: flex;
@@ -2537,7 +2543,7 @@
 .vagabond .items-list .item {
   align-items: center;
   padding: 0 2px;
-  border-bottom: 1px solid var(--vagabond-c-faint);
+  border-bottom: 1px solid var(--vagabond-c-dark);
 }
 .vagabond .items-list .item:last-child {
   border-bottom: none;
@@ -2723,7 +2729,7 @@
   color: var(--vagabond-c-dark);
 }
 .vagabond .spell-col-favorite .favorite-inactive {
-  color: var(--vagabond-c-faint);
+  color: var(--vagabond-c-dark);
 }
 .vagabond .perk-details-wrapper {
   padding: 5px;
@@ -3671,8 +3677,7 @@
   background-image: var(--vagabond-bg-paper);
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.85);
-  filter: blur(0);
+  filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
   display: flex;
   flex-direction: row;
   transform-origin: left center;
@@ -3746,7 +3751,7 @@
   margin-bottom: 4px;
   padding: 4px;
   background: rgba(0, 0, 0, 0.02);
-  border: 1px solid var(--vagabond-c-faint);
+  border: 1px solid var(--vagabond-c-dark);
   border-radius: 4px;
 }
 .vagabond .mana-field {
