@@ -29,6 +29,12 @@ export default class VagabondNPC extends VagabondActorBase {
       choices: ['Humanlike', 'Fae', 'Cryptid', 'Artificials', 'Beasts', 'Outers', 'Primordials', 'Undead']
     });
 
+    // Speed types
+    schema.speedTypes = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
     // NPC stats (simplified compared to characters)
     schema.stats = new fields.SchemaField(
       Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {
@@ -268,6 +274,19 @@ export default class VagabondNPC extends VagabondActorBase {
         ability.descriptionFormatted = this.formatAbilityDescription(ability.description);
       });
     }
+
+    // Prepare Speed Types for Locked Display (Label + Hint)
+    if (this.speedTypes && this.speedTypes.length > 0) {
+      this.speedTypesDisplay = this.speedTypes.map(key => {
+        return {
+          label: game.i18n.localize(CONFIG.VAGABOND.speedTypes[key]),
+          hint: game.i18n.localize(CONFIG.VAGABOND.speedTypeHints[key])
+        };
+      });
+    } else {
+      this.speedTypesDisplay = [];
+    }
+  
   }
 
   /**

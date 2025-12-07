@@ -43,6 +43,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       togglePanel: this._onTogglePanel,  // Sliding panel toggle
       toggleEffectsAccordion: this._onToggleEffectsAccordion,  // NPC effects accordion toggle
       toggleLock: this._onToggleLock,  // NPC lock/unlock toggle
+      toggleSpeedType: this._onToggleSpeedType, // NPC speed type toggle
+      removeSpeedType: this._onRemoveSpeedType, // NPC speed type remove
       toggleImmunity: this._onToggleImmunity,  // NPC damage immunity toggle
       removeImmunity: this._onRemoveImmunity,  // NPC damage immunity remove
       toggleWeakness: this._onToggleWeakness,  // NPC damage weakness toggle
@@ -2071,6 +2073,49 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this._openDropdowns = [];
 
     await this.actor.update({ 'system.locked': !currentLocked });
+  }
+
+  /**
+   * Handle toggling NPC speed types
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleSpeedType(event, target) {
+    const type = target.dataset.type;
+    const isChecked = target.checked;
+    const currentTypes = this.actor.system.speedTypes || [];
+
+    let newTypes;
+    if (isChecked) {
+      if (!currentTypes.includes(type)) {
+        newTypes = [...currentTypes, type];
+      } else {
+        return;
+      }
+    } else {
+      newTypes = currentTypes.filter(t => t !== type);
+    }
+
+    this._captureDropdownState(); // Uses your existing state capture
+    await this.actor.update({ 'system.speedTypes': newTypes });
+  }
+
+  /**
+   * Handle removing NPC speed type tag
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  static async _onRemoveSpeedType(event, target) {
+    const type = target.dataset.type;
+    if (!type) return;
+
+    const currentTypes = this.actor.system.speedTypes || [];
+    const newTypes = currentTypes.filter(t => t !== type);
+    await this.actor.update({ 'system.speedTypes': newTypes });
+
+    // Uncheck the corresponding checkbox
+    const checkbox = this.element.querySelector(`input[type="checkbox"][data-type="${type}"]`);
+    if (checkbox) checkbox.checked = false;
   }
 
   /**

@@ -44,6 +44,21 @@
         "description": "Resist curses and enthrallment"
       }
     },
+    "SpeedTypes": {
+      "Climb": "Climb",
+      "Cling": "Cling",
+      "Fly": "Fly",
+      "Phase": "Phase",
+      "Swim": "Swim",
+      "Hints": {
+        "Climb": "Moves at full Speed while climbing. Beings without it are Vulnerable while climbing.",
+        "Cling": "As Climb, but it can also Move on ceilings.",
+        "Fly": "Can Move through the air at full Speed.",
+        "Phase": "Can Move in occupied space, but is forced out to the nearest open space and takes 5 damage if it ends its Turn in occupied space.",
+        "Swim": "Moves at full Speed while swimming. Beings without it are Vulnerable while in liquid deeper than half their height."
+      },
+      "Label": "Speed Types"
+    },    
     "Sizes": {
       "small": "Small",
       "medium": "Medium",

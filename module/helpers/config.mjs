@@ -507,6 +507,30 @@ VAGABOND.rangeAbbreviations = {
 };
 
 /**
+ * Speed Types (Movement modes)
+ * @type {Object}
+ */
+VAGABOND.speedTypes = {
+  'climb': 'VAGABOND.SpeedTypes.Climb',
+  'cling': 'VAGABOND.SpeedTypes.Cling',
+  'fly': 'VAGABOND.SpeedTypes.Fly',
+  'phase': 'VAGABOND.SpeedTypes.Phase',
+  'swim': 'VAGABOND.SpeedTypes.Swim'
+};
+
+/**
+ * Speed Type Hints (Tooltips)
+ * @type {Object}
+ */
+VAGABOND.speedTypeHints = {
+  'climb': 'VAGABOND.SpeedTypes.Hints.Climb',
+  'cling': 'VAGABOND.SpeedTypes.Hints.Cling',
+  'fly': 'VAGABOND.SpeedTypes.Hints.Fly',
+  'phase': 'VAGABOND.SpeedTypes.Hints.Phase',
+  'swim': 'VAGABOND.SpeedTypes.Hints.Swim'
+};
+
+/**
  * Countdown dice types
  * @type {Array}
  */

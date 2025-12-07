@@ -3980,6 +3980,8 @@
 }
 .vagabond .npc-stats-compact-row .npc-stat-field {
   flex: 1;
+  align-items: baseline;
+  justify-content: flex-start;
 }
 .vagabond .npc-stats-row-appearing-zone {
   display: flex;
@@ -4003,6 +4005,21 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   margin-top: 8px;
+}
+.vagabond .npc-speed-types {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-speed-types input[type=text] {
+  flex: 0.25;
+  text-align: left;
+  justify-content: flex-start;
+  width: 25px !important;
+  font-family: "Manofa", serif;
+  font-size: 14px;
+  padding: 0;
 }
 .vagabond .npc-stat-field {
   display: flex;

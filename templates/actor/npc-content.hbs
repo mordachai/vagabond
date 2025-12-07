@@ -61,7 +61,8 @@
           </div>
         </div>
       </div>
-      {{! Row 2: Morale and Speed }}
+      
+      {{! Row 2: Morale }}
       <div class='npc-stats-compact-row'>
         {{! Morale }}
         <div class='npc-stat-field'>
@@ -76,22 +77,93 @@
             {{#if system.locked}}readonly{{/if}}
           />
         </div>
+      </div>
 
-        {{! Speed }}
+      {{! Row 3: Speed with Speed Types }}
+      <div class="npc-stats-compact-row">
         <div class='npc-stat-field'>
           <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.speed.label"}}</label>
-          <input
-            type='text'
-            name='system.speed'
-            value='{{system.speed}}'
-            data-dtype='Number'
-            class='npc-field-input'
-            placeholder='{{#unless system.locked}}30{{/unless}}'
-            {{#if system.locked}}readonly{{/if}}
-          />
+
+          {{! LOCKED MODE }}
+          {{#if system.locked}}
+            <div class="npc-speed-types">
+              
+              {{! Input adjusted width to fit content }}
+              <input
+                type='text'
+                name='system.speed'
+                value='{{system.speed}}'
+                data-dtype='Number'
+                class='npc-field-input'
+                readonly
+                style="width: 40px; text-align: center;"
+              />
+
+              {{! Fixed Logic: Loop through system.speedTypes directly }}
+              {{#if system.speedTypes.length}}
+                <div class="npc-immunity-text" style="font-size: 13px; font-style: italic;">
+                  (
+                  {{#each system.speedTypes as |type|}}
+                    {{! Use lookup config to get the label from the key }}
+                    <span data-tooltip="{{localize (lookup ../config.speedTypes type)}}">
+                      {{localize (lookup ../config.speedTypes type)}}
+                    </span>{{#unless @last}}, {{/unless}}
+                  {{/each}}
+                  )
+                </div>
+              {{/if}}
+            </div>
+
+          {{! UNLOCKED/EDIT MODE }}
+          {{else}}
+            {{! Main container is now a ROW, allowing wrapping if many tags exist }}
+            <div style="display: flex; flex-direction: row; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px;">
+              
+              {{! Speed Input }}
+              <input
+                type='text'
+                name='system.speed'
+                value='{{system.speed}}'
+                data-dtype='Number'
+                class='npc-field-input'
+                placeholder='30'
+                style="width: 40px; text-align: center;" 
+              />
+
+              {{! Speed Type Dropdown Button }}
+              <details class='npc-immunity-dropdown'>
+                <summary class='npc-immunity-toggle' style="border:none; cursor: pointer;">
+                  <i class='fas fa-plus-circle' data-tooltip="{{localize 'VAGABOND.SpeedTypes.Label'}}"></i>
+                </summary>
+                <div class='npc-immunity-checkboxes' style="right: auto; left: 0; z-index: 10;">
+                  {{#each config.speedTypes as |label key|}}
+                    <label class='npc-immunity-checkbox-item'>
+                      <input type='checkbox' value='{{key}}'
+                            {{#if (contains ../system.speedTypes key)}}checked{{/if}}
+                            data-action='toggleSpeedType'
+                            data-type='{{key}}'>
+                      <span>{{localize label}}</span>
+                    </label>
+                  {{/each}}
+                </div>
+              </details>
+
+              {{! Speed Tags - Moved INSIDE the flex row }}
+              <div class='npc-immunity-tags' style="display: flex; gap: 4px; margin: 0;">
+                {{#each system.speedTypes as |type index|}}
+                  <span class='npc-immunity-tag'>
+                    {{localize (lookup ../config.speedTypes type)}}
+                    <i class='fas fa-times' data-action='removeSpeedType' data-type='{{type}}' style="margin-left: 3px; cursor: pointer;"></i>
+                  </span>
+                {{/each}}
+              </div>
+
+            </div>
+          {{/if}}
         </div>
       </div>
-      {{!-- Row 3: Zone --}}
+
+      {{!-- Row 4: Zone --}}
       <div class='npc-detail-row npc-zone-appearing-row'>
         {{#if system.locked}}
           {{#if system.zone}}
