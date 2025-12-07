@@ -81,6 +81,8 @@ export default class VagabondEquipment extends VagabondItemBase {
         'poison': 'Poison',
         'cold': 'Cold',
         'blunt': 'Blunt',
+        'piercing': 'Piercing', 
+        'slashing': 'Slashing',
         'physical': 'Physical',
         'necrotic': 'Necrotic',
         'psychic': 'Psychic',

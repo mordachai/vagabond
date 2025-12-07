@@ -4057,7 +4057,8 @@
   font-family: "Paradigm", serif;
   font-weight: normal;
   color: var(--vagabond-c-dark);
-  flex: 1;
+  flex: 0.25;
+  justify-content: flex-start;
   box-shadow: none;
 }
 .vagabond .npc-field-input:hover {

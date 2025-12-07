@@ -24,6 +24,8 @@ export default class VagabondSpell extends VagabondItemBase {
         'poison': 'Poison',
         'cold': 'Cold',
         'blunt': 'Blunt',
+        'piercing': 'Piercing',
+        'slashing': 'Slashing',
         'physical': 'Physical',
         'necrotic': 'Necrotic',
         'psychic': 'Psychic',

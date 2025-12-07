@@ -438,7 +438,11 @@
           <div class='grid grid-2col gap-8'>
             <div class='damage-type-field'>
               <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageType.label'}}</label>
-              {{> "systems/vagabond/templates/shared/damage-type-select.hbs" name="system.damageType" selected=system.damageType includeNone=true}}
+              {{> "systems/vagabond/templates/shared/damage-type-select.hbs" 
+                  name="system.damageType" 
+                  selected=system.damageType 
+                  includeNone=true 
+                  config=config}}
             </div>
             <div class='damage-amount-field'>
               <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageAmount.label'}}</label>
@@ -555,7 +559,11 @@
         <div class='grid grid-2col gap-8'>
           <div class='damage-type-field'>
             <label class='resource-label'>Type</label>
-            {{> "systems/vagabond/templates/shared/damage-type-select.hbs" name="system.damageType" selected=system.damageType includeNone=true}}
+            {{> "systems/vagabond/templates/shared/damage-type-select.hbs" 
+                name="system.damageType" 
+                selected=system.damageType 
+                includeNone=true 
+                config=config}}
           </div>
           <div class='damage-amount-field'>
             <label class='resource-label'>Amount</label>

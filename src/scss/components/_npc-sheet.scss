@@ -278,7 +278,8 @@
   font-family: $font-primary;
   font-weight: normal;
   color: $c-dark;
-  flex: 1;
+  flex: 0.25;
+  justify-content: flex-start;
   box-shadow: none;
 
   &:hover {

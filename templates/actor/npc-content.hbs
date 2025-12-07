@@ -95,17 +95,15 @@
                 value='{{system.speed}}'
                 data-dtype='Number'
                 class='npc-field-input'
-                readonly
-                style="width: 40px; text-align: center;"
-              />
+                readonly/>
 
               {{! Fixed Logic: Loop through system.speedTypes directly }}
               {{#if system.speedTypes.length}}
-                <div class="npc-immunity-text" style="font-size: 13px; font-style: italic;">
+                <div class="npc-immunity-text">
                   (
                   {{#each system.speedTypes as |type|}}
                     {{! Use lookup config to get the label from the key }}
-                    <span data-tooltip="{{localize (lookup ../config.speedTypes type)}}">
+                    <span data-tooltip="{{localize (lookup ../config.speedTypeHints type)}}">
                       {{localize (lookup ../config.speedTypes type)}}
                     </span>{{#unless @last}}, {{/unless}}
                   {{/each}}
@@ -536,7 +534,12 @@
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.DamageType"}}:</label>
-                    {{> "systems/vagabond/templates/shared/damage-type-select.hbs" name=(concat "system.actions." index ".damageType") selected=action.damageType includeNone=true cssClass="npc-field-input"}}
+                    {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+                          name=(concat "system.actions." index ".damageType") 
+                          selected=action.damageType 
+                          includeNone=true 
+                          cssClass="npc-field-input"
+                          config=config}}
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}:</label>

@@ -203,6 +203,8 @@ export default class VagabondNPC extends VagabondActorBase {
             'poison': 'VAGABOND.DamageTypes.Poison',
             'cold': 'VAGABOND.DamageTypes.Cold',
             'blunt': 'VAGABOND.DamageTypes.Blunt',
+            'piercing': 'VAGABOND.DamageTypes.Piercing',
+            'slashing': 'VAGABOND.DamageTypes.Slashing',
             'physical': 'VAGABOND.DamageTypes.Physical',
             'necrotic': 'VAGABOND.DamageTypes.Necrotic',
             'psychic': 'VAGABOND.DamageTypes.Psychic',

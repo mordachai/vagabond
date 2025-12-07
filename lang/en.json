@@ -91,7 +91,9 @@
       "Magical": "Magical",
       "Healing": "Healing",
       "Recover": "Recover",
-      "Recharge": "Recharge"
+      "Recharge": "Recharge",
+      "Slashing": "Slashing",
+      "Piercing": "Piercing"
     },
     "MaterialWeaknesses": {
       "ColdIron": "Cold Iron",
