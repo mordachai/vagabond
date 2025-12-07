@@ -28,6 +28,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.attributes.isSpellcaster': 'Spellcasting: Is Spellcaster (Override)',
       'system.attributes.manaMultiplier': 'Spellcasting: Mana Multiplier',
       'system.attributes.castingStat': 'Spellcasting: Casting Stat (reason, might, etc.)',
+      'system.attributes.manaSkill': 'Spellcasting: Mana Skill (arcana, mysticism, etc.)',
 
       // ===== CURRENCY =====
       'system.currency.gold': 'Currency: Gold',
@@ -39,8 +40,8 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== MANA =====
       'system.mana.current': 'Mana: Current',
-      // -- NEW: Mana Bonus --
       'system.mana.bonus': 'Mana: Max Bonus (Flat Add)', 
+      'system.mana.castingMaxBonus': 'Mana: Casting Max Bonus (Flat Add)',
 
       // ===== GAME MECHANICS =====
       'system.favorHinder': 'Favor/Hinder State',

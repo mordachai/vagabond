@@ -56,12 +56,25 @@
 
     .skill-label {
       display: flex;
+      align-items: center;
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
       flex: 3;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      .mana-skill-icon {
+        font-size: 13px;
+        color: $c-tan;
+        margin-left: 4px;
+        flex-shrink: 0;
+        opacity: 0.8;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
 
       &::after{
         content: '';
@@ -281,7 +294,29 @@
 // Favorites Section
 .favorites-section {
   margin-top: 4px;
+  flex-wrap: nowrap;
+
+  .title-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .title-right-group{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-left: 8px;
+    gap: 2px;
+    font-size: 16px;
+  }
+
+
 }
+
+
 
 // Saves Section
 .saves {

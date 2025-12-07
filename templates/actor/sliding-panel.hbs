@@ -243,7 +243,12 @@
                 data-difficulty='{{skill.difficulty}}'
                 data-trained='{{skill.trained}}'
                 data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
-              >{{skill.label}}</label>
+              >
+                {{skill.label}}
+                {{#if (eq @root.system.attributes.manaSkill key)}}
+                  <i class='fa-duotone fa-regular fa-wand-magic-sparkles mana-skill-icon' title='Mana Skill'></i>
+                {{/if}}
+              </label>
               <span class='skill-difficulty'>{{skill.difficulty}}</span>
             </div>
           {{/each}}
@@ -431,9 +436,17 @@
             {{/if}}
           {{/each}}
 
-          {{! Spells Section }}
+          {{! Spells Section - Only show if character is a spellcaster }}
+          {{#if system.attributes.isSpellcaster}}
           <div class='weapon-skills flexcol mt-10'>
-            <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
+            <div class="title-container">
+              <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
+              <div class="title-right-group">
+                <i class='fas fa-star-christmas mana-icon'
+                title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
+                <span class='mana-display'>{{system.mana.current}}/{{system.mana.max}}</span>
+              </div>
+            </div>
             {{! Favorited Spells }}
             {{#each spells as |spell|}}
               {{#if spell.system.favorite}}
@@ -504,6 +517,7 @@
               {{/if}}
             {{/each}}
           </div>
+          {{/if}}
 
           {{! Equipped Armor }}
           {{#each armor as |item|}}

@@ -3,6 +3,26 @@
 // -----------------------------------------
 // Styles for inline spell casting controls in favorited spells section
 
+// Spells section title with mana display
+.weapon-skills h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .mana-icon {
+    font-size: 12px;
+    color: $c-tan;
+    margin-left: 4px;
+  }
+
+  .mana-display {
+    font-size: 13px;
+    font-weight: 600;
+    color: $c-dark;
+    font-family: $font-secondary;
+  }
+}
+
 .favorited-spell {
   display: flex;
   align-items: baseline;

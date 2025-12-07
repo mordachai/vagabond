@@ -22,10 +22,20 @@ export class VagabondActor extends Actor {
    * @override
    * Augment the actor source data with additional dynamic data that isn't
    * handled by the actor's DataModel. Data calculated in this step should be
-   * available both inside and outside of character sheets (such as if an actor
-   * is queried and has a roll executed directly from it).
+   * available both inside and outside of character sheets.
    */
   prepareDerivedData() {
+    // ---------------------------------------------------------------
+    // TRIGGER DATA MODEL CALCULATIONS
+    // This calls this.system.prepareDerivedData() automatically.
+    // Class data is already loaded in the DataModel's prepareBaseData(),
+    // and Active Effects have been applied between prepareBaseData and here.
+    // ---------------------------------------------------------------
+    super.prepareDerivedData();
+
+    // ---------------------------------------------------------------
+    // Flags and other post-calculation logic
+    // ---------------------------------------------------------------
     const actorData = this;
     const flags = actorData.flags.vagabond || {};
   }

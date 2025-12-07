@@ -7,6 +7,12 @@
   {{! Magic Section }}
   <section class='magic-section'>
     <h2 class='panel-title'>{{localize "VAGABOND.UI.Sections.Magic"}}</h2>
+    <div class='mana-field'>
+      <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.manaSkill.label"}}</label>
+      <select name="system.attributes.manaSkill" {{#unless @root.editable}}disabled{{/unless}}>
+        {{selectOptions @root.config.skills selected=system.attributes.manaSkill blank="" localize=true}}
+      </select>
+    </div>
     {{! Mana Info Row }}
     <div class='mana-info-row'>
       <div class='mana-field'>

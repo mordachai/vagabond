@@ -2078,12 +2078,23 @@
 }
 .vagabond .skills-list .skill .skill-label {
   display: flex;
+  align-items: center;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   flex: 3;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.vagabond .skills-list .skill .skill-label .mana-skill-icon {
+  font-size: 13px;
+  color: var(--vagabond-c-tan);
+  margin-left: 4px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+.vagabond .skills-list .skill .skill-label .mana-skill-icon:hover {
+  opacity: 1;
 }
 .vagabond .skills-list .skill .skill-label::after {
   content: "";
@@ -2261,6 +2272,22 @@
 }
 .vagabond .favorites-section {
   margin-top: 4px;
+  flex-wrap: nowrap;
+}
+.vagabond .favorites-section .title-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+.vagabond .favorites-section .title-right-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-left: 8px;
+  gap: 2px;
+  font-size: 16px;
 }
 .vagabond .saves .saves-row {
   display: flex;
@@ -3741,6 +3768,32 @@
   font-size: 16px;
   font-weight: bold;
 }
+.vagabond .mana-field select {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+  color: var(--vagabond-c-dark);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 12px;
+  padding-right: 20px;
+}
+.vagabond .mana-field select:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+.vagabond .mana-field select:focus {
+  outline: none;
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  background-color: rgba(0, 0, 0, 0.02);
+}
 .vagabond .mana-field .mana-value {
   font-size: 16px;
   font-weight: bold;
@@ -4871,6 +4924,22 @@ details[open] .vagabond .npc-immunity-toggle i {
     font-size: 18px;
     text-align: center;
   }
+}
+.vagabond .weapon-skills h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .weapon-skills h4 .mana-icon {
+  font-size: 12px;
+  color: var(--vagabond-c-tan);
+  margin-left: 4px;
+}
+.vagabond .weapon-skills h4 .mana-display {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  font-family: "Manofa", serif;
 }
 .vagabond .favorited-spell {
   display: flex;

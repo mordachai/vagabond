@@ -221,7 +221,8 @@
           "combat.armor": {"label": "Armor Rating"},
           "mana.current": {"label": "Current Mana"},
           "mana.max": {"label": "Max Mana"},
-          "mana.castingMax": {"label": "Casting Max"}
+          "mana.castingMax": {"label": "Casting Max"},
+          "manaSkill": {"label": "Casting Skill"}
         }
       },
       "NPC": {
@@ -577,13 +578,18 @@
       "Sections": {
         "Magic": "Magic",
         "Spells": "Spells",
+        "spellsPlaceholder": "No spells loaded yet. Favorite ⭐ you spells in the Spells tab.",
         "Inventory": "Inventory",
         "Skills": "Skills",
         "Attacks": "Attacks",
         "Equipped": "Equipped",
+        "equippedPlaceholder": "No items equipped yet. Right click on the items in the Inventory to equip.",
         "Features": "Features",
+        "featuresPlaceholder": "No features yet. Features are granted by your class as you level up.",
         "Traits": "Traits",
+        "traitsPlaceholder": "No traits yet. Traits are granted by your ancestry.",
         "Perks": "Perks",
+        "perksPlaceholder": "No perks yet. Drag perks from the Items directory.",
         "LevelFeatures": "Level Features",
         "Level": "Level",
         "WeaponStats": "Weapon Stats",

@@ -22,6 +22,21 @@ VAGABOND.statAbbreviations = {
   luck: 'VAGABOND.Stat.Luck.abbr',
 };
 
+VAGABOND.skills = {
+  arcana: "VAGABOND.Skills.Arcana",
+  craft: "VAGABOND.Skills.Craft",
+  medicine: "VAGABOND.Skills.Medicine",
+  brawl: "VAGABOND.Skills.Brawl",
+  finesse: "VAGABOND.Skills.Finesse",
+  sneak: "VAGABOND.Skills.Sneak",
+  detect: "VAGABOND.Skills.Detect",
+  mysticism: "VAGABOND.Skills.Mysticism",
+  survival: "VAGABOND.Skills.Survival",
+  influence: "VAGABOND.Skills.Influence",
+  leadership: "VAGABOND.Skills.Leadership",
+  performance: "VAGABOND.Skills.Performance"
+};
+
 /**
  * Size categories for actors
  * @type {Object}
