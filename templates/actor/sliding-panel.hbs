@@ -316,224 +316,139 @@
 
         {{! Favorites Section - Equipped Items }}
         <div class='favorites-section flexcol'>
-        <h4>{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
-          {{! Equipped Weapons }}
-          {{#each weapons as |weapon|}}
-            {{#if weapon.system.equipped}}
-              <div class='equipped-weapon' data-weapon-id='{{weapon._id}}'>
-                {{! Weapon Name - Left click to roll }}
-                <label
-                  class='weapon-name rollable'
-                  data-action='rollWeapon'
-                  data-item-id='{{weapon._id}}'
-                  {{#if weapon.system.propertiesDisplay}}
-                    data-tooltip='Properties: {{weapon.system.propertiesDisplay}}'
-                  {{/if}}
-                >{{weapon.name}}</label>
+          <h4>{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
 
-                {{! Damage Amount }}
-                <div class='weapon-damage'>{{weapon.system.currentDamage}}</div>
+          {{!-- Check if any items are equipped --}}
+          {{#if hasEquippedItems}}
 
-                {{! Damage Type Icon }}
-                <div class='weapon-damage-icon'>
-                  <i
-                    class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'
-                  ></i>
-                </div>
-
-                {{! Range Abbreviation }}
-                <div class='weapon-range'>{{weapon.system.rangeAbbrev}}</div>
-
-                {{! Grip Icon }}
-                <div class='weapon-grip-icon'>
-                  {{#if (eq weapon.system.grip '1H')}}
-                    <i class='fas fa-hand-fist'></i>
-                  {{else if (eq weapon.system.grip '2H')}}
-                    <i class='fas fa-hands'></i>
-                  {{else if (eq weapon.system.grip 'F')}}
-                    <i class='fas fa-hand-fist'></i>
-                  {{else if (eq weapon.system.grip 'V')}}
-                    {{#if (eq weapon.system.equipmentState 'oneHand')}}
-                      <i class='fas fa-hand-fist clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
-                    {{else if (eq weapon.system.equipmentState 'twoHands')}}
-                      <i class='fas fa-hands clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
-                    {{/if}}
-                  {{/if}}
-                </div>
-              </div>
-            {{/if}}
-          {{/each}}
-
-          {{! Equipped Gear, Alchemicals, and Relics }}
-          {{#each gear as |item|}}
-            {{#if item.system.equipped}}
-              {{#if (eq item.system.equipmentType 'alchemical')}}
-                {{! Alchemicals with damage are rollable like weapons }}
-                {{#unless (eq item.system.damageType '-')}}
-                  <div class='equipped-gear' data-item-id='{{item._id}}'>
-                    {{! Item Name - Left click to roll }}
-                    <label
-                      class='item-name rollable'
-                      data-action='rollWeapon'
-                      data-item-id='{{item._id}}'
-                    >{{item.name}}</label>
-
-                    {{! Damage Amount }}
-                    <div class='item-damage'>{{item.system.damageAmount}}</div>
-
-                    {{! Damage Type Icon }}
-                    <div class='item-damage-icon'>
-                      <i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i>
-                    </div>
-
-                    {{! Quantity }}
-                    <div class='item-quantity'>×{{item.system.quantity}}</div>
-                  </div>
-                {{else}}
-                  {{! Alchemicals without damage post to chat }}
-                  <div class='equipped-gear' data-item-id='{{item._id}}'>
-                    {{! Item Name - Left click to use }}
-                    <label
-                      class='item-name rollable'
-                      data-action='useItem'
-                      data-item-id='{{item._id}}'
-                    >{{item.name}}</label>
-
-                    {{! Empty damage (for alignment) }}
-                    <div class='item-damage'>—</div>
-
-                    {{! Empty damage type icon (for alignment) }}
-                    <div class='item-damage-icon'>
-                      <i class='{{lookup @root.config.damageTypeIcons "-"}}'></i>
-                    </div>
-
-                    {{! Quantity }}
-                    <div class='item-quantity'>×{{item.system.quantity}}</div>
-                  </div>
-                {{/unless}}
-              {{else}}
-                {{! Regular gear and relics post to chat }}
-                <div class='equipped-gear' data-item-id='{{item._id}}'>
-                  {{! Item Name - Left click to use }}
-                  <label
-                    class='item-name rollable'
-                    data-action='useItem'
-                    data-item-id='{{item._id}}'
-                  >{{item.name}}</label>
-
-                  {{! Empty damage (for alignment) }}
-                  <div class='item-damage'>—</div>
-
-                  {{! Empty damage type icon (for alignment) }}
-                  <div class='item-damage-icon'>
-                    <i class='{{lookup @root.config.damageTypeIcons "-"}}'></i>
-                  </div>
-
-                  {{! Quantity }}
-                  <div class='item-quantity'>×{{item.system.quantity}}</div>
-                </div>
-              {{/if}}
-            {{/if}}
-          {{/each}}
-
-          {{! Spells Section - Only show if character is a spellcaster }}
-          {{#if system.attributes.isSpellcaster}}
-          <div class='weapon-skills flexcol mt-10'>
-            <div class="title-container">
-              <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
-              <div class="title-right-group">
-                <i class='fas fa-star-christmas mana-icon'
-                title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
-                <span class='mana-display'>{{system.mana.current}}/{{system.mana.max}}</span>
-              </div>
-            </div>
-            {{! Favorited Spells }}
-            {{#each spells as |spell|}}
-              {{#if spell.system.favorite}}
-                <div class='favorited-spell' data-spell-id='{{spell._id}}'>
-                  {{! Spell Name - Left click to cast }}
-                  <label
-                    class='spell-name rollable'
-                    data-action='castSpell'
-                    data-spell-id='{{spell._id}}'
-                  >{{spell.name}}</label>
-
-                  {{! Damage Amount - Left click increase, Right click decrease }}
-                  <div
-                    class='spell-damage-dice {{#unless (eq spell.system.damageType "-")}}clickable{{/unless}}'
-                    {{#unless (eq spell.system.damageType '-')}}
-                      data-action='modifyDamage'
-                      data-spell-id='{{spell._id}}'
-                      data-damage-type='{{spell.system.damageType}}'
-                      title='Left click to increase damage (+1 mana per d6), Right click to decrease'
-                    {{/unless}}
-                  >{{#unless (eq spell.system.damageType '-')}}1d6{{else}}0{{/unless}}</div>
-
-                  {{! Fx (Effect) Checkbox Icon }}
-                  <div
-                    class='spell-fx-icon fx-inactive'
-                    data-action='toggleFx'
-                    data-spell-id='{{spell._id}}'
-                    title='Toggle spell effect (adds +1 mana when combined with damage)'>
-                      {{#if (eq @root.config.fxIcon.type "txt")}}
-                        <span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
-                      {{else if (eq @root.config.fxIcon.type "img")}}
-                        <img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
-                      {{else}}
-                        <i class="{{@root.config.fxIcon.value}}"></i>
+            {{! 1. Equipped Weapons }}
+            {{#each weapons as |weapon|}}
+              {{#if weapon.system.equipped}}
+                <div class='equipped-weapon' data-weapon-id='{{weapon._id}}'>
+                  <label class='weapon-name rollable' data-action='rollWeapon' data-item-id='{{weapon._id}}' {{#if weapon.system.propertiesDisplay}}data-tooltip='Properties: {{weapon.system.propertiesDisplay}}'{{/if}}>{{weapon.name}}</label>
+                  <div class='weapon-damage'>{{weapon.system.currentDamage}}</div>
+                  <div class='weapon-damage-icon'><i class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'></i></div>
+                  <div class='weapon-range'>{{weapon.system.rangeAbbrev}}</div>
+                  <div class='weapon-grip-icon'>
+                    {{#if (eq weapon.system.grip '1H')}}<i class='fas fa-hand-fist'></i>
+                    {{else if (eq weapon.system.grip '2H')}}<i class='fas fa-hands'></i>
+                    {{else if (eq weapon.system.grip 'F')}}<i class='fas fa-hand-fist'></i>
+                    {{else if (eq weapon.system.grip 'V')}}
+                      {{#if (eq weapon.system.equipmentState 'oneHand')}}<i class='fas fa-hand-fist clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
+                      {{else if (eq weapon.system.equipmentState 'twoHands')}}<i class='fas fa-hands clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
                       {{/if}}
+                    {{/if}}
                   </div>
-
-                  {{! Damage Type - Font Awesome Icon }}
-                  <div class='spell-damage-icon'>
-                    <i
-                      class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}'
-                      data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'
-                    ></i>
-                  </div>
-
-                  {{! Delivery Type - Dropdown }}
-                  <select
-                    class='spell-delivery-select'
-                    data-spell-id='{{spell._id}}'
-                  >
-                    <option value=''>Delivery</option>
-                    {{#each @root.config.deliveryTypes as |label key|}}
-                      <option value='{{key}}'>{{localize label}}</option>
-                    {{/each}}
-                  </select>
-
-                  {{! Delivery Cost - Left click increase, Right click decrease, shows hint on hover }}
-                  <div
-                    class='spell-delivery-cost disabled'
-                    data-action='modifyDelivery'
-                    data-spell-id='{{spell._id}}'
-                    title='Select a delivery type first'
-                  >0</div>
-
-                  {{! Mana Total - Display only }}
-                  <div class='spell-mana-total'>0</div>
                 </div>
               {{/if}}
             {{/each}}
-          </div>
+
+            {{! 2. Equipped Relics }}
+            {{#each gear as |item|}}
+              {{#if (and item.system.equipped (eq item.system.equipmentType 'relic'))}}
+                <div class='equipped-gear' data-item-id='{{item._id}}'>
+                  <label class='item-name rollable' data-action='useItem' data-item-id='{{item._id}}'>{{item.name}}</label>
+                  <div class='item-damage'>—</div>
+                  <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons "-"}}'></i></div>
+                  <div class='item-quantity'>×{{item.system.quantity}}</div>
+                </div>
+              {{/if}}
+            {{/each}}
+
+            {{! 3. Equipped Alchemicals }}
+            {{#each gear as |item|}}
+              {{#if (and item.system.equipped (eq item.system.equipmentType 'alchemical'))}}
+                {{#unless (eq item.system.damageType '-')}}
+                  {{! Alchemicals with damage }}
+                  <div class='equipped-gear' data-item-id='{{item._id}}'>
+                    <label class='item-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}'>{{item.name}}</label>
+                    <div class='item-damage'>{{item.system.damageAmount}}</div>
+                    <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
+                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  </div>
+                {{else}}
+                  {{! Alchemicals without damage }}
+                  <div class='equipped-gear' data-item-id='{{item._id}}'>
+                    <label class='item-name rollable' data-action='useItem' data-item-id='{{item._id}}'>{{item.name}}</label>
+                    <div class='item-damage'>—</div>
+                    <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons "-"}}'></i></div>
+                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  </div>
+                {{/unless}}
+              {{/if}}
+            {{/each}}
+
+            {{! 4. Equipped Gear (Everything else) }}
+            {{#each gear as |item|}}
+              {{#if item.system.equipped}}
+                {{#unless (or (eq item.system.equipmentType 'relic') (eq item.system.equipmentType 'alchemical'))}}
+                  <div class='equipped-gear' data-item-id='{{item._id}}'>
+                    <label class='item-name rollable' data-action='useItem' data-item-id='{{item._id}}'>{{item.name}}</label>
+                    <div class='item-damage'>—</div>
+                    <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons "-"}}'></i></div>
+                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  </div>
+                {{/unless}}
+              {{/if}}
+            {{/each}}
+
+            {{! 5. Equipped Armor - COMMENTED OUT }}
+            {{!--
+            {{#each armor as |item|}}
+              {{#if item.system.worn}}
+                <div class='equipped-armor flexrow flex-group-center'>
+                  <label class='resource-label flexlarge align-left' title='{{item.system.description}}'>{{item.name}} (AV: {{item.system.armorValue}})</label>
+                </div>
+              {{/if}}
+            {{/each}}
+            --}}
+
+          {{else}}
+            {{!-- Placeholder Text for Equipped --}}
+            <div class="no-items text-faint" style="padding: 0 5px;">{{localize 'VAGABOND.UI.Sections.equippedPlaceholder'}}</div>
           {{/if}}
 
-          {{! Equipped Armor }}
-          {{#each armor as |item|}}
-            {{#if item.system.worn}}
-              <div class='equipped-armor flexrow flex-group-center'>
-                <label
-                  class='resource-label flexlarge align-left'
-                  title='{{item.system.description}}'
-                >{{item.name}} (AV: {{item.system.armorValue}})</label>
+          {{! Spells Section }}
+          {{#if system.attributes.isSpellcaster}}
+            <div class='weapon-skills flexcol mt-10'>
+              <div class="title-container">
+                <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
+                <div class="title-right-group">
+                  <i class='fas fa-star-christmas mana-icon' title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
+                  <span class='mana-display'>{{system.mana.current}}/{{system.mana.max}}</span>
+                </div>
               </div>
-            {{/if}}
-          {{/each}}
-        </div>
-      </section>
-    </section>
 
+              {{#if hasFavoritedSpells}}
+                {{#each spells as |spell|}}
+                  {{#if spell.system.favorite}}
+                    <div class='favorited-spell' data-spell-id='{{spell._id}}'>
+                      <label class='spell-name rollable' data-action='castSpell' data-spell-id='{{spell._id}}'>{{spell.name}}</label>
+                      <div class='spell-damage-dice {{#unless (eq spell.system.damageType "-")}}clickable{{/unless}}' {{#unless (eq spell.system.damageType '-')}}data-action='modifyDamage' data-spell-id='{{spell._id}}' data-damage-type='{{spell.system.damageType}}' title='Left click to increase damage (+1 mana per d6), Right click to decrease'{{/unless}}>{{#unless (eq spell.system.damageType '-')}}1d6{{else}}0{{/unless}}</div>
+                      <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='Toggle spell effect (adds +1 mana when combined with damage)'>
+                        {{#if (eq @root.config.fxIcon.type "txt")}}<span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
+                        {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
+                        {{else}}<i class="{{@root.config.fxIcon.value}}"></i>{{/if}}
+                      </div>
+                      <div class='spell-damage-icon'><i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i></div>
+                      <select class='spell-delivery-select' data-spell-id='{{spell._id}}'>
+                        <option value=''>Delivery</option>
+                        {{#each @root.config.deliveryTypes as |label key|}}<option value='{{key}}'>{{localize label}}</option>{{/each}}
+                      </select>
+                      <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='Select a delivery type first'>0</div>
+                      <div class='spell-mana-total'>0</div>
+                    </div>
+                  {{/if}}
+                {{/each}}
+              {{else}}
+                {{!-- Placeholder Text for Spells --}}
+                <div class="no-items text-faint" style="padding: 0 5px;">{{localize 'VAGABOND.UI.Sections.spellsPlaceholder'}}</div>
+              {{/if}}
+            </div>
+          {{/if}}
+
+        </div>
+        
   </div>
 
   {{! Click Zone - visible sliver when closed (on the right) }}

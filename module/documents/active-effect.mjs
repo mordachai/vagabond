@@ -113,6 +113,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       // 'system.speed': 'NPC: Speed', // Commented out to prefer the detailed speed object below if applicable, or keep for NPC specific string
       'system.senses': 'NPC: Senses',
       'system.armor': 'NPC: Armor Value',
+      'system.armorBonus': 'Armor: Global Bonus (Flat Add)',
       'system.armorDescription': 'NPC: Armor Description',
       'system.locked': 'NPC: Locked Mode',
       'system.statusImmunities': 'NPC: Status Immunities (Array)',

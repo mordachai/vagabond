@@ -440,6 +440,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Offloading context prep to a helper function
     this._prepareItems(context);
 
+    // Check for equipped items and favorited spells for Sliding Panel ---
+    // This allows us to show/hide the placeholder text in the sliding panel
+    context.hasEquippedItems = 
+      (context.weapons && context.weapons.some(i => i.system.equipped)) || 
+      (context.gear && context.gear.some(i => i.system.equipped)) || 
+      (context.armor && context.armor.some(i => i.system.worn));
+
+    context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
+    // --------------------------------------------------------------------------
+
     // Prepare equipped armor type for header display
     const equippedArmor = this.actor.items.find(item => {
       const isArmor = (item.type === 'armor') ||

@@ -68,6 +68,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Bonus luck from active effects
     schema.bonusLuck = new fields.NumberField({ ...requiredInteger, initial: 0 });
 
+    // Armor Bonus from Active Effects
+    schema.armorBonus = new fields.NumberField({ ...requiredInteger, initial: 0 });
+    // ---------------------
+
     // Favor/Hinder system - toggle for roll modifiers
     schema.favorHinder = new fields.StringField({
       initial: 'none',
@@ -469,7 +473,7 @@ export default class VagabondCharacter extends VagabondActorBase {
         }
       }
     }
-    this.armor = totalArmor;
+    this.armor = totalArmor + (this.armorBonus || 0);
   }
 
   _calculateInventorySlots() {
