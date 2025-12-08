@@ -246,6 +246,7 @@
         "FIELDS": {
           "cr": {"label": "CR"},
           "name": {"label": "NPC Name"},
+          "threatLevel":{"label":"Threat Level", "abbv": "TL"},
           "size": {"label": "Size"},
           "beingType": {"label": "Being Type"},
           "morale": {"label": "Morale:"},

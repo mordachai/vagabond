@@ -151,6 +151,9 @@ globalThis.vagabond = {
 Hooks.once('init', async function () {
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
+  
+  // Loads placeholder images for character sheets
+  CONFIG.Actor.typeImages = VAGABOND.actorTypeImages;
 
   // Preload Handlebars templates
   await preloadHandlebarsTemplates();

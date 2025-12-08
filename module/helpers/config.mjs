@@ -1,5 +1,12 @@
 export const VAGABOND = {};
 
+
+//Default placeholder images
+VAGABOND.actorTypeImages = {
+  //character: "systems/vagabond/assets/default-character.svg",
+  npc: "systems/vagabond/assets/ui/default-npc.svg"
+};
+
 /**
  * The set of Stats used within the Vagabond system.
  * @type {Object}

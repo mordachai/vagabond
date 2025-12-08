@@ -378,7 +378,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Set width based on actor type
     if (this.document.type === 'npc') {
       options.position = options.position || {};
-      options.position.width = 380;
+      options.position.width = 300;
     }
 
     // Not all parts always render
