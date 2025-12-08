@@ -17,6 +17,15 @@ export default class VagabondNPC extends VagabondActorBase {
       min: 0,
     });
 
+    //TL - Threat Level
+    schema.threatLevel = new fields.NumberField({
+      required: true,
+      nullable: false,
+      initial: 0,
+      min: 0,
+      // Note: integer: true is intentionally omitted to allow decimals
+    });
+
     // NPC size
     schema.size = new fields.StringField({
       initial: 'medium',
@@ -242,6 +251,9 @@ export default class VagabondNPC extends VagabondActorBase {
 
   prepareDerivedData() {
     this.xp = this.cr * this.cr * 100;
+
+    // --- Format Threat Level to 2 decimal places (e.g., 1.60) ---
+    this.threatLevelFormatted = (this.threatLevel || 0).toFixed(2);
 
     // Loop through stats and add labels
     for (const key in this.stats) {

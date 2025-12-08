@@ -3,6 +3,24 @@
  * @extends {Actor}
  */
 export class VagabondActor extends Actor {
+
+  /** @override */
+  static getDefaultArtwork(actorData) {
+    // 1. Check if the actor being created is an NPC
+    if (actorData.type === "npc") {
+      // 2. HARDCODE the path here to ensure no config errors
+      const img = "systems/vagabond/assets/ui/default-npc.svg";
+      
+      return {
+        img: img,
+        texture: { src: img }
+      };
+    }
+
+    // 3. Fallback for characters or other types
+    return super.getDefaultArtwork(actorData);
+  }
+
   /** @override */
   prepareData() {
     // Prepare data for the actor. Calling the super version of this executes
