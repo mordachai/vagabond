@@ -2103,7 +2103,7 @@
   margin-left: 6px;
   flex-grow: 1;
   border-bottom: 1px dotted var(--vagabond-c-dark);
-  margin-bottom: 2px;
+  margin-bottom: -12px;
   opacity: 0.4;
   width: 100%;
 }
