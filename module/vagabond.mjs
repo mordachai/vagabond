@@ -518,15 +518,13 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
   });
 
   // 4. Save Button Handler (Roll to Save system)
+  // Each click generates a new save result card for currently selected tokens
   const saveButtons = html.querySelectorAll('.vagabond-save-button');
 
   saveButtons.forEach(button => {
     if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
-      // Disable button to prevent double-clicks
-      button.disabled = true;
 
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleSaveRoll(button);
@@ -535,15 +533,13 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
   });
 
   // 5. Apply Direct Damage Button Handler (bypasses saves)
+  // Each click applies damage to currently selected tokens
   const applyDirectButtons = html.querySelectorAll('.vagabond-apply-direct-button');
 
   applyDirectButtons.forEach(button => {
     if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
-      // Disable button to prevent double-clicks
-      button.disabled = true;
 
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleApplyDirect(button);
@@ -565,7 +561,57 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     });
   });
 
-  // 7. NPC Damage Button Handler (GM Only)
+  // 7. Style Favor/Hinder dice with colored drop-shadows and add text indicator
+  // Check if this is a dice roll message
+  const diceRoll = message.rolls?.[0];
+  if (diceRoll && diceRoll.formula) {
+    const formula = diceRoll.formula;
+    const hasFavor = formula.includes('+1d6') || formula.includes('+ 1d6');
+    const hasHinder = formula.includes('-1d6') || formula.includes('- 1d6');
+
+    if (hasFavor || hasHinder) {
+      // Add text indicator to chat card header
+      const chatCard = html.querySelector('.vagabond-chat-card');
+      if (chatCard) {
+        const header = chatCard.querySelector('.card-header');
+        if (header) {
+          const indicator = document.createElement('div');
+          indicator.className = hasFavor ? 'roll-modifier-indicator favored' : 'roll-modifier-indicator hindered';
+          indicator.textContent = hasFavor
+            ? game.i18n.localize('VAGABOND.Roll.Favored')
+            : game.i18n.localize('VAGABOND.Roll.Hindered');
+          header.appendChild(indicator);
+        }
+      }
+
+      // Find all d6 dice images/results in the message
+      // Foundry renders dice as .dice-result elements or images
+      const diceResults = html.querySelectorAll('.dice-result.d6, .dice-tooltip .dice-roll .d6');
+
+      diceResults.forEach(die => {
+        if (hasFavor) {
+          die.style.filter = 'drop-shadow(0 0 4px rgba(0, 255, 0, 0.8)) drop-shadow(0 0 8px rgba(0, 255, 0, 0.5))';
+        } else if (hasHinder) {
+          die.style.filter = 'drop-shadow(0 0 4px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 8px rgba(255, 0, 0, 0.5))';
+        }
+      });
+
+      // Also try to find dice images (for Dice So Nice or standard dice)
+      const diceImages = html.querySelectorAll('img.dice-result, .dice-tooltip img');
+      diceImages.forEach(img => {
+        // Check if it's a d6 by looking at the src or class
+        if (img.src && img.src.includes('d6')) {
+          if (hasFavor) {
+            img.style.filter = 'drop-shadow(0 0 4px rgba(0, 255, 0, 0.8)) drop-shadow(0 0 8px rgba(0, 255, 0, 0.5))';
+          } else if (hasHinder) {
+            img.style.filter = 'drop-shadow(0 0 4px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 8px rgba(255, 0, 0, 0.5))';
+          }
+        }
+      });
+    }
+  }
+
+  // 8. NPC Damage Button Handler (GM Only)
   const npcButtons = html.querySelectorAll('.vagabond-npc-damage-button');
 
   npcButtons.forEach(button => {

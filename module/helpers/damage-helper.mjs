@@ -596,12 +596,10 @@ export class VagabondDamageHelper {
       return 0;
     }
 
-    // RAW: Armor - Subtracted from Attack damage (only for physical damage types)
-    const physicalDamageTypes = ['blunt', 'physical', 'piercing', 'slashing'];
-    if (physicalDamageTypes.includes(normalizedType)) {
-      const armorRating = actor.system.armor || 0;
-      finalDamage = Math.max(0, finalDamage - armorRating);
-    }
+    // RAW: Armor - Subtracted from ALL incoming damage
+    // Armor always reduces damage unless target is immune or weak
+    const armorRating = actor.system.armor || 0;
+    finalDamage = Math.max(0, finalDamage - armorRating);
 
     return finalDamage;
   }
@@ -733,17 +731,20 @@ export class VagabondDamageHelper {
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
       const isSuccess = saveRoll.total >= difficulty;
 
-      // Calculate final damage
-      let finalDamage = damageAmount;
+      // Calculate damage breakdown for display
+      let damageAfterSave = damageAmount;
+      let saveReduction = 0;
       if (isSuccess) {
         // Remove highest damage die from original roll
-        finalDamage = this._removeHighestDie(rollTermsData);
+        damageAfterSave = this._removeHighestDie(rollTermsData);
+        saveReduction = damageAmount - damageAfterSave;
       }
 
-      // Apply armor/immune/weak modifiers
+      // Apply armor/immune/weak modifiers and track armor reduction
       const sourceActor = game.actors.get(actorId);
       const sourceItem = sourceActor?.items.get(itemId);
-      finalDamage = this.calculateFinalDamage(targetActor, finalDamage, damageType, sourceItem);
+      const finalDamage = this.calculateFinalDamage(targetActor, damageAfterSave, damageType, sourceItem);
+      const armorReduction = damageAfterSave - finalDamage;
 
       // Auto-apply damage if setting enabled
       const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage');
@@ -762,16 +763,16 @@ export class VagabondDamageHelper {
         isSuccess,
         isHindered,
         damageAmount,
+        saveReduction,
+        armorReduction,
         finalDamage,
         damageType,
         autoApply
       );
     }
 
-    // Disable button after all saves processed
-    button.disabled = true;
-    button.innerHTML = '<i class="fas fa-check"></i>Rolled';
-    button.classList.add('rolled');
+    // Button remains active so multiple players can roll saves
+    // Each click generates new save result cards for currently selected tokens
   }
 
   /**
@@ -822,8 +823,13 @@ export class VagabondDamageHelper {
     const hasActorHinder = (favorHinder === 'hinder');
 
     // Apply Favor/Hinder logic
-    // If actor has Favor AND save is not Hindered by conditions: apply Favor
-    if (hasActorFavor && !isHindered) {
+    // IMPORTANT: Favor and Hinder cancel each other out
+    // If actor has Favor AND save is Hindered by conditions: they cancel, roll straight d20
+    if (hasActorFavor && isHindered) {
+      rollFormula = 'd20'; // Cancel out - no modifier
+    }
+    // If actor has Favor AND save is NOT Hindered: apply Favor
+    else if (hasActorFavor && !isHindered) {
       rollFormula = 'd20 + 1d6';
     }
     // If actor has Hinder OR save is Hindered by conditions: apply Hinder
@@ -846,16 +852,23 @@ export class VagabondDamageHelper {
   static _removeHighestDie(rollTermsData) {
     let total = rollTermsData.total;
     let highestDieValue = 0;
+    let totalDiceCount = 0;
 
     // Find all dice terms and their results
     for (const term of rollTermsData.terms) {
       if (term.type === 'Die' && term.results) {
         for (const result of term.results) {
+          totalDiceCount++;
           if (result.result > highestDieValue) {
             highestDieValue = result.result;
           }
         }
       }
+    }
+
+    // If only one die was rolled, save completely negates damage
+    if (totalDiceCount === 1) {
+      return 0;
     }
 
     // Subtract highest die
@@ -871,13 +884,15 @@ export class VagabondDamageHelper {
    * @param {boolean} isSuccess - Whether the save succeeded
    * @param {boolean} isHindered - Whether the save was Hindered
    * @param {number} originalDamage - Original damage amount
+   * @param {number} saveReduction - Damage prevented by save
+   * @param {number} armorReduction - Damage prevented by armor
    * @param {number} finalDamage - Final damage after save/armor
    * @param {string} damageType - Damage type
    * @param {boolean} autoApplied - Whether damage was auto-applied
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isHindered, originalDamage, finalDamage, damageType, autoApplied) {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied) {
     const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
     // Import VagabondChatCard
@@ -891,25 +906,125 @@ export class VagabondDamageHelper {
       .addRoll(roll, difficulty)
       .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', false);
 
-    // Add metadata
-    if (isHindered) {
-      card.addMetadata('Condition', 'Hindered (-1d6)');
-    }
-    card.addMetadata('Original Damage', originalDamage.toString());
-    if (isSuccess) {
-      // Show how much damage was prevented by the successful save
-      // Note: This includes both die removal AND armor/immune reduction
-      card.addMetadata('Damage Prevented', (originalDamage - finalDamage).toString());
-    }
-    card.addMetadata('Final Damage', `${finalDamage} ${damageType}`);
+    // Build visual damage calculation display
+    const damageCalculationHTML = this._buildDamageCalculation(
+      originalDamage,
+      saveReduction,
+      armorReduction,
+      finalDamage,
+      damageType,
+      saveType,
+      actor,
+      autoApplied,
+      isHindered
+    );
 
-    if (autoApplied) {
-      card.addMetadata('Status', 'Damage Applied to HP');
-    } else {
-      card.addMetadata('Status', 'Damage NOT Applied (manual mode)');
-    }
+    card.setDescription((card.data.description || '') + damageCalculationHTML);
 
     return await card.send();
+  }
+
+  /**
+   * Build visual damage calculation HTML
+   * @param {number} originalDamage - Starting damage
+   * @param {number} saveReduction - Damage prevented by save
+   * @param {number} armorReduction - Damage prevented by armor
+   * @param {number} finalDamage - Final damage
+   * @param {string} damageType - Damage type key
+   * @param {string} saveType - Save type (reflex/endure/will)
+   * @param {Actor} actor - The defending actor
+   * @param {boolean} autoApplied - Whether damage was auto-applied
+   * @param {boolean} isHindered - Whether the save was hindered
+   * @returns {string} HTML string
+   * @private
+   */
+  static _buildDamageCalculation(originalDamage, saveReduction, armorReduction, finalDamage, damageType, saveType, actor, autoApplied, isHindered) {
+    // Get save icon
+    const saveIcons = {
+      'reflex': 'fa-solid fa-running',
+      'endure': 'fa-solid fa-shield-alt',
+      'will': 'fa-solid fa-brain'
+    };
+    const saveIcon = saveIcons[saveType] || 'fa-solid fa-shield';
+
+    // Get damage type icon and label
+    const damageTypeIcon = CONFIG.VAGABOND?.damageTypeIcons?.[damageType] || 'fa-solid fa-burst';
+    const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
+
+    // Build save tooltip with favor/hinder state
+    const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
+    const favorHinder = actor.system.favorHinder || 'none';
+    const hasActorFavor = (favorHinder === 'favor');
+    const hasActorHinder = (favorHinder === 'hinder');
+
+    let saveTooltip = saveLabel;
+    if (hasActorFavor && isHindered) {
+      // Cancelled out - no modifier
+      saveTooltip = `${saveLabel} ${game.i18n.localize('VAGABOND.Roll.SaveRoll')}`;
+    } else if (hasActorFavor) {
+      saveTooltip = `${saveLabel} ${game.i18n.localize('VAGABOND.Roll.Favored')}`;
+    } else if (hasActorHinder || isHindered) {
+      saveTooltip = `${saveLabel} ${game.i18n.localize('VAGABOND.Roll.Hindered')}`;
+    }
+
+    // Get equipped armor names for tooltip
+    let armorTooltip = game.i18n.localize('VAGABOND.Armor.Label');
+    const equippedArmor = actor.items.find(item => {
+      const isArmor = (item.type === 'armor') ||
+                     (item.type === 'equipment' && item.system.equipmentType === 'armor');
+      return isArmor && item.system.equipped;
+    });
+    if (equippedArmor) {
+      armorTooltip = `${game.i18n.localize('VAGABOND.Armor.Label')}: ${equippedArmor.name}`;
+    }
+
+    // Build calculation line with title separator
+    let calculationHTML = `<div class="save-damage-calculation">
+      <div class="damage-title">${game.i18n.localize('VAGABOND.Roll.SaveRoll')}</div>
+      <div class="damage-formula-line">
+        <span class="damage-component" title="${game.i18n.localize('VAGABOND.Damage.Total')}">
+          <i class="fa-solid fa-dice"></i> ${originalDamage}
+        </span>`;
+
+    // Add save reduction if any
+    if (saveReduction > 0) {
+      const saveIconClass = isHindered ? 'save-icon-hindered' : '';
+      calculationHTML += `
+        <span class="damage-operator">-</span>
+        <span class="damage-component" title="${saveTooltip}">
+          <i class="${saveIcon} ${saveIconClass}"></i> ${saveReduction}
+        </span>`;
+    }
+
+    // Add armor reduction if any
+    if (armorReduction > 0) {
+      calculationHTML += `
+        <span class="damage-operator">-</span>
+        <span class="damage-component" title="${armorTooltip}">
+          <i class="fa-sharp fa-regular fa-shield"></i> ${armorReduction}
+        </span>`;
+    }
+
+    // Add final damage
+    const finalDamageTooltip = `${game.i18n.localize('VAGABOND.Damage.Final')} ${damageTypeLabel}`;
+    calculationHTML += `
+        <span class="damage-operator">=</span>
+        <span class="damage-final" title="${finalDamageTooltip}">
+          ${finalDamage} <i class="${damageTypeIcon} damage-type-icon-large"></i>
+        </span>
+      </div>`;
+
+    // Add application note if damage was applied
+    if (autoApplied) {
+      calculationHTML += `
+      <div class="damage-application-note">
+        damage applied to ${actor.name}'s HP
+      </div>`;
+    }
+
+    calculationHTML += `</div>`;
+
+    return calculationHTML;
   }
 
   /**
@@ -954,9 +1069,6 @@ export class VagabondDamageHelper {
       ui.notifications.info(`Applied ${finalDamage} damage to ${targetActor.name}`);
     }
 
-    // Disable button
-    button.disabled = true;
-    button.innerHTML = '<i class="fas fa-check"></i> Damage Applied';
-    button.classList.add('applied');
+    // Button remains active so damage can be applied to different tokens
   }
 }

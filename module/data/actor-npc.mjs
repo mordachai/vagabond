@@ -168,12 +168,6 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
-        range: new fields.StringField({
-          required: false,
-          nullable: true,
-          initial: 'close',
-          choices: ['close', 'near', 'far']
-        }),
         flatDamage: new fields.StringField({
           required: false,
           nullable: false,
@@ -208,7 +202,7 @@ export default class VagabondNPC extends VagabondActorBase {
           required: false,
           nullable: true,
           initial: 'melee',
-          choices: Object.keys(CONFIG.VAGABOND?.attackTypes || { 'melee': '', 'ranged': '', 'cast': '' })
+          choices: ['melee', 'ranged', 'castClose', 'castRanged']
         }),
         extraInfo: new fields.StringField({
           required: false,

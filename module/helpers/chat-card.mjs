@@ -749,16 +749,13 @@ export class VagabondChatCard {
         damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[action.damageType]) || action.damageType;
       }
 
-      // Determine attack type from range field
-      // far = ranged, close/near = melee
-      let attackType = 'melee';
-      if (action.range === 'far') {
-        attackType = 'ranged';
-      } else if (action.range === 'close' || action.range === 'near') {
+      // Get attack type from action (default to 'melee' if not set)
+      // castClose is treated as melee for save purposes, castRanged as ranged
+      let attackType = action.attackType || 'melee';
+      if (attackType === 'castClose') {
         attackType = 'melee';
-      } else if (action.attackType) {
-        // Fallback to explicit attackType if range is not set
-        attackType = action.attackType;
+      } else if (attackType === 'castRanged') {
+        attackType = 'ranged';
       }
 
       // Create GM-only damage buttons

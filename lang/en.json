@@ -45,6 +45,18 @@
         "description": "Resist curses and enthrallment"
       }
     },
+    "Roll": {
+      "Favored": "Favored (+1d6)",
+      "Hindered": "Hindered (-1d6)",
+      "SaveRoll": "Save Roll"
+    },
+    "Damage": {
+      "Total": "Total Damage",
+      "Final": "Final Damage"
+    },
+    "Armor": {
+      "Label": "Armor"
+    },
     "DefendMechanics": {
       "BlockTitle": "Block (Endure)",
       "DodgeTitle": "Dodge (Reflex)",
@@ -54,7 +66,8 @@
     "AttackTypes": {
       "Melee": "Melee",
       "Ranged": "Ranged",
-      "Cast": "Cast"
+      "CastClose": "Cast Close",
+      "CastRanged": "Cast Ranged"
     },
     "SpeedTypes": {
       "Climb": "Climb",
@@ -288,6 +301,7 @@
           "Description": "Description",
           "Type": "Type",
           "Range": "Range",
+          "AttackType": "Attack Type",
           "Note": "Notes (before recharge)",
           "Recharge": "Recharge",
           "FlatDamage": "Flat Damage",
