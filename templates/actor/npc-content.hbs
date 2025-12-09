@@ -133,7 +133,7 @@
               value='{{system.senses}}'
               data-dtype='String'
               class='npc-field-input flex-1'
-              placeholder='Darkvision, Blindsight...'
+              placeholder='Darksight, Blindsight...'
             />
           {{/if}}
         </div>
@@ -301,7 +301,7 @@
                     <strong>
                       <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>:
                       {{#if (or action.type action.range action.saves)}}
-                        [{{#if action.type}}{{action.type}}{{#if (or action.range action.saves)}}, {{/if}}{{/if}}{{#if action.range}}{{action.range}}{{#if action.saves}} | {{/if}}{{/if}}{{#if action.saves}}{{#if (eq action.saves "reflex")}}{{localize "VAGABOND.Saves.Reflex.name"}}{{else if (eq action.saves "endure")}}{{localize "VAGABOND.Saves.Endure.name"}}{{else if (eq action.saves "will")}}{{localize "VAGABOND.Saves.Will.name"}}{{/if}}{{/if}}{{#if action.note}} {{action.note}}{{/if}}]
+                        [{{#if action.type}}{{action.type}}{{#if (or action.range action.saves)}}, {{/if}}{{/if}}{{#if action.range}}{{action.range}}{{#if action.saves}}{{#if action.note}} {{action.note}}{{/if}} | {{/if}}{{/if}}{{#if action.saves}}{{#if (eq action.saves "reflex")}}{{localize "VAGABOND.Saves.Reflex.name"}}{{else if (eq action.saves "endure")}}{{localize "VAGABOND.Saves.Endure.name"}}{{else if (eq action.saves "will")}}{{localize "VAGABOND.Saves.Will.name"}}{{/if}}{{/if}}]
                       {{else}}
                         {{#if action.note}}{{action.note}}{{/if}}
                       {{/if}}
@@ -323,9 +323,6 @@
                         {{#if action.rollDamage}}
                           <span class='action-damage-roll'>({{action.rollDamage}})</span>
                         {{/if}}
-                      {{/if}}
-                      {{#if action.description}}
-                        <span class='action-description'>{{action.description}}</span>
                       {{/if}}
                       {{#if action.extraInfo}}
                         <span class='action-extra-info'>{{{lookup (lookup @root.enrichedActions index) 'extraInfoFormatted'}}}</span>
@@ -357,10 +354,6 @@
                     </div>
                   </div>
                   {{#if action.name}}
-                    <div class='action-edit-row'>
-                    <label>{{localize "VAGABOND.Actor.NPC.Action.Description"}}:</label>
-                    <input type='text' name='system.actions.{{index}}.description' value='{{action.description}}' placeholder='Description' class='npc-field-input' />
-                  </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Type"}}:</label>
@@ -396,11 +389,11 @@
                       </select>
                     </div>
                   </div>
+                  <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}:</label>
+                    <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' class='npc-field-input' />
+                  </div>
                   <div class='action-edit-row action-edit-row-split'>
-                    <div class='action-edit-col'>
-                      <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-field-input' />
-                    </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Saves.savesTitle"}}:</label>
                       <select name='system.actions.{{index}}.saves' class='action-saves-select' data-index='{{index}}'>
@@ -409,11 +402,11 @@
                         <option value='endure' {{#if (eq action.saves "endure")}}selected{{/if}}>{{localize "VAGABOND.Saves.Endure.name"}}</option>
                         <option value='will' {{#if (eq action.saves "will")}}selected{{/if}}>{{localize "VAGABOND.Saves.Will.name"}}</option>
                       </select>
+                    </div>                    
+                    <div class='action-edit-col'>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}:</label>
+                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-field-input' />
                     </div>
-                  </div>
-                  <div class='action-edit-row'>
-                    <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}:</label>
-                    <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' class='npc-field-input' />
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
@@ -428,11 +421,11 @@
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.DamageType"}}:</label>
                     {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
-                          name=(concat "system.actions." index ".damageType") 
-                          selected=action.damageType 
-                          includeNone=true 
+                          name=(concat "system.actions." index ".damageType")
+                          selected=action.damageType
+                          includeNone=true
                           cssClass="npc-field-input"
-                          config=config}}
+                          config=@root.config}}
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}:</label>

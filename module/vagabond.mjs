@@ -444,21 +444,27 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
  * The 'html' argument is now a standard HTMLElement, not a jQuery object.
  */
 Hooks.on('renderChatMessageHTML', (message, html, data) => {
-  
+  // Safety check: ensure html is a valid element
+  if (!html || typeof html.querySelectorAll !== 'function') {
+    console.warn('VagabondSystem | renderChatMessageHTML: Invalid html element', html);
+    return;
+  }
+
   // 1. Accordion Toggle Handler
   // We use querySelectorAll to find elements within the chat message HTML
   const toggles = html.querySelectorAll('.metadata-header[data-action="toggleProperties"]');
-  
+
   toggles.forEach(toggle => {
+    if (!toggle) return; // Safety check
     toggle.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
-      
+
       const header = ev.currentTarget;
       // .closest() is the standard JS replacement for jQuery's .closest()
       const container = header.closest('.metadata-item-expandable');
-      
-      if (container) {
+
+      if (container && container.classList) {
         // .classList.toggle() is the standard JS replacement for jQuery's .toggleClass()
         container.classList.toggle('expanded');
       }
@@ -467,14 +473,15 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
 
   // 2. Damage Roll Button Handler
   const damageButtons = html.querySelectorAll('.vagabond-damage-button');
-  
+
   damageButtons.forEach(button => {
+    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-      
+
       // Disable button immediately to prevent double-clicks
       button.disabled = true;
-      
+
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.rollDamageFromButton(button, message.id);
       });
@@ -484,11 +491,12 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
   // 3. Apply Damage Button Handler
   // Note: multiple selectors are separated by commas just like in CSS
   const applyButtons = html.querySelectorAll('.vagabond-apply-damage-button, .vagabond-apply-healing-button');
-  
+
   applyButtons.forEach(button => {
+    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-      
+
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.applyDamageToTargets(button);
       });
@@ -497,11 +505,12 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
 
   // 4. NPC Damage Button Handler (GM Only)
   const npcButtons = html.querySelectorAll('.vagabond-npc-damage-button');
-  
+
   npcButtons.forEach(button => {
+    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-      
+
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleNPCDamageButton(button, message.id);
       });

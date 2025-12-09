@@ -298,9 +298,8 @@ export class VagabondDamageHelper {
       finalDamage = damageRoll.total;
     }
 
-    // Update the chat message to show the damage
-    await this.updateNPCActionDamage(
-      messageId,
+    // Post a new damage message instead of updating the original
+    await this.postNPCActionDamage(
       damageRoll,
       finalDamage,
       damageTypeLabel,
@@ -308,20 +307,10 @@ export class VagabondDamageHelper {
       action,
       damageType
     );
-
-    // Disable the buttons
-    const message = game.messages.get(messageId);
-    if (message) {
-      const allButtons = $(message.content).find('.vagabond-npc-damage-button');
-      allButtons.each(function() {
-        $(this).prop('disabled', true).addClass('used');
-      });
-    }
   }
 
   /**
-   * Update NPC action chat card with damage
-   * @param {string} messageId - The chat message ID
+   * Post a new chat message with NPC action damage
    * @param {Roll} damageRoll - The damage roll (or null for flat damage)
    * @param {number} finalDamage - The final damage amount
    * @param {string} damageTypeLabel - Localized damage type label
@@ -329,16 +318,7 @@ export class VagabondDamageHelper {
    * @param {Object} action - The action object
    * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
    */
-  static async updateNPCActionDamage(messageId, damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null) {
-    const message = game.messages.get(messageId);
-    if (!message) {
-      console.error('VagabondDamageHelper: Message not found:', messageId);
-      return;
-    }
-
-    // Get the current message content
-    let content = message.content;
-
+  static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null) {
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageTypeLabel, false, damageTypeKey, finalDamage);
 
@@ -350,18 +330,39 @@ export class VagabondDamageHelper {
       null
     );
 
-    // Replace the GM-only buttons with the damage display + apply button
-    // Look for the footer-actions div and replace its contents
-    content = content.replace(
-      /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
-      `$1${damageHTML}${applyButton}$3`
-    );
+    // Create message content
+    const content = `
+      <div class="vagabond-chat-card npc-damage-result">
+        <header class="card-header">
+          <h3 class="card-title">${action.name} Damage</h3>
+          <div class="card-subtitle">${actor.name}</div>
+        </header>
+        <div class="card-content">
+          ${damageHTML}
+        </div>
+        <footer class="card-footer">
+          <div class="footer-actions">
+            ${applyButton}
+          </div>
+        </footer>
+      </div>
+    `;
 
-    // Update the message's rolls array to include the damage roll
-    const rolls = damageRoll ? [...(message.rolls || []), damageRoll] : message.rolls;
+    // Create the chat message data
+    const messageData = {
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: content,
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER
+    };
 
-    // Update the message with new content and rolls
-    await message.update({ content, rolls });
+    // Add the roll if it exists
+    if (damageRoll) {
+      messageData.rolls = [damageRoll];
+    }
+
+    // Create the message
+    return await ChatMessage.create(messageData);
   }
 
   /**

@@ -158,11 +158,6 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
-        description: new fields.StringField({
-          required: false,
-          nullable: false,
-          initial: '',
-        }),
         type: new fields.StringField({
           required: false,
           nullable: true,

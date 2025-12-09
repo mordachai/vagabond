@@ -997,8 +997,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -1032,15 +1032,15 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
-  gap: 12px;
+  align-items: baseline;
+  gap: 8px;
 }
 .vagabond-chat-card .damage-icon {
-  font-size: 24px;
+  font-size: 28px;
   color: #ff6b35;
 }
 .vagabond-chat-card .damage-amount {
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 700;
   color: #d84315;
   line-height: 1;
@@ -3845,6 +3845,9 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+.vagabond i {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .npc-header {
   padding-top: 2px;
 }
@@ -4320,9 +4323,6 @@
   font-weight: normal;
 }
 .vagabond .action-name-line .action-damage-roll {
-  font-weight: normal;
-}
-.vagabond .action-name-line .action-description {
   font-weight: normal;
 }
 .vagabond .action-extra-info {

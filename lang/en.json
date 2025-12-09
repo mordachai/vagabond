@@ -272,12 +272,12 @@
           "Description": "Description",
           "Type": "Type",
           "Range": "Range",
-          "Note": "Note (before damage)",
+          "Note": "Note (before save)",
           "Recharge": "Recharge",
           "FlatDamage": "Flat Damage",
           "RollDamage": "Roll Damage",
           "DamageType": "Damage Type",
-          "ExtraInfo": "Extra Info",
+          "ExtraInfo": "Extra Info (after damage)",
           "Add": "Add Action"
         },
         "Ability": {

@@ -9,6 +9,8 @@
   }
 }
 
+i {color: $c-dark}
+
 // NPC Header
 .npc-header {
   padding-top: 2px;
@@ -613,10 +615,6 @@
   }
 
   .action-damage-roll {
-    font-weight: normal;
-  }
-
-  .action-description {
     font-weight: normal;
   }
 }
