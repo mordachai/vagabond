@@ -969,10 +969,14 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 8px 0;
   /* Header Section */
+  /* Roll Modifier Indicator (Favored/Hindered badge) */
   /* Metadata Bar - Compact info below header */
   /* Primary Content - Roll Results */
   /* Dice Display */
+  /* Favored/Hindered dice styling - applied via JavaScript in vagabond.mjs */
+  /* Green drop-shadow for favored (+1d6), red for hindered (-1d6) */
   /* Damage Section */
+  /* Save Damage Calculation Display */
   /* Metadata Section */
   /* Description Section */
   /* Footer Section - Actions & Tags */
@@ -988,6 +992,29 @@
   padding: 12px;
   background: var(--vagabond-c-dark);
   border-bottom: 1px solid var(--vagabond-c-faint);
+  position: relative;
+}
+.vagabond-chat-card .roll-modifier-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.vagabond-chat-card .roll-modifier-indicator.favored {
+  background: linear-gradient(135deg, rgba(0, 200, 0, 0.9) 0%, rgba(0, 255, 0, 0.8) 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.vagabond-chat-card .roll-modifier-indicator.hindered {
+  background: linear-gradient(135deg, rgba(200, 0, 0, 0.9) 0%, rgba(255, 0, 0, 0.8) 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 .vagabond-chat-card .card-icon {
   width: 48px;
@@ -1252,6 +1279,67 @@
   font-size: 13px;
   font-family: monospace;
   color: var(--vagabond-c-dark);
+}
+.vagabond-chat-card .save-damage-calculation {
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 12px;
+  align-items: center;
+}
+.vagabond-chat-card .save-damage-calculation .damage-title {
+  grid-column: 1/-1;
+}
+.vagabond-chat-card .damage-formula-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  line-height: 1.5;
+}
+.vagabond-chat-card .damage-component {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond-chat-card .damage-component i {
+  font-size: 14px;
+  color: var(--vagabond-c-tan);
+}
+.vagabond-chat-card .damage-component i.save-icon-hindered {
+  color: var(--vagabond-c-red);
+}
+.vagabond-chat-card .damage-operator {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--vagabond-c-tan);
+  margin: 0 2px;
+}
+.vagabond-chat-card .damage-final {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #d84315;
+}
+.vagabond-chat-card .damage-type-icon-large {
+  font-size: 24px !important;
+  color: #ff6b35 !important;
+}
+.vagabond-chat-card .damage-application-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--vagabond-c-tan);
+  margin-top: 6px;
+  font-style: italic;
 }
 .vagabond-chat-card .card-metadata {
   padding: 12px 16px;

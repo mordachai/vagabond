@@ -299,7 +299,7 @@
                 <div class='npc-action-view' data-action-index='{{index}}'>
                   <div class='action-name-line'>
                     <strong>
-                      <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>{{#if action.note}}: {{action.note}}{{/if}}{{#if (or action.recharge action.range)}} ({{#if action.recharge}}{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}: {{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}{{/if}}{{#if (and action.recharge action.range)}}, {{/if}}{{#if action.range}}{{localize "VAGABOND.Actor.NPC.Action.Range"}}: {{localize (lookup @root.config.weaponRanges action.range)}}{{/if}}){{/if}}{{#if (or action.recharge action.range action.note)}}:{{/if}}
+                      <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>{{#if action.note}}: {{action.note}}{{/if}}{{#if action.recharge}} ({{localize "VAGABOND.Actor.NPC.Action.Recharge"}}: {{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}){{/if}}{{#if (or action.recharge action.note)}}:{{/if}}
                     </strong>
                     {{#if (or action.flatDamage action.rollDamage action.damageType)}}
                       {{#if action.damageType}}
@@ -355,11 +355,12 @@
                       <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-field-input' />
                     </div>
                     <div class='action-edit-col'>
-                      <label>{{localize "VAGABOND.Actor.NPC.Action.Range"}}:</label>
-                      <select name='system.actions.{{index}}.range' class='npc-field-input'>
-                        <option value='close' {{#if (eq action.range 'close')}}selected{{/if}}>{{localize "VAGABOND.Weapon.Range.Close"}}</option>
-                        <option value='near' {{#if (eq action.range 'near')}}selected{{/if}}>{{localize "VAGABOND.Weapon.Range.Near"}}</option>
-                        <option value='far' {{#if (eq action.range 'far')}}selected{{/if}}>{{localize "VAGABOND.Weapon.Range.Far"}}</option>
+                      <label>{{localize "VAGABOND.Actor.NPC.Action.AttackType"}}:</label>
+                      <select name='system.actions.{{index}}.attackType' class='npc-field-input'>
+                        <option value='melee' {{#if (eq action.attackType 'melee')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.Melee"}}</option>
+                        <option value='ranged' {{#if (eq action.attackType 'ranged')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.Ranged"}}</option>
+                        <option value='castClose' {{#if (eq action.attackType 'castClose')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.CastClose"}}</option>
+                        <option value='castRanged' {{#if (eq action.attackType 'castRanged')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.CastRanged"}}</option>
                       </select>
                     </div>
                   </div>
