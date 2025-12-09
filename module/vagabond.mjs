@@ -52,7 +52,18 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
-  // Setting 3: Default clock position
+  // Setting 3: Auto-apply save damage
+  game.settings.register('vagabond', 'autoApplySaveDamage', {
+    name: 'VAGABOND.Settings.autoApplySaveDamage.name',
+    hint: 'VAGABOND.Settings.autoApplySaveDamage.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
+  // Setting 4: Default clock position
   game.settings.register('vagabond', 'defaultClockPosition', {
     name: 'VAGABOND.Settings.defaultClockPosition.name',
     hint: 'VAGABOND.Settings.defaultClockPosition.hint',
@@ -68,7 +79,7 @@ function registerGameSettings() {
     default: 'top-right',
   });
 
-  // Setting 4: Level Pacing
+  // Setting 5: Level Pacing
   game.settings.register('vagabond', 'levelPacing', {
     name: 'VAGABOND.Settings.levelPacing.name',
     hint: 'VAGABOND.Settings.levelPacing.hint',
@@ -450,7 +461,7 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     return;
   }
 
-  // 1. Accordion Toggle Handler
+  // 1. Accordion Toggle Handler (Properties)
   // We use querySelectorAll to find elements within the chat message HTML
   const toggles = html.querySelectorAll('.metadata-header[data-action="toggleProperties"]');
 
@@ -471,7 +482,25 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     });
   });
 
-  // 2. Damage Roll Button Handler
+  // 2. Accordion Toggle Handler (Defend Info)
+  const defendToggles = html.querySelectorAll('.defend-info-header[data-action="toggleDefendInfo"]');
+
+  defendToggles.forEach(toggle => {
+    if (!toggle) return; // Safety check
+    toggle.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const header = ev.currentTarget;
+      const container = header.closest('.card-defend-info');
+
+      if (container && container.classList) {
+        container.classList.toggle('expanded');
+      }
+    });
+  });
+
+  // 3. Damage Roll Button Handler
   const damageButtons = html.querySelectorAll('.vagabond-damage-button');
 
   damageButtons.forEach(button => {
@@ -488,11 +517,44 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     });
   });
 
-  // 3. Apply Damage Button Handler
-  // Note: multiple selectors are separated by commas just like in CSS
-  const applyButtons = html.querySelectorAll('.vagabond-apply-damage-button, .vagabond-apply-healing-button');
+  // 4. Save Button Handler (Roll to Save system)
+  const saveButtons = html.querySelectorAll('.vagabond-save-button');
 
-  applyButtons.forEach(button => {
+  saveButtons.forEach(button => {
+    if (!button) return; // Safety check
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+
+      // Disable button to prevent double-clicks
+      button.disabled = true;
+
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleSaveRoll(button);
+      });
+    });
+  });
+
+  // 5. Apply Direct Damage Button Handler (bypasses saves)
+  const applyDirectButtons = html.querySelectorAll('.vagabond-apply-direct-button');
+
+  applyDirectButtons.forEach(button => {
+    if (!button) return; // Safety check
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+
+      // Disable button to prevent double-clicks
+      button.disabled = true;
+
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplyDirect(button);
+      });
+    });
+  });
+
+  // 6. Apply Healing Button Handler (healing still uses old system)
+  const healingButtons = html.querySelectorAll('.vagabond-apply-healing-button');
+
+  healingButtons.forEach(button => {
     if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
@@ -503,7 +565,7 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     });
   });
 
-  // 4. NPC Damage Button Handler (GM Only)
+  // 7. NPC Damage Button Handler (GM Only)
   const npcButtons = html.querySelectorAll('.vagabond-npc-damage-button');
 
   npcButtons.forEach(button => {

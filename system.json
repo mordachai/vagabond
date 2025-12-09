@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -188,7 +188,20 @@
         },
         "private": false,
         "flags": {}
-    }        
+    },
+    {
+        "name": "humanlike",
+        "label": "Humanlike",
+        "system": "vagabond",
+        "path": "packs/characters/humanlike.db",
+        "type": "Actor",
+        "ownership": {
+          "PLAYER": "OBSERVER",
+          "ASSISTANT": "OWNER"
+        },
+        "private": false,
+        "flags": {}
+    }
   ],
   "packFolders": [
       {
@@ -226,7 +239,8 @@
                   "sorting": "m",
                   "color": "#000000",
                   "packs": [
-                      "bestiary"
+                      "bestiary",
+                      "humanlike"
                   ]
               }
           ]

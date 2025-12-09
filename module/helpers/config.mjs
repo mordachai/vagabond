@@ -556,3 +556,42 @@ VAGABOND.countdownDiceSizes = {
   'M': 75,
   'L': 100
 };
+
+/**
+ * Attack types for weapons, spells, and NPC actions
+ * Used to determine save modifiers (Hinder conditions)
+ * @type {Object}
+ */
+VAGABOND.attackTypes = {
+  'melee': {
+    label: 'VAGABOND.AttackTypes.Melee',
+    saveModifier: 'none'  // For future: 'none', 'hinder', 'favor', '+2', '-1d6', etc.
+  },
+  'ranged': {
+    label: 'VAGABOND.AttackTypes.Ranged',
+    saveModifier: 'hinderBlock'  // Hinders Block (Endure) saves
+  },
+  'cast': {
+    label: 'VAGABOND.AttackTypes.Cast',
+    saveModifier: 'hinderBlock'  // Treated as ranged for saves
+  }
+};
+
+/**
+ * Spell delivery types mapped to attack types
+ * Determines if spell is melee or ranged for save Hinder purposes
+ * Touch and Glyph spells are melee (do NOT hinder Block saves)
+ * All other spells are ranged (DO hinder Block saves)
+ * @type {Object}
+ */
+VAGABOND.spellDeliveryAttackTypes = {
+  'touch': 'melee',    // Touch spells are melee
+  'glyph': 'melee',    // Glyph spells are melee
+  'aura': 'ranged',    // All others are ranged
+  'cone': 'ranged',
+  'cube': 'ranged',
+  'imbue': 'ranged',
+  'line': 'ranged',
+  'remote': 'ranged',
+  'sphere': 'ranged'
+};

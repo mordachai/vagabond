@@ -571,6 +571,12 @@
   align-items: center;
 }
 
+.flex-col-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .flex-group-center,
 .flex-group-left,
 .flex-group-right {
@@ -676,9 +682,59 @@
   margin-right: 5px;
 }
 
-/* Apply Damage Button (Top-level - for chat messages) */
-.vagabond-apply-damage-button {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+/* Save Buttons Container (Roll to Save system) */
+.vagabond-save-buttons-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Save Buttons (Reflex, Endure, Will) - 3 in a row */
+.vagabond-save-button {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+.vagabond-save-button:hover {
+  background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.vagabond-save-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.vagabond-save-button:disabled {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  cursor: not-allowed;
+  opacity: 0.8;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+.vagabond-save-button:disabled:hover {
+  transform: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.vagabond-save-button i {
+  margin-right: 5px;
+}
+
+/* Apply Direct Damage Button (bypasses saves) - Full width */
+.vagabond-apply-direct-button {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
   border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
   color: white;
@@ -690,32 +746,35 @@
   transition: all 0.2s ease;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  flex-basis: 100%;
+  width: 100%;
 }
-.vagabond-apply-damage-button:hover {
-  background: linear-gradient(135deg, #f15546 0%, #d14436 100%);
+.vagabond-apply-direct-button:hover {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
   border-color: rgba(0, 0, 0, 0.4);
 }
-.vagabond-apply-damage-button:active {
+.vagabond-apply-direct-button:active {
   transform: translateY(1px);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-.vagabond-apply-damage-button:disabled, .vagabond-apply-damage-button.applied {
+.vagabond-apply-direct-button:disabled {
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   cursor: not-allowed;
   opacity: 0.8;
   border-color: rgba(0, 0, 0, 0.3);
 }
-.vagabond-apply-damage-button:disabled:hover, .vagabond-apply-damage-button.applied:hover {
+.vagabond-apply-direct-button:disabled:hover {
   transform: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
-.vagabond-apply-damage-button i {
+.vagabond-apply-direct-button i {
   margin-right: 5px;
 }
 
-/* Apply Healing Button (Top-level - for chat messages) */
+/* Apply Healing Button (healing still uses old system) */
 .vagabond-apply-healing-button {
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   border: 2px solid rgba(0, 0, 0, 0.3);
@@ -752,6 +811,110 @@
 }
 .vagabond-apply-healing-button i {
   margin-right: 5px;
+}
+
+/* Defend Info Section (Block/Dodge mechanics) - Accordion */
+.card-defend-info {
+  border-radius: 6px;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.defend-info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+.defend-info-header:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+.defend-info-header i.fa-shield-alt {
+  font-size: 14px;
+}
+.defend-info-header .expand-icon {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.card-defend-info.expanded .expand-icon {
+  transform: rotate(90deg);
+}
+
+.defend-info-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.card-defend-info.expanded .defend-info-details {
+  max-height: 300px;
+  padding: 0 12px 12px 12px;
+}
+
+.defend-info-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.defend-option {
+  flex: 1;
+  min-width: 200px;
+  border-radius: 4px;
+  padding: 8px;
+}
+.defend-option p {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: var(--vagabond-c-dark);
+  line-height: 1.4;
+}
+
+.defend-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.defend-title i {
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+}
+.defend-title strong {
+  color: var(--vagabond-c-dark);
+}
+
+.hindered-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.hindered-tag i {
+  font-size: 9px;
+}
+
+.armor-hinder-note {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--vagabond-c-dark);
 }
 
 /* NPC Damage Buttons (Top-level - for GM-only chat actions) */
@@ -1023,17 +1186,46 @@
 }
 .vagabond-chat-card .card-damage {
   padding: 16px;
-  display: flex;
-  gap: 20px;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  gap: 12px;
   align-items: center;
+}
+.vagabond-chat-card .damage-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%;
+  gap: 12px;
+  grid-column: 1/-1;
+}
+.vagabond-chat-card .damage-title::before, .vagabond-chat-card .damage-title::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  opacity: 0.3;
+}
+.vagabond-chat-card .flex-row-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
 }
 .vagabond-chat-card .damage-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  align-items: baseline;
-  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
 }
 .vagabond-chat-card .damage-icon {
   font-size: 28px;
@@ -1047,7 +1239,6 @@
   word-break: keep-all;
 }
 .vagabond-chat-card .critical-badge {
-  margin-left: auto;
   padding: 4px 8px;
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
   font-weight: 700;
@@ -1056,10 +1247,11 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+.vagabond-chat-card .damage-dice-display,
 .vagabond-chat-card .damage-formula {
-  margin-top: 8px;
   font-size: 13px;
   font-family: monospace;
+  color: var(--vagabond-c-dark);
 }
 .vagabond-chat-card .card-metadata {
   padding: 12px 16px;

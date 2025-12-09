@@ -510,12 +510,31 @@ export class VagabondChatCard {
       card.addMetadata('Properties', weapon.system.propertiesDisplay);
     }
 
-    // Add damage if provided
-    if (damageRoll) {
+    // Determine attack type from weapon skill key
+    const attackType = (weaponSkillKey === 'ranged') ? 'ranged' : 'melee';
+
+    // Add damage if provided AND attack hit
+    if (damageRoll && isHit) {
       // Get damage type from weapon, default to 'physical' if not set
       const damageType = weapon.system.damageType || 'physical';
       const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
       card.addDamage(damageRoll, damageTypeLabel, isCritical, damageType);
+
+      // Add defend info and save buttons when damage is auto-rolled on a hit
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      const isHealing = damageType?.toLowerCase() === 'healing';
+
+      if (!isHealing) {
+        // Add defend info section to description
+        const defendInfoHTML = VagabondDamageHelper._renderDefendInfoSection(attackType);
+        card.setDescription((card.data.description || '') + defendInfoHTML);
+      }
+
+      // Add save buttons (or healing button for healing damage)
+      const buttonsHTML = isHealing
+        ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, damageTypeLabel, actor.id, weapon.id)
+        : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, weapon.id, attackType);
+      card.addFooterAction(buttonsHTML);
     } else if (isHit) {
       // If hit but no damage roll (auto-roll disabled), add damage button
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
@@ -529,7 +548,8 @@ export class VagabondChatCard {
           type: 'weapon',
           isCritical: isCritical,
           statKey: statKey,
-          damageType: weapon.system.damageType
+          damageType: weapon.system.damageType,
+          attackType: attackType
         }
       );
       card.addFooterAction(damageButton);
@@ -623,11 +643,31 @@ export class VagabondChatCard {
       );
     }
 
-    // Add damage if provided
-    if (damageRoll && spell.system.damageType !== '-') {
+    // Determine attack type from spell delivery type
+    const deliveryType = spell.system.deliveryType || 'remote';
+    const attackType = CONFIG.VAGABOND?.spellDeliveryAttackTypes?.[deliveryType] || 'ranged';
+
+    // Add damage if provided AND spell succeeded
+    if (damageRoll && isSuccess && spell.system.damageType !== '-') {
       const damageTypeKey = spell.system.damageType;
       const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]);
       card.addDamage(damageRoll, damageTypeName, isCritical, damageTypeKey);
+
+      // Add defend info and save buttons when damage is auto-rolled on success
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      const isHealing = damageTypeKey?.toLowerCase() === 'healing';
+
+      if (!isHealing) {
+        // Add defend info section to description
+        const defendInfoHTML = VagabondDamageHelper._renderDefendInfoSection(attackType);
+        card.setDescription((card.data.description || '') + defendInfoHTML);
+      }
+
+      // Add save buttons (or healing button for healing damage)
+      const buttonsHTML = isHealing
+        ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, damageTypeName, actor.id, spell.id)
+        : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageTypeKey, damageRoll, actor.id, spell.id, attackType);
+      card.addFooterAction(buttonsHTML);
     } else if (isSuccess && spell.system.damageType !== '-') {
       // If succeeded but no damage roll (auto-roll disabled), add damage button
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
@@ -641,7 +681,8 @@ export class VagabondChatCard {
           type: 'spell',
           damageType: spell.system.damageType,
           isCritical: isCritical,
-          statKey: statKey
+          statKey: statKey,
+          attackType: attackType
         }
       );
       card.addFooterAction(damageButton);
@@ -665,13 +706,6 @@ export class VagabondChatCard {
       .setSubtitle(actor.name);
 
     // Add action metadata
-    if (action.type || action.range) {
-      let actionInfo = [];
-      if (action.type) actionInfo.push(action.type);
-      if (action.range) actionInfo.push(action.range);
-      card.addMetadata('Type', actionInfo.join(' • '));
-    }
-
     if (action.note) {
       card.addMetadata('Note', action.note);
     }
@@ -715,6 +749,18 @@ export class VagabondChatCard {
         damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[action.damageType]) || action.damageType;
       }
 
+      // Determine attack type from range field
+      // far = ranged, close/near = melee
+      let attackType = 'melee';
+      if (action.range === 'far') {
+        attackType = 'ranged';
+      } else if (action.range === 'close' || action.range === 'near') {
+        attackType = 'melee';
+      } else if (action.attackType) {
+        // Fallback to explicit attackType if range is not set
+        attackType = action.attackType;
+      }
+
       // Create GM-only damage buttons
       if (action.flatDamage) {
         const flatButton = VagabondDamageHelper.createNPCDamageButton(
@@ -723,7 +769,8 @@ export class VagabondChatCard {
           action.flatDamage,
           'flat',
           action.damageType || 'physical',
-          damageTypeLabel
+          damageTypeLabel,
+          attackType
         );
         card.addFooterAction(flatButton);
       }
@@ -735,7 +782,8 @@ export class VagabondChatCard {
           action.rollDamage,
           'roll',
           action.damageType || 'physical',
-          damageTypeLabel
+          damageTypeLabel,
+          attackType
         );
         card.addFooterAction(rollButton);
       }
