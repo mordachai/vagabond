@@ -158,32 +158,21 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
-        type: new fields.StringField({
-          required: false,
-          nullable: true,
-          initial: null,
-          choices: ['Melee', 'Ranged', 'Cast']
-        }),
-        range: new fields.StringField({
-          required: false,
-          nullable: true,
-          initial: null,
-        }),
         note: new fields.StringField({
           required: false,
           nullable: false,
           initial: '',
         }),
-        saves: new fields.StringField({
-          required: false,
-          nullable: true,
-          initial: null,
-          choices: ['reflex', 'endure', 'will']
-        }),
         recharge: new fields.StringField({
           required: false,
           nullable: false,
           initial: '',
+        }),
+        range: new fields.StringField({
+          required: false,
+          nullable: true,
+          initial: 'close',
+          choices: ['close', 'near', 'far']
         }),
         flatDamage: new fields.StringField({
           required: false,
@@ -214,6 +203,12 @@ export default class VagabondNPC extends VagabondActorBase {
             'psychic': 'VAGABOND.DamageTypes.Psychic',
             'healing': 'VAGABOND.DamageTypes.Healing'
           }
+        }),
+        attackType: new fields.StringField({
+          required: false,
+          nullable: true,
+          initial: 'melee',
+          choices: Object.keys(CONFIG.VAGABOND?.attackTypes || { 'melee': '', 'ranged': '', 'cast': '' })
         }),
         extraInfo: new fields.StringField({
           required: false,

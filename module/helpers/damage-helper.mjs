@@ -119,13 +119,16 @@ export class VagabondDamageHelper {
     // Get the damage type key for icon lookup (from context, which stores the key)
     const finalDamageTypeKey = context.damageType || null;
 
+    // Get attack type from context (defaults to 'melee' if not provided)
+    const attackType = context.attackType || 'melee';
+
     // Update the chat message in-place
     // Note: The "Roll Damage" button will be removed from the content during update
-    await this.updateChatCardDamage(messageId, damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey);
+    await this.updateChatCardDamage(messageId, damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType);
   }
 
 /**
-   * Update a chat card with damage information
+   * Update a chat card with damage information and save buttons
    * @param {string} messageId - The chat message ID
    * @param {Roll} damageRoll - The damage roll
    * @param {string} damageType - Type of damage (localized label)
@@ -133,8 +136,9 @@ export class VagabondDamageHelper {
    * @param {Actor} actor - The actor dealing damage
    * @param {Item} item - The item used (optional)
    * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
+   * @param {string} attackType - 'melee' or 'ranged' or 'cast' (for Hinder logic)
    */
-  static async updateChatCardDamage(messageId, damageRoll, damageType, isCritical, actor, item, damageTypeKey = null) {
+  static async updateChatCardDamage(messageId, damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee') {
     const message = game.messages.get(messageId);
     if (!message) {
       console.error('VagabondDamageHelper: Message not found:', messageId);
@@ -144,42 +148,62 @@ export class VagabondDamageHelper {
     // Get the current message content
     let content = message.content;
 
+    // Build Block/Dodge info section HTML
+    const defendInfoHTML = this._renderDefendInfoSection(attackType);
+
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageType, isCritical, damageTypeKey);
 
-    // Build apply damage button HTML
-    const applyButton = this.createApplyDamageButton(
-      damageRoll.total,
-      damageType,
-      actor.id,
-      item?.id
+    // Build save buttons HTML (unless it's healing)
+    const isHealing = damageType.toLowerCase() === 'healing';
+    let buttonsHTML;
+    if (isHealing) {
+      // Keep old apply healing button for healing damage
+      buttonsHTML = this.createApplyDamageButton(
+        damageRoll.total,
+        damageType,
+        actor.id,
+        item?.id
+      );
+    } else {
+      // Use new save buttons for all other damage
+      buttonsHTML = this.createSaveButtons(
+        damageRoll.total,
+        damageTypeKey || 'physical',
+        damageRoll,
+        actor.id,
+        item?.id,
+        attackType
+      );
+    }
+
+    // 1. Inject Block/Dodge Info Section (BEFORE damage section)
+    // Insert before the damage section
+    content = content.replace(
+      /(<div class=['"]card-damage-section['"])/,
+      `${defendInfoHTML}$1`
     );
 
-    // 1. Inject Damage Display
+    // 2. Inject Damage Display
     // Replace the empty damage section placeholder with the actual damage HTML
     content = content.replace(
       /(<div class=['"]card-damage-section['"] data-damage-section>)([\s\S]*?)(<\/div>)/,
       `$1${damageHTML}$3`
     );
 
-    // 2. Replace Footer Actions
-    // Instead of complex regex to find/remove specific buttons, we locate the .footer-actions container
-    // and completely replace its inner HTML with just the new Apply button (and any other persistent actions if we had them).
-    // This ensures a clean state and prevents weird text-node nesting issues.
-    
+    // 3. Replace Footer Actions with Save Buttons
     if (content.includes('footer-actions')) {
       content = content.replace(
         /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
-        `$1${applyButton}$3`
+        `$1${buttonsHTML}$3`
       );
     } else {
-      // Fallback: If no footer actions existed (unlikely if Roll Damage was there), inject it before footer tags or end of footer
-      // This is a safety catch.
+      // Fallback: If no footer actions existed, inject it before footer tags
       const footerOpen = `<footer class='card-footer'>`;
       if (content.includes(footerOpen)) {
          content = content.replace(
            footerOpen,
-           `${footerOpen}<div class='footer-actions'>${applyButton}</div>`
+           `${footerOpen}<div class='footer-actions'>${buttonsHTML}</div>`
          );
       }
     }
@@ -189,6 +213,47 @@ export class VagabondDamageHelper {
 
     // Update the message with new content and rolls
     await message.update({ content, rolls });
+  }
+
+  /**
+   * Render the Block/Dodge info section as an accordion
+   * @param {string} attackType - 'melee' or 'ranged' or 'cast'
+   * @returns {string} HTML string
+   * @private
+   */
+  static _renderDefendInfoSection(attackType) {
+    const isRanged = (attackType === 'ranged' || attackType === 'cast');
+    const hinderedTag = isRanged ? '<span class="hindered-tag"><i class="fas fa-exclamation-triangle"></i> Hindered</span>' : '';
+
+    return `
+      <div class='card-defend-info'>
+        <div class='defend-info-header' data-action='toggleDefendInfo'>
+          <i class='fas fa-shield-alt'></i>
+          <strong>Defending Options</strong>
+          <i class='fas fa-chevron-right expand-icon'></i>
+        </div>
+        <div class='defend-info-details'>
+          <div class='defend-info-row'>
+            <div class='defend-option defend-dodge'>
+              <div class='defend-title'>
+                <i class='fas fa-running'></i>
+                <strong>Dodge (Reflex):</strong>
+                <span class='armor-hinder-note'>(Hindered if Heavy Armor)</span>
+              </div>
+              <p>Roll Reflex save. Success ignores one highest damage die.</p>
+            </div>
+            <div class='defend-option defend-block'>
+              <div class='defend-title'>
+                <i class='fas fa-shield-alt'></i>
+                <strong>Block (Endure):</strong>
+                ${hinderedTag}
+              </div>
+              <p>Roll Endure save. Success ignores one highest damage die.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   /**
@@ -237,9 +302,10 @@ export class VagabondDamageHelper {
    * @param {string} damageMode - 'flat' or 'roll'
    * @param {string} damageType - Type of damage
    * @param {string} damageTypeLabel - Localized damage type label
+   * @param {string} attackType - Attack type ('melee', 'ranged', 'cast')
    * @returns {string} HTML button string
    */
-  static createNPCDamageButton(actorId, actionIndex, damageValue, damageMode, damageType, damageTypeLabel) {
+  static createNPCDamageButton(actorId, actionIndex, damageValue, damageMode, damageType, damageTypeLabel, attackType = 'melee') {
     const isFlat = damageMode === 'flat';
     const icon = isFlat ? 'fa-hashtag' : 'fa-dice-d20';
     const label = isFlat ? `Apply ${damageValue} Damage` : `Roll ${damageValue} Damage`;
@@ -253,6 +319,7 @@ export class VagabondDamageHelper {
         data-damage-mode="${damageMode}"
         data-damage-type="${damageType}"
         data-damage-type-label="${damageTypeLabel}"
+        data-attack-type="${attackType}"
       >
         <i class="fas ${icon}"></i> ${label}
       </button>
@@ -271,6 +338,7 @@ export class VagabondDamageHelper {
     const damageMode = button.dataset.damageMode;
     const damageType = button.dataset.damageType;
     const damageTypeLabel = button.dataset.damageTypeLabel || damageType;
+    const attackType = button.dataset.attackType || 'melee';
 
     const actor = game.actors.get(actorId);
     if (!actor) {
@@ -305,7 +373,8 @@ export class VagabondDamageHelper {
       damageTypeLabel,
       actor,
       action,
-      damageType
+      damageType,
+      attackType
     );
   }
 
@@ -317,18 +386,44 @@ export class VagabondDamageHelper {
    * @param {Actor} actor - The NPC actor
    * @param {Object} action - The action object
    * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
+   * @param {string} attackType - The attack type ('melee', 'ranged', 'cast')
    */
-  static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null) {
+  static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee') {
+    // If damageRoll is null (flat damage), create a simple Roll object with just the total
+    let rollForButtons = damageRoll;
+    if (!damageRoll) {
+      rollForButtons = new Roll(String(finalDamage));
+      await rollForButtons.evaluate();
+    }
+
+    // Check if this is healing damage
+    const isHealing = damageTypeKey?.toLowerCase() === 'healing';
+
+    // Build defend info section (if not healing) - players can roll saves against NPC attacks
+    const defendInfoHTML = isHealing ? '' : this._renderDefendInfoSection(attackType);
+
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageTypeLabel, false, damageTypeKey, finalDamage);
 
-    // Build apply damage button HTML
-    const applyButton = this.createApplyDamageButton(
-      finalDamage,
-      damageTypeLabel,
-      actor.id,
-      null
-    );
+    // Build buttons HTML - use save buttons for damage, old button for healing
+    let buttonsHTML;
+    if (isHealing) {
+      buttonsHTML = this.createApplyDamageButton(
+        finalDamage,
+        damageTypeLabel,
+        actor.id,
+        null
+      );
+    } else {
+      buttonsHTML = this.createSaveButtons(
+        finalDamage,
+        damageTypeKey || 'physical',
+        rollForButtons,
+        actor.id,
+        null,
+        attackType
+      );
+    }
 
     // Create message content
     const content = `
@@ -338,11 +433,12 @@ export class VagabondDamageHelper {
           <div class="card-subtitle">${actor.name}</div>
         </header>
         <div class="card-content">
+          ${defendInfoHTML}
           ${damageHTML}
         </div>
         <footer class="card-footer">
           <div class="footer-actions">
-            ${applyButton}
+            ${buttonsHTML}
           </div>
         </footer>
       </div>
@@ -435,83 +531,6 @@ export class VagabondDamageHelper {
     `;
   }
 
-  /**
-   * Apply damage or healing to selected or targeted tokens
-   * @param {HTMLElement} button - The clicked button element
-   */
-  static async applyDamageToTargets(button) {
-    const amount = parseInt(button.dataset.damageAmount);
-    const damageType = button.dataset.damageType;
-    const isHealing = damageType.toLowerCase() === 'healing';
-
-    // Get weapon data from chat message flags (if available)
-    const messageId = button.closest('.chat-message')?.dataset?.messageId;
-    const message = game.messages.get(messageId);
-    const weaponId = message?.flags?.vagabond?.weaponId;
-    const actorId = message?.flags?.vagabond?.actorId;
-
-    let attackingWeapon = null;
-    if (weaponId && actorId) {
-      const actor = game.actors.get(actorId);
-      attackingWeapon = actor?.items.get(weaponId);
-    }
-
-    // Get user's selected/targeted tokens
-    const targets = Array.from(game.user.targets);
-
-    if (targets.length === 0) {
-      ui.notifications.warn('No targets selected. Please target a token first.');
-      return;
-    }
-
-    // Apply damage or healing to each target
-    for (const target of targets) {
-      const targetActor = target.actor;
-      if (!targetActor) continue;
-
-      // Check permissions
-      if (!targetActor.isOwner && !game.user.isGM) {
-        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
-        continue;
-      }
-
-      const currentHP = targetActor.system.health?.value || 0;
-      const maxHP = targetActor.system.health?.max || currentHP;
-      let newHP;
-      let finalAmount;
-
-      if (isHealing) {
-        // Healing: Add HP (capped at max)
-        newHP = Math.min(maxHP, currentHP + amount);
-        finalAmount = newHP - currentHP; // Actual healing applied
-      } else {
-        // Damage: Calculate with resistances/vulnerabilities and subtract
-        finalAmount = this.calculateFinalDamage(targetActor, amount, damageType, attackingWeapon);
-        newHP = Math.max(0, currentHP - finalAmount);
-      }
-
-      await targetActor.update({ 'system.health.value': newHP });
-
-      // Show notification
-      if (isHealing) {
-        const healText = finalAmount !== amount
-          ? `${finalAmount} (capped at max HP)`
-          : finalAmount;
-      } else {
-        const damageText = finalAmount !== amount
-          ? `${finalAmount} (modified from ${amount})`
-          : finalAmount;
-      }
-    }
-
-    // Disable button after applying (check if button still exists)
-    if (button && button.classList) {
-      button.disabled = true;
-      const successText = isHealing ? 'Healing Applied' : 'Damage Applied';
-      button.innerHTML = `<i class="fas fa-check"></i> ${successText}`;
-      button.classList.add('applied');
-    }
-  }
 
   /**
    * Calculate final damage per RAW rules: Armor/Immune/Weak
@@ -585,5 +604,359 @@ export class VagabondDamageHelper {
     }
 
     return finalDamage;
+  }
+
+  /**
+   * Create save buttons (Reflex, Endure, Will, Apply Direct)
+   * @param {number} damageAmount - Base damage amount
+   * @param {string} damageType - Damage type key
+   * @param {Roll} damageRoll - The damage Roll object (for die manipulation)
+   * @param {string} actorId - Source actor ID
+   * @param {string} itemId - Item ID (weapon/spell)
+   * @param {string} attackType - 'melee' or 'ranged' or 'cast' (for Hinder logic)
+   * @returns {string} HTML string with 4 buttons
+   */
+  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType) {
+    // Encode the damage roll terms into a JSON string
+    const rollTermsData = JSON.stringify({
+      terms: damageRoll.terms.map(t => {
+        if (t.constructor.name === 'Die') {
+          return {
+            type: t.constructor.name,
+            faces: t.faces,
+            results: t.results || []
+          };
+        } else if (t.constructor.name === 'NumericTerm') {
+          return {
+            type: t.constructor.name,
+            number: t.number
+          };
+        } else {
+          return { type: t.constructor.name };
+        }
+      }),
+      total: damageRoll.total
+    }).replace(/"/g, '&quot;');
+
+    // Get localized save names
+    const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
+    const endureLabel = game.i18n.localize('VAGABOND.Saves.Endure.name');
+    const willLabel = game.i18n.localize('VAGABOND.Saves.Will.name');
+
+    return `
+      <div class="vagabond-save-buttons-container">
+        <button class="vagabond-save-button save-reflex"
+          data-save-type="reflex"
+          data-damage-amount="${damageAmount}"
+          data-damage-type="${damageType}"
+          data-roll-terms="${rollTermsData}"
+          data-actor-id="${actorId}"
+          data-item-id="${itemId || ''}"
+          data-attack-type="${attackType}">
+          <i class="fas fa-running"></i> ${reflexLabel}
+        </button>
+        <button class="vagabond-save-button save-endure"
+          data-save-type="endure"
+          data-damage-amount="${damageAmount}"
+          data-damage-type="${damageType}"
+          data-roll-terms="${rollTermsData}"
+          data-actor-id="${actorId}"
+          data-item-id="${itemId || ''}"
+          data-attack-type="${attackType}">
+          <i class="fas fa-shield-alt"></i> ${endureLabel}
+        </button>
+        <button class="vagabond-save-button save-will"
+          data-save-type="will"
+          data-damage-amount="${damageAmount}"
+          data-damage-type="${damageType}"
+          data-roll-terms="${rollTermsData}"
+          data-actor-id="${actorId}"
+          data-item-id="${itemId || ''}"
+          data-attack-type="${attackType}">
+          <i class="fas fa-brain"></i> ${willLabel}
+        </button>
+        <button class="vagabond-apply-direct-button"
+          data-damage-amount="${damageAmount}"
+          data-damage-type="${damageType}"
+          data-actor-id="${actorId}"
+          data-item-id="${itemId || ''}">
+          <i class="fas fa-bolt"></i> Apply Direct
+        </button>
+      </div>
+    `;
+  }
+
+  /**
+   * Handle save button click - roll saves for each selected token
+   * @param {HTMLElement} button - The clicked save button
+   */
+  static async handleSaveRoll(button) {
+    const saveType = button.dataset.saveType; // 'reflex', 'endure', 'will'
+    const damageAmount = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType;
+    const rollTermsData = JSON.parse(button.dataset.rollTerms.replace(/&quot;/g, '"'));
+    const attackType = button.dataset.attackType; // 'melee' or 'ranged' or 'cast'
+    const actorId = button.dataset.actorId;
+    const itemId = button.dataset.itemId;
+
+    // Get selected tokens
+    const selectedTokens = canvas.tokens.controlled;
+    if (selectedTokens.length === 0) {
+      ui.notifications.warn('No tokens selected. Please select at least one token.');
+      return;
+    }
+
+    // Roll save for each selected token individually
+    for (const target of selectedTokens) {
+      const targetActor = target.actor;
+      if (!targetActor) continue;
+
+      // Check permissions
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to roll saves for ${targetActor.name}.`);
+        continue;
+      }
+
+      // NPCs don't roll saves - they only have armor, immunities, and weaknesses
+      if (targetActor.type === 'npc') {
+        ui.notifications.warn(game.i18n.localize('VAGABOND.Saves.NPCNoSaves'));
+        continue;
+      }
+
+      // Determine if save is Hindered
+      const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
+
+      // Roll the save
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered);
+
+      // Determine success
+      const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
+      const isSuccess = saveRoll.total >= difficulty;
+
+      // Calculate final damage
+      let finalDamage = damageAmount;
+      if (isSuccess) {
+        // Remove highest damage die from original roll
+        finalDamage = this._removeHighestDie(rollTermsData);
+      }
+
+      // Apply armor/immune/weak modifiers
+      const sourceActor = game.actors.get(actorId);
+      const sourceItem = sourceActor?.items.get(itemId);
+      finalDamage = this.calculateFinalDamage(targetActor, finalDamage, damageType, sourceItem);
+
+      // Auto-apply damage if setting enabled
+      const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage');
+      if (autoApply) {
+        const currentHP = targetActor.system.health?.value || 0;
+        const newHP = Math.max(0, currentHP - finalDamage);
+        await targetActor.update({ 'system.health.value': newHP });
+      }
+
+      // Post save result to chat
+      await this._postSaveResult(
+        targetActor,
+        saveType,
+        saveRoll,
+        difficulty,
+        isSuccess,
+        isHindered,
+        damageAmount,
+        finalDamage,
+        damageType,
+        autoApply
+      );
+    }
+
+    // Disable button after all saves processed
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-check"></i>Rolled';
+    button.classList.add('rolled');
+  }
+
+  /**
+   * Determine if a save should be Hindered
+   * @param {string} saveType - 'reflex', 'endure', 'will'
+   * @param {string} attackType - 'melee' or 'ranged' or 'cast'
+   * @param {Actor} actor - The defending actor
+   * @returns {boolean} True if save is Hindered
+   * @private
+   */
+  static _isSaveHindered(saveType, attackType, actor) {
+    // Block (Endure): Hindered if Ranged or Cast attack
+    if (saveType === 'endure' && (attackType === 'ranged' || attackType === 'cast')) {
+      return true;
+    }
+
+    // Dodge (Reflex): Hindered if Heavy Armor
+    if (saveType === 'reflex') {
+      const equippedArmor = actor.items.find(item => {
+        const isArmor = (item.type === 'armor') ||
+                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
+        return isArmor && item.system.equipped;
+      });
+      if (equippedArmor && equippedArmor.system.armorType === 'heavy') {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Roll a save for an actor
+   * @param {Actor} actor - The actor rolling the save
+   * @param {string} saveType - 'reflex', 'endure', 'will'
+   * @param {boolean} isHindered - Whether the save is Hindered by conditions
+   * @returns {Promise<Roll>} The save roll
+   * @private
+   */
+  static async _rollSave(actor, saveType, isHindered) {
+    const favorHinder = actor.system.favorHinder || 'none';
+
+    // Build roll formula
+    let rollFormula = 'd20';
+
+    // Check if actor already has Favor or Hinder state
+    const hasActorFavor = (favorHinder === 'favor');
+    const hasActorHinder = (favorHinder === 'hinder');
+
+    // Apply Favor/Hinder logic
+    // If actor has Favor AND save is not Hindered by conditions: apply Favor
+    if (hasActorFavor && !isHindered) {
+      rollFormula = 'd20 + 1d6';
+    }
+    // If actor has Hinder OR save is Hindered by conditions: apply Hinder
+    // Multiple Hinder sources do NOT stack - only apply -1d6 once
+    else if (hasActorHinder || isHindered) {
+      rollFormula = 'd20 - 1d6';
+    }
+
+    const roll = new Roll(rollFormula, actor.getRollData());
+    await roll.evaluate();
+    return roll;
+  }
+
+  /**
+   * Remove the highest rolled damage die from the damage roll
+   * @param {Object} rollTermsData - Encoded roll terms data
+   * @returns {number} New damage total with highest die removed
+   * @private
+   */
+  static _removeHighestDie(rollTermsData) {
+    let total = rollTermsData.total;
+    let highestDieValue = 0;
+
+    // Find all dice terms and their results
+    for (const term of rollTermsData.terms) {
+      if (term.type === 'Die' && term.results) {
+        for (const result of term.results) {
+          if (result.result > highestDieValue) {
+            highestDieValue = result.result;
+          }
+        }
+      }
+    }
+
+    // Subtract highest die
+    return Math.max(0, total - highestDieValue);
+  }
+
+  /**
+   * Post save result to chat
+   * @param {Actor} actor - The defending actor
+   * @param {string} saveType - 'reflex', 'endure', 'will'
+   * @param {Roll} roll - The save roll
+   * @param {number} difficulty - Save difficulty
+   * @param {boolean} isSuccess - Whether the save succeeded
+   * @param {boolean} isHindered - Whether the save was Hindered
+   * @param {number} originalDamage - Original damage amount
+   * @param {number} finalDamage - Final damage after save/armor
+   * @param {string} damageType - Damage type
+   * @param {boolean} autoApplied - Whether damage was auto-applied
+   * @returns {Promise<ChatMessage>}
+   * @private
+   */
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isHindered, originalDamage, finalDamage, damageType, autoApplied) {
+    const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
+
+    // Import VagabondChatCard
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+
+    const card = new VagabondChatCard()
+      .setType('save-roll')
+      .setActor(actor)
+      .setTitle(`${saveLabel} Save`)
+      .setSubtitle(actor.name)
+      .addRoll(roll, difficulty)
+      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', false);
+
+    // Add metadata
+    if (isHindered) {
+      card.addMetadata('Condition', 'Hindered (-1d6)');
+    }
+    card.addMetadata('Original Damage', originalDamage.toString());
+    if (isSuccess) {
+      // Show how much damage was prevented by the successful save
+      // Note: This includes both die removal AND armor/immune reduction
+      card.addMetadata('Damage Prevented', (originalDamage - finalDamage).toString());
+    }
+    card.addMetadata('Final Damage', `${finalDamage} ${damageType}`);
+
+    if (autoApplied) {
+      card.addMetadata('Status', 'Damage Applied to HP');
+    } else {
+      card.addMetadata('Status', 'Damage NOT Applied (manual mode)');
+    }
+
+    return await card.send();
+  }
+
+  /**
+   * Handle "Apply Direct" button - bypass saves
+   * @param {HTMLElement} button - The clicked button
+   */
+  static async handleApplyDirect(button) {
+    const damageAmount = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType;
+    const actorId = button.dataset.actorId;
+    const itemId = button.dataset.itemId;
+
+    // Get weapon data for material weakness checks
+    const sourceActor = game.actors.get(actorId);
+    const sourceItem = sourceActor?.items.get(itemId);
+
+    // Get selected tokens
+    const selectedTokens = canvas.tokens.controlled;
+    if (selectedTokens.length === 0) {
+      ui.notifications.warn('No tokens selected. Please select at least one token.');
+      return;
+    }
+
+    // Apply damage to each selected token
+    for (const target of selectedTokens) {
+      const targetActor = target.actor;
+      if (!targetActor) continue;
+
+      // Check permissions
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
+        continue;
+      }
+
+      // Calculate final damage (armor/immune/weak)
+      const finalDamage = this.calculateFinalDamage(targetActor, damageAmount, damageType, sourceItem);
+
+      const currentHP = targetActor.system.health?.value || 0;
+      const newHP = Math.max(0, currentHP - finalDamage);
+      await targetActor.update({ 'system.health.value': newHP });
+
+      ui.notifications.info(`Applied ${finalDamage} damage to ${targetActor.name}`);
+    }
+
+    // Disable button
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-check"></i> Damage Applied';
+    button.classList.add('applied');
   }
 }

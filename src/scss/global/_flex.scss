@@ -7,6 +7,12 @@
   align-items: center;
 }
 
+.flex-col-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .flex-group-center,
 .flex-group-left,
 .flex-group-right {

@@ -1,25 +1,28 @@
 {{! Damage Display Partial - Used in chat cards for displaying damage results }}
 {{#if damage}}
-  <div class='card-damage'>
-    <div class='damage-container'>
-      {{#if damage.iconClass}}
-        <i class='{{damage.iconClass}} damage-icon'
-        title='{{damage.type}}'></i>
-      {{else}}
-        <i class='fas fa-burst damage-icon'></i>
-      {{/if}}
-      <span class='damage-amount'>{{damage.total}}</span>
-      {{!-- {{#if damage.type}}
-        <span class='damage-type'>{{damage.type}}</span>
-      {{/if}} --}}
-      {{#if damage.isCritical}}
-        <span class='critical-badge'>CRITICAL!</span>
-      {{/if}}
+    <div class='card-damage'>
+      <div class="damage-title">Damage</div>
+      <div class="flex-row-container">
+        <div class='damage-container'>
+          {{#if damage.iconClass}}
+            <i class='{{damage.iconClass}} damage-icon'
+            title='{{damage.type}}'></i>
+          {{else}}
+            <i class='fas fa-burst damage-icon'></i>
+          {{/if}}
+          <span class='damage-amount'>{{damage.total}}</span>
+          {{!-- {{#if damage.type}}
+            <span class='damage-type'>{{damage.type}}</span>
+          {{/if}} --}}
+          {{#if damage.isCritical}}
+            <span class='critical-badge'>CRITICAL!</span>
+          {{/if}}
+        </div>
+        {{#if damage.diceDisplay}}
+        <div class='damage-dice-display'>{{{damage.diceDisplay}}}</div>
+        {{else if damage.formula}}
+        <div class='damage-formula'>{{damage.formula}}</div>
+        {{/if}}
+      </div>
     </div>
-    {{#if damage.diceDisplay}}
-      <div class='damage-dice-display'>{{{damage.diceDisplay}}}</div>
-    {{else if damage.formula}}
-      <div class='damage-formula'>{{damage.formula}}</div>
-    {{/if}}
-  </div>
 {{/if}}

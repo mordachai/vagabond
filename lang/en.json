@@ -31,18 +31,30 @@
     "Saves": {
       "savesTitle": "Saves",
       "savesPlaceholder": "Reflex, Endure or Will",
+      "NPCNoSaves": "NPCs don't roll saves - they only have armor, immunities, and weaknesses.",
       "Reflex": {
         "name": "Reflex",
         "description": "Avoid area effects and attacks"
       },
       "Endure": {
-        "name": "Endure", 
+        "name": "Endure",
         "description": "Withstand poison and death"
       },
       "Will": {
         "name": "Will",
         "description": "Resist curses and enthrallment"
       }
+    },
+    "DefendMechanics": {
+      "BlockTitle": "Block (Endure)",
+      "DodgeTitle": "Dodge (Reflex)",
+      "BlockDescription": "Roll Endure save. Success ignores one highest damage die. Hindered if Ranged attack.",
+      "DodgeDescription": "Roll Reflex save. Success ignores one highest damage die. Hindered if Heavy Armor."
+    },
+    "AttackTypes": {
+      "Melee": "Melee",
+      "Ranged": "Ranged",
+      "Cast": "Cast"
     },
     "SpeedTypes": {
       "Climb": "Climb",
@@ -188,6 +200,10 @@
         "name": "Always Roll Damage",
         "hint": "When rolling damage with checks, roll damage even on misses (to show the intensity of the miss). Only applies when 'Roll Damage With Check' is enabled."
       },
+      "autoApplySaveDamage": {
+        "name": "Auto-Apply Save Damage",
+        "hint": "When enabled, damage is automatically applied to HP after save rolls. When disabled, damage amounts are shown in chat but must be applied manually."
+      },
       "defaultClockPosition": {
         "name": "Default Clock Position",
         "hint": "Default corner position for new progress clocks."
@@ -272,7 +288,7 @@
           "Description": "Description",
           "Type": "Type",
           "Range": "Range",
-          "Note": "Note (before save)",
+          "Note": "Notes (before recharge)",
           "Recharge": "Recharge",
           "FlatDamage": "Flat Damage",
           "RollDamage": "Roll Damage",

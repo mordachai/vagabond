@@ -66,9 +66,64 @@
   }
 }
 
-/* Apply Damage Button (Top-level - for chat messages) */
-.vagabond-apply-damage-button {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+/* Save Buttons Container (Roll to Save system) */
+.vagabond-save-buttons-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Save Buttons (Reflex, Endure, Will) - 3 in a row */
+.vagabond-save-button {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-family: $font-primary;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+
+  &:hover {
+    background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    border-color: rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  &:disabled {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    cursor: not-allowed;
+    opacity: 0.8;
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled:hover {
+    transform: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+/* Apply Direct Damage Button (bypasses saves) - Full width */
+.vagabond-apply-direct-button {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
   border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
   color: white;
@@ -80,9 +135,12 @@
   transition: all 0.2s ease;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  flex-basis: 100%;
+  width: 100%;
 
   &:hover {
-    background: linear-gradient(135deg, #f15546 0%, #d14436 100%);
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
     border-color: rgba(0, 0, 0, 0.4);
@@ -93,16 +151,14 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
   }
 
-  &:disabled,
-  &.applied {
+  &:disabled {
     background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
     cursor: not-allowed;
     opacity: 0.8;
     border-color: rgba(0, 0, 0, 0.3);
   }
 
-  &:disabled:hover,
-  &.applied:hover {
+  &:disabled:hover {
     transform: none;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
@@ -112,7 +168,7 @@
   }
 }
 
-/* Apply Healing Button (Top-level - for chat messages) */
+/* Apply Healing Button (healing still uses old system) */
 .vagabond-apply-healing-button {
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   border: 2px solid rgba(0, 0, 0, 0.3);
@@ -156,6 +212,117 @@
   i {
     margin-right: 5px;
   }
+}
+
+/* Defend Info Section (Block/Dodge mechanics) - Accordion */
+.card-defend-info {
+  border-radius: 6px;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.defend-info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: $c-dark;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+  }
+
+  i.fa-shield-alt {
+    font-size: 14px;
+  }
+
+  .expand-icon {
+    margin-left: auto;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+  }
+}
+
+.card-defend-info.expanded .expand-icon {
+  transform: rotate(90deg);
+}
+
+.defend-info-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.card-defend-info.expanded .defend-info-details {
+  max-height: 300px;
+  padding: 0 12px 12px 12px;
+}
+
+.defend-info-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.defend-option {
+  flex: 1;
+  min-width: 200px;
+  border-radius: 4px;
+  padding: 8px;
+
+  p {
+    margin: 4px 0 0 0;
+    font-size: 12px;
+    color: $c-dark;
+    line-height: 1.4;
+  }
+}
+
+.defend-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+
+  i {
+    font-size: 14px;
+    color: $c-dark;
+  }
+
+  strong {
+    color: $c-dark;
+  }
+}
+
+.hindered-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  i {
+    font-size: 9px;
+  }
+}
+
+.armor-hinder-note {
+  font-size: 11px;
+  font-style: italic;
+  color: $c-dark;
 }
 
 /* NPC Damage Buttons (Top-level - for GM-only chat actions) */
@@ -469,18 +636,51 @@
   /* Damage Section */
   .card-damage {
     padding: 16px;
-    display: flex;
-    gap: 20px;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
     align-items: center;
+  }
+
+  .damage-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: $c-dark;
+    font-weight: bold;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+    gap: 12px;
+    grid-column: 1 / -1;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid $c-dark;
+      opacity: 0.3;
+    }
+  }
+
+  .flex-row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
   }
 
   .damage-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: baseline;
-    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
   }
 
   .damage-icon {
@@ -507,7 +707,6 @@
   // }
 
   .critical-badge {
-    margin-left: auto;
     padding: 4px 8px;
     background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
     font-weight: 700;
@@ -517,10 +716,11 @@
     letter-spacing: 0.5px;
   }
 
+  .damage-dice-display,
   .damage-formula {
-    margin-top: 8px;
     font-size: 13px;
     font-family: monospace;
+    color: $c-dark;
   }
 
   /* Metadata Section */
