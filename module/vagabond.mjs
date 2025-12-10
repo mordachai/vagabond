@@ -452,43 +452,56 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 
 /**
  * Helper function to create measurement templates from spell delivery types
- *
- * FOUNDRY V14 MIGRATION NOTE:
- * MeasuredTemplates will be deprecated in V14 in favor of Regions API.
- * This entire function will need to be updated. See docs/SPELL_TEMPLATES.md
- * for migration strategy and checklist.
- *
- * @param {string} deliveryType - The delivery type (aura, cone, line, cube, sphere)
- * @param {string} deliveryText - The full delivery text (e.g., "Sphere 25' radius")
- * @param {ChatMessage} message - The chat message containing the spell cast
  */
 async function createSpellTemplate(deliveryType, deliveryText, message) {
-  // Parse distance from delivery text
-  // Examples: "Sphere 25' radius" → 25, "Cone 20'" → 20, "Cube 10' cube" → 10
+  // 1. Parse distance
   const distanceMatch = deliveryText.match(/(\d+)'/);
   if (!distanceMatch) {
     ui.notifications.warn('Could not parse template distance from delivery text.');
     return;
   }
-
   const distanceFeet = parseInt(distanceMatch[1], 10);
+  const gridDistance = distanceFeet; // Keep raw feet
 
-  // FIX: Use raw feet. Do NOT divide by grid distance.
-  // 25 feet will now correctly draw as 25 feet (5 squares).
-  const gridDistance = distanceFeet;
-
-  // Get the speaker's token (for templates that originate from caster)
+  // 2. Get Caster (Origin)
   const speaker = message.speaker;
   let originToken = null;
   if (speaker?.token) {
     originToken = canvas.tokens.get(speaker.token);
   }
 
-  // Map delivery types to Foundry template types and settings
+  // -------------------------------------------------------------
+  // NEW LOGIC: CALCULATE ROTATION TOWARDS TARGET
+  // -------------------------------------------------------------
+  let templateDirection = 0; // Default: Facing South (0) or Right (0) depending on system
+
+  if (originToken) {
+    // Start with the token's current rotation as the default
+    templateDirection = originToken.document.rotation;
+
+    // Check if the user has targeted a token
+    const targets = game.user.targets;
+    
+    if (targets.size > 0) {
+      // Get the first target (if multiple, we just pick the first one)
+      const target = targets.first();
+      
+      // Calculate the angle in radians between Caster and Target
+      const ray = new Ray(originToken.center, target.center);
+      
+      // Convert to degrees and normalize (Foundry helper method)
+      // If Math.toDegrees is not available in your specific version, use: (ray.angle * 180 / Math.PI)
+      templateDirection = Math.toDegrees(ray.angle);
+    }
+  }
+  // -------------------------------------------------------------
+
+  // 3. Base Template Data
   let templateData = {
-    t: '', // template type
+    t: '', 
     distance: gridDistance,
     fillColor: game.user.color || '#FF0000',
+    direction: templateDirection, // <--- Apply the calculated direction here
     flags: {
       vagabond: {
         deliveryType: deliveryType,
@@ -497,10 +510,9 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
     }
   };
 
-  // Determine template type and origin
+  // 4. Determine Type
   switch (deliveryType.toLowerCase()) {
     case 'aura':
-      // Circle centered on caster
       templateData.t = 'circle';
       if (originToken) {
         templateData.x = originToken.center.x;
@@ -509,44 +521,37 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
       break;
 
     case 'cone':
-      // Cone originating from caster
       templateData.t = 'cone';
-      templateData.angle = 90; // Standard cone angle
+      templateData.angle = 90;
       if (originToken) {
         templateData.x = originToken.center.x;
         templateData.y = originToken.center.y;
-        templateData.direction = originToken.document.rotation || 0;
+        // Direction is already set in templateData above!
       }
       break;
 
     case 'line':
-      // Ray originating from caster
       templateData.t = 'ray';
-      templateData.width = canvas.scene.grid.distance; // 1 grid square wide
+      templateData.width = canvas.scene.grid.distance; 
       if (originToken) {
         templateData.x = originToken.center.x;
         templateData.y = originToken.center.y;
-        templateData.direction = originToken.document.rotation || 0;
+        // Direction is already set in templateData above!
       }
       break;
 
     case 'cube':
-      // Rectangle, now originating from caster
       templateData.t = 'rect';
       templateData.distance = gridDistance; 
-      // FIX: Cube needs a width equal to distance to be a square
       templateData.width = gridDistance; 
-      templateData.direction = 0;
       if (originToken) {
         templateData.x = originToken.center.x;
         templateData.y = originToken.center.y;
-        // Optional: Match token rotation so the cube extends in front of them
-        templateData.direction = originToken.document.rotation || 0;
+        // Direction is already set in templateData above!
       }
       break;
 
     case 'sphere':
-      // Circle, now centered on caster (Same as Aura)
       templateData.t = 'circle';
       if (originToken) {
         templateData.x = originToken.center.x;
@@ -555,17 +560,15 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
       break;
 
     default:
-      ui.notifications.warn(`Template creation not supported for delivery type: ${deliveryType}`);
+      ui.notifications.warn(`Template creation not supported: ${deliveryType}`);
       return;
   }
 
-  // If we found a token, we have coordinates, so we create the template immediately.
+  // 5. Create Template
   if (templateData.x !== undefined && templateData.y !== undefined) {
     const templateDoc = new MeasuredTemplateDocument(templateData, { parent: canvas.scene });
-    // V14 TODO: Replace 'MeasuredTemplate' with 'Region'
     await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateDoc.toObject()]);
   } else {
-    // Fallback only if NO TOKEN is found
     ui.notifications.warn('No token found for caster. Cannot create template.');
   }
 }
