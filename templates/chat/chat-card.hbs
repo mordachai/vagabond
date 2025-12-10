@@ -86,36 +86,7 @@
     </div>
   {{/if}}
 
-  {{! PRIMARY CONTENT: Roll result or main info }}
-  {{#if hasRoll}}
-    <div class='card-primary'>
-      <div class='roll-result'>
-        <div class='roll-total-container'>
-          <span class='roll-total'>{{rollTotal}}</span>
-          {{#if difficulty}}
-            <span class='roll-vs'>vs {{difficulty}}</span>
-          {{/if}}
-        </div>
-        {{#if outcome}}
-          <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
-        {{/if}}
-      </div>
-      {{#if rollDiceDisplay}}
-        <div class='roll-dice-display'>{{{rollDiceDisplay}}}</div>
-      {{else if rollFormula}}
-        <div class='roll-formula'>{{rollFormula}}</div>
-      {{/if}}
-    </div>
-  {{/if}}
-
-  {{! DAMAGE/EFFECTS - Can be filled on initial render or dynamically updated }}
-  <div class='card-damage-section' data-damage-section>
-    {{#if damage}}
-      {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
-    {{/if}}
-  </div>
-
-  {{! METADATA: Stats, properties, conditions }}
+    {{! METADATA: Stats, properties, conditions }}
   {{#if metadata.length}}
     <div class='card-metadata'>
       {{#each metadata}}
@@ -146,6 +117,35 @@
       {{/each}}
     </div>
   {{/if}}
+
+  {{! PRIMARY CONTENT: Roll result or main info }}
+  {{#if hasRoll}}
+    <div class='card-primary'>
+      <div class='roll-result'>
+        <div class='roll-total-container'>
+          <span class='roll-total'>{{rollTotal}}</span>
+          {{#if difficulty}}
+            <span class='roll-vs'>vs {{difficulty}}</span>
+          {{/if}}
+        </div>
+        {{#if outcome}}
+          <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
+        {{/if}}
+      </div>
+      {{#if rollDiceDisplay}}
+        <div class='roll-dice-display'>{{{rollDiceDisplay}}}</div>
+      {{else if rollFormula}}
+        <div class='roll-formula'>{{rollFormula}}</div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{! DAMAGE/EFFECTS - Can be filled on initial render or dynamically updated }}
+  <div class='card-damage-section' data-damage-section>
+    {{#if damage}}
+      {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
+    {{/if}}
+  </div>
 
   {{! DESCRIPTION: Enriched HTML }}
   {{#if description}}

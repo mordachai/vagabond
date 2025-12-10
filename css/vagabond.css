@@ -817,7 +817,7 @@
 .card-defend-info {
   border-radius: 6px;
   padding: 0;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .defend-info-header {
@@ -857,7 +857,7 @@
 
 .card-defend-info.expanded .defend-info-details {
   max-height: 300px;
-  padding: 0 12px 12px 12px;
+  padding: 0 4px 4px 4px;
 }
 
 .defend-info-row {
@@ -1128,7 +1128,7 @@
   font-weight: 700;
 }
 .vagabond-chat-card .card-primary {
-  padding: 16px;
+  padding: 16px 16px 0 16px;
   background: var(--vagabond-c-white);
 }
 .vagabond-chat-card .roll-result {
@@ -1219,7 +1219,7 @@
   border-radius: 4px;
 }
 .vagabond-chat-card .card-damage {
-  padding: 16px;
+  padding: 0 0 12px 0;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
@@ -1239,6 +1239,7 @@
   width: 100%;
   gap: 12px;
   grid-column: 1/-1;
+  margin: 8px 0;
 }
 .vagabond-chat-card .damage-title::before, .vagabond-chat-card .damage-title::after {
   content: "";
@@ -1251,7 +1252,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
 }
 .vagabond-chat-card .damage-container {
@@ -1348,23 +1349,24 @@
   font-style: italic;
 }
 .vagabond-chat-card .card-metadata {
-  padding: 12px 16px;
-  background: var(--vagabond-c-faint);
+  padding: 8px 12px;
+  background: var(--vagabond-c-dark);
   border-top: 1px solid var(--vagabond-c-tan);
-  color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-white);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 .vagabond-chat-card .metadata-item {
   display: flex;
-  gap: 8px;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.4;
 }
 .vagabond-chat-card .metadata-label {
   font-weight: 700;
   min-width: 100px;
+  font-family: "Eskapade", serif;
+  font-style: italic;
 }
 .vagabond-chat-card .metadata-value {
   flex: 1;
@@ -1474,8 +1476,8 @@
   transform: rotate(90deg);
 }
 .vagabond-chat-card .property-details {
-  padding-left: 16px;
-  border-left: 2px solid var(--vagabond-c-tan);
+  padding-left: 8px;
+  border-left: 2px solid var(--vagabond-c-white);
   max-height: 0;
   overflow: hidden;
   margin-top: 0;
@@ -1490,8 +1492,8 @@
 }
 .vagabond-chat-card .property-name {
   font-weight: 600;
-  color: var(--vagabond-c-dark);
-  margin-right: 4px;
+  color: var(--vagabond-c-white);
+  margin-right: 2px;
 }
 .vagabond-chat-card .property-hint {
   font-size: 0.95em;

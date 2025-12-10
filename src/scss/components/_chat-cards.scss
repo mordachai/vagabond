@@ -218,7 +218,7 @@
 .card-defend-info {
   border-radius: 6px;
   padding: 0;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .defend-info-header {
@@ -261,7 +261,7 @@
 
 .card-defend-info.expanded .defend-info-details {
   max-height: 300px;
-  padding: 0 12px 12px 12px;
+  padding: 0 4px 4px 4px;
 }
 
 .defend-info-row {
@@ -566,7 +566,7 @@
 
   /* Primary Content - Roll Results */
   .card-primary {
-    padding: 16px;
+    padding: 16px 16px 0 16px;
     background: $c-white;
   }
 
@@ -677,7 +677,7 @@
 
   /* Damage Section */
   .card-damage {
-    padding: 16px;
+    padding: 0 0 12px 0;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
@@ -698,6 +698,7 @@
     width: 100%;
     gap: 12px;
     grid-column: 1 / -1;
+    margin: 8px 0;
 
     &::before,
     &::after {
@@ -713,7 +714,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
   }
 
@@ -838,25 +839,26 @@
 
   /* Metadata Section */
   .card-metadata {
-    padding: 12px 16px;
-    background: $c-faint;
+    padding: 8px 12px;
+    background: $c-dark;
     border-top: 1px solid $c-tan;
-    color: $c-tan;
+    color: $c-white;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
   }
 
   .metadata-item {
     display: flex;
-    gap: 8px;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.4;
   }
 
   .metadata-label {
     font-weight: 700;
     min-width: 100px;
+    font-family: $font-title;
+    font-style: italic;
   }
 
   .metadata-value {
@@ -990,8 +992,8 @@
   }
 
   .property-details {
-    padding-left: 16px;
-    border-left: 2px solid $c-tan;
+    padding-left: 8px;
+    border-left: 2px solid $c-white;
     max-height: 0;
     overflow: hidden;
     margin-top: 0;
@@ -1009,8 +1011,8 @@
 
   .property-name {
     font-weight: 600;
-    color: $c-dark;
-    margin-right: 4px;
+    color: $c-white;
+    margin-right: 2px;
   }
 
   .property-hint {
