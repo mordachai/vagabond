@@ -2996,7 +2996,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     try {
       // Handle alchemicals (just roll damage, no attack)
       if (isAlchemical) {
-        const roll = new Roll(item.system.damageAmount);
+        let damageFormula = item.system.damageAmount;
+
+        // Apply exploding dice if enabled
+        if (item.system.canExplode && item.system.explodeValues) {
+          const explodeValues = item.system.explodeValues
+            .split(',')
+            .map(v => v.trim())
+            .filter(v => v && !isNaN(v));
+
+          if (explodeValues.length > 0) {
+            const explodeSuffix = explodeValues.map(v => `x${v}`).join('');
+            damageFormula = damageFormula.replace(/(\d*)d(\d+)/gi, (match, count, faces) => {
+              return `${count || '1'}d${faces}${explodeSuffix}`;
+            });
+          }
+        }
+
+        const roll = new Roll(damageFormula);
         await roll.evaluate();
 
         const damageTypeKey = item.system.damageType;

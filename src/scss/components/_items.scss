@@ -322,6 +322,24 @@
 }
 
 // -----------------------------------------
+// Equipment Locked View (Two-Column Layout)
+// -----------------------------------------
+
+.locked-two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.locked-column-left,
+.locked-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// -----------------------------------------
 // Perk Details (Two-Column Grid Layout)
 // -----------------------------------------
 

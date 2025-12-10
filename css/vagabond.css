@@ -1834,6 +1834,7 @@
   flex: 1;
   min-width: 0;
   padding-top: 8px;
+  color: var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-type {
   font-size: 10px;
@@ -1850,6 +1851,7 @@
   font-weight: 700;
   line-height: 1.2;
   word-wrap: break-word;
+  color: inherit;
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore {
   font-size: 12px;
@@ -1876,6 +1878,7 @@
   justify-content: center;
   font-size: 16px;
   transition: all 0.2s ease;
+  color: var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-close:hover {
   transform: scale(1.1);
@@ -3019,6 +3022,18 @@
 }
 .vagabond .spell-col-favorite .favorite-inactive {
   color: var(--vagabond-c-dark);
+}
+.vagabond .locked-two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
+}
+.vagabond .locked-column-left,
+.vagabond .locked-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .vagabond .perk-details-wrapper {
   padding: 5px;

@@ -87,6 +87,11 @@ export class VagabondDamageHelper {
       }
     }
 
+    // Apply exploding dice syntax if item supports it
+    if (item) {
+      finalFormula = this._applyExplodingDice(item, finalFormula);
+    }
+
     // Roll damage
     const damageRoll = new Roll(finalFormula, actor.getRollData());
     await damageRoll.evaluate();
@@ -98,12 +103,12 @@ export class VagabondDamageHelper {
     if (context.type === 'weapon') {
       // Check context first (from button creation)
       let damageTypeKey = context.damageType;
-      
+
       // Fallback to item damage type if context doesn't have it
       if ((!damageTypeKey || damageTypeKey === '-') && item && item.system.damageType) {
         damageTypeKey = item.system.damageType;
       }
-      
+
       if (damageTypeKey && damageTypeKey !== '-') {
         damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]) || damageTypeKey;
       }
@@ -257,6 +262,39 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Apply exploding dice syntax to a damage formula if enabled
+   * @param {Item} item - The item (spell or equipment) with canExplode and explodeValues
+   * @param {string} formula - The base damage formula (e.g., "2d6", "1d8+2")
+   * @returns {string} Modified formula with exploding dice (e.g., "2d6x=1x=4" or "1d8x=1x=4+2")
+   * @private
+   */
+  static _applyExplodingDice(item, formula) {
+    if (!item?.system?.canExplode || !item?.system?.explodeValues) {
+      return formula;
+    }
+
+    // Parse explode values (comma-separated)
+    const explodeValues = item.system.explodeValues
+      .split(',')
+      .map(v => v.trim())
+      .filter(v => v && !isNaN(v));
+
+    if (explodeValues.length === 0) {
+      return formula;
+    }
+
+    // Build the exploding dice suffix (e.g., "x=1x=4")
+    // Using x=N for exact values, not x>=N
+    const explodeSuffix = explodeValues.map(v => `x=${v}`).join('');
+
+    // Apply exploding dice to all dice terms in the formula
+    // Match patterns like "2d6", "d8", "1d10" but not numbers like "10" or "+2"
+    return formula.replace(/(\d*)d(\d+)/gi, (match, count, faces) => {
+      return `${count || '1'}d${faces}${explodeSuffix}`;
+    });
+  }
+
+  /**
    * Roll spell damage
    * @param {Actor} actor - The actor casting the spell
    * @param {Item} spell - The spell item
@@ -277,6 +315,9 @@ export class VagabondDamageHelper {
         damageFormula += ` + ${statValue}`;
       }
     }
+
+    // Apply exploding dice syntax if enabled
+    damageFormula = this._applyExplodingDice(spell, damageFormula);
 
     const roll = new Roll(damageFormula, actor.getRollData());
     await roll.evaluate();

@@ -40,6 +40,35 @@
       </div>
     </div>
 
+    {{! Exploding Dice Configuration }}
+    <div class='form-group'>
+      <label class='resource-label'>Exploding Dice</label>
+      <div class='grid grid-2col gap-8'>
+        <div class='explode-checkbox-field'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.canExplode'
+              {{#if system.canExplode}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>Can Explode</span>
+          </label>
+        </div>
+        <div class='explode-values-field'>
+          <label class='resource-label'>Explode On (comma-separated)</label>
+          <input
+            type='text'
+            name='system.explodeValues'
+            value='{{system.explodeValues}}'
+            data-dtype='String'
+            placeholder='e.g., 1,4'
+            {{#unless system.canExplode}}disabled{{/unless}}
+          />
+        </div>
+      </div>
+    </div>
+
     {{! Crit }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>

@@ -99,6 +99,19 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: ''
     });
 
+    // Exploding Dice - whether damage dice can explode
+    schema.canExplode = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
+    // Explode Values - comma-separated numbers where dice explode (e.g., "1,4")
+    schema.explodeValues = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: ''
+    });
+
     // Properties - universal property array (weapon properties, gear traits, etc.)
     schema.properties = new fields.ArrayField(
       new fields.StringField({
