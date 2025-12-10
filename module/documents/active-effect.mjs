@@ -129,6 +129,13 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.inventory.maxSlots': 'Inventory: Max Slots (Calculated)',
       'system.mana.max': 'Mana: Max Total (Class + Bonus)',
       'system.mana.castingMax': 'Mana: Casting Max (Calculated)',
+      
+      // ===== ITEM / GLOBAL BONUSES  =====
+      'system.canExplode': 'Item: Can Explode (Direct)',
+      'system.explodeValues': 'Item: Explode Values (Direct)',
+      'system.bonuses.globalExplode': 'Global: Enable Exploding Dice (All Items)',
+      'system.bonuses.globalExplodeValues': 'Global: Explode Values Override (All Items)',
+      
     };
 
     return choices;

@@ -122,11 +122,14 @@
   {{#if hasRoll}}
     <div class='card-primary'>
       <div class='roll-result'>
-        <div class='roll-total-container'>
-          <span class='roll-total'>{{rollTotal}}</span>
-          {{#if difficulty}}
-            <span class='roll-vs'>vs {{difficulty}}</span>
-          {{/if}}
+        <div class="roll-total-container">
+          <div class='roll-total-info'>
+            <span class='roll-total'>{{rollTotal}}</span>
+            {{#if difficulty}}
+              <span class='roll-vs'>vs {{difficulty}}</span>
+            {{/if}}
+          </div>
+          <div class="fav-hinder-tag"></div>
         </div>
         {{#if outcome}}
           <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>

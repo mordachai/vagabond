@@ -175,16 +175,36 @@ export class VagabondItem extends Item {
   /**
    * Apply exploding dice syntax to a damage formula if enabled
    * @param {string} formula - The base damage formula (e.g., "2d6", "1d8+2")
-   * @returns {string} Modified formula with exploding dice (e.g., "2d6x=1x=4" or "1d8x=1x=4+2")
+   * @returns {string} Modified formula with exploding dice
    * @private
    */
   _applyExplodingDice(formula) {
-    if (!this.system.canExplode || !this.system.explodeValues) {
+    // 1. Get Local Item Settings
+    let canExplode = this.system.canExplode;
+    let explodeValuesStr = this.system.explodeValues;
+
+    // 2. Check Global Actor Bonuses (from Perks/Traits Active Effects)
+    if (this.actor) {
+      // If a global effect says "Explode All", treat canExplode as true
+      if (this.actor.system.bonuses?.globalExplode) {
+        canExplode = true;
+      }
+
+      // If a global effect provides specific values (e.g. "1,2"), use those
+      // You can decide if this overrides or appends. Here we override if present.
+      const globalValues = this.actor.system.bonuses?.globalExplodeValues;
+      if (globalValues) {
+        explodeValuesStr = globalValues;
+      }
+    }
+
+    // 3. Validation
+    if (!canExplode || !explodeValuesStr) {
       return formula;
     }
 
     // Parse explode values (comma-separated)
-    const explodeValues = this.system.explodeValues
+    const explodeValues = explodeValuesStr
       .split(',')
       .map(v => v.trim())
       .filter(v => v && !isNaN(v));
