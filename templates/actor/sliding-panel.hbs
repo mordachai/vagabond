@@ -415,7 +415,7 @@
                 <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
                 <div class="title-right-group">
                   <i class='fas fa-star-christmas mana-icon' title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
-                  <span class='mana-display'><span class="mana-current">{{system.mana.current}}</span>/{{system.mana.max}}</span>
+                  <span class='mana-display'><span class="mana-current clickable mana-modifier" data-mana-action='modify' data-tooltip='Left click to spend mana, Right click to restore mana'>{{system.mana.current}}</span>/{{system.mana.max}}</span>
                 </div>
               </div>
 

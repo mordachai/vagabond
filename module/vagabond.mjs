@@ -451,6 +451,127 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 /* -------------------------------------------- */
 
 /**
+ * Helper function to create measurement templates from spell delivery types
+ *
+ * FOUNDRY V14 MIGRATION NOTE:
+ * MeasuredTemplates will be deprecated in V14 in favor of Regions API.
+ * This entire function will need to be updated. See docs/SPELL_TEMPLATES.md
+ * for migration strategy and checklist.
+ *
+ * @param {string} deliveryType - The delivery type (aura, cone, line, cube, sphere)
+ * @param {string} deliveryText - The full delivery text (e.g., "Sphere 25' radius")
+ * @param {ChatMessage} message - The chat message containing the spell cast
+ */
+async function createSpellTemplate(deliveryType, deliveryText, message) {
+  // Parse distance from delivery text
+  // Examples: "Sphere 25' radius" → 25, "Cone 20'" → 20, "Cube 10' cube" → 10
+  const distanceMatch = deliveryText.match(/(\d+)'/);
+  if (!distanceMatch) {
+    ui.notifications.warn('Could not parse template distance from delivery text.');
+    return;
+  }
+
+  const distanceFeet = parseInt(distanceMatch[1], 10);
+
+  // FIX: Use raw feet. Do NOT divide by grid distance.
+  // 25 feet will now correctly draw as 25 feet (5 squares).
+  const gridDistance = distanceFeet;
+
+  // Get the speaker's token (for templates that originate from caster)
+  const speaker = message.speaker;
+  let originToken = null;
+  if (speaker?.token) {
+    originToken = canvas.tokens.get(speaker.token);
+  }
+
+  // Map delivery types to Foundry template types and settings
+  let templateData = {
+    t: '', // template type
+    distance: gridDistance,
+    fillColor: game.user.color || '#FF0000',
+    flags: {
+      vagabond: {
+        deliveryType: deliveryType,
+        deliveryText: deliveryText
+      }
+    }
+  };
+
+  // Determine template type and origin
+  switch (deliveryType.toLowerCase()) {
+    case 'aura':
+      // Circle centered on caster
+      templateData.t = 'circle';
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+      }
+      break;
+
+    case 'cone':
+      // Cone originating from caster
+      templateData.t = 'cone';
+      templateData.angle = 90; // Standard cone angle
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+        templateData.direction = originToken.document.rotation || 0;
+      }
+      break;
+
+    case 'line':
+      // Ray originating from caster
+      templateData.t = 'ray';
+      templateData.width = canvas.scene.grid.distance; // 1 grid square wide
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+        templateData.direction = originToken.document.rotation || 0;
+      }
+      break;
+
+    case 'cube':
+      // Rectangle, now originating from caster
+      templateData.t = 'rect';
+      templateData.distance = gridDistance; 
+      // FIX: Cube needs a width equal to distance to be a square
+      templateData.width = gridDistance; 
+      templateData.direction = 0;
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+        // Optional: Match token rotation so the cube extends in front of them
+        templateData.direction = originToken.document.rotation || 0;
+      }
+      break;
+
+    case 'sphere':
+      // Circle, now centered on caster (Same as Aura)
+      templateData.t = 'circle';
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+      }
+      break;
+
+    default:
+      ui.notifications.warn(`Template creation not supported for delivery type: ${deliveryType}`);
+      return;
+  }
+
+  // If we found a token, we have coordinates, so we create the template immediately.
+  if (templateData.x !== undefined && templateData.y !== undefined) {
+    const templateDoc = new MeasuredTemplateDocument(templateData, { parent: canvas.scene });
+    // V14 TODO: Replace 'MeasuredTemplate' with 'Region'
+    await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateDoc.toObject()]);
+  } else {
+    // Fallback only if NO TOKEN is found
+    ui.notifications.warn('No token found for caster. Cannot create template.');
+  }
+}
+
+
+/**
  * V13 Standard: 'renderChatMessageHTML' replaces 'renderChatMessage'.
  * The 'html' argument is now a standard HTMLElement, not a jQuery object.
  */
@@ -622,6 +743,27 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleNPCDamageButton(button, message.id);
       });
+    });
+  });
+
+  // 9. Template Trigger Handler (Spell Delivery Templates)
+  // V14 NOTE: Template creation function will need updating for Regions API
+  // See createSpellTemplate() function above for migration notes
+  const templateTriggers = html.querySelectorAll('.template-trigger');
+
+  templateTriggers.forEach(trigger => {
+    if (!trigger) return; // Safety check
+    trigger.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+
+      const deliveryType = trigger.dataset.deliveryType;
+      const deliveryText = trigger.dataset.deliveryText;
+
+      if (!deliveryType) return;
+
+      // Helper function to create measurement templates
+      // V14 TODO: This function will need updates for Regions API
+      await createSpellTemplate(deliveryType, deliveryText, message);
     });
   });
 });

@@ -537,6 +537,18 @@
 
   .meta-delivery {
     font-style: italic;
+
+    // Spell template trigger - clickable delivery text
+    // See docs/SPELL_TEMPLATES.md for implementation details
+    // V14 TODO: Verify styling works with Regions API
+    &.template-trigger {
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+      }
+    }
   }
 
   .meta-lore {

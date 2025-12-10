@@ -16,7 +16,7 @@
     {{! Mana Info Row }}
     <div class='mana-info-row'>
       <div class='mana-field'>
-        <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.current.label"}}</label>
+        <label class='resource-label clickable mana-modifier' data-mana-action='modify' data-tooltip='Left click to spend mana, Right click to restore mana'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.current.label"}}</label>
         <input
           type='text'
           name='system.mana.current'

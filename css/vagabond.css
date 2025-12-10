@@ -1110,6 +1110,13 @@
 .vagabond-chat-card .meta-delivery {
   font-style: italic;
 }
+.vagabond-chat-card .meta-delivery.template-trigger {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond-chat-card .meta-delivery.template-trigger:hover {
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+}
 .vagabond-chat-card .meta-lore {
   font-style: italic;
   opacity: 0.9;
@@ -4047,6 +4054,16 @@
   text-align: center;
   white-space: nowrap;
 }
+.vagabond .mana-field label.mana-modifier {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.vagabond .mana-field label.mana-modifier:hover {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: var(--vagabond-c-red);
+}
 .vagabond .mana-field input {
   width: 60px;
   text-align: center;
@@ -5207,6 +5224,16 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-weight: 600;
   color: var(--vagabond-c-dark);
   font-family: "Manofa", serif;
+}
+.vagabond .weapon-skills h4 .mana-display .mana-current.mana-modifier {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.vagabond .weapon-skills h4 .mana-display .mana-current.mana-modifier:hover {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: var(--vagabond-c-red);
 }
 .vagabond .favorited-spell {
   display: flex;

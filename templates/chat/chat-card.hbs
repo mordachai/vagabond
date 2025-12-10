@@ -45,7 +45,12 @@
           <span class='meta-item meta-range'>{{metadataBar.range}}</span>
         {{/if}}
         {{#if metadataBar.delivery}}
-          <span class='meta-item meta-delivery'>{{metadataBar.delivery}}</span>
+          {{!-- Clickable delivery text - creates measurement template on click
+                See docs/SPELL_TEMPLATES.md for details
+                V14 TODO: Update for Regions API --}}
+          <span class='meta-item meta-delivery template-trigger'
+                data-delivery-type='{{metadataBar.deliveryType}}'
+                data-delivery-text='{{metadataBar.delivery}}'>{{metadataBar.delivery}}</span>
         {{/if}}
         {{#if metadataBar.lore}}
           <span class='meta-item meta-lore'>{{metadataBar.lore}}</span>
