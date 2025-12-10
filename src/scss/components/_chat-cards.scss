@@ -755,14 +755,13 @@
 
   /* Save Damage Calculation Display */
   .save-damage-calculation {
-    padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.02);
+    padding: 2px 6px;
     border-radius: 4px;
-    margin-top: 12px;
+    margin-top: 6px;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    gap: 12px;
+    gap: 6px;
     align-items: center;
 
     .damage-title {
@@ -775,7 +774,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     color: $c-dark;
     line-height: 1.5;
@@ -787,7 +786,7 @@
     gap: 4px;
 
     i {
-      font-size: 14px;
+      font-size: 16px;
       color: $c-tan;
 
       &.save-icon-hindered {
@@ -807,7 +806,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 700;
     color: #d84315;
   }
@@ -821,7 +820,7 @@
     text-align: center;
     font-size: 11px;
     color: $c-tan;
-    margin-top: 6px;
+    margin-top: 4px;
     font-style: italic;
   }
 
@@ -854,11 +853,9 @@
 
   /* Description Section */
   .card-description {
-    padding: 12px 16px;
+    padding: 2px 4px;
     background: $c-white;
-    border-top: 1px solid $c-tan;
     font-size: 14px;
-    line-height: 1.6;
 
     p {
       margin: 0 0 8px 0;

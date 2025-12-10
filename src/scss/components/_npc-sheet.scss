@@ -11,19 +11,112 @@
 
 i {color: $c-dark}
 
+// Default dropdown styling (scoped to NPC sheet)
+// This matches the immunity dropdown reference styling
+.npc-sheet,
+.npc-header,
+.npc-content {
+  textarea {min-height: 10px;
+  height: fit-content;}
+
+  input {
+    height: 1.2rem;
+  }
+
+  select {
+    border: none;
+    border-bottom: 1px solid var(--vagabond-c-tan);
+    background: transparent;
+    padding: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: $font-secondary;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-bottom-color 0.2s ease;
+    box-shadow: none;
+    width: auto;
+
+    // Remove chevron/dropdown arrow styling
+    &::-ms-expand {
+      display: none;
+    }
+
+    &:hover {
+      border-bottom-color: var(--vagabond-c-dark);
+    }
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--vagabond-c-dark);
+      box-shadow: none;
+    }
+
+    option {
+      background: var(--vagabond-c-lite);
+      color: var(--vagabond-c-dark);
+
+      &:checked {
+        background: var(--vagabond-c-faint);
+      }
+    }
+
+    &:disabled {
+      border: none;
+      padding: 0;
+    }
+  }
+}
+
 // NPC Header
 .npc-header {
   padding-top: 2px;
 }
 
-// Lock/Unlock Toggle - Name Row
-.npc-lock-name-row {
+// NPC Name Input (inside lock-name-row)
+.npc-lock-name-row{
+
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 20px;
+
+  background: $c-dark;
+  color: $c-lite !important;
+  padding: 2px 4px;
+  border-radius: 4px;
+
+  input {
+    color: inherit;
+  }
 
   .npc-name-input {
+    width: 100%;
+    font-size: 20px;
+    font-family: $font-character-name;
+    font-weight: bold;
+    border: none !important;
+    background: transparent !important;
+    text-align: left;
+    padding: 0;
+    outline: none;
+    transition: border-bottom 0.2s ease;
+    border-bottom: 2px solid transparent;
+    box-shadow: none;
     flex: 1;
+
+    &:hover,
+    &:focus {
+      border-bottom: 2px solid var(--vagabond-c-dark) !important;
+      background: transparent !important;
+      box-shadow: none;
+    }
+
+    input[type='text'] {
+      min-width: 30px;
+    }
   }
 }
 
@@ -39,10 +132,11 @@ i {color: $c-dark}
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: $c-dark;
+  color: $c-lite;
 
   i {
     font-size: 16px;
+    color: $c-lite;
   }
 
   &:hover {
@@ -51,13 +145,21 @@ i {color: $c-dark}
   }
 }
 
+.npc-type-container {
+  color: $c-dark !important;
+  padding: 2px 4px;
+
+  input,select {
+    color: $c-dark;
+  }
+}
+
 // Top Section - Image + Info Row
 .npc-top-section {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 2px;
   align-items: flex-start;
-  margin-bottom: 8px;
 }
 
 // NPC Image Container (120x120 with frame and HP overlay)
@@ -198,38 +300,6 @@ i {color: $c-dark}
   flex: 1;
 }
 
-// NPC Name Input (inside lock-name-row)
-.npc-lock-name-row{
-
-  margin-top: 16px;
-
-  .npc-name-input {
-    width: 100%;
-    font-size: 20px;
-    font-family: $font-character-name;
-    font-weight: bold;
-    border: none !important;
-    background: transparent !important;
-    text-align: left;
-    padding: 0;
-    outline: none;
-    transition: border-bottom 0.2s ease;
-    border-bottom: 2px solid transparent;
-    box-shadow: none;
-
-    &:hover,
-    &:focus {
-      border-bottom: 2px solid var(--vagabond-c-dark) !important;
-      background: transparent !important;
-      box-shadow: none;
-    }
-
-    input[type='text'] {
-      min-width: 30px;
-    }
-  }
-}
-
 // NPC Stats Compact Row (HD/HP and Morale/Speed in right column)
 .npc-stats-compact-row {
   display: flex;
@@ -268,7 +338,7 @@ i {color: $c-dark}
 .npc-speed-types {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
 
   input[type='text'] {
@@ -475,6 +545,14 @@ i {color: $c-dark}
     color: $c-red;
     opacity: 0.5;
   }
+}
+
+.npc-armor-description-display {
+  font-size: 16px;
+  font-family: $font-primary;
+  font-weight: normal;
+  color: $c-dark;
+  padding: 2px 0;
 }
 
 // NPC Content
@@ -694,6 +772,7 @@ i {color: $c-dark}
   width: fit-content;
   justify-content: flex-start;
   font-style: italic;
+  gap:4px;
 
   .npc-size-select {
     text-transform: capitalize;
@@ -704,8 +783,7 @@ i {color: $c-dark}
   }
 
   select:disabled {
-    color: var(--vagabond-c-muted);
-    cursor: not-allowed;
+    cursor: default;
   }
 }
 
@@ -838,60 +916,6 @@ i {color: $c-dark}
 
   i {
     font-size: 14px;
-  }
-}
-
-// Default dropdown styling (scoped to NPC sheet)
-// This matches the immunity dropdown reference styling
-.npc-sheet,
-.npc-header,
-.npc-content {
-  select {
-    border: none;
-    border-bottom: 1px solid var(--vagabond-c-tan);
-    background: transparent;
-    padding: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: $font-secondary;
-    color: var(--vagabond-c-dark);
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    transition: border-bottom-color 0.2s ease;
-    box-shadow: none;
-    width: auto;
-
-    // Remove chevron/dropdown arrow styling
-    &::-ms-expand {
-      display: none;
-    }
-
-    &:hover {
-      border-bottom-color: var(--vagabond-c-dark);
-    }
-
-    &:focus {
-      outline: none;
-      border-bottom-color: var(--vagabond-c-dark);
-      box-shadow: none;
-    }
-
-    option {
-      background: var(--vagabond-c-lite);
-      color: var(--vagabond-c-dark);
-
-      &:checked {
-        background: var(--vagabond-c-faint);
-      }
-    }
-
-    &:disabled {
-      color: var(--vagabond-c-dark);
-      border: none;
-      padding: 0;
-    }
   }
 }
 
@@ -1078,14 +1102,13 @@ i {color: $c-dark}
   flex-direction: row;
   align-items: baseline;
   gap: 2px;
-  min-height: 16px;
+  line-height: 1.2rem;
   width: 100%;
 }
 
 .npc-description-row {
   display: block;
-  border-top: 5px groove $c-dark;
-  border-bottom: 6px groove $c-dark;
+  border-bottom: 1px solid $c-dark;
 }
 
 .npc-description-textarea {
@@ -1101,6 +1124,7 @@ i {color: $c-dark}
   resize: vertical;
   line-height: 1.1;
   box-shadow: none;
+  height: fit-content;
 
   &:hover {
     border-color: var(--vagabond-c-dark);
@@ -1133,7 +1157,7 @@ i {color: $c-dark}
 }
 
 .npc-immunity-text {
-  flex: 1;
+  // flex: 1;
   font-size: 16px;
   font-family: $font-primary;
   line-height: 1.0;

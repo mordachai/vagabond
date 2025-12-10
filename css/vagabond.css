@@ -1281,14 +1281,13 @@
   color: var(--vagabond-c-dark);
 }
 .vagabond-chat-card .save-damage-calculation {
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.02);
+  padding: 2px 6px;
   border-radius: 4px;
-  margin-top: 12px;
+  margin-top: 6px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto;
-  gap: 12px;
+  gap: 6px;
   align-items: center;
 }
 .vagabond-chat-card .save-damage-calculation .damage-title {
@@ -1299,7 +1298,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--vagabond-c-dark);
   line-height: 1.5;
@@ -1310,7 +1309,7 @@
   gap: 4px;
 }
 .vagabond-chat-card .damage-component i {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--vagabond-c-tan);
 }
 .vagabond-chat-card .damage-component i.save-icon-hindered {
@@ -1326,7 +1325,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 700;
   color: #d84315;
 }
@@ -1338,7 +1337,7 @@
   text-align: center;
   font-size: 11px;
   color: var(--vagabond-c-tan);
-  margin-top: 6px;
+  margin-top: 4px;
   font-style: italic;
 }
 .vagabond-chat-card .card-metadata {
@@ -1364,11 +1363,9 @@
   flex: 1;
 }
 .vagabond-chat-card .card-description {
-  padding: 12px 16px;
+  padding: 2px 4px;
   background: var(--vagabond-c-white);
-  border-top: 1px solid var(--vagabond-c-tan);
   font-size: 14px;
-  line-height: 1.6;
 }
 .vagabond-chat-card .card-description p {
   margin: 0 0 8px 0;
@@ -4128,6 +4125,69 @@
 .vagabond i {
   color: var(--vagabond-c-dark);
 }
+.vagabond .npc-sheet textarea,
+.vagabond .npc-header textarea,
+.vagabond .npc-content textarea {
+  min-height: 10px;
+  height: fit-content;
+}
+.vagabond .npc-sheet input,
+.vagabond .npc-header input,
+.vagabond .npc-content input {
+  height: 1.2rem;
+}
+.vagabond .npc-sheet select,
+.vagabond .npc-header select,
+.vagabond .npc-content select {
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  padding: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-bottom-color 0.2s ease;
+  box-shadow: none;
+  width: auto;
+}
+.vagabond .npc-sheet select::-ms-expand,
+.vagabond .npc-header select::-ms-expand,
+.vagabond .npc-content select::-ms-expand {
+  display: none;
+}
+.vagabond .npc-sheet select:hover,
+.vagabond .npc-header select:hover,
+.vagabond .npc-content select:hover {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet select:focus,
+.vagabond .npc-header select:focus,
+.vagabond .npc-content select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  box-shadow: none;
+}
+.vagabond .npc-sheet select option,
+.vagabond .npc-header select option,
+.vagabond .npc-content select option {
+  background: var(--vagabond-c-lite);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet select option:checked,
+.vagabond .npc-header select option:checked,
+.vagabond .npc-content select option:checked {
+  background: var(--vagabond-c-faint);
+}
+.vagabond .npc-sheet select:disabled,
+.vagabond .npc-header select:disabled,
+.vagabond .npc-content select:disabled {
+  border: none;
+  padding: 0;
+}
 .vagabond .npc-header {
   padding-top: 2px;
 }
@@ -4135,9 +4195,37 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 20px;
+  background: var(--vagabond-c-dark);
+  color: var(--vagabond-c-lite) !important;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.vagabond .npc-lock-name-row input {
+  color: inherit;
 }
 .vagabond .npc-lock-name-row .npc-name-input {
+  width: 100%;
+  font-size: 20px;
+  font-family: "Manofa", sans-serif;
+  font-weight: bold;
+  border: none !important;
+  background: transparent !important;
+  text-align: left;
+  padding: 0;
+  outline: none;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+  box-shadow: none;
   flex: 1;
+}
+.vagabond .npc-lock-name-row .npc-name-input:hover, .vagabond .npc-lock-name-row .npc-name-input:focus {
+  border-bottom: 2px solid var(--vagabond-c-dark) !important;
+  background: transparent !important;
+  box-shadow: none;
+}
+.vagabond .npc-lock-name-row .npc-name-input input[type=text] {
+  min-width: 30px;
 }
 .vagabond .npc-lock-button {
   display: flex;
@@ -4151,21 +4239,28 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-lite);
 }
 .vagabond .npc-lock-button i {
   font-size: 16px;
+  color: var(--vagabond-c-lite);
 }
 .vagabond .npc-lock-button:hover {
   color: var(--vagabond-c-tan);
   transform: scale(1.1);
 }
+.vagabond .npc-type-container {
+  color: var(--vagabond-c-dark) !important;
+  padding: 2px 4px;
+}
+.vagabond .npc-type-container input, .vagabond .npc-type-container select {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .npc-top-section {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 2px;
   align-items: flex-start;
-  margin-bottom: 8px;
 }
 .vagabond .npc-image-container {
   position: relative;
@@ -4276,31 +4371,6 @@
   justify-content: space-between;
   flex: 1;
 }
-.vagabond .npc-lock-name-row {
-  margin-top: 16px;
-}
-.vagabond .npc-lock-name-row .npc-name-input {
-  width: 100%;
-  font-size: 20px;
-  font-family: "Manofa", sans-serif;
-  font-weight: bold;
-  border: none !important;
-  background: transparent !important;
-  text-align: left;
-  padding: 0;
-  outline: none;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
-  box-shadow: none;
-}
-.vagabond .npc-lock-name-row .npc-name-input:hover, .vagabond .npc-lock-name-row .npc-name-input:focus {
-  border-bottom: 2px solid var(--vagabond-c-dark) !important;
-  background: transparent !important;
-  box-shadow: none;
-}
-.vagabond .npc-lock-name-row .npc-name-input input[type=text] {
-  min-width: 30px;
-}
 .vagabond .npc-stats-compact-row {
   display: flex;
   align-items: baseline;
@@ -4331,7 +4401,7 @@
 .vagabond .npc-speed-types {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
 }
 .vagabond .npc-speed-types input[type=text] {
@@ -4504,6 +4574,13 @@
   color: var(--vagabond-c-red);
   opacity: 0.5;
 }
+.vagabond .npc-armor-description-display {
+  font-size: 16px;
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+  padding: 2px 0;
+}
 .vagabond .npc-content {
   padding: 0;
   display: flex;
@@ -4672,13 +4749,13 @@
   width: fit-content;
   justify-content: flex-start;
   font-style: italic;
+  gap: 4px;
 }
 .vagabond .npc-type-row .npc-size-select {
   text-transform: capitalize;
 }
 .vagabond .npc-type-row select:disabled {
-  color: var(--vagabond-c-muted);
-  cursor: not-allowed;
+  cursor: default;
 }
 .vagabond .npc-edit-name,
 .vagabond .action-edit-name,
@@ -4794,60 +4871,6 @@
 .vagabond .action-add-btn i,
 .vagabond .ability-add-btn i {
   font-size: 14px;
-}
-.vagabond .npc-sheet select,
-.vagabond .npc-header select,
-.vagabond .npc-content select {
-  border: none;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  background: transparent;
-  padding: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: "Manofa", serif;
-  color: var(--vagabond-c-dark);
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  transition: border-bottom-color 0.2s ease;
-  box-shadow: none;
-  width: auto;
-}
-.vagabond .npc-sheet select::-ms-expand,
-.vagabond .npc-header select::-ms-expand,
-.vagabond .npc-content select::-ms-expand {
-  display: none;
-}
-.vagabond .npc-sheet select:hover,
-.vagabond .npc-header select:hover,
-.vagabond .npc-content select:hover {
-  border-bottom-color: var(--vagabond-c-dark);
-}
-.vagabond .npc-sheet select:focus,
-.vagabond .npc-header select:focus,
-.vagabond .npc-content select:focus {
-  outline: none;
-  border-bottom-color: var(--vagabond-c-dark);
-  box-shadow: none;
-}
-.vagabond .npc-sheet select option,
-.vagabond .npc-header select option,
-.vagabond .npc-content select option {
-  background: var(--vagabond-c-lite);
-  color: var(--vagabond-c-dark);
-}
-.vagabond .npc-sheet select option:checked,
-.vagabond .npc-header select option:checked,
-.vagabond .npc-content select option:checked {
-  background: var(--vagabond-c-faint);
-}
-.vagabond .npc-sheet select:disabled,
-.vagabond .npc-header select:disabled,
-.vagabond .npc-content select:disabled {
-  color: var(--vagabond-c-dark);
-  border: none;
-  padding: 0;
 }
 .vagabond .npc-stats-grid {
   display: grid;
@@ -5003,13 +5026,12 @@
   flex-direction: row;
   align-items: baseline;
   gap: 2px;
-  min-height: 16px;
+  line-height: 1.2rem;
   width: 100%;
 }
 .vagabond .npc-description-row {
   display: block;
-  border-top: 5px groove var(--vagabond-c-dark);
-  border-bottom: 6px groove var(--vagabond-c-dark);
+  border-bottom: 1px solid var(--vagabond-c-dark);
 }
 .vagabond .npc-description-textarea {
   width: 100%;
@@ -5024,6 +5046,7 @@
   resize: vertical;
   line-height: 1.1;
   box-shadow: none;
+  height: fit-content;
 }
 .vagabond .npc-description-textarea:hover {
   border-color: var(--vagabond-c-dark);
@@ -5050,7 +5073,6 @@
   font-style: italic;
 }
 .vagabond .npc-immunity-text {
-  flex: 1;
   font-size: 16px;
   font-family: "Paradigm", serif;
   line-height: 1;

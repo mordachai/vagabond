@@ -54,9 +54,6 @@
       "Total": "Total Damage",
       "Final": "Final Damage"
     },
-    "Armor": {
-      "Label": "Armor"
-    },
     "DefendMechanics": {
       "BlockTitle": "Block (Endure)",
       "DodgeTitle": "Dodge (Reflex)",
@@ -373,6 +370,7 @@
       },
       "Armor": {
         "FIELDS": {
+
           "armorType": {"label": "Armor Type"},
           "metal": {"label": "Metal"},
           "baseCost": {"label": "Base Cost"},
@@ -523,6 +521,7 @@
     }
     },
     "Armor": {
+      "Label": "Armor",
       "Type": {
         "Light": "Light",
         "Medium": "Medium",
