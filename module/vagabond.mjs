@@ -451,6 +451,130 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 /* -------------------------------------------- */
 
 /**
+ * Helper function to create measurement templates from spell delivery types
+ */
+async function createSpellTemplate(deliveryType, deliveryText, message) {
+  // 1. Parse distance
+  const distanceMatch = deliveryText.match(/(\d+)'/);
+  if (!distanceMatch) {
+    ui.notifications.warn('Could not parse template distance from delivery text.');
+    return;
+  }
+  const distanceFeet = parseInt(distanceMatch[1], 10);
+  const gridDistance = distanceFeet; // Keep raw feet
+
+  // 2. Get Caster (Origin)
+  const speaker = message.speaker;
+  let originToken = null;
+  if (speaker?.token) {
+    originToken = canvas.tokens.get(speaker.token);
+  }
+
+  // -------------------------------------------------------------
+  // NEW LOGIC: CALCULATE ROTATION TOWARDS TARGET
+  // -------------------------------------------------------------
+  let templateDirection = 0; // Default: Facing South (0) or Right (0) depending on system
+
+  if (originToken) {
+    // Start with the token's current rotation as the default
+    templateDirection = originToken.document.rotation;
+
+    // Check if the user has targeted a token
+    const targets = game.user.targets;
+    
+    if (targets.size > 0) {
+      // Get the first target (if multiple, we just pick the first one)
+      const target = targets.first();
+      
+      // Calculate the angle in radians between Caster and Target
+      const ray = new Ray(originToken.center, target.center);
+      
+      // Convert to degrees and normalize (Foundry helper method)
+      // If Math.toDegrees is not available in your specific version, use: (ray.angle * 180 / Math.PI)
+      templateDirection = Math.toDegrees(ray.angle);
+    }
+  }
+  // -------------------------------------------------------------
+
+  // 3. Base Template Data
+  let templateData = {
+    t: '', 
+    distance: gridDistance,
+    fillColor: game.user.color || '#FF0000',
+    direction: templateDirection, // <--- Apply the calculated direction here
+    flags: {
+      vagabond: {
+        deliveryType: deliveryType,
+        deliveryText: deliveryText
+      }
+    }
+  };
+
+  // 4. Determine Type
+  switch (deliveryType.toLowerCase()) {
+    case 'aura':
+      templateData.t = 'circle';
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+      }
+      break;
+
+    case 'cone':
+      templateData.t = 'cone';
+      templateData.angle = 90;
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+        // Direction is already set in templateData above!
+      }
+      break;
+
+    case 'line':
+      templateData.t = 'ray';
+      templateData.width = canvas.scene.grid.distance; 
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+        // Direction is already set in templateData above!
+      }
+      break;
+
+    case 'cube':
+      templateData.t = 'rect';
+      templateData.distance = gridDistance; 
+      templateData.width = gridDistance; 
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+        // Direction is already set in templateData above!
+      }
+      break;
+
+    case 'sphere':
+      templateData.t = 'circle';
+      if (originToken) {
+        templateData.x = originToken.center.x;
+        templateData.y = originToken.center.y;
+      }
+      break;
+
+    default:
+      ui.notifications.warn(`Template creation not supported: ${deliveryType}`);
+      return;
+  }
+
+  // 5. Create Template
+  if (templateData.x !== undefined && templateData.y !== undefined) {
+    const templateDoc = new MeasuredTemplateDocument(templateData, { parent: canvas.scene });
+    await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateDoc.toObject()]);
+  } else {
+    ui.notifications.warn('No token found for caster. Cannot create template.');
+  }
+}
+
+
+/**
  * V13 Standard: 'renderChatMessageHTML' replaces 'renderChatMessage'.
  * The 'html' argument is now a standard HTMLElement, not a jQuery object.
  */
@@ -622,6 +746,27 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleNPCDamageButton(button, message.id);
       });
+    });
+  });
+
+  // 9. Template Trigger Handler (Spell Delivery Templates)
+  // V14 NOTE: Template creation function will need updating for Regions API
+  // See createSpellTemplate() function above for migration notes
+  const templateTriggers = html.querySelectorAll('.template-trigger');
+
+  templateTriggers.forEach(trigger => {
+    if (!trigger) return; // Safety check
+    trigger.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+
+      const deliveryType = trigger.dataset.deliveryType;
+      const deliveryText = trigger.dataset.deliveryText;
+
+      if (!deliveryType) return;
+
+      // Helper function to create measurement templates
+      // V14 TODO: This function will need updates for Regions API
+      await createSpellTemplate(deliveryType, deliveryText, message);
     });
   });
 });

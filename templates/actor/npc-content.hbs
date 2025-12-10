@@ -14,7 +14,8 @@
             name='system.morale'
             value='{{system.morale}}'
             data-dtype='Number'
-            class='npc-field-input'
+            class='npc-number-input'
+            size='3'
             placeholder='{{#unless system.locked}}0{{/unless}}'
             {{#if system.locked}}readonly{{/if}}
           />
@@ -32,7 +33,7 @@
                 name='system.appearing'
                 value='{{system.appearing}}'
                 data-dtype='String'
-                class='npc-field-input'
+                class='npc-text-input'
                 placeholder='dX'
               />
             {{/if}}
@@ -47,14 +48,15 @@
         {{! LOCKED MODE }}
         {{#if system.locked}}
           <div class="npc-speed-types">
-            
+
             {{! Input adjusted width to fit content }}
             <input
               type='text'
               name='system.speed'
               value='{{system.speed}}'
               data-dtype='Number'
-              class='npc-field-input'
+              class='npc-number-input'
+              size='3'
               readonly/>
 
             {{! Fixed Logic: Loop through system.speedTypes directly }}
@@ -76,16 +78,16 @@
         {{else}}
           {{! Main container is now a ROW, allowing wrapping if many tags exist }}
           <div style="display: flex; flex-direction: row; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px;">
-            
+
             {{! Speed Input }}
             <input
               type='text'
               name='system.speed'
               value='{{system.speed}}'
               data-dtype='Number'
-              class='npc-field-input'
+              class='npc-number-input'
+              size='3'
               placeholder='30'
-              style="width: 40px; text-align: center;" 
             />
 
             {{! Speed Type Dropdown Button }}
@@ -132,158 +134,161 @@
               name='system.senses'
               value='{{system.senses}}'
               data-dtype='String'
-              class='npc-field-input flex-1'
+              class='npc-text-input'
               placeholder='Darksight, Blindsight...'
             />
           {{/if}}
         </div>
       {{/unless}}
-    </div>
-  </div>
 
-  {{! NPC Details Section }}
-  <div class='npc-details'>
-     {{! Armor - Always visible }}
-    <div class='npc-detail-row'>
-      <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.armor.label"}}</label>
-      <div class='npc-armor-display'>
-        <input
-          type='text'
-          name='system.armor'
-          value='{{system.armor}}'
-          data-dtype='Number'
-          class='npc-armor-value'
-          placeholder='{{#unless system.locked}}0{{/unless}}'
-          {{#if system.locked}}readonly{{/if}}
-        />
-        <input
-          type='text'
-          name='system.armorDescription'
-          value='{{system.armorDescription}}'
-          data-dtype='String'
-          class='npc-armor-description'
-          placeholder='{{#unless system.locked}}Light armor{{/unless}}'
-          {{#if system.locked}}readonly{{/if}}
-        />
-      </div>
-    </div>
-
-    {{! Damage Immunities }}
-    {{#unless (and system.locked (not system.immunities.length))}}
+      {{! Row 4: Armor - Always visible }}
       <div class='npc-detail-row'>
-        {{#if system.locked}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</label>
-          <div class='npc-immunity-text'>
-            {{#each system.immunities as |immunity index|}}
-              <i class='{{lookup ../config.damageTypeIcons immunity}} damage-type-icon-prefix'></i>{{localize (lookup ../config.damageTypes immunity)}}{{#unless @last}}, {{/unless}}
-            {{/each}}
-          </div>
-        {{else}}
-          <details class='npc-immunity-dropdown'>
-            <summary class='npc-immunity-toggle'>
-              <i class='fas fa-chevron-down'></i>
-              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</span>
-            </summary>
-            <div class='npc-immunity-checkboxes'>
-              {{#each config.damageTypes as |label key|}}
-                {{#unless (eq key '-')}}
+        <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.armor.label"}}</label>
+        <div class='npc-armor-display'>
+          <input
+            type='text'
+            name='system.armor'
+            value='{{system.armor}}'
+            data-dtype='Number'
+            class='npc-number-input'
+            size='3'
+            placeholder='{{#unless system.locked}}0{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+          {{#if system.locked}}
+            {{#if system.armorDescription}}
+              <span class='npc-armor-description-display'>[{{system.armorDescription}}]</span>
+            {{/if}}
+          {{else}}
+            <input
+              type='text'
+              name='system.armorDescription'
+              value='{{system.armorDescription}}'
+              data-dtype='String'
+              class='npc-text-input'
+              placeholder='Light armor'
+            />
+          {{/if}}
+        </div>
+      </div>
+
+      {{! Row 5: Damage Immunities }}
+      {{#unless (and system.locked (not system.immunities.length))}}
+        <div class='npc-detail-row'>
+          {{#if system.locked}}
+            <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</label>
+            <div class='npc-immunity-text'>
+              {{#each system.immunities as |immunity index|}}
+                <i class='{{lookup ../config.damageTypeIcons immunity}} damage-type-icon-prefix'></i>{{localize (lookup ../config.damageTypes immunity)}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+            </div>
+          {{else}}
+            <details class='npc-immunity-dropdown'>
+              <summary class='npc-immunity-toggle'>
+                <i class='fas fa-chevron-down'></i>
+                <span>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</span>
+              </summary>
+              <div class='npc-immunity-checkboxes'>
+                {{#each config.damageTypes as |label key|}}
+                  {{#unless (eq key '-')}}
+                    <label class='npc-immunity-checkbox-item'>
+                      <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
+                      <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
+                      <span>{{localize label}}</span>
+                    </label>
+                  {{/unless}}
+                {{/each}}
+              </div>
+            </details>
+            <div class='npc-immunity-tags'>
+              {{#each system.immunities as |immunity index|}}
+                <span class='npc-immunity-tag'>
+                  <i class='{{lookup ../config.damageTypeIcons immunity}} damage-type-icon-prefix'></i>
+                  {{localize (lookup ../config.damageTypes immunity)}}
+                  <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
+                </span>
+              {{/each}}
+            </div>
+          {{/if}}
+        </div>
+      {{/unless}}
+
+      {{! Row 6: Damage Weaknesses }}
+      {{#unless (and system.locked (not system.weaknesses.length))}}
+        <div class='npc-detail-row'>
+          {{#if system.locked}}
+            <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</label>
+            <div class='npc-immunity-text'>
+              {{#each system.weaknesses as |weakness index|}}
+                <i class='{{lookup ../config.damageTypeIcons weakness}} damage-type-icon-prefix'></i>{{localize (lookup ../config.allWeaknessTypes weakness)}}{{#unless @last}}, {{/unless}}
+              {{/each}}
+            </div>
+          {{else}}
+            <details class='npc-immunity-dropdown'>
+              <summary class='npc-immunity-toggle'>
+                <i class='fas fa-chevron-down'></i>
+                <span>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</span>
+              </summary>
+              <div class='npc-immunity-checkboxes'>
+                {{#each config.allWeaknessTypes as |label key|}}
+                  {{#unless (eq key '-')}}
+                    <label class='npc-immunity-checkbox-item'>
+                      <input type='checkbox' value='{{key}}' {{#if (contains ../system.weaknesses key)}}checked{{/if}} data-action='toggleWeakness' data-weakness='{{key}}'>
+                      <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
+                      <span>{{localize label}}</span>
+                    </label>
+                  {{/unless}}
+                {{/each}}
+              </div>
+            </details>
+            <div class='npc-immunity-tags'>
+              {{#each system.weaknesses as |weakness index|}}
+                <span class='npc-immunity-tag'>
+                  <i class='{{lookup ../config.damageTypeIcons weakness}} damage-type-icon-prefix'></i>
+                  {{localize (lookup ../config.allWeaknessTypes weakness)}}
+                  <i class='fas fa-times' data-action='removeWeakness' data-weakness='{{weakness}}'></i>
+                </span>
+              {{/each}}
+            </div>
+          {{/if}}
+        </div>
+      {{/unless}}
+
+      {{! Row 7: Status Immunities }}
+      {{#unless (and system.locked (not system.statusImmunities.length))}}
+        <div class='npc-detail-row'>
+          {{#if system.locked}}
+            <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</label>
+            <div class='npc-immunity-text'>
+              {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
+            </div>
+          {{else}}
+            <details class='npc-immunity-dropdown'>
+              <summary class='npc-immunity-toggle'>
+                <i class='fas fa-chevron-down'></i>
+                <span>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</span>
+              </summary>
+              <div class='npc-immunity-checkboxes'>
+                {{#each config.statusConditions as |label key|}}
                   <label class='npc-immunity-checkbox-item'>
-                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
-                    <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
+                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.statusImmunities key)}}checked{{/if}} data-action='toggleStatusImmunity' data-status='{{key}}'>
                     <span>{{localize label}}</span>
                   </label>
-                {{/unless}}
+                {{/each}}
+              </div>
+            </details>
+            <div class='npc-immunity-tags'>
+              {{#each system.statusImmunities as |status index|}}
+                <span class='npc-immunity-tag'>
+                  {{status}}
+                  <i class='fas fa-times' data-action='removeStatusImmunity' data-status='{{status}}'></i>
+                </span>
               {{/each}}
             </div>
-          </details>
-          <div class='npc-immunity-tags'>
-            {{#each system.immunities as |immunity index|}}
-              <span class='npc-immunity-tag'>
-                <i class='{{lookup ../config.damageTypeIcons immunity}} damage-type-icon-prefix'></i>
-                {{localize (lookup ../config.damageTypes immunity)}}
-                <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
-              </span>
-            {{/each}}
-          </div>
-        {{/if}}
-      </div>
-    {{/unless}}
-
-    {{! Damage Weaknesses }}
-    {{#unless (and system.locked (not system.weaknesses.length))}}
-      <div class='npc-detail-row'>
-        {{#if system.locked}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</label>
-          <div class='npc-immunity-text'>
-            {{#each system.weaknesses as |weakness index|}}
-              <i class='{{lookup ../config.damageTypeIcons weakness}} damage-type-icon-prefix'></i>{{localize (lookup ../config.allWeaknessTypes weakness)}}{{#unless @last}}, {{/unless}}
-            {{/each}}
-          </div>
-        {{else}}
-          <details class='npc-immunity-dropdown'>
-            <summary class='npc-immunity-toggle'>
-              <i class='fas fa-chevron-down'></i>
-              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</span>
-            </summary>
-            <div class='npc-immunity-checkboxes'>
-              {{#each config.allWeaknessTypes as |label key|}}
-                {{#unless (eq key '-')}}
-                  <label class='npc-immunity-checkbox-item'>
-                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.weaknesses key)}}checked{{/if}} data-action='toggleWeakness' data-weakness='{{key}}'>
-                    <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
-                    <span>{{localize label}}</span>
-                  </label>
-                {{/unless}}
-              {{/each}}
-            </div>
-          </details>
-          <div class='npc-immunity-tags'>
-            {{#each system.weaknesses as |weakness index|}}
-              <span class='npc-immunity-tag'>
-                <i class='{{lookup ../config.damageTypeIcons weakness}} damage-type-icon-prefix'></i>
-                {{localize (lookup ../config.allWeaknessTypes weakness)}}
-                <i class='fas fa-times' data-action='removeWeakness' data-weakness='{{weakness}}'></i>
-              </span>
-            {{/each}}
-          </div>
-        {{/if}}
-      </div>
-    {{/unless}}
-
-    {{! Status Immunities }}
-    {{#unless (and system.locked (not system.statusImmunities.length))}}
-      <div class='npc-detail-row'>
-        {{#if system.locked}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</label>
-          <div class='npc-immunity-text'>
-            {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
-          </div>
-        {{else}}
-          <details class='npc-immunity-dropdown'>
-            <summary class='npc-immunity-toggle'>
-              <i class='fas fa-chevron-down'></i>
-              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</span>
-            </summary>
-            <div class='npc-immunity-checkboxes'>
-              {{#each config.statusConditions as |label key|}}
-                <label class='npc-immunity-checkbox-item'>
-                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.statusImmunities key)}}checked{{/if}} data-action='toggleStatusImmunity' data-status='{{key}}'>
-                  <span>{{localize label}}</span>
-                </label>
-              {{/each}}
-            </div>
-          </details>
-          <div class='npc-immunity-tags'>
-            {{#each system.statusImmunities as |status index|}}
-              <span class='npc-immunity-tag'>
-                {{status}}
-                <i class='fas fa-times' data-action='removeStatusImmunity' data-status='{{status}}'></i>
-              </span>
-            {{/each}}
-          </div>
-        {{/if}}
-      </div>
-    {{/unless}}
+          {{/if}}
+        </div>
+      {{/unless}}
+    </div>
   </div>
 
   {{! Actions Section }}
@@ -299,7 +304,7 @@
                 <div class='npc-action-view' data-action-index='{{index}}'>
                   <div class='action-name-line'>
                     <strong>
-                      <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>{{#if action.note}}: {{action.note}}{{/if}}{{#if action.recharge}} ({{localize "VAGABOND.Actor.NPC.Action.Recharge"}}: {{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}){{/if}}{{#if (or action.recharge action.note)}}:{{/if}}
+                      <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>{{#if action.note}} [{{action.note}}]{{/if}}{{#if action.recharge}} ({{localize "VAGABOND.Actor.NPC.Action.Recharge"}}{{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}){{/if}}{{#if (or action.recharge action.note)}}{{/if}}:
                     </strong>
                     {{#if (or action.flatDamage action.rollDamage action.damageType)}}
                       {{#if action.damageType}}
@@ -338,7 +343,7 @@
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}:</label>
                     <div class='action-name-with-remove'>
-                      <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' class='npc-field-input' />
+                      <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' class='npc-text-input' />
                       <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
                         <i class='fas fa-trash'></i>
                       </button>
@@ -347,12 +352,12 @@
                   {{#if action.name}}
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}:</label>
-                    <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' class='npc-field-input' />
+                    <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' class='npc-text-input' />
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-field-input' />
+                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-text-input' />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.AttackType"}}:</label>
@@ -367,11 +372,11 @@
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.FlatDamage"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.flatDamage' value='{{action.flatDamage}}' placeholder='4' class='npc-field-input' />
+                      <input type='text' name='system.actions.{{index}}.flatDamage' value='{{action.flatDamage}}' placeholder='4' class='npc-number-input' size='3' />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.RollDamage"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' class='npc-field-input' />
+                      <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' class='npc-text-input' />
                     </div>
                   </div>
                   <div class='action-edit-row'>
@@ -434,7 +439,7 @@
                   <div class='ability-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Ability.Name"}}</label>
                     <div class='ability-name-with-remove'>
-                      <input type='text' name='system.abilities.{{index}}.name' value='{{ability.name}}' placeholder='Ability Name' class='npc-field-input' />
+                      <input type='text' name='system.abilities.{{index}}.name' value='{{ability.name}}' placeholder='Ability Name' class='npc-text-input' />
                       <button type='button' class='ability-remove-btn' data-action='removeAbility' data-index='{{index}}' title='Remove Ability'>
                         <i class='fas fa-trash'></i>
                       </button>
@@ -443,7 +448,7 @@
                   {{#if ability.name}}
                     <div class='ability-edit-row'>
                       <label>{{localize "VAGABOND.Actor.NPC.Ability.Description"}}</label>
-                      <textarea name='system.abilities.{{index}}.description' rows='3' placeholder='Description (dice like d6 or 2d8 will be clickable)' class='npc-field-input'>{{ability.description}}</textarea>
+                      <textarea name='system.abilities.{{index}}.description' rows='3' placeholder='Description (dice like d6 or 2d8 will be clickable)' class='npc-text-input'>{{ability.description}}</textarea>
                     </div>
                   {{/if}}
                 </div>

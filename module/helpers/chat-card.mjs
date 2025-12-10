@@ -611,8 +611,11 @@ export class VagabondChatCard {
       metadataBar.fxIcon = true;
     }
 
-    // Delivery
+    // Delivery (clickable to create measurement template)
+    // See docs/SPELL_TEMPLATES.md for template system details
+    // V14 TODO: Update for Regions API
     metadataBar.delivery = deliveryText;
+    metadataBar.deliveryType = spellState.deliveryType; // For template creation
 
     // Mana
     metadataBar.mana = costs.totalCost.toString();

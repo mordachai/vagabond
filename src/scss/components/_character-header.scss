@@ -772,6 +772,18 @@
     font-weight: bold;
     text-align: center;
     white-space: nowrap;
+
+    &.mana-modifier {
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+      transition: background-color 0.2s, color 0.2s;
+
+      &:hover {
+        background-color: rgba(212, 175, 55, 0.15);
+        color: var(--vagabond-c-red);
+      }
+    }
   }
 
   input {

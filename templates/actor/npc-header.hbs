@@ -23,7 +23,8 @@
           name='system.hd'
           value='{{system.hd}}'
           data-dtype='Number'
-          class='npc-field-input'
+          class='npc-number-input'
+          size='3'
           placeholder='{{#unless system.locked}}1{{/unless}}'
           {{#if system.locked}}readonly{{/if}}
         />
@@ -100,7 +101,7 @@
   </div>
 
   {{! Row: Size and Being Type }}
-  <div class="flex-row-container flex-between">
+  <div class="flex-row-container flex-between npc-type-container">
     <div class='npc-type-row'>
           {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
           {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}

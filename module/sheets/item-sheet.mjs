@@ -342,8 +342,22 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
+    // Add listener for exploding dice checkbox to enable/disable the text field
+    const explodeCheckboxes = this.element.querySelectorAll('input[name="system.canExplode"]');
+    explodeCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', (event) => {
+        // Find the corresponding explode values text field
+        const fieldContainer = event.target.closest('.form-group');
+        const explodeValuesField = fieldContainer?.querySelector('input[name="system.explodeValues"]');
+
+        if (explodeValuesField) {
+          explodeValuesField.disabled = !event.target.checked;
+        }
+      });
+    });
+
     // --- REMOVED THE OLD EQUIPMENT GRIP LISTENER BLOCK HERE ---
-    // The previous listener code was manual and buggy. 
+    // The previous listener code was manual and buggy.
     // We now use static EVENTS and _onUpdateGrip below.
   }
 

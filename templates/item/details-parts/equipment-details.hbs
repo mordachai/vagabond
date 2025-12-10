@@ -16,7 +16,10 @@
         </div>
       {{/if}}
 
-      {{! ===== WEAPON-SPECIFIC DISPLAY ===== }}
+      {{! Two-column layout: Main content | Details }}
+      <div class='locked-two-column'>
+        <div class='locked-column-left'>
+          {{! ===== WEAPON-SPECIFIC DISPLAY ===== }}
       {{#if (eq system.equipmentType 'weapon')}}
         <div class='locked-section'>
           <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.WeaponStats"}}</h3>
@@ -41,6 +44,12 @@
               <div class='locked-stat'>
                 <span class='stat-label'>Damage (2H):</span>
                 <span class='stat-value'>{{system.damageTwoHands}}</span>
+              </div>
+            {{/if}}
+            {{#if system.canExplode}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Can Explode:</span>
+                <span class='stat-value'>{{system.explodeValues}}</span>
               </div>
             {{/if}}
           </div>
@@ -116,6 +125,12 @@
                 <span class='stat-label'>Damage:</span>
                 <span class='stat-value'>{{system.damageAmount}} {{localize (concat "VAGABOND.DamageTypes." (capitalize system.damageType))}}</span>
               </div>
+              {{#if system.canExplode}}
+                <div class='locked-stat'>
+                  <span class='stat-label'>Can Explode:</span>
+                  <span class='stat-value'>{{system.explodeValues}}</span>
+                </div>
+              {{/if}}
             {{/unless}}
             <div class='locked-stat'>
               <span class='stat-label'>Cost:</span>
@@ -146,48 +161,58 @@
 
       {{! ===== UNIVERSAL FIELDS ===== }}
 
-      {{! Damage/Healing if present }}
-      {{#unless (eq system.damageType '-')}}
-        <div class='locked-section'>
-          <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}{{localize "VAGABOND.UI.Sections.Healing"}}{{else}}{{localize "VAGABOND.UI.Sections.Damage"}}{{/if}}</h3>
-          <div class='locked-stats-grid'>
-            <div class='locked-stat'>
-              <span class='stat-label'>Type:</span>
-              <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
-            </div>
-            {{#if system.damageAmount}}
-              <div class='locked-stat'>
-                <span class='stat-label'>Amount:</span>
-                <span class='stat-value'>{{system.damageAmount}}</span>
+          {{! Damage/Healing if present }}
+          {{#unless (eq system.damageType '-')}}
+            <div class='locked-section'>
+              <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}{{localize "VAGABOND.UI.Sections.Healing"}}{{else}}{{localize "VAGABOND.UI.Sections.Damage"}}{{/if}}</h3>
+              <div class='locked-stats-grid'>
+                <div class='locked-stat'>
+                  <span class='stat-label'>Type:</span>
+                  <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
+                </div>
+                {{#if system.damageAmount}}
+                  <div class='locked-stat'>
+                    <span class='stat-label'>Amount:</span>
+                    <span class='stat-value'>{{system.damageAmount}}</span>
+                  </div>
+                {{/if}}
+                {{#if system.canExplode}}
+                  <div class='locked-stat'>
+                    <span class='stat-label'>Can Explode:</span>
+                    <span class='stat-value'>{{system.explodeValues}}</span>
+                  </div>
+                {{/if}}
               </div>
-            {{/if}}
-          </div>
-        </div>
-      {{/unless}}
-
-      {{! Equipment Details }}
-      <div class='locked-section'>
-        <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Details"}}</h3>
-        <div class='locked-stats-grid'>
-          {{#unless (eq system.metal 'none')}}
-            <div class='locked-stat'>
-              <span class='stat-label'>Metal:</span>
-              <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
             </div>
           {{/unless}}
-          <div class='locked-stat'>
-            <span class='stat-label'>Slots:</span>
-            <span class='stat-value'>{{system.slots}}</span>
-          </div>
-          {{#if (gt system.quantity 1)}}
-            <div class='locked-stat'>
-              <span class='stat-label'>Quantity:</span>
-              <span class='stat-value'>{{system.quantity}}</span>
+        </div>
+
+        {{! Right column - Equipment Details }}
+        <div class='locked-column-right'>
+          <div class='locked-section'>
+            <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Details"}}</h3>
+            <div class='locked-stats-grid'>
+              {{#unless (eq system.metal 'none')}}
+                <div class='locked-stat'>
+                  <span class='stat-label'>Metal:</span>
+                  <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
+                </div>
+              {{/unless}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Slots:</span>
+                <span class='stat-value'>{{system.slots}}</span>
+              </div>
+              {{#if (gt system.quantity 1)}}
+                <div class='locked-stat'>
+                  <span class='stat-label'>Quantity:</span>
+                  <span class='stat-value'>{{system.quantity}}</span>
+                </div>
+              {{/if}}
+              <div class='locked-stat'>
+                <span class='stat-label'>Cost:</span>
+                <span class='stat-value'>{{system.costDisplay}}</span>
+              </div>
             </div>
-          {{/if}}
-          <div class='locked-stat'>
-            <span class='stat-label'>Cost:</span>
-            <span class='stat-value'>{{system.costDisplay}}</span>
           </div>
         </div>
       </div>
@@ -267,6 +292,35 @@
                 data-dtype='String'
                 placeholder='d10'
                 {{#unless (or (eq system.grip '2H') (eq system.grip 'V'))}}disabled{{/unless}}
+              />
+            </div>
+          </div>
+        </div>
+
+        {{! Exploding Dice Configuration }}
+        <div class='form-group'>
+          <label class='resource-label'>Exploding Dice</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='explode-checkbox-field'>
+              <label class='checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.canExplode'
+                  {{#if system.canExplode}}checked{{/if}}
+                  data-dtype='Boolean'
+                />
+                <span>Can Explode</span>
+              </label>
+            </div>
+            <div class='explode-values-field'>
+              <label class='resource-label'>Explode On (comma-separated)</label>
+              <input
+                type='text'
+                name='system.explodeValues'
+                value='{{system.explodeValues}}'
+                data-dtype='String'
+                placeholder='e.g., 1,4'
+                {{#unless system.canExplode}}disabled{{/unless}}
               />
             </div>
           </div>
@@ -457,6 +511,35 @@
           </div>
         </div>
 
+        {{! Exploding Dice Configuration }}
+        <div class='form-group'>
+          <label class='resource-label'>Exploding Dice</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='explode-checkbox-field'>
+              <label class='checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.canExplode'
+                  {{#if system.canExplode}}checked{{/if}}
+                  data-dtype='Boolean'
+                />
+                <span>Can Explode</span>
+              </label>
+            </div>
+            <div class='explode-values-field'>
+              <label class='resource-label'>Explode On (comma-separated)</label>
+              <input
+                type='text'
+                name='system.explodeValues'
+                value='{{system.explodeValues}}'
+                data-dtype='String'
+                placeholder='e.g., 1,4'
+                {{#unless system.canExplode}}disabled{{/unless}}
+              />
+            </div>
+          </div>
+        </div>
+
         {{! Cost }}
         <div class='form-group'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.baseCost.label'}}</label>
@@ -552,17 +635,17 @@
 
       {{! ===== UNIVERSAL FIELDS (ALL EQUIPMENT) ===== }}
 
-      {{! Damage Type and Amount Row (Universal) - not for alchemicals or relics, they have their own }}
-      {{#unless (or (eq system.equipmentType 'alchemical') (eq system.equipmentType 'relic'))}}
+      {{! Damage Type and Amount Row (Universal) - only for armor and gear (weapons/alchemicals/relics have their own) }}
+      {{#if (or (eq system.equipmentType 'armor') (eq system.equipmentType 'gear'))}}
         <div class='form-group'>
           <label class='resource-label'>Damage / Healing</label>
         <div class='grid grid-2col gap-8'>
           <div class='damage-type-field'>
             <label class='resource-label'>Type</label>
-            {{> "systems/vagabond/templates/shared/damage-type-select.hbs" 
-                name="system.damageType" 
-                selected=system.damageType 
-                includeNone=true 
+            {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+                name="system.damageType"
+                selected=system.damageType
+                includeNone=true
                 config=config}}
           </div>
           <div class='damage-amount-field'>
@@ -576,8 +659,37 @@
             />
           </div>
         </div>
+
+        {{! Exploding Dice Configuration }}
+        <div class='form-group'>
+          <label class='resource-label'>Exploding Dice</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='explode-checkbox-field'>
+              <label class='checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.canExplode'
+                  {{#if system.canExplode}}checked{{/if}}
+                  data-dtype='Boolean'
+                />
+                <span>Can Explode</span>
+              </label>
+            </div>
+            <div class='explode-values-field'>
+              <label class='resource-label'>Explode On (comma-separated)</label>
+              <input
+                type='text'
+                name='system.explodeValues'
+                value='{{system.explodeValues}}'
+                data-dtype='String'
+                placeholder='e.g., 1,4'
+                {{#unless system.canExplode}}disabled{{/unless}}
+              />
+            </div>
+          </div>
         </div>
-      {{/unless}}
+        </div>
+      {{/if}}
 
       {{! Metal, Slots, and Quantity Row }}
       {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}

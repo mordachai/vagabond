@@ -53,6 +53,19 @@ export default class VagabondSpell extends VagabondItemBase {
       initial: false
     });
 
+    // Exploding Dice - whether damage dice can explode
+    schema.canExplode = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
+    // Explode Values - comma-separated numbers where dice explode (e.g., "1,4")
+    schema.explodeValues = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: ''
+    });
+
     return schema;
   }
 }

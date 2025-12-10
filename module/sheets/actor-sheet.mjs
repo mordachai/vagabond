@@ -1112,6 +1112,36 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
     }
 
+    // Add mana modifier click handlers (both spells tab and sliding panel)
+    const manaModifiers = this.element.querySelectorAll('.mana-modifier[data-mana-action="modify"]');
+    manaModifiers.forEach(manaElement => {
+      // Left-click: spend mana (subtract)
+      manaElement.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentMana = this.actor.system.mana.current || 0;
+        const newMana = Math.max(currentMana - 1, 0);
+
+        await this.actor.update({ 'system.mana.current': newMana });
+      });
+
+      // Right-click: restore mana (add)
+      manaElement.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentMana = this.actor.system.mana.current || 0;
+        const maxMana = this.actor.system.mana.max || 0;
+        const newMana = Math.min(currentMana + 1, maxMana);
+
+        await this.actor.update({ 'system.mana.current': newMana });
+      });
+
+      // Make the element visually clickable
+      manaElement.style.cursor = 'pointer';
+    });
+
     // Add right-click context menu handlers for ancestry and class
     const ancestryName = this.element.querySelector('.ancestry-name');
     if (ancestryName) {
@@ -2966,7 +2996,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     try {
       // Handle alchemicals (just roll damage, no attack)
       if (isAlchemical) {
-        const roll = new Roll(item.system.damageAmount);
+        let damageFormula = item.system.damageAmount;
+
+        // Apply exploding dice if enabled
+        if (item.system.canExplode && item.system.explodeValues) {
+          const explodeValues = item.system.explodeValues
+            .split(',')
+            .map(v => v.trim())
+            .filter(v => v && !isNaN(v));
+
+          if (explodeValues.length > 0) {
+            const explodeSuffix = explodeValues.map(v => `x${v}`).join('');
+            damageFormula = damageFormula.replace(/(\d*)d(\d+)/gi, (match, count, faces) => {
+              return `${count || '1'}d${faces}${explodeSuffix}`;
+            });
+          }
+        }
+
+        const roll = new Roll(damageFormula);
         await roll.evaluate();
 
         const damageTypeKey = item.system.damageType;
@@ -3005,8 +3052,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Import damage helper
       const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
-      // Get favor/hinder state
-      const favorHinder = this.actor.system.favorHinder || 'none';
+      // Get favor/hinder state with keyboard modifiers
+      const systemFavorHinder = this.actor.system.favorHinder || 'none';
+      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+        systemFavorHinder,
+        event.shiftKey,
+        event.ctrlKey
+      );
 
       // Roll attack using weapon's method
       const attackResult = await item.rollAttack(this.actor, favorHinder);
@@ -3234,8 +3286,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const difficulty = skill.difficulty;
     const label = `${spell.name} (${skill.label})`;
 
-    // Apply favor/hinder
-    const favorHinder = this.actor.system.favorHinder || 'none';
+    // Apply favor/hinder with keyboard modifiers
+    const systemFavorHinder = this.actor.system.favorHinder || 'none';
+    const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+      systemFavorHinder,
+      event.shiftKey,
+      event.ctrlKey
+    );
     let rollFormula = 'd20';
 
     if (favorHinder === 'favor') {
@@ -3396,6 +3453,49 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Calculate effective favor/hinder state based on system state and keyboard modifiers.
+   * Shift = Favor, Ctrl = Hinder. If they conflict with system state, they cancel out.
+   * @param {string} systemState - The actor's current favorHinder state ('favor', 'hinder', or 'none')
+   * @param {boolean} shiftKey - Whether Shift key was pressed
+   * @param {boolean} ctrlKey - Whether Ctrl key was pressed
+   * @returns {string} The effective favorHinder state ('favor', 'hinder', or 'none')
+   * @private
+   */
+  static _calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey) {
+    // Determine modifier intent
+    let modifierIntent = 'none';
+    if (shiftKey && !ctrlKey) {
+      modifierIntent = 'favor';
+    } else if (ctrlKey && !shiftKey) {
+      modifierIntent = 'hinder';
+    } else if (shiftKey && ctrlKey) {
+      // Both pressed - cancel out
+      modifierIntent = 'none';
+    }
+
+    // If no modifier, return system state
+    if (modifierIntent === 'none') {
+      return systemState || 'none';
+    }
+
+    // If modifier matches system state, keep it
+    if (modifierIntent === systemState) {
+      return modifierIntent;
+    }
+
+    // If modifier conflicts with system state, they cancel out
+    if (systemState === 'favor' && modifierIntent === 'hinder') {
+      return 'none';
+    }
+    if (systemState === 'hinder' && modifierIntent === 'favor') {
+      return 'none';
+    }
+
+    // If system state is 'none', apply modifier
+    return modifierIntent;
+  }
+
+  /**
    * Handle clickable rolls.
    *
    * @this VagabondActorSheet
@@ -3416,8 +3516,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      // Apply favor/hinder if applicable
-      const favorHinder = this.actor.system.favorHinder || 'none';
+      // Apply favor/hinder based on system state and keyboard modifiers
+      const systemFavorHinder = this.actor.system.favorHinder || 'none';
+      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+        systemFavorHinder,
+        event.shiftKey,
+        event.ctrlKey
+      );
       let rollFormula = dataset.roll;
 
       if (favorHinder === 'favor') {
