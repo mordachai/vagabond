@@ -305,12 +305,15 @@ i {color: $c-dark}
   display: flex;
   align-items: baseline;
   gap: 12px;
+  line-height: 1.2rem;
+  width: 100%;
 
   .npc-stat-field {
-    flex: 0.5;
+    flex: 1 0 auto; // Equal distribution, can grow and shrink
     align-items: baseline;
     justify-content: flex-start;
-    gap: 2px;
+    gap: 6px;
+    min-width: 0; // Allow content to shrink
   }
 }
 
@@ -320,49 +323,24 @@ i {color: $c-dark}
   gap: 8px;
 }
 
-// NPC Stats Row (Senses) - Separate row
-.npc-stats-row-senses {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-// NPC Stats Row (Generic)
-.npc-stats-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-top: 8px;
-}
 
 .npc-speed-types {
   display: flex;
   justify-content: flex-start;
   align-items: baseline;
-  gap: 8px;
-
-  input[type='text'] {
-    flex: 0.5;
-    text-align: left;
-    justify-content: flex-start;
-    width: 25px !important;
-    font-family: $font-secondary;
-    font-size: 14px;
-    padding: 0;
-  }
-
+  gap: 6px;
+  line-height: 1.2rem;
+  flex: 1;
+  min-width: 0; // Allow wrapping
 }
 
 .npc-stat-field {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  gap: 2px;
-}
-
-.npc-senses-field,
-.npc-armor-field {
-  grid-column: span 1;
+  gap: 6px;
+  line-height: 1.2rem;
+  min-width: 0; // Allow flex children to shrink below content size
 }
 
 // Zone checkboxes - single column layout
@@ -381,23 +359,25 @@ i {color: $c-dark}
 }
 
 .npc-field-label {
+  font-size: 16px;
   font-weight: bold;
   font-family: $font-secondary;
   white-space: nowrap;
-  min-width: fit-content;
+  flex-shrink: 0; // Don't shrink labels
+  line-height: 1.2rem;
 }
 
+// Base shared styles for all NPC inputs
 .npc-field-input {
-  padding: 2px 4px;
   border-bottom: 1px solid var(--vagabond-c-dark);
   border-radius: 0;
   background: transparent;
-  font-size: 18px;
+  font-size: 16px;
   font-family: $font-primary;
   font-weight: normal;
   color: $c-dark;
-  justify-content: flex-start;
   box-shadow: none;
+  line-height: 1.2rem;
 
   &:hover {
     border-color: var(--vagabond-c-dark);
@@ -410,21 +390,59 @@ i {color: $c-dark}
     box-shadow: none;
   }
 
+  &::placeholder {
+    color: $c-red;
+    opacity: 0.9;
+  }
+}
+
+// Number inputs - short, centered, compact
+.npc-number-input {
+  @extend .npc-field-input;
+  padding: 2px 6px;
+  width: fit-content;
+  min-width: 0;
+  max-width: 35px;
+  text-align: left;
+  flex: 0 0 auto; // No shrink, no grow - just fit content
+
+
   &[readonly] {
     border: none;
     cursor: default;
     background: transparent;
-    padding: 2px 0px;
-    min-width: 20px;
+    padding: 2px 4px;
+    width: fit-content;
+    min-width: 0;
+    flex: 1 1 0;
+    text-align: left;
 
     &:hover {
       border: none;
     }
   }
+}
 
-  &::placeholder {
-    color: $c-red;
-    opacity: 0.9;
+// Text inputs - expandable, flex start
+.npc-text-input {
+  @extend .npc-field-input;
+  padding: 2px 4px;
+  flex: 1;
+  text-align: left;
+  justify-content: flex-start;
+  min-width: 60px;
+  flex: 1 1 auto;
+
+  &[readonly] {
+    border: none;
+    cursor: default;
+    background: transparent;
+    padding: 2px 0px;
+    flex: 1 1 0;
+
+    &:hover {
+      border: none;
+    }
   }
 }
 
@@ -433,7 +451,10 @@ i {color: $c-dark}
   font-size: 16px;
   font-family: $font-primary;
   font-weight: normal;
+  line-height: 1.2rem;
   flex: 1;
+  min-width: 0; // Allow content to shrink/wrap
+  word-wrap: break-word;
 
   i {color: $c-dark}
 }
@@ -460,99 +481,24 @@ i {color: $c-dark}
 // Armor Display (Value + Description)
 .npc-armor-display {
   display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.npc-armor-value {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  border-radius: 0;
-  background: transparent;
-  font-size: 15px;
-  font-family: $font-secondary;
-  font-weight: normal;
-  width: 40px;
-  text-align: left;
-  box-shadow: none;
-
-  &:hover {
-    border-bottom-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: var(--vagabond-c-dark);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &[readonly] {
-    border: none;
-    cursor: default;
-    background: transparent;
-    padding: 2px 0;
-    width: 16px;
-    text-align: right;
-
-    &:hover {
-      border: none;
-    }
-  }
-
-  &::placeholder {
-    color: $c-red;
-    opacity: 0.5;
-  }
-}
-
-.npc-armor-description {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-bottom: 1px solid $c-dark;
-  border-radius: 0;
-  background: transparent;
-  font-size: 16px;
-  font-family: $font-primary;
-  font-weight: normal;
+  align-items: baseline;
+  gap: 6px;
   flex: 1;
-  box-shadow: none;
-
-  &:hover {
-    border-bottom-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: var(--vagabond-c-dark);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &[readonly] {
-    border: none;
-    cursor: default;
-    background: transparent;
-    padding: 2px 0;
-
-    &:hover {
-      border: none;
-    }
-  }
-
-  &::placeholder {
-    color: $c-red;
-    opacity: 0.5;
-  }
+  line-height: 1.2rem;
+  min-width: 0; // Allow content to shrink
 }
 
+// Armor description display (locked mode) - shows [Light armor] style
 .npc-armor-description-display {
   font-size: 16px;
   font-family: $font-primary;
   font-weight: normal;
+  line-height: 1.2rem;
   color: $c-dark;
   padding: 2px 0;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
 }
 
 // NPC Content
@@ -919,48 +865,6 @@ i {color: $c-dark}
   }
 }
 
-// Stats Section
-.npc-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px 12px;
-}
-
-.npc-stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.npc-stat-label {
-  font-size: 14px;
-  font-weight: 600;
-  font-family: $font-secondary;
-  text-transform: uppercase;
-  color: var(--vagabond-c-muted);
-}
-
-.npc-stat-value {
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
-  font-weight: bold;
-  font-family: $font-secondary;
-  text-align: center;
-  border: 2px solid var(--vagabond-c-tan);
-  border-radius: 4px;
-  background: transparent;
-  padding: 4px;
-  box-shadow: none;
-
-  &:hover,
-  &:focus {
-    border-color: var(--vagabond-c-dark);
-    outline: none;
-    box-shadow: none;
-  }
-}
 
 // Effects Section (in accordion)
 .npc-effects {
@@ -1081,15 +985,6 @@ i {color: $c-dark}
   }
 }
 
-// Empty Section Placeholder
-.npc-empty-section {
-  text-align: center;
-  font-style: italic;
-  font-size: 16px;
-  font-family: $font-primary;
-  padding: 12px;
-}
-
 // NPC Details Section
 .npc-details {
   display: flex;
@@ -1101,9 +996,10 @@ i {color: $c-dark}
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  gap: 2px;
+  gap: 6px;
   line-height: 1.2rem;
   width: 100%;
+  min-width: 0; // Allow flex children to shrink
 }
 
 .npc-description-row {
@@ -1157,11 +1053,13 @@ i {color: $c-dark}
 }
 
 .npc-immunity-text {
-  // flex: 1;
   font-size: 16px;
   font-family: $font-primary;
-  line-height: 1.0;
+  line-height: 1.2rem;
   text-transform: capitalize;
+  flex: 1;
+  min-width: 0; // Allow text to wrap
+  word-wrap: break-word;
 
   .damage-type-icon-prefix {
     margin-right: 4px;
