@@ -5523,7 +5523,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: transparent;
   padding: 0;
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   font-family: "Eskapade", serif;
   font-weight: 500;
   color: var(--vagabond-c-dark);
@@ -5570,7 +5570,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   cursor: not-allowed;
 }
 .vagabond .favorited-spell .spell-range {
-  flex: 0 0 50px;
+  flex: 0 0 22px;
   text-align: center;
   font-family: "Manofa", serif;
   font-size: 11px;

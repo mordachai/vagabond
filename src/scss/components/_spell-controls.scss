@@ -139,7 +139,7 @@
     background: transparent;
     padding: 0;
     margin: 0;
-    font-size: 13px;
+    font-size: 14px;
     font-family: $font-title;
     font-weight: 500;
     color: $c-dark;
@@ -197,7 +197,7 @@
 
   // Column 6: Range display (fixed width, centered)
   .spell-range {
-    flex: 0 0 50px;
+    flex: 0 0 22px;
     text-align: center;
     font-family: $font-secondary;
     font-size: 11px;
