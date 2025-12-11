@@ -3915,6 +3915,21 @@
   background-size: contain;
   mix-blend-mode: multiply;
 }
+.vagabond .speed-stats-row .universal-bonus-field .stat-value-input.damage-flat, .vagabond .speed-stats-row .universal-bonus-field .stat-value-input.damage-dice {
+  width: 40px;
+  min-width: 35px;
+  max-width: 45px;
+  font-size: 16px;
+  padding: 2px 2px;
+}
+.vagabond .speed-stats-row .universal-bonus-field .damage-bonus-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  height: 40px;
+  justify-content: center;
+}
 .vagabond .favor-hinder-toggle-container {
   display: flex;
   flex-direction: column;

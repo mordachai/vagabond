@@ -58,6 +58,21 @@ VAGABOND.sizes = {
 };
 
 /**
+ * Being types for NPCs and ancestry items
+ * @type {Object}
+ */
+VAGABOND.beingTypes = {
+  'Humanlike': 'VAGABOND.BeingTypes.Humanlike',
+  'Fae': 'VAGABOND.BeingTypes.Fae',
+  'Cryptid': 'VAGABOND.BeingTypes.Cryptid',
+  'Artificials': 'VAGABOND.BeingTypes.Artificials',
+  'Beasts': 'VAGABOND.BeingTypes.Beasts',
+  'Outers': 'VAGABOND.BeingTypes.Outers',
+  'Primordials': 'VAGABOND.BeingTypes.Primordials',
+  'Undead': 'VAGABOND.BeingTypes.Undead'
+};
+
+/**
  * Progress Clock configurations
  * @type {Object}
  */

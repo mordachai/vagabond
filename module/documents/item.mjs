@@ -141,6 +141,12 @@ export class VagabondItem extends Item {
       rollFormula = 'd20 - 1d6';
     }
 
+    // Apply universal check bonus
+    const checkBonus = actor.system.universalCheckBonus || 0;
+    if (checkBonus !== 0) {
+      rollFormula += ` + ${checkBonus}`;
+    }
+
     // Roll the attack
     const roll = new Roll(rollFormula, actor.getRollData());
     await roll.evaluate();
@@ -241,6 +247,17 @@ export class VagabondItem extends Item {
       if (statValue > 0) {
         damageFormula += ` + ${statValue}`;
       }
+    }
+
+    // Add universal damage bonuses
+    const flatBonus = actor.system.universalDamageBonus || 0;
+    const diceBonus = actor.system.universalDamageDice || '';
+
+    if (flatBonus !== 0) {
+      damageFormula += ` + ${flatBonus}`;
+    }
+    if (diceBonus.trim() !== '') {
+      damageFormula += ` + ${diceBonus}`;
     }
 
     // Apply exploding dice syntax if enabled

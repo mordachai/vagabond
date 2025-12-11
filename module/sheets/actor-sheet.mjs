@@ -3301,6 +3301,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       rollFormula = 'd20 - 1d6';
     }
 
+    // Apply universal check bonus
+    const checkBonus = this.actor.system.universalCheckBonus || 0;
+    if (checkBonus !== 0) {
+      rollFormula += ` + ${checkBonus}`;
+    }
+
     const roll = new Roll(rollFormula, this.actor.getRollData());
     await roll.evaluate();
 
@@ -3529,6 +3535,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         rollFormula = `${dataset.roll} + 1d6`;
       } else if (favorHinder === 'hinder') {
         rollFormula = `${dataset.roll} - 1d6`;
+      }
+
+      // Apply universal check bonus
+      const checkBonus = this.actor.system.universalCheckBonus || 0;
+      if (checkBonus !== 0) {
+        rollFormula += ` + ${checkBonus}`;
       }
 
       let roll = new Roll(rollFormula, this.actor.getRollData());

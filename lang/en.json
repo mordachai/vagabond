@@ -652,7 +652,8 @@
         "Speed": "Speed",
         "Crawl": "Crawl",
         "Travel": "Travel",
-        "LuckPool": "Luck Pool"
+        "LuckPool": "Luck Pool",
+        "StudiedDie": "Studied Die"
       }
     },
     "Notifications": {

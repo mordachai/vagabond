@@ -169,6 +169,57 @@
         </label>
       </div>
 
+      {{!-- Studied Die Tracker --}}
+      <div class='stat-item'>
+        <input
+          type='number'
+          name='system.studiedDice'
+          value='{{system.studiedDice}}'
+          data-dtype='Number'
+          class='stat-value-input'
+          min='0'
+        />
+        <label class='stat-label' title='Dice available'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
+      </div>
+
+      {{!-- {{! Universal Check Bonus }}
+      <div class='stat-item universal-bonus-field'>
+        <input
+          type='number'
+          name='system.universalCheckBonus'
+          value='{{system.universalCheckBonus}}'
+          data-dtype='Number'
+          class='stat-value-input'
+          placeholder='0'
+          data-tooltip='Universal bonus to all d20 rolls'
+        />
+        <label class='stat-label'>Check</label>
+      </div>
+
+      {{! Universal Damage Bonus }}
+      <div class='stat-item universal-bonus-field'>
+        <div class='damage-bonus-group'>
+          <input
+            type='number'
+            name='system.universalDamageBonus'
+            value='{{system.universalDamageBonus}}'
+            data-dtype='Number'
+            class='stat-value-input damage-flat'
+            placeholder='0'
+            data-tooltip='Flat bonus to all damage'
+          />
+          <input
+            type='text'
+            name='system.universalDamageDice'
+            value='{{system.universalDamageDice}}'
+            class='stat-value-input damage-dice'
+            placeholder='dice'
+            data-tooltip='Dice bonus to all damage (e.g., 1d4)'
+          />
+        </div>
+        <label class='stat-label'>Damage</label>
+      </div> --}}
+
       <div class='stat-item'>
         <input
           type='text'
