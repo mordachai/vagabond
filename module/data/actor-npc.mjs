@@ -35,7 +35,7 @@ export default class VagabondNPC extends VagabondActorBase {
     // NPC being type
     schema.beingType = new fields.StringField({
       initial: 'Humanlike',
-      choices: ['Humanlike', 'Fae', 'Cryptid', 'Artificials', 'Beasts', 'Outers', 'Primordials', 'Undead']
+      choices: Object.keys(CONFIG.VAGABOND.beingTypes)
     });
 
     // Speed types
@@ -110,6 +110,17 @@ export default class VagabondNPC extends VagabondActorBase {
       required: false,
       nullable: false,
       initial: '',
+    });
+
+    // Universal Damage Bonuses (NPCs don't get check bonus since they don't roll)
+    schema.universalDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0
+    });
+
+    schema.universalDamageDice = new fields.StringField({
+      initial: '',
+      blank: true
     });
 
     // Locked/unlocked mode toggle

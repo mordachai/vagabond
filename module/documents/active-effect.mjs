@@ -48,7 +48,13 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.critNumber': 'Critical Hit Threshold',
       'system.bonusLuck': 'Bonus Luck',
       'system.currentLuck': 'Current Luck Pool',
-      
+      'system.studiedDice': 'Studied Dice Pool',
+
+      // -- Universal Bonuses --
+      'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
+      'system.universalDamageBonus': 'Universal: All Damage Rolls (Flat Bonus)',
+      'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus)',
+
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',
 

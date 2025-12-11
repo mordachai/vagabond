@@ -87,6 +87,17 @@ export class VagabondDamageHelper {
       }
     }
 
+    // Add universal damage bonuses
+    const flatBonus = actor.system.universalDamageBonus || 0;
+    const diceBonus = actor.system.universalDamageDice || '';
+
+    if (flatBonus !== 0) {
+      finalFormula += ` + ${flatBonus}`;
+    }
+    if (diceBonus.trim() !== '') {
+      finalFormula += ` + ${diceBonus}`;
+    }
+
     // Apply exploding dice syntax if item supports it
     if (item) {
       finalFormula = this._applyExplodingDice(item, finalFormula);
@@ -314,6 +325,17 @@ export class VagabondDamageHelper {
       if (statValue > 0) {
         damageFormula += ` + ${statValue}`;
       }
+    }
+
+    // Add universal damage bonuses
+    const flatBonus = actor.system.universalDamageBonus || 0;
+    const diceBonus = actor.system.universalDamageDice || '';
+
+    if (flatBonus !== 0) {
+      damageFormula += ` + ${flatBonus}`;
+    }
+    if (diceBonus.trim() !== '') {
+      damageFormula += ` + ${diceBonus}`;
     }
 
     // Apply exploding dice syntax if enabled

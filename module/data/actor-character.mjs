@@ -68,8 +68,30 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Bonus luck from active effects
     schema.bonusLuck = new fields.NumberField({ ...requiredInteger, initial: 0 });
 
+    // Studied Die - tracks number of dice available to player
+    schema.studiedDice = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
+
     // Armor Bonus from Active Effects
     schema.armorBonus = new fields.NumberField({ ...requiredInteger, initial: 0 });
+
+    // Universal Bonuses - apply to all rolls/damage
+    schema.universalCheckBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Universal Check Bonus"
+    });
+
+    schema.universalDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Universal Damage Bonus"
+    });
+
+    schema.universalDamageDice = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Damage Dice"
+    });
     // ---------------------
 
     // Favor/Hinder system - toggle for roll modifiers
@@ -415,6 +437,12 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
     data.lvl = this.attributes.level.value;
+
+    // Add universal bonuses for formula usage
+    data.universalCheckBonus = this.universalCheckBonus || 0;
+    data.universalDamageBonus = this.universalDamageBonus || 0;
+    data.universalDamageDice = this.universalDamageDice || '';
+
     return data;
   }
 

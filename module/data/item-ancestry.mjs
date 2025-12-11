@@ -20,7 +20,7 @@ export default class VagabondAncestry extends VagabondItemBase {
     // Ancestry type (like "Humanlike", "Cryptid", etc.)
     schema.ancestryType = new fields.StringField({
       initial: 'Humanlike',
-      choices: ['Humanlike', 'Fae', 'Cryptid', 'Artificials', 'Beasts', 'Outers', 'Primordials', 'Undead']
+      choices: Object.keys(CONFIG.VAGABOND.beingTypes)
     });
 
     // Traits array - editable list of ancestry traits
