@@ -1,0 +1,132 @@
+<div class="downtime-container">
+<div class="downtime-grid">
+    {{!-- Rest Activity --}}
+    <div class="activity-card">
+        <div class="activity-header">
+            <i class="fas fa-bed"></i> Rest
+            <span class="cost-badge">1 Shift</span>
+        </div>
+        <div class="activity-content">
+            <p>Recover HP, Mana, and Luck pool to max. If HP is at max, recover 1 Fatigue.</p>
+            <div class="input-group">
+                <label>Lodging Quality:</label>
+                <select name="lodgingType">
+                    <option value="none">No Lodging (Free)</option>
+                    <option value="horrible">Horrible (1s)</option>
+                    <option value="poor">Poor (2s)</option>
+                    <option value="modest">Modest (10s)</option>
+                    <option value="comfortable">Comfortable (20s)</option>
+                    <option value="luxury">Luxury (40s)</option>
+                    <option value="opulent">Opulent (1g)</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="downtime-btn" data-action="processRest">
+            <i class="fas fa-bed"></i> Rest
+        </button>
+    </div>
+
+    {{!-- Breather Activity --}}
+    <div class="activity-card">
+        <div class="activity-header">
+            <i class="fas fa-heart"></i> Breather
+            <span class="cost-badge">Free</span>
+        </div>
+        <div class="activity-content">
+            <p>Take a short break to catch your breath and recover some vitality.</p>
+            <p><strong>Effect:</strong> Regain HP equal to your Might stat ({{actor.system.stats.might.value}}).</p>
+        </div>
+        <button type="button" class="downtime-btn" data-action="processBreather">
+            <i class="fas fa-heart"></i> Take Breather
+        </button>
+    </div>
+
+    {{!-- Craft Activity --}}
+    <div class="activity-card">
+        <div class="activity-header">
+            <i class="fas fa-hammer"></i> Craft
+            <span class="cost-badge">1 Shift</span>
+        </div>
+        <div class="activity-content">
+            <p>Make items. Requires materials worth 50% of item value.</p>
+            <div class="input-group">
+                <label>Craft Difficulty:</label>
+                <select name="craftDiff">
+                    <option value="1">18-17 (1s)</option>
+                    <option value="20">16-15 (20s)</option>
+                    <option value="50">14-13 (50s)</option>
+                    <option value="250">12-11 (2g 50s)</option>
+                    <option value="500">10-9 (5g)</option>
+                    <option value="750">8-7 (7g 50s)</option>
+                    <option value="1000">6 (10g)</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="downtime-btn" data-action="processCraft">
+            <i class="fas fa-tools"></i> Craft Item
+        </button>
+    </div>
+
+    {{!-- Forage Activity --}}
+    <div class="activity-card">
+        <div class="activity-header">
+            <i class="fas fa-leaf"></i> Forage
+            <span class="cost-badge">1 Shift</span>
+        </div>
+        <div class="activity-content">
+            <p>Gather resources from the wilderness. Requires a Survival Check.</p>
+            <div class="input-group">
+                <label>Target Resource:</label>
+                <select name="forageType">
+                    <option value="food">Food (d6 Rations)</option>
+                    <option value="mats">Materials (d6 * 5s)</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="downtime-btn" data-action="processForage">
+            <i class="fas fa-search"></i> Forage
+        </button>
+    </div>
+
+    {{!-- Hunt Activity --}}
+    <div class="activity-card">
+        <div class="activity-header">
+            <i class="fas fa-paw"></i> Hunt
+            <span class="cost-badge">1 Shift</span>
+        </div>
+        <div class="activity-content">
+            <p>Look for wild game. Requires a Survival Check. Find beasts for rations or materials.</p>
+        </div>
+        <button type="button" class="downtime-btn" data-action="processHunt">
+            <i class="fas fa-bow-arrow"></i> Hunt Game
+        </button>
+    </div>
+
+    {{!-- Study Activity --}}
+    <div class="activity-card">
+        <div class="activity-header">
+            <i class="fas fa-book-open"></i> Study
+            <span class="cost-badge">1 Shift</span>
+        </div>
+        <div class="activity-content">
+            <p>Gain a <strong>Studied Die</strong> to gain Favor on a d20 roll tomorrow, or swap a Class Feature.</p>
+            <div class="input-group" style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
+                <label>Current Studied Dice: {{studiedDice}}</label>
+            </div>
+        </div>
+        <button type="button" class="downtime-btn" data-action="processStudy">
+            <i class="fas fa-graduation-cap"></i> Study
+        </button>
+    </div>
+</div>
+
+{{!-- Footer Buttons --}}
+<footer class="downtime-footer">
+    <button type="button" class="downtime-footer-btn cancel-btn" data-action="cancelDowntime">
+        <i class="fas fa-times"></i> Cancel
+    </button>
+    <button type="button" class="downtime-footer-btn done-btn" data-action="doneDowntime">
+        <i class="fas fa-check"></i> Done
+    </button>
+</footer>
+</div>

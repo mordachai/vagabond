@@ -19,6 +19,7 @@ import { CountdownDiceOverlay } from './ui/countdown-dice-overlay.mjs';
 import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
 import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
 import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
+import { DowntimeApp } from './applications/downtime-app.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -147,6 +148,7 @@ globalThis.vagabond = {
     ProgressClockConfig,
     ProgressClockDeleteDialog,
     CountdownDiceConfig,
+    DowntimeApp,
   },
   ui: {
     ProgressClockOverlay,

@@ -84,7 +84,19 @@
               {{!-- <div class='armor-type'>{{equippedArmorType}}</div> --}}
               <div class='armor-value'>{{system.armor}}</div>
             </div>
-            
+
+            {{! Downtime Button Overlay (Left side) }}
+            <div class='downtime-overlay'>
+              <button
+                type='button'
+                class='downtime-overlay-button'
+                data-action='openDowntime'
+                data-tooltip='{{localize "VAGABOND.Downtime.OpenTooltip"}}'
+              >
+                <i class='fas fa-hourglass-half'></i>
+              </button>
+            </div>
+
             {{! Row 3: Hit Points }}
             <div class='hp-display'>
               <i class='fas fa-heart hp-icon'></i>
@@ -158,13 +170,13 @@
         >
           <i class='fa-duotone fa-light fa-cube'></i>
         </button>
-        <label class='favor-hinder-label'>
+        <label class='favor-hinder-label favor-hinder-label-wrap'>
           {{#if (eq system.favorHinder "favor")}}
             {{localize "VAGABOND.FavorHinder.States.favor"}}
           {{else if (eq system.favorHinder "hinder")}}
             {{localize "VAGABOND.FavorHinder.States.hinder"}}
           {{else}}
-            Favor/<br/>Hinder
+            {{localize "VAGABOND.FavorHinder.States.none"}}
           {{/if}}
         </label>
       </div>
@@ -179,7 +191,7 @@
           class='stat-value-input'
           min='0'
         />
-        <label class='stat-label' title='Dice available'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
+        <label class='stat-label stat-label-wrap rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
       </div>
 
       {{!-- {{! Universal Check Bonus }}
@@ -228,7 +240,7 @@
           data-dtype='Number'
           class='stat-value-input'
         />
-        <label class='stat-label'>Speed</label>
+        <label class='stat-label'>{{localize "VAGABOND.UI.Sections.Speed"}}</label>
       </div>
       <div class='stat-item'>
         <input
@@ -238,7 +250,7 @@
           data-dtype='Number'
           class='stat-value-input'
         />
-        <label class='stat-label'>Crawl</label>
+        <label class='stat-label'>{{localize "VAGABOND.UI.Sections.Crawl"}}</label>
       </div>
       <div class='stat-item'>
         <input
@@ -248,7 +260,7 @@
           data-dtype='Number'
           class='stat-value-input'
         />
-        <label class='stat-label'>Travel</label>
+        <label class='stat-label'>{{localize "VAGABOND.UI.Sections.Travel"}}</label>
       </div>
       <div class='stat-item luck-item'>
         <div class='luck-display'>
@@ -261,7 +273,7 @@
             class='luck-value'
           />
         </div>
-        <label class='stat-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>Luck<br/>Pool</label>
+        <label class='stat-label stat-label-wrap rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.LuckPool"}}</label>
       </div>
     </div>
 
@@ -487,6 +499,7 @@
                         {{#each @root.config.deliveryTypes as |label key|}}<option value='{{key}}'>{{localize label}}</option>{{/each}}
                       </select>
                       <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='Select a delivery type first'>0</div>
+                      <div class='spell-range' title='Spell range/area'>—</div>
                       <div class='spell-mana-total'>0</div>
                     </div>
                   {{/if}}

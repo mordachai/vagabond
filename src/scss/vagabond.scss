@@ -25,6 +25,9 @@
 /* Inventory mini-sheet - imported at top level because it renders outside sheets */
 @import 'components/inventory-mini-sheet';
 
+/* Downtime activities - imported at top level because config dialog is outside sheets */
+@import 'components/downtime';
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

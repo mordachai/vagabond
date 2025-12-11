@@ -195,7 +195,20 @@
     }
   }
 
-  // Column 6: Mana total (fixed width, centered, bold)
+  // Column 6: Range display (fixed width, centered)
+  .spell-range {
+    flex: 0 0 50px;
+    text-align: center;
+    font-family: $font-secondary;
+    font-size: 11px;
+    font-weight: normal;
+    color: $c-dark;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Column 7: Mana total (fixed width, centered, bold)
   .spell-mana-total {
     flex: 0 0 13px;
     text-align: center;

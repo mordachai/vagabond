@@ -621,6 +621,11 @@
         "CurrentState": "Results"
       }
     },
+    "Downtime": {
+      "Title": "Downtime Activities",
+      "ButtonLabel": "Downtime",
+      "OpenTooltip": "Open Downtime Activities"
+    },
     "UI": {
       "Sections": {
         "Magic": "Magic",
@@ -653,7 +658,7 @@
         "Crawl": "Crawl",
         "Travel": "Travel",
         "LuckPool": "Luck Pool",
-        "StudiedDie": "Studied Die"
+        "StudiedDie": "Study Dice"
       }
     },
     "Notifications": {

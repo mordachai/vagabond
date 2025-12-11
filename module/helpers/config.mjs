@@ -92,6 +92,21 @@ VAGABOND.clockPositions = {
 VAGABOND.clockSegments = [4, 6, 8, 10, 12];
 
 /**
+ * Lodging expenses for Rest downtime activity
+ * Cost is in silver pieces per day
+ * @type {Object}
+ */
+VAGABOND.lodgingExpenses = {
+  'none': { label: 'No Lodging', cost: 0 },
+  'horrible': { label: 'Horrible', cost: 1 },
+  'poor': { label: 'Poor', cost: 2 },
+  'modest': { label: 'Modest', cost: 10 },
+  'comfortable': { label: 'Comfortable', cost: 20 },
+  'luxury': { label: 'Luxury', cost: 40 },
+  'opulent': { label: 'Opulent', cost: 100 } // 1g = 100s
+};
+
+/**
  * Saves againts damage of spells, weapons, and attacks
  * Universal list used across the entire system
  * @type {Object}

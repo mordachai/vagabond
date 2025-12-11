@@ -70,6 +70,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       editItem: this._onEditItem,  // Edit item from context menu
       deleteItem: this._onDeleteItem,  // Delete item from context menu
       spendLuck: this._onSpendLuck,  // Spend or recharge luck
+      spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
+      openDowntime: this._onOpenDowntime,  // Open downtime activities
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -361,6 +363,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         costSpan.setAttribute('title', 'Select a delivery type first');
         costSpan.classList.remove('clickable');
         costSpan.classList.add('disabled');
+      }
+    }
+
+    // Update range display
+    const rangeSpan = container.querySelector('.spell-range');
+    if (rangeSpan) {
+      if (state.deliveryType) {
+        const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
+        const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
+
+        if (baseRange.value) {
+          const totalValue = baseRange.value + (increment * state.deliveryIncrease);
+
+          if (baseRange.type === 'count') {
+            // For targets: just the number
+            rangeSpan.textContent = `${totalValue}`;
+          } else {
+            // For all distance types: just number and '
+            rangeSpan.textContent = `${totalValue}'`;
+          }
+        } else {
+          rangeSpan.textContent = '—';
+        }
+      } else {
+        rangeSpan.textContent = '—';
       }
     }
 
@@ -1919,8 +1946,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!confirmed) return;
 
-    // Level up!
-    await this.actor.update({ 'system.attributes.level.value': newLevel });
+    // Level up and reset XP to 0
+    await this.actor.update({
+      'system.attributes.level.value': newLevel,
+      'system.attributes.xp': 0
+    });
 
     ui.notifications.info(`Leveled up to ${newLevel}!`);
   }
@@ -4051,6 +4081,62 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Create chat message using VagabondChatCard
     const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     await VagabondChatCard.luckSpend(this.actor, newLuck, maxLuck);
+  }
+
+  /**
+   * Handle spending or adding studied dice
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onSpendStudiedDie(event, target) {
+    event.preventDefault();
+
+    const currentDice = this.actor.system.studiedDice || 0;
+
+    // Shift+Click: Add a studied die
+    if (event.shiftKey) {
+      await this.actor.update({ 'system.studiedDice': currentDice + 1 });
+      ui.notifications.info(`Added a Studied Die (${currentDice} → ${currentDice + 1})`);
+      return;
+    }
+
+    // Normal click: Spend a studied die
+    if (currentDice <= 0) {
+      ui.notifications.warn('No Studied Dice available to spend!');
+      return;
+    }
+
+    const newDice = currentDice - 1;
+    await this.actor.update({ 'system.studiedDice': newDice });
+
+    // Create chat message
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(this.actor)
+      .setTitle('Studied Die Spent')
+      .setSubtitle(this.actor.name)
+      .setDescription(`
+        <p><i class="fas fa-book-open"></i> <strong>${this.actor.name}</strong> spends a Studied Die.</p>
+        <p><em>Remaining: ${newDice}</em></p>
+        <p style="font-size: 0.8em; color: #666;">Use this to gain Favor on your next d20 roll.</p>
+      `);
+
+    await card.send();
+  }
+
+  /**
+   * Open the downtime activities dialog
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onOpenDowntime(event, target) {
+    event.preventDefault();
+
+    // Import and instantiate the DowntimeApp
+    const { DowntimeApp } = await import('../applications/downtime-app.mjs');
+    const app = new DowntimeApp(this.actor);
+    app.render({ force: true });
   }
 
   /********************

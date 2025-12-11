@@ -1,0 +1,129 @@
+// ==============================================
+// Downtime Activities Application Styles
+// ==============================================
+
+.downtime-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.downtime-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 10px;
+    font-family: var(--font-primary);
+}
+
+.activity-card {
+    background: var(--color-bg-2);
+    border: 1px solid var(--color-border-light-2);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.activity-header {
+    font-weight: bold;
+    font-size: 1.2em;
+    border-bottom: 1px solid var(--color-border-light-1);
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.activity-content {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    flex-grow: 1;
+
+    p {
+        margin: 0 0 10px 0;
+    }
+}
+
+.downtime-btn {
+    width: 100%;
+    padding: 8px;
+    cursor: pointer;
+    background: var(--color-ui-2);
+    color: var(--color-text-light-1);
+    border: 1px solid var(--color-border-dark);
+    border-radius: 4px;
+
+    &:hover {
+        background: var(--color-ui-1);
+        text-shadow: 0 0 5px white;
+    }
+}
+
+.input-group {
+    margin-bottom: 10px;
+
+    label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: bold;
+    }
+
+    select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 4px;
+    }
+}
+
+.cost-badge {
+    background: #333;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    margin-left: auto;
+}
+
+// Downtime Footer
+.downtime-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid var(--color-border-light-2);
+    background: var(--color-bg-1);
+
+    .downtime-footer-btn {
+        padding: 8px 20px;
+        cursor: pointer;
+        border: 1px solid var(--color-border-dark);
+        border-radius: 4px;
+        font-weight: bold;
+        transition: all 0.2s ease;
+
+        &.cancel-btn {
+            background: var(--color-bg-2);
+            color: var(--color-text-dark-primary);
+
+            &:hover {
+                background: var(--color-bg-3);
+                border-color: var(--color-border-light-1);
+            }
+        }
+
+        &.done-btn {
+            background: var(--color-ui-2);
+            color: var(--color-text-light-1);
+
+            &:hover {
+                background: var(--color-ui-1);
+                text-shadow: 0 0 5px white;
+            }
+        }
+    }
+}
