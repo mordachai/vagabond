@@ -901,94 +901,86 @@ function rollItemMacro(itemUuid) {
   });
 }
 
-
 /* -------------------------------------------- */
-/*  Vagabond System - Secure Content Manager    */
+/* Vagabond System - Secure Content Manager     */
 /* -------------------------------------------- */
 
 const SYSTEM_ID = "vagabond";
 const SETTING_KEY = "contentUnlocked";
 
-/* 
- * CHALLENGE DATABASE 
- */
+/* -------------------------------------------- */
+/* CHALLENGE DATABASE (Base64 Method)           */
+/* -------------------------------------------- */
 const CHALLENGES = [
   {
-    "id": "epay88",
+    "id": "x7k9p", // Answer: ruin
     "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGNhdXNlcyB5b3UgdG8gbG9zZSBhbGwgbGFuZCwgcG9zc2Vzc2lvbnMsIGFuZCB3ZWFsdGg/",
-    "h": [
-      "4a38d08340cba469053d9f4f6f22322ea2b0225580ec5abb433a0b4e4ddddeaf",
-      "4a38d08340cba469053d9f4f6f22322ea2b0225580ec5abb433a0b4e4ddddeaf"
-    ]
+    "h": ["cnVpbg=="] 
   },
   {
-    "id": "zn9jq",
-    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGdyYW50cyB0aHJlZSB3aXNoZXMgdGhhdCBtdXN0IGJlIG1hZGUgd2l0aGluIDEwIG1pbnV0ZXM/",
-    "h": [
-      "9e78b43ea00edcac8299e0cc8df7f6f913078171335f733a21d5d911b6999132",
-      "9e78b43ea00edcac8299e0cc8df7f6f913078171335f733a21d5d911b6999132"
-    ]
-  },
-  {
-    "id": "09pvo8",
+    "id": "m2j4q", // Answer: fool
     "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIG1ha2VzIHlvdSBsb3NlIDEgTGV2ZWwgYW5kIGRyYXcgYW5vdGhlciBjYXJkPw==",
-    "h": [
-      "18679f10e50678804a44f8cddbc0ed937b3ed234e95fe28357f2703a259c47d4",
-      "18679f10e50678804a44f8cddbc0ed937b3ed234e95fe28357f2703a259c47d4"
-    ]
+    "h": ["Zm9vbA=="]
   },
   {
-    "id": "u58fnb",
-    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGNyZWF0ZXMgYSBwb3dlcmZ1bCBIZWxsc3Bhd24gZW5lbXk/",
-    "h": [
-      "f3b4cd4944a5f266843434e5aacfa2bb79f466424c19dc172e8953fb8a83bc97",
-      "f3b4cd4944a5f266843434e5aacfa2bb79f466424c19dc172e8953fb8a83bc97"
-    ]
-  },
-  {
-    "id": "2cylf",
-    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGdyYW50cyB5b3UgMSBMZXZlbCBvciBsZXRzIHlvdSBkcmF3IHR3byBjYXJkcz8=",
-    "h": [
-      "78a7edfb3adb263c381f942170ee5813160d4017f13c615a6c067473ecca439a",
-      "78a7edfb3adb263c381f942170ee5813160d4017f13c615a6c067473ecca439a"
-    ]
-  },
-  {
-    "id": "f4ck4",
+    "id": "b5v8n", // Answer: rogue
     "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGNhdXNlcyBhIGZyaWVuZCB0byBwZXJtYW5lbnRseSBoYXRlIHlvdT8=",
-    "h": [
-      "d20bcf177b60169a92529f6b5b71c8647583a0ed940f93ae5af62c127856cb1d"
-    ]
+    "h": ["cm9ndWU="]
   },
   {
-    "id": "sepo5",
-    "q": "SW4gdGhlIHJlbGljIEJsYWNrIFdpbmcgd2hhdCB2aXNpb24gYWJpbGl0eSBkb2VzIGl0IGdyYW50IHdoaWxlIGVxdWlwcGVkPw==",
-    "h": [
-      "ffb724a6305ff76950df81eb3994cd50ac76745b64671f6598fe9dd1599c7927",
-      "ffb724a6305ff76950df81eb3994cd50ac76745b64671f6598fe9dd1599c7927"
-    ]
+    "id": "w9c1r", // Answer: flames
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGNyZWF0ZXMgYSBwb3dlcmZ1bCBIZWxsc3Bhd24gZW5lbXk/",
+    "h": ["ZmxhbWVz"]
   },
   {
-    "id": "sip0qb",
+    "id": "q3z6l", // Answer: key
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGdyYW50cyB5b3UgYSBGYWJsZWQgUmVsaWMgb2YgeW91ciBjaG9pY2U/",
+    "h": ["a2V5"]
+  },
+  {
+    "id": "p0o5t", // Answer: knight
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGdyYW50cyB0aGUgc2VydmljZSBvZiBhbiBBbGx5IGNoYW1waW9uIGNvbXBhbmlvbj8=",
+    "h": ["a25pZ2h0"]
+  },
+  {
+    "id": "y2x4u", // Answer: idiot
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGRlY3JlYXNlcyB5b3VyIFJlYXNvbiBieSBkNj8=",
+    "h": ["aWRpb3Q="]
+  },
+  {
+    "id": "r8n1s", // Answer: comet
     "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIHJlcXVpcmVzIHlvdSB0byBkZWZlYXQgdGhlIG5leHQgRW5lbXkgYWxvbmUgdG8gZ2FpbiBhIExldmVsPw==",
-    "h": [
-      "d51f791051c2e5f9112c57109acd4d7b9b5788df79db36fa24c09c3c9ee8a569",
-      "d51f791051c2e5f9112c57109acd4d7b9b5788df79db36fa24c09c3c9ee8a569"
-    ]
+    "h": ["Y29tZXQ="]
   },
   {
-    "id": "7es3u",
-    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGFsbG93cyB5b3UgdG8gYXZvaWQgb25lIHNpdHVhdGlvbiBvciBvdXRjb21lIGluIHRoZSBmdXR1cmU/",
-    "h": [
-      "aef88bb4f3cfbfdf997d9d835204984d4e9c89131ee1b2887d38483b660ceb8c",
-      "aef88bb4f3cfbfdf997d9d835204984d4e9c89131ee1b2887d38483b660ceb8c"
-    ]
+    "id": "k6m3d", // Answer: jester
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGdyYW50cyB5b3UgMSBMZXZlbCBvciBsZXRzIHlvdSBkcmF3IHR3byBjYXJkcz8=",
+    "h": ["amVzdGVy"]
   },
-
+  {
+    "id": "g4h7j", // Answer: omlarcat
+    "q": "SW4gdGhlIHJlbGljIENsb2FrIG9mIERpc3BsYWNlbWVudCB3aGF0IGNyZWF0dXJlJ3MgZnVyIGlzIHRoZSBjb2F0IG1hZGUgZnJvbT8=",
+    "h": ["b21sYXJjYXQ="]
+  },
+  {
+    "id": "l9k2p", // Answer: darksight
+    "q": "SW4gdGhlIHJlbGljIEJsYWNrIFdpbmcgd2hhdCB2aXNpb24gYWJpbGl0eSBkb2VzIGl0IGdyYW50IHdoaWxlIGVxdWlwcGVkPw==",
+    "h": ["ZGFya3NpZ2h0"]
+  },
+  {
+    "id": "v1f5c", // Answer: balance
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGluY3JlYXNlcyB0aGUgYm9udXMgb2YgdGhyZWUgUmVsaWNzIGJ5IDE/",
+    "h": ["YmFsYW5jZQ=="]
+  },
+  {
+    "id": "d3s9a", // Answer: moon
+    "q": "SW4gdGhlIHJlbGljIERlY2sgb2YgTWFueSBUaGluZ3Mgd2hhdCBjYXJkIGdyYW50cyB0aHJlZSB3aXNoZXMgdGhhdCBtdXN0IGJlIG1hZGUgd2l0aGluIDEwIG1pbnV0ZXM/",
+    "h": ["bW9vbg=="]
+  }
 ];
 
 /* -------------------------------------------- */
-/*  Initialization & Settings                   */
+/* Initialization & Settings                   */
 /* -------------------------------------------- */
 
 Hooks.once('init', () => {
@@ -1002,23 +994,20 @@ Hooks.once('init', () => {
 });
 
 /* -------------------------------------------- */
-/*  UI Interaction (Compendium Directory)       */
+/* UI Interaction (Compendium Directory)       */
 /* -------------------------------------------- */
 
 Hooks.on('renderCompendiumDirectory', (app, html, data) => {
   const isUnlocked = game.settings.get(SYSTEM_ID, SETTING_KEY);
   const directoryElement = html instanceof HTMLElement ? html : html[0];
   
-  // -- SCENARIO A: CONTENT IS UNLOCKED --
   if (isUnlocked) {
     const existingBtn = directoryElement.querySelector('#vagabond-unlock-btn');
     if (existingBtn) existingBtn.remove();
     return; 
   }
 
-  // -- SCENARIO B: CONTENT IS LOCKED --
-  
-  // 1. Hide System Packs
+  // Hide Packs
   game.packs.forEach(pack => {
     if (pack.metadata.packageName === SYSTEM_ID) {
       const packElement = directoryElement.querySelector(`[data-pack="${pack.collection}"]`);
@@ -1026,13 +1015,13 @@ Hooks.on('renderCompendiumDirectory', (app, html, data) => {
     }
   });
 
-  // 2. Cleanup empty folders
+  // Cleanup folders
   directoryElement.querySelectorAll('.directory-group').forEach(dir => {
     const list = dir.querySelector('ol');
     if (list && list.children.length === 0) dir.style.display = 'none';
   });
 
-  // 3. Inject the Unlock Button
+  // Inject Button
   if (!directoryElement.querySelector('#vagabond-unlock-btn')) {
     const unlockBtn = document.createElement("button");
     unlockBtn.id = "vagabond-unlock-btn";
@@ -1042,8 +1031,6 @@ Hooks.on('renderCompendiumDirectory', (app, html, data) => {
       background: #222; color: #fff; border: 1px solid #444;
       cursor: pointer; font-family: monospace; text-transform: uppercase;
     `;
-    
-    // We bind the click listener
     unlockBtn.onclick = (e) => { 
       e.preventDefault(); 
       promptRandomChallenge(); 
@@ -1056,12 +1043,9 @@ Hooks.on('renderCompendiumDirectory', (app, html, data) => {
 });
 
 /* -------------------------------------------- */
-/*  Cryptographic Logic & Dialogs (V2)          */
+/* Logic & Dialogs (BASE64 METHOD)             */
 /* -------------------------------------------- */
 
-/**
- * Selects a random challenge and displays the Input Dialog using ApplicationV2
- */
 async function promptRandomChallenge() {
   if (CHALLENGES.length === 0) {
     ui.notifications.warn("No challenges configured.");
@@ -1071,10 +1055,8 @@ async function promptRandomChallenge() {
   const challenge = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
   const questionText = decodeURIComponent(escape(window.atob(challenge.q)));
   
-  // Use the new DialogV2 API to avoid deprecation warnings
   const { DialogV2 } = foundry.applications.api;
 
-  // .wait() returns a Promise that resolves when a button is clicked
   const userResponse = await DialogV2.wait({
     window: { 
         title: "Security Check",
@@ -1083,9 +1065,9 @@ async function promptRandomChallenge() {
     content: `
       <div style="text-align: center; padding: 10px;">
         <h5 style="font-weight: bold; margin-bottom: 10px;">${questionText}</h5>
-        <p style="margin-bottom: 10px;">Prove your knowledge.</p>
+        <p style="margin-bottom: 10px;">One word answer:</p>
         <div class="form-group">
-            <input type="password" id="secret-attempt" placeholder="Answer..." style="text-align: center; width: 100%;" autofocus>
+            <input type="password" name="unlock-attempt" id="secret-attempt" placeholder="Answer..." style="text-align: center; width: 100%;" autofocus>
         </div>
       </div>
     `,
@@ -1093,44 +1075,40 @@ async function promptRandomChallenge() {
       action: "submit",
       label: "Verify",
       icon: "fas fa-check",
-      // Callback returns the value of the input field
       callback: (event, button, dialog) => {
         return dialog.element.querySelector('#secret-attempt').value;
       }
     }],
-    // Handle "Enter" key submission in the form
     submit: (result) => {
-        // Just return the value if enter is pressed, handled by the button callback logic usually, 
-        // but explicit submission handling can vary. 
-        // DialogV2 generally handles button clicks. 
-        return "submit"; 
+        return result["unlock-attempt"]; 
     },
     close: () => { return null; }
   });
 
-  // If userResponse is null (window closed) or empty
   if (!userResponse) return;
 
-  const valid = await verifySignature(userResponse.trim().toLowerCase(), challenge.h);
+  const cleanInput = userResponse.trim().toLowerCase();
 
-  if (valid) {
+  // -- MASTER OVERRIDE --
+  if (cleanInput === "vagabond_override") {
+      ui.notifications.info("Master Key Accepted.");
+      await game.settings.set(SYSTEM_ID, SETTING_KEY, true);
+      ui.sidebar.render();
+      return;
+  }
+  
+  // -- BASE64 CONVERSION --
+  // This uses standard browser encoding. It is consistent everywhere.
+  const encodedAttempt = window.btoa(cleanInput);
+
+  // -- DEBUGGING --
+  console.log(`Input: "${cleanInput}" | Encoded: ${encodedAttempt} | Expected: ${challenge.h[0]}`);
+
+  if (challenge.h.includes(encodedAttempt)) {
     ui.notifications.info("Access Granted.");
     await game.settings.set(SYSTEM_ID, SETTING_KEY, true);
-    ui.sidebar.render(); // Force refresh to remove button
+    ui.sidebar.render(); 
   } else {
     ui.notifications.error("Access Denied.");
   }
-}
-
-/**
- * Hashes the user input and compares it against valid hashes
- */
-async function verifySignature(input, validHashes) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(input);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-  return validHashes.includes(inputHash);
 }
