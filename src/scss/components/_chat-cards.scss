@@ -575,6 +575,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    margin-bottom: 8px;
   }
 
   .roll-total-container {
@@ -590,11 +591,7 @@
     align-items: baseline;
     gap: 8px;
   }
-
-  .roll-fav-hinder-tag {
-
-  }
-
+  
   .roll-total {
     font-size: 32px;
     font-weight: 700;
