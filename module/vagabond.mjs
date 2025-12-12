@@ -333,46 +333,50 @@ Hooks.on('canvasReady', async () => {
  * Add scene controls for Vagabond tools
  */
 Hooks.on('getSceneControlButtons', (controls) => {
-  // Ensure our base group exists
-  controls['vagabond'] ??= {
+  // Add Vagabond control group
+  controls.vagabond = {
     name: 'vagabond',
     title: 'Vagabond Tools',
     icon: 'fas fa-circle-v',
-    tools: {}
-  };
-
-  // Add create clock button
-  controls['vagabond'].tools['createClock'] ??= {
-    name: 'createClock',
-    title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
-    icon: 'fas fa-chart-pie',
-    button: true,
-    visible: true,
-    onChange: async () => {
-      try {
-        const { ProgressClockConfig } = globalThis.vagabond.applications;
-        const dialog = new ProgressClockConfig(null);
-        await dialog.render(true);
-      } catch (error) {
-        ui.notifications.error("Failed to open clock config: " + error.message);
-      }
-    }
-  };
-
-  // Add create countdown dice button
-  controls['vagabond'].tools['createCountdownDice'] ??= {
-    name: 'createCountdownDice',
-    title: game.i18n.localize('VAGABOND.CountdownDice.SceneControls.Create'),
-    icon: 'fas fa-dice-six',
-    button: true,
-    visible: true,
-    onChange: async () => {
-      try {
-        const { CountdownDiceConfig } = globalThis.vagabond.applications;
-        const dialog = new CountdownDiceConfig(null);
-        await dialog.render(true);
-      } catch (error) {
-        ui.notifications.error("Failed to open countdown dice config: " + error.message);
+    layer: 'tokens',
+    activeTool: 'select',
+    // CHANGE: 'tools' is now an Object keyed by tool name, not an Array
+    tools: {
+      select: {
+        name: 'select',
+        title: 'Select/Interact',
+        icon: 'fas fa-expand',
+        onChange: () => {} // Empty handler for default tool
+      },
+      createClock: {
+        name: 'createClock',
+        title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
+        icon: 'fas fa-chart-pie',
+        button: true,
+        onClick: async () => {
+          try {
+            const { ProgressClockConfig } = globalThis.vagabond.applications;
+            const dialog = new ProgressClockConfig(null);
+            await dialog.render(true);
+          } catch (error) {
+            ui.notifications.error("Failed to open clock config: " + error.message);
+          }
+        }
+      },
+      createCountdownDice: {
+        name: 'createCountdownDice',
+        title: game.i18n.localize('VAGABOND.CountdownDice.SceneControls.Create'),
+        icon: 'fas fa-dice-six',
+        button: true,
+        onClick: async () => {
+          try {
+            const { CountdownDiceConfig } = globalThis.vagabond.applications;
+            const dialog = new CountdownDiceConfig(null);
+            await dialog.render(true);
+          } catch (error) {
+            ui.notifications.error("Failed to open countdown dice config: " + error.message);
+          }
+        }
       }
     }
   };
