@@ -3285,6 +3285,238 @@
   color: var(--vagabond-c-red);
   text-shadow: 0 0 2px var(--vagabond-c-red);
 }
+.vagabond .starter-pack-details-wrapper .starter-pack-section {
+  margin-bottom: 1rem;
+}
+.vagabond .starter-pack-details-wrapper .starter-pack-section .section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--color-text-dark-primary);
+}
+.vagabond .starter-pack-details-wrapper .starter-pack-section .section-header i {
+  color: var(--color-text-dark-secondary);
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row .wealth-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row .wealth-field-inline label {
+  font-weight: 600;
+  min-width: 50px;
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row .wealth-field-inline input[type=number] {
+  min-width: 40px;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  flex: 0.5;
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row .wealth-total {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row .wealth-total strong {
+  margin-right: 0.5rem;
+}
+.vagabond .starter-pack-details-wrapper .wealth-section .wealth-inputs-row .wealth-total span {
+  color: var(--color-text-hyperlink);
+  font-weight: bold;
+}
+.vagabond .starter-pack-details-wrapper .items-section .group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .starter-pack-details-wrapper .items-section .group-header span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.vagabond .starter-pack-details-wrapper .items-section .group-header .item-count {
+  font-size: 0.9rem;
+  color: var(--color-text-dark-secondary);
+  font-weight: normal;
+}
+.vagabond .starter-pack-details-wrapper .items-section .drop-zone {
+  border: 2px dashed var(--vagabond-c-dark);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+.vagabond .starter-pack-details-wrapper .items-section .drop-zone:hover {
+  border-color: var(--color-text-hyperlink);
+  background: rgba(0, 0, 0, 0.08);
+}
+.vagabond .starter-pack-details-wrapper .items-section .drop-zone i {
+  font-size: 2rem;
+  color: var(--color-text-dark-secondary);
+  margin-bottom: 0.5rem;
+}
+.vagabond .starter-pack-details-wrapper .items-section .drop-zone p {
+  margin: 0;
+  color: var(--color-text-dark-secondary);
+  font-size: 0.95rem;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  background: var(--color-bg-option);
+  transition: background 0.2s ease;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row input[type=hidden] {
+  display: none;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-thumbnail {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-border-dark-primary);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-bg-btn);
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-details .item-row-1 {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-details .item-row-1 .item-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--color-text-dark-primary);
+  flex-shrink: 0;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-details .item-row-1 .item-metadata {
+  font-size: 0.85rem;
+  color: var(--color-text-dark-secondary);
+  font-style: italic;
+  flex-shrink: 1;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-details .item-row-2 {
+  display: flex;
+  font-size: 0.85rem;
+  align-items: baseline;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-details .item-row-2 .item-stats {
+  color: var(--color-text-dark-primary);
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  flex-shrink: 1;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 30px;
+  max-width: 50px;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-quantity-control .quantity-prefix {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-dark-secondary);
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-quantity-control input[type=number] {
+  width: 30px;
+  max-width: 30px;
+  padding: 0.2rem 0.25rem;
+  text-align: center;
+  font-size: 0.85rem;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 3px;
+  -moz-appearance: textfield;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-quantity-control input[type=number]::-webkit-outer-spin-button, .vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-quantity-control input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-quantity-control .quantity-display {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-dark-primary);
+  white-space: nowrap;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-actions .delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: var(--color-text-light-secondary);
+  background: var(--color-bg-btn);
+  border: 1px solid var(--color-border-dark-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-actions .delete-btn:hover {
+  background: #d32f2f;
+  color: white;
+  border-color: #b71c1c;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .pack-item-row .item-actions .delete-btn i {
+  font-size: 0.9rem;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .empty-placeholder {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--color-text-dark-secondary);
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .empty-placeholder i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+.vagabond .starter-pack-details-wrapper .items-section .pack-items-list .empty-placeholder p {
+  margin: 0;
+  font-size: 1rem;
+}
+.vagabond .starter-pack-details-wrapper .starter-pack-divider {
+  border: none;
+  border-top: 1px solid var(--vagabond-c-dark);
+  margin: 1.5rem 0;
+}
 .vagabond .inventory-slots-section {
   margin-bottom: 12px;
   padding: 8px;
@@ -3447,6 +3679,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   min-width: 150px;
   overflow: hidden;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .inventory-context-menu .context-menu-item {
   padding: 8px 12px;
@@ -3456,6 +3689,7 @@
   gap: 8px;
   font-size: 13px;
   transition: background 0.15s ease;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .inventory-context-menu .context-menu-item:hover {
   background: var(--vagabond-c-tan-lite);
@@ -3467,7 +3701,7 @@
   color: inherit;
 }
 .vagabond .inventory-context-menu .context-menu-item.danger {
-  color: #d9534f;
+  color: var(--vagabond-c-red);
 }
 .vagabond .inventory-context-menu .context-menu-item.danger:hover {
   background: rgba(217, 83, 79, 0.1);

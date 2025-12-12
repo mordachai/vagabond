@@ -147,9 +147,12 @@ export class VagabondItem extends Item {
       rollFormula += ` + ${checkBonus}`;
     }
 
+    // Import dice appearance helper
+    const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
+
     // Roll the attack
     const roll = new Roll(rollFormula, actor.getRollData());
-    await roll.evaluate();
+    await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
 
     // Check if the attack succeeds
     const isHit = roll.total >= difficulty;

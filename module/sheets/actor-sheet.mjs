@@ -519,6 +519,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                 name: feature.name,
                 enrichedDescription,
                 level: feature.level,
+                index: feature.index,  // IMPORTANT: Include index for context menu
               };
             })
           );
@@ -837,7 +838,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             _id: `feature-${feature.level}-${index}`,
             name: `${feature.name} (Level ${feature.level})`,
             description: feature.description,
-            level: feature.level
+            level: feature.level,
+            index: index
           });
         }
       }
@@ -1180,11 +1182,36 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
     }
 
-    // Add right-click handler for perk cards
+    // Add context menu handlers for perks
     const perkCards = this.element.querySelectorAll('.perk-card[data-item-id]');
     perkCards.forEach(perkCard => {
-      // Right-click to delete
-      perkCard.addEventListener('contextmenu', this._onRemovePerk.bind(this));
+      perkCard.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        const itemId = perkCard.dataset.itemId;
+        this._showFeatureContextMenu(event, itemId, 'perk');
+      });
+    });
+
+    // Add context menu handlers for traits
+    const traitCards = this.element.querySelectorAll('.trait[data-source-type="ancestry"]');
+    traitCards.forEach(traitCard => {
+      traitCard.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const traitIndex = parseInt(traitCard.dataset.traitIndex);
+        this._showFeatureContextMenu(event, { type: 'trait', index: traitIndex });
+      });
+    });
+
+    // Add context menu handlers for features (ancestry and class)
+    const featureCards = this.element.querySelectorAll('.feature[data-source-type="class"]');
+    featureCards.forEach(featureCard => {
+      featureCard.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const featureIndex = parseInt(featureCard.dataset.featureIndex);
+        this._showFeatureContextMenu(event, { type: 'feature', index: featureIndex });
+      });
     });
 
     // Add click handlers for gear items
@@ -1573,6 +1600,132 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       this._currentContextMenu.remove();
       this._currentContextMenu = null;
     }
+  }
+
+  /**
+   * Show context menu for features, traits, and perks
+   * @param {Event} event - The contextmenu event
+   * @param {string|object} itemIdOrData - For perks: item ID string. For traits/features: object with {type, index}
+   * @param {string} [itemType] - 'perk' (only used when itemIdOrData is a string)
+   * @private
+   */
+  _showFeatureContextMenu(event, itemIdOrData, itemType) {
+    this._hideInventoryContextMenu();
+
+    let item = null;
+    let sourceItem = null;
+    let featureData = null;
+    let canDelete = false;
+    let editLabel = 'Edit';
+
+    // Handle perks (real items)
+    if (typeof itemIdOrData === 'string') {
+      item = this.actor.items.get(itemIdOrData);
+      if (!item) {
+        console.log('Perk not found:', itemIdOrData);
+        return;
+      }
+      canDelete = true;
+    }
+    // Handle traits (from ancestry)
+    else if (itemIdOrData.type === 'trait') {
+      sourceItem = this.actor.items.find(i => i.type === 'ancestry');
+      if (!sourceItem || !sourceItem.system.traits) {
+        console.log('Ancestry or traits not found');
+        return;
+      }
+      featureData = sourceItem.system.traits[itemIdOrData.index];
+      if (!featureData) {
+        console.log('Trait not found at index:', itemIdOrData.index);
+        return;
+      }
+      editLabel = 'Edit Ancestry';
+    }
+    // Handle features (from class)
+    else if (itemIdOrData.type === 'feature') {
+      sourceItem = this.actor.items.find(i => i.type === 'class');
+      if (!sourceItem || !sourceItem.system.levelFeatures) {
+        console.log('Class or features not found');
+        return;
+      }
+      featureData = sourceItem.system.levelFeatures[itemIdOrData.index];
+      if (!featureData) {
+        console.log('Feature not found at index:', itemIdOrData.index);
+        return;
+      }
+      editLabel = 'Edit Class';
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const menu = document.createElement('div');
+    menu.className = 'inventory-context-menu';
+    menu.style.position = 'fixed';
+    menu.style.left = `${event.clientX}px`;
+    menu.style.top = `${event.clientY}px`;
+    menu.style.zIndex = '10000';
+
+    menu.innerHTML = `
+      <div class="context-menu-item" data-action="sendToChat">
+        <i class="fas fa-comment"></i>
+        <span>Send to Chat</span>
+      </div>
+      <div class="context-menu-item" data-action="edit">
+        <i class="fas fa-edit"></i>
+        <span>${editLabel}</span>
+      </div>
+      ${canDelete ? `
+        <div class="context-menu-item danger" data-action="delete">
+          <i class="fas fa-trash"></i>
+          <span>Delete</span>
+        </div>
+      ` : ''}
+    `;
+
+    this.element.appendChild(menu);
+    this._currentContextMenu = menu;
+
+    // Add click handlers
+    menu.querySelector('[data-action="sendToChat"]').addEventListener('click', async () => {
+      if (item) {
+        // Perk
+        await VagabondChatCard.featureUse(this.actor, item);
+      } else if (featureData) {
+        // Trait or Feature
+        await VagabondChatCard.featureDataUse(this.actor, featureData, sourceItem, itemIdOrData.type);
+      }
+      this._hideInventoryContextMenu();
+    });
+
+    menu.querySelector('[data-action="edit"]').addEventListener('click', () => {
+      if (item) {
+        item.sheet.render(true);
+      } else if (sourceItem) {
+        sourceItem.sheet.render(true);
+      }
+      this._hideInventoryContextMenu();
+    });
+
+    if (canDelete) {
+      menu.querySelector('[data-action="delete"]').addEventListener('click', async () => {
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+          window: { title: `Delete ${item.name}?` },
+          content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+          rejectClose: false,
+          modal: true
+        });
+        if (confirmed) {
+          await item.delete();
+        }
+        this._hideInventoryContextMenu();
+      });
+    }
+
+    // Close menu when clicking elsewhere
+    setTimeout(() => {
+      document.addEventListener('click', this._hideInventoryContextMenu.bind(this), { once: true });
+    }, 10);
   }
 
   /**
@@ -2005,7 +2158,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onToggleFeature(event, target) {
     event.preventDefault();
     const featureId = target.dataset.featureId;
-    const accordionItem = this.element.querySelector(`.feature.accordion-item[data-item-id="${featureId}"]`);
+    const accordionItem = target.closest('.feature.accordion-item');
     if (accordionItem) {
       accordionItem.classList.toggle('collapsed');
     }
@@ -2021,7 +2174,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onToggleTrait(event, target) {
     event.preventDefault();
     const traitId = target.dataset.traitId;
-    const accordionItem = this.element.querySelector(`.trait.accordion-item[data-item-id="${traitId}"]`);
+    const accordionItem = target.closest('.trait.accordion-item');
     if (accordionItem) {
       accordionItem.classList.toggle('collapsed');
     }
@@ -3573,8 +3726,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         rollFormula += ` + ${checkBonus}`;
       }
 
+      // Import dice appearance helper
+      const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
+
       let roll = new Roll(rollFormula, this.actor.getRollData());
-      await roll.evaluate();
+      await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
 
       // Determine roll type and use VagabondChatCard for stats, saves, and skills
       const rollType = dataset.rollType;
@@ -3919,6 +4075,63 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Filter out ALL class items from original data, then add back only the selected one
       const nonClassItems = itemData.filter(data => data.type !== 'class');
       itemData = [...nonClassItems, selectedClass];
+    }
+
+    // YOUR CUSTOM: Handle starter pack unpacking BEFORE creating any items
+    const starterPackItems = itemData.filter(data => data.type === 'starterPack');
+
+    if (starterPackItems.length > 0) {
+      // Process each starter pack
+      for (const packData of starterPackItems) {
+        // Load the pack items from UUIDs
+        const itemsToCreate = [];
+
+        for (const packItem of packData.system.items) {
+          try {
+            const item = await fromUuid(packItem.uuid);
+            if (item) {
+              // Clone the item data and set quantity
+              const itemClone = item.toObject();
+
+              // If the item has a quantity field, multiply it by the pack quantity
+              if (itemClone.system.quantity !== undefined) {
+                itemClone.system.quantity = (itemClone.system.quantity || 1) * packItem.quantity;
+              }
+
+              itemsToCreate.push(itemClone);
+
+              // If we need multiple copies (for items without quantity), add them separately
+              if (packItem.quantity > 1 && itemClone.system.quantity === undefined) {
+                for (let i = 1; i < packItem.quantity; i++) {
+                  itemsToCreate.push(item.toObject());
+                }
+              }
+            }
+          } catch (error) {
+            console.warn(`Failed to load item with UUID ${packItem.uuid}:`, error);
+          }
+        }
+
+        // Set the character's currency
+        if (this.actor.type === 'character') {
+          await this.actor.update({
+            'system.currency.gold': packData.system.currency.gold,
+            'system.currency.silver': packData.system.currency.silver,
+            'system.currency.copper': packData.system.currency.copper,
+          });
+        }
+
+        // Create all items from the pack
+        if (itemsToCreate.length > 0) {
+          await this.actor.createEmbeddedDocuments('Item', itemsToCreate);
+        }
+
+        // Show notification
+        ui.notifications.info(`Unpacked "${packData.name}" - added ${itemsToCreate.length} items and set currency to ${packData.system.currency.gold}g ${packData.system.currency.silver}s ${packData.system.currency.copper}c`);
+      }
+
+      // Remove starter packs from itemData (we don't want to add the pack itself)
+      itemData = itemData.filter(data => data.type !== 'starterPack');
     }
 
     return this.actor.createEmbeddedDocuments('Item', itemData);

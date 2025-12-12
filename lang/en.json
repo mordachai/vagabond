@@ -159,6 +159,11 @@
         "abbr": "c"
       }
     },
+    "Wealth": {
+      "Gold": "Gold",
+      "Silver": "Silver",
+      "Copper": "Copper"
+    },
     "DeliveryTypes": {
       "Aura": {
         "label": "Aura",
@@ -428,6 +433,22 @@
         "SpellNamePlaceholder": "Enter spell name...",
         "OtherPrerequisitePlaceholder": "Enter prerequisite..."
       },
+      "StarterPack": {
+        "FIELDS": {
+          "description": {"label": "Description"},
+          "items": {"label": "Items"},
+          "ItemUUID": "Item UUID",
+          "Quantity": "Quantity"
+        },
+        "Currency": "Starting Currency",
+        "CurrencyTotal": "Total Currency",
+        "Wealth": "Starting Currency",
+        "WealthTotal": "Total Currency",
+        "PackContents": "Pack Contents",
+        "DropItemsHere": "Drag and drop items here to add them to the pack",
+        "NoItems": "No items in this pack yet. Drag items here to add them.",
+        "RemoveItem": "Remove item from pack"
+      },
       "Relic": {
         "FIELDS": {
           "lore": {"label": "Lore"},
@@ -680,7 +701,8 @@
       "ancestry": "Ancestry",
       "class": "Class",
       "perk": "Perk",
-      "equipment": "Gear"
+      "equipment": "Gear",
+      "starterPack": "Starter Pack"
     },
     "CountdownDice": {
       "SceneControls": {
@@ -700,6 +722,11 @@
         "Ended": "Countdown ended!",
         "CurrentState": "Current State"
       }
+    },
+    "DiceSoNice": {
+      "Category": "Vagabond",
+      "Favor": "Favor Dice",
+      "Hinder": "Hinder Dice"
     }
   }
 
