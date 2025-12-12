@@ -2527,40 +2527,94 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle toggling action accordion in edit mode
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleActionAccordion(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const actionEdit = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
+     * Handle toggling action accordion in edit mode
+     * Saves data only when closing the accordion.
+     * @param {Event} event
+     * @param {HTMLElement} target
+     */
+    static async _onToggleActionAccordion(event, target) {
+      event.preventDefault();
+      const index = parseInt(target.dataset.index);
+      const actionEdit = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
 
-    if (actionEdit) {
-      const content = actionEdit.querySelector('.action-edit-content');
-      const icon = actionEdit.querySelector('.accordion-icon');
+      if (actionEdit) {
+        const content = actionEdit.querySelector('.action-edit-content');
+        const icon = actionEdit.querySelector('.accordion-icon');
 
-      if (content && icon) {
-        const isCollapsed = content.classList.contains('collapsed');
-        content.classList.toggle('collapsed');
-        icon.classList.toggle('fa-chevron-right');
-        icon.classList.toggle('fa-chevron-down');
+        if (content && icon) {
+          const isCollapsed = content.classList.contains('collapsed');
 
-        // Track accordion state for restoration after re-render
-        if (!this._openActionAccordions) {
-          this._openActionAccordions = new Set();
-        }
+          // UX LOGIC:
+          // If we are currently OPEN (not collapsed) and about to CLOSE -> SAVE DATA
+          if (!isCollapsed) {
+            await this._saveNPCAction(index);
+          }
 
-        if (isCollapsed) {
-          // Opening the accordion
-          this._openActionAccordions.add(index);
-        } else {
-          // Closing the accordion
-          this._openActionAccordions.delete(index);
+          // Toggle visual state
+          content.classList.toggle('collapsed');
+          icon.classList.toggle('fa-chevron-right');
+          icon.classList.toggle('fa-chevron-down');
+
+          // Track state for re-renders
+          if (!this._openActionAccordions) {
+            this._openActionAccordions = new Set();
+          }
+
+          if (isCollapsed) {
+            // It was collapsed, now it is open -> Add to set
+            this._openActionAccordions.add(index);
+          } else {
+            // It was open, now it is collapsed -> Remove from set
+            this._openActionAccordions.delete(index);
+          }
         }
       }
     }
-  }
+
+  /**
+     * Handle toggling ability accordion in edit mode
+     * Saves data only when closing the accordion.
+     * @param {Event} event
+     * @param {HTMLElement} target
+     */
+    static async _onToggleAbilityAccordion(event, target) {
+      event.preventDefault();
+      const index = parseInt(target.dataset.index);
+      const abilityEdit = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
+
+      if (abilityEdit) {
+        const content = abilityEdit.querySelector('.ability-edit-content');
+        const icon = abilityEdit.querySelector('.accordion-icon');
+
+        if (content && icon) {
+          const isCollapsed = content.classList.contains('collapsed');
+
+          // UX LOGIC:
+          // If we are currently OPEN (not collapsed) and about to CLOSE -> SAVE DATA
+          if (!isCollapsed) {
+            await this._saveNPCAbility(index);
+          }
+
+          // Toggle visual state
+          content.classList.toggle('collapsed');
+          icon.classList.toggle('fa-chevron-right');
+          icon.classList.toggle('fa-chevron-down');
+
+          // Track state for re-renders
+          if (!this._openAbilityAccordions) {
+            this._openAbilityAccordions = new Set();
+          }
+
+          if (isCollapsed) {
+            // It was collapsed, now it is open -> Add to set
+            this._openAbilityAccordions.add(index);
+          } else {
+            // It was open, now it is collapsed -> Remove from set
+            this._openAbilityAccordions.delete(index);
+          }
+        }
+      }
+    }
 
   /**
    * Handle morale check roll for NPCs
@@ -2682,41 +2736,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await this.actor.update({ 'system.abilities': newAbilities });
   }
 
-  /**
-   * Handle toggling ability accordion in edit mode
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleAbilityAccordion(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const abilityEdit = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
-
-    if (abilityEdit) {
-      const content = abilityEdit.querySelector('.ability-edit-content');
-      const icon = abilityEdit.querySelector('.accordion-icon');
-
-      if (content && icon) {
-        const isCollapsed = content.classList.contains('collapsed');
-        content.classList.toggle('collapsed');
-        icon.classList.toggle('fa-chevron-right');
-        icon.classList.toggle('fa-chevron-down');
-
-        // Track accordion state for restoration after re-render
-        if (!this._openAbilityAccordions) {
-          this._openAbilityAccordions = new Set();
-        }
-
-        if (isCollapsed) {
-          // Opening the accordion
-          this._openAbilityAccordions.add(index);
-        } else {
-          // Closing the accordion
-          this._openAbilityAccordions.delete(index);
-        }
-      }
-    }
-  }
 
   /**
    * Handle clicking on ability name (send to chat)
@@ -3819,7 +3838,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    ***************/
 
   /**
-   * MISSING FROM YOUR VERSION: Main drop handler that routes to specific drop methods
    * Handle dropping of items onto the actor sheet
    * @param {DragEvent} event     The concluding DragEvent which contains drop data
    * @returns {Promise}
@@ -4352,6 +4370,69 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     app.render({ force: true });
   }
 
+
+  /**
+   * Manually saves the data from an NPC action accordion to the actor.
+   * Used to prevent constant re-renders while typing.
+   * @param {number} index - The index of the action in the system.actions array
+   * @private
+   */
+  async _saveNPCAction(index) {
+    const actionEl = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
+    if (!actionEl) return;
+
+    // 1. Get the current array from the actor to avoid overwriting other data
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+    if (!actions[index]) return;
+
+    // 2. Read values directly from the DOM inputs
+    // We look for inputs with 'data-field' attributes (defined in your template)
+    const inputs = actionEl.querySelectorAll('[data-field]');
+    let hasChanges = false;
+
+    inputs.forEach(input => {
+      const field = input.dataset.field; // e.g., "name", "description", "rollDamage"
+      const value = input.value;
+      
+      // Only update if changed
+      if (actions[index][field] !== value) {
+        actions[index][field] = value;
+        hasChanges = true;
+      }
+    });
+
+    // 3. Update the actor only if something actually changed
+    if (hasChanges) {
+      await this.actor.update({ 'system.actions': actions });
+    }
+  }
+
+  // Duplicate logic for Abilities if needed
+  async _saveNPCAbility(index) {
+    const abilityEl = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
+    if (!abilityEl) return;
+
+    const abilities = foundry.utils.deepClone(this.actor.system.abilities || []);
+    if (!abilities[index]) return;
+
+    const inputs = abilityEl.querySelectorAll('[data-field]');
+    let hasChanges = false;
+
+    inputs.forEach(input => {
+      const field = input.dataset.field;
+      const value = input.value;
+      
+      if (abilities[index][field] !== value) {
+        abilities[index][field] = value;
+        hasChanges = true;
+      }
+    });
+
+    if (hasChanges) {
+      await this.actor.update({ 'system.abilities': abilities });
+    }
+  }
+
   /********************
    *
    * Actor Override Handling
@@ -4402,44 +4483,49 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * Setup click outside handler for accordions
    * @private
    */
-  _setupAccordionClickOutside() {
-    // Remove existing listener if any
+_setupAccordionClickOutside() {
     if (this._accordionClickOutsideHandler) {
       document.removeEventListener('click', this._accordionClickOutsideHandler);
     }
 
-    // Create new listener
-    this._accordionClickOutsideHandler = (event) => {
-      // Find all open action accordions
+    this._accordionClickOutsideHandler = async (event) => {
+      // 1. Handle NPC Actions
       const openActionAccordions = this.element.querySelectorAll('.npc-action-edit .action-edit-content:not(.collapsed)');
-      openActionAccordions.forEach(content => {
+      
+      for (const content of openActionAccordions) {
         const accordion = content.closest('.npc-action-edit');
-        // Check if click is outside this accordion
+        // If click is OUTSIDE this accordion
         if (accordion && !accordion.contains(event.target)) {
           const index = parseInt(accordion.dataset.actionIndex);
           const icon = accordion.querySelector('.accordion-icon');
 
+          // --- SAVE DATA BEFORE CLOSING ---
+          await this._saveNPCAction(index); 
+          // --------------------------------
+
           content.classList.add('collapsed');
           if (icon) {
             icon.classList.remove('fa-chevron-down');
             icon.classList.add('fa-chevron-right');
           }
 
-          // Remove from tracked state
           if (this._openActionAccordions) {
             this._openActionAccordions.delete(index);
           }
         }
-      });
-
-      // Find all open ability accordions
+      }
+      
+      // 2. Handle NPC Abilities (Repeat logic for abilities)
       const openAbilityAccordions = this.element.querySelectorAll('.npc-ability-edit .ability-edit-content:not(.collapsed)');
-      openAbilityAccordions.forEach(content => {
+      for (const content of openAbilityAccordions) {
         const accordion = content.closest('.npc-ability-edit');
-        // Check if click is outside this accordion
         if (accordion && !accordion.contains(event.target)) {
           const index = parseInt(accordion.dataset.abilityIndex);
           const icon = accordion.querySelector('.accordion-icon');
+
+          // --- SAVE DATA ---
+          await this._saveNPCAbility(index);
+          // -----------------
 
           content.classList.add('collapsed');
           if (icon) {
@@ -4447,15 +4533,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             icon.classList.add('fa-chevron-right');
           }
 
-          // Remove from tracked state
           if (this._openAbilityAccordions) {
             this._openAbilityAccordions.delete(index);
           }
         }
-      });
+      }
     };
 
-    // Add listener to document
     document.addEventListener('click', this._accordionClickOutsideHandler);
   }
 

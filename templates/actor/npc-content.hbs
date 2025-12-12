@@ -288,7 +288,7 @@
           {{/if}}
         </div>
       {{/unless}}
-    </div>
+  </div>
   </div>
 
   {{! Actions Section }}
@@ -329,7 +329,7 @@
             {{/each}}
           {{/if}}
         {{else}}
-          {{! EDIT MODE }}
+          {{! EDIT MODE - Buffered Editing: Using data-field instead of name to prevent auto-save on every keystroke }}
           {{#if system.actions}}
             {{#each system.actions as |action index|}}
               <div class='npc-action-edit accordion-item {{#unless action.name}}expanded{{/unless}}' data-action-index='{{index}}'>
@@ -343,7 +343,7 @@
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}:</label>
                     <div class='action-name-with-remove'>
-                      <input type='text' name='system.actions.{{index}}.name' value='{{action.name}}' placeholder='Action Name' class='npc-text-input' />
+                      <input type='text' data-field='name' value='{{action.name}}' placeholder='Action Name' class='npc-text-input' onchange="event.stopPropagation();" />
                       <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
                         <i class='fas fa-trash'></i>
                       </button>
@@ -352,16 +352,16 @@
                   {{#if action.name}}
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}:</label>
-                    <input type='text' name='system.actions.{{index}}.note' value='{{action.note}}' placeholder='Note' class='npc-text-input' />
+                    <input type='text' data-field='note' value='{{action.note}}' placeholder='Note' class='npc-text-input' onchange="event.stopPropagation();" />
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-text-input' />
+                      <input type='text' data-field='recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-text-input' onchange="event.stopPropagation();" />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.AttackType"}}:</label>
-                      <select name='system.actions.{{index}}.attackType' class='npc-field-input'>
+                      <select data-field='attackType' class='npc-field-input' onchange="event.stopPropagation();">
                         <option value='melee' {{#if (eq action.attackType 'melee')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.Melee"}}</option>
                         <option value='ranged' {{#if (eq action.attackType 'ranged')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.Ranged"}}</option>
                         <option value='castClose' {{#if (eq action.attackType 'castClose')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.CastClose"}}</option>
@@ -372,25 +372,27 @@
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.FlatDamage"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.flatDamage' value='{{action.flatDamage}}' placeholder='4' class='npc-number-input' size='3' />
+                      <input type='text' data-field='flatDamage' value='{{action.flatDamage}}' placeholder='4' class='npc-number-input' size='3' onchange="event.stopPropagation();" />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.RollDamage"}}:</label>
-                      <input type='text' name='system.actions.{{index}}.rollDamage' value='{{action.rollDamage}}' placeholder='2d8' class='npc-text-input' />
+                      <input type='text' data-field='rollDamage' value='{{action.rollDamage}}' placeholder='2d8' class='npc-text-input' onchange="event.stopPropagation();" />
                     </div>
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.DamageType"}}:</label>
-                    {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
-                          name=(concat "system.actions." index ".damageType")
-                          selected=action.damageType
-                          includeNone=true
-                          cssClass="npc-field-input"
-                          config=@root.config}}
+                    <select data-field="damageType" class="npc-field-input" onchange="event.stopPropagation();">
+                      <option value="-" {{#if (eq action.damageType "-")}}selected{{/if}}>-</option>
+                      {{#each @root.config.damageTypes as |label key|}}
+                        {{#unless (eq key "-")}}
+                          <option value="{{key}}" {{#if (eq ../action.damageType key)}}selected{{/if}}>{{localize label}}</option>
+                        {{/unless}}
+                      {{/each}}
+                    </select>
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}:</label>
-                    <textarea name='system.actions.{{index}}.extraInfo' rows='2' placeholder='Extra information...' class='npc-field-input'>{{action.extraInfo}}</textarea>
+                    <textarea data-field='extraInfo' rows='2' placeholder='Extra information...' class='npc-field-input' onchange="event.stopPropagation();">{{action.extraInfo}}</textarea>
                   </div>
                   {{/if}}
                 </div>
@@ -425,7 +427,7 @@
             {{/each}}
           {{/if}}
         {{else}}
-          {{! EDIT MODE }}
+          {{! EDIT MODE - Buffered Editing }}
           {{#if system.abilities}}
             {{#each system.abilities as |ability index|}}
               <div class='npc-ability-edit accordion-item {{#unless ability.name}}expanded{{/unless}}' data-ability-index='{{index}}'>
@@ -439,7 +441,7 @@
                   <div class='ability-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Ability.Name"}}</label>
                     <div class='ability-name-with-remove'>
-                      <input type='text' name='system.abilities.{{index}}.name' value='{{ability.name}}' placeholder='Ability Name' class='npc-text-input' />
+                      <input type='text' data-field='name' value='{{ability.name}}' placeholder='Ability Name' class='npc-text-input' onchange="event.stopPropagation();" />
                       <button type='button' class='ability-remove-btn' data-action='removeAbility' data-index='{{index}}' title='Remove Ability'>
                         <i class='fas fa-trash'></i>
                       </button>
@@ -448,7 +450,7 @@
                   {{#if ability.name}}
                     <div class='ability-edit-row'>
                       <label>{{localize "VAGABOND.Actor.NPC.Ability.Description"}}</label>
-                      <textarea name='system.abilities.{{index}}.description' rows='3' placeholder='Description (dice like d6 or 2d8 will be clickable)' class='npc-text-input'>{{ability.description}}</textarea>
+                      <textarea data-field='description' rows='3' placeholder='Description (dice like d6 or 2d8 will be clickable)' class='npc-text-input' onchange="event.stopPropagation();">{{ability.description}}</textarea>
                     </div>
                   {{/if}}
                 </div>
