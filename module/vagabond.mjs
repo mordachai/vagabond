@@ -475,47 +475,22 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
     return;
   }
   const distanceFeet = parseInt(distanceMatch[1], 10);
-  const gridDistance = distanceFeet; // Keep raw feet
+  const gridDistance = distanceFeet; 
 
-  // 2. Get Caster (Origin)
+  // 2. Get Caster & Target
   const speaker = message.speaker;
-  let originToken = null;
-  if (speaker?.token) {
-    originToken = canvas.tokens.get(speaker.token);
-  }
+  let casterToken = null;
+  if (speaker?.token) casterToken = canvas.tokens.get(speaker.token);
 
-  // -------------------------------------------------------------
-  // NEW LOGIC: CALCULATE ROTATION TOWARDS TARGET
-  // -------------------------------------------------------------
-  let templateDirection = 0; // Default: Facing South (0) or Right (0) depending on system
-
-  if (originToken) {
-    // Start with the token's current rotation as the default
-    templateDirection = originToken.document.rotation;
-
-    // Check if the user has targeted a token
-    const targets = game.user.targets;
-    
-    if (targets.size > 0) {
-      // Get the first target (if multiple, we just pick the first one)
-      const target = targets.first();
-      
-      // Calculate the angle in radians between Caster and Target
-      const ray = new Ray(originToken.center, target.center);
-      
-      // Convert to degrees and normalize (Foundry helper method)
-      // If Math.toDegrees is not available in your specific version, use: (ray.angle * 180 / Math.PI)
-      templateDirection = Math.toDegrees(ray.angle);
-    }
-  }
-  // -------------------------------------------------------------
+  const targets = game.user.targets;
+  const targetToken = targets.first();
 
   // 3. Base Template Data
   let templateData = {
     t: '', 
     distance: gridDistance,
     fillColor: game.user.color || '#FF0000',
-    direction: templateDirection, // <--- Apply the calculated direction here
+    direction: 0, 
     flags: {
       vagabond: {
         deliveryType: deliveryType,
@@ -524,53 +499,81 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
     }
   };
 
-  // 4. Determine Type
+  // 4. Determine Type & Origin
   switch (deliveryType.toLowerCase()) {
     case 'aura':
       templateData.t = 'circle';
-      if (originToken) {
-        templateData.x = originToken.center.x;
-        templateData.y = originToken.center.y;
+      if (casterToken) {
+        templateData.x = casterToken.center.x;
+        templateData.y = casterToken.center.y;
       }
       break;
 
     case 'cone':
       templateData.t = 'cone';
       templateData.angle = 90;
-      if (originToken) {
-        templateData.x = originToken.center.x;
-        templateData.y = originToken.center.y;
-        // Direction is already set in templateData above!
+      if (casterToken) {
+        templateData.x = casterToken.center.x;
+        templateData.y = casterToken.center.y;
+        if (targetToken) {
+          const ray = new Ray(casterToken.center, targetToken.center);
+          templateData.direction = Math.toDegrees(ray.angle);
+        } else {
+          templateData.direction = casterToken.document.rotation || 0;
+        }
       }
       break;
 
     case 'line':
       templateData.t = 'ray';
       templateData.width = canvas.scene.grid.distance; 
-      if (originToken) {
-        templateData.x = originToken.center.x;
-        templateData.y = originToken.center.y;
-        // Direction is already set in templateData above!
+      if (casterToken) {
+        templateData.x = casterToken.center.x;
+        templateData.y = casterToken.center.y;
+        if (targetToken) {
+          const ray = new Ray(casterToken.center, targetToken.center);
+          templateData.direction = Math.toDegrees(ray.angle);
+        } else {
+          templateData.direction = casterToken.document.rotation || 0;
+        }
       }
       break;
 
     case 'cube':
-      templateData.t = 'rect';
-      templateData.distance = gridDistance; 
-      templateData.width = gridDistance; 
-      if (originToken) {
-        templateData.x = originToken.center.x;
-        templateData.y = originToken.center.y;
-        // Direction is already set in templateData above!
+      if (!targetToken) {
+        ui.notifications.warn(`Please target a token to place the ${deliveryType}.`);
+        return;
       }
+      templateData.t = 'rect';
+      
+      // --- CUBE FIX START ---
+      const sideLength = gridDistance; // e.g., 20
+      
+      // Calculate Diagonal for the template distance (Hypotenuse)
+      // If side is 20, Diagonal is ~28.28
+      templateData.distance = sideLength * Math.sqrt(2);
+      templateData.direction = 45; // Must be 45 to make it a square
+      
+      // Calculate Pixel Size for centering
+      const gridPixels = canvas.grid.size; 
+      const sceneGridDist = canvas.scene.grid.distance; 
+      const sideLengthPixels = (sideLength / sceneGridDist) * gridPixels;
+
+      // Center it
+      templateData.x = targetToken.center.x - (sideLengthPixels / 2);
+      templateData.y = targetToken.center.y - (sideLengthPixels / 2);
+      // --- CUBE FIX END ---
       break;
 
     case 'sphere':
-      templateData.t = 'circle';
-      if (originToken) {
-        templateData.x = originToken.center.x;
-        templateData.y = originToken.center.y;
+      if (!targetToken) {
+        ui.notifications.warn(`Please target a token to place the ${deliveryType}.`);
+        return;
       }
+      templateData.t = 'circle';
+      templateData.x = targetToken.center.x;
+      templateData.y = targetToken.center.y;
+      templateData.direction = 0;
       break;
 
     default:
@@ -583,7 +586,7 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
     const templateDoc = new MeasuredTemplateDocument(templateData, { parent: canvas.scene });
     await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateDoc.toObject()]);
   } else {
-    ui.notifications.warn('No token found for caster. Cannot create template.');
+    ui.notifications.warn('Could not determine origin point for template.');
   }
 }
 
@@ -699,7 +702,7 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     });
   });
 
-  // 7. Style Favor/Hinder dice with colored drop-shadows and add text indicator
+  // 7. Style Favor/Hinder dice with colored drop-shadows
   // Check if this is a dice roll message
   const diceRoll = message.rolls?.[0];
   if (diceRoll && diceRoll.formula) {
@@ -708,42 +711,17 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     const hasHinder = formula.includes('-1d6') || formula.includes('- 1d6');
 
     if (hasFavor || hasHinder) {
-      // Add text indicator to chat card header
-      const chatCard = html.querySelector('.vagabond-chat-card');
-      if (chatCard) {
-        const header = chatCard.querySelector('.card-header');
-        if (header) {
-          const indicator = document.createElement('div');
-          indicator.className = hasFavor ? 'roll-modifier-indicator favored' : 'roll-modifier-indicator hindered';
-          indicator.textContent = hasFavor
-            ? game.i18n.localize('VAGABOND.Roll.Favored')
-            : game.i18n.localize('VAGABOND.Roll.Hindered');
-          header.appendChild(indicator);
-        }
-      }
+      // FIX: Target your system's custom dice elements (.roll-die) instead of core Foundry classes
+      const diceElements = html.querySelectorAll('.roll-die[data-die="d6"]');
 
-      // Find all d6 dice images/results in the message
-      // Foundry renders dice as .dice-result elements or images
-      const diceResults = html.querySelectorAll('.dice-result.d6, .dice-tooltip .dice-roll .d6');
-
-      diceResults.forEach(die => {
+      diceElements.forEach(die => {
+        // We use style.boxShadow for the span since it has a background image, 
+        // or filter: drop-shadow if you want it to follow the image transparency.
+        // Given your DOM, drop-shadow is best for the webp background.
         if (hasFavor) {
           die.style.filter = 'drop-shadow(0 0 4px rgba(0, 255, 0, 0.8)) drop-shadow(0 0 8px rgba(0, 255, 0, 0.5))';
         } else if (hasHinder) {
           die.style.filter = 'drop-shadow(0 0 4px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 8px rgba(255, 0, 0, 0.5))';
-        }
-      });
-
-      // Also try to find dice images (for Dice So Nice or standard dice)
-      const diceImages = html.querySelectorAll('img.dice-result, .dice-tooltip img');
-      diceImages.forEach(img => {
-        // Check if it's a d6 by looking at the src or class
-        if (img.src && img.src.includes('d6')) {
-          if (hasFavor) {
-            img.style.filter = 'drop-shadow(0 0 4px rgba(0, 255, 0, 0.8)) drop-shadow(0 0 8px rgba(0, 255, 0, 0.5))';
-          } else if (hasHinder) {
-            img.style.filter = 'drop-shadow(0 0 4px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 8px rgba(255, 0, 0, 0.5))';
-          }
         }
       });
     }

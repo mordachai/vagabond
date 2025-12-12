@@ -995,26 +995,21 @@
   position: relative;
 }
 .vagabond-chat-card .roll-modifier-indicator {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 10px;
-  font-weight: bold;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 4px;
+  margin-left: 0;
+  margin-right: auto;
+  width: 120px;
+  height: auto;
+  padding: 6px 0 6px 12px;
+  font-size: 12px;
   text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 3px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-.vagabond-chat-card .roll-modifier-indicator.favored {
-  background: linear-gradient(135deg, rgba(0, 200, 0, 0.9) 0%, rgba(0, 255, 0, 0.8) 100%);
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-.vagabond-chat-card .roll-modifier-indicator.hindered {
-  background: linear-gradient(135deg, rgba(200, 0, 0, 0.9) 0%, rgba(255, 0, 0, 0.8) 100%);
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  background-image: url("../assets/ui/bannerBG-2.webp");
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: 100% 100%;
+  color: var(--vagabond-c-white);
 }
 .vagabond-chat-card .card-icon {
   width: 48px;
@@ -1285,13 +1280,16 @@
   word-break: keep-all;
 }
 .vagabond-chat-card .critical-badge {
+  width: fit-content;
+  height: auto;
   padding: 4px 8px;
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin: auto;
 }
 .vagabond-chat-card .damage-dice-display,
 .vagabond-chat-card .damage-formula {

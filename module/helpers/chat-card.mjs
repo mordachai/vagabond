@@ -301,19 +301,37 @@ export class VagabondChatCard {
     return parts.join(' ');
   }
 
-  /**
+/**
    * Render the card to HTML
    * @returns {Promise<string>} Rendered HTML
    */
   async render() {
-    // Format roll results with die images before rendering
+    // 1. Process Main Roll (Attack/Skill/Save)
     if (this.data.roll) {
+      // Robust check: removes all spaces from formula before checking
+      // This handles "+1d6", "+ 1d6", and " +  1d6" equally well.
+      const cleanFormula = (this.data.roll.formula || '').replace(/\s/g, '');
+      
+      this.data.isFavored = cleanFormula.includes('+1d6');
+      this.data.isHindered = cleanFormula.includes('-1d6');
+
+      // Debugging
+      if (this.data.isFavored || this.data.isHindered) {
+        console.log("Vagabond | Card is Favored/Hindered:", { 
+          fav: this.data.isFavored, 
+          hind: this.data.isHindered 
+        });
+      }
+
       this.data.rollDiceDisplay = VagabondChatCard.formatRollWithDice(this.data.roll);
     }
+
+    // 2. Process Damage Roll (YOU WERE MISSING THIS BLOCK)
     if (this.data.damage?.roll) {
       this.data.damage.diceDisplay = VagabondChatCard.formatRollWithDice(this.data.damage.roll);
     }
 
+    // 3. Finalize and Render
     this.data.config = CONFIG.VAGABOND;
 
     const templatePath = 'systems/vagabond/templates/chat/chat-card.hbs';

@@ -1,7 +1,7 @@
-{{! Universal Chat Card Template }}
+{{! [cite_start]Universal Chat Card Template [cite: 1] }}
 <div class='vagabond-chat-card' data-card-type='{{type}}'>
 
-  {{! HEADER: Title + Icon + Subtitle }}
+  {{! [cite_start]HEADER: Title + Icon + Subtitle [cite: 2] }}
   <header class='card-header'>
     {{#if icon}}
       <img class='card-icon' src='{{icon}}' alt='{{title}}' />
@@ -14,7 +14,7 @@
     </div>
   </header>
 
-  {{! METADATA BAR: Compact info display (below header, before roll) }}
+  {{! [cite_start]METADATA BAR [cite: 3] }}
   {{#if metadataBar}}
     <div class='card-metadata-bar {{#if metadataBar.alignManaEnd}}align-mana-end{{/if}}'>
       <div class='meta-left'>
@@ -45,9 +45,6 @@
           <span class='meta-item meta-range'>{{metadataBar.range}}</span>
         {{/if}}
         {{#if metadataBar.delivery}}
-          {{!-- Clickable delivery text - creates measurement template on click
-                See docs/SPELL_TEMPLATES.md for details
-                V14 TODO: Update for Regions API --}}
           <span class='meta-item meta-delivery template-trigger'
                 data-delivery-type='{{metadataBar.deliveryType}}'
                 data-delivery-text='{{metadataBar.delivery}}'>{{metadataBar.delivery}}</span>
@@ -86,12 +83,11 @@
     </div>
   {{/if}}
 
-    {{! METADATA: Stats, properties, conditions }}
+  {{! [cite_start]METADATA [cite: 11] }}
   {{#if metadata.length}}
     <div class='card-metadata'>
       {{#each metadata}}
         {{#if (and (eq label 'Properties') ../propertyDetails)}}
-          {{! Property accordion - clickable to expand/collapse }}
           <div class='metadata-item metadata-item-expandable'>
             <div class='metadata-header' data-action='toggleProperties'>
               <span class='metadata-label'>{{label}}:</span>
@@ -108,7 +104,6 @@
             </div>
           </div>
         {{else}}
-          {{! Regular metadata }}
           <div class='metadata-item'>
             <span class='metadata-label'>{{label}}:</span>
             <span class='metadata-value'>{{value}}</span>
@@ -118,7 +113,21 @@
     </div>
   {{/if}}
 
-  {{! PRIMARY CONTENT: Roll result or main info }}
+            {{! --- START INDICATOR --- }}
+          {{#if isFavored}}
+            <div class="roll-modifier-indicator favored">
+              {{localize 'VAGABOND.Roll.Favored'}}
+            </div>
+          {{/if}}
+          
+          {{#if isHindered}}
+            <div class="roll-modifier-indicator hindered">
+              {{localize 'VAGABOND.Roll.Hindered'}}
+            </div>
+          {{/if}}
+          {{! --- END INDICATOR --- }}
+
+  {{! [cite_start]PRIMARY CONTENT: Roll result [cite: 16] }}
   {{#if hasRoll}}
     <div class='card-primary'>
       <div class='roll-result'>
@@ -129,7 +138,6 @@
               <span class='roll-vs'>vs {{difficulty}}</span>
             {{/if}}
           </div>
-          <div class="fav-hinder-tag"></div>
         </div>
         {{#if outcome}}
           <span class='roll-outcome roll-outcome-{{outcomeClass}}'>{{outcome}}</span>
@@ -143,21 +151,21 @@
     </div>
   {{/if}}
 
-  {{! DAMAGE/EFFECTS - Can be filled on initial render or dynamically updated }}
+  {{! [cite_start]DAMAGE/EFFECTS [cite: 18] }}
   <div class='card-damage-section' data-damage-section>
     {{#if damage}}
       {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
     {{/if}}
   </div>
 
-  {{! DESCRIPTION: Enriched HTML }}
+  {{! [cite_start]DESCRIPTION [cite: 19] }}
   {{#if description}}
     <div class='card-description'>
       {{{description}}}
     </div>
   {{/if}}
 
-  {{! FOOTER: Actions + Tags }}
+  {{! [cite_start]FOOTER [cite: 20] }}
   {{#if (or footerActions.length footerTags.length)}}
     <footer class='card-footer'>
       {{#if footerActions.length}}
