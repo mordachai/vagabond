@@ -9,5 +9,6 @@ export { default as VagabondEquipment } from './base-equipment.mjs';
 export { default as VagabondSpell } from './item-spell.mjs';
 export { default as VagabondAncestry } from './item-ancestry.mjs';
 export { default as VagabondClass } from './item-class.mjs';
-export { default as VagabondPerk } from './item-perk.mjs'; 
+export { default as VagabondPerk } from './item-perk.mjs';
+export { default as VagabondStarterPack } from './item-starter-pack.mjs'; 
 

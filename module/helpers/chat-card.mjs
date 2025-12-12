@@ -821,6 +821,106 @@ export class VagabondChatCard {
   }
 
   /**
+   * Static helper: Create and send a feature/trait/perk card to chat
+   * @param {VagabondActor} actor - The actor using the feature
+   * @param {VagabondItem} item - The ancestry/class/perk item
+   * @returns {Promise<ChatMessage>}
+   */
+  static async featureUse(actor, item) {
+    const card = new VagabondChatCard()
+      .setType('item-use')
+      .setItem(item)
+      .setActor(actor)
+      .setTitle(item.name)
+      .setSubtitle(actor.name);
+
+    // Add item type metadata
+    let itemTypeLabel = 'Feature';
+    if (item.type === 'perk') {
+      itemTypeLabel = 'Perk';
+      // Add prerequisites if present
+      const prereqString = item.system.getPrerequisiteString();
+      if (prereqString) {
+        card.addMetadata('Prerequisites', prereqString);
+      }
+    } else if (item.type === 'ancestry') {
+      itemTypeLabel = 'Ancestry';
+      // Add ancestry metadata
+      if (item.system.size) {
+        const sizeLabel = game.i18n.localize(`VAGABOND.Item.Ancestry.Sizes.${item.system.size.charAt(0).toUpperCase() + item.system.size.slice(1)}`);
+        card.addMetadata('Size', sizeLabel);
+      }
+      if (item.system.ancestryType) {
+        card.addMetadata('Type', item.system.ancestryType);
+      }
+    } else if (item.type === 'class') {
+      itemTypeLabel = 'Class';
+      // Add class metadata
+      if (item.system.isSpellcaster) {
+        card.addMetadata('Spellcaster', 'Yes');
+        if (item.system.manaMultiplier) {
+          card.addMetadata('Mana Multiplier', `×${item.system.manaMultiplier}`);
+        }
+      }
+    }
+
+    card.addMetadata('Type', itemTypeLabel);
+
+    // Add description if present
+    if (item.system.description) {
+      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: item
+      });
+      card.setDescription(enriched);
+    }
+
+    return await card.send();
+  }
+
+  /**
+   * Static helper: Create and send a trait or feature card to chat (from ancestry/class data)
+   * @param {VagabondActor} actor - The actor
+   * @param {Object} featureData - The trait/feature data object with {name, description}
+   * @param {VagabondItem} sourceItem - The ancestry or class item
+   * @param {string} type - 'trait' or 'feature'
+   * @returns {Promise<ChatMessage>}
+   */
+  static async featureDataUse(actor, featureData, sourceItem, type) {
+    const card = new VagabondChatCard()
+      .setType('item-use')
+      .setItem(sourceItem)  // Use source item image
+      .setActor(actor)
+      .setTitle(featureData.name)
+      .setSubtitle(actor.name);
+
+    // Add metadata
+    if (type === 'trait') {
+      card.addMetadata('Type', 'Trait');
+      card.addMetadata('Source', sourceItem.name);
+    } else if (type === 'feature') {
+      card.addMetadata('Type', 'Class Feature');
+      card.addMetadata('Source', sourceItem.name);
+      if (featureData.level) {
+        card.addMetadata('Level', featureData.level.toString());
+      }
+    }
+
+    // Add description if present
+    if (featureData.description) {
+      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(featureData.description, {
+        async: true,
+        secrets: actor.isOwner,
+        relativeTo: sourceItem
+      });
+      card.setDescription(enriched);
+    }
+
+    return await card.send();
+  }
+
+  /**
    * Static helper: Create and send a gear/item use card
    * @param {VagabondActor} actor - The actor using the item
    * @param {VagabondItem} item - The gear/alchemical/relic item

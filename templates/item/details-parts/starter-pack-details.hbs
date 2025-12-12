@@ -1,0 +1,120 @@
+<section class="tab details {{tab.cssClass}} starter-pack-details-wrapper" data-group="primary" data-tab="details">
+
+    {{!-- 1. Description (Full Width) --}}
+    {{!-- <div class="starter-pack-section description-section">
+        <label class="section-header">
+            <i class="fas fa-book-open"></i> {{localize 'VAGABOND.Item.StarterPack.FIELDS.description.label'}}
+        </label>
+        <div class="editor-container">
+            {{#if editable}}
+                <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            {{else}}
+                <div class="editor-content">{{{enriched.description}}}</div>
+            {{/if}}
+        </div>
+    </div> --}}
+
+    {{!-- <hr class="starter-pack-divider"> --}}
+
+    {{!-- 2. Currency Section --}}
+    <div class="starter-pack-section wealth-section">
+        <label class="section-header">
+            <i class="fas fa-coins"></i> {{localize 'VAGABOND.Item.StarterPack.Currency'}}
+        </label>
+        <div class="wealth-inputs-row">
+            <div class="wealth-field-inline">
+                <label for="system.currency.gold">{{localize 'VAGABOND.Currency.Gold.long'}}</label>
+                <input type="number" name="system.currency.gold" value="{{system.currency.gold}}" min="0" step="1" />
+            </div>
+            <div class="wealth-field-inline">
+                <label for="system.currency.silver">{{localize 'VAGABOND.Currency.Silver.long'}}</label>
+                <input type="number" name="system.currency.silver" value="{{system.currency.silver}}" min="0" step="1" />
+            </div>
+            <div class="wealth-field-inline">
+                <label for="system.currency.copper">{{localize 'VAGABOND.Currency.Copper.long'}}</label>
+                <input type="number" name="system.currency.copper" value="{{system.currency.copper}}" min="0" step="1" />
+            </div>
+            {{!-- <div class="wealth-total">
+                <strong>{{localize 'VAGABOND.Item.StarterPack.CurrencyTotal'}}:</strong> <span>{{currencyString}}</span>
+            </div> --}}
+        </div>
+    </div>
+
+    <hr class="starter-pack-divider">
+
+    {{!-- 3. Items List Section --}}
+    <div class="starter-pack-section items-section">
+        <div class="group-header">
+            <span><i class="fas fa-backpack"></i> {{localize 'VAGABOND.Item.StarterPack.PackContents'}}</span>
+            <span class="item-count">({{system.itemCount}} items, {{system.totalQuantity}} total)</span>
+        </div>
+
+        {{#if editable}}
+        <div class="drop-zone">
+            <i class="fas fa-plus-circle"></i>
+            <p>{{localize 'VAGABOND.Item.StarterPack.DropItemsHere'}}</p>
+        </div>
+        {{/if}}
+
+        <div class="pack-items-list">
+            {{#if packItems}}
+                {{#each packItems as |packItem index|}}
+                <div class="pack-item-row" data-item-index="{{index}}">
+                    {{!-- Hidden UUID field to preserve data during form submission --}}
+                    <input type="hidden" name="system.items.{{index}}.uuid" value="{{packItem.uuid}}" />
+
+                    <div class="item-thumbnail">
+                        <img src="{{packItem.img}}" alt="{{packItem.name}}" />
+                    </div>
+
+                    <div class="item-details">
+                        <div class="item-row-1">
+                            <span class="item-name">{{packItem.name}}</span>
+                            {{#if packItem.description}}
+                            <span class="item-metadata">{{packItem.description}}</span>
+                            {{/if}}
+                        </div>
+                        <div class="item-row-2">
+                            {{#if packItem.stats}}
+                            <span class="item-stats">{{packItem.stats}}</span>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="item-quantity-control">
+                        {{#if ../editable}}
+                        <span class="quantity-prefix">x</span>
+                        <input type="number"
+                               name="system.items.{{index}}.quantity"
+                               value="{{packItem.quantity}}"
+                               min="1"
+                               step="1" />
+                        {{else}}
+                        <span class="quantity-display">x{{packItem.quantity}}</span>
+                        {{/if}}
+                    </div>
+
+                    {{#if ../editable}}
+                    <div class="item-actions">
+                        <a class="delete-btn"
+                           data-action="removePackItem"
+                           data-index="{{index}}"
+                           title="{{localize 'VAGABOND.Item.StarterPack.RemoveItem'}}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            {{else}}
+                <div class="empty-placeholder">
+                    <i class="fas fa-inbox"></i>
+                    <p>{{localize 'VAGABOND.Item.StarterPack.NoItems'}}</p>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+
+</section>

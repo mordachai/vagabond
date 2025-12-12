@@ -121,7 +121,7 @@
         <h4>{{localize "VAGABOND.UI.Sections.Features"}}</h4>
         <ul class='features-list'>
           {{#each enrichedFeatures as |feature id|}}
-            <li class='feature accordion-item collapsed' data-item-id='{{feature._id}}'>
+            <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class'>
               <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
                 <h5 class='feature-name'>{{feature.name}}</h5>
               </div>
@@ -141,7 +141,7 @@
         <h4>{{localize "VAGABOND.UI.Sections.Traits"}}</h4>
         <ul class='traits-list'>
           {{#each enrichedTraits as |trait|}}
-            <li class='trait accordion-item collapsed' data-item-id='{{trait._id}}'>
+            <li class='trait accordion-item collapsed' data-trait-index='{{trait.index}}' data-source-type='ancestry'>
               <div class='trait-header accordion-header clickable' data-action='toggleTrait' data-trait-id='{{trait._id}}'>
                 <h5 class='trait-name'>{{trait.name}}</h5>
               </div>

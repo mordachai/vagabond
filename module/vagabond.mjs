@@ -10,6 +10,7 @@ import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
+import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import UI classes
@@ -157,6 +158,7 @@ globalThis.vagabond = {
   utils: {
     rollItemMacro,
     VagabondChatCard,
+    VagabondDiceAppearance,
   },
   models,
 };
@@ -197,6 +199,7 @@ Hooks.once('init', async function () {
     ancestry: models.VagabondAncestry,
     class: models.VagabondClass,
     perk: models.VagabondPerk,
+    starterPack: models.VagabondStarterPack,
   };
 
   // Register custom ActiveEffect document class
@@ -251,6 +254,11 @@ Handlebars.registerHelper('contains', function (array, value) {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+});
+
+// Register Dice So Nice colorsets when Dice So Nice is ready
+Hooks.once('diceSoNiceReady', (dice3d) => {
+  VagabondDiceAppearance.registerColorsets();
 });
 
 /* -------------------------------------------- */

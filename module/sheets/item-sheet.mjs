@@ -40,6 +40,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       toggleImmunity: this._onToggleImmunity,
       removeImmunity: this._onRemoveImmunity,
       toggleLock: this._onToggleLock,
+      removePackItem: this._onRemovePackItem,
     },
     form: {
       submitOnChange: true,
@@ -85,6 +86,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     perkDetails: {
       template: 'systems/vagabond/templates/item/details-parts/perk-details.hbs',
     },
+    starterPackDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/starter-pack-details.hbs',
+    },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
     },
@@ -111,6 +115,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         break;
       case 'perk':
         options.parts.push('perkDetails', 'effects');
+        break;
+      case 'starterPack':
+        options.parts.push('starterPackDetails', 'effects');
         break;
     }
   }
@@ -226,6 +233,119 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         };
         break;
 
+      case 'starterPackDetails':
+        // Starter Pack gets enriched description and loaded items
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
+
+        // Load items from UUIDs
+        context.packItems = [];
+        for (let i = 0; i < this.item.system.items.length; i++) {
+          const packItem = this.item.system.items[i];
+          try {
+            const item = await fromUuid(packItem.uuid);
+            if (item) {
+              // Build stats string based on item type
+              let stats = '';
+              let description = '';
+
+              if (item.type === 'equipment') {
+                const sys = item.system;
+
+                // Determine equipment subtype and build stats
+                if (sys.equipmentType === 'weapon') {
+                  // Weapon: damage, damage type, grip (NO range)
+                  const damageDisplay = sys.grip === 'V'
+                    ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
+                    : (sys.currentDamage || '—');
+                  const damageType = sys.damageType && sys.damageType !== '-'
+                    ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
+                    : '';
+                  const grip = sys.grip ? (sys.grip === 'V' ? '1H/2H' : sys.grip) : '—';
+
+                  stats = `${damageDisplay} ${damageType} • ${grip}`;
+
+                  // Get localized weapon skill name
+                  let weaponSkillName = '';
+                  if (sys.weaponSkill) {
+                    const skillKey = CONFIG.VAGABOND.weaponSkills[sys.weaponSkill];
+                    weaponSkillName = skillKey ? game.i18n.localize(skillKey) : '';
+                  }
+                  description = weaponSkillName ? `${weaponSkillName} Weapon` : 'Weapon';
+
+                } else if (sys.equipmentType === 'armor') {
+                  // Armor: armor value, minimal might
+                  const armorValue = sys.armorValue || 0;
+                  const minMight = sys.minimalMight || 0;
+                  stats = `Armor: ${armorValue} • Min Might: ${minMight}`;
+                  description = sys.armorType ? `${sys.armorType.titleCase()} Armor` : 'Armor';
+
+                } else if (sys.equipmentType === 'alchemical') {
+                  // Alchemical: damage, type, cost
+                  const damage = sys.damageAmount || '—';
+                  const damageType = sys.damageType && sys.damageType !== '-'
+                    ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
+                    : '';
+                  const cost = sys.baseCost?.gold || 0;
+                  stats = `${damage} ${damageType} • ${cost}g`;
+                  description = sys.alchemicalType ? sys.alchemicalType.titleCase() : 'Alchemical';
+
+                } else if (sys.equipmentType === 'relic') {
+                  // Relic: cost, slots
+                  const cost = sys.baseCost?.gold || 0;
+                  const slots = sys.baseSlots || 1;
+                  stats = `Cost: ${cost}g • Slots: ${slots}`;
+                  description = 'Relic';
+
+                } else {
+                  // Gear: cost, slots
+                  const cost = sys.baseCost?.gold || 0;
+                  const slots = sys.baseSlots || 1;
+                  stats = `Cost: ${cost}g • Slots: ${slots}`;
+                  description = sys.gearType || 'Gear';
+                }
+
+              } else if (item.type === 'spell') {
+                // Spell: mana cost, delivery
+                const manaCost = item.system.delivery?.cost || 0;
+                const deliveryType = item.system.delivery?.type || '';
+                stats = `Mana: ${manaCost} • ${deliveryType}`;
+                description = 'Spell';
+
+              } else {
+                // Other item types
+                description = game.i18n.localize(`TYPES.Item.${item.type}`);
+              }
+
+              context.packItems.push({
+                name: item.name,
+                img: item.img,
+                type: item.type,
+                typeName: game.i18n.localize(`TYPES.Item.${item.type}`),
+                quantity: packItem.quantity,
+                uuid: packItem.uuid,
+                stats: stats,
+                description: description,
+              });
+            }
+          } catch (error) {
+            console.warn(`Failed to load item with UUID ${packItem.uuid}:`, error);
+          }
+        }
+
+        // Add currency string
+        context.currencyString = this.item.system.getCurrencyString();
+        break;
+
       case 'description':
         context.tab = context.tabs[partId];
         // Enrich description info for display
@@ -257,9 +377,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for spell, ancestry, class, perk, and equipment is details, others default to description
+    // Default tab for spell, ancestry, class, perk, equipment, and starterPack is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment' || this.document.type === 'starterPack') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -286,6 +406,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'classDetails':
         case 'perkDetails':
         case 'equipmentDetails':
+        case 'starterPackDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;
@@ -902,9 +1023,50 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
+
+    // Handle dropping items onto starter packs
+    if (this.item.type === 'starterPack') {
+      const droppedItem = await Item.implementation.fromDropData(data);
+      if (!droppedItem) return false;
+
+      // Check if item already exists in pack
+      const existingIndex = this.item.system.items.findIndex(item => item.uuid === droppedItem.uuid);
+
+      if (existingIndex >= 0) {
+        // Update quantity
+        const newItems = [...this.item.system.items];
+        newItems[existingIndex].quantity += 1;
+        await this.item.update({ 'system.items': newItems });
+        ui.notifications.info(`Increased quantity of ${droppedItem.name} in ${this.item.name}`);
+      } else {
+        // Add new item
+        const newItems = [...this.item.system.items, { uuid: droppedItem.uuid, quantity: 1 }];
+        await this.item.update({ 'system.items': newItems });
+        ui.notifications.info(`Added ${droppedItem.name} to ${this.item.name}`);
+      }
+
+      return true;
+    }
+
+    return false;
   }
 
   async _onDropFolder(event, data) {
     if (!this.item.isOwner) return [];
+  }
+
+  /**
+   * Handle removing an item from a starter pack
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemovePackItem(event, target) {
+    const index = parseInt(target.dataset.index);
+    if (isNaN(index)) return;
+
+    const items = this.item.system.items || [];
+    const newItems = items.filter((_, i) => i !== index);
+    await this.item.update({ 'system.items': newItems });
   }
 }

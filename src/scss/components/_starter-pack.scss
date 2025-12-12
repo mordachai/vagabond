@@ -1,0 +1,288 @@
+// Starter Pack Item Sheet Styles
+
+.starter-pack-details-wrapper {
+  .starter-pack-section {
+    margin-bottom: 1rem;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: var(--color-text-dark-primary);
+
+      i {
+        color: var(--color-text-dark-secondary);
+      }
+    }
+  }
+
+  // Wealth Section - Single Row Layout
+  .wealth-section {
+    .wealth-inputs-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+
+      .wealth-field-inline {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        label {
+          font-weight: 600;
+          min-width: 50px;
+        }
+
+        input[type="number"] {
+          min-width: 40px;
+          padding: 0.25rem 0.5rem;
+          text-align: center;
+          flex: 0.5;
+        }
+      }
+
+      .wealth-total {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        font-size: 1rem;
+
+        strong {
+          margin-right: 0.5rem;
+        }
+
+        span {
+          color: var(--color-text-hyperlink);
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  // Items List Section
+  .items-section {
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid $c-dark;
+
+      span:first-child {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .item-count {
+        font-size: 0.9rem;
+        color: var(--color-text-dark-secondary);
+        font-weight: normal;
+      }
+    }
+
+    .drop-zone {
+      border: 2px dashed $c-dark;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      background: rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: var(--color-text-hyperlink);
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      i {
+        font-size: 2rem;
+        color: var(--color-text-dark-secondary);
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        margin: 0;
+        color: var(--color-text-dark-secondary);
+        font-size: 0.95rem;
+      }
+    }
+
+    .pack-items-list {
+      .pack-item-row {
+        display: grid;
+        grid-template-columns: 48px 1fr auto auto;
+        gap: 1rem;
+        align-items: center;
+        padding: 0.75rem;
+        border: 1px solid $c-dark;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+        background: var(--color-bg-option);
+        transition: background 0.2s ease;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
+        }
+
+        // Hide the hidden UUID input
+        input[type="hidden"] {
+          display: none;
+        }
+
+        .item-thumbnail {
+          width: 48px;
+          height: 48px;
+          border: 1px solid var(--color-border-dark-primary);
+          border-radius: 4px;
+          overflow: hidden;
+          background: var(--color-bg-btn);
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .item-details {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          min-width: 0; // Allow text truncation
+          flex: 1;
+
+          .item-row-1 {
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+            flex-wrap: wrap;
+
+            .item-name {
+              font-weight: bold;
+              font-size: 1rem;
+              color: var(--color-text-dark-primary);
+              flex-shrink: 0;
+            }
+
+            .item-metadata {
+              font-size: 0.85rem;
+              color: var(--color-text-dark-secondary);
+              font-style: italic;
+              flex-shrink: 1;
+            }
+          }
+
+          .item-row-2 {
+            display: flex;
+            font-size: 0.85rem;
+            align-items: baseline;
+
+            .item-stats {
+              color: var(--color-text-dark-primary);
+              font-family: 'Courier New', monospace;
+              font-size: 0.8rem;
+              flex-shrink: 1;
+            }
+          }
+        }
+
+        .item-quantity-control {
+          display: flex;
+          align-items: center;
+          gap: 0.15rem;
+          min-width: 30px;
+          max-width: 50px;
+
+          .quantity-prefix {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-dark-secondary);
+          }
+
+          input[type="number"] {
+            width: 30px;
+            max-width: 30px;
+            padding: 0.2rem 0.25rem;
+            text-align: center;
+            font-size: 0.85rem;
+            border: 1px solid $c-dark;
+            border-radius: 3px;
+
+            // Hide spinner arrows
+            -moz-appearance: textfield;
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
+          }
+
+          .quantity-display {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-text-dark-primary);
+            white-space: nowrap;
+          }
+        }
+
+        .item-actions {
+          .delete-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            color: var(--color-text-light-secondary);
+            background: var(--color-bg-btn);
+            border: 1px solid var(--color-border-dark-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: #d32f2f;
+              color: white;
+              border-color: #b71c1c;
+            }
+
+            i {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+
+      .empty-placeholder {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--color-text-dark-secondary);
+
+        i {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+          opacity: 0.3;
+        }
+
+        p {
+          margin: 0;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .starter-pack-divider {
+    border: none;
+    border-top: 1px solid $c-dark;
+    margin: 1.5rem 0;
+  }
+}
