@@ -124,8 +124,8 @@ i {color: $c-dark}
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: none;
   background: transparent;
@@ -135,7 +135,7 @@ i {color: $c-dark}
   color: $c-lite;
 
   i {
-    font-size: 16px;
+    font-size: 14px;
     color: $c-lite;
   }
 
@@ -146,12 +146,16 @@ i {color: $c-dark}
 }
 
 .npc-type-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   color: $c-dark !important;
-  padding: 2px 4px;
+  padding: 2px 4px;  
 
   input,select {
     color: $c-dark;
-  }
+    line-height: 1.1rem;
+  } 
 }
 
 // Top Section - Image + Info Row
@@ -221,7 +225,7 @@ i {color: $c-dark}
 
 .npc-health-container {
   position: absolute;
-  bottom: -15px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
   width: 106%;
@@ -243,7 +247,6 @@ i {color: $c-dark}
   background-size: 100% 100%;
 
 }
-
 
 // NPC HP Display (overlay at bottom of portrait)
 .npc-hp-display {
@@ -319,10 +322,59 @@ i {color: $c-dark}
 
 .npc-zone-field {
   display: flex;
-  align-items: baseline;
+  align-items: center; /* Align label and text perfectly */
   gap: 8px;
 }
 
+.npc-zone-select {
+  // Inherit the global select styles you already defined (border-bottom, transparent, etc.)
+  // We just enforce specific width or alignment here if needed.
+  
+  height: auto;
+  padding: 0; 
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan); // Matches your theme
+  background: transparent;
+  
+  font-family: "Almendra", serif; // Or your $font-secondary variable
+  font-size: 16px;
+  font-weight: 600;
+  color: #191813; // Or your $c-dark variable
+  cursor: pointer;
+
+  &:hover {
+    border-bottom-color: #191813; // Darken on hover
+  }
+
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid #191813;
+  }
+
+  &:disabled {
+    border: none;         
+    cursor: default;           
+    background: transparent; 
+    opacity: 1 !important;      
+    color: $c-dark; 
+    font-family: $font-primary;
+    font-weight: normal;
+    
+    /* Hides the dropdown arrow */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Removes hover effects */
+    &:hover {
+      border: none;
+    }
+  }
+  
+  // OPTIONAL: Aligns the text to the right if you prefer
+  text-align: left; 
+}
 
 .npc-speed-types {
   display: flex;
@@ -341,21 +393,6 @@ i {color: $c-dark}
   gap: 6px;
   line-height: 1.2rem;
   min-width: 0; // Allow flex children to shrink below content size
-}
-
-// Zone checkboxes - single column layout
-.npc-zone-checkboxes {
-  grid-template-columns: 1fr !important;
-  min-width: 200px !important;
-
-  .npc-immunity-checkbox-item {
-    white-space: nowrap;
-
-    // Hide radio button circles for Zone selector
-    input[type='radio'] {
-      display: none;
-    }
-  }
 }
 
 .npc-field-label {
@@ -1005,6 +1042,7 @@ i {color: $c-dark}
 .npc-description-row {
   display: block;
   border-bottom: 1px solid $c-dark;
+  margin-bottom: 8px;
 }
 
 .npc-description-textarea {
@@ -1170,7 +1208,7 @@ i {color: $c-dark}
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  background: var(--vagabond-c-faint);
+  background: #e2e2e255;
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 3px;
   font-size: 13px;

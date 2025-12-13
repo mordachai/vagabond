@@ -101,45 +101,20 @@
   </div>
 
   {{! Row: Size and Being Type }}
-  <div class="flex-row-container flex-between npc-type-container">
+  <div class="npc-type-container">
     <div class='npc-type-row'>
           {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
           {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
     </div>
-    {{!--  Zone --}}
-    <div class='npc-stat-field'>
-      {{#if system.locked}}
-        {{#if system.zone}}
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</label>
-          <div class='npc-immunity-text'>{{system.zone}}</div>
-        {{/if}}
-      {{else}}
-        <div class='npc-zone-field'>
-          <details class='npc-immunity-dropdown'>
-            <summary class='npc-immunity-toggle'>
-              <i class='fas fa-chevron-down'></i>
-              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.zone.label"}}</span>
-            </summary>
-            <div class='npc-immunity-checkboxes npc-zone-checkboxes'>
-              {{#each config.combatZones as |label key|}}
-                <label class='npc-immunity-checkbox-item'>
-                  <input type='radio' name='zone-selector' value='{{key}}' {{#if (eq ../system.zone key)}}checked{{/if}} data-action='selectZone' data-zone='{{key}}'>
-                  <span>{{localize label}}</span>
-                </label>
-              {{/each}}
-            </div>
-          </details>
-          {{#if system.zone}}
-            <div class='npc-immunity-tags'>
-              <span class='npc-immunity-tag'>
-                {{system.zone}}
-                <i class='fas fa-times' data-action='clearZone'></i>
-              </span>
-            </div>
-          {{/if}}
-        </div>
-      {{/if}}
-    </div>
+    {{! Render if zone exists OR if the sheet is NOT locked }}
+    {{#if (or system.zone (not system.locked))}}
+      <div class="npc-zone-field">
+        <label class="npc-field-label">Zone:</label>
+        <select name="system.zone" class="npc-zone-select" {{#if system.locked}}disabled{{/if}}>
+          {{selectOptions config.combatZones selected=system.zone localize=true blank=""}}
+        </select>
+      </div>
+    {{/if}}
   </div>
 
   {{!-- NPC description --}}

@@ -622,6 +622,10 @@
   text-align: center;
 }
 
+.baseline {
+  align-items: baseline;
+}
+
 /* Chat cards - imported at top level because they render outside sheets */
 /* ========================================
    CHAT CARDS & BUTTONS
@@ -4689,8 +4693,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: none;
   background: transparent;
@@ -4700,7 +4704,7 @@
   color: var(--vagabond-c-lite);
 }
 .vagabond .npc-lock-button i {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--vagabond-c-lite);
 }
 .vagabond .npc-lock-button:hover {
@@ -4708,11 +4712,15 @@
   transform: scale(1.1);
 }
 .vagabond .npc-type-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   color: var(--vagabond-c-dark) !important;
   padding: 2px 4px;
 }
 .vagabond .npc-type-container input, .vagabond .npc-type-container select {
   color: var(--vagabond-c-dark);
+  line-height: 1.1rem;
 }
 .vagabond .npc-top-section {
   display: flex;
@@ -4768,7 +4776,7 @@
 }
 .vagabond .npc-health-container {
   position: absolute;
-  bottom: -15px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
   width: 106%;
@@ -4845,8 +4853,46 @@
 }
 .vagabond .npc-zone-field {
   display: flex;
-  align-items: baseline;
+  align-items: center; /* Align label and text perfectly */
   gap: 8px;
+}
+.vagabond .npc-zone-select {
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+  font-family: "Almendra", serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #191813;
+  cursor: pointer;
+  text-align: left;
+}
+.vagabond .npc-zone-select:hover {
+  border-bottom-color: #191813;
+}
+.vagabond .npc-zone-select:focus {
+  outline: none;
+  border-bottom: 2px solid #191813;
+}
+.vagabond .npc-zone-select:disabled {
+  border: none;
+  cursor: default;
+  background: transparent;
+  opacity: 1 !important;
+  color: var(--vagabond-c-dark);
+  font-family: "Paradigm", serif;
+  font-weight: normal;
+  /* Hides the dropdown arrow */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Removes hover effects */
+}
+.vagabond .npc-zone-select:disabled:hover {
+  border: none;
 }
 .vagabond .npc-speed-types {
   display: flex;
@@ -4864,16 +4910,6 @@
   gap: 6px;
   line-height: 1.2rem;
   min-width: 0;
-}
-.vagabond .npc-zone-checkboxes {
-  grid-template-columns: 1fr !important;
-  min-width: 200px !important;
-}
-.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item {
-  white-space: nowrap;
-}
-.vagabond .npc-zone-checkboxes .npc-immunity-checkbox-item input[type=radio] {
-  display: none;
 }
 .vagabond .npc-field-label {
   font-size: 16px;
@@ -5401,6 +5437,7 @@
 .vagabond .npc-description-row {
   display: block;
   border-bottom: 1px solid var(--vagabond-c-dark);
+  margin-bottom: 8px;
 }
 .vagabond .npc-description-textarea {
   width: 100%;
@@ -5542,7 +5579,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  background: var(--vagabond-c-faint);
+  background: rgba(226, 226, 226, 0.3333333333);
   border: 1px solid var(--vagabond-c-tan);
   border-radius: 3px;
   font-size: 13px;

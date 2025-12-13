@@ -91,17 +91,16 @@
             />
 
             {{! Speed Type Dropdown Button }}
-            <details class='npc-immunity-dropdown'>
+            <details class='npc-immunity-dropdown' data-save-target="system.speedTypes">
               <summary class='npc-immunity-toggle' style="border:none; cursor: pointer;">
                 <i class='fas fa-plus-circle' data-tooltip="{{localize 'VAGABOND.SpeedTypes.Label'}}"></i>
               </summary>
               <div class='npc-immunity-checkboxes' style="right: auto; left: 0; z-index: 10;">
                 {{#each config.speedTypes as |label key|}}
                   <label class='npc-immunity-checkbox-item'>
+                    {{!-- Remove data-action --}}
                     <input type='checkbox' value='{{key}}'
-                          {{#if (contains ../system.speedTypes key)}}checked{{/if}}
-                          data-action='toggleSpeedType'
-                          data-type='{{key}}'>
+                          {{#if (contains ../system.speedTypes key)}}checked{{/if}}>
                     <span>{{localize label}}</span>
                   </label>
                 {{/each}}
@@ -183,23 +182,24 @@
               {{/each}}
             </div>
           {{else}}
-            <details class='npc-immunity-dropdown'>
-              <summary class='npc-immunity-toggle'>
-                <i class='fas fa-chevron-down'></i>
-                <span>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</span>
-              </summary>
-              <div class='npc-immunity-checkboxes'>
-                {{#each config.damageTypes as |label key|}}
-                  {{#unless (eq key '-')}}
-                    <label class='npc-immunity-checkbox-item'>
-                      <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
-                      <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
-                      <span>{{localize label}}</span>
-                    </label>
-                  {{/unless}}
-                {{/each}}
-              </div>
-            </details>
+          <details class='npc-immunity-dropdown' data-save-target="system.immunities">
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.damageTypes as |label key|}}
+                {{#unless (eq key '-')}}
+                  <label class='npc-immunity-checkbox-item'>
+                    {{!-- Remove data-action --}}
+                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}}>
+                    <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
+                    <span>{{localize label}}</span>
+                  </label>
+                {{/unless}}
+              {{/each}}
+            </div>
+          </details>
             <div class='npc-immunity-tags'>
               {{#each system.immunities as |immunity index|}}
                 <span class='npc-immunity-tag'>
@@ -224,23 +224,24 @@
               {{/each}}
             </div>
           {{else}}
-            <details class='npc-immunity-dropdown'>
-              <summary class='npc-immunity-toggle'>
-                <i class='fas fa-chevron-down'></i>
-                <span>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</span>
-              </summary>
-              <div class='npc-immunity-checkboxes'>
-                {{#each config.allWeaknessTypes as |label key|}}
-                  {{#unless (eq key '-')}}
-                    <label class='npc-immunity-checkbox-item'>
-                      <input type='checkbox' value='{{key}}' {{#if (contains ../system.weaknesses key)}}checked{{/if}} data-action='toggleWeakness' data-weakness='{{key}}'>
-                      <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
-                      <span>{{localize label}}</span>
-                    </label>
-                  {{/unless}}
-                {{/each}}
-              </div>
-            </details>
+          <details class='npc-immunity-dropdown' data-save-target="system.weaknesses">
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.weaknesses.label"}}</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.allWeaknessTypes as |label key|}}
+                {{#unless (eq key '-')}}
+                  <label class='npc-immunity-checkbox-item'>
+                    {{!-- Remove data-action --}}
+                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.weaknesses key)}}checked{{/if}}>
+                    <i class='{{lookup ../config.damageTypeIcons key}} damage-type-icon-prefix'></i>
+                    <span>{{localize label}}</span>
+                  </label>
+                {{/unless}}
+              {{/each}}
+            </div>
+          </details>
             <div class='npc-immunity-tags'>
               {{#each system.weaknesses as |weakness index|}}
                 <span class='npc-immunity-tag'>
@@ -263,20 +264,21 @@
               {{#each system.statusImmunities as |status index|}}{{status}}{{#unless @last}}, {{/unless}}{{/each}}
             </div>
           {{else}}
-            <details class='npc-immunity-dropdown'>
-              <summary class='npc-immunity-toggle'>
-                <i class='fas fa-chevron-down'></i>
-                <span>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</span>
-              </summary>
-              <div class='npc-immunity-checkboxes'>
-                {{#each config.statusConditions as |label key|}}
-                  <label class='npc-immunity-checkbox-item'>
-                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.statusImmunities key)}}checked{{/if}} data-action='toggleStatusImmunity' data-status='{{key}}'>
-                    <span>{{localize label}}</span>
-                  </label>
-                {{/each}}
-              </div>
-            </details>
+          <details class='npc-immunity-dropdown' data-save-target="system.statusImmunities">
+            <summary class='npc-immunity-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>{{localize "VAGABOND.Actor.NPC.FIELDS.statusImmunities.label"}}</span>
+            </summary>
+            <div class='npc-immunity-checkboxes'>
+              {{#each config.statusConditions as |label key|}}
+                <label class='npc-immunity-checkbox-item'>
+                  {{!-- Remove data-action --}}
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.statusImmunities key)}}checked{{/if}}>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/each}}
+            </div>
+          </details>
             <div class='npc-immunity-tags'>
               {{#each system.statusImmunities as |status index|}}
                 <span class='npc-immunity-tag'>

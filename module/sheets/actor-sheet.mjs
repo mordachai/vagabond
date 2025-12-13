@@ -4370,6 +4370,47 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     app.render({ force: true });
   }
 
+  /**
+     * Saves the state of a dropdown container to the actor.
+     * Handles both Checkboxes (Arrays) and Radio Buttons (Single Strings).
+     * @param {HTMLElement} detailsElement - The <details> element
+     */
+    async _saveDropdown(detailsElement) {
+      const targetField = detailsElement.dataset.saveTarget;
+      if (!targetField) return;
+
+      // Detect input type by checking the first input found
+      const firstInput = detailsElement.querySelector('input');
+      if (!firstInput) return;
+      
+      // --- CASE A: Radio Buttons (Single Value) ---
+      if (firstInput.type === 'radio') {
+        const checked = detailsElement.querySelector('input:checked');
+        const newValue = checked ? checked.value : null;
+        const currentValue = foundry.utils.getProperty(this.actor, targetField);
+
+        if (newValue !== currentValue) {
+          await this.actor.update({ [targetField]: newValue });
+        }
+      } 
+      
+      // --- CASE B: Checkboxes (Array of Values) ---
+      else {
+        const checkboxes = detailsElement.querySelectorAll('input[type="checkbox"]');
+        const newValues = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value);
+
+        const currentValues = foundry.utils.getProperty(this.actor, targetField) || [];
+        
+        const isSame = newValues.length === currentValues.length && 
+                      newValues.every(v => currentValues.includes(v));
+
+        if (!isSame) {
+          await this.actor.update({ [targetField]: newValues });
+        }
+      }
+    }
 
   /**
    * Manually saves the data from an NPC action accordion to the actor.
@@ -4483,39 +4524,38 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * Setup click outside handler for accordions
    * @private
    */
-_setupAccordionClickOutside() {
+/**
+   * Sets up global click listener to close Accordions and Dropdowns when clicking outside.
+   * Also triggers "Buffered Save" logic.
+   * @private
+   */
+  _setupAccordionClickOutside() {
     if (this._accordionClickOutsideHandler) {
       document.removeEventListener('click', this._accordionClickOutsideHandler);
     }
 
     this._accordionClickOutsideHandler = async (event) => {
-      // 1. Handle NPC Actions
-      const openActionAccordions = this.element.querySelectorAll('.npc-action-edit .action-edit-content:not(.collapsed)');
       
+      // --- 1. Handle NPC Actions (Accordion) ---
+      const openActionAccordions = this.element.querySelectorAll('.npc-action-edit .action-edit-content:not(.collapsed)');
       for (const content of openActionAccordions) {
         const accordion = content.closest('.npc-action-edit');
-        // If click is OUTSIDE this accordion
         if (accordion && !accordion.contains(event.target)) {
           const index = parseInt(accordion.dataset.actionIndex);
           const icon = accordion.querySelector('.accordion-icon');
 
-          // --- SAVE DATA BEFORE CLOSING ---
-          await this._saveNPCAction(index); 
-          // --------------------------------
+          await this._saveNPCAction(index); // Save
 
           content.classList.add('collapsed');
           if (icon) {
             icon.classList.remove('fa-chevron-down');
             icon.classList.add('fa-chevron-right');
           }
-
-          if (this._openActionAccordions) {
-            this._openActionAccordions.delete(index);
-          }
+          if (this._openActionAccordions) this._openActionAccordions.delete(index);
         }
       }
-      
-      // 2. Handle NPC Abilities (Repeat logic for abilities)
+
+      // --- 2. Handle NPC Abilities (Accordion) ---
       const openAbilityAccordions = this.element.querySelectorAll('.npc-ability-edit .ability-edit-content:not(.collapsed)');
       for (const content of openAbilityAccordions) {
         const accordion = content.closest('.npc-ability-edit');
@@ -4523,19 +4563,28 @@ _setupAccordionClickOutside() {
           const index = parseInt(accordion.dataset.abilityIndex);
           const icon = accordion.querySelector('.accordion-icon');
 
-          // --- SAVE DATA ---
-          await this._saveNPCAbility(index);
-          // -----------------
+          await this._saveNPCAbility(index); // Save
 
           content.classList.add('collapsed');
           if (icon) {
             icon.classList.remove('fa-chevron-down');
             icon.classList.add('fa-chevron-right');
           }
+          if (this._openAbilityAccordions) this._openAbilityAccordions.delete(index);
+        }
+      }
 
-          if (this._openAbilityAccordions) {
-            this._openAbilityAccordions.delete(index);
-          }
+      // --- 3. Handle NPC Dropdowns (Immunities, Weaknesses, etc) ---
+      // Select any open <details> element that has a save target
+      const openDropdowns = this.element.querySelectorAll('details.npc-immunity-dropdown[open][data-save-target]');
+      
+      for (const details of openDropdowns) {
+        // If the click happened OUTSIDE this details element
+        if (!details.contains(event.target)) {
+          
+          await this._saveDropdown(details); // Save selections
+          
+          details.removeAttribute('open');   // Close the dropdown
         }
       }
     };
