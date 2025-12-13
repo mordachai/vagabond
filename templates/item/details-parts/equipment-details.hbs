@@ -59,8 +59,7 @@
               <span class='stat-label'>Properties:</span>
               <div class='property-tags-locked'>
                 {{#each system.properties as |property|}}
-                  <span class='property-tag-locked' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
-                    {{property}}
+                  <span data-tooltip='{{lookup ../config.weaponPropertyHints key}}'>{{localize label}}</span>                    {{property}}
                   </span>
                 {{/each}}
               </div>
@@ -242,28 +241,20 @@
           <div class='grid grid-3col gap-8'>
             <div class='weapon-skill-field'>
               <label class='resource-label'>Skill</label>
-              <select name='system.weaponSkill' data-dtype='String'>
-                  <option value="melee" {{#if (eq system.weaponSkill 'melee')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
-                  <option value="brawl" {{#if (eq system.weaponSkill 'brawl')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Brawl'}}</option>
-                  <option value="finesse" {{#if (eq system.weaponSkill 'finesse')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Finesse'}}</option>
-                  <option value="ranged" {{#if (eq system.weaponSkill 'ranged')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
-              </select>
+                <select name="system.weaponSkill" data-dtype="String">
+                    {{selectOptions config.weaponSkills selected=system.weaponSkill localize=true blank="-"}}
+                </select>
             </div>
             <div class='weapon-range-field'>
               <label class='resource-label'>Range</label>
-              <select name='system.range' data-dtype='String'>
-                  <option value="close" {{#if (eq system.range 'close')}}selected{{/if}}>Close</option>
-                  <option value="near" {{#if (eq system.range 'near')}}selected{{/if}}>Near</option>
-                  <option value="far" {{#if (eq system.range 'far')}}selected{{/if}}>Far</option>
+              <select name="system.range" data-dtype="String">
+                  {{selectOptions config.weaponRanges selected=system.range localize=true blank="-"}}
               </select>
             </div>
             <div class='weapon-grip-field'>
               <label class='resource-label'>Grip</label>
-              <select name='system.grip' data-dtype='String' data-action="update-grip">
-                  <option value="1H" {{#if (eq system.grip '1H')}}selected{{/if}}>1H (One-Handed)</option>
-                  <option value="2H" {{#if (eq system.grip '2H')}}selected{{/if}}>2H (Two-Handed)</option>
-                  <option value="F" {{#if (eq system.grip 'F')}}selected{{/if}}>F (Fist)</option>
-                  <option value="V" {{#if (eq system.grip 'V')}}selected{{/if}}>V (Versatile)</option>
+              <select name="system.grip" data-dtype="String" data-action="update-grip">
+                  {{selectOptions config.grip selected=system.grip localize=true}}
               </select>
             </div>
           </div>
@@ -330,58 +321,28 @@
         <div class='form-group'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.properties.label'}}</label>
           <div class='property-selector-row'>
-            <details class='property-dropdown'>
-              <summary class='property-dropdown-toggle'>
-                <i class='fas fa-chevron-down'></i>
-                <span>Select Properties</span>
-              </summary>
-              <div class='property-checkboxes'>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Brawl' {{#if (contains system.properties 'Brawl')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brawl'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Brawl"}}'>Brawl</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Brutal' {{#if (contains system.properties 'Brutal')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Brutal'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Brutal"}}'>Brutal</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Cleave' {{#if (contains system.properties 'Cleave')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Cleave'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Cleave"}}'>Cleave</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Entangle' {{#if (contains system.properties 'Entangle')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Entangle'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Entangle"}}'>Entangle</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Finesse' {{#if (contains system.properties 'Finesse')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Finesse'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Finesse"}}'>Finesse</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Keen' {{#if (contains system.properties 'Keen')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Keen'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Keen"}}'>Keen</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Long' {{#if (contains system.properties 'Long')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Long'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Long"}}'>Long</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Near' {{#if (contains system.properties 'Near')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Near'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Near"}}'>Near</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Ranged' {{#if (contains system.properties 'Ranged')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Ranged'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Ranged"}}'>Ranged</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Shield' {{#if (contains system.properties 'Shield')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Shield'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Shield"}}'>Shield</span>
-                </label>
-                <label class='property-checkbox-item'>
-                  <input type='checkbox' value='Thrown' {{#if (contains system.properties 'Thrown')}}checked{{/if}} data-action='toggleWeaponProperty' data-property='Thrown'>
-                  <span data-tooltip='{{lookup config.weaponPropertyHints "Thrown"}}'>Thrown</span>
-                </label>
-              </div>
-            </details>
+          <details class='property-dropdown'>
+            <summary class='property-dropdown-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>Select Properties</span>
+            </summary>
+            <div class='property-checkboxes'>
+              
+              {{#each config.weaponProperties as |label key|}}
+              <label class='property-checkbox-item'>
+                <input 
+                  type='checkbox' 
+                  value='{{key}}' 
+                  {{#if (contains system.properties key)}}checked{{/if}} 
+                  data-action='toggleWeaponProperty' 
+                  data-property='{{key}}'
+                >
+                <span data-tooltip='{{lookup config.weaponPropertyHints key}}'>{{localize label}}</span>
+              </label>
+              {{/each}}
+              
+            </div>
+          </details>
             <div class='property-tags'>
               {{#each system.properties as |property index|}}
                 <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
@@ -403,9 +364,7 @@
             <div class='armor-type-field'>
               <label class='resource-label'>Armor Type</label>
               <select name='system.armorType' data-dtype='String'>
-                  <option value="light" {{#if (eq system.armorType 'light')}}selected{{/if}}>Light (Rating 1, Might 3)</option>
-                  <option value="medium" {{#if (eq system.armorType 'medium')}}selected{{/if}}>Medium (Rating 2, Might 4)</option>
-                  <option value="heavy" {{#if (eq system.armorType 'heavy')}}selected{{/if}}>Heavy (Rating 3, Might 5)</option>
+                  {{selectOptions config.armorTypeDescriptions selected=system.armorType}}
               </select>
             </div>
           </div>
@@ -476,13 +435,17 @@
         <div class='form-group'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.alchemicalType.label'}}</label>
           <select name='system.alchemicalType' data-dtype='String'>
-            <option value='acid' {{#if (eq system.alchemicalType 'acid')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Acid"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Acid'}}</option>
-            <option value='concoction' {{#if (eq system.alchemicalType 'concoction')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Concoction"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Concoction'}}</option>
-            <option value='explosive' {{#if (eq system.alchemicalType 'explosive')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Explosive"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Explosive'}}</option>
-            <option value='oil' {{#if (eq system.alchemicalType 'oil')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Oil"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Oil'}}</option>
-            <option value='poison' {{#if (eq system.alchemicalType 'poison')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Poison"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Poison'}}</option>
-            <option value='potion' {{#if (eq system.alchemicalType 'potion')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Potion"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Potion'}}</option>
-            <option value='torch' {{#if (eq system.alchemicalType 'torch')}}selected{{/if}} title='{{localize "VAGABOND.Item.Alchemical.TypeHints.Torch"}}'>{{localize 'VAGABOND.Item.Alchemical.Types.Torch'}}</option>
+            
+            {{#each config.alchemicalTypes as |label key|}}
+              <option 
+                value="{{key}}" 
+                {{#if (eq ../system.alchemicalType key)}}selected{{/if}}
+                title="{{localize (lookup ../config.alchemicalTypeHints key)}}"
+              >
+                {{localize label}}
+              </option>
+            {{/each}}
+
           </select>
         </div>
 
@@ -699,13 +662,20 @@
             <div class='metal-field'>
               <label class='resource-label'>Metal</label>
               <select name='system.metal' data-dtype='String'>
-                  <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}} title='No special material'>None</option>
-                  <option value="common" {{#if (eq system.metal 'common')}}selected{{/if}} title='{{lookup config.metalData.common "effect"}}'>{{localize 'VAGABOND.Metal.Common'}}</option>
-                  <option value="adamant" {{#if (eq system.metal 'adamant')}}selected{{/if}} title='{{lookup config.metalData.adamant "effect"}}'>{{localize 'VAGABOND.Metal.Adamant'}}</option>
-                  <option value="coldIron" {{#if (eq system.metal 'coldIron')}}selected{{/if}} title='{{lookup config.metalData.coldIron "effect"}}'>{{localize 'VAGABOND.Metal.ColdIron'}}</option>
-                  <option value="silver" {{#if (eq system.metal 'silver')}}selected{{/if}} title='{{lookup config.metalData.silver "effect"}}'>{{localize 'VAGABOND.Metal.Silver'}}</option>
-                  <option value="mythral" {{#if (eq system.metal 'mythral')}}selected{{/if}} title='{{lookup config.metalData.mythral "effect"}}'>{{localize 'VAGABOND.Metal.Mythral'}}</option>
-                  <option value="orichalcum" {{#if (eq system.metal 'orichalcum')}}selected{{/if}} title='{{lookup config.metalData.orichalcum "effect"}}'>{{localize 'VAGABOND.Metal.Orichalcum'}}</option>
+                {{!-- 1. Handle "None" explicitly if it's not in your main type list --}}
+                <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}}>None</option>
+                
+                {{!-- 2. Iterate dynamically over the config --}}
+                {{#each config.metalTypes as |label key|}}
+                  <option 
+                    value="{{key}}" 
+                    {{#if (eq ../system.metal key)}}selected{{/if}}
+                    {{!-- FIXED: Nested lookup to get .effect from the metalData object --}}
+                    title="{{localize (lookup (lookup ../config.metalData key) 'effect')}}"
+                  >
+                    {{localize label}}
+                  </option>
+                {{/each}}
               </select>
             </div>
             <div class='slots-field'>

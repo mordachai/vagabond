@@ -305,6 +305,17 @@ VAGABOND.weaponSkills = {
 };
 
 /**
+ * Font Awesome icon classes for weapon skills
+ * @type {Object}
+ */
+VAGABOND.weaponSkillIcons = {
+  'melee': 'fa-solid fa-sword',
+  'ranged': 'fa-solid fa-bow-arrow',
+  'brawl': 'fa-solid fa-hand-back-fist',
+  'finesse': 'fa-solid fa-dagger'
+};
+
+/**
  * Weapon range options
  * @type {Object}
  */
@@ -315,14 +326,35 @@ VAGABOND.weaponRanges = {
 };
 
 /**
+ * Range abbreviations for display
+ * @type {Object}
+ */
+VAGABOND.rangeAbbreviations = {
+  'close': 'VAGABOND.Weapon.Range.CloseAbbr',
+  'near': 'VAGABOND.Weapon.Range.NearAbbr',
+  'far': 'VAGABOND.Weapon.Range.FarAbbr'
+};
+
+/**
  * Weapon grip types
  * @type {Object}
  */
-VAGABOND.weaponGrips = {
+VAGABOND.grip = {
   '1H': 'VAGABOND.Weapon.Grip.1H',
   '2H': 'VAGABOND.Weapon.Grip.2H',
   'F': 'VAGABOND.Weapon.Grip.F',
   'V': 'VAGABOND.Weapon.Grip.V'
+};
+
+/**
+ * Weapon grip descriptions
+ * @type {Object}
+ */
+VAGABOND.weaponGripDescriptions = {
+  '1H': 'VAGABOND.Weapon.GripDescriptions.1H',
+  '2H': 'VAGABOND.Weapon.GripDescriptions.2H',
+  'F': 'VAGABOND.Weapon.GripDescriptions.F',
+  'V': 'VAGABOND.Weapon.GripDescriptions.V'
 };
 
 /**
@@ -362,14 +394,31 @@ VAGABOND.weaponPropertyHints = {
 };
 
 /**
- * Weapon grip descriptions
+ * Alchemical item types
  * @type {Object}
  */
-VAGABOND.weaponGripDescriptions = {
-  '1H': 'VAGABOND.Weapon.GripDescriptions.1H',
-  '2H': 'VAGABOND.Weapon.GripDescriptions.2H',
-  'F': 'VAGABOND.Weapon.GripDescriptions.F',
-  'V': 'VAGABOND.Weapon.GripDescriptions.V'
+VAGABOND.alchemicalTypes = {
+  'acid': 'VAGABOND.Item.Alchemical.Types.Acid',
+  'concoction': 'VAGABOND.Item.Alchemical.Types.Concoction',
+  'explosive': 'VAGABOND.Item.Alchemical.Types.Explosive',
+  'oil': 'VAGABOND.Item.Alchemical.Types.Oil',
+  'poison': 'VAGABOND.Item.Alchemical.Types.Poison',
+  'potion': 'VAGABOND.Item.Alchemical.Types.Potion',
+  'torch': 'VAGABOND.Item.Alchemical.Types.Torch'
+};
+
+/**
+ * Alchemical type tooltips
+ * @type {Object}
+ */
+VAGABOND.alchemicalTypeHints = {
+  'acid': 'VAGABOND.Item.Alchemical.TypeHints.Acid',
+  'concoction': 'VAGABOND.Item.Alchemical.TypeHints.Concoction',
+  'explosive': 'VAGABOND.Item.Alchemical.TypeHints.Explosive',
+  'oil': 'VAGABOND.Item.Alchemical.TypeHints.Oil',
+  'poison': 'VAGABOND.Item.Alchemical.TypeHints.Poison',
+  'potion': 'VAGABOND.Item.Alchemical.TypeHints.Potion',
+  'torch': 'VAGABOND.Item.Alchemical.TypeHints.Torch'
 };
 
 /**
@@ -472,7 +521,7 @@ VAGABOND.damageTypeIcons = {
  * @type {Object}
  */
 VAGABOND.fxIcon = {
-  type: 'txt',                      // 'fa' for Font Awesome, 'img' for image
+  type: 'txt',   // 'fa' for Font Awesome, 'img' for image
   value: 'Fx'    // FA class or image path
 };
 
@@ -489,63 +538,7 @@ VAGABOND.speedTable = {
   6: { base: 35, crawl: 105, travel: 7 }  // Dex 6+ (Caps here if higher entries are removed)
 };
 
-/**
- * Font Awesome icon classes for weapon skills
- * @type {Object}
- */
-VAGABOND.weaponSkillIcons = {
-  'melee': 'fa-solid fa-sword',
-  'ranged': 'fa-solid fa-bow-arrow',
-  'brawl': 'fa-solid fa-hand-back-fist',
-  'finesse': 'fa-solid fa-dagger'
-};
 
-/**
- * Icon paths for inventory visual grid
- * @type {Object}
- */
-VAGABOND.icons = {
-  // TO CLAUDE: REPLACE FOR FONT AWESOME ICONS IF USED ANYWHERE
-  weaponSkills: {
-    'melee': 'systems/vagabond/assets/ui/weapon-skill-melee.webp',
-    'ranged': 'systems/vagabond/assets/ui/weapon-skill-ranged.webp',
-    'brawl': 'systems/vagabond/assets/ui/weapon-skill-brawl.webp',
-    'finesse': 'systems/vagabond/assets/ui/weapon-skill-finesse.webp'
-  },
-
-  // TO CLAUDE: SHOULD NOT BE USED ANYMORE
-  damageTypes: {
-    '-': 'systems/vagabond/assets/ui/none-dmg-icn.webp',
-    'acid': 'systems/vagabond/assets/ui/acid-dmg-icn.webp',
-    'fire': 'systems/vagabond/assets/ui/fire-dmg-icn.webp',
-    'shock': 'systems/vagabond/assets/ui/shock-dmg-icn.webp',
-    'poison': 'systems/vagabond/assets/ui/poison-dmg-icn.webp',
-    'cold': 'systems/vagabond/assets/ui/cold-dmg-icn.webp',
-    'blunt': 'systems/vagabond/assets/ui/blunt-dmg-icn.webp',
-    'physical': 'systems/vagabond/assets/ui/physical-dmg-icn.webp',
-    'necrotic': 'systems/vagabond/assets/ui/necrotic-dmg-icn.webp',
-    'psychic': 'systems/vagabond/assets/ui/psychic-dmg-icn.webp',
-    'healing': 'systems/vagabond/assets/ui/healing-dmg-icn.webp'
-  },
-
-  // TO CLAUDE: Grip icons >> REPLACE FOR FONT AWESOME ICONS
-  grips: {
-    '1H': 'systems/vagabond/assets/ui/grip-1h.webp',
-    '2H': 'systems/vagabond/assets/ui/grip-2h.webp',
-    'F': 'systems/vagabond/assets/ui/grip-fist.webp',
-    'V': 'systems/vagabond/assets/ui/grip-versatile.webp'
-  }
-};
-
-/**
- * Range abbreviations for display
- * @type {Object}
- */
-VAGABOND.rangeAbbreviations = {
-  'close': 'VAGABOND.Weapon.Range.CloseAbbr',
-  'near': 'VAGABOND.Weapon.Range.NearAbbr',
-  'far': 'VAGABOND.Weapon.Range.FarAbbr'
-};
 
 /**
  * Speed Types (Movement modes)
