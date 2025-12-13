@@ -7,7 +7,7 @@
 
 This is an non-official adaptation for Foundry VTT of **Indestructoboy's (Taron Pounds)** RPG system, **Vagabond**. 
 
-Check the awesome books here: ![Vagabond - Land of the Blind](https://landoftheblind.myshopify.com/products/vagabond-pulp-fantasy-rpg-core-rulebook). If you purchase the book you can grant access to the full contents of the compendiums in Foundry VTT.
+Check the awesome books here: [Vagabond - Land of the Blind](https://landoftheblind.myshopify.com/products/vagabond-pulp-fantasy-rpg-core-rulebook). Purchasing the book (digital ot paperback) will grant you access to the full contents of the compendiums in Foundry VTT.
 
 ---
 
@@ -16,8 +16,6 @@ Check the awesome books here: ![Vagabond - Land of the Blind](https://landoftheb
 ### Character Sheet Styles: Classical and Old Scrolls
 
 Click on the right margin of the top sheet to open it! 
-
-![Character Sheet](https://raw.githubusercontent.com/mordachai/vagabond/main/assets/readme/character_sheet_preview.png)
 
 To alternate between the styles toggle the Application style:
 
@@ -31,6 +29,7 @@ Track tension and time directly on the canvas without needing external modules.
 - **Progress Clocks**: Create clocks with 4, 6, 8, 10, or 12 segments. Position them anywhere to track long-term goals or impending doom.
 - **Countdown Dice**: Create the countdice and never forget to roll when the time comes!
 
+---
 
 ### Downtime Manager
 Vagabond emphasizes the struggle of the journey. The built-in **Downtime Manager** automates the logistics of survival.
@@ -38,6 +37,7 @@ Vagabond emphasizes the struggle of the journey. The built-in **Downtime Manager
 - **Hunting & Foraging**: Built-in loot tables for hunting game or foraging for supplies, automatically rolling for yield.
 - **Crafting & Studying**: Track progress on crafting projects or gain "Studied Dice" for future rolls.
 
+---
 
 ### Awesome Freeform Spellcasting
 Magic in Vagabond is flexible and unique. The system includes a dynamic **Mana Calculator**:
@@ -48,7 +48,7 @@ Magic in Vagabond is flexible and unique. The system includes a dynamic **Mana C
 ---
 
 ### Got the book? You're in for a treat!
-Inside the book there is the keys to unlock all the content for your Foundry table. No need to purchase a ptrmium module:
+Inside the book there is the keys to unlock all the content for your Foundry table. No need to purchase a premium module:
 
 - 7 Ancestries and their Traits
 - 18 Classes with all Features
