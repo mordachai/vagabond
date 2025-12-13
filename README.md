@@ -23,6 +23,7 @@ Game settings >> Core >> Configure interface >> Applications.
 
 It does not affect Foundry appearance, only in game dialogs and theme.
 
+---
 
 ### Clocks & Countdown Dice
 Track tension and time directly on the canvas without needing external modules.
@@ -62,4 +63,12 @@ Inside the book there is the keys to unlock all the content for your Foundry tab
 https://github.com/mordachai/vagabond/releases/latest/download/system.json
 
 ```
+---
 
+### Item Piles integration
+
+If you want to use the module Item Piles to manage treasures and shop in your game install together the module below:
+
+```
+https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module.json
+```
