@@ -7,7 +7,7 @@
 
 This is an non-official adaptation for Foundry VTT of **Indestructoboy's (Taron Pounds)** RPG system, **Vagabond**. 
 
-Check the awesome books here: [Vagabond - Land of the Blind](https://landoftheblind.myshopify.com/products/vagabond-pulp-fantasy-rpg-core-rulebook). Purchasing the book (digital ot paperback) will grant you access to the full contents of the compendiums in Foundry VTT.
+Check the awesome books here: [Vagabond - Land of the Blind](https://landoftheblind.myshopify.com/products/vagabond-pulp-fantasy-rpg-core-rulebook). Purchasing the book (digital or paperback) will grant you access to the full contents of the compendiums in Foundry VTT.
 
 ---
 
@@ -52,9 +52,9 @@ Inside the book there is the keys to unlock all the content for your Foundry tab
 
 - 7 Ancestries and their Traits
 - 18 Classes with all Features
-- +100 Perks
-- +300 NPCs
-- +500 Items!
+- 100+ Perks
+- 300+ NPCs
+- 500+ Items!
 
 ## Installation (for now):
 
