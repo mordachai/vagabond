@@ -47,6 +47,15 @@ Magic in Vagabond is flexible and unique. The system includes a dynamic **Mana C
 
 ---
 
+### Got the book? You're in for a treat!
+Inside the book there is the keys to unlock all the content for your Foundry table. No need to purchase a ptrmium module:
+
+- 7 Ancestries and their Traits
+- 18 Classes with all Features
+- +100 Perks
+- +300 NPCs
+- +500 Items!
+
 ## Installation (for now):
 
 ```
