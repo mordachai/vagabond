@@ -516,7 +516,8 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
         templateData.x = casterToken.center.x;
         templateData.y = casterToken.center.y;
         if (targetToken) {
-          const ray = new Ray(casterToken.center, targetToken.center);
+          // --- FIX: Use namespaced Ray ---
+          const ray = new foundry.canvas.geometry.Ray(casterToken.center, targetToken.center);
           templateData.direction = Math.toDegrees(ray.angle);
         } else {
           templateData.direction = casterToken.document.rotation || 0;
@@ -531,7 +532,8 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
         templateData.x = casterToken.center.x;
         templateData.y = casterToken.center.y;
         if (targetToken) {
-          const ray = new Ray(casterToken.center, targetToken.center);
+          // --- FIX: Use namespaced Ray ---
+          const ray = new foundry.canvas.geometry.Ray(casterToken.center, targetToken.center);
           templateData.direction = Math.toDegrees(ray.angle);
         } else {
           templateData.direction = casterToken.document.rotation || 0;
@@ -546,13 +548,11 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
       }
       templateData.t = 'rect';
       
-      // --- CUBE FIX START ---
-      const sideLength = gridDistance; // e.g., 20
+      const sideLength = gridDistance; 
       
       // Calculate Diagonal for the template distance (Hypotenuse)
-      // If side is 20, Diagonal is ~28.28
       templateData.distance = sideLength * Math.sqrt(2);
-      templateData.direction = 45; // Must be 45 to make it a square
+      templateData.direction = 45; 
       
       // Calculate Pixel Size for centering
       const gridPixels = canvas.grid.size; 
@@ -562,7 +562,6 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
       // Center it
       templateData.x = targetToken.center.x - (sideLengthPixels / 2);
       templateData.y = targetToken.center.y - (sideLengthPixels / 2);
-      // --- CUBE FIX END ---
       break;
 
     case 'sphere':
