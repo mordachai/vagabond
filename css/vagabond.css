@@ -1271,7 +1271,7 @@
   justify-content: center;
   align-items: baseline;
   gap: 12px;
-  margin: 0 8px;
+  margin: 0 8px 10px 8px;
 }
 .vagabond-chat-card .damage-icon {
   font-size: 28px;
