@@ -1,30 +1,24 @@
-{{! Damage Display Partial - Used in chat cards for displaying damage results }}
-{{#if damage}}
-    <div class='card-damage'>
-      <div class="damage-title" title="{{damage.formula}}">
-        {{localize "VAGABOND.UI.Sections.Damage"}}
-      </div>
-      {{#if damage.isCritical}}
-        <span class='critical-badge'>{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!</span>
-      {{/if}}
-      <div class="flex-row-container">
-        <div class='damage-container'>
-          {{#if damage.iconClass}}
-            <i class='{{damage.iconClass}} damage-icon'
-            title='{{damage.type}}'></i>
-          {{else}}
-            <i class='fas fa-burst damage-icon'></i>
-          {{/if}}
-          <span class='damage-amount'>{{damage.total}}</span>
-          {{!-- {{#if damage.type}}
-            <span class='damage-type'>{{damage.type}}</span>
-          {{/if}} --}}
-        </div>
-        {{#if damage.diceDisplay}}
-        <div class='damage-dice-display'>{{{damage.diceDisplay}}}</div>
-        {{else if damage.formula}}
-        <div class='damage-formula'>{{damage.formula}}</div>
-        {{/if}}
-      </div>
+{{! damage-display.hbs }}
+<div class="damage-section">
+    {{!-- 1. Black Arrow Header --}}
+    <div class="damage-header-arrow" title="{{damage.formula}}">
+        <span>{{localize "VAGABOND.UI.Sections.Damage"}}</span>
     </div>
-{{/if}}
+
+    {{!-- 2. Damage Row --}}
+    <div class="damage-row">
+        {{!-- Total Amount with Burst Icon --}}
+        <div class="damage-total-display">
+             {{#if damage.isCritical}}
+                <div class="crit-label">{{localize "VAGABOND.Roll.Critical"}}!</div>
+             {{/if}}
+            <i class="fas fa-burst damage-bg-icon"></i>
+            <span class="damage-value">{{damage.total}}</span>
+        </div>
+
+        {{!-- Dice Icons --}}
+        <div class="damage-dice-list">
+             {{{damage.diceDisplay}}}
+        </div>
+    </div>
+</div>

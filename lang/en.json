@@ -55,6 +55,7 @@
       "Final": "Final Damage"
     },
     "DefendMechanics": {
+      "DefendingTitle": "Defending options",
       "BlockTitle": "Block (Endure)",
       "DodgeTitle": "Dodge (Reflex)",
       "BlockDescription": "Roll Endure save. Success ignores one highest damage die. Hindered if Ranged attack.",
