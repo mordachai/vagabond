@@ -429,18 +429,37 @@ export class VagabondChatCard {
           damageType: weapon.system.damageType || 'physical',
           hasDefenses: true
       });
-  }
-  
+  }  
+
   static async spellCast(actor, spell, spellCastResult, damageRoll = null) {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, costs, deliveryText, spellState } = spellCastResult;
+      
       const tags = [];
+      
+      // 1. Skill Tag
       tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
+      
+      // 2. Damage Tag
       if (spell.system.damageType !== '-') {
           const dType = spell.system.damageType;
           const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
           tags.push({ label: `${spellState.damageDice}d6`, icon, cssClass: 'tag-damage' });
       }
-      tags.push({ label: deliveryText, cssClass: 'tag-delivery' });
+
+      // 3. Delivery Tag (THE FIX)
+      // We manually build the data string here to ensure it works reliably in the template
+      if (spellState.deliveryType) {
+          tags.push({ 
+              label: deliveryText, 
+              cssClass: 'tag-delivery template-trigger', // Adds class for listener
+              // Pre-format the attributes as a safe string
+              extraAttributes: `data-delivery-type="${spellState.deliveryType}" data-delivery-text="${deliveryText}"`
+          });
+      } else {
+          tags.push({ label: deliveryText, cssClass: 'tag-delivery' });
+      }
+
+      // 4. Mana Cost Tag
       tags.push({ label: `${costs.totalCost} Mana`, cssClass: 'tag-mana' });
 
       return this.createActionCard({
@@ -452,7 +471,7 @@ export class VagabondChatCard {
           description: spell.system.description,
           hasDefenses: true
       });
-  } 
+  }
   
   static async npcAction(actor, action, actionIndex) {
     const tags = [];
