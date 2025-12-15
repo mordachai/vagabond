@@ -2,7 +2,7 @@
 <div class="vagabond-chat-card-v2" data-card-type="{{type}}">
 
     {{!-- 1. Character Name --}}
-    <h4 class="actor-name-header">{{alias}}</h4>
+    {{!-- <h4 class="actor-name-header">{{alias}}</h4> --}}
 
     {{!-- 2. Main Card Body --}}
     <div class="card-body">
@@ -15,19 +15,49 @@
             <div class="header-info">
                 <h3 class="header-title">{{title}}</h3>
                 
-                {{!-- UNIFIED METADATA BAR (Range, Mana, Ammo - NO SKILL HERE) --}}
-                {{#if metadataTags.length}}
                 <div class="metadata-tags-row">
-                    {{#each metadataTags}}
-                    <div class="meta-tag {{this.cssClass}}" title="{{this.title}}">
-                        {{#if this.icon}}<i class="{{this.icon}}"></i>{{/if}}
-                        {{#if this.label}}<span>{{this.label}}</span>{{/if}}
-                    </div>
+                    
+                    {{!-- 1. STANDARD TAGS (Range, Mana, etc.) --}}
+                    {{#each standardTags}}
+                        <div class="meta-tag {{this.cssClass}}" title="{{this.title}}">
+                            {{#if this.icon}}<i class="{{this.icon}}"></i>{{/if}}
+                            {{#if this.label}}<span>{{this.label}}</span>{{/if}}
+                        </div>
+                        {{!-- Add Separator unless it's the last standard tag --}}
+                        {{#unless @last}}<span class="tag-separator">//</span>{{/unless}}
                     {{/each}}
+
+                    {{!-- Separator between Standard and Properties (if both exist) --}}
+                    {{#if (and standardTags.length propertyTags.length)}}
+                        <span class="tag-separator">//</span>
+                    {{/if}}
+
+                    {{!-- 2. PROPERTIES TRIGGER (Clickable Group) --}}
+                    {{#if propertyTags.length}}
+                        <div class="meta-tag tag-property-group" data-action="toggleProperties" title="{{localize 'VAGABOND.Weapon.Property.ViewPropertiesLabel'}}">
+                            {{#each propertyTags}}
+                                <span>{{this.label}}</span>{{#unless @last}},{{/unless}}
+                            {{/each}}
+                        </div>
+                    {{/if}}
+
                 </div>
-                {{/if}}
             </div>
         </header>
+
+        {{!-- [MOVED HERE] PROPERTIES ACCORDION CONTENT --}}
+        {{!-- Opens right below the header tags, before the roll strip --}}
+        {{#if propertyDetails.length}}
+        <div class="metadata-item-expandable">
+            <div class="metadata-content">
+                <ul>
+                {{#each propertyDetails}}
+                    <li><strong>{{this.name}}:</strong> {{this.hint}}</li>
+                {{/each}}
+                </ul>
+            </div>
+        </div>
+        {{/if}}
 
         {{!-- B. MODIFIER BADGE --}}
         {{#if isFavored}}
@@ -44,7 +74,7 @@
         {{#if hasRoll}}
         <section class="roll-strip">
             <div class="roll-info-group">
-                {{!-- SKILL LABEL (Moved here: "FINESSE", "MELEE", etc.) --}}
+                {{!-- SKILL LABEL --}}
                 {{#if rollSkillLabel}}
                 <div class="roll-skill-label">{{rollSkillLabel}}</div>
                 {{/if}}
@@ -82,7 +112,7 @@
 
             {{!-- FOOTER --}}
             <footer class="card-actions">
-                {{!-- 1. Action Buttons (Save / Apply Direct) --}}
+                {{!-- 1. Action Buttons --}}
                 {{#if footerActions.length}}
                 <div class="action-buttons-container">
                     {{#each footerActions}}
@@ -92,7 +122,7 @@
                 {{/if}}
 
                 {{!-- 2. Defend Options Accordion --}}
-                {{!-- We check the flag set in the Master Method --}}
+                {{!-- RESTORED CORRECT KEYS --}}
                 {{#if showDefendOptions}}
                 <div class="defend-info-box">
                     <div class="defend-header">

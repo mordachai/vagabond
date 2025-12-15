@@ -36,6 +36,12 @@
   font-weight: normal;
   font-style: italic;
 }
+@font-face {
+  font-family: "Ludlow";
+  src: url("../assets/fonts/ludlow-regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   --vagabond-c-dark: #1b1b1b;
   --vagabond-c-lite: #e3e2dd;
@@ -392,14 +398,17 @@
 
 .chat-message {
   background: #000;
-  color: #DED656;
-  font-family: "Eskapade", serif;
   border: none;
   border-radius: 2px;
 }
 .chat-message .message-header {
   color: #DED656;
+  margin: 10px 0 5px 0;
+}
+.chat-message .message-sender {
   font-family: "Eskapade", serif;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 /* Heartbeat Animation */
@@ -644,12 +653,15 @@
    VAGABOND V2 CHAT CARDS - UNIFIED STYLES
    ======================================== */
 .vagabond-chat-card-v2 {
-  --font-primary: "Paradigm", serif;
-  --font-secondary: "Signika", sans-serif;
+  --font-primary: "Eskapade", serif;
+  --font-secondary: "Manofa", sans-serif;
   --c-dark-blue: #0b1a23;
-  --c-yellow-text: #f4e87c;
-  --c-save-yellow: #dcdba7;
-  --c-damage-orange: #d35400;
+  --c-yellow-text: #DED656;
+  --c-save-yellow: #DED656;
+  --c-damage-orange: #e7570a;
+  --c-bg-lite: #7f8c8d;
+  --c-bluey: #5a6e76;
+  --c-dark-bluey: #2c3e50;
   position: relative;
   margin-bottom: 10px;
   font-family: var(--font-primary);
@@ -659,6 +671,7 @@
   /* HEADER */
   /* MODIFIER BADGE */
   /* ROLL STRIP */
+  /*CARD DESCRIPTION*/
   /* DAMAGE SECTION */
   /* PROPERTIES ACCORDION */
   /* FOOTER BUTTONS */
@@ -676,25 +689,26 @@
   background-image: url("../assets/ui/chat/card-bg.webp");
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  padding: 8px 12px;
+  padding: 0;
+  border: 2px solid var(--c-yellow-text);
   border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   position: relative;
 }
 .vagabond-chat-card-v2 .card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  margin-bottom: 15px;
+  margin: 10px 5px;
 }
 .vagabond-chat-card-v2 .card-header .header-icon {
-  flex: 0 0 48px;
-  height: 48px;
-  border: 2px solid #5a6e76;
-  border-radius: 6px;
+  flex: 0 0 55px;
+  height: 55px;
+  border: 2px solid var(--c-dark-blue);
+  border-radius: 4px border-radius;
   overflow: hidden;
   background: #000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 .vagabond-chat-card-v2 .card-header .header-icon img {
   width: 100%;
@@ -706,58 +720,77 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  border-bottom: 4px double var(--c-dark-blue);
+  /* Metadata Row Styling */
 }
 .vagabond-chat-card-v2 .card-header .header-info .header-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   text-transform: uppercase;
   margin: 0;
   line-height: 1.1;
   color: var(--c-dark-blue);
   border: none;
+  font-family: "Eskapade", serif;
+  border-bottom: 3px solid var(--c-dark-blue);
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+  flex-wrap: nowrap; /* FIX: Force single line */
+  align-items: center;
+  gap: 3px;
   margin-top: 4px;
+  overflow: hidden; /* Hide overflow */
+  max-width: 100%;
+  /* Standard Tag */
+  /* The Slash Separator // */
+  /* The Properties Group (Clickable) */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag {
-  font-size: 11px;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--c-dark-blue);
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: #4a5e66;
-  font-weight: bold;
-  border: 1px solid transparent;
-  /* Specific Tag Styles */
+  gap: 2px;
+  white-space: nowrap; /* Keep short tags intact */
+  flex-shrink: 0; /* Don't squish standard tags */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag i {
   opacity: 0.7;
   font-size: 10px;
 }
-.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag.tag-property {
-  background: #fff;
-  border: 1px solid #ccc;
-  color: #666;
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-separator {
+  color: var(--c-dark-blue);
+  font-weight: 300;
+  font-size: 12px;
+  user-select: none;
+  flex-shrink: 0;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-property-group {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
   font-style: italic;
-  font-weight: normal;
+  transition: all 0.2s;
+  color: var(--c-dark-blue);
+  /* ELLIPSIS MAGIC */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; /* Flexbox hack for truncation */
+  flex: 1; /* Fill remaining space but truncate if too small */
 }
-.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag.tag-damage {
-  color: #d35400;
-  background: rgba(211, 84, 0, 0.1);
-}
-.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag.tag-range {
-  color: #2980b9;
-  background: rgba(41, 128, 185, 0.1);
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-property-group:hover {
+  background: #fff;
+  border-color: var(--c-bg-lite);
+  color: #000;
 }
 .vagabond-chat-card-v2 .modifier-badge {
-  position: absolute;
-  right: -5px;
-  top: 45px;
+  position: relative;
+  bottom: -18px;
+  margin-left: auto;
+  margin-right: 3px;
   z-index: 5;
   width: 120px;
   height: 30px;
@@ -773,52 +806,59 @@
 .vagabond-chat-card-v2 .modifier-badge.favored {
   background-image: url("../assets/ui/chat/favored-bg.webp");
   color: #000;
-  transform: rotate(2deg);
+  transform: rotate(1deg);
 }
 .vagabond-chat-card-v2 .modifier-badge.hindered {
   background-image: url("../assets/ui/chat/hindered-bg.webp");
   color: #fff;
-  transform: rotate(-2deg);
+  transform: rotate(-1deg);
 }
 .vagabond-chat-card-v2 .roll-strip {
   background-image: url("../assets/ui/chat/roll-bg.webp");
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
-  margin: 0 -12px;
+  margin: -3px -12px;
   padding: 5px 12px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 55px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+  align-items: center; /* Vertically center everything */
+  justify-content: flex-start; /* FIX: Pack items to the left */
+  gap: 10px; /* FIX: 10px margin between Banner and Dice */
+  height: 100px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   /* The Skill Label (FINESSE, etc.) */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-info-group {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-shrink: 0; /* Prevent banner from squishing */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-skill-label {
+  position: absolute; /* Take out of flow so it doesn't affect vertical centering */
+  bottom: 100%; /* Anchor to the top edge of the group (Banner) */
+  left: 5px; /* Slight offset to match banner padding */
   color: #fff;
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 14px;
+  font-weight: 700;
   font-style: italic;
   text-transform: uppercase;
-  margin-left: 10px;
-  margin-bottom: -3px;
+  margin-bottom: 0px; /* Space between label and banner */
   z-index: 2;
-  text-shadow: 1px 1px 0 #000;
   opacity: 0.9;
+  white-space: nowrap; /* Ensure it stays on one line */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner {
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  width: 145px;
+  width: fit-content;
   height: 40px;
+  max-width: 165px;
+  min-width: 130px;
   display: flex;
   align-items: center;
   padding-left: 8px;
-  padding-right: 25px;
+  padding-right: 12px;
   white-space: nowrap;
   gap: 2px;
 }
@@ -829,36 +869,66 @@
   background-image: url("../assets/ui/chat/result-miss-bg.webp");
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-value {
-  font-size: 26px;
+  color: #fff;
+  font-size: 34px;
   font-weight: 900;
   line-height: 1;
   margin-right: 4px;
+  font-family: "Ludlow", serif;
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-vs {
-  font-size: 11px;
+  color: #fff;
+  font-size: 14px;
   opacity: 0.9;
   margin-top: 2px;
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-target {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
   margin: 0 4px;
+  color: var(--c-dark-blue);
+  font-family: "Eskapade", sans-serif;
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-outcome-text {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 800;
   text-transform: uppercase;
   margin-left: 2px;
+  color: #fff;
 }
-.vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-value, .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-target, .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-outcome-text {
-  color: white;
-  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+.vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-value, .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-outcome-text {
+  text-shadow: 1px 1px 0 var(--c-dark-blue), -1px 1px 0 var(--c-dark-blue), -1px -1px 0 var(--c-dark-blue), 1px -1px 0 var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .card-description {
+  margin: 8px 16px;
+  font-family: "Paradigma", serif;
+  font-size: 16px;
 }
 .vagabond-chat-card-v2 .content-body {
   padding-top: 10px;
 }
 .vagabond-chat-card-v2 .damage-section {
   margin-bottom: 10px;
+  /* Add inside .vagabond-chat-card-v2 .damage-section */
+  /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) */
+}
+.vagabond-chat-card-v2 .damage-section .damage-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30px;
+  /* Critical Label */
+}
+.vagabond-chat-card-v2 .damage-section .damage-header-container .crit-label {
+  background: var(--c-damage-orange);
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 3px 6px;
+  border-radius: 3px;
+  z-index: 3;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .vagabond-chat-card-v2 .damage-section .damage-header-arrow {
   background-image: url("../assets/ui/chat/damage-title-bg.webp");
@@ -868,8 +938,10 @@
   height: 30px;
   display: flex;
   align-items: center;
-  padding-left: 15px;
+  justify-content: center;
   margin-bottom: 5px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  /* The Right Line */
 }
 .vagabond-chat-card-v2 .damage-section .damage-header-arrow span {
   color: white;
@@ -877,6 +949,52 @@
   font-size: 14px;
   text-transform: uppercase;
   text-shadow: 1px 1px 0 #000;
+}
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow::before {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: var(--c-bluey); /* Dark slate color matching the UI */
+  border-radius: 1px;
+  max-width: 40px; /* Limit length so it doesn't touch edges */
+}
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow::after {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: var(--c-bluey);
+  border-radius: 1px;
+  max-width: 40px;
+}
+.vagabond-chat-card-v2 .damage-section .damage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 12px;
+  padding: 0 20px;
+}
+.vagabond-chat-card-v2 .damage-section .damage-total-display {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: last baseline;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  /* Faded Background Icon (Burst/Skull/Fire) */
+  /* The Number Value */
+}
+.vagabond-chat-card-v2 .damage-section .damage-total-display .damage-bg-icon {
+  font-size: 30px;
+  color: var(--c-damage-orange);
+  text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
+}
+.vagabond-chat-card-v2 .damage-section .damage-total-display .damage-value {
+  font-family: var(--font-secondary);
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--c-damage-orange); /* Dark Orange */
+  text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable {
   background: #f1f1f1;
@@ -886,7 +1004,7 @@
   overflow: hidden;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-header {
-  background: #7f8c8d;
+  background: var(--c-bg-lite);
   color: white;
   padding: 5px 8px;
   font-size: 11px;
@@ -902,7 +1020,7 @@
   transition: transform 0.2s;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-header:hover {
-  background: #4a5e66;
+  background: var(--c-bluey);
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-content {
   max-height: 0;
@@ -917,8 +1035,9 @@
   list-style: none;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-content ul li {
-  font-size: 11px;
-  color: #333;
+  font-size: 16px;
+  font-family: "Paradigma", serif;
+  color: var(--c-dark-blue);
   margin-bottom: 2px;
   position: relative;
 }
@@ -946,12 +1065,13 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 5px;
+  margin: 8px 16px;
   /* Apply Direct (Full Width) */
   /* Save Buttons Row */
   /* Defend Options Accordion */
 }
-.vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button {
+.vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button,
+.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button {
   width: 100%;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp");
   background-size: 100% 100%;
@@ -959,6 +1079,7 @@
   background-position: center center;
   color: #fff;
   padding: 6px;
+  margin-bottom: 6px;
   text-transform: uppercase;
   font-weight: bold;
   font-family: var(--font-primary);
@@ -969,22 +1090,25 @@
   gap: 6px;
   border-radius: 2px;
   border: none;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
-.vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button:hover {
-  filter: brightness(1.2);
+.vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button:hover,
+.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button:hover {
+  filter: brightness(1.6);
 }
-.vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button i {
-  color: #f4e87c;
+.vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button i,
+.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button i {
+  color: var(--c-yellow-text);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   width: 100%;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button {
   flex: 1;
   background: var(--c-save-yellow);
-  border: 1px solid #aaa;
+  border: 1px solid var(--c-bg-lite);
   color: var(--c-dark-blue);
   padding: 6px 2px;
   font-size: 12px;
@@ -996,18 +1120,19 @@
   align-items: center;
   gap: 4px;
   white-space: nowrap;
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.4);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover {
-  filter: brightness(0.95);
+  filter: brightness(0.8);
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box {
-  background: #dce1e3;
+  background: #fff;
   border-bottom: 2px solid #000;
   border-radius: 3px;
   overflow: hidden;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header {
-  background: #2c3e50;
+  background: var(--c-dark-bluey);
   color: white;
   padding: 5px 8px;
   font-size: 12px;
@@ -1018,7 +1143,7 @@
   gap: 6px;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header:hover {
-  background: #34495e;
+  background: var(--c-bluey);
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header .expand-icon {
   margin-left: auto;
@@ -1055,16 +1180,24 @@
   justify-content: center;
   gap: 4px;
 }
+.roll-dice-container .roll-modifier,
+.damage-dice-list .roll-modifier {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 4px;
+  color: var(--c-damage-orange);
+}
 
 .vb-die-wrapper {
   position: relative !important;
-  width: 36px !important;
-  height: 36px !important;
+  width: 50px !important;
+  height: 50px !important;
   display: flex;
+  flex: 0 1 auto;
   align-items: center;
   justify-content: center;
   z-index: 1;
-  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding-bottom: 3px;
 }
 
 .vb-die-wrapper .vb-die-bg {
@@ -1083,12 +1216,128 @@
 .vb-die-wrapper .vb-die-val {
   position: relative;
   z-index: 2;
-  font-family: "Signika", sans-serif;
-  font-weight: 800;
-  font-size: 18px;
+  font-family: "Ludlow", serif;
+  font-weight: 700;
+  font-size: 32px;
   color: #fff;
-  text-shadow: 0 0 3px #000;
   pointer-events: none;
+  text-shadow: 1px 1px 0 var(--c-dark-blue), -1px 1px 0 var(--c-dark-blue), -1px -1px 0 var(--c-dark-blue), 1px -1px 0 var(--c-dark-blue);
+}
+
+.vb-die-wrapper .vb-die-explode {
+  position: absolute !important;
+  top: -4px;
+  right: -4px;
+  z-index: 1;
+  /* Layout Reset */
+  width: 16px !important; /* Give it a fixed small size */
+  height: 16px !important;
+  margin: 0 !important;
+  /* Center the Icon inside the Circle */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  /* Visuals */
+  font-size: 16px;
+  color: #e74c3c;
+  text-shadow: 1px 1px 0 #ffecea, -1px 1px 0 #ffecea, -1px -1px 0 #ffecea, 1px -1px 0 #ffecea;
+}
+
+/* SAVE DAMAGE CALCULATION (New Section) */
+.save-damage-calculation {
+  background: rgba(255, 255, 255, 0.5); /* Subtle background container */
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 8px 5px;
+  text-align: center;
+  /* Title styling matching the Damage Arrow */
+  /* The Calculation Row (15 - 1 = 14) */
+  /* Footer Note */
+}
+.save-damage-calculation .damage-title {
+  /* Reuse the damage title background */
+  background-image: url("../assets/ui/chat/damage-title-bg.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; /* Center the image */
+  width: 150px;
+  height: 30px;
+  margin: 0 auto 8px auto; /* Center horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Text Styling */
+  color: white;
+  font-weight: 900;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 #000;
+  padding-right: 15px; /* Visual balance for arrow tip */
+  /* The Right Line */
+}
+.save-damage-calculation .damage-title::before {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: #5a6e76; /* Dark slate color matching the UI */
+  border-radius: 1px;
+  max-width: 20px; /* Limit length so it doesn't touch edges */
+}
+.save-damage-calculation .damage-title::after {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: #5a6e76;
+  border-radius: 1px;
+  max-width: 20px;
+}
+.save-damage-calculation .damage-formula-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-secondary);
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--c-dark-blue);
+  margin-bottom: 5px;
+  /* Numbers & Icons */
+  /* Operators (- / =) */
+  /* The Final Result */
+}
+.save-damage-calculation .damage-formula-line .damage-component {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.save-damage-calculation .damage-formula-line .damage-component i {
+  color: var(--c-dark-blue); /* Dark Blue Icons */
+  font-size: 16px;
+}
+.save-damage-calculation .damage-formula-line .damage-operator {
+  color: #7f8c8d;
+  font-size: 20px;
+  font-weight: 900;
+}
+.save-damage-calculation .damage-formula-line .damage-final {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--c-damage-orange); /* Pop color for result */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.save-damage-calculation .damage-formula-line .damage-final i {
+  color: var(--c-damage-orange);
+  font-size: 16px;
+}
+.save-damage-calculation .damage-application-note {
+  font-size: 11px;
+  font-style: italic;
+  color: #4a5e66;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 /* Animations */

@@ -105,6 +105,21 @@ function registerGameSettings() {
       }
     }
   });
+  
+  // Setting 6: Chat icons
+  game.settings.register('vagabond', 'chatCardIconStyle', {
+    name: 'VAGABOND.Settings.chatCardIconStyle.name', // "Chat Card Icon Style"
+    hint: 'VAGABOND.Settings.chatCardIconStyle.hint', // "Choose what icon appears on the chat card."
+    scope: 'client', // Client-side preference so each player can choose
+    config: true,
+    type: String,
+    choices: {
+      'item': 'VAGABOND.Settings.chatCardIconStyle.item', // "Always Item Icon (Default)"
+      'smart': 'VAGABOND.Settings.chatCardIconStyle.smart' // "Actor Face for Attacks/Spells, Item Icon for Gear"
+    },
+    default: 'item', 
+    requiresReload: false
+  });
 }
 
 /* -------------------------------------------- */
@@ -603,15 +618,29 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   // ---------------------------------------------------------
   // 1. Accordion Toggle Handler (Properties)
   // ---------------------------------------------------------
-  const propertyToggles = html.querySelectorAll('.metadata-header[data-action="toggleProperties"]');
+  // 1. Accordion Toggle Handler (Properties)
+  // Handles triggers whether they are inside or outside the container
+  const propertyToggles = html.querySelectorAll('[data-action="toggleProperties"]');
 
   propertyToggles.forEach(toggle => {
     toggle.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
-      const header = ev.currentTarget;
-      const container = header.closest('.metadata-item-expandable');
+      const trigger = ev.currentTarget;
+      let container = null;
+
+      // Strategy A: Is the trigger directly inside the box? (Old style)
+      if (trigger.closest('.metadata-item-expandable')) {
+          container = trigger.closest('.metadata-item-expandable');
+      } 
+      // Strategy B: Trigger is in Header -> Find the box inside the main card
+      else {
+          const card = trigger.closest('.vagabond-chat-card-v2');
+          if (card) {
+              container = card.querySelector('.metadata-item-expandable');
+          }
+      }
 
       if (container) {
         container.classList.toggle('expanded');

@@ -442,78 +442,42 @@ export class VagabondDamageHelper {
    * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
    * @param {string} attackType - The attack type ('melee', 'ranged', 'cast')
    */
-  static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee') {
-    // If damageRoll is null (flat damage), create a simple Roll object with just the total
-    let rollForButtons = damageRoll;
-    if (!damageRoll) {
-      rollForButtons = new Roll(String(finalDamage));
-      await rollForButtons.evaluate();
+
+    static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee') {
+      // 1. Dynamic Import to avoid circular dependency issues
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+
+      // 2. Handle Flat Damage
+      // The builder expects a Roll object to extract the total and formula.
+      // If this is flat damage (damageRoll is null), we create a dummy Roll object.
+      let rollObj = damageRoll;
+      if (!rollObj) {
+          // Create a roll that is just the number (e.g., "10")
+          rollObj = new Roll(`${finalDamage}`);
+          await rollObj.evaluate();
+      }
+
+      // 3. Delegate to the Master Builder
+      // This ensures NPC damage cards use the exact same template (.vagabond-chat-card-v2) as Players.
+      await VagabondChatCard.createActionCard({
+          actor: actor,
+          title: `${action.name} Damage`,
+          // Passing the subtitle explicitly ensures it doesn't default to something generic
+          subtitle: actor.name, 
+          
+          // Passing the roll triggers the "Damage Section" (Big Orange Number)
+          damageRoll: rollObj,
+          
+          // Pass the key (e.g., 'physical') so the builder can look up the correct Icon/Label config
+          damageType: damageTypeKey || 'physical',
+          
+          // Pass context for the Save Buttons
+          attackType: attackType,
+          
+          // Ensure Defenses (Block/Dodge accordion) appear unless it's healing
+          hasDefenses: (damageTypeKey !== 'healing')
+      });
     }
-
-    // Check if this is healing damage
-    const isHealing = damageTypeKey?.toLowerCase() === 'healing';
-
-    // Build defend info section (if not healing) - players can roll saves against NPC attacks
-    const defendInfoHTML = isHealing ? '' : this._renderDefendInfoSection(attackType);
-
-    // Build damage HTML using the template partial
-    const damageHTML = await this._renderDamagePartial(damageRoll, damageTypeLabel, false, damageTypeKey, finalDamage);
-
-    // Build buttons HTML - use save buttons for damage, old button for healing
-    let buttonsHTML;
-    if (isHealing) {
-      buttonsHTML = this.createApplyDamageButton(
-        finalDamage,
-        damageTypeLabel,
-        actor.id,
-        null
-      );
-    } else {
-      buttonsHTML = this.createSaveButtons(
-        finalDamage,
-        damageTypeKey || 'physical',
-        rollForButtons,
-        actor.id,
-        null,
-        attackType
-      );
-    }
-
-    // Create message content
-    const content = `
-      <div class="vagabond-chat-card npc-damage-result">
-        <header class="card-header">
-          <h3 class="card-title">${action.name} Damage</h3>
-          <div class="card-subtitle">${actor.name}</div>
-        </header>
-        <div class="card-content">
-          ${defendInfoHTML}
-          ${damageHTML}
-        </div>
-        <footer class="card-footer">
-          <div class="footer-actions">
-            ${buttonsHTML}
-          </div>
-        </footer>
-      </div>
-    `;
-
-    // Create the chat message data
-    const messageData = {
-      user: game.user.id,
-      speaker: ChatMessage.getSpeaker({ actor }),
-      content: content,
-      style: CONST.CHAT_MESSAGE_STYLES.OTHER
-    };
-
-    // Add the roll if it exists
-    if (damageRoll) {
-      messageData.rolls = [damageRoll];
-    }
-
-    // Create the message
-    return await ChatMessage.create(messageData);
-  }
 
   /**
    * Render damage HTML using the template partial
@@ -956,7 +920,7 @@ export class VagabondDamageHelper {
       .setTitle(`${saveLabel} Save`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', false);
+      .setOutcome(isSuccess ? 'PASS' : 'FAIL', false);
 
     // Build visual damage calculation display
     const damageCalculationHTML = this._buildDamageCalculation(

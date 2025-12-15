@@ -231,6 +231,12 @@
         "normal": "Normal (5 × Next Level) - Est. 5-12 Months",
         "epic": "Epic (7 × Next Level) - Est. 1-2 Years",
         "saga": "Saga (10 × Next Level) - Est. 2+ Years"
+      },
+      "chatCardIconStyle": {
+        "name": "Chat Card Icon Style",
+        "hint": "Choose what icon appears on the chat card",
+        "item": "Always Item Icon (Default)",
+        "smart": "Actor Face for Attacks/Spells, Item Icon for Gear"
       }
     },
     "Actor": {
@@ -516,6 +522,7 @@
       "V": "Versatile: Counts as 1H, but its damage die is one size larger if 2H."
     },
     "Property": {
+      "ViewPropertiesLabel": "View Properties",
       "Brawl": "Brawl",
       "Brutal": "Brutal",
       "Cleave": "Cleave",
@@ -687,6 +694,8 @@
       "NoLuckRemaining": "No Luck remaining to spend!",
       "LuckAlreadyMax": "Luck is already at maximum!"
     }
+
+
   },
   "TYPES": {
     "Actor": {

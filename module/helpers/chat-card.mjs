@@ -54,16 +54,32 @@ export class VagabondChatCard {
       return this;
   }
   
-  addDamage(damageRoll, damageType, isCritical, damageTypeKey) {
-      this.data.damage = {
-          total: damageRoll.total,
-          formula: damageRoll.formula,
-          type: damageType,
-          typeKey: damageTypeKey,
-          isCritical: isCritical,
-          roll: damageRoll
-      };
-      return this;
+  addDamage(damageRoll, damageType = 'Physical', isCritical = false, damageTypeKey = null) {
+    let damageIconClass = null;
+
+    // FIX: Normalize the key to lowercase to match CONFIG.VAGABOND.damageTypeIcons keys
+    // If damageTypeKey is null, fallback to using the damageType label (lowercased)
+    const rawKey = damageTypeKey || damageType || 'physical';
+    const key = rawKey.toLowerCase();
+
+    // Lookup the icon
+    if (CONFIG.VAGABOND?.damageTypeIcons?.[key]) {
+      damageIconClass = CONFIG.VAGABOND.damageTypeIcons[key];
+    } else {
+      // Fallback defaults
+      damageIconClass = CONFIG.VAGABOND?.damageTypeIcons?.['physical'] || 'fas fa-burst';
+    }
+
+    this.data.damage = {
+      total: typeof damageRoll === 'number' ? damageRoll : damageRoll.total,
+      formula: typeof damageRoll === 'number' ? null : damageRoll.formula,
+      type: damageType, // Keep the readable label (e.g. "Piercing")
+      typeKey: key,     // Keep the normalized key (e.g. "piercing")
+      iconClass: damageIconClass,
+      isCritical: isCritical,
+      roll: typeof damageRoll === 'number' ? null : damageRoll
+    };
+    return this;
   }
   
   addFooterAction(html) { this.data.footerActions.push(html); return this; }
@@ -78,7 +94,7 @@ export class VagabondChatCard {
     const d20Result = d20Term?.results?.[0]?.result || 0;
     return d20Result >= critNumber;
   }
-
+ 
   static formatRollWithDice(roll) {
     if (!roll) return '';
 
@@ -115,11 +131,13 @@ export class VagabondChatCard {
             parts.push(`<span class="roll-operator">${previousOperator}</span>`);
           }
           const isExploded = result.exploded;
+          
+          // FIX: Changed fa-certificate to fa-burst
           parts.push(`
             <div class="vb-die-wrapper" data-faces="${dieType}">
-               <div class="vb-die-bg" style="background-image: url('${dieIcon}')"></div>
+               <div class="vb-die-bg dmg-pool" style="background-image: url('${dieIcon}')"></div>
                <span class="vb-die-val">${result.result}</span>
-               ${isExploded ? '<i class="fas fa-certificate vb-die-explode" title="Exploded!"></i>' : ''}
+               ${isExploded ? '<i class="fas fa-burst vb-die-explode" title="Exploded!"></i>' : ''}
             </div>
           `);
           previousOperator = '+';
@@ -188,34 +206,88 @@ export class VagabondChatCard {
     hasDefenses = false, attackType = 'melee', footerActions = [],
     propertyDetails = null
   }) {
-      const card = new VagabondChatCard()
-        .setActor(actor).setItem(item).setTitle(title).setSubtitle(subtitle);
+      const card = new VagabondChatCard();
+      const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
 
+      // LOGIC: The "First Set Wins" Rule
+      // Whichever method (setItem or setActor) runs first establishes the icon.
+      
+      let prioritizeActor = false;
+
+      if (iconStyle === 'smart' && item) {
+          // Smart Mode: Prioritize Actor Face for "Active" things (Weapons, Spells)
+          // But keep Item Icon for "Passive/Consumable" things (Gear, Potions)
+          const isWeapon = item.type === 'weapon' || (item.type === 'equipment' && item.system.equipmentType === 'weapon');
+          const isSpell = item.type === 'spell';
+          
+          if (isWeapon || isSpell) {
+              prioritizeActor = true;
+          }
+      }
+
+      // EXECUTE PRIORITY
+      if (prioritizeActor) {
+          // 1. Face First (Attacks/Spells in Smart Mode)
+          card.setActor(actor).setItem(item);
+      } else {
+          // 2. Item First (Default Mode OR Gear/Potions)
+          card.setItem(item).setActor(actor);
+      }
+
+      // Continue setup...
+      card.setTitle(title).setSubtitle(subtitle);
+
+      // 1. Handle Main Roll
       if (rollData) {
           const { roll, difficulty, isHit, isCritical } = rollData;
           let label = 'NEUTRAL';
           if (typeof isHit !== 'undefined') label = isHit ? 'HIT' : 'MISS';
-          else if (typeof rollData.isSuccess !== 'undefined') label = rollData.isSuccess ? 'SUCCESS' : 'FAIL';
+          else if (typeof rollData.isSuccess !== 'undefined') label = rollData.isSuccess ? 'PASS' : 'FAIL';
           
           card.addRoll(roll, difficulty).setOutcome(label, isCritical);
           
+          // Extract Skill Label (moves to roll strip)
           const skillIndex = tags.findIndex(t => t.cssClass === 'tag-skill');
           if (skillIndex > -1) {
               card.data.rollSkillLabel = tags[skillIndex].label;
               tags.splice(skillIndex, 1);
           }
       }
+
+      // 2. SPLIT TAGS: Standard vs Properties
+      const standardTags = [];
+      const propertyTags = [];
+
+      tags.forEach(tag => {
+          // Check if it's a property tag
+          if (tag.cssClass && tag.cssClass.includes('tag-property')) {
+              propertyTags.push(tag);
+          } else {
+              standardTags.push(tag);
+          }
+      });
+
+      // Assign to card data
+      card.data.standardTags = standardTags;
+      card.data.propertyTags = propertyTags;
       
-      card.setMetadataTags(tags);
+      // Also set the full list just in case, though we primarily use the split ones now
+      card.setMetadataTags(tags); 
+
       if (propertyDetails) card.setPropertyDetails(propertyDetails);
       if (description) card.setDescription(description);
 
+      // 3. Handle Damage & Buttons
       if (damageRoll) {
           const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-          const dLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
+          
+          // Fix: Normalize key for icon lookup
+          const rawKey = damageType || 'physical';
+          const key = rawKey.toLowerCase();
+          const dLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[key]) || damageType;
           const isCrit = rollData?.isCritical || false;
           
-          card.addDamage(damageRoll, dLabel, isCrit, damageType);
+          card.addDamage(damageRoll, dLabel, isCrit, key);
           
           const isHealing = damageType.toLowerCase() === 'healing';
           
@@ -226,6 +298,7 @@ export class VagabondChatCard {
           card.addFooterAction(btns);
           
           if (!isHealing && hasDefenses) card.data.showDefendOptions = true;
+
       } else if (rollData?.isHit && item && !damageRoll) {
            const { VagabondDamageHelper } = await import('./damage-helper.mjs');
            const formula = item.system.currentDamage || '1d6';
@@ -306,7 +379,7 @@ export class VagabondChatCard {
       
       if (weapon.system.currentDamage) {
           const dType = weapon.system.damageType || 'physical';
-          const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
+          const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
           tags.push({ label: weapon.system.currentDamage, icon: icon, cssClass: 'tag-damage' });
       }
       if (weapon.system.grip) {
@@ -317,16 +390,34 @@ export class VagabondChatCard {
           tags.push({ label: weapon.system.rangeDisplay, cssClass: 'tag-range' });
       }
 
+      // PROPERTIES LOGIC
       let propertyDetails = null;
       if (weapon.system.properties && weapon.system.properties.length > 0) {
+          const propList = [];
+          
           weapon.system.properties.forEach(prop => {
-              const label = game.i18n.localize(`VAGABOND.Weapon.Property.${prop}`) || prop;
+              // 1. Find correct key in Config (handle case sensitivity)
+              // This ensures 'finesse' finds 'Finesse'
+              const configKeys = Object.keys(CONFIG.VAGABOND.weaponProperties);
+              const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
+              
+              // 2. Get Label
+              const labelKey = CONFIG.VAGABOND.weaponProperties[realKey] || `VAGABOND.Weapon.Property.${realKey}`;
+              const label = game.i18n.localize(labelKey);
+
+              // 3. Get Hint (Assuming .Hints convention based on key)
+              // If you have a different structure for descriptions, update the key string below
+              const hintKey = `VAGABOND.Weapon.PropertyHints.${realKey}`; 
+              const hint = game.i18n.localize(hintKey);
+
+              // Add to Tags (Header)
               tags.push({ label: label, cssClass: 'tag-property' });
+
+              // Add to Details (Accordion)
+              propList.push({ name: label, hint: (hint !== hintKey) ? hint : '' });
           });
-          propertyDetails = weapon.system.properties.map(prop => ({
-              name: game.i18n.localize(`VAGABOND.Weapon.Property.${prop}`) || prop,
-              hint: game.i18n.localize(`VAGABOND.Weapon.PropertyHints.${prop}`) || ''
-          }));
+          
+          propertyDetails = propList;
       }
 
       return this.createActionCard({
@@ -361,49 +452,99 @@ export class VagabondChatCard {
           description: spell.system.description,
           hasDefenses: true
       });
-  }
+  } 
   
   static async npcAction(actor, action, actionIndex) {
     const tags = [];
-    if (action.recharge) tags.push({ label: `Recharge ${action.recharge}`, icon: 'fas fa-rotate' });
+    
+    // 1. NPC Subtitle (The Actor Name)
+    const subtitle = actor.name;
 
+    // 2. Parse Traits (Tags)
+    // Checks if traits exist as a String ("Undead, Flying") or Array
+    if (action.traits) {
+        const traitList = Array.isArray(action.traits) 
+            ? action.traits 
+            : action.traits.split(',').map(t => t.trim());
+            
+        traitList.forEach(t => {
+            if (t) tags.push({ label: t, cssClass: 'tag-property' }); // Adds standard styling
+        });
+    }
+
+    // 3. Parse Range (if it exists on NPC actions)
+    if (action.range) {
+         tags.push({ label: action.range, cssClass: 'tag-range' });
+    }
+
+    // 4. Recharge Mechanic
+    if (action.recharge) {
+        tags.push({ label: `Recharge ${action.recharge}`, icon: 'fas fa-rotate', cssClass: 'tag-standard' });
+    }
+
+    // 5. Description Enrichment
     let description = '';
     if (action.description) {
       description = await foundry.applications.ux.TextEditor.enrichHTML(action.description, {
         async: true, secrets: actor.isOwner, relativeTo: actor
       });
     }
+    
+    // 6. Extra Info (common in 5e-style NPC blocks)
     if (action.extraInfo) {
       const extra = await foundry.applications.ux.TextEditor.enrichHTML(action.extraInfo, { async: true });
       description += `<hr class="action-divider"><div class="action-extra-info">${extra}</div>`;
     }
 
+    // 7. Damage Buttons
     const footerActions = [];
-    if (action.flatDamage || action.rollDamage) {
+    // Only verify damage if it's not "-"
+    if ((action.flatDamage || action.rollDamage) && action.damageType !== '-') {
         const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-        let dTypeLabel = '';
-        if (action.damageType && action.damageType !== '-') {
-            dTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[action.damageType]) || action.damageType;
-        }
+        
+        const rawType = action.damageType || 'physical';
+        const dTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType;
+        
+        // Normalize attack type for the helper
         let attackType = action.attackType || 'melee';
         if (attackType === 'castClose') attackType = 'melee';
         else if (attackType === 'castRanged') attackType = 'ranged';
 
         if (action.flatDamage) {
-            footerActions.push(VagabondDamageHelper.createNPCDamageButton(actor.id, actionIndex, action.flatDamage, 'flat', action.damageType || 'physical', dTypeLabel, attackType));
+            footerActions.push(VagabondDamageHelper.createNPCDamageButton(
+                actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType
+            ));
         }
         if (action.rollDamage) {
-            footerActions.push(VagabondDamageHelper.createNPCDamageButton(actor.id, actionIndex, action.rollDamage, 'roll', action.damageType || 'physical', dTypeLabel, attackType));
+            footerActions.push(VagabondDamageHelper.createNPCDamageButton(
+                actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType
+            ));
         }
     }
 
+    // 8. Create the Card
     return this.createActionCard({
         actor,
         title: action.name || 'NPC Action',
-        tags,
+        subtitle,    // <--- Now correctly passes the Actor Name
+        tags,        // <--- Now includes Traits and Range
         description,
-        footerActions
+        footerActions,
+        // If you want the ability image to be the icon, pass 'item' if available, 
+        // otherwise it defaults to actor image in createActionCard logic.
     });
+  }
+
+  static async _onClickAbilityName(event, target) {
+      event.preventDefault();
+      const index = parseInt(target.dataset.index);
+      const ability = this.actor.system.abilities[index];
+
+      if (!ability || !ability.name) return;
+
+      // Use npcAction instead of npcAbility
+      const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+      await VagabondChatCard.npcAction(this.actor, ability, index);
   }
 
   // 7. FEATURE USE ADAPTER (Handles both full Items and plain Data Objects)

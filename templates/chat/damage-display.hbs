@@ -1,19 +1,23 @@
 {{! damage-display.hbs }}
 <div class="damage-section">
     {{!-- 1. Black Arrow Header --}}
-    <div class="damage-header-arrow" title="{{damage.formula}}">
-        <span>{{localize "VAGABOND.UI.Sections.Damage"}}</span>
+    <div class="damage-header-container">
+        <div class="damage-header-arrow" title="{{damage.formula}}">
+            <span>{{localize "VAGABOND.UI.Sections.Damage"}}</span>
+        </div>
+        {{#if damage.isCritical}}
+        <div class="crit-label">{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!</div>
+        {{/if}}
     </div>
 
     {{!-- 2. Damage Row --}}
     <div class="damage-row">
-        {{!-- Total Amount with Burst Icon --}}
+        {{!-- Total Amount with Type Icon Background --}}
         <div class="damage-total-display">
-             {{#if damage.isCritical}}
-                <div class="crit-label">{{localize "VAGABOND.Roll.Critical"}}!</div>
-             {{/if}}
-            <i class="fas fa-burst damage-bg-icon"></i>
-            <span class="damage-value">{{damage.total}}</span>
+            
+            {{!-- FIX: Use dynamic icon class, fallback to burst if missing --}}
+            <i class="{{#if damage.iconClass}}{{damage.iconClass}}{{else}}fas fa-burst{{/if}} damage-bg-icon"></i>
+            <div class="damage-value">{{damage.total}}</div>
         </div>
 
         {{!-- Dice Icons --}}
