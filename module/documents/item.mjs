@@ -252,15 +252,26 @@ export class VagabondItem extends Item {
       }
     }
 
-    // Add universal damage bonuses
-    const flatBonus = actor.system.universalDamageBonus || 0;
-    const diceBonus = actor.system.universalDamageDice || '';
+    // Add weapon-specific universal damage bonuses
+    const weaponFlatBonus = actor.system.universalWeaponDamageBonus || 0;
+    const weaponDiceBonus = actor.system.universalWeaponDamageDice || '';
 
-    if (flatBonus !== 0) {
-      damageFormula += ` + ${flatBonus}`;
+    if (weaponFlatBonus !== 0) {
+      damageFormula += ` + ${weaponFlatBonus}`;
     }
-    if (diceBonus.trim() !== '') {
-      damageFormula += ` + ${diceBonus}`;
+    if (weaponDiceBonus.trim() !== '') {
+      damageFormula += ` + ${weaponDiceBonus}`;
+    }
+
+    // Add legacy universal damage bonuses (backward compatibility)
+    const universalFlatBonus = actor.system.universalDamageBonus || 0;
+    const universalDiceBonus = actor.system.universalDamageDice || '';
+
+    if (universalFlatBonus !== 0) {
+      damageFormula += ` + ${universalFlatBonus}`;
+    }
+    if (universalDiceBonus.trim() !== '') {
+      damageFormula += ` + ${universalDiceBonus}`;
     }
 
     // Apply exploding dice syntax if enabled

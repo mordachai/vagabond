@@ -66,6 +66,17 @@ export default class VagabondSpell extends VagabondItemBase {
       initial: ''
     });
 
+    // Damage Die Size - optional override for this specific spell (defaults to character's spellDamageDieSize)
+    schema.damageDieSize = new fields.NumberField({
+      required: false,
+      nullable: true,
+      initial: null,
+      min: 4,
+      max: 20,
+      label: "Damage Die Size Override",
+      hint: "Override damage die size for this spell (leave blank to use character default)"
+    });
+
     return schema;
   }
 }
