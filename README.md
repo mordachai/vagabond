@@ -72,3 +72,11 @@ If you want to use the module Item Piles to manage treasures and shop in your ga
 ```
 https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module.json
 ```
+
+---
+
+## Acknowledgements
+
+Huge thanks to KeyInk for the marvelous work designing the new chat cards and sheets (with sheets coming in the future).
+
+A big thank-you as well to everyone on Indestructoboy’s Discord server for the incredible support, playtests, and awesome tables. You all rock!
