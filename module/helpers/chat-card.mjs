@@ -546,7 +546,10 @@ export class VagabondChatCard {
       }
 
       // 4. Mana Cost Tag
-      tags.push({ label: `${costs.totalCost} Mana`, cssClass: 'tag-mana' });
+      tags.push({ 
+          label: `${costs.totalCost} <i class="fas fa-star-christmas"></i>`, 
+          cssClass: 'tag-mana' 
+      });
 
       return this.createActionCard({
           actor, item: spell, title: spell.name,
