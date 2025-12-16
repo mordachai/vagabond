@@ -3709,7 +3709,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Determine roll type and use VagabondChatCard for stats, saves, and skills
       const rollType = dataset.rollType;
-
+      
+      /* DISABLED - No stat rolls in Vagabond currently
       if (rollType === 'stat') {
         // Stat roll
         const statKey = dataset.statKey;
@@ -3724,7 +3725,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           isSuccess
         );
         return roll;
-      } else if (rollType === 'save') {
+      } else*/
+        if (rollType === 'save') {
         // Save roll
         const saveKey = dataset.saveKey;
         const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;

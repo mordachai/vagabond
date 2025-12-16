@@ -447,9 +447,11 @@ export class VagabondChatCard {
     return this._checkRoll(actor, 'skill', skillKey, roll, difficulty, isSuccess);
   }
 
-  static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
-    return this._checkRoll(actor, 'stat', statKey, roll, difficulty, isSuccess);
-  }
+  //@deprecated
+  //static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
+  //  return this._checkRoll(actor, 'stat', statKey, roll, difficulty, isSuccess);
+  //}
+  //
 
   static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
     return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess);
