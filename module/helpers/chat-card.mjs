@@ -93,60 +93,105 @@ export class VagabondChatCard {
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     return d20Result >= critNumber;
-  }
- 
-  static formatRollWithDice(roll) {
+  } 
+
+
+  static formatRollWithDice(roll, isDamage = false) {
     if (!roll) return '';
 
     const parts = [];
     let previousOperator = '';
 
-    const cleanFormula = (roll.formula || '').replace(/\s/g, '');
-    const isFavoredRoll = cleanFormula.includes('+1d6') || cleanFormula.includes('+1d6[favored]');
-    const isHinderedRoll = cleanFormula.includes('-1d6') || cleanFormula.includes('-1d6[hindered]');
+    // 1. Analyze Formula Context
+    // We remove spaces to make matching easier (e.g. "1d20 + 1d6" becomes "1d20+1d6")
+    const formula = (roll.formula || '').replace(/\s/g, ''); 
+    
+    // Check if the global formula suggests a favored/hindered roll
+    // This helps us guess intent even if flavor text is missing
+    const isFavoredContext = !isDamage && (formula.includes('+1d6') || formula.includes('+1d6[favored]'));
+    const isHinderedContext = !isDamage && (formula.includes('-1d6') || formula.includes('-1d6[hindered]'));
 
     for (const term of roll.terms) {
-      if (typeof term === 'string') {
-        previousOperator = term;
-        continue;
+      
+      // 2. Handle Operators (THE V13 FIX)
+      // We check for 'OperatorTerm' class name OR if it is a string
+      if (typeof term === 'string' || term.constructor.name === 'OperatorTerm') {
+        const op = typeof term === 'string' ? term : term.operator;
+        previousOperator = op.trim();
+        continue; 
       }
 
+      // 3. Handle Dice
       if (term.constructor.name === 'Die') {
         const dieType = term.faces;
         
-        // FIX: Use full system path
+        // Default Icon
         let dieIcon = `systems/vagabond/assets/ui/dice/d${dieType}-bg.webp`;
 
-        if (dieType === 6) {
-          const flavor = term.options?.flavor?.toLowerCase() || '';
-          if (flavor.includes('fav') || (isFavoredRoll && previousOperator === '+')) {
-            dieIcon = `systems/vagabond/assets/ui/dice/d6-fav-bg.webp`;
-          } else if (flavor.includes('hind') || (isHinderedRoll && previousOperator === '-')) {
-            dieIcon = `systems/vagabond/assets/ui/dice/d6-hind-bg.webp`;
+        // FAVORED / HINDERED LOGIC
+        // Only applies to d6s in a non-damage context (Attack/Skill rolls)
+        if (dieType === 6 && !isDamage) {
+          const flavor = (term.options?.flavor || '').toLowerCase();
+          
+          // A. Explicit Flavor Check (Best reliability)
+          if (flavor.includes('fav')) {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-fav-bg.webp`;
+          } else if (flavor.includes('hind')) {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-hind-bg.webp`;
+          }
+          
+          // B. Contextual Operator Check (Fallback)
+          // If it looks like a Favor/Hinder formula and the operator matches
+          else if (isFavoredContext && previousOperator === '+') {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-fav-bg.webp`;
+          }
+          else if (isHinderedContext && previousOperator === '-') {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-hind-bg.webp`;
           }
         }
 
+        // Apply Size Class based on context (Damage vs Check)
+        const sizeClass = isDamage ? 'die-type-damage' : 'die-type-check';
+
         for (const result of term.results) {
-          if (previousOperator && previousOperator !== '+') {
+        
+          // Show '+' if Favored, Show '-' if Hindered
+          const shouldShowPlus = previousOperator === '+' && isFavoredContext;
+          const shouldShowMinus = previousOperator === '-';
+
+          if (shouldShowMinus) {
+            parts.push(`<span class="roll-operator" style="font-weight:bold; font-size: 20px;">-</span>`);
+          } 
+          else if (shouldShowPlus) {
+            parts.push(`<span class="roll-operator" style="font-weight:bold; font-size: 20px;">+</span>`);
+          }
+          else if (previousOperator && previousOperator !== '+') {
+            // Fallback for other weird operators like * or /
             parts.push(`<span class="roll-operator">${previousOperator}</span>`);
           }
+
           const isExploded = result.exploded;
           
-          // FIX: Changed fa-certificate to fa-burst
           parts.push(`
-            <div class="vb-die-wrapper" data-faces="${dieType}">
-               <div class="vb-die-bg dmg-pool" style="background-image: url('${dieIcon}')"></div>
-               <span class="vb-die-val">${result.result}</span>
-               ${isExploded ? '<i class="fas fa-burst vb-die-explode" title="Exploded!"></i>' : ''}
+            <div class="vb-die-wrapper ${sizeClass}" data-faces="${dieType}">
+              <div class="vb-die-bg dmg-pool" style="background-image: url('${dieIcon}')"></div>
+              <span class="vb-die-val">${result.result}</span>
+              ${isExploded ? '<i class="fas fa-burst vb-die-explode" title="Exploded!"></i>' : ''}
             </div>
           `);
-          previousOperator = '+';
+          
+          // Reset operator
+          previousOperator = ''; // Standard logic assumes addition between multiple dice of same term
         }
-      } else if (term.constructor.name === 'NumericTerm') {
+      } 
+      
+      // 4. Handle Static Numbers (modifiers)
+      else if (term.constructor.name === 'NumericTerm') {
         const value = term.number;
         if (value !== 0) {
-          const operator = value > 0 ? '+' : '';
-          parts.push(`<span class="roll-modifier">${operator}${value}</span>`);
+          // If we have a stored operator (like "-"), use it. Otherwise assume "+" for positive numbers.
+          const displayOp = previousOperator || (value >= 0 ? '+' : '');
+          parts.push(`<span class="roll-modifier">${displayOp}${Math.abs(value)}</span>`);
         }
         previousOperator = '';
       }
@@ -159,14 +204,20 @@ export class VagabondChatCard {
   /* -------------------------------------------- */
   
   async render() {
+      // 1. Attack/Skill Rolls (isDamage = false)
       if (this.data.roll) {
           const f = this.data.roll.formula || '';
           this.data.isFavored = f.includes('+1d6') || f.includes('+ 1d6');
           this.data.isHindered = f.includes('-1d6') || f.includes('- 1d6');
-          this.data.rollDiceDisplay = this.constructor.formatRollWithDice(this.data.roll);
+          
+          // Pass FALSE so it uses Fav/Hind images
+          this.data.rollDiceDisplay = this.constructor.formatRollWithDice(this.data.roll, false);
       }
+      
+      // 2. Damage Rolls (isDamage = true)
       if (this.data.damage?.roll) {
-           this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll);
+           // Pass TRUE so it ignores Fav/Hind images and adds 'die-type-damage' class
+           this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll, true);
       }
       
       this.data.config = CONFIG.VAGABOND;

@@ -687,8 +687,7 @@
 }
 .vagabond-chat-card-v2 .card-body {
   background-image: url("../assets/ui/chat/card-bg.webp");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   padding: 0;
   border: 2px solid var(--c-yellow-text);
   border-radius: 2px;
@@ -795,9 +794,9 @@
 }
 .vagabond-chat-card-v2 .modifier-badge {
   position: relative;
-  bottom: -18px;
+  bottom: -16px;
   margin-left: auto;
-  margin-right: 3px;
+  margin-right: 5px;
   z-index: 5;
   width: 120px;
   height: 30px;
@@ -813,19 +812,17 @@
 .vagabond-chat-card-v2 .modifier-badge.favored {
   background-image: url("../assets/ui/chat/favored-bg.webp");
   color: #000;
-  transform: rotate(1deg);
 }
 .vagabond-chat-card-v2 .modifier-badge.hindered {
   background-image: url("../assets/ui/chat/hindered-bg.webp");
   color: #fff;
-  transform: rotate(-1deg);
 }
 .vagabond-chat-card-v2 .roll-strip {
   background-image: url("../assets/ui/chat/roll-bg.webp");
   background-size: 100% 100%;
   background-position: center;
-  margin: -3px -12px;
-  padding: 5px 12px;
+  margin: 0 -2px 0 -2px;
+  padding: 0 5px 0 2px;
   display: flex;
   align-items: center; /* Vertically center everything */
   justify-content: flex-start; /* FIX: Pack items to the left */
@@ -863,9 +860,10 @@
   max-width: 165px;
   min-width: 130px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   padding-left: 8px;
   padding-right: 12px;
+  padding-top: 2px;
   white-space: nowrap;
   gap: 2px;
 }
@@ -1114,8 +1112,8 @@
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button {
   flex: 1;
-  background: var(--c-save-yellow);
-  border: 1px solid var(--c-bg-lite);
+  background-image: url("../assets/ui/chat/yellow-button.webp");
+  border: none;
   color: var(--c-dark-blue);
   padding: 6px 2px;
   font-size: 12px;
@@ -1127,7 +1125,7 @@
   align-items: center;
   gap: 4px;
   white-space: nowrap;
-  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover {
   filter: brightness(0.8);
@@ -1194,17 +1192,37 @@
   margin: 4px;
   color: var(--c-damage-orange);
 }
+.roll-dice-container .roll-operator,
+.damage-dice-list .roll-operator {
+  font-size: large;
+  color: #fff;
+}
 
+/* Default Wrapper (Base Styles) */
 .vb-die-wrapper {
   position: relative !important;
-  width: 50px !important;
-  height: 50px !important;
   display: flex;
-  flex: 0 1 auto;
   align-items: center;
   justify-content: center;
   z-index: 1;
   padding-bottom: 3px;
+  /* 1. ATTACK ROLL STRIP DICE (Standard Size) */
+  /* 2. DAMAGE SECTION DICE (Smaller Size) */
+}
+.vb-die-wrapper.die-type-check {
+  width: 50px !important;
+  height: 50px !important;
+}
+.vb-die-wrapper.die-type-check .vb-die-val {
+  font-size: 32px;
+}
+.vb-die-wrapper.die-type-damage {
+  width: 40px !important; /* Make them smaller */
+  height: 40px !important;
+  /* Smaller text */
+}
+.vb-die-wrapper.die-type-damage .vb-die-val {
+  font-size: 28px;
 }
 
 .vb-die-wrapper .vb-die-bg {

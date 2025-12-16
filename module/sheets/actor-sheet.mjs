@@ -3485,8 +3485,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       rollFormula += ` + ${checkBonus}`;
     }
 
+    // 1. Dynamic Import the Dice Appearance Helper
+    const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
+
+    // 2. Create the roll
     const roll = new Roll(rollFormula, this.actor.getRollData());
-    await roll.evaluate();
+    
+    // 3. Evaluate using the custom color logic (Triggering Dice So Nice)
+    await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
 
     const isSuccess = roll.total >= difficulty;
 
