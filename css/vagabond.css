@@ -4481,6 +4481,7 @@
   width: 100%;
   height: 180px;
   flex-shrink: 0;
+  background: var(--vagabond-c-dark);
   background-image: url(../assets/images/npc-portrait-frame.webp);
   background-repeat: no-repeat;
   background-position: top center;
@@ -4524,17 +4525,17 @@
 }
 .vagabond .npc-health-container {
   position: absolute;
-  bottom: -5px;
+  bottom: -9px;
   left: 50%;
   transform: translateX(-50%);
   width: 106%;
   height: auto;
-  padding: 1px 25px 1px 25px;
+  padding: 2px 25px 2px 25px;
   display: flex;
   flex-direction: row;
   gap: 4px;
   justify-content: space-around;
-  align-items: center;
+  align-items: baseline;
   background-image: url(../assets/images/npc-hp-banner.webp);
   background-repeat: no-repeat;
   background-position: center;

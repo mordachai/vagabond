@@ -2734,22 +2734,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await this.actor.update({ 'system.abilities': newAbilities });
   }
 
-
   /**
    * Handle clicking on ability name (send to chat)
-   * @param {Event} event
-   * @param {HTMLElement} target
+   * FIX: Changed .npcAbility() to .npcAction() because that is the real method name.
    */
   static async _onClickAbilityName(event, target) {
     event.preventDefault();
     const index = parseInt(target.dataset.index);
+    
+    // "this" is the Sheet Instance, "this.actor" is the Actor
     const ability = this.actor.system.abilities[index];
 
     if (!ability || !ability.name) return;
 
-    // Use the unified chat card system
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-    await VagabondChatCard.npcAbility(this.actor, ability);
+    // Use the existing static method from ChatCard
+    // Note: npcAction is smart enough to handle "text-only" abilities
+    await VagabondChatCard.npcAction(this.actor, ability, index);
   }
 
   /**
