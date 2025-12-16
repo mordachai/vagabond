@@ -16,1030 +16,644 @@ export class VagabondChatCard {
       outcome: null,
       outcomeClass: null,
       damage: null,
-      metadataBar: null, // Compact metadata bar (below header, before roll)
-      metadata: [],
-      propertyDetails: null, // For expandable property hints
+      metadataTags: [], 
+      propertyDetails: null, 
       description: null,
       footerTags: [],
-      footerActions: [], // For buttons like "Roll Damage"
+      footerActions: [], 
       actor: null,
-      item: null
+      item: null,
+      showDefendOptions: false
     };
   }
 
-  /**
-   * Set the card type
-   * @param {string} type - Card type (stat-roll, save-roll, skill-roll, weapon-attack, spell-cast, npc-action, npc-ability, item-use)
-   * @returns {VagabondChatCard}
-   */
-  setType(type) {
-    this.data.type = type;
-    return this;
+  /* -------------------------------------------- */
+  /* Fluent API Methods                          */
+  /* -------------------------------------------- */
+  setType(t) { this.data.type = t; return this; }
+  setActor(a) { this.data.actor = a; this.data.alias = a?.name; if(!this.data.icon) this.data.icon = a?.img; return this; }
+  setItem(i) { this.data.item = i; if(!this.data.icon) this.data.icon = i?.img; return this; }
+  setTitle(t) { this.data.title = t; return this; }
+  setSubtitle(s) { this.data.subtitle = s; return this; }
+  setDescription(d) { this.data.description = d; return this; }
+  
+  setMetadataTags(tags) { this.data.metadataTags = tags; return this; }
+  setPropertyDetails(props) { this.data.propertyDetails = props; return this; }
+  
+  addRoll(roll, difficulty) {
+      this.data.hasRoll = true;
+      this.data.rollTotal = roll.total;
+      this.data.difficulty = difficulty;
+      this.data.roll = roll;
+      return this;
   }
-
-  /**
-   * Set the actor for this card
-   * @param {VagabondActor} actor - The actor
-   * @returns {VagabondChatCard}
-   */
-  setActor(actor) {
-    this.data.actor = actor;
-    // Default icon to actor's image if not set
-    if (!this.data.icon) {
-      this.data.icon = actor?.img;
-    }
-    return this;
+  
+  setOutcome(outcome, isCritical) {
+      this.data.outcome = outcome;
+      this.data.isCritical = isCritical;
+      return this;
   }
-
-  /**
-   * Set the item for this card (weapon, spell, etc.)
-   * @param {VagabondItem} item - The item
-   * @returns {VagabondChatCard}
-   */
-  setItem(item) {
-    this.data.item = item;
-    // Default icon to item's image if not set
-    if (!this.data.icon) {
-      this.data.icon = item?.img;
-    }
-    return this;
-  }
-
-  /**
-   * Set the card title
-   * @param {string} title - The title text
-   * @returns {VagabondChatCard}
-   */
-  setTitle(title) {
-    this.data.title = title;
-    return this;
-  }
-
-  /**
-   * Set the card subtitle
-   * @param {string} subtitle - The subtitle text
-   * @returns {VagabondChatCard}
-   */
-  setSubtitle(subtitle) {
-    this.data.subtitle = subtitle;
-    return this;
-  }
-
-  /**
-   * Set the card icon
-   * @param {string} icon - Path to icon image
-   * @returns {VagabondChatCard}
-   */
-  setIcon(icon) {
-    this.data.icon = icon;
-    return this;
-  }
-
-  /**
-   * Add a roll result
-   * @param {Roll} roll - The Roll object
-   * @param {number} difficulty - The difficulty number (optional)
-   * @returns {VagabondChatCard}
-   */
-  addRoll(roll, difficulty = null) {
-    this.data.hasRoll = true;
-    this.data.rollTotal = roll.total;
-    this.data.rollFormula = roll.formula;
-    this.data.difficulty = difficulty;
-    this.data.roll = roll; // Store the roll object for later use
-    return this;
-  }
-
-  /**
-   * Set the outcome of a roll
-   * @param {string} outcome - Outcome text (SUCCESS, FAIL, HIT, MISS, CRITICAL, etc.)
-   * @param {boolean} isCritical - Whether this is a critical result
-   * @returns {VagabondChatCard}
-   */
-  setOutcome(outcome, isCritical = false) {
-    this.data.outcome = outcome;
-
-    // Set outcome class for styling
-    if (isCritical) {
-      this.data.outcomeClass = 'critical';
-    } else if (outcome === 'SUCCESS' || outcome === 'HIT') {
-      this.data.outcomeClass = 'success';
-    } else if (outcome === 'FAIL' || outcome === 'MISS') {
-      this.data.outcomeClass = 'failure';
-    } else {
-      this.data.outcomeClass = 'neutral';
-    }
-
-    return this;
-  }
-
-  /**
-   * Add damage information
-   * @param {Roll|number} damageRoll - The damage Roll object or number
-   * @param {string} damageType - Type of damage label (Physical, Fire, etc.)
-   * @param {boolean} isCritical - Whether this is critical damage
-   * @param {string} damageTypeKey - Optional damage type key for icon lookup (physical, fire, etc.)
-   * @returns {VagabondChatCard}
-   */
+  
   addDamage(damageRoll, damageType = 'Physical', isCritical = false, damageTypeKey = null) {
-    // Look up Font Awesome icon class if we have a key
     let damageIconClass = null;
-    if (damageTypeKey && CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
-      damageIconClass = CONFIG.VAGABOND.damageTypeIcons[damageTypeKey];
+
+    // FIX: Normalize the key to lowercase to match CONFIG.VAGABOND.damageTypeIcons keys
+    // If damageTypeKey is null, fallback to using the damageType label (lowercased)
+    const rawKey = damageTypeKey || damageType || 'physical';
+    const key = rawKey.toLowerCase();
+
+    // Lookup the icon
+    if (CONFIG.VAGABOND?.damageTypeIcons?.[key]) {
+      damageIconClass = CONFIG.VAGABOND.damageTypeIcons[key];
+    } else {
+      // Fallback defaults
+      damageIconClass = CONFIG.VAGABOND?.damageTypeIcons?.['physical'] || 'fas fa-burst';
     }
 
     this.data.damage = {
       total: typeof damageRoll === 'number' ? damageRoll : damageRoll.total,
       formula: typeof damageRoll === 'number' ? null : damageRoll.formula,
-      type: damageType,
-      typeKey: damageTypeKey,
+      type: damageType, // Keep the readable label (e.g. "Piercing")
+      typeKey: key,     // Keep the normalized key (e.g. "piercing")
       iconClass: damageIconClass,
       isCritical: isCritical,
       roll: typeof damageRoll === 'number' ? null : damageRoll
     };
     return this;
   }
+  
+  addFooterAction(html) { this.data.footerActions.push(html); return this; }
 
-  /**
-   * Add a metadata item
-   * @param {string} label - The label
-   * @param {string} value - The value
-   * @returns {VagabondChatCard}
-   */
-  addMetadata(label, value) {
-    this.data.metadata.push({ label, value });
-    return this;
-  }
+  /* -------------------------------------------- */
+  /* Static Helpers                              */
+  /* -------------------------------------------- */
 
-  /**
-   * Set the description (enriched HTML)
-   * @param {string} description - Enriched HTML description
-   * @returns {VagabondChatCard}
-   */
-  setDescription(description) {
-    this.data.description = description;
-    return this;
-  }
-
-  /**
-   * Add footer tags
-   * @param {string[]} tags - Array of tag strings
-   * @returns {VagabondChatCard}
-   */
-  addTags(tags) {
-    this.data.footerTags = this.data.footerTags.concat(tags);
-    return this;
-  }
-
-  /**
-   * Add a single footer tag
-   * @param {string} tag - Tag string
-   * @returns {VagabondChatCard}
-   */
-  addTag(tag) {
-    this.data.footerTags.push(tag);
-    return this;
-  }
-
-  /**
-   * Set the metadata bar (compact info below header, before roll)
-   * @param {Object} metadataBar - Metadata bar configuration
-   * @returns {VagabondChatCard}
-   */
-  setMetadataBar(metadataBar) {
-    this.data.metadataBar = metadataBar;
-    return this;
-  }
-
-  /**
-   * Set property details for expandable accordion (weapon properties with hints)
-   * @param {Array<Object>} properties - Array of {name, hint} objects
-   * @returns {VagabondChatCard}
-   */
-  setPropertyDetails(properties) {
-    this.data.propertyDetails = properties;
-    return this;
-  }
-
-  /**
-   * Add a footer action (button HTML)
-   * @param {string} actionHtml - HTML string for the action button
-   * @returns {VagabondChatCard}
-   */
-  addFooterAction(actionHtml) {
-    this.data.footerActions.push(actionHtml);
-    return this;
-  }
-
-  /**
-   * Build the card data
-   * @returns {Object} Card data object
-   */
-  build() {
-    return this.data;
-  }
-
-  /**
-   * Extract the d20 result from a roll (for critical checking)
-   * @param {Roll} roll - The Roll object
-   * @param {Actor} actor - The actor (for critNumber)
-   * @returns {boolean} Whether the d20 result is a critical
-   */
   static isRollCritical(roll, actor) {
     const critNumber = actor?.system?.critNumber || 20;
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     return d20Result >= critNumber;
-  }
+  } 
 
-  /**
-   * Format a roll result with die images
-   * @param {Roll} roll - The Roll object
-   * @returns {string} HTML string with die results
-   */
-  static formatRollWithDice(roll) {
+
+  static formatRollWithDice(roll, isDamage = false) {
     if (!roll) return '';
 
     const parts = [];
     let previousOperator = '';
 
+    // 1. Analyze Formula Context
+    // We remove spaces to make matching easier (e.g. "1d20 + 1d6" becomes "1d20+1d6")
+    const formula = (roll.formula || '').replace(/\s/g, ''); 
+    
+    // Check if the global formula suggests a favored/hindered roll
+    // This helps us guess intent even if flavor text is missing
+    const isFavoredContext = !isDamage && (formula.includes('+1d6') || formula.includes('+1d6[favored]'));
+    const isHinderedContext = !isDamage && (formula.includes('-1d6') || formula.includes('-1d6[hindered]'));
+
     for (const term of roll.terms) {
-      // Handle operators
-      if (typeof term === 'string') {
-        previousOperator = term;
-        continue;
+      
+      // 2. Handle Operators (THE V13 FIX)
+      // We check for 'OperatorTerm' class name OR if it is a string
+      if (typeof term === 'string' || term.constructor.name === 'OperatorTerm') {
+        const op = typeof term === 'string' ? term : term.operator;
+        previousOperator = op.trim();
+        continue; 
       }
 
-      // Handle dice terms
+      // 3. Handle Dice
       if (term.constructor.name === 'Die') {
         const dieType = term.faces;
-        const dieIcon = `systems/vagabond/assets/ui/dice/d${dieType}-bg.webp`;
+        
+        // Default Icon
+        let dieIcon = `systems/vagabond/assets/ui/dice/d${dieType}-bg.webp`;
+
+        // FAVORED / HINDERED LOGIC
+        // Only applies to d6s in a non-damage context (Attack/Skill rolls)
+        if (dieType === 6 && !isDamage) {
+          const flavor = (term.options?.flavor || '').toLowerCase();
+          
+          // A. Explicit Flavor Check (Best reliability)
+          if (flavor.includes('fav')) {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-fav-bg.webp`;
+          } else if (flavor.includes('hind')) {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-hind-bg.webp`;
+          }
+          
+          // B. Contextual Operator Check (Fallback)
+          // If it looks like a Favor/Hinder formula and the operator matches
+          else if (isFavoredContext && previousOperator === '+') {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-fav-bg.webp`;
+          }
+          else if (isHinderedContext && previousOperator === '-') {
+              dieIcon = `systems/vagabond/assets/ui/dice/d6-hind-bg.webp`;
+          }
+        }
+
+        // Apply Size Class based on context (Damage vs Check)
+        const sizeClass = isDamage ? 'die-type-damage' : 'die-type-check';
 
         for (const result of term.results) {
-          if (previousOperator && previousOperator !== '+') {
+        
+          // Show '+' if Favored, Show '-' if Hindered
+          const shouldShowPlus = previousOperator === '+' && isFavoredContext;
+          const shouldShowMinus = previousOperator === '-';
+
+          if (shouldShowMinus) {
+            parts.push(`<span class="roll-operator" style="font-weight:bold; font-size: 20px;">-</span>`);
+          } 
+          else if (shouldShowPlus) {
+            parts.push(`<span class="roll-operator" style="font-weight:bold; font-size: 20px;">+</span>`);
+          }
+          else if (previousOperator && previousOperator !== '+') {
+            // Fallback for other weird operators like * or /
             parts.push(`<span class="roll-operator">${previousOperator}</span>`);
           }
+
+          const isExploded = result.exploded;
+          
           parts.push(`
-            <span class="roll-die" data-die="d${dieType}" style="background-image: url('${dieIcon}')">
-              ${result.result}
-            </span>
+            <div class="vb-die-wrapper ${sizeClass}" data-faces="${dieType}">
+              <div class="vb-die-bg dmg-pool" style="background-image: url('${dieIcon}')"></div>
+              <span class="vb-die-val">${result.result}</span>
+              ${isExploded ? '<i class="fas fa-burst vb-die-explode" title="Exploded!"></i>' : ''}
+            </div>
           `);
-          previousOperator = '+';
+          
+          // Reset operator
+          previousOperator = ''; // Standard logic assumes addition between multiple dice of same term
         }
-      }
-      // Handle numeric terms (modifiers)
+      } 
+      
+      // 4. Handle Static Numbers (modifiers)
       else if (term.constructor.name === 'NumericTerm') {
         const value = term.number;
         if (value !== 0) {
-          const operator = value > 0 ? '+' : '';
-          parts.push(`<span class="roll-modifier">${operator}${value}</span>`);
+          // If we have a stored operator (like "-"), use it. Otherwise assume "+" for positive numbers.
+          const displayOp = previousOperator || (value >= 0 ? '+' : '');
+          parts.push(`<span class="roll-modifier">${displayOp}${Math.abs(value)}</span>`);
         }
         previousOperator = '';
       }
     }
-
     return parts.join(' ');
   }
 
-/**
-   * Render the card to HTML
-   * @returns {Promise<string>} Rendered HTML
-   */
+  /* -------------------------------------------- */
+  /* Render & Send                               */
+  /* -------------------------------------------- */
+  
   async render() {
-    // 1. Process Main Roll (Attack/Skill/Save)
-    if (this.data.roll) {
-      // Robust check: removes all spaces from formula before checking
-      // This handles "+1d6", "+ 1d6", and " +  1d6" equally well.
-      const cleanFormula = (this.data.roll.formula || '').replace(/\s/g, '');
+      // 1. Attack/Skill Rolls (isDamage = false)
+      if (this.data.roll) {
+          const f = this.data.roll.formula || '';
+          this.data.isFavored = f.includes('+1d6') || f.includes('+ 1d6');
+          this.data.isHindered = f.includes('-1d6') || f.includes('- 1d6');
+          
+          // Pass FALSE so it uses Fav/Hind images
+          this.data.rollDiceDisplay = this.constructor.formatRollWithDice(this.data.roll, false);
+      }
       
-      this.data.isFavored = cleanFormula.includes('+1d6');
-      this.data.isHindered = cleanFormula.includes('-1d6');
-
-      // Debugging
-      if (this.data.isFavored || this.data.isHindered) {
-        console.log("Vagabond | Card is Favored/Hindered:", { 
-          fav: this.data.isFavored, 
-          hind: this.data.isHindered 
-        });
+      // 2. Damage Rolls (isDamage = true)
+      if (this.data.damage?.roll) {
+           // Pass TRUE so it ignores Fav/Hind images and adds 'die-type-damage' class
+           this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll, true);
+      }
+      
+      this.data.config = CONFIG.VAGABOND;
+      const template = 'systems/vagabond/templates/chat/chat-card.hbs';
+      return await foundry.applications.handlebars.renderTemplate(template, this.data);
+  }
+  
+  async send() {
+      const content = await this.render();
+      const msgData = {
+          content: content,
+          speaker: ChatMessage.getSpeaker({ actor: this.data.actor }),
+          style: CONST.CHAT_MESSAGE_STYLES.OTHER,
+          rolls: this.data.roll ? [this.data.roll] : []
+      };
+      if (this.data.damage?.roll) msgData.rolls.push(this.data.damage.roll);
+      
+      if (this.data.item && this.data.actor) {
+        msgData.flags = {
+            vagabond: {
+                actorId: this.data.actor.id,
+                itemId: this.data.item.id
+            }
+        };
       }
 
-      this.data.rollDiceDisplay = VagabondChatCard.formatRollWithDice(this.data.roll);
-    }
-
-    // 2. Process Damage Roll (YOU WERE MISSING THIS BLOCK)
-    if (this.data.damage?.roll) {
-      this.data.damage.diceDisplay = VagabondChatCard.formatRollWithDice(this.data.damage.roll);
-    }
-
-    // 3. Finalize and Render
-    this.data.config = CONFIG.VAGABOND;
-
-    const templatePath = 'systems/vagabond/templates/chat/chat-card.hbs';
-    return await foundry.applications.handlebars.renderTemplate(templatePath, this.data);
+      return await ChatMessage.create(msgData);
   }
 
-  /**
-   * Send the card to chat
-   * @returns {Promise<ChatMessage>}
-   */
-  async send() {
-    const content = await this.render();
+  /* -------------------------------------------- */
+  /* MASTER METHOD                               */
+  /* -------------------------------------------- */
+  
+  static async createActionCard({
+    actor, item, title, subtitle, rollData, tags = [], 
+    damageRoll, damageType = 'physical', description = '', 
+    hasDefenses = false, attackType = 'melee', footerActions = [],
+    propertyDetails = null
+  }) {
+      const card = new VagabondChatCard();
+      const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
 
-    const messageData = {
-      content: content,
-      speaker: ChatMessage.getSpeaker({ actor: this.data.actor }),
-      style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-      rollMode: game.settings.get('core', 'rollMode'),
-    };
+      // LOGIC: The "First Set Wins" Rule
+      // Whichever method (setItem or setActor) runs first establishes the icon.
+      
+      let prioritizeActor = false;
 
-    // If there's a roll, include it in the message
-    if (this.data.roll) {
-      messageData.rolls = [this.data.roll];
-    }
+      if (iconStyle === 'smart' && item) {
+          // Smart Mode: Prioritize Actor Face for "Active" things (Weapons, Spells)
+          // But keep Item Icon for "Passive/Consumable" things (Gear, Potions)
+          const isWeapon = item.type === 'weapon' || (item.type === 'equipment' && item.system.equipmentType === 'weapon');
+          const isSpell = item.type === 'spell';
+          
+          if (isWeapon || isSpell) {
+              prioritizeActor = true;
+          }
+      }
 
-    // If there's damage roll, include it too
-    if (this.data.damage?.roll) {
-      if (!messageData.rolls) messageData.rolls = [];
-      messageData.rolls.push(this.data.damage.roll);
-    }
+      // EXECUTE PRIORITY
+      if (prioritizeActor) {
+          // 1. Face First (Attacks/Spells in Smart Mode)
+          card.setActor(actor).setItem(item);
+      } else {
+          // 2. Item First (Default Mode OR Gear/Potions)
+          card.setItem(item).setActor(actor);
+      }
 
-    // Store weapon/item ID and actor ID in flags for material weakness checks
-    if (this.data.item && this.data.actor) {
-      messageData.flags = {
-        vagabond: {
-          weaponId: this.data.item.id,
-          actorId: this.data.actor.id
-        }
-      };
-    }
+      // Continue setup...
+      card.setTitle(title).setSubtitle(subtitle);
 
-    return await ChatMessage.create(messageData);
+      // 1. Handle Main Roll
+      if (rollData) {
+          const { roll, difficulty, isHit, isCritical } = rollData;
+          let label = 'NEUTRAL';
+          if (typeof isHit !== 'undefined') label = isHit ? 'HIT' : 'MISS';
+          else if (typeof rollData.isSuccess !== 'undefined') label = rollData.isSuccess ? 'PASS' : 'FAIL';
+          
+          card.addRoll(roll, difficulty).setOutcome(label, isCritical);
+          
+          // Extract Skill Label (moves to roll strip)
+          const skillIndex = tags.findIndex(t => t.cssClass === 'tag-skill');
+          if (skillIndex > -1) {
+              card.data.rollSkillLabel = tags[skillIndex].label;
+              tags.splice(skillIndex, 1);
+          }
+      }
+
+      // 2. SPLIT TAGS: Standard vs Properties
+      const standardTags = [];
+      const propertyTags = [];
+
+      tags.forEach(tag => {
+          // Check if it's a property tag
+          if (tag.cssClass && tag.cssClass.includes('tag-property')) {
+              propertyTags.push(tag);
+          } else {
+              standardTags.push(tag);
+          }
+      });
+
+      // Assign to card data
+      card.data.standardTags = standardTags;
+      card.data.propertyTags = propertyTags;
+      
+      // Also set the full list just in case, though we primarily use the split ones now
+      card.setMetadataTags(tags); 
+
+      if (propertyDetails) card.setPropertyDetails(propertyDetails);
+      if (description) card.setDescription(description);
+
+      // 3. Handle Damage & Buttons
+      if (damageRoll) {
+          const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+          
+          // Fix: Normalize key for icon lookup
+          const rawKey = damageType || 'physical';
+          const key = rawKey.toLowerCase();
+          const dLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[key]) || damageType;
+          const isCrit = rollData?.isCritical || false;
+          
+          card.addDamage(damageRoll, dLabel, isCrit, key);
+          
+          const isHealing = damageType.toLowerCase() === 'healing';
+          
+          let btns = isHealing 
+            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id)
+            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType);
+            
+          card.addFooterAction(btns);
+          
+          if (!isHealing && hasDefenses) card.data.showDefendOptions = true;
+
+      } else if (rollData?.isHit && item && !damageRoll) {
+           const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+           const formula = item.system.currentDamage || '1d6';
+           const btn = VagabondDamageHelper.createDamageButton(actor.id, item.id, formula, {
+               type: item.type, isCritical: rollData.isCritical, damageType, attackType
+           });
+           card.addFooterAction(btn);
+      }
+      
+      if (footerActions.length) footerActions.forEach(a => card.addFooterAction(a));
+
+      return await card.send();
   }
+  
+  /* -------------------------------------------- */
+  /* ADAPTER METHODS                             */
+  /* -------------------------------------------- */
 
-  /**
-   * Static helper: Create and send a stat roll card
-   * @param {VagabondActor} actor - The actor
-   * @param {string} statKey - The stat key (might, dexterity, etc.)
-   * @param {Roll} roll - The roll result
-   * @param {number} difficulty - The difficulty
-   * @param {boolean} isSuccess - Whether the roll succeeded
-   * @returns {Promise<ChatMessage>}
-   */
-  static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
-    const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[statKey]) || statKey;
-    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
-    const card = new VagabondChatCard()
-      .setType('stat-roll')
-      .setActor(actor)
-      .setTitle(`${statLabel} Check`)
-      .setSubtitle(actor.name)
-      .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
-
-    // Add stat value metadata
-    const statValue = actor.system.stats[statKey]?.value || 0;
-    card.addMetadata('Stat Value', statValue.toString());
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a save roll card
-   * @param {VagabondActor} actor - The actor
-   * @param {string} saveKey - The save key (reflex, endure, will)
-   * @param {Roll} roll - The roll result
-   * @param {number} difficulty - The difficulty
-   * @param {boolean} isSuccess - Whether the roll succeeded
-   * @returns {Promise<ChatMessage>}
-   */
-  static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
-    const save = actor.system.saves?.[saveKey];
-    const saveLabel = save?.label || saveKey;
-    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
-
-    const card = new VagabondChatCard()
-      .setType('save-roll')
-      .setActor(actor)
-      .setTitle(`${saveLabel} Save`)
-      .setSubtitle(actor.name)
-      .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a skill roll card
-   * @param {VagabondActor} actor - The actor
-   * @param {string} skillKey - The skill key
-   * @param {Roll} roll - The roll result
-   * @param {number} difficulty - The difficulty
-   * @param {boolean} isSuccess - Whether the roll succeeded
-   * @returns {Promise<ChatMessage>}
-   */
   static async skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
-    // Check if it's a regular skill or weapon skill
     const skill = actor.system.skills?.[skillKey] || actor.system.weaponSkills?.[skillKey];
     const skillLabel = skill?.label || skillKey;
-    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
-
-    const card = new VagabondChatCard()
-      .setType('skill-roll')
-      .setActor(actor)
-      .setTitle(`${skillLabel} Check`)
-      .setSubtitle(actor.name)
-      .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
-
+    const isCritical = this.isRollCritical(roll, actor);
+    
+    const tags = [];
+    tags.push({ label: skillLabel, cssClass: 'tag-skill' });
+    if (skill?.stat) {
+        const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[skill.stat]?.abbr) || skill.stat;
+        tags.push({ label: statLabel, cssClass: 'tag-stat' });
+    }
     if (skill) {
-      if (skill.stat) {
-        const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[skill.stat]) || skill.stat;
-        card.addMetadata('Skill', `${skillLabel} (${statLabel})`);
-      }
-      card.addMetadata('Trained', skill.trained ? 'Yes' : 'No');
+        tags.push({ label: skill.trained ? 'Trained' : 'Untrained', cssClass: 'tag-info' });
     }
 
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a weapon attack card
-   * @param {VagabondActor} actor - The actor
-   * @param {VagabondItem} weapon - The weapon item
-   * @param {Object} attackResult - The attack result from weapon.rollAttack()
-   * @param {Roll} damageRoll - Optional damage roll if attack hit
-   * @returns {Promise<ChatMessage>}
-   */
-  static async weaponAttack(actor, weapon, attackResult, damageRoll = null) {
-    const { roll, difficulty, isHit, isCritical, weaponSkill, weaponSkillKey } = attackResult;
-
-    const card = new VagabondChatCard()
-      .setType('weapon-attack')
-      .setActor(actor)
-      .setItem(weapon)
-      .setTitle(`${weapon.name} Attack`)
-      .setSubtitle(actor.name)
-      .addRoll(roll, difficulty)
-      .setOutcome(isHit ? 'HIT' : 'MISS', isCritical);
-
-    // Build metadata bar
-    const metadataBar = {};
-
-    // Skill
-    const skillLabel = weaponSkill?.label || weaponSkillKey;
-    metadataBar.skill = skillLabel;
-
-    // Damage
-    if (weapon.system.currentDamage) {
-      metadataBar.damage = weapon.system.currentDamage;
-
-      // Damage type icon
-      const damageTypeKey = weapon.system.damageType || 'physical';
-      if (CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
-        metadataBar.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons[damageTypeKey];
-      }
-
-      // Grip icon (Font Awesome icons)
-      if (weapon.system.grip) {
-        const gripMap = {
-          '1H': 'fas fa-hand-fist',
-          '2H': 'fas fa-hands',
-          'V': 'fas fa-hand-peace'
-        };
-        metadataBar.gripIcon = gripMap[weapon.system.grip];
-      }
-    }
-
-    // Range (full word display)
-    if (weapon.system.rangeDisplay) {
-      metadataBar.range = weapon.system.rangeDisplay;
-    }
-
-    card.setMetadataBar(metadataBar);
-
-    // Add properties with expandable hints (stays at bottom)
-    if (weapon.system.properties && weapon.system.properties.length > 0) {
-      const propertyDetails = weapon.system.properties.map(prop => ({
-        name: prop,
-        hint: game.i18n.localize(`VAGABOND.Weapon.PropertyHints.${prop}`) || ''
-      }));
-      card.setPropertyDetails(propertyDetails);
-      // Also add the simple display as metadata for the label
-      card.addMetadata('Properties', weapon.system.propertiesDisplay);
-    }
-
-    // Determine attack type from weapon skill key
-    const attackType = (weaponSkillKey === 'ranged') ? 'ranged' : 'melee';
-
-    // Add damage if provided AND attack hit
-    if (damageRoll && isHit) {
-      // Get damage type from weapon, default to 'physical' if not set
-      const damageType = weapon.system.damageType || 'physical';
-      const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
-      card.addDamage(damageRoll, damageTypeLabel, isCritical, damageType);
-
-      // Add defend info and save buttons when damage is auto-rolled on a hit
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-      const isHealing = damageType?.toLowerCase() === 'healing';
-
-      if (!isHealing) {
-        // Add defend info section to description
-        const defendInfoHTML = VagabondDamageHelper._renderDefendInfoSection(attackType);
-        card.setDescription((card.data.description || '') + defendInfoHTML);
-      }
-
-      // Add save buttons (or healing button for healing damage)
-      const buttonsHTML = isHealing
-        ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, damageTypeLabel, actor.id, weapon.id)
-        : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, weapon.id, attackType);
-      card.addFooterAction(buttonsHTML);
-    } else if (isHit) {
-      // If hit but no damage roll (auto-roll disabled), add damage button
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-      const damageFormula = weapon.system.currentDamage;
-      const statKey = weaponSkill?.stat || null;
-      const damageButton = VagabondDamageHelper.createDamageButton(
-        actor.id,
-        weapon.id,
-        damageFormula,
-        {
-          type: 'weapon',
-          isCritical: isCritical,
-          statKey: statKey,
-          damageType: weapon.system.damageType,
-          attackType: attackType
-        }
-      );
-      card.addFooterAction(damageButton);
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a spell cast card
-   * @param {VagabondActor} actor - The actor
-   * @param {VagabondItem} spell - The spell item
-   * @param {Object} spellCastResult - The spell cast result
-   * @param {Roll} damageRoll - Optional damage roll if spell succeeded
-   * @returns {Promise<ChatMessage>}
-   */
-  static async spellCast(actor, spell, spellCastResult, damageRoll = null) {
-    const {
-      roll,
-      difficulty,
-      isSuccess,
-      isCritical,
-      manaSkill,
-      manaSkillKey,
-      spellState,
-      costs,
-      deliveryText
-    } = spellCastResult;
-
-    const card = new VagabondChatCard()
-      .setType('spell-cast')
-      .setActor(actor)
-      .setItem(spell)
-      .setTitle(`${spell.name}`)
-      .setSubtitle(actor.name)
-      .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', isCritical);
-
-    // Build metadata bar
-    const metadataBar = {};
-
-    // Skill
-    const skillLabel = manaSkill?.label || manaSkillKey;
-    metadataBar.skill = skillLabel;
-
-    // Damage
-    if (spell.system.damageType !== '-') {
-      metadataBar.damage = `${spellState.damageDice}d6`;
-
-      // Damage type icon
-      const damageTypeKey = spell.system.damageType;
-      if (CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
-        metadataBar.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons[damageTypeKey];
-      }
-    }
-
-    // FX icon - show ONLY if useFx is true
-    if (spellState.useFx) {
-      metadataBar.fxIcon = true;
-    }
-
-    // Delivery (clickable to create measurement template)
-    // See docs/SPELL_TEMPLATES.md for template system details
-    // V14 TODO: Update for Regions API
-    metadataBar.delivery = deliveryText;
-    metadataBar.deliveryType = spellState.deliveryType; // For template creation
-
-    // Mana
-    metadataBar.mana = costs.totalCost.toString();
-    metadataBar.alignManaEnd = true; // Flag to align mana to the end (spell-specific)
-
-    card.setMetadataBar(metadataBar);
-
-    // Add enriched description
-    if (spell.system.description) {
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(spell.system.description, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: spell
-      });
-      card.setDescription(enriched);
-    }
-
-    // Add critical effect if critical and spell has crit text
-    if (isCritical && spell.system.crit && spell.system.crit.trim() !== '') {
-      const critEnriched = await foundry.applications.ux.TextEditor.enrichHTML(spell.system.crit, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: spell
-      });
-      card.setDescription(
-        (card.data.description || '') +
-        `<div class="spell-crit-effect"><strong>Critical Effect:</strong> ${critEnriched}</div>`
-      );
-    }
-
-    // Determine attack type from spell delivery type
-    const deliveryType = spell.system.deliveryType || 'remote';
-    const attackType = CONFIG.VAGABOND?.spellDeliveryAttackTypes?.[deliveryType] || 'ranged';
-
-    // Add damage if provided AND spell succeeded
-    if (damageRoll && isSuccess && spell.system.damageType !== '-') {
-      const damageTypeKey = spell.system.damageType;
-      const damageTypeName = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]);
-      card.addDamage(damageRoll, damageTypeName, isCritical, damageTypeKey);
-
-      // Add defend info and save buttons when damage is auto-rolled on success
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-      const isHealing = damageTypeKey?.toLowerCase() === 'healing';
-
-      if (!isHealing) {
-        // Add defend info section to description
-        const defendInfoHTML = VagabondDamageHelper._renderDefendInfoSection(attackType);
-        card.setDescription((card.data.description || '') + defendInfoHTML);
-      }
-
-      // Add save buttons (or healing button for healing damage)
-      const buttonsHTML = isHealing
-        ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, damageTypeName, actor.id, spell.id)
-        : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageTypeKey, damageRoll, actor.id, spell.id, attackType);
-      card.addFooterAction(buttonsHTML);
-    } else if (isSuccess && spell.system.damageType !== '-') {
-      // If succeeded but no damage roll (auto-roll disabled), add damage button
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-      const damageFormula = `${spellState.damageDice}d6`;
-      const statKey = manaSkill?.stat || null;
-      const damageButton = VagabondDamageHelper.createDamageButton(
-        actor.id,
-        spell.id,
-        damageFormula,
-        {
-          type: 'spell',
-          damageType: spell.system.damageType,
-          isCritical: isCritical,
-          statKey: statKey,
-          attackType: attackType
-        }
-      );
-      card.addFooterAction(damageButton);
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send an NPC action card
-   * @param {VagabondActor} actor - The NPC actor
-   * @param {Object} action - The action object
-   * @param {number} actionIndex - Index of the action in the actions array
-   * @returns {Promise<ChatMessage>}
-   */
-  static async npcAction(actor, action, actionIndex) {
-    const card = new VagabondChatCard()
-      .setType('npc-action')
-      .setActor(actor)
-      .setTitle(action.name || 'Unnamed Action')
-      .setSubtitle(actor.name);
-
-    // Add action metadata
-    if (action.note) {
-      card.addMetadata('Note', action.note);
-    }
-
-    if (action.recharge) {
-      card.addMetadata('Recharge', action.recharge);
-    }
-
-    // Add description if present
-    if (action.description) {
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(action.description, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: actor
-      });
-      card.setDescription(enriched);
-    }
-
-    // Add extra info if present
-    if (action.extraInfo) {
-      const enrichedExtra = await foundry.applications.ux.TextEditor.enrichHTML(action.extraInfo, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: actor
-      });
-      const currentDesc = card.data.description || '';
-      card.setDescription(
-        currentDesc +
-        (currentDesc ? '<hr class="action-divider">' : '') +
-        `<div class="action-extra-info">${enrichedExtra}</div>`
-      );
-    }
-
-    // Add damage buttons (GM-only) if action has damage
-    if (action.flatDamage || action.rollDamage) {
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-
-      // Get damage type label if set
-      let damageTypeLabel = '';
-      if (action.damageType && action.damageType !== '-') {
-        damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[action.damageType]) || action.damageType;
-      }
-
-      // Get attack type from action (default to 'melee' if not set)
-      // castClose is treated as melee for save purposes, castRanged as ranged
-      let attackType = action.attackType || 'melee';
-      if (attackType === 'castClose') {
-        attackType = 'melee';
-      } else if (attackType === 'castRanged') {
-        attackType = 'ranged';
-      }
-
-      // Create GM-only damage buttons
-      if (action.flatDamage) {
-        const flatButton = VagabondDamageHelper.createNPCDamageButton(
-          actor.id,
-          actionIndex,
-          action.flatDamage,
-          'flat',
-          action.damageType || 'physical',
-          damageTypeLabel,
-          attackType
-        );
-        card.addFooterAction(flatButton);
-      }
-
-      if (action.rollDamage) {
-        const rollButton = VagabondDamageHelper.createNPCDamageButton(
-          actor.id,
-          actionIndex,
-          action.rollDamage,
-          'roll',
-          action.damageType || 'physical',
-          damageTypeLabel,
-          attackType
-        );
-        card.addFooterAction(rollButton);
-      }
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send an NPC ability card
-   * @param {VagabondActor} actor - The NPC actor
-   * @param {Object} ability - The ability object
-   * @returns {Promise<ChatMessage>}
-   */
-  static async npcAbility(actor, ability) {
-    const card = new VagabondChatCard()
-      .setType('npc-ability')
-      .setActor(actor)
-      .setTitle(ability.name || 'Unnamed Ability')
-      .setSubtitle(actor.name);
-
-    // Add description if present
-    if (ability.description) {
-      // Use formatted version if available (with dice rolls converted to roll links)
-      const descToEnrich = ability.descriptionFormatted || ability.description;
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(descToEnrich, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: actor
-      });
-      card.setDescription(enriched);
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a feature/trait/perk card to chat
-   * @param {VagabondActor} actor - The actor using the feature
-   * @param {VagabondItem} item - The ancestry/class/perk item
-   * @returns {Promise<ChatMessage>}
-   */
-  static async featureUse(actor, item) {
-    const card = new VagabondChatCard()
-      .setType('item-use')
-      .setItem(item)
-      .setActor(actor)
-      .setTitle(item.name)
-      .setSubtitle(actor.name);
-
-    // Add item type metadata
-    let itemTypeLabel = 'Feature';
-    if (item.type === 'perk') {
-      itemTypeLabel = 'Perk';
-      // Add prerequisites if present
-      const prereqString = item.system.getPrerequisiteString();
-      if (prereqString) {
-        card.addMetadata('Prerequisites', prereqString);
-      }
-    } else if (item.type === 'ancestry') {
-      itemTypeLabel = 'Ancestry';
-      // Add ancestry metadata
-      if (item.system.size) {
-        const sizeLabel = game.i18n.localize(`VAGABOND.Item.Ancestry.Sizes.${item.system.size.charAt(0).toUpperCase() + item.system.size.slice(1)}`);
-        card.addMetadata('Size', sizeLabel);
-      }
-      if (item.system.ancestryType) {
-        card.addMetadata('Type', item.system.ancestryType);
-      }
-    } else if (item.type === 'class') {
-      itemTypeLabel = 'Class';
-      // Add class metadata
-      if (item.system.isSpellcaster) {
-        card.addMetadata('Spellcaster', 'Yes');
-        if (item.system.manaMultiplier) {
-          card.addMetadata('Mana Multiplier', `×${item.system.manaMultiplier}`);
-        }
-      }
-    }
-
-    card.addMetadata('Type', itemTypeLabel);
-
-    // Add description if present
-    if (item.system.description) {
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: item
-      });
-      card.setDescription(enriched);
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a trait or feature card to chat (from ancestry/class data)
-   * @param {VagabondActor} actor - The actor
-   * @param {Object} featureData - The trait/feature data object with {name, description}
-   * @param {VagabondItem} sourceItem - The ancestry or class item
-   * @param {string} type - 'trait' or 'feature'
-   * @returns {Promise<ChatMessage>}
-   */
-  static async featureDataUse(actor, featureData, sourceItem, type) {
-    const card = new VagabondChatCard()
-      .setType('item-use')
-      .setItem(sourceItem)  // Use source item image
-      .setActor(actor)
-      .setTitle(featureData.name)
-      .setSubtitle(actor.name);
-
-    // Add metadata
-    if (type === 'trait') {
-      card.addMetadata('Type', 'Trait');
-      card.addMetadata('Source', sourceItem.name);
-    } else if (type === 'feature') {
-      card.addMetadata('Type', 'Class Feature');
-      card.addMetadata('Source', sourceItem.name);
-      if (featureData.level) {
-        card.addMetadata('Level', featureData.level.toString());
-      }
-    }
-
-    // Add description if present
-    if (featureData.description) {
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(featureData.description, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: sourceItem
-      });
-      card.setDescription(enriched);
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a gear/item use card
-   * @param {VagabondActor} actor - The actor using the item
-   * @param {VagabondItem} item - The gear/alchemical/relic item
-   * @returns {Promise<ChatMessage>}
-   */
-  static async gearUse(actor, item) {
-    const card = new VagabondChatCard()
-      .setType('item-use')
-      .setItem(item)      // Set item first so its image becomes the icon
-      .setActor(actor)    // Set actor second (won't override icon since it's already set)
-      .setTitle(item.name)
-      .setSubtitle(actor.name);
-
-    // Build metadata bar based on equipment type
-    const metadataBar = {};
-
-    if (item.system.equipmentType === 'alchemical') {
-      // Alchemical: "Alchemical item" + type
-      const typeLabel = game.i18n.localize(
-        `VAGABOND.Item.Alchemical.Types.${item.system.alchemicalType.charAt(0).toUpperCase() + item.system.alchemicalType.slice(1)}`
-      );
-      metadataBar.alchemicalType = typeLabel;
-
-      // Add damage if present
-      if (item.system.damageType !== '-' && item.system.damageAmount) {
-        metadataBar.damage = item.system.damageAmount.toString();
-        const damageTypeKey = item.system.damageType;
-        if (CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
-          metadataBar.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons[damageTypeKey];
-        }
-      }
-    } else if (item.system.equipmentType === 'relic') {
-      // Relic: just the lore text (without label)
-      if (item.system.lore) {
-        metadataBar.lore = item.system.lore;
-      }
-    } else if (item.system.equipmentType === 'armor') {
-      // Armor: Rating: # Might: #
-      if (item.system.rating) {
-        metadataBar.rating = item.system.rating.toString();
-      }
-      if (item.system.mightRequirement) {
-        metadataBar.might = item.system.mightRequirement.toString();
-      }
-    } else if (item.system.equipmentType === 'gear') {
-      // Gear: Qty# Slots:# Cost:#
-      if (item.system.quantity) {
-        metadataBar.qty = item.system.quantity.toString();
-      }
-      if (item.system.slots) {
-        metadataBar.slots = item.system.slots.toString();
-      }
-      if (item.system.cost) {
-        metadataBar.cost = item.system.cost.toString();
-      }
-    }
-
-    card.setMetadataBar(metadataBar);
-
-    // Add enriched description
-    if (item.system.description) {
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description, {
-        async: true,
-        secrets: actor.isOwner,
-        relativeTo: item
-      });
-      card.setDescription(enriched);
-    }
-
-    return await card.send();
-  }
-
-  /**
-   * Static helper: Create and send a luck spend card
-   * @param {VagabondActor} actor - The actor spending luck
-   * @param {number} currentLuck - The new current luck value (after spending)
-   * @param {number} maxLuck - The maximum luck value
-   * @returns {Promise<ChatMessage>}
-   */
-  static async luckSpend(actor, currentLuck, maxLuck) {
-    // Prepare luck data
-    const luckData = {
-      actorName: actor.name,
-      icon: actor.img,
-      title: 'Luck Spent',
-      luckData: {
-        currentLuck: currentLuck,
-        maxLuck: maxLuck
-      }
-    };
-
-    // Render the luck spend template
-    const templatePath = 'systems/vagabond/templates/chat/luck-spend-card.hbs';
-    const content = await foundry.applications.handlebars.renderTemplate(templatePath, luckData);
-
-    // Create and send the chat message
-    return await ChatMessage.create({
-      user: game.user.id,
-      speaker: ChatMessage.getSpeaker({ actor: actor }),
-      content: content,
-      style: CONST.CHAT_MESSAGE_STYLES.OTHER
+    return this.createActionCard({
+        actor,
+        title: `${skillLabel} Check`,
+        rollData: { roll, difficulty, isSuccess, isCritical },
+        tags
     });
+  }
+
+  static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
+    const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[statKey]?.long) || statKey;
+    const isCritical = this.isRollCritical(roll, actor);
+    
+    const tags = [];
+    tags.push({ label: statLabel, cssClass: 'tag-skill' });
+    tags.push({ label: `${actor.system.stats[statKey]?.value || 0}`, icon: 'fas fa-hashtag' });
+
+    return this.createActionCard({
+        actor,
+        title: `${statLabel} Check`,
+        rollData: { roll, difficulty, isSuccess, isCritical },
+        tags
+    });
+  }
+
+  static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
+    const saveLabel = actor.system.saves?.[saveKey]?.label || saveKey;
+    const isCritical = this.isRollCritical(roll, actor);
+
+    const tags = [];
+    tags.push({ label: saveLabel, cssClass: 'tag-skill' });
+
+    return this.createActionCard({
+        actor,
+        title: `${saveLabel} Save`,
+        rollData: { roll, difficulty, isSuccess, isCritical },
+        tags
+    });
+  }
+
+  static async weaponAttack(actor, weapon, attackResult, damageRoll) {
+      const { weaponSkill, weaponSkillKey } = attackResult;
+      
+      const tags = [];
+      tags.push({ label: weaponSkill?.label || weaponSkillKey, cssClass: 'tag-skill' });
+      
+      if (weapon.system.currentDamage) {
+          const dType = weapon.system.damageType || 'physical';
+          const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
+          tags.push({ label: weapon.system.currentDamage, icon: icon, cssClass: 'tag-damage' });
+      }
+      if (weapon.system.grip) {
+          const gripMap = { '1H': 'fas fa-hand-fist', '2H': 'fas fa-hands', 'V': 'fas fa-hand-peace' };
+          tags.push({ icon: gripMap[weapon.system.grip], cssClass: 'tag-grip' });
+      }
+      if (weapon.system.rangeDisplay) {
+          tags.push({ label: weapon.system.rangeDisplay, cssClass: 'tag-range' });
+      }
+
+      // PROPERTIES LOGIC
+      let propertyDetails = null;
+      if (weapon.system.properties && weapon.system.properties.length > 0) {
+          const propList = [];
+          
+          weapon.system.properties.forEach(prop => {
+              // 1. Find correct key in Config (handle case sensitivity)
+              // This ensures 'finesse' finds 'Finesse'
+              const configKeys = Object.keys(CONFIG.VAGABOND.weaponProperties);
+              const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
+              
+              // 2. Get Label
+              const labelKey = CONFIG.VAGABOND.weaponProperties[realKey] || `VAGABOND.Weapon.Property.${realKey}`;
+              const label = game.i18n.localize(labelKey);
+
+              // 3. Get Hint (Assuming .Hints convention based on key)
+              // If you have a different structure for descriptions, update the key string below
+              const hintKey = `VAGABOND.Weapon.PropertyHints.${realKey}`; 
+              const hint = game.i18n.localize(hintKey);
+
+              // Add to Tags (Header)
+              tags.push({ label: label, cssClass: 'tag-property' });
+
+              // Add to Details (Accordion)
+              propList.push({ name: label, hint: (hint !== hintKey) ? hint : '' });
+          });
+          
+          propertyDetails = propList;
+      }
+
+      return this.createActionCard({
+          actor, item: weapon, title: `${weapon.name} Attack`,
+          rollData: attackResult,
+          tags,
+          propertyDetails,
+          damageRoll,
+          damageType: weapon.system.damageType || 'physical',
+          hasDefenses: true
+      });
+  }  
+
+  static async spellCast(actor, spell, spellCastResult, damageRoll = null) {
+      const { roll, difficulty, isSuccess, isCritical, manaSkill, costs, deliveryText, spellState } = spellCastResult;
+      
+      const tags = [];
+      
+      // 1. Skill Tag
+      tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
+      
+      // 2. Damage Tag
+      if (spell.system.damageType !== '-') {
+          const dType = spell.system.damageType;
+          const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
+          tags.push({ label: `${spellState.damageDice}d6`, icon, cssClass: 'tag-damage' });
+      }
+
+      // 3. Delivery Tag (THE FIX)
+      // We manually build the data string here to ensure it works reliably in the template
+      if (spellState.deliveryType) {
+          tags.push({ 
+              label: deliveryText, 
+              cssClass: 'tag-delivery template-trigger', // Adds class for listener
+              // Pre-format the attributes as a safe string
+              extraAttributes: `data-delivery-type="${spellState.deliveryType}" data-delivery-text="${deliveryText}"`
+          });
+      } else {
+          tags.push({ label: deliveryText, cssClass: 'tag-delivery' });
+      }
+
+      // 4. Mana Cost Tag
+      tags.push({ label: `${costs.totalCost} Mana`, cssClass: 'tag-mana' });
+
+      return this.createActionCard({
+          actor, item: spell, title: spell.name,
+          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess },
+          tags,
+          damageRoll,
+          damageType: spell.system.damageType,
+          description: spell.system.description,
+          hasDefenses: true
+      });
+  }
+  
+  static async npcAction(actor, action, actionIndex) {
+    const tags = [];
+    
+    // 1. NPC Subtitle (The Actor Name)
+    const subtitle = actor.name;
+
+    // 2. Parse Traits (Tags)
+    // Checks if traits exist as a String ("Undead, Flying") or Array
+    if (action.traits) {
+        const traitList = Array.isArray(action.traits) 
+            ? action.traits 
+            : action.traits.split(',').map(t => t.trim());
+            
+        traitList.forEach(t => {
+            if (t) tags.push({ label: t, cssClass: 'tag-property' }); // Adds standard styling
+        });
+    }
+
+    // 3. Parse Range (if it exists on NPC actions)
+    if (action.range) {
+         tags.push({ label: action.range, cssClass: 'tag-range' });
+    }
+
+    // 4. Recharge Mechanic
+    if (action.recharge) {
+        tags.push({ label: `Recharge ${action.recharge}`, icon: 'fas fa-rotate', cssClass: 'tag-standard' });
+    }
+
+    // 5. Description Enrichment
+    let description = '';
+    if (action.description) {
+      description = await foundry.applications.ux.TextEditor.enrichHTML(action.description, {
+        async: true, secrets: actor.isOwner, relativeTo: actor
+      });
+    }
+    
+    // 6. Extra Info (common in 5e-style NPC blocks)
+    if (action.extraInfo) {
+      const extra = await foundry.applications.ux.TextEditor.enrichHTML(action.extraInfo, { async: true });
+      description += `<hr class="action-divider"><div class="action-extra-info">${extra}</div>`;
+    }
+
+    // 7. Damage Buttons
+    const footerActions = [];
+    // Only verify damage if it's not "-"
+    if ((action.flatDamage || action.rollDamage) && action.damageType !== '-') {
+        const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+        
+        const rawType = action.damageType || 'physical';
+        const dTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType;
+        
+        // Normalize attack type for the helper
+        let attackType = action.attackType || 'melee';
+        if (attackType === 'castClose') attackType = 'melee';
+        else if (attackType === 'castRanged') attackType = 'ranged';
+
+        if (action.flatDamage) {
+            footerActions.push(VagabondDamageHelper.createNPCDamageButton(
+                actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType
+            ));
+        }
+        if (action.rollDamage) {
+            footerActions.push(VagabondDamageHelper.createNPCDamageButton(
+                actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType
+            ));
+        }
+    }
+
+    // 8. Create the Card
+    return this.createActionCard({
+        actor,
+        title: action.name || 'NPC Action',
+        subtitle,    // <--- Now correctly passes the Actor Name
+        tags,        // <--- Now includes Traits and Range
+        description,
+        footerActions,
+        // If you want the ability image to be the icon, pass 'item' if available, 
+        // otherwise it defaults to actor image in createActionCard logic.
+    });
+  }
+
+  static async _onClickAbilityName(event, target) {
+      event.preventDefault();
+      const index = parseInt(target.dataset.index);
+      const ability = this.actor.system.abilities[index];
+
+      if (!ability || !ability.name) return;
+
+      // Use npcAction instead of npcAbility
+      const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+      await VagabondChatCard.npcAction(this.actor, ability, index);
+  }
+
+  // 7. FEATURE USE ADAPTER (Handles both full Items and plain Data Objects)
+  static async featureUse(actor, item) {
+    let description = '';
+    
+    // ROBUST CHECK:
+    // If it's a full Item, description is in item.system.description.
+    // If it's a plain Data Object (from Class/Ancestry), it's likely just item.description.
+    const rawDescription = item.system?.description || item.description || '';
+
+    if (rawDescription) {
+      description = await foundry.applications.ux.TextEditor.enrichHTML(rawDescription, {
+        async: true, secrets: actor.isOwner, relativeTo: item
+      });
+    }
+
+    // Determine if this is a real item or just data
+    // Real items have a UUID or id. Data objects might not.
+    const isRealItem = !!item.id || !!item.uuid;
+
+    return this.createActionCard({
+        actor, 
+        // Only pass 'item' if it's a real document, otherwise null prevents linking errors
+        item: isRealItem ? item : null, 
+        title: item.name || "Feature", 
+        cardType: 'item-use', 
+        description
+    });
+  }
+
+  // 8. GEAR USE ADAPTER
+  static async gearUse(actor, item) {
+    return this.featureUse(actor, item);
+  }
+
+  // 9. FEATURE DATA USE ADAPTER
+  static async featureDataUse(actor, item) {
+    // This receives the plain data object {name, description} from the sheet
+    return this.featureUse(actor, item);
   }
 }

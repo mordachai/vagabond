@@ -1540,8 +1540,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this.element.appendChild(menu);
     this._currentContextMenu = menu;
 
-    console.log('Context menu created and appended:', menu, 'at position:', event.clientX, event.clientY);
-
     // Add click handlers
     // Send to Chat handler (for non-weapons)
     if (!isWeapon) {
@@ -2989,11 +2987,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!itemId) return;
 
-    const weapon = this.actor.items.get(itemId);
-    if (weapon && weapon.type === 'weapon') {
-      // Call the existing weapon roll action
-      await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
-    }
+    // FIX: Call the static method, forcing 'this' to be the current sheet instance
+    await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
   }
 
   /**
@@ -3165,15 +3160,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handle weapon attack rolls.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
+   * STATIC: DEFAULT_OPTIONS can find it.
    */
-  static async _onRollWeapon(event, target) {
+
+  static async _onRollWeapon(event, target = null) {
     event.preventDefault();
-    const itemId = target.dataset.itemId;
+
+    // 1. Target Safety
+    const element = target || event.currentTarget;
+    const itemId = element.dataset.itemId || element.closest('[data-item-id]')?.dataset.itemId;
     const item = this.actor.items.get(itemId);
 
     if (!item) {
@@ -3181,47 +3176,40 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
+    // 2. Define Item Types
     const isWeapon = (item.type === 'weapon') ||
                      (item.type === 'equipment' && item.system.equipmentType === 'weapon');
-
-    // Check if this is an alchemical with damage
+    
+    // FIX: Remove the "damageType !== '-'" check here so we catch ALL alchemicals
     const isAlchemical = item.type === 'equipment' &&
-                        item.system.equipmentType === 'alchemical' &&
-                        item.system.damageType !== '-';
+                         item.system.equipmentType === 'alchemical';
 
     if (!isWeapon && !isAlchemical) {
-      ui.notifications.error('Item cannot be rolled!');
+      ui.notifications.warn(game.i18n.localize("VAGABOND.UI.Errors.ItemNotRollable"));
       return;
     }
 
     try {
-      // Handle alchemicals (just roll damage, no attack)
+      /* PATH A: ALCHEMICAL */
       if (isAlchemical) {
-        let damageFormula = item.system.damageAmount;
+        // SMART CHECK: If no damage type or no formula, treat as generic "Use Item"
+        const hasDamage = item.system.damageType && 
+                          item.system.damageType !== '-' && 
+                          item.system.damageAmount;
 
-        // Apply exploding dice if enabled
-        if (item.system.canExplode && item.system.explodeValues) {
-          const explodeValues = item.system.explodeValues
-            .split(',')
-            .map(v => v.trim())
-            .filter(v => v && !isNaN(v));
-
-          if (explodeValues.length > 0) {
-            const explodeSuffix = explodeValues.map(v => `x${v}`).join('');
-            damageFormula = damageFormula.replace(/(\d*)d(\d+)/gi, (match, count, faces) => {
-              return `${count || '1'}d${faces}${explodeSuffix}`;
-            });
-          }
+        if (!hasDamage) {
+            // Redirect to the simple Gear Use card
+            return VagabondChatCard.gearUse(this.actor, item);
         }
 
+        // Otherwise, proceed with the Roll logic
+        let damageFormula = item.system.damageAmount;
         const roll = new Roll(damageFormula);
         await roll.evaluate();
 
-        const damageTypeKey = item.system.damageType;
-        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey]);
+        const damageTypeKey = item.system.damageType || 'physical';
+        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey] || damageTypeKey);
 
-        // Use VagabondChatCard for consistent formatting
         const card = new VagabondChatCard()
           .setType('item-use')
           .setItem(item)
@@ -3229,32 +3217,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           .setTitle(item.name)
           .setSubtitle(this.actor.name)
           .addDamage(roll, damageTypeLabel, false, damageTypeKey);
-
-        // Add alchemical type metadata
-        const typeLabel = game.i18n.localize(
-          `VAGABOND.Item.Alchemical.Types.${item.system.alchemicalType.charAt(0).toUpperCase() + item.system.alchemicalType.slice(1)}`
-        );
-        card.addMetadata('Type', typeLabel);
-
-        // Add description if present
+        
         if (item.system.description) {
-          const enriched = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description, {
-            async: true,
-            secrets: this.actor.isOwner,
-            relativeTo: item
-          });
+          const enriched = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description, { async: true });
           card.setDescription(enriched);
         }
-
         await card.send();
         return roll;
       }
 
-      // Handle weapons (normal attack + damage flow)
-      // Import damage helper
+      /* PATH B: WEAPONS */
       const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
-      // Get favor/hinder state with keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
       const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
         systemFavorHinder,
@@ -3262,22 +3236,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.ctrlKey
       );
 
-      // Roll attack using weapon's method
       const attackResult = await item.rollAttack(this.actor, favorHinder);
+      if (!attackResult) return;
 
-      // Determine if damage should be auto-rolled
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
-        // Get the stat used for the attack (for crit bonus damage)
         const statKey = attackResult.weaponSkill?.stat || null;
         damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
-      // Send attack to chat using VagabondChatCard
       await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll);
-
       return attackResult.roll;
+
     } catch (error) {
+      console.error(error);
       ui.notifications.warn(error.message);
       return;
     }
@@ -3292,9 +3264,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
    * @protected
    */
+
   static async _onUseItem(event, target) {
     event.preventDefault();
-    const itemId = target.dataset.itemId;
+    
+    // 1. Target Safety
+    const element = target || event.currentTarget;
+    const itemId = element.dataset.itemId || element.closest('[data-item-id]')?.dataset.itemId;
     const item = this.actor.items.get(itemId);
 
     if (!item) {
@@ -3302,7 +3278,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // Use VagabondChatCard for consistent formatting
+    // 2. Create Card
     await VagabondChatCard.gearUse(this.actor, item);
   }
 
@@ -3509,8 +3485,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       rollFormula += ` + ${checkBonus}`;
     }
 
+    // 1. Dynamic Import the Dice Appearance Helper
+    const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
+
+    // 2. Create the roll
     const roll = new Roll(rollFormula, this.actor.getRollData());
-    await roll.evaluate();
+    
+    // 3. Evaluate using the custom color logic (Triggering Dice So Nice)
+    await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
 
     const isSuccess = roll.total >= difficulty;
 

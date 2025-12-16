@@ -164,8 +164,6 @@ export class VagabondDamageHelper {
     // Get the current message content
     let content = message.content;
 
-    // Build Block/Dodge info section HTML
-    const defendInfoHTML = this._renderDefendInfoSection(attackType);
 
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageType, isCritical, damageTypeKey);
@@ -191,23 +189,16 @@ export class VagabondDamageHelper {
         item?.id,
         attackType
       );
-    }
+    } 
 
-    // 1. Inject Block/Dodge Info Section (BEFORE damage section)
-    // Insert before the damage section
-    content = content.replace(
-      /(<div class=['"]card-damage-section['"])/,
-      `${defendInfoHTML}$1`
-    );
-
-    // 2. Inject Damage Display
+    // 1. Inject Damage Display
     // Replace the empty damage section placeholder with the actual damage HTML
     content = content.replace(
       /(<div class=['"]card-damage-section['"] data-damage-section>)([\s\S]*?)(<\/div>)/,
       `$1${damageHTML}$3`
     );
 
-    // 3. Replace Footer Actions with Save Buttons
+    // 2. Replace Footer Actions with Save Buttons
     if (content.includes('footer-actions')) {
       content = content.replace(
         /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
@@ -451,78 +442,42 @@ export class VagabondDamageHelper {
    * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
    * @param {string} attackType - The attack type ('melee', 'ranged', 'cast')
    */
-  static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee') {
-    // If damageRoll is null (flat damage), create a simple Roll object with just the total
-    let rollForButtons = damageRoll;
-    if (!damageRoll) {
-      rollForButtons = new Roll(String(finalDamage));
-      await rollForButtons.evaluate();
+
+    static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee') {
+      // 1. Dynamic Import to avoid circular dependency issues
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+
+      // 2. Handle Flat Damage
+      // The builder expects a Roll object to extract the total and formula.
+      // If this is flat damage (damageRoll is null), we create a dummy Roll object.
+      let rollObj = damageRoll;
+      if (!rollObj) {
+          // Create a roll that is just the number (e.g., "10")
+          rollObj = new Roll(`${finalDamage}`);
+          await rollObj.evaluate();
+      }
+
+      // 3. Delegate to the Master Builder
+      // This ensures NPC damage cards use the exact same template (.vagabond-chat-card-v2) as Players.
+      await VagabondChatCard.createActionCard({
+          actor: actor,
+          title: `${action.name} Damage`,
+          // Passing the subtitle explicitly ensures it doesn't default to something generic
+          subtitle: actor.name, 
+          
+          // Passing the roll triggers the "Damage Section" (Big Orange Number)
+          damageRoll: rollObj,
+          
+          // Pass the key (e.g., 'physical') so the builder can look up the correct Icon/Label config
+          damageType: damageTypeKey || 'physical',
+          
+          // Pass context for the Save Buttons
+          attackType: attackType,
+          
+          // Ensure Defenses (Block/Dodge accordion) appear unless it's healing
+          hasDefenses: (damageTypeKey !== 'healing')
+      });
     }
-
-    // Check if this is healing damage
-    const isHealing = damageTypeKey?.toLowerCase() === 'healing';
-
-    // Build defend info section (if not healing) - players can roll saves against NPC attacks
-    const defendInfoHTML = isHealing ? '' : this._renderDefendInfoSection(attackType);
-
-    // Build damage HTML using the template partial
-    const damageHTML = await this._renderDamagePartial(damageRoll, damageTypeLabel, false, damageTypeKey, finalDamage);
-
-    // Build buttons HTML - use save buttons for damage, old button for healing
-    let buttonsHTML;
-    if (isHealing) {
-      buttonsHTML = this.createApplyDamageButton(
-        finalDamage,
-        damageTypeLabel,
-        actor.id,
-        null
-      );
-    } else {
-      buttonsHTML = this.createSaveButtons(
-        finalDamage,
-        damageTypeKey || 'physical',
-        rollForButtons,
-        actor.id,
-        null,
-        attackType
-      );
-    }
-
-    // Create message content
-    const content = `
-      <div class="vagabond-chat-card npc-damage-result">
-        <header class="card-header">
-          <h3 class="card-title">${action.name} Damage</h3>
-          <div class="card-subtitle">${actor.name}</div>
-        </header>
-        <div class="card-content">
-          ${defendInfoHTML}
-          ${damageHTML}
-        </div>
-        <footer class="card-footer">
-          <div class="footer-actions">
-            ${buttonsHTML}
-          </div>
-        </footer>
-      </div>
-    `;
-
-    // Create the chat message data
-    const messageData = {
-      user: game.user.id,
-      speaker: ChatMessage.getSpeaker({ actor }),
-      content: content,
-      style: CONST.CHAT_MESSAGE_STYLES.OTHER
-    };
-
-    // Add the roll if it exists
-    if (damageRoll) {
-      messageData.rolls = [damageRoll];
-    }
-
-    // Create the message
-    return await ChatMessage.create(messageData);
-  }
 
   /**
    * Render damage HTML using the template partial
@@ -667,31 +622,18 @@ export class VagabondDamageHelper {
     return finalDamage;
   }
 
+
   /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
-   * @param {number} damageAmount - Base damage amount
-   * @param {string} damageType - Damage type key
-   * @param {Roll} damageRoll - The damage Roll object (for die manipulation)
-   * @param {string} actorId - Source actor ID
-   * @param {string} itemId - Item ID (weapon/spell)
-   * @param {string} attackType - 'melee' or 'ranged' or 'cast' (for Hinder logic)
-   * @returns {string} HTML string with 4 buttons
    */
   static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType) {
-    // Encode the damage roll terms into a JSON string
+    // Encode the damage roll terms
     const rollTermsData = JSON.stringify({
       terms: damageRoll.terms.map(t => {
         if (t.constructor.name === 'Die') {
-          return {
-            type: t.constructor.name,
-            faces: t.faces,
-            results: t.results || []
-          };
+          return { type: t.constructor.name, faces: t.faces, results: t.results || [] };
         } else if (t.constructor.name === 'NumericTerm') {
-          return {
-            type: t.constructor.name,
-            number: t.number
-          };
+          return { type: t.constructor.name, number: t.number };
         } else {
           return { type: t.constructor.name };
         }
@@ -699,50 +641,61 @@ export class VagabondDamageHelper {
       total: damageRoll.total
     }).replace(/"/g, '&quot;');
 
-    // Get localized save names
+    // Localize Labels
     const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
     const endureLabel = game.i18n.localize('VAGABOND.Saves.Endure.name');
     const willLabel = game.i18n.localize('VAGABOND.Saves.Will.name');
+    
+    // FIX: Ensure Apply Direct key exists or fallback to English
+    const applyKey = 'VAGABOND.Chat.ApplyDirect';
+    let applyDirectLabel = game.i18n.localize(applyKey);
+    if (applyDirectLabel === applyKey) applyDirectLabel = "Apply Direct";
 
+    // LAYOUT FIX: Two rows. Top: Apply Direct. Bottom: Saves.
     return `
       <div class="vagabond-save-buttons-container">
-        <button class="vagabond-save-button save-reflex"
-          data-save-type="reflex"
-          data-damage-amount="${damageAmount}"
-          data-damage-type="${damageType}"
-          data-roll-terms="${rollTermsData}"
-          data-actor-id="${actorId}"
-          data-item-id="${itemId || ''}"
-          data-attack-type="${attackType}">
-          <i class="fas fa-running"></i> ${reflexLabel}
-        </button>
-        <button class="vagabond-save-button save-endure"
-          data-save-type="endure"
-          data-damage-amount="${damageAmount}"
-          data-damage-type="${damageType}"
-          data-roll-terms="${rollTermsData}"
-          data-actor-id="${actorId}"
-          data-item-id="${itemId || ''}"
-          data-attack-type="${attackType}">
-          <i class="fas fa-shield-alt"></i> ${endureLabel}
-        </button>
-        <button class="vagabond-save-button save-will"
-          data-save-type="will"
-          data-damage-amount="${damageAmount}"
-          data-damage-type="${damageType}"
-          data-roll-terms="${rollTermsData}"
-          data-actor-id="${actorId}"
-          data-item-id="${itemId || ''}"
-          data-attack-type="${attackType}">
-          <i class="fas fa-brain"></i> ${willLabel}
-        </button>
-        <button class="vagabond-apply-direct-button"
-          data-damage-amount="${damageAmount}"
-          data-damage-type="${damageType}"
-          data-actor-id="${actorId}"
-          data-item-id="${itemId || ''}">
-          <i class="fas fa-bolt"></i> Apply Direct
-        </button>
+        <div class="save-buttons-top">
+            <button class="vagabond-apply-direct-button"
+              data-damage-amount="${damageAmount}"
+              data-damage-type="${damageType}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}">
+              <i class="fas fa-bolt"></i> ${applyDirectLabel}
+            </button>
+        </div>
+
+        <div class="save-buttons-row">
+            <button class="vagabond-save-button save-reflex"
+              data-save-type="reflex"
+              data-damage-amount="${damageAmount}"
+              data-damage-type="${damageType}"
+              data-roll-terms="${rollTermsData}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-attack-type="${attackType}">
+              <i class="fas fa-running"></i> ${reflexLabel}
+            </button>
+            <button class="vagabond-save-button save-endure"
+              data-save-type="endure"
+              data-damage-amount="${damageAmount}"
+              data-damage-type="${damageType}"
+              data-roll-terms="${rollTermsData}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-attack-type="${attackType}">
+              <i class="fas fa-shield-alt"></i> ${endureLabel}
+            </button>
+            <button class="vagabond-save-button save-will"
+              data-save-type="will"
+              data-damage-amount="${damageAmount}"
+              data-damage-type="${damageType}"
+              data-roll-terms="${rollTermsData}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-attack-type="${attackType}">
+              <i class="fas fa-brain"></i> ${willLabel}
+            </button>
+        </div>
       </div>
     `;
   }
@@ -967,7 +920,7 @@ export class VagabondDamageHelper {
       .setTitle(`${saveLabel} Save`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'SUCCESS' : 'FAIL', false);
+      .setOutcome(isSuccess ? 'PASS' : 'FAIL', false);
 
     // Build visual damage calculation display
     const damageCalculationHTML = this._buildDamageCalculation(

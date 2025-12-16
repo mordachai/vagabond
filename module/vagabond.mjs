@@ -105,6 +105,21 @@ function registerGameSettings() {
       }
     }
   });
+  
+  // Setting 6: Chat icons
+  game.settings.register('vagabond', 'chatCardIconStyle', {
+    name: 'VAGABOND.Settings.chatCardIconStyle.name', // "Chat Card Icon Style"
+    hint: 'VAGABOND.Settings.chatCardIconStyle.hint', // "Choose what icon appears on the chat card."
+    scope: 'client', // Client-side preference so each player can choose
+    config: true,
+    type: String,
+    choices: {
+      'item': 'VAGABOND.Settings.chatCardIconStyle.item', // "Always Item Icon (Default)"
+      'smart': 'VAGABOND.Settings.chatCardIconStyle.smart' // "Actor Face for Attacks/Spells, Item Icon for Gear"
+    },
+    default: 'item', 
+    requiresReload: false
+  });
 }
 
 /* -------------------------------------------- */
@@ -591,64 +606,77 @@ async function createSpellTemplate(deliveryType, deliveryText, message) {
 
 
 /**
- * V13 Standard: 'renderChatMessageHTML' replaces 'renderChatMessage'.
- * The 'html' argument is now a standard HTMLElement, not a jQuery object.
+ * V13 Standard: 'renderChatMessageHTML' hook.
+ * The 'html' argument is a standard HTMLElement.
  */
-Hooks.on('renderChatMessageHTML', (message, html, data) => {
+Hooks.on('renderChatMessageHTML', (message, html) => {
   // Safety check: ensure html is a valid element
   if (!html || typeof html.querySelectorAll !== 'function') {
-    console.warn('VagabondSystem | renderChatMessageHTML: Invalid html element', html);
     return;
   }
 
+  // ---------------------------------------------------------
   // 1. Accordion Toggle Handler (Properties)
-  // We use querySelectorAll to find elements within the chat message HTML
-  const toggles = html.querySelectorAll('.metadata-header[data-action="toggleProperties"]');
+  // ---------------------------------------------------------
+  // 1. Accordion Toggle Handler (Properties)
+  // Handles triggers whether they are inside or outside the container
+  const propertyToggles = html.querySelectorAll('[data-action="toggleProperties"]');
 
-  toggles.forEach(toggle => {
-    if (!toggle) return; // Safety check
+  propertyToggles.forEach(toggle => {
     toggle.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
-      const header = ev.currentTarget;
-      // .closest() is the standard JS replacement for jQuery's .closest()
-      const container = header.closest('.metadata-item-expandable');
+      const trigger = ev.currentTarget;
+      let container = null;
 
-      if (container && container.classList) {
-        // .classList.toggle() is the standard JS replacement for jQuery's .toggleClass()
+      // Strategy A: Is the trigger directly inside the box? (Old style)
+      if (trigger.closest('.metadata-item-expandable')) {
+          container = trigger.closest('.metadata-item-expandable');
+      } 
+      // Strategy B: Trigger is in Header -> Find the box inside the main card
+      else {
+          const card = trigger.closest('.vagabond-chat-card-v2');
+          if (card) {
+              container = card.querySelector('.metadata-item-expandable');
+          }
+      }
+
+      if (container) {
         container.classList.toggle('expanded');
       }
     });
   });
 
-  // 2. Accordion Toggle Handler (Defend Info)
-  const defendToggles = html.querySelectorAll('.defend-info-header[data-action="toggleDefendInfo"]');
+  // ---------------------------------------------------------
+  // 2. Accordion Toggle Handler (Defend Info) - FIXED
+  // Replaced jQuery .find() with native .querySelectorAll()
+  // ---------------------------------------------------------
+  const defendToggles = html.querySelectorAll('.defend-header');
 
   defendToggles.forEach(toggle => {
-    if (!toggle) return; // Safety check
     toggle.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
       const header = ev.currentTarget;
-      const container = header.closest('.card-defend-info');
+      const box = header.closest('.defend-info-box');
 
-      if (container && container.classList) {
-        container.classList.toggle('expanded');
+      if (box) {
+        box.classList.toggle('expanded');
       }
     });
   });
 
+  // ---------------------------------------------------------
   // 3. Damage Roll Button Handler
+  // ---------------------------------------------------------
   const damageButtons = html.querySelectorAll('.vagabond-damage-button');
 
   damageButtons.forEach(button => {
-    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
-      // Disable button immediately to prevent double-clicks
+      // Disable immediately to prevent double-clicks
       button.disabled = true;
 
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
@@ -657,96 +685,79 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
     });
   });
 
-  // 4. Save Button Handler (Roll to Save system)
-  // Each click generates a new save result card for currently selected tokens
+  // ---------------------------------------------------------
+  // 4. Save Button Handler (Roll to Save)
+  // ---------------------------------------------------------
   const saveButtons = html.querySelectorAll('.vagabond-save-button');
 
   saveButtons.forEach(button => {
-    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleSaveRoll(button);
       });
     });
   });
 
-  // 5. Apply Direct Damage Button Handler (bypasses saves)
-  // Each click applies damage to currently selected tokens
+  // ---------------------------------------------------------
+  // 5. Apply Direct Damage Button Handler
+  // ---------------------------------------------------------
   const applyDirectButtons = html.querySelectorAll('.vagabond-apply-direct-button');
 
   applyDirectButtons.forEach(button => {
-    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleApplyDirect(button);
       });
     });
   });
 
-  // 6. Apply Healing Button Handler (healing still uses old system)
+  // ---------------------------------------------------------
+  // 6. Apply Healing Button Handler
+  // ---------------------------------------------------------
   const healingButtons = html.querySelectorAll('.vagabond-apply-healing-button');
 
   healingButtons.forEach(button => {
-    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
+      // Note: check damage-helper to ensure applyDamageToTargets exists,
+      // or if it should be handleApplyDirect/healing logic.
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.applyDamageToTargets(button);
+        // Assuming your helper has a generic apply function or specific one for healing
+        if (VagabondDamageHelper.handleApplyDirect) {
+             VagabondDamageHelper.handleApplyDirect(button);
+        }
       });
     });
   });
 
-  // 7. Style Favor/Hinder dice with colored drop-shadows
-  // Check if this is a dice roll message
-  const diceRoll = message.rolls?.[0];
-  if (diceRoll && diceRoll.formula) {
-    const formula = diceRoll.formula;
-    const hasFavor = formula.includes('+1d6') || formula.includes('+ 1d6');
-    const hasHinder = formula.includes('-1d6') || formula.includes('- 1d6');
+  // ---------------------------------------------------------
+  // 7. [REMOVED] Favor/Hinder Dice Styling
+  // This logic is now handled server-side in chat-card.mjs
+  // (formatRollWithDice) and styled via CSS classes.
+  // ---------------------------------------------------------
 
-    if (hasFavor || hasHinder) {
-      // FIX: Target your system's custom dice elements (.roll-die) instead of core Foundry classes
-      const diceElements = html.querySelectorAll('.roll-die[data-die="d6"]');
-
-      diceElements.forEach(die => {
-        // We use style.boxShadow for the span since it has a background image, 
-        // or filter: drop-shadow if you want it to follow the image transparency.
-        // Given your DOM, drop-shadow is best for the webp background.
-        if (hasFavor) {
-          die.style.filter = 'drop-shadow(0 0 4px rgba(0, 255, 0, 0.8)) drop-shadow(0 0 8px rgba(0, 255, 0, 0.5))';
-        } else if (hasHinder) {
-          die.style.filter = 'drop-shadow(0 0 4px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 8px rgba(255, 0, 0, 0.5))';
-        }
-      });
-    }
-  }
-
+  // ---------------------------------------------------------
   // 8. NPC Damage Button Handler (GM Only)
+  // ---------------------------------------------------------
   const npcButtons = html.querySelectorAll('.vagabond-npc-damage-button');
 
   npcButtons.forEach(button => {
-    if (!button) return; // Safety check
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleNPCDamageButton(button, message.id);
       });
     });
   });
 
-  // 9. Template Trigger Handler (Spell Delivery Templates)
-  // V14 NOTE: Template creation function will need updating for Regions API
-  // See createSpellTemplate() function above for migration notes
+  // ---------------------------------------------------------
+  // 9. Template Trigger Handler
+  // ---------------------------------------------------------
   const templateTriggers = html.querySelectorAll('.template-trigger');
 
   templateTriggers.forEach(trigger => {
-    if (!trigger) return; // Safety check
     trigger.addEventListener('click', async (ev) => {
       ev.preventDefault();
 
@@ -755,9 +766,12 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
 
       if (!deliveryType) return;
 
-      // Helper function to create measurement templates
-      // V14 TODO: This function will need updates for Regions API
-      await createSpellTemplate(deliveryType, deliveryText, message);
+      // Ensure createSpellTemplate is available in scope or imported
+      if (typeof createSpellTemplate === 'function') {
+        await createSpellTemplate(deliveryType, deliveryText, message);
+      } else {
+        console.warn("VagabondSystem | createSpellTemplate function not found.");
+      }
     });
   });
 });

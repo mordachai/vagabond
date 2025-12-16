@@ -41,9 +41,17 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'Ludlow';
+  src: url('../assets/fonts/ludlow-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 // Font variables
 $font-primary: 'Paradigm', serif;
 $font-secondary: 'Manofa', serif;
 $font-title: 'Eskapade', serif;
 $font-character-name: 'Manofa', sans-serif;
 $font-decorative: 'Paradigm', serif;
+$font-number: 'Ludlow', serif;

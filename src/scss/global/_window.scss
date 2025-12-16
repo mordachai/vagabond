@@ -114,6 +114,23 @@
   }
 }
 
+.chat-message {
+  background: #000;
+  border: none;
+  border-radius: 2px;
+
+  .message-header {
+    color: #DED656;
+    margin: 10px 0 5px 0;
+  }
+
+  .message-sender {
+    font-family: $font-title;
+    font-size: 20px;
+    font-weight: 700;
+  }
+}
+
 /* Heartbeat Animation */
 @keyframes heartbeat {
   0% {
