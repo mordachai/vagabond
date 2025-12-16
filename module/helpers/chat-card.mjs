@@ -368,58 +368,91 @@ export class VagabondChatCard {
   /* ADAPTER METHODS                             */
   /* -------------------------------------------- */
 
-  static async skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
-    const skill = actor.system.skills?.[skillKey] || actor.system.weaponSkills?.[skillKey];
-    const skillLabel = skill?.label || skillKey;
-    const isCritical = this.isRollCritical(roll, actor);
-    
-    const tags = [];
-    tags.push({ label: skillLabel, cssClass: 'tag-skill' });
-    if (skill?.stat) {
-        const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[skill.stat]?.abbr) || skill.stat;
-        tags.push({ label: statLabel, cssClass: 'tag-stat' });
-    }
-    if (skill) {
-        tags.push({ label: skill.trained ? 'Trained' : 'Untrained', cssClass: 'tag-info' });
+  /**
+   * Internal unified check roll handler
+   * @param {VagabondActor} actor - Actor performing check
+   * @param {string} type - 'stat', 'skill', or 'save'
+   * @param {string} key - Entity key (statKey, skillKey, or saveKey)
+   * @param {Roll} roll - Evaluated roll
+   * @param {number} difficulty - Target difficulty
+   * @param {boolean} isSuccess - Whether roll succeeded
+   * @returns {Promise<ChatMessage>}
+   * @private
+   */
+  static async _checkRoll(actor, type, key, roll, difficulty, isSuccess) {
+    // Get entity data based on type
+    let entity, entityLabel, title, tags;
+
+    switch (type) {
+      case 'stat':
+        entity = actor.system.stats[key];
+        entityLabel = game.i18n.localize(CONFIG.VAGABOND.stats[key]?.long) || key;
+        title = `${entityLabel} Check`;
+        tags = [
+          { label: entityLabel, cssClass: 'tag-skill' },
+          { label: `${entity?.value || 0}`, icon: 'fas fa-hashtag' }
+        ];
+        break;
+
+      case 'skill':
+        entity = actor.system.skills?.[key] || actor.system.weaponSkills?.[key];
+        entityLabel = entity?.label || key;
+        title = `${entityLabel} Check`;
+        tags = [
+          { label: entityLabel, cssClass: 'tag-skill' }
+        ];
+        if (entity?.stat) {
+          const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[entity.stat]?.abbr) || entity.stat;
+          tags.push({ label: statLabel, cssClass: 'tag-stat' });
+        }
+        if (entity) {
+          tags.push({ label: entity.trained ? 'Trained' : 'Untrained', cssClass: 'tag-info' });
+        }
+        break;
+
+      case 'save':
+        entity = actor.system.saves?.[key];
+        entityLabel = entity?.label || key;
+        title = `${entityLabel} Save`;
+        tags = [
+          { label: entityLabel, cssClass: 'tag-skill' }
+        ];
+        break;
+
+      default:
+        throw new Error(`Invalid check roll type: ${type}`);
     }
 
-    return this.createActionCard({
-        actor,
-        title: `${skillLabel} Check`,
-        rollData: { roll, difficulty, isSuccess, isCritical },
-        tags
+    // Check if critical
+    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
+
+    // Build roll data
+    const rollData = {
+      roll: roll,
+      difficulty: difficulty,
+      isSuccess: isSuccess,
+      isCritical: isCritical
+    };
+
+    // Create and send card
+    return VagabondChatCard.createActionCard({
+      actor: actor,
+      title: title,
+      rollData: rollData,
+      tags: tags
     });
+  }
+
+  static async skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
+    return this._checkRoll(actor, 'skill', skillKey, roll, difficulty, isSuccess);
   }
 
   static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
-    const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[statKey]?.long) || statKey;
-    const isCritical = this.isRollCritical(roll, actor);
-    
-    const tags = [];
-    tags.push({ label: statLabel, cssClass: 'tag-skill' });
-    tags.push({ label: `${actor.system.stats[statKey]?.value || 0}`, icon: 'fas fa-hashtag' });
-
-    return this.createActionCard({
-        actor,
-        title: `${statLabel} Check`,
-        rollData: { roll, difficulty, isSuccess, isCritical },
-        tags
-    });
+    return this._checkRoll(actor, 'stat', statKey, roll, difficulty, isSuccess);
   }
 
   static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
-    const saveLabel = actor.system.saves?.[saveKey]?.label || saveKey;
-    const isCritical = this.isRollCritical(roll, actor);
-
-    const tags = [];
-    tags.push({ label: saveLabel, cssClass: 'tag-skill' });
-
-    return this.createActionCard({
-        actor,
-        title: `${saveLabel} Save`,
-        rollData: { roll, difficulty, isSuccess, isCritical },
-        tags
-    });
+    return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess);
   }
 
   static async weaponAttack(actor, weapon, attackResult, damageRoll) {
@@ -618,9 +651,15 @@ export class VagabondChatCard {
   }
 
   // 7. FEATURE USE ADAPTER (Handles both full Items and plain Data Objects)
-  static async featureUse(actor, item) {
+  /**
+   * Generic item use adapter for gear, features, and other items
+   * @param {VagabondActor} actor - Actor using the item
+   * @param {Item|Object} item - Item document or data object
+   * @returns {Promise<ChatMessage>}
+   */
+  static async itemUse(actor, item) {
     let description = '';
-    
+
     // ROBUST CHECK:
     // If it's a full Item, description is in item.system.description.
     // If it's a plain Data Object (from Class/Ancestry), it's likely just item.description.
@@ -637,23 +676,30 @@ export class VagabondChatCard {
     const isRealItem = !!item.id || !!item.uuid;
 
     return this.createActionCard({
-        actor, 
+        actor,
         // Only pass 'item' if it's a real document, otherwise null prevents linking errors
-        item: isRealItem ? item : null, 
-        title: item.name || "Feature", 
-        cardType: 'item-use', 
+        item: isRealItem ? item : null,
+        title: item.name || "Feature",
+        cardType: 'item-use',
         description
     });
   }
 
+  /**
+   * @deprecated Use itemUse() instead
+   */
+  static async featureUse(actor, item) {
+    return this.itemUse(actor, item);
+  }
+
   // 8. GEAR USE ADAPTER
   static async gearUse(actor, item) {
-    return this.featureUse(actor, item);
+    return this.itemUse(actor, item);
   }
 
   // 9. FEATURE DATA USE ADAPTER
   static async featureDataUse(actor, item) {
     // This receives the plain data object {name, description} from the sheet
-    return this.featureUse(actor, item);
+    return this.itemUse(actor, item);
   }
 }

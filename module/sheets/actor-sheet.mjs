@@ -1688,7 +1688,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     menu.querySelector('[data-action="sendToChat"]').addEventListener('click', async () => {
       if (item) {
         // Perk
-        await VagabondChatCard.featureUse(this.actor, item);
+        await VagabondChatCard.itemUse(this.actor, item);
       } else if (featureData) {
         // Trait or Feature
         await VagabondChatCard.featureDataUse(this.actor, featureData, sourceItem, itemIdOrData.type);
@@ -3471,28 +3471,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       event.shiftKey,
       event.ctrlKey
     );
-    let rollFormula = 'd20';
 
-    if (favorHinder === 'favor') {
-      rollFormula = 'd20 + 1d6';
-    } else if (favorHinder === 'hinder') {
-      rollFormula = 'd20 - 1d6';
-    }
-
-    // Apply universal check bonus
-    const checkBonus = this.actor.system.universalCheckBonus || 0;
-    if (checkBonus !== 0) {
-      rollFormula += ` + ${checkBonus}`;
-    }
-
-    // 1. Dynamic Import the Dice Appearance Helper
-    const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
-
-    // 2. Create the roll
-    const roll = new Roll(rollFormula, this.actor.getRollData());
-    
-    // 3. Evaluate using the custom color logic (Triggering Dice So Nice)
-    await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
+    // Import roll builder and build roll with centralized utility
+    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+    const roll = await VagabondRollBuilder.buildAndEvaluateD20(
+      this.actor,
+      favorHinder
+    );
 
     const isSuccess = roll.total >= difficulty;
 
@@ -3713,25 +3698,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.shiftKey,
         event.ctrlKey
       );
-      let rollFormula = dataset.roll;
 
-      if (favorHinder === 'favor') {
-        rollFormula = `${dataset.roll} + 1d6`;
-      } else if (favorHinder === 'hinder') {
-        rollFormula = `${dataset.roll} - 1d6`;
-      }
-
-      // Apply universal check bonus
-      const checkBonus = this.actor.system.universalCheckBonus || 0;
-      if (checkBonus !== 0) {
-        rollFormula += ` + ${checkBonus}`;
-      }
-
-      // Import dice appearance helper
-      const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
-
-      let roll = new Roll(rollFormula, this.actor.getRollData());
-      await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
+      // Import roll builder and build roll with centralized utility
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+      const roll = await VagabondRollBuilder.buildAndEvaluateD20(
+        this.actor,
+        favorHinder,
+        dataset.roll  // Base formula (usually 'd20')
+      );
 
       // Determine roll type and use VagabondChatCard for stats, saves, and skills
       const rollType = dataset.rollType;
