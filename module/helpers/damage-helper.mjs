@@ -87,15 +87,53 @@ export class VagabondDamageHelper {
       }
     }
 
-    // Add universal damage bonuses
-    const flatBonus = actor.system.universalDamageBonus || 0;
-    const diceBonus = actor.system.universalDamageDice || '';
-
-    if (flatBonus !== 0) {
-      finalFormula += ` + ${flatBonus}`;
+    // Determine item type and apply appropriate separated bonuses
+    let equipmentType = null;
+    if (item) {
+      // For equipment items, check equipmentType field
+      if (item.system.equipmentType) {
+        equipmentType = item.system.equipmentType;
+      }
+      // For spell items
+      else if (item.type === 'spell') {
+        equipmentType = 'spell';
+      }
+    } else if (context.type) {
+      // Fallback to context type if item not available
+      equipmentType = context.type;
     }
-    if (diceBonus.trim() !== '') {
-      finalFormula += ` + ${diceBonus}`;
+
+    // Apply type-specific universal damage bonuses
+    let typeFlatBonus = 0;
+    let typeDiceBonus = '';
+
+    if (equipmentType === 'weapon') {
+      typeFlatBonus = actor.system.universalWeaponDamageBonus || 0;
+      typeDiceBonus = actor.system.universalWeaponDamageDice || '';
+    } else if (equipmentType === 'spell') {
+      typeFlatBonus = actor.system.universalSpellDamageBonus || 0;
+      typeDiceBonus = actor.system.universalSpellDamageDice || '';
+    } else if (equipmentType === 'alchemical') {
+      typeFlatBonus = actor.system.universalAlchemicalDamageBonus || 0;
+      typeDiceBonus = actor.system.universalAlchemicalDamageDice || '';
+    }
+
+    if (typeFlatBonus !== 0) {
+      finalFormula += ` + ${typeFlatBonus}`;
+    }
+    if (typeDiceBonus.trim() !== '') {
+      finalFormula += ` + ${typeDiceBonus}`;
+    }
+
+    // Add legacy universal damage bonuses (backward compatibility)
+    const universalFlatBonus = actor.system.universalDamageBonus || 0;
+    const universalDiceBonus = actor.system.universalDamageDice || '';
+
+    if (universalFlatBonus !== 0) {
+      finalFormula += ` + ${universalFlatBonus}`;
+    }
+    if (universalDiceBonus.trim() !== '') {
+      finalFormula += ` + ${universalDiceBonus}`;
     }
 
     // Apply exploding dice syntax if item supports it
@@ -303,12 +341,15 @@ export class VagabondDamageHelper {
    * @param {Object} spellState - Spell state (damageDice, deliveryType, etc.)
    * @param {boolean} isCritical - Whether this was a critical hit
    * @param {string} statKey - The stat used for the cast (for crit bonus)
-   * @returns {Roll} The damage roll
+   * @returns {Roll} The damage roll (or null if no damage dice)
    */
   static async rollSpellDamage(actor, spell, spellState, isCritical = false, statKey = null) {
-    if (spell.system.damageType === '-') return null;
+    // Allow typeless damage ("-") - only skip if there are no damage dice at all
+    if (!spellState.damageDice || spellState.damageDice <= 0) return null;
 
-    let damageFormula = `${spellState.damageDice}d6`;
+    // Determine die size: spell override > actor default (6)
+    const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
+    let damageFormula = `${spellState.damageDice}d${dieSize}`;
 
     // Add stat bonus on critical hit
     if (isCritical && statKey) {
@@ -318,15 +359,26 @@ export class VagabondDamageHelper {
       }
     }
 
-    // Add universal damage bonuses
-    const flatBonus = actor.system.universalDamageBonus || 0;
-    const diceBonus = actor.system.universalDamageDice || '';
+    // Add spell-specific universal damage bonuses (new separated system)
+    const spellFlatBonus = actor.system.universalSpellDamageBonus || 0;
+    const spellDiceBonus = actor.system.universalSpellDamageDice || '';
 
-    if (flatBonus !== 0) {
-      damageFormula += ` + ${flatBonus}`;
+    if (spellFlatBonus !== 0) {
+      damageFormula += ` + ${spellFlatBonus}`;
     }
-    if (diceBonus.trim() !== '') {
-      damageFormula += ` + ${diceBonus}`;
+    if (spellDiceBonus.trim() !== '') {
+      damageFormula += ` + ${spellDiceBonus}`;
+    }
+
+    // Add legacy universal damage bonuses (backward compatibility)
+    const universalFlatBonus = actor.system.universalDamageBonus || 0;
+    const universalDiceBonus = actor.system.universalDamageDice || '';
+
+    if (universalFlatBonus !== 0) {
+      damageFormula += ` + ${universalFlatBonus}`;
+    }
+    if (universalDiceBonus.trim() !== '') {
+      damageFormula += ` + ${universalDiceBonus}`;
     }
 
     // Apply exploding dice syntax if enabled
@@ -506,8 +558,8 @@ export class VagabondDamageHelper {
       }
     };
 
-    // Look up the damage type icon
-    if (damageTypeKey && CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
+    // Look up the damage type icon (skip for typeless "-" damage)
+    if (damageTypeKey && damageTypeKey !== '-' && CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
       damageData.damage.iconClass = CONFIG.VAGABOND.damageTypeIcons[damageTypeKey];
     }
 
@@ -557,16 +609,23 @@ export class VagabondDamageHelper {
    * - Armor: Subtracted from Attack damage (physical types only)
    * - Immune: Unharmed by the damage type (take 0 damage)
    * - Weak: Ignores Armor and Immune, deals extra damage die (extra die handled at roll time)
+   * - Typeless ("-"): Treated as generic damage, applies armor but no special immunities/weaknesses
    *
    * @param {Actor} actor - The target actor
    * @param {number} damage - Base damage amount
-   * @param {string} damageType - Type of damage
+   * @param {string} damageType - Type of damage (or "-" for typeless)
    * @param {Item} attackingWeapon - The weapon used (optional, for material weakness checks)
    * @returns {number} Final damage amount
    */
   static calculateFinalDamage(actor, damage, damageType, attackingWeapon = null) {
     // Normalize damage type for lookup
     const normalizedType = damageType.toLowerCase();
+
+    // Handle typeless damage ("-") - just apply armor, skip immunities/weaknesses
+    if (normalizedType === '-') {
+      const armorRating = actor.system.armor || 0;
+      return Math.max(0, damage - armorRating);
+    }
 
     // Get immunities and weaknesses arrays (for NPCs and from equipped armor)
     let immunities = actor.system.immunities || [];
@@ -963,9 +1022,13 @@ export class VagabondDamageHelper {
     };
     const saveIcon = saveIcons[saveType] || 'fa-solid fa-shield';
 
-    // Get damage type icon and label
-    const damageTypeIcon = CONFIG.VAGABOND?.damageTypeIcons?.[damageType] || 'fa-solid fa-burst';
-    const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
+    // Get damage type icon and label (handle typeless "-" damage)
+    let damageTypeIcon = null;
+    let damageTypeLabel = '';
+    if (damageType && damageType !== '-') {
+      damageTypeIcon = CONFIG.VAGABOND?.damageTypeIcons?.[damageType] || 'fa-solid fa-burst';
+      damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
+    }
 
     // Build save tooltip with favor/hinder state
     const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
@@ -1022,11 +1085,14 @@ export class VagabondDamageHelper {
     }
 
     // Add final damage
-    const finalDamageTooltip = `${game.i18n.localize('VAGABOND.Damage.Final')} ${damageTypeLabel}`;
+    const finalDamageTooltip = damageTypeLabel
+      ? `${game.i18n.localize('VAGABOND.Damage.Final')} ${damageTypeLabel}`
+      : game.i18n.localize('VAGABOND.Damage.Final');
+    const damageTypeIconHTML = damageTypeIcon ? `<i class="${damageTypeIcon} damage-type-icon-large"></i>` : '';
     calculationHTML += `
         <span class="damage-operator">=</span>
         <span class="damage-final" title="${finalDamageTooltip}">
-          ${finalDamage} <i class="${damageTypeIcon} damage-type-icon-large"></i>
+          ${finalDamage} ${damageTypeIconHTML}
         </span>
       </div>`;
 

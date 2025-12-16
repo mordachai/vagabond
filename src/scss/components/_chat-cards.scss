@@ -94,7 +94,7 @@
                 
                 /* Standard Tag */
                 .meta-tag {
-                    font-size: 14px;
+                    font-size: 16px;
                     font-weight: bold;
                     color: var(--c-dark-blue);
                     display: flex;
@@ -103,7 +103,7 @@
                     white-space: nowrap; /* Keep short tags intact */
                     flex-shrink: 0;      /* Don't squish standard tags */
                     
-                    i { opacity: 0.7; font-size: 10px; }
+                    i { opacity: 0.7; font-size: 12px; }
                 }
 
                 .template-trigger {
@@ -118,9 +118,15 @@
                 .tag-separator {
                     color: var(--c-dark-blue);
                     font-weight: 300;
-                    font-size: 12px;
+                    font-size: 14px;
                     user-select: none;
                     flex-shrink: 0; 
+                }
+                .tag-mana {
+                    flex-direction: row-reverse; /* Flips the icon to the right side */
+                    gap: 2px;
+
+                    i {font-size: 14px;}
                 }
 
                 /* The Properties Group (Clickable) */
@@ -251,7 +257,7 @@
             }
             
             .roll-vs {
-                color: #fff;
+                color: var(--c-dark-blue);
                 font-size: 14px;
                 opacity: 0.9;
                 margin-top: 2px;

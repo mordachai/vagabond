@@ -1,6 +1,87 @@
 /**
  * Custom ActiveEffect document for the Vagabond system.
  * Provides attribute key autocomplete in the Active Effect configuration.
+ *
+ * ============================================================================
+ * DAMAGE BONUS SYSTEM GUIDE
+ * ============================================================================
+ *
+ * ## Universal Damage Bonuses (Legacy)
+ * These apply to ALL damage rolls (weapons, spells, alchemicals):
+ * - system.universalDamageBonus (flat number, e.g., +2)
+ * - system.universalDamageDice (dice formula, e.g., "1d4")
+ *
+ * ## Separated Universal Damage Bonuses (New)
+ * These apply ONLY to specific item types:
+ *
+ * **Weapon Damage:**
+ * - system.universalWeaponDamageBonus (flat, e.g., +2)
+ * - system.universalWeaponDamageDice (dice, e.g., "1d4")
+ *
+ * **Spell Damage:**
+ * - system.universalSpellDamageBonus (flat, e.g., +3)
+ * - system.universalSpellDamageDice (dice, e.g., "1d6")
+ *
+ * **Alchemical Damage:**
+ * - system.universalAlchemicalDamageBonus (flat, e.g., +1)
+ * - system.universalAlchemicalDamageDice (dice, e.g., "1d4")
+ *
+ * ## Stacking Behavior
+ * - Separated bonuses stack WITH legacy universal bonuses
+ * - Example: Weapon attack with +2 universal AND +3 weapon = total +5
+ * - Order: Base Damage → Type-Specific Bonus → Universal Bonus
+ *
+ * ============================================================================
+ * SPELL DAMAGE DIE SIZE SYSTEM
+ * ============================================================================
+ *
+ * ## Character-Level Control
+ * - system.spellDamageDieSize (default: 6)
+ * - Changes ALL spell damage dice (e.g., from d6 to d8/d10/d12)
+ * - Modifiable via Active Effects for perks/buffs
+ *
+ * ## Spell-Level Override
+ * - Individual spells can override with their own damageDieSize field
+ * - Priority: Spell Override → Actor Default → 6
+ *
+ * ## Usage Examples
+ *
+ * **Example 1: "Weapon Master" Perk**
+ * - Attribute Key: system.universalWeaponDamageBonus
+ * - Change Mode: Add
+ * - Effect Value: 2
+ * - Result: All weapon attacks deal +2 damage (spells unaffected)
+ *
+ * **Example 2: "Empowered Magic" Perk**
+ * - Attribute Key: system.spellDamageDieSize
+ * - Change Mode: Upgrade (or Override)
+ * - Effect Value: 8
+ * - Result: All spell damage uses d8 instead of d6
+ *   - Before: Fireball 3d6 fire
+ *   - After: Fireball 3d8 fire
+ *
+ * **Example 3: "Alchemical Expertise" Perk**
+ * - Attribute Key: system.universalAlchemicalDamageDice
+ * - Change Mode: Add
+ * - Effect Value: "1d4"
+ * - Result: All alchemical items deal +1d4 damage
+ *
+ * **Example 4: Combined Bonuses**
+ * Character has:
+ * - system.universalDamageBonus = +2 (applies to all)
+ * - system.universalSpellDamageBonus = +3 (applies to spells only)
+ *
+ * Spell damage formula: 3d6 → 3d6 + 3 + 2 = 3d6 + 5
+ * Weapon damage formula: 2d8 → 2d8 + 2 (only universal applies)
+ *
+ * ============================================================================
+ * BACKWARD COMPATIBILITY
+ * ============================================================================
+ * - Legacy universalDamageBonus/universalDamageDice still work
+ * - Both legacy and separated bonuses apply cumulatively
+ * - Existing characters/effects will continue to function normally
+ *
+ * ============================================================================
  */
 export class VagabondActiveEffect extends ActiveEffect {
 
@@ -49,11 +130,21 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.bonusLuck': 'Bonus Luck',
       'system.currentLuck': 'Current Luck Pool',
       'system.studiedDice': 'Studied Dice Pool',
+      'system.bonuses.hpPerLevel': 'Bonus: HP Per Level',
 
       // -- Universal Bonuses --
       'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
       'system.universalDamageBonus': 'Universal: All Damage Rolls (Flat Bonus)',
       'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus)',
+
+      // -- Separated Universal Damage Bonuses --
+      'system.universalWeaponDamageBonus': 'Universal: Weapon Damage (Flat Bonus)',
+      'system.universalWeaponDamageDice': 'Universal: Weapon Damage (Dice Bonus)',
+      'system.universalSpellDamageBonus': 'Universal: Spell Damage (Flat Bonus)',
+      'system.universalSpellDamageDice': 'Universal: Spell Damage (Dice Bonus)',
+      'system.universalAlchemicalDamageBonus': 'Universal: Alchemical Damage (Flat Bonus)',
+      'system.universalAlchemicalDamageDice': 'Universal: Alchemical Damage (Dice Bonus)',
+      'system.spellDamageDieSize': 'Spell: Damage Die Size (e.g., 6 for d6, 8 for d8)',
 
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',

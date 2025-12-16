@@ -92,6 +92,53 @@ export default class VagabondCharacter extends VagabondActorBase {
       blank: true,
       label: "Universal Damage Dice"
     });
+
+    // Separated Universal Damage Bonuses by Type
+    schema.universalWeaponDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Universal Weapon Damage Bonus"
+    });
+
+    schema.universalWeaponDamageDice = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Weapon Damage Dice"
+    });
+
+    schema.universalSpellDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Universal Spell Damage Bonus"
+    });
+
+    schema.universalSpellDamageDice = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Spell Damage Dice"
+    });
+
+    schema.universalAlchemicalDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Universal Alchemical Damage Bonus"
+    });
+
+    schema.universalAlchemicalDamageDice = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Alchemical Damage Dice"
+    });
+
+    // Spell Damage Die Size - allows changing spell damage from d6 to d8/d10/d12
+    schema.spellDamageDieSize = new fields.NumberField({
+      ...requiredInteger,
+      initial: 6,
+      min: 4,
+      max: 20,
+      label: "Spell Damage Die Size",
+      hint: "Base die size for spell damage (e.g., 6 for d6, 8 for d8)"
+    });
     // ---------------------
 
     // Favor/Hinder system - toggle for roll modifiers
@@ -279,14 +326,13 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
   }
 
-  /**
+/**
    * V13 Best Practice: prepareDerivedData is for calculations.
    * This happens AFTER Active Effects.
    */
   prepareDerivedData() {
     // CRITICAL FIX: Active Effects pass string values, so we need to convert
     // isSpellcaster to a proper boolean if it's a truthy string like "1"
-    // This needs to happen BEFORE we call _calculateManaValues
     if (typeof this.attributes.isSpellcaster === 'string') {
       this.attributes.isSpellcaster = this.attributes.isSpellcaster === 'true' ||
                                       this.attributes.isSpellcaster === '1' ||
@@ -298,10 +344,34 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.attributes.isSpellcaster = Boolean(this.attributes.isSpellcaster);
 
     // ------------------------------------------------------------------
+    // NEW: Initialize Bonuses Container
+    // This creates the safe place for your Active Effect to "land"
+    // ------------------------------------------------------------------
+    this.bonuses = this.bonuses || {};
+    // Default to 0 if no active effect is applied
+    if (this.bonuses.hpPerLevel === undefined) this.bonuses.hpPerLevel = 0;
+
+    // ------------------------------------------------------------------
+    // NEW: Calculate Max HP 
+    // Formula: Might + Level + (Bonus * Level)
+    // We do this BEFORE other combat values in case they depend on Max HP
+    // ------------------------------------------------------------------
+    const mightValue = this.stats.might?.value || 0;
+    const levelValue = this.attributes.level?.value || 0;
+    
+    this.health.max = mightValue + levelValue + (this.bonuses.hpPerLevel * levelValue);
+
+
+    // ------------------------------------------------------------------
     // 1. Calculate derived values that depend on Embedded Items/Effects
     // ------------------------------------------------------------------
     this._calculateManaValues();
+    
+    // NOTE: Check your _calculateCombatValues function!
+    // If it currently calculates health.max, you should remove that line
+    // from inside the helper function so it doesn't overwrite the work we just did above.
     this._calculateCombatValues();
+    
     this._calculateInventorySlots();
 
     // ------------------------------------------------------------------
@@ -451,9 +521,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     const dexValue = this.stats.dexterity?.value || 0;
     const luckValue = this.stats.luck?.value || 0;
     const level = this.attributes.level.value || 1;
-
-    // HP Calculation
-    this.health.max = mightValue * level;
 
     // Luck Calculation
     const bonusLuck = this.bonusLuck || 0;

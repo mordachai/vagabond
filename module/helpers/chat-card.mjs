@@ -465,8 +465,14 @@ export class VagabondChatCard {
       
       if (weapon.system.currentDamage) {
           const dType = weapon.system.damageType || 'physical';
-          const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
-          tags.push({ label: weapon.system.currentDamage, icon: icon, cssClass: 'tag-damage' });
+          // Show damage with icon if type exists, without icon if typeless ("-")
+          if (dType && dType !== '-') {
+              const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
+              tags.push({ label: weapon.system.currentDamage, icon: icon, cssClass: 'tag-damage' });
+          } else {
+              // Typeless damage - show damage amount without damage type icon
+              tags.push({ label: weapon.system.currentDamage, cssClass: 'tag-damage' });
+          }
       }
       if (weapon.system.grip) {
           const gripMap = { '1H': 'fas fa-hand-fist', '2H': 'fas fa-hands', 'V': 'fas fa-hand-peace' };
@@ -526,10 +532,19 @@ export class VagabondChatCard {
       tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
       
       // 2. Damage Tag
-      if (spell.system.damageType !== '-') {
+      if (spellState.damageDice && spellState.damageDice > 0) {
           const dType = spell.system.damageType;
-          const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
-          tags.push({ label: `${spellState.damageDice}d6`, icon, cssClass: 'tag-damage' });
+          // Determine die size: spell override > actor default (6)
+          const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
+
+          // Show damage dice with icon if type exists, without icon if typeless ("-")
+          if (dType && dType !== '-') {
+              const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
+              tags.push({ label: `${spellState.damageDice}d${dieSize}`, icon, cssClass: 'tag-damage' });
+          } else {
+              // Typeless damage - show dice amount without damage type icon
+              tags.push({ label: `${spellState.damageDice}d${dieSize}`, cssClass: 'tag-damage' });
+          }
       }
 
       // 3. Delivery Tag (THE FIX)
@@ -547,7 +562,8 @@ export class VagabondChatCard {
 
       // 4. Mana Cost Tag
       tags.push({ 
-          label: `${costs.totalCost} <i class="fas fa-star-christmas"></i>`, 
+          label: `${costs.totalCost}`, 
+          icon: 'fas fa-star-christmas',
           cssClass: 'tag-mana' 
       });
 
@@ -606,13 +622,14 @@ export class VagabondChatCard {
 
     // 7. Damage Buttons
     const footerActions = [];
-    // Only verify damage if it's not "-"
-    if ((action.flatDamage || action.rollDamage) && action.damageType !== '-') {
+    // Show damage buttons even for "-" (typeless damage)
+    if (action.flatDamage || action.rollDamage) {
         const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-        
+
         const rawType = action.damageType || 'physical';
-        const dTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType;
-        
+        // For "-" damage type, use empty string as label (will be handled as typeless)
+        const dTypeLabel = rawType === '-' ? '' : (game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType);
+
         // Normalize attack type for the helper
         let attackType = action.attackType || 'melee';
         if (attackType === 'castClose') attackType = 'melee';
@@ -697,14 +714,102 @@ export class VagabondChatCard {
     return this.itemUse(actor, item);
   }
 
-  // 8. GEAR USE ADAPTER
+  // 8. COUNTDOWN DICE ROLL ADAPTER
+  /**
+   * Create a chat card for countdown dice rolls
+   * @param {JournalEntry} dice - The countdown dice journal entry
+   * @param {Roll} roll - The dice roll
+   * @param {number} rollResult - The roll result
+   * @param {string} status - Status: 'continues', 'reduced', or 'ended'
+   * @param {string} currentDiceType - Current dice type (e.g., 'd20')
+   * @param {string} newDiceType - New dice type (for 'reduced' status)
+   * @returns {Promise<ChatMessage>}
+   */
+  static async countdownDiceRoll(dice, roll, rollResult, status, currentDiceType, newDiceType = null) {
+    const flags = dice.flags.vagabond.countdownDice;
+
+    // Determine status message and state
+    let statusMessage;
+    let statusClass;
+    let stateMessage;
+
+    if (status === 'continues') {
+      statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Continues');
+      statusClass = 'continues';
+      stateMessage = `${currentDiceType} remains`;
+    } else if (status === 'reduced') {
+      statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Reduced');
+      statusClass = 'reduced';
+      stateMessage = `${currentDiceType} → ${newDiceType}`;
+    } else if (status === 'ended') {
+      statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Ended');
+      statusClass = 'ended';
+      stateMessage = `${currentDiceType} countdown complete`;
+    }
+
+    // Build description with state and status
+    const description = `
+      <p><strong>${game.i18n.localize('VAGABOND.CountdownDice.Chat.CurrentState')}:</strong> ${stateMessage}</p>
+      <p class="status-message ${statusClass}">${statusMessage}</p>
+    `;
+
+    // Get dice image path for icon
+    const CountdownDiceClass = (await import('../documents/countdown-dice.mjs')).CountdownDice;
+    const diceImagePath = CountdownDiceClass.getDiceImagePath(currentDiceType);
+
+    // Build tags for dice type and result
+    const tags = [
+      { label: currentDiceType, cssClass: 'tag-dice-type' },
+      { label: `Result: ${rollResult}`, cssClass: 'tag-result' }
+    ];
+
+    // Create chat card using unified system
+    const card = new VagabondChatCard();
+    card.data.icon = diceImagePath;
+    card.data.title = flags.name;
+    card.data.subtitle = 'Countdown Dice';
+    card.data.standardTags = tags;
+    card.data.description = description;
+    card.data.roll = roll;
+    card.data.hasRoll = false; // Don't show roll header section
+    card.data.type = 'countdown-dice';
+
+    // Add custom alias for speaker
+    card.data.alias = game.user.name;
+
+    return await card.send();
+  }
+
+  // 9. GEAR USE ADAPTER
   static async gearUse(actor, item) {
     return this.itemUse(actor, item);
   }
 
-  // 9. FEATURE DATA USE ADAPTER
+  // 10. FEATURE DATA USE ADAPTER
   static async featureDataUse(actor, item) {
     // This receives the plain data object {name, description} from the sheet
     return this.itemUse(actor, item);
+  }
+
+  // 11. LUCK SPEND ADAPTER
+  /**
+   * Create a chat card for spending luck
+   * @param {VagabondActor} actor - The actor spending luck
+   * @param {number} newLuck - New luck value after spending
+   * @param {number} maxLuck - Maximum luck value
+   * @returns {Promise<ChatMessage>}
+   */
+  static async luckSpend(actor, newLuck, maxLuck) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Luck Spent')
+      .setSubtitle(actor.name)
+      .setDescription(`
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a Luck point.</p>
+        <p><strong>Remaining Luck:</strong> ${newLuck} / ${maxLuck}</p>
+      `);
+
+    return await card.send();
   }
 }

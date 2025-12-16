@@ -499,43 +499,16 @@ export class CountdownDiceOverlay {
     const flags = dice.flags.vagabond.countdownDice;
     const currentDiceType = flags.diceType;
 
-    let statusMessage;
-    let statusClass;
-    let stateMessage;
-
-    if (status === 'continues') {
-      statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Continues');
-      statusClass = 'continues';
-      stateMessage = `${currentDiceType} remains`;
-    } else if (status === 'reduced') {
-      statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Reduced');
-      statusClass = 'reduced';
-      stateMessage = `${currentDiceType} → ${newDiceType}`;
-    } else if (status === 'ended') {
-      statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Ended');
-      statusClass = 'ended';
-      stateMessage = `${currentDiceType} countdown complete`;
-    }
-
-    const diceImagePath = CountdownDice.getDiceImagePath(currentDiceType);
-
-    const content = `
-      <div class="countdown-dice-chat">
-        <div class="chat-header">
-          <img src="${diceImagePath}" alt="${currentDiceType}" class="dice-icon" />
-          <h4>${flags.name}</h4>
-        </div>
-        <div class="die-result">${rollResult}</div>
-        <p><strong>${game.i18n.localize('VAGABOND.CountdownDice.Chat.CurrentState')}:</strong> ${stateMessage}</p>
-        <p class="status-message ${statusClass}">${statusMessage}</p>
-      </div>
-    `;
-
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-      content: content,
-      rolls: [roll],
-    });
+    // Use unified chat card system
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    await VagabondChatCard.countdownDiceRoll(
+      dice,
+      roll,
+      rollResult,
+      status,
+      currentDiceType,
+      newDiceType
+    );
   }
 
   /**

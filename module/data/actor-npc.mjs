@@ -123,6 +123,37 @@ export default class VagabondNPC extends VagabondActorBase {
       blank: true
     });
 
+    // Separated Universal Damage Bonuses by Type (same as character)
+    schema.universalWeaponDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0
+    });
+
+    schema.universalWeaponDamageDice = new fields.StringField({
+      initial: '',
+      blank: true
+    });
+
+    schema.universalSpellDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0
+    });
+
+    schema.universalSpellDamageDice = new fields.StringField({
+      initial: '',
+      blank: true
+    });
+
+    schema.universalAlchemicalDamageBonus = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0
+    });
+
+    schema.universalAlchemicalDamageDice = new fields.StringField({
+      initial: '',
+      blank: true
+    });
+
     // Locked/unlocked mode toggle
     schema.locked = new fields.BooleanField({
       required: true,
