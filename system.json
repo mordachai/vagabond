@@ -1,12 +1,18 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
       "name": "Gus",
-      "discord": "gus4294"
+      "discord": "gus4294",
+      "url": "https://github.com/mordachai"      
+    },
+    {
+      "name": "KeyInk",
+      "discord": "keyink",
+      "url": "https://bsky.app/profile/keylligraphyink.bsky.social"
     }
   ],
   "documentTypes": {
