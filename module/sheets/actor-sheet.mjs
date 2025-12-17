@@ -71,7 +71,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteItem: this._onDeleteItem,  // Delete item from context menu
       spendLuck: this._onSpendLuck,  // Spend or recharge luck
       spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
-      openDowntime: this._onOpenDowntime,  // Open downtime activities
+      openDowntime: this._onOpenDowntime, // Open downtime activities
+      toggleSpellPreview: this._onToggleSpellPreview, // Display measure template
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -129,20 +130,36 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Override close to clean up dropdown state
-   */
-  async close(options = {}) {
-    // Clear dropdown state when sheet closes
-    this._openDropdowns = [];
+     * Override close to clean up:
+     * 1. Dropdown states
+     * 2. Debounce timers
+     * 3. Event listeners
+     * 4. Measurement Template previews
+     * @override
+     */
+    async close(options = {}) {
+      // 1. Clear dropdown state
+      this._openDropdowns = [];
 
-    // Clear debounce timer
-    if (this._formSubmitDebounce) {
-      clearTimeout(this._formSubmitDebounce);
-      this._formSubmitDebounce = null;
+      // 2. Clear pending form submission debounce
+      if (this._formSubmitDebounce) {
+        clearTimeout(this._formSubmitDebounce);
+        this._formSubmitDebounce = null;
+      }
+
+      // 3. Remove click outside handler (from the second implementation)
+      if (this._accordionClickOutsideHandler) {
+        document.removeEventListener('click', this._accordionClickOutsideHandler);
+        this._accordionClickOutsideHandler = null;
+      }
+
+      // 4. NEW: Cleanup any active Template Previews for this actor
+      if (globalThis.vagabond.managers?.templates) {
+        await globalThis.vagabond.managers.templates.clearActorPreviews(this.actor.id);
+      }
+
+      return super.close(options);
     }
-
-    return super.close(options);
-  }
 
   /**
    * Load spell states from localStorage for this character
@@ -179,7 +196,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         damageDice: 1,
         deliveryType: null,
         deliveryIncrease: 0,
-        useFx: defaultUseFx  // Default true for effect-only spells
+        useFx: defaultUseFx,
+        previewActive: false // NEW: Track preview state
       };
     }
     return this.spellStates[spellId];
@@ -295,6 +313,60 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return '';
   }
 
+  /** * Logic to actually update/create the preview 
+   * (Helper function to be used by multiple listeners)
+   */
+  async _refreshSpellPreview(spellId) {
+    const state = this._getSpellState(spellId);
+    
+    // If preview is OFF, ensure we clear it
+    if (!state.previewActive) {
+      if (globalThis.vagabond.managers?.templates) {
+        await globalThis.vagabond.managers.templates.clearPreview(this.actor.id, spellId);
+      }
+      return;
+    }
+
+    // If preview is ON, calculate data and update
+    const spell = this.actor.items.get(spellId);
+    if (!state.deliveryType) return; // Can't draw without type
+
+    // Calculate total distance
+    const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
+    const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
+    const totalDistance = baseRange.value + (increment * state.deliveryIncrease);
+
+    if (globalThis.vagabond.managers?.templates) {
+      await globalThis.vagabond.managers.templates.updatePreview(
+        this.actor, 
+        spellId, 
+        state.deliveryType, 
+        totalDistance
+      );
+    }
+  }
+
+  /**
+   * ACTION: Toggle Spell Preview
+   */
+  static async _onToggleSpellPreview(event, target) {
+    event.preventDefault();
+    const spellId = target.dataset.spellId;
+    const state = this._getSpellState(spellId);
+
+    // 1. Toggle State
+    state.previewActive = !state.previewActive;
+    
+    // 2. Save (Optional: if we want this persistent across reloads, usually not for previews)
+    // this._saveSpellStates(); 
+
+    // 3. Update Visuals
+    this._updateSpellDisplay(spellId);
+
+    // 4. Update Canvas
+    await this._refreshSpellPreview(spellId);
+  }
+
   /**
    * Update spell display in the UI with current state and costs
    * @param {string} spellId - The spell ID
@@ -369,6 +441,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Update range display
     const rangeSpan = container.querySelector('.spell-range');
     if (rangeSpan) {
+      
+      // NEW: Toggle preview active visual state
+      if (state.previewActive) {
+        rangeSpan.classList.add('preview-active');
+        // Visual feedback to show it's active (Bright Text + Glow)
+        rangeSpan.style.color = "var(--color-text-light-highlight)"; 
+        rangeSpan.style.textShadow = "0 0 5px var(--color-shadow-highlight)";
+      } else {
+        rangeSpan.classList.remove('preview-active');
+        rangeSpan.style.color = "";
+        rangeSpan.style.textShadow = "";
+      }
+
       if (state.deliveryType) {
         const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
         const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
@@ -396,7 +481,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (totalSpan) {
       totalSpan.textContent = costs.totalCost;
     }
-  }
+  }  
+
 
   /** @override */
   _configureRenderOptions(options) {
@@ -1302,6 +1388,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease = 0; // Reset increases when changing delivery
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+          
+          // REFRESH PREVIEW (Added)
+          await this._refreshSpellPreview(spellId);
         });
       }
 
@@ -1352,6 +1441,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease++;
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // REFRESH PREVIEW (Added)
+          await this._refreshSpellPreview(spellId);
         });
 
         deliveryCostElement.addEventListener('contextmenu', async (event) => {
@@ -1360,16 +1452,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease = Math.max(0, state.deliveryIncrease - 1);
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // REFRESH PREVIEW (Added)
+          await this._refreshSpellPreview(spellId);
         });
       }
     });
 
     // Inventory Grid Event Listeners
     this._attachInventoryGridListeners();
-
-    // You may want to add other special handling here
-    // Foundry comes with a large number of utility classes, e.g. SearchFilter
-    // That you may want to implement yourself.
   }
 
   /**
@@ -4619,22 +4710,4 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
-  /**
-   * Clean up event listeners when sheet closes
-   * @override
-   */
-  async close(options = {}) {
-    // Clear any pending form submission
-    if (this._formSubmitDebounce) {
-      clearTimeout(this._formSubmitDebounce);
-      this._formSubmitDebounce = null;
-    }
-
-    // Remove click outside handler
-    if (this._accordionClickOutsideHandler) {
-      document.removeEventListener('click', this._accordionClickOutsideHandler);
-      this._accordionClickOutsideHandler = null;
-    }
-    return super.close(options);
-  }
 }
