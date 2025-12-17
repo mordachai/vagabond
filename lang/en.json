@@ -693,8 +693,12 @@
     "Notifications": {
       "NoLuckRemaining": "No Luck remaining to spend!",
       "LuckAlreadyMax": "Luck is already at maximum!"
+    },
+    "DiceSoNice": {
+      "Category": "Vagabond",
+      "Favor": "Favor Dice",
+      "Hinder": "Hinder Dice"
     }
-
 
   },
   "TYPES": {
@@ -732,11 +736,6 @@
         "Ended": "Countdown ended!",
         "CurrentState": "Current State"
       }
-    },
-    "DiceSoNice": {
-      "Category": "Vagabond",
-      "Favor": "Favor Dice",
-      "Hinder": "Hinder Dice"
     }
   }
 

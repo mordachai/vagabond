@@ -157,15 +157,17 @@ export default class VagabondCharacter extends VagabondActorBase {
       max: 20
     });
 
-    // Define the six core stats (DEFAULTS TO 0)
+    // Define the six core stats (NO INITIAL VALUE - empty by default)
     schema.stats = new fields.SchemaField(
       Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {
         obj[stat] = new fields.SchemaField({
           value: new fields.NumberField({
-            ...requiredInteger,
-            initial: 0,  // Default 0
+            required: false,
+            nullable: true,
+            integer: true,
+            initial: null,  // No initial value - field is empty
             min: 0,
-            max: 12,     
+            max: 12,
           }),
         });
         return obj;
@@ -352,14 +354,16 @@ export default class VagabondCharacter extends VagabondActorBase {
     if (this.bonuses.hpPerLevel === undefined) this.bonuses.hpPerLevel = 0;
 
     // ------------------------------------------------------------------
-    // NEW: Calculate Max HP 
-    // Formula: Might + Level + (Bonus * Level)
+    // NEW: Calculate Max HP
+    // Formula: (Might × Level) + (hpPerLevel Bonus × Level)
+    // Base HP = Might × Level
+    // Tough Perk adds +1 hpPerLevel per stack, giving +Level HP per stack
     // We do this BEFORE other combat values in case they depend on Max HP
     // ------------------------------------------------------------------
     const mightValue = this.stats.might?.value || 0;
     const levelValue = this.attributes.level?.value || 0;
-    
-    this.health.max = mightValue + levelValue + (this.bonuses.hpPerLevel * levelValue);
+
+    this.health.max = (mightValue * levelValue) + (this.bonuses.hpPerLevel * levelValue);
 
 
     // ------------------------------------------------------------------

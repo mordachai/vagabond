@@ -1084,7 +1084,8 @@
   /* Defend Options Accordion */
 }
 .vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button,
-.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button {
+.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button,
+.vagabond-chat-card-v2 .card-actions .vagabond-damage-button {
   width: 100%;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp");
   background-size: 100% 100%;
@@ -1106,11 +1107,13 @@
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 .vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button:hover,
-.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button:hover {
+.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button:hover,
+.vagabond-chat-card-v2 .card-actions .vagabond-damage-button:hover {
   filter: brightness(1.6);
 }
 .vagabond-chat-card-v2 .card-actions .vagabond-apply-direct-button i,
-.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button i {
+.vagabond-chat-card-v2 .card-actions .vagabond-npc-damage-button i,
+.vagabond-chat-card-v2 .card-actions .vagabond-damage-button i {
   color: var(--c-yellow-text);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row {
@@ -3781,7 +3784,7 @@
   font-size: 28px;
   font-weight: bold;
   text-align: center;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--vagabond-stat-bg);
   padding-top: 5px;
   color: var(--vagabond-c-stat);
@@ -3789,6 +3792,12 @@
 }
 .vagabond .stats-grid .stat-score:hover, .vagabond .stats-grid .stat-score:focus {
   text-shadow: 0 0 3px var(--vagabond-c-white);
+}
+.vagabond .stats-grid .stat-score::placeholder {
+  color: rgba(var(--vagabond-c-stat), 0.3);
+  opacity: 1;
+  -webkit-text-stroke-color: var(--vagabond-c-red);
+  -webkit-text-stroke-width: 1px;
 }
 .vagabond .stats-grid .stat-label {
   font-size: 13px;

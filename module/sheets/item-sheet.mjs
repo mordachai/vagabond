@@ -263,7 +263,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
                 // Determine equipment subtype and build stats
                 if (sys.equipmentType === 'weapon') {
-                  // Weapon: damage, damage type, grip (NO range)
+                  // Weapon: damage, damage type, grip, cost, slots
                   const damageDisplay = sys.grip === 'V'
                     ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
                     : (sys.currentDamage || '—');
@@ -271,8 +271,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                     ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
                     : '';
                   const grip = sys.grip ? (sys.grip === 'V' ? '1H/2H' : sys.grip) : '—';
+                  const costDisplay = sys.costDisplay || '0g';
+                  const slots = sys.slots || 1;
 
-                  stats = `${damageDisplay} ${damageType} • ${grip}`;
+                  stats = `${damageDisplay} ${damageType} • ${grip} • ${costDisplay} • ${slots} slot${slots !== 1 ? 's' : ''}`;
 
                   // Get localized weapon skill name
                   let weaponSkillName = '';
@@ -283,10 +285,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                   description = weaponSkillName ? `${weaponSkillName} Weapon` : 'Weapon';
 
                 } else if (sys.equipmentType === 'armor') {
-                  // Armor: armor value, minimal might
-                  const armorValue = sys.armorValue || 0;
-                  const minMight = sys.minimalMight || 0;
-                  stats = `Armor: ${armorValue} • Min Might: ${minMight}`;
+                  // Armor: armor rating, might requirement, cost
+                  const rating = sys.rating || 0;
+                  const might = sys.might || 0;
+                  const costDisplay = sys.costDisplay || '0g';
+                  stats = `Armor: ${rating} • Might: ${might} • ${costDisplay}`;
                   description = sys.armorType ? `${sys.armorType.titleCase()} Armor` : 'Armor';
 
                 } else if (sys.equipmentType === 'alchemical') {
@@ -295,22 +298,22 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                   const damageType = sys.damageType && sys.damageType !== '-'
                     ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
                     : '';
-                  const cost = sys.baseCost?.gold || 0;
-                  stats = `${damage} ${damageType} • ${cost}g`;
+                  const costDisplay = sys.costDisplay || '0g';
+                  stats = `${damage} ${damageType} • ${costDisplay}`;
                   description = sys.alchemicalType ? sys.alchemicalType.titleCase() : 'Alchemical';
 
                 } else if (sys.equipmentType === 'relic') {
                   // Relic: cost, slots
-                  const cost = sys.baseCost?.gold || 0;
+                  const costDisplay = sys.costDisplay || '0g';
                   const slots = sys.baseSlots || 1;
-                  stats = `Cost: ${cost}g • Slots: ${slots}`;
+                  stats = `${costDisplay} • Slots: ${slots}`;
                   description = 'Relic';
 
                 } else {
                   // Gear: cost, slots
-                  const cost = sys.baseCost?.gold || 0;
+                  const costDisplay = sys.costDisplay || '0g';
                   const slots = sys.baseSlots || 1;
-                  stats = `Cost: ${cost}g • Slots: ${slots}`;
+                  stats = `${costDisplay} • Slots: ${slots}`;
                   description = sys.gearType || 'Gear';
                 }
 
