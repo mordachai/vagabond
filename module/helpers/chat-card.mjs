@@ -234,7 +234,7 @@ export class VagabondChatCard {
           rolls: this.data.roll ? [this.data.roll] : []
       };
       if (this.data.damage?.roll) msgData.rolls.push(this.data.damage.roll);
-      
+
       if (this.data.item && this.data.actor) {
         msgData.flags = {
             vagabond: {
@@ -339,16 +339,18 @@ export class VagabondChatCard {
           const isCrit = rollData?.isCritical || false;
           
           card.addDamage(damageRoll, dLabel, isCrit, key);
-          
+
           const isHealing = damageType.toLowerCase() === 'healing';
-          
-          let btns = isHealing 
+
+          let btns = isHealing
             ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id)
             : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType);
-            
+
           card.addFooterAction(btns);
-          
-          if (!isHealing && hasDefenses) card.data.showDefendOptions = true;
+
+          if (!isHealing && hasDefenses) {
+            card.addFooterAction(VagabondDamageHelper.createDefendOptions());
+          }
 
       } else if (rollData?.isHit && item && !damageRoll) {
            const { VagabondDamageHelper } = await import('./damage-helper.mjs');

@@ -35,18 +35,16 @@ export class VagabondDamageHelper {
     const contextJson = JSON.stringify(context).replace(/"/g, '&quot;');
 
     return `
-      <div class="vagabond-damage-button-container" data-vagabond-button="true">
-        <button
-          class="vagabond-damage-button"
-          data-vagabond-button="true"
-          data-actor-id="${actorId}"
-          data-item-id="${itemId || ''}"
-          data-damage-formula="${damageFormula}"
-          data-context="${contextJson}"
-        >
-          <i class="fas fa-dice"></i> Roll Damage
-        </button>
-      </div>
+      <button
+        class="vagabond-damage-button"
+        data-vagabond-button="true"
+        data-actor-id="${actorId}"
+        data-item-id="${itemId || ''}"
+        data-damage-formula="${damageFormula}"
+        data-context="${contextJson}"
+      >
+        <i class="fas fa-dice"></i> Roll Damage
+      </button>
     `;
   }
 
@@ -176,9 +174,28 @@ export class VagabondDamageHelper {
     // Get attack type from context (defaults to 'melee' if not provided)
     const attackType = context.attackType || 'melee';
 
-    // Update the chat message in-place
-    // Note: The "Roll Damage" button will be removed from the content during update
-    await this.updateChatCardDamage(messageId, damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType);
+    // Post a SEPARATE damage message instead of updating the attack card
+    // This prevents double-rolling issues and matches the save result flow
+    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType);
+  }
+
+  /**
+   * Post a separate damage result message with save buttons
+   * Uses existing createActionCard() to avoid code duplication
+   */
+  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee') {
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+
+    return await VagabondChatCard.createActionCard({
+      actor,
+      item,
+      title: `${item?.name || 'Attack'} Damage`,
+      damageRoll,
+      damageType: damageTypeKey || damageType,
+      hasDefenses: true,
+      attackType,
+      rollData: isCritical ? { isCritical: true } : null
+    });
   }
 
 /**
@@ -191,6 +208,7 @@ export class VagabondDamageHelper {
    * @param {Item} item - The item used (optional)
    * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
    * @param {string} attackType - 'melee' or 'ranged' or 'cast' (for Hinder logic)
+   * @deprecated Use postDamageResult() instead
    */
   static async updateChatCardDamage(messageId, damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee') {
     const message = game.messages.get(messageId);
@@ -201,7 +219,6 @@ export class VagabondDamageHelper {
 
     // Get the current message content
     let content = message.content;
-
 
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageType, isCritical, damageTypeKey);
@@ -227,37 +244,54 @@ export class VagabondDamageHelper {
         item?.id,
         attackType
       );
-    } 
+    }
+
+    // Build defend options HTML (unless it's healing)
+    const defendHTML = isHealing ? '' : this.createDefendOptions();
 
     // 1. Inject Damage Display
-    // Replace the empty damage section placeholder with the actual damage HTML
-    content = content.replace(
-      /(<div class=['"]card-damage-section['"] data-damage-section>)([\s\S]*?)(<\/div>)/,
-      `$1${damageHTML}$3`
-    );
-
-    // 2. Replace Footer Actions with Save Buttons
-    if (content.includes('footer-actions')) {
+    // Check if damage section already exists
+    if (content.includes('class="damage-section"')) {
+      // Replace existing damage section
       content = content.replace(
-        /(<div class=['"]footer-actions['"]>)([\s\S]*?)(<\/div>)/,
-        `$1${buttonsHTML}$3`
+        /(<div class=['"]damage-section['"]>)([\s\S]*?)(<\/div>)/,
+        damageHTML
       );
     } else {
-      // Fallback: If no footer actions existed, inject it before footer tags
-      const footerOpen = `<footer class='card-footer'>`;
-      if (content.includes(footerOpen)) {
-         content = content.replace(
-           footerOpen,
-           `${footerOpen}<div class='footer-actions'>${buttonsHTML}</div>`
-         );
+      // Inject new damage section after roll-strip or at start of content-body
+      if (content.includes('class="roll-strip"')) {
+        content = content.replace(
+          /(<\/section>)(\s*<section class=['"]content-body['"]>)/,
+          `$1$2${damageHTML}`
+        );
+      } else if (content.includes('class="content-body"')) {
+        content = content.replace(
+          /(<section class=['"]content-body['"]>)/,
+          `$1${damageHTML}`
+        );
       }
     }
 
-    // Update the message's rolls array to include the damage roll
-    const rolls = [...(message.rolls || []), damageRoll];
+    // 2. Replace Footer Actions with Save Buttons
+    if (content.includes('class="action-buttons-container"')) {
+      // Replace the entire action-buttons-container content
+      content = content.replace(
+        /(<div class=['"]action-buttons-container['"]>)([\s\S]*?)(<\/div>)/,
+        `$1${buttonsHTML}${defendHTML}$3`
+      );
+    } else if (content.includes('class="card-actions"')) {
+      // Inject new action-buttons-container into card-actions footer
+      content = content.replace(
+        /(<footer class=['"]card-actions['"]>)/,
+        `$1<div class="action-buttons-container">${buttonsHTML}${defendHTML}</div>`
+      );
+    }
 
-    // Update the message with new content and rolls
-    await message.update({ content, rolls });
+    // IMPORTANT: We DON'T add the roll to the message's rolls array
+    // This prevents Dice So Nice from showing the dice again
+    // The dice were already shown by Foundry when we evaluated the roll
+    // We only update the content to show the damage result
+    await message.update({ content });
   }
 
   /**
@@ -683,6 +717,36 @@ export class VagabondDamageHelper {
 
 
   /**
+   * Create defend options accordion HTML
+   * @returns {string} HTML string
+   */
+  static createDefendOptions() {
+    return `
+      <div class="defend-info-box">
+        <div class="defend-header">
+          <i class="fas fa-shield-alt"></i>
+          <span>${game.i18n.localize('VAGABOND.DefendMechanics.DefendingTitle')}</span>
+          <i class="fas fa-chevron-down expand-icon"></i>
+        </div>
+        <div class="defend-content">
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.DodgeTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.DodgeDescription')}
+          </p>
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.BlockTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.BlockDescription')}
+          </p>
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
+          </p>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
    */
   static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType) {
@@ -719,7 +783,7 @@ export class VagabondDamageHelper {
               data-damage-type="${damageType}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}">
-              <i class="fas fa-bolt"></i> ${applyDirectLabel}
+              <i class="fas fa-burst"></i> ${applyDirectLabel}
             </button>
         </div>
 
@@ -802,9 +866,11 @@ export class VagabondDamageHelper {
       // Roll the save
       const saveRoll = await this._rollSave(targetActor, saveType, isHindered);
 
-      // Determine success
+      // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
       const isSuccess = saveRoll.total >= difficulty;
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+      const isCritical = VagabondChatCard.isRollCritical(saveRoll, targetActor);
 
       // Calculate damage breakdown for display
       let damageAfterSave = damageAmount;
@@ -836,6 +902,7 @@ export class VagabondDamageHelper {
         saveRoll,
         difficulty,
         isSuccess,
+        isCritical,
         isHindered,
         damageAmount,
         saveReduction,
@@ -957,6 +1024,7 @@ export class VagabondDamageHelper {
    * @param {Roll} roll - The save roll
    * @param {number} difficulty - Save difficulty
    * @param {boolean} isSuccess - Whether the save succeeded
+   * @param {boolean} isCritical - Whether the save was a critical (natural 20)
    * @param {boolean} isHindered - Whether the save was Hindered
    * @param {number} originalDamage - Original damage amount
    * @param {number} saveReduction - Damage prevented by save
@@ -967,7 +1035,7 @@ export class VagabondDamageHelper {
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied) {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied) {
     const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
     // Import VagabondChatCard
@@ -979,7 +1047,7 @@ export class VagabondDamageHelper {
       .setTitle(`${saveLabel} Save`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'PASS' : 'FAIL', false);
+      .setOutcome(isSuccess ? 'PASS' : 'FAIL', isCritical);
 
     // Build visual damage calculation display
     const damageCalculationHTML = this._buildDamageCalculation(
@@ -994,7 +1062,20 @@ export class VagabondDamageHelper {
       isHindered
     );
 
-    card.setDescription((card.data.description || '') + damageCalculationHTML);
+    // Add crit rule text if critical save
+    let critRuleHTML = '';
+    if (isCritical) {
+      critRuleHTML = `
+        <div class="save-crit-rule">
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
+          </p>
+        </div>
+      `;
+    }
+
+    card.setDescription((card.data.description || '') + damageCalculationHTML + critRuleHTML);
 
     return await card.send();
   }

@@ -79,8 +79,13 @@
                 <div class="roll-skill-label">{{rollSkillLabel}}</div>
                 {{/if}}
 
+                {{!-- CRIT LABEL FOR SAVES --}}
+                {{!-- {{#if isCritical}}
+                <div class="roll-crit-label">{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!</div>
+                {{/if}} --}}
+
                 {{!-- RESULT BANNER --}}
-                <div class="roll-result-banner {{#if (or (eq outcome 'success') (eq outcome 'HIT'))}}result-hit{{else}}result-miss{{/if}}">
+                <div class="roll-result-banner {{#if (or (eq outcome 'success') (eq outcome 'HIT') (eq outcome 'PASS'))}}result-hit{{else}}result-miss{{/if}}">
                     <span class="roll-value">{{rollTotal}}</span>
                     <span class="roll-vs">vs</span>
                     <span class="roll-target">{{difficulty}}</span>
@@ -112,34 +117,12 @@
 
             {{!-- FOOTER --}}
             <footer class="card-actions">
-                {{!-- 1. Action Buttons --}}
+                {{!-- Action Buttons (includes defend options via footerActions) --}}
                 {{#if footerActions.length}}
                 <div class="action-buttons-container">
                     {{#each footerActions}}
                         {{{this}}}
                     {{/each}}
-                </div>
-                {{/if}}
-
-                {{!-- 2. Defend Options Accordion --}}
-                {{!-- RESTORED CORRECT KEYS --}}
-                {{#if showDefendOptions}}
-                <div class="defend-info-box">
-                    <div class="defend-header">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>{{localize "VAGABOND.DefendMechanics.DefendingTitle"}}</span>
-                        <i class="fas fa-chevron-down expand-icon"></i>
-                    </div>
-                    <div class="defend-content">
-                         <p>
-                            <strong>{{localize "VAGABOND.DefendMechanics.DodgeTitle"}}:</strong> 
-                            {{localize "VAGABOND.DefendMechanics.DodgeDescription"}}
-                        </p>
-                        <p>
-                            <strong>{{localize "VAGABOND.DefendMechanics.BlockTitle"}}:</strong> 
-                            {{localize "VAGABOND.DefendMechanics.BlockDescription"}}
-                        </p>
-                    </div>
                 </div>
                 {{/if}}
             </footer>

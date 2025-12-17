@@ -257,16 +257,22 @@
     font-size: 28px;
     font-weight: bold;
     text-align: center;
-    border-radius: 2px;
+    border-radius: 3px;
     background: $bg-stat;
     padding-top: 5px;
     color: $c-stat;
     font-family: $font-secondary;
-    
+
     &:hover,
     &:focus {
       text-shadow: 0 0 3px $c-white;
+    }
 
+    &::placeholder {
+      color: rgba($c-stat, 0.3);
+      opacity: 1;
+      -webkit-text-stroke-color: $c-red;
+      -webkit-text-stroke-width: 1px;
     }
   }
 

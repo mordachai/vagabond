@@ -58,8 +58,10 @@
       "DefendingTitle": "Defending options",
       "BlockTitle": "Block (Endure)",
       "DodgeTitle": "Dodge (Reflex)",
+      "CritTitle": "Crit",
       "BlockDescription": "Roll Endure save. Success ignores one highest damage die. Hindered if Ranged attack.",
-      "DodgeDescription": "Roll Reflex save. Success ignores one highest damage die. Hindered if Heavy Armor."
+      "DodgeDescription": "Roll Reflex save. Success ignores one highest damage die. Hindered if Heavy Armor.",
+      "CritDescription": "You aren't affected by what provoked the Save, and can use an Action."
     },
     "AttackTypes": {
       "Melee": "Melee",
@@ -693,8 +695,12 @@
     "Notifications": {
       "NoLuckRemaining": "No Luck remaining to spend!",
       "LuckAlreadyMax": "Luck is already at maximum!"
+    },
+    "DiceSoNice": {
+      "Category": "Vagabond",
+      "Favor": "Favor Dice",
+      "Hinder": "Hinder Dice"
     }
-
 
   },
   "TYPES": {
@@ -732,11 +738,6 @@
         "Ended": "Countdown ended!",
         "CurrentState": "Current State"
       }
-    },
-    "DiceSoNice": {
-      "Category": "Vagabond",
-      "Favor": "Favor Dice",
-      "Hinder": "Hinder Dice"
     }
   }
 
