@@ -646,11 +646,11 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       if (!deliveryType) return;
 
-      // Ensure createSpellTemplate is available in scope or imported
-      if (typeof createSpellTemplate === 'function') {
-        await createSpellTemplate(deliveryType, deliveryText, message);
+      // Call the template manager to create the template from chat
+      if (globalThis.vagabond?.managers?.templates) {
+        await globalThis.vagabond.managers.templates.fromChat(deliveryType, deliveryText, message);
       } else {
-        console.warn("VagabondSystem | createSpellTemplate function not found.");
+        console.warn("VagabondSystem | Template manager not found.");
       }
     });
   });

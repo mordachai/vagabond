@@ -313,12 +313,33 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return '';
   }
 
-  /** * Logic to actually update/create the preview 
+  /**
+   * Clear all template previews for this actor
+   * Called when player changes ANY spell configuration (shows they're changing their mind)
+   * @private
+   */
+  async _clearAllPreviews() {
+    if (globalThis.vagabond.managers?.templates) {
+      await globalThis.vagabond.managers.templates.clearActorPreviews(this.actor.id);
+    }
+
+    // Also reset all preview states
+    for (const spellId in this.spellStates) {
+      this.spellStates[spellId].previewActive = false;
+    }
+
+    // Update UI to show previews are off
+    for (const spellId in this.spellStates) {
+      this._updateSpellDisplay(spellId);
+    }
+  }
+
+  /** * Logic to actually update/create the preview
    * (Helper function to be used by multiple listeners)
    */
   async _refreshSpellPreview(spellId) {
     const state = this._getSpellState(spellId);
-    
+
     // If preview is OFF, ensure we clear it
     if (!state.previewActive) {
       if (globalThis.vagabond.managers?.templates) {
@@ -338,9 +359,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (globalThis.vagabond.managers?.templates) {
       await globalThis.vagabond.managers.templates.updatePreview(
-        this.actor, 
-        spellId, 
-        state.deliveryType, 
+        this.actor,
+        spellId,
+        state.deliveryType,
         totalDistance
       );
     }
@@ -354,11 +375,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const spellId = target.dataset.spellId;
     const state = this._getSpellState(spellId);
 
-    // 1. Toggle State
+    // 1. Clear ALL other previews first
+    // This ensures only one preview is active at a time
+    for (const otherId in this.spellStates) {
+      if (otherId !== spellId && this.spellStates[otherId].previewActive) {
+        this.spellStates[otherId].previewActive = false;
+        if (globalThis.vagabond.managers?.templates) {
+          await globalThis.vagabond.managers.templates.clearPreview(this.actor.id, otherId);
+        }
+        this._updateSpellDisplay(otherId);
+      }
+    }
+
+    // 2. Toggle THIS spell's preview state
     state.previewActive = !state.previewActive;
-    
-    // 2. Save (Optional: if we want this persistent across reloads, usually not for previews)
-    // this._saveSpellStates(); 
 
     // 3. Update Visuals
     this._updateSpellDisplay(spellId);
@@ -1388,9 +1418,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease = 0; // Reset increases when changing delivery
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
-          
-          // REFRESH PREVIEW (Added)
-          await this._refreshSpellPreview(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
       }
 
@@ -1403,6 +1433,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.damageDice++;
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
 
         damageElement.addEventListener('contextmenu', async (event) => {
@@ -1417,6 +1450,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
       }
 
@@ -1442,8 +1478,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
 
-          // REFRESH PREVIEW (Added)
-          await this._refreshSpellPreview(spellId);
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
 
         deliveryCostElement.addEventListener('contextmenu', async (event) => {
@@ -1453,8 +1489,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
 
-          // REFRESH PREVIEW (Added)
-          await this._refreshSpellPreview(spellId);
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
       }
     });
@@ -3749,6 +3785,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     this._saveSpellStates();
     this._updateSpellDisplay(spellId);
+
+    // Clear ALL previews (player is changing spell configuration)
+    await this._clearAllPreviews();
   }
 
   /**
