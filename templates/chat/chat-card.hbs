@@ -79,8 +79,13 @@
                 <div class="roll-skill-label">{{rollSkillLabel}}</div>
                 {{/if}}
 
+                {{!-- CRIT LABEL FOR SAVES --}}
+                {{!-- {{#if isCritical}}
+                <div class="roll-crit-label">{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!</div>
+                {{/if}} --}}
+
                 {{!-- RESULT BANNER --}}
-                <div class="roll-result-banner {{#if (or (eq outcome 'success') (eq outcome 'HIT'))}}result-hit{{else}}result-miss{{/if}}">
+                <div class="roll-result-banner {{#if (or (eq outcome 'success') (eq outcome 'HIT') (eq outcome 'PASS'))}}result-hit{{else}}result-miss{{/if}}">
                     <span class="roll-value">{{rollTotal}}</span>
                     <span class="roll-vs">vs</span>
                     <span class="roll-target">{{difficulty}}</span>

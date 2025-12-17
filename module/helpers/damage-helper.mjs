@@ -737,6 +737,10 @@ export class VagabondDamageHelper {
             <strong>${game.i18n.localize('VAGABOND.DefendMechanics.BlockTitle')}:</strong>
             ${game.i18n.localize('VAGABOND.DefendMechanics.BlockDescription')}
           </p>
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
+          </p>
         </div>
       </div>
     `;
@@ -862,9 +866,11 @@ export class VagabondDamageHelper {
       // Roll the save
       const saveRoll = await this._rollSave(targetActor, saveType, isHindered);
 
-      // Determine success
+      // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
       const isSuccess = saveRoll.total >= difficulty;
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+      const isCritical = VagabondChatCard.isRollCritical(saveRoll, targetActor);
 
       // Calculate damage breakdown for display
       let damageAfterSave = damageAmount;
@@ -896,6 +902,7 @@ export class VagabondDamageHelper {
         saveRoll,
         difficulty,
         isSuccess,
+        isCritical,
         isHindered,
         damageAmount,
         saveReduction,
@@ -1017,6 +1024,7 @@ export class VagabondDamageHelper {
    * @param {Roll} roll - The save roll
    * @param {number} difficulty - Save difficulty
    * @param {boolean} isSuccess - Whether the save succeeded
+   * @param {boolean} isCritical - Whether the save was a critical (natural 20)
    * @param {boolean} isHindered - Whether the save was Hindered
    * @param {number} originalDamage - Original damage amount
    * @param {number} saveReduction - Damage prevented by save
@@ -1027,7 +1035,7 @@ export class VagabondDamageHelper {
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied) {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied) {
     const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
     // Import VagabondChatCard
@@ -1039,7 +1047,7 @@ export class VagabondDamageHelper {
       .setTitle(`${saveLabel} Save`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
-      .setOutcome(isSuccess ? 'PASS' : 'FAIL', false);
+      .setOutcome(isSuccess ? 'PASS' : 'FAIL', isCritical);
 
     // Build visual damage calculation display
     const damageCalculationHTML = this._buildDamageCalculation(
@@ -1054,7 +1062,20 @@ export class VagabondDamageHelper {
       isHindered
     );
 
-    card.setDescription((card.data.description || '') + damageCalculationHTML);
+    // Add crit rule text if critical save
+    let critRuleHTML = '';
+    if (isCritical) {
+      critRuleHTML = `
+        <div class="save-crit-rule">
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
+          </p>
+        </div>
+      `;
+    }
+
+    card.setDescription((card.data.description || '') + damageCalculationHTML + critRuleHTML);
 
     return await card.send();
   }
