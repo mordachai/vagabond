@@ -314,6 +314,58 @@
         margin: 8px 16px;
         font-family: 'Paradigma', serif;
         font-size: 16px;
+
+        /* Item Stats Grid - for Send to Chat detailed info */
+        .item-stats-grid {
+            margin-top: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--c-dark-blue);
+            border-radius: 3px;
+
+            .stat-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 4px 0;
+                border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .stat-label {
+                    font-weight: bold;
+                    color: var(--c-dark-blue);
+                }
+
+                .stat-value {
+                    color: var(--c-dark-blue);
+                }
+            }
+        }
+
+        /* Item Properties - for weapon properties */
+        .item-properties {
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+
+            strong {
+                color: var(--c-dark-blue);
+                font-weight: bold;
+            }
+
+            .property-tag {
+                display: inline-block;
+                padding: 2px 6px;
+                margin: 2px;
+                background: var(--c-dark-blue);
+                color: var(--c-yellow-text);
+                border-radius: 3px;
+                font-size: 13px;
+            }
+        }
     }
 
     /* SAVE CRIT RULE */

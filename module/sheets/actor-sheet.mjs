@@ -1516,13 +1516,40 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const isWeapon = (item.type === 'weapon') ||
                      (item.type === 'equipment' && item.system.equipmentType === 'weapon');
 
+    const isAlchemical = item.type === 'equipment' && item.system.equipmentType === 'alchemical';
+    const hasAlchemicalDamage = isAlchemical && item.system.damageType && item.system.damageType !== '-';
+    const isArmor = item.type === 'equipment' && item.system.equipmentType === 'armor';
+    const isGear = item.type === 'equipment' && item.system.equipmentType === 'gear';
+    const isRelic = item.type === 'equipment' && item.system.equipmentType === 'relic';
+
+    // Determine if "Use" option should be shown
+    let showUseOption = false;
+
+    if (isWeapon) {
+      // Weapons can only be "used" (attacked with) if equipped
+      showUseOption = isEquipped;
+    } else if (isArmor) {
+      // Armor cannot be "used"
+      showUseOption = false;
+    } else if (isGear) {
+      // Gear can only be "used" if it's consumable
+      showUseOption = item.system.isConsumable === true;
+    } else {
+      // Alchemicals, relics, and other items can be used
+      showUseOption = true;
+    }
+
     menu.innerHTML = `
-      ${!isWeapon ? `
-        <div class="context-menu-item" data-action="sendToChat">
-          <i class="fas fa-comment"></i>
-          <span>Send to Chat</span>
+      ${showUseOption ? `
+        <div class="context-menu-item" data-action="use">
+          <i class="fas fa-hand-sparkles"></i>
+          <span>Use</span>
         </div>
       ` : ''}
+      <div class="context-menu-item" data-action="sendToChat">
+        <i class="fas fa-comment"></i>
+        <span>Send to Chat</span>
+      </div>
       <div class="context-menu-item" data-action="equip">
         <i class="fas fa-${isEquipped ? 'times' : 'check'}"></i>
         <span>${isEquipped ? 'Unequip' : 'Equip'}</span>
@@ -1541,13 +1568,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this._currentContextMenu = menu;
 
     // Add click handlers
-    // Send to Chat handler (for non-weapons)
-    if (!isWeapon) {
-      menu.querySelector('[data-action="sendToChat"]')?.addEventListener('click', async () => {
-        await VagabondChatCard.gearUse(this.actor, item);
+    // Use handler - actually uses the item (attacks, consumes, etc.)
+    if (showUseOption) {
+      menu.querySelector('[data-action="use"]')?.addEventListener('click', async () => {
+        // For weapons or alchemicals with damage, use rollWeapon
+        if (isWeapon || hasAlchemicalDamage) {
+          await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
+        } else {
+          // For everything else, use useItem (which delegates to item.roll())
+          await VagabondActorSheet._onUseItem.call(this, event, { dataset: { itemId } });
+        }
         this._hideInventoryContextMenu();
       });
     }
+
+    // Send to Chat handler - shows item info without consuming
+    menu.querySelector('[data-action="sendToChat"]')?.addEventListener('click', async () => {
+      await VagabondChatCard.gearUse(this.actor, item);
+      this._hideInventoryContextMenu();
+    });
 
     menu.querySelector('[data-action="equip"]').addEventListener('click', async () => {
       if (isWeapon && item.system.equipmentState !== undefined) {
@@ -3179,7 +3218,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // 2. Define Item Types
     const isWeapon = (item.type === 'weapon') ||
                      (item.type === 'equipment' && item.system.equipmentType === 'weapon');
-    
+
     // FIX: Remove the "damageType !== '-'" check here so we catch ALL alchemicals
     const isAlchemical = item.type === 'equipment' &&
                          item.system.equipmentType === 'alchemical';
@@ -3187,6 +3226,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (!isWeapon && !isAlchemical) {
       ui.notifications.warn(game.i18n.localize("VAGABOND.UI.Errors.ItemNotRollable"));
       return;
+    }
+
+    // 3. Check consumable requirements
+    if (item.type === 'equipment') {
+      const canUse = await item.checkConsumableRequirements();
+      if (!canUse) {
+        return; // Notification already shown
+      }
     }
 
     try {
@@ -3199,7 +3246,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         if (!hasDamage) {
             // Redirect to the simple Gear Use card
-            return VagabondChatCard.gearUse(this.actor, item);
+            await VagabondChatCard.gearUse(this.actor, item);
+            // Handle consumption after successful use
+            await item.handleConsumption();
+            return;
         }
 
         // Otherwise, proceed with the Roll logic
@@ -3223,6 +3273,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           card.setDescription(enriched);
         }
         await card.send();
+        // Handle consumption after successful use
+        await item.handleConsumption();
         return roll;
       }
 
@@ -3246,6 +3298,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
 
       await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll);
+      // Handle consumption after successful attack (regardless of hit/miss)
+      await item.handleConsumption();
       return attackResult.roll;
 
     } catch (error) {
@@ -3257,7 +3311,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handle using an item (gear, relic, or alchemical) to post to chat.
-   * Creates a chat card displaying the item's details.
+   * Delegates to item.roll() to avoid code duplication.
    *
    * @this VagabondActorSheet
    * @param {PointerEvent} event   The originating click event
@@ -3267,7 +3321,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onUseItem(event, target) {
     event.preventDefault();
-    
+
     // 1. Target Safety
     const element = target || event.currentTarget;
     const itemId = element.dataset.itemId || element.closest('[data-item-id]')?.dataset.itemId;
@@ -3278,8 +3332,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // 2. Create Card
-    await VagabondChatCard.gearUse(this.actor, item);
+    // 2. Delegate to item.roll() which handles consumables, chat cards, and all logic
+    if (typeof item.roll === 'function') {
+      await item.roll(event);
+    }
   }
 
   /**

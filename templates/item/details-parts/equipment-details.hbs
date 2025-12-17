@@ -769,6 +769,36 @@
         </div>
       {{/unless}}
 
+      {{! Consumable Configuration }}
+      <div class='form-group'>
+        <label class='resource-label'>Consumable Configuration</label>
+        <div class='grid grid-1col gap-8'>
+          <div class='consumable-checkbox-field'>
+            <label class='checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.isConsumable'
+                {{#if system.isConsumable}}checked{{/if}}
+                data-dtype='Boolean'
+              />
+              <span>Consumable (reduces quantity on use)</span>
+            </label>
+          </div>
+          <div class='linked-consumable-field'>
+            <label class='resource-label'>Linked Consumable (optional)</label>
+            <select name='system.linkedConsumable' data-dtype='String'>
+              <option value=''>None</option>
+              {{#each actorConsumableItems as |consumable|}}
+                <option value='{{consumable.id}}' {{#if (eq ../system.linkedConsumable consumable.id)}}selected{{/if}}>
+                  {{consumable.name}} ({{consumable.system.quantity}} remaining)
+                </option>
+              {{/each}}
+            </select>
+            <small class='field-hint'>When this item is used, it will consume the linked item instead</small>
+          </div>
+        </div>
+      </div>
+
       {{! Calculated Properties Display - not needed for relics or alchemicals }}
       {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
         <div class='form-group'>

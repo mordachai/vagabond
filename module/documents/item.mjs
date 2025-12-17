@@ -40,12 +40,22 @@ export class VagabondItem extends Item {
     const item = this;
     const label = `[${item.type}] ${item.name}`;
 
+    // Check consumable requirements before using
+    if (item.type === 'equipment') {
+      const canUse = await this.checkConsumableRequirements();
+      if (!canUse) {
+        return; // Notification already shown in checkConsumableRequirements
+      }
+    }
+
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
       // Use VagabondChatCard for equipment items (gear, alchemicals, relics)
       if (item.type === 'equipment') {
         const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
         await VagabondChatCard.gearUse(this.actor, item);
+        // Handle consumption after successful use
+        await this.handleConsumption();
       } else {
         // For other item types (ancestry, class, perk, etc), just post description
         await VagabondChatHelper.postMessage(this.actor, item.system.description ?? '');
@@ -60,7 +70,70 @@ export class VagabondItem extends Item {
       const roll = new Roll(rollData.formula, rollData.actor);
       await roll.evaluate();
       await VagabondChatHelper.postRoll(this.actor, roll, label);
+      // Handle consumption after successful use
+      if (item.type === 'equipment') {
+        await this.handleConsumption();
+      }
       return roll;
+    }
+  }
+
+  /**
+   * Check if this item can be used based on consumable requirements
+   * @returns {Promise<boolean>} True if item can be used, false otherwise
+   */
+  async checkConsumableRequirements() {
+    if (this.type !== 'equipment') return true;
+
+    // If this item has a linked consumable, check if it's available
+    if (this.system.linkedConsumable) {
+      const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
+      if (!linkedItem || linkedItem.system.quantity <= 0) {
+        ui.notifications.warn(`Cannot use ${this.name}: linked consumable ${linkedItem?.name || 'not found'} is exhausted.`);
+        return false;
+      }
+    }
+    // If this item is consumable and has no linked item, check its own quantity
+    else if (this.system.isConsumable && this.system.quantity <= 0) {
+      ui.notifications.warn(`Cannot use ${this.name}: no charges remaining.`);
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Handle consumption of this item or its linked consumable
+   * Reduces quantity by 1 and removes item if quantity reaches 0
+   * @returns {Promise<void>}
+   */
+  async handleConsumption() {
+    if (this.type !== 'equipment') return;
+
+    // If this item has a linked consumable, consume from that instead
+    if (this.system.linkedConsumable) {
+      const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
+      if (linkedItem) {
+        const newQuantity = linkedItem.system.quantity - 1;
+        if (newQuantity <= 0) {
+          // Remove the linked item
+          await linkedItem.delete();
+        } else {
+          // Reduce quantity
+          await linkedItem.update({ 'system.quantity': newQuantity });
+        }
+      }
+    }
+    // Otherwise, if this item is consumable, consume from itself
+    else if (this.system.isConsumable) {
+      const newQuantity = this.system.quantity - 1;
+      if (newQuantity <= 0) {
+        // Remove this item
+        await this.delete();
+      } else {
+        // Reduce quantity
+        await this.update({ 'system.quantity': newQuantity });
+      }
     }
   }
 

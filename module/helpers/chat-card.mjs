@@ -695,6 +695,11 @@ export class VagabondChatCard {
       });
     }
 
+    // Add detailed stats to description for equipment items
+    if (item.type === 'equipment' && item.system) {
+      description += this._buildItemStatsHTML(item);
+    }
+
     // Determine if this is a real item or just data
     // Real items have a UUID or id. Data objects might not.
     const isRealItem = !!item.id || !!item.uuid;
@@ -707,6 +712,87 @@ export class VagabondChatCard {
         cardType: 'item-use',
         description
     });
+  }
+
+  /**
+   * Build detailed stats HTML for equipment items (similar to mini-sheet)
+   * @param {VagabondItem} item - The equipment item
+   * @returns {string} HTML stats
+   * @private
+   */
+  static _buildItemStatsHTML(item) {
+    const sys = item.system;
+    const equipType = sys.equipmentType;
+    let html = '<div class="item-stats-grid">';
+
+    // Universal stats
+    const stats = [];
+
+    // Type-specific stats
+    if (equipType === 'weapon') {
+      if (sys.currentDamage) stats.push({ label: 'Damage', value: `${sys.currentDamage} ${this._getDamageTypeLabel(sys.damageType)}` });
+      if (sys.rangeDisplay) stats.push({ label: 'Range', value: sys.rangeDisplay });
+      if (sys.gripDisplay) stats.push({ label: 'Grip', value: sys.gripDisplay });
+      if (sys.weaponSkill) stats.push({ label: 'Weapon Skill', value: sys.weaponSkill });
+    } else if (equipType === 'armor') {
+      if (sys.armorTypeDisplay) stats.push({ label: 'Type', value: sys.armorTypeDisplay });
+      if (sys.finalRating) stats.push({ label: 'Rating', value: sys.finalRating });
+      if (sys.might) stats.push({ label: 'Might Req', value: sys.might });
+      if (sys.immunities && sys.immunities.length > 0) {
+        stats.push({ label: 'Immunities', value: sys.immunities.join(', ') });
+      }
+    } else if (equipType === 'alchemical') {
+      if (sys.alchemicalType) {
+        const type = sys.alchemicalType.charAt(0).toUpperCase() + sys.alchemicalType.slice(1);
+        stats.push({ label: 'Type', value: type });
+      }
+      if (sys.damageAmount && sys.damageType !== '-') {
+        stats.push({ label: 'Damage', value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
+      }
+    } else if (equipType === 'gear') {
+      if (sys.gearCategory) stats.push({ label: 'Category', value: sys.gearCategory });
+      if (sys.damageAmount && sys.damageType !== '-') {
+        stats.push({ label: 'Effect', value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
+      }
+    } else if (equipType === 'relic') {
+      if (sys.lore) stats.push({ label: 'Lore', value: sys.lore });
+    }
+
+    // Universal equipment stats
+    if (sys.metalDisplay && sys.metal !== 'none' && sys.metal !== 'common') {
+      stats.push({ label: 'Metal', value: sys.metalDisplay });
+    }
+    if (sys.costDisplay) stats.push({ label: 'Cost', value: sys.costDisplay });
+    if (sys.slots) stats.push({ label: 'Slots', value: sys.slots });
+    if (sys.quantity && sys.quantity > 1) stats.push({ label: 'Quantity', value: sys.quantity });
+
+    // Build HTML
+    stats.forEach(stat => {
+      html += `<div class="stat-row"><span class="stat-label">${stat.label}:</span> <span class="stat-value">${stat.value}</span></div>`;
+    });
+
+    html += '</div>';
+
+    // Add properties for weapons
+    if (equipType === 'weapon' && sys.properties && sys.properties.length > 0) {
+      html += '<div class="item-properties">';
+      html += '<strong>Properties:</strong> ';
+      html += sys.properties.map(prop => `<span class="property-tag">${prop}</span>`).join(', ');
+      html += '</div>';
+    }
+
+    return html;
+  }
+
+  /**
+   * Get damage type label
+   * @param {string} damageType - The damage type key
+   * @returns {string} Localized damage type label
+   * @private
+   */
+  static _getDamageTypeLabel(damageType) {
+    if (!damageType || damageType === '-') return '';
+    return game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType]) || damageType;
   }
 
   /**
