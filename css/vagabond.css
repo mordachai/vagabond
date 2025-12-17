@@ -1201,7 +1201,7 @@
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button {
   flex: 1;
-  background-image: url("../assets/ui/chat/yellow-button.webp");
+  background: url("../assets/ui/chat/yellow-button.webp");
   border: none;
   color: var(--c-dark-blue);
   padding: 6px 2px;
@@ -1217,7 +1217,12 @@
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover {
-  filter: brightness(0.8);
+  filter: brightness(1.1);
+  background: url("../assets/ui/chat/yellow-button.webp");
+  color: var(--vagabond-c-dark);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-save-buttons-container {
+  margin-bottom: 10px;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box {
   background: #fff;
@@ -1340,8 +1345,8 @@
 
 .vb-die-wrapper .vb-die-explode {
   position: absolute !important;
-  top: -4px;
-  right: -4px;
+  top: -2px;
+  right: -2px;
   z-index: 1;
   /* Layout Reset */
   width: 16px !important; /* Give it a fixed small size */
