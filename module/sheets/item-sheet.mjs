@@ -164,6 +164,17 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             }
           )
         };
+        // Prepare list of consumable items from the actor (if item is owned)
+        context.actorConsumableItems = [];
+        if (this.item.actor) {
+          context.actorConsumableItems = this.item.actor.items
+            .filter(i => i.type === 'equipment' && i.system.isConsumable && i.id !== this.item.id)
+            .map(i => ({
+              id: i.id,
+              name: i.name,
+              system: { quantity: i.system.quantity }
+            }));
+        }
         break;
 
       case 'spellDetails':

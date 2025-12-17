@@ -169,6 +169,11 @@ export default class VagabondCharacter extends VagabondActorBase {
             min: 0,
             max: 12,
           }),
+          // Bonus field for Active Effects to modify stats
+          bonus: new fields.NumberField({
+            ...requiredInteger,
+            initial: 0,
+          }),
         });
         return obj;
       }, {})
@@ -333,6 +338,18 @@ export default class VagabondCharacter extends VagabondActorBase {
    * This happens AFTER Active Effects.
    */
   prepareDerivedData() {
+    // Calculate total stat values (value + bonus) for each stat
+    // This happens AFTER Active Effects, so bonuses are already applied
+    for (const [key, stat] of Object.entries(this.stats)) {
+      const value = stat.value || 0;
+      const bonus = stat.bonus || 0;
+      stat.total = value + bonus;
+      // Ensure total doesn't exceed 12 (max stat value)
+      stat.total = Math.min(stat.total, 12);
+      // Ensure total doesn't go below 0
+      stat.total = Math.max(stat.total, 0);
+    }
+
     // CRITICAL FIX: Active Effects pass string values, so we need to convert
     // isSpellcaster to a proper boolean if it's a truthy string like "1"
     if (typeof this.attributes.isSpellcaster === 'string') {
@@ -360,10 +377,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Tough Perk adds +1 hpPerLevel per stack, giving +Level HP per stack
     // We do this BEFORE other combat values in case they depend on Max HP
     // ------------------------------------------------------------------
-    const mightValue = this.stats.might?.value || 0;
+    const mightTotal = this.stats.might?.total || 0;
     const levelValue = this.attributes.level?.value || 0;
 
-    this.health.max = (mightValue * levelValue) + (this.bonuses.hpPerLevel * levelValue);
+    this.health.max = (mightTotal * levelValue) + (this.bonuses.hpPerLevel * levelValue);
 
 
     // ------------------------------------------------------------------
@@ -394,20 +411,20 @@ export default class VagabondCharacter extends VagabondActorBase {
     this._calculateXPRequirements();
 
     // Process Saves
-    // Falls back to 0 (default) if undefined
-    const dexValue = this.stats.dexterity?.value || 0;
-    const awrValue = this.stats.awareness?.value || 0;
-    const mitValue = this.stats.might?.value || 0;
-    const rsnValue = this.stats.reason?.value || 0;
-    const presValue = this.stats.presence?.value || 0;
+    // Use total stat values (which include bonuses from Active Effects)
+    const dexTotal = this.stats.dexterity?.total || 0;
+    const awrTotal = this.stats.awareness?.total || 0;
+    const mitTotal = this.stats.might?.total || 0;
+    const rsnTotal = this.stats.reason?.total || 0;
+    const presTotal = this.stats.presence?.total || 0;
 
     const reflexBonus = this.saves.reflex?.bonus || 0;
     const endureBonus = this.saves.endure?.bonus || 0;
     const willBonus = this.saves.will?.bonus || 0;
 
-    this.saves.reflex.difficulty = 20 - (dexValue + awrValue) - reflexBonus;
-    this.saves.endure.difficulty = 20 - (mitValue + mitValue) - endureBonus;
-    this.saves.will.difficulty = 20 - (rsnValue + presValue) - willBonus;
+    this.saves.reflex.difficulty = 20 - (dexTotal + awrTotal) - reflexBonus;
+    this.saves.endure.difficulty = 20 - (mitTotal + mitTotal) - endureBonus;
+    this.saves.will.difficulty = 20 - (rsnTotal + presTotal) - willBonus;
 
     this.saves.reflex.label = game.i18n.localize('VAGABOND.Saves.Reflex.name') ?? 'Reflex';
     this.saves.reflex.description = game.i18n.localize('VAGABOND.Saves.Reflex.description') ?? 'Avoid area effects and attacks';
@@ -521,14 +538,14 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateCombatValues() {
-    const mightValue = this.stats.might?.value || 0;
-    const dexValue = this.stats.dexterity?.value || 0;
-    const luckValue = this.stats.luck?.value || 0;
+    const mightTotal = this.stats.might?.total || 0;
+    const dexTotal = this.stats.dexterity?.total || 0;
+    const luckTotal = this.stats.luck?.total || 0;
     const level = this.attributes.level.value || 1;
 
-    // Luck Calculation
+    // Luck Calculation - use total Luck stat plus bonusLuck
     const bonusLuck = this.bonusLuck || 0;
-    this.maxLuck = luckValue + bonusLuck;
+    this.maxLuck = luckTotal + bonusLuck;
 
     if (this.currentLuck === undefined || this.currentLuck === null) {
       this.currentLuck = this.maxLuck;
@@ -540,14 +557,14 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Speed Calculation
     // 1. Get speed bonus from Active Effects (stored in system.speed.bonus)
     const speedBonus = this.speed.bonus || 0;
-    
+
     // 2. Lookup base speed values from config table
-    // We iterate to find the matching tier for current Dex
+    // We iterate to find the matching tier for current Dex (use total which includes bonus)
     let speedTier = CONFIG.VAGABOND.speedTable[0]; // Default fallback
     const dexKeys = Object.keys(CONFIG.VAGABOND.speedTable).map(Number).sort((a, b) => a - b);
-    
+
     for (const key of dexKeys) {
-      if (dexValue >= key) {
+      if (dexTotal >= key) {
         speedTier = CONFIG.VAGABOND.speedTable[key];
       }
     }
@@ -576,11 +593,11 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateInventorySlots() {
-    // Might + 8 + Bonus
-    const mightValue = this.stats.might?.value || 0; 
+    // Might + 8 + Bonus (use total Might which includes bonuses)
+    const mightTotal = this.stats.might?.total || 0;
     const bonusSlots = this.inventory.bonusSlots || 0;
 
-    this.inventory.maxSlots = 8 + mightValue + bonusSlots;
+    this.inventory.maxSlots = 8 + mightTotal + bonusSlots;
 
     let occupiedSlots = 0;
     if (this.parent?.items) {
@@ -603,7 +620,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     if (this.attributes.isSpellcaster) {
 
       const castingStat = this.attributes.castingStat || 'reason';
-      const castingStatValue = this.stats[castingStat]?.value || 0;
+      const castingStatTotal = this.stats[castingStat]?.total || 0;
       const level = this.attributes.level?.value || 1;
 
       // Multiplier & Max Mana Logic
@@ -613,7 +630,8 @@ export default class VagabondCharacter extends VagabondActorBase {
 
       // 2. Calculate Casting Max
       // Formula: (Stat + Level/2) + Bonus
-      const baseCastingMax = castingStatValue + Math.ceil(level / 2);
+      // Use total stat which includes bonuses from Active Effects
+      const baseCastingMax = castingStatTotal + Math.ceil(level / 2);
       const castingMaxBonus = this.mana.castingMaxBonus || 0; // Read the new bonus
 
       this.mana.castingMax = baseCastingMax + castingMaxBonus;

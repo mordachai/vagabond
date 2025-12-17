@@ -932,6 +932,50 @@
   margin: 8px 16px;
   font-family: "Paradigma", serif;
   font-size: 16px;
+  /* Item Stats Grid - for Send to Chat detailed info */
+  /* Item Properties - for weapon properties */
+}
+.vagabond-chat-card-v2 .card-description .item-stats-grid {
+  margin-top: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--c-dark-blue);
+  border-radius: 3px;
+}
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+}
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row:last-child {
+  border-bottom: none;
+}
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row .stat-label {
+  font-weight: bold;
+  color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row .stat-value {
+  color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .card-description .item-properties {
+  margin-top: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+.vagabond-chat-card-v2 .card-description .item-properties strong {
+  color: var(--c-dark-blue);
+  font-weight: bold;
+}
+.vagabond-chat-card-v2 .card-description .item-properties .property-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 2px;
+  background: var(--c-dark-blue);
+  color: var(--c-yellow-text);
+  border-radius: 3px;
+  font-size: 13px;
 }
 .vagabond-chat-card-v2 .save-crit-rule {
   background: rgba(231, 87, 10, 0.1); /* Light orange background */
@@ -1157,7 +1201,7 @@
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button {
   flex: 1;
-  background-image: url("../assets/ui/chat/yellow-button.webp");
+  background: url("../assets/ui/chat/yellow-button.webp");
   border: none;
   color: var(--c-dark-blue);
   padding: 6px 2px;
@@ -1173,7 +1217,12 @@
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover {
-  filter: brightness(0.8);
+  filter: brightness(1.1);
+  background: url("../assets/ui/chat/yellow-button.webp");
+  color: var(--vagabond-c-dark);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-save-buttons-container {
+  margin-bottom: 10px;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box {
   background: #fff;
@@ -1296,8 +1345,8 @@
 
 .vb-die-wrapper .vb-die-explode {
   position: absolute !important;
-  top: -4px;
-  right: -4px;
+  top: -2px;
+  right: -2px;
   z-index: 1;
   /* Layout Reset */
   width: 16px !important; /* Give it a fixed small size */
@@ -3478,7 +3527,7 @@
   color: var(--vagabond-c-dark);
 }
 .vagabond .inventory-context-menu .context-menu-item {
-  padding: 8px 12px;
+  padding: 5px 10px;
   cursor: pointer;
   display: flex;
   align-items: center;

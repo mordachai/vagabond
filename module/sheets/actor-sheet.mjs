@@ -71,7 +71,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteItem: this._onDeleteItem,  // Delete item from context menu
       spendLuck: this._onSpendLuck,  // Spend or recharge luck
       spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
-      openDowntime: this._onOpenDowntime,  // Open downtime activities
+      openDowntime: this._onOpenDowntime, // Open downtime activities
+      toggleSpellPreview: this._onToggleSpellPreview, // Display measure template
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -129,20 +130,36 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Override close to clean up dropdown state
-   */
-  async close(options = {}) {
-    // Clear dropdown state when sheet closes
-    this._openDropdowns = [];
+     * Override close to clean up:
+     * 1. Dropdown states
+     * 2. Debounce timers
+     * 3. Event listeners
+     * 4. Measurement Template previews
+     * @override
+     */
+    async close(options = {}) {
+      // 1. Clear dropdown state
+      this._openDropdowns = [];
 
-    // Clear debounce timer
-    if (this._formSubmitDebounce) {
-      clearTimeout(this._formSubmitDebounce);
-      this._formSubmitDebounce = null;
+      // 2. Clear pending form submission debounce
+      if (this._formSubmitDebounce) {
+        clearTimeout(this._formSubmitDebounce);
+        this._formSubmitDebounce = null;
+      }
+
+      // 3. Remove click outside handler (from the second implementation)
+      if (this._accordionClickOutsideHandler) {
+        document.removeEventListener('click', this._accordionClickOutsideHandler);
+        this._accordionClickOutsideHandler = null;
+      }
+
+      // 4. NEW: Cleanup any active Template Previews for this actor
+      if (globalThis.vagabond.managers?.templates) {
+        await globalThis.vagabond.managers.templates.clearActorPreviews(this.actor.id);
+      }
+
+      return super.close(options);
     }
-
-    return super.close(options);
-  }
 
   /**
    * Load spell states from localStorage for this character
@@ -179,7 +196,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         damageDice: 1,
         deliveryType: null,
         deliveryIncrease: 0,
-        useFx: defaultUseFx  // Default true for effect-only spells
+        useFx: defaultUseFx,
+        previewActive: false // NEW: Track preview state
       };
     }
     return this.spellStates[spellId];
@@ -296,6 +314,90 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Clear all template previews for this actor
+   * Called when player changes ANY spell configuration (shows they're changing their mind)
+   * @private
+   */
+  async _clearAllPreviews() {
+    if (globalThis.vagabond.managers?.templates) {
+      await globalThis.vagabond.managers.templates.clearActorPreviews(this.actor.id);
+    }
+
+    // Also reset all preview states
+    for (const spellId in this.spellStates) {
+      this.spellStates[spellId].previewActive = false;
+    }
+
+    // Update UI to show previews are off
+    for (const spellId in this.spellStates) {
+      this._updateSpellDisplay(spellId);
+    }
+  }
+
+  /** * Logic to actually update/create the preview
+   * (Helper function to be used by multiple listeners)
+   */
+  async _refreshSpellPreview(spellId) {
+    const state = this._getSpellState(spellId);
+
+    // If preview is OFF, ensure we clear it
+    if (!state.previewActive) {
+      if (globalThis.vagabond.managers?.templates) {
+        await globalThis.vagabond.managers.templates.clearPreview(this.actor.id, spellId);
+      }
+      return;
+    }
+
+    // If preview is ON, calculate data and update
+    const spell = this.actor.items.get(spellId);
+    if (!state.deliveryType) return; // Can't draw without type
+
+    // Calculate total distance
+    const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
+    const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
+    const totalDistance = baseRange.value + (increment * state.deliveryIncrease);
+
+    if (globalThis.vagabond.managers?.templates) {
+      await globalThis.vagabond.managers.templates.updatePreview(
+        this.actor,
+        spellId,
+        state.deliveryType,
+        totalDistance
+      );
+    }
+  }
+
+  /**
+   * ACTION: Toggle Spell Preview
+   */
+  static async _onToggleSpellPreview(event, target) {
+    event.preventDefault();
+    const spellId = target.dataset.spellId;
+    const state = this._getSpellState(spellId);
+
+    // 1. Clear ALL other previews first
+    // This ensures only one preview is active at a time
+    for (const otherId in this.spellStates) {
+      if (otherId !== spellId && this.spellStates[otherId].previewActive) {
+        this.spellStates[otherId].previewActive = false;
+        if (globalThis.vagabond.managers?.templates) {
+          await globalThis.vagabond.managers.templates.clearPreview(this.actor.id, otherId);
+        }
+        this._updateSpellDisplay(otherId);
+      }
+    }
+
+    // 2. Toggle THIS spell's preview state
+    state.previewActive = !state.previewActive;
+
+    // 3. Update Visuals
+    this._updateSpellDisplay(spellId);
+
+    // 4. Update Canvas
+    await this._refreshSpellPreview(spellId);
+  }
+
+  /**
    * Update spell display in the UI with current state and costs
    * @param {string} spellId - The spell ID
    * @private
@@ -369,6 +471,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Update range display
     const rangeSpan = container.querySelector('.spell-range');
     if (rangeSpan) {
+      
+      // NEW: Toggle preview active visual state
+      if (state.previewActive) {
+        rangeSpan.classList.add('preview-active');
+        // Visual feedback to show it's active (Bright Text + Glow)
+        rangeSpan.style.color = "var(--color-text-light-highlight)"; 
+        rangeSpan.style.textShadow = "0 0 5px var(--color-shadow-highlight)";
+      } else {
+        rangeSpan.classList.remove('preview-active');
+        rangeSpan.style.color = "";
+        rangeSpan.style.textShadow = "";
+      }
+
       if (state.deliveryType) {
         const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
         const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
@@ -396,7 +511,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (totalSpan) {
       totalSpan.textContent = costs.totalCost;
     }
-  }
+  }  
+
 
   /** @override */
   _configureRenderOptions(options) {
@@ -1302,6 +1418,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease = 0; // Reset increases when changing delivery
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
       }
 
@@ -1314,6 +1433,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.damageDice++;
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
 
         damageElement.addEventListener('contextmenu', async (event) => {
@@ -1328,6 +1450,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
       }
 
@@ -1352,6 +1477,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease++;
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
 
         deliveryCostElement.addEventListener('contextmenu', async (event) => {
@@ -1360,16 +1488,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           state.deliveryIncrease = Math.max(0, state.deliveryIncrease - 1);
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
+
+          // Clear ALL previews (player is changing spell configuration)
+          await this._clearAllPreviews();
         });
       }
     });
 
     // Inventory Grid Event Listeners
     this._attachInventoryGridListeners();
-
-    // You may want to add other special handling here
-    // Foundry comes with a large number of utility classes, e.g. SearchFilter
-    // That you may want to implement yourself.
   }
 
   /**
@@ -1516,13 +1643,40 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const isWeapon = (item.type === 'weapon') ||
                      (item.type === 'equipment' && item.system.equipmentType === 'weapon');
 
+    const isAlchemical = item.type === 'equipment' && item.system.equipmentType === 'alchemical';
+    const hasAlchemicalDamage = isAlchemical && item.system.damageType && item.system.damageType !== '-';
+    const isArmor = item.type === 'equipment' && item.system.equipmentType === 'armor';
+    const isGear = item.type === 'equipment' && item.system.equipmentType === 'gear';
+    const isRelic = item.type === 'equipment' && item.system.equipmentType === 'relic';
+
+    // Determine if "Use" option should be shown
+    let showUseOption = false;
+
+    if (isWeapon) {
+      // Weapons can only be "used" (attacked with) if equipped
+      showUseOption = isEquipped;
+    } else if (isArmor) {
+      // Armor cannot be "used"
+      showUseOption = false;
+    } else if (isGear) {
+      // Gear can only be "used" if it's consumable
+      showUseOption = item.system.isConsumable === true;
+    } else {
+      // Alchemicals, relics, and other items can be used
+      showUseOption = true;
+    }
+
     menu.innerHTML = `
-      ${!isWeapon ? `
-        <div class="context-menu-item" data-action="sendToChat">
-          <i class="fas fa-comment"></i>
-          <span>Send to Chat</span>
+      ${showUseOption ? `
+        <div class="context-menu-item" data-action="use">
+          <i class="fas fa-hand-sparkles"></i>
+          <span>Use</span>
         </div>
       ` : ''}
+      <div class="context-menu-item" data-action="sendToChat">
+        <i class="fas fa-comment"></i>
+        <span>Send to Chat</span>
+      </div>
       <div class="context-menu-item" data-action="equip">
         <i class="fas fa-${isEquipped ? 'times' : 'check'}"></i>
         <span>${isEquipped ? 'Unequip' : 'Equip'}</span>
@@ -1541,13 +1695,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this._currentContextMenu = menu;
 
     // Add click handlers
-    // Send to Chat handler (for non-weapons)
-    if (!isWeapon) {
-      menu.querySelector('[data-action="sendToChat"]')?.addEventListener('click', async () => {
-        await VagabondChatCard.gearUse(this.actor, item);
+    // Use handler - actually uses the item (attacks, consumes, etc.)
+    if (showUseOption) {
+      menu.querySelector('[data-action="use"]')?.addEventListener('click', async () => {
+        // For weapons or alchemicals with damage, use rollWeapon
+        if (isWeapon || hasAlchemicalDamage) {
+          await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
+        } else {
+          // For everything else, use useItem (which delegates to item.roll())
+          await VagabondActorSheet._onUseItem.call(this, event, { dataset: { itemId } });
+        }
         this._hideInventoryContextMenu();
       });
     }
+
+    // Send to Chat handler - shows item info without consuming
+    menu.querySelector('[data-action="sendToChat"]')?.addEventListener('click', async () => {
+      await VagabondChatCard.gearUse(this.actor, item);
+      this._hideInventoryContextMenu();
+    });
 
     menu.querySelector('[data-action="equip"]').addEventListener('click', async () => {
       if (isWeapon && item.system.equipmentState !== undefined) {
@@ -3179,7 +3345,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // 2. Define Item Types
     const isWeapon = (item.type === 'weapon') ||
                      (item.type === 'equipment' && item.system.equipmentType === 'weapon');
-    
+
     // FIX: Remove the "damageType !== '-'" check here so we catch ALL alchemicals
     const isAlchemical = item.type === 'equipment' &&
                          item.system.equipmentType === 'alchemical';
@@ -3187,6 +3353,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (!isWeapon && !isAlchemical) {
       ui.notifications.warn(game.i18n.localize("VAGABOND.UI.Errors.ItemNotRollable"));
       return;
+    }
+
+    // 3. Check consumable requirements
+    if (item.type === 'equipment') {
+      const canUse = await item.checkConsumableRequirements();
+      if (!canUse) {
+        return; // Notification already shown
+      }
     }
 
     try {
@@ -3199,7 +3373,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         if (!hasDamage) {
             // Redirect to the simple Gear Use card
-            return VagabondChatCard.gearUse(this.actor, item);
+            await VagabondChatCard.gearUse(this.actor, item);
+            // Handle consumption after successful use
+            await item.handleConsumption();
+            return;
         }
 
         // Otherwise, proceed with the Roll logic
@@ -3223,6 +3400,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           card.setDescription(enriched);
         }
         await card.send();
+        // Handle consumption after successful use
+        await item.handleConsumption();
         return roll;
       }
 
@@ -3246,6 +3425,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
 
       await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll);
+      // Handle consumption after successful attack (regardless of hit/miss)
+      await item.handleConsumption();
       return attackResult.roll;
 
     } catch (error) {
@@ -3257,7 +3438,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handle using an item (gear, relic, or alchemical) to post to chat.
-   * Creates a chat card displaying the item's details.
+   * Delegates to item.roll() to avoid code duplication.
    *
    * @this VagabondActorSheet
    * @param {PointerEvent} event   The originating click event
@@ -3267,7 +3448,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onUseItem(event, target) {
     event.preventDefault();
-    
+
     // 1. Target Safety
     const element = target || event.currentTarget;
     const itemId = element.dataset.itemId || element.closest('[data-item-id]')?.dataset.itemId;
@@ -3278,8 +3459,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // 2. Create Card
-    await VagabondChatCard.gearUse(this.actor, item);
+    // 2. Delegate to item.roll() which handles consumables, chat cards, and all logic
+    if (typeof item.roll === 'function') {
+      await item.roll(event);
+    }
   }
 
   /**
@@ -3602,6 +3785,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     this._saveSpellStates();
     this._updateSpellDisplay(spellId);
+
+    // Clear ALL previews (player is changing spell configuration)
+    await this._clearAllPreviews();
   }
 
   /**
@@ -4563,22 +4749,4 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
-  /**
-   * Clean up event listeners when sheet closes
-   * @override
-   */
-  async close(options = {}) {
-    // Clear any pending form submission
-    if (this._formSubmitDebounce) {
-      clearTimeout(this._formSubmitDebounce);
-      this._formSubmitDebounce = null;
-    }
-
-    // Remove click outside handler
-    if (this._accordionClickOutsideHandler) {
-      document.removeEventListener('click', this._accordionClickOutsideHandler);
-      this._accordionClickOutsideHandler = null;
-    }
-    return super.close(options);
-  }
 }

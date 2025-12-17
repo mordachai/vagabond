@@ -3,6 +3,44 @@
  * Provides attribute key autocomplete in the Active Effect configuration.
  *
  * ============================================================================
+ * STAT BONUS SYSTEM
+ * ============================================================================
+ *
+ * ## Overview
+ * All six core stats (Might, Dexterity, Awareness, Reason, Presence, Luck) can
+ * be modified through Active Effects using bonus fields.
+ *
+ * ## Stat Fields
+ * Each stat has three values:
+ * - **value**: Base stat value (0-12)
+ * - **bonus**: Bonus from Active Effects (can be positive or negative)
+ * - **total**: Calculated value (value + bonus, clamped to 0-12)
+ *
+ * ## Effect Keys
+ * - system.stats.might.bonus
+ * - system.stats.dexterity.bonus
+ * - system.stats.awareness.bonus
+ * - system.stats.reason.bonus
+ * - system.stats.presence.bonus
+ * - system.stats.luck.bonus
+ *
+ * ## What Stats Affect
+ * Stat bonuses affect ALL derived calculations:
+ * - **Might**: Max HP, Inventory Slots, Endure Save
+ * - **Dexterity**: Speed, Reflex Save
+ * - **Awareness**: Reflex Save
+ * - **Reason**: Will Save, Casting Max (if spellcaster)
+ * - **Presence**: Will Save
+ * - **Luck**: Max Luck pool
+ *
+ * ## Usage Example
+ * "Belt of Giant Strength" (+2 Might):
+ * - Attribute Key: system.stats.might.bonus
+ * - Change Mode: Add
+ * - Effect Value: 2
+ * - Result: Increases Might total by +2, which increases HP and inventory slots
+ *
+ * ============================================================================
  * DAMAGE BONUS SYSTEM GUIDE
  * ============================================================================
  *
@@ -151,11 +189,17 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== STATS =====
       'system.stats.might.value': 'Stat: Might',
+      'system.stats.might.bonus': 'Stat: Might Bonus',
       'system.stats.dexterity.value': 'Stat: Dexterity',
+      'system.stats.dexterity.bonus': 'Stat: Dexterity Bonus',
       'system.stats.awareness.value': 'Stat: Awareness',
+      'system.stats.awareness.bonus': 'Stat: Awareness Bonus',
       'system.stats.reason.value': 'Stat: Reason',
+      'system.stats.reason.bonus': 'Stat: Reason Bonus',
       'system.stats.presence.value': 'Stat: Presence',
+      'system.stats.presence.bonus': 'Stat: Presence Bonus',
       'system.stats.luck.value': 'Stat: Luck',
+      'system.stats.luck.bonus': 'Stat: Luck Bonus',
 
       // ===== SAVES =====
       'system.saves.reflex.bonus': 'Save: Reflex Bonus',

@@ -194,6 +194,21 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: ''
     });
 
+    // ===== CONSUMABLE FIELDS =====
+
+    // Consumable - whether this item is consumable (reduces quantity on use)
+    schema.isConsumable = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
+    // Linked Consumable - item ID of consumable that gets consumed when this item is used
+    schema.linkedConsumable = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: ''
+    });
+
     // ===== ALCHEMICAL-SPECIFIC FIELDS =====
 
     // Alchemical type

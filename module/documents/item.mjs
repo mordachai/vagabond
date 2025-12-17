@@ -40,12 +40,22 @@ export class VagabondItem extends Item {
     const item = this;
     const label = `[${item.type}] ${item.name}`;
 
+    // Check consumable requirements before using
+    if (item.type === 'equipment') {
+      const canUse = await this.checkConsumableRequirements();
+      if (!canUse) {
+        return; // Notification already shown in checkConsumableRequirements
+      }
+    }
+
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
       // Use VagabondChatCard for equipment items (gear, alchemicals, relics)
       if (item.type === 'equipment') {
         const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
         await VagabondChatCard.gearUse(this.actor, item);
+        // Handle consumption after successful use
+        await this.handleConsumption();
       } else {
         // For other item types (ancestry, class, perk, etc), just post description
         await VagabondChatHelper.postMessage(this.actor, item.system.description ?? '');
@@ -60,7 +70,70 @@ export class VagabondItem extends Item {
       const roll = new Roll(rollData.formula, rollData.actor);
       await roll.evaluate();
       await VagabondChatHelper.postRoll(this.actor, roll, label);
+      // Handle consumption after successful use
+      if (item.type === 'equipment') {
+        await this.handleConsumption();
+      }
       return roll;
+    }
+  }
+
+  /**
+   * Check if this item can be used based on consumable requirements
+   * @returns {Promise<boolean>} True if item can be used, false otherwise
+   */
+  async checkConsumableRequirements() {
+    if (this.type !== 'equipment') return true;
+
+    // If this item has a linked consumable, check if it's available
+    if (this.system.linkedConsumable) {
+      const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
+      if (!linkedItem || linkedItem.system.quantity <= 0) {
+        ui.notifications.warn(`Cannot use ${this.name}: linked consumable ${linkedItem?.name || 'not found'} is exhausted.`);
+        return false;
+      }
+    }
+    // If this item is consumable and has no linked item, check its own quantity
+    else if (this.system.isConsumable && this.system.quantity <= 0) {
+      ui.notifications.warn(`Cannot use ${this.name}: no charges remaining.`);
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Handle consumption of this item or its linked consumable
+   * Reduces quantity by 1 and removes item if quantity reaches 0
+   * @returns {Promise<void>}
+   */
+  async handleConsumption() {
+    if (this.type !== 'equipment') return;
+
+    // If this item has a linked consumable, consume from that instead
+    if (this.system.linkedConsumable) {
+      const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
+      if (linkedItem) {
+        const newQuantity = linkedItem.system.quantity - 1;
+        if (newQuantity <= 0) {
+          // Remove the linked item
+          await linkedItem.delete();
+        } else {
+          // Reduce quantity
+          await linkedItem.update({ 'system.quantity': newQuantity });
+        }
+      }
+    }
+    // Otherwise, if this item is consumable, consume from itself
+    else if (this.system.isConsumable) {
+      const newQuantity = this.system.quantity - 1;
+      if (newQuantity <= 0) {
+        // Remove this item
+        await this.delete();
+      } else {
+        // Reduce quantity
+        await this.update({ 'system.quantity': newQuantity });
+      }
     }
   }
 
@@ -182,12 +255,11 @@ export class VagabondItem extends Item {
    * @returns {Promise<Roll>} The damage roll
    */
   /**
-   * Apply exploding dice syntax to a damage formula if enabled
-   * @param {string} formula - The base damage formula (e.g., "2d6", "1d8+2")
-   * @returns {string} Modified formula with exploding dice
+   * Get explosion values from this item if enabled
+   * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
    * @private
    */
-  _applyExplodingDice(formula) {
+  _getExplodeValues() {
     // 1. Get Local Item Settings
     let canExplode = this.system.canExplode;
     let explodeValuesStr = this.system.explodeValues;
@@ -209,28 +281,95 @@ export class VagabondItem extends Item {
 
     // 3. Validation
     if (!canExplode || !explodeValuesStr) {
-      return formula;
+      return null;
     }
 
     // Parse explode values (comma-separated)
     const explodeValues = explodeValuesStr
       .split(',')
       .map(v => v.trim())
-      .filter(v => v && !isNaN(v));
+      .filter(v => v && !isNaN(v))
+      .map(v => parseInt(v));
 
-    if (explodeValues.length === 0) {
-      return formula;
+    return explodeValues.length > 0 ? explodeValues : null;
+  }
+
+  /**
+   * Manually explode dice on specific values (recursive)
+   * This bypasses Foundry's potentially buggy x=1x=4 syntax
+   * @param {Roll} roll - The evaluated roll to explode
+   * @param {Array<number>} explodeValues - Values that should trigger explosions (e.g., [1, 4])
+   * @param {number} maxExplosions - Safety limit to prevent infinite loops (default 100)
+   * @returns {Promise<Roll>} The modified roll with explosions applied
+   * @private
+   */
+  async _manuallyExplodeDice(roll, explodeValues, maxExplosions = 100) {
+    if (!explodeValues || explodeValues.length === 0) {
+      return roll;
     }
 
-    // Build the exploding dice suffix (e.g., "x=1x=4")
-    // Using x=N for exact values, not x>=N
-    const explodeSuffix = explodeValues.map(v => `x=${v}`).join('');
+    // Convert explode values to numbers
+    const explodeSet = new Set(explodeValues.map(v => parseInt(v)));
+    let explosionCount = 0;
 
-    // Apply exploding dice to all dice terms in the formula
-    // Match patterns like "2d6", "d8", "1d10" but not numbers like "10" or "+2"
-    return formula.replace(/(\d*)d(\d+)/gi, (match, count, faces) => {
-      return `${count || '1'}d${faces}${explodeSuffix}`;
-    });
+    // Find all Die terms in the roll
+    for (let i = 0; i < roll.terms.length; i++) {
+      const term = roll.terms[i];
+
+      // Skip non-die terms (operators, numbers, etc.)
+      if (term.constructor.name !== 'Die') continue;
+
+      const faces = term.faces;
+      const results = term.results || [];
+
+      // Process each result in this die term
+      // We need to track the original length because we'll be adding results
+      const originalLength = results.length;
+
+      for (let j = 0; j < originalLength; j++) {
+        const result = results[j];
+
+        // Check if this result should explode
+        if (explodeSet.has(result.result)) {
+          // Mark this die as exploded (it's causing an explosion)
+          result.exploded = true;
+
+          // Roll new dice recursively
+          let previousResult = result;
+          let newRoll = result.result;
+
+          while (explodeSet.has(newRoll) && explosionCount < maxExplosions) {
+            explosionCount++;
+
+            // Roll another die of the same size
+            const explosionRoll = Math.floor(Math.random() * faces) + 1;
+
+            // Check if this new roll will also explode
+            const willExplode = explodeSet.has(explosionRoll);
+
+            // Add the explosion as a new result
+            const newResult = {
+              result: explosionRoll,
+              active: true,
+              exploded: willExplode  // Only mark as exploded if it will cause another explosion
+            };
+            results.push(newResult);
+
+            // Update for next iteration
+            previousResult = newResult;
+            newRoll = explosionRoll;
+          }
+        }
+      }
+
+      // Recalculate the term's total
+      term._total = results.reduce((sum, r) => sum + (r.active ? r.result : 0), 0);
+    }
+
+    // Recalculate the roll's total
+    roll._total = roll._evaluateTotal();
+
+    return roll;
   }
 
   async rollDamage(actor, isCritical = false, statKey = null) {
@@ -274,11 +413,16 @@ export class VagabondItem extends Item {
       damageFormula += ` + ${universalDiceBonus}`;
     }
 
-    // Apply exploding dice syntax if enabled
-    damageFormula = this._applyExplodingDice(damageFormula);
-
+    // Roll damage (without explosion modifiers in formula)
     const roll = new Roll(damageFormula, actor.getRollData());
     await roll.evaluate();
+
+    // Apply manual explosions if enabled
+    const explodeValues = this._getExplodeValues();
+    if (explodeValues) {
+      await this._manuallyExplodeDice(roll, explodeValues);
+    }
+
     return roll;
   }
 

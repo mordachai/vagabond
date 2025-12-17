@@ -4,6 +4,83 @@
  */
 export class VagabondDamageHelper {
   /**
+   * Manually explode dice on specific values (recursive)
+   * This bypasses Foundry's potentially buggy x=1x=4 syntax
+   * @param {Roll} roll - The evaluated roll to explode
+   * @param {Array<number>} explodeValues - Values that should trigger explosions (e.g., [1, 4])
+   * @param {number} maxExplosions - Safety limit to prevent infinite loops (default 100)
+   * @returns {Promise<Roll>} The modified roll with explosions applied
+   * @private
+   */
+  static async _manuallyExplodeDice(roll, explodeValues, maxExplosions = 100) {
+    if (!explodeValues || explodeValues.length === 0) {
+      return roll;
+    }
+
+    // Convert explode values to numbers
+    const explodeSet = new Set(explodeValues.map(v => parseInt(v)));
+    let explosionCount = 0;
+
+    // Find all Die terms in the roll
+    for (let i = 0; i < roll.terms.length; i++) {
+      const term = roll.terms[i];
+
+      // Skip non-die terms (operators, numbers, etc.)
+      if (term.constructor.name !== 'Die') continue;
+
+      const faces = term.faces;
+      const results = term.results || [];
+
+      // Process each result in this die term
+      // We need to track the original length because we'll be adding results
+      const originalLength = results.length;
+
+      for (let j = 0; j < originalLength; j++) {
+        const result = results[j];
+
+        // Check if this result should explode
+        if (explodeSet.has(result.result)) {
+          // Mark this die as exploded (it's causing an explosion)
+          result.exploded = true;
+
+          // Roll new dice recursively
+          let previousResult = result;
+          let newRoll = result.result;
+
+          while (explodeSet.has(newRoll) && explosionCount < maxExplosions) {
+            explosionCount++;
+
+            // Roll another die of the same size
+            const explosionRoll = Math.floor(Math.random() * faces) + 1;
+
+            // Check if this new roll will also explode
+            const willExplode = explodeSet.has(explosionRoll);
+
+            // Add the explosion as a new result
+            const newResult = {
+              result: explosionRoll,
+              active: true,
+              exploded: willExplode  // Only mark as exploded if it will cause another explosion
+            };
+            results.push(newResult);
+
+            // Update for next iteration
+            previousResult = newResult;
+            newRoll = explosionRoll;
+          }
+        }
+      }
+
+      // Recalculate the term's total
+      term._total = results.reduce((sum, r) => sum + (r.active ? r.result : 0), 0);
+    }
+
+    // Recalculate the roll's total
+    roll._total = roll._evaluateTotal();
+
+    return roll;
+  }
+  /**
    * Determine if damage should be rolled based on game settings
    * @param {boolean} isHit - Whether the attack/check was successful
    * @returns {boolean} - Whether to roll damage
@@ -134,14 +211,17 @@ export class VagabondDamageHelper {
       finalFormula += ` + ${universalDiceBonus}`;
     }
 
-    // Apply exploding dice syntax if item supports it
-    if (item) {
-      finalFormula = this._applyExplodingDice(item, finalFormula);
-    }
-
-    // Roll damage
+    // Roll damage (without explosion modifiers in formula)
     const damageRoll = new Roll(finalFormula, actor.getRollData());
     await damageRoll.evaluate();
+
+    // Apply manual explosions if item supports it
+    if (item) {
+      const explodeValues = this._getExplodeValues(item);
+      if (explodeValues) {
+        await this._manuallyExplodeDice(damageRoll, explodeValues);
+      }
+    }
 
     // Determine damage type
     let damageTypeLabel = 'Physical';
@@ -336,36 +416,24 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Apply exploding dice syntax to a damage formula if enabled
+   * Get explosion values from an item if enabled
    * @param {Item} item - The item (spell or equipment) with canExplode and explodeValues
-   * @param {string} formula - The base damage formula (e.g., "2d6", "1d8+2")
-   * @returns {string} Modified formula with exploding dice (e.g., "2d6x=1x=4" or "1d8x=1x=4+2")
+   * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
    * @private
    */
-  static _applyExplodingDice(item, formula) {
+  static _getExplodeValues(item) {
     if (!item?.system?.canExplode || !item?.system?.explodeValues) {
-      return formula;
+      return null;
     }
 
     // Parse explode values (comma-separated)
     const explodeValues = item.system.explodeValues
       .split(',')
       .map(v => v.trim())
-      .filter(v => v && !isNaN(v));
+      .filter(v => v && !isNaN(v))
+      .map(v => parseInt(v));
 
-    if (explodeValues.length === 0) {
-      return formula;
-    }
-
-    // Build the exploding dice suffix (e.g., "x=1x=4")
-    // Using x=N for exact values, not x>=N
-    const explodeSuffix = explodeValues.map(v => `x=${v}`).join('');
-
-    // Apply exploding dice to all dice terms in the formula
-    // Match patterns like "2d6", "d8", "1d10" but not numbers like "10" or "+2"
-    return formula.replace(/(\d*)d(\d+)/gi, (match, count, faces) => {
-      return `${count || '1'}d${faces}${explodeSuffix}`;
-    });
+    return explodeValues.length > 0 ? explodeValues : null;
   }
 
   /**
@@ -415,11 +483,15 @@ export class VagabondDamageHelper {
       damageFormula += ` + ${universalDiceBonus}`;
     }
 
-    // Apply exploding dice syntax if enabled
-    damageFormula = this._applyExplodingDice(spell, damageFormula);
-
+    // Roll damage (without explosion modifiers in formula)
     const roll = new Roll(damageFormula, actor.getRollData());
     await roll.evaluate();
+
+    // Apply manual explosions if enabled
+    const explodeValues = this._getExplodeValues(spell);
+    if (explodeValues) {
+      await this._manuallyExplodeDice(roll, explodeValues);
+    }
 
     return roll;
   }

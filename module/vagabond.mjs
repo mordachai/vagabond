@@ -21,6 +21,7 @@ import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
 import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
 import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
 import { DowntimeApp } from './applications/downtime-app.mjs';
+import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -165,6 +166,7 @@ globalThis.vagabond = {
     ProgressClockDeleteDialog,
     CountdownDiceConfig,
     DowntimeApp,
+    VagabondMeasureTemplates,
   },
   ui: {
     ProgressClockOverlay,
@@ -215,6 +217,10 @@ Hooks.once('init', async function () {
     class: models.VagabondClass,
     perk: models.VagabondPerk,
     starterPack: models.VagabondStarterPack,
+  };
+
+  globalThis.vagabond.managers = {
+    templates: new VagabondMeasureTemplates()
   };
 
   // Register custom ActiveEffect document class
@@ -480,132 +486,6 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 /* -------------------------------------------- */
 
 /**
- * Helper function to create measurement templates from spell delivery types
- */
-async function createSpellTemplate(deliveryType, deliveryText, message) {
-  // 1. Parse distance
-  const distanceMatch = deliveryText.match(/(\d+)'/);
-  if (!distanceMatch) {
-    ui.notifications.warn('Could not parse template distance from delivery text.');
-    return;
-  }
-  const distanceFeet = parseInt(distanceMatch[1], 10);
-  const gridDistance = distanceFeet; 
-
-  // 2. Get Caster & Target
-  const speaker = message.speaker;
-  let casterToken = null;
-  if (speaker?.token) casterToken = canvas.tokens.get(speaker.token);
-
-  const targets = game.user.targets;
-  const targetToken = targets.first();
-
-  // 3. Base Template Data
-  let templateData = {
-    t: '', 
-    distance: gridDistance,
-    fillColor: game.user.color || '#FF0000',
-    direction: 0, 
-    flags: {
-      vagabond: {
-        deliveryType: deliveryType,
-        deliveryText: deliveryText
-      }
-    }
-  };
-
-  // 4. Determine Type & Origin
-  switch (deliveryType.toLowerCase()) {
-    case 'aura':
-      templateData.t = 'circle';
-      if (casterToken) {
-        templateData.x = casterToken.center.x;
-        templateData.y = casterToken.center.y;
-      }
-      break;
-
-    case 'cone':
-      templateData.t = 'cone';
-      templateData.angle = 90;
-      if (casterToken) {
-        templateData.x = casterToken.center.x;
-        templateData.y = casterToken.center.y;
-        if (targetToken) {
-          // --- FIX: Use namespaced Ray ---
-          const ray = new foundry.canvas.geometry.Ray(casterToken.center, targetToken.center);
-          templateData.direction = Math.toDegrees(ray.angle);
-        } else {
-          templateData.direction = casterToken.document.rotation || 0;
-        }
-      }
-      break;
-
-    case 'line':
-      templateData.t = 'ray';
-      templateData.width = canvas.scene.grid.distance; 
-      if (casterToken) {
-        templateData.x = casterToken.center.x;
-        templateData.y = casterToken.center.y;
-        if (targetToken) {
-          // --- FIX: Use namespaced Ray ---
-          const ray = new foundry.canvas.geometry.Ray(casterToken.center, targetToken.center);
-          templateData.direction = Math.toDegrees(ray.angle);
-        } else {
-          templateData.direction = casterToken.document.rotation || 0;
-        }
-      }
-      break;
-
-    case 'cube':
-      if (!targetToken) {
-        ui.notifications.warn(`Please target a token to place the ${deliveryType}.`);
-        return;
-      }
-      templateData.t = 'rect';
-      
-      const sideLength = gridDistance; 
-      
-      // Calculate Diagonal for the template distance (Hypotenuse)
-      templateData.distance = sideLength * Math.sqrt(2);
-      templateData.direction = 45; 
-      
-      // Calculate Pixel Size for centering
-      const gridPixels = canvas.grid.size; 
-      const sceneGridDist = canvas.scene.grid.distance; 
-      const sideLengthPixels = (sideLength / sceneGridDist) * gridPixels;
-
-      // Center it
-      templateData.x = targetToken.center.x - (sideLengthPixels / 2);
-      templateData.y = targetToken.center.y - (sideLengthPixels / 2);
-      break;
-
-    case 'sphere':
-      if (!targetToken) {
-        ui.notifications.warn(`Please target a token to place the ${deliveryType}.`);
-        return;
-      }
-      templateData.t = 'circle';
-      templateData.x = targetToken.center.x;
-      templateData.y = targetToken.center.y;
-      templateData.direction = 0;
-      break;
-
-    default:
-      ui.notifications.warn(`Template creation not supported: ${deliveryType}`);
-      return;
-  }
-
-  // 5. Create Template
-  if (templateData.x !== undefined && templateData.y !== undefined) {
-    const templateDoc = new MeasuredTemplateDocument(templateData, { parent: canvas.scene });
-    await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateDoc.toObject()]);
-  } else {
-    ui.notifications.warn('Could not determine origin point for template.');
-  }
-}
-
-
-/**
  * V13 Standard: 'renderChatMessageHTML' hook.
  * The 'html' argument is a standard HTMLElement.
  */
@@ -766,11 +646,11 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       if (!deliveryType) return;
 
-      // Ensure createSpellTemplate is available in scope or imported
-      if (typeof createSpellTemplate === 'function') {
-        await createSpellTemplate(deliveryType, deliveryText, message);
+      // Call the template manager to create the template from chat
+      if (globalThis.vagabond?.managers?.templates) {
+        await globalThis.vagabond.managers.templates.fromChat(deliveryType, deliveryText, message);
       } else {
-        console.warn("VagabondSystem | createSpellTemplate function not found.");
+        console.warn("VagabondSystem | Template manager not found.");
       }
     });
   });
