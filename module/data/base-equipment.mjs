@@ -59,6 +59,23 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: 1
     });
 
+    // Grid position for inventory display (0-indexed)
+    schema.gridPosition = new fields.NumberField({
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: 0,
+      min: 0
+    });
+
+    // Parent container ID (if this item is inside a container)
+    schema.containerId = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: null,
+      nullable: true
+    });
+
     // Metal type (affects cost multiplier and special properties for weapons/armor)
     schema.metal = new fields.StringField({
       required: true,

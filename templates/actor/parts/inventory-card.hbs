@@ -1,11 +1,15 @@
-{{! Inventory Card - Simplified: Image (50px) + Name }}
+{{! Inventory Card - Each item is a separate instance }}
 <div
-  class='inventory-card {{#if equipped}}equipped{{/if}}'
+  class='inventory-card
+         {{#if equipped}}equipped{{/if}}
+         {{#if isSlotZero}}slot-zero{{/if}}'
   data-item-id='{{item._id}}'
   data-item-slots='{{item.system.slots}}'
   data-item-type='{{item.type}}'
   data-grid-position='{{gridPosition}}'
-  style='grid-column: span {{item.system.slots}};'
+  data-is-slot-zero='{{isSlotZero}}'
+  data-display-number='{{displayNumber}}'
+  style='grid-column: span {{#if (eq totalSlots 0)}}1{{else}}{{totalSlots}}{{/if}};'
   draggable='true'
 >
   <img src='{{item.img}}' alt='{{item.name}}' class='item-image' />
