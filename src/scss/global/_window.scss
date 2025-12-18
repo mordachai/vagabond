@@ -1,3 +1,6 @@
+:root {--c-chat-yellow: #DED656;}
+$-c-yellow: var(--c-chat-yellow);
+
 .window-app {
   font-family: $font-primary;
 }
@@ -118,17 +121,139 @@
   background: #000;
   border: none;
   border-radius: 2px;
-  color: #DED656;
+  color: $-c-yellow;
+  padding: 8px;
 
+  /* Header Section */
   .message-header {
-    color: #DED656;
-    margin: 10px 0 5px 0;
+    color: $-c-yellow;
+    margin: 5px 0 10px 0;
+    border-bottom: none;
+
+    .message-sender {
+      font-family: $font-title; // Assumes your variable is defined
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .message-metadata {
+      color: $-c-yellow;
+      opacity: 0.8;
+    }
   }
 
-  .message-sender {
-    font-family: $font-title;
-    font-size: 20px;
-    font-weight: 700;
+  /* Content Section */
+  .message-content {
+    
+    // Typography
+    h1, h2, h3, h4, h5, h6 {
+      color: $-c-yellow; // Darkened per your screenshot
+    }
+
+    // Horizontal Rule
+    hr {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, $-c-yellow, transparent);
+      margin: 10px 0;
+    }
+
+    // Table
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid $-c-yellow;
+      margin: 8px 0;
+
+      thead th {
+        color: $-c-yellow;
+        border-bottom: 1px solid $-c-yellow;
+        text-align: left;
+        padding: 4px;
+      }
+
+      tbody td {
+        border-top: 1px solid $-c-yellow;
+        padding: 4px;
+      }
+    }
+
+    // Quote & Citation
+    blockquote {
+      border-left: 2px solid $-c-yellow;
+      font-style: italic;
+      margin: 10px 0;
+      padding-left: 10px;
+      color: $-c-yellow;
+      background: rgba(222, 214, 86, 0.05);
+
+      cite {
+        display: block;
+        text-align: right;
+        font-size: 0.9em;
+        opacity: 0.8;
+        font-style: normal;
+      }
+    }
+
+    // Interactive Elements
+    button {
+      background: #000;
+      color: $-c-yellow;
+      border: 1px solid #ded556bb;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-family: inherit;
+
+      &:hover {
+        border-color: $-c-yellow;
+        box-shadow: 0 0 5px rgba(222, 214, 86, 0.5);
+      }
+    }
+
+    a {
+      color: $-c-yellow;
+      text-decoration: underline;
+
+      &:hover {
+        text-shadow: 0 0 5px $-c-yellow;
+      }
+    }
+
+    // Form Inputs
+    label {
+      font-weight: bold;
+      color: $-c-yellow;
+      font-size: 0.9em;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      background: #0a0a0a;
+      color: $-c-yellow;
+      border: 1px solid #333;
+      border-radius: 3px;
+      padding: 2px 5px;
+      
+      &:focus {
+        border-color: $-c-yellow;
+        outline: none;
+        box-shadow: 0 0 3px $-c-yellow;
+      }
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      accent-color: $-c-yellow;
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      accent-color: $-c-yellow;
+    }
   }
 }
 

@@ -298,10 +298,23 @@ VAGABOND.deliveryIncrement = {
  * @type {Object}
  */
 VAGABOND.weaponSkills = {
-  'melee': 'VAGABOND.WeaponSkills.Melee',
-  'brawl': 'VAGABOND.WeaponSkills.Brawl',
-  'finesse': 'VAGABOND.WeaponSkills.Finesse',
-  'ranged': 'VAGABOND.WeaponSkills.Ranged'
+'melee': 'VAGABOND.WeaponSkills.Melee',
+'brawl': 'VAGABOND.WeaponSkills.Brawl',
+'finesse': 'VAGABOND.WeaponSkills.Finesse',
+'ranged': 'VAGABOND.WeaponSkills.Ranged',
+'arcana': 'VAGABOND.Skills.Arcana',
+'craft': 'VAGABOND.Skills.Craft',
+'medicine': 'VAGABOND.Skills.Medicine',
+'sneak': 'VAGABOND.Skills.Sneak',
+'detect': 'VAGABOND.Skills.Detect',
+'mysticism': 'VAGABOND.Skills.Mysticism',
+'survival': 'VAGABOND.Skills.Survival',
+'influence': 'VAGABOND.Skills.Influence',
+'leadership': 'VAGABOND.Skills.Leadership',
+'performance': 'VAGABOND.Skills.Performance',
+'reflex': 'VAGABOND.Saves.Reflex.name',
+'endure': 'VAGABOND.Saves.Endure.name',
+'will': 'VAGABOND.Saves.Will.name',
 };
 
 /**
@@ -436,7 +449,7 @@ VAGABOND.armorTypes = {
  * @type {Object}
  */
 VAGABOND.armorTypeDescriptions = {
-  'light': 'Light: Rating 1, Might 3, 1 Slot',
+  'light': 'Light: Rating 1, Might 3, 2 Slot',
   'medium': 'Medium: Rating 2, Might 4, 2 Slots',
   'heavy': 'Heavy: Rating 3, Might 5, 3 Slots'
 };

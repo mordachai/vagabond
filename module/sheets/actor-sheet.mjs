@@ -1105,8 +1105,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   _getDamageTypeIcon(item) {
-    if (!item.system.damageType) return null;
-    return CONFIG.VAGABOND.damageTypeIcons?.[item.system.damageType] || null;
+    // For weapons, use currentDamageType (based on current grip)
+    const damageType = item.system.currentDamageType || item.system.damageType;
+    if (!damageType) return null;
+    return CONFIG.VAGABOND.damageTypeIcons?.[damageType] || null;
   }
 
   /**
@@ -2010,11 +2012,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   _buildWeaponStats(item) {
+    const damageType = item.system.currentDamageType || item.system.damageType || '';
     return `
       <div class="mini-sheet-stats">
         <div class="stat-row">
           <span class="stat-name">Damage</span>
-          <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${item.system.damageType || ''}</span>
+          <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${damageType}</span>
         </div>
         <div class="stat-row">
           <span class="stat-name">Range</span>

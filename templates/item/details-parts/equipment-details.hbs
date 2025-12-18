@@ -38,12 +38,12 @@
             </div>
             <div class='locked-stat'>
               <span class='stat-label'>Damage (1H):</span>
-              <span class='stat-value'>{{system.damageOneHand}}</span>
+              <span class='stat-value'>{{system.damageOneHand}} {{localize (lookup config.damageTypes system.damageTypeOneHand)}}</span>
             </div>
             {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
               <div class='locked-stat'>
                 <span class='stat-label'>Damage (2H):</span>
-                <span class='stat-value'>{{system.damageTwoHands}}</span>
+                <span class='stat-value'>{{system.damageTwoHands}} {{localize (lookup config.damageTypes system.damageTypeTwoHands)}}</span>
               </div>
             {{/if}}
             {{#if system.canExplode}}
@@ -241,9 +241,10 @@
           <div class='grid grid-3col gap-8'>
             <div class='weapon-skill-field'>
               <label class='resource-label'>Skill</label>
-                <select name="system.weaponSkill" data-dtype="String">
-                    {{selectOptions config.weaponSkills selected=system.weaponSkill localize=true blank="-"}}
-                </select>
+              {{> "systems/vagabond/templates/shared/weapon-skill-select.hbs"
+                  name="system.weaponSkill"
+                  selected=system.weaponSkill
+                  config=config}}
             </div>
             <div class='weapon-range-field'>
               <label class='resource-label'>Range</label>
@@ -265,7 +266,7 @@
           <label class='resource-label'>Damage</label>
           <div class='grid grid-2col gap-8'>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hand-fist'></i> One Hand</label>
+              <label class='resource-label'><i class='fas fa-hand-fist'></i> One Hand - Amount</label>
               <input
                 type='text'
                 name='system.damageOneHand'
@@ -275,7 +276,17 @@
               />
             </div>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hands'></i> Two Hands</label>
+              <label class='resource-label'><i class='fas fa-hand-fist'></i> One Hand - Type</label>
+              {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+                  name="system.damageTypeOneHand"
+                  selected=system.damageTypeOneHand
+                  includeNone=true
+                  config=config}}
+            </div>
+          </div>
+          <div class='grid grid-2col gap-8'>
+            <div class='damage-with-icon'>
+              <label class='resource-label'><i class='fas fa-hands'></i> Two Hands - Amount</label>
               <input
                 type='text'
                 name='system.damageTwoHands'
@@ -284,6 +295,20 @@
                 placeholder='d10'
                 {{#unless (or (eq system.grip '2H') (eq system.grip 'V'))}}disabled{{/unless}}
               />
+            </div>
+            <div class='damage-with-icon'>
+              <label class='resource-label'><i class='fas fa-hands'></i> Two Hands - Type</label>
+              {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
+                {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+                    name="system.damageTypeTwoHands"
+                    selected=system.damageTypeTwoHands
+                    includeNone=true
+                    config=config}}
+              {{else}}
+                <select name="system.damageTypeTwoHands" data-dtype="String" disabled>
+                  <option value="{{system.damageTypeTwoHands}}">{{localize (lookup config.damageTypes system.damageTypeTwoHands)}}</option>
+                </select>
+              {{/if}}
             </div>
           </div>
         </div>

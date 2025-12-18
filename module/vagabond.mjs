@@ -136,6 +136,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/damage-type-select.hbs',
     'systems/vagabond/templates/shared/size-select.hbs',
     'systems/vagabond/templates/shared/being-type-select.hbs',
+    'systems/vagabond/templates/shared/weapon-skill-select.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     //Chat cards

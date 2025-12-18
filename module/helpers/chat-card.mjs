@@ -466,7 +466,7 @@ export class VagabondChatCard {
       tags.push({ label: weaponSkill?.label || weaponSkillKey, cssClass: 'tag-skill' });
       
       if (weapon.system.currentDamage) {
-          const dType = weapon.system.damageType || 'physical';
+          const dType = weapon.system.currentDamageType || 'physical';
           // Show damage with icon if type exists, without icon if typeless ("-")
           if (dType && dType !== '-') {
               const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
@@ -514,13 +514,20 @@ export class VagabondChatCard {
           propertyDetails = propList;
       }
 
+      // Enrich description if present
+      let description = '';
+      if (weapon.system.description) {
+          description = await foundry.applications.ux.TextEditor.enrichHTML(weapon.system.description, { async: true });
+      }
+
       return this.createActionCard({
           actor, item: weapon, title: `${weapon.name} Attack`,
           rollData: attackResult,
           tags,
           propertyDetails,
           damageRoll,
-          damageType: weapon.system.damageType || 'physical',
+          damageType: weapon.system.currentDamageType || 'physical',
+          description,
           hasDefenses: true
       });
   }  
@@ -730,7 +737,7 @@ export class VagabondChatCard {
 
     // Type-specific stats
     if (equipType === 'weapon') {
-      if (sys.currentDamage) stats.push({ label: 'Damage', value: `${sys.currentDamage} ${this._getDamageTypeLabel(sys.damageType)}` });
+      if (sys.currentDamage) stats.push({ label: 'Damage', value: `${sys.currentDamage} ${this._getDamageTypeLabel(sys.currentDamageType)}` });
       if (sys.rangeDisplay) stats.push({ label: 'Range', value: sys.rangeDisplay });
       if (sys.gripDisplay) stats.push({ label: 'Grip', value: sys.gripDisplay });
       if (sys.weaponSkill) stats.push({ label: 'Weapon Skill', value: sys.weaponSkill });

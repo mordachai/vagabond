@@ -232,8 +232,9 @@ export class VagabondDamageHelper {
       let damageTypeKey = context.damageType;
 
       // Fallback to item damage type if context doesn't have it
-      if ((!damageTypeKey || damageTypeKey === '-') && item && item.system.damageType) {
-        damageTypeKey = item.system.damageType;
+      if ((!damageTypeKey || damageTypeKey === '-') && item) {
+        // For weapons, use currentDamageType (based on current grip)
+        damageTypeKey = item.system.currentDamageType || item.system.damageType;
       }
 
       if (damageTypeKey && damageTypeKey !== '-') {
