@@ -3470,6 +3470,59 @@
   background-color: rgba(76, 175, 80, 0.1);
   border: 2px dashed #4caf50;
 }
+.vagabond .container-search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+.vagabond .container-search-header .search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-grow: 1;
+}
+.vagabond .container-search-header .search-field i {
+  color: var(--color-text-dark-secondary);
+  font-size: 0.85em;
+}
+.vagabond .container-search-header .search-field .container-search {
+  background: none;
+  border: none;
+  color: var(--color-text-dark-primary);
+  width: 100%;
+  font-size: 0.9em;
+  height: 24px;
+  font-family: var(--font-primary);
+}
+.vagabond .container-search-header .search-field .container-search::placeholder {
+  color: var(--color-text-dark-secondary);
+  font-style: italic;
+  opacity: 0.7;
+}
+.vagabond .container-search-header .search-field .container-search:focus {
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .container-search-header .item-counter {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: bold;
+  white-space: nowrap;
+  color: var(--color-text-dark-secondary);
+  border-left: 1px solid var(--color-border-dark);
+  padding-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vagabond .container-search-header .item-counter span {
+  color: var(--color-text-dark-primary);
+}
 .vagabond .container-items-list {
   margin-top: 12px;
 }
@@ -3483,8 +3536,9 @@
   border-bottom: 2px solid var(--color-border-dark);
 }
 .vagabond .container-items-table thead th {
-  padding: 8px 4px;
-  text-align: left;
+  /* Reduced top/bottom padding from 8px to 4px */
+  padding: 4px;
+  text-align: center;
   font-weight: bold;
   font-size: 0.85em;
   text-transform: uppercase;
@@ -3498,7 +3552,8 @@
   background-color: rgba(0, 0, 0, 0.1);
 }
 .vagabond .container-items-table tbody td {
-  padding: 8px 4px;
+  /* Reduced top/bottom padding from 8px to 2px */
+  padding: 2px 4px;
   vertical-align: middle;
 }
 .vagabond .container-items-table tbody td.item-name {
@@ -3507,8 +3562,9 @@
   gap: 8px;
 }
 .vagabond .container-items-table tbody td.item-name .item-icon {
-  width: 32px;
-  height: 32px;
+  /* Reduced size from 32px to 24px to shrink row height */
+  width: 24px;
+  height: 24px;
   border: 1px solid var(--color-border-dark);
   border-radius: 3px;
   object-fit: cover;
@@ -3522,16 +3578,17 @@
 .vagabond .container-items-table tbody td.item-name .item-name-container {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  /* Tightened spacing between name and type */
+  gap: 0;
 }
 .vagabond .container-items-table tbody td.item-name .item-name-container .item-name-text {
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 .vagabond .container-items-table tbody td.item-name .item-name-container .item-type-text {
   color: var(--color-text-dark-secondary);
   font-size: 0.75em;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 .vagabond .container-items-table tbody td.item-damage, .vagabond .container-items-table tbody td.item-slots, .vagabond .container-items-table tbody td.item-cost {
   text-align: center;
@@ -3540,11 +3597,16 @@
 .vagabond .container-items-table tbody td.item-actions {
   text-align: right;
   white-space: nowrap;
+  /* Changed to flex to ensure vertical centering of buttons */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .vagabond .container-items-table tbody td.item-actions button {
   background: none;
   border: none;
-  padding: 4px 8px;
+  /* Reduced padding to keep button small */
+  padding: 2px 6px;
   cursor: pointer;
   color: var(--color-text-light-heading);
   transition: color 0.2s;
@@ -3559,7 +3621,8 @@
   color: #5c940d;
 }
 .vagabond .container-items-table tbody td.item-actions button i {
-  font-size: 14px;
+  font-size: 13px; /* Slightly smaller icon */
+  display: block; /* Removes baseline shim */
 }
 .vagabond .container-empty-state {
   text-align: center;

@@ -29,9 +29,18 @@
       </div>
     {{/unless}}
 
+    {{!-- Filter bar --}}
+    <div class="container-search-header">
+        <div class="search-field">
+            <i class="fas fa-search"></i>
+            <input type="text" class="container-search" placeholder="Search items..." spellcheck="false">
+        </div>
+        <div class="item-counter">
+            Items: <span id="visible-count">{{containerItems.length}}</span> / <span id="total-count">{{containerItems.length}}</span>
+        </div>
+    </div>
     {{! Container Items List }}
     <div class='form-group' data-drop-container='true'>
-      <label class='resource-label'>Container Items ({{system.currentCapacity}}/{{system.capacity}} slots)</label>
       {{#if containerItems.length}}
         <div class='container-items-list'>
           <table class='container-items-table'>

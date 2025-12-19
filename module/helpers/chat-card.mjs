@@ -467,77 +467,73 @@ export class VagabondChatCard {
   }
 
   static async weaponAttack(actor, weapon, attackResult, damageRoll) {
-      const { weaponSkill, weaponSkillKey } = attackResult;
+      const { weaponSkill, weaponSkillKey, isHit, isCritical } = attackResult;
       
+      // FIX: Auto-roll damage if settings allow or if it's a critical hit
+      // This ensures the orange damage section and save buttons appear immediately
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      if (!damageRoll && VagabondDamageHelper.shouldRollDamage(isHit)) {
+          damageRoll = await weapon.rollDamage(actor, { isCritical });
+      }
+
       const tags = [];
       tags.push({ label: weaponSkill?.label || weaponSkillKey, cssClass: 'tag-skill' });
       
       if (weapon.system.currentDamage) {
           const dType = weapon.system.currentDamageType || 'physical';
-          // Show damage with icon if type exists, without icon if typeless ("-")
           if (dType && dType !== '-') {
               const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
               tags.push({ label: weapon.system.currentDamage, icon: icon, cssClass: 'tag-damage' });
           } else {
-              // Typeless damage - show damage amount without damage type icon
               tags.push({ label: weapon.system.currentDamage, cssClass: 'tag-damage' });
           }
       }
+
       if (weapon.system.grip) {
           const gripMap = { '1H': 'fas fa-hand-fist', '2H': 'fas fa-hands', 'V': 'fas fa-hand-peace' };
           tags.push({ icon: gripMap[weapon.system.grip], cssClass: 'tag-grip' });
       }
+
       if (weapon.system.rangeDisplay) {
           tags.push({ label: weapon.system.rangeDisplay, cssClass: 'tag-range' });
       }
 
       // PROPERTIES LOGIC
       let propertyDetails = null;
-      if (weapon.system.properties && weapon.system.properties.length > 0) {
+      if (weapon.system.properties?.length > 0) {
           const propList = [];
-          
           weapon.system.properties.forEach(prop => {
-              // 1. Find correct key in Config (handle case sensitivity)
-              // This ensures 'finesse' finds 'Finesse'
               const configKeys = Object.keys(CONFIG.VAGABOND.weaponProperties);
               const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
-              
-              // 2. Get Label
-              const labelKey = CONFIG.VAGABOND.weaponProperties[realKey] || `VAGABOND.Weapon.Property.${realKey}`;
-              const label = game.i18n.localize(labelKey);
-
-              // 3. Get Hint (Assuming .Hints convention based on key)
-              // If you have a different structure for descriptions, update the key string below
+              const label = game.i18n.localize(CONFIG.VAGABOND.weaponProperties[realKey] || `VAGABOND.Weapon.Property.${realKey}`);
               const hintKey = `VAGABOND.Weapon.PropertyHints.${realKey}`; 
               const hint = game.i18n.localize(hintKey);
 
-              // Add to Tags (Header)
               tags.push({ label: label, cssClass: 'tag-property' });
-
-              // Add to Details (Accordion)
               propList.push({ name: label, hint: (hint !== hintKey) ? hint : '' });
           });
-          
           propertyDetails = propList;
       }
 
-      // Enrich description if present
+      // Enrich description
       let description = '';
       if (weapon.system.description) {
           description = await foundry.applications.ux.TextEditor.enrichHTML(weapon.system.description, { async: true });
       }
 
       return this.createActionCard({
-          actor, item: weapon, title: `${weapon.name} Attack`,
+          actor, 
+          item: weapon, 
+          title: `${weapon.name} Attack`,
           rollData: attackResult,
           tags,
           propertyDetails,
-          damageRoll,
+          damageRoll, // Now correctly populated for hits/crits
           damageType: weapon.system.currentDamageType || 'physical',
           description,
           hasDefenses: true
       });
-  }  
+  }
 
   static async spellCast(actor, spell, spellCastResult, damageRoll = null) {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, costs, deliveryText, spellState } = spellCastResult;

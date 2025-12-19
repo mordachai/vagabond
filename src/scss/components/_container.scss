@@ -6,6 +6,67 @@
   border: 2px dashed #4caf50;
 }
 
+.container-search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 4px;
+  padding: 2px 8px; // Reduced padding for shorter height
+  margin-bottom: 8px;
+  gap: 10px;
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+
+    i {
+      color: var(--color-text-dark-secondary);
+      font-size: 0.85em;
+    }
+
+    .container-search {
+      background: none;
+      border: none;
+      color: var(--color-text-dark-primary);
+      width: 100%;
+      font-size: 0.9em;
+      height: 24px; // Matches the icon heights we set earlier
+      font-family: var(--font-primary);
+
+      &::placeholder {
+        color: var(--color-text-dark-secondary);
+        font-style: italic;
+        opacity: 0.7;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  .item-counter {
+    font-family: var(--font-mono); // Monospace looks better for shifting numbers
+    font-size: 0.8em;
+    font-weight: bold;
+    white-space: nowrap;
+    color: var(--color-text-dark-secondary);
+    border-left: 1px solid var(--color-border-dark);
+    padding-left: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    span {
+      color: var(--color-text-dark-primary);
+    }
+  }
+}
+
 .container-items-list {
   margin-top: 12px;
 }
@@ -20,8 +81,9 @@
     border-bottom: 2px solid var(--color-border-dark);
 
     th {
-      padding: 8px 4px;
-      text-align: left;
+      /* Reduced top/bottom padding from 8px to 4px */
+      padding: 4px; 
+      text-align: center;
       font-weight: bold;
       font-size: 0.85em;
       text-transform: uppercase;
@@ -40,7 +102,8 @@
     }
 
     td {
-      padding: 8px 4px;
+      /* Reduced top/bottom padding from 8px to 2px */
+      padding: 2px 4px;
       vertical-align: middle;
 
       &.item-name {
@@ -49,8 +112,9 @@
         gap: 8px;
 
         .item-icon {
-          width: 32px;
-          height: 32px;
+          /* Reduced size from 32px to 24px to shrink row height */
+          width: 24px;
+          height: 24px;
           border: 1px solid var(--color-border-dark);
           border-radius: 3px;
           object-fit: cover;
@@ -66,17 +130,18 @@
         .item-name-container {
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          /* Tightened spacing between name and type */
+          gap: 0; 
 
           .item-name-text {
             font-weight: 500;
-            line-height: 1.2;
+            line-height: 1.1;
           }
 
           .item-type-text {
             color: var(--color-text-dark-secondary);
             font-size: 0.75em;
-            line-height: 1.2;
+            line-height: 1.1;
           }
         }
       }
@@ -91,11 +156,16 @@
       &.item-actions {
         text-align: right;
         white-space: nowrap;
+        /* Changed to flex to ensure vertical centering of buttons */
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
 
         button {
           background: none;
           border: none;
-          padding: 4px 8px;
+          /* Reduced padding to keep button small */
+          padding: 2px 6px;
           cursor: pointer;
           color: var(--color-text-light-heading);
           transition: color 0.2s;
@@ -113,7 +183,8 @@
           }
 
           i {
-            font-size: 14px;
+            font-size: 13px; /* Slightly smaller icon */
+            display: block; /* Removes baseline shim */
           }
         }
       }

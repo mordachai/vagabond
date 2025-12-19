@@ -400,7 +400,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             if (itemData.type === 'equipment') {
               const sys = itemData.system;
               slotsDisplay = sys.baseSlots !== undefined ? sys.baseSlots : 0;
-              costDisplay = sys.costDisplay || '—';
+              const cost = sys.baseCost || {};
+              const costs = [];
+              if (cost.gold > 0) costs.push(`${cost.gold}g`);
+              if (cost.silver > 0) costs.push(`${cost.silver}s`);
+              if (cost.copper > 0) costs.push(`${cost.copper}c`);
+              costDisplay = costs.length > 0 ? costs.join(' ') : '0c';
               metalDisplay = sys.metal ? sys.metal.titleCase() : '—';
 
               if (sys.equipmentType === 'weapon') {
@@ -561,6 +566,33 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         });
         windowContent.addEventListener('drop', (e) => {
           windowContent.classList.remove('drag-over');
+        });
+      }
+
+      // --- SEARCH FILTER LOGIC ---
+      const searchInput = this.element.querySelector('.container-search');
+      const visibleDisplay = this.element.querySelector('#visible-count');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (event) => {
+          const query = event.target.value.toLowerCase();
+          const rows = this.element.querySelectorAll('.container-item-row');
+          let visibleCount = 0;
+          
+          rows.forEach(row => {
+            const itemName = row.querySelector('.item-name-text')?.textContent.toLowerCase() || "";
+            const itemType = row.querySelector('.item-type-text')?.textContent.toLowerCase() || "";
+            
+            if (itemName.includes(query) || itemType.includes(query)) {
+              row.style.display = "";
+              visibleCount++;
+            } else {
+              row.style.display = "none";
+            }
+          });
+
+          // Update the "y" value in "y/X"
+          if (visibleDisplay) visibleDisplay.textContent = visibleCount;
         });
       }
 
@@ -1210,27 +1242,27 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (!this.item.isOwner) return false;
   }
 
+  /**
+   * Handle dropping an item onto the sheet.
+   * Logic for Starter Packs and Containers with Compendium/Sidebar support.
+   * @override
+   */
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
 
-    console.log('Item dropped on item sheet:', data);
-
-    // Handle dropping items onto starter packs
+    // 1. Handle dropping items onto starter packs
     if (this.item.type === 'starterPack') {
       const droppedItem = await Item.implementation.fromDropData(data);
       if (!droppedItem) return false;
 
-      // Check if item already exists in pack
       const existingIndex = this.item.system.items.findIndex(item => item.uuid === droppedItem.uuid);
 
       if (existingIndex >= 0) {
-        // Update quantity
         const newItems = [...this.item.system.items];
         newItems[existingIndex].quantity += 1;
         await this.item.update({ 'system.items': newItems });
         ui.notifications.info(`Increased quantity of ${droppedItem.name} in ${this.item.name}`);
       } else {
-        // Add new item
         const newItems = [...this.item.system.items, { uuid: droppedItem.uuid, quantity: 1 }];
         await this.item.update({ 'system.items': newItems });
         ui.notifications.info(`Added ${droppedItem.name} to ${this.item.name}`);
@@ -1239,68 +1271,56 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       return true;
     }
 
-    // Handle dropping items onto containers
+    // 2. Handle dropping items onto containers
     if (this.item.type === 'container') {
-      console.log('Processing drop on container');
       const droppedItem = await Item.implementation.fromDropData(data);
-      console.log('Dropped item:', droppedItem);
-      if (!droppedItem) {
-        console.warn('Failed to load dropped item');
-        return false;
-      }
+      if (!droppedItem) return false;
 
-      // Check if this is equipment type
+      // Only equipment items can be placed in containers
       if (droppedItem.type !== 'equipment') {
-        ui.notifications.warn('Containers can only hold equipment items (weapons, armor, gear, alchemicals, relics).');
+        ui.notifications.warn('Containers can only hold equipment items.');
         return false;
       }
 
-      // Prevent nesting containers
-      if (droppedItem.type === 'container') {
+      // Prevent nesting containers within containers
+      if (droppedItem.system.equipmentType === 'container' || droppedItem.type === 'container') {
         ui.notifications.warn('Containers cannot be placed inside other containers.');
         return false;
       }
 
-      // Check capacity based on slots (0-slot items don't count)
-      const itemSlots = droppedItem.system?.baseSlots || 0;
-
-      // Calculate current slots used (skip 0-slot items)
+      // Capacity Logic: Calculate current slots used (skipping 0-slot items)
+      const newItemSlots = Number(droppedItem.system?.baseSlots) || 0;
       const currentItems = this.item.system.items || [];
       const currentSlotsUsed = currentItems.reduce((total, item) => {
-        const slots = item.system?.baseSlots || 0;
+        const slots = Number(item.system?.baseSlots) || 0;
         return total + (slots > 0 ? slots : 0);
       }, 0);
 
       const capacity = this.item.system.capacity || 10;
 
-      // If it's a 0-slot item, always allow
-      if (itemSlots === 0) {
-        // Will be added below
-      } else {
-        // Check if there's enough space for non-zero slot items
-        if (currentSlotsUsed + itemSlots > capacity) {
-          ui.notifications.warn(`Container doesn't have enough space! (${currentSlotsUsed}/${capacity} slots used, need ${itemSlots} more)`);
-          return false;
-        }
+      // Block the drop if it exceeds capacity
+      if (newItemSlots > 0 && (currentSlotsUsed + newItemSlots > capacity)) {
+        ui.notifications.warn(`Container full! (${currentSlotsUsed}/${capacity} slots used, item needs ${newItemSlots})`);
+        return false; 
       }
 
-      // Store the full item data in the container
+      // Prepare item data snapshot for storage
       const itemData = droppedItem.toObject();
 
-      // If item is from the same actor, delete it from actor inventory
-      if (droppedItem.parent === this.item.actor) {
-        console.log('Item is from same actor, deleting from inventory');
+      // MOVE vs COPY logic: 
+      // Only delete the original if it belongs to the same actor owning this container.
+      // Items from Sidebar, Compendiums, or other Actors are copied.
+      if (droppedItem.parent && this.item.actor && droppedItem.parent.id === this.item.actor.id) {
         await droppedItem.delete();
       }
 
-      // Add to container with full item data
+      // Add to container items array
       const newItems = [...this.item.system.items, itemData];
       await this.item.update({ 'system.items': newItems });
 
       ui.notifications.info(`${droppedItem.name} added to ${this.item.name}.`);
 
-      // Force re-render to show updated items list
-      // Use force=true and parts to ensure containerDetails re-renders
+      // Use ApplicationV2 render options to update only the relevant part
       await this.render(true, { parts: ['containerDetails'] });
 
       return true;
