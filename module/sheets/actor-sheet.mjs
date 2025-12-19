@@ -65,7 +65,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickAbilityName: this._onClickAbilityName,  // NPC click ability name
       toggleAbilityAccordion: this._onToggleAbilityAccordion,  // NPC toggle ability accordion
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from NPC recharge
-      autoArrangeInventory: this._onAutoArrangeInventory,  // Auto-arrange inventory grid
+      // autoArrangeInventory: this._onAutoArrangeInventory,  // REMOVED - Auto-arrange inventory grid
       equipItem: this._onEquipItem,  // Equip item from context menu
       editItem: this._onEditItem,  // Edit item from context menu
       deleteItem: this._onDeleteItem,  // Delete item from context menu
@@ -1055,48 +1055,46 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     context.isOverloaded = overloadAmount > 0;
     context.overloadAmount = overloadAmount;
 
-    // DYNAMIC GRID SIZE - Show all capacity slots OR all items, whichever is greater
+    // DYNAMIC GRID SIZE - Show all items + empty slots to display all capacity numbers up to maxSlots
     const totalItemCount = context.inventoryItems.length;
-    const minSlotsToShow = Math.max(totalItemCount, maxSlots);
-
-    // Round up to next complete row (4 columns)
-    const gridRows = Math.ceil(minSlotsToShow / 4);
-    const gridSize = gridRows * 4;
-    const emptySlotCount = gridSize - totalItemCount;
 
     // NEW NUMBERING LOGIC:
-    // Numbers represent "capacity slots" - skip positions with slot-0 items
-    // Walk through grid positions sequentially, assigning numbers only to non-slot-0 positions
+    // Numbers represent "capacity slots" - each item consumes slots equal to its size
+    // A 3-slot item consumes capacity numbers 1, 2, 3 (shows "1" on card)
+    // A 2-slot item consumes capacity numbers 4, 5 (shows "4" on card)
     let capacityNumber = 1; // Sequential capacity slot number (1, 2, 3...)
 
     // Assign numbers to items (skip slot-0 items)
     context.inventoryItems.forEach(itemData => {
       if (!itemData.isSlotZero) {
-        itemData.displayNumber = capacityNumber;
-        capacityNumber++;
+        itemData.displayNumber = capacityNumber; // Show starting number
+        capacityNumber += itemData.totalSlots; // Increment by slot size!
       } else {
         itemData.displayNumber = null; // Slot-0 items have no number
       }
     });
 
-    // Create empty slots to fill remaining grid
+    // Calculate how many empty slots we need to show remaining capacity
+    // capacityNumber is now at the next available capacity number
+    // We need empty slots until capacityNumber reaches maxSlots + 1
+    const remainingCapacity = maxSlots - (capacityNumber - 1);
+    const emptySlotCount = Math.max(0, remainingCapacity);
+
+    // Create empty slots to show remaining capacity
     context.emptySlots = Array.from({ length: emptySlotCount }, (_, i) => {
       const gridPosition = totalItemCount + i;
-
-      // Only assign numbers up to maxSlots (which already includes bonusSlots)
-      const shouldNumber = capacityNumber <= maxSlots;
-      const slotNumber = shouldNumber ? capacityNumber : null;
-
-      if (shouldNumber) {
-        capacityNumber++; // Increment for next slot
-      }
+      const slotNumber = capacityNumber + i;
 
       return {
         index: gridPosition,
         displayNumber: slotNumber,
-        unavailable: !shouldNumber // Slots beyond capacity are unavailable
+        unavailable: false // All these slots are within capacity
       };
     });
+
+    // Grid size is total items + empty slots (no rounding to rows)
+    const gridSize = totalItemCount + emptySlotCount;
+    const gridRows = Math.ceil(gridSize / 4); // Calculate rows for CSS, but don't force size
 
     context.gridSize = gridSize;
     context.gridRows = gridRows;
@@ -1601,15 +1599,25 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         this._clearAllDragStates();
       });
 
-      // Allow dropping on other cards (to swap positions)
+      // Allow dropping on other cards (to slide into position)
       card.addEventListener('dragover', (event) => {
         event.preventDefault();
 
         const draggedItemId = event.dataTransfer.getData('text/plain');
         const targetItemId = card.dataset.itemId;
 
-        // Valid if different items
-        const isValid = draggedItemId !== targetItemId;
+        if (draggedItemId === targetItemId) {
+          // Dragging on self - invalid
+          card.classList.remove('drag-target-valid', 'drag-target-invalid');
+          card.classList.add('drag-target-invalid');
+          return;
+        }
+
+        const targetItem = this.actor.items.get(targetItemId);
+        if (!targetItem) return;
+
+        const targetPos = targetItem.system.gridPosition || 0;
+        const isValid = this._canDropAtPosition(draggedItemId, targetPos);
 
         // Apply visual feedback (left margin only)
         card.classList.remove('drag-target-valid', 'drag-target-invalid');
@@ -1630,20 +1638,21 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         // Clear drag states immediately
         this._clearAllDragStates();
 
-        if (draggedItemId !== targetItemId) {
-          console.log(`Swapping items: ${draggedItemId} <-> ${targetItemId}`);
+        if (draggedItemId === targetItemId) return;
 
-          const draggedItem = this.actor.items.get(draggedItemId);
-          const targetItem = this.actor.items.get(targetItemId);
+        const targetItem = this.actor.items.get(targetItemId);
+        if (!targetItem) return;
 
-          if (draggedItem && targetItem) {
-            const draggedPos = draggedItem.system.gridPosition || 0;
-            const targetPos = targetItem.system.gridPosition || 0;
+        const targetPos = targetItem.system.gridPosition || 0;
 
-            await draggedItem.update({ 'system.gridPosition': targetPos });
-            await targetItem.update({ 'system.gridPosition': draggedPos });
-          }
+        // Check if drop is valid
+        if (!this._canDropAtPosition(draggedItemId, targetPos)) {
+          ui.notifications.warn("Not enough capacity to place item here!");
+          return;
         }
+
+        console.log(`Sliding item ${draggedItemId} to position ${targetPos}`);
+        await this._slideItemToPosition(draggedItemId, targetPos);
       });
     });
 
@@ -1655,9 +1664,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       slot.addEventListener('dragover', (event) => {
         event.preventDefault();
 
-        // Check if slot is unavailable (beyond capacity)
-        const isUnavailable = slot.classList.contains('unavailable');
-        const isValid = !isUnavailable;
+        const draggedItemId = event.dataTransfer.getData('text/plain');
+        const slotIndex = parseInt(slot.dataset.slotIndex);
+
+        // Check if drop is valid (doesn't exceed capacity)
+        const isValid = this._canDropAtPosition(draggedItemId, slotIndex);
 
         // Apply visual feedback (left margin only)
         slot.classList.remove('drag-target-valid', 'drag-target-invalid');
@@ -1675,21 +1686,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         // Clear drag states immediately
         this._clearAllDragStates();
 
-        // Don't allow drops on unavailable slots
-        if (slot.classList.contains('unavailable')) {
-          ui.notifications.warn("Cannot place items beyond inventory capacity!");
-          return;
-        }
-
         const itemId = event.dataTransfer.getData('text/plain');
         const slotIndex = parseInt(slot.dataset.slotIndex);
 
-        console.log(`Dropping item ${itemId} on slot ${slotIndex}`);
-
-        const item = this.actor.items.get(itemId);
-        if (item) {
-          await item.update({ 'system.gridPosition': slotIndex });
+        // Check if drop is valid
+        if (!this._canDropAtPosition(itemId, slotIndex)) {
+          ui.notifications.warn("Not enough capacity to place item here!");
+          return;
         }
+
+        console.log(`Sliding item ${itemId} to position ${slotIndex}`);
+        await this._slideItemToPosition(itemId, slotIndex);
       });
     });
 
@@ -1727,6 +1734,151 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this.element.querySelectorAll('.drag-target-valid, .drag-target-invalid').forEach(el => {
       el.classList.remove('drag-target-valid', 'drag-target-invalid');
     });
+  }
+
+  /**
+   * Slide/insert an item into a new grid position
+   * Process: 1) Remove item (close gap), 2) Insert at target (make room)
+   * @param {string} draggedItemId - ID of the item being dragged
+   * @param {number} targetPosition - Target grid position (left edge, before removal)
+   * @returns {Promise<boolean>} True if successful, false if invalid
+   * @private
+   */
+  async _slideItemToPosition(draggedItemId, targetPosition) {
+    const draggedItem = this.actor.items.get(draggedItemId);
+    if (!draggedItem) return false;
+
+    const oldPosition = draggedItem.system.gridPosition || 0;
+    const draggedSlots = draggedItem.system.slots || 0;
+
+    // Don't do anything if dropping on self
+    if (oldPosition === targetPosition) return false;
+
+    // Get all inventory items (exclude items in containers and the dragged item)
+    const inventoryItems = this.actor.items.filter(i =>
+      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear') &&
+      !i.system.containerId &&
+      i.id !== draggedItemId
+    );
+
+    const updates = [];
+
+    // Calculate effective target position (accounting for the gap left behind)
+    const effectiveTarget = targetPosition > oldPosition
+      ? targetPosition - draggedSlots
+      : targetPosition;
+
+    inventoryItems.forEach(item => {
+      let pos = item.system.gridPosition || 0;
+
+      // Step 1: Close gap from removing dragged item
+      if (pos > oldPosition) {
+        pos = pos - draggedSlots;
+      }
+
+      // Step 2: Make room for inserting dragged item
+      if (pos >= effectiveTarget) {
+        pos = pos + draggedSlots;
+      }
+
+      // Only update if position changed
+      if (pos !== item.system.gridPosition) {
+        updates.push({
+          _id: item.id,
+          'system.gridPosition': pos
+        });
+      }
+    });
+
+    // Place the dragged item at its effective target position
+    updates.push({
+      _id: draggedItemId,
+      'system.gridPosition': effectiveTarget
+    });
+
+    // Apply all updates at once
+    if (updates.length > 0) {
+      await this.actor.updateEmbeddedDocuments('Item', updates);
+    }
+
+    return true;
+  }
+
+  /**
+   * Check if dropping an item at a position is valid (doesn't exceed capacity)
+   * Simulates: 1) Remove item from old pos, 2) Insert at new pos, 3) Check capacity
+   * @param {string} draggedItemId - ID of the item being dragged
+   * @param {number} targetPosition - Target grid position
+   * @returns {boolean} True if valid, false if would exceed capacity
+   * @private
+   */
+  _canDropAtPosition(draggedItemId, targetPosition) {
+    const draggedItem = this.actor.items.get(draggedItemId);
+    if (!draggedItem) return false;
+
+    const draggedSlots = draggedItem.system.slots || 0;
+    const oldPosition = draggedItem.system.gridPosition || 0;
+    const maxSlots = this.document.system.inventory?.maxSlots || 20;
+
+    // Slot-0 items don't consume capacity, always allow
+    if (draggedSlots === 0) return true;
+
+    // Don't validate if dropping on self
+    if (oldPosition === targetPosition) return true;
+
+    // Get all capacity-consuming items (exclude slot-0 and the dragged item)
+    const capacityItems = this.actor.items.filter(i =>
+      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear') &&
+      !i.system.containerId &&
+      i.id !== draggedItemId &&
+      (i.system.slots || 0) > 0
+    );
+
+    // Calculate final positions after the full move (remove + insert)
+    const afterMove = capacityItems.map(item => {
+      let pos = item.system.gridPosition || 0;
+      const slots = item.system.slots || 0;
+
+      // Step 1: Close gap from removing dragged item
+      if (pos > oldPosition) {
+        pos = pos - draggedSlots;
+      }
+
+      // Step 2: Make room for inserting dragged item
+      // Note: targetPosition is relative to the state BEFORE removal
+      // After removal, effective target is adjusted
+      const effectiveTarget = targetPosition > oldPosition
+        ? targetPosition - draggedSlots
+        : targetPosition;
+
+      if (pos >= effectiveTarget) {
+        pos = pos + draggedSlots;
+      }
+
+      return { item, newPos: pos, slots };
+    });
+
+    // Add the dragged item at its new position (adjusted for the gap it left)
+    const effectiveTarget = targetPosition > oldPosition
+      ? targetPosition - draggedSlots
+      : targetPosition;
+
+    afterMove.push({
+      item: draggedItem,
+      newPos: effectiveTarget,
+      slots: draggedSlots
+    });
+
+    // Sort by position
+    afterMove.sort((a, b) => a.newPos - b.newPos);
+
+    // Calculate capacity: sum of all slots
+    let totalCapacity = 0;
+    for (const { slots } of afterMove) {
+      totalCapacity += slots;
+    }
+
+    return totalCapacity <= maxSlots;
   }
 
   /**
@@ -4409,7 +4561,30 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       itemData = itemData.filter(data => data.type !== 'starterPack');
     }
 
-    return this.actor.createEmbeddedDocuments('Item', itemData);
+    // YOUR CUSTOM: Handle stack splitting for inventory items
+    // 1 Item Document = 1 Physical Item rule
+    const itemsToCreate = [];
+
+    for (const data of itemData) {
+      const isInventory = ['equipment', 'weapon', 'armor', 'gear'].includes(data.type);
+      const qty = data.system?.quantity || 1;
+
+      if (isInventory && qty > 1) {
+        // Create 'qty' number of separate items
+        for (let i = 0; i < qty; i++) {
+          const clone = foundry.utils.deepClone(data);
+          clone.system.quantity = 1; // Force to 1
+          itemsToCreate.push(clone);
+        }
+        ui.notifications.info(`Split "${data.name}" into ${qty} separate items.`);
+      } else {
+        // Ensure quantity is 1 for inventory items
+        if (isInventory) foundry.utils.setProperty(data, 'system.quantity', 1);
+        itemsToCreate.push(data);
+      }
+    }
+
+    return this.actor.createEmbeddedDocuments('Item', itemsToCreate);
   }
 
   /********************
@@ -4418,14 +4593,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    *
    ********************/
 
-  /**
-   * Auto-arrange inventory items in the grid
-   * Optimally packs items to fill rows of 4 columns
-   * Priority: 3+1, 2+2, 2+1+1, 1+1+1+1
-   * @param {Event} event - The click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
-   */
+  /*
+   * REMOVED: Auto-arrange inventory - User requested only sliding behavior
+   * Keeping this commented out for reference
+   *
   static async _onAutoArrangeInventory(event, target) {
     const sheet = target.closest('.vagabond.actor');
     if (!sheet) return;
@@ -4433,13 +4604,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const actor = game.actors.get(sheet.dataset.actorId);
     if (!actor) return;
 
-    // Get all inventory items
     const items = actor.items.filter(i =>
       (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear') &&
-      !i.system.containerId // Exclude items in containers
+      !i.system.containerId
     );
 
-    // Group items by slot size (separate slot-0 items)
     const slot0Items = [];
     const slot1Items = [];
     const slot2Items = [];
@@ -4455,35 +4624,26 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       else slot4PlusItems.push(item);
     });
 
-    // Build optimal arrangement
     const arranged = [];
-
-    // 1. Place slot-0 items first (they don't consume capacity)
     arranged.push(...slot0Items);
-
-    // 2. Place 4+ slot items (they span entire rows or more)
     arranged.push(...slot4PlusItems.sort((a, b) => (b.system.slots || 0) - (a.system.slots || 0)));
 
-    // 3. Match 3-slot with 1-slot (3+1 = 4)
     while (slot3Items.length > 0 && slot1Items.length > 0) {
       arranged.push(slot3Items.shift());
       arranged.push(slot1Items.shift());
     }
 
-    // 4. Match 2-slot with 2-slot (2+2 = 4)
     while (slot2Items.length >= 2) {
       arranged.push(slot2Items.shift());
       arranged.push(slot2Items.shift());
     }
 
-    // 5. Match 2-slot with two 1-slot items (2+1+1 = 4)
     while (slot2Items.length > 0 && slot1Items.length >= 2) {
       arranged.push(slot2Items.shift());
       arranged.push(slot1Items.shift());
       arranged.push(slot1Items.shift());
     }
 
-    // 6. Group four 1-slot items (1+1+1+1 = 4)
     while (slot1Items.length >= 4) {
       arranged.push(slot1Items.shift());
       arranged.push(slot1Items.shift());
@@ -4491,12 +4651,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       arranged.push(slot1Items.shift());
     }
 
-    // 7. Place remaining items (don't fit patterns)
     arranged.push(...slot3Items);
     arranged.push(...slot2Items);
     arranged.push(...slot1Items);
 
-    // Assign sequential grid positions
     const updates = arranged.map((item, index) => ({
       _id: item.id,
       'system.gridPosition': index
@@ -4505,6 +4663,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     await actor.updateEmbeddedDocuments('Item', updates);
     ui.notifications.info('Inventory auto-arranged for optimal packing');
   }
+  */
 
   /**
    * Equip an item from context menu
