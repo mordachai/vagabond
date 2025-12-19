@@ -20,7 +20,7 @@
       <div class='item-document-name'>
         <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
       </div>
-      {{#if (eq item.type 'equipment')}}
+      {{#if (or (eq item.type 'equipment') (eq item.type 'container'))}}
         <button
           type='button'
           class='equipment-lock-toggle'
@@ -120,6 +120,94 @@
           </select>
         </div>
       </div>
+    {{/if}}
+
+    {{#if (eq item.type 'container')}}
+      {{#if system.locked}}
+        <div class='grid grid-3col'>
+          <div class='resource'>
+            <label class='resource-label'>Slots</label>
+            <div class='calculated-properties'>
+              <span class='calc-value'>{{system.slots}}</span>
+            </div>
+          </div>
+          <div class='resource'>
+            <label class='resource-label'>Capacity</label>
+            <div class='calculated-properties'>
+              <span class='calc-value'>{{system.currentCapacity}} / {{system.capacity}}</span>
+            </div>
+          </div>
+          <div class='resource'>
+            <label class='resource-label'>Cost</label>
+            <div class='calculated-properties'>
+              <span class='calc-value'>{{system.costDisplay}}</span>
+            </div>
+          </div>
+        </div>
+      {{else}}
+        <div class='grid grid-1col'>
+          <div class='grid grid-3col gap-8'>
+            <div class='resource'>
+              <label class='resource-label'>Slots (Space Occupied)</label>
+              <input
+                type='number'
+                name='system.slots'
+                value='{{system.slots}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='resource'>
+              <label class='resource-label'>Capacity (Items It Holds)</label>
+              <input
+                type='number'
+                name='system.capacity'
+                value='{{system.capacity}}'
+                min='1'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='resource'>
+              <label class='resource-label'>Current Capacity</label>
+              <div class='calculated-properties'>
+                <span class='calc-value'>{{system.currentCapacity}} / {{system.capacity}}</span>
+              </div>
+            </div>
+          </div>
+          <div class='grid grid-3col gap-8'>
+            <div class='resource'>
+              <label class='resource-label'>Gold</label>
+              <input
+                type='number'
+                name='system.baseCost.gold'
+                value='{{system.baseCost.gold}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='resource'>
+              <label class='resource-label'>Silver</label>
+              <input
+                type='number'
+                name='system.baseCost.silver'
+                value='{{system.baseCost.silver}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='resource'>
+              <label class='resource-label'>Copper</label>
+              <input
+                type='number'
+                name='system.baseCost.copper'
+                value='{{system.baseCost.copper}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
+        </div>
+      {{/if}}
     {{/if}}
 
     {{#if (eq item.type 'class')}}

@@ -718,7 +718,8 @@
       "class": "Class",
       "perk": "Perk",
       "equipment": "Gear",
-      "starterPack": "Starter Pack"
+      "starterPack": "Starter Pack",
+      "container": "Container"
     },
     "CountdownDice": {
       "SceneControls": {

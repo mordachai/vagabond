@@ -922,6 +922,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const gear = [];
     const weapons = [];
     const armor = [];
+    const containers = [];
     const features = [];
     const perks = [];
     const spells = [];
@@ -995,19 +996,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       else if (i.type === 'perk') {
         perks.push(i);
       }
+      // Append to containers.
+      else if (i.type === 'container') {
+        containers.push(i);
+      }
     }
 
     // Sort then assign
     context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.armor = armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.containers = containers.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.traits = traits; // Traits don't need sorting, they're already in ancestry order
 
     // Prepare inventory grid data
-    this._prepareInventoryGrid(context, gear, weapons, armor);
+    this._prepareInventoryGrid(context, gear, weapons, armor, containers);
   }
 
   /**
@@ -1016,11 +1022,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {Array} gear - Gear items
    * @param {Array} weapons - Weapon items
    * @param {Array} armor - Armor items
+   * @param {Array} containers - Container items
    * @private
    */
-  _prepareInventoryGrid(context, gear, weapons, armor) {
+  _prepareInventoryGrid(context, gear, weapons, armor, containers) {
     // Combine all inventory items (exclude items inside containers)
-    const allInventoryItems = [...weapons, ...armor, ...gear].filter(
+    const allInventoryItems = [...weapons, ...armor, ...gear, ...containers].filter(
       item => !item.system.containerId
     );
 
@@ -1583,8 +1590,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Drag start
       card.addEventListener('dragstart', (event) => {
         console.log('Drag start:', itemId);
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
         event.dataTransfer.effectAllowed = 'move';
-        event.dataTransfer.setData('text/plain', itemId);
+
+        // Set proper Foundry drag data
+        const dragData = item.toDragData();
+        event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
 
         // Clear any stuck dragging states first
         this._clearAllDragStates();
@@ -1599,11 +1612,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         this._clearAllDragStates();
       });
 
+      // Double-click to open item sheet (containers open their own sheet)
+      card.addEventListener('dblclick', async (event) => {
+        const item = this.actor.items.get(itemId);
+        if (item) {
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+          item.sheet.render(true);
+        }
+      });
+
       // Allow dropping on other cards (to slide into position)
       card.addEventListener('dragover', (event) => {
         event.preventDefault();
 
-        const draggedItemId = event.dataTransfer.getData('text/plain');
+        const dragData = event.dataTransfer.getData('text/plain');
+        const draggedItemId = this._extractItemIdFromDragData(dragData);
         const targetItemId = card.dataset.itemId;
 
         if (draggedItemId === targetItemId) {
@@ -1632,7 +1657,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.preventDefault();
         event.stopPropagation();
 
-        const draggedItemId = event.dataTransfer.getData('text/plain');
+        const dragData = event.dataTransfer.getData('text/plain');
+        const draggedItemId = this._extractItemIdFromDragData(dragData);
         const targetItemId = card.dataset.itemId;
 
         // Clear drag states immediately
@@ -1643,6 +1669,67 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const targetItem = this.actor.items.get(targetItemId);
         if (!targetItem) return;
 
+        // CONTAINER LOGIC: Check if dropping onto a container
+        if (targetItem.type === 'container') {
+          const draggedItem = this.actor.items.get(draggedItemId);
+          if (!draggedItem) return;
+
+          // Prevent putting containers inside containers
+          if (draggedItem.type === 'container') {
+            ui.notifications.warn("Cannot put containers inside other containers!");
+            return;
+          }
+
+          // Check capacity based on slots (0-slot items don't count)
+          const currentItems = targetItem.system.items || [];
+          const capacity = targetItem.system.capacity || 10;
+
+          // Calculate current slots used (skip 0-slot items)
+          const currentSlotsUsed = currentItems.reduce((total, item) => {
+            const itemSlots = item.system?.baseSlots || 0;
+            return total + (itemSlots > 0 ? itemSlots : 0);
+          }, 0);
+
+          // Get dragged item slots (0-slot items don't count toward capacity)
+          const draggedItemSlots = draggedItem.system.baseSlots || 0;
+
+          // If it's a 0-slot item, always allow
+          if (draggedItemSlots === 0) {
+            // Get full item data
+            const itemData = draggedItem.toObject();
+
+            // Add to container's items array
+            const newItems = [...currentItems, itemData];
+            await targetItem.update({ 'system.items': newItems });
+
+            // Delete the original item from actor inventory
+            await draggedItem.delete();
+
+            ui.notifications.info(`Placed ${draggedItem.name} into ${targetItem.name}`);
+            return; // Don't slide, we're done
+          }
+
+          // Check if there's enough space for non-zero slot items
+          if (currentSlotsUsed + draggedItemSlots > capacity) {
+            ui.notifications.warn(`${targetItem.name} doesn't have enough space! (${currentSlotsUsed}/${capacity} slots used, need ${draggedItemSlots} more)`);
+            return;
+          }
+
+          // Get full item data
+          const itemData = draggedItem.toObject();
+
+          // Add to container's items array
+          const newItems = [...currentItems, itemData];
+          await targetItem.update({ 'system.items': newItems });
+
+          // Delete the original item from actor inventory
+          await draggedItem.delete();
+
+          ui.notifications.info(`Placed ${draggedItem.name} into ${targetItem.name}`);
+          return; // Don't slide, we're done
+        }
+
+        // NORMAL SLIDING LOGIC (non-container drops)
         const targetPos = targetItem.system.gridPosition || 0;
 
         // Check if drop is valid
@@ -1652,6 +1739,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
 
         console.log(`Sliding item ${draggedItemId} to position ${targetPos}`);
+
         await this._slideItemToPosition(draggedItemId, targetPos);
       });
     });
@@ -1664,7 +1752,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       slot.addEventListener('dragover', (event) => {
         event.preventDefault();
 
-        const draggedItemId = event.dataTransfer.getData('text/plain');
+        const dragData = event.dataTransfer.getData('text/plain');
+        const draggedItemId = this._extractItemIdFromDragData(dragData);
         const slotIndex = parseInt(slot.dataset.slotIndex);
 
         // Check if drop is valid (doesn't exceed capacity)
@@ -1686,7 +1775,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         // Clear drag states immediately
         this._clearAllDragStates();
 
-        const itemId = event.dataTransfer.getData('text/plain');
+        const dragData = event.dataTransfer.getData('text/plain');
+        const itemId = this._extractItemIdFromDragData(dragData);
         const slotIndex = parseInt(slot.dataset.slotIndex);
 
         // Check if drop is valid
@@ -1696,6 +1786,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
 
         console.log(`Sliding item ${itemId} to position ${slotIndex}`);
+
         await this._slideItemToPosition(itemId, slotIndex);
       });
     });
@@ -1751,12 +1842,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const oldPosition = draggedItem.system.gridPosition || 0;
     const draggedSlots = draggedItem.system.slots || 0;
 
+    // For displacement purposes, 0-slot items count as 1 slot
+    const displacementSlots = Math.max(draggedSlots, 1);
+
     // Don't do anything if dropping on self
     if (oldPosition === targetPosition) return false;
 
     // Get all inventory items (exclude items in containers and the dragged item)
     const inventoryItems = this.actor.items.filter(i =>
-      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear') &&
+      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear' || i.type === 'container') &&
       !i.system.containerId &&
       i.id !== draggedItemId
     );
@@ -1765,7 +1859,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Calculate effective target position (accounting for the gap left behind)
     const effectiveTarget = targetPosition > oldPosition
-      ? targetPosition - draggedSlots
+      ? targetPosition - displacementSlots
       : targetPosition;
 
     inventoryItems.forEach(item => {
@@ -1773,12 +1867,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Step 1: Close gap from removing dragged item
       if (pos > oldPosition) {
-        pos = pos - draggedSlots;
+        pos = pos - displacementSlots;
       }
 
       // Step 2: Make room for inserting dragged item
       if (pos >= effectiveTarget) {
-        pos = pos + draggedSlots;
+        pos = pos + displacementSlots;
       }
 
       // Only update if position changed
@@ -1805,11 +1899,38 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Check if dropping an item at a position is valid (doesn't exceed capacity)
-   * Simulates: 1) Remove item from old pos, 2) Insert at new pos, 3) Check capacity
+   * Extract item ID from drag data
+   * @param {string} dragData - Raw drag data from dataTransfer
+   * @returns {string|null} Item ID or null if invalid
+   * @private
+   */
+  _extractItemIdFromDragData(dragData) {
+    if (!dragData) return null;
+
+    try {
+      // Try to parse as JSON (Foundry drag data format)
+      const parsed = JSON.parse(dragData);
+
+      // Extract ID from UUID format: "Actor.xxx.Item.yyy"
+      if (parsed.uuid) {
+        const parts = parsed.uuid.split('.');
+        return parts[parts.length - 1]; // Return the last part (item ID)
+      }
+
+      // If no uuid, might be just an item ID string
+      return parsed;
+    } catch (e) {
+      // Not JSON, assume it's a plain item ID
+      return dragData;
+    }
+  }
+
+  /**
+   * Check if dropping an item at a position is valid (doesn't overflow column)
+   * The only restriction is column overflow - items should always slide otherwise
    * @param {string} draggedItemId - ID of the item being dragged
    * @param {number} targetPosition - Target grid position
-   * @returns {boolean} True if valid, false if would exceed capacity
+   * @returns {boolean} True if valid, false if would overflow column
    * @private
    */
   _canDropAtPosition(draggedItemId, targetPosition) {
@@ -1817,68 +1938,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (!draggedItem) return false;
 
     const draggedSlots = draggedItem.system.slots || 0;
-    const oldPosition = draggedItem.system.gridPosition || 0;
-    const maxSlots = this.document.system.inventory?.maxSlots || 20;
 
-    // Slot-0 items don't consume capacity, always allow
+    // Slot-0 items don't consume space, always allow
     if (draggedSlots === 0) return true;
 
-    // Don't validate if dropping on self
-    if (oldPosition === targetPosition) return true;
+    // Grid is 3 columns wide
+    const COLUMNS = 3;
 
-    // Get all capacity-consuming items (exclude slot-0 and the dragged item)
-    const capacityItems = this.actor.items.filter(i =>
-      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear') &&
-      !i.system.containerId &&
-      i.id !== draggedItemId &&
-      (i.system.slots || 0) > 0
-    );
+    // Calculate which column this position is in
+    const column = targetPosition % COLUMNS;
 
-    // Calculate final positions after the full move (remove + insert)
-    const afterMove = capacityItems.map(item => {
-      let pos = item.system.gridPosition || 0;
-      const slots = item.system.slots || 0;
+    // Check if item would overflow the column
+    // A 2-slot item can't start in column 2 (last column)
+    // A 3-slot item can't start in columns 1 or 2 (last two columns)
+    const columnsNeeded = draggedSlots;
+    const columnsAvailable = COLUMNS - column;
 
-      // Step 1: Close gap from removing dragged item
-      if (pos > oldPosition) {
-        pos = pos - draggedSlots;
-      }
-
-      // Step 2: Make room for inserting dragged item
-      // Note: targetPosition is relative to the state BEFORE removal
-      // After removal, effective target is adjusted
-      const effectiveTarget = targetPosition > oldPosition
-        ? targetPosition - draggedSlots
-        : targetPosition;
-
-      if (pos >= effectiveTarget) {
-        pos = pos + draggedSlots;
-      }
-
-      return { item, newPos: pos, slots };
-    });
-
-    // Add the dragged item at its new position (adjusted for the gap it left)
-    const effectiveTarget = targetPosition > oldPosition
-      ? targetPosition - draggedSlots
-      : targetPosition;
-
-    afterMove.push({
-      item: draggedItem,
-      newPos: effectiveTarget,
-      slots: draggedSlots
-    });
-
-    // Sort by position
-    afterMove.sort((a, b) => a.newPos - b.newPos);
-
-    // Calculate capacity: sum of all slots
-    let totalCapacity = 0;
-    for (const { slots } of afterMove) {
-      totalCapacity += slots;
+    // If the item needs more columns than available, it would overflow
+    if (columnsNeeded > columnsAvailable) {
+      return false;
     }
 
-    return totalCapacity <= maxSlots;
+    // Otherwise, allow the drop - items will slide to make room
+    return true;
   }
 
   /**
@@ -4273,6 +4355,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Handle different data types
     switch (data.type) {
+      case 'ContainerItem':
+        return this._onDropContainerItem(event, data);
       case 'ActiveEffect':
         return this._onDropActiveEffect(event, data);
       case 'Actor':
@@ -4435,6 +4519,70 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   async _onDropActor(event, data) {
     if (!this.actor.isOwner) return false;
+  }
+
+  /**
+   * Handle dropping a container item onto the actor sheet
+   * @param {DragEvent} event     The concluding DragEvent which contains drop data
+   * @param {object} data         The data transfer with containerUuid, itemUuid, itemIndex
+   * @returns {Promise}
+   * @protected
+   */
+  async _onDropContainerItem(event, data) {
+    if (!this.actor.isOwner) return false;
+
+    try {
+      // Get the container
+      const container = await fromUuid(data.containerUuid);
+      if (!container || container.type !== 'container') {
+        ui.notifications.error('Invalid container.');
+        return false;
+      }
+
+      // Use the item data from the drag event
+      const itemData = data.itemData;
+      if (!itemData) {
+        ui.notifications.error('Failed to load item data.');
+        return false;
+      }
+
+      // Check if character has enough slots
+      const itemSlots = itemData.system?.slots || itemData.system?.baseSlots || 1;
+      const availableSlots = this.actor.system.inventory.max - this.actor.system.inventory.used;
+
+      if (availableSlots < itemSlots) {
+        ui.notifications.warn(`Not enough inventory space. Need ${itemSlots} slots, have ${availableSlots} available.`);
+        return false;
+      }
+
+      // Set equipped state based on item type
+      if (itemData.type === 'equipment') {
+        if (itemData.system.equipmentType === 'weapon') {
+          // Equip weapon based on grip
+          if (itemData.system.grip === '1H' || itemData.system.grip === 'V') {
+            itemData.system.equipmentState = 'oneHand';
+          } else if (itemData.system.grip === '2H') {
+            itemData.system.equipmentState = 'twoHands';
+          }
+        } else if (itemData.system.equipmentType === 'armor') {
+          itemData.system.equipmentState = 'equipped';
+        }
+      }
+
+      await this.actor.createEmbeddedDocuments('Item', [itemData]);
+
+      // Remove from container
+      const newItems = container.system.items.filter((_, i) => i !== data.itemIndex);
+      await container.update({ 'system.items': newItems });
+
+      ui.notifications.info(`${itemData.name} moved to character inventory.`);
+
+      return true;
+    } catch (error) {
+      console.error('Error dropping container item:', error);
+      ui.notifications.error('Failed to move item.');
+      return false;
+    }
   }
 
   /* -------------------------------------------- */
