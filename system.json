@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -30,7 +30,8 @@
       "ancestry": {"htmlFields": ["description"]},
       "class": {"htmlFields": ["description"]},
       "perk": {"htmlFields": ["description"]},
-      "starterPack": {"htmlFields": ["description"]}
+      "starterPack": {"htmlFields": ["description"]},
+      "container": {"htmlFields": ["description"]}
     }
   },
   "flags": {

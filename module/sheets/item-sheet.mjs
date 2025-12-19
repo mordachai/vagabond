@@ -41,6 +41,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeImmunity: this._onRemoveImmunity,
       toggleLock: this._onToggleLock,
       removePackItem: this._onRemovePackItem,
+      equipFromContainer: this._onEquipFromContainer,
+      deleteFromContainer: this._onDeleteFromContainer,
     },
     form: {
       submitOnChange: true,
@@ -89,6 +91,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     starterPackDetails: {
       template: 'systems/vagabond/templates/item/details-parts/starter-pack-details.hbs',
     },
+    containerDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/container-details.hbs',
+    },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
     },
@@ -118,6 +123,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         break;
       case 'starterPack':
         options.parts.push('starterPackDetails', 'effects');
+        break;
+      case 'container':
+        options.parts.push('containerDetails', 'effects');
         break;
     }
   }
@@ -360,6 +368,83 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         context.currencyString = this.item.system.getCurrencyString();
         break;
 
+      case 'containerDetails':
+        // Container gets enriched description and loaded items
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
+
+        // Load items from stored item data
+        context.containerItems = [];
+        console.log('Loading container items, count:', this.item.system.items.length);
+        for (let i = 0; i < this.item.system.items.length; i++) {
+          const itemData = this.item.system.items[i];
+          console.log('Loading container item data:', itemData);
+          try {
+            // itemData is now the full item object, not just a reference
+            let damageDisplay = '—';
+            let metalDisplay = '—';
+            let ratingDisplay = '—';
+            let slotsDisplay = '—';
+            let costDisplay = '—';
+            let typeName = game.i18n.localize(`TYPES.Item.${itemData.type}`);
+
+            if (itemData.type === 'equipment') {
+              const sys = itemData.system;
+              slotsDisplay = sys.baseSlots !== undefined ? sys.baseSlots : 0;
+              costDisplay = sys.costDisplay || '—';
+              metalDisplay = sys.metal ? sys.metal.titleCase() : '—';
+
+              if (sys.equipmentType === 'weapon') {
+                damageDisplay = sys.grip === 'V'
+                  ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
+                  : (sys.currentDamage || '—');
+                typeName = 'Weapon';
+              } else if (sys.equipmentType === 'armor') {
+                ratingDisplay = sys.rating || 0;
+                typeName = 'Armor';
+              } else if (sys.equipmentType === 'alchemical') {
+                damageDisplay = sys.damageAmount || '—';
+                typeName = 'Alchemical';
+              } else if (sys.equipmentType === 'relic') {
+                typeName = 'Relic';
+              } else {
+                typeName = 'Gear';
+              }
+            } else {
+              // For non-equipment items, check for baseSlots
+              slotsDisplay = itemData.system?.baseSlots !== undefined ? itemData.system.baseSlots : 0;
+            }
+
+            const displayData = {
+              name: itemData.name,
+              img: itemData.img,
+              type: itemData.type,
+              typeName: typeName,
+              damageDisplay: damageDisplay,
+              metalDisplay: metalDisplay,
+              ratingDisplay: ratingDisplay,
+              slotsDisplay: slotsDisplay,
+              costDisplay: costDisplay,
+              index: i
+            };
+            console.log('Adding item to containerItems:', displayData);
+            context.containerItems.push(displayData);
+          } catch (error) {
+            console.warn(`Failed to load item at index ${i}:`, error);
+          }
+        }
+        console.log('Final containerItems array:', context.containerItems);
+        break;
+
       case 'description':
         context.tab = context.tabs[partId];
         // Enrich description info for display
@@ -391,9 +476,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
-    // Default tab for spell, ancestry, class, perk, equipment, and starterPack is details, others default to description
+    // Default tab for spell, ancestry, class, perk, equipment, starterPack, and container is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment' || this.document.type === 'starterPack') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment' || this.document.type === 'starterPack' || this.document.type === 'container') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -421,6 +506,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'perkDetails':
         case 'equipmentDetails':
         case 'starterPackDetails':
+        case 'containerDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;
@@ -444,9 +530,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   async _onRender(context, options) {
     await super._onRender(context, options);
-    new DragDrop.implementation({
+
+    // Set up drag and drop for the entire sheet
+    const dragDrop = new DragDrop.implementation({
       dragSelector: ".draggable",
-      dropSelector: null,
+      dropSelector: null, // Accept drops anywhere on the sheet
       permissions: {
         dragstart: this._canDragStart.bind(this),
         drop: this._canDragDrop.bind(this)
@@ -456,7 +544,50 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         dragover: this._onDragOver.bind(this),
         drop: this._onDrop.bind(this)
       }
-    }).bind(this.element);
+    });
+    dragDrop.bind(this.element);
+
+    // For containers, make the entire sheet a visible drop zone
+    if (this.item.type === 'container') {
+      const windowContent = this.element.querySelector('.window-content');
+      if (windowContent) {
+        windowContent.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          windowContent.classList.add('drag-over');
+        });
+        windowContent.addEventListener('dragleave', (e) => {
+          windowContent.classList.remove('drag-over');
+        });
+        windowContent.addEventListener('drop', (e) => {
+          windowContent.classList.remove('drag-over');
+        });
+      }
+
+      // Add click listeners to container item icons for mini-sheet
+      const itemIcons = this.element.querySelectorAll('.container-items-table .item-icon');
+      itemIcons.forEach(icon => {
+        icon.addEventListener('click', async (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const itemIndex = parseInt(icon.dataset.itemIndex);
+          const itemData = this.item.system.items[itemIndex];
+
+          if (itemData) {
+            // Create a temporary item document for the sheet
+            const tempItem = await Item.implementation.create(itemData, {
+              temporary: true,
+              parent: this.item.actor || null
+            });
+
+            if (tempItem) {
+              tempItem.sheet.render(true);
+            }
+          }
+        });
+      });
+    }
 
     // Add listener for delivery type changes to auto-populate cost and increase
     if (this.document.type === 'spell') {
@@ -817,7 +948,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onToggleLock(event, target) {
-    if (this.item.type !== 'equipment') return;
+    if (this.item.type !== 'equipment' && this.item.type !== 'container') return;
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
     // No need to close/reopen - template handles both states with conditionals
@@ -942,9 +1073,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _canDragDrop(selector) {
     // Don't handle drops on prose-mirror editors - let them handle it themselves
     if (selector && selector.closest && selector.closest('prose-mirror')) {
+      console.log('Cannot drop on prose-mirror');
       return false;
     }
-    return this.isEditable;
+    const canDrop = this.isEditable;
+    console.log('Can drag drop on item sheet?', canDrop, 'item type:', this.item.type, 'selector:', selector);
+    return canDrop;
   }
 
   _onDragStart(event) {
@@ -959,27 +1093,67 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       dragData = effect.toDragData();
     }
 
+    // Container item row
+    if (li.dataset.itemIndex !== undefined && this.item.type === 'container') {
+      const index = parseInt(li.dataset.itemIndex);
+      const itemData = this.item.system.items[index];
+      if (itemData) {
+        dragData = {
+          type: 'ContainerItem',
+          containerUuid: this.item.uuid,
+          itemIndex: index,
+          itemData: itemData
+        };
+      }
+    }
+
     if (!dragData) return;
 
     // Set data transfer
     event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
   }
 
-  _onDragOver(event) { }
+  _onDragOver(event) {
+    event.preventDefault();
+    return false;
+  }
 
   async _onDrop(event) {
+    console.log('Drop event received on item sheet', 'target:', event.target);
+    event.preventDefault();
+
     // CRITICAL: Check for ProseMirror BEFORE calling getDragEventData()
-    // The dataTransfer can only be read once, so we must not consume it
-    const proseMirror = event.target.closest('prose-mirror');
-    if (proseMirror) {
+    // Only ignore if the drop target is the actual ProseMirror editor content area
+    const isProseMirrorEditor = event.target.classList?.contains('ProseMirror') ||
+                                event.target.closest('.ProseMirror');
+    if (isProseMirrorEditor) {
       // Don't consume the event - let ProseMirror handle it
+      console.log('Drop on ProseMirror editor content, ignoring');
       return;
     }
 
-    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
+    // Try to get data from event.dataTransfer first
+    let data;
+    try {
+      const textData = event.dataTransfer.getData('text/plain');
+      console.log('Raw text data:', textData);
+      if (textData) {
+        data = JSON.parse(textData);
+      } else {
+        data = foundry.applications.ux.TextEditor.getDragEventData(event);
+      }
+    } catch (error) {
+      console.error('Error parsing drop data:', error);
+      data = foundry.applications.ux.TextEditor.getDragEventData(event);
+    }
+
+    console.log('Parsed drop data:', data);
     const item = this.item;
     const allowed = Hooks.call('dropItemSheetData', item, this, data);
-    if (allowed === false) return;
+    if (allowed === false) {
+      console.log('Drop prevented by hook');
+      return;
+    }
 
     switch (data.type) {
       case 'ActiveEffect':
@@ -987,6 +1161,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'Actor':
         return this._onDropActor(event, data);
       case 'Item':
+        console.log('Calling _onDropItem');
         return this._onDropItem(event, data);
       case 'Folder':
         return this._onDropFolder(event, data);
@@ -1038,6 +1213,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
 
+    console.log('Item dropped on item sheet:', data);
+
     // Handle dropping items onto starter packs
     if (this.item.type === 'starterPack') {
       const droppedItem = await Item.implementation.fromDropData(data);
@@ -1062,6 +1239,73 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       return true;
     }
 
+    // Handle dropping items onto containers
+    if (this.item.type === 'container') {
+      console.log('Processing drop on container');
+      const droppedItem = await Item.implementation.fromDropData(data);
+      console.log('Dropped item:', droppedItem);
+      if (!droppedItem) {
+        console.warn('Failed to load dropped item');
+        return false;
+      }
+
+      // Check if this is equipment type
+      if (droppedItem.type !== 'equipment') {
+        ui.notifications.warn('Containers can only hold equipment items (weapons, armor, gear, alchemicals, relics).');
+        return false;
+      }
+
+      // Prevent nesting containers
+      if (droppedItem.type === 'container') {
+        ui.notifications.warn('Containers cannot be placed inside other containers.');
+        return false;
+      }
+
+      // Check capacity based on slots (0-slot items don't count)
+      const itemSlots = droppedItem.system?.baseSlots || 0;
+
+      // Calculate current slots used (skip 0-slot items)
+      const currentItems = this.item.system.items || [];
+      const currentSlotsUsed = currentItems.reduce((total, item) => {
+        const slots = item.system?.baseSlots || 0;
+        return total + (slots > 0 ? slots : 0);
+      }, 0);
+
+      const capacity = this.item.system.capacity || 10;
+
+      // If it's a 0-slot item, always allow
+      if (itemSlots === 0) {
+        // Will be added below
+      } else {
+        // Check if there's enough space for non-zero slot items
+        if (currentSlotsUsed + itemSlots > capacity) {
+          ui.notifications.warn(`Container doesn't have enough space! (${currentSlotsUsed}/${capacity} slots used, need ${itemSlots} more)`);
+          return false;
+        }
+      }
+
+      // Store the full item data in the container
+      const itemData = droppedItem.toObject();
+
+      // If item is from the same actor, delete it from actor inventory
+      if (droppedItem.parent === this.item.actor) {
+        console.log('Item is from same actor, deleting from inventory');
+        await droppedItem.delete();
+      }
+
+      // Add to container with full item data
+      const newItems = [...this.item.system.items, itemData];
+      await this.item.update({ 'system.items': newItems });
+
+      ui.notifications.info(`${droppedItem.name} added to ${this.item.name}.`);
+
+      // Force re-render to show updated items list
+      // Use force=true and parts to ensure containerDetails re-renders
+      await this.render(true, { parts: ['containerDetails'] });
+
+      return true;
+    }
+
     return false;
   }
 
@@ -1082,5 +1326,106 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const items = this.item.system.items || [];
     const newItems = items.filter((_, i) => i !== index);
     await this.item.update({ 'system.items': newItems });
+  }
+
+  /**
+   * Handle equipping an item from container to character inventory
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onEquipFromContainer(event, target) {
+    if (this.item.type !== 'container') return;
+    if (!this.item.actor) {
+      ui.notifications.warn('Container must be owned by a character to equip items.');
+      return;
+    }
+
+    const index = parseInt(target.dataset.itemIndex);
+    if (isNaN(index)) return;
+
+    const itemData = this.item.system.items[index];
+    if (!itemData) return;
+
+    try {
+      // Check if character has enough slots
+      const itemSlots = itemData.system?.baseSlots || 0;
+      const actor = this.item.actor;
+      const availableSlots = actor.system.inventory.max - actor.system.inventory.used;
+
+      if (availableSlots < itemSlots) {
+        ui.notifications.warn(`Not enough inventory space. Need ${itemSlots} slots, have ${availableSlots} available.`);
+        return;
+      }
+
+      // Set equipped state based on item type
+      if (itemData.type === 'equipment') {
+        if (itemData.system.equipmentType === 'weapon') {
+          // Equip weapon based on grip
+          if (itemData.system.grip === '1H' || itemData.system.grip === 'V') {
+            itemData.system.equipmentState = 'oneHand';
+          } else if (itemData.system.grip === '2H') {
+            itemData.system.equipmentState = 'twoHands';
+          }
+        } else if (itemData.system.equipmentType === 'armor') {
+          itemData.system.equipmentState = 'equipped';
+        }
+      }
+
+      await actor.createEmbeddedDocuments('Item', [itemData]);
+
+      // Remove from container
+      const newItems = this.item.system.items.filter((_, i) => i !== index);
+      await this.item.update({ 'system.items': newItems });
+
+      ui.notifications.info(`${itemData.name} equipped to character inventory.`);
+
+      // Force re-render to show updated items list
+      this.render();
+    } catch (error) {
+      console.error('Error equipping item from container:', error);
+      ui.notifications.error('Failed to equip item.');
+    }
+  }
+
+  /**
+   * Handle deleting an item from container
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onDeleteFromContainer(event, target) {
+    if (this.item.type !== 'container') return;
+
+    const index = parseInt(target.dataset.itemIndex);
+    if (isNaN(index)) return;
+
+    const itemData = this.item.system.items[index];
+    if (!itemData) return;
+
+    try {
+      const itemName = itemData.name || 'Unknown Item';
+
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Delete Item' },
+        content: `<p>Are you sure you want to delete <strong>${itemName}</strong> from this container?</p><p>This action cannot be undone.</p>`,
+        rejectClose: false,
+        modal: true
+      });
+
+      if (!confirmed) return;
+
+      // Remove from container
+      const newItems = this.item.system.items.filter((_, i) => i !== index);
+      await this.item.update({ 'system.items': newItems });
+
+      ui.notifications.info(`${itemName} deleted from container.`);
+
+      // Force re-render to show updated items list
+      this.render();
+    } catch (error) {
+      console.error('Error deleting item from container:', error);
+      ui.notifications.error('Failed to delete item.');
+    }
   }
 }

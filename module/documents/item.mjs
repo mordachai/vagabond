@@ -56,6 +56,34 @@ export class VagabondItem extends Item {
         await VagabondChatCard.gearUse(this.actor, item);
         // Handle consumption after successful use
         await this.handleConsumption();
+      } else if (item.type === 'container') {
+        // Post container info to chat
+        const costs = [];
+        if (this.system.baseCost.gold > 0) costs.push(`${this.system.baseCost.gold}g`);
+        if (this.system.baseCost.silver > 0) costs.push(`${this.system.baseCost.silver}s`);
+        if (this.system.baseCost.copper > 0) costs.push(`${this.system.baseCost.copper}c`);
+        const costDisplay = costs.length > 0 ? costs.join(' ') : '—';
+
+        const content = `
+          <div class="vagabond-chat-card-v2">
+            <div class="chat-card-header">
+              <h3>${item.name}</h3>
+            </div>
+            <div class="chat-card-body">
+              ${item.system.description ? `<div class="description">${item.system.description}</div>` : ''}
+              <div class="container-stats">
+                <p><strong>Slots:</strong> ${this.system.slots}</p>
+                <p><strong>Capacity:</strong> ${this.system.currentCapacity} / ${this.system.capacity}</p>
+                <p><strong>Cost:</strong> ${costDisplay}</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+          content: content,
+        });
       } else {
         // For other item types (ancestry, class, perk, etc), just post description
         await VagabondChatHelper.postMessage(this.actor, item.system.description ?? '');
@@ -171,10 +199,49 @@ export class VagabondItem extends Item {
       if (["1H", "F"].includes(newGrip)) {
         foundry.utils.setProperty(changed, "system.equipmentState", "oneHand");
       }
-      
+
       // Optional: If Grip becomes "2H" (Strict Two-Handed), FORCE state to "twoHands"
       if (newGrip === "2H") {
         foundry.utils.setProperty(changed, "system.equipmentState", "twoHands");
+      }
+    }
+  }
+
+  /**
+   * This function runs AUTOMATICALLY before an item is deleted.
+   * For containers with items, show a confirmation dialog.
+   */
+  async _preDelete(options, user) {
+    await super._preDelete(options, user);
+
+    // Check if this is a container with items
+    if (this.type === 'container' && this.system.items && this.system.items.length > 0) {
+      // Only show dialog if not already confirmed
+      if (!options.containerDeleteConfirmed) {
+        const itemCount = this.system.items.length;
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+          window: { title: 'Delete Container' },
+          content: `<p>This container holds <strong>${itemCount}</strong> item${itemCount !== 1 ? 's' : ''}.</p><p>Are you sure you want to delete <strong>${this.name}</strong> and all items inside?</p><p>This action cannot be undone.</p>`,
+          rejectClose: false,
+          modal: true
+        });
+
+        if (!confirmed) {
+          // Cancel the deletion
+          return false;
+        }
+
+        // Delete all items from the container
+        if (this.actor) {
+          for (const containerItem of this.system.items) {
+            if (containerItem.itemId) {
+              const item = this.actor.items.get(containerItem.itemId);
+              if (item) {
+                await item.delete();
+              }
+            }
+          }
+        }
       }
     }
   }

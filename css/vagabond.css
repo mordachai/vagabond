@@ -2043,6 +2043,7 @@
 
 /* Styles limited to vagabond sheets */
 .vagabond {
+  /* Container Item Styles */
   /* Character Name at Top - Full Width */
   /* Combined Character Info Row */
   /* ======================================
@@ -3464,6 +3465,122 @@
   border: none;
   border-top: 1px solid var(--vagabond-c-dark);
   margin: 1.5rem 0;
+}
+.vagabond .window-content.drag-over {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 2px dashed #4caf50;
+}
+.vagabond .container-items-list {
+  margin-top: 12px;
+}
+.vagabond .container-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+.vagabond .container-items-table thead {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid var(--color-border-dark);
+}
+.vagabond .container-items-table thead th {
+  padding: 8px 4px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vagabond .container-items-table tbody tr {
+  border-bottom: 1px solid var(--color-border-light);
+  transition: background-color 0.2s;
+}
+.vagabond .container-items-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.vagabond .container-items-table tbody td {
+  padding: 8px 4px;
+  vertical-align: middle;
+}
+.vagabond .container-items-table tbody td.item-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .container-items-table tbody td.item-name .item-icon {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+  object-fit: cover;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.vagabond .container-items-table tbody td.item-name .item-icon:hover {
+  opacity: 0.7;
+}
+.vagabond .container-items-table tbody td.item-name .item-name-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vagabond .container-items-table tbody td.item-name .item-name-container .item-name-text {
+  font-weight: 500;
+  line-height: 1.2;
+}
+.vagabond .container-items-table tbody td.item-name .item-name-container .item-type-text {
+  color: var(--color-text-dark-secondary);
+  font-size: 0.75em;
+  line-height: 1.2;
+}
+.vagabond .container-items-table tbody td.item-damage, .vagabond .container-items-table tbody td.item-slots, .vagabond .container-items-table tbody td.item-cost {
+  text-align: center;
+  font-family: monospace;
+}
+.vagabond .container-items-table tbody td.item-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+.vagabond .container-items-table tbody td.item-actions button {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: var(--color-text-light-heading);
+  transition: color 0.2s;
+}
+.vagabond .container-items-table tbody td.item-actions button:hover {
+  color: var(--color-text-light-highlight);
+}
+.vagabond .container-items-table tbody td.item-actions button.delete-from-container:hover {
+  color: #c92a2a;
+}
+.vagabond .container-items-table tbody td.item-actions button.equip-from-container:hover {
+  color: #5c940d;
+}
+.vagabond .container-items-table tbody td.item-actions button i {
+  font-size: 14px;
+}
+.vagabond .container-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  border: 2px dashed var(--color-border-light);
+  border-radius: 8px;
+  margin-top: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.vagabond .container-empty-state i {
+  font-size: 32px;
+  color: var(--color-text-dark-secondary);
+  margin-bottom: 12px;
+}
+.vagabond .container-empty-state p {
+  margin: 8px 0;
+  color: var(--color-text-dark-secondary);
+}
+.vagabond .container-empty-state p.hint {
+  font-size: 0.85em;
+  font-style: italic;
 }
 .vagabond .inventory-slots-section {
   margin-bottom: 12px;

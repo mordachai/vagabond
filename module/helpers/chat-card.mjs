@@ -291,17 +291,24 @@ export class VagabondChatCard {
       // 1. Handle Main Roll
       if (rollData) {
           const { roll, difficulty, isHit, isCritical } = rollData;
-          let label = 'NEUTRAL';
-          if (typeof isHit !== 'undefined') label = isHit ? 'HIT' : 'MISS';
-          else if (typeof rollData.isSuccess !== 'undefined') label = rollData.isSuccess ? 'PASS' : 'FAIL';
-          
-          card.addRoll(roll, difficulty).setOutcome(label, isCritical);
-          
-          // Extract Skill Label (moves to roll strip)
-          const skillIndex = tags.findIndex(t => t.cssClass === 'tag-skill');
-          if (skillIndex > -1) {
-              card.data.rollSkillLabel = tags[skillIndex].label;
-              tags.splice(skillIndex, 1);
+
+          // Only process roll if it exists (damage cards may only pass isCritical)
+          if (roll) {
+              let label = 'NEUTRAL';
+              if (typeof isHit !== 'undefined') label = isHit ? 'HIT' : 'MISS';
+              else if (typeof rollData.isSuccess !== 'undefined') label = rollData.isSuccess ? 'PASS' : 'FAIL';
+
+              card.addRoll(roll, difficulty).setOutcome(label, isCritical);
+
+              // Extract Skill Label (moves to roll strip)
+              const skillIndex = tags.findIndex(t => t.cssClass === 'tag-skill');
+              if (skillIndex > -1) {
+                  card.data.rollSkillLabel = tags[skillIndex].label;
+                  tags.splice(skillIndex, 1);
+              }
+          } else if (typeof isCritical !== 'undefined') {
+              // If no roll but has critical info, just set the outcome
+              card.setOutcome('NEUTRAL', isCritical);
           }
       }
 

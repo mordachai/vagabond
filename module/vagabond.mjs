@@ -218,6 +218,7 @@ Hooks.once('init', async function () {
     class: models.VagabondClass,
     perk: models.VagabondPerk,
     starterPack: models.VagabondStarterPack,
+    container: models.VagabondContainerData,
   };
 
   globalThis.vagabond.managers = {

@@ -1,0 +1,95 @@
+{{! Container Details Tab }}
+<section
+  class='tab details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  <div class='equipment-item-content'>
+    {{! Description Section }}
+    <div class='form-group'>
+      {{#unless system.locked}}
+        <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
+      {{/unless}}
+      <div class='equipment-description'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! Container Configuration (only in unlocked mode) }}
+    {{#unless system.locked}}
+      <div class='form-group'>
+        <label class='resource-label'>Container Configuration</label>
+        <p class='field-hint'>Configure the container's capacity and cost. Items with 0 slots don't count toward capacity.</p>
+      </div>
+    {{/unless}}
+
+    {{! Container Items List }}
+    <div class='form-group' data-drop-container='true'>
+      <label class='resource-label'>Container Items ({{system.currentCapacity}}/{{system.capacity}} slots)</label>
+      {{#if containerItems.length}}
+        <div class='container-items-list'>
+          <table class='container-items-table'>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Damage</th>
+                <th>Slots</th>
+                <th>Cost</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each containerItems}}
+                <tr class='container-item-row draggable' data-item-index='{{index}}' draggable='true'>
+                  <td class='item-name'>
+                    <img src='{{img}}' alt='{{name}}' class='item-icon' data-item-index='{{@index}}' />
+                    <div class='item-name-container'>
+                      <div class='item-name-text'>{{name}}</div>
+                      <div class='item-type-text'>{{typeName}}</div>
+                    </div>
+                  </td>
+                  <td class='item-damage'>{{damageDisplay}}</td>
+                  <td class='item-slots'>{{slotsDisplay}}</td>
+                  <td class='item-cost'>{{costDisplay}}</td>
+                  <td class='item-actions'>
+                    {{#if ../item.actor}}
+                      <button
+                        type='button'
+                        class='equip-from-container'
+                        data-action='equipFromContainer'
+                        data-item-index='{{@index}}'
+                        title='Equip to character inventory'
+                      >
+                        <i class='fas fa-hand-paper'></i>
+                      </button>
+                    {{/if}}
+                    <button
+                      type='button'
+                      class='delete-from-container'
+                      data-action='deleteFromContainer'
+                      data-item-index='{{@index}}'
+                      title='Delete item'
+                    >
+                      <i class='fas fa-trash'></i>
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{else}}
+        <div class='container-empty-state' data-drop-container='true'>
+          <p><i class='fas fa-inbox'></i> Empty container</p>
+          <p class='hint'>Drag items from compendiums or character inventory to add them</p>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</section>
