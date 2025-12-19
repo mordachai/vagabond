@@ -600,18 +600,34 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.maxSlots = 8 + mightTotal + bonusSlots;
 
     let occupiedSlots = 0;
+    let occupiedSlotsWithZero = 0;
+
     if (this.parent?.items) {
       for (const item of this.parent.items) {
         const isInventoryItem = (item.type === 'equipment') ||
                                (item.type === 'weapon') ||
                                (item.type === 'armor') ||
                                (item.type === 'gear');
-        if (isInventoryItem && item.system.slots !== undefined) {
-          occupiedSlots += item.system.slots;
+
+        if (isInventoryItem) {
+          // Skip items inside containers
+          if (item.system.containerId) continue;
+
+          const itemSlots = item.system.slots || 0;
+
+          // Add to occupied (excludes slot-0 items)
+          if (itemSlots > 0) {
+            occupiedSlots += itemSlots;
+          }
+
+          // Track all items for grid display (each item instance counts as 1)
+          occupiedSlotsWithZero += 1;
         }
       }
     }
-    this.inventory.occupiedSlots = occupiedSlots;
+
+    this.inventory.occupiedSlots = occupiedSlots; // Only counts non-zero slot items
+    this.inventory.totalItems = occupiedSlotsWithZero; // All items for grid sizing
     this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots;
   }
 

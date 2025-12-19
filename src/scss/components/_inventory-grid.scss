@@ -122,10 +122,15 @@
     }
   }
 
-  // Drag-over state
-  &.drag-over {
-    background: rgba(100, 200, 100, 0.2);
-    border-color: #5cb85c;
+  // Drag-over state (left margin only)
+  &.drag-target-valid {
+    border-left: 4px solid #5cb85c;
+    box-shadow: -4px 0 8px rgba(92, 184, 92, 0.3);
+  }
+
+  &.drag-target-invalid {
+    border-left: 4px solid #d9534f;
+    box-shadow: -4px 0 8px rgba(217, 83, 79, 0.3);
   }
 }
 
@@ -174,8 +179,45 @@
   }
 
   &.dragging {
-    opacity: 0.6;
-    transform: scale(0.98);
+    opacity: 0.4;
+    transform: scale(0.95);
+    cursor: grabbing;
+  }
+
+  // Drag-over state (left margin only)
+  &.drag-target-valid {
+    border-left: 4px solid #5cb85c;
+    box-shadow: -4px 0 8px rgba(92, 184, 92, 0.3);
+  }
+
+  &.drag-target-invalid {
+    border-left: 4px solid #d9534f;
+    box-shadow: -4px 0 8px rgba(217, 83, 79, 0.3);
+  }
+
+  // Slot-0 items (green tint - free items)
+  &.slot-zero {
+    border-color: rgba(0, 200, 0, 0.5);
+    background: rgba(0, 200, 0, 0.05);
+
+    &:hover {
+      background: rgba(0, 200, 0, 0.15);
+    }
+  }
+
+  // Slot number (same style as empty slots)
+  .slot-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    font-family: $font-secondary;
+    opacity: 0.7;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .item-image {
@@ -201,6 +243,25 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+  }
+}
+
+// Overload warning
+.inventory-overload-warning {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  border-radius: 4px;
+  color: #d9534f;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  i {
+    font-size: 16px;
   }
 }
 

@@ -136,6 +136,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/damage-type-select.hbs',
     'systems/vagabond/templates/shared/size-select.hbs',
     'systems/vagabond/templates/shared/being-type-select.hbs',
+    'systems/vagabond/templates/shared/weapon-skill-select.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     //Chat cards
@@ -484,6 +485,36 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 /* -------------------------------------------- */
 /* Chat Message Hooks                           */
 /* -------------------------------------------- */
+
+/* -------------------------------------------- */
+/*  Item Creation Hooks                         */
+/* -------------------------------------------- */
+
+// Ensure new inventory items get proper gridPosition
+Hooks.on('preCreateItem', (item, data, options, userId) => {
+  // Only handle inventory items
+  const isInventoryItem = ['equipment', 'weapon', 'armor', 'gear'].includes(item.type);
+  if (!isInventoryItem) return;
+
+  // If gridPosition not set, assign next available position
+  if (item.system.gridPosition === undefined || item.system.gridPosition === null) {
+    const actor = item.parent;
+    if (actor) {
+      // Find max gridPosition of existing items
+      const existingItems = actor.items.filter(i =>
+        ['equipment', 'weapon', 'armor', 'gear'].includes(i.type)
+      );
+
+      const maxPosition = existingItems.reduce((max, i) => {
+        const pos = i.system.gridPosition ?? 0;
+        return Math.max(max, pos);
+      }, -1);
+
+      // Assign next position
+      item.updateSource({ 'system.gridPosition': maxPosition + 1 });
+    }
+  }
+});
 
 /**
  * V13 Standard: 'renderChatMessageHTML' hook.

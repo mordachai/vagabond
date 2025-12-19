@@ -59,6 +59,23 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: 1
     });
 
+    // Grid position for inventory display (0-indexed)
+    schema.gridPosition = new fields.NumberField({
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: 0,
+      min: 0
+    });
+
+    // Parent container ID (if this item is inside a container)
+    schema.containerId = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: null,
+      nullable: true
+    });
+
     // Metal type (affects cost multiplier and special properties for weapons/armor)
     schema.metal = new fields.StringField({
       required: true,
@@ -123,12 +140,30 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== WEAPON-SPECIFIC FIELDS =====
 
-    // Weapon skill used to attack (melee, brawl, finesse, ranged)
+    // Weapon skill used to attack (weapon skills, skills, or saves)
     schema.weaponSkill = new fields.StringField({
       required: false,
       blank: true,
       initial: 'melee',
-      choices: ['melee', 'brawl', 'finesse', 'ranged']
+      choices: CONFIG.VAGABOND?.weaponSkills || {
+        'melee': 'Melee',
+        'brawl': 'Brawl',
+        'finesse': 'Finesse',
+        'ranged': 'Ranged',
+        'arcana': 'Arcana',
+        'craft': 'Craft',
+        'medicine': 'Medicine',
+        'sneak': 'Sneak',
+        'detect': 'Detect',
+        'mysticism': 'Mysticism',
+        'survival': 'Survival',
+        'influence': 'Influence',
+        'leadership': 'Leadership',
+        'performance': 'Performance',
+        'reflex': 'Reflex',
+        'endure': 'Endure',
+        'will': 'Will'
+      }
     });
 
     // Range (close, near, far)
@@ -154,11 +189,59 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: 'd6'
     });
 
+    // Damage type one-handed
+    schema.damageTypeOneHand = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: '-',
+      choices: CONFIG.VAGABOND?.damageTypes || {
+        '-': 'None',
+        'acid': 'Acid',
+        'fire': 'Fire',
+        'shock': 'Shock',
+        'poison': 'Poison',
+        'cold': 'Cold',
+        'blunt': 'Blunt',
+        'piercing': 'Piercing',
+        'slashing': 'Slashing',
+        'physical': 'Physical',
+        'necrotic': 'Necrotic',
+        'psychic': 'Psychic',
+        'healing': 'Healing',
+        'recover': 'Recover',
+        'recharge': 'Recharge'
+      }
+    });
+
     // Damage two-handed (for versatile weapons)
     schema.damageTwoHands = new fields.StringField({
       required: false,
       blank: true,
       initial: 'd8'
+    });
+
+    // Damage type two-handed
+    schema.damageTypeTwoHands = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: '-',
+      choices: CONFIG.VAGABOND?.damageTypes || {
+        '-': 'None',
+        'acid': 'Acid',
+        'fire': 'Fire',
+        'shock': 'Shock',
+        'poison': 'Poison',
+        'cold': 'Cold',
+        'blunt': 'Blunt',
+        'piercing': 'Piercing',
+        'slashing': 'Slashing',
+        'physical': 'Physical',
+        'necrotic': 'Necrotic',
+        'psychic': 'Psychic',
+        'healing': 'Healing',
+        'recover': 'Recover',
+        'recharge': 'Recharge'
+      }
     });
 
     // Equipment state for weapons (unequipped, oneHand, twoHands)
@@ -299,13 +382,19 @@ export default class VagabondEquipment extends VagabondItemBase {
     // Determine if weapon is equipped (any state other than unequipped)
     this.equipped = this.equipmentState !== 'unequipped';
 
-    // Determine current damage based on equipment state
+    // Determine current damage and damage type based on equipment state
     let baseDamage;
+    let baseDamageType;
     if (this.equipmentState === 'twoHands') {
       baseDamage = this.damageTwoHands;
+      baseDamageType = this.damageTypeTwoHands;
     } else {
       baseDamage = this.damageOneHand;
+      baseDamageType = this.damageTypeOneHand;
     }
+
+    // Set current damage type
+    this.currentDamageType = baseDamageType || '-';
 
     // Apply adamant bonus (+1 to damage)
     if (this.metal === 'adamant') {

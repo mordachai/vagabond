@@ -102,17 +102,17 @@
 
         {{!-- D. CONTENT BODY --}}
         <section class="content-body">
-            
-            {{!-- Damage Section --}}
-            {{#if damage}}
-                {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
-            {{/if}}
 
             {{!-- Description Text --}}
             {{#if description}}
             <div class="card-description">
                 {{{description}}}
             </div>
+            {{/if}}
+
+            {{!-- Damage Section --}}
+            {{#if damage}}
+                {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
             {{/if}}
 
             {{!-- FOOTER --}}

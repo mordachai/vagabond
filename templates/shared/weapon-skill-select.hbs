@@ -1,0 +1,17 @@
+{{!
+  Weapon Skill Selector - Allows selection from weaponSkills, skills, and saves
+
+  Parameters:
+    - name: The input name attribute
+    - selected: Currently selected value
+    - config: The CONFIG.VAGABOND object
+    - cssClass: Optional CSS class for the select element
+}}
+<select name='{{name}}' data-dtype='String' {{#if cssClass}}class='{{cssClass}}'{{/if}}>
+  {{! Loop through all configured weapon skill options }}
+  {{#each config.weaponSkills as |label key|}}
+    <option value="{{key}}" {{#if (eq ../selected key)}}selected{{/if}}>
+      {{localize label}}
+    </option>
+  {{/each}}
+</select>

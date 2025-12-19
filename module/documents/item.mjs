@@ -202,8 +202,14 @@ export class VagabondItem extends Item {
     this.validateCanAttack();
 
     // Get the weapon skill and difficulty
+    // The weaponSkill field can now be:
+    // 1. A weapon skill (melee, brawl, finesse, ranged) - from actor.system.weaponSkills
+    // 2. A regular skill (arcana, craft, etc.) - from actor.system.skills
+    // 3. A save (reflex, endure, will) - from actor.system.saves
     const weaponSkillKey = this.system.weaponSkill;
-    const weaponSkill = actor.system.weaponSkills[weaponSkillKey];
+    let weaponSkill = actor.system.weaponSkills?.[weaponSkillKey] ||
+                      actor.system.skills?.[weaponSkillKey] ||
+                      actor.system.saves?.[weaponSkillKey];
     const difficulty = weaponSkill?.difficulty || 10;
 
     // Build roll formula with favor/hinder

@@ -76,38 +76,50 @@
             <span>Overloaded!</span>
           </div>
         {{/if}}
-        {{#if @root.editable}}
-          <button
-            type='button'
-            class='auto-arrange-button'
-            data-action='autoArrangeInventory'
-            data-tooltip='Automatically arrange items in inventory grid'
-          >
-            <i class='fas fa-sort'></i> Auto-Arrange
-          </button>
-        {{/if}}
       </div>
     </div>
 
-    {{! Visual Inventory Grid - 5 rows × 4 columns }}
+    {{! Visual Inventory Grid - DYNAMIC rows × 4 columns }}
     <div class='inventory-grid-container'>
-      <div class='inventory-grid' data-max-slots='{{system.inventory.maxSlots}}'>
+      <div class='inventory-grid'
+           data-max-slots='{{system.inventory.maxSlots}}'
+           data-grid-size='{{gridSize}}'
+           style='grid-template-rows: repeat({{gridRows}}, 50px);'>
+
         {{! Render inventory items }}
         {{#each inventoryItems as |itemData|}}
-          {{> "systems/vagabond/templates/actor/parts/inventory-card.hbs" item=itemData.item equipped=itemData.equipped gridPosition=itemData.gridPosition metalColor=itemData.metalColor weaponSkillIcon=itemData.weaponSkillIcon damageTypeIcon=itemData.damageTypeIcon}}
+          {{> "systems/vagabond/templates/actor/parts/inventory-card.hbs"
+              item=itemData.item
+              equipped=itemData.equipped
+              gridPosition=itemData.gridPosition
+              displayNumber=itemData.displayNumber
+              isSlotZero=itemData.isSlotZero
+              quantity=itemData.quantity
+              totalSlots=itemData.totalSlots
+              metalColor=itemData.metalColor
+              weaponSkillIcon=itemData.weaponSkillIcon
+              damageTypeIcon=itemData.damageTypeIcon}}
         {{/each}}
 
-        {{! Render empty slots }}
+        {{! Render empty slots (to complete grid) }}
         {{#each emptySlots as |slot|}}
-          <div
-            class='inventory-slot empty-slot {{#if slot.unavailable}}unavailable{{/if}}'
-            data-slot-index='{{slot.index}}'
-            data-droppable='true'
-          >
-            <div class='slot-number'>{{slot.displayNumber}}</div>
+          <div class='inventory-slot empty-slot {{#if slot.unavailable}}unavailable{{/if}}'
+               data-slot-index='{{slot.index}}'
+               data-droppable='true'>
+            {{#if slot.displayNumber}}
+              <div class='slot-number'>{{slot.displayNumber}}</div>
+            {{/if}}
           </div>
         {{/each}}
       </div>
+
+      {{! Overload Warning }}
+      {{#if isOverloaded}}
+        <div class='inventory-overload-warning'>
+          <i class='fas fa-exclamation-triangle'></i>
+          <span>Your Inventory is full, you can't take the Rush action. (+{{overloadAmount}} slots beyond capacity)</span>
+        </div>
+      {{/if}}
     </div>
   </section>
   
