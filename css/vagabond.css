@@ -2992,6 +2992,33 @@
 .vagabond .class-description > div {
   min-height: 100px;
 }
+.vagabond .class-choice-container {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 5;
+  padding: 5px;
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 5px;
+}
+.vagabond .pool-input {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .pool-input::placeholder {
+  color: var(--vagabond-c-red);
+}
+.vagabond .skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(226, 226, 226, 0.3333333333);
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Paradigm", serif;
+  white-space: nowrap;
+}
 .vagabond .traits-section .scrollable {
   width: 100%;
   min-height: 100px;
@@ -5746,13 +5773,6 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-size: 14px;
   margin-left: 2px;
   margin-right: 4px;
-}
-.vagabond .npc-immunity-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  align-items: center;
-  flex: 1;
 }
 .vagabond .npc-immunity-tag {
   display: inline-flex;

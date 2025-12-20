@@ -170,6 +170,36 @@
   }
 }
 
+.class-choice-container {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 5;
+  padding: 5px;
+  border: 1px solid $c-dark;
+  border-radius: 5px;
+}
+
+.pool-input {
+  color: $c-dark;
+  &::placeholder {
+    color: $c-red;
+  }
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: #e2e2e255;
+  border: 2px solid var(--vagabond-c-tan);
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: $font-primary;
+  white-space: nowrap;
+}
+
 .traits-section {
   .scrollable {
     width: 100%;

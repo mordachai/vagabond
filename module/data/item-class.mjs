@@ -71,7 +71,10 @@ export default class VagabondClass extends VagabondItemBase {
 
     // Skill Grant System
     schema.skillGrant = new fields.SchemaField({
+      // Fixed skills the class always provides (e.g., Alchemist -> Craft)
       guaranteed: new fields.ArrayField(new fields.StringField(), { initial: [] }),
+
+      // Dynamic choices (e.g., Magus -> Choose 3 from a restricted list)
       choices: new fields.ArrayField(
         new fields.SchemaField({
           count: new fields.NumberField({ initial: 0, integer: true, min: 0 }),

@@ -270,6 +270,8 @@ Handlebars.registerHelper('contains', function (array, value) {
   return array.includes(value);
 });
 
+Handlebars.registerHelper('add', (a, b) => a + b);
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
