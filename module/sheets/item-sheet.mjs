@@ -43,6 +43,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removePackItem: this._onRemovePackItem,
       equipFromContainer: this._onEquipFromContainer,
       deleteFromContainer: this._onDeleteFromContainer,
+      addGuaranteedSkill: this._onAddGuaranteedSkill,
+      removeGuaranteedSkill: this._onRemoveGuaranteedSkill,
+      addSkillChoiceGroup: this._onAddSkillChoiceGroup,
+      removeSkillChoiceGroup: this._onRemoveSkillChoiceGroup,
     },
     form: {
       submitOnChange: true,
@@ -745,6 +749,30 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const levelFeatures = this.item.system.levelFeatures || [];
     const newFeatures = levelFeatures.filter((_, i) => i !== index);
     await this.item.update({ 'system.levelFeatures': newFeatures });
+  }
+
+  static async _onAddGuaranteedSkill(event, target) {
+    const skill = this.element.querySelector('#guaranteed-skill-select').value;
+    const current = this.item.system.skillGrant.guaranteed;
+    if (current.includes(skill)) return;
+    await this.item.update({ "system.skillGrant.guaranteed": [...current, skill] });
+  }
+
+  static async _onRemoveGuaranteedSkill(event, target) {
+    const index = parseInt(target.dataset.index);
+    const current = this.item.system.skillGrant.guaranteed;
+    await this.item.update({ "system.skillGrant.guaranteed": current.filter((_, i) => i !== index) });
+  }
+
+  static async _onAddSkillChoiceGroup(event, target) {
+    const choices = [...this.item.system.skillGrant.choices, { count: 1, pool: [], label: "" }];
+    await this.item.update({ "system.skillGrant.choices": choices });
+  }
+
+  static async _onRemoveSkillChoiceGroup(event, target) {
+    const index = parseInt(target.dataset.index);
+    const choices = this.item.system.skillGrant.choices.filter((_, i) => i !== index);
+    await this.item.update({ "system.skillGrant.choices": choices });
   }
 
   /**

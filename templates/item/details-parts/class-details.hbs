@@ -20,6 +20,69 @@
       </div>
     </div>
 
+    {{! Skill Training Section }}
+    <div class='skill-training-section mt-20'>
+      <h3>{{localize "VAGABOND.UI.Sections.SkillTraining"}}</h3>
+      
+      {{! Guaranteed Skills }}
+      <div class='form-group-stacked'>
+        <label>{{localize "VAGABOND.UI.Labels.GuaranteedSkills"}}</label>
+        <div class='flex-row flex-wrap gap-5'>
+          {{#each system.skillGrant.guaranteed as |skillKey index|}}
+            <div class='skill-tag'>
+              <span>{{lookup @root.config.skills skillKey}}</span>
+              {{#if @root.editable}}
+                <a data-action="removeGuaranteedSkill" data-index="{{index}}"><i class="fas fa-times"></i></a>
+              {{/if}}
+            </div>
+          {{/each}}
+        </div>
+        {{#if editable}}
+          <div class='flex-row mt-5'>
+            <select id="guaranteed-skill-select">
+              {{#each config.skills as |label key|}}
+                <option value="{{key}}">{{label}}</option>
+              {{/each}}
+            </select>
+            <button type="button" data-action="addGuaranteedSkill" class="btn-sm">
+              <i class="fas fa-plus"></i> {{localize "VAGABOND.UI.Buttons.AddSkill"}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
+
+      {{! Choice Groups }}
+      <div class='skill-choices mt-10'>
+        <div class='flex-row justify-between mb-5'>
+          <label>{{localize "VAGABOND.UI.Labels.SkillChoices"}}</label>
+          {{#if editable}}
+            <button type="button" data-action="addSkillChoiceGroup" class="btn-sm">
+              <i class="fas fa-plus"></i> {{localize "VAGABOND.UI.Buttons.AddChoiceGroup"}}
+            </button>
+          {{/if}}
+        </div>
+
+        {{#each system.skillGrant.choices as |choice index|}}
+          <div class='choice-group-card p-10 border mb-5'>
+            <div class='flex-row justify-between'>
+              <strong>{{localize "VAGABOND.UI.Labels.Group"}} #{{add index 1}}</strong>
+              <a data-action="removeSkillChoiceGroup" data-index="{{index}}" class="text-danger"><i class="fas fa-trash"></i></a>
+            </div>
+            <div class='grid grid-2col gap-5 mt-5'>
+              <div class='form-group'>
+                <label>{{localize "VAGABOND.UI.Labels.Count"}}</label>
+                <input type="number" name="system.skillGrant.choices.{{index}}.count" value="{{choice.count}}">
+              </div>
+              <div class='form-group'>
+                <label>{{localize "VAGABOND.UI.Labels.Label"}}</label>
+                <input type="text" name="system.skillGrant.choices.{{index}}.label" value="{{choice.label}}">
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
     {{! Level Features Section }}
     <div class='level-features-section mt-20'>
       <h3>{{localize "VAGABOND.UI.Sections.LevelFeatures"}}</h3>

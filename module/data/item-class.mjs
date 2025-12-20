@@ -69,6 +69,19 @@ export default class VagabondClass extends VagabondItemBase {
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
 
+    // Skill Grant System
+    schema.skillGrant = new fields.SchemaField({
+      guaranteed: new fields.ArrayField(new fields.StringField(), { initial: [] }),
+      choices: new fields.ArrayField(
+        new fields.SchemaField({
+          count: new fields.NumberField({ initial: 0, integer: true, min: 0 }),
+          pool: new fields.ArrayField(new fields.StringField(), { initial: [] }),
+          label: new fields.StringField({ initial: '' })
+        }),
+        { initial: [] }
+      )
+    });
+
     // Level features - features gained at each level
     schema.levelFeatures = new fields.ArrayField(
       new fields.SchemaField({
