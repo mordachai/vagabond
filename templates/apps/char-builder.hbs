@@ -1,0 +1,144 @@
+<form class="vagabond-builder flexcol" autocomplete="off">
+    <nav class="builder-tabs flexrow">
+        {{#each steps as |s|}}
+        <a class="tab-item {{#if s.active}}active{{/if}} {{#if s.disabled}}disabled{{/if}}" data-step="{{s.id}}" data-action="goToStep">
+            <span class="step-num">{{s.number}}</span><span class="step-label">{{localize s.label}}</span>
+        </a>
+        {{/each}}
+    </nav>
+
+    <main class="builder-body flexcol">
+        <section class="decision-zone {{#unless hasChoices}}hidden{{/unless}}">
+            <header class="zone-header">{{localize "VAGABOND.CharBuilder.ProposedChoices"}}</header>
+            <div class="decision-tray flexrow">
+                {{#if (eq step 'class')}}
+                    <div class="skill-decision flexrow">
+                        <div class="guaranteed-skills flexcol">
+                            <strong>Obligatory Training:</strong>
+                            {{#each classChoices.guaranteed}}<span class="skill-tag locked"><i class="fas fa-lock"></i> {{this.label}}</span>{{/each}}
+                        </div>
+                        {{#each classChoices.choices}}
+                            <div class="pool-box flexcol">
+                                <strong>Choose {{this.count}} from {{this.label}}:</strong>
+                                <div class="pool-options">
+                                    {{#each this.pool}}
+                                        <label class="checkbox-label"><input type="checkbox" value="{{this.key}}" {{#if this.selected}}checked{{/if}} {{#if this.disabled}}disabled{{/if}} data-action="toggleSkill"> {{this.label}}</label>
+                                    {{/each}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                {{/if}}
+
+                {{#if (eq step 'stats')}}
+                    <div class="stat-assigner flexrow">
+                        {{#each statData.slots}}
+                            <div class="stat-slot flexcol" data-stat="{{this.key}}" data-action="assignStat">
+                                <label>{{this.label}}</label>
+                                <div class="hex-box {{#unless this.value}}empty{{/unless}}">{{#if this.value}}{{this.value}}{{else}}?{{/if}}</div>
+                            </div>
+                        {{/each}}
+                        <div class="available-pool flexcol">
+                            <strong>Available Values (Pick one):</strong>
+                            <div class="pool-values flexrow">
+                                {{#each statData.unassigned}}
+                                    <button type="button" class="value-chip {{#if this.active}}active{{/if}}" data-index="{{this.index}}" data-action="pickValue">{{this.value}}</button>
+                                {{/each}}
+                            </div>
+                            <button type="button" class="btn-reset-stats" data-action="resetStats"><i class="fas fa-undo"></i> Reset Distribution</button>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </section>
+
+        <section class="selection-zone {{#if useTripleColumn}}triple-column{{/if}}">
+            <aside class="selection-list flexcol">
+                <div class="search-sticky"><input type="text" placeholder="Search..." data-action="filterList"></div>
+                <div class="directory-list custom-scroll">
+                    {{#if (eq step 'stats')}}
+                        {{#each statData.arrays}}
+                            <li class="directory-item {{#if this.selected}}active{{/if}}" data-id="{{this.id}}" data-action="selectOption">
+                                <strong>Array {{this.id}}:</strong> {{this.values}}
+                            </li>
+                        {{/each}}
+                    {{else if isGearStep}}
+                        {{#if isGearStep}}
+                        <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
+                            <span>Silver: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>
+                        </div>
+                        {{/if}}
+                        {{#each options as |group|}}
+                        <details class="gear-accordion" {{#if group.isOpen}}open{{/if}}>
+                            <summary class="category-header" data-category="{{group.id}}" data-action="toggleCategory">
+                                <i class="fas fa-chevron-right"></i> {{group.label}}
+                            </summary>
+                            <ul class="item-list">
+                                {{#each group.items as |opt|}}
+                                <li class="directory-item flexrow {{#if opt.selected}}active{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                                    <img src="{{opt.img}}" width="32" height="32"><span class="name">{{opt.name}}</span>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </details>
+                        {{/each}}
+                    {{else}}
+                        {{#each options as |opt|}}
+                        <li class="directory-item flexrow {{#if opt.selected}}active{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                            <img src="{{opt.img}}" width="32" height="32"><span class="name">{{opt.name}}</span>
+                        </li>
+                        {{/each}}
+                    {{/if}}
+                </div>
+            </aside>
+
+            <article class="selection-preview custom-scroll">
+                {{#if selectedItem}}
+                    <div class="preview-header flexrow">
+                        <img src="{{selectedItem.img}}" class="preview-img-main">
+                        <div class="name-block flexcol">
+                            <h2>{{selectedItem.name}}</h2>
+                            {{#if selectedItem.displayStats.sublabel}}
+                                <span class="sublabel">{{selectedItem.displayStats.sublabel}}</span>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="preview-description">{{{selectedItem.enrichedDescription}}}</div>
+
+                    <div class="preview-details-grid">
+                        {{!-- WEAPON BLOCK --}}
+                        {{#if (eq selectedItem.displayStats.subType "weapon")}}
+                            {{#if selectedItem.displayStats.damage1h}}<div><strong>1H Damage:</strong> {{selectedItem.displayStats.damage1h}}</div>{{/if}}
+                            {{#if selectedItem.displayStats.damage2h}}<div><strong>2H Damage:</strong> {{selectedItem.displayStats.damage2h}}</div>{{/if}}
+                            {{#if selectedItem.displayStats.skill}}<div><strong>Skill:</strong> {{selectedItem.displayStats.skill}}</div>{{/if}}
+                        {{/if}}
+
+                        {{!-- GEAR BLOCK --}}
+                        {{#if (eq selectedItem.displayStats.subType "gear")}}
+                            {{#if selectedItem.displayStats.sublabel}}<div><strong>Category:</strong> {{selectedItem.displayStats.sublabel}}</div>{{/if}}
+                        {{/if}}
+
+                        {{!-- ALWAYS RENDER SLOTS AND COST --}}
+                        <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
+                        <div><strong>Cost:</strong> {{selectedItem.displayStats.cost}} Silver</div>
+                    </div>
+                {{/if}}
+            </article>
+
+            {{#if useTripleColumn}}
+            <aside class="reference-column custom-scroll">
+                {{#if originRefs.ancestry}}<h4 class="ref-header">Traits ({{originRefs.ancestry.name}})</h4>
+                {{#each originRefs.ancestry.traits}}<div class="ref-entry"><strong>{{this.name}}</strong>: {{{this.description}}}</div>{{/each}}{{/if}}
+                {{#if originRefs.class}}<h4 class="ref-header">Features ({{originRefs.class.name}})</h4>
+                {{#each originRefs.class.features}}<div class="ref-entry"><strong>{{this.name}}</strong>: {{{this.description}}}</div>{{/each}}{{/if}}
+            </aside>
+            {{/if}}
+        </section>
+    </main>
+
+    <footer class="builder-footer flexrow">
+        <button type="button" class="btn-random" data-action="randomize"><i class="fas fa-dice"></i> Random</button>
+        <div class="footer-nav flexrow"><button type="button" class="btn-prev" data-action="prev">Previous</button><button type="button" class="btn-next" data-action="next">Next</button><button type="submit" class="btn-finish">Finish</button></div>
+    </footer>
+</form>

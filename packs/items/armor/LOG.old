@@ -1,3 +1,5 @@
-2025/12/20-12:34:53.622 331c Recovering log #257
-2025/12/20-12:34:53.625 331c Delete type=0 #257
-2025/12/20-12:34:53.625 331c Delete type=3 #256
+2025/12/21-01:06:22.371 c5cc Recovering log #263
+2025/12/21-01:06:22.372 c5cc Level-0 table #265: started
+2025/12/21-01:06:22.382 c5cc Level-0 table #265: 1097 bytes OK
+2025/12/21-01:06:22.385 c5cc Delete type=0 #263
+2025/12/21-01:06:22.385 c5cc Delete type=3 #262

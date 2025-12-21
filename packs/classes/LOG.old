@@ -1,3 +1,5 @@
-2025/12/20-12:34:53.535 6cd0 Recovering log #254
-2025/12/20-12:34:53.538 6cd0 Delete type=0 #254
-2025/12/20-12:34:53.538 6cd0 Delete type=3 #253
+2025/12/21-01:06:22.253 e4c Recovering log #263
+2025/12/21-01:06:22.253 e4c Level-0 table #265: started
+2025/12/21-01:06:22.262 e4c Level-0 table #265: 3538 bytes OK
+2025/12/21-01:06:22.266 e4c Delete type=0 #263
+2025/12/21-01:06:22.266 e4c Delete type=3 #261

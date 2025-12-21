@@ -689,25 +689,7 @@
         "Crawl": "Crawl",
         "Travel": "Travel",
         "LuckPool": "Luck Pool",
-        "StudiedDie": "Study Dice",
-        "SkillTraining": "Skill Training"
-      },
-      "Labels": {
-        "GuaranteedSkills": "Guaranteed Skills",
-        "SkillChoices": "Skill Choices",
-        "Group": "Group",
-        "Count": "Count",
-        "Label": "Label (e.g., Social Skills)",
-        "RestrictedPool": "Restricted Pool"
-      },
-      "Buttons": {
-        "AddSkill": "Add Skill",
-        "AddChoiceGroup": "Add Choice Group",
-        "UpdateGroup": "Update"
-      },
-      "Hints": {
-        "EmptyForAny": "Leave empty to allow ANY skill",
-        "PoolRestrictionHint": "If the pool is empty, the player can choose any skill that isn't already trained. If skills are added to the pool, the player is restricted to those specific options."
+        "StudiedDie": "Study Dice"
       }
     },
     "Notifications": {
@@ -718,8 +700,33 @@
       "Category": "Vagabond",
       "Favor": "Favor Dice",
       "Hinder": "Hinder Dice"
+    },
+    "CharBuilder": {
+      "Title": "Character Builder",
+      "Steps": {
+        "Ancestry": "Ancestry",
+        "Class": "Class",
+        "Stats": "Stats",
+        "Perks": "Perks",
+        "Spells": "Spells",
+        "StartingPacks": "Starting Packs",
+        "Gear": "Gear"
+      },
+      "ProposedChoices": "Proposed Choices",
+      "OriginReferences": "Origin References",
+      "Buttons": {
+        "Random": "Random Choice",
+        "Previous": "Previous",
+        "Next": "Next",
+        "Close": "Close",
+        "Finish": "Finish"
+      },
+      "Confirmation": {
+        "CloseTitle": "Abandon Character Construction?",
+        "CloseContent": "Are you sure you want to close the builder? All unsaved progress will be lost."
+      },
+      "FinishMessage": "Your Vagabond is ready! Remember to double-check your Features and Traits on your new sheet to ensure you've manually added all promised Perks and Spells."
     }
-
   },
   "TYPES": {
     "Actor": {
