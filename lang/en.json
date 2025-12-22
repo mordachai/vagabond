@@ -709,17 +709,22 @@
         "Stats": "Stats",
         "Perks": "Perks",
         "Spells": "Spells",
-        "StartingPacks": "Starting Packs",
+        "Startingpacks": "Starting Packs",
         "Gear": "Gear"
       },
+      "Traits":"Traits",
+      "ClassFeatures": "Features",
+      "DerivedStats": "Character Stats",
       "ProposedChoices": "Proposed Choices",
       "OriginReferences": "Origin References",
+      "AssignStats": "Drag and drop the values in the Stats to assign",
       "Buttons": {
         "Random": "Random Choice",
         "Previous": "Previous",
         "Next": "Next",
         "Close": "Close",
-        "Finish": "Finish"
+        "Finish": "Finish",
+        "Reset":"Reset"
       },
       "Confirmation": {
         "CloseTitle": "Abandon Character Construction?",

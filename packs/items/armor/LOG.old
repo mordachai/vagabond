@@ -1,5 +1,3 @@
-2025/12/21-01:06:22.371 c5cc Recovering log #263
-2025/12/21-01:06:22.372 c5cc Level-0 table #265: started
-2025/12/21-01:06:22.382 c5cc Level-0 table #265: 1097 bytes OK
-2025/12/21-01:06:22.385 c5cc Delete type=0 #263
-2025/12/21-01:06:22.385 c5cc Delete type=3 #262
+2025/12/21-14:11:24.430 6b90 Recovering log #270
+2025/12/21-14:11:24.433 6b90 Delete type=0 #270
+2025/12/21-14:11:24.433 6b90 Delete type=3 #269
