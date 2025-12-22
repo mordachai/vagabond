@@ -1,5 +1,10 @@
 {
   "VAGABOND": {
+    "Terms": {
+      "None": "None",
+      "Yes": "yes",
+      "No": "no"
+    },
     "Stat": {
       "Might": { "long": "Might", "abbr": "MIG" },
       "Dexterity": { "long": "Dexterity", "abbr": "DEX" },
@@ -718,6 +723,17 @@
       "ProposedChoices": "Proposed Choices",
       "OriginReferences": "Origin References",
       "AssignStats": "Drag and drop the values in the Stats to assign",
+      "ClassDetails": "Details",
+      "Levels": "Features by Level",
+      "Instructions": {
+        "Ancestry": "Choose your heritage. Your ancestry determines your base traits and physical characteristics.",
+        "Class": "Select a profession. This defines your skills, starting equipment, and growth potential.",
+        "Stats": "Select a Stat Array from the list on the left to begin assigning values on top.",
+        "Perks": "Select your starting perks. These are unique talents that give you an edge in specific situations.",
+        "Spells": "If your class or ancestry allows, choose your starting spells or magical abilities.",
+        "StartingPacks": "Pick a starting equipment bundle. This will determine your initial gold and basic survival gear.",
+        "Gear": "Spend your remaining silver on additional equipment, weapons, and supplies."
+      },
       "Buttons": {
         "Random": "Random Choice",
         "Previous": "Previous",

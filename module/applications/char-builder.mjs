@@ -68,12 +68,26 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   async _prepareContext(options) {
     const getProperty = foundry.utils.getProperty;
     const availableOptions = await this._loadStepOptions();
+    
     const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
+    
+    // --- 0. INSTRUCTION & SELECTION LOGIC ---
+    let hasSelection = false;
+    if (this.currentStep === 'stats') {
+        hasSelection = !!this.builderData.selectedArrayId; 
+    } else if (Array.isArray(this.builderData[stepKey])) {
+        hasSelection = this.builderData[stepKey].length > 0;
+    } else {
+        hasSelection = !!this.builderData[stepKey];
+    }
 
+    const locId = this.currentStep.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
+    const instruction = !hasSelection ? game.i18n.localize(`VAGABOND.CharBuilder.Instructions.${locId}`) : null;
+        
     // --- 1. PREPARE RAW DATA & SANITIZE ---
     const actorData = this.actor.toObject();
 
-    // A. Wipe Lingering Actor Effects & Data (Prevents the "17" issue)
+    // A. Wipe Lingering Actor Effects & Data
     actorData.effects = []; 
     if (actorData.system.inventory) actorData.system.inventory.bonusSlots = 0;
     
@@ -90,7 +104,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // --- 2. APPLY BUILDER STATS ---
     const builderStats = this.builderData.stats;
     for (const [key, val] of Object.entries(builderStats)) {
-        if (val !== null) actorData.system.stats[key].value = val;
+        if (val !== null && actorData.system.stats[key]) actorData.system.stats[key].value = val;
     }
 
     // --- 3. INJECT ITEMS ---
@@ -104,16 +118,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     if (itemUuids.length > 0) {
         const validItems = await Promise.all(itemUuids.map(uuid => fromUuid(uuid)));
-        
-        // Convert to Object (RESTORED: We do NOT filter effects anymore)
         const newItems = validItems.filter(i => i).map(item => item.toObject());
 
-        // Singleton Check: Prevent adding a second Ancestry/Class if one exists in the list
         const singletonTypes = ['ancestry', 'class'];
         const typesBeingAdded = new Set(newItems.map(i => i.type));
 
         actorData.items = actorData.items.filter(existingItem => {
-            // If we are adding a new Class, remove the old Class from the array
             if (singletonTypes.includes(existingItem.type) && typesBeingAdded.has(existingItem.type)) return false; 
             return true;
         });
@@ -122,19 +132,17 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     // --- 4. CREATE PREVIEW ---
-    // Since 'actorData.type' is 'character', this creates a VagabondCharacter
-    // It will automatically apply the 'transfer: true' effects from the injected items.
     const previewActor = new Actor.implementation(actorData);
     previewActor.prepareData();
-
-    // Debug Access
     window.debugBuilder = previewActor; 
 
-    // --- UI LOGIC ---
+    // --- 5. UI & ITEM PREVIEW LOGIC ---
     let previewUuid = this.builderData.previewUuid;
     if (!previewUuid && this.currentStep !== 'gear') previewUuid = this.builderData[stepKey];
     
     let selectedItem = null;
+    let classPreviewData = null;
+
     if (previewUuid && typeof previewUuid === 'string') {
         const item = await fromUuid(previewUuid);
         if (item) {
@@ -146,6 +154,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             
             const sys = item.system;
             if (item.type === 'ancestry') selectedItem.traits = sys.traits || [];
+            
+            // Process Class Levels & Features
             if (item.type === 'class') {
                 const features = sys.levelFeatures || [];
                 const grouped = features.reduce((acc, feat) => {
@@ -154,11 +164,30 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     acc[lvl].push(feat);
                     return acc;
                 }, {});
+
                 selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => ({
-                    level: lvl, isOpen: parseInt(lvl) === 1, features: feats
+                    level: lvl, 
+                    isOpen: parseInt(lvl) === 1, 
+                    features: feats
                 })).sort((a, b) => a.level - b.level);
+
+                // Prepare specialized 3rd column data for Class step
+                // Check if any selected perks grant spellcasting to override class base
+                const perkGrantsMagic = (await Promise.all(this.builderData.perks.map(u => fromUuid(u))))
+                    .some(p => p?.system?.grantSpellcasting === true);
+
+                const isSpellcaster = sys.isSpellcaster || perkGrantsMagic;
+                const rawSkill = sys.manaSkill || "None";
+                const localizedSkillKey = rawSkill.charAt(0).toUpperCase() + rawSkill.slice(1);
+
+                classPreviewData = {
+                    isSpellcaster: isSpellcaster ? "Yes" : "No",
+                    manaSkill: localizedSkillKey,
+                    levelGroups: selectedItem.levelGroups
+                };
             }
-             selectedItem.displayStats = {
+
+            selectedItem.displayStats = {
                 subType: sys.equipmentType || "",
                 slots: sys.baseSlots || 0,
                 costLabel: sys.baseCost?.gold ? `${sys.baseCost.gold}G` : `${sys.baseCost?.silver || 0}S`,
@@ -172,6 +201,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         }
     }
 
+    // --- 6. ECONOMY LOGIC ---
     let budget = 0;
     let currentSpending = 0;
     if (this.builderData.startingPack) {
@@ -191,9 +221,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       step: this.currentStep,
       steps: this._getStepsContext(),
       hasChoices: ['class', 'stats'].includes(this.currentStep),
-      useTripleColumn: ['perks', 'spells'].includes(this.currentStep),
+      useTripleColumn: ['class', 'perks', 'spells'].includes(this.currentStep), // Added 'class' here
       options: availableOptions,
-      selectedItem,
+      selectedItem: instruction ? null : selectedItem,
+      classPreviewData,
       originRefs: await this._getOriginReferences(),
       classChoices: await this._prepareClassChoices(),
       statData: this._prepareStatsContext(),
@@ -203,7 +234,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         spent: currentSpending, 
         remaining: budget - currentSpending, 
         isOver: (budget - currentSpending) < 0 
-      }
+      },
+      instruction
     };
   }
 
@@ -306,44 +338,33 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   /** @override */
 /** @override */
   _onRender(context, options) {
-    console.log("Vagabond | _onRender called. Attaching listeners...");
     const html = this.element;
     
     // 1. Draggable Chips Initialization
     const chips = html.querySelectorAll('.value-chip');
-    console.log(`Vagabond | Found ${chips.length} value chips.`);
-
     chips.forEach(chip => {
         chip.setAttribute('draggable', 'true');
         
         chip.addEventListener('dragstart', (ev) => {
-            console.log("Vagabond | DragStart detected.");
             const target = ev.currentTarget; 
-            
-            // Log what we are trying to drag
-            console.log("Vagabond | Drag Target Dataset:", target.dataset);
-
+           
             const transfer = { 
                 index: target.dataset.index, 
                 value: target.dataset.value 
             };
             
-            console.log("Vagabond | Transfer Data:", transfer);
-
             ev.dataTransfer.setData("text/plain", JSON.stringify(transfer));
             ev.dataTransfer.effectAllowed = "move"; 
             target.classList.add('dragging');
         });
 
         chip.addEventListener('dragend', (ev) => {
-            console.log("Vagabond | DragEnd.");
             ev.currentTarget.classList.remove('dragging');
         });
     });
 
     // 2. Drop Zones (Stat Slots) Initialization
     const slots = html.querySelectorAll('.stat-slot');
-    console.log(`Vagabond | Found ${slots.length} stat slots.`);
 
     slots.forEach(slot => {
         slot.addEventListener('dragover', (ev) => {
@@ -355,14 +376,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         slot.addEventListener('dragleave', (ev) => ev.currentTarget.classList.remove('drag-over'));
 
         slot.addEventListener('drop', (ev) => {
-            console.log("Vagabond | Drop detected on slot.");
             ev.preventDefault();
             ev.currentTarget.classList.remove('drag-over');
 
             try {
                 const rawData = ev.dataTransfer.getData("text/plain");
-                console.log("Vagabond | Raw Drop Data:", rawData);
-
                 if (!rawData) {
                     console.warn("Vagabond | No data found in drop event.");
                     return;
@@ -371,8 +389,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 const data = JSON.parse(rawData);
                 const statKey = ev.currentTarget.dataset.stat;
                 
-                console.log(`Vagabond | Dropping value ${data.value} (index ${data.index}) into ${statKey}`);
-
                 this._assignStatValue(statKey, parseInt(data.value), parseInt(data.index));
             } catch (err) { 
                 console.error("Vagabond | Drag drop failed with error:", err); 
@@ -381,39 +397,40 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     });
   }
 
- _assignStatValue(statKey, value, poolIndex) {
-      console.log("Vagabond | _assignStatValue called");
-      console.log(`Vagabond | Args - Key: ${statKey}, Value: ${value}, PoolIndex: ${poolIndex}`);
-
-      // Check validity
+  /**
+   * Internal helper to handle the logic of assigning a value to a stat slot.
+   * @param {string} statKey - The attribute key (e.g., 'might')
+   * @param {number} value - The numeric value being assigned
+   * @param {number} poolIndex - The index of the value in the unassigned pool
+   */
+  _assignStatValue(statKey, value, poolIndex) {
+      // 1. Validation: Ensure we have a valid number and index
       if (isNaN(value) || isNaN(poolIndex)) {
           console.error("Vagabond | Validation Failed: Value or PoolIndex is NaN");
           return;
       }
 
-      const prev = this.builderData.stats[statKey];
-      console.log("Vagabond | Previous value in slot:", prev);
+      // 2. Handle Reassignment: If the slot already has a value, return it to the pool
+      const previousValue = this.builderData.stats[statKey];
+      if (previousValue !== null) {
+          this.builderData.unassignedValues.push(previousValue);
+      }
 
-      // Return previous value to pool if replacing
-      if (prev !== null) {
-          console.log("Vagabond | Pushing previous value back to pool");
-          this.builderData.unassignedValues.push(prev);
-      }
-      
+      // 3. Update the Stat: Set the new value to the chosen attribute
       this.builderData.stats[statKey] = value;
-      
-      // Remove the used value from the pool
-      console.log(`Vagabond | Attempting to splice index ${poolIndex} from pool (Size: ${this.builderData.unassignedValues.length})`);
-      
+
+      // 4. Remove from Pool: Remove the specific value used from the unassigned list
+      // We use the index to ensure we remove the exact 'chip' the user dragged
       if (poolIndex >= 0 && poolIndex < this.builderData.unassignedValues.length) {
-          const removed = this.builderData.unassignedValues.splice(poolIndex, 1);
-          console.log("Vagabond | Spliced value:", removed);
+          this.builderData.unassignedValues.splice(poolIndex, 1);
       } else {
-          console.warn("Vagabond | Pool Index out of bounds, splice skipped.");
+          // Fallback: if index is lost for some reason, find the first matching value
+          const fallbackIndex = this.builderData.unassignedValues.indexOf(value);
+          if (fallbackIndex > -1) this.builderData.unassignedValues.splice(fallbackIndex, 1);
       }
-      
+
+      // 5. Cleanup: Clear any active selection state and re-render
       this.builderData.selectedValue = null;
-      console.log("Vagabond | Re-rendering...");
       this.render();
   }
 

@@ -151,7 +151,7 @@
       grid-template-columns: 280px 1fr;
 
       &.triple-column {
-        grid-template-columns: 260px 1fr 1fr;
+        grid-template-columns: 0.80fr 1.2fr 1fr;
       }
 
       .selection-list,
@@ -274,37 +274,6 @@
           }
         }
 
-        .level-accordion {
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          margin-bottom: 5px;
-          border-radius: 4px;
-
-          .level-header {
-            background: rgba(0, 0, 0, 0.05);
-            padding: 8px;
-            font-family: $font-title;
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            i {
-              transition: transform 0.2s ease;
-              font-size: 0.8rem;
-            }
-          }
-
-          &[open] .level-header i {
-            transform: rotate(90deg);
-          }
-
-          .level-content {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.2);
-          }
-        }
-
         .preview-header {
           display: flex;
           gap: 15px;
@@ -391,6 +360,48 @@
     }
   }
 
+        .class-details-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr; // 2 equal columns
+          gap: 10px;
+          padding: 10px;
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 4px;
+          margin-bottom: 10px;
+
+          .detail-item {
+              display: flex;
+              justify-content: flex-start;
+              font-size: 0.9rem;
+              gap: 4px;
+              
+              .label {
+                  font-weight: bold;
+                  color: var(--color-text-dark-secondary);
+              }
+          }
+      }
+
+        .level-accordion {
+            summary {
+                list-style: none; // Hides the default arrow in Firefox/Chrome
+                display: flex;    // Ensures your icon and "Level X" stay aligned
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+
+                // Hides the default arrow in Safari and older versions of Chrome
+                &::-webkit-details-marker {
+                    display: none;
+                }
+            }
+
+            // This ensures your custom chevron rotates when the accordion is open
+            &[open] .level-header i {
+                transform: rotate(90deg);
+            }
+        }
+
   .stats-preview-results {
     .preview-details-grid {
       display: grid;
@@ -457,6 +468,29 @@
       transform: scale(1.1);
       background: rgba(255, 215, 0, 0.2);
     }
+  }
+
+  .step-instruction-overlay {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      color: var(--color-text-dark-secondary);
+
+      i {
+          font-size: 4rem;
+          margin-bottom: 1.5rem;
+          opacity: 0.3;
+      }
+
+      p {
+          font-size: 1.25rem;
+          font-style: italic;
+          line-height: 1.4;
+          max-width: 450px;
+      }
   }
 
   .builder-footer {

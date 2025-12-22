@@ -2176,7 +2176,7 @@
   grid-template-columns: 280px 1fr;
 }
 .vagabond-builder .builder-body .selection-zone.triple-column {
-  grid-template-columns: 260px 1fr 1fr;
+  grid-template-columns: 0.8fr 1.2fr 1fr;
 }
 .vagabond-builder .builder-body .selection-zone .selection-list,
 .vagabond-builder .builder-body .selection-zone .selection-preview,
@@ -2277,32 +2277,6 @@
 .vagabond-builder .builder-body .selection-zone .selection-preview .trait-item strong, .vagabond-builder .builder-body .selection-zone .selection-preview .feature-item strong {
   font-weight: 700;
 }
-.vagabond-builder .builder-body .selection-zone .selection-preview .level-accordion {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  margin-bottom: 5px;
-  border-radius: 4px;
-}
-.vagabond-builder .builder-body .selection-zone .selection-preview .level-accordion .level-header {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 8px;
-  font-family: "Eskapade", serif;
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.vagabond-builder .builder-body .selection-zone .selection-preview .level-accordion .level-header i {
-  transition: transform 0.2s ease;
-  font-size: 0.8rem;
-}
-.vagabond-builder .builder-body .selection-zone .selection-preview .level-accordion[open] .level-header i {
-  transform: rotate(90deg);
-}
-.vagabond-builder .builder-body .selection-zone .selection-preview .level-accordion .level-content {
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.2);
-}
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-header {
   display: flex;
   gap: 15px;
@@ -2375,6 +2349,38 @@
   display: block;
   font-size: 1rem;
 }
+.vagabond-builder .class-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.vagabond-builder .class-details-grid .detail-item {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 0.9rem;
+  gap: 4px;
+}
+.vagabond-builder .class-details-grid .detail-item .label {
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
+}
+.vagabond-builder .level-accordion summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.vagabond-builder .level-accordion summary::-webkit-details-marker {
+  display: none;
+}
+.vagabond-builder .level-accordion[open] .level-header i {
+  transform: rotate(90deg);
+}
 .vagabond-builder .stats-preview-results .preview-details-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2427,6 +2433,26 @@
   border-color: gold;
   transform: scale(1.1);
   background: rgba(255, 215, 0, 0.2);
+}
+.vagabond-builder .step-instruction-overlay {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-dark-secondary);
+}
+.vagabond-builder .step-instruction-overlay i {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.3;
+}
+.vagabond-builder .step-instruction-overlay p {
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.4;
+  max-width: 450px;
 }
 .vagabond-builder .builder-footer {
   flex: 0 0 auto;
