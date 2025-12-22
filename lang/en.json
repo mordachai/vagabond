@@ -283,7 +283,7 @@
           "combat.armor": {"label": "Armor Rating"},
           "mana.current": {"label": "Current Mana"},
           "mana.max": {"label": "Max Mana"},
-          "mana.castingMax": {"label": "Casting Max"},
+          "mana.castingMax": {"label": "Max Cast"},
           "manaSkill": {"label": "Casting Skill"}
         }
       },

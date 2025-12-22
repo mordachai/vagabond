@@ -116,17 +116,31 @@
                     <div class="stats-preview-results">
                         <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.DerivedStats"}}</h3>
                         <div class="preview-details-grid">
+                            {{!-- Primary Derived Stats --}}
                             <div class="stat-box"><strong>HP:</strong> {{actor.system.health.max}}</div>
+                            
+                            {{!-- Spellcasting Stats (Only visible if Spellcaster) --}}
+                            {{#if isSpellcaster}}
+                                <div class="stat-box mana-box">
+                                    <strong>{{localize "VAGABOND.Actor.Character.FIELDS.mana.max.label"}}:</strong> {{manaStats.max}}
+                                </div>
+                                <div class="stat-box mana-box">
+                                    <strong>{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}:</strong> {{manaStats.castingMax}}
+                                </div>
+                            {{/if}}
+
                             <div class="stat-box"><strong>Luck Pool:</strong> {{actor.system.stats.luck.value}}</div>
                             <div class="stat-box"><strong>Inventory:</strong> {{actor.system.inventory.maxSlots}} Slots</div>
                             
+                            {{!-- Movement Row --}}
                             <div class="grid-span-all movement-row">
                                 <strong>Speed:</strong> {{actor.system.speed.base}}ft | 
                                 <strong>Crawl:</strong> {{actor.system.speed.crawl}}ft | 
                                 <strong>Travel:</strong> {{actor.system.speed.travel}} mi/day
                             </div>
 
-                            <div class="grid-span-all saves-header">Saves</div>
+                            {{!-- Saves Row --}}
+                            <div class="grid-span-all saves-header">{{localize "VAGABOND.Saves.savesTitle"}}</div>
                             <div class="stat-box"><strong>Reflex:</strong> {{actor.system.saves.reflex.difficulty}}</div>
                             <div class="stat-box"><strong>Endure:</strong> {{actor.system.saves.endure.difficulty}}</div>
                             <div class="stat-box"><strong>Will:</strong> {{actor.system.saves.will.difficulty}}</div>

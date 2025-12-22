@@ -66,9 +66,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   /** @override */
   async _prepareContext(options) {
-    const getProperty = foundry.utils.getProperty;
     const availableOptions = await this._loadStepOptions();
-    
     const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
     
     // --- 0. INSTRUCTION & SELECTION LOGIC ---
@@ -86,12 +84,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         
     // --- 1. PREPARE RAW DATA & SANITIZE ---
     const actorData = this.actor.toObject();
-
-    // A. Wipe Lingering Actor Effects & Data
     actorData.effects = []; 
     if (actorData.system.inventory) actorData.system.inventory.bonusSlots = 0;
     
-    // B. Zero out Stat Bonuses
     if (actorData.system.stats) {
         for (const key of Object.keys(actorData.system.stats)) {
             if (actorData.system.stats[key]) {
@@ -102,8 +97,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     // --- 2. APPLY BUILDER STATS ---
-    const builderStats = this.builderData.stats;
-    for (const [key, val] of Object.entries(builderStats)) {
+    for (const [key, val] of Object.entries(this.builderData.stats)) {
         if (val !== null && actorData.system.stats[key]) actorData.system.stats[key].value = val;
     }
 
@@ -116,127 +110,135 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         ...this.builderData.gear
     ].filter(uuid => uuid);
 
-    if (itemUuids.length > 0) {
-        const validItems = await Promise.all(itemUuids.map(uuid => fromUuid(uuid)));
-        const newItems = validItems.filter(i => i).map(item => item.toObject());
+    // Optimized: Fetch items once to use for both Injection and Spellcaster checks
+    const validItemDocs = itemUuids.length > 0 ? await Promise.all(itemUuids.map(uuid => fromUuid(uuid))) : [];
+    const validItems = validItemDocs.filter(i => i);
 
+    if (validItems.length > 0) {
+        const itemObjects = validItems.map(item => item.toObject());
         const singletonTypes = ['ancestry', 'class'];
-        const typesBeingAdded = new Set(newItems.map(i => i.type));
+        const typesBeingAdded = new Set(itemObjects.map(i => i.type));
 
         actorData.items = actorData.items.filter(existingItem => {
-            if (singletonTypes.includes(existingItem.type) && typesBeingAdded.has(existingItem.type)) return false; 
-            return true;
+            return !(singletonTypes.includes(existingItem.type) && typesBeingAdded.has(existingItem.type));
         });
-
-        actorData.items.push(...newItems);
+        actorData.items.push(...itemObjects);
     }
 
-    // --- 4. CREATE PREVIEW ---
-    const previewActor = new Actor.implementation(actorData);
-    previewActor.prepareData();
-    window.debugBuilder = previewActor; 
+    // --- 4. CREATE PREVIEW ---
+    const previewActor = new Actor.implementation(actorData);
+    previewActor.prepareData();
 
-    // --- 5. UI & ITEM PREVIEW LOGIC ---
+    // --- 5. DYNAMIC MAGIC LOGIC (Stats Step) ---
+    // Check if class OR any selected perks grant spellcasting
+    const perkGrantsMagic = validItems.some(i => i.type === 'perk' && i.system.grantSpellcasting === true);
+    const classItem = validItems.find(i => i.type === 'class');
+    const isSpellcaster = classItem?.system.isSpellcaster || perkGrantsMagic;
+
+    // --- 6. UI & ITEM PREVIEW LOGIC ---
+    // Only allow a preview if it was explicitly clicked (previewUuid) 
+    // OR if we are on a tab where the main selection should be shown.
     let previewUuid = this.builderData.previewUuid;
-    if (!previewUuid && this.currentStep !== 'gear') previewUuid = this.builderData[stepKey];
-    
+
+    // If no specific item is clicked, only default to the step's selection 
+    // IF we are actually on that step.
+    if (!previewUuid) {
+        if (this.currentStep === 'ancestry') previewUuid = this.builderData.ancestry;
+        else if (this.currentStep === 'class') previewUuid = this.builderData.class;
+        else if (this.currentStep === 'starting-packs') previewUuid = this.builderData.startingPack;
+    }
+
     let selectedItem = null;
-    let classPreviewData = null;
+    let classPreviewData = null;
 
-    if (previewUuid && typeof previewUuid === 'string') {
-        const item = await fromUuid(previewUuid);
-        if (item) {
-            selectedItem = item.toObject();
-            selectedItem.uuid = item.uuid;
-            selectedItem.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-                item.system.description || "", { async: true, secrets: false, relativeTo: item }
-            );
-            
-            const sys = item.system;
-            if (item.type === 'ancestry') selectedItem.traits = sys.traits || [];
-            
-            // Process Class Levels & Features
-            if (item.type === 'class') {
-                const features = sys.levelFeatures || [];
-                const grouped = features.reduce((acc, feat) => {
-                    const lvl = feat.level || 1;
-                    if (!acc[lvl]) acc[lvl] = [];
-                    acc[lvl].push(feat);
-                    return acc;
-                }, {});
+    if (previewUuid && typeof previewUuid === 'string') {
+        const item = validItems.find(i => i.uuid === previewUuid) || await fromUuid(previewUuid);
+        if (item) {
+            selectedItem = item.toObject();
+            selectedItem.uuid = item.uuid;
+            selectedItem.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+                item.system.description || "", { async: true, secrets: false, relativeTo: item }
+            );
+            
+            const sys = item.system;
+            if (item.type === 'ancestry') selectedItem.traits = sys.traits || [];
+            
+            if (item.type === 'class') {
+                const features = sys.levelFeatures || [];
+                const grouped = features.reduce((acc, feat) => {
+                    const lvl = feat.level || 1;
+                    if (!acc[lvl]) acc[lvl] = [];
+                    acc[lvl].push(feat);
+                    return acc;
+                }, {});
 
-                selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => ({
-                    level: lvl, 
-                    isOpen: parseInt(lvl) === 1, 
-                    features: feats
-                })).sort((a, b) => a.level - b.level);
+                selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => ({
+                    level: lvl, 
+                    isOpen: parseInt(lvl) === 1, 
+                    features: feats
+                })).sort((a, b) => a.level - b.level);
 
-                // Prepare specialized 3rd column data for Class step
-                // Check if any selected perks grant spellcasting to override class base
-                const perkGrantsMagic = (await Promise.all(this.builderData.perks.map(u => fromUuid(u))))
-                    .some(p => p?.system?.grantSpellcasting === true);
+                const rawSkill = sys.manaSkill || "None";
+                const localizedSkillKey = rawSkill.charAt(0).toUpperCase() + rawSkill.slice(1);
 
-                const isSpellcaster = sys.isSpellcaster || perkGrantsMagic;
-                const rawSkill = sys.manaSkill || "None";
-                const localizedSkillKey = rawSkill.charAt(0).toUpperCase() + rawSkill.slice(1);
+                classPreviewData = {
+                    isSpellcaster: isSpellcaster ? "Yes" : "No",
+                    manaSkill: localizedSkillKey,
+                    levelGroups: selectedItem.levelGroups
+                };
+            }
 
-                classPreviewData = {
-                    isSpellcaster: isSpellcaster ? "Yes" : "No",
-                    manaSkill: localizedSkillKey,
-                    levelGroups: selectedItem.levelGroups
-                };
-            }
+            selectedItem.displayStats = {
+                subType: sys.equipmentType || "",
+                slots: sys.baseSlots || 0,
+                costLabel: sys.baseCost?.gold ? `${sys.baseCost.gold}G` : `${sys.baseCost?.silver || 0}S`,
+                damage1h: sys.damageOneHand || null,
+                damage2h: sys.damageTwoHands || null,
+                damageType: sys.damageType || "-",
+                range: sys.range || null,
+                grip: sys.grip || null,
+                skill: sys.weaponSkill || null
+            };
+        }
+    }
 
-            selectedItem.displayStats = {
-                subType: sys.equipmentType || "",
-                slots: sys.baseSlots || 0,
-                costLabel: sys.baseCost?.gold ? `${sys.baseCost.gold}G` : `${sys.baseCost?.silver || 0}S`,
-                damage1h: sys.damageOneHand || null,
-                damage2h: sys.damageTwoHands || null,
-                damageType: sys.damageType || "-",
-                range: sys.range || null,
-                grip: sys.grip || null,
-                skill: sys.weaponSkill || null
-            };
-        }
-    }
+    // --- 7. ECONOMY LOGIC ---
+    let budget = 0;
+    let currentSpending = 0;
+    const packItem = validItems.find(i => i.uuid === this.builderData.startingPack);
+    if (packItem) budget = packItem.system.startingSilver || 0;
+  
+    validItems.filter(i => i.type === 'equipment').forEach(item => {
+      const goldInSilver = (item.system.baseCost?.gold || 0) * 10;
+      currentSpending += goldInSilver + (item.system.baseCost?.silver || 0);
+    });
 
-    // --- 6. ECONOMY LOGIC ---
-    let budget = 0;
-    let currentSpending = 0;
-    if (this.builderData.startingPack) {
-        const pack = await fromUuid(this.builderData.startingPack);
-        budget = pack?.system.startingSilver || 0;
-    }
-    for (const uuid of this.builderData.gear) {
-        const item = await fromUuid(uuid);
-        if (item) {
-            const goldInSilver = (item.system.baseCost?.gold || 0) * 10;
-            currentSpending += goldInSilver + (item.system.baseCost?.silver || 0);
-        }
-    }
-
-    return {
-      actor: previewActor,
-      step: this.currentStep,
-      steps: this._getStepsContext(),
-      hasChoices: ['class', 'stats'].includes(this.currentStep),
-      useTripleColumn: ['class', 'perks', 'spells'].includes(this.currentStep), // Added 'class' here
-      options: availableOptions,
-      selectedItem: instruction ? null : selectedItem,
-      classPreviewData,
-      originRefs: await this._getOriginReferences(),
-      classChoices: await this._prepareClassChoices(),
-      statData: this._prepareStatsContext(),
-      isGearStep: this.currentStep === 'gear',
-      budget: { 
-        total: budget, 
-        spent: currentSpending, 
-        remaining: budget - currentSpending, 
-        isOver: (budget - currentSpending) < 0 
+    return {
+      actor: previewActor,
+      step: this.currentStep,
+      steps: this._getStepsContext(),
+      hasChoices: ['class', 'stats'].includes(this.currentStep),
+      useTripleColumn: ['class', 'perks', 'spells'].includes(this.currentStep),
+      options: availableOptions,
+      selectedItem: instruction ? null : selectedItem,
+      classPreviewData,
+      isSpellcaster, // Used for showing Mana in stats preview
+      manaStats: {
+          max: previewActor.system.mana?.max || 0,
+          castingMax: previewActor.system.mana?.castingMax || 0
       },
-      instruction
-    };
+      originRefs: await this._getOriginReferences(),
+      classChoices: await this._prepareClassChoices(),
+      statData: this._prepareStatsContext(),
+      isGearStep: this.currentStep === 'gear',
+      budget: { 
+        total: budget, 
+        spent: currentSpending, 
+        remaining: budget - currentSpending, 
+        isOver: (budget - currentSpending) < 0 
+      },
+      instruction
+    };
   }
 
   _getStepsContext() {
@@ -532,7 +534,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       this.render();
   }
 
-  _onGoToStep(event, target) { this.currentStep = target.dataset.step; this.render(); }
+  _onGoToStep(event, target) {
+    this.currentStep = target.dataset.step;
+    
+    // Clear the active preview item so it doesn't bleed into the next tab
+    this.builderData.previewUuid = null;
+    
+    this.render();
+}
 
   async _onFinish() {
     const actor = this.actor;
