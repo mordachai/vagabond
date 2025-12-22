@@ -2055,7 +2055,7 @@
   flex: 0 0 auto;
   display: flex;
   background: rgba(0, 0, 0, 0.15);
-  border-bottom: 2px solid var(--color-border-dark);
+  border-bottom: 2px solid var(--vagabond-c-dark);
 }
 .vagabond-builder .builder-tabs .tab-item {
   flex: 1;
@@ -2119,7 +2119,7 @@
   padding: 4px;
 }
 .vagabond-builder .builder-body .decision-zone .zone-header {
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
   border-bottom: 1px solid black;
   margin-bottom: 8px;
 }
@@ -2157,7 +2157,7 @@
   cursor: pointer;
 }
 .vagabond-builder .builder-body .decision-zone .value-chip.active {
-  background: var(--color-vagabond-red);
+  background: var(--vagabond-c-red);
   outline: 2px solid gold;
 }
 .vagabond-builder .builder-body .decision-zone .skill-tag.locked {
@@ -2252,7 +2252,7 @@
 .vagabond-builder .builder-body .selection-zone .selection-list .category-header {
   background: rgba(0, 0, 0, 0.1);
   padding: 8px;
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
   cursor: pointer;
   list-style: none;
 }
@@ -2263,8 +2263,8 @@
   transform: rotate(90deg);
 }
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-section-header {
-  font-family: var(--font-eskapade);
-  border-bottom: 1px solid var(--color-border-dark);
+  font-family: "Eskapade", serif;
+  border-bottom: 1px solid var(--vagabond-c-dark);
   margin: 15px 0 10px 0;
   text-transform: uppercase;
   font-size: 1.2rem;
@@ -2285,7 +2285,7 @@
 .vagabond-builder .builder-body .selection-zone .selection-preview .level-accordion .level-header {
   background: rgba(0, 0, 0, 0.05);
   padding: 8px;
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
   cursor: pointer;
   list-style: none;
   display: flex;
@@ -2330,12 +2330,12 @@
   border: none;
   margin: 0;
   font-size: 1.8rem;
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
 }
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-header .name-block .sublabel {
   font-style: italic;
   color: #555;
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
 }
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-description {
   margin-bottom: 20px;
@@ -2347,14 +2347,14 @@
   justify-content: space-between;
 }
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-details-grid .text-red {
-  color: var(--color-vagabond-red);
+  color: var(--vagabond-c-red);
   font-weight: bold;
 }
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-details-grid i.fa-check-circle {
   color: green;
 }
 .vagabond-builder .builder-body .selection-zone .selection-preview .preview-details-grid i.fa-times-circle {
-  color: var(--color-vagabond-red);
+  color: var(--vagabond-c-red);
 }
 .vagabond-builder .builder-body .selection-zone .reference-column {
   padding: 10px;
@@ -2362,8 +2362,8 @@
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 .vagabond-builder .builder-body .selection-zone .reference-column .ref-header {
-  font-family: var(--font-eskapade);
-  color: var(--color-vagabond-red);
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-red);
   border-bottom: 1px solid black;
   margin-bottom: 12px;
 }
@@ -2398,7 +2398,7 @@
   grid-column: 1/-1;
   padding: 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
 }
 .vagabond-builder .stats-preview-results .preview-details-grid .movement-row {
   text-align: center;
@@ -2407,7 +2407,7 @@
 .vagabond-builder .stats-preview-results .preview-details-grid .saves-header {
   margin-top: 10px;
   font-weight: bold;
-  color: var(--color-vagabond-red);
+  color: var(--vagabond-c-red);
 }
 .vagabond-builder .stat-slot .hex-box {
   transition: transform 0.1s ease, border-color 0.2s;
@@ -2418,7 +2418,7 @@
   background: rgba(255, 255, 255, 0.1);
 }
 .vagabond-builder .stat-slot .hex-box.filled {
-  border: 2px solid var(--color-vagabond-red);
+  border: 2px solid var(--vagabond-c-dark);
   background: white;
   color: black;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -2434,13 +2434,13 @@
   justify-content: space-between;
   padding: 15px 25px;
   background: rgba(0, 0, 0, 0.1);
-  border-top: 2px solid var(--color-border-dark);
+  border-top: 2px solid var(--vagabond-c-dark);
 }
 .vagabond-builder .builder-footer .footer-nav {
   gap: 12px;
 }
 .vagabond-builder .builder-footer button {
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
   height: 40px;
   cursor: pointer;
 }
@@ -2455,11 +2455,11 @@
   color: #eee;
   padding: 10px;
   text-align: right;
-  font-family: var(--font-eskapade);
+  font-family: "Eskapade", serif;
   border-radius: 4px;
 }
 .vagabond-builder .budget-tracker.bankrupt {
-  background: var(--color-vagabond-red);
+  background: var(--vagabond-c-red);
   animation: pulse-red 2s infinite;
 }
 .vagabond-builder .budget-tracker strong {

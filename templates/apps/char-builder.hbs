@@ -39,7 +39,7 @@
                         </div>
                         <div class="pool-values">
                             {{#each statData.unassigned}}
-                                <button type="button" class="value-chip {{#if this.active}}active{{/if}}" data-index="{{this.index}}" data-action="pickValue">{{this.value}}</button>
+                            <button type="button" class="value-chip {{#if this.active}}active{{/if}}" data-index="{{this.index}}" data-value="{{this.value}}" data-action="pickValue">{{this.value}}</button>
                             {{/each}}
                         </div>
                         <div><i class="fa-light fa-chevrons-right" style="font-size: 2rem;"></i></div>

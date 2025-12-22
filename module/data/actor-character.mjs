@@ -308,12 +308,34 @@ export default class VagabondCharacter extends VagabondActorBase {
    */
   prepareBaseData() {
     super.prepareBaseData();
+  // --- 1. Reset Flat Mechanics ---
+    this.inventory.bonusSlots = 0;
+    this.mana.bonus = 0;
+    this.mana.castingMaxBonus = 0;
+    this.speed.bonus = 0;
+    this.armorBonus = 0;
+    this.bonusLuck = 0;
 
-    // 1. Reset Defaults
+    // --- 2. Reset Universal Bonuses ---
+    this.universalCheckBonus = 0;
+    this.universalDamageBonus = 0;
+    this.universalWeaponDamageBonus = 0;
+    this.universalSpellDamageBonus = 0;
+    this.universalAlchemicalDamageBonus = 0;
+
+    // --- 3. Loop: Reset All Stat & Save Bonuses ---
+    for (let s of Object.values(this.stats)) { s.bonus = 0; }
+    for (let s of Object.values(this.saves)) { s.bonus = 0; }
+
+    // --- 4. Loop: Reset All Skill Bonuses ---
+    for (let s of Object.values(this.skills)) { s.bonus = 0; }
+    for (let s of Object.values(this.weaponSkills)) { s.bonus = 0; }
+
+    // 5. Reset Defaults (Your existing code)
     this.attributes.isSpellcaster = false;
     this.attributes.manaMultiplier = 0;
 
-    // 2. Apply Class Data
+    // 6. Apply Class Data
     const classItem = this.parent.items.find(item => item.type === 'class');
     if (classItem) {
       if (classItem.system.isSpellcaster) {
