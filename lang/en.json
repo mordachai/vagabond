@@ -746,7 +746,7 @@
       },
       "TrayTitle": "Your Selections",
       "TrayInstructions": "Drag items from the list or click 'Add to Tray' to collect your choices.",
-      "TrayEmpty": "Your tray is empty. Select items from the list on the left.",
+      "TrayEmpty": "Your tray is empty. Select items from the list and drop it here.",
       "PackContents": "Pack Contents",
       "Budget": "Starting Budget",
       "Confirmation": {

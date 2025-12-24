@@ -736,7 +736,9 @@
     background: white;
     border: 1px solid $c-dark;
     border-radius: 3px;
-    min-height: 50px;
+    height: 50px;
+    max-height: 50px;
+    overflow: hidden;
 
     &.from-pack {
       background: rgba(255, 215, 0, 0.15);
@@ -763,34 +765,47 @@
       font-weight: 600;
       font-size: 0.9rem;
       line-height: 1.2;
-      word-break: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     // For gear items with extra info
     &.gear-item {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 6px;
+      flex-direction: row;
+      align-items: center;
+      padding: 4px;
 
       .tray-img {
-        align-self: center;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
       }
 
       .tray-info {
-        width: 100%;
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: 2px;
+        justify-content: center;
+        overflow: hidden;
 
         .tray-name {
           font-size: 0.85rem;
-          text-align: center;
+          font-weight: 600;
+          line-height: 1.1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .tray-meta {
           font-size: 0.75rem;
           color: #666;
-          text-align: center;
+          line-height: 1.1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
     }
