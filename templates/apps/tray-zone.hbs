@@ -1,0 +1,109 @@
+{{!-- Tray Zone (visible on perks/spells/gear steps) --}}
+{{#if showTray}}
+<section class="tray-zone">
+    <div class="tray-header flexrow">
+        <h3>{{localize "VAGABOND.CharBuilder.TrayTitle"}}</h3>
+        <button type="button" class="btn-clear-tray" data-action="clearTray">
+            <i class="fas fa-trash"></i> {{localize "VAGABOND.CharBuilder.Buttons.ClearTray"}}
+        </button>
+    </div>
+
+    <div class="tray-grid">
+        {{!-- Instruction column (left side) --}}
+        <div class="tray-instructions">
+            <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
+
+            {{#if (eq step 'gear')}}
+                {{#if startingPackItems}}
+                    <div class="pack-summary">
+                        <strong>{{startingPackItems.packName}}</strong>
+                        <p>{{localize "VAGABOND.CharBuilder.Budget"}}: {{startingPackItems.startingSilver}}s</p>
+                    </div>
+                {{else}}
+                    <div class="pack-summary">
+                        <p>{{localize "VAGABOND.CharBuilder.Budget"}}: 300s</p>
+                    </div>
+                {{/if}}
+            {{/if}}
+        </div>
+
+        {{!-- Items grid (4 columns) --}}
+        <div class="tray-items-grid">
+            {{#if (eq step 'perks')}}
+                {{#if trayData.isEmpty}}
+                    <div class="tray-empty-message">
+                        <i class="fas fa-arrow-left"></i>
+                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                    </div>
+                {{else}}
+                    {{#each trayData.perks as |item|}}
+                        <div class="tray-item-card" data-uuid="{{item.uuid}}">
+                            <img src="{{item.img}}" alt="{{item.name}}" class="tray-item-img">
+                            <div class="tray-item-name">{{item.name}}</div>
+                            <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove from tray">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {{/each}}
+                    {{#each trayData.emptySlots as |slot|}}
+                        <div class="tray-item-card empty-slot">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                    {{/each}}
+                {{/if}}
+            {{else if (eq step 'spells')}}
+                {{#if trayData.isEmpty}}
+                    <div class="tray-empty-message">
+                        <i class="fas fa-arrow-left"></i>
+                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                    </div>
+                {{else}}
+                    {{#each trayData.spells as |item|}}
+                        <div class="tray-item-card" data-uuid="{{item.uuid}}">
+                            <img src="{{item.img}}" alt="{{item.name}}" class="tray-item-img">
+                            <div class="tray-item-name">{{item.name}}</div>
+                            <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove from tray">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {{/each}}
+                    {{#each trayData.emptySlots as |slot|}}
+                        <div class="tray-item-card empty-slot">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                    {{/each}}
+                {{/if}}
+            {{else if (eq step 'gear')}}
+                {{#if trayData.isEmpty}}
+                    <div class="tray-empty-message">
+                        <i class="fas fa-arrow-left"></i>
+                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                    </div>
+                {{else}}
+                    {{#each trayData.gear as |item|}}
+                        <div class="tray-item-card {{#if item.fromStartingPack}}from-pack{{/if}}" data-uuid="{{item.uuid}}">
+                            <img src="{{item.img}}" alt="{{item.name}}" class="tray-item-img">
+                            <div class="tray-item-name">{{item.name}}</div>
+                            {{#if item.qty}}
+                                <div class="tray-item-qty">x{{item.qty}}</div>
+                            {{/if}}
+                            <div class="tray-item-slots">Slots: {{item.slots}}</div>
+                            <div class="tray-item-cost">Cost: {{item.costDisplay}}</div>
+                            {{#if item.canDelete}}
+                                <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove from tray">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            {{/if}}
+                        </div>
+                    {{/each}}
+                    {{#each trayData.emptySlots as |slot|}}
+                        <div class="tray-item-card empty-slot">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                    {{/each}}
+                {{/if}}
+            {{/if}}
+        </div>
+    </div>
+</section>
+{{/if}}

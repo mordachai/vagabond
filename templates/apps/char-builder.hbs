@@ -62,6 +62,96 @@
                 {{/if}}
             </div>
         </section>
+        {{!-- Tray Zone (visible on perks/spells/gear steps) --}}
+        {{#if showTray}}
+        <section class="tray-zone">
+            <div class="tray-grid">
+                {{!-- Instruction column (left side) --}}
+                <div class="tray-sidebar">
+                    <h3>{{localize "VAGABOND.CharBuilder.TrayTitle"}}</h3>
+                    <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
+        
+                    {{#if (eq step 'gear')}}
+                        {{#if startingPackItems}}
+                            <div class="pack-summary">
+                                <strong>{{startingPackItems.packName}}</strong>
+                                <p>{{localize "VAGABOND.CharBuilder.Budget"}}: {{startingPackItems.startingSilver}}s</p>
+                            </div>
+                        {{else}}
+                            <div class="pack-summary">
+                                <p>{{localize "VAGABOND.CharBuilder.Budget"}}: 300s</p>
+                            </div>
+                        {{/if}}
+                    {{/if}}
+        
+                    <button type="button" class="btn-clear-tray" data-action="clearTray">
+                        <i class="fas fa-trash"></i> {{localize "VAGABOND.CharBuilder.Buttons.ClearTray"}}
+                    </button>
+                </div>
+        
+                {{!-- Items grid (4 columns) --}}
+                <div class="tray-items-grid">
+                    {{#if (eq step 'perks')}}
+                        {{#if trayData.isEmpty}}
+                            <div class="tray-empty-message">
+                                <i class="fas fa-arrow-left"></i>
+                                <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                            </div>
+                        {{else}}
+                            {{#each trayData.perks as |item|}}
+                                <div class="tray-item-compact" data-uuid="{{item.uuid}}">
+                                    <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
+                                    <span class="tray-name">{{item.name}}</span>
+                                    <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            {{/each}}
+                        {{/if}}
+                    {{else if (eq step 'spells')}}
+                        {{#if trayData.isEmpty}}
+                            <div class="tray-empty-message">
+                                <i class="fas fa-arrow-left"></i>
+                                <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                            </div>
+                        {{else}}
+                            {{#each trayData.spells as |item|}}
+                                <div class="tray-item-compact" data-uuid="{{item.uuid}}">
+                                    <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
+                                    <span class="tray-name">{{item.name}}</span>
+                                    <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            {{/each}}
+                        {{/if}}
+                    {{else if (eq step 'gear')}}
+                        {{#if trayData.isEmpty}}
+                            <div class="tray-empty-message">
+                                <i class="fas fa-arrow-left"></i>
+                                <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                            </div>
+                        {{else}}
+                            {{#each trayData.gear as |item|}}
+                                <div class="tray-item-compact gear-item {{#if item.fromStartingPack}}from-pack{{/if}}" data-uuid="{{item.uuid}}">
+                                    <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
+                                    <div class="tray-info">
+                                        <span class="tray-name">{{item.name}}{{#if item.qty}} x{{item.qty}}{{/if}}</span>
+                                        <span class="tray-meta">{{item.slots}} slots • {{item.costDisplay}}</span>
+                                    </div>
+                                    {{#if item.canDelete}}
+                                        <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    {{/if}}
+                                </div>
+                            {{/each}}
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        </section>
+        {{/if}}
 
         <section class="selection-zone {{#if useTripleColumn}}triple-column{{/if}}">
             <aside class="selection-list flexcol">
@@ -86,8 +176,15 @@
                             </summary>
                             <ul class="item-list">
                                 {{#each group.items as |opt|}}
-                                <li class="directory-item flexrow {{#if opt.selected}}active{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
-                                    <img src="{{opt.img}}" width="32" height="32"><span class="name">{{opt.name}}</span>
+                                <li class="directory-item gear-item flexrow {{#if opt.selected}}active{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                                    <img src="{{opt.img}}" width="48" height="48">
+                                    <div class="item-info">
+                                        <div class="name">{{opt.name}}</div>
+                                        <div class="item-meta">
+                                            <span class="item-slots"><i class="fas fa-box"></i> {{opt.system.baseSlots}}</span>
+                                            <span class="item-cost"><i class="fas fa-coins"></i> {{#if opt.system.baseCost.gold}}{{opt.system.baseCost.gold}}g{{else}}{{opt.system.baseCost.silver}}s{{/if}}</span>
+                                        </div>
+                                    </div>
                                 </li>
                                 {{/each}}
                             </ul>
@@ -159,6 +256,15 @@
 
                     <div class="preview-description">{{{selectedItem.enrichedDescription}}}</div>
 
+                    {{!-- Add to Tray button --}}
+                    {{#if showTray}}
+                        <div class="preview-actions">
+                            <button type="button" class="btn-add-to-tray" data-action="addToTray" data-uuid="{{selectedItem.uuid}}">
+                                <i class="fas fa-plus"></i> {{localize "VAGABOND.CharBuilder.Buttons.AddToTray"}}
+                            </button>
+                        </div>
+                    {{/if}}
+
                     {{#if (eq selectedItem.type "ancestry")}}
                         <div class="traits-container">
                             <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.Traits"}}</h3>
@@ -170,20 +276,166 @@
                         </div>
                     {{/if}}
 
-                    {{!-- Gear/Weapon/Armor Grid remains here --}}
-                    <div class="preview-details-grid">
-                        {{#if (eq selectedItem.displayStats.subType "weapon")}}
-                            <div><strong>1H Damage:</strong> {{selectedItem.displayStats.damage1h}}</div>
-                            <div><strong>2H Damage:</strong> {{selectedItem.displayStats.damage2h}}</div>
-                            <div><strong>Type:</strong> {{selectedItem.displayStats.damageType}}</div>
-                            <div><strong>Range:</strong> {{selectedItem.displayStats.range}}</div>
-                            <div><strong>Grip:</strong> {{selectedItem.displayStats.grip}}</div>
-                            <div><strong>Skill:</strong> {{selectedItem.displayStats.skill}}</div>
-                            <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
-                            <div><strong>Cost:</strong> {{selectedItem.displayStats.costLabel}}</div>
+                    {{!-- Starting Pack Contents Display --}}
+                    {{#if (eq step 'starting-packs')}}
+                        {{#if startingPackItems}}
+                            <div class="starting-pack-contents">
+                                <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.PackContents"}}</h3>
+                                <div class="pack-budget-info">
+                                    <strong>{{localize "VAGABOND.CharBuilder.Budget"}}:</strong> {{startingPackItems.startingSilver}}s
+                                </div>
+                                <div class="pack-items-list">
+                                    {{#each startingPackItems.items as |item|}}
+                                        <div class="pack-item-row">
+                                            <img src="{{item.img}}" alt="{{item.name}}" class="pack-item-img">
+                                            <div class="pack-item-info">
+                                                <span class="pack-item-name">{{item.name}}</span>
+                                                <span class="pack-item-qty">x{{item.qty}}</span>
+                                            </div>
+                                            <div class="pack-item-meta">
+                                                <span class="pack-item-slots">{{item.slots}} slots</span>
+                                                <span class="pack-item-cost">{{item.costDisplay}}</span>
+                                            </div>
+                                        </div>
+                                    {{/each}}
+                                </div>
+                            </div>
                         {{/if}}
-                        {{!-- ... (Armor/Alchemical/Gear blocks same as before) --}}
-                    </div>
+                    {{/if}}
+
+                    {{!-- Equipment Details --}}
+                    {{#if (eq selectedItem.type "equipment")}}
+                        <div class="equipment-details">
+                            {{!-- WEAPONS --}}
+                            {{#if (eq selectedItem.displayStats.subType "weapons")}}
+                                <h3 class="preview-section-header">Weapon Details</h3>
+                                <div class="preview-details-grid">
+                                    {{#if selectedItem.displayStats.weaponSkill}}
+                                        <div><strong>Skill:</strong> {{selectedItem.displayStats.weaponSkill}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.range}}
+                                        <div><strong>Range:</strong> {{selectedItem.displayStats.range}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.grip}}
+                                        <div><strong>Grip:</strong> {{selectedItem.displayStats.grip}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.damage1h}}
+                                        <div><strong>1H Damage:</strong> {{selectedItem.displayStats.damage1h}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.damage2h}}
+                                        <div><strong>2H Damage:</strong> {{selectedItem.displayStats.damage2h}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.damageType}}
+                                        <div class="damage-type-row">
+                                            <strong>Damage Type:</strong>
+                                            {{#if selectedItem.displayStats.damageTypeIcon}}
+                                                <i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>
+                                            {{/if}}
+                                            {{selectedItem.displayStats.damageType}}
+                                        </div>
+                                    {{/if}}
+                                    <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
+                                    <div><strong>Cost:</strong>
+                                        {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
+                                        {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
+                                        {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                    </div>
+                                </div>
+                                {{#if selectedItem.displayStats.propertiesWithHints}}
+                                    <div class="weapon-properties">
+                                        <h4>Properties</h4>
+                                        {{#each selectedItem.displayStats.propertiesWithHints}}
+                                            <div class="property-item" title="{{this.hint}}">
+                                                <strong>{{this.name}}:</strong> <em>{{this.hint}}</em>
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                {{/if}}
+                            {{/if}}
+
+                            {{!-- ARMOR --}}
+                            {{#if (eq selectedItem.displayStats.subType "armor")}}
+                                <h3 class="preview-section-header">Armor Details</h3>
+                                <div class="preview-details-grid">
+                                    {{#if selectedItem.displayStats.armorRating}}
+                                        <div><strong>Armor Rating:</strong> {{selectedItem.displayStats.armorRating}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.mightRequirement}}
+                                        <div><strong>Might Requirement:</strong> {{selectedItem.displayStats.mightRequirement}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.armorType}}
+                                        <div><strong>Type:</strong> {{selectedItem.displayStats.armorType}}</div>
+                                    {{/if}}
+                                    <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
+                                    <div><strong>Cost:</strong>
+                                        {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
+                                        {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
+                                        {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+
+                            {{!-- ALCHEMICALS --}}
+                            {{#if (eq selectedItem.displayStats.subType "alchemical-items")}}
+                                <h3 class="preview-section-header">Alchemical Details</h3>
+                                <div class="preview-details-grid">
+                                    {{#if selectedItem.displayStats.alchemicalType}}
+                                        <div><strong>Type:</strong> {{selectedItem.displayStats.alchemicalType}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.damage}}
+                                        <div><strong>Damage:</strong> {{selectedItem.displayStats.damage}}</div>
+                                    {{/if}}
+                                    {{#if selectedItem.displayStats.damageType}}
+                                        <div class="damage-type-row">
+                                            <strong>Damage Type:</strong>
+                                            {{#if selectedItem.displayStats.damageTypeIcon}}
+                                                <i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>
+                                            {{/if}}
+                                            {{selectedItem.displayStats.damageType}}
+                                        </div>
+                                    {{/if}}
+                                    <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
+                                    <div><strong>Cost:</strong>
+                                        {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
+                                        {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
+                                        {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+
+                            {{!-- RELICS --}}
+                            {{#if (eq selectedItem.displayStats.subType "relics")}}
+                                <h3 class="preview-section-header">Relic Details</h3>
+                                {{#if selectedItem.displayStats.lore}}
+                                    <div class="relic-lore">
+                                        <h4>Lore</h4>
+                                        <p>{{{selectedItem.displayStats.enrichedLore}}}</p>
+                                    </div>
+                                {{/if}}
+                                <div class="preview-details-grid">
+                                    <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
+                                    <div><strong>Cost:</strong>
+                                        {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
+                                        {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
+                                        {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+
+                            {{!-- GEAR (generic) --}}
+                            {{#if (eq selectedItem.displayStats.subType "gear")}}
+                                <h3 class="preview-section-header">Gear Details</h3>
+                                <div class="preview-details-grid">
+                                    <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
+                                    <div><strong>Cost:</strong>
+                                        {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
+                                        {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
+                                        {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                        </div>
+                    {{/if}}
                 {{/if}}
             </article>
 

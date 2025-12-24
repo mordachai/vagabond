@@ -740,8 +740,15 @@
         "Next": "Next",
         "Close": "Close",
         "Finish": "Finish",
-        "Reset":"Reset"
+        "Reset": "Reset",
+        "AddToTray": "Add to Tray",
+        "ClearTray": "Clear Tray"
       },
+      "TrayTitle": "Your Selections",
+      "TrayInstructions": "Drag items from the list or click 'Add to Tray' to collect your choices.",
+      "TrayEmpty": "Your tray is empty. Select items from the list on the left.",
+      "PackContents": "Pack Contents",
+      "Budget": "Starting Budget",
       "Confirmation": {
         "CloseTitle": "Abandon Character Construction?",
         "CloseContent": "Are you sure you want to close the builder? All unsaved progress will be lost."

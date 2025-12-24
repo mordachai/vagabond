@@ -273,7 +273,7 @@ export class VagabondDamageHelper {
       title: `${item?.name || 'Attack'} Damage`,
       damageRoll,
       damageType: damageTypeKey || damageType,
-      hasDefenses: true,
+      hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
       attackType,
       rollData: isCritical ? { isCritical: true } : null
     });
@@ -304,11 +304,11 @@ export class VagabondDamageHelper {
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageType, isCritical, damageTypeKey);
 
-    // Build save buttons HTML (unless it's healing)
-    const isHealing = damageType.toLowerCase() === 'healing';
+    // Build save buttons HTML (unless it's a restorative type)
+    const isRestorative = this.isRestorativeDamageType(damageType);
     let buttonsHTML;
-    if (isHealing) {
-      // Keep old apply healing button for healing damage
+    if (isRestorative) {
+      // Use apply button for healing/recover/recharge
       buttonsHTML = this.createApplyDamageButton(
         damageRoll.total,
         damageType,
@@ -316,7 +316,7 @@ export class VagabondDamageHelper {
         item?.id
       );
     } else {
-      // Use new save buttons for all other damage
+      // Use save buttons for all harmful damage
       buttonsHTML = this.createSaveButtons(
         damageRoll.total,
         damageTypeKey || 'physical',
@@ -327,8 +327,8 @@ export class VagabondDamageHelper {
       );
     }
 
-    // Build defend options HTML (unless it's healing)
-    const defendHTML = isHealing ? '' : this.createDefendOptions();
+    // Build defend options HTML (unless it's a restorative type)
+    const defendHTML = isRestorative ? '' : this.createDefendOptions();
 
     // 1. Inject Damage Display
     // Check if damage section already exists
@@ -622,19 +622,19 @@ export class VagabondDamageHelper {
           actor: actor,
           title: `${action.name} Damage`,
           // Passing the subtitle explicitly ensures it doesn't default to something generic
-          subtitle: actor.name, 
-          
+          subtitle: actor.name,
+
           // Passing the roll triggers the "Damage Section" (Big Orange Number)
           damageRoll: rollObj,
-          
+
           // Pass the key (e.g., 'physical') so the builder can look up the correct Icon/Label config
           damageType: damageTypeKey || 'physical',
-          
+
           // Pass context for the Save Buttons
           attackType: attackType,
-          
-          // Ensure Defenses (Block/Dodge accordion) appear unless it's healing
-          hasDefenses: (damageTypeKey !== 'healing')
+
+          // Ensure Defenses (Block/Dodge accordion) appear unless it's a restorative type
+          hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical')
       });
     }
 
@@ -681,19 +681,45 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Check if a damage type is restorative (healing, recover, recharge)
+   * @param {string} damageType - The damage type to check
+   * @returns {boolean}
+   */
+  static isRestorativeDamageType(damageType) {
+    const normalizedType = damageType?.toLowerCase() || '';
+    return normalizedType === 'healing' || normalizedType === 'recover' || normalizedType === 'recharge';
+  }
+
+  /**
    * Create an "Apply Damage" button
    * @param {number} damageAmount - The amount of damage
-   * @param {string} damageType - Type of damage
+   * @param {string} damageType - Type of damage (or healing/recover/recharge)
    * @param {string} actorId - Source actor ID
    * @param {string} itemId - Item ID (optional)
    * @returns {string} HTML button string
    */
   static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null) {
-    // Check if this is healing
-    const isHealing = damageType.toLowerCase() === 'healing';
-    const icon = isHealing ? 'fa-heart-pulse' : 'fa-heart-crack';
-    const text = isHealing ? `Apply ${damageAmount} Healing` : `Apply ${damageAmount} Damage`;
-    const buttonClass = isHealing ? 'vagabond-apply-healing-button' : 'vagabond-apply-damage-button';
+    // Check damage type and set appropriate button style
+    const normalizedType = damageType.toLowerCase();
+    let icon, text, buttonClass;
+
+    if (normalizedType === 'healing') {
+      icon = 'fa-heart-pulse';
+      text = `Apply ${damageAmount} Healing`;
+      buttonClass = 'vagabond-apply-healing-button';
+    } else if (normalizedType === 'recover') {
+      icon = 'fa-arrows-rotate';
+      text = `Recover ${damageAmount} Fatigue`;
+      buttonClass = 'vagabond-apply-recover-button';
+    } else if (normalizedType === 'recharge') {
+      icon = 'fa-bolt';
+      text = `Restore ${damageAmount} Mana`;
+      buttonClass = 'vagabond-apply-recharge-button';
+    } else {
+      icon = 'fa-heart-crack';
+      text = `Apply ${damageAmount} Damage`;
+      buttonClass = 'vagabond-apply-damage-button';
+    }
 
     return `
       <button
@@ -1261,6 +1287,62 @@ export class VagabondDamageHelper {
     calculationHTML += `</div>`;
 
     return calculationHTML;
+  }
+
+  /**
+   * Handle applying restorative effects (healing, recover, recharge)
+   * @param {HTMLElement} button - The clicked button
+   */
+  static async handleApplyRestorative(button) {
+    const amount = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType.toLowerCase();
+
+    // Get selected tokens
+    const selectedTokens = canvas.tokens.controlled;
+    if (selectedTokens.length === 0) {
+      ui.notifications.warn('No tokens selected. Please select at least one token.');
+      return;
+    }
+
+    // Apply restorative effect to each selected token
+    for (const target of selectedTokens) {
+      const targetActor = target.actor;
+      if (!targetActor) continue;
+
+      // Check permissions
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
+        continue;
+      }
+
+      // Apply the appropriate restorative effect
+      if (damageType === 'healing') {
+        // Healing: Increase HP (up to max)
+        const currentHP = targetActor.system.health?.value || 0;
+        const maxHP = targetActor.system.health?.max || 0;
+        const newHP = Math.min(maxHP, currentHP + amount);
+        const actualHealing = newHP - currentHP;
+        await targetActor.update({ 'system.health.value': newHP });
+        ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP`);
+      } else if (damageType === 'recover') {
+        // Recover: Decrease Fatigue (down to 0)
+        const currentFatigue = targetActor.system.fatigue?.value || 0;
+        const newFatigue = Math.max(0, currentFatigue - amount);
+        const actualRecovery = currentFatigue - newFatigue;
+        await targetActor.update({ 'system.fatigue.value': newFatigue });
+        ui.notifications.info(`${targetActor.name} recovered ${actualRecovery} fatigue`);
+      } else if (damageType === 'recharge') {
+        // Recharge: Increase Mana (up to max)
+        const currentMana = targetActor.system.mana?.value || 0;
+        const maxMana = targetActor.system.mana?.max || 0;
+        const newMana = Math.min(maxMana, currentMana + amount);
+        const actualRecharge = newMana - currentMana;
+        await targetActor.update({ 'system.mana.value': newMana });
+        ui.notifications.info(`${targetActor.name} recharged ${actualRecharge} mana`);
+      }
+    }
+
+    // Button remains active so effects can be applied to different tokens
   }
 
   /**

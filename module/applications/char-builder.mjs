@@ -15,15 +15,15 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       ancestry: null,
       class: null,
       stats: { might: null, dexterity: null, awareness: null, reason: null, presence: null, luck: null },
-      skills: [], 
-      perks: [],
-      spells: [],
+      skills: [],
+      perks: [],      // Perks in tray
+      spells: [],     // Spells in tray
       startingPack: null,
-      gear: [],
+      gear: [],       // Gear in tray (includes starting pack items if selected)
       previewUuid: null,
       selectedArrayId: null,
-      unassignedValues: [], 
-      selectedValue: null   
+      unassignedValues: [],
+      selectedValue: null
     };
 
     this.openCategories = new Set();
@@ -58,6 +58,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       assignStat: VagabondCharBuilder.prototype._onAssignStat,
       toggleSkill: VagabondCharBuilder.prototype._onToggleSkill,
       resetStats: VagabondCharBuilder.prototype._onResetStats,
+      addToTray: VagabondCharBuilder.prototype._onAddToTray,
+      removeFromTray: VagabondCharBuilder.prototype._onRemoveFromTray,
+      clearTray: VagabondCharBuilder.prototype._onClearTray,
       finish: VagabondCharBuilder.prototype._onFinish
     }
   };
@@ -188,30 +191,92 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 };
             }
 
-            selectedItem.displayStats = {
-                subType: sys.equipmentType || "",
-                slots: sys.baseSlots || 0,
-                costLabel: sys.baseCost?.gold ? `${sys.baseCost.gold}G` : `${sys.baseCost?.silver || 0}S`,
-                damage1h: sys.damageOneHand || null,
-                damage2h: sys.damageTwoHands || null,
-                damageType: sys.damageType || "-",
-                range: sys.range || null,
-                grip: sys.grip || null,
-                skill: sys.weaponSkill || null
-            };
+// Prepare detailed display stats based on equipment type
+            const displayStats = {
+                subType: sys.equipmentType || "",
+                slots: sys.baseSlots || 0,
+                cost: sys.baseCost || { gold: 0, silver: 0, copper: 0 }
+            };
+
+            // Add equipment-type-specific fields
+            if (item.type === 'equipment') {
+                const eqType = sys.equipmentType;
+
+                // Weapons
+                if (eqType === 'weapons') {
+                    displayStats.weaponSkill = sys.weaponSkill || null;
+                    displayStats.range = sys.range || null;
+                    displayStats.grip = sys.grip || null;
+                    displayStats.damage1h = sys.damageOneHand || null;
+                    displayStats.damage2h = sys.damageTwoHands || null;
+                    displayStats.damageType = sys.damageType || "-";
+                    displayStats.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons?.[sys.damageType] || null;
+                    displayStats.properties = sys.properties || [];
+                    displayStats.propertiesWithHints = (sys.properties || []).map(prop => ({
+                        name: prop,
+                        label: CONFIG.VAGABOND.weaponProperties?.[prop] || prop,
+                        hint: CONFIG.VAGABOND.weaponPropertyHints?.[prop] || ""
+                    }));
+                }
+
+                // Armor
+                else if (eqType === 'armor') {
+                    displayStats.armorRating = sys.armorRating || 0;
+                    displayStats.mightRequirement = sys.mightRequirement || 0;
+                    displayStats.armorType = sys.armorType || null;
+                }
+
+                // Alchemicals
+                else if (eqType === 'alchemical-items') {
+                    displayStats.alchemicalType = sys.alchemicalType || null;
+                    displayStats.damage = sys.damage || null;
+                    displayStats.damageType = sys.damageType || "-";
+                    displayStats.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons?.[sys.damageType] || null;
+                }
+
+                // Relics
+                else if (eqType === 'relics') {
+                    displayStats.lore = sys.lore || null;
+                    if (sys.lore) {
+                        displayStats.enrichedLore = await foundry.applications.ux.TextEditor.enrichHTML(
+                            sys.lore, { async: true, secrets: false, relativeTo: item }
+                        );
+                    }
+                }
+
+                // Gear - no additional fields needed beyond slots and cost
+            }
+
+            selectedItem.displayStats = displayStats;
         }
     }
 
-    // --- 7. ECONOMY LOGIC ---
-    let budget = 0;
-    let currentSpending = 0;
-    const packItem = validItems.find(i => i.uuid === this.builderData.startingPack);
-    if (packItem) budget = packItem.system.startingSilver || 0;
-  
-    validItems.filter(i => i.type === 'equipment').forEach(item => {
-      const goldInSilver = (item.system.baseCost?.gold || 0) * 10;
-      currentSpending += goldInSilver + (item.system.baseCost?.silver || 0);
-    });
+    // --- 7. TRAY DATA & STARTING PACK ---
+    const trayData = await this._prepareTrayData();
+    const startingPackItems = await this._getStartingPackItems();
+
+    // --- 8. ECONOMY LOGIC ---
+    let budget = 300; // Default 300 silver
+    let currentSpending = 0;
+    const packItem = validItems.find(i => i.uuid === this.builderData.startingPack);
+
+    // Fix: Use currency field instead of non-existent startingSilver
+    if (packItem && packItem.system.currency) {
+      const curr = packItem.system.currency;
+      budget = (curr.gold || 0) * 10 + (curr.silver || 0) + (curr.copper || 0) / 10;
+    }
+
+    // Calculate spending from gear in tray (exclude starting pack items)
+    if (trayData.gear) {
+      trayData.gear.forEach(item => {
+        // Skip starting pack items - they don't count toward spending
+        if (!item.fromStartingPack) {
+          const goldInSilver = (item.cost?.gold || 0) * 10;
+          currentSpending += goldInSilver + (item.cost?.silver || 0) + (item.cost?.copper || 0) / 10;
+        }
+      });
+    }
+
 
     return {
       actor: previewActor,
@@ -231,6 +296,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       classChoices: await this._prepareClassChoices(),
       statData: this._prepareStatsContext(),
       isGearStep: this.currentStep === 'gear',
+      showTray: ['perks', 'spells', 'gear'].includes(this.currentStep),
+      trayData,
+      startingPackItems,
       budget: { 
         total: budget, 
         spent: currentSpending, 
@@ -286,13 +354,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   async _loadStepOptions() {
     if (this.currentStep === 'stats') return [];
-    const packMap = { 
-        'ancestry': ['vagabond.ancestries'], 
-        'class': ['vagabond.classes'], 
-        'perks': ['vagabond.perks'], 
-        'spells': ['vagabond.spells'], 
-        'starting-packs': ['vagabond.starting-packs'], 
-        'gear': ['vagabond.alchemical-items', 'vagabond.armor', 'vagabond.gear', 'vagabond.weapons', 'vagabond.relics'] 
+    const packMap = {
+        'ancestry': ['vagabond.ancestries'],
+        'class': ['vagabond.classes'],
+        'perks': ['vagabond.perks'],
+        'spells': ['vagabond.spells'],
+        'starting-packs': ['vagabond.starting-packs'],
+        'gear': ['vagabond.alchemical-items', 'vagabond.armor', 'vagabond.gear', 'vagabond.weapons', 'vagabond.relics']
     };
     const packs = packMap[this.currentStep] || [];
     const results = [];
@@ -301,7 +369,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (!this.indices[p]) {
         const pack = game.packs.get(p);
         if (pack) {
-          const index = await pack.getIndex({ fields: ["img", "type", "system.baseCost"] });
+          const index = await pack.getIndex({ fields: ["img", "type", "system.baseCost", "system.baseSlots"] });
           this.indices[p] = { label: pack.metadata.label, id: pack.metadata.name, items: index };
         }
       }
@@ -309,15 +377,26 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (!cached) continue;
 
       if (this.currentStep === 'gear') {
-        results.push({ 
-            label: cached.label, 
-            id: cached.id, 
-            isOpen: this.openCategories.has(cached.id), 
-            items: cached.items.map(i => ({ ...i, selected: this.builderData.gear.includes(i.uuid) })) 
+        // Sort items alphabetically within each category
+        const sortedItems = [...cached.items].sort((a, b) => a.name.localeCompare(b.name));
+        results.push({
+            label: cached.label,
+            id: cached.id,
+            isOpen: this.openCategories.has(cached.id),
+            items: sortedItems.map(i => ({ ...i, selected: this.builderData.gear.includes(i.uuid) }))
         });
       } else {
         const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
-        results.push(...cached.items.map(i => ({ ...i, selected: i.uuid === this.builderData[stepKey] })));
+        // Sort items alphabetically
+        const sortedItems = [...cached.items].sort((a, b) => a.name.localeCompare(b.name));
+
+        // For perks/spells (arrays), mark items that are in the tray
+        if (['perks', 'spells'].includes(this.currentStep)) {
+          results.push(...sortedItems.map(i => ({ ...i, selected: this.builderData[stepKey].includes(i.uuid) })));
+        } else {
+          // For single selections (ancestry, class, starting-packs)
+          results.push(...sortedItems.map(i => ({ ...i, selected: i.uuid === this.builderData[stepKey] })));
+        }
       }
     }
     return results;
@@ -335,6 +414,127 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (item) data.class = { name: item.name, features: (item.system.levelFeatures || []).filter(f => f.level === 1) };
     }
     return data;
+  }
+
+  /**
+   * Prepare tray data for perks, spells, and gear
+   */
+  async _prepareTrayData() {
+    const stepKey = this.currentStep;
+    const trayItems = [];
+
+    if (stepKey === 'perks' || stepKey === 'spells') {
+      const uuids = this.builderData[stepKey];
+      for (const uuid of uuids) {
+        const item = await fromUuid(uuid);
+        if (item) {
+          trayItems.push({
+            uuid: item.uuid,
+            name: item.name,
+            img: item.img,
+            type: item.type
+          });
+        }
+      }
+    } else if (stepKey === 'gear') {
+      const uuids = this.builderData.gear;
+      for (const uuid of uuids) {
+        const item = await fromUuid(uuid);
+        if (item) {
+          const cost = item.system.baseCost || {};
+          trayItems.push({
+            uuid: item.uuid,
+            name: item.name,
+            img: item.img,
+            type: item.type,
+            slots: item.system.baseSlots || 0,
+            cost: {
+              gold: cost.gold || 0,
+              silver: cost.silver || 0,
+              copper: cost.copper || 0
+            },
+            costDisplay: this._formatCost(cost)
+          });
+        }
+      }
+
+      // Add starting pack items to gear tray
+      if (this.builderData.startingPack) {
+        const packData = await this._getStartingPackItems();
+        if (packData?.items) {
+          // Prepend starting pack items with special flags
+          const packItems = packData.items.map(packItem => ({
+            uuid: `${this.builderData.startingPack}-${packItem.name}`, // Unique ID for pack items
+            name: packItem.name,
+            img: packItem.img,
+            type: 'equipment',
+            slots: packItem.slots,
+            cost: {
+              gold: 0,
+              silver: 0,
+              copper: 0
+            },
+            costDisplay: '0s',
+            qty: packItem.qty,
+            fromStartingPack: true,
+            canDelete: false
+          }));
+          trayItems.unshift(...packItems);
+        }
+      }
+    }
+
+    return {
+      perks: stepKey === 'perks' ? trayItems : null,
+      spells: stepKey === 'spells' ? trayItems : null,
+      gear: stepKey === 'gear' ? trayItems : null,
+      isEmpty: trayItems.length === 0,
+      emptySlots: Array(Math.max(0, 8 - trayItems.length)).fill({})
+    };
+  }
+
+  /**
+   * Get starting pack items with details
+   */
+  async _getStartingPackItems() {
+    if (!this.builderData.startingPack) return null;
+
+    const packItem = await fromUuid(this.builderData.startingPack);
+    if (!packItem) return null;
+
+    const packItems = packItem.system.items || [];
+    const itemDetails = [];
+
+    for (const packItemEntry of packItems) {
+      const item = await fromUuid(packItemEntry.uuid);
+      if (item) {
+        const cost = item.system.baseCost || {};
+        itemDetails.push({
+          name: item.name,
+          img: item.img,
+          slots: item.system.baseSlots || 0,
+          qty: packItemEntry.quantity || 1,
+          costDisplay: this._formatCost(cost)
+        });
+      }
+    }
+
+    return {
+      packName: packItem.name,
+      startingSilver: (() => { const curr = packItem.system.currency || {}; return (curr.gold || 0) * 10 + (curr.silver || 0) + (curr.copper || 0) / 10; })(),
+      items: itemDetails
+    };
+  }
+
+  /**
+   * Format cost for display (only show non-zero values)
+   */
+  _formatCost(cost = {}) {
+    const parts = [];
+    if (cost.gold > 0) parts.push(`${cost.gold}g`);
+    if (cost.silver > 0) parts.push(`${cost.silver}s`);
+    if (cost.copper > 0) parts.push(`${cost.copper}c`);
+    return parts.join(' ') || '0s';
   }
 
   /** @override */
@@ -397,6 +597,57 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             }
         });
     });
+
+    // 3. Tray drag-drop for perks/spells/gear
+    if (['perks', 'spells', 'gear'].includes(this.currentStep)) {
+      // Make selection list items draggable
+      const selectableItems = html.querySelectorAll('.directory-item[data-uuid]');
+      selectableItems.forEach(item => {
+        item.setAttribute('draggable', 'true');
+        
+        item.addEventListener('dragstart', (ev) => {
+          const uuid = ev.currentTarget.dataset.uuid;
+          ev.dataTransfer.setData('text/plain', JSON.stringify({ uuid, type: 'item' }));
+          ev.dataTransfer.effectAllowed = 'copy';
+          ev.currentTarget.classList.add('dragging');
+        });
+        
+        item.addEventListener('dragend', (ev) => {
+          ev.currentTarget.classList.remove('dragging');
+        });
+      });
+      
+      // Make tray grid a drop zone
+      const trayGrid = html.querySelector('.tray-items-grid');
+      if (trayGrid) {
+        trayGrid.addEventListener('dragover', (ev) => {
+          ev.preventDefault();
+          ev.dataTransfer.dropEffect = 'copy';
+          trayGrid.classList.add('drag-over');
+        });
+
+        trayGrid.addEventListener('dragleave', (ev) => {
+          if (ev.currentTarget === ev.target) {
+            trayGrid.classList.remove('drag-over');
+          }
+        });
+        
+        trayGrid.addEventListener('drop', (ev) => {
+          ev.preventDefault();
+          trayGrid.classList.remove('drag-over');
+          
+          try {
+            const data = JSON.parse(ev.dataTransfer.getData('text/plain'));
+            if (data.type === 'item' && data.uuid) {
+              // Trigger add to tray
+              this._onAddToTray({}, { dataset: { uuid: data.uuid } });
+            }
+          } catch (err) {
+            console.error("Vagabond | Drag drop failed:", err);
+          }
+        });
+      }
+    }
   }
 
   /**
@@ -457,20 +708,119 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   _onSelectOption(event, target) {
       const uuid = target.dataset.uuid;
+      // ALWAYS set preview
       this.builderData.previewUuid = uuid;
+
+      // Special handling for stats step
       if (this.currentStep === 'stats') {
           const id = target.dataset.id;
           this.builderData.selectedArrayId = id;
           this.builderData.unassignedValues = [...this.statArrays[id]];
           this.builderData.stats = { might: null, dexterity: null, awareness: null, reason: null, presence: null, luck: null };
-      } else if (this.currentStep === 'gear') {
-          if (this.builderData.gear.includes(uuid)) this.builderData.gear = this.builderData.gear.filter(u => u !== uuid);
-          else this.builderData.gear.push(uuid);
-      } else {
+      }
+      // For single-selection steps (ancestry, class, starting-packs)
+      else if (['ancestry', 'class', 'starting-packs'].includes(this.currentStep)) {
           const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
           this.builderData[stepKey] = uuid;
       }
+      // For tray steps (perks, spells, gear) - ONLY PREVIEW, DO NOT ADD TO TRAY
+      // Add to tray is done via drag-drop or "Add to Tray" button only
+
       this.render();
+  }
+
+  // Add to Tray action handler
+  async _onAddToTray(event, target) {
+      const uuid = target.dataset.uuid;
+      if (!uuid) return;
+
+      const stepKey = this.currentStep;
+
+      // Validate we're on a tray step
+      if (!['perks', 'spells', 'gear'].includes(stepKey)) return;
+
+      // Check if already in tray
+      if (this.builderData[stepKey].includes(uuid)) {
+          ui.notifications.warn("This item is already in your tray.");
+          return;
+      }
+
+      // For gear, check budget and warn if overspending
+      if (stepKey === 'gear') {
+          const newItem = await fromUuid(uuid);
+          if (newItem && newItem.type === 'equipment') {
+              const itemCost = (newItem.system.baseCost?.gold || 0) * 10 + (newItem.system.baseCost?.silver || 0) + (newItem.system.baseCost?.copper || 0) / 10;
+
+              // Calculate current budget
+              let budget = 300;
+              const packItem = await fromUuid(this.builderData.startingPack);
+              if (packItem && packItem.system.currency) {
+                  const curr = packItem.system.currency;
+                  budget = (curr.gold || 0) * 10 + (curr.silver || 0) + (curr.copper || 0) / 10;
+              }
+
+              // Calculate current spending
+              let currentSpending = 0;
+              for (const gearUuid of this.builderData.gear) {
+                  const gearItem = await fromUuid(gearUuid);
+                  if (gearItem?.type === 'equipment') {
+                      currentSpending += (gearItem.system.baseCost?.gold || 0) * 10 + (gearItem.system.baseCost?.silver || 0) + (gearItem.system.baseCost?.copper || 0) / 10;
+                  }
+              }
+
+              const newTotal = currentSpending + itemCost;
+              if (newTotal > budget) {
+                  const overage = Math.round((newTotal - budget) * 10) / 10; // Round to 1 decimal
+                  ui.notifications.warn(`You would be ${overage}s over budget! Remove items or change your starting pack.`);
+                  // Still allow adding (don't return), just warn
+              }
+          }
+      }
+
+      // Add to tray
+      this.builderData[stepKey].push(uuid);
+
+      // Render to update tray display
+      this.render();
+  }
+
+  // Remove from Tray action handler
+  _onRemoveFromTray(event, target) {
+      const uuid = target.dataset.uuid;
+      if (!uuid) return;
+
+      const stepKey = this.currentStep;
+
+      // Remove from appropriate array
+      if (this.builderData[stepKey]) {
+          this.builderData[stepKey] = this.builderData[stepKey].filter(u => u !== uuid);
+      }
+
+      // If this was the previewed item, clear preview
+      if (this.builderData.previewUuid === uuid) {
+          this.builderData.previewUuid = null;
+      }
+
+      this.render();
+  }
+
+  // Clear Tray action handler
+  async _onClearTray(event, target) {
+      const stepKey = this.currentStep;
+
+      // Confirm before clearing (unless empty)
+      if (this.builderData[stepKey]?.length > 0) {
+          const confirmed = await Dialog.confirm({
+              title: "Clear Tray?",
+              content: `<p>Remove all items from your ${stepKey} tray?</p>`
+          });
+
+          if (confirmed) {
+              this.builderData[stepKey] = [];
+              this.builderData.previewUuid = null;
+              this.render();
+          }
+      }
   }
 
   _onPickValue(event, target) {

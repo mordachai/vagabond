@@ -628,20 +628,35 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 6. Apply Healing Button Handler
+  // 6. Apply Restorative Effects Button Handlers
   // ---------------------------------------------------------
   const healingButtons = html.querySelectorAll('.vagabond-apply-healing-button');
+  const recoverButtons = html.querySelectorAll('.vagabond-apply-recover-button');
+  const rechargeButtons = html.querySelectorAll('.vagabond-apply-recharge-button');
 
   healingButtons.forEach(button => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-      // Note: check damage-helper to ensure applyDamageToTargets exists,
-      // or if it should be handleApplyDirect/healing logic.
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        // Assuming your helper has a generic apply function or specific one for healing
-        if (VagabondDamageHelper.handleApplyDirect) {
-             VagabondDamageHelper.handleApplyDirect(button);
-        }
+        VagabondDamageHelper.handleApplyRestorative(button);
+      });
+    });
+  });
+
+  recoverButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplyRestorative(button);
+      });
+    });
+  });
+
+  rechargeButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplyRestorative(button);
       });
     });
   });

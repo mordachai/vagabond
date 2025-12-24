@@ -1,0 +1,273 @@
+// ===================================
+// TRAY SYSTEM STYLES
+// ===================================
+
+.tray-zone {
+  flex: 0 0 auto;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: rgba(173, 216, 230, 0.2);  // Light blue tint
+  border: 2px solid $c-dark;
+  border-radius: 4px;
+
+  .tray-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    h3 {
+      font-family: $font-title;
+      margin: 0;
+      border: none;
+      font-size: 1.3rem;
+    }
+
+    .btn-clear-tray {
+      background: $c-red;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: $font-secondary;
+
+      &:hover {
+        background: $c-red;
+      }
+    }
+  }
+
+  .tray-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 15px;
+  }
+
+  .tray-instructions {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+
+    .pack-summary {
+      margin-top: 10px;
+      padding: 8px;
+      background: rgba(255, 215, 0, 0.1);
+      border-left: 3px solid gold;
+
+      strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .tray-items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    min-height: 120px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    border: 2px dashed rgba(0, 0, 0, 0.2);
+
+    &.drag-over {
+      background: rgba(255, 215, 0, 0.2);
+      border-color: gold;
+      border-style: solid;
+    }
+  }
+
+  .tray-item-card {
+    position: relative;
+    background: white;
+    border: 2px solid $c-dark;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100px;
+
+    &.from-pack {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: gold;
+      border-width: 3px;
+    }
+
+    &.empty-slot {
+      border-style: dashed;
+      border-color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.02);
+
+      i {
+        font-size: 2rem;
+        color: #ccc;
+      }
+    }
+
+    .tray-item-img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .tray-item-name {
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 3px;
+      line-height: 1.1;
+    }
+
+    .tray-item-qty {
+      font-size: 0.75rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .tray-item-slots,
+    .tray-item-cost {
+      font-size: 0.75rem;
+      color: #666;
+    }
+
+    .btn-remove-from-tray {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: $c-red;
+      color: white;
+      border: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      i {
+        font-size: 0.7rem;
+      }
+    }
+  }
+
+  .tray-empty-message {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    color: #999;
+    font-style: italic;
+
+    i {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    p {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// Drag-and-drop visual states
+.directory-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+// Add to tray button in preview area
+.preview-actions {
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 4px;
+  text-align: center;
+
+  .btn-add-to-tray {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-family: $font-title;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: darken(#4CAF50, 10%);
+    }
+
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+// Enhanced gear item display in selection list
+.selection-list {
+  .directory-item.gear-item {
+    align-items: flex-start;
+    padding: 10px 8px;
+
+    &.in-tray {
+      background: rgba(173, 216, 230, 0.15);
+      border-left: 3px solid #00bcd4;
+    }
+
+    img {
+      margin-right: 12px;
+    }
+
+    .item-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .name {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .item-meta {
+        display: flex;
+        gap: 12px;
+        font-size: 0.85rem;
+        color: #666;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          i {
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+}

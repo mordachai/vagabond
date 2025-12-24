@@ -1,0 +1,378 @@
+// ===================================
+// COMPACT 4-COLUMN TRAY GRID STYLES
+// ===================================
+
+.tray-zone {
+  flex: 0 0 auto;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(173, 216, 230, 0.2);
+  border: 2px solid $c-dark;
+  border-radius: 4px;
+
+  .tray-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 10px;
+  }
+
+  .tray-sidebar {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 10px;
+    border-radius: 4px;
+    gap: 10px;
+
+    h3 {
+      font-family: $font-title;
+      margin: 0;
+      border: none;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      line-height: 1.3;
+    }
+
+    .pack-summary {
+      margin-top: auto;
+      padding: 8px;
+      background: rgba(255, 215, 0, 0.1);
+      border-left: 3px solid gold;
+      font-size: 0.85rem;
+
+      strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .btn-clear-tray {
+      margin-top: 10px;
+      background: $c-red;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: $font-secondary;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: $c-red;
+      }
+
+      i {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  // 4-column grid for items
+  .tray-items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    border: 2px dashed rgba(0, 0, 0, 0.2);
+    min-height: 80px;
+
+    &.drag-over {
+      background: rgba(255, 215, 0, 0.2);
+      border-color: gold;
+      border-style: solid;
+    }
+  }
+
+  // Compact item: [img] name x
+  .tray-item-compact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    background: white;
+    border: 1px solid $c-dark;
+    border-radius: 3px;
+    height: 50px;
+    max-height: 50px;
+    overflow: hidden;
+
+    &.from-pack {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: gold;
+      border-width: 2px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .tray-img {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      object-fit: cover;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .tray-name {
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9rem;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    // For gear items with extra info
+    &.gear-item {
+      flex-direction: row;
+      align-items: center;
+      padding: 4px;
+
+      .tray-img {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+      }
+
+      .tray-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        justify-content: center;
+        overflow: hidden;
+
+        .tray-name {
+          font-size: 0.85rem;
+          font-weight: 600;
+          line-height: 1.1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .tray-meta {
+          font-size: 0.75rem;
+          color: #666;
+          line-height: 1.1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .btn-remove {
+      background: $c-red;
+      color: white;
+      border: none;
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      i {
+        font-size: 0.7rem;
+      }
+    }
+  }
+
+  .tray-empty-message {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    color: #999;
+    font-style: italic;
+
+    i {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
+}
+
+// Starting Pack Contents Display
+.starting-pack-contents {
+  margin-top: 20px;
+
+  .pack-budget-info {
+    background: rgba(255, 215, 0, 0.15);
+    padding: 10px;
+    margin: 10px 0;
+    border-left: 4px solid gold;
+    font-size: 1rem;
+    border-radius: 3px;
+  }
+
+  .pack-items-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .pack-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    .pack-item-img {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      object-fit: cover;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .pack-item-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .pack-item-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .pack-item-qty {
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 500;
+      }
+    }
+
+    .pack-item-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #666;
+
+      .pack-item-slots,
+      .pack-item-cost {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+// Drag-and-drop visual states
+.directory-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+// Add to tray button in preview area
+.preview-actions {
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 4px;
+  text-align: center;
+
+  .btn-add-to-tray {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: $font-title;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #45a049;
+    }
+
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+// Enhanced gear item display in selection list
+.selection-list {
+  .directory-item.gear-item {
+    align-items: flex-start;
+    padding: 10px 8px;
+
+    &.active {
+      background: rgba(173, 216, 230, 0.15);
+      border-left: 3px solid #00bcd4;
+    }
+
+    img {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      margin-right: 12px;
+    }
+
+    .item-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .name {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .item-meta {
+        display: flex;
+        gap: 12px;
+        font-size: 0.85rem;
+        color: #666;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          i {
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+}

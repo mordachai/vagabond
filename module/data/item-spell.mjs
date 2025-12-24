@@ -13,25 +13,27 @@ export default class VagabondSpell extends VagabondItemBase {
 
     // Damage Type - type of damage/healing the spell provides
     // Uses centralized CONFIG.VAGABOND.damageTypes
+    // Damage Type - uses CONFIG.VAGABOND.damageTypes with fallback
     schema.damageType = new fields.StringField({
       ...requiredString,
       initial: '-',
       choices: CONFIG.VAGABOND?.damageTypes || {
-        '-': 'None',
-        'acid': 'Acid',
-        'fire': 'Fire',
-        'shock': 'Shock',
-        'poison': 'Poison',
-        'cold': 'Cold',
-        'blunt': 'Blunt',
-        'piercing': 'Piercing',
-        'slashing': 'Slashing',
-        'physical': 'Physical',
-        'necrotic': 'Necrotic',
-        'psychic': 'Psychic',
-        'healing': 'Healing',
-        'recover': 'Recover',
-        'recharge': 'Recharge'
+        '-': 'VAGABOND.DamageTypes.None',
+        'acid': 'VAGABOND.DamageTypes.Acid',
+        'fire': 'VAGABOND.DamageTypes.Fire',
+        'shock': 'VAGABOND.DamageTypes.Shock',
+        'poison': 'VAGABOND.DamageTypes.Poison',
+        'cold': 'VAGABOND.DamageTypes.Cold',
+        'blunt': 'VAGABOND.DamageTypes.Blunt',
+        'piercing': 'VAGABOND.DamageTypes.Piercing',
+        'slashing': 'VAGABOND.DamageTypes.Slashing',
+        'physical': 'VAGABOND.DamageTypes.Physical',
+        'necrotic': 'VAGABOND.DamageTypes.Necrotic',
+        'psychic': 'VAGABOND.DamageTypes.Psychic',
+        'magical': 'VAGABOND.DamageTypes.Magical',
+        'healing': 'VAGABOND.DamageTypes.Healing',
+        'recover': 'VAGABOND.DamageTypes.Recover',
+        'recharge': 'VAGABOND.DamageTypes.Recharge'
       }
     });
 

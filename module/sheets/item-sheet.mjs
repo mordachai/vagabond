@@ -822,17 +822,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Ensure data is saved when the sheet is closed.
+   * Override close() to manually submit form BEFORE the close process.
+   * This ensures form data is saved before the form element is removed from DOM.
+   * In ApplicationV2, this.element IS the form element itself (tag="form").
    * @override
    */
-  async _onClose(options) {
-    await super._onClose(options);
-    
-    // Safety check: force a final submit if the document still exists
-    if (this.document && this.document.id) {
+  async close(options = {}) {
+    // Submit the form BEFORE calling super.close() which removes it from DOM
+    if (this.element && this.element.tagName === 'FORM') {
+      try {
         await this.submit();
-        console.log(`Vagabond | Final save for ${this.document.name} on close.`);
+      } catch (err) {
+        console.error('Vagabond | Error submitting item sheet:', err);
+      }
     }
+
+    // Now proceed with normal close process
+    return super.close(options);
   }
 
   /**
@@ -1242,12 +1248,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _canDragDrop(selector) {
     // Don't handle drops on prose-mirror editors - let them handle it themselves
     if (selector && selector.closest && selector.closest('prose-mirror')) {
-      console.log('Cannot drop on prose-mirror');
       return false;
     }
-    const canDrop = this.isEditable;
-    console.log('Can drag drop on item sheet?', canDrop, 'item type:', this.item.type, 'selector:', selector);
-    return canDrop;
+    return this.isEditable;
   }
 
   _onDragStart(event) {

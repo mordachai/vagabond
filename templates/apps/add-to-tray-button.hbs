@@ -1,0 +1,9 @@
+
+                    {{!-- Add to Tray button --}}
+                    {{#if showTray}}
+                        <div class="preview-actions">
+                            <button type="button" class="btn-add-to-tray" data-action="addToTray" data-uuid="{{selectedItem.uuid}}">
+                                <i class="fas fa-plus"></i> {{localize "VAGABOND.CharBuilder.Buttons.AddToTray"}}
+                            </button>
+                        </div>
+                    {{/if}}
