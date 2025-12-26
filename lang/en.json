@@ -694,7 +694,24 @@
         "Crawl": "Crawl",
         "Travel": "Travel",
         "LuckPool": "Luck Pool",
-        "StudiedDie": "Study Dice"
+        "StudiedDie": "Study Dice",
+        "SkillTraining": "Trained Skills"
+      },
+      "Labels": {
+        "GuaranteedSkills": "Trained Skills:",
+        "SkillChoices": "Grouped Choices:",
+        "Group": "Choose from Group",
+        "Count": "Select:",
+        "RestrictedPool": "Among these:"
+
+      },
+      "Buttons": {
+        "AddSkill": "Add Skill",
+        "AddChoiceGroup":"Add Group",
+        "UpdateGroup":"Save/Update"
+      },
+      "Hints": {
+        "EmptyForAny": "Let Empty fo ANY skills"
       }
     },
     "Notifications": {
