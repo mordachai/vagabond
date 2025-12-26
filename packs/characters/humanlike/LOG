@@ -1,3 +1,5 @@
-2025/12/21-23:41:14.206 fa8c Recovering log #177
-2025/12/21-23:41:14.209 fa8c Delete type=0 #177
-2025/12/21-23:41:14.209 fa8c Delete type=3 #176
+2025/12/25-02:49:46.387 b9fc Recovering log #202
+2025/12/25-02:49:46.387 b9fc Level-0 table #204: started
+2025/12/25-02:49:46.389 b9fc Level-0 table #204: 8238 bytes OK
+2025/12/25-02:49:46.392 b9fc Delete type=0 #202
+2025/12/25-02:49:46.392 b9fc Delete type=3 #201

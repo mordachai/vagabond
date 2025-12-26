@@ -1380,7 +1380,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 0;
 }
 .roll-dice-container .roll-modifier,
 .damage-dice-list .roll-modifier {
@@ -2205,10 +2205,27 @@
   padding: 8px;
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 .vagabond-builder .builder-body .selection-zone .selection-list .directory-item.active {
   background: var(--vagabond-c-faint);
+  border-left: 3px solid var(--vagabond-c-red);
   font-weight: 600;
+}
+.vagabond-builder .builder-body .selection-zone .selection-list .directory-item.in-tray {
+  background: rgba(173, 216, 230, 0.2);
+  border-left: 3px solid #4CAF50;
+  font-weight: 600;
+}
+.vagabond-builder .builder-body .selection-zone .selection-list .directory-item.previewing {
+  background: rgba(255, 215, 0, 0.15);
+  border-left: 3px solid gold;
+  font-weight: 600;
+}
+.vagabond-builder .builder-body .selection-zone .selection-list .directory-item.in-tray.previewing {
+  background: rgba(76, 175, 80, 0.25);
+  border-left: 3px solid #4CAF50;
+  box-shadow: inset 0 0 0 2px gold;
 }
 .vagabond-builder .builder-body .selection-zone .selection-list .directory-item img {
   width: 48px;
@@ -2658,7 +2675,9 @@
   background: white;
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
-  min-height: 50px;
+  height: 50px;
+  max-height: 50px;
+  overflow: hidden;
 }
 .tray-zone .tray-item-compact.from-pack {
   background: rgba(255, 215, 0, 0.15);
@@ -2682,30 +2701,43 @@
   font-weight: 600;
   font-size: 0.9rem;
   line-height: 1.2;
-  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .tray-zone .tray-item-compact.gear-item {
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 6px;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px;
 }
 .tray-zone .tray-item-compact.gear-item .tray-img {
-  align-self: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
 }
 .tray-zone .tray-item-compact.gear-item .tray-info {
-  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  justify-content: center;
+  overflow: hidden;
 }
 .tray-zone .tray-item-compact.gear-item .tray-info .tray-name {
   font-size: 0.85rem;
-  text-align: center;
+  font-weight: 600;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .tray-zone .tray-item-compact.gear-item .tray-info .tray-meta {
   font-size: 0.75rem;
   color: #666;
-  text-align: center;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .tray-zone .tray-item-compact .btn-remove {
   background: var(--vagabond-c-red);
@@ -2760,9 +2792,9 @@
   border-radius: 3px;
 }
 .starting-pack-contents .pack-items-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 .starting-pack-contents .pack-item-row {
   display: flex;
@@ -2840,10 +2872,6 @@
 .selection-list .directory-item.gear-item {
   align-items: flex-start;
   padding: 10px 8px;
-}
-.selection-list .directory-item.gear-item.active {
-  background: rgba(173, 216, 230, 0.15);
-  border-left: 3px solid #00bcd4;
 }
 .selection-list .directory-item.gear-item img {
   width: 48px;

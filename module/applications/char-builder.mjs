@@ -83,7 +83,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     const locId = this.currentStep.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
-    const instruction = !hasSelection ? game.i18n.localize(`VAGABOND.CharBuilder.Instructions.${locId}`) : null;
+    // Show instruction only if tray is empty AND nothing is being previewed
+    const instruction = (!hasSelection && !this.builderData.previewUuid) ? game.i18n.localize(`VAGABOND.CharBuilder.Instructions.${locId}`) : null;
         
     // --- 1. PREPARE RAW DATA & SANITIZE ---
     const actorData = this.actor.toObject();
@@ -285,8 +286,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       hasChoices: ['class', 'stats'].includes(this.currentStep),
       useTripleColumn: ['class', 'perks', 'spells'].includes(this.currentStep),
       options: availableOptions,
-      selectedItem: instruction ? null : selectedItem,
-      classPreviewData,
+      selectedItem: selectedItem, // Always show preview if item is clicked
+      previewUuid: this.builderData.previewUuid,
+      classPreviewData,
       isSpellcaster, // Used for showing Mana in stats preview
       manaStats: {
           max: previewActor.system.mana?.max || 0,
@@ -383,7 +385,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             label: cached.label,
             id: cached.id,
             isOpen: this.openCategories.has(cached.id),
-            items: sortedItems.map(i => ({ ...i, selected: this.builderData.gear.includes(i.uuid) }))
+            items: sortedItems.map(i => ({
+              ...i,
+              selected: this.builderData.gear.includes(i.uuid),
+              previewing: i.uuid === this.builderData.previewUuid
+            }))
         });
       } else {
         const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
@@ -392,10 +398,18 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
         // For perks/spells (arrays), mark items that are in the tray
         if (['perks', 'spells'].includes(this.currentStep)) {
-          results.push(...sortedItems.map(i => ({ ...i, selected: this.builderData[stepKey].includes(i.uuid) })));
+          results.push(...sortedItems.map(i => ({
+            ...i,
+            selected: this.builderData[stepKey].includes(i.uuid),
+            previewing: i.uuid === this.builderData.previewUuid
+          })));
         } else {
           // For single selections (ancestry, class, starting-packs)
-          results.push(...sortedItems.map(i => ({ ...i, selected: i.uuid === this.builderData[stepKey] })));
+          results.push(...sortedItems.map(i => ({
+            ...i,
+            selected: i.uuid === this.builderData[stepKey],
+            previewing: i.uuid === this.builderData.previewUuid
+          })));
         }
       }
     }
@@ -538,10 +552,19 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   /** @override */
-/** @override */
   _onRender(context, options) {
     const html = this.element;
-    
+
+    // UNIVERSAL: Attach click handlers to ALL directory items for preview
+    const allDirectoryItems = html.querySelectorAll('.directory-item[data-uuid]');
+    allDirectoryItems.forEach(item => {
+      item.addEventListener('click', (ev) => {
+        const uuid = ev.currentTarget.dataset.uuid;
+        this.builderData.previewUuid = uuid;
+        this.render();
+      });
+    });
+
     // 1. Draggable Chips Initialization
     const chips = html.querySelectorAll('.value-chip');
     chips.forEach(chip => {
@@ -604,14 +627,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       const selectableItems = html.querySelectorAll('.directory-item[data-uuid]');
       selectableItems.forEach(item => {
         item.setAttribute('draggable', 'true');
-        
+
         item.addEventListener('dragstart', (ev) => {
           const uuid = ev.currentTarget.dataset.uuid;
           ev.dataTransfer.setData('text/plain', JSON.stringify({ uuid, type: 'item' }));
           ev.dataTransfer.effectAllowed = 'copy';
           ev.currentTarget.classList.add('dragging');
         });
-        
+
         item.addEventListener('dragend', (ev) => {
           ev.currentTarget.classList.remove('dragging');
         });

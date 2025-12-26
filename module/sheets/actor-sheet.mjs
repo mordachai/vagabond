@@ -2748,6 +2748,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleFavorHinder(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling favor/hinder
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before favor/hinder toggle:', err);
+      }
+    }
+
     const currentState = this.actor.system.favorHinder || 'none';
 
     // Cycle through states: none -> favor -> hinder -> none
@@ -2796,6 +2806,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleLock(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling lock state
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before lock toggle:', err);
+      }
+    }
+
     const currentLocked = this.actor.system.locked;
 
     // Clear dropdown state when toggling lock mode
@@ -3828,6 +3848,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleWeaponEquipment(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling weapon equipment
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before weapon equipment toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
@@ -3887,6 +3917,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleWeaponGrip(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling weapon grip
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before weapon grip toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
@@ -3924,6 +3964,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleArmorEquipment(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling armor equipment
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before armor equipment toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const armor = this.actor.items.get(itemId);
 
@@ -3994,40 +4044,55 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // Perform roll using the mana skill
+    // Get skill information for display
     const skill = this.actor.system.skills[manaSkill];
     const difficulty = skill.difficulty;
-    const label = `${spell.name} (${skill.label})`;
 
-    // Apply favor/hinder with keyboard modifiers
-    const systemFavorHinder = this.actor.system.favorHinder || 'none';
-    const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
-      systemFavorHinder,
-      event.shiftKey,
-      event.ctrlKey
-    );
+    // Check if spell bypasses roll requirement
+    let roll = null;
+    let isSuccess = false;
+    let isCritical = false;
 
-    // Import roll builder and build roll with centralized utility
-    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-    const roll = await VagabondRollBuilder.buildAndEvaluateD20(
-      this.actor,
-      favorHinder
-    );
+    if (spell.system.noRollRequired) {
+      // BYPASS PATH: No roll needed, always succeeds, no criticals
+      isSuccess = true;
+      isCritical = false;
+      roll = null; // No roll object created
+    } else {
+      // NORMAL PATH: Perform casting check roll
+      const label = `${spell.name} (${skill.label})`;
 
-    const isSuccess = roll.total >= difficulty;
+      // Apply favor/hinder with keyboard modifiers
+      const systemFavorHinder = this.actor.system.favorHinder || 'none';
+      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+        systemFavorHinder,
+        event.shiftKey,
+        event.ctrlKey
+      );
 
-    // Check critical - ONLY the d20 result, not including favor/hinder
-    const critNumber = this.actor.system.critNumber || 20;
-    const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
-    const d20Result = d20Term?.results?.[0]?.result || 0;
-    const isCritical = d20Result >= critNumber;
+      // Import roll builder and build roll with centralized utility
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+      roll = await VagabondRollBuilder.buildAndEvaluateD20(
+        this.actor,
+        favorHinder
+      );
 
-    // If successful, deduct mana
+      isSuccess = roll.total >= difficulty;
+
+      // Check critical - ONLY the d20 result, not including favor/hinder
+      const critNumber = this.actor.system.critNumber || 20;
+      const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
+      const d20Result = d20Term?.results?.[0]?.result || 0;
+      isCritical = d20Result >= critNumber;
+    }
+
+    // Deduct mana on success (whether from successful roll or bypass)
     if (isSuccess) {
       const newMana = this.actor.system.mana.current - costs.totalCost;
       await this.actor.update({ 'system.mana.current': newMana });
     }
     // Failed - no mana cost (chat card will show failure)
+    // Note: Bypass spells always succeed, so mana is always deducted
 
     // Create chat message
     await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical);
@@ -4049,7 +4114,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {Item} spell - The spell item
    * @param {Object} state - Spell state
    * @param {Object} costs - Cost breakdown
-   * @param {Roll} roll - The roll result
+   * @param {Roll|null} roll - The roll result (null if noRollRequired)
    * @param {number} difficulty - Target difficulty
    * @param {boolean} isSuccess - Whether the cast succeeded
    * @param {boolean} isCritical - Whether the roll was a critical hit
@@ -4152,6 +4217,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleSpellFavorite(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling spell favorite
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before spell favorite toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const spell = this.actor.items.get(itemId);
 

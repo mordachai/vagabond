@@ -79,6 +79,14 @@ export default class VagabondSpell extends VagabondItemBase {
       hint: "Override damage die size for this spell (leave blank to use character default)"
     });
 
+    // No Roll Required - bypass casting check
+    schema.noRollRequired = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "No Roll Required",
+      hint: "Bypass the casting check roll for this spell (always succeeds, no criticals)"
+    });
+
     return schema;
   }
 }

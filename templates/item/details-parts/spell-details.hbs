@@ -69,6 +69,20 @@
       </div>
     </div>
 
+    {{! No Roll Required Checkbox }}
+    <div class='form-group'>
+      <label class='checkbox-label'>
+        <input
+          type='checkbox'
+          name='system.noRollRequired'
+          {{#if system.noRollRequired}}checked{{/if}}
+          data-dtype='Boolean'
+        />
+        <span>No Roll Required</span>
+      </label>
+      <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
+    </div>
+
     {{! Crit }}
     <div class='form-group'>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>

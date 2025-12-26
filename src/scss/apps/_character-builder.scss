@@ -185,10 +185,34 @@
           padding: 8px;
           cursor: pointer;
           border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          transition: all 0.2s ease;
 
+          // Active/Selected state (for stats, ancestry, class, starting-packs)
           &.active {
             background: $c-faint;
+            border-left: 3px solid $c-red;
             font-weight: 600;
+          }
+
+          // Item is in the tray (for perks, spells, gear)
+          &.in-tray {
+            background: rgba(173, 216, 230, 0.2);
+            border-left: 3px solid #4CAF50;
+            font-weight: 600;
+          }
+
+          // Item is being previewed
+          &.previewing {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 3px solid gold;
+            font-weight: 600;
+          }
+
+          // Item is both in tray AND being previewed
+          &.in-tray.previewing {
+            background: rgba(76, 175, 80, 0.25);
+            border-left: 3px solid #4CAF50;
+            box-shadow: inset 0 0 0 2px gold;
           }
           img {
             width: 48px;
@@ -872,9 +896,9 @@
   }
 
   .pack-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
   .pack-item-row {
@@ -967,11 +991,6 @@
   .directory-item.gear-item {
     align-items: flex-start;
     padding: 10px 8px;
-
-    &.active {
-      background: rgba(173, 216, 230, 0.15);
-      border-left: 3px solid #00bcd4;
-    }
 
     img {
       width: 48px;

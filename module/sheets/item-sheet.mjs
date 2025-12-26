@@ -1124,6 +1124,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleLock(event, target) {
     if (this.item.type !== 'equipment' && this.item.type !== 'container') return;
+
+    // Submit the form BEFORE toggling to save any pending changes
+    if (this.element && this.element.tagName === 'FORM') {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before lock toggle:', err);
+      }
+    }
+
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
     // No need to close/reopen - template handles both states with conditionals

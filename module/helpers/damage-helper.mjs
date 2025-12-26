@@ -925,8 +925,9 @@ export class VagabondDamageHelper {
   /**
    * Handle save button click - roll saves for each selected token
    * @param {HTMLElement} button - The clicked save button
+   * @param {Event} event - The click event (for keyboard modifiers)
    */
-  static async handleSaveRoll(button) {
+  static async handleSaveRoll(button, event = null) {
     const saveType = button.dataset.saveType; // 'reflex', 'endure', 'will'
     const damageAmount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType;
@@ -959,11 +960,15 @@ export class VagabondDamageHelper {
         continue;
       }
 
-      // Determine if save is Hindered
+      // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
       const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
 
-      // Roll the save
-      const saveRoll = await this._rollSave(targetActor, saveType, isHindered);
+      // Extract keyboard modifiers from event
+      const shiftKey = event?.shiftKey || false;
+      const ctrlKey = event?.ctrlKey || false;
+
+      // Roll the save with keyboard modifiers
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
 
       // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
@@ -1050,37 +1055,73 @@ export class VagabondDamageHelper {
    * @param {Actor} actor - The actor rolling the save
    * @param {string} saveType - 'reflex', 'endure', 'will'
    * @param {boolean} isHindered - Whether the save is Hindered by conditions
+   * @param {boolean} shiftKey - Whether Shift key was pressed (Favor modifier)
+   * @param {boolean} ctrlKey - Whether Ctrl key was pressed (Hinder modifier)
    * @returns {Promise<Roll>} The save roll
    * @private
    */
-  static async _rollSave(actor, saveType, isHindered) {
-    const favorHinder = actor.system.favorHinder || 'none';
+  static async _rollSave(actor, saveType, isHindered, shiftKey = false, ctrlKey = false) {
+    // Calculate effective favor/hinder state using keyboard modifiers
+    // This follows the same logic as VagabondActorSheet._calculateEffectiveFavorHinder
+    const systemState = actor.system.favorHinder || 'none';
+
+    // Determine modifier intent from keyboard
+    let modifierIntent = 'none';
+    if (shiftKey && !ctrlKey) {
+      modifierIntent = 'favor';
+    } else if (ctrlKey && !shiftKey) {
+      modifierIntent = 'hinder';
+    } else if (shiftKey && ctrlKey) {
+      // Both pressed - cancel out
+      modifierIntent = 'none';
+    }
+
+    // Calculate final effective state
+    let effectiveFavorHinder = 'none';
+    if (systemState === modifierIntent) {
+      // Same direction - apply it
+      effectiveFavorHinder = systemState;
+    } else if (systemState === 'none') {
+      // No system state - use modifier
+      effectiveFavorHinder = modifierIntent;
+    } else if (modifierIntent === 'none') {
+      // No modifier - use system state
+      effectiveFavorHinder = systemState;
+    } else {
+      // Opposite directions - cancel out
+      effectiveFavorHinder = 'none';
+    }
 
     // Build roll formula
     let rollFormula = 'd20';
+    let finalFavorHinder = 'none'; // Track final state for dice appearance
 
-    // Check if actor already has Favor or Hinder state
-    const hasActorFavor = (favorHinder === 'favor');
-    const hasActorHinder = (favorHinder === 'hinder');
+    // Now apply favor/hinder considering both the effective state AND the conditional hinder
+    const hasEffectiveFavor = (effectiveFavorHinder === 'favor');
+    const hasEffectiveHinder = (effectiveFavorHinder === 'hinder');
 
-    // Apply Favor/Hinder logic
     // IMPORTANT: Favor and Hinder cancel each other out
-    // If actor has Favor AND save is Hindered by conditions: they cancel, roll straight d20
-    if (hasActorFavor && isHindered) {
-      rollFormula = 'd20'; // Cancel out - no modifier
+    // If effective state is Favor AND save is Hindered by conditions: they cancel, roll straight d20
+    if (hasEffectiveFavor && isHindered) {
+      rollFormula = 'd20';
+      finalFavorHinder = 'none';
     }
-    // If actor has Favor AND save is NOT Hindered: apply Favor
-    else if (hasActorFavor && !isHindered) {
-      rollFormula = 'd20 + 1d6';
+    // If effective state is Favor AND save is NOT Hindered: apply Favor
+    else if (hasEffectiveFavor && !isHindered) {
+      rollFormula = 'd20 + 1d6[favored]';
+      finalFavorHinder = 'favor';
     }
-    // If actor has Hinder OR save is Hindered by conditions: apply Hinder
+    // If effective state is Hinder OR save is Hindered by conditions: apply Hinder
     // Multiple Hinder sources do NOT stack - only apply -1d6 once
-    else if (hasActorHinder || isHindered) {
-      rollFormula = 'd20 - 1d6';
+    else if (hasEffectiveHinder || isHindered) {
+      rollFormula = 'd20 - 1d6[hindered]';
+      finalFavorHinder = 'hinder';
     }
 
+    // Use VagabondDiceAppearance to apply custom colors for Dice So Nice
+    const { VagabondDiceAppearance } = await import('./dice-appearance.mjs');
     const roll = new Roll(rollFormula, actor.getRollData());
-    await roll.evaluate();
+    await VagabondDiceAppearance.evaluateWithCustomColors(roll, finalFavorHinder);
     return roll;
   }
 

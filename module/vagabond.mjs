@@ -608,7 +608,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.handleSaveRoll(button);
+        VagabondDamageHelper.handleSaveRoll(button, ev);
       });
     });
   });
