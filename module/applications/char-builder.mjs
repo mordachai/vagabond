@@ -16,14 +16,16 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       class: null,
       stats: { might: null, dexterity: null, awareness: null, reason: null, presence: null, luck: null },
       skills: [],
-      perks: [],      // Perks in tray
+      perks: [],      // Manually added perks
+      classPerks: [], // Perks granted by class features (auto-populated)
       spells: [],     // Spells in tray
       startingPack: null,
       gear: [],       // Gear in tray (includes starting pack items if selected)
       previewUuid: null,
       selectedArrayId: null,
       unassignedValues: [],
-      selectedValue: null
+      selectedValue: null,
+      lastClassForPerks: null // Track which class we last extracted perks from
     };
 
     this.openCategories = new Set();
@@ -69,6 +71,20 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   /** @override */
   async _prepareContext(options) {
+    // Auto-populate perks from class features when entering perks step
+    if (this.currentStep === 'perks') {
+      // Check if class has changed since we last extracted perks
+      if (this.builderData.class !== this.builderData.lastClassForPerks) {
+        // Class changed - update class perks
+        if (this.builderData.class) {
+          this.builderData.classPerks = await this._extractPerksFromClass();
+        } else {
+          this.builderData.classPerks = [];
+        }
+        this.builderData.lastClassForPerks = this.builderData.class;
+      }
+    }
+
     const availableOptions = await this._loadStepOptions();
     const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
     
@@ -106,11 +122,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     // --- 3. INJECT ITEMS ---
+    // Combine class perks and manually added perks
+    const allPerks = [...new Set([...this.builderData.classPerks, ...this.builderData.perks])];
+
     const itemUuids = [
         this.builderData.ancestry,
         this.builderData.class,
         this.builderData.startingPack,
-        ...this.builderData.perks,
+        ...allPerks,
         ...this.builderData.gear
     ].filter(uuid => uuid);
 
@@ -168,19 +187,33 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             if (item.type === 'ancestry') selectedItem.traits = sys.traits || [];
             
             if (item.type === 'class') {
-                const features = sys.levelFeatures || [];
-                const grouped = features.reduce((acc, feat) => {
-                    const lvl = feat.level || 1;
-                    if (!acc[lvl]) acc[lvl] = [];
-                    acc[lvl].push(feat);
-                    return acc;
-                }, {});
+                const features = sys.levelFeatures || [];
 
-                selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => ({
-                    level: lvl, 
-                    isOpen: parseInt(lvl) === 1, 
-                    features: feats
-                })).sort((a, b) => a.level - b.level);
+                // Enrich each feature's description for display
+                const enrichedFeatures = await Promise.all(features.map(async (feat) => {
+                    const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+                        feat.description || '',
+                        {
+                            secrets: false,
+                            rollData: item.getRollData(),
+                            relativeTo: item,
+                        }
+                    );
+                    return { ...feat, enrichedDescription };
+                }));
+
+                const grouped = enrichedFeatures.reduce((acc, feat) => {
+                    const lvl = feat.level || 1;
+                    if (!acc[lvl]) acc[lvl] = [];
+                    acc[lvl].push(feat);
+                    return acc;
+                }, {});
+
+                selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => ({
+                    level: lvl,
+                    isOpen: parseInt(lvl) === 1,
+                    features: feats
+                })).sort((a, b) => a.level - b.level);
 
                 const rawSkill = sys.manaSkill || "None";
                 const localizedSkillKey = rawSkill.charAt(0).toUpperCase() + rawSkill.slice(1);
@@ -398,9 +431,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
         // For perks/spells (arrays), mark items that are in the tray
         if (['perks', 'spells'].includes(this.currentStep)) {
+          // For perks, check both class perks and manual perks
+          const isInTray = this.currentStep === 'perks'
+            ? (uuid) => this.builderData.classPerks.includes(uuid) || this.builderData.perks.includes(uuid)
+            : (uuid) => this.builderData[stepKey].includes(uuid);
+
           results.push(...sortedItems.map(i => ({
             ...i,
-            selected: this.builderData[stepKey].includes(i.uuid),
+            selected: isInTray(i.uuid),
             previewing: i.uuid === this.builderData.previewUuid
           })));
         } else {
@@ -425,7 +463,22 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
     if (this.builderData.class) {
       const item = await fromUuid(this.builderData.class);
-      if (item) data.class = { name: item.name, features: (item.system.levelFeatures || []).filter(f => f.level === 1) };
+      if (item) {
+        const level1Features = (item.system.levelFeatures || []).filter(f => f.level === 1);
+        // Enrich feature descriptions
+        const enrichedFeatures = await Promise.all(level1Features.map(async (feat) => {
+          const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+            feat.description || '',
+            {
+              secrets: false,
+              rollData: item.getRollData(),
+              relativeTo: item,
+            }
+          );
+          return { ...feat, enrichedDescription };
+        }));
+        data.class = { name: item.name, features: enrichedFeatures };
+      }
     }
     return data;
   }
@@ -438,15 +491,23 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const trayItems = [];
 
     if (stepKey === 'perks' || stepKey === 'spells') {
-      const uuids = this.builderData[stepKey];
+      // For perks, combine class perks and manual perks
+      const uuids = stepKey === 'perks'
+        ? [...new Set([...this.builderData.classPerks, ...this.builderData.perks])]
+        : this.builderData[stepKey];
+
       for (const uuid of uuids) {
         const item = await fromUuid(uuid);
         if (item) {
+          // Mark if this perk came from the class
+          const isClassPerk = stepKey === 'perks' && this.builderData.classPerks.includes(uuid);
           trayItems.push({
             uuid: item.uuid,
             name: item.name,
             img: item.img,
-            type: item.type
+            type: item.type,
+            isClassPerk: isClassPerk,
+            canDelete: !isClassPerk // Can't delete class-granted perks
           });
         }
       }
@@ -505,6 +566,37 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       isEmpty: trayItems.length === 0,
       emptySlots: Array(Math.max(0, 8 - trayItems.length)).fill({})
     };
+  }
+
+  /**
+   * Extract perk UUIDs from class level features
+   * Parses @UUID[Compendium.vagabond.perks.Item.xxx]{Name} links
+   * @returns {Array<string>} Array of perk UUIDs
+   */
+  async _extractPerksFromClass() {
+    if (!this.builderData.class) return [];
+
+    const classItem = await fromUuid(this.builderData.class);
+    if (!classItem) return [];
+
+    const features = classItem.system.levelFeatures || [];
+    const perkUuids = [];
+
+    // Regex to match @UUID[...] links in perk compendium
+    const uuidRegex = /@UUID\[Compendium\.vagabond\.perks\.Item\.([^\]]+)\]/g;
+
+    for (const feature of features) {
+      const description = feature.description || '';
+      let match;
+      while ((match = uuidRegex.exec(description)) !== null) {
+        const fullUuid = `Compendium.vagabond.perks.Item.${match[1]}`;
+        if (!perkUuids.includes(fullUuid)) {
+          perkUuids.push(fullUuid);
+        }
+      }
+    }
+
+    return perkUuids;
   }
 
   /**
@@ -762,8 +854,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       // Validate we're on a tray step
       if (!['perks', 'spells', 'gear'].includes(stepKey)) return;
 
-      // Check if already in tray
-      if (this.builderData[stepKey].includes(uuid)) {
+      // Check if already in tray (for perks, check both class perks and manual perks)
+      const isInTray = stepKey === 'perks'
+        ? this.builderData.classPerks.includes(uuid) || this.builderData.perks.includes(uuid)
+        : this.builderData[stepKey].includes(uuid);
+
+      if (isInTray) {
           ui.notifications.warn("This item is already in your tray.");
           return;
       }
@@ -813,6 +909,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (!uuid) return;
 
       const stepKey = this.currentStep;
+
+      // For perks, prevent removing class-granted perks
+      if (stepKey === 'perks' && this.builderData.classPerks.includes(uuid)) {
+          ui.notifications.warn("This perk is granted by your class and cannot be removed.");
+          return;
+      }
 
       // Remove from appropriate array
       if (this.builderData[stepKey]) {
@@ -938,7 +1040,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     if (data.ancestry) await addByUuid(data.ancestry);
     if (data.class) await addByUuid(data.class);
     if (data.startingPack) await addByUuid(data.startingPack);
-    for (const uuid of [...data.perks, ...data.spells, ...data.gear]) await addByUuid(uuid);
+    // Combine class perks and manual perks
+    const allPerks = [...new Set([...data.classPerks, ...data.perks])];
+    for (const uuid of [...allPerks, ...data.spells, ...data.gear]) await addByUuid(uuid);
 
     await actor.update(updateData);
     await actor.createEmbeddedDocuments("Item", itemsToCreate);

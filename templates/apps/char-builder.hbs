@@ -99,12 +99,16 @@
                             </div>
                         {{else}}
                             {{#each trayData.perks as |item|}}
-                                <div class="tray-item-compact" data-uuid="{{item.uuid}}">
+                                <div class="tray-item-compact {{#if item.isClassPerk}}from-class{{/if}}" data-uuid="{{item.uuid}}">
                                     <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
-                                    <span class="tray-name">{{item.name}}</span>
-                                    <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
-                                        <i class="fas fa-times"></i>
-                                    </button>
+                                    <span class="tray-name">{{item.name}}{{#if item.isClassPerk}} <i class="fas fa-star" title="From Class"></i>{{/if}}</span>
+                                    {{#if item.canDelete}}
+                                        <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    {{else}}
+                                        <i class="fas fa-lock" title="Granted by class" style="opacity: 0.5;"></i>
+                                    {{/if}}
                                 </div>
                             {{/each}}
                         {{/if}}
@@ -477,7 +481,7 @@
                                     <div class="level-content">
                                         {{#each this.features}}
                                             <div class="ref-entry">
-                                                <strong>{{this.name}}:</strong> {{{this.description}}}
+                                                <strong>{{this.name}}:</strong> {{{this.enrichedDescription}}}
                                             </div>
                                         {{/each}}
                                     </div>
@@ -498,7 +502,7 @@
                     {{#if originRefs.class}}
                         <h4 class="ref-header">Features ({{originRefs.class.name}})</h4>
                         {{#each originRefs.class.features}}
-                            <div class="ref-entry"><strong>{{this.name}}: </strong>{{{this.description}}}</div>
+                            <div class="ref-entry"><strong>{{this.name}}: </strong>{{{this.enrichedDescription}}}</div>
                         {{/each}}
                     {{/if}}
                 {{/if}}

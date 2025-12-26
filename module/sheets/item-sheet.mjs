@@ -12,6 +12,39 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 ) {
   constructor(options = {}) {
     super(options);
+
+    // Listen for updates to this item to re-render when ProseMirror saves
+    this._hookId = Hooks.on('updateItem', (item, changes, options, userId) => {
+      // Only re-render if this is our item and levelFeatures or traits were updated
+      if (item.id === this.document.id) {
+        if (changes.system?.levelFeatures || changes.system?.traits) {
+          this.render({ force: true });
+        }
+      }
+    });
+  }
+
+  /**
+   * Clean up hooks when sheet is closed
+   * @override
+   */
+  async close(options = {}) {
+    // Remove the hook listener
+    if (this._hookId !== undefined) {
+      Hooks.off('updateItem', this._hookId);
+    }
+
+    // Submit the form BEFORE calling super.close() which removes it from DOM
+    if (this.element && this.element.tagName === 'FORM') {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting item sheet:', err);
+      }
+    }
+
+    // Now proceed with normal close process
+    return super.close(options);
   }
 
   /** @override */
@@ -52,7 +85,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       saveChoices: this._onSaveChoices,
     },
     form: {
-      submitOnChange: false,
+      submitOnChange: true,
       submitOnClose: true,
     },
     // Custom property that's merged into `this.options`
@@ -238,6 +271,19 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           const features = this.item.system.levelFeatures
             .map((f, index) => ({ ...f, index }))
             .filter(f => f.level === level);
+
+          // Enrich each feature's description for proper display
+          for (let feature of features) {
+            feature.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+              feature.description || '',
+              {
+                secrets: this.document.isOwner,
+                rollData: this.item.getRollData(),
+                relativeTo: this.item,
+              }
+            );
+          }
+
           context.levelGroups.push({
             level,
             features
@@ -819,26 +865,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     choices[index].pool = poolArray;
 
     await this.item.update({ "system.skillGrant.choices": choices });
-  }
-
-  /**
-   * Override close() to manually submit form BEFORE the close process.
-   * This ensures form data is saved before the form element is removed from DOM.
-   * In ApplicationV2, this.element IS the form element itself (tag="form").
-   * @override
-   */
-  async close(options = {}) {
-    // Submit the form BEFORE calling super.close() which removes it from DOM
-    if (this.element && this.element.tagName === 'FORM') {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting item sheet:', err);
-      }
-    }
-
-    // Now proceed with normal close process
-    return super.close(options);
   }
 
   /**

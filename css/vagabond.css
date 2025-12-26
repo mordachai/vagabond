@@ -2740,25 +2740,26 @@
   white-space: nowrap;
 }
 .tray-zone .tray-item-compact .btn-remove {
-  background: var(--vagabond-c-red);
-  color: white;
+  color: var(--vagabond-c-dark);
   border: none;
   width: 20px;
   height: 20px;
   min-width: 20px;
-  border-radius: 3px;
   cursor: pointer;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.7;
+  background: none;
+  font-size: 0.9rem;
 }
 .tray-zone .tray-item-compact .btn-remove:hover {
   opacity: 1;
+  transform: scale(1.1);
 }
 .tray-zone .tray-item-compact .btn-remove i {
-  font-size: 0.7rem;
+  font-size: 1.1rem;
 }
 .tray-zone .tray-empty-message {
   grid-column: 1/-1;

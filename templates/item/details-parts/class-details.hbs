@@ -155,10 +155,12 @@
                       <div class='level-feature-description'>
                         <prose-mirror
                           name='system.levelFeatures.{{feature.index}}.description'
+                          data-document-uuid='{{@root.item.uuid}}'
                           value='{{feature.description}}'
+                          collaborate='true'
                           toggled='true'
                         >
-                          {{{feature.description}}}
+                          {{{feature.enrichedDescription}}}
                         </prose-mirror>
                       </div>
                       <input
@@ -168,8 +170,8 @@
                       />
                     {{else}}
                       <strong class='feature-title'>{{feature.name}}</strong>
-                      {{#if feature.description}}
-                        <div class='mt-5'>{{{feature.description}}}</div>
+                      {{#if feature.enrichedDescription}}
+                        <div class='mt-5'>{{{feature.enrichedDescription}}}</div>
                       {{/if}}
                     {{/if}}
                   </div>
