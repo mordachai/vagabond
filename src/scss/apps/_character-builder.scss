@@ -33,14 +33,193 @@
 
   .builder-body {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
     min-height: 0;
     padding: 15px;
+    overflow: hidden;
+
+    // Left column: Selection list (full height)
+    .selection-list-column {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+
+      .search-sticky {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: white;
+        margin-bottom: 10px;
+
+        input {
+          width: 100%;
+          height: 32px;
+        }
+      }
+
+      .directory-list {
+        flex: 1;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        padding-right: 10px;
+        font-size: 1.2rem;
+      }
+
+      .directory-item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 8px;
+        cursor: pointer;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+
+        &.active {
+          background: $c-faint;
+          border-left: 3px solid $c-red;
+          font-weight: 600;
+        }
+
+        &.in-tray {
+          background: rgba(173, 216, 230, 0.2);
+          border-left: 3px solid #4CAF50;
+          font-weight: 600;
+        }
+
+        &.previewing {
+          background: rgba(255, 215, 0, 0.15);
+          border-left: 3px solid gold;
+          font-weight: 600;
+        }
+
+        &.in-tray.previewing {
+          background: rgba(76, 175, 80, 0.25);
+          border-left: 3px solid #4CAF50;
+          box-shadow: inset 0 0 0 2px gold;
+        }
+
+        img {
+          width: 48px;
+          height: 48px;
+          min-width: 48px;
+          max-width: 48px;
+          flex-shrink: 0;
+          object-fit: cover;
+          aspect-ratio: 1 / 1;
+          margin-right: 12px;
+          border: 1px solid black;
+          border-radius: 4px;
+          display: block;
+        }
+
+        .name {
+          font-family: $font-primary;
+          font-size: 1.1rem;
+        }
+      }
+
+      .stat-array-item {
+        font-size: 1rem;
+
+        .array-label {
+          display: flex;
+          border-radius: 30px;
+          width: 20px;
+          height: 20px;
+          align-items: center;
+          justify-content: center;
+          font-family: $font-number;
+          font-weight: 500;
+          font-size: 0.95rem;
+          padding: 2px;
+          color: $c-dark;
+          border: 1px solid black;
+          margin-right: 8px;
+        }
+
+        .array-values {
+          font-family: $font-title;
+          font-size: 1.1rem;
+        }
+      }
+
+      .category-header {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        font-family: $font-title;
+        cursor: pointer;
+        list-style: none;
+
+        i {
+          transition: 0.2s;
+        }
+      }
+
+      details[open] .category-header i {
+        transform: rotate(90deg);
+      }
+
+      .budget-tracker {
+        padding: 8px;
+        background: rgba(255, 215, 0, 0.2);
+        border: 2px solid gold;
+        border-radius: 4px;
+        text-align: center;
+        font-family: $font-secondary;
+        font-weight: 600;
+        margin-bottom: 10px;
+
+        &.bankrupt {
+          background: rgba(255, 0, 0, 0.2);
+          border-color: $c-red;
+          color: $c-red;
+        }
+      }
+
+      .directory-item.gear-item {
+        align-items: flex-start;
+        padding: 10px 8px;
+
+        .item-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .name {
+            font-weight: 600;
+            font-size: 1rem;
+          }
+
+          .item-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #666;
+
+            span {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            }
+          }
+        }
+      }
+    }
+
+    // Right column: Decision, Tray, and Content areas
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      gap: 15px;
+    }
 
     .decision-zone {
       flex: 0 0 auto;
-      margin-bottom: 15px;
       padding: 10px;
       background: rgba(255, 255, 255, 0.4);
       border: 1px dashed black;
@@ -143,18 +322,17 @@
       }
     }
 
-    .selection-zone {
+    .content-zone {
       display: grid;
       flex: 1;
       min-height: 0;
       gap: 20px;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 1fr;
 
       &.triple-column {
-        grid-template-columns: 0.80fr 1.2fr 1fr;
+        grid-template-columns: 1.2fr 1fr;
       }
 
-      .selection-list,
       .selection-preview,
       .reference-column {
         height: 100%;
@@ -162,120 +340,6 @@
         scrollbar-width: thin;
         padding-right: 10px;
         font-size: 1.2rem;
-      }
-
-      .selection-list {
-        .search-sticky {
-          position: sticky;
-          top: 0;
-          z-index: 5;
-          background: white;
-          margin-bottom: 10px;
-
-          input {
-            width: 100%;
-            height: 32px;
-          }
-        }
-
-        .directory-item {
-          display: flex;
-          align-items: center; // Vertical centering
-          justify-content: flex-start; // Keeps everything to the left
-          padding: 8px;
-          cursor: pointer;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-          transition: all 0.2s ease;
-
-          // Active/Selected state (for stats, ancestry, class, starting-packs)
-          &.active {
-            background: $c-faint;
-            border-left: 3px solid $c-red;
-            font-weight: 600;
-          }
-
-          // Item is in the tray (for perks, spells, gear)
-          &.in-tray {
-            background: rgba(173, 216, 230, 0.2);
-            border-left: 3px solid #4CAF50;
-            font-weight: 600;
-          }
-
-          // Item is being previewed
-          &.previewing {
-            background: rgba(255, 215, 0, 0.15);
-            border-left: 3px solid gold;
-            font-weight: 600;
-          }
-
-          // Item is both in tray AND being previewed
-          &.in-tray.previewing {
-            background: rgba(76, 175, 80, 0.25);
-            border-left: 3px solid #4CAF50;
-            box-shadow: inset 0 0 0 2px gold;
-          }
-          img {
-            width: 48px;
-            height: 48px;
-            min-width: 48px; // Prevent shrinking
-            max-width: 48px; // Prevent growing
-            flex-shrink: 0;   // Force it to stay 48px even if text is long
-            object-fit: cover;
-            aspect-ratio: 1 / 1;
-            margin-right: 12px; // Space between image and name
-            border: 1px solid black;
-            border-radius: 4px;
-            display: block;
-          }
-
-          .name {
-            font-family: $font-primary;
-            font-size: 1.1rem;
-          }
-
-        }
-
-        .stat-array-item {
-          font-size: 1rem;
-
-          .array-label {
-            display: flex;
-            border-radius: 30px;
-            width: 20px;
-            height: 20px;
-            align-items: center;
-            justify-content: center;
-            font-family: $font-number;
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 2px;
-            color: $c-dark;
-            border: 1px solid black;
-            margin-right: 8px;
-          }
-
-          .array-values {
-            font-family: $font-title;
-            font-size: 1.1rem;
-          }
-          
-        }
-
-        .category-header {
-          background: rgba(0, 0, 0, 0.1);
-          padding: 8px;
-          font-family: $font-title;
-          cursor: pointer;
-          list-style: none;
-
-          i {
-            transition: 0.2s;
-          }
-        }
-
-        details[open] .category-header i {
-          transform: rotate(90deg);
-        }
       }
 
       .selection-preview {
@@ -987,46 +1051,3 @@
   }
 }
 
-// Enhanced gear item display in selection list
-.selection-list {
-  .directory-item.gear-item {
-    align-items: flex-start;
-    padding: 10px 8px;
-
-    img {
-      width: 48px;
-      height: 48px;
-      min-width: 48px;
-      margin-right: 12px;
-    }
-
-    .item-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      .name {
-        font-weight: 600;
-        font-size: 1rem;
-      }
-
-      .item-meta {
-        display: flex;
-        gap: 12px;
-        font-size: 0.85rem;
-        color: #666;
-
-        span {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-
-          i {
-            font-size: 0.75rem;
-          }
-        }
-      }
-    }
-  }
-}

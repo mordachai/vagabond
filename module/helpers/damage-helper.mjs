@@ -6,6 +6,10 @@ export class VagabondDamageHelper {
   /**
    * Manually explode dice on specific values (recursive)
    * This bypasses Foundry's potentially buggy x=1x=4 syntax
+   *
+   * ✅ CANONICAL VERSION: This is the main implementation.
+   * ⚠️ DUPLICATE EXISTS in module/documents/item.mjs - should be consolidated to use this version.
+   *
    * @param {Roll} roll - The evaluated roll to explode
    * @param {Array<number>} explodeValues - Values that should trigger explosions (e.g., [1, 4])
    * @param {number} maxExplosions - Safety limit to prevent infinite loops (default 100)
@@ -153,11 +157,15 @@ export class VagabondDamageHelper {
       item = actor.items.get(itemId);
     }
 
-    // Add stat bonus on critical hit
+    // Get roll data WITH item effects applied (important for on-use effects)
+    const rollData = item ? actor.getRollDataWithItemEffects(item) : actor.getRollData();
+
+    // Add stat bonus on critical hit (positive or negative)
     let finalFormula = damageFormula;
     if (context.isCritical && context.statKey) {
-      const statValue = actor.system.stats[context.statKey]?.value || 0;
-      if (statValue > 0) {
+      // Use roll data (includes item effects) instead of actor.system directly
+      const statValue = rollData.stats?.[context.statKey]?.value || 0;
+      if (statValue !== 0) {  // ✅ FIX: Include negative stats too (they reduce damage)
         finalFormula += ` + ${statValue}`;
       }
     }
@@ -418,6 +426,12 @@ export class VagabondDamageHelper {
 
   /**
    * Get explosion values from an item if enabled
+   *
+   * ⚠️ PARTIAL DUPLICATE: Similar method exists in module/documents/item.mjs but with DIFFERENT logic.
+   * - This version (static): Simple item property check
+   * - item.mjs version (instance): Also checks actor.system.bonuses.globalExplode
+   * Consider consolidating or clearly documenting the different use cases.
+   *
    * @param {Item} item - The item (spell or equipment) with canExplode and explodeValues
    * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
    * @private
@@ -454,10 +468,10 @@ export class VagabondDamageHelper {
     const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
     let damageFormula = `${spellState.damageDice}d${dieSize}`;
 
-    // Add stat bonus on critical hit
+    // Add stat bonus on critical hit (positive or negative)
     if (isCritical && statKey) {
       const statValue = actor.system.stats[statKey]?.value || 0;
-      if (statValue > 0) {
+      if (statValue !== 0) {  // ✅ FIX: Include negative stats too (they reduce damage)
         damageFormula += ` + ${statValue}`;
       }
     }
@@ -1061,67 +1075,25 @@ export class VagabondDamageHelper {
    * @private
    */
   static async _rollSave(actor, saveType, isHindered, shiftKey = false, ctrlKey = false) {
-    // Calculate effective favor/hinder state using keyboard modifiers
-    // This follows the same logic as VagabondActorSheet._calculateEffectiveFavorHinder
+    // Use centralized roll builder for all favor/hinder logic
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+
+    // Calculate effective favor/hinder from system state and keyboard modifiers
     const systemState = actor.system.favorHinder || 'none';
+    const effectiveFavorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
+      systemState,
+      shiftKey,
+      ctrlKey
+    );
 
-    // Determine modifier intent from keyboard
-    let modifierIntent = 'none';
-    if (shiftKey && !ctrlKey) {
-      modifierIntent = 'favor';
-    } else if (ctrlKey && !shiftKey) {
-      modifierIntent = 'hinder';
-    } else if (shiftKey && ctrlKey) {
-      // Both pressed - cancel out
-      modifierIntent = 'none';
-    }
+    // Build and evaluate roll with conditional hinder support
+    // (isHindered = true when heavy armor for Dodge, or ranged/cast attack for Block)
+    const roll = await VagabondRollBuilder.buildAndEvaluateD20WithConditionalHinder(
+      actor,
+      effectiveFavorHinder,
+      isHindered
+    );
 
-    // Calculate final effective state
-    let effectiveFavorHinder = 'none';
-    if (systemState === modifierIntent) {
-      // Same direction - apply it
-      effectiveFavorHinder = systemState;
-    } else if (systemState === 'none') {
-      // No system state - use modifier
-      effectiveFavorHinder = modifierIntent;
-    } else if (modifierIntent === 'none') {
-      // No modifier - use system state
-      effectiveFavorHinder = systemState;
-    } else {
-      // Opposite directions - cancel out
-      effectiveFavorHinder = 'none';
-    }
-
-    // Build roll formula
-    let rollFormula = 'd20';
-    let finalFavorHinder = 'none'; // Track final state for dice appearance
-
-    // Now apply favor/hinder considering both the effective state AND the conditional hinder
-    const hasEffectiveFavor = (effectiveFavorHinder === 'favor');
-    const hasEffectiveHinder = (effectiveFavorHinder === 'hinder');
-
-    // IMPORTANT: Favor and Hinder cancel each other out
-    // If effective state is Favor AND save is Hindered by conditions: they cancel, roll straight d20
-    if (hasEffectiveFavor && isHindered) {
-      rollFormula = 'd20';
-      finalFavorHinder = 'none';
-    }
-    // If effective state is Favor AND save is NOT Hindered: apply Favor
-    else if (hasEffectiveFavor && !isHindered) {
-      rollFormula = 'd20 + 1d6[favored]';
-      finalFavorHinder = 'favor';
-    }
-    // If effective state is Hinder OR save is Hindered by conditions: apply Hinder
-    // Multiple Hinder sources do NOT stack - only apply -1d6 once
-    else if (hasEffectiveHinder || isHindered) {
-      rollFormula = 'd20 - 1d6[hindered]';
-      finalFavorHinder = 'hinder';
-    }
-
-    // Use VagabondDiceAppearance to apply custom colors for Dice So Nice
-    const { VagabondDiceAppearance } = await import('./dice-appearance.mjs');
-    const roll = new Roll(rollFormula, actor.getRollData());
-    await VagabondDiceAppearance.evaluateWithCustomColors(roll, finalFavorHinder);
     return roll;
   }
 

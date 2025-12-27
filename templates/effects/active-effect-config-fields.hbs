@@ -1,0 +1,146 @@
+{{!-- Custom fields for Vagabond Active Effect Config --}}
+
+<div class="vagabond-effect-config-wrapper">
+  <fieldset class="vagabond-effect-fields">
+    <legend>{{localize "VAGABOND.Effect.ApplicationMode.Label"}}</legend>
+
+    <div class="form-group">
+      <label for="application-mode">{{localize "VAGABOND.Effect.ApplicationMode.Label"}}</label>
+      <div class="form-fields">
+        <select name="flags.vagabond.applicationMode" id="application-mode">
+          {{#each vagabond.applicationModes as |mode key|}}
+            <option value="{{key}}" {{#if (eq ../vagabond.applicationMode key)}}selected{{/if}}>
+              {{localize mode.label}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      <p class="hint application-mode-hint"></p>
+    </div>
+
+    {{#if vagabond.parentItemName}}
+    <div class="form-group info-box">
+      <i class="fas fa-info-circle"></i>
+      <p class="notes">
+        <strong>Parent Item:</strong> {{vagabond.parentItemName}} ({{vagabond.parentItemType}})<br>
+        <strong>Suggested Mode:</strong> {{localize vagabond.smartDefaultMode.label}}
+      </p>
+    </div>
+    {{/if}}
+
+    <div class="form-group help-box">
+      <details>
+        <summary><i class="fas fa-question-circle"></i> Application Mode Guide</summary>
+        <div class="mode-help">
+          {{#each vagabond.applicationModes as |mode key|}}
+          <div class="mode-example">
+            <h4><i class="{{mode.icon}}"></i> {{localize mode.label}}</h4>
+            <p>{{localize mode.hint}}</p>
+            {{#if (eq key "permanent")}}
+            <p class="example"><em>Example: Perk that gives +2 Might to all rolls</em></p>
+            {{else if (eq key "when-equipped")}}
+            <p class="example"><em>Example: Armor that gives +1 AC while worn</em></p>
+            {{else if (eq key "on-use")}}
+            <p class="example"><em>Example: Keen Dagger (crits on 19-20, but only with dagger attacks)</em></p>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+      </details>
+    </div>
+
+  </fieldset>
+
+  <style>
+  .vagabond-effect-fields {
+    border: 1px solid var(--color-border-light-primary);
+    padding: 0.5rem;
+    margin: 1rem 0;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .vagabond-effect-fields legend {
+    font-weight: bold;
+    padding: 0 0.5rem;
+  }
+
+  .application-mode-hint {
+    font-style: italic;
+    color: var(--color-text-dark-secondary);
+    margin-top: 0.25rem;
+  }
+
+  .info-box {
+    background: rgba(13, 110, 253, 0.1);
+    border: 1px solid rgba(13, 110, 253, 0.3);
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .info-box i {
+    color: var(--color-info);
+    margin-right: 0.5rem;
+  }
+
+  .info-box .notes {
+    margin: 0;
+    font-size: 0.9em;
+  }
+
+  .help-box {
+    margin-top: 0.75rem;
+  }
+
+  .help-box summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--color-text-dark-primary);
+    user-select: none;
+  }
+
+  .help-box summary:hover {
+    color: var(--color-text-hyperlink);
+  }
+
+  .mode-help {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  .mode-example {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-light-tertiary);
+  }
+
+  .mode-example:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .mode-example h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text-dark-primary);
+  }
+
+  .mode-example h4 i {
+    margin-right: 0.5rem;
+    width: 1.2em;
+    text-align: center;
+  }
+
+  .mode-example p {
+    margin: 0.25rem 0;
+  }
+
+  .mode-example .example {
+    font-style: italic;
+    font-size: 0.9em;
+    color: var(--color-text-dark-secondary);
+  }
+  </style>
+</div>

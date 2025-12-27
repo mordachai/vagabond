@@ -252,10 +252,10 @@ export class VagabondChatCard {
   /* -------------------------------------------- */
   
   static async createActionCard({
-    actor, item, title, subtitle, rollData, tags = [], 
-    damageRoll, damageType = 'physical', description = '', 
+    actor, item, title, subtitle, rollData, tags = [],
+    damageRoll, damageType = 'physical', description = '',
     hasDefenses = false, attackType = 'melee', footerActions = [],
-    propertyDetails = null
+    propertyDetails = null, damageFormula = null
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -361,9 +361,28 @@ export class VagabondChatCard {
 
       } else if (rollData?.isHit && item && !damageRoll) {
            const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-           const formula = item.system.currentDamage || '1d6';
+
+           // Use provided damageFormula, or fall back to item's current damage
+           // For spells, damageFormula should be passed explicitly with increased dice
+           // For weapons, item.system.currentDamage accounts for grip state
+           const formula = damageFormula || item.system.currentDamage || '1d6';
+
+           // Determine statKey for crit damage bonus
+           // For weapons: get from weaponSkill.stat
+           // For spells: get from manaSkill.stat (if available in rollData)
+           let statKey = null;
+           if (rollData.weaponSkill?.stat) {
+               statKey = rollData.weaponSkill.stat;
+           } else if (rollData.manaSkill?.stat) {
+               statKey = rollData.manaSkill.stat;
+           }
+
            const btn = VagabondDamageHelper.createDamageButton(actor.id, item.id, formula, {
-               type: item.type, isCritical: rollData.isCritical, damageType, attackType
+               type: item.type,
+               isCritical: rollData.isCritical,
+               damageType,
+               attackType,
+               statKey  // ✅ FIX: Pass statKey for critical damage bonus
            });
            card.addFooterAction(btn);
       }
@@ -521,9 +540,12 @@ export class VagabondChatCard {
           description = await foundry.applications.ux.TextEditor.enrichHTML(weapon.system.description, { async: true });
       }
 
+      // Determine attack type from weapon skill (ranged vs melee)
+      const attackType = weaponSkillKey === 'ranged' ? 'ranged' : 'melee';
+
       return this.createActionCard({
-          actor, 
-          item: weapon, 
+          actor,
+          item: weapon,
           title: `${weapon.name} Attack`,
           rollData: attackResult,
           tags,
@@ -531,7 +553,8 @@ export class VagabondChatCard {
           damageRoll, // Now correctly populated for hits/crits
           damageType: weapon.system.currentDamageType || 'physical',
           description,
-          hasDefenses: true
+          hasDefenses: true,
+          attackType  // ✅ FIX: Pass attackType for save hinder logic
       });
   }
 
@@ -573,20 +596,30 @@ export class VagabondChatCard {
       }
 
       // 4. Mana Cost Tag
-      tags.push({ 
-          label: `${costs.totalCost}`, 
+      tags.push({
+          label: `${costs.totalCost}`,
           icon: 'fas fa-star-christmas',
-          cssClass: 'tag-mana' 
+          cssClass: 'tag-mana'
       });
+
+      // Calculate spell damage formula for manual damage button
+      // This must include the increased damage dice from mana expenditure
+      let spellDamageFormula = null;
+      if (spellState.damageDice && spellState.damageDice > 0) {
+          const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
+          spellDamageFormula = `${spellState.damageDice}d${dieSize}`;
+      }
 
       return this.createActionCard({
           actor, item: spell, title: spell.name,
-          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess },
+          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill },  // ✅ FIX: Include manaSkill for statKey lookup
           tags,
           damageRoll,
           damageType: spell.system.damageType,
           description: spell.system.description,
-          hasDefenses: true
+          hasDefenses: true,
+          attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
+          damageFormula: spellDamageFormula  // ✅ FIX: Pass actual spell damage formula with increased dice
       });
   }
   

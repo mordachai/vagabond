@@ -228,6 +228,13 @@ Hooks.once('init', async function () {
   // Register custom ActiveEffect document class
   CONFIG.ActiveEffect.documentClass = VagabondActiveEffect;
 
+  // Register custom ActiveEffectConfig sheet
+  const VagabondActiveEffectConfig = (await import('./applications/active-effect-config.mjs')).default;
+  DocumentSheetConfig.registerSheet(ActiveEffect, 'vagabond', VagabondActiveEffectConfig, {
+    makeDefault: true,
+    label: 'VAGABOND.Effect.ConfigSheet'
+  });
+
   // Active Effects are never copied to the Actor,
   // but will still apply to the Actor from within the Item
   // if the transfer property on the Active Effect is true.

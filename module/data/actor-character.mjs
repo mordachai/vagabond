@@ -535,18 +535,27 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
     if (this.skills) {
+      data.skills = {};
       for (let [k, v] of Object.entries(this.skills)) {
-        data[k] = foundry.utils.deepClone(v);
+        data.skills[k] = foundry.utils.deepClone(v);
+        // Ensure stat field is included (it's readonly so might not clone)
+        if (v.stat) data.skills[k].stat = v.stat;
       }
     }
     if (this.weaponSkills) {
+      data.weaponSkills = {};
       for (let [k, v] of Object.entries(this.weaponSkills)) {
-        data[k] = foundry.utils.deepClone(v);
+        data.weaponSkills[k] = foundry.utils.deepClone(v);
+        // Ensure stat field is included (it's readonly so might not clone)
+        if (v.stat) data.weaponSkills[k].stat = v.stat;
       }
     }
     if (this.saves) {
+      data.saves = {};
       for (let [k, v] of Object.entries(this.saves)) {
-        data[k] = foundry.utils.deepClone(v);
+        data.saves[k] = foundry.utils.deepClone(v);
+        // Ensure stat field is included (it's readonly so might not clone)
+        if (v.stat) data.saves[k].stat = v.stat;
       }
     }
     data.lvl = this.attributes.level.value;

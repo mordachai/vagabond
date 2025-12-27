@@ -7,8 +7,57 @@
         {{/each}}
     </nav>
 
-    <main class="builder-body flexcol">
-        <section class="decision-zone {{#unless hasChoices}}hidden{{/unless}}">
+    <main class="builder-body">
+        {{!-- LEFT COLUMN: Selection List (full height) --}}
+        <aside class="selection-list-column">
+            <div class="search-sticky"><input type="text" placeholder="Search..." data-action="filterList"></div>
+            <div class="directory-list custom-scroll">
+                {{#if (eq step 'stats')}}
+                    {{#each statData.arrays}}
+                        <li class="directory-item stat-array-item {{#if this.selected}}active{{/if}}"
+                            data-id="{{this.id}}" data-action="selectOption">
+                            <span class="array-label">{{this.id}}</span>
+                            <span class="array-values">{{this.values}}</span>
+                        </li>
+                    {{/each}}
+                {{else if isGearStep}}
+                    <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
+                        <span>Silver: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>
+                    </div>
+                    {{#each options as |group|}}
+                    <details class="gear-accordion" {{#if group.isOpen}}open{{/if}}>
+                        <summary class="category-header" data-category="{{group.id}}" data-action="toggleCategory">
+                            <i class="fas fa-chevron-right"></i> {{group.label}}
+                        </summary>
+                        <ul class="item-list">
+                            {{#each group.items as |opt|}}
+                            <li class="directory-item gear-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                                <img src="{{opt.img}}" width="48" height="48">
+                                <div class="item-info">
+                                    <div class="name">{{opt.name}}</div>
+                                    <div class="item-meta">
+                                        <span class="item-slots"><i class="fas fa-box"></i> {{opt.system.baseSlots}}</span>
+                                        <span class="item-cost"><i class="fas fa-coins"></i> {{#if opt.system.baseCost.gold}}{{opt.system.baseCost.gold}}g{{else}}{{opt.system.baseCost.silver}}s{{/if}}</span>
+                                    </div>
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </details>
+                    {{/each}}
+                {{else}}
+                    {{#each options as |opt|}}
+                    <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                        <img src="{{opt.img}}" width="32" height="32"><span class="name">{{opt.name}}</span>
+                    </li>
+                    {{/each}}
+                {{/if}}
+            </div>
+        </aside>
+
+        {{!-- RIGHT COLUMN: Decision, Tray, and Content Areas --}}
+        <div class="right-column">
+            <section class="decision-zone {{#unless hasChoices}}hidden{{/unless}}">
             <header class="zone-header">{{localize "VAGABOND.CharBuilder.ProposedChoices"}}</header>
             <div class="decision-tray flexrow">
                 {{#if (eq step 'class')}}
@@ -157,54 +206,8 @@
         </section>
         {{/if}}
 
-        <section class="selection-zone {{#if useTripleColumn}}triple-column{{/if}}">
-            <aside class="selection-list flexcol">
-                <div class="search-sticky"><input type="text" placeholder="Search..." data-action="filterList"></div>
-                <div class="directory-list custom-scroll">
-                    {{#if (eq step 'stats')}}
-                        {{#each statData.arrays}}
-                            <li class="directory-item stat-array-item {{#if this.selected}}active{{/if}}" 
-                                data-id="{{this.id}}" data-action="selectOption">
-                                <span class="array-label">{{this.id}}</span>
-                                <span class="array-values">{{this.values}}</span>
-                            </li>
-                        {{/each}}
-                    {{else if isGearStep}}
-                        <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
-                            <span>Silver: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>
-                        </div>
-                        {{#each options as |group|}}
-                        <details class="gear-accordion" {{#if group.isOpen}}open{{/if}}>
-                            <summary class="category-header" data-category="{{group.id}}" data-action="toggleCategory">
-                                <i class="fas fa-chevron-right"></i> {{group.label}}
-                            </summary>
-                            <ul class="item-list">
-                                {{#each group.items as |opt|}}
-                                <li class="directory-item gear-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
-                                    <img src="{{opt.img}}" width="48" height="48">
-                                    <div class="item-info">
-                                        <div class="name">{{opt.name}}</div>
-                                        <div class="item-meta">
-                                            <span class="item-slots"><i class="fas fa-box"></i> {{opt.system.baseSlots}}</span>
-                                            <span class="item-cost"><i class="fas fa-coins"></i> {{#if opt.system.baseCost.gold}}{{opt.system.baseCost.gold}}g{{else}}{{opt.system.baseCost.silver}}s{{/if}}</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                {{/each}}
-                            </ul>
-                        </details>
-                        {{/each}}
-                    {{else}}
-                        {{#each options as |opt|}}
-                        <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
-                            <img src="{{opt.img}}" width="32" height="32"><span class="name">{{opt.name}}</span>
-                        </li>
-                        {{/each}}
-                    {{/if}}
-                </div>
-            </aside>
-
-            <article class="selection-preview custom-scroll">
+            <section class="content-zone {{#if useTripleColumn}}triple-column{{/if}}">
+                <article class="selection-preview custom-scroll">
                 {{#if instruction}}
                     <div class="step-instruction-overlay flexcol">
                         <i class="fas fa-info-circle"></i>
@@ -508,7 +511,8 @@
                 {{/if}}
             </aside>
             {{/if}}
-        </section>
+            </section>
+        </div>
     </main>
 
     <footer class="builder-footer flexrow">

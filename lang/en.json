@@ -505,7 +505,16 @@
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects",
-      "Duration": "Duration"
+      "Duration": "Duration",
+      "ApplicationMode": {
+        "Label": "Application Mode",
+        "Permanent": "Permanent (Always Active)",
+        "PermanentHint": "This effect is always active. Use for perks, permanent buffs, or equipped armor bonuses that don't require the item to be actively used.",
+        "WhenEquipped": "When Equipped",
+        "WhenEquippedHint": "This effect only applies while the item is equipped (weapons, armor, accessories). The effect turns off when unequipped.",
+        "OnUse": "On Use Only",
+        "OnUseHint": "This effect only applies when making rolls WITH this specific item. Use for weapon properties (Keen, Brutal), spell modifiers, or item-specific bonuses."
+      }
     },
     "Weapon": {
     "Range": {

@@ -3779,9 +3779,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       /* PATH B: WEAPONS */
       const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
 
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
         event.ctrlKey
@@ -4062,25 +4063,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // NORMAL PATH: Perform casting check roll
       const label = `${spell.name} (${skill.label})`;
 
+      // Get roll data WITH this spell's "on-use" effects applied
+      const rollData = this.actor.getRollDataWithItemEffects(spell);
+
+      // Import roll builder and build roll with centralized utility
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+
       // Apply favor/hinder with keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
         event.ctrlKey
       );
 
-      // Import roll builder and build roll with centralized utility
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-      roll = await VagabondRollBuilder.buildAndEvaluateD20(
-        this.actor,
+      roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(
+        rollData,
         favorHinder
       );
 
       isSuccess = roll.total >= difficulty;
 
-      // Check critical - ONLY the d20 result, not including favor/hinder
-      const critNumber = this.actor.system.critNumber || 20;
+      // ✅ CRITICAL: Use critNumber from rollData (includes item effects)
+      const critNumber = rollData.critNumber || 20;
       const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
       const d20Result = d20Term?.results?.[0]?.result || 0;
       isCritical = d20Result >= critNumber;
@@ -4241,47 +4246,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Calculate effective favor/hinder state based on system state and keyboard modifiers.
-   * Shift = Favor, Ctrl = Hinder. If they conflict with system state, they cancel out.
-   * @param {string} systemState - The actor's current favorHinder state ('favor', 'hinder', or 'none')
-   * @param {boolean} shiftKey - Whether Shift key was pressed
-   * @param {boolean} ctrlKey - Whether Ctrl key was pressed
-   * @returns {string} The effective favorHinder state ('favor', 'hinder', or 'none')
-   * @private
+   * ✅ REMOVED - This method has been centralized to VagabondRollBuilder.calculateEffectiveFavorHinder()
+   *
+   * All favor/hinder calculation logic is now handled by the VagabondRollBuilder class
+   * in module/helpers/roll-builder.mjs for consistency across the system.
+   *
+   * Use: VagabondRollBuilder.calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey)
    */
-  static _calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey) {
-    // Determine modifier intent
-    let modifierIntent = 'none';
-    if (shiftKey && !ctrlKey) {
-      modifierIntent = 'favor';
-    } else if (ctrlKey && !shiftKey) {
-      modifierIntent = 'hinder';
-    } else if (shiftKey && ctrlKey) {
-      // Both pressed - cancel out
-      modifierIntent = 'none';
-    }
-
-    // If no modifier, return system state
-    if (modifierIntent === 'none') {
-      return systemState || 'none';
-    }
-
-    // If modifier matches system state, keep it
-    if (modifierIntent === systemState) {
-      return modifierIntent;
-    }
-
-    // If modifier conflicts with system state, they cancel out
-    if (systemState === 'favor' && modifierIntent === 'hinder') {
-      return 'none';
-    }
-    if (systemState === 'hinder' && modifierIntent === 'favor') {
-      return 'none';
-    }
-
-    // If system state is 'none', apply modifier
-    return modifierIntent;
-  }
 
   /**
    * Handle clickable rolls.
@@ -4304,16 +4275,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
+      // Import roll builder and build roll with centralized utility
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+
       // Apply favor/hinder based on system state and keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
         event.ctrlKey
       );
 
-      // Import roll builder and build roll with centralized utility
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
       const roll = await VagabondRollBuilder.buildAndEvaluateD20(
         this.actor,
         favorHinder,
