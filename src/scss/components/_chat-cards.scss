@@ -567,27 +567,43 @@
         margin: 8px 16px;
 
         /* Apply Direct (Full Width) */
-        .vagabond-apply-direct-button,
-        .vagabond-npc-damage-button,
-        .vagabond-damage-button {
+        button.vagabond-apply-direct-button,
+        button.vagabond-npc-damage-button,
+        button.vagabond-damage-button,
+        button.vagabond-apply-save-damage-button {
             width: 100%;
-            background-image: url('../assets/ui/chat/apply-direct-bg.webp');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center center;
-            color: #fff;
-            padding: 6px;
+            background: transparent !important;
+            background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
+            background-size: 100% 100% !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            color: #fff !important;
+            padding: 6px !important;
             margin-bottom: 6px;
             text-transform: uppercase;
             font-weight: bold;
             font-family: var(--font-primary);
             cursor: pointer;
-            display: flex; justify-content: center; align-items: center; gap: 6px;
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
             border-radius: 2px;
-            border: none;
+            border: none !important;
             box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            white-space: normal;
+            text-align: center;
+            line-height: 1.2;
             &:hover { filter: brightness(1.6); }
-            i { color: var(--c-yellow-text); }
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                filter: grayscale(1);
+            }
+            i {
+                color: var(--c-yellow-text) !important;
+                flex-shrink: 0;
+            }
         }
 
         /* Save Buttons Row */
@@ -618,7 +634,13 @@
         .vagabond-save-buttons-container {
             margin-bottom: 10px;
         }
-        
+
+        /* Apply Save Damage Button Container (in save result cards) */
+        .save-apply-button-container {
+            margin-top: 10px;
+            width: 100%;
+        }
+
         /* Defend Options Accordion */
         .defend-info-box {
             background: #fff;
@@ -647,6 +669,47 @@
     }
 }
 
+/* Apply Save Damage Button (outside card-actions, in save result description) */
+.save-apply-button-container button.vagabond-apply-save-damage-button {
+    width: 100%;
+    background: transparent !important;
+    background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    color: #fff !important;
+    padding: 6px !important;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    border-radius: 2px;
+    border: none !important;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+
+    &:hover {
+        filter: brightness(1.6);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        filter: grayscale(1);
+    }
+
+    i {
+        color: var(--c-yellow-text) !important;
+        flex-shrink: 0;
+    }
+}
 
 /* ========================================
    GLOBAL DICE VISUALS (ROOT LEVEL)

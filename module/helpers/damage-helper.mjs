@@ -748,6 +748,29 @@ export class VagabondDamageHelper {
     `;
   }
 
+  /**
+   * Create "Apply to Target" button for save result cards
+   * @param {string} actorId - The actor who rolled the save (damage applies to them)
+   * @param {string} actorName - The actor's name for display
+   * @param {number} finalDamage - Final damage amount (after save/armor/immunities)
+   * @param {string} damageType - Type of damage
+   * @returns {string} HTML button string
+   */
+  static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType) {
+    return `
+      <div class="save-apply-button-container">
+        <button
+          class="vagabond-apply-save-damage-button"
+          data-actor-id="${actorId}"
+          data-actor-name="${actorName}"
+          data-damage-amount="${finalDamage}"
+          data-damage-type="${damageType}"
+        >
+          <i class="fas fa-burst"></i> Apply ${finalDamage} to ${actorName}
+        </button>
+      </div>
+    `;
+  }
 
   /**
    * Calculate final damage per RAW rules: Armor/Immune/Weak
@@ -937,7 +960,7 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Handle save button click - roll saves for each selected token
+   * Handle save button click - roll saves for each targeted token
    * @param {HTMLElement} button - The clicked save button
    * @param {Event} event - The click event (for keyboard modifiers)
    */
@@ -950,15 +973,15 @@ export class VagabondDamageHelper {
     const actorId = button.dataset.actorId;
     const itemId = button.dataset.itemId;
 
-    // Get selected tokens
-    const selectedTokens = canvas.tokens.controlled;
-    if (selectedTokens.length === 0) {
-      ui.notifications.warn('No tokens selected. Please select at least one token.');
+    // Get targeted tokens
+    const targetedTokens = Array.from(game.user.targets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Roll save for each selected token individually
-    for (const target of selectedTokens) {
+    // Roll save for each targeted token individually
+    for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
@@ -1032,7 +1055,7 @@ export class VagabondDamageHelper {
     }
 
     // Button remains active so multiple players can roll saves
-    // Each click generates new save result cards for currently selected tokens
+    // Each click generates new save result cards for currently targeted tokens
   }
 
   /**
@@ -1189,6 +1212,12 @@ export class VagabondDamageHelper {
 
     card.setDescription((card.data.description || '') + damageCalculationHTML + critRuleHTML);
 
+    // Add "Apply to Target" button if damage was not auto-applied
+    if (!autoApplied && finalDamage > 0) {
+      const applyButton = this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType);
+      card.setDescription((card.data.description || '') + applyButton);
+    }
+
     return await card.send();
   }
 
@@ -1310,15 +1339,15 @@ export class VagabondDamageHelper {
     const amount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType.toLowerCase();
 
-    // Get selected tokens
-    const selectedTokens = canvas.tokens.controlled;
-    if (selectedTokens.length === 0) {
-      ui.notifications.warn('No tokens selected. Please select at least one token.');
+    // Get targeted tokens
+    const targetedTokens = Array.from(game.user.targets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Apply restorative effect to each selected token
-    for (const target of selectedTokens) {
+    // Apply restorative effect to each targeted token
+    for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
@@ -1372,15 +1401,15 @@ export class VagabondDamageHelper {
     const sourceActor = game.actors.get(actorId);
     const sourceItem = sourceActor?.items.get(itemId);
 
-    // Get selected tokens
-    const selectedTokens = canvas.tokens.controlled;
-    if (selectedTokens.length === 0) {
-      ui.notifications.warn('No tokens selected. Please select at least one token.');
+    // Get targeted tokens
+    const targetedTokens = Array.from(game.user.targets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Apply damage to each selected token
-    for (const target of selectedTokens) {
+    // Apply damage to each targeted token
+    for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
@@ -1401,5 +1430,43 @@ export class VagabondDamageHelper {
     }
 
     // Button remains active so damage can be applied to different tokens
+  }
+
+  /**
+   * Handle "Apply to Target" button from save result cards
+   * Applies pre-calculated damage (after save/armor/immunities) to the specific character who rolled the save
+   * @param {HTMLElement} button - The clicked button
+   */
+  static async handleApplySaveDamage(button) {
+    const actorId = button.dataset.actorId;
+    const actorName = button.dataset.actorName;
+    const finalDamage = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType;
+
+    // Get the actor who rolled the save
+    const actor = game.actors.get(actorId);
+    if (!actor) {
+      ui.notifications.error('Character not found!');
+      return;
+    }
+
+    // Check permissions - must own the character or be GM
+    if (!actor.isOwner && !game.user.isGM) {
+      ui.notifications.warn(`You don't have permission to modify ${actor.name}.`);
+      return;
+    }
+
+    // Apply the pre-calculated damage to this specific character
+    const currentHP = actor.system.health?.value || 0;
+    const newHP = Math.max(0, currentHP - finalDamage);
+    await actor.update({ 'system.health.value': newHP });
+
+    // Update button text and disable
+    const icon = button.querySelector('i');
+    button.textContent = `Applied to ${actorName}`;
+    if (icon) button.prepend(icon); // Keep the icon
+    button.disabled = true;
+
+    ui.notifications.info(`Applied ${finalDamage} damage to ${actorName} (${currentHP} → ${newHP} HP)`);
   }
 }

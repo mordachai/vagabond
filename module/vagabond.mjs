@@ -689,7 +689,21 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 9. Template Trigger Handler
+  // 9. Apply Save Damage Button Handler
+  // ---------------------------------------------------------
+  const applySaveButtons = html.querySelectorAll('.vagabond-apply-save-damage-button');
+
+  applySaveButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplySaveDamage(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 10. Template Trigger Handler
   // ---------------------------------------------------------
   const templateTriggers = html.querySelectorAll('.template-trigger');
 
