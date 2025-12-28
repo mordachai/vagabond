@@ -268,43 +268,32 @@ export class VagabondItem extends Item {
   async rollAttack(actor, favorHinder = 'none') {
     this.validateCanAttack();
 
+    // Get roll data WITH this item's "on-use" effects applied
+    // This allows weapon properties like "Keen" to affect only this weapon's rolls
+    const rollData = actor.getRollDataWithItemEffects(this);
+
     // Get the weapon skill and difficulty
     // The weaponSkill field can now be:
     // 1. A weapon skill (melee, brawl, finesse, ranged) - from actor.system.weaponSkills
     // 2. A regular skill (arcana, craft, etc.) - from actor.system.skills
     // 3. A save (reflex, endure, will) - from actor.system.saves
     const weaponSkillKey = this.system.weaponSkill;
-    let weaponSkill = actor.system.weaponSkills?.[weaponSkillKey] ||
-                      actor.system.skills?.[weaponSkillKey] ||
-                      actor.system.saves?.[weaponSkillKey];
+    let weaponSkill = rollData.weaponSkills?.[weaponSkillKey] ||
+                      rollData.skills?.[weaponSkillKey] ||
+                      rollData.saves?.[weaponSkillKey];
     const difficulty = weaponSkill?.difficulty || 10;
 
-    // Build roll formula with favor/hinder
-    let rollFormula = 'd20';
-    if (favorHinder === 'favor') {
-      rollFormula = 'd20 + 1d6';
-    } else if (favorHinder === 'hinder') {
-      rollFormula = 'd20 - 1d6';
-    }
-
-    // Apply universal check bonus
-    const checkBonus = actor.system.universalCheckBonus || 0;
-    if (checkBonus !== 0) {
-      rollFormula += ` + ${checkBonus}`;
-    }
-
-    // Import dice appearance helper
-    const { VagabondDiceAppearance } = await import('../helpers/dice-appearance.mjs');
-
-    // Roll the attack
-    const roll = new Roll(rollFormula, actor.getRollData());
-    await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
+    // Use centralized roll builder with modified roll data
+    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+    const roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, favorHinder);
 
     // Check if the attack succeeds
     const isHit = roll.total >= difficulty;
 
     // Check critical - ONLY the d20 result, not including favor/hinder
-    const critNumber = actor.system.critNumber || 20;
+    // ✅ CRITICAL: Use critNumber from rollData (which includes item effects)
+    // This allows "Keen" weapons to crit on 19-20 instead of just 20
+    const critNumber = rollData.critNumber || 20;
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     const isCritical = d20Result >= critNumber;
@@ -329,6 +318,12 @@ export class VagabondItem extends Item {
    */
   /**
    * Get explosion values from this item if enabled
+   *
+   * ⚠️ PARTIAL DUPLICATE: Similar method exists in module/helpers/damage-helper.mjs with SIMPLER logic.
+   * - This version (instance): Checks both item properties AND actor.system.bonuses.globalExplode
+   * - damage-helper.mjs version (static): Only checks item properties (simpler)
+   * This version has MORE features (global actor bonuses). Consider if both are needed.
+   *
    * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
    * @private
    */
@@ -370,6 +365,12 @@ export class VagabondItem extends Item {
   /**
    * Manually explode dice on specific values (recursive)
    * This bypasses Foundry's potentially buggy x=1x=4 syntax
+   *
+   * ⚠️ TODO [CODE DUPLICATION]: This method is DUPLICATED in module/helpers/damage-helper.mjs
+   * Recommendation: Remove this duplicate and import VagabondDamageHelper instead:
+   *   import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
+   *   return await VagabondDamageHelper._manuallyExplodeDice(roll, explodeValues, maxExplosions);
+   *
    * @param {Roll} roll - The evaluated roll to explode
    * @param {Array<number>} explodeValues - Values that should trigger explosions (e.g., [1, 4])
    * @param {number} maxExplosions - Safety limit to prevent infinite loops (default 100)
@@ -456,10 +457,10 @@ export class VagabondItem extends Item {
 
     let damageFormula = this.system.currentDamage;
 
-    // Add stat bonus on critical hit
+    // Add stat bonus on critical hit (positive or negative)
     if (isCritical && statKey) {
       const statValue = actor.system.stats[statKey]?.value || 0;
-      if (statValue > 0) {
+      if (statValue !== 0) {  // ✅ FIX: Include negative stats too (they reduce damage)
         damageFormula += ` + ${statValue}`;
       }
     }

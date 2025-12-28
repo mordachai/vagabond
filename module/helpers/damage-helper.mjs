@@ -6,6 +6,10 @@ export class VagabondDamageHelper {
   /**
    * Manually explode dice on specific values (recursive)
    * This bypasses Foundry's potentially buggy x=1x=4 syntax
+   *
+   * ✅ CANONICAL VERSION: This is the main implementation.
+   * ⚠️ DUPLICATE EXISTS in module/documents/item.mjs - should be consolidated to use this version.
+   *
    * @param {Roll} roll - The evaluated roll to explode
    * @param {Array<number>} explodeValues - Values that should trigger explosions (e.g., [1, 4])
    * @param {number} maxExplosions - Safety limit to prevent infinite loops (default 100)
@@ -153,11 +157,15 @@ export class VagabondDamageHelper {
       item = actor.items.get(itemId);
     }
 
-    // Add stat bonus on critical hit
+    // Get roll data WITH item effects applied (important for on-use effects)
+    const rollData = item ? actor.getRollDataWithItemEffects(item) : actor.getRollData();
+
+    // Add stat bonus on critical hit (positive or negative)
     let finalFormula = damageFormula;
     if (context.isCritical && context.statKey) {
-      const statValue = actor.system.stats[context.statKey]?.value || 0;
-      if (statValue > 0) {
+      // Use roll data (includes item effects) instead of actor.system directly
+      const statValue = rollData.stats?.[context.statKey]?.value || 0;
+      if (statValue !== 0) {  // ✅ FIX: Include negative stats too (they reduce damage)
         finalFormula += ` + ${statValue}`;
       }
     }
@@ -273,7 +281,7 @@ export class VagabondDamageHelper {
       title: `${item?.name || 'Attack'} Damage`,
       damageRoll,
       damageType: damageTypeKey || damageType,
-      hasDefenses: true,
+      hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
       attackType,
       rollData: isCritical ? { isCritical: true } : null
     });
@@ -304,11 +312,11 @@ export class VagabondDamageHelper {
     // Build damage HTML using the template partial
     const damageHTML = await this._renderDamagePartial(damageRoll, damageType, isCritical, damageTypeKey);
 
-    // Build save buttons HTML (unless it's healing)
-    const isHealing = damageType.toLowerCase() === 'healing';
+    // Build save buttons HTML (unless it's a restorative type)
+    const isRestorative = this.isRestorativeDamageType(damageType);
     let buttonsHTML;
-    if (isHealing) {
-      // Keep old apply healing button for healing damage
+    if (isRestorative) {
+      // Use apply button for healing/recover/recharge
       buttonsHTML = this.createApplyDamageButton(
         damageRoll.total,
         damageType,
@@ -316,7 +324,7 @@ export class VagabondDamageHelper {
         item?.id
       );
     } else {
-      // Use new save buttons for all other damage
+      // Use save buttons for all harmful damage
       buttonsHTML = this.createSaveButtons(
         damageRoll.total,
         damageTypeKey || 'physical',
@@ -327,8 +335,8 @@ export class VagabondDamageHelper {
       );
     }
 
-    // Build defend options HTML (unless it's healing)
-    const defendHTML = isHealing ? '' : this.createDefendOptions();
+    // Build defend options HTML (unless it's a restorative type)
+    const defendHTML = isRestorative ? '' : this.createDefendOptions();
 
     // 1. Inject Damage Display
     // Check if damage section already exists
@@ -418,6 +426,12 @@ export class VagabondDamageHelper {
 
   /**
    * Get explosion values from an item if enabled
+   *
+   * ⚠️ PARTIAL DUPLICATE: Similar method exists in module/documents/item.mjs but with DIFFERENT logic.
+   * - This version (static): Simple item property check
+   * - item.mjs version (instance): Also checks actor.system.bonuses.globalExplode
+   * Consider consolidating or clearly documenting the different use cases.
+   *
    * @param {Item} item - The item (spell or equipment) with canExplode and explodeValues
    * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
    * @private
@@ -454,10 +468,10 @@ export class VagabondDamageHelper {
     const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
     let damageFormula = `${spellState.damageDice}d${dieSize}`;
 
-    // Add stat bonus on critical hit
+    // Add stat bonus on critical hit (positive or negative)
     if (isCritical && statKey) {
       const statValue = actor.system.stats[statKey]?.value || 0;
-      if (statValue > 0) {
+      if (statValue !== 0) {  // ✅ FIX: Include negative stats too (they reduce damage)
         damageFormula += ` + ${statValue}`;
       }
     }
@@ -622,19 +636,19 @@ export class VagabondDamageHelper {
           actor: actor,
           title: `${action.name} Damage`,
           // Passing the subtitle explicitly ensures it doesn't default to something generic
-          subtitle: actor.name, 
-          
+          subtitle: actor.name,
+
           // Passing the roll triggers the "Damage Section" (Big Orange Number)
           damageRoll: rollObj,
-          
+
           // Pass the key (e.g., 'physical') so the builder can look up the correct Icon/Label config
           damageType: damageTypeKey || 'physical',
-          
+
           // Pass context for the Save Buttons
           attackType: attackType,
-          
-          // Ensure Defenses (Block/Dodge accordion) appear unless it's healing
-          hasDefenses: (damageTypeKey !== 'healing')
+
+          // Ensure Defenses (Block/Dodge accordion) appear unless it's a restorative type
+          hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical')
       });
     }
 
@@ -681,19 +695,45 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Check if a damage type is restorative (healing, recover, recharge)
+   * @param {string} damageType - The damage type to check
+   * @returns {boolean}
+   */
+  static isRestorativeDamageType(damageType) {
+    const normalizedType = damageType?.toLowerCase() || '';
+    return normalizedType === 'healing' || normalizedType === 'recover' || normalizedType === 'recharge';
+  }
+
+  /**
    * Create an "Apply Damage" button
    * @param {number} damageAmount - The amount of damage
-   * @param {string} damageType - Type of damage
+   * @param {string} damageType - Type of damage (or healing/recover/recharge)
    * @param {string} actorId - Source actor ID
    * @param {string} itemId - Item ID (optional)
    * @returns {string} HTML button string
    */
   static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null) {
-    // Check if this is healing
-    const isHealing = damageType.toLowerCase() === 'healing';
-    const icon = isHealing ? 'fa-heart-pulse' : 'fa-heart-crack';
-    const text = isHealing ? `Apply ${damageAmount} Healing` : `Apply ${damageAmount} Damage`;
-    const buttonClass = isHealing ? 'vagabond-apply-healing-button' : 'vagabond-apply-damage-button';
+    // Check damage type and set appropriate button style
+    const normalizedType = damageType.toLowerCase();
+    let icon, text, buttonClass;
+
+    if (normalizedType === 'healing') {
+      icon = 'fa-heart-pulse';
+      text = `Apply ${damageAmount} Healing`;
+      buttonClass = 'vagabond-apply-healing-button';
+    } else if (normalizedType === 'recover') {
+      icon = 'fa-arrows-rotate';
+      text = `Recover ${damageAmount} Fatigue`;
+      buttonClass = 'vagabond-apply-recover-button';
+    } else if (normalizedType === 'recharge') {
+      icon = 'fa-bolt';
+      text = `Restore ${damageAmount} Mana`;
+      buttonClass = 'vagabond-apply-recharge-button';
+    } else {
+      icon = 'fa-heart-crack';
+      text = `Apply ${damageAmount} Damage`;
+      buttonClass = 'vagabond-apply-damage-button';
+    }
 
     return `
       <button
@@ -708,6 +748,29 @@ export class VagabondDamageHelper {
     `;
   }
 
+  /**
+   * Create "Apply to Target" button for save result cards
+   * @param {string} actorId - The actor who rolled the save (damage applies to them)
+   * @param {string} actorName - The actor's name for display
+   * @param {number} finalDamage - Final damage amount (after save/armor/immunities)
+   * @param {string} damageType - Type of damage
+   * @returns {string} HTML button string
+   */
+  static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType) {
+    return `
+      <div class="save-apply-button-container">
+        <button
+          class="vagabond-apply-save-damage-button"
+          data-actor-id="${actorId}"
+          data-actor-name="${actorName}"
+          data-damage-amount="${finalDamage}"
+          data-damage-type="${damageType}"
+        >
+          <i class="fas fa-burst"></i> Apply ${finalDamage} to ${actorName}
+        </button>
+      </div>
+    `;
+  }
 
   /**
    * Calculate final damage per RAW rules: Armor/Immune/Weak
@@ -897,10 +960,11 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Handle save button click - roll saves for each selected token
+   * Handle save button click - roll saves for each targeted token
    * @param {HTMLElement} button - The clicked save button
+   * @param {Event} event - The click event (for keyboard modifiers)
    */
-  static async handleSaveRoll(button) {
+  static async handleSaveRoll(button, event = null) {
     const saveType = button.dataset.saveType; // 'reflex', 'endure', 'will'
     const damageAmount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType;
@@ -909,15 +973,15 @@ export class VagabondDamageHelper {
     const actorId = button.dataset.actorId;
     const itemId = button.dataset.itemId;
 
-    // Get selected tokens
-    const selectedTokens = canvas.tokens.controlled;
-    if (selectedTokens.length === 0) {
-      ui.notifications.warn('No tokens selected. Please select at least one token.');
+    // Get targeted tokens
+    const targetedTokens = Array.from(game.user.targets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Roll save for each selected token individually
-    for (const target of selectedTokens) {
+    // Roll save for each targeted token individually
+    for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
@@ -933,11 +997,15 @@ export class VagabondDamageHelper {
         continue;
       }
 
-      // Determine if save is Hindered
+      // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
       const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
 
-      // Roll the save
-      const saveRoll = await this._rollSave(targetActor, saveType, isHindered);
+      // Extract keyboard modifiers from event
+      const shiftKey = event?.shiftKey || false;
+      const ctrlKey = event?.ctrlKey || false;
+
+      // Roll the save with keyboard modifiers
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
 
       // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
@@ -987,7 +1055,7 @@ export class VagabondDamageHelper {
     }
 
     // Button remains active so multiple players can roll saves
-    // Each click generates new save result cards for currently selected tokens
+    // Each click generates new save result cards for currently targeted tokens
   }
 
   /**
@@ -1024,37 +1092,31 @@ export class VagabondDamageHelper {
    * @param {Actor} actor - The actor rolling the save
    * @param {string} saveType - 'reflex', 'endure', 'will'
    * @param {boolean} isHindered - Whether the save is Hindered by conditions
+   * @param {boolean} shiftKey - Whether Shift key was pressed (Favor modifier)
+   * @param {boolean} ctrlKey - Whether Ctrl key was pressed (Hinder modifier)
    * @returns {Promise<Roll>} The save roll
    * @private
    */
-  static async _rollSave(actor, saveType, isHindered) {
-    const favorHinder = actor.system.favorHinder || 'none';
+  static async _rollSave(actor, saveType, isHindered, shiftKey = false, ctrlKey = false) {
+    // Use centralized roll builder for all favor/hinder logic
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
 
-    // Build roll formula
-    let rollFormula = 'd20';
+    // Calculate effective favor/hinder from system state and keyboard modifiers
+    const systemState = actor.system.favorHinder || 'none';
+    const effectiveFavorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
+      systemState,
+      shiftKey,
+      ctrlKey
+    );
 
-    // Check if actor already has Favor or Hinder state
-    const hasActorFavor = (favorHinder === 'favor');
-    const hasActorHinder = (favorHinder === 'hinder');
+    // Build and evaluate roll with conditional hinder support
+    // (isHindered = true when heavy armor for Dodge, or ranged/cast attack for Block)
+    const roll = await VagabondRollBuilder.buildAndEvaluateD20WithConditionalHinder(
+      actor,
+      effectiveFavorHinder,
+      isHindered
+    );
 
-    // Apply Favor/Hinder logic
-    // IMPORTANT: Favor and Hinder cancel each other out
-    // If actor has Favor AND save is Hindered by conditions: they cancel, roll straight d20
-    if (hasActorFavor && isHindered) {
-      rollFormula = 'd20'; // Cancel out - no modifier
-    }
-    // If actor has Favor AND save is NOT Hindered: apply Favor
-    else if (hasActorFavor && !isHindered) {
-      rollFormula = 'd20 + 1d6';
-    }
-    // If actor has Hinder OR save is Hindered by conditions: apply Hinder
-    // Multiple Hinder sources do NOT stack - only apply -1d6 once
-    else if (hasActorHinder || isHindered) {
-      rollFormula = 'd20 - 1d6';
-    }
-
-    const roll = new Roll(rollFormula, actor.getRollData());
-    await roll.evaluate();
     return roll;
   }
 
@@ -1149,6 +1211,12 @@ export class VagabondDamageHelper {
     }
 
     card.setDescription((card.data.description || '') + damageCalculationHTML + critRuleHTML);
+
+    // Add "Apply to Target" button if damage was not auto-applied
+    if (!autoApplied && finalDamage > 0) {
+      const applyButton = this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType);
+      card.setDescription((card.data.description || '') + applyButton);
+    }
 
     return await card.send();
   }
@@ -1264,6 +1332,62 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Handle applying restorative effects (healing, recover, recharge)
+   * @param {HTMLElement} button - The clicked button
+   */
+  static async handleApplyRestorative(button) {
+    const amount = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType.toLowerCase();
+
+    // Get targeted tokens
+    const targetedTokens = Array.from(game.user.targets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
+      return;
+    }
+
+    // Apply restorative effect to each targeted token
+    for (const target of targetedTokens) {
+      const targetActor = target.actor;
+      if (!targetActor) continue;
+
+      // Check permissions
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
+        continue;
+      }
+
+      // Apply the appropriate restorative effect
+      if (damageType === 'healing') {
+        // Healing: Increase HP (up to max)
+        const currentHP = targetActor.system.health?.value || 0;
+        const maxHP = targetActor.system.health?.max || 0;
+        const newHP = Math.min(maxHP, currentHP + amount);
+        const actualHealing = newHP - currentHP;
+        await targetActor.update({ 'system.health.value': newHP });
+        ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP`);
+      } else if (damageType === 'recover') {
+        // Recover: Decrease Fatigue (down to 0)
+        const currentFatigue = targetActor.system.fatigue?.value || 0;
+        const newFatigue = Math.max(0, currentFatigue - amount);
+        const actualRecovery = currentFatigue - newFatigue;
+        await targetActor.update({ 'system.fatigue.value': newFatigue });
+        ui.notifications.info(`${targetActor.name} recovered ${actualRecovery} fatigue`);
+      } else if (damageType === 'recharge') {
+        // Recharge: Increase Mana (up to max)
+        const currentMana = targetActor.system.mana?.value || 0;
+        const maxMana = targetActor.system.mana?.max || 0;
+        const newMana = Math.min(maxMana, currentMana + amount);
+        const actualRecharge = newMana - currentMana;
+        await targetActor.update({ 'system.mana.value': newMana });
+        ui.notifications.info(`${targetActor.name} recharged ${actualRecharge} mana`);
+      }
+    }
+
+    // Button remains active so effects can be applied to different tokens
+  }
+
+  /**
    * Handle "Apply Direct" button - bypass saves
    * @param {HTMLElement} button - The clicked button
    */
@@ -1277,15 +1401,15 @@ export class VagabondDamageHelper {
     const sourceActor = game.actors.get(actorId);
     const sourceItem = sourceActor?.items.get(itemId);
 
-    // Get selected tokens
-    const selectedTokens = canvas.tokens.controlled;
-    if (selectedTokens.length === 0) {
-      ui.notifications.warn('No tokens selected. Please select at least one token.');
+    // Get targeted tokens
+    const targetedTokens = Array.from(game.user.targets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Apply damage to each selected token
-    for (const target of selectedTokens) {
+    // Apply damage to each targeted token
+    for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
@@ -1306,5 +1430,43 @@ export class VagabondDamageHelper {
     }
 
     // Button remains active so damage can be applied to different tokens
+  }
+
+  /**
+   * Handle "Apply to Target" button from save result cards
+   * Applies pre-calculated damage (after save/armor/immunities) to the specific character who rolled the save
+   * @param {HTMLElement} button - The clicked button
+   */
+  static async handleApplySaveDamage(button) {
+    const actorId = button.dataset.actorId;
+    const actorName = button.dataset.actorName;
+    const finalDamage = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType;
+
+    // Get the actor who rolled the save
+    const actor = game.actors.get(actorId);
+    if (!actor) {
+      ui.notifications.error('Character not found!');
+      return;
+    }
+
+    // Check permissions - must own the character or be GM
+    if (!actor.isOwner && !game.user.isGM) {
+      ui.notifications.warn(`You don't have permission to modify ${actor.name}.`);
+      return;
+    }
+
+    // Apply the pre-calculated damage to this specific character
+    const currentHP = actor.system.health?.value || 0;
+    const newHP = Math.max(0, currentHP - finalDamage);
+    await actor.update({ 'system.health.value': newHP });
+
+    // Update button text and disable
+    const icon = button.querySelector('i');
+    button.textContent = `Applied to ${actorName}`;
+    if (icon) button.prepend(icon); // Keep the icon
+    button.disabled = true;
+
+    ui.notifications.info(`Applied ${finalDamage} damage to ${actorName} (${currentHP} → ${newHP} HP)`);
   }
 }

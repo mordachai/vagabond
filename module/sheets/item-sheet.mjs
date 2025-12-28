@@ -12,6 +12,39 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 ) {
   constructor(options = {}) {
     super(options);
+
+    // Listen for updates to this item to re-render when ProseMirror saves
+    this._hookId = Hooks.on('updateItem', (item, changes, options, userId) => {
+      // Only re-render if this is our item and levelFeatures, levelSpells, or traits were updated
+      if (item.id === this.document.id) {
+        if (changes.system?.levelFeatures || changes.system?.traits || changes.system?.levelSpells) {
+          this.render({ force: true });
+        }
+      }
+    });
+  }
+
+  /**
+   * Clean up hooks when sheet is closed
+   * @override
+   */
+  async close(options = {}) {
+    // Remove the hook listener
+    if (this._hookId !== undefined) {
+      Hooks.off('updateItem', this._hookId);
+    }
+
+    // Submit the form BEFORE calling super.close() which removes it from DOM
+    if (this.element && this.element.tagName === 'FORM') {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting item sheet:', err);
+      }
+    }
+
+    // Now proceed with normal close process
+    return super.close(options);
   }
 
   /** @override */
@@ -43,9 +76,17 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removePackItem: this._onRemovePackItem,
       equipFromContainer: this._onEquipFromContainer,
       deleteFromContainer: this._onDeleteFromContainer,
+      addGuaranteedSkill: this._onAddGuaranteedSkill,
+      removeGuaranteedSkill: this._onRemoveGuaranteedSkill,
+      addSkillChoiceGroup: this._onAddSkillChoiceGroup,
+      removeSkillChoiceGroup: this._onRemoveSkillChoiceGroup,
+      updateChoicePool: this._onUpdatePool,
+      updateChoiceCount: this._onUpdateCount,
+      saveChoices: this._onSaveChoices,
     },
     form: {
       submitOnChange: true,
+      submitOnClose: true,
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -226,13 +267,51 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         );
         // Prepare level groups (1-10) with their features
         context.levelGroups = [];
+        const manaMultiplier = this.item.system.manaMultiplier || 2;
+        // Create a working copy with all 10 levels initialized
+        const levelSpellsMap = new Map();
+        (this.item.system.levelSpells || []).forEach(ls => {
+          levelSpellsMap.set(ls.level, ls.spells || 0);
+        });
+
+        const workingLevelSpells = [];
+        for (let lvl = 1; lvl <= 10; lvl++) {
+          workingLevelSpells.push({
+            level: lvl,
+            spells: levelSpellsMap.get(lvl) || 0
+          });
+        }
+
         for (let level = 1; level <= 10; level++) {
           const features = this.item.system.levelFeatures
             .map((f, index) => ({ ...f, index }))
             .filter(f => f.level === level);
+
+          // Enrich each feature's description for proper display
+          for (let feature of features) {
+            feature.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+              feature.description || '',
+              {
+                secrets: this.document.isOwner,
+                rollData: this.item.getRollData(),
+                relativeTo: this.item,
+              }
+            );
+          }
+
+          // Get spells for this level (level - 1 because array is 0-indexed but levels start at 1)
+          const spellsIndex = level - 1;
+          const spells = workingLevelSpells[spellsIndex].spells;
+
+          // Calculate maxMana for this level
+          const maxMana = manaMultiplier * level;
+
           context.levelGroups.push({
             level,
-            features
+            features,
+            spells,
+            spellsIndex,
+            maxMana
           });
         }
         break;
@@ -675,10 +754,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _onUpdateGrip(event, target) {
     event.preventDefault();
     const newGrip = target.value;
-    
+
     // Explicitly update the document
     await this.document.update({ "system.grip": newGrip });
-    
+
     // This await ensures the data is saved before the UI refreshes
   }
 
@@ -746,6 +825,121 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const newFeatures = levelFeatures.filter((_, i) => i !== index);
     await this.item.update({ 'system.levelFeatures': newFeatures });
   }
+
+  /* -------------------------------------------- */
+  /* Skill Grant Handlers                         */
+  /* -------------------------------------------- */
+
+  /**
+   * Add a skill to the guaranteed list.
+   */
+  static async _onAddGuaranteedSkill(event, target) {
+    console.log("VAGABOND | Action: _onAddGuaranteedSkill");
+    const select = this.element.querySelector('#guaranteed-skill-select');
+    if (!select) {
+      console.error("VAGABOND | Selector #guaranteed-skill-select not found");
+      return;
+    }
+    
+    const skill = select.value.toLowerCase().trim();
+    const current = this.item.system.skillGrant.guaranteed || [];
+    
+    if (current.includes(skill)) {
+      console.warn(`VAGABOND | Skill ${skill} is already in the list.`);
+      return;
+    }
+
+    const updateData = { "system.skillGrant.guaranteed": [...current, skill] };
+    await this.item.update(updateData);
+  }
+
+  static async _onRemoveGuaranteedSkill(event, target) {
+    const index = parseInt(target.dataset.index);
+    
+    const current = this.item.system.skillGrant.guaranteed || [];
+    const newGuaranteed = current.filter((_, i) => i !== index);
+    
+    await this.item.update({ "system.skillGrant.guaranteed": newGuaranteed });
+  }
+
+  static async _onAddSkillChoiceGroup(event, target) {
+    const choices = [...(this.item.system.skillGrant.choices || []), { count: 1, pool: [], label: "" }];
+    
+    await this.item.update({ "system.skillGrant.choices": choices });
+  }
+
+  static async _onRemoveSkillChoiceGroup(event, target) {
+    const index = parseInt(target.dataset.index);
+    
+    const choices = (this.item.system.skillGrant.choices || []).filter((_, i) => i !== index);
+    await this.item.update({ "system.skillGrant.choices": choices });
+  }
+
+  static async _onUpdatePool(event, target) {
+    const index = parseInt(target.dataset.index);
+    const rawValue = target.value;
+    
+    const poolArray = rawValue.split(',')
+      .map(s => s.trim().toLowerCase())
+      .filter(s => s !== ""); 
+
+    // IMPORTANT: Deep clone the entire array for Compendium persistence
+    const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices);
+    if (!choices[index]) return;
+
+    choices[index].pool = poolArray;
+
+    await this.item.update({ "system.skillGrant.choices": choices });
+  }
+
+  /**
+   * Action: Manual update for skill choices.
+   * This simply triggers the built-in submit logic of ApplicationV2.
+   */
+  static async _onSaveChoices(event, target) {
+    // Calling submit() collects all 'name' attributes from the form and updates the document.
+    await this.submit();
+    ui.notifications.info("Skill choices updated successfully.");
+  }
+
+  /**
+   * Refined data processing for skill pools.
+   * Since the pool is a comma-separated string in the UI but an Array in the DataModel,
+   * we handle the conversion here.
+   * @override
+   */
+  async _processFormData(event, form, formData) {
+    const data = foundry.utils.expandObject(formData.object);
+
+    // Logic to convert comma-separated strings back to arrays for the DataModel
+    if (data.system?.skillGrant?.choices) {
+        for (let key in data.system.skillGrant.choices) {
+            let choice = data.system.skillGrant.choices[key];
+            if (typeof choice.pool === "string") {
+                choice.pool = choice.pool.split(',')
+                    .map(s => s.trim().toLowerCase())
+                    .filter(s => s !== "");
+            }
+        }
+    }
+
+    return this.document.update(data);
+  }
+
+    /**
+     * Manual update for the Skill Choice Count using Actions.
+     */
+    static async _onUpdateCount(event, target) {
+      const index = parseInt(target.dataset.index);
+      const value = parseInt(target.value) || 0;
+
+      const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices);
+      if (!choices[index]) return;
+
+      choices[index].count = value;
+
+      await this.item.update({ "system.skillGrant.choices": choices });
+    }
 
   /**
    * Handle adding a new stat prerequisite to a perk item
@@ -981,6 +1175,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleLock(event, target) {
     if (this.item.type !== 'equipment' && this.item.type !== 'container') return;
+
+    // Submit the form BEFORE toggling to save any pending changes
+    if (this.element && this.element.tagName === 'FORM') {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before lock toggle:', err);
+      }
+    }
+
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
     // No need to close/reopen - template handles both states with conditionals
@@ -1105,12 +1309,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   _canDragDrop(selector) {
     // Don't handle drops on prose-mirror editors - let them handle it themselves
     if (selector && selector.closest && selector.closest('prose-mirror')) {
-      console.log('Cannot drop on prose-mirror');
       return false;
     }
-    const canDrop = this.isEditable;
-    console.log('Can drag drop on item sheet?', canDrop, 'item type:', this.item.type, 'selector:', selector);
-    return canDrop;
+    return this.isEditable;
   }
 
   _onDragStart(event) {

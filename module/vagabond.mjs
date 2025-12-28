@@ -228,6 +228,13 @@ Hooks.once('init', async function () {
   // Register custom ActiveEffect document class
   CONFIG.ActiveEffect.documentClass = VagabondActiveEffect;
 
+  // Register custom ActiveEffectConfig sheet
+  const VagabondActiveEffectConfig = (await import('./applications/active-effect-config.mjs')).default;
+  DocumentSheetConfig.registerSheet(ActiveEffect, 'vagabond', VagabondActiveEffectConfig, {
+    makeDefault: true,
+    label: 'VAGABOND.Effect.ConfigSheet'
+  });
+
   // Active Effects are never copied to the Actor,
   // but will still apply to the Actor from within the Item
   // if the transfer property on the Active Effect is true.
@@ -269,6 +276,10 @@ Handlebars.registerHelper('contains', function (array, value) {
   if (!array || !Array.isArray(array)) return false;
   return array.includes(value);
 });
+
+Handlebars.registerHelper('add', (a, b) => a + b);
+
+Handlebars.registerHelper('gte', (a, b) => a >= b);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
@@ -606,7 +617,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.handleSaveRoll(button);
+        VagabondDamageHelper.handleSaveRoll(button, ev);
       });
     });
   });
@@ -626,20 +637,35 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 6. Apply Healing Button Handler
+  // 6. Apply Restorative Effects Button Handlers
   // ---------------------------------------------------------
   const healingButtons = html.querySelectorAll('.vagabond-apply-healing-button');
+  const recoverButtons = html.querySelectorAll('.vagabond-apply-recover-button');
+  const rechargeButtons = html.querySelectorAll('.vagabond-apply-recharge-button');
 
   healingButtons.forEach(button => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
-      // Note: check damage-helper to ensure applyDamageToTargets exists,
-      // or if it should be handleApplyDirect/healing logic.
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        // Assuming your helper has a generic apply function or specific one for healing
-        if (VagabondDamageHelper.handleApplyDirect) {
-             VagabondDamageHelper.handleApplyDirect(button);
-        }
+        VagabondDamageHelper.handleApplyRestorative(button);
+      });
+    });
+  });
+
+  recoverButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplyRestorative(button);
+      });
+    });
+  });
+
+  rechargeButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplyRestorative(button);
       });
     });
   });
@@ -665,7 +691,21 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 9. Template Trigger Handler
+  // 9. Apply Save Damage Button Handler
+  // ---------------------------------------------------------
+  const applySaveButtons = html.querySelectorAll('.vagabond-apply-save-damage-button');
+
+  applySaveButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplySaveDamage(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 10. Template Trigger Handler
   // ---------------------------------------------------------
   const templateTriggers = html.querySelectorAll('.template-trigger');
 

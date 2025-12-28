@@ -20,6 +20,93 @@
       </div>
     </div>
 
+    {{! Skill Training Section }}
+    <div class='skill-training-section mt-20'>
+      <h3>{{localize "VAGABOND.UI.Sections.SkillTraining"}}</h3>
+      
+      <div class='form-group-stacked'>
+        <label>{{localize "VAGABOND.UI.Labels.GuaranteedSkills"}}</label>
+        <div class='flex-row flex-wrap gap-5'>
+          {{#each system.skillGrant.guaranteed as |skillKey index|}}
+            <div class='skill-tag'>
+              <span>{{localize (lookup @root.config.weaponSkills skillKey)}}</span>
+              {{#if @root.editable}}
+                <a data-action="removeGuaranteedSkill" 
+                data-index="{{index}}"><i class="fas fa-times"></i></a>
+              {{/if}}
+            </div>
+          {{/each}}
+        </div>
+
+        {{#if editable}}
+          <div class='flex-row mt-5'>
+            <select id="guaranteed-skill-select">
+              {{#each config.weaponSkills as |label key|}}
+                <option value="{{key}}">{{localize label}}</option>
+              {{/each}}
+            </select>
+            <button type="button" 
+            data-action="addGuaranteedSkill" 
+            class="btn-sm">
+              <i class="fas fa-plus"></i> {{localize "VAGABOND.UI.Buttons.AddSkill"}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
+
+      <div class='skill-choices mt-10'>
+        <div class='flex-row justify-between mb-5'>
+          <label>{{localize "VAGABOND.UI.Labels.SkillChoices"}}</label>
+          {{#if editable}}
+            <button type="button" 
+            data-action="addSkillChoiceGroup" 
+            class="btn-sm">
+              <i class="fas fa-plus"></i> {{localize "VAGABOND.UI.Buttons.AddChoiceGroup"}}
+            </button>
+          {{/if}}
+        </div>
+
+        {{#each system.skillGrant.choices as |choice index|}}
+          <div class='choice-group-card p-10 border mb-5'>
+            <div class='flex-row justify-between align-right mb-5'>
+              <strong>{{localize "VAGABOND.UI.Labels.Group"}} n. {{add index 1}}</strong>
+              <a data-action="removeSkillChoiceGroup" 
+              data-index="{{index}}" 
+              class="text-danger"><i class="fas fa-trash"></i></a>
+            </div>
+            
+            {{! Choices class skills }}
+            <div class='class-choice-container'>
+              <div class='form-group'>
+                <label>{{localize "VAGABOND.UI.Labels.Count"}}</label>
+                <input type="number" 
+                      name="system.skillGrant.choices.{{index}}.count" {{!-- Added name for auto-save --}}
+                      class="count-input" 
+                      value="{{choice.count}}" 
+                      min="0">
+              </div>
+              <div class='form-group'>
+                <label>{{localize "VAGABOND.UI.Labels.RestrictedPool"}}<span class="text-sm"> ({{localize "VAGABOND.UI.Hints.EmptyForAny"}})</span></label>
+                <input type="text" 
+                      name="system.skillGrant.choices.{{index}}.pool" {{!-- Added name for auto-save --}}
+                      class="pool-input"
+                      value="{{#each choice.pool}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}" 
+                      placeholder="e.g. detect, influence, leadership">
+              </div>
+              
+              {{#if @root.editable}}
+              <div class="flex-row justify-end mt-5">
+                <button type="button" data-action="saveChoices" class="btn-sm">
+                  <i class="fas fa-save"></i> {{localize "VAGABOND.UI.Buttons.UpdateGroup"}}
+                </button>
+              </div>
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
     {{! Level Features Section }}
     <div class='level-features-section mt-20'>
       <h3>{{localize "VAGABOND.UI.Sections.LevelFeatures"}}</h3>
@@ -40,6 +127,32 @@
               </button>
             {{/if}}
           </div>
+
+          {{! Spells and Mana Display/Edit }}
+          {{#if @root.system.isSpellcaster}}
+            <div class='level-traits-display'>
+              <div class='trait-badge-inline'>
+                <strong>Mana:</strong> <span>{{group.maxMana}}</span>
+              </div>
+              <div class='trait-badge-inline'>
+                <strong>Spells:</strong>
+                {{#if @root.editable}}
+                  <input
+                    type='number'
+                    name='system.levelSpells.{{group.spellsIndex}}.spells'
+                    value='{{group.spells}}'
+                    min='0'
+                    data-dtype='Number'
+                    class='spells-per-level-input'
+                    placeholder='0'
+                  />
+                  <input type='hidden' name='system.levelSpells.{{group.spellsIndex}}.level' value='{{group.level}}' />
+                {{else}}
+                  <span>{{group.spells}}</span>
+                {{/if}}
+              </div>
+            </div>
+          {{/if}}
 
           {{#if group.features.length}}
             <ol class='features-list m-0 pl-20'>
@@ -68,10 +181,12 @@
                       <div class='level-feature-description'>
                         <prose-mirror
                           name='system.levelFeatures.{{feature.index}}.description'
+                          data-document-uuid='{{@root.item.uuid}}'
                           value='{{feature.description}}'
+                          collaborate='true'
                           toggled='true'
                         >
-                          {{{feature.description}}}
+                          {{{feature.enrichedDescription}}}
                         </prose-mirror>
                       </div>
                       <input
@@ -81,8 +196,8 @@
                       />
                     {{else}}
                       <strong class='feature-title'>{{feature.name}}</strong>
-                      {{#if feature.description}}
-                        <div class='mt-5'>{{{feature.description}}}</div>
+                      {{#if feature.enrichedDescription}}
+                        <div class='mt-5'>{{{feature.enrichedDescription}}}</div>
                       {{/if}}
                     {{/if}}
                   </div>

@@ -1,6 +1,7 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { VagabondCharBuilder } from '../applications/char-builder.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -73,6 +74,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
       openDowntime: this._onOpenDowntime, // Open downtime activities
       toggleSpellPreview: this._onToggleSpellPreview, // Display measure template
+      openCharBuilder: this._onOpenCharBuilder, // Open character builder
+      dismissCharBuilder: this._onDismissCharBuilder, // Dismiss character builder permanently
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -2748,6 +2751,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleFavorHinder(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling favor/hinder
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before favor/hinder toggle:', err);
+      }
+    }
+
     const currentState = this.actor.system.favorHinder || 'none';
 
     // Cycle through states: none -> favor -> hinder -> none
@@ -2796,6 +2809,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleLock(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling lock state
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before lock toggle:', err);
+      }
+    }
+
     const currentLocked = this.actor.system.locked;
 
     // Clear dropdown state when toggling lock mode
@@ -3759,9 +3782,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       /* PATH B: WEAPONS */
       const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
 
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
         event.ctrlKey
@@ -3828,6 +3852,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleWeaponEquipment(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling weapon equipment
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before weapon equipment toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
@@ -3887,6 +3921,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleWeaponGrip(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling weapon grip
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before weapon grip toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const weapon = this.actor.items.get(itemId);
 
@@ -3924,6 +3968,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleArmorEquipment(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling armor equipment
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before armor equipment toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const armor = this.actor.items.get(itemId);
 
@@ -3994,40 +4048,59 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // Perform roll using the mana skill
+    // Get skill information for display
     const skill = this.actor.system.skills[manaSkill];
     const difficulty = skill.difficulty;
-    const label = `${spell.name} (${skill.label})`;
 
-    // Apply favor/hinder with keyboard modifiers
-    const systemFavorHinder = this.actor.system.favorHinder || 'none';
-    const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
-      systemFavorHinder,
-      event.shiftKey,
-      event.ctrlKey
-    );
+    // Check if spell bypasses roll requirement
+    let roll = null;
+    let isSuccess = false;
+    let isCritical = false;
 
-    // Import roll builder and build roll with centralized utility
-    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-    const roll = await VagabondRollBuilder.buildAndEvaluateD20(
-      this.actor,
-      favorHinder
-    );
+    if (spell.system.noRollRequired) {
+      // BYPASS PATH: No roll needed, always succeeds, no criticals
+      isSuccess = true;
+      isCritical = false;
+      roll = null; // No roll object created
+    } else {
+      // NORMAL PATH: Perform casting check roll
+      const label = `${spell.name} (${skill.label})`;
 
-    const isSuccess = roll.total >= difficulty;
+      // Get roll data WITH this spell's "on-use" effects applied
+      const rollData = this.actor.getRollDataWithItemEffects(spell);
 
-    // Check critical - ONLY the d20 result, not including favor/hinder
-    const critNumber = this.actor.system.critNumber || 20;
-    const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
-    const d20Result = d20Term?.results?.[0]?.result || 0;
-    const isCritical = d20Result >= critNumber;
+      // Import roll builder and build roll with centralized utility
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
 
-    // If successful, deduct mana
+      // Apply favor/hinder with keyboard modifiers
+      const systemFavorHinder = this.actor.system.favorHinder || 'none';
+      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
+        systemFavorHinder,
+        event.shiftKey,
+        event.ctrlKey
+      );
+
+      roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(
+        rollData,
+        favorHinder
+      );
+
+      isSuccess = roll.total >= difficulty;
+
+      // ✅ CRITICAL: Use critNumber from rollData (includes item effects)
+      const critNumber = rollData.critNumber || 20;
+      const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
+      const d20Result = d20Term?.results?.[0]?.result || 0;
+      isCritical = d20Result >= critNumber;
+    }
+
+    // Deduct mana on success (whether from successful roll or bypass)
     if (isSuccess) {
       const newMana = this.actor.system.mana.current - costs.totalCost;
       await this.actor.update({ 'system.mana.current': newMana });
     }
     // Failed - no mana cost (chat card will show failure)
+    // Note: Bypass spells always succeed, so mana is always deducted
 
     // Create chat message
     await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical);
@@ -4049,7 +4122,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {Item} spell - The spell item
    * @param {Object} state - Spell state
    * @param {Object} costs - Cost breakdown
-   * @param {Roll} roll - The roll result
+   * @param {Roll|null} roll - The roll result (null if noRollRequired)
    * @param {number} difficulty - Target difficulty
    * @param {boolean} isSuccess - Whether the cast succeeded
    * @param {boolean} isCritical - Whether the roll was a critical hit
@@ -4152,6 +4225,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleSpellFavorite(event, target) {
     event.preventDefault();
+
+    // Submit pending form changes before toggling spell favorite
+    if (this.hasFrame) {
+      try {
+        await this.submit();
+      } catch (err) {
+        console.error('Vagabond | Error submitting form before spell favorite toggle:', err);
+      }
+    }
+
     const itemId = target.dataset.itemId;
     const spell = this.actor.items.get(itemId);
 
@@ -4166,47 +4249,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Calculate effective favor/hinder state based on system state and keyboard modifiers.
-   * Shift = Favor, Ctrl = Hinder. If they conflict with system state, they cancel out.
-   * @param {string} systemState - The actor's current favorHinder state ('favor', 'hinder', or 'none')
-   * @param {boolean} shiftKey - Whether Shift key was pressed
-   * @param {boolean} ctrlKey - Whether Ctrl key was pressed
-   * @returns {string} The effective favorHinder state ('favor', 'hinder', or 'none')
-   * @private
+   * ✅ REMOVED - This method has been centralized to VagabondRollBuilder.calculateEffectiveFavorHinder()
+   *
+   * All favor/hinder calculation logic is now handled by the VagabondRollBuilder class
+   * in module/helpers/roll-builder.mjs for consistency across the system.
+   *
+   * Use: VagabondRollBuilder.calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey)
    */
-  static _calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey) {
-    // Determine modifier intent
-    let modifierIntent = 'none';
-    if (shiftKey && !ctrlKey) {
-      modifierIntent = 'favor';
-    } else if (ctrlKey && !shiftKey) {
-      modifierIntent = 'hinder';
-    } else if (shiftKey && ctrlKey) {
-      // Both pressed - cancel out
-      modifierIntent = 'none';
-    }
-
-    // If no modifier, return system state
-    if (modifierIntent === 'none') {
-      return systemState || 'none';
-    }
-
-    // If modifier matches system state, keep it
-    if (modifierIntent === systemState) {
-      return modifierIntent;
-    }
-
-    // If modifier conflicts with system state, they cancel out
-    if (systemState === 'favor' && modifierIntent === 'hinder') {
-      return 'none';
-    }
-    if (systemState === 'hinder' && modifierIntent === 'favor') {
-      return 'none';
-    }
-
-    // If system state is 'none', apply modifier
-    return modifierIntent;
-  }
 
   /**
    * Handle clickable rolls.
@@ -4229,16 +4278,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
+      // Import roll builder and build roll with centralized utility
+      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+
       // Apply favor/hinder based on system state and keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondActorSheet._calculateEffectiveFavorHinder(
+      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
         event.ctrlKey
       );
 
-      // Import roll builder and build roll with centralized utility
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
       const roll = await VagabondRollBuilder.buildAndEvaluateD20(
         this.actor,
         favorHinder,
@@ -4992,6 +5042,50 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const { DowntimeApp } = await import('../applications/downtime-app.mjs');
     const app = new DowntimeApp(this.actor);
     app.render({ force: true });
+  }
+
+  /**
+   * Open the character builder
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onOpenCharBuilder(event, target) {
+    event.preventDefault();
+
+    // Only allow for character type actors
+    if (this.actor.type !== 'character') {
+      ui.notifications.warn("Character builder is only available for character-type actors.");
+      return;
+    }
+
+    // Create and render the character builder
+    const builder = new VagabondCharBuilder(this.actor);
+    builder.render({ force: true });
+  }
+
+  /**
+   * Dismiss the character builder permanently
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onDismissCharBuilder(event, target) {
+    event.preventDefault();
+
+    // Confirm dismissal
+    const confirmed = await Dialog.confirm({
+      title: "Dismiss Character Builder",
+      content: `<p>Are you sure you want to dismiss the character builder?</p>
+                <p>You can still manually build your character using the normal character sheet.</p>
+                <p><strong>This action cannot be undone.</strong></p>`,
+      yes: () => true,
+      no: () => false,
+      defaultYes: false
+    });
+
+    if (confirmed) {
+      await this.actor.update({ "system.details.builderDismissed": true });
+      ui.notifications.info("Character builder dismissed. You can use the normal character sheet to build your character.");
+    }
   }
 
   /**

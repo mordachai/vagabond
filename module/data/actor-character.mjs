@@ -34,6 +34,12 @@ export default class VagabondCharacter extends VagabondActorBase {
       manaSkill: new fields.StringField({ initial: null, nullable: true }),
     });
 
+    // Character details - tracks builder state
+    schema.details = new fields.SchemaField({
+      constructed: new fields.BooleanField({ initial: false }),
+      builderDismissed: new fields.BooleanField({ initial: false })
+    });
+
     // Currency system
     schema.currency = new fields.SchemaField({
       gold: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
@@ -308,12 +314,34 @@ export default class VagabondCharacter extends VagabondActorBase {
    */
   prepareBaseData() {
     super.prepareBaseData();
+  // --- 1. Reset Flat Mechanics ---
+    this.inventory.bonusSlots = 0;
+    this.mana.bonus = 0;
+    this.mana.castingMaxBonus = 0;
+    this.speed.bonus = 0;
+    this.armorBonus = 0;
+    this.bonusLuck = 0;
 
-    // 1. Reset Defaults
+    // --- 2. Reset Universal Bonuses ---
+    this.universalCheckBonus = 0;
+    this.universalDamageBonus = 0;
+    this.universalWeaponDamageBonus = 0;
+    this.universalSpellDamageBonus = 0;
+    this.universalAlchemicalDamageBonus = 0;
+
+    // --- 3. Loop: Reset All Stat & Save Bonuses ---
+    for (let s of Object.values(this.stats)) { s.bonus = 0; }
+    for (let s of Object.values(this.saves)) { s.bonus = 0; }
+
+    // --- 4. Loop: Reset All Skill Bonuses ---
+    for (let s of Object.values(this.skills)) { s.bonus = 0; }
+    for (let s of Object.values(this.weaponSkills)) { s.bonus = 0; }
+
+    // 5. Reset Defaults (Your existing code)
     this.attributes.isSpellcaster = false;
     this.attributes.manaMultiplier = 0;
 
-    // 2. Apply Class Data
+    // 6. Apply Class Data
     const classItem = this.parent.items.find(item => item.type === 'class');
     if (classItem) {
       if (classItem.system.isSpellcaster) {
@@ -513,18 +541,27 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
     if (this.skills) {
+      data.skills = {};
       for (let [k, v] of Object.entries(this.skills)) {
-        data[k] = foundry.utils.deepClone(v);
+        data.skills[k] = foundry.utils.deepClone(v);
+        // Ensure stat field is included (it's readonly so might not clone)
+        if (v.stat) data.skills[k].stat = v.stat;
       }
     }
     if (this.weaponSkills) {
+      data.weaponSkills = {};
       for (let [k, v] of Object.entries(this.weaponSkills)) {
-        data[k] = foundry.utils.deepClone(v);
+        data.weaponSkills[k] = foundry.utils.deepClone(v);
+        // Ensure stat field is included (it's readonly so might not clone)
+        if (v.stat) data.weaponSkills[k].stat = v.stat;
       }
     }
     if (this.saves) {
+      data.saves = {};
       for (let [k, v] of Object.entries(this.saves)) {
-        data[k] = foundry.utils.deepClone(v);
+        data.saves[k] = foundry.utils.deepClone(v);
+        // Ensure stat field is included (it's readonly so might not clone)
+        if (v.stat) data.saves[k].stat = v.stat;
       }
     }
     data.lvl = this.attributes.level.value;

@@ -37,6 +37,11 @@
 
       {{! Level, Ancestry, Class, Being Type, Size - All in One Row }}
       <div class='character-info-combined-row'>
+        {{#if (and (not system.details.constructed) (not system.details.builderDismissed))}}
+          <button type='button' class='btn-char-builder-icon pulse-glow' data-action='openCharBuilder' data-tooltip='Build Character'>
+            <i class='fas fa-wand-magic-sparkles'></i>
+          </button>
+        {{/if}}
         <span>
           Level
           <input

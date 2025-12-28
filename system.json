@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "1.8.1",
+  "version": "2.0.0",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -111,6 +111,19 @@
         "system": "vagabond",
         "path": "packs/starting-packs.db",
         "type": "Item",
+        "ownership": {
+          "PLAYER": "OBSERVER",
+          "ASSISTANT": "OWNER"
+        },
+        "private": false,
+        "flags": {}
+    },
+        {
+        "name": "creation-notes",
+        "label": "Creation Notes",
+        "system": "vagabond",
+        "path": "packs/creation-notes.db",
+        "type": "JournalEntry",
         "ownership": {
           "PLAYER": "OBSERVER",
           "ASSISTANT": "OWNER"
@@ -240,7 +253,8 @@
                       "ancestries",
                       "classes",
                       "perks",
-                      "starting-packs"
+                      "starting-packs",
+                      "creation-notes"
                   ]
               },
               {

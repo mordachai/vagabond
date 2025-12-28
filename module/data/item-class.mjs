@@ -69,6 +69,22 @@ export default class VagabondClass extends VagabondItemBase {
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
 
+    // Skill Grant System
+    schema.skillGrant = new fields.SchemaField({
+      // Fixed skills the class always provides (e.g., Alchemist -> Craft)
+      guaranteed: new fields.ArrayField(new fields.StringField(), { initial: [] }),
+
+      // Dynamic choices (e.g., Magus -> Choose 3 from a restricted list)
+      choices: new fields.ArrayField(
+        new fields.SchemaField({
+          count: new fields.NumberField({ initial: 0, integer: true, min: 0 }),
+          pool: new fields.ArrayField(new fields.StringField(), { initial: [] }),
+          label: new fields.StringField({ initial: '' })
+        }),
+        { initial: [] }
+      )
+    });
+
     // Level features - features gained at each level
     schema.levelFeatures = new fields.ArrayField(
       new fields.SchemaField({
@@ -81,6 +97,26 @@ export default class VagabondClass extends VagabondItemBase {
         }),
         name: new fields.StringField({ ...requiredString, initial: '' }),
         description: new fields.StringField({ initial: '' })
+      }),
+      { initial: [] }
+    );
+
+    // Spells gained per level - separate from features
+    schema.levelSpells = new fields.ArrayField(
+      new fields.SchemaField({
+        level: new fields.NumberField({
+          required: true,
+          initial: 1,
+          min: 1,
+          max: 10,
+          integer: true
+        }),
+        spells: new fields.NumberField({
+          required: true,
+          initial: 0,
+          min: 0,
+          integer: true
+        })
       }),
       { initial: [] }
     );

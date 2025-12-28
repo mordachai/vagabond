@@ -614,6 +614,43 @@ VAGABOND.attackTypes = {
 };
 
 /**
+ * Active Effect Application Modes
+ * Controls when an effect should be applied to the actor
+ * @type {Object}
+ */
+VAGABOND.effectApplicationModes = {
+  'permanent': {
+    label: 'VAGABOND.Effect.ApplicationMode.Permanent',
+    hint: 'VAGABOND.Effect.ApplicationMode.PermanentHint',
+    icon: 'fa-solid fa-infinity'
+  },
+  'when-equipped': {
+    label: 'VAGABOND.Effect.ApplicationMode.WhenEquipped',
+    hint: 'VAGABOND.Effect.ApplicationMode.WhenEquippedHint',
+    icon: 'fa-solid fa-hand-fist'
+  },
+  'on-use': {
+    label: 'VAGABOND.Effect.ApplicationMode.OnUse',
+    hint: 'VAGABOND.Effect.ApplicationMode.OnUseHint',
+    icon: 'fa-solid fa-sparkles'
+  }
+};
+
+/**
+ * Default application modes by item type
+ * Provides smart defaults when creating effects on different item types
+ * @type {Object}
+ */
+VAGABOND.defaultApplicationModes = {
+  'perk': 'permanent',
+  'ancestry': 'permanent',
+  'class': 'permanent',
+  'weapon': 'on-use',
+  'equipment': 'when-equipped',
+  'spell': 'on-use'
+};
+
+/**
  * Spell delivery types mapped to attack types
  * Determines if spell is melee or ranged for save Hinder purposes
  * Touch and Glyph spells are melee (do NOT hinder Block saves)

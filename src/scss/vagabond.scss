@@ -28,6 +28,8 @@
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 @import 'components/downtime';
 
+@import 'apps/character-builder';
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

@@ -31,6 +31,7 @@
     border-radius: 50%;
     align-self: center;
     mix-blend-mode: normal;
+    background: $c-dark;
 
     &:hover {
       opacity: 0.9;
@@ -525,6 +526,53 @@
       border-bottom: 1px solid $c-dark;
     }
   }
+}
+
+/* Character Builder Icon Button - Inline */
+.btn-char-builder-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin-right: 8px;
+  background: $c-red;
+  color: $c-white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+
+  i {
+    font-size: 12px;
+    margin: 0;
+    color: $c-white;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(145, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Pulsing glow animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(234, 102, 102, 0.4), 0 0 10px rgba(234, 102, 102, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(234, 122, 102, 0.8), 0 0 20px rgba(234, 102, 102, 0.4), 0 0 30px rgba(234, 102, 102, 0.2);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
 // Speed Stats Row
