@@ -283,7 +283,7 @@
           "combat.armor": {"label": "Armor Rating"},
           "mana.current": {"label": "Current Mana"},
           "mana.max": {"label": "Max Mana"},
-          "mana.castingMax": {"label": "Max Cast"},
+          "mana.castingMax": {"label": "Mana/Cast"},
           "manaSkill": {"label": "Casting Skill"}
         }
       },
@@ -748,17 +748,17 @@
       "DerivedStats": "Character Stats",
       "ProposedChoices": "Proposed Choices",
       "OriginReferences": "Origin References",
-      "AssignStats": "Drag and drop the values in the Stats to assign",
+      "AssignStats": "Drag and drop the values in the Stats below to assign:",
       "ClassDetails": "Details",
       "Levels": "Features by Level",
       "Instructions": {
-        "Ancestry": "Choose your heritage. Your ancestry determines your base traits and physical characteristics.",
-        "Class": "Select a profession. This defines your skills, starting equipment, and growth potential.",
-        "Stats": "Select a Stat Array from the list on the left to begin assigning values on top.",
-        "Perks": "Select your starting perks. These are unique talents that give you an edge in specific situations.",
-        "Spells": "If your class or ancestry allows, choose your starting spells or magical abilities.",
-        "StartingPacks": "Pick a starting equipment bundle. This will determine your initial gold and basic survival gear.",
-        "Gear": "Spend your remaining silver on additional equipment, weapons, and supplies."
+        "Ancestry": "Choose your Ancestry. It grants you Traits shared by every member of that Ancestry, such as their Type and Size. ",
+        "Class": "Select a Class. They grant Training and Features, and provides a guide for how the Hero best perform in Combat.",
+        "Stats": "Select a Stat array from the list on the left to begin assigning values on top.",
+        "Perks": "Check your starting perks. Perks are marks of achievement and signals of arcs in one’s life journey.",
+        "Spells": "If your class or ancestry allows, choose your starting spells. Spells can create devastating and miraculous effects.",
+        "StartingPacks": "You can choose any pack you like, but there are recommended Starter Packs in your class Playing section",
+        "Gear": "You can spend your remaining silver on additional equipment, weapons, and supplies."
       },
       "Buttons": {
         "Random": "Random Choice",
@@ -768,7 +768,8 @@
         "Finish": "Finish",
         "Reset": "Reset",
         "AddToTray": "Add to Tray",
-        "ClearTray": "Clear Tray"
+        "ClearTray": "Clear Tray",
+        "RemovePack": "Remove Starting Pack"
       },
       "TrayTitle": "Your Selections",
       "TrayInstructions": "Drag items from the list or click 'Add to Tray' to collect your choices.",

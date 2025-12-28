@@ -2,6 +2,30 @@
    VAGABOND V2 CHAT CARDS - UNIFIED STYLES
    ======================================== */
 
+// Target only chat messages containing Vagabond chat cards
+li.chat-message:has(.vagabond-chat-card-v2) {
+    background: black;
+
+    /* Header Section */
+    .message-header {
+      color: $c-yellow;
+      margin: 5px 0 10px 0;
+      border-bottom: none;
+
+        .message-sender {
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .message-metadata {
+            color: $c-yellow;
+            opacity: 0.8;
+        }    
+    }
+}
+
 .vagabond-chat-card-v2 {
     --font-primary: "Eskapade", serif;
     --font-secondary: "Manofa", sans-serif;

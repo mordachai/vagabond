@@ -128,6 +128,32 @@
             {{/if}}
           </div>
 
+          {{! Spells and Mana Display/Edit }}
+          {{#if @root.system.isSpellcaster}}
+            <div class='level-traits-display'>
+              <div class='trait-badge-inline'>
+                <strong>Mana:</strong> <span>{{group.maxMana}}</span>
+              </div>
+              <div class='trait-badge-inline'>
+                <strong>Spells:</strong>
+                {{#if @root.editable}}
+                  <input
+                    type='number'
+                    name='system.levelSpells.{{group.spellsIndex}}.spells'
+                    value='{{group.spells}}'
+                    min='0'
+                    data-dtype='Number'
+                    class='spells-per-level-input'
+                    placeholder='0'
+                  />
+                  <input type='hidden' name='system.levelSpells.{{group.spellsIndex}}.level' value='{{group.level}}' />
+                {{else}}
+                  <span>{{group.spells}}</span>
+                {{/if}}
+              </div>
+            </div>
+          {{/if}}
+
           {{#if group.features.length}}
             <ol class='features-list m-0 pl-20'>
               {{#each group.features as |feature|}}

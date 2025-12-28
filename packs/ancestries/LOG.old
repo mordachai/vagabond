@@ -1,3 +1,7 @@
-2025/12/27-19:40:43.911 cdb4 Recovering log #319
-2025/12/27-19:40:43.916 cdb4 Delete type=0 #319
-2025/12/27-19:40:43.916 cdb4 Delete type=3 #318
+2025/12/28-21:18:22.657 84f4 Recovering log #339
+2025/12/28-21:18:22.662 84f4 Delete type=0 #339
+2025/12/28-21:18:22.662 84f4 Delete type=3 #338
+2025/12/28-21:51:24.794 2680 Level-0 table #343: started
+2025/12/28-21:51:24.795 2680 Level-0 table #343: 0 bytes OK
+2025/12/28-21:51:24.796 2680 Delete type=0 #341
+2025/12/28-21:51:24.816 2680 Manual compaction at level-0 from '!items!4b55ZN5hVR3goYRZ' @ 72057594037927935 : 1 .. '!items.effects!vcPfVxMJXWTPteGx.sx07MuawyaLixpAt' @ 0 : 0; will stop at (end)

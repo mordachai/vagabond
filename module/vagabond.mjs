@@ -279,6 +279,8 @@ Handlebars.registerHelper('contains', function (array, value) {
 
 Handlebars.registerHelper('add', (a, b) => a + b);
 
+Handlebars.registerHelper('gte', (a, b) => a >= b);
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */

@@ -65,6 +65,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       addToTray: VagabondCharBuilder.prototype._onAddToTray,
       removeFromTray: VagabondCharBuilder.prototype._onRemoveFromTray,
       clearTray: VagabondCharBuilder.prototype._onClearTray,
+      removeStartingPack: VagabondCharBuilder.prototype._onRemoveStartingPack,
       finish: VagabondCharBuilder.prototype._onFinish,
       dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder
     }
@@ -187,7 +188,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             );
             
             const sys = item.system;
-            if (item.type === 'ancestry') selectedItem.traits = sys.traits || [];
+            if (item.type === 'ancestry') {
+              selectedItem.traits = sys.traits || [];
+              selectedItem.size = sys.size || 'medium';
+              selectedItem.ancestryType = sys.ancestryType || 'Humanlike';
+            }
             
             if (item.type === 'class') {
                 const features = sys.levelFeatures || [];
@@ -212,11 +217,23 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     return acc;
                 }, {});
 
-                selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => ({
-                    level: lvl,
-                    isOpen: parseInt(lvl) === 1,
-                    features: feats
-                })).sort((a, b) => a.level - b.level);
+                const manaMultiplier = sys.manaMultiplier || 2;
+                const levelSpells = sys.levelSpells || [];
+
+                selectedItem.levelGroups = Object.entries(grouped).map(([lvl, feats]) => {
+                    const levelNum = parseInt(lvl);
+                    // Find spells for this level
+                    const spellData = levelSpells.find(ls => ls.level === levelNum);
+                    const spells = spellData?.spells || 0;
+                    const maxMana = manaMultiplier * levelNum;
+                    return {
+                        level: lvl,
+                        isOpen: levelNum === 1,
+                        features: feats,
+                        spells: spells,
+                        maxMana: maxMana
+                    };
+                }).sort((a, b) => a.level - b.level);
 
                 const rawSkill = sys.manaSkill || "None";
                 const localizedSkillKey = rawSkill.charAt(0).toUpperCase() + rawSkill.slice(1);
@@ -224,6 +241,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 classPreviewData = {
                     isSpellcaster: isSpellcaster ? "Yes" : "No",
                     manaSkill: localizedSkillKey,
+                    manaMultiplier: sys.manaMultiplier || 2,
                     levelGroups: selectedItem.levelGroups
                 };
             }
@@ -314,6 +332,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       });
     }
 
+    // Get spell limit for spells step
+    const spellLimit = this.currentStep === 'spells' ? await this._getSpellLimit() : null;
+    const currentSpellCount = this.currentStep === 'spells' ? this.builderData.spells.length : null;
+
 
     return {
       actor: previewActor,
@@ -344,6 +366,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         isOver: (budget - currentSpending) < 0 
       },
       instruction,
+      spellLimit,
+      currentSpellCount,
       // Randomization controls
       showRandomButton: ["ancestry", "class", "stats", "spells", "starting-packs"].includes(this.currentStep),
       showFullRandomButton: this.currentStep === "ancestry",
@@ -669,6 +693,26 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   /**
+   * Get the spell limit for level 1 from the selected class
+   * @returns {number} Number of spells the character can learn at level 1
+   */
+  async _getSpellLimit() {
+    if (!this.builderData.class) return 0;
+
+    const classItem = await fromUuid(this.builderData.class);
+    if (!classItem) return 0;
+
+    // Check if class is a spellcaster
+    if (!classItem.system.isSpellcaster) return 0;
+
+    // Get level 1 spells from levelSpells array
+    const levelSpells = classItem.system.levelSpells || [];
+    const level1Data = levelSpells.find(ls => ls.level === 1);
+
+    return level1Data?.spells || 0;
+  }
+
+  /**
    * Get starting pack items with details
    */
   async _getStartingPackItems() {
@@ -964,6 +1008,17 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
           return;
       }
 
+      // For spells, check the spell limit
+      if (stepKey === 'spells') {
+          const spellLimit = await this._getSpellLimit();
+          const currentSpellCount = this.builderData.spells.length;
+
+          if (currentSpellCount >= spellLimit) {
+              ui.notifications.error(`You can only learn ${spellLimit} spell${spellLimit !== 1 ? 's' : ''} at level 1. Remove a spell first.`);
+              return; // Block adding more spells
+          }
+      }
+
       // For gear, check budget and warn if overspending
       if (stepKey === 'gear') {
           const newItem = await fromUuid(uuid);
@@ -1045,6 +1100,21 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               this.builderData.previewUuid = null;
               this.render();
           }
+      }
+  }
+
+  async _onRemoveStartingPack(event, target) {
+      if (!this.builderData.startingPack) return;
+
+      const confirmed = await Dialog.confirm({
+          title: "Remove Starting Pack?",
+          content: "<p>This will remove the selected starting pack and return to the default budget.</p>"
+      });
+
+      if (confirmed) {
+          this.builderData.startingPack = null;
+          this.builderData.previewUuid = null;
+          this.render();
       }
   }
 
@@ -1404,12 +1474,19 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const options = await this._loadStepOptions('spells');
     if (options.length === 0) return;
 
+    // Get spell limit from class
+    const spellLimit = await this._getSpellLimit();
+    if (spellLimit === 0) {
+      ui.notifications.warn("Your class does not grant spells at level 1.");
+      return;
+    }
+
     // Clear current spells
     this.builderData.spells = [];
 
-    // Shuffle and pick 4
+    // Shuffle and pick spells up to the limit
     const shuffled = options.sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 4);
+    const selected = shuffled.slice(0, spellLimit);
 
     this.builderData.spells = selected.map(s => s.uuid);
 

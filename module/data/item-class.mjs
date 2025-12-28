@@ -101,6 +101,26 @@ export default class VagabondClass extends VagabondItemBase {
       { initial: [] }
     );
 
+    // Spells gained per level - separate from features
+    schema.levelSpells = new fields.ArrayField(
+      new fields.SchemaField({
+        level: new fields.NumberField({
+          required: true,
+          initial: 1,
+          min: 1,
+          max: 10,
+          integer: true
+        }),
+        spells: new fields.NumberField({
+          required: true,
+          initial: 0,
+          min: 0,
+          integer: true
+        })
+      }),
+      { initial: [] }
+    );
+
     return schema;
   }
 

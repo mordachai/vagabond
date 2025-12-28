@@ -288,6 +288,53 @@
   }
 }
 
+// Level traits display (Mana and Spells per level)
+.level-traits-display {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: rgba(255, 215, 0, 0.1);
+  border-left: 3px solid $c-red;
+  border-radius: 4px;
+
+  .trait-badge-inline {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 0.95rem;
+
+    strong {
+      color: $c-dark;
+      font-weight: 700;
+    }
+
+    span {
+      color: $c-red;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Spells per level input
+.spells-per-level-input {
+  width: 60px;
+  padding: 2px 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $c-red;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-align: center;
+
+  &:focus {
+    outline: 2px solid $c-red;
+    border-color: $c-red;
+  }
+}
+
 // Feature title styling
 .feature-title {
   font-family: 'Manofa', serif;

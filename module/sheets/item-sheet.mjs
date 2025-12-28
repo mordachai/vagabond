@@ -15,9 +15,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
     // Listen for updates to this item to re-render when ProseMirror saves
     this._hookId = Hooks.on('updateItem', (item, changes, options, userId) => {
-      // Only re-render if this is our item and levelFeatures or traits were updated
+      // Only re-render if this is our item and levelFeatures, levelSpells, or traits were updated
       if (item.id === this.document.id) {
-        if (changes.system?.levelFeatures || changes.system?.traits) {
+        if (changes.system?.levelFeatures || changes.system?.traits || changes.system?.levelSpells) {
           this.render({ force: true });
         }
       }
@@ -267,6 +267,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         );
         // Prepare level groups (1-10) with their features
         context.levelGroups = [];
+        const manaMultiplier = this.item.system.manaMultiplier || 2;
+        // Create a working copy with all 10 levels initialized
+        const levelSpellsMap = new Map();
+        (this.item.system.levelSpells || []).forEach(ls => {
+          levelSpellsMap.set(ls.level, ls.spells || 0);
+        });
+
+        const workingLevelSpells = [];
+        for (let lvl = 1; lvl <= 10; lvl++) {
+          workingLevelSpells.push({
+            level: lvl,
+            spells: levelSpellsMap.get(lvl) || 0
+          });
+        }
+
         for (let level = 1; level <= 10; level++) {
           const features = this.item.system.levelFeatures
             .map((f, index) => ({ ...f, index }))
@@ -284,9 +299,19 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             );
           }
 
+          // Get spells for this level (level - 1 because array is 0-indexed but levels start at 1)
+          const spellsIndex = level - 1;
+          const spells = workingLevelSpells[spellsIndex].spells;
+
+          // Calculate maxMana for this level
+          const maxMana = manaMultiplier * level;
+
           context.levelGroups.push({
             level,
-            features
+            features,
+            spells,
+            spellsIndex,
+            maxMana
           });
         }
         break;
@@ -729,10 +754,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _onUpdateGrip(event, target) {
     event.preventDefault();
     const newGrip = target.value;
-    
+
     // Explicitly update the document
     await this.document.update({ "system.grip": newGrip });
-    
+
     // This await ensures the data is saved before the UI refreshes
   }
 
