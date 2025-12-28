@@ -30,6 +30,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     this.openCategories = new Set();
     this.indices = {};
+    this.compendiumTypeCache = {}; // Cache which compendiums contain which types
 
     // Step 3: The 1d12 Stat Array Table
     this.statArrays = {
@@ -56,6 +57,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       selectOption: VagabondCharBuilder.prototype._onSelectOption,
       toggleCategory: VagabondCharBuilder.prototype._onToggleCategory,
       randomize: VagabondCharBuilder.prototype._onRandomize,
+      randomizeFullCharacter: VagabondCharBuilder.prototype._onRandomizeFullCharacter,
       pickValue: VagabondCharBuilder.prototype._onPickValue,
       assignStat: VagabondCharBuilder.prototype._onAssignStat,
       toggleSkill: VagabondCharBuilder.prototype._onToggleSkill,
@@ -63,7 +65,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       addToTray: VagabondCharBuilder.prototype._onAddToTray,
       removeFromTray: VagabondCharBuilder.prototype._onRemoveFromTray,
       clearTray: VagabondCharBuilder.prototype._onClearTray,
-      finish: VagabondCharBuilder.prototype._onFinish
+      finish: VagabondCharBuilder.prototype._onFinish,
+      dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder
     }
   };
 
@@ -340,16 +343,36 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         remaining: budget - currentSpending, 
         isOver: (budget - currentSpending) < 0 
       },
-      instruction
+      instruction,
+      // Randomization controls
+      showRandomButton: ["ancestry", "class", "stats", "spells", "starting-packs"].includes(this.currentStep),
+      showFullRandomButton: this.currentStep === "ancestry",
+      canAdvance: this._isStepComplete(this.currentStep),
+      canFinish: this._areMandatoryStepsComplete()
     };
   }
 
   _getStepsContext() {
-    return this.constructor.STEPS_ORDER.map((id, i) => ({
-        id, number: i + 1, label: `VAGABOND.CharBuilder.Steps.${id.charAt(0).toUpperCase() + id.slice(1).replace('-', '')}`,
-        active: id === this.currentStep,
-        disabled: i > 0 && !this.builderData.ancestry
-    }));
+    return this.constructor.STEPS_ORDER.map((id, i) => {
+        // Disable steps based on completion of previous required steps
+        let disabled = false;
+        if (i > 0) {
+            // Can't access step 2+ without completing step 1 (ancestry)
+            if (!this.builderData.ancestry) disabled = true;
+            // Can't access step 3+ without completing step 2 (class)
+            else if (i >= 2 && !this.builderData.class) disabled = true;
+            // Can't access step 4+ without completing step 3 (stats)
+            else if (i >= 3 && !this._isStepComplete('stats')) disabled = true;
+        }
+
+        return {
+            id,
+            number: i + 1,
+            label: `VAGABOND.CharBuilder.Steps.${id.charAt(0).toUpperCase() + id.slice(1).replace('-', '')}`,
+            active: id === this.currentStep,
+            disabled: disabled
+        };
+    });
   }
 
   async _prepareClassChoices() {
@@ -387,33 +410,79 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     };
   }
 
-  async _loadStepOptions() {
-    if (this.currentStep === 'stats') return [];
-    const packMap = {
-        'ancestry': ['vagabond.ancestries'],
-        'class': ['vagabond.classes'],
-        'perks': ['vagabond.perks'],
-        'spells': ['vagabond.spells'],
-        'starting-packs': ['vagabond.starting-packs'],
-        'gear': ['vagabond.alchemical-items', 'vagabond.armor', 'vagabond.gear', 'vagabond.weapons', 'vagabond.relics']
+  async _loadStepOptions(stepOverride = null) {
+    const step = stepOverride || this.currentStep;
+    if (step === 'stats') return [];
+
+    // Dynamically find all compendiums that contain the appropriate item type
+    const typeMap = {
+        'ancestry': 'ancestry',
+        'class': 'class',
+        'perks': 'perk',
+        'spells': 'spell',
+        'starting-packs': 'starterPack',
+        'gear': 'equipment'
     };
-    const packs = packMap[this.currentStep] || [];
+
+    const targetType = typeMap[step];
+    let packs = [];
+
+    // Check cache first
+    if (this.compendiumTypeCache[step]) {
+      packs = this.compendiumTypeCache[step];
+    } else {
+      // Search all compendiums for matching item types (first time only)
+      for (const pack of game.packs) {
+        // Only include Item compendiums
+        if (pack.metadata.type !== 'Item') continue;
+
+        // Check if this compendium contains items of the target type
+        const index = await pack.getIndex({ fields: ["type", "system.equipmentType"] });
+
+        if (step === 'gear') {
+          // For gear, check if any items are equipment type
+          const hasEquipment = index.some(i => i.type === 'equipment');
+          if (hasEquipment) packs.push(pack.metadata.id);
+        } else {
+          // For other steps, check for exact type match
+          const hasType = index.some(i => i.type === targetType);
+          if (hasType) packs.push(pack.metadata.id);
+        }
+      }
+
+      // Cache the results
+      this.compendiumTypeCache[step] = packs;
+    }
+
     const results = [];
 
     for (const p of packs) {
       if (!this.indices[p]) {
         const pack = game.packs.get(p);
         if (pack) {
-          const index = await pack.getIndex({ fields: ["img", "type", "system.baseCost", "system.baseSlots"] });
+          const index = await pack.getIndex({ fields: ["img", "type", "system.baseCost", "system.baseSlots", "system.equipmentType"] });
           this.indices[p] = { label: pack.metadata.label, id: pack.metadata.name, items: index };
         }
       }
       const cached = this.indices[p];
       if (!cached) continue;
 
-      if (this.currentStep === 'gear') {
+      // Filter items by type for this step
+      let filteredItems = cached.items;
+      if (step === 'gear') {
+        // Only show equipment items for gear step
+        filteredItems = cached.items.filter(i => i.type === 'equipment');
+      } else {
+        // Only show items matching the target type
+        filteredItems = cached.items.filter(i => i.type === targetType);
+      }
+
+      // Skip empty categories
+      if (filteredItems.length === 0) continue;
+
+      if (step === 'gear') {
         // Sort items alphabetically within each category
-        const sortedItems = [...cached.items].sort((a, b) => a.name.localeCompare(b.name));
+        const sortedItems = [...filteredItems].sort((a, b) => a.name.localeCompare(b.name));
         results.push({
             label: cached.label,
             id: cached.id,
@@ -425,14 +494,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             }))
         });
       } else {
-        const stepKey = this.currentStep === 'starting-packs' ? 'startingPack' : this.currentStep;
+        const stepKey = step === 'starting-packs' ? 'startingPack' : step;
         // Sort items alphabetically
-        const sortedItems = [...cached.items].sort((a, b) => a.name.localeCompare(b.name));
+        const sortedItems = [...filteredItems].sort((a, b) => a.name.localeCompare(b.name));
 
         // For perks/spells (arrays), mark items that are in the tray
-        if (['perks', 'spells'].includes(this.currentStep)) {
+        if (['perks', 'spells'].includes(step)) {
           // For perks, check both class perks and manual perks
-          const isInTray = this.currentStep === 'perks'
+          const isInTray = step === 'perks'
             ? (uuid) => this.builderData.classPerks.includes(uuid) || this.builderData.perks.includes(uuid)
             : (uuid) => this.builderData[stepKey].includes(uuid);
 
@@ -647,6 +716,31 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   _onRender(context, options) {
     const html = this.element;
 
+    // Search input filter
+    const searchInput = html.querySelector('.search-input');
+    const searchClear = html.querySelector('.search-clear');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (ev) => {
+        this._onFilterList(ev, ev.target);
+        // Show/hide clear button based on input
+        if (searchClear) {
+          searchClear.style.display = ev.target.value ? 'flex' : 'none';
+        }
+      });
+    }
+
+    if (searchClear) {
+      searchClear.style.display = 'none'; // Hidden by default
+      searchClear.addEventListener('click', (ev) => {
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.dispatchEvent(new Event('input')); // Trigger filter update
+          searchInput.focus();
+        }
+      });
+    }
+
     // UNIVERSAL: Attach click handlers to ALL directory items for preview
     const allDirectoryItems = html.querySelectorAll('.directory-item[data-uuid]');
     allDirectoryItems.forEach(item => {
@@ -804,6 +898,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   // ACTION HANDLERS
   _onNext(event, target) {
+      // Check if current step is complete before advancing
+      if (!this._isStepComplete(this.currentStep)) {
+          ui.notifications.warn("Complete the current step before advancing.");
+          return;
+      }
+
       const idx = this.constructor.STEPS_ORDER.indexOf(this.currentStep);
       if (idx < this.constructor.STEPS_ORDER.length - 1) {
           this.currentStep = this.constructor.STEPS_ORDER[idx + 1];
@@ -987,11 +1087,23 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   async _onRandomize() {
-    if (this.currentStep === 'stats') {
-        const roll = await new Roll("1d12").evaluate();
-        this.builderData.selectedArrayId = String(roll.total);
-        this.builderData.unassignedValues = [...this.statArrays[roll.total]];
-        this.builderData.stats = { might: null, dexterity: null, awareness: null, reason: null, presence: null, luck: null };
+    // Step-by-step randomization based on current step
+    switch (this.currentStep) {
+      case 'ancestry':
+        await this._randomizeAncestry();
+        break;
+      case 'class':
+        await this._randomizeClass();
+        break;
+      case 'stats':
+        await this._randomizeStats(false); // false = don't auto-assign
+        break;
+      case 'spells':
+        await this._randomizeSpells();
+        break;
+      case 'starting-packs':
+        await this._randomizeStartingPack();
+        break;
     }
     this.render();
   }
@@ -1003,22 +1115,84 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     this.render();
   }
 
-  _onToggleCategory(event, target) { 
-      const id = target.dataset.category; 
-      if (this.openCategories.has(id)) this.openCategories.delete(id); else this.openCategories.add(id); 
+  _onToggleCategory(event, target) {
+      const id = target.dataset.category;
+      if (this.openCategories.has(id)) this.openCategories.delete(id); else this.openCategories.add(id);
       this.render();
   }
 
+  _onFilterList(event, target) {
+    const query = target.value.toLowerCase().trim();
+    const html = this.element;
+
+    if (this.currentStep === 'gear') {
+      // For gear step with accordions, filter items within each category
+      const accordions = html.querySelectorAll('.gear-accordion');
+      accordions.forEach(accordion => {
+        const items = accordion.querySelectorAll('.directory-item');
+        let hasVisibleItems = false;
+
+        items.forEach(item => {
+          const name = item.querySelector('.name')?.textContent.toLowerCase() || '';
+          if (!query || name.includes(query)) {
+            item.style.display = '';
+            hasVisibleItems = true;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // Hide entire accordion if no items match
+        if (query && !hasVisibleItems) {
+          accordion.style.display = 'none';
+        } else {
+          accordion.style.display = '';
+        }
+      });
+    } else {
+      // For non-gear steps, filter directory items directly
+      const items = html.querySelectorAll('.directory-list > .directory-item');
+      items.forEach(item => {
+        // For stats step, check array values; for other steps, check name
+        const name = item.querySelector('.name')?.textContent.toLowerCase() || '';
+        const arrayValues = item.querySelector('.array-values')?.textContent.toLowerCase() || '';
+        const searchText = name || arrayValues;
+
+        if (!query || searchText.includes(query)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  }
+
   _onGoToStep(event, target) {
-    this.currentStep = target.dataset.step;
-    
+    const requestedStep = target.dataset.step;
+    const steps = this._getStepsContext();
+    const stepData = steps.find(s => s.id === requestedStep);
+
+    // Prevent navigation to disabled steps
+    if (stepData && stepData.disabled) {
+        ui.notifications.warn("Complete the required steps before accessing this step.");
+        return;
+    }
+
+    this.currentStep = requestedStep;
+
     // Clear the active preview item so it doesn't bleed into the next tab
     this.builderData.previewUuid = null;
-    
+
     this.render();
 }
 
   async _onFinish() {
+    // Validate mandatory steps are complete
+    if (!this._areMandatoryStepsComplete()) {
+        ui.notifications.error("You must complete Ancestry, Class, and Stats before finishing character creation.");
+        return;
+    }
+
     const actor = this.actor;
     const data = this.builderData;
     const updateData = {
@@ -1039,7 +1213,36 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     if (data.ancestry) await addByUuid(data.ancestry);
     if (data.class) await addByUuid(data.class);
-    if (data.startingPack) await addByUuid(data.startingPack);
+
+    // Handle starting pack - add the pack itself AND extract its items
+    if (data.startingPack) {
+        await addByUuid(data.startingPack);
+
+        // Extract items from the starting pack and add them
+        const packItem = await fromUuid(data.startingPack);
+        if (packItem && packItem.system.items) {
+            for (const packItemEntry of packItem.system.items) {
+                const gearItem = await fromUuid(packItemEntry.uuid);
+                if (gearItem) {
+                    const gearObj = gearItem.toObject();
+                    // Set quantity if specified in the pack
+                    if (packItemEntry.quantity && packItemEntry.quantity > 1) {
+                        gearObj.system.quantity = packItemEntry.quantity;
+                    }
+                    itemsToCreate.push(gearObj);
+                }
+            }
+        }
+
+        // Add starting pack currency to character
+        if (packItem && packItem.system.currency) {
+            const curr = packItem.system.currency;
+            updateData["system.currency.gold"] = (curr.gold || 0);
+            updateData["system.currency.silver"] = (curr.silver || 0);
+            updateData["system.currency.copper"] = (curr.copper || 0);
+        }
+    }
+
     // Combine class perks and manual perks
     const allPerks = [...new Set([...data.classPerks, ...data.perks])];
     for (const uuid of [...allPerks, ...data.spells, ...data.gear]) await addByUuid(uuid);
@@ -1053,5 +1256,215 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     ui.notifications.info(`Character ${actor.name} successfully created!`);
     this.close();
+  }
+
+  async _onDismissBuilder() {
+    // Confirm dismissal
+    const confirmed = await Dialog.confirm({
+      title: "Dismiss Character Builder",
+      content: `<p>Are you sure you want to dismiss the character builder?</p>
+                <p>You can still manually build your character using the normal character sheet.</p>
+                <p><strong>This action cannot be undone.</strong></p>`,
+      yes: () => true,
+      no: () => false,
+      defaultYes: false
+    });
+
+    if (confirmed) {
+      await this.actor.update({ "system.details.builderDismissed": true });
+      ui.notifications.info("Character builder dismissed. You can use the normal character sheet to build your character.");
+      this.close();
+    }
+  }
+
+  // RANDOMIZATION METHODS
+
+  /**
+   * Full random character generation - one click creates entire character
+   */
+  async _onRandomizeFullCharacter() {
+    // Step 1: Ancestry (weighted)
+    await this._randomizeAncestry();
+
+    // Step 2: Class (equal weight)
+    await this._randomizeClass();
+
+    // Step 3: Stats (auto-assign)
+    await this._randomizeStats(true); // true = auto-assign
+
+    // Step 4: Perks - skip, already set by class
+
+    // Step 5: Spells (4 random)
+    await this._randomizeSpells();
+
+    // Step 6: Starting Pack (1 random)
+    await this._randomizeStartingPack();
+
+    // Step 7: Gear - skip, starting pack is enough
+
+    ui.notifications.info("Full random character generated!");
+    this.render();
+  }
+
+  /**
+   * Randomize ancestry with weighted distribution
+   * Human: 5/8, Dwarf: 1/8, Elf: 1/8, Halfling: 1/8
+   */
+  async _randomizeAncestry() {
+    const options = await this._loadStepOptions('ancestry');
+    if (options.length === 0) return;
+
+    // Create weighted array based on d8 distribution
+    const weightedNames = {
+      'Human': 5,
+      'Dwarf': 1,
+      'Elf': 1,
+      'Halfling': 1
+    };
+
+    // Build weighted pool
+    const weightedPool = [];
+    options.forEach(option => {
+      const weight = weightedNames[option.name] || 0;
+      for (let i = 0; i < weight; i++) {
+        weightedPool.push(option);
+      }
+    });
+
+    if (weightedPool.length === 0) {
+      // Fallback: equal distribution if names don't match
+      const randomIndex = Math.floor(Math.random() * options.length);
+      this.builderData.ancestry = options[randomIndex].uuid;
+    } else {
+      const randomIndex = Math.floor(Math.random() * weightedPool.length);
+      this.builderData.ancestry = weightedPool[randomIndex].uuid;
+    }
+
+    this.builderData.previewUuid = this.builderData.ancestry;
+  }
+
+  /**
+   * Randomize class - equal weight for all 18 classes
+   */
+  async _randomizeClass() {
+    const options = await this._loadStepOptions('class');
+    if (options.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * options.length);
+    this.builderData.class = options[randomIndex].uuid;
+    this.builderData.previewUuid = this.builderData.class;
+
+    // Auto-select guaranteed skills
+    const classItem = await fromUuid(this.builderData.class);
+    if (classItem) {
+      const grant = classItem.system.skillGrant;
+      this.builderData.skills = [...grant.guaranteed];
+
+      // Auto-select random skills from choices
+      for (const choice of grant.choices) {
+        const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND.skills);
+        const available = pool.filter(s => !this.builderData.skills.includes(s));
+        const shuffled = available.sort(() => Math.random() - 0.5);
+        this.builderData.skills.push(...shuffled.slice(0, choice.count));
+      }
+    }
+  }
+
+  /**
+   * Randomize stats - choose random array and optionally auto-assign
+   * @param {boolean} autoAssign - If true, automatically assign values in order
+   */
+  async _randomizeStats(autoAssign = false) {
+    // Roll 1d12 to select stat array
+    const roll = await new Roll("1d12").evaluate();
+    this.builderData.selectedArrayId = String(roll.total);
+    this.builderData.unassignedValues = [...this.statArrays[roll.total]];
+
+    if (autoAssign) {
+      // Auto-assign in order: Might, Dexterity, Awareness, Reason, Presence, Luck
+      const statOrder = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
+      const values = [...this.statArrays[roll.total]];
+
+      this.builderData.stats = {};
+      statOrder.forEach((stat, index) => {
+        this.builderData.stats[stat] = values[index];
+      });
+
+      this.builderData.unassignedValues = [];
+    } else {
+      // Just select array, player will assign
+      this.builderData.stats = { might: null, dexterity: null, awareness: null, reason: null, presence: null, luck: null };
+    }
+  }
+
+  /**
+   * Randomize 4 spells from available spell list
+   */
+  async _randomizeSpells() {
+    const options = await this._loadStepOptions('spells');
+    if (options.length === 0) return;
+
+    // Clear current spells
+    this.builderData.spells = [];
+
+    // Shuffle and pick 4
+    const shuffled = options.sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 4);
+
+    this.builderData.spells = selected.map(s => s.uuid);
+
+    if (selected.length > 0) {
+      this.builderData.previewUuid = selected[0].uuid;
+    }
+  }
+
+  /**
+   * Randomize starting pack - equal weight for all 36 packs
+   */
+  async _randomizeStartingPack() {
+    const options = await this._loadStepOptions('starting-packs');
+    if (options.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * options.length);
+    this.builderData.startingPack = options[randomIndex].uuid;
+    this.builderData.previewUuid = this.builderData.startingPack;
+  }
+
+  /**
+   * Check if current step is completed
+   */
+  _isStepComplete(step) {
+    switch (step) {
+      case 'ancestry':
+        return !!this.builderData.ancestry;
+      case 'class':
+        return !!this.builderData.class;
+      case 'stats':
+        // Stats complete when all 6 values are assigned
+        return Object.values(this.builderData.stats).every(v => v !== null);
+      case 'perks':
+        // Perks are optional
+        return true;
+      case 'spells':
+        // Spells are optional
+        return true;
+      case 'starting-packs':
+        // Starting packs are optional
+        return true;
+      case 'gear':
+        // Gear is optional
+        return true;
+      default:
+        return true;
+    }
+  }
+
+  /**
+   * Check if mandatory steps are complete (steps 1, 2, 3)
+   */
+  _areMandatoryStepsComplete() {
+    return this._isStepComplete('ancestry') &&
+           this._isStepComplete('class') &&
+           this._isStepComplete('stats');
   }
 }

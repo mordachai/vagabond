@@ -34,6 +34,12 @@ export default class VagabondCharacter extends VagabondActorBase {
       manaSkill: new fields.StringField({ initial: null, nullable: true }),
     });
 
+    // Character details - tracks builder state
+    schema.details = new fields.SchemaField({
+      constructed: new fields.BooleanField({ initial: false }),
+      builderDismissed: new fields.BooleanField({ initial: false })
+    });
+
     // Currency system
     schema.currency = new fields.SchemaField({
       gold: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),

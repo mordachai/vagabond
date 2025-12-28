@@ -2126,10 +2126,21 @@
   text-align: center;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
 }
 .vagabond-builder .builder-tabs .tab-item.active {
   color: var(--vagabond-c-red);
   background: rgba(255, 255, 255, 0.4);
+}
+.vagabond-builder .builder-tabs .tab-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+.vagabond-builder .builder-tabs .tab-item:not(.disabled):not(.active):hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(0, 0, 0, 0.7);
 }
 .vagabond-builder .builder-body {
   flex: 1;
@@ -2147,15 +2158,49 @@
   min-height: 0;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 5;
   background: white;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
-.vagabond-builder .builder-body .selection-list-column .search-sticky input {
+.vagabond-builder .builder-body .selection-list-column .search-sticky .search-input {
   width: 100%;
   height: 32px;
+  padding-right: 32px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding-left: 8px;
+  font-size: 14px;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .search-input:focus {
+  outline: 2px solid var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .search-clear {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .search-clear:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .search-clear i {
+  font-size: 12px;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-list {
   flex: 1;
@@ -2207,8 +2252,9 @@
   display: block;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item .name {
-  font-family: "Paradigm", serif;
-  font-size: 1.1rem;
+  font-family: "Eskapade", serif;
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 .vagabond-builder .builder-body .selection-list-column .stat-array-item {
   font-size: 1rem;
@@ -2651,9 +2697,14 @@
   flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 15px 25px;
   background: rgba(0, 0, 0, 0.1);
   border-top: 2px solid var(--vagabond-c-dark);
+  gap: 100px;
+}
+.vagabond-builder .builder-footer .footer-left {
+  gap: 12px;
 }
 .vagabond-builder .builder-footer .footer-nav {
   gap: 12px;
@@ -2662,11 +2713,61 @@
   font-family: "Eskapade", serif;
   height: 40px;
   cursor: pointer;
+  padding: 0 15px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.vagabond-builder .builder-footer button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #999 !important;
+}
+.vagabond-builder .builder-footer button.btn-dismiss {
+  background: #888;
+  color: white;
+  border: none;
+}
+.vagabond-builder .builder-footer button.btn-dismiss:hover:not(:disabled) {
+  background: #999;
 }
 .vagabond-builder .builder-footer button.btn-random {
   background: #444;
   color: white;
   border: none;
+}
+.vagabond-builder .builder-footer button.btn-random:hover:not(:disabled) {
+  background: #555;
+}
+.vagabond-builder .builder-footer button.btn-full-random {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.vagabond-builder .builder-footer button.btn-full-random:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.vagabond-builder .builder-footer button.btn-full-random i {
+  margin-right: 6px;
+}
+.vagabond-builder .builder-footer button.btn-prev, .vagabond-builder .builder-footer button.btn-next {
+  background: #666;
+  color: white;
+  border: none;
+}
+.vagabond-builder .builder-footer button.btn-prev:hover:not(:disabled), .vagabond-builder .builder-footer button.btn-next:hover:not(:disabled) {
+  background: #777;
+}
+.vagabond-builder .builder-footer button.btn-finish {
+  background: var(--vagabond-c-red);
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+.vagabond-builder .builder-footer button.btn-finish:hover:not(:disabled) {
+  background: var(--vagabond-c-red);
 }
 .vagabond-builder .budget-tracker {
   grid-column: 1/-1;
@@ -2994,6 +3095,8 @@
   /* Container Item Styles */
   /* Character Name at Top - Full Width */
   /* Combined Character Info Row */
+  /* Character Builder Icon Button - Inline */
+  /* Pulsing glow animation */
   /* ======================================
      SLIDING PANEL SYSTEM
      ====================================== */
@@ -5391,6 +5494,45 @@
 }
 .vagabond .character-info-combined-row .level-input:hover, .vagabond .character-info-combined-row .level-input:focus {
   border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .btn-char-builder-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin-right: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  vertical-align: middle;
+}
+.vagabond .btn-char-builder-icon i {
+  font-size: 12px;
+  margin: 0;
+}
+.vagabond .btn-char-builder-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.vagabond .btn-char-builder-icon:active {
+  transform: scale(0.95);
+}
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.8), 0 0 20px rgba(102, 126, 234, 0.4), 0 0 30px rgba(102, 126, 234, 0.2);
+  }
+}
+.vagabond .pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 .vagabond .speed-stats-row {
   display: flex;

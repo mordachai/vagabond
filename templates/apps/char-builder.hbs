@@ -10,7 +10,10 @@
     <main class="builder-body">
         {{!-- LEFT COLUMN: Selection List (full height) --}}
         <aside class="selection-list-column">
-            <div class="search-sticky"><input type="text" placeholder="Search..." data-action="filterList"></div>
+            <div class="search-sticky">
+                <input type="text" class="search-input" placeholder="Search..." autocomplete="off">
+                <button type="button" class="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
+            </div>
             <div class="directory-list custom-scroll">
                 {{#if (eq step 'stats')}}
                     {{#each statData.arrays}}
@@ -516,7 +519,25 @@
     </main>
 
     <footer class="builder-footer flexrow">
-        <button type="button" class="btn-random" data-action="randomize"><i class="fas fa-dice"></i> Random</button>
-        <div class="footer-nav flexrow"><button type="button" class="btn-prev" data-action="prev">Previous</button><button type="button" class="btn-next" data-action="next">Next</button><button type="submit" class="btn-finish">Finish</button></div>
+        <div class="footer-left flexrow">
+            <button type="button" class="btn-dismiss" data-action="dismissBuilder" data-tooltip="Dismiss builder and use normal character sheet">
+                <i class="fas fa-times-circle"></i> Dismiss
+            </button>
+            {{#if showFullRandomButton}}
+                <button type="button" class="btn-full-random" data-action="randomizeFullCharacter">
+                    <i class="fas fa-bolt"></i> Full Random Character
+                </button>
+            {{/if}}
+            {{#if showRandomButton}}
+                <button type="button" class="btn-random" data-action="randomize">
+                    <i class="fas fa-dice"></i> Random
+                </button>
+            {{/if}}
+        </div>
+        <div class="footer-nav flexrow">
+            <button type="button" class="btn-prev" data-action="prev">Previous</button>
+            <button type="button" class="btn-next" data-action="next" {{#unless canAdvance}}disabled{{/unless}}>Next</button>
+            <button type="button" class="btn-finish" data-action="finish" {{#unless canFinish}}disabled{{/unless}}>Finish</button>
+        </div>
     </footer>
 </form>

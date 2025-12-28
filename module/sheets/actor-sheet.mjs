@@ -1,6 +1,7 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { VagabondCharBuilder } from '../applications/char-builder.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -73,6 +74,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
       openDowntime: this._onOpenDowntime, // Open downtime activities
       toggleSpellPreview: this._onToggleSpellPreview, // Display measure template
+      openCharBuilder: this._onOpenCharBuilder, // Open character builder
+      dismissCharBuilder: this._onDismissCharBuilder, // Dismiss character builder permanently
     },
     // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -5039,6 +5042,50 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const { DowntimeApp } = await import('../applications/downtime-app.mjs');
     const app = new DowntimeApp(this.actor);
     app.render({ force: true });
+  }
+
+  /**
+   * Open the character builder
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onOpenCharBuilder(event, target) {
+    event.preventDefault();
+
+    // Only allow for character type actors
+    if (this.actor.type !== 'character') {
+      ui.notifications.warn("Character builder is only available for character-type actors.");
+      return;
+    }
+
+    // Create and render the character builder
+    const builder = new VagabondCharBuilder(this.actor);
+    builder.render({ force: true });
+  }
+
+  /**
+   * Dismiss the character builder permanently
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onDismissCharBuilder(event, target) {
+    event.preventDefault();
+
+    // Confirm dismissal
+    const confirmed = await Dialog.confirm({
+      title: "Dismiss Character Builder",
+      content: `<p>Are you sure you want to dismiss the character builder?</p>
+                <p>You can still manually build your character using the normal character sheet.</p>
+                <p><strong>This action cannot be undone.</strong></p>`,
+      yes: () => true,
+      no: () => false,
+      defaultYes: false
+    });
+
+    if (confirmed) {
+      await this.actor.update({ "system.details.builderDismissed": true });
+      ui.notifications.info("Character builder dismissed. You can use the normal character sheet to build your character.");
+    }
   }
 
   /**
