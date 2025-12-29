@@ -2023,6 +2023,32 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: rgba(0, 0, 0, 0.0862745098);
   color: var(--vagabond-c-dark);
 }
+#vagabond-char-builder .window-content h3, #vagabond-char-builder .window-content h4 {
+  background: var(--vagabond-c-black);
+  width: 100%;
+  height: 38px;
+  margin: 0 auto 8px auto; /* Center horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3px 5px 0px 15px;
+  border-radius: 3px;
+  /* Text Styling */
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-white);
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  /* The Right Line */
+}
+#vagabond-char-builder .window-content h3::after, #vagabond-char-builder .window-content h4::after {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: #5a6e76;
+  border-radius: 1px;
+  margin: 0 10px;
+}
 
 .vagabond-builder {
   height: 100%;
@@ -2374,6 +2400,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   gap: 15px;
   margin-bottom: 20px;
+  background: var(--vagabond-c-dark);
+  color: var(--vagabond-c-white);
+  padding: 8px;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header img.preview-img-main {
   width: 100px;
@@ -2393,12 +2422,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex-direction: column;
   justify-content: center;
   flex: 1;
+  color: var(--vagabond-c-white) !important;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .name-block h2 {
   border: none;
   margin: 0;
   font-size: 1.8rem;
   font-family: "Eskapade", serif;
+  color: var(--vagabond-c-white) !important;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .name-block .sublabel {
   font-style: italic;
@@ -2416,6 +2447,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1.25rem;
   min-width: 150px;
   font-family: "Eskapade", serif;
+  color: var(--vagabond-c-white);
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .ancestry-info .info-row {
   display: flex;
@@ -2423,7 +2455,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .ancestry-info .info-row strong {
   font-weight: 700;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-white);
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-description {
   margin-bottom: 20px;
@@ -2597,21 +2629,21 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 0.9rem;
 }
 .vagabond-builder .equipment-details .relic-lore {
+  display: block;
   margin-top: 10px;
   padding: 10px;
-  background: rgba(255, 215, 0, 0.1);
-  border-left: 4px solid gold;
   border-radius: 4px;
 }
-.vagabond-builder .equipment-details .relic-lore h4 {
-  margin: 0 0 8px 0;
+.vagabond-builder .equipment-details .relic-lore strong {
+  margin: 0 4px 8px 0;
   font-family: "Eskapade", serif;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: var(--vagabond-c-dark);
+  font-weight: 800;
 }
-.vagabond-builder .equipment-details .relic-lore p {
+.vagabond-builder .equipment-details .relic-lore span {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   line-height: 1.4;
 }
 .vagabond-builder .stat-slot .hex-box {

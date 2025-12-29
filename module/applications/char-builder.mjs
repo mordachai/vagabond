@@ -258,7 +258,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 const eqType = sys.equipmentType;
 
                 // Weapons
-                if (eqType === 'weapons') {
+                if (eqType === 'weapon') {
                     displayStats.weaponSkill = sys.weaponSkill || null;
                     displayStats.range = sys.range || null;
                     displayStats.grip = sys.grip || null;
@@ -279,10 +279,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     displayStats.armorRating = sys.armorRating || 0;
                     displayStats.mightRequirement = sys.mightRequirement || 0;
                     displayStats.armorType = sys.armorType || null;
+                    displayStats.armorTypeDescription = CONFIG.VAGABOND.armorTypeDescriptions?.[sys.armorType] || null;
                 }
 
                 // Alchemicals
-                else if (eqType === 'alchemical-items') {
+                else if (eqType === 'alchemical') {
                     displayStats.alchemicalType = sys.alchemicalType || null;
                     displayStats.damage = sys.damage || null;
                     displayStats.damageType = sys.damageType || "-";
@@ -290,7 +291,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 }
 
                 // Relics
-                else if (eqType === 'relics') {
+                else if (eqType === 'relic') {
                     displayStats.lore = sys.lore || null;
                     if (sys.lore) {
                         displayStats.enrichedLore = await foundry.applications.ux.TextEditor.enrichHTML(

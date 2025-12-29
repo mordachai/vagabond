@@ -345,7 +345,7 @@
                     {{#if (eq selectedItem.type "equipment")}}
                         <div class="equipment-details">
                             {{!-- WEAPONS --}}
-                            {{#if (eq selectedItem.displayStats.subType "weapons")}}
+                            {{#if (eq selectedItem.displayStats.subType "weapon")}}
                                 <h3 class="preview-section-header">Weapon Details</h3>
                                 <div class="preview-details-grid">
                                     {{#if selectedItem.displayStats.weaponSkill}}
@@ -377,14 +377,15 @@
                                         {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                                         {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                                         {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                        {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
                                     </div>
                                 </div>
                                 {{#if selectedItem.displayStats.propertiesWithHints}}
                                     <div class="weapon-properties">
                                         <h4>Properties</h4>
                                         {{#each selectedItem.displayStats.propertiesWithHints}}
-                                            <div class="property-item" title="{{this.hint}}">
-                                                <strong>{{this.name}}:</strong> <em>{{this.hint}}</em>
+                                            <div class="property-item" title="{{localize this.hint}}">
+                                                <strong>{{localize this.label}}:</strong> <em>{{localize this.hint}}</em>
                                             </div>
                                         {{/each}}
                                     </div>
@@ -394,6 +395,11 @@
                             {{!-- ARMOR --}}
                             {{#if (eq selectedItem.displayStats.subType "armor")}}
                                 <h3 class="preview-section-header">Armor Details</h3>
+                                {{#if selectedItem.displayStats.armorTypeDescription}}
+                                    <div class="armor-type-description">
+                                        <em>{{selectedItem.displayStats.armorTypeDescription}}</em>
+                                    </div>
+                                {{/if}}
                                 <div class="preview-details-grid">
                                     {{#if selectedItem.displayStats.armorRating}}
                                         <div><strong>Armor Rating:</strong> {{selectedItem.displayStats.armorRating}}</div>
@@ -409,12 +415,13 @@
                                         {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                                         {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                                         {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                        {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
                                     </div>
                                 </div>
                             {{/if}}
 
                             {{!-- ALCHEMICALS --}}
-                            {{#if (eq selectedItem.displayStats.subType "alchemical-items")}}
+                            {{#if (eq selectedItem.displayStats.subType "alchemical")}}
                                 <h3 class="preview-section-header">Alchemical Details</h3>
                                 <div class="preview-details-grid">
                                     {{#if selectedItem.displayStats.alchemicalType}}
@@ -437,17 +444,18 @@
                                         {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                                         {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                                         {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                        {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
                                     </div>
                                 </div>
                             {{/if}}
 
                             {{!-- RELICS --}}
-                            {{#if (eq selectedItem.displayStats.subType "relics")}}
+                            {{#if (eq selectedItem.displayStats.subType "relic")}}
                                 <h3 class="preview-section-header">Relic Details</h3>
                                 {{#if selectedItem.displayStats.lore}}
                                     <div class="relic-lore">
-                                        <h4>Lore</h4>
-                                        <p>{{{selectedItem.displayStats.enrichedLore}}}</p>
+                                        <strong>{{localize "VAGABOND.Item.Relic.FIELDS.lore.label"}}: </strong>
+                                        <span>{{{selectedItem.displayStats.enrichedLore}}}</span>
                                     </div>
                                 {{/if}}
                                 <div class="preview-details-grid">
@@ -456,6 +464,7 @@
                                         {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                                         {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                                         {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                        {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
                                     </div>
                                 </div>
                             {{/if}}
@@ -469,6 +478,7 @@
                                         {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                                         {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                                         {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
+                                        {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
                                     </div>
                                 </div>
                             {{/if}}
