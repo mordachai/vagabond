@@ -39,7 +39,7 @@
       <div class='character-info-combined-row'>
         {{#if (and (not system.details.constructed) (not system.details.builderDismissed))}}
           <button type='button' class='btn-char-builder-icon pulse-glow' data-action='openCharBuilder' data-tooltip='Build Character'>
-            <i class='fas fa-wand-magic-sparkles'></i>
+            <i class='fa-fw fas fa-scroll'></i>
           </button>
         {{/if}}
         <span>
@@ -174,7 +174,13 @@
           data-action='toggleFavorHinder'
           data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
         >
-          <i class='fa-duotone fa-light fa-cube'></i>
+          {{#if (eq system.favorHinder "favor")}}
+            <img src='systems/vagabond/assets/ui/dice/favor-mark.webp' alt='Favored' class='favor-hinder-marker' />
+          {{else if (eq system.favorHinder "hinder")}}
+            <img src='systems/vagabond/assets/ui/dice/hinder-mark.webp' alt='Hindered' class='favor-hinder-marker' />
+          {{else}}
+            <img src='systems/vagabond/assets/ui/dice/neutral-mark.webp' alt='Neutral' class='favor-hinder-marker' />
+          {{/if}}
         </button>
         <label class='favor-hinder-label favor-hinder-label-wrap'>
           {{#if (eq system.favorHinder "favor")}}

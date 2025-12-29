@@ -668,3 +668,9 @@ VAGABOND.spellDeliveryAttackTypes = {
   'remote': 'ranged',
   'sphere': 'ranged'
 };
+
+VAGABOND.favHindMarker = {
+  'none': 'systems/vagabond/assets/ui/dice/neutral-mark.webp',
+  'favored': 'systems/vagabond/assets/ui/dice/favor-mark.webp',
+  'hindered': 'systems/vagabond/assets/ui/dice/hinder-mark.webp'
+}

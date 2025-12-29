@@ -124,8 +124,9 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     display: flex;
                     align-items: center;
                     gap: 2px;
-                    white-space: nowrap; /* Keep short tags intact */
-                    flex-shrink: 0;      /* Don't squish standard tags */
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                    text-transform: capitalize;   
                     
                     i { opacity: 0.7; font-size: 12px; }
                 }
@@ -199,12 +200,12 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
         &.favored {
             background-image: url('../assets/ui/chat/favored-bg.webp');
-            color: #000;
+            color: $c-black;
             // transform: rotate(1deg);
         }
         &.hindered {
             background-image: url('../assets/ui/chat/hindered-bg.webp');
-            color: #fff;
+            color: $c-black;
             // transform: rotate(-1deg);
         }
     }
@@ -271,7 +272,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             background-repeat: no-repeat;
             width: fit-content;
             height: 40px;
-            max-width: 165px;
+            max-width: 160px;
             min-width: 130px;
             
             display: flex;
@@ -289,7 +290,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
             .roll-value {
                 color: #fff;
-                font-size: 34px; 
+                font-size: 32px; 
                 font-weight: 900;
                 line-height: 1;
                 margin-right: 4px;
@@ -304,7 +305,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             }
             
             .roll-target {
-                font-size: 30px;
+                font-size: 28px;
                 font-weight: bold;
                 margin: 0 4px;
                 color: var(--c-dark-blue);
@@ -749,10 +750,15 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     gap: 0;
 
     .roll-modifier {
-        font-size: 28px;
+        font-size: 24px;
         font-weight: bold;
         margin: 4px;
         color: var(--c-damage-orange);
+        text-shadow:
+            1px 1px 0 $c-white,
+            -1px 1px 0 $c-white,
+            -1px -1px 0 $c-white,
+            1px -1px 0 $c-white;
     }
 
     .roll-operator {
@@ -772,8 +778,8 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     
     /* 1. ATTACK ROLL STRIP DICE (Standard Size) */
     &.die-type-check {
-        width: 50px !important;
-        height: 50px !important;
+        width: 45px !important;
+        height: 45px !important;
 
         .vb-die-val { font-size: 32px; }
     }

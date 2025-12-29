@@ -84,13 +84,16 @@
 
 .tab {
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
-  width: 430px;
+  //width: 430px;
+  width: 100%;
   z-index: 10 !important;
   background: none;
   margin-left: 0;
   padding:  8px 32px 8px 8px;
   box-sizing: border-box;
+  color: $c-dark;
 }
 
 // .tab.biography {

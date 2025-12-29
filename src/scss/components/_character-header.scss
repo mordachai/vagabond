@@ -80,10 +80,10 @@
 // Downtime Overlay (Top left, mirroring armor)
 .downtime-overlay {
   position: absolute;
-  top: -1px;
-  left: -2px;
-  width: 24px;
-  height: 24px;
+  top: 2px;
+  left: 1px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,8 +91,8 @@
   text-decoration: none;
 
   .downtime-overlay-button {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     cursor: pointer;
     padding: 0;
@@ -707,7 +707,7 @@
   margin-right: 8px;
 
   .favor-hinder-toggle {
-    width: 40px;
+    width: 44px;
     height: 40px;
     border-radius: 8px;
     border: none;
@@ -754,12 +754,10 @@
   }
 
   .favor-hinder-label {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
     text-align: center;
     line-height: 1.1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     min-height: 24px;
     width: 60px;
     display: flex;

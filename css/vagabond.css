@@ -768,8 +768,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   align-items: center;
   gap: 2px;
-  white-space: nowrap; /* Keep short tags intact */
-  flex-shrink: 0; /* Don't squish standard tags */
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: capitalize;
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag i {
   opacity: 0.7;
@@ -834,11 +835,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .modifier-badge.favored {
   background-image: url("../assets/ui/chat/favored-bg.webp");
-  color: #000;
+  color: var(--vagabond-c-black);
 }
 .vagabond-chat-card-v2 .modifier-badge.hindered {
   background-image: url("../assets/ui/chat/hindered-bg.webp");
-  color: #fff;
+  color: var(--vagabond-c-black);
 }
 .vagabond-chat-card-v2 .roll-strip {
   background-image: url("../assets/ui/chat/roll-bg.webp");
@@ -895,7 +896,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background-repeat: no-repeat;
   width: fit-content;
   height: 40px;
-  max-width: 165px;
+  max-width: 160px;
   min-width: 130px;
   display: flex;
   align-items: baseline;
@@ -913,7 +914,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-value {
   color: #fff;
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 900;
   line-height: 1;
   margin-right: 4px;
@@ -926,7 +927,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 2px;
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-target {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bold;
   margin: 0 4px;
   color: var(--c-dark-blue);
@@ -1355,10 +1356,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .roll-dice-container .roll-modifier,
 .damage-dice-list .roll-modifier {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   margin: 4px;
   color: var(--c-damage-orange);
+  text-shadow: 1px 1px 0 var(--vagabond-c-white), -1px 1px 0 var(--vagabond-c-white), -1px -1px 0 var(--vagabond-c-white), 1px -1px 0 var(--vagabond-c-white);
 }
 .roll-dice-container .roll-operator,
 .damage-dice-list .roll-operator {
@@ -1378,8 +1380,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* 2. DAMAGE SECTION DICE (Smaller Size) */
 }
 .vb-die-wrapper.die-type-check {
-  width: 50px !important;
-  height: 50px !important;
+  width: 45px !important;
+  height: 45px !important;
 }
 .vb-die-wrapper.die-type-check .vb-die-val {
   font-size: 32px;
@@ -3263,13 +3265,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond .tab {
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
-  width: 430px;
+  width: 100%;
   z-index: 10 !important;
   background: none;
   margin-left: 0;
   padding: 8px 32px 8px 8px;
   box-sizing: border-box;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .tox .tox-editor-container {
   background: var(--vagabond-c-white);
@@ -5143,6 +5147,86 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .effects .item .effect-controls {
   border: none;
 }
+.vagabond .vagabond-effect-config-wrapper {
+  overflow-y: auto;
+  max-height: 600px;
+}
+.vagabond .vagabond-effect-fields {
+  border: 1px solid var(--color-border-light-primary);
+  padding: 0.5rem;
+  margin: 1rem 0;
+  background: rgba(0, 0, 0, 0.05);
+  overflow-y: scroll;
+}
+.vagabond .vagabond-effect-fields legend {
+  font-weight: bold;
+  padding: 0 0.5rem;
+}
+.vagabond .application-mode-hint {
+  font-style: italic;
+  color: var(--color-text-dark-secondary);
+  margin-top: 0.25rem;
+}
+.vagabond .info-box {
+  background: rgba(13, 110, 253, 0.1);
+  border: 1px solid rgba(13, 110, 253, 0.3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+.vagabond .info-box i {
+  color: var(--color-info);
+  margin-right: 0.5rem;
+}
+.vagabond .info-box .notes {
+  margin: 0;
+  font-size: 0.9em;
+}
+.vagabond .help-box {
+  margin-top: 0.75rem;
+}
+.vagabond .help-box summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--color-text-dark-primary);
+  user-select: none;
+}
+.vagabond .help-box summary:hover {
+  color: var(--color-text-hyperlink);
+}
+.vagabond .mode-help {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+.vagabond .mode-example {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border-light-tertiary);
+}
+.vagabond .mode-example:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.vagabond .mode-example h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-text-dark-primary);
+}
+.vagabond .mode-example h4 i {
+  margin-right: 0.5rem;
+  width: 1.2em;
+  text-align: center;
+}
+.vagabond .mode-example p {
+  margin: 0.25rem 0;
+}
+.vagabond .mode-example .example {
+  font-style: italic;
+  font-size: 0.9em;
+  color: var(--color-text-dark-secondary);
+}
 .vagabond .sheet-header {
   display: flex;
   flex-direction: column;
@@ -5202,10 +5286,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond .downtime-overlay {
   position: absolute;
-  top: -1px;
-  left: -2px;
-  width: 24px;
-  height: 24px;
+  top: 2px;
+  left: 1px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5213,8 +5297,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-decoration: none;
 }
 .vagabond .downtime-overlay .downtime-overlay-button {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   cursor: pointer;
   padding: 0;
@@ -5715,7 +5799,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-right: 8px;
 }
 .vagabond .favor-hinder-toggle-container .favor-hinder-toggle {
-  width: 40px;
+  width: 44px;
   height: 40px;
   border-radius: 8px;
   border: none;
@@ -5747,12 +5831,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-shadow: 0 0 2px rgba(144, 0, 0, 0.7960784314);
 }
 .vagabond .favor-hinder-toggle-container .favor-hinder-label {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   text-align: center;
   line-height: 1.1;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   min-height: 24px;
   width: 60px;
   display: flex;

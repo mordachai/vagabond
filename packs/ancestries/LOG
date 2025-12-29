@@ -1,5 +1,3 @@
-2025/12/29-06:22:41.605 7cf4 Recovering log #347
-2025/12/29-06:22:41.605 7cf4 Level-0 table #349: started
-2025/12/29-06:22:41.607 7cf4 Level-0 table #349: 5114 bytes OK
-2025/12/29-06:22:41.610 7cf4 Delete type=0 #347
-2025/12/29-06:22:41.610 7cf4 Delete type=3 #346
+2025/12/29-15:33:36.229 6fcc Recovering log #350
+2025/12/29-15:33:36.232 6fcc Delete type=0 #350
+2025/12/29-15:33:36.232 6fcc Delete type=3 #348
