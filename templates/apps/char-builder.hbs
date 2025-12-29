@@ -51,7 +51,16 @@
                 {{else}}
                     {{#each options as |opt|}}
                     <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
-                        <img src="{{opt.img}}" width="32" height="32"><span class="name">{{opt.name}}</span>
+                        <img src="{{opt.img}}" width="32" height="32">
+                        <div class="item-info">
+                            <div class="name">{{opt.name}}</div>
+                            {{#if opt.damageTypeLabel}}
+                                <div class="item-meta">
+                                    {{#if opt.damageTypeIcon}}<i class="{{opt.damageTypeIcon}}"></i>{{/if}}
+                                    <span class="damage-type-label">{{opt.damageTypeLabel}}</span>
+                                </div>
+                            {{/if}}
+                        </div>
                     </li>
                     {{/each}}
                 {{/if}}
@@ -122,7 +131,7 @@
             <div class="tray-grid">
                 {{!-- Instruction column (left side) --}}
                 <div class="tray-sidebar">
-                    <h3>{{localize "VAGABOND.CharBuilder.TrayTitle"}}</h3>
+                    {{!-- <h3>{{localize "VAGABOND.CharBuilder.TrayTitle"}}</h3> --}}
                     <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
         
                     {{#if (eq step 'gear')}}
@@ -278,6 +287,14 @@
                         <img src="{{selectedItem.img}}" class="preview-img-main">
                         <div class="name-block">
                             <h2>{{selectedItem.name}}</h2>
+                            {{#if (eq selectedItem.type "spell")}}
+                                {{#if selectedItem.displayStats.damageTypeLabel}}
+                                    <div class="spell-damage-type">
+                                        {{#if selectedItem.displayStats.damageTypeIcon}}<i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>{{/if}}
+                                        <span>{{selectedItem.displayStats.damageTypeLabel}}</span>
+                                    </div>
+                                {{/if}}
+                            {{/if}}
                         </div>
                         {{#if (eq selectedItem.type "ancestry")}}
                         <div class="ancestry-info flexcol">
@@ -288,6 +305,14 @@
                     </div>
 
                     <div class="preview-description">{{{selectedItem.enrichedDescription}}}</div>
+
+                    {{#if (eq selectedItem.type "spell")}}
+                        {{#if selectedItem.displayStats.crit}}
+                            <div class="spell-crit-info">
+                                <strong>Crit:</strong> {{selectedItem.displayStats.crit}}
+                            </div>
+                        {{/if}}
+                    {{/if}}
 
                     {{!-- Add to Tray button --}}
                     {{#if showTray}}

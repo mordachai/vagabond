@@ -303,6 +303,17 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 // Gear - no additional fields needed beyond slots and cost
             }
 
+            // Add spell-specific fields
+            if (item.type === 'spell') {
+                const damageType = sys.damageType || '-';
+                displayStats.damageType = damageType;
+                displayStats.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons?.[damageType] || null;
+                displayStats.damageTypeLabel = damageType !== '-'
+                    ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType] || damageType)
+                    : null;
+                displayStats.crit = sys.crit || null;
+            }
+
             selectedItem.displayStats = displayStats;
         }
     }
@@ -485,7 +496,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (!this.indices[p]) {
         const pack = game.packs.get(p);
         if (pack) {
-          const index = await pack.getIndex({ fields: ["img", "type", "system.baseCost", "system.baseSlots", "system.equipmentType"] });
+          // Include spell-specific fields in the index for spells step
+          const fields = step === 'spells'
+            ? ["img", "type", "system.damageType", "system.crit"]
+            : ["img", "type", "system.baseCost", "system.baseSlots", "system.equipmentType"];
+          const index = await pack.getIndex({ fields });
           this.indices[p] = { label: pack.metadata.label, id: pack.metadata.name, items: index };
         }
       }
@@ -530,11 +545,24 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             ? (uuid) => this.builderData.classPerks.includes(uuid) || this.builderData.perks.includes(uuid)
             : (uuid) => this.builderData[stepKey].includes(uuid);
 
-          results.push(...sortedItems.map(i => ({
-            ...i,
-            selected: isInTray(i.uuid),
-            previewing: i.uuid === this.builderData.previewUuid
-          })));
+          results.push(...sortedItems.map(i => {
+            const baseData = {
+              ...i,
+              selected: isInTray(i.uuid),
+              previewing: i.uuid === this.builderData.previewUuid
+            };
+
+            // Enrich spell items with damage type data
+            if (step === 'spells' && i.system?.damageType) {
+              const damageType = i.system.damageType;
+              baseData.damageTypeIcon = CONFIG.VAGABOND.damageTypeIcons?.[damageType] || null;
+              baseData.damageTypeLabel = damageType !== '-'
+                ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageType] || damageType)
+                : null;
+            }
+
+            return baseData;
+          }));
         } else {
           // For single selections (ancestry, class, starting-packs)
           results.push(...sortedItems.map(i => ({

@@ -275,7 +275,7 @@
         transform: rotate(90deg);
       }
 
-      .directory-item.gear-item {
+      .directory-item:has(.item-info) {
         align-items: flex-start;
         padding: 10px 8px;
 
@@ -283,6 +283,7 @@
           flex: 1;
           display: flex;
           flex-direction: column;
+          align-items: baseline;
           gap: 4px;
 
           .name {
@@ -292,13 +293,14 @@
 
           .item-meta {
             display: flex;
-            gap: 12px;
+            gap: 4px;
             font-size: 0.85rem;
             color: #666;
 
+
             span {
               display: flex;
-              align-items: center;
+              align-items: baseline;
               gap: 4px;
             }
           }

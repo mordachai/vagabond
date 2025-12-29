@@ -2237,29 +2237,30 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column details[open] .category-header i {
   transform: rotate(90deg);
 }
-.vagabond-builder .builder-body .selection-list-column .directory-item.gear-item {
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) {
   align-items: flex-start;
   padding: 10px 8px;
 }
-.vagabond-builder .builder-body .selection-list-column .directory-item.gear-item .item-info {
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: baseline;
   gap: 4px;
 }
-.vagabond-builder .builder-body .selection-list-column .directory-item.gear-item .item-info .name {
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .name {
   font-weight: 600;
   font-size: 1rem;
 }
-.vagabond-builder .builder-body .selection-list-column .directory-item.gear-item .item-info .item-meta {
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .item-meta {
   display: flex;
-  gap: 12px;
+  gap: 4px;
   font-size: 0.85rem;
   color: #666;
 }
-.vagabond-builder .builder-body .selection-list-column .directory-item.gear-item .item-info .item-meta span {
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .item-meta span {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 4px;
 }
 .vagabond-builder .builder-body .right-column {
