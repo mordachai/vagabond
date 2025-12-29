@@ -147,6 +147,16 @@ export default class VagabondCharacter extends VagabondActorBase {
     });
     // ---------------------
 
+    // Bonuses container for various character bonuses
+    schema.bonuses = new fields.SchemaField({
+      hpPerLevel: new fields.NumberField({
+        ...requiredInteger,
+        initial: 0,
+        label: "HP per Level Bonus",
+        hint: "Bonus HP granted per character level (e.g., Tough perk adds +1)"
+      })
+    });
+
     // Favor/Hinder system - toggle for roll modifiers
     schema.favorHinder = new fields.StringField({
       initial: 'none',
@@ -321,9 +331,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.speed.bonus = 0;
     this.armorBonus = 0;
     this.bonusLuck = 0;
+    this.health.bonus = 0;
+    this.bonuses.hpPerLevel = 0;
 
-    // --- 2. Reset Universal Bonuses ---
-    this.universalCheckBonus = 0;
+    // --- 2. Reset Universal Bonuses (from Active Effects) ---
+    // NOTE: universalCheckBonus is NOT reset here - it's player-controlled and only resets after rolls
     this.universalDamageBonus = 0;
     this.universalWeaponDamageBonus = 0;
     this.universalSpellDamageBonus = 0;
@@ -391,24 +403,19 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.attributes.isSpellcaster = Boolean(this.attributes.isSpellcaster);
 
     // ------------------------------------------------------------------
-    // NEW: Initialize Bonuses Container
-    // This creates the safe place for your Active Effect to "land"
-    // ------------------------------------------------------------------
-    this.bonuses = this.bonuses || {};
-    // Default to 0 if no active effect is applied
-    if (this.bonuses.hpPerLevel === undefined) this.bonuses.hpPerLevel = 0;
-
-    // ------------------------------------------------------------------
-    // NEW: Calculate Max HP
-    // Formula: (Might × Level) + (hpPerLevel Bonus × Level)
+    // Calculate Max HP
+    // Formula: (Might × Level) + (hpPerLevel Bonus × Level) + Flat HP Bonus
     // Base HP = Might × Level
     // Tough Perk adds +1 hpPerLevel per stack, giving +Level HP per stack
+    // Flat bonus (system.health.bonus) adds a fixed amount regardless of level
     // We do this BEFORE other combat values in case they depend on Max HP
     // ------------------------------------------------------------------
     const mightTotal = this.stats.might?.total || 0;
     const levelValue = this.attributes.level?.value || 0;
+    const hpPerLevelBonus = this.bonuses.hpPerLevel || 0;
+    const flatHpBonus = this.health.bonus || 0;
 
-    this.health.max = (mightTotal * levelValue) + (this.bonuses.hpPerLevel * levelValue);
+    this.health.max = (mightTotal * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
 
 
     // ------------------------------------------------------------------

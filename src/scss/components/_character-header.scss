@@ -620,6 +620,18 @@
         word-wrap: break-word;
       }
     }
+
+    // Check Modifier specific styles
+    .check-mod-value {
+      pointer-events: none;
+      color: $c-dark;
+      font-weight: bold;
+
+      &:hover {
+        cursor: default;
+        border-bottom: 1px solid transparent;
+      }
+    }
   }
 
   // Luck Item with Clover Icon

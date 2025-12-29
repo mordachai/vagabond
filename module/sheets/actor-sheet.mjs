@@ -72,6 +72,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteItem: this._onDeleteItem,  // Delete item from context menu
       spendLuck: this._onSpendLuck,  // Spend or recharge luck
       spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
+      modifyCheckBonus: this._onModifyCheckBonus,  // Modify check bonus
       openDowntime: this._onOpenDowntime, // Open downtime activities
       toggleSpellPreview: this._onToggleSpellPreview, // Display measure template
       openCharBuilder: this._onOpenCharBuilder, // Open character builder
@@ -1312,6 +1313,30 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         await this.actor.update({ 'system.health.value': newHP });
       });
+    }
+
+    // Add Check Modifier right-click handler
+    const checkModLabel = this.element.querySelector('[data-action="modifyCheckBonus"]');
+    if (checkModLabel) {
+      console.log('Vagabond | Check Mod label found:', checkModLabel);
+
+      // Right-click: decrease check bonus
+      checkModLabel.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log('Vagabond | Check Mod right-clicked');
+        const currentBonus = this.actor.system.universalCheckBonus || 0;
+        console.log('Vagabond | Current bonus:', currentBonus);
+
+        await this.actor.update({ 'system.universalCheckBonus': currentBonus - 1 });
+        console.log('Vagabond | Updated to:', currentBonus - 1);
+      });
+
+      // Make cursor show it's clickable
+      checkModLabel.style.cursor = 'pointer';
+    } else {
+      console.warn('Vagabond | Check Mod label NOT found');
     }
 
     // Add mana modifier click handlers (both spells tab and sliding panel)
@@ -3794,6 +3819,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const attackResult = await item.rollAttack(this.actor, favorHinder);
       if (!attackResult) return;
 
+      // Reset check bonus to 0 after any attack roll
+      if (this.actor.system.universalCheckBonus !== 0) {
+        await this.actor.update({ 'system.universalCheckBonus': 0 });
+      }
+
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         const statKey = attackResult.weaponSkill?.stat || null;
@@ -4294,6 +4324,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         favorHinder,
         dataset.roll  // Base formula (usually 'd20')
       );
+
+      // Reset check bonus to 0 after any roll
+      if (this.actor.system.universalCheckBonus !== 0) {
+        await this.actor.update({ 'system.universalCheckBonus': 0 });
+      }
 
       // Determine roll type and use VagabondChatCard for stats, saves, and skills
       const rollType = dataset.rollType;
@@ -5028,6 +5063,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       `);
 
     await card.send();
+  }
+
+  /**
+   * Handle modifying the check bonus (left-click only)
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  static async _onModifyCheckBonus(event, target) {
+    event.preventDefault();
+    console.log('Vagabond | Check Mod clicked', this);
+
+    const currentBonus = this.actor.system.universalCheckBonus || 0;
+    console.log('Vagabond | Current bonus:', currentBonus);
+
+    await this.actor.update({ 'system.universalCheckBonus': currentBonus + 1 });
+    console.log('Vagabond | Updated to:', currentBonus + 1);
   }
 
   /**

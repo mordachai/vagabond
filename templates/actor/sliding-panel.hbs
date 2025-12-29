@@ -200,6 +200,19 @@
         <label class='stat-label stat-label-wrap rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
       </div>
 
+      {{!-- Check Modifier --}}
+      <div class='stat-item'>
+        <input
+          type='text'
+          name='system.universalCheckBonus'
+          value='{{system.universalCheckBonus}}'
+          data-dtype='Number'
+          class='stat-value-input check-mod-value'
+          readonly
+        />
+        <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>Check<br>Mod</label>
+      </div>
+
       {{!-- {{! Universal Check Bonus }}
       <div class='stat-item universal-bonus-field'>
         <input
