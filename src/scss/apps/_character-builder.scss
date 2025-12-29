@@ -1,6 +1,16 @@
 // Target only the character builder's window-content
 #vagabond-char-builder .window-content {
   background: black;
+  color: $c-dark;
+
+  h1,h2,h3,h4,h5,h6 {
+    color: $c-dark;
+  }
+
+  table {
+    background: #00000016;
+    color: $c-dark;
+  }
 }
 
 .vagabond-builder {
@@ -55,7 +65,7 @@
     grid-template-columns: 280px 1fr;
     gap: 20px;
     min-height: 0;
-    padding: 15px;
+    padding: 25px;
     overflow: hidden;
 
     // Left column: Selection list (full height)
@@ -122,6 +132,7 @@
         scrollbar-width: thin;
         padding-right: 10px;
         font-size: 1.2rem;
+        
       }
 
       .directory-item {
@@ -761,7 +772,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px 25px;
-    background: white;
+    background: none;
     border-top: 2px solid $c-dark;
     gap: 100px;
 
@@ -1269,4 +1280,3 @@
     }
   }
 }
-

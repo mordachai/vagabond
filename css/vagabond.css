@@ -2014,6 +2014,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 #vagabond-char-builder .window-content {
   background: black;
+  color: var(--vagabond-c-dark);
+}
+#vagabond-char-builder .window-content h1, #vagabond-char-builder .window-content h2, #vagabond-char-builder .window-content h3, #vagabond-char-builder .window-content h4, #vagabond-char-builder .window-content h5, #vagabond-char-builder .window-content h6 {
+  color: var(--vagabond-c-dark);
+}
+#vagabond-char-builder .window-content table {
+  background: rgba(0, 0, 0, 0.0862745098);
+  color: var(--vagabond-c-dark);
 }
 
 .vagabond-builder {
@@ -2063,7 +2071,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   grid-template-columns: 280px 1fr;
   gap: 20px;
   min-height: 0;
-  padding: 15px;
+  padding: 25px;
   overflow: hidden;
 }
 .vagabond-builder .builder-body .selection-list-column {
@@ -2651,7 +2659,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-  background: white;
+  background: none;
   border-top: 2px solid var(--vagabond-c-dark);
   gap: 100px;
 }
@@ -5607,6 +5615,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .speed-stats-row .stat-item .stat-label.stat-label-wrap {
   max-width: 45px;
   word-wrap: break-word;
+}
+.vagabond .speed-stats-row .stat-item .check-mod-value {
+  pointer-events: none;
+  color: var(--vagabond-c-dark);
+  font-weight: bold;
+}
+.vagabond .speed-stats-row .stat-item .check-mod-value:hover {
+  cursor: default;
+  border-bottom: 1px solid transparent;
 }
 .vagabond .speed-stats-row .luck-item .luck-display {
   position: relative;
