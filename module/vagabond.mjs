@@ -623,6 +623,20 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
+  // 4b. Save Reminder Button Handler (Roll Save Without Damage)
+  // ---------------------------------------------------------
+  const saveReminderButtons = html.querySelectorAll('.vagabond-save-reminder-button');
+
+  saveReminderButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleSaveReminderRoll(button, ev);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
   // 5. Apply Direct Damage Button Handler
   // ---------------------------------------------------------
   const applyDirectButtons = html.querySelectorAll('.vagabond-apply-direct-button');

@@ -355,10 +355,6 @@ export class VagabondChatCard {
 
           card.addFooterAction(btns);
 
-          if (!isHealing && hasDefenses) {
-            card.addFooterAction(VagabondDamageHelper.createDefendOptions());
-          }
-
       } else if (rollData?.isHit && item && !damageRoll) {
            const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
@@ -386,8 +382,17 @@ export class VagabondChatCard {
            });
            card.addFooterAction(btn);
       }
-      
+
       if (footerActions.length) footerActions.forEach(a => card.addFooterAction(a));
+
+      // Add defend options if requested (independent of damage)
+      if (hasDefenses) {
+        const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+        const isHealing = damageType?.toLowerCase() === 'healing';
+        if (!isHealing) {
+          card.addFooterAction(VagabondDamageHelper.createDefendOptions());
+        }
+      }
 
       return await card.send();
   }
@@ -646,39 +651,44 @@ export class VagabondChatCard {
          tags.push({ label: action.range, cssClass: 'tag-range' });
     }
 
-    // 4. Recharge Mechanic
+    // 4. Parse Note (display before Recharge)
+    if (action.note) {
+        tags.push({ label: action.note, cssClass: 'tag-standard' });
+    }
+
+    // 5. Recharge Mechanic (display after Note)
     if (action.recharge) {
         tags.push({ label: `Recharge ${action.recharge}`, icon: 'fas fa-rotate', cssClass: 'tag-standard' });
     }
 
-    // 5. Description Enrichment
+    // 6. Description Enrichment
     let description = '';
     if (action.description) {
       description = await foundry.applications.ux.TextEditor.enrichHTML(action.description, {
         async: true, secrets: actor.isOwner, relativeTo: actor
       });
     }
-    
-    // 6. Extra Info (common in 5e-style NPC blocks)
+
+    // 7. Extra Info (common in 5e-style NPC blocks)
     if (action.extraInfo) {
       const extra = await foundry.applications.ux.TextEditor.enrichHTML(action.extraInfo, { async: true });
       description += `<hr class="action-divider"><div class="action-extra-info">${extra}</div>`;
     }
 
-    // 7. Damage Buttons
+    // 8. Damage Buttons & Save Buttons
     const footerActions = [];
+    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+
+    // Normalize attack type for the helpers
+    let attackType = action.attackType || 'melee';
+    if (attackType === 'castClose') attackType = 'melee';
+    else if (attackType === 'castRanged') attackType = 'ranged';
+
     // Show damage buttons even for "-" (typeless damage)
     if (action.flatDamage || action.rollDamage) {
-        const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-
         const rawType = action.damageType || 'physical';
         // For "-" damage type, use empty string as label (will be handled as typeless)
         const dTypeLabel = rawType === '-' ? '' : (game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType);
-
-        // Normalize attack type for the helper
-        let attackType = action.attackType || 'melee';
-        if (attackType === 'castClose') attackType = 'melee';
-        else if (attackType === 'castRanged') attackType = 'ranged';
 
         if (action.flatDamage) {
             footerActions.push(VagabondDamageHelper.createNPCDamageButton(
@@ -690,17 +700,21 @@ export class VagabondChatCard {
                 actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType
             ));
         }
+    } else {
+        // No damage: Add save reminder buttons for effects that require saves
+        footerActions.push(VagabondDamageHelper.createSaveReminderButtons(attackType));
     }
 
-    // 8. Create the Card
+    // 9. Create the Card (always include defend options)
     return this.createActionCard({
         actor,
         title: action.name || 'NPC Action',
         subtitle,    // <--- Now correctly passes the Actor Name
-        tags,        // <--- Now includes Traits and Range
+        tags,        // <--- Now includes Traits, Range, Note, and Recharge
         description,
         footerActions,
-        // If you want the ability image to be the icon, pass 'item' if available, 
+        hasDefenses: true,  // Always show defend options for NPC actions
+        // If you want the ability image to be the icon, pass 'item' if available,
         // otherwise it defaults to actor image in createActionCard logic.
     });
   }

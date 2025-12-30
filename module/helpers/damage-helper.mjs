@@ -883,6 +883,40 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Create save reminder buttons (no damage, just roll saves)
+   * @param {string} attackType - Attack type for hinder calculation ('melee', 'ranged', 'cast')
+   * @returns {string} HTML string
+   */
+  static createSaveReminderButtons(attackType = 'melee') {
+    // Localize Labels
+    const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
+    const endureLabel = game.i18n.localize('VAGABOND.Saves.Endure.name');
+    const willLabel = game.i18n.localize('VAGABOND.Saves.Will.name');
+
+    return `
+      <div class="vagabond-save-buttons-container">
+        <div class="save-buttons-row">
+            <button class="vagabond-save-reminder-button save-reflex"
+              data-save-type="reflex"
+              data-attack-type="${attackType}">
+              <i class="fas fa-running"></i> ${reflexLabel}
+            </button>
+            <button class="vagabond-save-reminder-button save-endure"
+              data-save-type="endure"
+              data-attack-type="${attackType}">
+              <i class="fas fa-shield-alt"></i> ${endureLabel}
+            </button>
+            <button class="vagabond-save-reminder-button save-will"
+              data-save-type="will"
+              data-attack-type="${attackType}">
+              <i class="fas fa-brain"></i> ${willLabel}
+            </button>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
    */
   static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType) {
@@ -973,16 +1007,43 @@ export class VagabondDamageHelper {
     const actorId = button.dataset.actorId;
     const itemId = button.dataset.itemId;
 
-    // Get targeted tokens
-    const targetedTokens = Array.from(game.user.targets);
-    if (targetedTokens.length === 0) {
-      ui.notifications.warn('No tokens targeted. Please target at least one token.');
-      return;
+    let actorsToRoll = [];
+
+    // Smart character detection for players
+    if (!game.user.isGM) {
+      // Get all owned character actors (not NPCs)
+      const ownedCharacters = game.actors.filter(a =>
+        a.type === 'character' && a.isOwner
+      );
+
+      if (ownedCharacters.length === 1) {
+        // Player has exactly 1 owned character - auto-use it
+        actorsToRoll = [ownedCharacters[0]];
+      } else if (ownedCharacters.length > 1) {
+        // Player has multiple characters - require targeting
+        const targetedTokens = Array.from(game.user.targets);
+        if (targetedTokens.length === 0) {
+          ui.notifications.warn('You have multiple characters. Please target the token you want to roll for.');
+          return;
+        }
+        actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
+      } else {
+        // Player has no owned characters
+        ui.notifications.warn('You do not own any characters to roll saves for.');
+        return;
+      }
+    } else {
+      // GM must use targeting
+      const targetedTokens = Array.from(game.user.targets);
+      if (targetedTokens.length === 0) {
+        ui.notifications.warn('No tokens targeted. Please target at least one token.');
+        return;
+      }
+      actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
     }
 
-    // Roll save for each targeted token individually
-    for (const target of targetedTokens) {
-      const targetActor = target.actor;
+    // Roll save for each actor
+    for (const targetActor of actorsToRoll) {
       if (!targetActor) continue;
 
       // Check permissions
@@ -1006,6 +1067,11 @@ export class VagabondDamageHelper {
 
       // Roll the save with keyboard modifiers
       const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
+
+      // Wait for Dice So Nice animation to complete
+      if (game.dice3d) {
+        await game.dice3d.showForRoll(saveRoll, game.user, true);
+      }
 
       // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
@@ -1056,6 +1122,102 @@ export class VagabondDamageHelper {
 
     // Button remains active so multiple players can roll saves
     // Each click generates new save result cards for currently targeted tokens
+  }
+
+  /**
+   * Handle save reminder button click - roll saves without damage
+   * @param {HTMLElement} button - The clicked save reminder button
+   * @param {Event} event - The click event (for keyboard modifiers)
+   */
+  static async handleSaveReminderRoll(button, event = null) {
+    const saveType = button.dataset.saveType; // 'reflex', 'endure', 'will'
+    const attackType = button.dataset.attackType; // 'melee', 'ranged', or 'cast'
+
+    let actorsToRoll = [];
+
+    // Smart character detection for players
+    if (!game.user.isGM) {
+      // Get all owned character actors (not NPCs)
+      const ownedCharacters = game.actors.filter(a =>
+        a.type === 'character' && a.isOwner
+      );
+
+      if (ownedCharacters.length === 1) {
+        // Player has exactly 1 owned character - auto-use it
+        actorsToRoll = [ownedCharacters[0]];
+      } else if (ownedCharacters.length > 1) {
+        // Player has multiple characters - require targeting
+        const targetedTokens = Array.from(game.user.targets);
+        if (targetedTokens.length === 0) {
+          ui.notifications.warn('You have multiple characters. Please target the token you want to roll for.');
+          return;
+        }
+        actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
+      } else {
+        // Player has no owned characters
+        ui.notifications.warn('You do not own any characters to roll saves for.');
+        return;
+      }
+    } else {
+      // GM must use targeting
+      const targetedTokens = Array.from(game.user.targets);
+      if (targetedTokens.length === 0) {
+        ui.notifications.warn('No tokens targeted. Please target at least one token.');
+        return;
+      }
+      actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
+    }
+
+    // Roll save for each actor
+    for (const targetActor of actorsToRoll) {
+      if (!targetActor) continue;
+
+      // Check permissions
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to roll saves for ${targetActor.name}.`);
+        continue;
+      }
+
+      // NPCs don't roll saves - they only have armor, immunities, and weaknesses
+      if (targetActor.type === 'npc') {
+        ui.notifications.warn(game.i18n.localize('VAGABOND.Saves.NPCNoSaves'));
+        continue;
+      }
+
+      // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
+      const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
+
+      // Extract keyboard modifiers from event
+      const shiftKey = event?.shiftKey || false;
+      const ctrlKey = event?.ctrlKey || false;
+
+      // Roll the save with keyboard modifiers
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
+
+      // Wait for Dice So Nice animation to complete
+      if (game.dice3d) {
+        await game.dice3d.showForRoll(saveRoll, game.user, true);
+      }
+
+      // Determine success and critical
+      const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
+      const isSuccess = saveRoll.total >= difficulty;
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+      const isCritical = VagabondChatCard.isRollCritical(saveRoll, targetActor);
+
+      // Post simplified save result to chat (no damage calculations)
+      await this._postSaveReminderResult(
+        targetActor,
+        saveType,
+        saveRoll,
+        difficulty,
+        isSuccess,
+        isCritical,
+        isHindered
+      );
+    }
+
+    // Button remains active so multiple players can roll saves
   }
 
   /**
@@ -1217,6 +1379,69 @@ export class VagabondDamageHelper {
       const applyButton = this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType);
       card.setDescription((card.data.description || '') + applyButton);
     }
+
+    return await card.send();
+  }
+
+  /**
+   * Post simplified save reminder result to chat (no damage)
+   * @param {Actor} actor - The defending actor
+   * @param {string} saveType - 'reflex', 'endure', 'will'
+   * @param {Roll} roll - The save roll
+   * @param {number} difficulty - Save difficulty
+   * @param {boolean} isSuccess - Whether the save succeeded
+   * @param {boolean} isCritical - Whether the save was a critical (natural 20)
+   * @param {boolean} isHindered - Whether the save was Hindered
+   * @returns {Promise<ChatMessage>}
+   * @private
+   */
+  static async _postSaveReminderResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered) {
+    const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
+
+    // Import VagabondChatCard
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+
+    const card = new VagabondChatCard()
+      .setType('save-roll')
+      .setActor(actor)
+      .setTitle(`${saveLabel} Save`)
+      .setSubtitle(actor.name)
+      .addRoll(roll, difficulty)
+      .setOutcome(isSuccess ? 'PASS' : 'FAIL', isCritical);
+
+    // Add description explaining what happened
+    let descriptionHTML = `<div class="save-reminder-result">`;
+
+    if (isSuccess) {
+      descriptionHTML += `<p><strong>Success!</strong> ${actor.name} successfully made their ${saveLabel} save.`;
+      if (isCritical) {
+        descriptionHTML += ` <strong>(Critical!)</strong>`;
+      }
+      descriptionHTML += `</p>`;
+    } else {
+      descriptionHTML += `<p><strong>Failed!</strong> ${actor.name} failed their ${saveLabel} save.`;
+      descriptionHTML += `</p>`;
+    }
+
+    if (isHindered) {
+      descriptionHTML += `<p class="save-hindered-note"><em>This save was Hindered.</em></p>`;
+    }
+
+    descriptionHTML += `</div>`;
+
+    // Add crit rule text if critical save
+    if (isCritical) {
+      descriptionHTML += `
+        <div class="save-crit-rule">
+          <p>
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
+          </p>
+        </div>
+      `;
+    }
+
+    card.setDescription(descriptionHTML);
 
     return await card.send();
   }
