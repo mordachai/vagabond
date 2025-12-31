@@ -1068,10 +1068,8 @@ export class VagabondDamageHelper {
       // Roll the save with keyboard modifiers
       const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
 
-      // Wait for Dice So Nice animation to complete
-      if (game.dice3d) {
-        await game.dice3d.showForRoll(saveRoll, game.user, true);
-      }
+      // Dice So Nice animation is handled automatically by roll.evaluate() in Foundry v13
+      // No need to manually call showForRoll here
 
       // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
@@ -1194,10 +1192,8 @@ export class VagabondDamageHelper {
       // Roll the save with keyboard modifiers
       const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
 
-      // Wait for Dice So Nice animation to complete
-      if (game.dice3d) {
-        await game.dice3d.showForRoll(saveRoll, game.user, true);
-      }
+      // Dice So Nice animation is handled automatically by roll.evaluate() in Foundry v13
+      // No need to manually call showForRoll here
 
       // Determine success and critical
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
@@ -1227,26 +1223,6 @@ export class VagabondDamageHelper {
    * @private
    */
   static _hasEquippedShield(actor) {
-    console.log('Vagabond | _hasEquippedShield called for:', {
-      actorName: actor.name,
-      actorId: actor.id,
-      actorUuid: actor.uuid,
-      isToken: !!actor.token,
-      totalItems: actor.items.size,
-      currentUser: game.user.name,
-      isGM: game.user.isGM
-    });
-
-    // Log ALL items to see what the actor has
-    console.log('Vagabond | Actor items:', Array.from(actor.items).map(item => ({
-      name: item.name,
-      type: item.type,
-      equipmentType: item.system?.equipmentType,
-      equipped: item.system?.equipped,
-      equipmentState: item.system?.equipmentState,
-      properties: item.system?.properties
-    })));
-
     // Find equipped weapon with Shield property
     const equippedShield = actor.items.find(item => {
       const isWeapon = (item.type === 'weapon') ||
@@ -1256,28 +1232,7 @@ export class VagabondDamageHelper {
                         item.system.equipmentState === 'twoHands';
       const hasShieldProperty = item.system.properties?.includes('Shield');
 
-      // Debug logging for weapons
-      if (isWeapon) {
-        console.log('Vagabond | Checking weapon:', {
-          itemName: item.name,
-          type: item.type,
-          equipmentType: item.system.equipmentType,
-          equipped: item.system.equipped,
-          equipmentState: item.system.equipmentState,
-          properties: item.system.properties,
-          isEquipped: isEquipped,
-          hasShieldProperty: hasShieldProperty,
-          matchesAll: isWeapon && isEquipped && hasShieldProperty
-        });
-      }
-
       return isWeapon && isEquipped && hasShieldProperty;
-    });
-
-    console.log('Vagabond | Shield Check Result:', {
-      actorName: actor.name,
-      hasShield: !!equippedShield,
-      shieldName: equippedShield?.name || 'none'
     });
 
     return !!equippedShield;
@@ -1292,21 +1247,13 @@ export class VagabondDamageHelper {
    * @private
    */
   static _isSaveHindered(saveType, attackType, actor) {
-    console.log('Vagabond | _isSaveHindered called:', {
-      saveType: saveType,
-      attackType: attackType,
-      actorName: actor.name
-    });
-
     // Block (Endure): Hindered if Ranged or Cast attack
     // EXCEPTION: Shield property negates ranged hinder (but not cast)
     if (saveType === 'endure' && (attackType === 'ranged' || attackType === 'cast')) {
       // Shield protects against ranged attacks, but not magical (cast) attacks
       if (attackType === 'ranged' && this._hasEquippedShield(actor)) {
-        console.log('Vagabond | Shield negates ranged hinder!');
         return false; // Shield negates the hinder
       }
-      console.log('Vagabond | Block is hindered (attackType:', attackType, ')');
       return true;
     }
 
@@ -1342,22 +1289,11 @@ export class VagabondDamageHelper {
     // Calculate effective favor/hinder from system state and keyboard modifiers
     const systemState = actor.system.favorHinder || 'none';
 
-    console.log('Vagabond | _rollSave Debug:', {
-      actorName: actor.name,
-      saveType: saveType,
-      systemState: systemState,
-      shiftKey: shiftKey,
-      ctrlKey: ctrlKey,
-      isConditionallyHindered: isHindered
-    });
-
     const effectiveFavorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
       systemState,
       shiftKey,
       ctrlKey
     );
-
-    console.log('Vagabond | After calculateEffectiveFavorHinder:', effectiveFavorHinder);
 
     // Build and evaluate roll with conditional hinder support
     // (isHindered = true when heavy armor for Dodge, or ranged/cast attack for Block)
@@ -1366,14 +1302,6 @@ export class VagabondDamageHelper {
       effectiveFavorHinder,
       isHindered
     );
-
-    console.log('Vagabond | Final roll formula:', roll.formula);
-    console.log('Vagabond | Roll terms:', roll.terms.map(t => ({
-      class: t.constructor.name,
-      faces: t.faces,
-      results: t.results,
-      options: t.options
-    })));
 
     return roll;
   }

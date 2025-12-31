@@ -12,20 +12,11 @@ export class VagabondRollBuilder {
   static buildD20Formula(actor, favorHinder, baseFormula = 'd20') {
     let formula = baseFormula;
 
-    console.log('Vagabond | buildD20Formula input:', {
-      favorHinder: favorHinder,
-      baseFormula: baseFormula
-    });
-
     // Add favor/hinder dice
     if (favorHinder === 'favor') {
       formula += ' + 1d6[favored]';
-      console.log('Vagabond | Added favor die');
     } else if (favorHinder === 'hinder') {
       formula += ' - 1d6[hindered]';
-      console.log('Vagabond | Added hinder die');
-    } else {
-      console.log('Vagabond | No favor/hinder die added (state:', favorHinder, ')');
     }
 
     // Add universal check bonus
@@ -34,7 +25,6 @@ export class VagabondRollBuilder {
       formula += ` + ${checkBonus}`;
     }
 
-    console.log('Vagabond | Final formula:', formula);
     return formula;
   }
 
@@ -139,25 +129,17 @@ export class VagabondRollBuilder {
    * @returns {string} Final favor/hinder state after applying conditional hinder
    */
   static applyConditionalHinder(effectiveFavorHinder, isConditionallyHindered) {
-    console.log('Vagabond | applyConditionalHinder:', {
-      effectiveFavorHinder: effectiveFavorHinder,
-      isConditionallyHindered: isConditionallyHindered
-    });
-
     if (!isConditionallyHindered) {
-      console.log('Vagabond | No conditional hinder, returning:', effectiveFavorHinder);
       return effectiveFavorHinder;
     }
 
     // Conditional hinder is present
     if (effectiveFavorHinder === 'favor') {
       // Favor + Conditional Hinder = cancel out to 'none'
-      console.log('Vagabond | Favor + Conditional Hinder = none (cancelled)');
       return 'none';
     } else {
       // 'none' or 'hinder' + Conditional Hinder = 'hinder'
       // (Multiple hinders don't stack, just apply once)
-      console.log('Vagabond | Conditional hinder applied, returning: hinder');
       return 'hinder';
     }
   }
