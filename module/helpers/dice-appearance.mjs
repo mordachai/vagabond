@@ -25,6 +25,7 @@ export class VagabondDiceAppearance {
       }
     }
 
+    // Evaluate the roll (Dice So Nice will be shown manually in damage-helper.mjs)
     await roll.evaluate();
     return roll;
   }

@@ -561,7 +561,7 @@
       "Long": "Extended reach, can attack from 10ft away.",
       "Near": "Ranged weapon with Near range.",
       "Ranged": "Ranged weapon, uses Ranged skill.",
-      "Shield": "Can be used defensively to block attacks.",
+      "Shield": "Ignores Hinder from Blocking Ranged Attacks. Can Shove (manual play).",
       "Thrown": "Can be thrown as a ranged attack."
     }
     },
