@@ -75,6 +75,20 @@ https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module
 
 ---
 
+### Too Many Tokens Integration
+
+Want some tokens and doesn't have a problem with Ai images? Install this module too:
+
+```
+https://github.com/mordachai/art-for-vagabond/releases/latest/download/module.json
+```
+
+You will need to also install the Too Many Tokens - DnD module that takes a bit of a space. in general you cant install this in servicves like Forge, but its a good alternative in a pinch. 
+No, installing the online version will not work, at least not yet...
+
+---
+
+
 ## Acknowledgements
 
 Huge thanks to KeyInk for the marvelous work designing the new chat cards and sheets (with sheets coming in the future).
