@@ -77,13 +77,15 @@ https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module
 
 ### Too Many Tokens Integration
 
+<img width="1527" height="932" alt="image" src="https://github.com/user-attachments/assets/131fd4ec-5f9f-41b5-9c77-a838de80dd2f" />
+
 Want some tokens and doesn't have a problem with Ai images? Install this module too:
 
 ```
 https://github.com/mordachai/art-for-vagabond/releases/latest/download/module.json
 ```
 
-You will need to also install the Too Many Tokens - DnD module that takes a bit of a space. in general you cant install this in servicves like Forge, but its a good alternative in a pinch. 
+You will need to also install the Too Many Tokens - DnD module that takes a bit of a space. in general you cant install this in services like Forge, but its a good alternative in a pinch. 
 No, installing the online version will not work, at least not yet...
 
 ---
