@@ -3207,19 +3207,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Create chat card using VagabondChatCard system
     const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+
+    // Build tags for metadata
+    const tags = [
+      { label: `${game.i18n.localize("VAGABOND.Actor.NPC.MoraleCheck.Target")}: ${morale}`, cssClass: 'tag-standard' }
+    ];
+
     const card = new VagabondChatCard()
       .setType('morale-check')
       .setActor(this.actor)
       .setTitle(game.i18n.localize("VAGABOND.Actor.NPC.MoraleCheck.Title"))
       .setSubtitle(this.actor.name)
       .addRoll(roll, morale)
-      .setOutcome(isPassed ? 'PASS' : 'FAIL');
-
-    // Add metadata
-    card.addMetadata(
-      game.i18n.localize("VAGABOND.Actor.NPC.MoraleCheck.Target"),
-      morale
-    );
+      .setOutcome(isPassed ? 'PASS' : 'FAIL')
+      .setMetadataTags(tags);
 
     // Send as blind GM roll
     await card.send({
