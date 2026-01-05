@@ -32,12 +32,6 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     --c-dark-blue: #0b1a23;
     --c-yellow-text: #DED656;
     --c-save-yellow: #DED656;
-    --c-damage-orange: #e7570a;
-    --c-bg-lite: #7f8c8d;
-    --c-bluey: #5a6e76;
-    --c-dark-bluey: #2c3e50;
-
-    $c-dark-bluey: var(--c-dark-bluey);
     
     position: relative;
     margin-bottom: 10px;
@@ -132,7 +126,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     text-decoration: underline dotted; /* Optional visual cue */
                 }
                 .template-trigger:hover {
-                    color: var(--c-damage-orange); /* Or your highlight color */
+                    color: $c-damage; /* Or your highlight color */
                 }
 
                 /* The Slash Separator // */
@@ -168,7 +162,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
                     &:hover {
                         background: #fff;
-                        border-color: var(--c-bg-lite);
+                        border-color: $c-bg-lite;
                         color: #000;
                     }
                 }
@@ -252,7 +246,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             position: absolute;
             top: 0;
             right: 0;
-            background: var(--c-damage-orange);
+            background: $c-damage;
             color: white;
             font-size: 13px;
             font-weight: bold;
@@ -389,10 +383,26 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         }
     }
 
+    .card-crit {
+        margin: 8px 16px;
+        padding: 8px 12px;
+        font-family: $font-primary;
+        font-size: 16px;
+        border-radius: 4px;
+        box-shadow: 0px 1px 4px $c-darkgray;
+
+        strong {
+            font-weight: bold;
+            font-family: $font-title;
+            font-size: 18px;
+            text-shadow: 1px 1px 3px #00000045;
+        }
+    }
+
     /* SAVE CRIT RULE */
     .save-crit-rule {
         background: rgba(231, 87, 10, 0.1); /* Light orange background */
-        border-left: 3px solid var(--c-damage-orange);
+        border-left: 3px solid $c-damage;
         margin: 8px 16px;
         padding: 8px 12px;
         border-radius: 3px;
@@ -404,7 +414,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             color: var(--c-dark-blue);
 
             strong {
-                color: var(--c-damage-orange);
+                color: $c-damage;
                 text-transform: uppercase;
                 font-size: 13px;
             }
@@ -427,7 +437,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
             /* Critical Label */
             .crit-label {
-                background: var(--c-damage-orange);
+                background: $c-damage;
                 color: white;
                 font-size: 13px;
                 font-weight: bold;
@@ -457,7 +467,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     content: "";
                     flex: 1; /* Grow to fill space */
                     height: 2px;
-                    background: var(--c-bluey); /* Dark slate color matching the UI */
+                    background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
                     border-radius: 1px;
                     max-width: 40px; /* Limit length so it doesn't touch edges */
                 }
@@ -467,7 +477,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     content: "";
                     flex: 1; /* Grow to fill space */
                     height: 2px;
-                    background: var(--c-bluey);
+                    background: var(--vagabond-c-bluey);
                     border-radius: 1px;
                     max-width: 40px;
                 }
@@ -495,7 +505,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             /* Faded Background Icon (Burst/Skull/Fire) */
             .damage-bg-icon {
                 font-size: 30px;
-                color: var(--c-damage-orange);
+                color: $c-damage;
                 text-shadow:
                     1px 1px 0 white,
                     -1px 1px 0 white,
@@ -508,7 +518,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                 font-family: var(--font-secondary);
                 font-size: 34px; 
                 font-weight: 900;
-                color: var(--c-damage-orange);       /* Dark Orange */
+                color: $c-damage;       /* Dark Orange */
                 text-shadow:
                     1px 1px 0 white,
                     -1px 1px 0 white,
@@ -530,7 +540,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         overflow: hidden;
 
         .metadata-header {
-            background: var(--c-bg-lite); 
+            background: $c-bg-lite; 
             color: white;
             padding: 5px 8px;
             font-size: 11px;
@@ -542,7 +552,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             gap: 6px;
             
             .expand-icon { margin-left: auto; transition: transform 0.2s; }
-            &:hover { background: var(--c-bluey); }
+            &:hover { background: var(--vagabond-c-bluey); }
         }
 
         .metadata-content {
@@ -564,7 +574,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     position: relative;
                     &::before {
                         content: "•";
-                        color: var(--c-damage-orange);
+                        color: $c-damage;
                         font-weight: bold;
                         display: inline-block;
                         width: 1em;
@@ -671,16 +681,16 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             overflow: hidden;
             
             .defend-header {
-                background: var(--c-dark-bluey); color: white;
+                background: $c-dark-bluey; color: white;
                 padding: 5px 8px; font-size: 12px; font-weight: bold;
                 cursor: pointer; display: flex; align-items: center; gap: 6px;
-                &:hover { background: var(--c-bluey); }
+                &:hover { background: var(--vagabond-c-bluey); }
                 .expand-icon { margin-left: auto; transition: transform 0.2s; }
             }
             
             .defend-content {
                 max-height: 0; padding: 0 8px; overflow: hidden; transition: 0.3s;
-                p { font-size: 11px; margin: 4px 0; color: #222; }
+                p { font-size: 12px; margin: 4px 0; color: #222; }
             }
             
             &.expanded {
@@ -750,7 +760,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         font-size: 24px;
         font-weight: bold;
         margin: 4px;
-        color: var(--c-damage-orange);
+        color: $c-damage;
         text-shadow:
             1px 1px 0 $c-white,
             -1px 1px 0 $c-white,
@@ -939,13 +949,13 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             .damage-final {
                 font-size: 24px;
                 font-weight: 900;
-                color: var(--c-damage-orange); /* Pop color for result */
+                color: $c-damage; /* Pop color for result */
                 display: flex;
                 align-items: center;
                 gap: 5px;
                 
                 i { 
-                    color: var(--c-damage-orange);
+                    color: $c-damage;
                     font-size: 16px; 
                 }
             }
@@ -964,29 +974,54 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
 /* Targets Section */
 .chat-targets-section {
-    background: rgba(0, 0, 0, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 8px 12px;
     margin: 8px 0;
+    padding: 4px 0;
+    border-bottom: 1px solid $c-dark-bluey;
+
 
     .targets-header {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: var(--color-text-light-heading);
+        background-image: url('../assets/ui/chat/damage-title-bg.webp');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 150px; height: 30px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 5px;
+        filter: drop-shadow( 2px 2px 2px rgba(0, 0, 0, 0.5));
+        
+        span {
+            color: white; font-weight: 900; font-size: 14px;
+            text-transform: uppercase; text-shadow: 1px 1px 0 #000;
+        }
 
         i {
-            color: var(--color-warm-3);  // Crosshair theme
+            color: $c-yellow;
+            font-size: 14px;
+        }
+
+        &::before {
+                content: "";
+                flex: 1; /* Grow to fill space */
+                height: 2px;
+                background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
+                border-radius: 1px;
+                max-width: 40px; /* Limit length so it doesn't touch edges */
+        }
+
+            /* The Right Line */
+            &::after {
+                content: "";
+                flex: 1; /* Grow to fill space */
+                height: 2px;
+                background: var(--vagabond-c-bluey);
+                border-radius: 1px;
+                max-width: 40px;
         }
     }
 
     .targets-list {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         gap: 8px;
     }
 
@@ -995,23 +1030,39 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         flex-direction: column;
         align-items: center;
         gap: 4px;
+        cursor: pointer;
+        transition: transform 0.2s ease, filter 0.2s ease;
+
+        &:hover {
+            transform: scale(1.02);
+            filter: brightness(1.2);
+
+            img {
+                box-shadow: 0 0 8px rgba(222, 214, 86, 0.6);
+            }
+
+            .target-name {
+                font-weight: bold;
+            }
+        }
 
         img {
             width: 32px;
             height: 32px;
-            border-radius: 4px;
-            border: 2px solid var(--color-warm-3);
+            border-radius: 2px;
             object-fit: cover;
+            transition: box-shadow 0.2s ease;
         }
 
         .target-name {
-            font-size: 10px;
-            color: var(--color-text-light-7);
-            max-width: 60px;
+            font-size: 13px;
+            color: $c-dark;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             text-align: center;
+            transition: color 0.2s ease, font-weight 0.2s ease;
         }
     }
 }

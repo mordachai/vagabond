@@ -83,6 +83,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       updateChoicePool: this._onUpdatePool,
       updateChoiceCount: this._onUpdateCount,
       saveChoices: this._onSaveChoices,
+      createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from spell description
     },
     form: {
       submitOnChange: true,
@@ -531,9 +532,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
       case 'description':
         context.tab = context.tabs[partId];
+        // Format description for countdown dice (if spell)
+        let descriptionToEnrich = this.item.system.description;
+        if (this.item.type === 'spell' && this.item.system.formatDescription) {
+          descriptionToEnrich = this.item.system.formatDescription(descriptionToEnrich);
+        }
         // Enrich description info for display
         context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-          this.item.system.description,
+          descriptionToEnrich,
           {
             secrets: this.document.isOwner,
             rollData: this.item.getRollData(),
@@ -1648,5 +1654,43 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       console.error('Error deleting item from container:', error);
       ui.notifications.error('Failed to delete item.');
     }
+  }
+
+  /**
+   * Handle creating a countdown dice from a spell description
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The clicked element
+   */
+  static async _onCreateCountdownFromRecharge(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Extract dice type from data attribute
+    let diceType = target.dataset.diceType || target.dataset.diceSize;
+
+    // If we got just a number (from data-dice-size), add the "d" prefix
+    if (diceType && !diceType.startsWith('d')) {
+      diceType = 'd' + diceType;
+    }
+
+    if (!diceType) return;
+
+    // Validate dice type
+    const validDiceTypes = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+    if (!validDiceTypes.includes(diceType)) {
+      console.warn(`Invalid dice type for countdown: ${diceType}`);
+      return;
+    }
+
+    // For spells, use the item name as the countdown name
+    const name = this.item.name;
+
+    // Create countdown dice
+    const { CountdownDice } = globalThis.vagabond.documents;
+    await CountdownDice.create({
+      name: name,
+      diceType: diceType,
+      size: 'S', // Small size
+    });
   }
 }

@@ -60,6 +60,10 @@
   --vagabond-stat-bg: #1b1b1b;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-c-bluey: #5a6e76;
+  --vagabond-c-dark-bluey: #2c3e50;
+  --vagabond-c-damage-orange: #e7570a;
+  --vagabond-c-bg-lite: #7f8c8d;
 }
 
 .theme-dark {
@@ -673,10 +677,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --c-dark-blue: #0b1a23;
   --c-yellow-text: #DED656;
   --c-save-yellow: #DED656;
-  --c-damage-orange: #e7570a;
-  --c-bg-lite: #7f8c8d;
-  --c-bluey: #5a6e76;
-  --c-dark-bluey: #2c3e50;
   position: relative;
   margin-bottom: 10px;
   font-family: var(--font-primary);
@@ -777,7 +777,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-decoration: underline dotted; /* Optional visual cue */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .template-trigger:hover {
-  color: var(--c-damage-orange); /* Or your highlight color */
+  color: var(--vagabond-c-damage-orange); /* Or your highlight color */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-separator {
   color: var(--c-dark-blue);
@@ -809,7 +809,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-property-group:hover {
   background: #fff;
-  border-color: var(--c-bg-lite);
+  border-color: var(--vagabond-c-bg-lite);
   color: #000;
 }
 .vagabond-chat-card-v2 .modifier-badge {
@@ -877,7 +877,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   position: absolute;
   top: 0;
   right: 0;
-  background: var(--c-damage-orange);
+  background: var(--vagabond-c-damage-orange);
   color: white;
   font-size: 13px;
   font-weight: bold;
@@ -988,9 +988,23 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 3px;
   font-size: 13px;
 }
+.vagabond-chat-card-v2 .card-crit {
+  margin: 8px 16px;
+  padding: 8px 12px;
+  font-family: "Paradigm", serif;
+  font-size: 16px;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px var(--vagabond-c-darkgray);
+}
+.vagabond-chat-card-v2 .card-crit strong {
+  font-weight: bold;
+  font-family: "Eskapade", serif;
+  font-size: 18px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2705882353);
+}
 .vagabond-chat-card-v2 .save-crit-rule {
   background: rgba(231, 87, 10, 0.1); /* Light orange background */
-  border-left: 3px solid var(--c-damage-orange);
+  border-left: 3px solid var(--vagabond-c-damage-orange);
   margin: 8px 16px;
   padding: 8px 12px;
   border-radius: 3px;
@@ -1002,7 +1016,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--c-dark-blue);
 }
 .vagabond-chat-card-v2 .save-crit-rule p strong {
-  color: var(--c-damage-orange);
+  color: var(--vagabond-c-damage-orange);
   text-transform: uppercase;
   font-size: 13px;
 }
@@ -1022,7 +1036,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Critical Label */
 }
 .vagabond-chat-card-v2 .damage-section .damage-header-container .crit-label {
-  background: var(--c-damage-orange);
+  background: var(--vagabond-c-damage-orange);
   color: white;
   font-size: 13px;
   font-weight: bold;
@@ -1056,7 +1070,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   content: "";
   flex: 1; /* Grow to fill space */
   height: 2px;
-  background: var(--c-bluey); /* Dark slate color matching the UI */
+  background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
   border-radius: 1px;
   max-width: 40px; /* Limit length so it doesn't touch edges */
 }
@@ -1064,7 +1078,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   content: "";
   flex: 1; /* Grow to fill space */
   height: 2px;
-  background: var(--c-bluey);
+  background: var(--vagabond-c-bluey);
   border-radius: 1px;
   max-width: 40px;
 }
@@ -1088,14 +1102,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .damage-section .damage-total-display .damage-bg-icon {
   font-size: 30px;
-  color: var(--c-damage-orange);
+  color: var(--vagabond-c-damage-orange);
   text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
 }
 .vagabond-chat-card-v2 .damage-section .damage-total-display .damage-value {
   font-family: var(--font-secondary);
   font-size: 34px;
   font-weight: 900;
-  color: var(--c-damage-orange); /* Dark Orange */
+  color: var(--vagabond-c-damage-orange); /* Dark Orange */
   text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable {
@@ -1106,7 +1120,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   overflow: hidden;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-header {
-  background: var(--c-bg-lite);
+  background: var(--vagabond-c-bg-lite);
   color: white;
   padding: 5px 8px;
   font-size: 11px;
@@ -1122,7 +1136,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   transition: transform 0.2s;
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-header:hover {
-  background: var(--c-bluey);
+  background: var(--vagabond-c-bluey);
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-content {
   max-height: 0;
@@ -1145,7 +1159,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .metadata-item-expandable .metadata-content ul li::before {
   content: "•";
-  color: var(--c-damage-orange);
+  color: var(--vagabond-c-damage-orange);
   font-weight: bold;
   display: inline-block;
   width: 1em;
@@ -1265,7 +1279,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   overflow: hidden;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header {
-  background: var(--c-dark-bluey);
+  background: var(--vagabond-c-bluey);
   color: white;
   padding: 5px 8px;
   font-size: 12px;
@@ -1276,7 +1290,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 6px;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header:hover {
-  background: var(--c-bluey);
+  background: var(--vagabond-c-bluey);
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header .expand-icon {
   margin-left: auto;
@@ -1289,7 +1303,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   transition: 0.3s;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-content p {
-  font-size: 11px;
+  font-size: 12px;
   margin: 4px 0;
   color: #222;
 }
@@ -1357,7 +1371,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 24px;
   font-weight: bold;
   margin: 4px;
-  color: var(--c-damage-orange);
+  color: var(--vagabond-c-damage-orange);
   text-shadow: 1px 1px 0 var(--vagabond-c-white), -1px 1px 0 var(--vagabond-c-white), -1px -1px 0 var(--vagabond-c-white), 1px -1px 0 var(--vagabond-c-white);
 }
 .roll-dice-container .roll-operator,
@@ -1515,13 +1529,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .save-damage-calculation .damage-formula-line .damage-final {
   font-size: 24px;
   font-weight: 900;
-  color: var(--c-damage-orange); /* Pop color for result */
+  color: var(--vagabond-c-damage-orange); /* Pop color for result */
   display: flex;
   align-items: center;
   gap: 5px;
 }
 .save-damage-calculation .damage-formula-line .damage-final i {
-  color: var(--c-damage-orange);
+  color: var(--vagabond-c-damage-orange);
   font-size: 16px;
 }
 .save-damage-calculation .damage-application-note {
@@ -1535,27 +1549,54 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 /* Targets Section */
 .chat-targets-section {
-  background: rgba(0, 0, 0, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 12px;
   margin: 8px 0;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--vagabond-c-bluey);
 }
 .chat-targets-section .targets-header {
+  background-image: url("../assets/ui/chat/damage-title-bg.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 30px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: var(--color-text-light-heading);
+  justify-content: center;
+  margin-bottom: 5px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  /* The Right Line */
+}
+.chat-targets-section .targets-header span {
+  color: white;
+  font-weight: 900;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 #000;
 }
 .chat-targets-section .targets-header i {
-  color: var(--color-warm-3);
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 14px;
+}
+.chat-targets-section .targets-header::before {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
+  border-radius: 1px;
+  max-width: 40px; /* Limit length so it doesn't touch edges */
+}
+.chat-targets-section .targets-header::after {
+  content: "";
+  flex: 1; /* Grow to fill space */
+  height: 2px;
+  background: var(--vagabond-c-bluey);
+  border-radius: 1px;
+  max-width: 40px;
 }
 .chat-targets-section .targets-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
 }
 .chat-targets-section .target-token {
@@ -1563,22 +1604,35 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.chat-targets-section .target-token:hover {
+  transform: scale(1.02);
+  filter: brightness(1.2);
+}
+.chat-targets-section .target-token:hover img {
+  box-shadow: 0 0 8px rgba(222, 214, 86, 0.6);
+}
+.chat-targets-section .target-token:hover .target-name {
+  font-weight: bold;
 }
 .chat-targets-section .target-token img {
   width: 32px;
   height: 32px;
-  border-radius: 4px;
-  border: 2px solid var(--color-warm-3);
+  border-radius: 2px;
   object-fit: cover;
+  transition: box-shadow 0.2s ease;
 }
 .chat-targets-section .target-token .target-name {
-  font-size: 10px;
-  color: var(--color-text-light-7);
-  max-width: 60px;
+  font-size: 13px;
+  color: var(--vagabond-c-dark);
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
+  transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
 /* Animations */
@@ -1642,6 +1696,21 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 /* Countdown dice - imported at top level because overlay and config are outside sheets */
+.countdown-dice-trigger {
+  cursor: pointer;
+  color: var(--vagabond-c-red);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--vagabond-c-muted);
+  transition: all 0.2s ease;
+}
+.countdown-dice-trigger:hover {
+  text-decoration-style: solid;
+  text-decoration-color: var(--vagabond-c-faint);
+  opacity: 0.8;
+}
+
 .countdown-dice-overlay {
   position: fixed;
   z-index: 100;
@@ -7092,20 +7161,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-immunity-tag .damage-type-icon-prefix {
   font-size: 12px;
   margin-right: 2px;
-}
-.vagabond .countdown-dice-trigger {
-  cursor: pointer;
-  color: var(--vagabond-c-red);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: var(--vagabond-c-muted);
-  transition: all 0.2s ease;
-}
-.vagabond .countdown-dice-trigger:hover {
-  text-decoration-style: solid;
-  text-decoration-color: var(--vagabond-c-faint);
-  opacity: 0.8;
 }
 .vagabond .item-sheet-header {
   display: flex;

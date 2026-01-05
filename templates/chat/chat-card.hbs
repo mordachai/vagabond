@@ -109,7 +109,7 @@
           </div>
           <div class="targets-list">
             {{#each targetsAtRollTime}}
-            <div class="target-token" title="{{this.actorName}}">
+            <div class="target-token" title="{{this.actorName}} (click to ping)" data-token-id="{{this.tokenId}}" data-scene-id="{{this.sceneId}}">
               <img src="{{this.actorImg}}" alt="{{this.actorName}}">
               <span class="target-name">{{this.actorName}}</span>
             </div>
@@ -125,6 +125,13 @@
             {{#if description}}
             <div class="card-description">
                 {{{description}}}
+            </div>
+            {{/if}}
+
+            {{!-- Crit Text --}}
+            {{#if crit}}
+            <div class="card-crit">
+                <strong>Crit:</strong> {{{crit}}}
             </div>
             {{/if}}
 

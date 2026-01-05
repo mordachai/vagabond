@@ -19,6 +19,7 @@ export class VagabondChatCard {
       metadataTags: [],
       propertyDetails: null,
       description: null,
+      crit: null,  // Critical hit/success effect text
       footerTags: [],
       footerActions: [],
       actor: null,
@@ -37,6 +38,7 @@ export class VagabondChatCard {
   setTitle(t) { this.data.title = t; return this; }
   setSubtitle(s) { this.data.subtitle = s; return this; }
   setDescription(d) { this.data.description = d; return this; }
+  setCrit(c) { this.data.crit = c; return this; }
   
   setMetadataTags(tags) { this.data.metadataTags = tags; return this; }
   setPropertyDetails(props) { this.data.propertyDetails = props; return this; }
@@ -266,6 +268,7 @@ export class VagabondChatCard {
   static async createActionCard({
     actor, item, title, subtitle, rollData, tags = [],
     damageRoll, damageType = 'physical', description = '',
+    crit = null,
     hasDefenses = false, attackType = 'melee', footerActions = [],
     propertyDetails = null, damageFormula = null,
     targetsAtRollTime = []
@@ -352,6 +355,7 @@ export class VagabondChatCard {
 
       if (propertyDetails) card.setPropertyDetails(propertyDetails);
       if (description) card.setDescription(description);
+      if (crit) card.setCrit(crit);
 
       // 3. Handle Damage & Buttons
       if (damageRoll) {
@@ -634,13 +638,20 @@ export class VagabondChatCard {
           spellDamageFormula = `${spellState.damageDice}d${dieSize}`;
       }
 
+      // Format crit text if critical and crit text exists
+      let critText = null;
+      if (isCritical && spell.system.crit) {
+          critText = spell.system.formatDescription(spell.system.crit);  // Format for countdown dice triggers
+      }
+
       return this.createActionCard({
           actor, item: spell, title: spell.name,
           rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill },  // ✅ FIX: Include manaSkill for statKey lookup
           tags,
           damageRoll,
           damageType: spell.system.damageType,
-          description: spell.system.description,
+          description: spell.system.formatDescription(spell.system.description),  // Format for countdown dice triggers
+          crit: critText,  // Include crit text if critical
           hasDefenses: true,
           attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
           damageFormula: spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice

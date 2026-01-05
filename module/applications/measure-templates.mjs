@@ -31,17 +31,25 @@ export class VagabondMeasureTemplates {
       return;
     }
 
-    // 3. Construct Data
+    // 3. Calculate centroid from current targets
+    const targetArray = Array.from(game.user.targets);
+    let centroid = null;
+    if (targetArray.length > 0) {
+      centroid = this._calculateTargetCentroid(targetArray);
+    }
+
+    // 4. Construct Data
     const templateData = this._constructTemplateData({
       type: deliveryType,
       distance: distance,
       token: token,
-      targets: game.user.targets
+      targets: game.user.targets,
+      centroid: centroid
     });
 
     if (!templateData) return;
 
-    // 4. Create the Template
+    // 5. Create the Template
     // Flag it so we know it's a Vagabond preview
     templateData.flags = { 
       vagabond: { 
@@ -52,8 +60,8 @@ export class VagabondMeasureTemplates {
     };
 
     const doc = await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateData]);
-    
-    // 5. Track the ID
+
+    // 6. Track the ID
     if (doc && doc[0]) {
       this.activePreviews.set(`${actor.id}-${itemId}`, doc[0].id);
     }
@@ -97,9 +105,9 @@ export class VagabondMeasureTemplates {
 
   /**
    * Creates a template from Chat Card metadata.
-   * @param {string} deliveryType 
-   * @param {string} deliveryText 
-   * @param {ChatMessage} message 
+   * @param {string} deliveryType
+   * @param {string} deliveryText
+   * @param {ChatMessage} message
    */
   async fromChat(deliveryType, deliveryText, message) {
     // 1. Parse Distance
@@ -119,19 +127,43 @@ export class VagabondMeasureTemplates {
         casterToken = actor?.getActiveTokens()[0];
     }
 
-    // 3. Construct Data
+    // 3. Get stored targets from message flags and resolve to tokens
+    const storedTargets = message.flags?.vagabond?.targetsAtRollTime || [];
+    const resolvedTargets = [];
+
+    for (const targetData of storedTargets) {
+      // Check if target is on current scene
+      if (targetData.sceneId !== canvas.scene?.id) continue;
+
+      // Get token from current scene
+      const token = canvas.tokens.get(targetData.tokenId);
+      if (token) {
+        resolvedTargets.push(token);
+      }
+    }
+
+    // 4. Calculate centroid if we have multiple targets
+    let centroid = null;
+    if (resolvedTargets.length > 0) {
+      centroid = this._calculateTargetCentroid(resolvedTargets);
+      console.log(`VagabondMeasureTemplates | Calculated centroid from ${resolvedTargets.length} stored targets:`, centroid);
+    }
+
+    // 5. Construct Data with centroid
     const templateData = this._constructTemplateData({
       type: deliveryType,
       distance: distance,
       token: casterToken,
-      targets: game.user.targets
+      targets: game.user.targets, // Still pass for fallback
+      centroid: centroid
     });
 
     if (templateData) {
       templateData.flags = {
         vagabond: {
           deliveryType: deliveryType,
-          deliveryText: deliveryText
+          deliveryText: deliveryText,
+          targetsAtRollTime: storedTargets // Preserve stored targets
         }
       };
       await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateData]);
@@ -143,15 +175,38 @@ export class VagabondMeasureTemplates {
   /* -------------------------------------------- */
 
   /**
+   * Calculate the geometric centroid (midpoint) of multiple targets
+   * @param {Array} targets - Array of Token objects
+   * @returns {Object|null} {x, y} coordinates of centroid, or null if no targets
+   */
+  _calculateTargetCentroid(targets) {
+    if (!targets || targets.length === 0) return null;
+
+    // Sum all x and y coordinates
+    const sum = targets.reduce((acc, token) => {
+      acc.x += token.center.x;
+      acc.y += token.center.y;
+      return acc;
+    }, { x: 0, y: 0 });
+
+    // Return average (centroid)
+    return {
+      x: sum.x / targets.length,
+      y: sum.y / targets.length
+    };
+  }
+
+  /**
    * Generates the MeasuredTemplateDocument data.
    * @param {Object} params
    * @param {string} params.type - Delivery type (cone, line, etc.)
    * @param {number} params.distance - Distance in feet
    * @param {Token} params.token - The caster token
    * @param {UserTargets} params.targets - The user's targets
+   * @param {Object} params.centroid - Optional precalculated centroid {x, y}
    * @returns {Object|null} Template data
    */
-  _constructTemplateData({ type, distance, token, targets }) {
+  _constructTemplateData({ type, distance, token, targets, centroid = null }) {
     if (!token && ['cone','line','aura'].includes(type)) {
        ui.notifications.warn('Could not determine origin point (Caster Token) for template.');
        return null;
@@ -164,12 +219,16 @@ export class VagabondMeasureTemplates {
       distance: distance,
       fillColor: game.user.color || '#FF0000',
       direction: 0,
-      x: 0, 
+      x: 0,
       y: 0
     };
 
+    // Use centroid for positioning if available, otherwise fall back to first target
+    const destinationPoint = centroid || (targetToken ? targetToken.center : null);
+
     switch (type.toLowerCase()) {
       case 'aura':
+        // Aura remains centered on caster (unchanged)
         templateData.t = 'circle';
         templateData.x = token.center.x;
         templateData.y = token.center.y;
@@ -180,9 +239,10 @@ export class VagabondMeasureTemplates {
         templateData.angle = 90;
         templateData.x = token.center.x;
         templateData.y = token.center.y;
-        
-        if (targetToken) {
-          const ray = new foundry.canvas.geometry.Ray(token.center, targetToken.center);
+
+        // Use centroid or first target for direction
+        if (destinationPoint) {
+          const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
           templateData.direction = Math.toDegrees(ray.angle);
         } else {
           templateData.direction = token.document.rotation || 0;
@@ -194,9 +254,10 @@ export class VagabondMeasureTemplates {
         templateData.width = canvas.scene.grid.distance; // usually 5ft width
         templateData.x = token.center.x;
         templateData.y = token.center.y;
-        
-        if (targetToken) {
-          const ray = new foundry.canvas.geometry.Ray(token.center, targetToken.center);
+
+        // Use centroid or first target for direction
+        if (destinationPoint) {
+          const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
           templateData.direction = Math.toDegrees(ray.angle);
         } else {
           templateData.direction = token.document.rotation || 0;
@@ -204,33 +265,37 @@ export class VagabondMeasureTemplates {
         break;
 
       case 'cube':
-        if (!targetToken) {
+        // Require either centroid or target for positioning
+        if (!destinationPoint) {
           ui.notifications.warn(`Please target a token to place the ${type}.`);
           return null;
         }
         templateData.t = 'rect';
-        
-        // Cube logic from original file
+
+        // Cube logic: position so centroid is at the center of the rectangle
         const sideLength = distance;
         templateData.distance = sideLength * Math.sqrt(2); // Hypotenuse
         templateData.direction = 45;
-        
+
         const gridPixels = canvas.grid.size;
         const sceneGridDist = canvas.scene.grid.distance;
         const sideLengthPixels = (sideLength / sceneGridDist) * gridPixels;
 
-        templateData.x = targetToken.center.x - (sideLengthPixels / 2);
-        templateData.y = targetToken.center.y - (sideLengthPixels / 2);
+        // Center the cube on the destination point (centroid or target)
+        templateData.x = destinationPoint.x - (sideLengthPixels / 2);
+        templateData.y = destinationPoint.y - (sideLengthPixels / 2);
         break;
 
       case 'sphere':
-        if (!targetToken) {
+        // Require either centroid or target for positioning
+        if (!destinationPoint) {
           ui.notifications.warn(`Please target a token to place the ${type}.`);
           return null;
         }
         templateData.t = 'circle';
-        templateData.x = targetToken.center.x;
-        templateData.y = targetToken.center.y;
+        // Center on destination point (centroid or target)
+        templateData.x = destinationPoint.x;
+        templateData.y = destinationPoint.y;
         break;
 
       default:

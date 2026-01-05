@@ -1224,19 +1224,4 @@ i {color: $c-dark}
 
 }
 
-// Clickable Countdown Dice Trigger (CdX recharge text)
-.countdown-dice-trigger {
-  cursor: pointer;
-  color: $c-red;
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: $c-muted;
-  transition: all 0.2s ease;
-
-  &:hover {
-    text-decoration-style: solid;
-    text-decoration-color: $c-faint;
-    opacity: 0.8;
-  }
-}
+// Note: .countdown-dice-trigger styles moved to _countdown-dice.scss for global access

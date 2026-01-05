@@ -685,13 +685,65 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 7. [REMOVED] Favor/Hinder Dice Styling
+  // 7. Countdown Dice Trigger Handler (Chat Card Descriptions)
+  // ---------------------------------------------------------
+  const countdownTriggers = html.querySelectorAll('.countdown-dice-trigger');
+
+  countdownTriggers.forEach(trigger => {
+    trigger.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      // Extract dice type from data attribute
+      let diceType = trigger.dataset.diceType || trigger.dataset.diceSize;
+
+      // If we got just a number (from data-dice-size), add the "d" prefix
+      if (diceType && !diceType.startsWith('d')) {
+        diceType = 'd' + diceType;
+      }
+
+      if (!diceType) return;
+
+      // Validate dice type
+      const validDiceTypes = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+      if (!validDiceTypes.includes(diceType)) {
+        console.warn(`Invalid dice type for countdown: ${diceType}`);
+        return;
+      }
+
+      // Get spell/item name from message flags or use a default
+      const itemId = message.flags?.vagabond?.itemId;
+      let name = 'Countdown';
+
+      if (itemId) {
+        const actorId = message.flags?.vagabond?.actorId;
+        const actor = game.actors.get(actorId);
+        if (actor) {
+          const item = actor.items.get(itemId);
+          if (item) {
+            name = item.name;
+          }
+        }
+      }
+
+      // Create countdown dice
+      const { CountdownDice } = globalThis.vagabond.documents;
+      await CountdownDice.create({
+        name: name,
+        diceType: diceType,
+        size: 'S', // Small size
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 8. [REMOVED] Favor/Hinder Dice Styling
   // This logic is now handled server-side in chat-card.mjs
   // (formatRollWithDice) and styled via CSS classes.
   // ---------------------------------------------------------
 
   // ---------------------------------------------------------
-  // 8. NPC Damage Button Handler (GM Only)
+  // 9. NPC Damage Button Handler (GM Only)
   // ---------------------------------------------------------
   const npcButtons = html.querySelectorAll('.vagabond-npc-damage-button');
 
@@ -738,6 +790,56 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       } else {
         console.warn("VagabondSystem | Template manager not found.");
       }
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 11. Target Token Click Handler (Ping & Pan)
+  // ---------------------------------------------------------
+  const targetTokens = html.querySelectorAll('.target-token');
+
+  targetTokens.forEach(targetElement => {
+    targetElement.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+
+      const tokenId = targetElement.dataset.tokenId;
+      const sceneId = targetElement.dataset.sceneId;
+
+      if (!tokenId || !sceneId) return;
+
+      // Check if target is on a different scene
+      if (sceneId !== canvas.scene?.id) {
+        ui.notifications.warn('Target is on a different scene. Switching scenes...');
+        const scene = game.scenes.get(sceneId);
+        if (scene) {
+          await scene.view();
+          // Wait a moment for scene to load
+          await new Promise(resolve => setTimeout(resolve, 100));
+        } else {
+          ui.notifications.error('Target scene not found.');
+          return;
+        }
+      }
+
+      // Get the token on the current scene
+      const token = canvas.tokens.get(tokenId);
+      if (!token) {
+        ui.notifications.warn('Target token not found on scene.');
+        return;
+      }
+
+      // Pan to token
+      await canvas.animatePan({
+        x: token.center.x,
+        y: token.center.y,
+        duration: 250
+      });
+
+      // Ping the token location
+      canvas.ping(token.center, {
+        style: canvas.grid.type === 0 ? 'pulse' : 'alert',
+        color: game.user.color
+      });
     });
   });
 });
