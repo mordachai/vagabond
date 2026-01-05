@@ -3241,9 +3241,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     if (!action || !action.name) return;
 
+    // Capture targeted tokens for NPC action
+    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
+      tokenId: token.id,
+      sceneId: token.scene.id,
+      actorId: token.actor?.id,
+      actorName: token.name,
+      actorImg: token.document.texture.src
+    }));
+
     // Use the unified chat card system
     const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-    await VagabondChatCard.npcAction(this.actor, action, index);
+    await VagabondChatCard.npcAction(this.actor, action, index, targetsAtRollTime);
   }
 
   /**
@@ -3764,6 +3773,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
+    // Capture targeted tokens at roll time
+    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
+      tokenId: token.id,
+      sceneId: token.scene.id,
+      actorId: token.actor?.id,
+      actorName: token.name,
+      actorImg: token.document.texture.src
+    }));
+
     try {
       /* PATH A: ALCHEMICAL */
       if (isAlchemical) {
@@ -3831,7 +3849,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey);
       }
 
-      await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll);
+      await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll, targetsAtRollTime);
       // Handle consumption after successful attack (regardless of hit/miss)
       await item.handleConsumption();
       return attackResult.roll;
@@ -4066,6 +4084,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
+    // Capture targeted tokens at cast time
+    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
+      tokenId: token.id,
+      sceneId: token.scene.id,
+      actorId: token.actor?.id,
+      actorName: token.name,
+      actorImg: token.document.texture.src
+    }));
+
     // Get mana skill
     const manaSkill = this.actor.system.classData?.manaSkill;
     if (!manaSkill) {
@@ -4134,7 +4161,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Note: Bypass spells always succeed, so mana is always deducted
 
     // Create chat message
-    await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical);
+    await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical, targetsAtRollTime);
 
     // Reset spell state (keep deliveryType, reset useFx to default)
     const defaultUseFx = spell?.system?.damageType === '-';
@@ -4157,9 +4184,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {number} difficulty - Target difficulty
    * @param {boolean} isSuccess - Whether the cast succeeded
    * @param {boolean} isCritical - Whether the roll was a critical hit
+   * @param {Array} targetsAtRollTime - Targets captured at cast time
    * @private
    */
-  async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical) {
+  async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical, targetsAtRollTime = []) {
     // Import damage helper
     const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
 
@@ -4195,7 +4223,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     };
 
     // Use universal chat card
-    await VagabondChatCard.spellCast(this.actor, spell, spellCastResult, damageRoll);
+    await VagabondChatCard.spellCast(this.actor, spell, spellCastResult, damageRoll, targetsAtRollTime);
   }
 
   /**

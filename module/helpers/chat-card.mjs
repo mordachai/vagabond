@@ -16,14 +16,15 @@ export class VagabondChatCard {
       outcome: null,
       outcomeClass: null,
       damage: null,
-      metadataTags: [], 
-      propertyDetails: null, 
+      metadataTags: [],
+      propertyDetails: null,
       description: null,
       footerTags: [],
-      footerActions: [], 
+      footerActions: [],
       actor: null,
       item: null,
-      showDefendOptions: false
+      showDefendOptions: false,
+      targetsAtRollTime: []  // Targets captured at roll time
     };
   }
 
@@ -39,7 +40,17 @@ export class VagabondChatCard {
   
   setMetadataTags(tags) { this.data.metadataTags = tags; return this; }
   setPropertyDetails(props) { this.data.propertyDetails = props; return this; }
-  
+
+  /**
+   * Set targets captured at roll time
+   * @param {Array} targets - Array of target objects
+   * @returns {VagabondChatCard}
+   */
+  setTargets(targets) {
+    this.data.targetsAtRollTime = targets || [];
+    return this;
+  }
+
   addRoll(roll, difficulty) {
       this.data.hasRoll = true;
       this.data.rollTotal = roll.total;
@@ -235,11 +246,12 @@ export class VagabondChatCard {
       };
       if (this.data.damage?.roll) msgData.rolls.push(this.data.damage.roll);
 
-      if (this.data.item && this.data.actor) {
+      if (this.data.actor) {
         msgData.flags = {
             vagabond: {
                 actorId: this.data.actor.id,
-                itemId: this.data.item.id
+                itemId: this.data.item?.id || null,
+                targetsAtRollTime: this.data.targetsAtRollTime || []
             }
         };
       }
@@ -255,7 +267,8 @@ export class VagabondChatCard {
     actor, item, title, subtitle, rollData, tags = [],
     damageRoll, damageType = 'physical', description = '',
     hasDefenses = false, attackType = 'melee', footerActions = [],
-    propertyDetails = null, damageFormula = null
+    propertyDetails = null, damageFormula = null,
+    targetsAtRollTime = []
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -287,6 +300,11 @@ export class VagabondChatCard {
 
       // Continue setup...
       card.setTitle(title).setSubtitle(subtitle);
+
+      // Set targets captured at roll time
+      if (targetsAtRollTime && targetsAtRollTime.length > 0) {
+        card.setTargets(targetsAtRollTime);
+      }
 
       // 1. Handle Main Roll
       if (rollData) {
@@ -350,8 +368,8 @@ export class VagabondChatCard {
           const isHealing = damageType.toLowerCase() === 'healing';
 
           let btns = isHealing
-            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id)
-            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType);
+            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id, targetsAtRollTime)
+            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime);
 
           card.addFooterAction(btns);
 
@@ -379,7 +397,7 @@ export class VagabondChatCard {
                damageType,
                attackType,
                statKey  // ✅ FIX: Pass statKey for critical damage bonus
-           });
+           }, targetsAtRollTime);
            card.addFooterAction(btn);
       }
 
@@ -490,7 +508,7 @@ export class VagabondChatCard {
     return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess);
   }
 
-  static async weaponAttack(actor, weapon, attackResult, damageRoll) {
+  static async weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime = []) {
       const { weaponSkill, weaponSkillKey, isHit, isCritical } = attackResult;
       
       // FIX: Auto-roll damage if settings allow or if it's a critical hit
@@ -559,11 +577,12 @@ export class VagabondChatCard {
           damageType: weapon.system.currentDamageType || 'physical',
           description,
           hasDefenses: true,
-          attackType  // ✅ FIX: Pass attackType for save hinder logic
+          attackType,  // ✅ FIX: Pass attackType for save hinder logic
+          targetsAtRollTime
       });
   }
 
-  static async spellCast(actor, spell, spellCastResult, damageRoll = null) {
+  static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = []) {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, costs, deliveryText, spellState } = spellCastResult;
       
       const tags = [];
@@ -624,11 +643,12 @@ export class VagabondChatCard {
           description: spell.system.description,
           hasDefenses: true,
           attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
-          damageFormula: spellDamageFormula  // ✅ FIX: Pass actual spell damage formula with increased dice
+          damageFormula: spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
+          targetsAtRollTime
       });
   }
   
-  static async npcAction(actor, action, actionIndex) {
+  static async npcAction(actor, action, actionIndex, targetsAtRollTime = []) {
     const tags = [];
     
     // 1. NPC Subtitle (The Actor Name)
@@ -692,17 +712,17 @@ export class VagabondChatCard {
 
         if (action.flatDamage) {
             footerActions.push(VagabondDamageHelper.createNPCDamageButton(
-                actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType
+                actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType, targetsAtRollTime
             ));
         }
         if (action.rollDamage) {
             footerActions.push(VagabondDamageHelper.createNPCDamageButton(
-                actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType
+                actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType, targetsAtRollTime
             ));
         }
     } else {
         // No damage: Add save reminder buttons for effects that require saves
-        footerActions.push(VagabondDamageHelper.createSaveReminderButtons(attackType));
+        footerActions.push(VagabondDamageHelper.createSaveReminderButtons(attackType, targetsAtRollTime));
     }
 
     // 9. Create the Card (always include defend options)
@@ -714,6 +734,7 @@ export class VagabondChatCard {
         description,
         footerActions,
         hasDefenses: true,  // Always show defend options for NPC actions
+        targetsAtRollTime
         // If you want the ability image to be the icon, pass 'item' if available,
         // otherwise it defaults to actor image in createActionCard logic.
     });

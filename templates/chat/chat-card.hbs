@@ -100,6 +100,24 @@
         </section>
         {{/if}}
 
+        {{!-- E. TARGETS SECTION --}}
+        {{#if targetsAtRollTime.length}}
+        <section class="chat-targets-section">
+          <div class="targets-header">
+            <i class="fas fa-crosshairs"></i>
+            <span>Targets</span>
+          </div>
+          <div class="targets-list">
+            {{#each targetsAtRollTime}}
+            <div class="target-token" title="{{this.actorName}}">
+              <img src="{{this.actorImg}}" alt="{{this.actorName}}">
+              <span class="target-name">{{this.actorName}}</span>
+            </div>
+            {{/each}}
+          </div>
+        </section>
+        {{/if}}
+
         {{!-- D. CONTENT BODY --}}
         <section class="content-body">
 

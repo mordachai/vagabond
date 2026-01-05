@@ -1533,6 +1533,54 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-top: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
+/* Targets Section */
+.chat-targets-section {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  margin: 8px 0;
+}
+.chat-targets-section .targets-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text-light-heading);
+}
+.chat-targets-section .targets-header i {
+  color: var(--color-warm-3);
+}
+.chat-targets-section .targets-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chat-targets-section .target-token {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.chat-targets-section .target-token img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: 2px solid var(--color-warm-3);
+  object-fit: cover;
+}
+.chat-targets-section .target-token .target-name {
+  font-size: 10px;
+  color: var(--color-text-light-7);
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
 /* Animations */
 @keyframes popIn {
   from {

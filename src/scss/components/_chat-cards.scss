@@ -962,6 +962,59 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         }
     }
 
+/* Targets Section */
+.chat-targets-section {
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    margin: 8px 0;
+
+    .targets-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--color-text-light-heading);
+
+        i {
+            color: var(--color-warm-3);  // Crosshair theme
+        }
+    }
+
+    .targets-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .target-token {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 2px solid var(--color-warm-3);
+            object-fit: cover;
+        }
+
+        .target-name {
+            font-size: 10px;
+            color: var(--color-text-light-7);
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+        }
+    }
+}
 
 /* Animations */
 @keyframes popIn {

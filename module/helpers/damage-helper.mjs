@@ -84,6 +84,82 @@ export class VagabondDamageHelper {
 
     return roll;
   }
+
+  /**
+   * Get targets from button dataset with multi-tier fallback
+   * @param {HTMLElement} button - The button element
+   * @param {ChatMessage} message - The chat message (optional)
+   * @returns {Array} Array of target data objects
+   * @private
+   */
+  static _getTargetsFromButton(button, message = null) {
+    // Tier 1: Button dataset (primary source)
+    if (button.dataset.targets) {
+      try {
+        const stored = JSON.parse(button.dataset.targets.replace(/&quot;/g, '"'));
+        if (stored && stored.length > 0) {
+          console.log('VagabondDamageHelper | Using stored targets from button:', stored.length);
+          return stored;
+        }
+      } catch (e) {
+        console.warn('VagabondDamageHelper | Failed to parse button targets', e);
+      }
+    }
+
+    // Tier 2: Message flags (fallback for old buttons)
+    if (message?.flags?.vagabond?.targetsAtRollTime) {
+      const flagTargets = message.flags.vagabond.targetsAtRollTime;
+      if (flagTargets && flagTargets.length > 0) {
+        console.log('VagabondDamageHelper | Using stored targets from message flags:', flagTargets.length);
+        return flagTargets;
+      }
+    }
+
+    // Tier 3: Current game.user.targets (backward compatibility)
+    const currentTargets = Array.from(game.user.targets).map(token => ({
+      tokenId: token.id,
+      sceneId: token.scene.id,
+      actorId: token.actor?.id,
+      actorName: token.name,
+      actorImg: token.document.texture.src
+    }));
+
+    if (currentTargets.length > 0) {
+      console.log('VagabondDamageHelper | Using current game.user.targets (fallback):', currentTargets.length);
+    }
+
+    return currentTargets;
+  }
+
+  /**
+   * Resolve stored target data to actual token references
+   * @param {Array} storedTargets - Array of target objects
+   * @returns {Array} Array of resolved Token documents
+   * @private
+   */
+  static _resolveStoredTargets(storedTargets) {
+    const resolved = [];
+
+    for (const targetData of storedTargets) {
+      // Cross-scene check
+      if (targetData.sceneId !== canvas.scene?.id) {
+        ui.notifications.warn(`${targetData.actorName} is on a different scene - skipping`);
+        continue;
+      }
+
+      // Find token on current scene
+      const token = canvas.tokens.get(targetData.tokenId);
+      if (!token) {
+        ui.notifications.warn(`Token for ${targetData.actorName} not found - may have been deleted`);
+        continue;
+      }
+
+      resolved.push(token);
+    }
+
+    return resolved;
+  }
+
   /**
    * Determine if damage should be rolled based on game settings
    * @param {boolean} isHit - Whether the attack/check was successful
@@ -112,8 +188,9 @@ export class VagabondDamageHelper {
    * @param {Object} context - Additional context for the damage roll
    * @returns {string} HTML button string
    */
-  static createDamageButton(actorId, itemId, damageFormula, context = {}) {
+  static createDamageButton(actorId, itemId, damageFormula, context = {}, targetsAtRollTime = []) {
     const contextJson = JSON.stringify(context).replace(/"/g, '&quot;');
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
     return `
       <button
@@ -123,6 +200,7 @@ export class VagabondDamageHelper {
         data-item-id="${itemId || ''}"
         data-damage-formula="${damageFormula}"
         data-context="${contextJson}"
+        data-targets="${targetsJson}"
       >
         <i class="fas fa-dice"></i> Roll Damage
       </button>
@@ -321,7 +399,8 @@ export class VagabondDamageHelper {
         damageRoll.total,
         damageType,
         actor.id,
-        item?.id
+        item?.id,
+        []  // No targets available in deprecated update method
       );
     } else {
       // Use save buttons for all harmful damage
@@ -331,7 +410,8 @@ export class VagabondDamageHelper {
         damageRoll,
         actor.id,
         item?.id,
-        attackType
+        attackType,
+        []  // No targets available in deprecated update method
       );
     }
 
@@ -532,10 +612,11 @@ export class VagabondDamageHelper {
    * @param {string} attackType - Attack type ('melee', 'ranged', 'cast')
    * @returns {string} HTML button string
    */
-  static createNPCDamageButton(actorId, actionIndex, damageValue, damageMode, damageType, damageTypeLabel, attackType = 'melee') {
+  static createNPCDamageButton(actorId, actionIndex, damageValue, damageMode, damageType, damageTypeLabel, attackType = 'melee', targetsAtRollTime = []) {
     const isFlat = damageMode === 'flat';
     const icon = isFlat ? 'fa-hashtag' : 'fa-dice-d20';
     const label = isFlat ? `Apply ${damageValue} Damage` : `Roll ${damageValue} Damage`;
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
     return `
       <button
@@ -547,6 +628,7 @@ export class VagabondDamageHelper {
         data-damage-type="${damageType}"
         data-damage-type-label="${damageTypeLabel}"
         data-attack-type="${attackType}"
+        data-targets="${targetsJson}"
       >
         <i class="fas ${icon}"></i> ${label}
       </button>
@@ -579,6 +661,9 @@ export class VagabondDamageHelper {
       return;
     }
 
+    // Get targets from button (captured at action roll time)
+    const targetsAtRollTime = this._getTargetsFromButton(button);
+
     let damageRoll;
     let finalDamage;
 
@@ -601,7 +686,8 @@ export class VagabondDamageHelper {
       actor,
       action,
       damageType,
-      attackType
+      attackType,
+      targetsAtRollTime
     );
   }
 
@@ -616,7 +702,7 @@ export class VagabondDamageHelper {
    * @param {string} attackType - The attack type ('melee', 'ranged', 'cast')
    */
 
-    static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee') {
+    static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee', targetsAtRollTime = []) {
       // 1. Dynamic Import to avoid circular dependency issues
       const { VagabondChatCard } = await import('./chat-card.mjs');
 
@@ -648,7 +734,10 @@ export class VagabondDamageHelper {
           attackType: attackType,
 
           // Ensure Defenses (Block/Dodge accordion) appear unless it's a restorative type
-          hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical')
+          hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical'),
+
+          // Pass targets captured at action roll time
+          targetsAtRollTime
       });
     }
 
@@ -712,7 +801,7 @@ export class VagabondDamageHelper {
    * @param {string} itemId - Item ID (optional)
    * @returns {string} HTML button string
    */
-  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null) {
+  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null, targetsAtRollTime = []) {
     // Check damage type and set appropriate button style
     const normalizedType = damageType.toLowerCase();
     let icon, text, buttonClass;
@@ -735,6 +824,8 @@ export class VagabondDamageHelper {
       buttonClass = 'vagabond-apply-damage-button';
     }
 
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
+
     return `
       <button
         class="${buttonClass}"
@@ -742,6 +833,7 @@ export class VagabondDamageHelper {
         data-damage-type="${damageType}"
         data-actor-id="${actorId}"
         data-item-id="${itemId || ''}"
+        data-targets="${targetsJson}"
       >
         <i class="fas ${icon}"></i> ${text}
       </button>
@@ -885,30 +977,36 @@ export class VagabondDamageHelper {
   /**
    * Create save reminder buttons (no damage, just roll saves)
    * @param {string} attackType - Attack type for hinder calculation ('melee', 'ranged', 'cast')
+   * @param {Array} targetsAtRollTime - Targets captured at roll time
    * @returns {string} HTML string
    */
-  static createSaveReminderButtons(attackType = 'melee') {
+  static createSaveReminderButtons(attackType = 'melee', targetsAtRollTime = []) {
     // Localize Labels
     const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
     const endureLabel = game.i18n.localize('VAGABOND.Saves.Endure.name');
     const willLabel = game.i18n.localize('VAGABOND.Saves.Will.name');
+
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
     return `
       <div class="vagabond-save-buttons-container">
         <div class="save-buttons-row">
             <button class="vagabond-save-reminder-button save-reflex"
               data-save-type="reflex"
-              data-attack-type="${attackType}">
+              data-attack-type="${attackType}"
+              data-targets="${targetsJson}">
               <i class="fas fa-running"></i> ${reflexLabel}
             </button>
             <button class="vagabond-save-reminder-button save-endure"
               data-save-type="endure"
-              data-attack-type="${attackType}">
+              data-attack-type="${attackType}"
+              data-targets="${targetsJson}">
               <i class="fas fa-shield-alt"></i> ${endureLabel}
             </button>
             <button class="vagabond-save-reminder-button save-will"
               data-save-type="will"
-              data-attack-type="${attackType}">
+              data-attack-type="${attackType}"
+              data-targets="${targetsJson}">
               <i class="fas fa-brain"></i> ${willLabel}
             </button>
         </div>
@@ -919,7 +1017,7 @@ export class VagabondDamageHelper {
   /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
    */
-  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType) {
+  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = []) {
     // Encode the damage roll terms
     const rollTermsData = JSON.stringify({
       terms: damageRoll.terms.map(t => {
@@ -933,6 +1031,9 @@ export class VagabondDamageHelper {
       }),
       total: damageRoll.total
     }).replace(/"/g, '&quot;');
+
+    // Encode targets
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
     // Localize Labels
     const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
@@ -952,7 +1053,8 @@ export class VagabondDamageHelper {
               data-damage-amount="${damageAmount}"
               data-damage-type="${damageType}"
               data-actor-id="${actorId}"
-              data-item-id="${itemId || ''}">
+              data-item-id="${itemId || ''}"
+              data-targets="${targetsJson}">
               <i class="fas fa-burst"></i> ${applyDirectLabel}
             </button>
         </div>
@@ -965,7 +1067,8 @@ export class VagabondDamageHelper {
               data-roll-terms="${rollTermsData}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
-              data-attack-type="${attackType}">
+              data-attack-type="${attackType}"
+              data-targets="${targetsJson}">
               <i class="fas fa-running"></i> ${reflexLabel}
             </button>
             <button class="vagabond-save-button save-endure"
@@ -975,7 +1078,8 @@ export class VagabondDamageHelper {
               data-roll-terms="${rollTermsData}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
-              data-attack-type="${attackType}">
+              data-attack-type="${attackType}"
+              data-targets="${targetsJson}">
               <i class="fas fa-shield-alt"></i> ${endureLabel}
             </button>
             <button class="vagabond-save-button save-will"
@@ -985,7 +1089,8 @@ export class VagabondDamageHelper {
               data-roll-terms="${rollTermsData}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
-              data-attack-type="${attackType}">
+              data-attack-type="${attackType}"
+              data-targets="${targetsJson}">
               <i class="fas fa-brain"></i> ${willLabel}
             </button>
         </div>
@@ -1007,39 +1112,43 @@ export class VagabondDamageHelper {
     const actorId = button.dataset.actorId;
     const itemId = button.dataset.itemId;
 
+    // Get targets with fallback
+    const storedTargets = this._getTargetsFromButton(button);
+
     let actorsToRoll = [];
 
-    // Smart character detection for players
     if (!game.user.isGM) {
-      // Get all owned character actors (not NPCs)
-      const ownedCharacters = game.actors.filter(a =>
-        a.type === 'character' && a.isOwner
-      );
+      // PLAYER: Use stored targets if available, otherwise smart single-char detection
+      if (storedTargets.length > 0) {
+        const targetTokens = this._resolveStoredTargets(storedTargets);
+        actorsToRoll = targetTokens.map(t => t.actor).filter(a => a && a.isOwner);
 
-      if (ownedCharacters.length === 1) {
-        // Player has exactly 1 owned character - auto-use it
-        actorsToRoll = [ownedCharacters[0]];
-      } else if (ownedCharacters.length > 1) {
-        // Player has multiple characters - require targeting
-        const targetedTokens = Array.from(game.user.targets);
-        if (targetedTokens.length === 0) {
-          ui.notifications.warn('You have multiple characters. Please target the token you want to roll for.');
+        if (actorsToRoll.length === 0) {
+          ui.notifications.warn('None of the targeted tokens belong to you.');
           return;
         }
-        actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
       } else {
-        // Player has no owned characters
-        ui.notifications.warn('You do not own any characters to roll saves for.');
-        return;
+        // Fallback: single-character detection
+        const ownedCharacters = game.actors.filter(a => a.type === 'character' && a.isOwner);
+        if (ownedCharacters.length === 1) {
+          actorsToRoll = [ownedCharacters[0]];
+        } else if (ownedCharacters.length > 1) {
+          ui.notifications.warn('You have multiple characters. Please target the token you want to roll for.');
+          return;
+        } else {
+          ui.notifications.warn('You do not own any characters to roll saves for.');
+          return;
+        }
       }
     } else {
-      // GM must use targeting
-      const targetedTokens = Array.from(game.user.targets);
-      if (targetedTokens.length === 0) {
+      // GM: Use stored targets
+      if (storedTargets.length === 0) {
         ui.notifications.warn('No tokens targeted. Please target at least one token.');
         return;
       }
-      actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
+
+      const targetTokens = this._resolveStoredTargets(storedTargets);
+      actorsToRoll = targetTokens.map(t => t.actor).filter(a => a);
     }
 
     // Roll save for each actor
@@ -1131,39 +1240,43 @@ export class VagabondDamageHelper {
     const saveType = button.dataset.saveType; // 'reflex', 'endure', 'will'
     const attackType = button.dataset.attackType; // 'melee', 'ranged', or 'cast'
 
+    // Get targets with fallback
+    const storedTargets = this._getTargetsFromButton(button);
+
     let actorsToRoll = [];
 
-    // Smart character detection for players
     if (!game.user.isGM) {
-      // Get all owned character actors (not NPCs)
-      const ownedCharacters = game.actors.filter(a =>
-        a.type === 'character' && a.isOwner
-      );
+      // PLAYER: Use stored targets if available, otherwise smart single-char detection
+      if (storedTargets.length > 0) {
+        const targetTokens = this._resolveStoredTargets(storedTargets);
+        actorsToRoll = targetTokens.map(t => t.actor).filter(a => a && a.isOwner);
 
-      if (ownedCharacters.length === 1) {
-        // Player has exactly 1 owned character - auto-use it
-        actorsToRoll = [ownedCharacters[0]];
-      } else if (ownedCharacters.length > 1) {
-        // Player has multiple characters - require targeting
-        const targetedTokens = Array.from(game.user.targets);
-        if (targetedTokens.length === 0) {
-          ui.notifications.warn('You have multiple characters. Please target the token you want to roll for.');
+        if (actorsToRoll.length === 0) {
+          ui.notifications.warn('None of the targeted tokens belong to you.');
           return;
         }
-        actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
       } else {
-        // Player has no owned characters
-        ui.notifications.warn('You do not own any characters to roll saves for.');
-        return;
+        // Fallback: single-character detection
+        const ownedCharacters = game.actors.filter(a => a.type === 'character' && a.isOwner);
+        if (ownedCharacters.length === 1) {
+          actorsToRoll = [ownedCharacters[0]];
+        } else if (ownedCharacters.length > 1) {
+          ui.notifications.warn('You have multiple characters. Please target the token you want to roll for.');
+          return;
+        } else {
+          ui.notifications.warn('You do not own any characters to roll saves for.');
+          return;
+        }
       }
     } else {
-      // GM must use targeting
-      const targetedTokens = Array.from(game.user.targets);
-      if (targetedTokens.length === 0) {
+      // GM: Use stored targets
+      if (storedTargets.length === 0) {
         ui.notifications.warn('No tokens targeted. Please target at least one token.');
         return;
       }
-      actorsToRoll = targetedTokens.map(t => t.actor).filter(a => a);
+
+      const targetTokens = this._resolveStoredTargets(storedTargets);
+      actorsToRoll = targetTokens.map(t => t.actor).filter(a => a);
     }
 
     // Roll save for each actor
@@ -1588,14 +1701,23 @@ export class VagabondDamageHelper {
     const amount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType.toLowerCase();
 
-    // Get targeted tokens
-    const targetedTokens = Array.from(game.user.targets);
-    if (targetedTokens.length === 0) {
+    // Get targets with fallback system
+    const storedTargets = this._getTargetsFromButton(button);
+
+    if (storedTargets.length === 0) {
       ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Apply restorative effect to each targeted token
+    // Resolve to actual tokens
+    const targetedTokens = this._resolveStoredTargets(storedTargets);
+
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('None of the targeted tokens could be found on this scene.');
+      return;
+    }
+
+    // Apply restorative effect to each resolved target
     for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
@@ -1650,14 +1772,23 @@ export class VagabondDamageHelper {
     const sourceActor = game.actors.get(actorId);
     const sourceItem = sourceActor?.items.get(itemId);
 
-    // Get targeted tokens
-    const targetedTokens = Array.from(game.user.targets);
-    if (targetedTokens.length === 0) {
+    // Get targets with fallback system
+    const storedTargets = this._getTargetsFromButton(button);
+
+    if (storedTargets.length === 0) {
       ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
 
-    // Apply damage to each targeted token
+    // Resolve to actual tokens
+    const targetedTokens = this._resolveStoredTargets(storedTargets);
+
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('None of the targeted tokens could be found on this scene.');
+      return;
+    }
+
+    // Apply damage to each resolved target
     for (const target of targetedTokens) {
       const targetActor = target.actor;
       if (!targetActor) continue;
