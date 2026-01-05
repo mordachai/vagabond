@@ -1,7 +1,3 @@
-2026/01/05-11:44:22.989 cff8 Recovering log #318
-2026/01/05-11:44:22.991 cff8 Delete type=0 #318
-2026/01/05-11:44:22.991 cff8 Delete type=3 #317
-2026/01/05-14:11:51.300 a1ec Level-0 table #322: started
-2026/01/05-14:11:51.300 a1ec Level-0 table #322: 0 bytes OK
-2026/01/05-14:11:51.301 a1ec Delete type=0 #320
-2026/01/05-14:11:51.303 a1ec Manual compaction at level-0 from '!items!0kjmDiLgySCmhswv' @ 72057594037927935 : 1 .. '!items!y1dMToABIEv83o2C' @ 0 : 0; will stop at (end)
+2026/01/05-17:12:12.449 a278 Recovering log #324
+2026/01/05-17:12:12.452 a278 Delete type=0 #324
+2026/01/05-17:12:12.453 a278 Delete type=3 #323
