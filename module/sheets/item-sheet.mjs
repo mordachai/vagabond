@@ -532,9 +532,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
       case 'description':
         context.tab = context.tabs[partId];
-        // Format description for countdown dice (if spell)
+        // Format description for countdown dice (spells and equipment)
         let descriptionToEnrich = this.item.system.description;
-        if (this.item.type === 'spell' && this.item.system.formatDescription) {
+        if (this.item.system.formatDescription) {
           descriptionToEnrich = this.item.system.formatDescription(descriptionToEnrich);
         }
         // Enrich description info for display

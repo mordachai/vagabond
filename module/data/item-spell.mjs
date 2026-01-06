@@ -1,4 +1,5 @@
 import VagabondItemBase from './base-item.mjs';
+import { VagabondTextParser } from '../helpers/text-parser.mjs';
 
 export default class VagabondSpell extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
@@ -99,16 +100,7 @@ export default class VagabondSpell extends VagabondItemBase {
   formatDescription(description) {
     if (!description) return '';
 
-    // Replace countdown dice patterns with clickable spans
-    // Matches: Cd4, Cd6, cd8, CD10, etc. (case-insensitive)
-    const countdownPattern = /C(d\d+)/gi;
-    const formattedDescription = description.replace(countdownPattern, (match, diceNotation) => {
-      // Extract just the number (4, 6, 8, etc.)
-      const diceSize = diceNotation.match(/\d+/)[0];
-      // match is the full match "Cd6", "CD4", etc.
-      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}">${match}</span>`;
-    });
-
-    return formattedDescription;
+    // Use centralized text parser
+    return VagabondTextParser.parseCountdownDice(description);
   }
 }

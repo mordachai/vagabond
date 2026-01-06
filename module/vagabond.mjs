@@ -757,7 +757,21 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 9. Apply Save Damage Button Handler
+  // 9.5 Item Damage Button Handler (for healing potions, bombs, etc)
+  // ---------------------------------------------------------
+  const itemButtons = html.querySelectorAll('.vagabond-item-damage-button');
+
+  itemButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleItemDamageButton(button, message.id);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 10. Apply Save Damage Button Handler
   // ---------------------------------------------------------
   const applySaveButtons = html.querySelectorAll('.vagabond-apply-save-damage-button');
 

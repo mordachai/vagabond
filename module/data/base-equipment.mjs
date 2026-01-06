@@ -1,4 +1,5 @@
 import VagabondItemBase from './base-item.mjs';
+import { VagabondTextParser } from '../helpers/text-parser.mjs';
 
 /**
  * Base Equipment class for all equippable items (weapons, armor, gear, alchemicals, relics)
@@ -477,5 +478,18 @@ export default class VagabondEquipment extends VagabondItemBase {
     };
 
     return metals[this.metal] || metals.none;
+  }
+
+  /**
+   * Format equipment description for countdown dice triggers
+   * Converts "Cdx" or "cdx" patterns to clickable spans for countdown dice creation
+   * @param {string} description - The description text to format
+   * @returns {string} Formatted description with clickable countdown dice triggers
+   */
+  formatDescription(description) {
+    if (!description) return '';
+
+    // Use centralized text parser
+    return VagabondTextParser.parseCountdownDice(description);
   }
 }

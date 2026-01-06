@@ -3,7 +3,17 @@
     {{!-- 1. Black Arrow Header --}}
     <div class="damage-header-container">
         <div class="damage-header-arrow" title="{{damage.formula}}">
-            <span>{{localize "VAGABOND.UI.Sections.Damage"}}</span>
+            <span>
+                {{#if (eq damage.typeKey "healing")}}
+                    {{localize "VAGABOND.UI.Sections.Healing"}}
+                {{else if (eq damage.typeKey "recover")}}
+                    {{localize "VAGABOND.UI.Sections.Recovery"}}
+                {{else if (eq damage.typeKey "recharge")}}
+                    {{localize "VAGABOND.UI.Sections.Recharge"}}
+                {{else}}
+                    {{localize "VAGABOND.UI.Sections.Damage"}}
+                {{/if}}
+            </span>
         </div>
         {{#if damage.isCritical}}
         <div class="crit-label">{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!</div>

@@ -34,9 +34,10 @@ export class VagabondItem extends Item {
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
+   * @param {Array} targetsAtRollTime   Targets captured at use time (optional)
    * @private
    */
-  async roll(event) {
+  async roll(event, targetsAtRollTime = []) {
     const item = this;
     const label = `[${item.type}] ${item.name}`;
 
@@ -53,7 +54,7 @@ export class VagabondItem extends Item {
       // Use VagabondChatCard for equipment items (gear, alchemicals, relics)
       if (item.type === 'equipment') {
         const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-        await VagabondChatCard.gearUse(this.actor, item);
+        await VagabondChatCard.gearUse(this.actor, item, targetsAtRollTime);
         // Handle consumption after successful use
         await this.handleConsumption();
       } else if (item.type === 'container') {
@@ -97,7 +98,25 @@ export class VagabondItem extends Item {
       // Invoke the roll and submit it to chat.
       const roll = new Roll(rollData.formula, rollData.actor);
       await roll.evaluate();
-      await VagabondChatHelper.postRoll(this.actor, roll, label);
+
+      // For equipment items with damage, use VagabondChatCard with targets
+      if (item.type === 'equipment' && item.system.damageType && item.system.damageType !== '-') {
+        const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+        const damageTypeKey = item.system.damageType;
+        const damageTypeLabel = CONFIG.VAGABOND.damageTypes[damageTypeKey] || damageTypeKey;
+
+        await new VagabondChatCard()
+          .setActor(this.actor)
+          .setItem(item)
+          .setTitle(item.name)
+          .addDamage(roll, damageTypeLabel, false, damageTypeKey)
+          .setTargets(targetsAtRollTime)
+          .send();
+      } else {
+        // Fallback to old behavior for items without damage types
+        await VagabondChatHelper.postRoll(this.actor, roll, label);
+      }
+
       // Handle consumption after successful use
       if (item.type === 'equipment') {
         await this.handleConsumption();

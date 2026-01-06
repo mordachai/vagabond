@@ -1,4 +1,5 @@
 import VagabondActorBase from './base-actor.mjs';
+import { VagabondTextParser } from '../helpers/text-parser.mjs';
 
 export default class VagabondNPC extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
@@ -430,28 +431,8 @@ export default class VagabondNPC extends VagabondActorBase {
   formatAbilityDescription(description) {
     if (!description) return '';
 
-    // First, replace countdown dice patterns with clickable spans
-    // Matches: Cd4, Cd6, cd8, CD10, etc. (case-insensitive)
-    // Use data-dice-size instead of data-dice-type to avoid enrichment issues
-    const countdownPattern = /C(d\d+)/gi;
-    let formattedDescription = description.replace(countdownPattern, (match, diceNotation) => {
-      // Extract just the number (4, 6, 8, etc.) to avoid "dX" being treated as a roll
-      const diceSize = diceNotation.match(/\d+/)[0];
-      // match is the full match "Cd6", "CD4", etc.
-      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}">${match}</span>`;
-    });
-
-    // Then replace remaining dice notation with roll links
-    // Matches patterns like: d4, d6, d8, d10, d12, d20, 2d6, 3d8, etc.
-    // Uses negative lookbehind to exclude patterns preceded by 'C' or 'c'
-    const dicePattern = /(?<![Cc])(\d*)d(\d+)/gi;
-    formattedDescription = formattedDescription.replace(dicePattern, (match) => {
-      // Skip if this is inside a span tag (already processed as countdown dice)
-      if (match.includes('span')) return match;
-      return `[[/r ${match}]]`;
-    });
-
-    return formattedDescription;
+    // Use centralized text parser for both countdown dice and regular dice
+    return VagabondTextParser.parseAll(description);
   }
 
   /**
@@ -461,22 +442,7 @@ export default class VagabondNPC extends VagabondActorBase {
   formatExtraInfo(extraInfo) {
     if (!extraInfo) return '';
 
-    // First, replace countdown dice patterns with clickable spans
-    // Use data-dice-size instead of data-dice-type to avoid enrichment issues
-    const countdownPattern = /C(d\d+)/gi;
-    let formattedExtraInfo = extraInfo.replace(countdownPattern, (match, diceNotation) => {
-      // Extract just the number (4, 6, 8, etc.) to avoid "dX" being treated as a roll
-      const diceSize = diceNotation.match(/\d+/)[0];
-      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}">${match}</span>`;
-    });
-
-    // Then replace remaining dice notation with roll links
-    const dicePattern = /(?<![Cc])(\d*)d(\d+)/gi;
-    formattedExtraInfo = formattedExtraInfo.replace(dicePattern, (match) => {
-      if (match.includes('span')) return match;
-      return `[[/r ${match}]]`;
-    });
-
-    return formattedExtraInfo;
+    // Use centralized text parser for both countdown dice and regular dice
+    return VagabondTextParser.parseAll(extraInfo);
   }
 }

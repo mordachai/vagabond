@@ -636,6 +636,203 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Create a damage button for item usage (healing potions, bombs, etc)
+   * @param {string} actorId - Actor ID using the item
+   * @param {string} itemId - Item ID being used
+   * @param {string} damageAmount - Damage formula or flat amount
+   * @param {string} damageType - Damage type key
+   * @param {string} damageTypeLabel - Localized damage type label
+   * @param {string} attackType - Attack type ('melee', 'ranged', 'none')
+   * @param {Array} targetsAtRollTime - Targets captured at use time
+   * @returns {string} HTML button string
+   */
+  static createItemDamageButton(actorId, itemId, damageAmount, damageType, damageTypeLabel, attackType = 'melee', targetsAtRollTime = []) {
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
+
+    // Check if it's a restorative effect
+    const isRestorative = ['healing', 'recover', 'recharge'].includes(damageType);
+
+    // Determine icon and label
+    let icon, label;
+    if (isRestorative) {
+      if (damageType === 'healing') {
+        icon = 'fa-heart';
+        label = `Apply ${damageAmount} Healing`;
+      } else if (damageType === 'recover') {
+        icon = 'fa-spa';
+        label = `Recover ${damageAmount} Fatigue`;
+      } else {
+        icon = 'fa-bolt';
+        label = `Recharge ${damageAmount} Mana`;
+      }
+    } else {
+      // Check if it's a formula or flat damage
+      const isFormula = /d\d+/i.test(damageAmount);
+      icon = isFormula ? 'fa-dice-d20' : 'fa-hashtag';
+      label = isFormula ? `Roll ${damageAmount} Damage` : `Apply ${damageAmount} Damage`;
+    }
+
+    return `
+      <button
+        class="vagabond-item-damage-button"
+        data-actor-id="${actorId}"
+        data-item-id="${itemId}"
+        data-damage-amount="${damageAmount}"
+        data-damage-type="${damageType}"
+        data-damage-type-label="${damageTypeLabel}"
+        data-attack-type="${attackType}"
+        data-targets="${targetsJson}"
+      >
+        <i class="fas ${icon}"></i> ${label}
+      </button>
+    `;
+  }
+
+  /**
+   * Handle item damage button click
+   * @param {HTMLElement} button - The clicked button element
+   * @param {string} messageId - The chat message ID
+   */
+  static async handleItemDamageButton(button, messageId) {
+    const actorId = button.dataset.actorId;
+    const itemId = button.dataset.itemId;
+    const damageAmount = button.dataset.damageAmount;
+    const damageType = button.dataset.damageType;
+    const damageTypeLabel = button.dataset.damageTypeLabel || damageType;
+    const attackType = button.dataset.attackType || 'melee';
+
+    const actor = game.actors.get(actorId);
+    if (!actor) {
+      ui.notifications.error('Actor not found!');
+      return;
+    }
+
+    const item = actor.items.get(itemId);
+    if (!item) {
+      ui.notifications.error('Item not found!');
+      return;
+    }
+
+    // Get targets from button (captured at item use time)
+    const targetsAtRollTime = this._getTargetsFromButton(button);
+
+    // Check if it's a formula or flat value
+    const isFormula = /d\d+/i.test(damageAmount);
+    let damageRoll;
+    let finalDamage;
+
+    if (isFormula) {
+      // Roll damage
+      damageRoll = new Roll(damageAmount, actor.getRollData());
+      await damageRoll.evaluate();
+      finalDamage = damageRoll.total;
+    } else {
+      // Flat damage/healing
+      finalDamage = parseInt(damageAmount);
+      damageRoll = null;
+    }
+
+    // Check if it's restorative or harmful
+    const isRestorative = ['healing', 'recover', 'recharge'].includes(damageType);
+
+    if (isRestorative) {
+      // Post restorative effect message
+      await this.postItemRestorativeEffect(
+        damageRoll,
+        finalDamage,
+        damageTypeLabel,
+        actor,
+        item,
+        damageType,
+        targetsAtRollTime
+      );
+    } else {
+      // Post damage message with save buttons
+      await this.postItemDamage(
+        damageRoll,
+        finalDamage,
+        damageTypeLabel,
+        actor,
+        item,
+        damageType,
+        attackType,
+        targetsAtRollTime
+      );
+    }
+  }
+
+  /**
+   * Post a new chat message with item damage
+   * @param {Roll} damageRoll - The damage roll (or null for flat damage)
+   * @param {number} finalDamage - The final damage amount
+   * @param {string} damageTypeLabel - Localized damage type label
+   * @param {Actor} actor - The actor using the item
+   * @param {Item} item - The item being used
+   * @param {string} damageTypeKey - The damage type key for icon lookup
+   * @param {string} attackType - The attack type ('melee', 'ranged', 'none')
+   * @param {Array} targetsAtRollTime - Targets captured at use time
+   */
+  static async postItemDamage(damageRoll, finalDamage, damageTypeLabel, actor, item, damageTypeKey = 'physical', attackType = 'melee', targetsAtRollTime = []) {
+    // Dynamic Import to avoid circular dependency issues
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+
+    // Handle Flat Damage - create dummy Roll object
+    let rollObj = damageRoll;
+    if (!rollObj) {
+      rollObj = new Roll(`${finalDamage}`);
+      await rollObj.evaluate();
+    }
+
+    // Create damage card with save buttons
+    await VagabondChatCard.createActionCard({
+      actor: actor,
+      item: item,
+      title: `${item.name} Damage`,
+      subtitle: actor.name,
+      damageRoll: rollObj,
+      damageType: damageTypeKey,
+      attackType: attackType,
+      hasDefenses: true,
+      targetsAtRollTime
+    });
+  }
+
+  /**
+   * Post a new chat message with item restorative effect (healing/recover/recharge)
+   * @param {Roll} damageRoll - The healing/recovery roll (or null for flat amount)
+   * @param {number} finalAmount - The final healing/recovery amount
+   * @param {string} damageTypeLabel - Localized effect type label
+   * @param {Actor} actor - The actor using the item
+   * @param {Item} item - The item being used
+   * @param {string} damageTypeKey - The effect type key ('healing', 'recover', 'recharge')
+   * @param {Array} targetsAtRollTime - Targets captured at use time
+   */
+  static async postItemRestorativeEffect(damageRoll, finalAmount, damageTypeLabel, actor, item, damageTypeKey = 'healing', targetsAtRollTime = []) {
+    // Dynamic Import to avoid circular dependency issues
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+
+    // Handle Flat amount - create dummy Roll object
+    let rollObj = damageRoll;
+    if (!rollObj) {
+      rollObj = new Roll(`${finalAmount}`);
+      await rollObj.evaluate();
+    }
+
+    // Create restorative effect card with apply button
+    await VagabondChatCard.createActionCard({
+      actor: actor,
+      item: item,
+      title: item.name,
+      subtitle: actor.name,
+      damageRoll: rollObj,
+      damageType: damageTypeKey,
+      attackType: 'none',
+      hasDefenses: false,
+      targetsAtRollTime
+    });
+  }
+
+  /**
    * Handle NPC damage button click (GM reveals damage to players)
    * @param {HTMLElement} button - The clicked button element
    * @param {string} messageId - The chat message ID

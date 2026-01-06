@@ -2,6 +2,7 @@ import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { VagabondCharBuilder } from '../applications/char-builder.mjs';
+import { VagabondTextParser } from '../helpers/text-parser.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -3792,7 +3793,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         if (!hasDamage) {
             // Redirect to the simple Gear Use card
-            await VagabondChatCard.gearUse(this.actor, item);
+            await VagabondChatCard.gearUse(this.actor, item, targetsAtRollTime);
             // Handle consumption after successful use
             await item.handleConsumption();
             return;
@@ -3806,19 +3807,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const damageTypeKey = item.system.damageType || 'physical';
         const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey] || damageTypeKey);
 
-        const card = new VagabondChatCard()
-          .setType('item-use')
-          .setItem(item)
-          .setActor(this.actor)
-          .setTitle(item.name)
-          .setSubtitle(this.actor.name)
-          .addDamage(roll, damageTypeLabel, false, damageTypeKey);
-        
+        // Check if it's restorative or harmful
+        const isRestorative = ['healing', 'recover', 'recharge'].includes(damageTypeKey);
+
+        // Build description with countdown dice parsing
+        let description = '';
         if (item.system.description) {
-          const enriched = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description, { async: true });
-          card.setDescription(enriched);
+          // Parse countdown dice first
+          const parsedDescription = VagabondTextParser.parseCountdownDice(item.system.description);
+          description = await foundry.applications.ux.TextEditor.enrichHTML(parsedDescription, { async: true });
         }
-        await card.send();
+
+        // Use createActionCard for consistency with other items
+        await VagabondChatCard.createActionCard({
+          actor: this.actor,
+          item: item,
+          title: item.name,
+          subtitle: this.actor.name,
+          damageRoll: roll,
+          damageType: damageTypeKey,
+          description: description,
+          attackType: isRestorative ? 'none' : 'melee',
+          hasDefenses: !isRestorative,
+          targetsAtRollTime: targetsAtRollTime
+        });
+
         // Handle consumption after successful use
         await item.handleConsumption();
         return roll;
@@ -3884,9 +3897,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
 
-    // 2. Delegate to item.roll() which handles consumables, chat cards, and all logic
+    // 2. Capture targets at use time
+    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
+      tokenId: token.id,
+      sceneId: token.scene.id,
+      actorId: token.actor?.id,
+      actorName: token.name,
+      actorImg: token.document.texture.src
+    }));
+
+    // 3. Delegate to item.roll() which handles consumables, chat cards, and all logic
     if (typeof item.roll === 'function') {
-      await item.roll(event);
+      await item.roll(event, targetsAtRollTime);
     }
   }
 

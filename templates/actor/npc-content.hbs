@@ -306,7 +306,7 @@
                 <div class='npc-action-view' data-action-index='{{index}}'>
                   <div class='action-name-line'>
                     <strong>
-                      <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>{{#if action.note}} [{{action.note}}]{{/if}}{{#if action.recharge}} ({{localize "VAGABOND.Actor.NPC.Action.Recharge"}}{{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}){{/if}}{{#if (or action.recharge action.note)}}{{/if}}:
+                      <span class='action-name' data-action='clickActionName' data-index='{{index}}'>{{action.name}}</span>{{#if action.note}} [{{action.note}}]{{/if}}{{#if action.recharge}} ({{localize "VAGABOND.Actor.NPC.Action.Recharge"}} {{{lookup (lookup @root.enrichedActions index) 'rechargeFormatted'}}}){{/if}}{{#if (or action.recharge action.note)}}{{/if}}: 
                     </strong>
                     {{#if (or action.flatDamage action.rollDamage action.damageType)}}
                       {{#if action.damageType}}

@@ -695,6 +695,8 @@
         "Relic": "Relic",
         "Healing": "Healing",
         "Damage": "Damage",
+        "Recovery": "Recovery",
+        "Recharge": "Recharge",
         "Details": "Details",
         "Name": "Name",
         "Favorite": "Favorite",

@@ -600,8 +600,13 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         /* Apply Direct (Full Width) */
         button.vagabond-apply-direct-button,
         button.vagabond-npc-damage-button,
+        button.vagabond-item-damage-button,
         button.vagabond-damage-button,
-        button.vagabond-apply-save-damage-button {
+        button.vagabond-apply-save-damage-button,
+        button.vagabond-apply-healing-button,
+        button.vagabond-apply-recover-button,
+        button.vagabond-apply-recharge-button,
+        button.vagabond-apply-damage-button {
             width: 100%;
             background: transparent !important;
             background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
@@ -986,6 +991,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         width: 150px; height: 30px;
         display: flex; align-items: center; justify-content: center;
         margin-bottom: 5px;
+        gap: 4px;
         filter: drop-shadow( 2px 2px 2px rgba(0, 0, 0, 0.5));
         
         span {
@@ -1004,7 +1010,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                 height: 2px;
                 background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
                 border-radius: 1px;
-                max-width: 40px; /* Limit length so it doesn't touch edges */
+                max-width: 30px; /* Limit length so it doesn't touch edges */
         }
 
             /* The Right Line */
@@ -1014,7 +1020,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                 height: 2px;
                 background: var(--vagabond-c-bluey);
                 border-radius: 1px;
-                max-width: 40px;
+                max-width: 30px;
         }
     }
 
@@ -1042,7 +1048,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             }
 
             .target-name {
-                font-weight: bold;
+                color: $c-dark;
             }
         }
 
@@ -1055,8 +1061,9 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         }
 
         .target-name {
-            font-size: 13px;
-            color: $c-dark;
+            font-size: 14px;
+            color: $c-darkgray;
+            font-weight: 700;
             max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;

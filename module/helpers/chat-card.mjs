@@ -1,3 +1,5 @@
+import { VagabondTextParser } from './text-parser.mjs';
+
 /**
  * Universal chat card builder for Vagabond system
  * Provides a fluent API for creating rich, consistent chat cards
@@ -561,10 +563,11 @@ export class VagabondChatCard {
           propertyDetails = propList;
       }
 
-      // Enrich description
+      // Enrich description with countdown dice parsing
       let description = '';
       if (weapon.system.description) {
-          description = await foundry.applications.ux.TextEditor.enrichHTML(weapon.system.description, { async: true });
+          const parsedDescription = VagabondTextParser.parseCountdownDice(weapon.system.description);
+          description = await foundry.applications.ux.TextEditor.enrichHTML(parsedDescription, { async: true });
       }
 
       // Determine attack type from weapon skill (ranged vs melee)
@@ -667,42 +670,49 @@ export class VagabondChatCard {
 
     // 2. Parse Traits (Tags)
     // Checks if traits exist as a String ("Undead, Flying") or Array
+    // NOTE: Tags are plain text, not enriched HTML, so don't parse countdown dice here
     if (action.traits) {
-        const traitList = Array.isArray(action.traits) 
-            ? action.traits 
+        const traitList = Array.isArray(action.traits)
+            ? action.traits
             : action.traits.split(',').map(t => t.trim());
-            
+
         traitList.forEach(t => {
-            if (t) tags.push({ label: t, cssClass: 'tag-property' }); // Adds standard styling
+            if (t) tags.push({ label: t, cssClass: 'tag-property' });
         });
     }
 
     // 3. Parse Range (if it exists on NPC actions)
+    // NOTE: Tags are plain text, not enriched HTML
     if (action.range) {
          tags.push({ label: action.range, cssClass: 'tag-range' });
     }
 
     // 4. Parse Note (display before Recharge)
+    // NOTE: Tags are plain text, not enriched HTML
     if (action.note) {
         tags.push({ label: action.note, cssClass: 'tag-standard' });
     }
 
     // 5. Recharge Mechanic (display after Note)
+    // NOTE: Tags are plain text, not enriched HTML
     if (action.recharge) {
         tags.push({ label: `Recharge ${action.recharge}`, icon: 'fas fa-rotate', cssClass: 'tag-standard' });
     }
 
-    // 6. Description Enrichment
+    // 6. Description Enrichment with countdown dice parsing
     let description = '';
     if (action.description) {
-      description = await foundry.applications.ux.TextEditor.enrichHTML(action.description, {
+      // Parse countdown dice and regular dice rolls first
+      const parsedDescription = VagabondTextParser.parseAll(action.description);
+      description = await foundry.applications.ux.TextEditor.enrichHTML(parsedDescription, {
         async: true, secrets: actor.isOwner, relativeTo: actor
       });
     }
 
-    // 7. Extra Info (common in 5e-style NPC blocks)
+    // 7. Extra Info (common in 5e-style NPC blocks) with countdown dice parsing
     if (action.extraInfo) {
-      const extra = await foundry.applications.ux.TextEditor.enrichHTML(action.extraInfo, { async: true });
+      const parsedExtraInfo = VagabondTextParser.parseAll(action.extraInfo);
+      const extra = await foundry.applications.ux.TextEditor.enrichHTML(parsedExtraInfo, { async: true });
       description += `<hr class="action-divider"><div class="action-extra-info">${extra}</div>`;
     }
 
@@ -770,13 +780,18 @@ export class VagabondChatCard {
    * @param {Item|Object} item - Item document or data object
    * @returns {Promise<ChatMessage>}
    */
-  static async itemUse(actor, item) {
+  static async itemUse(actor, item, targetsAtRollTime = []) {
     let description = '';
 
     // ROBUST CHECK:
     // If it's a full Item, description is in item.system.description.
     // If it's a plain Data Object (from Class/Ancestry), it's likely just item.description.
-    const rawDescription = item.system?.description || item.description || '';
+    let rawDescription = item.system?.description || item.description || '';
+
+    // Format description for countdown dice if the item has a formatDescription method
+    if (rawDescription && item.system?.formatDescription) {
+      rawDescription = item.system.formatDescription(rawDescription);
+    }
 
     if (rawDescription) {
       description = await foundry.applications.ux.TextEditor.enrichHTML(rawDescription, {
@@ -793,13 +808,40 @@ export class VagabondChatCard {
     // Real items have a UUID or id. Data objects might not.
     const isRealItem = !!item.id || !!item.uuid;
 
+    // Check if item has damage/healing effects that need buttons
+    const footerActions = [];
+    if (item.type === 'equipment' && item.system?.damageAmount && item.system?.damageType && item.system.damageType !== '-') {
+      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      const damageType = item.system.damageType;
+      const damageAmount = item.system.damageAmount;
+      const damageTypeLabel = this._getDamageTypeLabel(damageType);
+
+      // Determine if it's restorative (healing/recover/recharge) or harmful
+      const isRestorative = ['healing', 'recover', 'recharge'].includes(damageType);
+      const attackType = isRestorative ? 'none' : 'melee'; // Default attack type for non-restorative items
+
+      footerActions.push(
+        VagabondDamageHelper.createItemDamageButton(
+          actor.id,
+          item.id,
+          damageAmount,
+          damageType,
+          damageTypeLabel,
+          attackType,
+          targetsAtRollTime
+        )
+      );
+    }
+
     return this.createActionCard({
         actor,
         // Only pass 'item' if it's a real document, otherwise null prevents linking errors
         item: isRealItem ? item : null,
         title: item.name || "Feature",
         cardType: 'item-use',
-        description
+        description,
+        targetsAtRollTime,
+        footerActions
     });
   }
 
@@ -958,8 +1000,8 @@ export class VagabondChatCard {
   }
 
   // 9. GEAR USE ADAPTER
-  static async gearUse(actor, item) {
-    return this.itemUse(actor, item);
+  static async gearUse(actor, item, targetsAtRollTime = []) {
+    return this.itemUse(actor, item, targetsAtRollTime);
   }
 
   // 10. FEATURE DATA USE ADAPTER
