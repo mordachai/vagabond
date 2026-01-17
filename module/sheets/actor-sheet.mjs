@@ -1671,11 +1671,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
 
       card.addEventListener('drop', async (event) => {
+        const dragData = event.dataTransfer.getData('text/plain');
+        const draggedItemId = this._extractItemIdFromDragData(dragData);
+        
+        // Check if item is internal (reordering)
+        const draggedItem = this.actor.items.get(draggedItemId);
+        if (!draggedItem) {
+          // External item - let it bubble to main sheet handler
+          this._clearAllDragStates();
+          return;
+        }
+
         event.preventDefault();
         event.stopPropagation();
 
-        const dragData = event.dataTransfer.getData('text/plain');
-        const draggedItemId = this._extractItemIdFromDragData(dragData);
         const targetItemId = card.dataset.itemId;
 
         // Clear drag states immediately
@@ -1783,14 +1792,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
 
       slot.addEventListener('drop', async (event) => {
+        const dragData = event.dataTransfer.getData('text/plain');
+        const itemId = this._extractItemIdFromDragData(dragData);
+        
+        // Check if item is internal (reordering)
+        const draggedItem = this.actor.items.get(itemId);
+        if (!draggedItem) {
+          // External item - let it bubble to main sheet handler
+          this._clearAllDragStates();
+          return;
+        }
+
         event.preventDefault();
         event.stopPropagation();
 
         // Clear drag states immediately
         this._clearAllDragStates();
 
-        const dragData = event.dataTransfer.getData('text/plain');
-        const itemId = this._extractItemIdFromDragData(dragData);
         const slotIndex = parseInt(slot.dataset.slotIndex);
 
         // Check if drop is valid
