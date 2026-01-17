@@ -98,7 +98,6 @@ export class VagabondDamageHelper {
       try {
         const stored = JSON.parse(button.dataset.targets.replace(/&quot;/g, '"'));
         if (stored && stored.length > 0) {
-          console.log('VagabondDamageHelper | Using stored targets from button:', stored.length);
           return stored;
         }
       } catch (e) {
@@ -110,7 +109,6 @@ export class VagabondDamageHelper {
     if (message?.flags?.vagabond?.targetsAtRollTime) {
       const flagTargets = message.flags.vagabond.targetsAtRollTime;
       if (flagTargets && flagTargets.length > 0) {
-        console.log('VagabondDamageHelper | Using stored targets from message flags:', flagTargets.length);
         return flagTargets;
       }
     }
@@ -123,10 +121,6 @@ export class VagabondDamageHelper {
       actorName: token.name,
       actorImg: token.document.texture.src
     }));
-
-    if (currentTargets.length > 0) {
-      console.log('VagabondDamageHelper | Using current game.user.targets (fallback):', currentTargets.length);
-    }
 
     return currentTargets;
   }

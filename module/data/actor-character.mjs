@@ -415,7 +415,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     const hpPerLevelBonus = this.bonuses.hpPerLevel || 0;
     const flatHpBonus = this.health.bonus || 0;
 
-    this.health.max = (mightTotal * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
+    // Calculate base derived Max HP
+    const baseMaxHP = (mightTotal * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
+    
+    // Add to existing value (which includes Active Effects modifications)
+    this.health.max = (this.health.max || 0) + baseMaxHP;
 
 
     // ------------------------------------------------------------------

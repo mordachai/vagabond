@@ -35,4 +35,11 @@ export default class VagabondActorBase extends foundry.abstract
 
     return schema;
   }
+
+  prepareBaseData() {
+    // Reset derived fields that might be targets of Active Effects
+    // This ensures we don't accumulate values from previous save/load cycles
+    // when adding calculated values in prepareDerivedData.
+    if (this.health) this.health.max = 0;
+  }
 }

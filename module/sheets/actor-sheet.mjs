@@ -1319,19 +1319,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Add Check Modifier right-click handler
     const checkModLabel = this.element.querySelector('[data-action="modifyCheckBonus"]');
     if (checkModLabel) {
-      console.log('Vagabond | Check Mod label found:', checkModLabel);
-
       // Right-click: decrease check bonus
       checkModLabel.addEventListener('contextmenu', async (event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        console.log('Vagabond | Check Mod right-clicked');
         const currentBonus = this.actor.system.universalCheckBonus || 0;
-        console.log('Vagabond | Current bonus:', currentBonus);
 
         await this.actor.update({ 'system.universalCheckBonus': currentBonus - 1 });
-        console.log('Vagabond | Updated to:', currentBonus - 1);
       });
 
       // Make cursor show it's clickable
@@ -1589,22 +1584,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _attachInventoryGridListeners() {
     const inventoryCards = this.element.querySelectorAll('.inventory-card');
 
-    console.log(`Attaching listeners to ${inventoryCards.length} inventory cards`);
-
     inventoryCards.forEach(card => {
       const itemId = card.dataset.itemId;
 
       // Single-click: Show mini-sheet (FOR TESTING)
       card.addEventListener('click', (event) => {
         event.preventDefault();
-        console.log('Click detected on item:', itemId);
         this._showInventoryMiniSheet(event, itemId);
       });
 
       // Double-click: Open item sheet
       card.addEventListener('dblclick', (event) => {
         event.preventDefault();
-        console.log('Double-click detected on item:', itemId);
         const item = this.actor.items.get(itemId);
         if (item) item.sheet.render(true);
       });
@@ -1612,13 +1603,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // Right-click: Show context menu
       card.addEventListener('contextmenu', (event) => {
         event.preventDefault();
-        console.log('Right-click detected on item:', itemId);
         this._showInventoryContextMenu(event, itemId, card);
       });
 
       // Drag start
       card.addEventListener('dragstart', (event) => {
-        console.log('Drag start:', itemId);
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
@@ -1637,7 +1626,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Drag end
       card.addEventListener('dragend', (event) => {
-        console.log('Drag end:', itemId);
         this._clearAllDragStates();
       });
 
@@ -1767,15 +1755,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           return;
         }
 
-        console.log(`Sliding item ${draggedItemId} to position ${targetPos}`);
-
         await this._slideItemToPosition(draggedItemId, targetPos);
       });
     });
 
     // Handle drops on empty slots
     const emptySlots = this.element.querySelectorAll('.inventory-slot.empty-slot');
-    console.log(`Attaching listeners to ${emptySlots.length} empty slots`);
 
     emptySlots.forEach(slot => {
       slot.addEventListener('dragover', (event) => {
@@ -1814,8 +1799,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           return;
         }
 
-        console.log(`Sliding item ${itemId} to position ${slotIndex}`);
-
         await this._slideItemToPosition(itemId, slotIndex);
       });
     });
@@ -1825,7 +1808,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       // If clicking anywhere (not during drag), clear any stuck states
       const draggingItems = this.element.querySelectorAll('.inventory-card[data-is-dragging="true"]');
       if (draggingItems.length > 0) {
-        console.log('Clearing stuck drag states from click');
         this._clearAllDragStates();
       }
     });

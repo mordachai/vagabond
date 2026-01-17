@@ -133,6 +133,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       // ===== BASE ACTOR VARIABLES =====
       'system.health.value': 'Health: Current HP',
       'system.health.max': 'Health: Max HP',
+      'system.health.bonus': 'Health: Flat HP Bonus (Applied to Max)',
       'system.power.value': 'Power: Current',
       'system.power.max': 'Power: Max',
       'system.fatigue': 'Fatigue (0-5)',
@@ -248,10 +249,11 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== NPC-SPECIFIC VARIABLES =====
       'system.cr': 'NPC: Challenge Rating',
-      'system.hd': 'NPC: Hit Dice',
+      'system.threatLevel': 'NPC: Threat Level',
+      'system.hd': 'NPC: Hit Dice (HP)',
       'system.morale': 'NPC: Morale',
       'system.appearing': 'NPC: Number Appearing',
-      // 'system.speed': 'NPC: Speed', // Commented out to prefer the detailed speed object below if applicable, or keep for NPC specific string
+      'system.speed': 'NPC: Speed (Flat)',
       'system.senses': 'NPC: Senses',
       'system.armor': 'NPC: Armor Value',
       'system.armorBonus': 'Armor: Global Bonus (Flat Add)',

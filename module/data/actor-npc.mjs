@@ -291,7 +291,10 @@ export default class VagabondNPC extends VagabondActorBase {
     // Calculate HP max based on HD and size
     // If size is small: HD * 1, otherwise: HD * 4.5 (rounded down)
     const isSmall = this.size === 'small';
-    this.health.max = isSmall ? this.hd : Math.floor(this.hd * 4.5);
+    const baseMaxHP = isSmall ? this.hd : Math.floor(this.hd * 4.5);
+    
+    // Add to existing value (which includes Active Effects modifications)
+    this.health.max = (this.health.max || 0) + baseMaxHP;
 
     // Format appearing for display in locked mode
     if (this.locked && this.appearing) {

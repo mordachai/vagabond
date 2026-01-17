@@ -182,6 +182,9 @@ globalThis.vagabond = {
 };
 
 Hooks.once('init', async function () {
+  // Register game settings first to avoid preparation errors
+  registerGameSettings();
+
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
   
@@ -230,7 +233,7 @@ Hooks.once('init', async function () {
 
   // Register custom ActiveEffectConfig sheet
   const VagabondActiveEffectConfig = (await import('./applications/active-effect-config.mjs')).default;
-  DocumentSheetConfig.registerSheet(ActiveEffect, 'vagabond', VagabondActiveEffectConfig, {
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(ActiveEffect, 'vagabond', VagabondActiveEffectConfig, {
     makeDefault: true,
     label: 'VAGABOND.Effect.ConfigSheet'
   });
@@ -251,9 +254,6 @@ Hooks.once('init', async function () {
     makeDefault: true,
     label: 'VAGABOND.SheetLabels.Item',
   });
-
-  // Register game settings
-  registerGameSettings();
 });
 
 /* -------------------------------------------- */
@@ -367,14 +367,13 @@ Hooks.on('canvasReady', async () => {
  * Add scene controls for Vagabond tools
  */
 Hooks.on('getSceneControlButtons', (controls) => {
-  // Add Vagabond control group
+  // Add Vagabond control group (v13 uses object structure)
   controls.vagabond = {
     name: 'vagabond',
     title: 'Vagabond Tools',
     icon: 'fas fa-circle-v',
     layer: 'tokens',
     activeTool: 'select',
-    // CHANGE: 'tools' is now an Object keyed by tool name, not an Array
     tools: {
       select: {
         name: 'select',
@@ -1195,9 +1194,6 @@ async function promptRandomChallenge() {
   // -- BASE64 CONVERSION --
   // This uses standard browser encoding. It is consistent everywhere.
   const encodedAttempt = window.btoa(cleanInput);
-
-  // -- DEBUGGING --
-  console.log(`Input: "${cleanInput}" | Encoded: ${encodedAttempt} | Expected: ${challenge.h[0]}`);
 
   if (challenge.h.includes(encodedAttempt)) {
     ui.notifications.info("Access Granted.");

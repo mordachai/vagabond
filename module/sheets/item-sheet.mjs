@@ -464,10 +464,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
         // Load items from stored item data
         context.containerItems = [];
-        console.log('Loading container items, count:', this.item.system.items.length);
         for (let i = 0; i < this.item.system.items.length; i++) {
           const itemData = this.item.system.items[i];
-          console.log('Loading container item data:', itemData);
           try {
             // itemData is now the full item object, not just a reference
             let damageDisplay = '—';
@@ -521,13 +519,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
               costDisplay: costDisplay,
               index: i
             };
-            console.log('Adding item to containerItems:', displayData);
             context.containerItems.push(displayData);
           } catch (error) {
             console.warn(`Failed to load item at index ${i}:`, error);
           }
         }
-        console.log('Final containerItems array:', context.containerItems);
         break;
 
       case 'description':
@@ -840,7 +836,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * Add a skill to the guaranteed list.
    */
   static async _onAddGuaranteedSkill(event, target) {
-    console.log("VAGABOND | Action: _onAddGuaranteedSkill");
     const select = this.element.querySelector('#guaranteed-skill-select');
     if (!select) {
       console.error("VAGABOND | Selector #guaranteed-skill-select not found");
@@ -1358,7 +1353,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   async _onDrop(event) {
-    console.log('Drop event received on item sheet', 'target:', event.target);
     event.preventDefault();
 
     // CRITICAL: Check for ProseMirror BEFORE calling getDragEventData()
@@ -1367,7 +1361,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                                 event.target.closest('.ProseMirror');
     if (isProseMirrorEditor) {
       // Don't consume the event - let ProseMirror handle it
-      console.log('Drop on ProseMirror editor content, ignoring');
       return;
     }
 
@@ -1375,7 +1368,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     let data;
     try {
       const textData = event.dataTransfer.getData('text/plain');
-      console.log('Raw text data:', textData);
       if (textData) {
         data = JSON.parse(textData);
       } else {
@@ -1386,11 +1378,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       data = foundry.applications.ux.TextEditor.getDragEventData(event);
     }
 
-    console.log('Parsed drop data:', data);
     const item = this.item;
     const allowed = Hooks.call('dropItemSheetData', item, this, data);
     if (allowed === false) {
-      console.log('Drop prevented by hook');
       return;
     }
 
@@ -1400,7 +1390,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'Actor':
         return this._onDropActor(event, data);
       case 'Item':
-        console.log('Calling _onDropItem');
         return this._onDropItem(event, data);
       case 'Folder':
         return this._onDropFolder(event, data);

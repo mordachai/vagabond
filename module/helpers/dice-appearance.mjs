@@ -36,7 +36,6 @@ export class VagabondDiceAppearance {
    */
   static registerColorsets() {
     if (!game.dice3d) {
-      console.log('Vagabond | Dice So Nice not available, skipping colorset registration');
       return;
     }
 
@@ -65,7 +64,6 @@ export class VagabondDiceAppearance {
         edge: '#dc2626'
       }, 'default');
 
-      console.log('Vagabond | Registered Dice So Nice colorsets for favor/hinder');
     } catch (error) {
       console.error('Vagabond | Failed to register Dice So Nice colorsets:', error);
     }

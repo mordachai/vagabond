@@ -146,7 +146,6 @@ export class VagabondMeasureTemplates {
     let centroid = null;
     if (resolvedTargets.length > 0) {
       centroid = this._calculateTargetCentroid(resolvedTargets);
-      console.log(`VagabondMeasureTemplates | Calculated centroid from ${resolvedTargets.length} stored targets:`, centroid);
     }
 
     // 5. Construct Data with centroid
