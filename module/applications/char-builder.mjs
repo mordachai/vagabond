@@ -4,6 +4,8 @@
  */
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
+import { VagabondUIHelper } from '../helpers/ui-helper.mjs';
+
 export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV2) {
   constructor(actor, options = {}) {
     super(options);
@@ -123,6 +125,22 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // --- 2. APPLY BUILDER STATS ---
     for (const [key, val] of Object.entries(this.builderData.stats)) {
         if (val !== null && actorData.system.stats[key]) actorData.system.stats[key].value = val;
+    }
+
+    // --- 2.5 APPLY BUILDER SKILLS & CLASS SKILLS ---
+    const skillsToTrain = [...this.builderData.skills];
+    // Fetch class item if exists to get guaranteed skills
+    const classItemObj = this.builderData.class ? await fromUuid(this.builderData.class) : null;
+    if (classItemObj) {
+        const guaranteed = classItemObj.system.skillGrant?.guaranteed || [];
+        for (const s of guaranteed) {
+            if (!skillsToTrain.includes(s)) skillsToTrain.push(s);
+        }
+    }
+
+    for (const sKey of skillsToTrain) {
+        if (actorData.system.skills && actorData.system.skills[sKey]) actorData.system.skills[sKey].trained = true;
+        if (actorData.system.weaponSkills && actorData.system.weaponSkills[sKey]) actorData.system.weaponSkills[sKey].trained = true;
     }
 
     // --- 3. INJECT ITEMS ---
@@ -366,7 +384,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       },
       originRefs: await this._getOriginReferences(),
       classChoices: await this._prepareClassChoices(),
-      statData: this._prepareStatsContext(),
+      statData: this._prepareStatsContext(previewActor),
       isGearStep: this.currentStep === 'gear',
       showTray: ['perks', 'spells', 'gear'].includes(this.currentStep),
       trayData,
@@ -430,8 +448,92 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     };
   }
 
-  _prepareStatsContext() {
+  _prepareStatsContext(actor) {
     const labels = { might: "Might", dexterity: "Dexterity", awareness: "Awareness", reason: "Reason", presence: "Presence", luck: "Luck" };
+    
+    // Prepare Derived Data (Saves, Skills, Weapon Skills)
+    const derived = {
+        saves: [],
+        skills: [],
+        weaponSkills: [],
+        hpTooltip: VagabondUIHelper.getAttributeTooltip('derived', 'hp', actor),
+        luckTooltip: VagabondUIHelper.getAttributeTooltip('derived', 'luck', actor),
+        inventoryTooltip: VagabondUIHelper.getAttributeTooltip('derived', 'inventory', actor),
+        speedTooltip: VagabondUIHelper.getAttributeTooltip('derived', 'speed', actor),
+        manaMaxTooltip: VagabondUIHelper.getAttributeTooltip('derived', 'manaMax', actor),
+        manaCastTooltip: VagabondUIHelper.getAttributeTooltip('derived', 'manaCast', actor)
+    };
+
+    if (actor) {
+        // Saves
+        for (const [key, save] of Object.entries(actor.system.saves)) {
+            let stats = [];
+            if (key === 'reflex') stats = ['dexterity', 'awareness'];
+            else if (key === 'endure') stats = ['might', 'might'];
+            else if (key === 'will') stats = ['reason', 'presence'];
+
+            const statAbbrs = stats.map(s => game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[s])).join('+');
+            
+            derived.saves.push({
+                key,
+                label: save.label,
+                statAbbr: statAbbrs,
+                value: save.difficulty,
+                tooltip: VagabondUIHelper.getAttributeTooltip('save', key, actor)
+            });
+        }
+
+        // Skills (Following en.json order or alphabetical)
+        const skillKeys = Object.keys(CONFIG.VAGABOND.skills);
+        for (const key of skillKeys) {
+            const skill = actor.system.skills[key];
+            if (!skill) continue;
+
+            const statAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]);
+
+            derived.skills.push({
+                key,
+                label: skill.label,
+                statAbbr: statAbbr,
+                trained: skill.trained,
+                value: skill.difficulty,
+                tooltip: VagabondUIHelper.getAttributeTooltip('skill', key, actor)
+            });
+        }
+
+        // Weapon Skills
+        const weaponSkillKeys = ['melee', 'ranged', 'brawl', 'finesse']; // Core weapon skills
+        for (const key of weaponSkillKeys) {
+            const skill = actor.system.weaponSkills[key];
+            if (!skill) continue;
+
+            const statAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]);
+
+            derived.weaponSkills.push({
+                key,
+                label: skill.label,
+                statAbbr: statAbbr,
+                trained: skill.trained,
+                value: skill.difficulty,
+                tooltip: VagabondUIHelper.getAttributeTooltip('weaponSkill', key, actor)
+            });
+        }
+    }
+
+    // Update Primary Derived Stat Labels with Stat Abbreviations
+    const migAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations['might']);
+    const dexAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations['dexterity']);
+    const lukAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations['luck']);
+    const castStat = actor?.system.attributes.castingStat;
+    const castAbbr = castStat ? game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[castStat]) : '';
+
+    derived.hp = { label: 'HP', statAbbr: migAbbr };
+    derived.manaMax = { label: game.i18n.localize("VAGABOND.Actor.Character.FIELDS.mana.max.label"), statAbbr: castAbbr };
+    derived.manaCast = { label: game.i18n.localize("VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"), statAbbr: castAbbr };
+    derived.luck = { label: 'Luck Pool', statAbbr: lukAbbr };
+    derived.inventory = { label: 'Inventory', statAbbr: migAbbr };
+    derived.speed = { label: 'Speed', statAbbr: dexAbbr };
+
     return {
       slots: Object.entries(this.builderData.stats).map(([key, value]) => ({ key, label: labels[key], value })),
       unassigned: this.builderData.unassignedValues.map((v, i) => ({ 
@@ -442,7 +544,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       arrays: Object.entries(this.statArrays).map(([id, values]) => ({ 
         id, values: values.join(', '), 
         selected: this.builderData.selectedArrayId === id 
-      }))
+      })),
+      derived
     };
   }
 
@@ -1294,6 +1397,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     const actor = this.actor;
     const data = this.builderData;
+    
+    // 1. Initial Update: Stats & Currency
     const updateData = {
         "system.stats.might.value": data.stats.might,
         "system.stats.dexterity.value": data.stats.dexterity,
@@ -1311,7 +1416,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     };
 
     if (data.ancestry) await addByUuid(data.ancestry);
-    if (data.class) await addByUuid(data.class);
+    
+    // Get class item for later skill check
+    let classItem = null;
+    if (data.class) {
+        await addByUuid(data.class);
+        classItem = await fromUuid(data.class);
+    }
 
     // Handle starting pack - add the pack itself AND extract its items
     if (data.startingPack) {
@@ -1346,12 +1457,71 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const allPerks = [...new Set([...data.classPerks, ...data.perks])];
     for (const uuid of [...allPerks, ...data.spells, ...data.gear]) await addByUuid(uuid);
 
+    // FIX: Auto-equip items and favorite spells
+    itemsToCreate.forEach(item => {
+        // Auto-favorite spells
+        if (item.type === 'spell') {
+            foundry.utils.setProperty(item, 'system.favorite', true);
+        } 
+        // Auto-equip Armor
+        else if (item.type === 'armor') {
+            foundry.utils.setProperty(item, 'system.equipped', true);
+        } 
+        else if (item.type === 'equipment' && item.system.equipmentType === 'armor') {
+            foundry.utils.setProperty(item, 'system.equipped', true);
+        } 
+        // Auto-equip Weapons
+        else if (item.type === 'weapon' || (item.type === 'equipment' && item.system.equipmentType === 'weapon')) {
+            const grip = item.system.grip;
+            // Default to oneHand unless it's strictly 2H
+            const state = (grip === '2H') ? 'twoHands' : 'oneHand';
+            foundry.utils.setProperty(item, 'system.equipmentState', state);
+            // Also set equipped flag for compatibility
+            foundry.utils.setProperty(item, 'system.equipped', true);
+        }
+    });
+
+    // Execute first update (Stats) and Item Creation
     await actor.update(updateData);
     await actor.createEmbeddedDocuments("Item", itemsToCreate);
 
-    const skillUpdates = {};
-    for (const sKey of data.skills) skillUpdates[`system.skills.${sKey}.trained`] = true;
-    await actor.update(skillUpdates);
+    // 2. Final Update: Skills & Derived Pools (HP, Luck, Mana)
+    // We do this AFTER item creation so that derived data (like Max HP from perks/stats) is accurate
+    const finalUpdates = {};
+
+    // Merge guaranteed class skills with selected skills
+    const skillsToTrain = [...data.skills];
+    if (classItem) {
+        const guaranteed = classItem.system.skillGrant?.guaranteed || [];
+        for (const s of guaranteed) {
+            if (!skillsToTrain.includes(s)) skillsToTrain.push(s);
+        }
+    }
+    
+    for (const sKey of skillsToTrain) {
+        // Check and update standard skills
+        if (actor.system.skills && sKey in actor.system.skills) {
+            finalUpdates[`system.skills.${sKey}.trained`] = true;
+        }
+        // Check and update weapon skills (e.g., melee, ranged)
+        if (actor.system.weaponSkills && sKey in actor.system.weaponSkills) {
+            finalUpdates[`system.weaponSkills.${sKey}.trained`] = true;
+        }
+    }
+
+    // Set Pools to Max
+    // HP: Use the now-calculated max from the actor
+    finalUpdates["system.health.value"] = actor.system.health.max;
+    
+    // Luck: Use the Luck stat value (which is the max for the pool)
+    finalUpdates["system.currentLuck"] = actor.system.stats.luck.value;
+
+    // Mana: If spellcaster, set to max
+    if (actor.system.attributes.isSpellcaster) {
+        finalUpdates["system.mana.current"] = actor.system.mana.max;
+    }
+
+    await actor.update(finalUpdates);
 
     ui.notifications.info(`Character ${actor.name} successfully created!`);
     this.close();

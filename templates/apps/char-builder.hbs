@@ -244,40 +244,95 @@
                     {{#unless instruction}}
                     <div class="stats-preview-results">
                         <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.DerivedStats"}}</h3>
-                        <div class="preview-details-grid">
+                        <div class="preview-skills-grid stats-grid">
                             {{!-- Primary Derived Stats --}}
-                            <div class="stat-box"><strong>HP:</strong> {{actor.system.health.max}}</div>
+                            <div class="skill-item" title="{{statData.derived.hpTooltip}}">
+                                <span class="skill-name">{{statData.derived.hp.label}} <span class="stat-abbr">[{{statData.derived.hp.statAbbr}}]</span></span>
+                                <span class="skill-dots"></span>
+                                <span class="skill-value">{{actor.system.health.max}}</span>
+                            </div>
                             
                             {{!-- Spellcasting Stats (Only visible if Spellcaster) --}}
                             {{#if isSpellcaster}}
-                                <div class="stat-box mana-box">
-                                    <strong>{{localize "VAGABOND.Actor.Character.FIELDS.mana.max.label"}}:</strong> {{manaStats.max}}
+                                <div class="skill-item" title="{{statData.derived.manaMaxTooltip}}">
+                                    <span class="skill-name">{{statData.derived.manaMax.label}} <span class="stat-abbr">[{{statData.derived.manaMax.statAbbr}}]</span></span>
+                                    <span class="skill-dots"></span>
+                                    <span class="skill-value">{{manaStats.max}}</span>
                                 </div>
-                                <div class="stat-box mana-box">
-                                    <strong>{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}:</strong> {{manaStats.castingMax}}
+                                <div class="skill-item" title="{{statData.derived.manaCastTooltip}}">
+                                    <span class="skill-name">{{statData.derived.manaCast.label}} <span class="stat-abbr">[{{statData.derived.manaCast.statAbbr}}]</span></span>
+                                    <span class="skill-dots"></span>
+                                    <span class="skill-value">{{manaStats.castingMax}}</span>
                                 </div>
                             {{/if}}
 
-                            <div class="stat-box"><strong>Luck Pool:</strong> {{actor.system.stats.luck.value}}</div>
-                            <div class="stat-box"><strong>Inventory:</strong> {{actor.system.inventory.maxSlots}} Slots</div>
+                            <div class="skill-item" title="{{statData.derived.luckTooltip}}">
+                                <span class="skill-name">{{statData.derived.luck.label}} <span class="stat-abbr">[{{statData.derived.luck.statAbbr}}]</span></span>
+                                <span class="skill-dots"></span>
+                                <span class="skill-value">{{actor.system.stats.luck.value}}</span>
+                            </div>
+                            <div class="skill-item" title="{{statData.derived.inventoryTooltip}}">
+                                <span class="skill-name">{{statData.derived.inventory.label}} <span class="stat-abbr">[{{statData.derived.inventory.statAbbr}}]</span></span>
+                                <span class="skill-dots"></span>
+                                <span class="skill-value">{{actor.system.inventory.maxSlots}}</span>
+                            </div>
                             
-                            {{!-- Movement Row --}}
-                            <div class="grid-span-all movement-row">
-                                <strong>Speed:</strong> {{actor.system.speed.base}}ft | 
-                                <strong>Crawl:</strong> {{actor.system.speed.crawl}}ft | 
-                                <strong>Travel:</strong> {{actor.system.speed.travel}} mi/day
+                            <div class="skill-item" title="{{statData.derived.speedTooltip}}">
+                                <span class="skill-name">{{statData.derived.speed.label}} <span class="stat-abbr">[{{statData.derived.speed.statAbbr}}]</span></span>
+                                <span class="skill-dots"></span>
+                                <span class="skill-value">{{actor.system.speed.base}}</span>
                             </div>
                         </div>
-
                     </div>
-                    {{!-- Saves Row --}}
+
+                    {{!-- Saves --}}
                     <div class="stats-preview-results">
-                            <h3 class="preview-section-header">{{localize "VAGABOND.Saves.savesTitle"}}</h3>
-                                <div class="preview-details-grid">
-                                <div class="stat-box"><strong>Reflex:</strong> {{actor.system.saves.reflex.difficulty}}</div>
-                                <div class="stat-box"><strong>Endure:</strong> {{actor.system.saves.endure.difficulty}}</div>
-                                <div class="stat-box"><strong>Will:</strong> {{actor.system.saves.will.difficulty}}</div>
-                            </div>
+                        <h3 class="preview-section-header">{{localize "VAGABOND.Saves.savesTitle"}}</h3>
+                        <div class="preview-skills-grid saves-grid grid-3col">
+                            {{#each statData.derived.saves}}
+                                <div class="skill-item" title="{{this.tooltip}}">
+                                    <span class="skill-name">{{this.label}} <span class="stat-abbr">[{{this.statAbbr}}]</span></span>
+                                    <span class="skill-dots"></span>
+                                    <span class="skill-value">{{this.value}}</span>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    {{!-- Skills (4 Columns) --}}
+                    <div class="stats-preview-results">
+                        <h3 class="preview-section-header">{{localize "VAGABOND.UI.Sections.Skills"}}</h3>
+                        <div class="preview-skills-grid skills-4-col">
+                            {{#each statData.derived.skills}}
+                                <div class="skill-item {{#if this.trained}}trained{{/if}}" title="{{this.tooltip}}">
+                                    <span class="skill-name">
+                                        {{#if this.trained}}<strong>{{/if}}
+                                        {{this.label}} <span class="stat-abbr">[{{this.statAbbr}}]</span>
+                                        {{#if this.trained}}</strong>{{/if}}
+                                    </span>
+                                    <span class="skill-dots"></span>
+                                    <span class="skill-value">{{this.value}}</span>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    {{!-- Weapon Skills (4 Columns) --}}
+                    <div class="stats-preview-results">
+                        <h3 class="preview-section-header">Weapon Skills</h3>
+                        <div class="preview-skills-grid weapon-skills-4-col">
+                            {{#each statData.derived.weaponSkills}}
+                                <div class="skill-item {{#if this.trained}}trained{{/if}}" title="{{this.tooltip}}">
+                                    <span class="skill-name">
+                                        {{#if this.trained}}<strong>{{/if}}
+                                        {{this.label}} <span class="stat-abbr">[{{this.statAbbr}}]</span>
+                                        {{#if this.trained}}</strong>{{/if}}
+                                    </span>
+                                    <span class="skill-dots"></span>
+                                    <span class="skill-value">{{this.value}}</span>
+                                </div>
+                            {{/each}}
+                        </div>
                     </div>
                     {{/unless}}
                 {{/if}}

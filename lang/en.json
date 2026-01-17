@@ -27,6 +27,26 @@
       "Sneak": "Sneak",
       "Survival": "Survival"
     },
+    "SkillsHints": {
+      "Arcana": "Application and knowledge of magic.",
+      "Brawl": "Exerting physical force. Used for Grapples, Shoves, and attacks with Brawl Weapons.",
+      "Craft": "Your skill to appraise and make Items.",
+      "Detect": "Reflexively sensing others.",
+      "Finesse": "Coordination and concealing your actions. Also used for thievery, and when attacking with Finesse Weapons.",
+      "Influence": "Social ability of coercion, deception, or negotiation.",
+      "Leadership": "Social motivation and diplomacy.",
+      "Medicine": "Education in non-magical healing.",
+      "Mysticism": "Understanding of the supernatural.",
+      "Performance": "Cultural talent and ability to inspire awe.",
+      "Sneak": "Concealing your location.",
+      "Survival": "Tracking and a knowledge of beasts, plants, and other aspects of nature."
+    },
+    "WeaponSkillsHints": {
+      "Melee": "Attacking with Melee Weapons.",
+      "Ranged": "Attacking with Ranged Weapons.",
+      "Brawl": "Exerting physical force. Used for Grapples, Shoves, and attacks with Brawl Weapons.",
+      "Finesse": "Coordination and concealing your actions. Also used for thievery, and when attacking with Finesse Weapons."
+    },
     "WeaponSkills": {
       "Melee": "Melee",
       "Ranged": "Ranged",
@@ -39,18 +59,18 @@
       "NPCNoSaves": "NPCs don't roll saves - they only have armor, immunities, and weaknesses.",
       "Reflex": {
         "name": "Reflex",
-        "description": "Avoid area effects and attacks"
+        "description": "Evade physical harm, such as explosions, quick traps, slipping grasp, and dragon’s breath."
       },
       "Endure": {
         "name": "Endure",
-        "description": "Withstand poison and death"
+        "description": "Withstand physical harm, such as poisons, extreme heat, restraints, and petrification."
       },
       "Will": {
         "name": "Will",
-        "description": "Resist curses and enthrallment"
+        "description": "Resist mental harm, such as charms, dreadful terrors, psychic enthrallment, and your resolve."
       }
     },
-    "Roll": {
+        "Roll": {
       "Favored": "Favored (+1d6)",
       "Hindered": "Hindered (-1d6)",
       "SaveRoll": "Save Roll"
