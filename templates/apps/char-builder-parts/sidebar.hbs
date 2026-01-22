@@ -1,0 +1,58 @@
+{{!-- LEFT COLUMN: Selection List (full height) --}}
+<aside class="selection-list-column">
+    <div class="search-sticky">
+        <input type="text" class="search-input" placeholder="Search..." autocomplete="off">
+        <button type="button" class="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="directory-list custom-scroll">
+        {{#if (eq step 'stats')}}
+            {{#each statData.arrays}}
+                <li class="directory-item stat-array-item {{#if this.selected}}active{{/if}}"
+                    data-id="{{this.id}}" data-action="selectOption">
+                    <span class="array-label">{{this.id}}</span>
+                    <span class="array-values">{{this.values}}</span>
+                </li>
+            {{/each}}
+        {{else if isGearStep}}
+            <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
+                <span>Silver: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>
+            </div>
+            {{#each options as |group|}}
+            <details class="gear-accordion" {{#if group.isOpen}}open{{/if}}>
+                <summary class="category-header" data-category="{{group.id}}" data-action="toggleCategory">
+                    <i class="fas fa-chevron-right"></i> {{group.label}}
+                </summary>
+                <ul class="item-list">
+                    {{#each group.items as |opt|}}
+                    <li class="directory-item gear-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                        <img src="{{opt.img}}" width="48" height="48">
+                        <div class="item-info">
+                            <div class="name">{{opt.name}}</div>
+                            <div class="item-meta">
+                                <span class="item-slots"><i class="fas fa-box"></i> {{opt.system.baseSlots}}</span>
+                                <span class="item-cost"><i class="fas fa-coins"></i> {{#if opt.system.baseCost.gold}}{{opt.system.baseCost.gold}}g{{else}}{{opt.system.baseCost.silver}}s{{/if}}</span>
+                            </div>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </details>
+            {{/each}}
+        {{else}}
+            {{#each options as |opt|}}
+            <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                <img src="{{opt.img}}" width="32" height="32">
+                <div class="item-info">
+                    <div class="name">{{opt.name}}</div>
+                    {{#if opt.damageTypeLabel}}
+                        <div class="item-meta">
+                            {{#if opt.damageTypeIcon}}<i class="{{opt.damageTypeIcon}}"></i>{{/if}}
+                            <span class="damage-type-label">{{opt.damageTypeLabel}}</span>
+                        </div>
+                    {{/if}}
+                </div>
+            </li>
+            {{/each}}
+        {{/if}}
+    </div>
+</aside>

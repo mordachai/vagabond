@@ -143,7 +143,25 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/chat/damage-display.hbs',
   ];
 
-  return foundry.applications.handlebars.loadTemplates(templatePaths);
+  // Load standard partials
+  await foundry.applications.handlebars.loadTemplates(templatePaths);
+
+  // Manually register character builder partials with simple names
+  const builderParts = {
+    'navigation': 'systems/vagabond/templates/apps/char-builder-parts/navigation.hbs',
+    'sidebar': 'systems/vagabond/templates/apps/char-builder-parts/sidebar.hbs',
+    'decision': 'systems/vagabond/templates/apps/char-builder-parts/decision.hbs',
+    'tray': 'systems/vagabond/templates/apps/char-builder-parts/tray.hbs',
+    'preview': 'systems/vagabond/templates/apps/char-builder-parts/preview.hbs',
+    'reference': 'systems/vagabond/templates/apps/char-builder-parts/reference.hbs',
+    'footer': 'systems/vagabond/templates/apps/char-builder-parts/footer.hbs'
+  };
+
+  // Register each builder part as a Handlebars partial
+  for (const [name, path] of Object.entries(builderParts)) {
+    const template = await getTemplate(path);
+    Handlebars.registerPartial(name, template);
+  }
 }
 
 /* -------------------------------------------- */

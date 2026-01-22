@@ -1,0 +1,7 @@
+<nav class="builder-tabs flexrow">
+    {{#each steps as |s|}}
+    <a class="tab-item {{#if s.active}}active{{/if}} {{#if s.disabled}}disabled{{/if}}" data-step="{{s.id}}" data-action="goToStep">
+        <span class="step-num">{{s.number}}-</span><span class="step-label">{{localize s.label}}</span>
+    </a>
+    {{/each}}
+</nav>

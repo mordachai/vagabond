@@ -1,0 +1,75 @@
+<aside class="reference-column custom-scroll {{#unless useTripleColumn}}hidden{{/unless}}">
+    {{!-- COLUMN 3: CLASS DATA --}}
+    {{#if (eq step 'class')}}
+        {{#if classPreviewData}}
+            <div class="class-summary-box">
+                <h4 class="ref-header">{{localize "VAGABOND.CharBuilder.ClassDetails"}}</h4>
+
+                {{!-- 2-Column Grid for Class Info --}}
+                <div class="class-details-grid">
+                    <div class="detail-item">
+                        <span class="label">Spellcaster:</span>
+                        <span class="value">{{localize (concat "VAGABOND.Terms." classPreviewData.isSpellcaster)}}</span>
+                    </div>
+                    {{#if (eq classPreviewData.isSpellcaster "Yes")}}
+                        <div class="detail-item">
+                            <span class="label">Skill:</span>
+                            <span class="value">
+                            {{#if (eq classPreviewData.manaSkill "None")}}
+                                {{localize "VAGABOND.Terms.None"}}
+                            {{else}}
+                                {{localize (concat "VAGABOND.Skills." classPreviewData.manaSkill)}}
+                            {{/if}}
+                            </span>
+                        </div>
+                    {{/if}}
+                </div>
+
+                <h4 class="ref-header">{{localize "VAGABOND.CharBuilder.Levels"}}</h4>
+                {{#each classPreviewData.levelGroups}}
+                    <details class="level-accordion" {{#if this.isOpen}}open{{/if}}>
+                        <summary class="level-header">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Level {{this.level}}</span>
+                        </summary>
+                        <div class="level-content">
+                            {{#if (eq @root.classPreviewData.isSpellcaster "Yes")}}
+                                <div class="level-traits">
+                                    <div class="trait-badge">
+                                        <strong>Mana:</strong> <span>{{this.maxMana}}</span>
+                                    </div>
+                                    {{#if this.spells}}
+                                        <div class="trait-badge">
+                                            <strong>Spells:</strong> <span>{{this.spells}}</span>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
+                            {{#each this.features}}
+                                <div class="ref-entry">
+                                    <strong>{{this.name}}:</strong> {{{this.enrichedDescription}}}
+                                </div>
+                            {{/each}}
+                        </div>
+                    </details>
+                {{/each}}
+            </div>
+        {{/if}}
+    {{/if}}
+
+    {{!-- Origin Refs (Ancestry Traits/Class Features for later steps) --}}
+    {{#if (or (eq step 'perks') (eq step 'spells'))}}
+        {{#if originRefs.ancestry}}
+            <h4 class="ref-header">Traits ({{originRefs.ancestry.name}})</h4>
+            {{#each originRefs.ancestry.traits}}
+                <div class="ref-entry"><strong>{{this.name}}: </strong> {{{this.description}}}</div>
+            {{/each}}
+        {{/if}}
+        {{#if originRefs.class}}
+            <h4 class="ref-header">Features ({{originRefs.class.name}})</h4>
+            {{#each originRefs.class.features}}
+                <div class="ref-entry"><strong>{{this.name}}: </strong>{{{this.enrichedDescription}}}</div>
+            {{/each}}
+        {{/if}}
+    {{/if}}
+</aside>

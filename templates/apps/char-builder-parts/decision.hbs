@@ -1,0 +1,56 @@
+<section class="decision-zone {{#unless hasChoices}}hidden{{/unless}}">
+{{!-- <header class="zone-header">{{localize "VAGABOND.CharBuilder.ProposedChoices"}}</header> --}}
+<div class="decision-tray">
+    {{#if (eq step 'class')}}
+        <div class="skill-decision flexrow">
+            <div class="guaranteed-skills flexcol">
+                <strong>Obligatory Training:</strong>
+                {{#each classChoices.guaranteed}}<span class="skill-tag locked"><i class="fas fa-lock"></i> {{this.label}}</span>{{/each}}
+            </div>
+            {{#each classChoices.choices}}
+                <div class="pool-box">
+                    <strong>Choose {{this.count}} from {{this.label}}:</strong>
+                    <div class="pool-options">
+                        {{#each this.pool}}
+                            <label class="checkbox-label"><input type="checkbox" value="{{this.key}}" {{#if this.selected}}checked{{/if}} {{#if this.disabled}}disabled{{/if}} data-action="toggleSkill"> {{this.label}}</label>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
+
+    {{#if (eq step 'stats')}}
+        {{!-- Stats to Pick and Drop --}}
+        <div class="available-pool">
+            <div class="flex-center-gap-12 flex-around w-100">
+                <h6>{{localize "VAGABOND.CharBuilder.AssignStats"}}</h6>
+                <button type="button" class="btn-reset-stats w-80" data-action="resetStats"><i class="fas fa-undo"></i> {{localize "VAGABOND.CharBuilder.Buttons.Reset"}}</button>
+            </div>
+            <div class="pool-values">
+                {{#each statData.unassigned}}
+                <button type="button" class="value-chip {{#if this.active}}active{{/if}}" data-index="{{this.index}}" data-value="{{this.value}}" data-action="pickValue">{{this.value}}</button>
+                {{/each}}
+            </div>
+            {{#if statData.unassigned}}
+            <div><i class="fa-light fa-chevrons-down chevrons-down"></i></div>
+            {{/if}}
+        </div>
+        <div class="stat-assigner">
+            {{#each statData.slots}}
+            {{!-- Char Stats --}}
+            <div class="stat-slot" data-stat="{{this.key}}">
+                <label>{{this.label}}</label>
+                <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
+                    {{#if this.value}}
+                        {{this.value}}
+                    {{else}}
+                        ?
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    {{/if}}
+</div>
+</section>
