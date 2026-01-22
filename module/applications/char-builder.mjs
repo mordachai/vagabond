@@ -73,7 +73,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
   };
 
-  static PARTS = { form: { template: "systems/vagabond/templates/apps/char-builder.hbs" } };
+  static PARTS = {
+    form: {
+      template: "systems/vagabond/templates/apps/char-builder.hbs",
+      scrollable: [".directory-list", ".selection-preview", ".reference-column"]
+    }
+  };
 
   /** @override */
   async _prepareContext(options) {
