@@ -159,7 +159,7 @@ async function preloadHandlebarsTemplates() {
 
   // Register each builder part as a Handlebars partial
   for (const [name, path] of Object.entries(builderParts)) {
-    const template = await getTemplate(path);
+    const template = await foundry.applications.handlebars.getTemplate(path);
     Handlebars.registerPartial(name, template);
   }
 }

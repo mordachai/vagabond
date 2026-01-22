@@ -942,15 +942,13 @@ export class VagabondChatCard {
     const tags = [];
 
     // Damage Type Tag (icon and name only, no dice - damage is always 1d6 unless mana spent)
-    if (sys.damage && sys.damage > 0) {
-      const dType = sys.damageType;
+    const dType = sys.damageType;
 
-      // Show damage type with icon if type exists
-      if (dType && dType !== '-') {
-        const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
-        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[dType]) || dType;
-        tags.push({ label: damageTypeLabel, icon, cssClass: 'tag-damage' });
-      }
+    // Show damage type with icon if type exists
+    if (dType && dType !== '-') {
+      const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
+      const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[dType]) || dType;
+      tags.push({ label: damageTypeLabel, icon, cssClass: 'tag-damage' });
     }
 
     // Delivery Tag
