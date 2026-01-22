@@ -799,6 +799,20 @@ export class VagabondChatCard {
       });
     }
 
+    // Build tags and critical text for spells
+    const tags = [];
+    let critText = null;
+
+    if (item.type === 'spell' && item.system) {
+      // Build spell tags
+      tags.push(...this._buildSpellTags(item));
+
+      // Format crit text if it exists
+      if (item.system.crit) {
+        critText = item.system.formatDescription ? item.system.formatDescription(item.system.crit) : item.system.crit;
+      }
+    }
+
     // Add detailed stats to description for equipment items
     if (item.type === 'equipment' && item.system) {
       description += this._buildItemStatsHTML(item);
@@ -839,7 +853,9 @@ export class VagabondChatCard {
         item: isRealItem ? item : null,
         title: item.name || "Feature",
         cardType: 'item-use',
+        tags,
         description,
+        crit: critText,
         targetsAtRollTime,
         footerActions
     });
@@ -913,6 +929,46 @@ export class VagabondChatCard {
     }
 
     return html;
+  }
+
+  /**
+   * Build metadata tags for spell items (similar to spellCast method)
+   * @param {VagabondItem} item - The spell item
+   * @returns {Array} Array of tag objects
+   * @private
+   */
+  static _buildSpellTags(item) {
+    const sys = item.system;
+    const tags = [];
+
+    // Damage Type Tag (icon and name only, no dice - damage is always 1d6 unless mana spent)
+    if (sys.damage && sys.damage > 0) {
+      const dType = sys.damageType;
+
+      // Show damage type with icon if type exists
+      if (dType && dType !== '-') {
+        const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
+        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[dType]) || dType;
+        tags.push({ label: damageTypeLabel, icon, cssClass: 'tag-damage' });
+      }
+    }
+
+    // Delivery Tag
+    if (sys.deliveryType && sys.deliveryType !== '-') {
+      const deliveryLabel = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[sys.deliveryType]) || sys.deliveryType;
+      tags.push({ label: deliveryLabel, cssClass: 'tag-delivery' });
+    }
+
+    // Mana Cost Tag
+    if (sys.manaCost) {
+      tags.push({
+        label: `${sys.manaCost}`,
+        icon: 'fas fa-star-christmas',
+        cssClass: 'tag-mana'
+      });
+    }
+
+    return tags;
   }
 
   /**

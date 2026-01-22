@@ -22,7 +22,8 @@
   .item-name {
     font-weight: bold;
     padding-left: 5px;
-    text-align: left;
+    text-align: center;
+    justify-content: center;
     display: flex;
   }
 }
@@ -114,7 +115,7 @@
     }
     .item-name {
       padding-left: 5px;
-      text-align: left;
+      text-align: center;
     }
   }
 
@@ -243,8 +244,9 @@
 // Section title with add button
 .section-title-with-add {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 8px;
 
   .fa-plus {
     font-size: 14px;
@@ -375,6 +377,12 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+
+  // Center header title
+  .items-header & {
+    justify-content: center;
+    padding-left: 0;
+  }
 }
 
 .spell-col-damage {
@@ -396,6 +404,14 @@
   .favorite-inactive {
     color: $c-dark;
   }
+}
+
+.spell-col-chat {
+  flex: 0 0 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 // -----------------------------------------

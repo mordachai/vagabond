@@ -529,7 +529,65 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
     }
 
+    /* CRITICAL SECTION */
+    .crit-section {
+        margin-bottom: 10px;
 
+        .crit-header-container {
+            display: flex;
+            align-items: center;
+            padding-right: 30px;
+        }
+
+        .crit-header-arrow {
+            background-image: url('../assets/ui/chat/damage-title-bg.webp');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 150px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+
+            span {
+                color: white;
+                font-weight: 900;
+                font-size: 14px;
+                text-transform: uppercase;
+                text-shadow: 1px 1px 0 #000;
+            }
+
+            &::before {
+                content: "";
+                flex: 1;
+                height: 2px;
+                background: var(--vagabond-c-bluey);
+                border-radius: 1px;
+                max-width: 40px;
+            }
+
+            &::after {
+                content: "";
+                flex: 1;
+                height: 2px;
+                background: var(--vagabond-c-bluey);
+                border-radius: 1px;
+                max-width: 40px;
+            }
+        }
+
+        .crit-text {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-left: 3px solid $c-damage;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--c-dark-blue);
+        }
+    }
 
     /* PROPERTIES ACCORDION */
     .metadata-item-expandable {

@@ -51,12 +51,14 @@ export class VagabondItem extends Item {
 
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
-      // Use VagabondChatCard for equipment items (gear, alchemicals, relics)
-      if (item.type === 'equipment') {
+      // Use VagabondChatCard for equipment items (gear, alchemicals, relics) and spells
+      if (item.type === 'equipment' || item.type === 'spell') {
         const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-        await VagabondChatCard.gearUse(this.actor, item, targetsAtRollTime);
-        // Handle consumption after successful use
-        await this.handleConsumption();
+        await VagabondChatCard.itemUse(this.actor, item, targetsAtRollTime);
+        // Handle consumption after successful use (equipment only)
+        if (item.type === 'equipment') {
+          await this.handleConsumption();
+        }
       } else if (item.type === 'container') {
         // Post container info to chat
         const costs = [];

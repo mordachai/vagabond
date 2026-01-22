@@ -128,16 +128,25 @@
             </div>
             {{/if}}
 
-            {{!-- Crit Text --}}
-            {{#if crit}}
-            <div class="card-crit">
-                <strong>Crit:</strong> {{{crit}}}
-            </div>
-            {{/if}}
-
             {{!-- Damage Section --}}
             {{#if damage}}
                 {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
+            {{/if}}
+
+            {{!-- Crit Section --}}
+            {{#if crit}}
+            <div class="crit-section">
+                {{!-- Black Arrow Header --}}
+                <div class="crit-header-container">
+                    <div class="crit-header-arrow">
+                        <span>{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}</span>
+                    </div>
+                </div>
+                {{!-- Crit Text --}}
+                <div class="crit-text">
+                    {{{crit}}}
+                </div>
+            </div>
             {{/if}}
 
             {{!-- FOOTER --}}
