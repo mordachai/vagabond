@@ -1973,7 +1973,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-weight: 700;
   line-height: 1.2;
   word-wrap: break-word;
-  color: inherit;
+  color: var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore {
   font-size: 12px;

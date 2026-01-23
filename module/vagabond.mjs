@@ -5,17 +5,20 @@ import { VagabondActiveEffect } from './documents/active-effect.mjs';
 import { ProgressClock } from './documents/progress-clock.mjs';
 import { CountdownDice } from './documents/countdown-dice.mjs';
 // Import sheet classes.
-import { VagabondActorSheet } from './sheets/actor-sheet.mjs';
+import {
+  VagabondActorSheet,
+  VagabondCharacterSheet,
+  VagabondNPCSheet,
+} from './sheets/_module.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
-// TEMPORARY: Commented out for testing
-// import { EquipmentHelper } from './helpers/equipment-helper.mjs';
-// import { ContextMenuHelper } from './helpers/context-menu-helper.mjs';
-// import { AccordionHelper } from './helpers/accordion-helper.mjs';
-// import { EnrichmentHelper } from './helpers/enrichment-helper.mjs';
+import { EquipmentHelper } from './helpers/equipment-helper.mjs';
+import { ContextMenuHelper } from './helpers/context-menu-helper.mjs';
+import { AccordionHelper } from './helpers/accordion-helper.mjs';
+import { EnrichmentHelper } from './helpers/enrichment-helper.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import UI classes
@@ -185,6 +188,8 @@ globalThis.vagabond = {
   },
   applications: {
     VagabondActorSheet,
+    VagabondCharacterSheet,
+    VagabondNPCSheet,
     VagabondItemSheet,
     ProgressClockConfig,
     ProgressClockDeleteDialog,
@@ -200,11 +205,10 @@ globalThis.vagabond = {
     rollItemMacro,
     VagabondChatCard,
     VagabondDiceAppearance,
-    // TEMPORARY: Commented out for testing
-    // EquipmentHelper,
-    // ContextMenuHelper,
-    // AccordionHelper,
-    // EnrichmentHelper,
+    EquipmentHelper,
+    ContextMenuHelper,
+    AccordionHelper,
+    EnrichmentHelper,
   },
   models,
 };
@@ -273,9 +277,19 @@ Hooks.once('init', async function () {
 
   // Register sheet application classes
   collections.Actors.unregisterSheet('core', sheets.ActorSheet);
-  collections.Actors.registerSheet('vagabond', VagabondActorSheet, {
+
+  // Register character sheet
+  collections.Actors.registerSheet('vagabond', VagabondCharacterSheet, {
+    types: ['character'],
     makeDefault: true,
-    label: 'VAGABOND.SheetLabels.Actor',
+    label: 'VAGABOND.SheetLabels.Character',
+  });
+
+  // Register NPC sheet
+  collections.Actors.registerSheet('vagabond', VagabondNPCSheet, {
+    types: ['npc'],
+    makeDefault: true,
+    label: 'VAGABOND.SheetLabels.NPC',
   });
   collections.Items.unregisterSheet('core', sheets.ItemSheet);
   collections.Items.registerSheet('vagabond', VagabondItemSheet, {
