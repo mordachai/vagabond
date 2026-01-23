@@ -7,6 +7,7 @@
   background: rgba(0, 0, 0, 0.05);
   border: $border-groove;
   font-weight: bold;
+  color: $c-dark;
   > * {
     font-size: 14px;
     text-align: center;
@@ -16,6 +17,7 @@
     padding-left: 5px;
     text-align: left;
     display: flex;
+    color: $c-dark;
   }
 }
 
@@ -29,6 +31,7 @@
   padding: 0;
   overflow-y: auto;
   scrollbar-width: thin;
+  color: $c-dark;
 
   // Child lists
   .effect-list {
@@ -130,6 +133,13 @@
   }
 }
 
+&.active-effect-config,
+.effects {
+  .form-group > label, .form-group > span.label {
+    color: $c-dark;
+  }
+}
+
 .vagabond-effect-config-wrapper {
   overflow-y: auto;
   max-height: 600px;
@@ -146,6 +156,7 @@
 .vagabond-effect-fields legend {
   font-weight: bold;
   padding: 0 0.5rem;
+  color: $c-dark;
 }
 
 .application-mode-hint {
@@ -160,6 +171,7 @@
   border-radius: 4px;
   padding: 0.5rem;
   margin-top: 0.5rem;
+  color: $c-dark;
 }
 
 .info-box i {

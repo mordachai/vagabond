@@ -5314,6 +5314,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: rgba(0, 0, 0, 0.05);
   border: 2px groove var(--vagabond-c-dark);
   font-weight: bold;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .effects-header > * {
   font-size: 14px;
@@ -5324,6 +5325,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding-left: 5px;
   text-align: left;
   display: flex;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .effects-list {
   list-style: none;
@@ -5331,6 +5333,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding: 0;
   overflow-y: auto;
   scrollbar-width: thin;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .effects-list .effect-list {
   list-style: none;
@@ -5414,6 +5417,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .effects .item .effect-controls {
   border: none;
 }
+.vagabond.active-effect-config .form-group > label, .vagabond.active-effect-config .form-group > span.label,
+.vagabond .effects .form-group > label,
+.vagabond .effects .form-group > span.label {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .vagabond-effect-config-wrapper {
   overflow-y: auto;
   max-height: 600px;
@@ -5428,6 +5436,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .vagabond-effect-fields legend {
   font-weight: bold;
   padding: 0 0.5rem;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .application-mode-hint {
   font-style: italic;
@@ -5440,6 +5449,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 4px;
   padding: 0.5rem;
   margin-top: 0.5rem;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .info-box i {
   color: var(--color-info);
