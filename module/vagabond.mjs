@@ -11,6 +11,11 @@ import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 import { VAGABOND } from './helpers/config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
+// TEMPORARY: Commented out for testing
+// import { EquipmentHelper } from './helpers/equipment-helper.mjs';
+// import { ContextMenuHelper } from './helpers/context-menu-helper.mjs';
+// import { AccordionHelper } from './helpers/accordion-helper.mjs';
+// import { EnrichmentHelper } from './helpers/enrichment-helper.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import UI classes
@@ -195,6 +200,11 @@ globalThis.vagabond = {
     rollItemMacro,
     VagabondChatCard,
     VagabondDiceAppearance,
+    // TEMPORARY: Commented out for testing
+    // EquipmentHelper,
+    // ContextMenuHelper,
+    // AccordionHelper,
+    // EnrichmentHelper,
   },
   models,
 };
