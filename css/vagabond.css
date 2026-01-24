@@ -6931,6 +6931,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .ability-edit-header .accordion-icon.fa-chevron-down {
   transform: rotate(90deg);
 }
+.vagabond .accordion-item.open .accordion-header .accordion-icon,
+.vagabond .npc-edit-item.open .npc-edit-header .accordion-icon,
+.vagabond .npc-action-edit.open .action-edit-header .accordion-icon,
+.vagabond .npc-ability-edit.open .ability-edit-header .accordion-icon {
+  transform: rotate(90deg);
+}
 .vagabond .npc-type-row {
   display: flex;
   width: fit-content;
@@ -6955,9 +6961,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .action-edit-content,
 .vagabond .ability-edit-content {
   overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+}
+.vagabond .npc-edit-content.open,
+.vagabond .action-edit-content.open,
+.vagabond .ability-edit-content.open {
   max-height: 1500px;
   opacity: 1;
-  transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 .vagabond .npc-edit-content.collapsed,
 .vagabond .action-edit-content.collapsed,
@@ -7597,5 +7613,3 @@ details[open] .vagabond .npc-immunity-toggle i {
   white-space: nowrap;
   word-break: break-all;
 }
-
-/*# sourceMappingURL=vagabond.css.map */

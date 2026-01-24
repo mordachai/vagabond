@@ -750,6 +750,14 @@ i {color: $c-dark}
   }
 }
 
+// Accordion icon rotation when parent accordion is open
+.accordion-item.open .accordion-header .accordion-icon,
+.npc-edit-item.open .npc-edit-header .accordion-icon,
+.npc-action-edit.open .action-edit-header .accordion-icon,
+.npc-ability-edit.open .ability-edit-header .accordion-icon {
+  transform: rotate(90deg);
+}
+
 // NPC Type Row (Size and Being Type)
 .npc-type-row {
   display: flex;
@@ -785,9 +793,18 @@ i {color: $c-dark}
 .action-edit-content,
 .ability-edit-content {
   overflow: hidden;
-  max-height: 1500px;
-  opacity: 1;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+
+  &.open {
+    max-height: 1500px;
+    opacity: 1;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 
   &.collapsed {
     max-height: 0;

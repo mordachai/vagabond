@@ -32,8 +32,9 @@ export class RollHandler {
 
     // Handle rolls that supply the formula directly
     if (dataset.roll) {
-      // Import roll builder
+      // Import helpers
       const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
+      const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
       // Apply favor/hinder based on system state and keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
@@ -49,8 +50,27 @@ export class RollHandler {
         dataset.roll // Base formula (usually 'd20')
       );
 
+      // Determine if this is a skill or save roll
+      const rollKey = dataset.key; // e.g., 'awareness', 'might', 'reaction'
+      const rollType = dataset.type; // 'skill' or 'save'
+
+      // For skills and saves, use the formatted chat cards
+      if (rollType === 'skill' && rollKey) {
+        // Check both regular skills and weapon skills
+        const skillData = this.actor.system.skills?.[rollKey] || this.actor.system.weaponSkills?.[rollKey];
+        const difficulty = skillData?.difficulty || 10;
+        const isSuccess = roll.total >= difficulty;
+        return VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+      } else if (rollType === 'save' && rollKey) {
+        const saveData = this.actor.system.saves?.[rollKey];
+        const difficulty = saveData?.difficulty || 10;
+        const isSuccess = roll.total >= difficulty;
+        return VagabondChatCard.saveRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+      }
+
+      // Fallback for generic rolls (stats, etc.)
       const label = dataset.label ? `${dataset.label}` : '';
-      roll.toMessage({
+      await roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,
         rollMode: game.settings.get('core', 'rollMode'),

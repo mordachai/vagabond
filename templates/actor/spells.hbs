@@ -53,14 +53,15 @@
         <div class='item-name spell-col-name'>{{localize "VAGABOND.UI.Sections.Name"}}</div>
         <div class='item-damage spell-col-damage'>{{localize "VAGABOND.UI.Sections.Damage"}}</div>
         <div class='spell-col-favorite' data-tooltip='{{localize "VAGABOND.UI.Sections.Favorite"}}'>F</div>
-        <div class='spell-col-chat' data-tooltip='Send to Chat'>
-          <i class='fas fa-comment'></i>
+        <div class='spell-col-controls' data-tooltip='Actions'>
+          <i class='fas fa-cog'></i>
         </div>
       </li>
       {{#each spells as |spell|}}
         <li
           class='item flexrow draggable spell-item-row'
           data-item-id='{{spell._id}}'
+          data-document-id='{{spell._id}}'
           data-document-class='Item'
         >
           <div class='item-name spell-col-name'>
@@ -88,8 +89,11 @@
               <i class='clickable far fa-star favorite-inactive' data-tooltip='Not Favorite (click to favorite)'></i>
             {{/if}}
           </div>
-          <div class='spell-col-chat clickable' data-action='useItem' data-item-id='{{spell._id}}' data-tooltip='Send spell to chat'>
-            <i class='fas fa-comment'></i>
+          <div class='spell-col-controls'>
+            <i class='clickable fas fa-comment' data-action='useItem' data-item-id='{{spell._id}}' data-tooltip='Send spell to chat'></i>
+            {{#if @root.editable}}
+              <i class='clickable fas fa-trash' data-action='deleteDoc' data-document-class='Item' data-document-id='{{spell._id}}' data-tooltip='Delete spell'></i>
+            {{/if}}
           </div>
         </li>
       {{else}}

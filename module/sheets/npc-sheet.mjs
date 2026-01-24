@@ -30,6 +30,24 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     classes: ['vagabond', 'actor', 'npc'],
   };
 
+  /**
+   * @override
+   * Post-render setup for NPC-specific listeners
+   */
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+
+    // Setup immunity handler listeners for checkboxes
+    if (this.immunityHandler) {
+      this.immunityHandler.setupListeners();
+    }
+
+    // Setup action handler listeners for buffered editing
+    if (this.actionHandler) {
+      this.actionHandler.setupListeners();
+    }
+  }
+
   // ===========================
   // Handler Delegation Methods
   // ===========================

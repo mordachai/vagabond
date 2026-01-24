@@ -223,8 +223,8 @@ export default class VagabondNPC extends VagabondActorBase {
         }),
         damageType: new fields.StringField({
           required: false,
-          nullable: true,
-          initial: null,
+          nullable: false,
+          initial: '-',
           choices: CONFIG.VAGABOND?.damageTypes || {
             '-': 'VAGABOND.DamageTypes.None',
             'acid': 'VAGABOND.DamageTypes.Acid',

@@ -117,25 +117,25 @@ export class EquipmentHelper {
   }
 
   /**
-   * Get the weapon skill icon path
+   * Get the weapon skill icon class
    * @param {Object} item - The weapon item
-   * @returns {string|null} Icon path or null if not a weapon
+   * @returns {string|null} Icon class or null if not a weapon
    */
   static getWeaponSkillIcon(item) {
     if (!this.isWeapon(item)) return null;
     const skill = item.system.weaponSkill || 'melee';
-    return CONFIG.VAGABOND.icons.weaponSkills[skill];
+    return CONFIG.VAGABOND.weaponSkillIcons?.[skill] || null;
   }
 
   /**
-   * Get the damage type icon path
+   * Get the damage type icon class
    * @param {Object} item - The item with damage type
-   * @returns {string|null} Icon path or null if no damage type
+   * @returns {string|null} Icon class or null if no damage type
    */
   static getDamageTypeIcon(item) {
     const damageType = item.system?.damageType;
     if (!damageType || damageType === '-') return null;
-    return CONFIG.VAGABOND.icons.damageTypes[damageType];
+    return CONFIG.VAGABOND.damageTypeIcons?.[damageType] || null;
   }
 
   /**

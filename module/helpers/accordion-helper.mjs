@@ -12,16 +12,20 @@ export class AccordionHelper {
 
     const content = accordion.querySelector('.accordion-content');
     const icon = accordion.querySelector('.accordion-icon');
+    const header = accordion.querySelector('.accordion-header');
 
     if (content) {
       content.classList.add('open');
+      content.classList.remove('collapsed');
     }
     if (icon) {
       icon.classList.add('open');
     }
 
-    // Set aria-expanded for accessibility
-    accordion.setAttribute('aria-expanded', 'true');
+    // Set aria-expanded on the header for accessibility
+    if (header) {
+      header.setAttribute('aria-expanded', 'true');
+    }
   }
 
   /**
@@ -33,16 +37,20 @@ export class AccordionHelper {
 
     const content = accordion.querySelector('.accordion-content');
     const icon = accordion.querySelector('.accordion-icon');
+    const header = accordion.querySelector('.accordion-header');
 
     if (content) {
       content.classList.remove('open');
+      content.classList.add('collapsed');
     }
     if (icon) {
       icon.classList.remove('open');
     }
 
-    // Set aria-expanded for accessibility
-    accordion.setAttribute('aria-expanded', 'false');
+    // Set aria-expanded on the header for accessibility
+    if (header) {
+      header.setAttribute('aria-expanded', 'false');
+    }
   }
 
   /**

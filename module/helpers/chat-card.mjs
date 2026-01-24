@@ -1085,4 +1085,66 @@ export class VagabondChatCard {
 
     return await card.send();
   }
+
+  /**
+   * Create a chat card for recharging luck
+   * @param {VagabondActor} actor - The actor recharging luck
+   * @param {number} maxLuck - Maximum luck value
+   * @returns {Promise<ChatMessage>}
+   */
+  static async luckRecharge(actor, maxLuck) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Luck Recharged')
+      .setSubtitle(actor.name)
+      .setDescription(`
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> recharges their Luck.</p>
+        <p><strong>Luck Pool:</strong> ${maxLuck} / ${maxLuck}</p>
+      `);
+
+    return await card.send();
+  }
+
+  /**
+   * Create a chat card for spending a studied die
+   * @param {VagabondActor} actor - The actor spending the die
+   * @param {Roll} roll - The d6 roll
+   * @param {number} remainingDice - Remaining studied dice
+   * @returns {Promise<ChatMessage>}
+   */
+  static async studiedDieSpend(actor, roll, remainingDice) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Studied Die Used')
+      .setSubtitle(actor.name)
+      .addRoll(roll)
+      .setDescription(`
+        <p><i class="fas fa-dice-d6"></i> <strong>${actor.name}</strong> uses a Studied Die and rolls <strong>${roll.total}</strong>.</p>
+        <p><strong>Remaining Studied Dice:</strong> ${remainingDice}</p>
+      `);
+
+    return await card.send();
+  }
+
+  /**
+   * Create a chat card for adding a studied die
+   * @param {VagabondActor} actor - The actor gaining the die
+   * @param {number} newCount - New studied dice count
+   * @returns {Promise<ChatMessage>}
+   */
+  static async studiedDieGain(actor, newCount) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Studied Die Gained')
+      .setSubtitle(actor.name)
+      .setDescription(`
+        <p><i class="fas fa-dice-d6"></i> <strong>${actor.name}</strong> gains a Studied Die.</p>
+        <p><strong>Total Studied Dice:</strong> ${newCount}</p>
+      `);
+
+    return await card.send();
+  }
 }

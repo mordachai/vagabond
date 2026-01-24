@@ -10,19 +10,25 @@ export class EnrichmentHelper {
    * @returns {Promise<void>}
    */
   static async enrichFeatures(context, actor) {
-    if (!context.features?.length) return;
+    if (!context.features?.length) {
+      context.enrichedFeatures = [];
+      return;
+    }
 
+    context.enrichedFeatures = [];
     for (const feature of context.features) {
-      if (feature.system?.description) {
-        feature.enrichedDescription = await TextEditor.enrichHTML(
-          feature.system.description,
+      const description = feature.system?.description || feature.description;
+      if (description) {
+        feature.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          description,
           {
             async: true,
             secrets: actor.isOwner,
-            relativeTo: feature,
+            relativeTo: feature.sourceItem || actor,
           }
         );
       }
+      context.enrichedFeatures.push(feature);
     }
   }
 
@@ -33,19 +39,25 @@ export class EnrichmentHelper {
    * @returns {Promise<void>}
    */
   static async enrichTraits(context, actor) {
-    if (!context.traits?.length) return;
+    if (!context.traits?.length) {
+      context.enrichedTraits = [];
+      return;
+    }
 
+    context.enrichedTraits = [];
     for (const trait of context.traits) {
-      if (trait.system?.description) {
-        trait.enrichedDescription = await TextEditor.enrichHTML(
-          trait.system.description,
+      const description = trait.system?.description || trait.description;
+      if (description) {
+        trait.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          description,
           {
             async: true,
             secrets: actor.isOwner,
-            relativeTo: trait,
+            relativeTo: trait.sourceItem || actor,
           }
         );
       }
+      context.enrichedTraits.push(trait);
     }
   }
 
@@ -56,12 +68,17 @@ export class EnrichmentHelper {
    * @returns {Promise<void>}
    */
   static async enrichPerks(context, actor) {
-    if (!context.perks?.length) return;
+    if (!context.perks?.length) {
+      context.enrichedPerks = [];
+      return;
+    }
 
+    context.enrichedPerks = [];
     for (const perk of context.perks) {
-      if (perk.system?.description) {
-        perk.enrichedDescription = await TextEditor.enrichHTML(
-          perk.system.description,
+      const description = perk.system?.description || perk.description;
+      if (description) {
+        perk.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          description,
           {
             async: true,
             secrets: actor.isOwner,
@@ -69,6 +86,7 @@ export class EnrichmentHelper {
           }
         );
       }
+      context.enrichedPerks.push(perk);
     }
   }
 
@@ -83,7 +101,7 @@ export class EnrichmentHelper {
 
     for (const spell of context.spells) {
       if (spell.system?.description) {
-        spell.enrichedDescription = await TextEditor.enrichHTML(
+        spell.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
           spell.system.description,
           {
             async: true,
@@ -96,17 +114,26 @@ export class EnrichmentHelper {
   }
 
   /**
-   * Enrich NPC actions with HTML content
+   * Enrich NPC actions with HTML content and formatted fields
    * @param {Object} context - The render context containing actions
    * @param {Object} actor - The actor document
    * @returns {Promise<void>}
    */
   static async enrichActions(context, actor) {
-    if (!context.actions?.length) return;
+    if (!context.actions?.length) {
+      context.enrichedActions = [];
+      return;
+    }
 
-    for (const action of context.actions) {
+    context.enrichedActions = [];
+    
+    for (let i = 0; i < context.actions.length; i++) {
+      const action = context.actions[i];
+      const enrichedAction = { ...action };
+
+      // Enrich description
       if (action.description) {
-        action.enrichedDescription = await TextEditor.enrichHTML(
+        enrichedAction.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
           action.description,
           {
             async: true,
@@ -115,6 +142,34 @@ export class EnrichmentHelper {
           }
         );
       }
+
+      // Format recharge field for display
+      if (action.recharge) {
+        enrichedAction.rechargeFormatted = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          action.recharge,
+          {
+            async: true,
+            secrets: actor.isOwner,
+            rollData: actor.getRollData(),
+            relativeTo: actor,
+          }
+        );
+      }
+
+      // Format extra info field for display
+      if (action.extraInfo) {
+        enrichedAction.extraInfoFormatted = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          action.extraInfo,
+          {
+            async: true,
+            secrets: actor.isOwner,
+            rollData: actor.getRollData(),
+            relativeTo: actor,
+          }
+        );
+      }
+
+      context.enrichedActions.push(enrichedAction);
     }
   }
 
@@ -129,7 +184,7 @@ export class EnrichmentHelper {
 
     for (const ability of context.abilities) {
       if (ability.description) {
-        ability.enrichedDescription = await TextEditor.enrichHTML(
+        ability.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
           ability.description,
           {
             async: true,
@@ -178,7 +233,7 @@ export class EnrichmentHelper {
   static async enrichItemDescription(item, actor) {
     if (!item?.system?.description) return '';
 
-    return await TextEditor.enrichHTML(
+    return await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       item.system.description,
       {
         async: true,
@@ -199,7 +254,7 @@ export class EnrichmentHelper {
   static async enrichText(content, options = {}) {
     if (!content) return '';
 
-    return await TextEditor.enrichHTML(content, {
+    return await foundry.applications.ux.TextEditor.implementation.enrichHTML(content, {
       async: true,
       secrets: options.secrets || false,
       relativeTo: options.relativeTo || null,

@@ -489,15 +489,155 @@ export class InventoryHandler {
       html += `<div class="mini-sheet-description">${item.system.description}</div>`;
     }
 
-    // Stats (two columns) - Simplified for now
-    // In full implementation, would call _buildWeaponStats, _buildArmorStats, etc.
-    html += '<div class="mini-sheet-stats">';
-    html += '<div class="stat-row"><span class="stat-name">Type</span><span class="stat-value">';
-    html += EquipmentHelper.getEquipmentStateText(item);
-    html += '</span></div>';
-    html += '</div>';
+    // Stats (two columns)
+    if (isWeapon) {
+      html += this._buildWeaponStats(item);
+    } else if (isArmor) {
+      html += this._buildArmorStats(item);
+    } else if (isGear || isRelic) {
+      html += this._buildGearStats(item);
+    }
+
+    // Properties with descriptions (full width at bottom)
+    if (isWeapon && item.system.properties && item.system.properties.length > 0) {
+      html += this._buildWeaponProperties(item);
+    }
 
     return html;
+  }
+
+  /**
+   * Build weapon stats HTML (two-column grid)
+   * @param {VagabondItem} item - The weapon item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildWeaponStats(item) {
+    const damageType = item.system.currentDamageType || item.system.damageType || '';
+    return `
+      <div class="mini-sheet-stats">
+        <div class="stat-row">
+          <span class="stat-name">Damage</span>
+          <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${damageType}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Range</span>
+          <span class="stat-value">${item.system.rangeDisplay || item.system.range || '—'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Grip</span>
+          <span class="stat-value">${item.system.gripDisplay || item.system.grip || '—'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Weapon Skill</span>
+          <span class="stat-value">${item.system.weaponSkill || '—'}</span>
+        </div>
+        ${item.system.metal && item.system.metal !== 'common' ? `
+        <div class="stat-row">
+          <span class="stat-name">Metal</span>
+          <span class="stat-value">${item.system.metal}</span>
+        </div>
+        ` : ''}
+        <div class="stat-row">
+          <span class="stat-name">Cost</span>
+          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Slots</span>
+          <span class="stat-value">${item.system.slots || 1}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Build armor stats HTML (two-column grid)
+   * @param {VagabondItem} item - The armor item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildArmorStats(item) {
+    return `
+      <div class="mini-sheet-stats">
+        <div class="stat-row">
+          <span class="stat-name">Armor Rating</span>
+          <span class="stat-value">${item.system.finalRating || item.system.rating || '—'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Type</span>
+          <span class="stat-value">${item.system.armorType || '—'}</span>
+        </div>
+        ${item.system.metal && item.system.metal !== 'common' ? `
+        <div class="stat-row">
+          <span class="stat-name">Metal</span>
+          <span class="stat-value">${item.system.metal}</span>
+        </div>
+        ` : ''}
+        <div class="stat-row">
+          <span class="stat-name">Cost</span>
+          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Slots</span>
+          <span class="stat-value">${item.system.slots || 1}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Build gear stats HTML (two-column grid)
+   * @param {VagabondItem} item - The gear item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildGearStats(item) {
+    return `
+      <div class="mini-sheet-stats">
+        ${item.system.quantity ? `
+        <div class="stat-row">
+          <span class="stat-name">Quantity</span>
+          <span class="stat-value">${item.system.quantity}</span>
+        </div>
+        ` : ''}
+        <div class="stat-row">
+          <span class="stat-name">Cost</span>
+          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Slots</span>
+          <span class="stat-value">${item.system.slots || 1}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Build weapon properties with descriptions
+   * @param {VagabondItem} item - The weapon item
+   * @returns {string} HTML
+   * @private
+   */
+  _buildWeaponProperties(item) {
+    const config = CONFIG.VAGABOND;
+
+    return `
+      <div class="mini-sheet-properties">
+        <div class="mini-sheet-label">Properties</div>
+        <div class="property-list">
+          ${item.system.properties.map(prop => {
+            const descriptionKey = config.weaponPropertyHints?.[prop] || '';
+            const description = descriptionKey ? game.i18n.localize(descriptionKey) : '';
+            return `
+              <div class="property-row">
+                <span class="property-name">${prop}:</span>
+                <span class="property-description">${description}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
   }
 
   /**
@@ -511,5 +651,36 @@ export class InventoryHandler {
       return item.system.equipmentType.charAt(0).toUpperCase() + item.system.equipmentType.slice(1);
     }
     return item.type.charAt(0).toUpperCase() + item.type.slice(1);
+  }
+
+  /**
+   * Setup event listeners for inventory grid cards
+   * Called after render to attach click, double-click, and context menu handlers
+   */
+  setupListeners() {
+    const inventoryCards = this.sheet.element.querySelectorAll('.inventory-card');
+
+    inventoryCards.forEach(card => {
+      const itemId = card.dataset.itemId;
+
+      // Single-click: Show mini-sheet
+      card.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.showInventoryMiniSheet(event, itemId);
+      });
+
+      // Double-click: Open item sheet
+      card.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        const item = this.actor.items.get(itemId);
+        if (item) item.sheet.render(true);
+      });
+
+      // Right-click: Show context menu
+      card.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        this.showInventoryContextMenu(event, itemId);
+      });
+    });
   }
 }

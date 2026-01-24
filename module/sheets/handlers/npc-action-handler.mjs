@@ -1,3 +1,5 @@
+import { AccordionHelper } from '../../helpers/accordion-helper.mjs';
+
 /**
  * Handler for NPC actions and abilities management.
  * Manages adding/removing actions, abilities, and their accordion states.
@@ -23,10 +25,14 @@ export class NPCActionHandler {
 
     const actions = this.actor.system.actions || [];
     actions.push({
-      name: 'New Action',
-      description: '',
-      damageRoll: '',
+      name: '',
+      note: '',
       recharge: '',
+      flatDamage: '',
+      rollDamage: '',
+      damageType: this.validateDamageType('-'), // Ensure valid default
+      attackType: 'melee',
+      extraInfo: '',
     });
 
     await this.actor.update({ 'system.actions': actions });
@@ -55,14 +61,16 @@ export class NPCActionHandler {
    */
   async toggleActionAccordion(event, target) {
     event.preventDefault();
-
-    // Import accordion helper
-    const { AccordionHelper } = globalThis.vagabond.utils;
-
-    const actionEdit = target.closest('.npc-action-edit');
-    if (actionEdit) {
-      AccordionHelper.toggle(actionEdit);
+    
+    // Find the accordion container using the target element (Foundry V2 pattern)
+    const accordionContainer = target.closest('.npc-action-edit');
+    
+    if (!accordionContainer) {
+      console.error('NPCActionHandler: Could not find accordion container for action accordion');
+      return;
     }
+
+    AccordionHelper.toggle(accordionContainer);
   }
 
   /**
@@ -75,7 +83,7 @@ export class NPCActionHandler {
 
     const abilities = this.actor.system.abilities || [];
     abilities.push({
-      name: 'New Ability',
+      name: '',
       description: '',
     });
 
@@ -105,14 +113,16 @@ export class NPCActionHandler {
    */
   async toggleAbilityAccordion(event, target) {
     event.preventDefault();
-
-    // Import accordion helper
-    const { AccordionHelper } = globalThis.vagabond.utils;
-
-    const abilityEdit = target.closest('.npc-ability-edit');
-    if (abilityEdit) {
-      AccordionHelper.toggle(abilityEdit);
+    
+    // Find the accordion container using the target element (Foundry V2 pattern)
+    const accordionContainer = target.closest('.npc-ability-edit');
+    
+    if (!accordionContainer) {
+      console.error('NPCActionHandler: Could not find accordion container for ability accordion');
+      return;
     }
+
+    AccordionHelper.toggle(accordionContainer);
   }
 
   /**
@@ -147,12 +157,21 @@ export class NPCActionHandler {
   }
 
   /**
+   * Update accordion state for persistence and accessibility
+   * @param {HTMLElement} header - The accordion header element
+   * @param {HTMLElement} content - The accordion content element
+   * @private
+   */
+  _updateAccordionState(header, content) {
+    // Track accordion state for persistence
+    const isExpanded = content.classList.contains('open');
+    header.setAttribute('aria-expanded', isExpanded.toString());
+  }
+
+  /**
    * Capture accordion state before re-render
    */
   captureAccordionState() {
-    // Import accordion helper
-    const { AccordionHelper } = globalThis.vagabond.utils;
-
     this._openActionAccordions = AccordionHelper.getOpenIds(
       this.sheet.element,
       '.npc-action-edit'
@@ -167,14 +186,89 @@ export class NPCActionHandler {
    * Restore accordion state after re-render
    */
   restoreAccordionState() {
-    // Import accordion helper
-    const { AccordionHelper } = globalThis.vagabond.utils;
-
     AccordionHelper.restoreState(this.sheet.element, this._openActionAccordions, '.npc-action-edit');
     AccordionHelper.restoreState(
       this.sheet.element,
       this._openAbilityAccordions,
       '.npc-ability-edit'
     );
+  }
+
+  /**
+   * Validate and sanitize damage type values
+   * @param {string} damageType - The damage type value to validate
+   * @returns {string} - The validated damage type or "-" as fallback
+   */
+  validateDamageType(damageType) {
+    // Get valid damage types from CONFIG
+    const validTypes = Object.keys(CONFIG.VAGABOND.damageTypes);
+    
+    // If no damage type provided or empty, default to "-"
+    if (!damageType || damageType === '') {
+      return '-';
+    }
+    
+    // If damage type is valid, return it
+    if (validTypes.includes(damageType)) {
+      return damageType;
+    }
+    
+    // If invalid damage type, log warning and return default
+    console.warn(`NPCActionHandler: Invalid damage type "${damageType}" provided, defaulting to "-". Valid types are: ${validTypes.join(', ')}`);
+    return '-';
+  }
+
+  /**
+   * Setup event listeners for buffered action and ability editing
+   */
+  setupListeners() {
+    // Setup buffered action editing
+    const actionEdits = this.sheet.element.querySelectorAll('.npc-action-edit');
+    actionEdits.forEach((actionEdit, actionIndex) => {
+      const inputs = actionEdit.querySelectorAll('[data-field]');
+
+      inputs.forEach((input) => {
+        input.addEventListener('change', async (event) => {
+          event.stopPropagation();
+          const field = input.dataset.field;
+          let value = input.value;
+
+          // Apply validation for damage type fields
+          if (field === 'damageType') {
+            value = this.validateDamageType(value);
+          }
+
+          const actions = [...(this.actor.system.actions || [])];
+          const actualIndex = parseInt(actionEdit.dataset.actionIndex);
+
+          if (actions[actualIndex]) {
+            actions[actualIndex][field] = value;
+            await this.actor.update({ 'system.actions': actions });
+          }
+        });
+      });
+    });
+
+    // Setup buffered ability editing
+    const abilityEdits = this.sheet.element.querySelectorAll('.npc-ability-edit');
+    abilityEdits.forEach((abilityEdit, abilityIndex) => {
+      const inputs = abilityEdit.querySelectorAll('[data-field]');
+
+      inputs.forEach((input) => {
+        input.addEventListener('change', async (event) => {
+          event.stopPropagation();
+          const field = input.dataset.field;
+          const value = input.value;
+
+          const abilities = [...(this.actor.system.abilities || [])];
+          const actualIndex = parseInt(abilityEdit.dataset.abilityIndex);
+
+          if (abilities[actualIndex]) {
+            abilities[actualIndex][field] = value;
+            await this.actor.update({ 'system.abilities': abilities });
+          }
+        });
+      });
+    });
   }
 }

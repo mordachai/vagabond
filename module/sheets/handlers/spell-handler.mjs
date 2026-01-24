@@ -658,7 +658,8 @@ export class SpellHandler {
    * Called during sheet render
    */
   setupListeners() {
-    const spellRows = this.sheet.element.querySelectorAll('.spell-row[data-spell-id]');
+    // Query for both spell rows (in spells tab) and favorited spells (in sliding panel)
+    const spellRows = this.sheet.element.querySelectorAll('.spell-row[data-spell-id], .favorited-spell[data-spell-id]');
 
     spellRows.forEach((spellRow) => {
       const spellId = spellRow.dataset.spellId;

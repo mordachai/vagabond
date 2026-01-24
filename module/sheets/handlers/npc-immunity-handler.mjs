@@ -42,10 +42,10 @@ export class NPCImmunityHandler {
    */
   async removeImmunity(event, target) {
     event.preventDefault();
-    const damageType = target.dataset.damageType;
+    const immunity = target.dataset.immunity;
 
     const immunities = this.actor.system.immunities || [];
-    const index = immunities.indexOf(damageType);
+    const index = immunities.indexOf(immunity);
 
     if (index > -1) {
       immunities.splice(index, 1);
@@ -83,10 +83,10 @@ export class NPCImmunityHandler {
    */
   async removeWeakness(event, target) {
     event.preventDefault();
-    const damageType = target.dataset.damageType;
+    const weakness = target.dataset.weakness;
 
     const weaknesses = this.actor.system.weaknesses || [];
-    const index = weaknesses.indexOf(damageType);
+    const index = weaknesses.indexOf(weakness);
 
     if (index > -1) {
       weaknesses.splice(index, 1);
@@ -124,10 +124,10 @@ export class NPCImmunityHandler {
    */
   async removeStatusImmunity(event, target) {
     event.preventDefault();
-    const condition = target.dataset.condition;
+    const status = target.dataset.status;
 
     const statusImmunities = this.actor.system.statusImmunities || [];
-    const index = statusImmunities.indexOf(condition);
+    const index = statusImmunities.indexOf(status);
 
     if (index > -1) {
       statusImmunities.splice(index, 1);
@@ -165,7 +165,7 @@ export class NPCImmunityHandler {
    */
   async removeSpeedType(event, target) {
     event.preventDefault();
-    const speedType = target.dataset.speedType;
+    const speedType = target.dataset.type;
 
     const speedTypes = this.actor.system.speedTypes || [];
     const index = speedTypes.indexOf(speedType);
@@ -220,5 +220,110 @@ export class NPCImmunityHandler {
         dropdowns[index].setAttribute('open', '');
       }
     });
+  }
+
+  /**
+   * Setup event listeners for immunity checkboxes
+   */
+  setupListeners() {
+    // Handle immunities dropdown
+    const immunitiesDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.immunities"]');
+    if (immunitiesDropdown) {
+      const checkboxes = immunitiesDropdown.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', async (event) => {
+          const value = event.target.value;
+          const immunities = [...(this.actor.system.immunities || [])];
+
+          if (event.target.checked) {
+            if (!immunities.includes(value)) {
+              immunities.push(value);
+            }
+          } else {
+            const index = immunities.indexOf(value);
+            if (index > -1) {
+              immunities.splice(index, 1);
+            }
+          }
+
+          await this.actor.update({ 'system.immunities': immunities });
+        });
+      });
+    }
+
+    // Handle weaknesses dropdown
+    const weaknessesDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.weaknesses"]');
+    if (weaknessesDropdown) {
+      const checkboxes = weaknessesDropdown.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', async (event) => {
+          const value = event.target.value;
+          const weaknesses = [...(this.actor.system.weaknesses || [])];
+
+          if (event.target.checked) {
+            if (!weaknesses.includes(value)) {
+              weaknesses.push(value);
+            }
+          } else {
+            const index = weaknesses.indexOf(value);
+            if (index > -1) {
+              weaknesses.splice(index, 1);
+            }
+          }
+
+          await this.actor.update({ 'system.weaknesses': weaknesses });
+        });
+      });
+    }
+
+    // Handle status immunities dropdown
+    const statusDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.statusImmunities"]');
+    if (statusDropdown) {
+      const checkboxes = statusDropdown.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', async (event) => {
+          const value = event.target.value;
+          const statusImmunities = [...(this.actor.system.statusImmunities || [])];
+
+          if (event.target.checked) {
+            if (!statusImmunities.includes(value)) {
+              statusImmunities.push(value);
+            }
+          } else {
+            const index = statusImmunities.indexOf(value);
+            if (index > -1) {
+              statusImmunities.splice(index, 1);
+            }
+          }
+
+          await this.actor.update({ 'system.statusImmunities': statusImmunities });
+        });
+      });
+    }
+
+    // Handle speed types dropdown
+    const speedTypesDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
+    if (speedTypesDropdown) {
+      const checkboxes = speedTypesDropdown.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', async (event) => {
+          const value = event.target.value;
+          const speedTypes = [...(this.actor.system.speedTypes || [])];
+
+          if (event.target.checked) {
+            if (!speedTypes.includes(value)) {
+              speedTypes.push(value);
+            }
+          } else {
+            const index = speedTypes.indexOf(value);
+            if (index > -1) {
+              speedTypes.splice(index, 1);
+            }
+          }
+
+          await this.actor.update({ 'system.speedTypes': speedTypes });
+        });
+      });
+    }
   }
 }
