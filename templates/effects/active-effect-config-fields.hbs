@@ -22,26 +22,26 @@
     <div class="form-group info-box">
       <i class="fas fa-info-circle"></i>
       <p class="notes">
-        <strong>Parent Item:</strong> {{vagabond.parentItemName}} ({{vagabond.parentItemType}})<br>
-        <strong>Suggested Mode:</strong> {{localize vagabond.smartDefaultMode.label}}
+        <strong>{{localize "VAGABOND.UI.Labels.ParentItem"}}</strong> {{vagabond.parentItemName}} ({{vagabond.parentItemType}})<br>
+        <strong>{{localize "VAGABOND.UI.Labels.SuggestedMode"}}</strong> {{localize vagabond.smartDefaultMode.label}}
       </p>
     </div>
     {{/if}}
 
     <div class="form-group help-box">
       <details>
-        <summary><i class="fas fa-question-circle"></i> Application Mode Guide</summary>
+        <summary><i class="fas fa-question-circle"></i> {{localize "VAGABOND.UI.Labels.ApplicationModeGuide"}}</summary>
         <div class="mode-help">
           {{#each vagabond.applicationModes as |mode key|}}
           <div class="mode-example">
             <h4><i class="{{mode.icon}}"></i> {{localize mode.label}}</h4>
             <p>{{localize mode.hint}}</p>
             {{#if (eq key "permanent")}}
-            <p class="example"><em>Example: Perk that gives +2 Might to all rolls</em></p>
+            <p class="example"><em>{{localize "VAGABOND.UI.Examples.PermanentEffect"}}</em></p>
             {{else if (eq key "when-equipped")}}
-            <p class="example"><em>Example: Armor that gives +1 AC while worn</em></p>
+            <p class="example"><em>{{localize "VAGABOND.UI.Examples.EquippedEffect"}}</em></p>
             {{else if (eq key "on-use")}}
-            <p class="example"><em>Example: Keen Dagger (crits on 19-20, but only with dagger attacks)</em></p>
+            <p class="example"><em>{{localize "VAGABOND.UI.Examples.OnUseEffect"}}</em></p>
             {{/if}}
           </div>
           {{/each}}

@@ -54,12 +54,12 @@
           {{#if system.ancestryData}}
             <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
           {{else}}
-            <span>Unknown Ancestry</span>
+            <span>{{localize "VAGABOND.UI.Labels.UnknownAncestry"}}</span>
           {{/if}}
           {{#if system.classData}}
             <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
           {{else}}
-            <span>No Class</span>
+            <span>{{localize "VAGABOND.UI.Labels.NoClass"}}</span>
           {{/if}}
           {{#if system.ancestryData}}
             ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} size)
@@ -216,7 +216,7 @@
           class='stat-value-input check-mod-value'
           readonly
         />
-        <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' oncontextmenu='return false;' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>Check<br>Mod</label>
+        <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' oncontextmenu='return false;' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>{{localize "VAGABOND.UI.Labels.CheckMod"}}</label>
       </div>
 
       {{!-- {{! Universal Check Bonus }}
@@ -230,7 +230,7 @@
           placeholder='0'
           data-tooltip='Universal bonus to all d20 rolls'
         />
-        <label class='stat-label'>Check</label>
+        <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Check"}}</label>
       </div>
 
       {{! Universal Damage Bonus }}
@@ -254,7 +254,7 @@
             data-tooltip='Dice bonus to all damage (e.g., 1d4)'
           />
         </div>
-        <label class='stat-label'>Damage</label>
+        <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
       </div> --}}
 
       <div class='stat-item'>
@@ -382,7 +382,7 @@
       <section class='right-column grid-span-1'>
         {{! Saves Section - Horizontal layout }}
         <div class='saves'>
-          <h4>Saves</h4>
+          <h4>{{localize "VAGABOND.UI.Sections.Saves"}}</h4>
           <div class='saves-row flexrow'>
             {{#each system.saves as |save key|}}
               <div class='save flexcol align-center'>
@@ -520,7 +520,7 @@
                       </div>
                       <div class='spell-damage-icon'><i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i></div>
                       <select class='spell-delivery-select' data-spell-id='{{spell._id}}'>
-                        <option value=''>Delivery</option>
+                        <option value=''>{{localize "VAGABOND.UI.Labels.Delivery"}}</option>
                         {{#each @root.config.deliveryTypes as |label key|}}<option value='{{key}}'>{{localize label}}</option>{{/each}}
                       </select>
                       <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='Select a delivery type first'>0</div>

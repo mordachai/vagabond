@@ -85,7 +85,7 @@
 
         {{!-- Weapon Skills (4 Columns) --}}
         <div class="stats-preview-results">
-            <h3 class="preview-section-header">Weapon Skills</h3>
+            <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.WeaponSkills"}}</h3>
             <div class="preview-skills-grid weapon-skills-4-col">
                 {{#each statData.derived.weaponSkills}}
                     <div class="skill-item {{#if this.trained}}trained{{/if}}" title="{{this.tooltip}}">
@@ -192,7 +192,7 @@
             <div class="equipment-details">
                 {{!-- WEAPONS --}}
                 {{#if (eq selectedItem.displayStats.subType "weapon")}}
-                    <h3 class="preview-section-header">Weapon Details</h3>
+                    <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.WeaponDetails"}}</h3>
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.weaponSkill}}
                             <div><strong>Skill:</strong> {{selectedItem.displayStats.weaponSkill}}</div>
@@ -228,7 +228,7 @@
                     </div>
                     {{#if selectedItem.displayStats.propertiesWithHints}}
                         <div class="weapon-properties">
-                            <h4>Properties</h4>
+                            <h4>{{localize "VAGABOND.UI.Labels.Properties"}}</h4>
                             {{#each selectedItem.displayStats.propertiesWithHints}}
                                 <div class="property-item" title="{{localize this.hint}}">
                                     <strong>{{localize this.label}}:</strong> <em>{{localize this.hint}}</em>
@@ -240,7 +240,7 @@
 
                 {{!-- ARMOR --}}
                 {{#if (eq selectedItem.displayStats.subType "armor")}}
-                    <h3 class="preview-section-header">Armor Details</h3>
+                    <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.ArmorDetails"}}</h3>
                     {{#if selectedItem.displayStats.armorTypeDescription}}
                         <div class="armor-type-description">
                             <em>{{selectedItem.displayStats.armorTypeDescription}}</em>
@@ -268,7 +268,7 @@
 
                 {{!-- ALCHEMICALS --}}
                 {{#if (eq selectedItem.displayStats.subType "alchemical")}}
-                    <h3 class="preview-section-header">Alchemical Details</h3>
+                    <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.AlchemicalDetails"}}</h3>
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.alchemicalType}}
                             <div><strong>Type:</strong> {{selectedItem.displayStats.alchemicalType}}</div>
@@ -297,7 +297,7 @@
 
                 {{!-- RELICS --}}
                 {{#if (eq selectedItem.displayStats.subType "relic")}}
-                    <h3 class="preview-section-header">Relic Details</h3>
+                    <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.RelicDetails"}}</h3>
                     {{#if selectedItem.displayStats.lore}}
                         <div class="relic-lore">
                             <strong>{{localize "VAGABOND.Item.Relic.FIELDS.lore.label"}}: </strong>
@@ -317,7 +317,7 @@
 
                 {{!-- GEAR (generic) --}}
                 {{#if (eq selectedItem.displayStats.subType "gear")}}
-                    <h3 class="preview-section-header">Gear Details</h3>
+                    <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.GearDetails"}}</h3>
                     <div class="preview-details-grid">
                         <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>Cost:</strong>
