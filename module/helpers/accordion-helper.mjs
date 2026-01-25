@@ -14,6 +14,9 @@ export class AccordionHelper {
     const icon = accordion.querySelector('.accordion-icon');
     const header = accordion.querySelector('.accordion-header');
 
+    // Remove 'collapsed' from the accordion-item itself
+    accordion.classList.remove('collapsed');
+
     if (content) {
       content.classList.add('open');
       content.classList.remove('collapsed');
@@ -38,6 +41,9 @@ export class AccordionHelper {
     const content = accordion.querySelector('.accordion-content');
     const icon = accordion.querySelector('.accordion-icon');
     const header = accordion.querySelector('.accordion-header');
+
+    // Add 'collapsed' to the accordion-item itself
+    accordion.classList.add('collapsed');
 
     if (content) {
       content.classList.remove('open');
@@ -78,8 +84,9 @@ export class AccordionHelper {
   static isOpen(accordion) {
     if (!accordion) return false;
 
-    const content = accordion.querySelector('.accordion-content');
-    return content?.classList.contains('open') || false;
+    // Check if the accordion-item itself has 'collapsed' class
+    // If it does NOT have 'collapsed', it's open
+    return !accordion.classList.contains('collapsed');
   }
 
   /**

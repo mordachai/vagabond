@@ -23,3 +23,9 @@ package-lock.json
 jsconfig.json
 *.zip
 *.7z
+
+# Kiro
+task-*
+test-*
+verify-*
+/.kiro*

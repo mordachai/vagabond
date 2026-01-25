@@ -60,12 +60,24 @@ export class RollHandler {
         const skillData = this.actor.system.skills?.[rollKey] || this.actor.system.weaponSkills?.[rollKey];
         const difficulty = skillData?.difficulty || 10;
         const isSuccess = roll.total >= difficulty;
-        return VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+        await VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+
+        // Reset check bonus to 0 after any roll
+        if (this.actor.system.universalCheckBonus !== 0) {
+          await this.actor.update({ 'system.universalCheckBonus': 0 });
+        }
+        return roll;
       } else if (rollType === 'save' && rollKey) {
         const saveData = this.actor.system.saves?.[rollKey];
         const difficulty = saveData?.difficulty || 10;
         const isSuccess = roll.total >= difficulty;
-        return VagabondChatCard.saveRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+        await VagabondChatCard.saveRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+
+        // Reset check bonus to 0 after any roll
+        if (this.actor.system.universalCheckBonus !== 0) {
+          await this.actor.update({ 'system.universalCheckBonus': 0 });
+        }
+        return roll;
       }
 
       // Fallback for generic rolls (stats, etc.)
@@ -75,6 +87,11 @@ export class RollHandler {
         flavor: label,
         rollMode: game.settings.get('core', 'rollMode'),
       });
+
+      // Reset check bonus to 0 after any roll
+      if (this.actor.system.universalCheckBonus !== 0) {
+        await this.actor.update({ 'system.universalCheckBonus': 0 });
+      }
       return roll;
     }
   }

@@ -353,7 +353,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Fix: Use currency field instead of non-existent startingSilver
     if (packItem && packItem.system.currency) {
       const curr = packItem.system.currency;
-      budget = (curr.gold || 0) * 10 + (curr.silver || 0) + (curr.copper || 0) / 10;
+      budget = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
     }
 
     // Calculate spending from gear in tray (exclude starting pack items)
@@ -361,7 +361,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       trayData.gear.forEach(item => {
         // Skip starting pack items - they don't count toward spending
         if (!item.fromStartingPack) {
-          const goldInSilver = (item.cost?.gold || 0) * 10;
+          const goldInSilver = (item.cost?.gold || 0) * 100;
           currentSpending += goldInSilver + (item.cost?.silver || 0) + (item.cost?.copper || 0) / 10;
         }
       });
@@ -877,7 +877,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     return {
       packName: packItem.name,
-      startingSilver: (() => { const curr = packItem.system.currency || {}; return (curr.gold || 0) * 10 + (curr.silver || 0) + (curr.copper || 0) / 10; })(),
+      startingSilver: (() => { const curr = packItem.system.currency || {}; return (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10; })(),
       items: itemDetails
     };
   }
@@ -1160,14 +1160,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (stepKey === 'gear') {
           const newItem = await fromUuid(uuid);
           if (newItem && newItem.type === 'equipment') {
-              const itemCost = (newItem.system.baseCost?.gold || 0) * 10 + (newItem.system.baseCost?.silver || 0) + (newItem.system.baseCost?.copper || 0) / 10;
+              const itemCost = (newItem.system.baseCost?.gold || 0) * 100 + (newItem.system.baseCost?.silver || 0) + (newItem.system.baseCost?.copper || 0) / 10;
 
               // Calculate current budget
               let budget = 300;
               const packItem = await fromUuid(this.builderData.startingPack);
               if (packItem && packItem.system.currency) {
                   const curr = packItem.system.currency;
-                  budget = (curr.gold || 0) * 10 + (curr.silver || 0) + (curr.copper || 0) / 10;
+                  budget = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
               }
 
               // Calculate current spending
@@ -1175,7 +1175,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               for (const gearUuid of this.builderData.gear) {
                   const gearItem = await fromUuid(gearUuid);
                   if (gearItem?.type === 'equipment') {
-                      currentSpending += (gearItem.system.baseCost?.gold || 0) * 10 + (gearItem.system.baseCost?.silver || 0) + (gearItem.system.baseCost?.copper || 0) / 10;
+                      currentSpending += (gearItem.system.baseCost?.gold || 0) * 100 + (gearItem.system.baseCost?.silver || 0) + (gearItem.system.baseCost?.copper || 0) / 10;
                   }
               }
 
@@ -1449,13 +1449,32 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             }
         }
 
-        // Add starting pack currency to character
+        // Calculate remaining currency after gear spending
+        let budgetInSilver = 300; // Default 300 silver
         if (packItem && packItem.system.currency) {
             const curr = packItem.system.currency;
-            updateData["system.currency.gold"] = (curr.gold || 0);
-            updateData["system.currency.silver"] = (curr.silver || 0);
-            updateData["system.currency.copper"] = (curr.copper || 0);
+            budgetInSilver = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
         }
+
+        // Calculate total spending from gear (excluding starting pack items)
+        let totalSpending = 0;
+        for (const gearUuid of data.gear) {
+            const gearItem = await fromUuid(gearUuid);
+            if (gearItem?.type === 'equipment') {
+                const cost = gearItem.system.baseCost || {};
+                totalSpending += (cost.gold || 0) * 100 + (cost.silver || 0) + (cost.copper || 0) / 10;
+            }
+        }
+
+        // Give player the remaining budget
+        const remainingSilver = budgetInSilver - totalSpending;
+        const remainingGold = Math.floor(remainingSilver / 100);
+        const remainingSilverOnly = Math.floor(remainingSilver % 100);
+        const remainingCopper = Math.round((remainingSilver % 1) * 10);
+
+        updateData["system.currency.gold"] = remainingGold;
+        updateData["system.currency.silver"] = remainingSilverOnly;
+        updateData["system.currency.copper"] = remainingCopper;
     }
 
     // Combine class perks and manual perks

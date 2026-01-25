@@ -68,6 +68,7 @@
     display: flex;
     flex: 0 0 30px;
     justify-content: flex-end;
+    gap: 5px;
     a {
       font-size: 12px;
       text-align: center;
@@ -403,6 +404,41 @@
 
   .favorite-inactive {
     color: $c-dark;
+  }
+}
+
+.spell-col-controls {
+  flex: 0 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  // Center icon in header row
+  .items-header & {
+    justify-content: center;
+  }
+
+  i {
+    font-size: 12px;
+  }
+}
+
+// Spell item row - ensure enough height for images
+.spell-item-row {
+  min-height: 44px;
+
+  .item-image {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
   }
 }
 

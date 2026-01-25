@@ -847,11 +847,24 @@ export class VagabondChatCard {
       );
     }
 
+    // Build title and subtitle with enhanced metadata
+    let title = item.name || "Feature";
+    let subtitle = actor.name;
+
+    // For perks, add prerequisite information as a tag
+    if (item.type === 'perk' && item.system?.getPrerequisiteString) {
+      const prereqString = item.system.getPrerequisiteString();
+      if (prereqString) {
+        tags.push({ label: `Prereq: ${prereqString}`, cssClass: 'tag-prerequisite' });
+      }
+    }
+
     return this.createActionCard({
         actor,
         // Only pass 'item' if it's a real document, otherwise null prevents linking errors
         item: isRealItem ? item : null,
-        title: item.name || "Feature",
+        title,
+        subtitle,
         cardType: 'item-use',
         tags,
         description,
@@ -1059,9 +1072,53 @@ export class VagabondChatCard {
   }
 
   // 10. FEATURE DATA USE ADAPTER
-  static async featureDataUse(actor, item) {
-    // This receives the plain data object {name, description} from the sheet
-    return this.itemUse(actor, item);
+  static async featureDataUse(actor, featureData, sourceItem, type) {
+    let description = '';
+
+    // Get the description from featureData
+    let rawDescription = featureData.description || featureData.enrichedDescription || '';
+
+    if (rawDescription) {
+      description = await foundry.applications.ux.TextEditor.enrichHTML(rawDescription, {
+        async: true, secrets: actor.isOwner, relativeTo: sourceItem
+      });
+    }
+
+    // Build metadata tags based on type
+    const tags = [];
+    
+    if (type === 'feature') {
+      // Features: Add level and class info as tags
+      const level = featureData.level || 1;
+      const className = sourceItem?.name || "Class";
+      tags.push({ label: `${className} - Level ${level}`, cssClass: 'tag-feature-info' });
+    } else if (type === 'trait') {
+      // Traits: Add ancestry info as tag
+      const ancestryName = sourceItem?.name || "Ancestry";
+      tags.push({ label: `${ancestryName} Trait`, cssClass: 'tag-trait-info' });
+    }
+
+    // Create the chat card directly to have full control over the image
+    const card = new VagabondChatCard()
+      .setType('item-use')
+      .setActor(actor)
+      .setTitle(featureData.name || "Feature")
+      .setSubtitle(actor.name);
+
+    // Override the icon with the source item's image (class for features, ancestry for traits)
+    if (sourceItem?.img) {
+      card.data.icon = sourceItem.img;
+    }
+
+    // Set the description
+    if (description) {
+      card.setDescription(description);
+    }
+
+    // Add the metadata tags
+    card.data.standardTags = tags;
+
+    return card.send();
   }
 
   // 11. LUCK SPEND ADAPTER

@@ -498,6 +498,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (this.spellHandler) {
       this.spellHandler.setupListeners();
     }
+
+    // Setup feature/trait/perk context menu listeners (if inventory handler exists)
+    if (this.inventoryHandler) {
+      this._setupFeatureContextMenuListeners();
+    }
+
+    // Show sliding panel tooltip (first time only)
+    this._showSlidingPanelTooltip();
   }
 
   // ===========================
@@ -784,25 +792,166 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const currentLevel = this.actor.system.attributes.level.value;
     const newLevel = currentLevel + 1;
 
-    // Update level
-    await this.actor.update({ 'system.attributes.level.value': newLevel });
+    // Store previous values for comparison
+    const previousMaxHP = this.actor.system.health.max;
+    const previousMaxMana = this.actor.system.mana.max;
+    const previousCastingMax = this.actor.system.mana.castingMax;
 
-    // Create level up chat message
-    const chatData = {
-      user: game.user.id,
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `
-        <div class="vagabond level-up-card">
-          <h3>${this.actor.name} leveled up!</h3>
-          <p><strong>New Level:</strong> ${newLevel}</p>
-        </div>
-      `,
-    };
+    // Get class item for spell amount calculation
+    const classItem = this.actor.items.find(item => item.type === 'class');
+    let previousSpellAmount = 0;
+    if (classItem && classItem.system.levelSpells) {
+      const currentLevelSpells = classItem.system.levelSpells.find(ls => ls.level === currentLevel);
+      if (currentLevelSpells) {
+        previousSpellAmount = currentLevelSpells.spells;
+      }
+    }
 
-    await ChatMessage.create(chatData);
+    try {
+      // Update level and reset XP to 0
+      await this.actor.update({ 
+        'system.attributes.level.value': newLevel,
+        'system.attributes.xp': 0
+      });
 
-    ui.notifications.info(`${this.actor.name} is now level ${newLevel}!`);
+      // Force a data refresh to ensure calculations include all active effects
+      await this.actor.prepareData();
+
+      // Calculate changes after level up
+      const newMaxHP = this.actor.system.health.max;
+      const hpChange = newMaxHP - previousMaxHP;
+      
+      const newMaxMana = this.actor.system.mana.max;
+      const manaChange = newMaxMana - previousMaxMana;
+      
+      const newCastingMax = this.actor.system.mana.castingMax;
+      const castingMaxChange = newCastingMax - previousCastingMax;
+
+      // Calculate new spell amount
+      let newSpellAmount = 0;
+      if (classItem && classItem.system.levelSpells) {
+        const newLevelSpells = classItem.system.levelSpells.find(ls => ls.level === newLevel);
+        if (newLevelSpells) {
+          newSpellAmount = newLevelSpells.spells;
+        }
+      }
+      const spellAmountChange = newSpellAmount - previousSpellAmount;
+
+      // Get features gained at the new level
+      const newFeatures = [];
+      if (classItem && classItem.system.levelFeatures) {
+        const featuresAtNewLevel = classItem.system.levelFeatures.filter(f => f.level === newLevel);
+        newFeatures.push(...featuresAtNewLevel);
+      }
+
+      // Check if character is a spellcaster
+      const isSpellcaster = this.actor.system.attributes.isSpellcaster;
+
+      // Build metadata tags for the level up card
+      const tags = [];
+      tags.push({ label: game.i18n.format('VAGABOND.LevelUp.NewLevel', { level: newLevel }), cssClass: 'tag-level', icon: 'fas fa-arrow-up' });
+
+      // Build description content
+      let description = ``;
+      
+      // Max HP
+      description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.MaxHP')}</strong> ${previousMaxHP} → ${newMaxHP}`;
+      if (hpChange !== 0) {
+        description += ` (${hpChange >= 0 ? '+' : ''}${hpChange})`;
+      }
+      description += `</p>`;
+
+      // Mana information (only for spellcasters)
+      if (isSpellcaster) {
+        description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.MaxMana')}</strong> ${previousMaxMana} → ${newMaxMana}`;
+        if (manaChange !== 0) {
+          description += ` (${manaChange >= 0 ? '+' : ''}${manaChange})`;
+        }
+        description += `</p>`;
+
+        description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.ManaPerCast')}</strong> ${previousCastingMax} → ${newCastingMax}`;
+        if (castingMaxChange !== 0) {
+          description += ` (${castingMaxChange >= 0 ? '+' : ''}${castingMaxChange})`;
+        }
+        description += `</p>`;
+      }
+
+      // Spell Amount
+      description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.SpellAmount')}</strong> ${previousSpellAmount} → ${newSpellAmount}`;
+      if (spellAmountChange !== 0) {
+        description += ` (${spellAmountChange >= 0 ? '+' : ''}${spellAmountChange})`;
+      }
+      description += `</p>`;
+
+      // New Features
+      if (newFeatures.length > 0) {
+        description += `
+          <div class="features-section">
+            <div class="features-header-container">
+              <div class="features-header-arrow">
+                <span>${game.i18n.localize('VAGABOND.LevelUp.NewFeatures')}</span>
+              </div>
+            </div>
+            <div class="features-content">
+              ${newFeatures.map(feature => `
+                <div class="feature-item">
+                  <h4>${feature.name}</h4>
+                  ${feature.description ? `<p>${feature.description}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Create level up chat card using VagabondChatCard
+      const card = new VagabondChatCard()
+        .setType('level-up')
+        .setActor(this.actor)
+        .setTitle(game.i18n.localize('VAGABOND.LevelUp.Title'))
+        .setSubtitle(this.actor.name)
+        .setDescription(description);
+
+      // Set metadata tags
+      card.data.standardTags = tags;
+
+      // Send the card
+      await card.send();
+
+      // Update notification message to include mana if applicable
+      let notificationMessage = game.i18n.format('VAGABOND.LevelUp.NotificationLevelUp', { 
+        name: this.actor.name, 
+        level: newLevel, 
+        hpChange: hpChange 
+      });
+      
+      if (isSpellcaster) {
+        notificationMessage += game.i18n.format('VAGABOND.LevelUp.NotificationMana', { manaChange: manaChange });
+      }
+      
+      if (spellAmountChange > 0) {
+        notificationMessage += game.i18n.format('VAGABOND.LevelUp.NotificationSpells', { 
+          spellCount: spellAmountChange,
+          plural: spellAmountChange > 1 ? 's' : ''
+        });
+      }
+      
+      if (newFeatures.length > 0) {
+        notificationMessage += game.i18n.format('VAGABOND.LevelUp.NotificationFeatures', { 
+          featureCount: newFeatures.length,
+          plural: newFeatures.length > 1 ? 's' : ''
+        });
+      }
+      
+      ui.notifications.info(notificationMessage);
+
+    } catch (error) {
+      console.error(game.i18n.localize('VAGABOND.LevelUp.ErrorConsoleMessage'), error);
+      ui.notifications.error(game.i18n.format('VAGABOND.LevelUp.ErrorLevelUpFailed', { error: error.message }));
+    }
   }
+
+
 
   /**
    * Toggle feature accordion
@@ -811,7 +960,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onToggleFeature(event, target) {
-    const accordion = target.closest('.feature-accordion');
+    const accordion = target.closest('.feature.accordion-item');
     AccordionHelper.toggle(accordion);
   }
 
@@ -822,7 +971,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onToggleTrait(event, target) {
-    const accordion = target.closest('.trait-accordion');
+    const accordion = target.closest('.trait.accordion-item');
     AccordionHelper.toggle(accordion);
   }
 
@@ -833,7 +982,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onTogglePerk(event, target) {
-    const accordion = target.closest('.perk-accordion');
+    const accordion = target.closest('.perk-card.accordion-item');
     AccordionHelper.toggle(accordion);
   }
 
@@ -849,17 +998,91 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     const isOpen = panel.classList.contains('panel-open');
 
-    // Toggle classes for smooth CSS transition
-    if (isOpen) {
-      panel.classList.remove('panel-open');
-      panel.classList.add('panel-closed');
-    } else {
-      panel.classList.remove('panel-closed');
-      panel.classList.add('panel-open');
-    }
+    // Force a reflow to ensure the browser recognizes the current state
+    // before applying the transition
+    void panel.offsetHeight;
+
+    // Use requestAnimationFrame to ensure smooth transition
+    requestAnimationFrame(() => {
+      // Toggle classes for smooth CSS transition
+      if (isOpen) {
+        panel.classList.remove('panel-open');
+        panel.classList.add('panel-closed');
+      } else {
+        panel.classList.remove('panel-closed');
+        panel.classList.add('panel-open');
+      }
+    });
 
     // Save state to flag (without re-rendering)
     await this.actor.setFlag('vagabond', 'isPanelOpen', !isOpen);
+
+    // Hide the tooltip after first use
+    this._hideSlidingPanelTooltip();
+  }
+
+  /**
+   * Show sliding panel tooltip (first time only)
+   * @private
+   */
+  _showSlidingPanelTooltip() {
+    // Only show for character sheets
+    if (this.actor.type !== 'character') return;
+
+    // Check if user has already seen the tooltip
+    const hasSeenTooltip = game.user.getFlag('vagabond', 'hasSeenPanelTooltip');
+    if (hasSeenTooltip) return;
+
+    const clickZone = this.element.querySelector('.panel-click-zone');
+    if (!clickZone) return;
+
+    // Add highlight class to click zone
+    clickZone.classList.add('tooltip-active');
+
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.className = 'sliding-panel-tooltip';
+    tooltip.innerHTML = `
+      <div class="tooltip-arrow"></div>
+      <div class="tooltip-content">
+        Click anywhere on this area to open/close
+      </div>
+    `;
+
+    // Add tooltip to click zone (absolute positioning relative to click zone)
+    clickZone.appendChild(tooltip);
+
+    // Add visible class after a short delay for animation
+    setTimeout(() => tooltip.classList.add('visible'), 100);
+  }
+
+  /**
+   * Hide sliding panel tooltip and mark as seen
+   * @private
+   */
+  _hideSlidingPanelTooltip() {
+    const tooltip = this.element.querySelector('.sliding-panel-tooltip');
+    const clickZone = this.element.querySelector('.panel-click-zone');
+    
+    if (!tooltip) return;
+
+    // Remove highlight class from click zone
+    if (clickZone) {
+      clickZone.classList.remove('tooltip-active');
+    }
+
+    // Fade out
+    tooltip.classList.remove('visible');
+
+    // Remove after animation
+    setTimeout(() => {
+      if (tooltip.parentNode) {
+        tooltip.parentNode.removeChild(tooltip);
+      }
+    }, 300);
+
+    // Mark as seen permanently
+    game.user.setFlag('vagabond', 'hasSeenPanelTooltip', true);
   }
 
   /**
@@ -961,9 +1184,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onModifyCheckBonus(event, target) {
-    const currentBonus = this.actor.system.checkBonus || 0;
-    const newBonus = parseInt(target.value) || 0;
-    await this.actor.update({ 'system.checkBonus': newBonus });
+    event.preventDefault();
+    const currentBonus = this.actor.system.universalCheckBonus || 0;
+
+    // Left click: +1, Right click: -1
+    if (event.button === 2 || event.type === 'contextmenu') {
+      // Right click: decrement
+      const newBonus = currentBonus - 1;
+      await this.actor.update({ 'system.universalCheckBonus': newBonus });
+    } else {
+      // Left click: increment
+      const newBonus = currentBonus + 1;
+      await this.actor.update({ 'system.universalCheckBonus': newBonus });
+    }
   }
 
   /**
@@ -1016,7 +1249,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _viewDoc(event, target) {
-    const doc = this._getEmbeddedDocument(target);
+    const doc = this._getEmbeddedDocument(target, this.actor);
     if (doc) doc.sheet.render(true);
   }
 
@@ -1027,7 +1260,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _deleteDoc(event, target) {
-    const doc = this._getEmbeddedDocument(target);
+    const doc = this._getEmbeddedDocument(target, this.actor);
     if (!doc) return;
 
     const confirmed = await Dialog.confirm({
@@ -1049,30 +1282,40 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _createDoc(event, target) {
     const { documentClass, type } = target.dataset;
 
-    // Map document class names to collection names
-    const collectionMap = {
-      'Item': 'items',
-      'ActiveEffect': 'effects',
-    };
+    let docData;
 
-    const collectionName = collectionMap[documentClass] || documentClass;
-    const collection = this.actor[collectionName];
+    if (documentClass === 'ActiveEffect') {
+      // Use the working approach from item-sheet.mjs
+      const aeCls = getDocumentClass('ActiveEffect');
+      
+      docData = {
+        name: aeCls.defaultName({
+          type: target.dataset.type,
+          parent: this.actor,
+        }),
+      };
 
-    if (!collection) {
-      console.error(`Collection not found for ${documentClass}`);
-      return;
+      // Process all data attributes like the working _createEffect method
+      for (const [dataKey, value] of Object.entries(target.dataset)) {
+        // Skip reserved attributes
+        if (['action', 'documentClass'].includes(dataKey)) continue;
+        foundry.utils.setProperty(docData, dataKey, value);
+      }
+      
+      // Use createEmbeddedDocuments for proper embedding
+      return await this.actor.createEmbeddedDocuments('ActiveEffect', [docData]);
+    } else {
+      // Existing Item creation logic
+      docData = {
+        name: type ? `New ${type}` : 'New Document',
+      };
+
+      if (type) {
+        docData.type = type;
+      }
+      
+      return await this.actor.createEmbeddedDocuments('Item', [docData]);
     }
-
-    const docData = {
-      name: type ? `New ${type}` : 'New Effect',
-    };
-
-    // Only add type if it's provided (Items need type, ActiveEffects don't)
-    if (type) {
-      docData.type = type;
-    }
-
-    await collection.createDocument(docData);
   }
 
   /**
@@ -1082,7 +1325,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _toggleEffect(event, target) {
-    const effect = this._getEmbeddedDocument(target);
+    const effect = this._getEmbeddedDocument(target, this.actor);
     if (effect) {
       await effect.update({ disabled: !effect.disabled });
     }
@@ -1091,12 +1334,30 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   /**
    * Get embedded document from target element
    * @param {HTMLElement} target - The target element
+   * @param {Actor} actor - The actor instance
    * @returns {Document|null} The embedded document
    * @private
    */
-  _getEmbeddedDocument(target) {
-    const { documentId, documentClass } = target.closest('[data-document-id]')?.dataset || {};
-    if (!documentId || !documentClass) return null;
+  static _getEmbeddedDocument(target, actor) {
+    const li = target.closest('[data-effect-id], [data-item-id], [data-document-id]');
+    if (!li) return null;
+
+    const { effectId, itemId, documentId, documentClass } = li.dataset;
+    
+    // Determine the document ID and class
+    let docId, docClass;
+    if (effectId) {
+      docId = effectId;
+      docClass = 'ActiveEffect';
+    } else if (itemId) {
+      docId = itemId;
+      docClass = 'Item';
+    } else if (documentId) {
+      docId = documentId;
+      docClass = documentClass;
+    } else {
+      return null;
+    }
 
     // Map document class names to collection names
     const collectionMap = {
@@ -1104,9 +1365,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       'ActiveEffect': 'effects',
     };
 
-    const collectionName = collectionMap[documentClass] || documentClass;
-    const collection = this.actor[collectionName];
-    return collection?.get(documentId);
+    const collectionName = collectionMap[docClass] || docClass;
+    const collection = actor[collectionName];
+    return collection?.get(docId);
   }
 
   // ===========================
@@ -1240,6 +1501,69 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
       });
     }
+  }
+
+  /**
+   * Setup context menu listeners for features, traits, and perks
+   * @private
+   */
+  _setupFeatureContextMenuListeners() {
+    // Feature headers (from class)
+    const featureHeaders = this.element.querySelectorAll('.feature-header');
+    featureHeaders.forEach(header => {
+      header.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const featureItem = header.closest('[data-feature-index]');
+        if (!featureItem) return;
+
+        const featureIndex = parseInt(featureItem.dataset.featureIndex);
+        if (isNaN(featureIndex)) return;
+
+        await this.inventoryHandler.showFeatureContextMenu(event, {
+          type: 'feature',
+          index: featureIndex
+        });
+      });
+    });
+
+    // Trait headers (from ancestry)
+    const traitHeaders = this.element.querySelectorAll('.trait-header');
+    traitHeaders.forEach(header => {
+      header.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const traitItem = header.closest('[data-trait-index]');
+        if (!traitItem) return;
+
+        const traitIndex = parseInt(traitItem.dataset.traitIndex);
+        if (isNaN(traitIndex)) return;
+
+        await this.inventoryHandler.showFeatureContextMenu(event, {
+          type: 'trait',
+          index: traitIndex
+        });
+      });
+    });
+
+    // Perk headers (real items)
+    const perkHeaders = this.element.querySelectorAll('.perk-header');
+    perkHeaders.forEach(header => {
+      header.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const perkItem = header.closest('[data-item-id]');
+        if (!perkItem) return;
+
+        const itemId = perkItem.dataset.itemId;
+        if (!itemId) return;
+
+        await this.inventoryHandler.showFeatureContextMenu(event, itemId, 'perk');
+      });
+    });
   }
 
   /**
