@@ -1502,6 +1502,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
       // Prepare item data snapshot for storage
       const itemData = droppedItem.toObject();
+      
+      // Set the containerId to track which container this item belongs to
+      itemData.system.containerId = this.item.id;
 
       // MOVE vs COPY logic: 
       // Only delete the original if it belongs to the same actor owning this container.
@@ -1584,9 +1587,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             itemData.system.equipmentState = 'twoHands';
           }
         } else if (itemData.system.equipmentType === 'armor') {
-          itemData.system.equipmentState = 'equipped';
+          itemData.system.worn = true; // Use 'worn' field for armor, not 'equipmentState'
         }
       }
+
+      // Clear containerId when moving item back to inventory
+      itemData.system.containerId = null;
 
       await actor.createEmbeddedDocuments('Item', [itemData]);
 

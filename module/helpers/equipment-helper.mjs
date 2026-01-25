@@ -52,6 +52,15 @@ export class EquipmentHelper {
     return item?.type === 'equipment' && item?.system?.equipmentType === 'relic';
   }
 
+  /**
+   * Check if an item is a container
+   * @param {Object} item - The item to check
+   * @returns {boolean} True if the item is a container
+   */
+  static isContainer(item) {
+    return item?.type === 'container';
+  }
+
   // ===========================
   // Equipment State Methods
   // ===========================
@@ -70,6 +79,9 @@ export class EquipmentHelper {
     }
     if (this.isGear(item) || this.isAlchemical(item) || this.isRelic(item)) {
       return item.system.worn === true;
+    }
+    if (this.isContainer(item)) {
+      return false; // Containers are not "equipped" in the traditional sense
     }
     return false;
   }

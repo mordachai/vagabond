@@ -9,7 +9,8 @@ VAGABOND.equipmentTypes = {
   'armor': 'VAGABOND.EquipmentTypes.armor',
   'gear': 'VAGABOND.EquipmentTypes.gear',
   'alchemical': 'VAGABOND.EquipmentTypes.alchemical',
-  'relic': 'VAGABOND.EquipmentTypes.relic'
+  'relic': 'VAGABOND.EquipmentTypes.relic',
+  'container': 'VAGABOND.EquipmentTypes.container'
 };
 
 /**

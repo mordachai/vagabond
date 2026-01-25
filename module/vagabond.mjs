@@ -546,7 +546,7 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 // Ensure new inventory items get proper gridPosition
 Hooks.on('preCreateItem', (item, data, options, userId) => {
   // Only handle inventory items
-  const isInventoryItem = ['equipment', 'weapon', 'armor', 'gear'].includes(item.type);
+  const isInventoryItem = ['equipment', 'weapon', 'armor', 'gear', 'container'].includes(item.type);
   if (!isInventoryItem) return;
 
   // If gridPosition not set, assign next available position
@@ -555,7 +555,7 @@ Hooks.on('preCreateItem', (item, data, options, userId) => {
     if (actor) {
       // Find max gridPosition of existing items
       const existingItems = actor.items.filter(i =>
-        ['equipment', 'weapon', 'armor', 'gear'].includes(i.type)
+        ['equipment', 'weapon', 'armor', 'gear', 'container'].includes(i.type)
       );
 
       const maxPosition = existingItems.reduce((max, i) => {

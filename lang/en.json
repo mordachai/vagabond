@@ -609,6 +609,14 @@
       "Mythral": "Occupies 1 fewer Slot (min 1).",
       "Orichalcum": "Armor reduces Cast damage."
     },
+    "EquipmentTypes": {
+      "weapon": "Weapon",
+      "armor": "Armor", 
+      "gear": "Gear",
+      "alchemical": "Alchemical",
+      "relic": "Relic",
+      "container": "Container"
+    },
     "FavorHinder": {
       "label": "Favor/Hinder",
       "States": {
@@ -743,6 +751,7 @@
         "Gear": "Gear",
         "Alchemical": "Alchemical",
         "Relic": "Relic",
+        "Container": "Container",
         "Close": "Close",
         "Near": "Near",
         "Far": "Far",

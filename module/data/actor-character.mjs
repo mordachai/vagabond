@@ -678,13 +678,15 @@ export default class VagabondCharacter extends VagabondActorBase {
         const isInventoryItem = (item.type === 'equipment') ||
                                (item.type === 'weapon') ||
                                (item.type === 'armor') ||
-                               (item.type === 'gear');
+                               (item.type === 'gear') ||
+                               (item.type === 'container');
 
         if (isInventoryItem) {
           // Skip items inside containers
           if (item.system.containerId) continue;
 
-          const itemSlots = item.system.slots || 0;
+          // Get slots from appropriate field (containers use 'slots', equipment uses 'baseSlots' or 'slots')
+          const itemSlots = item.system.slots || item.system.baseSlots || 0;
 
           // Add to occupied (excludes slot-0 items)
           if (itemSlots > 0) {

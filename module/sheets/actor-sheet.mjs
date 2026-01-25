@@ -417,8 +417,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         case 'equipment':
           if (item.system.equipmentType === 'weapon') weapons.push(item);
           else if (item.system.equipmentType === 'armor') armor.push(item);
-          else if (item.system.equipmentType === 'container') containers.push(item);
           else gear.push(item);
+          break;
+        case 'container':
+          containers.push(item);
           break;
         case 'spell':
           spells.push(item);
