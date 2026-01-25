@@ -121,6 +121,24 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     i { opacity: 0.7; font-size: 12px; }
                 }
 
+                /* Feature and Trait Info Tags */
+                .tag-feature-info {
+                    color: var(--c-dark-blue);
+                    font-style: italic;
+                }
+
+                .tag-trait-info {
+                    color: var(--c-dark-blue);
+                    font-style: italic;
+                }
+
+                /* Perk Prerequisite Tags */
+                .tag-prerequisite {
+                    color: var(--c-dark-blue);
+                    font-size: 14px;
+                    font-style: italic;
+                }
+
                 .template-trigger {
                     cursor: pointer;
                     text-decoration: underline dotted; /* Optional visual cue */
@@ -1128,6 +1146,195 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             white-space: nowrap;
             text-align: center;
             transition: color 0.2s ease, font-weight 0.2s ease;
+        }
+    }
+}
+
+/* Level Up Card Styling */
+.vagabond-chat-card-v2[data-card-type="level-up"] {
+    .tag-level {
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 3px;
+    }
+}
+
+/* FEATURES SECTION (for level up cards) */
+.vagabond-chat-card-v2 .features-section {
+    margin-bottom: 10px;
+
+    .features-header-container {
+        display: flex;
+        align-items: center;
+        padding-right: 30px;
+        margin-left: -16px;
+    }
+
+    .features-header-arrow {
+        background-image: url('../assets/ui/chat/damage-title-bg.webp');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 150px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5px;
+        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+
+        span {
+            color: white;
+            font-weight: 900;
+            font-family: $font-title;
+            font-size: 14px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        &::before {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: var(--vagabond-c-bluey);
+            border-radius: 1px;
+            max-width: 25px;
+        }
+
+        &::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: var(--vagabond-c-bluey);
+            border-radius: 1px;
+            max-width: 25px;
+        }
+    }
+
+    .features-content {
+        padding: 8px 20px;
+        
+        .feature-item {
+            margin-bottom: 12px;
+            
+            &:last-child {
+                margin-bottom: 0;
+            }
+            
+            h4 {
+                margin: 0 0 4px 0;
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--c-dark-blue);
+                border: none;
+            }
+            
+            p {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.5;
+                color: var(--c-dark-blue);
+            }
+        }
+    }
+}
+
+.vagabond-chat-card-v2 .level-up-card,
+.chat-message .level-up-card {
+    .hp-section {
+        background: rgba(220, 20, 60, 0.1);
+        border-left: 4px solid #DC143C;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+
+        .hp-breakdown {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 8px;
+            border-radius: 3px;
+            margin-top: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+    }
+
+    .mana-section {
+        background: rgba(100, 149, 237, 0.1);
+        border-left: 4px solid #6495ED;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+
+        .mana-breakdown {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 8px;
+            border-radius: 3px;
+            margin-top: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+    }
+
+    .spell-amount-section {
+        background: rgba(138, 43, 226, 0.1);
+        border-left: 4px solid #8A2BE2;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+
+        .spell-amount-increase {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .spell-amount-decrease {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .spell-amount-unchanged {
+            color: #6c757d;
+            font-weight: 400;
+        }
+    }
+
+    .feature-section {
+        background: rgba(255, 193, 7, 0.1);
+        border-left: 4px solid #FFC107;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+
+        h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--c-dark-blue);
+        }
+
+        .feature-item {
+            margin-bottom: 12px;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            border-left: 3px solid #FFC107;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            h4 {
+                margin: 0 0 4px 0;
+                font-size: 14px;
+                font-weight: 600;
+                color: #FFC107;
+            }
+
+            p {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.4;
+                color: var(--c-dark-blue);
+            }
         }
     }
 }

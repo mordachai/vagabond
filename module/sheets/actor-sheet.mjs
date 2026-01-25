@@ -3,11 +3,20 @@ import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { VagabondCharBuilder } from '../applications/char-builder.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
+import { AccordionHelper } from '../helpers/accordion-helper.mjs';
+import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
+import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 const { api, sheets } = foundry.applications;
 
 /**
- * Extend the basic ActorSheet with some very simple modifications
+ * Base ActorSheet for Vagabond system
+ * Extended by VagabondCharacterSheet and VagabondNPCSheet
+ *
+ * REFACTORED: Phase 4 - Most action handlers now delegate to specialized handlers
+ * initialized in child classes (spellHandler, rollHandler, equipmentHandler, etc.)
+ *
  * @extends {ActorSheetV2}
  */
 export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
@@ -25,72 +34,74 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       createDoc: this._createDoc,
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
+      // Roll actions - delegated to rollHandler
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
-      useItem: this._onUseItem,  // Use item (gear/relic/alchemical) to post chat card
+      useItem: this._onUseItem,
+      rollMorale: this._onRollMorale,
+      // Equipment actions - delegated to equipmentHandler
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleWeaponGrip: this._onToggleWeaponGrip,
       toggleArmorEquipment: this._onToggleArmorEquipment,
-      castSpell: this._onCastSpell,  // NEW: Cast spell action
-      modifyDamage: this._onModifyDamage,  // NEW: Increase/decrease damage
-      modifyDelivery: this._onModifyDelivery,  // NEW: Increase/decrease delivery
-      toggleFx: this._onToggleFx,  // NEW: Toggle Fx checkbox
+      equipItem: this._onEquipItem,
+      editItem: this._onEditItem,
+      deleteItem: this._onDeleteItem,
+      // Spell actions - delegated to spellHandler
+      castSpell: this._onCastSpell,
+      toggleFx: this._onToggleFx,
       toggleSpellFavorite: this._onToggleSpellFavorite,
-      viewAncestry: this._viewAncestry,  // YOUR CUSTOM ACTION
-      viewClass: this._viewClass,  // YOUR CUSTOM ACTION
-      levelUp: this._onLevelUp,  // Level up action
-      toggleFeature: this._onToggleFeature,  // Feature accordion toggle
-      toggleTrait: this._onToggleTrait,  // Trait accordion toggle
-      togglePerk: this._onTogglePerk,  // Perk accordion toggle
-      togglePanel: this._onTogglePanel,  // Sliding panel toggle
-      toggleEffectsAccordion: this._onToggleEffectsAccordion,  // NPC effects accordion toggle
-      toggleLock: this._onToggleLock,  // NPC lock/unlock toggle
-      toggleSpeedType: this._onToggleSpeedType, // NPC speed type toggle
-      removeSpeedType: this._onRemoveSpeedType, // NPC speed type remove
-      toggleImmunity: this._onToggleImmunity,  // NPC damage immunity toggle
-      removeImmunity: this._onRemoveImmunity,  // NPC damage immunity remove
-      toggleWeakness: this._onToggleWeakness,  // NPC damage weakness toggle
-      removeWeakness: this._onRemoveWeakness,  // NPC damage weakness remove
-      toggleStatusImmunity: this._onToggleStatusImmunity,  // NPC status immunity toggle
-      removeStatusImmunity: this._onRemoveStatusImmunity,  // NPC status immunity remove
-      selectZone: this._onSelectZone,  // NPC zone selection
-      clearZone: this._onClearZone,  // NPC zone clear
-      toggleFavorHinder: this._onToggleFavorHinder,  // Favor/Hinder toggle
-      rollMorale: this._onRollMorale,  // NPC morale check
-      addAction: this._onAddAction,  // NPC add action
-      removeAction: this._onRemoveAction,  // NPC remove action
-      clickActionName: this._onClickActionName,  // NPC click action name
-      clickActionDamageRoll: this._onClickActionDamageRoll,  // NPC click action damage roll
-      toggleActionAccordion: this._onToggleActionAccordion,  // NPC toggle action accordion
-      addAbility: this._onAddAbility,  // NPC add ability
-      removeAbility: this._onRemoveAbility,  // NPC remove ability
-      clickAbilityName: this._onClickAbilityName,  // NPC click ability name
-      toggleAbilityAccordion: this._onToggleAbilityAccordion,  // NPC toggle ability accordion
-      createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from NPC recharge
-      // autoArrangeInventory: this._onAutoArrangeInventory,  // REMOVED - Auto-arrange inventory grid
-      equipItem: this._onEquipItem,  // Equip item from context menu
-      editItem: this._onEditItem,  // Edit item from context menu
-      deleteItem: this._onDeleteItem,  // Delete item from context menu
-      spendLuck: this._onSpendLuck,  // Spend or recharge luck
-      spendStudiedDie: this._onSpendStudiedDie,  // Spend or add studied die
-      modifyCheckBonus: this._onModifyCheckBonus,  // Modify check bonus
-      openDowntime: this._onOpenDowntime, // Open downtime activities
-      toggleSpellPreview: this._onToggleSpellPreview, // Display measure template
-      openCharBuilder: this._onOpenCharBuilder, // Open character builder
-      dismissCharBuilder: this._onDismissCharBuilder, // Dismiss character builder permanently
+      toggleSpellPreview: this._onToggleSpellPreview,
+      // Character-specific UI actions (handled in base class)
+      viewAncestry: this._viewAncestry,
+      viewClass: this._viewClass,
+      levelUp: this._onLevelUp,
+      toggleFeature: this._onToggleFeature,
+      toggleTrait: this._onToggleTrait,
+      togglePerk: this._onTogglePerk,
+      togglePanel: this._onTogglePanel,
+      toggleFavorHinder: this._onToggleFavorHinder,
+      spendLuck: this._onSpendLuck,
+      spendStudiedDie: this._onSpendStudiedDie,
+      modifyCheckBonus: this._onModifyCheckBonus,
+      openDowntime: this._onOpenDowntime,
+      openCharBuilder: this._onOpenCharBuilder,
+      dismissCharBuilder: this._onDismissCharBuilder,
+      // NPC-specific UI actions (handled in base class)
+      toggleEffectsAccordion: this._onToggleEffectsAccordion,
+      toggleLock: this._onToggleLock,
+      // NPC immunity actions - delegated to immunityHandler
+      toggleSpeedType: this._onToggleSpeedType,
+      removeSpeedType: this._onRemoveSpeedType,
+      toggleImmunity: this._onToggleImmunity,
+      removeImmunity: this._onRemoveImmunity,
+      toggleWeakness: this._onToggleWeakness,
+      removeWeakness: this._onRemoveWeakness,
+      toggleStatusImmunity: this._onToggleStatusImmunity,
+      removeStatusImmunity: this._onRemoveStatusImmunity,
+      selectZone: this._onSelectZone,
+      clearZone: this._onClearZone,
+      // NPC action/ability actions - delegated to actionHandler
+      addAction: this._onAddAction,
+      removeAction: this._onRemoveAction,
+      toggleActionAccordion: this._onToggleActionAccordion,
+      addAbility: this._onAddAbility,
+      removeAbility: this._onRemoveAbility,
+      clickAbilityName: this._onClickAbilityName,
+      toggleAbilityAccordion: this._onToggleAbilityAccordion,
+      clickActionName: this._onClickActionName,
+      clickActionDamageRoll: this._onClickActionDamageRoll,
+      createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
     },
-    // FIXED: Enabled drag & drop (was commented in boilerplate)
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
     form: {
       submitOnChange: true,
-      submitDelay: 500,  // Debounce form submission to prevent accordion flicker
+      submitDelay: 500,
     },
   };
 
   /** @override */
   static PARTS = {
     tabs: {
-      // Foundry-provided generic template
       template: 'templates/generic/tab-navigation.hbs',
     },
     features: {
@@ -109,7 +120,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/sliding-panel.hbs',
       scrollable: [".panel-content"],
     },
-    // NPC-specific parts
     npcHeader: {
       template: 'systems/vagabond/templates/actor/npc-header.hbs',
     },
@@ -119,798 +129,263 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     },
   };
 
-  /**
-   * Constructor - Initialize spell states from localStorage
-   * @param {object} object - The actor document
-   * @param {object} options - Application options
-   */
+  /** @override */
   constructor(object, options) {
     super(object, options);
 
-    // Load spell states from localStorage (per character, per spell)
-    this.spellStates = this._loadSpellStates();
-
-    // Form submission debounce (fallback if submitDelay not supported)
-    this._formSubmitDebounce = null;
+    // Note: Handlers are initialized in child classes (VagabondCharacterSheet, VagabondNPCSheet)
+    // this.spellHandler, this.rollHandler, etc.
   }
-
-  /**
-     * Override close to clean up:
-     * 1. Dropdown states
-     * 2. Debounce timers
-     * 3. Event listeners
-     * 4. Measurement Template previews
-     * @override
-     */
-    async close(options = {}) {
-      // 1. Clear dropdown state
-      this._openDropdowns = [];
-
-      // 2. Clear pending form submission debounce
-      if (this._formSubmitDebounce) {
-        clearTimeout(this._formSubmitDebounce);
-        this._formSubmitDebounce = null;
-      }
-
-      // 3. Remove click outside handler (from the second implementation)
-      if (this._accordionClickOutsideHandler) {
-        document.removeEventListener('click', this._accordionClickOutsideHandler);
-        this._accordionClickOutsideHandler = null;
-      }
-
-      // 4. NEW: Cleanup any active Template Previews for this actor
-      if (globalThis.vagabond.managers?.templates) {
-        await globalThis.vagabond.managers.templates.clearActorPreviews(this.actor.id);
-      }
-
-      return super.close(options);
-    }
-
-  /**
-   * Load spell states from localStorage for this character
-   * @returns {Object} Spell states keyed by spell ID
-   * @private
-   */
-  _loadSpellStates() {
-    const key = `vagabond.spell-states.${this.actor.id}`;
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : {};
-  }
-
-  /**
-   * Save spell states to localStorage for this character
-   * @private
-   */
-  _saveSpellStates() {
-    const key = `vagabond.spell-states.${this.actor.id}`;
-    localStorage.setItem(key, JSON.stringify(this.spellStates));
-  }
-
-  /**
-   * Get spell state for a specific spell, creating default if needed
-   * @param {string} spellId - The spell ID
-   * @returns {Object} Spell state with damageDice, deliveryType, deliveryIncrease
-   * @private
-   */
-  _getSpellState(spellId) {
-    if (!this.spellStates[spellId]) {
-      const spell = this.actor.items.get(spellId);
-      const defaultUseFx = spell?.system?.damageType === '-';
-
-      this.spellStates[spellId] = {
-        damageDice: 1,
-        deliveryType: null,
-        deliveryIncrease: 0,
-        useFx: defaultUseFx,
-        previewActive: false // NEW: Track preview state
-      };
-    }
-    return this.spellStates[spellId];
-  }
-
-  /**
-   * Calculate total mana cost for casting a spell
-   * @param {string} spellId - The spell ID
-   * @returns {Object} Cost breakdown: damageCost, deliveryBaseCost, deliveryIncreaseCost, totalCost
-   * @private
-   */
-  _calculateSpellCost(spellId) {
-    const state = this._getSpellState(spellId);
-    const spell = this.actor.items.get(spellId);
-
-    // Damage cost: 0 for 1d6, +1 per extra die
-    const hasDamage = spell.system.damageType !== '-' && state.damageDice >= 1;
-    const damageCost = hasDamage && state.damageDice > 1
-      ? state.damageDice - 1
-      : 0;
-
-    // Fx cost: +1 mana ONLY when using both damage AND effects
-    const fxCost = (state.useFx && hasDamage) ? 1 : 0;
-
-    // Delivery base cost
-    const deliveryBaseCost = state.deliveryType
-      ? CONFIG.VAGABOND.deliveryDefaults[state.deliveryType].cost
-      : 0;
-
-    // Delivery increase cost
-    const increasePerStep = state.deliveryType
-      ? CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType]
-      : 0;
-    const deliveryIncreaseCost = state.deliveryIncrease * increasePerStep;
-
-    const totalCost = damageCost + fxCost + deliveryBaseCost + deliveryIncreaseCost;
-
-    return { damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, totalCost };
-  }
-
-  /**
-   * Get delivery size/range hint text (e.g., "(25 foot)" for increased cone)
-   * NOTE: Distances stored in feet for future grid conversion (5 feet = 1 grid)
-   * @param {string} deliveryType - The delivery type
-   * @param {number} increaseCount - Number of increases
-   * @returns {string} Size hint text
-   * @private
-   */
-  _getDeliverySizeHint(deliveryType, increaseCount) {
-    if (!deliveryType || increaseCount === 0) return '';
-
-    const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
-    const increment = CONFIG.VAGABOND.deliveryIncrement[deliveryType];
-
-    if (!baseRange.value || increment === 0) return '';
-
-    const newValue = baseRange.value + (increment * increaseCount);
-
-    if (baseRange.type === 'count') {
-      // For imbue/remote: "2 targets"
-      return `(${newValue} ${baseRange.unit}${newValue > 1 ? 's' : ''})`;
-    } else if (baseRange.type === 'radius') {
-      // For aura/sphere: "(15-foot radius)"
-      return `(${newValue}-${baseRange.unit} ${baseRange.type})`;
-    } else if (baseRange.type === 'length') {
-      // For cone/line: "(20 foot)"
-      return `(${newValue}-${baseRange.unit})`;
-    } else if (baseRange.type === 'cube') {
-      // For cube: "(10-foot cube)"
-      return `(${newValue}-${baseRange.unit} ${baseRange.type})`;
-    } else if (baseRange.type === 'square') {
-      // For glyph: "(5-foot square)"
-      return `(${newValue}-${baseRange.unit} ${baseRange.type})`;
-    }
-
-    return '';
-  }
-
-  /**
-   * Get total delivery area/range for metadata display (e.g., "20'" for cone)
-   * @param {string} deliveryType - The delivery type
-   * @param {number} increaseCount - Number of increases
-   * @returns {string} Total area text (e.g., "20'", "15' radius", "2 targets")
-   * @private
-   */
-  _getDeliveryTotalArea(deliveryType, increaseCount) {
-    if (!deliveryType) return '';
-
-    const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
-    const increment = CONFIG.VAGABOND.deliveryIncrement[deliveryType];
-
-    if (!baseRange.value) return '';
-
-    const totalValue = baseRange.value + (increment * increaseCount);
-
-    if (baseRange.type === 'count') {
-      // For imbue/remote: "2 targets"
-      return `${totalValue} ${baseRange.unit}${totalValue > 1 ? 's' : ''}`;
-    } else if (baseRange.type === 'radius') {
-      // For aura/sphere: "15' radius"
-      return `${totalValue}' ${baseRange.type}`;
-    } else if (baseRange.type === 'length') {
-      // For cone/line: "20'"
-      return `${totalValue}'`;
-    } else if (baseRange.type === 'cube') {
-      // For cube: "10' cube"
-      return `${totalValue}' ${baseRange.type}`;
-    } else if (baseRange.type === 'square') {
-      // For glyph: "5' square"
-      return `${totalValue}' ${baseRange.type}`;
-    }
-
-    return '';
-  }
-
-  /**
-   * Clear all template previews for this actor
-   * Called when player changes ANY spell configuration (shows they're changing their mind)
-   * @private
-   */
-  async _clearAllPreviews() {
-    if (globalThis.vagabond.managers?.templates) {
-      await globalThis.vagabond.managers.templates.clearActorPreviews(this.actor.id);
-    }
-
-    // Also reset all preview states
-    for (const spellId in this.spellStates) {
-      this.spellStates[spellId].previewActive = false;
-    }
-
-    // Update UI to show previews are off
-    for (const spellId in this.spellStates) {
-      this._updateSpellDisplay(spellId);
-    }
-  }
-
-  /** * Logic to actually update/create the preview
-   * (Helper function to be used by multiple listeners)
-   */
-  async _refreshSpellPreview(spellId) {
-    const state = this._getSpellState(spellId);
-
-    // If preview is OFF, ensure we clear it
-    if (!state.previewActive) {
-      if (globalThis.vagabond.managers?.templates) {
-        await globalThis.vagabond.managers.templates.clearPreview(this.actor.id, spellId);
-      }
-      return;
-    }
-
-    // If preview is ON, calculate data and update
-    const spell = this.actor.items.get(spellId);
-    if (!state.deliveryType) return; // Can't draw without type
-
-    // Calculate total distance
-    const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
-    const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
-    const totalDistance = baseRange.value + (increment * state.deliveryIncrease);
-
-    if (globalThis.vagabond.managers?.templates) {
-      await globalThis.vagabond.managers.templates.updatePreview(
-        this.actor,
-        spellId,
-        state.deliveryType,
-        totalDistance
-      );
-    }
-  }
-
-  /**
-   * ACTION: Toggle Spell Preview
-   */
-  static async _onToggleSpellPreview(event, target) {
-    event.preventDefault();
-    const spellId = target.dataset.spellId;
-    const state = this._getSpellState(spellId);
-
-    // 1. Clear ALL other previews first
-    // This ensures only one preview is active at a time
-    for (const otherId in this.spellStates) {
-      if (otherId !== spellId && this.spellStates[otherId].previewActive) {
-        this.spellStates[otherId].previewActive = false;
-        if (globalThis.vagabond.managers?.templates) {
-          await globalThis.vagabond.managers.templates.clearPreview(this.actor.id, otherId);
-        }
-        this._updateSpellDisplay(otherId);
-      }
-    }
-
-    // 2. Toggle THIS spell's preview state
-    state.previewActive = !state.previewActive;
-
-    // 3. Update Visuals
-    this._updateSpellDisplay(spellId);
-
-    // 4. Update Canvas
-    await this._refreshSpellPreview(spellId);
-  }
-
-  /**
-   * Update spell display in the UI with current state and costs
-   * @param {string} spellId - The spell ID
-   * @private
-   */
-  _updateSpellDisplay(spellId) {
-    const state = this._getSpellState(spellId);
-    const costs = this._calculateSpellCost(spellId);
-    const spell = this.actor.items.get(spellId);
-
-    const container = this.element.querySelector(`[data-spell-id="${spellId}"]`);
-    if (!container) return;
-
-    // Update damage dice display
-    if (spell.system.damageType !== '-') {
-      const damageElement = container.querySelector('.spell-damage-dice');
-      if (damageElement) {
-        damageElement.textContent = `${state.damageDice}`;
-      }
-    }
-
-    // Update Fx icon visual state
-    const fxIcon = container.querySelector('.spell-fx-icon');
-    if (fxIcon) {
-      if (state.useFx) {
-        fxIcon.classList.add('fx-active');
-        fxIcon.classList.remove('fx-inactive');
-      } else {
-        fxIcon.classList.add('fx-inactive');
-        fxIcon.classList.remove('fx-active');
-      }
-    }
-
-    // Update delivery dropdown
-    const deliverySelect = container.querySelector('.spell-delivery-select');
-    if (deliverySelect) {
-      deliverySelect.value = state.deliveryType || '';
-    }
-
-    // Update delivery cost display and hint
-    const costSpan = container.querySelector('.spell-delivery-cost');
-    if (costSpan) {
-      if (state.deliveryType) {
-        const deliveryCost = costs.deliveryBaseCost + costs.deliveryIncreaseCost;
-        costSpan.textContent = deliveryCost;
-
-        // Build hint with increase info
-        const increaseHint = game.i18n.localize(CONFIG.VAGABOND.deliveryTypeHints[state.deliveryType]);
-        if (state.deliveryIncrease > 0) {
-          const sizeHint = this._getDeliverySizeHint(state.deliveryType, state.deliveryIncrease);
-          costSpan.setAttribute('title', `${increaseHint} ${sizeHint}`);
-        } else {
-          costSpan.setAttribute('title', increaseHint);
-        }
-
-        // Disable increase if delivery doesn't support it
-        if (CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType] === 0) {
-          costSpan.classList.remove('clickable');
-          costSpan.classList.add('disabled');
-        } else {
-          costSpan.classList.add('clickable');
-          costSpan.classList.remove('disabled');
-        }
-      } else {
-        costSpan.textContent = '—';
-        costSpan.setAttribute('title', 'Select a delivery type first');
-        costSpan.classList.remove('clickable');
-        costSpan.classList.add('disabled');
-      }
-    }
-
-    // Update range display
-    const rangeSpan = container.querySelector('.spell-range');
-    if (rangeSpan) {
-      
-      // NEW: Toggle preview active visual state
-      if (state.previewActive) {
-        rangeSpan.classList.add('preview-active');
-        // Visual feedback to show it's active (Bright Text + Glow)
-        rangeSpan.style.color = "var(--color-text-light-highlight)"; 
-        rangeSpan.style.textShadow = "0 0 5px var(--color-shadow-highlight)";
-      } else {
-        rangeSpan.classList.remove('preview-active');
-        rangeSpan.style.color = "";
-        rangeSpan.style.textShadow = "";
-      }
-
-      if (state.deliveryType) {
-        const baseRange = CONFIG.VAGABOND.deliveryBaseRanges[state.deliveryType];
-        const increment = CONFIG.VAGABOND.deliveryIncrement[state.deliveryType];
-
-        if (baseRange.value) {
-          const totalValue = baseRange.value + (increment * state.deliveryIncrease);
-
-          if (baseRange.type === 'count') {
-            // For targets: just the number
-            rangeSpan.textContent = `${totalValue}`;
-          } else {
-            // For all distance types: just number and '
-            rangeSpan.textContent = `${totalValue}'`;
-          }
-        } else {
-          rangeSpan.textContent = '—';
-        }
-      } else {
-        rangeSpan.textContent = '—';
-      }
-    }
-
-    // Update total mana cost
-    const totalSpan = container.querySelector('.spell-mana-total');
-    if (totalSpan) {
-      totalSpan.textContent = costs.totalCost;
-    }
-  }  
-
 
   /** @override */
+  async close(options) {
+    // Clean up event listeners
+    if (this._accordionClickOutsideHandler) {
+      document.removeEventListener('click', this._accordionClickOutsideHandler);
+    }
+
+    // Clear measurement template previews (if spell handler exists)
+    if (this.spellHandler) {
+      await this.spellHandler._clearAllPreviews();
+    }
+
+    return super.close(options);
+  }
+
+  /**
+   * Configure rendering options for the actor sheet
+   * @param {Object} options - Render options
+   * @override
+   */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
 
-    // Set width based on actor type
-    if (this.document.type === 'npc') {
-      options.position = options.position || {};
-      options.position.width = 300;
-    }
+    // Determine which parts to render based on actor type
+    const isCharacter = this.document.type === 'character';
+    const isNPC = this.document.type === 'npc';
 
-    // Not all parts always render
-    if (this.document.type === 'npc') {
-      // NPC uses a completely different layout - no tabs, no sliding panel
+    if (isCharacter) {
+      options.parts = ['tabs', 'features', 'spells', 'effects', 'slidingPanel'];
+    } else if (isNPC) {
       options.parts = ['npcHeader', 'npcContent'];
-      return;
     }
 
-    // Character sheet layout
-    // Header is now inside the sliding panel, so only tabs and slidingPanel at top level
-    options.parts = ['tabs', 'slidingPanel'];
-    // Don't show the other tabs if only limited view
+    // Handle limited view permissions
     if (this.document.limited) {
-      options.parts.push('spells');
-      return;
-    }
-    // Control which parts show based on document subtype
-    switch (this.document.type) {
-      case 'character':
-        // Order: Features | Spells | Effects + Sliding Panel (right)
-        options.parts.push('features', 'spells', 'effects');
-        break;
+      options.parts = isCharacter ? ['slidingPanel'] : ['npcHeader'];
     }
   }
 
-  /* -------------------------------------------- */
-
-  /** @override */
+  /**
+   * Prepare context for rendering
+   * @param {Object} options - Render options
+   * @returns {Promise<Object>} Render context
+   * @override
+   */
   async _prepareContext(options) {
-    // Output initialization
     const context = {
-      // Validates both permissions and compendium status
-      editable: this.isEditable,
-      owner: this.document.isOwner,
-      limited: this.document.limited,
-      // Add the actor document.
       actor: this.actor,
-      // Add the actor's data to context.data for easier access, as well as flags.
       system: this.actor.system,
       flags: this.actor.flags,
-      // Adding a pointer to CONFIG.VAGABOND
       config: CONFIG.VAGABOND,
-      tabs: this._getTabs(options.parts),
+      editable: this.isEditable,
+      owner: this.actor.isOwner,
+      limited: this.actor.limited,
+      isCharacter: this.actor.type === 'character',
+      isNPC: this.actor.type === 'npc',
       // Necessary for formInput and formFields helpers
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
-      // Sliding panel state
-      isPanelOpen: this.isPanelOpen ?? false,
     };
 
-    // YOUR CUSTOM: Add localized ancestry data for template
-    if (this.actor.system.ancestryData) {
-      context.system.ancestryDisplay = {
-        name: this.actor.system.ancestryData.name,
-        sizeLabel: game.i18n.localize(`VAGABOND.Sizes.${this.actor.system.ancestryData.size}`),
-        beingTypeLabel: game.i18n.localize(`VAGABOND.BeingTypes.${this.actor.system.ancestryData.beingType}`)
-      };
+    // Enrich biography
+    context.enrichedBiography = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+      this.actor.system.biography,
+      {
+        async: true,
+        secrets: this.actor.isOwner,
+        relativeTo: this.actor,
+      }
+    );
+
+    // Prepare tabs
+    context.tabs = this._getTabs(options.parts);
+
+    // Prepare items
+    await this._prepareItems(context);
+
+    // Add character-specific data
+    if (context.isCharacter) {
+      const ancestry = this.actor.items.find((i) => i.type === 'ancestry');
+      context.hasAncestry = !!ancestry;
+      context.ancestryName = ancestry?.name || 'Unknown';
+
+      const classItem = this.actor.items.find((i) => i.type === 'class');
+      context.hasClass = !!classItem;
+      context.className = classItem?.name || 'Unknown';
+
+      // Localized ancestry data for display
+      if (this.actor.system.ancestryData) {
+        context.system.ancestryDisplay = {
+          name: this.actor.system.ancestryData.name,
+          sizeLabel: game.i18n.localize(`VAGABOND.Sizes.${this.actor.system.ancestryData.size}`),
+          beingTypeLabel: game.i18n.localize(`VAGABOND.BeingTypes.${this.actor.system.ancestryData.beingType}`)
+        };
+      }
+
+      // Panel state
+      context.isPanelOpen = this.actor.getFlag('vagabond', 'isPanelOpen') ?? true;
+
+      // Check for equipped items and favorited spells for Sliding Panel
+      context.hasEquippedItems =
+        (context.weapons && context.weapons.some(i => i.system.equipped)) ||
+        (context.gear && context.gear.some(i => i.system.equipped)) ||
+        (context.armor && context.armor.some(i => i.system.worn));
+
+      context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
+
+      // Prepare equipped armor type for header display
+      const equippedArmor = this.actor.items.find(item => {
+        const isArmor = (item.type === 'armor') ||
+                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
+        return isArmor && item.system.equipped;
+      });
+      context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
+
+      // Prepare fatigue boxes (5 skulls)
+      const fatigue = this.actor.system.fatigue || 0;
+      context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+        checked: i < fatigue,
+        level: i + 1
+      }));
     }
 
-    // Offloading context prep to a helper function
-    this._prepareItems(context);
-
-    // Check for equipped items and favorited spells for Sliding Panel ---
-    // This allows us to show/hide the placeholder text in the sliding panel
-    context.hasEquippedItems = 
-      (context.weapons && context.weapons.some(i => i.system.equipped)) || 
-      (context.gear && context.gear.some(i => i.system.equipped)) || 
-      (context.armor && context.armor.some(i => i.system.worn));
-
-    context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
-    // --------------------------------------------------------------------------
-
-    // Prepare equipped armor type for header display
-    const equippedArmor = this.actor.items.find(item => {
-      const isArmor = (item.type === 'armor') ||
-                     (item.type === 'equipment' && item.system.equipmentType === 'armor');
-      return isArmor && item.system.equipped;
-    });
-    context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
-
-    // Prepare fatigue boxes (5 skulls)
-    const fatigue = this.actor.system.fatigue || 0;
-    context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
-      checked: i < fatigue,
-      level: i + 1
-    }));
+    // Prepare active effects
+    context.effects = prepareActiveEffectCategories(this.actor.effects);
 
     return context;
   }
 
-  /** @override */
+  /**
+   * Prepare context for individual parts
+   * @param {string} partId - Part identifier
+   * @param {Object} context - Base context
+   * @returns {Promise<Object>} Part context
+   * @override
+   */
   async _preparePartContext(partId, context) {
+    const partContext = { ...context };
+
     switch (partId) {
       case 'features':
-        context.tab = context.tabs[partId];
-        // Enrich class feature descriptions for display
-        if (context.features) {
-          context.enrichedFeatures = await Promise.all(
-            context.features.map(async (feature) => {
-              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-                feature.description || '',
-                {
-                  secrets: this.document.isOwner,
-                  rollData: this.document.getRollData(),
-                  relativeTo: this.document,
-                }
-              );
-              return {
-                _id: feature._id,
-                name: feature.name,
-                enrichedDescription,
-                level: feature.level,
-                index: feature.index,  // IMPORTANT: Include index for context menu
-              };
-            })
-          );
-        }
-        // Enrich trait descriptions for display
-        if (context.traits) {
-          context.enrichedTraits = await Promise.all(
-            context.traits.map(async (trait) => {
-              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-                trait.description || '',
-                {
-                  secrets: this.document.isOwner,
-                  rollData: this.document.getRollData(),
-                  relativeTo: this.document,
-                }
-              );
-              return {
-                _id: trait._id,
-                name: trait.name,
-                enrichedDescription,
-                index: trait.index,
-              };
-            })
-          );
-        }
-        // Enrich perk descriptions and prerequisites for display
-        if (context.perks) {
-          context.enrichedPerks = await Promise.all(
-            context.perks.map(async (perk) => {
-              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-                perk.system.description,
-                {
-                  secrets: this.document.isOwner,
-                  rollData: perk.getRollData(),
-                  relativeTo: perk,
-                }
-              );
-              return {
-                _id: perk.id,
-                id: perk.id,
-                name: perk.name,
-                img: perk.img,
-                enrichedDescription,
-                prerequisites: perk.system.getPrerequisiteString(),
-              };
-            })
-          );
-        }
+        partContext.tab = context.tabs[partId];
+        await EnrichmentHelper.enrichFeatures(partContext, this.actor);
+        await EnrichmentHelper.enrichTraits(partContext, this.actor);
+        await EnrichmentHelper.enrichPerks(partContext, this.actor);
         break;
-      case 'spells':
-        context.tab = context.tabs[partId];
-        break;
-      case 'effects':
-        context.tab = context.tabs[partId];
-        // Prepare active effects
-        context.effects = prepareActiveEffectCategories(
-          // A generator that returns all effects stored on the actor
-          // as well as any items
-          this.actor.allApplicableEffects()
-        );
-        break;
-      case 'slidingPanel':
-        // Enrich perk descriptions for the sliding panel
-        if (context.perks) {
-          context.enrichedPerks = await Promise.all(
-            context.perks.map(async (perk) => {
-              const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-                perk.system.description,
-                {
-                  secrets: this.document.isOwner,
-                  rollData: perk.getRollData(),
-                  relativeTo: perk,
-                }
-              );
-              return {
-                _id: perk.id,
-                id: perk.id,
-                name: perk.name,
-                img: perk.img,
-                enrichedDescription,
-                prerequisites: perk.system.getPrerequisiteString(),
-              };
-            })
-          );
-        }
-        break;
-      case 'npcHeader':
-        // Enrich the appearing field for roll links
-        if (this.actor.system.locked && this.actor.system.appearingFormatted) {
-          context.enrichedAppearing = await foundry.applications.ux.TextEditor.enrichHTML(
-            this.actor.system.appearingFormatted,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.actor.getRollData(),
-              relativeTo: this.actor,
-            }
-          );
-        } else {
-          context.enrichedAppearing = this.actor.system.appearingFormatted;
-        }
 
+      case 'spells':
+        partContext.tab = context.tabs[partId];
+        // Spell enrichment is handled by spellHandler
+        if (this.spellHandler) {
+          await this.spellHandler.enrichSpellsContext(partContext);
+        }
+        break;
+
+      case 'effects':
+        partContext.tab = context.tabs[partId];
+        break;
+
+      case 'slidingPanel':
+        // Panel already has all necessary data in base context
+        break;
+
+      case 'npcHeader':
         // Prepare fatigue boxes for NPC (5 skulls, same as character)
         const fatigue = this.actor.system.fatigue || 0;
-        context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+        partContext.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
           checked: i < fatigue,
           level: i + 1
         }));
         break;
-      case 'npcContent':
-        // Prepare active effects for NPC
-        context.effects = prepareActiveEffectCategories(
-          this.actor.allApplicableEffects()
-        );
 
-        // Enrich the appearing field for roll links
-        if (this.actor.system.locked && this.actor.system.appearingFormatted) {
-          context.enrichedAppearing = await foundry.applications.ux.TextEditor.enrichHTML(
-            this.actor.system.appearingFormatted,
+      case 'npcContent':
+        // Add actions and abilities from actor system
+        partContext.actions = this.actor.system.actions || [];
+        partContext.abilities = this.actor.system.abilities || [];
+
+        // Format appearing field for display in locked mode
+        if (this.actor.system.locked && this.actor.system.appearing) {
+          // First, use VagabondTextParser to convert dice notation to roll links
+          const parsedText = VagabondTextParser.parseAll(this.actor.system.appearing);
+          
+          // Then, use Foundry's enrichment to make the roll links clickable
+          partContext.enrichedAppearing = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+            parsedText,
             {
-              secrets: this.document.isOwner,
+              async: true,
+              secrets: this.actor.isOwner,
               rollData: this.actor.getRollData(),
               relativeTo: this.actor,
             }
           );
         } else {
-          context.enrichedAppearing = this.actor.system.appearingFormatted;
+          partContext.enrichedAppearing = this.actor.system.appearing || '';
         }
 
-        // Enrich action fields for display in locked mode
-        if (this.actor.system.locked && this.actor.system.actions) {
-          context.enrichedActions = await Promise.all(
-            this.actor.system.actions.map(async (action) => {
-              // Enrich recharge if present
-              const enrichedRecharge = action.rechargeFormatted
-                ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    action.rechargeFormatted,
-                    {
-                      secrets: this.document.isOwner,
-                      rollData: this.actor.getRollData(),
-                      relativeTo: this.actor,
-                    }
-                  )
-                : '';
-
-              // Enrich roll damage if present
-              // If rollDamageFormatted doesn't exist, format it now
-              let rollDamageToEnrich = action.rollDamageFormatted;
-              if (!rollDamageToEnrich && action.rollDamage) {
-                // Format on the fly if not already formatted
-                const dicePattern = /\d*d\d+/i;
-                if (dicePattern.test(action.rollDamage.trim())) {
-                  rollDamageToEnrich = `[[/r ${action.rollDamage.trim()}]]`;
-                } else {
-                  rollDamageToEnrich = action.rollDamage;
-                }
-              }
-
-              const enrichedRollDamage = rollDamageToEnrich
-                ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    rollDamageToEnrich,
-                    {
-                      secrets: this.document.isOwner,
-                      rollData: this.actor.getRollData(),
-                      relativeTo: this.actor,
-                    }
-                  )
-                : '';
-
-              // Enrich extra info if present (use pre-formatted from data model)
-              const enrichedExtraInfo = action.extraInfoFormatted
-                ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    action.extraInfoFormatted,
-                    {
-                      secrets: this.document.isOwner,
-                      rollData: this.actor.getRollData(),
-                      relativeTo: this.actor,
-                    }
-                  )
-                : '';
-
-              return {
-                rechargeFormatted: enrichedRecharge,
-                rollDamageFormatted: enrichedRollDamage,
-                extraInfoFormatted: enrichedExtraInfo,
-              };
-            })
-          );
-        } else {
-          context.enrichedActions = [];
-        }
-
-        // Enrich ability descriptions for display in locked mode
-        if (this.actor.system.locked && this.actor.system.abilities) {
-          context.enrichedAbilities = await Promise.all(
-            this.actor.system.abilities.map(async (ability) => {
-              // Enrich description if present
-              // If descriptionFormatted doesn't exist, format it now
-              let descriptionToEnrich = ability.descriptionFormatted;
-              if (!descriptionToEnrich && ability.description) {
-                // Format on the fly: convert dice notation to roll links
-                const dicePattern = /(\d*)d(\d+)/gi;
-                descriptionToEnrich = ability.description.replace(dicePattern, (match) => {
-                  return `[[/r ${match}]]`;
-                });
-              }
-
-              const enrichedDescription = descriptionToEnrich
-                ? await foundry.applications.ux.TextEditor.enrichHTML(
-                    descriptionToEnrich,
-                    {
-                      secrets: this.document.isOwner,
-                      rollData: this.actor.getRollData(),
-                      relativeTo: this.actor,
-                    }
-                  )
-                : '';
-
-              return {
-                descriptionFormatted: enrichedDescription,
-              };
-            })
-          );
-        } else {
-          context.enrichedAbilities = [];
-        }
+        // Enrich NPC actions and abilities
+        await EnrichmentHelper.enrichActions(partContext, this.actor);
+        await EnrichmentHelper.enrichAbilities(partContext, this.actor);
         break;
     }
-    return context;
+
+    return partContext;
   }
 
   /**
-   * Generates the data for the generic tab navigation template
-   * @param {string[]} parts An array of named template parts to render
-   * @returns {Record<string, Partial<ApplicationTab>>}
-   * @protected
+   * Get tabs configuration
+   * @param {Array} parts - Rendered parts
+   * @returns {Object} Tab configurations keyed by partId
+   * @private
    */
   _getTabs(parts) {
-    // If you have sub-tabs this is necessary to change
     const tabGroup = 'primary';
+
     // Default tab for first time it's rendered this session
     if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'features';
+
     return parts.reduce((tabs, partId) => {
       const tab = {
         cssClass: '',
         group: tabGroup,
-        // Matches tab property to
         id: '',
-        // FontAwesome Icon, if you so choose
         icon: '',
-        // Run through localization
         label: 'VAGABOND.Actor.Tabs.',
       };
+
       switch (partId) {
-        case 'header':
         case 'tabs':
         case 'slidingPanel':
+        case 'npcHeader':
+        case 'npcContent':
           return tabs;
-        case 'spells':
-          tab.id = 'spells';
-          tab.label += 'Spells';
-          break;
         case 'features':
           tab.id = 'features';
           tab.label += 'Features';
+          tab.icon = 'fa-solid fa-shield-halved';
+          break;
+        case 'spells':
+          tab.id = 'spells';
+          tab.label += 'Spells';
+          tab.icon = 'fa-solid fa-wand-sparkles';
           break;
         case 'effects':
           tab.id = 'effects';
           tab.label += 'Effects';
+          tab.icon = 'fa-solid fa-flask';
           break;
       }
+
       if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active';
       tabs[partId] = tab;
       return tabs;
@@ -918,316 +393,1009 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Organize and classify Items for Actor sheets.
-   *
-   * @param {object} context The context object to mutate
+   * Prepare items for rendering
+   * @param {Object} context - Render context
+   * @private
    */
-  _prepareItems(context) {
-    // Initialize containers.
+  async _prepareItems(context) {
     const gear = [];
     const weapons = [];
     const armor = [];
     const containers = [];
-    const features = [];
-    const perks = [];
     const spells = [];
-    const traits = [];
+    const perks = [];
 
-    // Build traits list from ancestry
-    const ancestryItem = this.document.items.find(item => item.type === 'ancestry');
-    if (ancestryItem && ancestryItem.system.traits) {
-      ancestryItem.system.traits.forEach((trait, index) => {
-        traits.push({
-          _id: `trait-${index}`,
-          name: trait.name,
-          description: trait.description,
-          index: index
-        });
-      });
-    }
+    context.features = [];
+    context.traits = [];
 
-    // Build features list from class levelFeatures up to current level
-    const classItem = this.document.items.find(item => item.type === 'class');
-    if (classItem) {
-      const currentLevel = this.document.system.attributes.level.value;
-      const allLevelFeatures = classItem.system.levelFeatures || [];
+    // Get current level for filtering class features
+    const currentLevel = this.actor.system.attributes?.level?.value || this.actor.system.level || 1;
 
-      // Get features for levels 1 through current level
-      for (let index = 0; index < allLevelFeatures.length; index++) {
-        const feature = allLevelFeatures[index];
-        if (feature.level <= currentLevel) {
-          features.push({
-            _id: `feature-${feature.level}-${index}`,
-            name: `${feature.name} (Level ${feature.level})`,
-            description: feature.description,
-            level: feature.level,
-            index: index
-          });
-        }
-      }
-
-      // Sort by level
-      features.sort((a, b) => a.level - b.level);
-    }
-
-    // Iterate through items, allocating to containers
-    for (let i of this.document.items) {
-      // Handle equipment items by their equipmentType
-      if (i.type === 'equipment') {
-        if (i.system.equipmentType === 'weapon') {
-          weapons.push(i);
-        } else if (i.system.equipmentType === 'armor') {
-          armor.push(i);
-        } else {
-          // Gear, alchemicals, and relics all go in the gear array
-          gear.push(i);
-        }
-      }
-      // Legacy: Keep supporting old item types for backward compatibility
-      else if (i.type === 'gear') {
-        gear.push(i);
-      }
-      else if (i.type === 'weapon') {
-        weapons.push(i);
-      }
-      else if (i.type === 'armor') {
-        armor.push(i);
-      }
-      // Append to spells.
-      else if (i.type === 'spell') {
-        spells.push(i);
-      }
-      // Append to perks.
-      else if (i.type === 'perk') {
-        perks.push(i);
-      }
-      // Append to containers.
-      else if (i.type === 'container') {
-        containers.push(i);
+    for (const item of this.actor.items) {
+      switch (item.type) {
+        case 'equipment':
+          if (item.system.equipmentType === 'weapon') weapons.push(item);
+          else if (item.system.equipmentType === 'armor') armor.push(item);
+          else if (item.system.equipmentType === 'container') containers.push(item);
+          else gear.push(item);
+          break;
+        case 'spell':
+          spells.push(item);
+          break;
+        case 'perk':
+          perks.push(item);
+          break;
+        case 'class':
+          // Get features for current level and below
+          if (item.system.levelFeatures) {
+            const classFeatures = item.system.levelFeatures
+              .filter(f => f.level <= currentLevel)
+              .map((f, index) => ({
+                ...f,
+                index: index,
+                _id: `${item.id}-feature-${index}`,
+                sourceItem: item
+              }));
+            context.features.push(...classFeatures);
+          }
+          break;
+        case 'ancestry':
+          // Get all ancestry traits
+          if (item.system.traits) {
+            const ancestryTraits = item.system.traits.map((t, index) => ({
+              ...t,
+              index: index,
+              _id: `${item.id}-trait-${index}`,
+              sourceItem: item
+            }));
+            context.traits.push(...ancestryTraits);
+          }
+          break;
       }
     }
 
-    // Sort then assign
-    context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.weapons = weapons.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.armor = armor.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.containers = containers.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.perks = perks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.spells = spells.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.traits = traits; // Traits don't need sorting, they're already in ancestry order
+    // Store categorized items
+    context.gear = gear;
+    context.weapons = weapons;
+    context.armor = armor;
+    context.containers = containers;
+    context.spells = spells;
+    context.perks = perks;
 
-    // Prepare inventory grid data
-    this._prepareInventoryGrid(context, gear, weapons, armor, containers);
-  }
-
-  /**
-   * Prepare inventory grid data for visual display
-   * @param {Object} context - The template context
-   * @param {Array} gear - Gear items
-   * @param {Array} weapons - Weapon items
-   * @param {Array} armor - Armor items
-   * @param {Array} containers - Container items
-   * @private
-   */
-  _prepareInventoryGrid(context, gear, weapons, armor, containers) {
-    // Combine all inventory items (exclude items inside containers)
-    const allInventoryItems = [...weapons, ...armor, ...gear, ...containers].filter(
-      item => !item.system.containerId
-    );
-
-    // Prepare item data for inventory cards
-    context.inventoryItems = allInventoryItems.map((item, index) => {
-      const itemData = {
-        item: item,
-        gridPosition: item.system.gridPosition ?? index,
-        equipped: this._isItemEquipped(item),
-        metalColor: this._getMetalColor(item),
-        weaponSkillIcon: this._getWeaponSkillIcon(item),
-        damageTypeIcon: this._getDamageTypeIcon(item),
-        isSlotZero: (item.system.slots === 0),
-        totalSlots: item.system.slots || 0
-      };
-
-      // Add range abbreviation for weapons
-      if (item.system.range) {
-        itemData.item.system.rangeAbbr = CONFIG.VAGABOND.rangeAbbreviations[item.system.range] || item.system.range;
-      }
-
-      return itemData;
-    });
-
-    // Sort by grid position
-    context.inventoryItems.sort((a, b) => a.gridPosition - b.gridPosition);
-
-    // Calculate overload for warning message
-    const maxSlots = this.document.system.inventory?.maxSlots || 20;
-    const occupiedSlots = this.document.system.inventory?.occupiedSlots || 0;
-    const overloadAmount = Math.max(0, occupiedSlots - maxSlots);
-    context.isOverloaded = overloadAmount > 0;
-    context.overloadAmount = overloadAmount;
-
-    // DYNAMIC GRID SIZE - Show all items + empty slots to display all capacity numbers up to maxSlots
-    const totalItemCount = context.inventoryItems.length;
-
-    // NEW NUMBERING LOGIC:
-    // Numbers represent "capacity slots" - each item consumes slots equal to its size
-    // A 3-slot item consumes capacity numbers 1, 2, 3 (shows "1" on card)
-    // A 2-slot item consumes capacity numbers 4, 5 (shows "4" on card)
-    let capacityNumber = 1; // Sequential capacity slot number (1, 2, 3...)
-
-    // Assign numbers to items (skip slot-0 items)
-    context.inventoryItems.forEach(itemData => {
-      if (!itemData.isSlotZero) {
-        itemData.displayNumber = capacityNumber; // Show starting number
-        capacityNumber += itemData.totalSlots; // Increment by slot size!
-      } else {
-        itemData.displayNumber = null; // Slot-0 items have no number
-      }
-    });
-
-    // Calculate how many empty slots we need to show remaining capacity
-    // capacityNumber is now at the next available capacity number
-    // We need empty slots until capacityNumber reaches maxSlots + 1
-    const remainingCapacity = maxSlots - (capacityNumber - 1);
-    const emptySlotCount = Math.max(0, remainingCapacity);
-
-    // Create empty slots to show remaining capacity
-    context.emptySlots = Array.from({ length: emptySlotCount }, (_, i) => {
-      const gridPosition = totalItemCount + i;
-      const slotNumber = capacityNumber + i;
-
-      return {
-        index: gridPosition,
-        displayNumber: slotNumber,
-        unavailable: false // All these slots are within capacity
-      };
-    });
-
-    // Grid size is total items + empty slots (no rounding to rows)
-    const gridSize = totalItemCount + emptySlotCount;
-    const gridRows = Math.ceil(gridSize / 4); // Calculate rows for CSS, but don't force size
-
-    context.gridSize = gridSize;
-    context.gridRows = gridRows;
-  }
-
-  /**
-   * Check if an item is equipped
-   * @param {Item} item - The item to check
-   * @returns {boolean} Whether the item is equipped
-   * @private
-   */
-  _isItemEquipped(item) {
-    if (item.system.equipped !== undefined) {
-      return item.system.equipped;
+    // Prepare inventory grid (delegates to inventoryHandler if available)
+    if (this.inventoryHandler) {
+      this.inventoryHandler.prepareInventoryGrid(context, gear, weapons, armor, containers);
     }
-    if (item.system.equipmentState) {
-      return item.system.equipmentState !== 'unequipped';
-    }
-    return false;
   }
 
   /**
-   * Get metal color for weapon skill icon
-   * @param {Item} item - The item
-   * @returns {string} Hex color code
-   * @private
-   */
-  _getMetalColor(item) {
-    if (!item.system.metal) return CONFIG.VAGABOND.metalColors?.common || '#8b7355';
-    return CONFIG.VAGABOND.metalColors?.[item.system.metal] || CONFIG.VAGABOND.metalColors?.common || '#8b7355';
-  }
-
-  /**
-   * Get weapon skill icon class
-   * @param {Item} item - The item
-   * @returns {string} Font Awesome icon class
-   * @private
-   */
-  _getWeaponSkillIcon(item) {
-    if (!item.system.weaponSkill) return null;
-    return CONFIG.VAGABOND.weaponSkillIcons?.[item.system.weaponSkill] || null;
-  }
-
-  /**
-   * Get damage type icon class
-   * @param {Item} item - The item
-   * @returns {string} Font Awesome icon class
-   * @private
-   */
-  _getDamageTypeIcon(item) {
-    // For weapons, use currentDamageType (based on current grip)
-    const damageType = item.system.currentDamageType || item.system.damageType;
-    if (!damageType) return null;
-    return CONFIG.VAGABOND.damageTypeIcons?.[damageType] || null;
-  }
-
-  /**
-   * Actions performed after any render of the Application.
-   * Post-render steps are not awaited by the render process.
-   * @param {ApplicationRenderContext} context      Prepared context data
-   * @param {RenderOptions} options                 Provided render options
-   * @protected
+   * Post-render setup
+   * @param {Object} context - Render context
+   * @param {Object} options - Render options
    * @override
    */
   async _onRender(context, options) {
     await super._onRender(context, options);
+
+    // Disable overridden inputs
     this.#disableOverrides();
 
-    // Clear any stuck drag states from previous render
-    if (this._clearAllDragStates) {
-      this._clearAllDragStates();
-    }
-
-    // Restore open state of immunity dropdowns after re-render
-    if (this._openDropdowns) {
-      this._openDropdowns.forEach(index => {
-        const dropdowns = this.element.querySelectorAll('.npc-immunity-dropdown');
-        if (dropdowns[index]) {
-          dropdowns[index].setAttribute('open', '');
-        }
-      });
-    }
-
-    // Restore open state of action accordions after re-render
-    if (this._openActionAccordions) {
-      this._openActionAccordions.forEach(index => {
-        const actionEdit = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
-        if (actionEdit) {
-          const content = actionEdit.querySelector('.action-edit-content');
-          const icon = actionEdit.querySelector('.accordion-icon');
-          if (content && icon) {
-            content.classList.remove('collapsed');
-            icon.classList.remove('fa-chevron-right');
-            icon.classList.add('fa-chevron-down');
-          }
-        }
-      });
-    }
-
-    // Restore open state of ability accordions after re-render
-    if (this._openAbilityAccordions) {
-      this._openAbilityAccordions.forEach(index => {
-        const abilityEdit = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
-        if (abilityEdit) {
-          const content = abilityEdit.querySelector('.ability-edit-content');
-          const icon = abilityEdit.querySelector('.accordion-icon');
-          if (content && icon) {
-            content.classList.remove('collapsed');
-            icon.classList.remove('fa-chevron-right');
-            icon.classList.add('fa-chevron-down');
-          }
-        }
-      });
-    }
-
-    // Add click outside handler to close accordions
+    // Setup accordion click-outside handlers
     this._setupAccordionClickOutside();
 
+    // Setup HP and Fatigue click handlers
+    this._setupHealthFatigueListeners();
+
+    // Setup ancestry/class right-click delete handlers
+    this._setupAncestryClassHandlers();
+
+    // Setup inventory grid listeners (if inventory handler exists)
+    if (this.inventoryHandler) {
+      this.inventoryHandler.setupListeners();
+    }
+
+    // Setup spell listeners (if spell handler exists)
+    if (this.spellHandler) {
+      this.spellHandler.setupListeners();
+    }
+
+    // Setup feature/trait/perk context menu listeners (if inventory handler exists)
+    if (this.inventoryHandler) {
+      this._setupFeatureContextMenuListeners();
+    }
+
+    // Show sliding panel tooltip (first time only)
+    this._showSlidingPanelTooltip();
+  }
+
+  // ===========================
+  // DELEGATION ACTION HANDLERS
+  // ===========================
+  // These methods delegate to handlers initialized in child classes
+
+  // --- ROLL HANDLERS ---
+  static async _onRoll(event, target) {
+    return this.rollHandler?.roll(event, target);
+  }
+
+  static async _onRollWeapon(event, target) {
+    return this.rollHandler?.rollWeapon(event, target);
+  }
+
+  static async _onUseItem(event, target) {
+    return this.rollHandler?.useItem(event, target);
+  }
+
+  static async _onRollMorale(event, target) {
+    return this.rollHandler?.rollMorale(event, target);
+  }
+
+  // --- EQUIPMENT HANDLERS ---
+  static async _onToggleWeaponEquipment(event, target) {
+    return this.equipmentHandler?.toggleWeaponEquipment(event, target);
+  }
+
+  static async _onToggleWeaponGrip(event, target) {
+    return this.equipmentHandler?.toggleWeaponGrip(event, target);
+  }
+
+  static async _onToggleArmorEquipment(event, target) {
+    return this.equipmentHandler?.toggleArmorEquipment(event, target);
+  }
+
+  static async _onEquipItem(event, target) {
+    return this.equipmentHandler?.equipItem(event, target);
+  }
+
+  static async _onEditItem(event, target) {
+    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+    const item = this.actor.items.get(itemId);
+    if (item) item.sheet.render(true);
+  }
+
+  static async _onDeleteItem(event, target) {
+    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!itemId) return;
+
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+
+    const confirmed = await Dialog.confirm({
+      title: game.i18n.localize('VAGABOND.Dialog.DeleteItem'),
+      content: `<p>${game.i18n.format('VAGABOND.Dialog.DeleteItemContent', { name: item.name })}</p>`,
+    });
+
+    if (confirmed) {
+      await item.delete();
+      ui.notifications.info(`Deleted ${item.name}`);
+    }
+  }
+
+  // --- SPELL HANDLERS ---
+  static async _onCastSpell(event, target) {
+    return this.spellHandler?.castSpell(event, target);
+  }
+
+  static async _onToggleFx(event, target) {
+    return this.spellHandler?.toggleFx(event, target);
+  }
+
+  static async _onToggleSpellFavorite(event, target) {
+    return this.spellHandler?.toggleSpellFavorite(event, target);
+  }
+
+  static async _onToggleSpellPreview(event, target) {
+    return this.spellHandler?.toggleSpellPreview(event, target);
+  }
+
+  // --- NPC IMMUNITY HANDLERS ---
+  static async _onToggleSpeedType(event, target) {
+    return this.immunityHandler?.toggleSpeedType(event, target);
+  }
+
+  static async _onRemoveSpeedType(event, target) {
+    return this.immunityHandler?.removeSpeedType(event, target);
+  }
+
+  static async _onToggleImmunity(event, target) {
+    return this.immunityHandler?.toggleImmunity(event, target);
+  }
+
+  static async _onRemoveImmunity(event, target) {
+    return this.immunityHandler?.removeImmunity(event, target);
+  }
+
+  static async _onToggleWeakness(event, target) {
+    return this.immunityHandler?.toggleWeakness(event, target);
+  }
+
+  static async _onRemoveWeakness(event, target) {
+    return this.immunityHandler?.removeWeakness(event, target);
+  }
+
+  static async _onToggleStatusImmunity(event, target) {
+    return this.immunityHandler?.toggleStatusImmunity(event, target);
+  }
+
+  static async _onRemoveStatusImmunity(event, target) {
+    return this.immunityHandler?.removeStatusImmunity(event, target);
+  }
+
+  static async _onSelectZone(event, target) {
+    return this.immunityHandler?.selectZone(event, target);
+  }
+
+  static async _onClearZone(event, target) {
+    return this.immunityHandler?.clearZone(event, target);
+  }
+
+  // --- NPC ACTION HANDLERS ---
+  static async _onAddAction(event, target) {
+    return this.actionHandler?.addAction(event, target);
+  }
+
+  static async _onRemoveAction(event, target) {
+    return this.actionHandler?.removeAction(event, target);
+  }
+
+  static async _onToggleActionAccordion(event, target) {
+    return this.actionHandler?.toggleActionAccordion(event, target);
+  }
+
+  static async _onAddAbility(event, target) {
+    return this.actionHandler?.addAbility(event, target);
+  }
+
+  static async _onRemoveAbility(event, target) {
+    return this.actionHandler?.removeAbility(event, target);
+  }
+
+  static async _onToggleAbilityAccordion(event, target) {
+    return this.actionHandler?.toggleAbilityAccordion(event, target);
+  }
+
+  static async _onCreateCountdownFromRecharge(event, target) {
+    return this.actionHandler?.createCountdownFromRecharge(event, target);
+  }
+
+  /**
+   * Handle clicking NPC action name (posts to chat)
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onClickActionName(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const action = this.actor.system.actions[index];
+
+    if (!action || !action.name) return;
+
+    // Capture targeted tokens for NPC action
+    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
+      tokenId: token.id,
+      sceneId: token.scene.id,
+      actorId: token.actor?.id,
+      actorName: token.name,
+      actorImg: token.document.texture.src
+    }));
+
+    // Use the unified chat card system
+    await VagabondChatCard.npcAction(this.actor, action, index, targetsAtRollTime);
+  }
+
+  /**
+   * Handle clicking NPC action damage roll (rolls damage dice)
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onClickActionDamageRoll(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const action = this.actor.system.actions[index];
+
+    if (!action || !action.rollDamage) return;
+
+    // Roll the damage dice
+    const roll = new Roll(action.rollDamage, this.actor.getRollData());
+    await roll.evaluate();
+    await VagabondChatHelper.postRoll(
+      this.actor,
+      roll,
+      `<strong>${action.name}</strong> Damage`
+    );
+  }
+
+  /**
+   * Handle clicking NPC ability name (posts to chat)
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onClickAbilityName(event, target) {
+    event.preventDefault();
+    const index = parseInt(target.dataset.index);
+    const ability = this.actor.system.abilities[index];
+
+    if (!ability || !ability.name) return;
+
+    // Use the unified chat card system (handles text-only abilities)
+    await VagabondChatCard.npcAction(this.actor, ability, index);
+  }
+
+  // ===========================
+  // SHARED UI ACTION HANDLERS
+  // ===========================
+  // These methods are NOT delegated - they're truly shared UI logic
+
+  /**
+   * Handle changing a Document's image
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @returns {Promise}
+   * @protected
+   */
+  static async _onEditImage(event, target) {
+    const attr = target.dataset.edit;
+    const current = foundry.utils.getProperty(this.document, attr);
+    const { img } =
+      this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ??
+      {};
+    const fp = new FilePicker({
+      current,
+      type: 'image',
+      redirectToRoot: img ? [img] : [],
+      callback: (path) => {
+        this.document.update({ [attr]: path });
+      },
+      top: this.position.top + 40,
+      left: this.position.left + 10,
+    });
+    return fp.browse();
+  }
+
+  /**
+   * Handle viewing the character's ancestry item
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _viewAncestry(event, target) {
+    const ancestry = this.actor.items.find(item => item.type === 'ancestry');
+    if (ancestry) {
+      ancestry.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle viewing the character's class item
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _viewClass(event, target) {
+    const classItem = this.actor.items.find(item => item.type === 'class');
+    if (classItem) {
+      classItem.sheet.render(true);
+    }
+  }
+
+  /**
+   * Handle leveling up the character
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onLevelUp(event, target) {
+    const currentLevel = this.actor.system.attributes.level.value;
+    const newLevel = currentLevel + 1;
+
+    // Store previous values for comparison
+    const previousMaxHP = this.actor.system.health.max;
+    const previousMaxMana = this.actor.system.mana.max;
+    const previousCastingMax = this.actor.system.mana.castingMax;
+
+    // Get class item for spell amount calculation
+    const classItem = this.actor.items.find(item => item.type === 'class');
+    let previousSpellAmount = 0;
+    if (classItem && classItem.system.levelSpells) {
+      const currentLevelSpells = classItem.system.levelSpells.find(ls => ls.level === currentLevel);
+      if (currentLevelSpells) {
+        previousSpellAmount = currentLevelSpells.spells;
+      }
+    }
+
+    try {
+      // Update level and reset XP to 0
+      await this.actor.update({ 
+        'system.attributes.level.value': newLevel,
+        'system.attributes.xp': 0
+      });
+
+      // Force a data refresh to ensure calculations include all active effects
+      await this.actor.prepareData();
+
+      // Calculate changes after level up
+      const newMaxHP = this.actor.system.health.max;
+      const hpChange = newMaxHP - previousMaxHP;
+      
+      const newMaxMana = this.actor.system.mana.max;
+      const manaChange = newMaxMana - previousMaxMana;
+      
+      const newCastingMax = this.actor.system.mana.castingMax;
+      const castingMaxChange = newCastingMax - previousCastingMax;
+
+      // Calculate new spell amount
+      let newSpellAmount = 0;
+      if (classItem && classItem.system.levelSpells) {
+        const newLevelSpells = classItem.system.levelSpells.find(ls => ls.level === newLevel);
+        if (newLevelSpells) {
+          newSpellAmount = newLevelSpells.spells;
+        }
+      }
+      const spellAmountChange = newSpellAmount - previousSpellAmount;
+
+      // Get features gained at the new level
+      const newFeatures = [];
+      if (classItem && classItem.system.levelFeatures) {
+        const featuresAtNewLevel = classItem.system.levelFeatures.filter(f => f.level === newLevel);
+        newFeatures.push(...featuresAtNewLevel);
+      }
+
+      // Check if character is a spellcaster
+      const isSpellcaster = this.actor.system.attributes.isSpellcaster;
+
+      // Build metadata tags for the level up card
+      const tags = [];
+      tags.push({ label: game.i18n.format('VAGABOND.LevelUp.NewLevel', { level: newLevel }), cssClass: 'tag-level', icon: 'fas fa-arrow-up' });
+
+      // Build description content
+      let description = ``;
+      
+      // Max HP
+      description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.MaxHP')}</strong> ${previousMaxHP} → ${newMaxHP}`;
+      if (hpChange !== 0) {
+        description += ` (${hpChange >= 0 ? '+' : ''}${hpChange})`;
+      }
+      description += `</p>`;
+
+      // Mana information (only for spellcasters)
+      if (isSpellcaster) {
+        description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.MaxMana')}</strong> ${previousMaxMana} → ${newMaxMana}`;
+        if (manaChange !== 0) {
+          description += ` (${manaChange >= 0 ? '+' : ''}${manaChange})`;
+        }
+        description += `</p>`;
+
+        description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.ManaPerCast')}</strong> ${previousCastingMax} → ${newCastingMax}`;
+        if (castingMaxChange !== 0) {
+          description += ` (${castingMaxChange >= 0 ? '+' : ''}${castingMaxChange})`;
+        }
+        description += `</p>`;
+      }
+
+      // Spell Amount
+      description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.SpellAmount')}</strong> ${previousSpellAmount} → ${newSpellAmount}`;
+      if (spellAmountChange !== 0) {
+        description += ` (${spellAmountChange >= 0 ? '+' : ''}${spellAmountChange})`;
+      }
+      description += `</p>`;
+
+      // New Features
+      if (newFeatures.length > 0) {
+        description += `
+          <div class="features-section">
+            <div class="features-header-container">
+              <div class="features-header-arrow">
+                <span>${game.i18n.localize('VAGABOND.LevelUp.NewFeatures')}</span>
+              </div>
+            </div>
+            <div class="features-content">
+              ${newFeatures.map(feature => `
+                <div class="feature-item">
+                  <h4>${feature.name}</h4>
+                  ${feature.description ? `<p>${feature.description}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Create level up chat card using VagabondChatCard
+      const card = new VagabondChatCard()
+        .setType('level-up')
+        .setActor(this.actor)
+        .setTitle(game.i18n.localize('VAGABOND.LevelUp.Title'))
+        .setSubtitle(this.actor.name)
+        .setDescription(description);
+
+      // Set metadata tags
+      card.data.standardTags = tags;
+
+      // Send the card
+      await card.send();
+
+      // Update notification message to include mana if applicable
+      let notificationMessage = game.i18n.format('VAGABOND.LevelUp.NotificationLevelUp', { 
+        name: this.actor.name, 
+        level: newLevel, 
+        hpChange: hpChange 
+      });
+      
+      if (isSpellcaster) {
+        notificationMessage += game.i18n.format('VAGABOND.LevelUp.NotificationMana', { manaChange: manaChange });
+      }
+      
+      if (spellAmountChange > 0) {
+        notificationMessage += game.i18n.format('VAGABOND.LevelUp.NotificationSpells', { 
+          spellCount: spellAmountChange,
+          plural: spellAmountChange > 1 ? 's' : ''
+        });
+      }
+      
+      if (newFeatures.length > 0) {
+        notificationMessage += game.i18n.format('VAGABOND.LevelUp.NotificationFeatures', { 
+          featureCount: newFeatures.length,
+          plural: newFeatures.length > 1 ? 's' : ''
+        });
+      }
+      
+      ui.notifications.info(notificationMessage);
+
+    } catch (error) {
+      console.error(game.i18n.localize('VAGABOND.LevelUp.ErrorConsoleMessage'), error);
+      ui.notifications.error(game.i18n.format('VAGABOND.LevelUp.ErrorLevelUpFailed', { error: error.message }));
+    }
+  }
+
+
+
+  /**
+   * Toggle feature accordion
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onToggleFeature(event, target) {
+    const accordion = target.closest('.feature.accordion-item');
+    AccordionHelper.toggle(accordion);
+  }
+
+  /**
+   * Toggle trait accordion
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onToggleTrait(event, target) {
+    const accordion = target.closest('.trait.accordion-item');
+    AccordionHelper.toggle(accordion);
+  }
+
+  /**
+   * Toggle perk accordion
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onTogglePerk(event, target) {
+    const accordion = target.closest('.perk-card.accordion-item');
+    AccordionHelper.toggle(accordion);
+  }
+
+  /**
+   * Toggle sliding panel
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onTogglePanel(event, target) {
+    const panel = this.element.querySelector('.sliding-panel');
+    if (!panel) return;
+
+    const isOpen = panel.classList.contains('panel-open');
+
+    // Force a reflow to ensure the browser recognizes the current state
+    // before applying the transition
+    void panel.offsetHeight;
+
+    // Use requestAnimationFrame to ensure smooth transition
+    requestAnimationFrame(() => {
+      // Toggle classes for smooth CSS transition
+      if (isOpen) {
+        panel.classList.remove('panel-open');
+        panel.classList.add('panel-closed');
+      } else {
+        panel.classList.remove('panel-closed');
+        panel.classList.add('panel-open');
+      }
+    });
+
+    // Save state to flag (without re-rendering)
+    await this.actor.setFlag('vagabond', 'isPanelOpen', !isOpen);
+
+    // Hide the tooltip after first use
+    this._hideSlidingPanelTooltip();
+  }
+
+  /**
+   * Show sliding panel tooltip (first time only)
+   * @private
+   */
+  _showSlidingPanelTooltip() {
+    // Only show for character sheets
+    if (this.actor.type !== 'character') return;
+
+    // Check if user has already seen the tooltip
+    const hasSeenTooltip = game.user.getFlag('vagabond', 'hasSeenPanelTooltip');
+    if (hasSeenTooltip) return;
+
+    const clickZone = this.element.querySelector('.panel-click-zone');
+    if (!clickZone) return;
+
+    // Add highlight class to click zone
+    clickZone.classList.add('tooltip-active');
+
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.className = 'sliding-panel-tooltip';
+    tooltip.innerHTML = `
+      <div class="tooltip-arrow"></div>
+      <div class="tooltip-content">
+        Click anywhere on this area to open/close
+      </div>
+    `;
+
+    // Add tooltip to click zone (absolute positioning relative to click zone)
+    clickZone.appendChild(tooltip);
+
+    // Add visible class after a short delay for animation
+    setTimeout(() => tooltip.classList.add('visible'), 100);
+  }
+
+  /**
+   * Hide sliding panel tooltip and mark as seen
+   * @private
+   */
+  _hideSlidingPanelTooltip() {
+    const tooltip = this.element.querySelector('.sliding-panel-tooltip');
+    const clickZone = this.element.querySelector('.panel-click-zone');
+    
+    if (!tooltip) return;
+
+    // Remove highlight class from click zone
+    if (clickZone) {
+      clickZone.classList.remove('tooltip-active');
+    }
+
+    // Fade out
+    tooltip.classList.remove('visible');
+
+    // Remove after animation
+    setTimeout(() => {
+      if (tooltip.parentNode) {
+        tooltip.parentNode.removeChild(tooltip);
+      }
+    }, 300);
+
+    // Mark as seen permanently
+    game.user.setFlag('vagabond', 'hasSeenPanelTooltip', true);
+  }
+
+  /**
+   * Toggle favor/hinder state
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onToggleFavorHinder(event, target) {
+    const currentState = this.actor.system.favorHinder || 'none';
+    const states = ['none', 'favor', 'hinder'];
+    const currentIndex = states.indexOf(currentState);
+    const nextIndex = (currentIndex + 1) % states.length;
+    const newState = states[nextIndex];
+
+    await this.actor.update({ 'system.favorHinder': newState });
+  }
+
+  /**
+   * Toggle NPC effects accordion
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onToggleEffectsAccordion(event, target) {
+    const accordion = target.closest('.npc-effects-accordion');
+    AccordionHelper.toggle(accordion);
+  }
+
+  /**
+   * Toggle NPC lock state
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onToggleLock(event, target) {
+    const currentState = this.actor.system.locked ?? false;
+    await this.actor.update({ 'system.locked': !currentState });
+  }
+
+  /**
+   * Spend or recharge luck
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onSpendLuck(event, target) {
+    event.preventDefault();
+    const currentLuck = this.actor.system.currentLuck || 0;
+    const maxLuck = this.actor.system.luck?.value || this.actor.system.stats?.luck?.value || 0;
+
+    if (event.shiftKey) {
+      // Shift+Click: Recharge to max
+      await this.actor.update({ 'system.currentLuck': maxLuck });
+      await VagabondChatCard.luckRecharge(this.actor, maxLuck);
+    } else {
+      // Regular Click: Spend (decrement)
+      if (currentLuck > 0) {
+        const newLuck = currentLuck - 1;
+        await this.actor.update({ 'system.currentLuck': newLuck });
+        await VagabondChatCard.luckSpend(this.actor, newLuck, maxLuck);
+      }
+    }
+  }
+
+  /**
+   * Spend or add studied die
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onSpendStudiedDie(event, target) {
+    event.preventDefault();
+    const currentDice = this.actor.system.studiedDice || 0;
+
+    if (event.shiftKey) {
+      // Shift+Click: Add a studied die
+      const newCount = currentDice + 1;
+      await this.actor.update({ 'system.studiedDice': newCount });
+      await VagabondChatCard.studiedDieGain(this.actor, newCount);
+    } else {
+      // Regular Click: Spend (roll d6 and decrement)
+      if (currentDice > 0) {
+        // Roll the d6
+        const roll = new Roll('1d6');
+        await roll.evaluate();
+
+        const remainingDice = currentDice - 1;
+        await this.actor.update({ 'system.studiedDice': remainingDice });
+        await VagabondChatCard.studiedDieSpend(this.actor, roll, remainingDice);
+      }
+    }
+  }
+
+  /**
+   * Modify universal check bonus
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onModifyCheckBonus(event, target) {
+    event.preventDefault();
+    const currentBonus = this.actor.system.universalCheckBonus || 0;
+
+    // Left click: +1, Right click: -1
+    if (event.button === 2 || event.type === 'contextmenu') {
+      // Right click: decrement
+      const newBonus = currentBonus - 1;
+      await this.actor.update({ 'system.universalCheckBonus': newBonus });
+    } else {
+      // Left click: increment
+      const newBonus = currentBonus + 1;
+      await this.actor.update({ 'system.universalCheckBonus': newBonus });
+    }
+  }
+
+  /**
+   * Open downtime activities application
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onOpenDowntime(event, target) {
+    new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true);
+  }
+
+  /**
+   * Open character builder application
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onOpenCharBuilder(event, target) {
+    const builder = new VagabondCharBuilder(this.actor);
+    builder.render(true);
+  }
+
+  /**
+   * Dismiss character builder permanently
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onDismissCharBuilder(event, target) {
+    const confirmed = await Dialog.confirm({
+      title: 'Dismiss Character Builder',
+      content: '<p>Are you sure you want to dismiss the character builder? This will hide the prompt permanently.</p>',
+    });
+
+    if (confirmed) {
+      await this.actor.setFlag('vagabond', 'dismissedCharBuilder', true);
+      this.render();
+    }
+  }
+
+  // ===========================
+  // GENERIC DOCUMENT ACTIONS
+  // ===========================
+
+  /**
+   * View an embedded document
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _viewDoc(event, target) {
+    const doc = this._getEmbeddedDocument(target, this.actor);
+    if (doc) doc.sheet.render(true);
+  }
+
+  /**
+   * Delete an embedded document
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _deleteDoc(event, target) {
+    const doc = this._getEmbeddedDocument(target, this.actor);
+    if (!doc) return;
+
+    const confirmed = await Dialog.confirm({
+      title: `Delete ${doc.name}?`,
+      content: `<p>Are you sure you want to delete ${doc.name}?</p>`,
+    });
+
+    if (confirmed) {
+      await doc.delete();
+    }
+  }
+
+  /**
+   * Create a new embedded document
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _createDoc(event, target) {
+    const { documentClass, type } = target.dataset;
+
+    let docData;
+
+    if (documentClass === 'ActiveEffect') {
+      // Use the working approach from item-sheet.mjs
+      const aeCls = getDocumentClass('ActiveEffect');
+      
+      docData = {
+        name: aeCls.defaultName({
+          type: target.dataset.type,
+          parent: this.actor,
+        }),
+      };
+
+      // Process all data attributes like the working _createEffect method
+      for (const [dataKey, value] of Object.entries(target.dataset)) {
+        // Skip reserved attributes
+        if (['action', 'documentClass'].includes(dataKey)) continue;
+        foundry.utils.setProperty(docData, dataKey, value);
+      }
+      
+      // Use createEmbeddedDocuments for proper embedding
+      return await this.actor.createEmbeddedDocuments('ActiveEffect', [docData]);
+    } else {
+      // Existing Item creation logic
+      docData = {
+        name: type ? `New ${type}` : 'New Document',
+      };
+
+      if (type) {
+        docData.type = type;
+      }
+      
+      return await this.actor.createEmbeddedDocuments('Item', [docData]);
+    }
+  }
+
+  /**
+   * Toggle active effect enabled state
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _toggleEffect(event, target) {
+    const effect = this._getEmbeddedDocument(target, this.actor);
+    if (effect) {
+      await effect.update({ disabled: !effect.disabled });
+    }
+  }
+
+  /**
+   * Get embedded document from target element
+   * @param {HTMLElement} target - The target element
+   * @param {Actor} actor - The actor instance
+   * @returns {Document|null} The embedded document
+   * @private
+   */
+  static _getEmbeddedDocument(target, actor) {
+    const li = target.closest('[data-effect-id], [data-item-id], [data-document-id]');
+    if (!li) return null;
+
+    const { effectId, itemId, documentId, documentClass } = li.dataset;
+    
+    // Determine the document ID and class
+    let docId, docClass;
+    if (effectId) {
+      docId = effectId;
+      docClass = 'ActiveEffect';
+    } else if (itemId) {
+      docId = itemId;
+      docClass = 'Item';
+    } else if (documentId) {
+      docId = documentId;
+      docClass = documentClass;
+    } else {
+      return null;
+    }
+
+    // Map document class names to collection names
+    const collectionMap = {
+      'Item': 'items',
+      'ActiveEffect': 'effects',
+    };
+
+    const collectionName = collectionMap[docClass] || docClass;
+    const collection = actor[collectionName];
+    return collection?.get(docId);
+  }
+
+  // ===========================
+  // FORM SUBMISSION
+  // ===========================
+
+  /**
+   * Submit a document update based on the processed form data
+   * @param {SubmitEvent} event - The originating form submission event
+   * @param {HTMLFormElement} form - The form element that was submitted
+   * @param {object} submitData - Processed and validated form data
+   * @returns {Promise<void>}
+   * @protected
+   * @override
+   */
+  async _processSubmitData(event, form, submitData) {
+    const overrides = foundry.utils.flattenObject(this.actor.overrides);
+    for (let k of Object.keys(overrides)) delete submitData[k];
+    await this.document.update(submitData);
+  }
+
+  /**
+   * Setup HP and Fatigue click handlers
+   * @private
+   */
+  _setupHealthFatigueListeners() {
     // Add fatigue skull click handlers
     const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
-
     fatigueSkulls.forEach((skull, index) => {
       skull.addEventListener('click', async (event) => {
         event.preventDefault();
@@ -1276,4077 +1444,130 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         await this.actor.update({ 'system.health.value': newHP });
       });
-
-      // Make the heart icon clickable
-      pcHpIcon.style.cursor = 'pointer';
     }
-
-    // Add HP heart icon click handlers for NPC
-    const npcHpIcon = this.element.querySelector('.npc-hp-heart-icon');
-    if (npcHpIcon) {
-      // Left-click: increment HP
-      npcHpIcon.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentHP = this.actor.system.health.value || 0;
-        const maxHP = this.actor.system.health.max || 10;
-        const newHP = Math.min(currentHP + 1, maxHP);
-
-        // Trigger heartbeat animation
-        npcHpIcon.classList.add('heartbeat');
-        setTimeout(() => npcHpIcon.classList.remove('heartbeat'), 300);
-
-        await this.actor.update({ 'system.health.value': newHP });
-      });
-
-      // Right-click: decrement HP
-      npcHpIcon.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentHP = this.actor.system.health.value || 0;
-        const newHP = Math.max(currentHP - 1, 0);
-
-        // Trigger heartbeat animation
-        npcHpIcon.classList.add('heartbeat');
-        setTimeout(() => npcHpIcon.classList.remove('heartbeat'), 300);
-
-        await this.actor.update({ 'system.health.value': newHP });
-      });
-    }
-
-    // Add Check Modifier right-click handler
-    const checkModLabel = this.element.querySelector('[data-action="modifyCheckBonus"]');
-    if (checkModLabel) {
-      // Right-click: decrease check bonus
-      checkModLabel.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentBonus = this.actor.system.universalCheckBonus || 0;
-
-        await this.actor.update({ 'system.universalCheckBonus': currentBonus - 1 });
-      });
-
-      // Make cursor show it's clickable
-      checkModLabel.style.cursor = 'pointer';
-    } else {
-      console.warn('Vagabond | Check Mod label NOT found');
-    }
-
-    // Add mana modifier click handlers (both spells tab and sliding panel)
-    const manaModifiers = this.element.querySelectorAll('.mana-modifier[data-mana-action="modify"]');
-    manaModifiers.forEach(manaElement => {
-      // Left-click: spend mana (subtract)
-      manaElement.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentMana = this.actor.system.mana.current || 0;
-        const newMana = Math.max(currentMana - 1, 0);
-
-        await this.actor.update({ 'system.mana.current': newMana });
-      });
-
-      // Right-click: restore mana (add)
-      manaElement.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentMana = this.actor.system.mana.current || 0;
-        const maxMana = this.actor.system.mana.max || 0;
-        const newMana = Math.min(currentMana + 1, maxMana);
-
-        await this.actor.update({ 'system.mana.current': newMana });
-      });
-
-      // Make the element visually clickable
-      manaElement.style.cursor = 'pointer';
-    });
-
-    // Add right-click context menu handlers for ancestry and class
-    const ancestryName = this.element.querySelector('.ancestry-name');
-    if (ancestryName) {
-      ancestryName.addEventListener('contextmenu', this._onRemoveAncestry.bind(this));
-    }
-
-    const className = this.element.querySelector('.class-name');
-    if (className) {
-      className.addEventListener('contextmenu', this._onRemoveClass.bind(this));
-    }
-
-    // Add context menu handlers for perks
-    const perkCards = this.element.querySelectorAll('.perk-card[data-item-id]');
-    perkCards.forEach(perkCard => {
-      perkCard.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        const itemId = perkCard.dataset.itemId;
-        this._showFeatureContextMenu(event, itemId, 'perk');
-      });
-    });
-
-    // Add context menu handlers for traits
-    const traitCards = this.element.querySelectorAll('.trait[data-source-type="ancestry"]');
-    traitCards.forEach(traitCard => {
-      traitCard.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const traitIndex = parseInt(traitCard.dataset.traitIndex);
-        this._showFeatureContextMenu(event, { type: 'trait', index: traitIndex });
-      });
-    });
-
-    // Add context menu handlers for features (ancestry and class)
-    const featureCards = this.element.querySelectorAll('.feature[data-source-type="class"]');
-    featureCards.forEach(featureCard => {
-      featureCard.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const featureIndex = parseInt(featureCard.dataset.featureIndex);
-        this._showFeatureContextMenu(event, { type: 'feature', index: featureIndex });
-      });
-    });
-
-    // Add click handlers for gear items
-    const gearItems = this.element.querySelectorAll('.gear-item-row[data-item-id]');
-    gearItems.forEach(gearItem => {
-      // Left-click on image: open item sheet
-      const gearImage = gearItem.querySelector('.gear-item-image');
-      if (gearImage) {
-        gearImage.addEventListener('click', this._onGearImageClick.bind(this));
-      }
-
-      // Left-click on name: use item (if usable)
-      const gearName = gearItem.querySelector('.gear-item-name');
-      if (gearName) {
-        gearName.addEventListener('click', this._onGearNameClick.bind(this));
-      }
-
-      // Click on equipped icon: toggle equipped status
-      const equippedIcon = gearItem.querySelector('.gear-equipped-icon');
-      if (equippedIcon) {
-        equippedIcon.addEventListener('click', this._onToggleEquipped.bind(this));
-      }
-
-      // Right-click on row: delete item
-      gearItem.addEventListener('contextmenu', this._onGearContextMenu.bind(this));
-    });
-
-    // Add click and context menu handlers for weapon items
-    const weaponItems = this.element.querySelectorAll('.weapon-item-row[data-item-id]');
-    weaponItems.forEach(weaponItem => {
-      // Left-click on image: open item sheet
-      const weaponImage = weaponItem.querySelector('.weapon-item-image');
-      if (weaponImage) {
-        weaponImage.addEventListener('click', this._onWeaponImageClick.bind(this));
-      }
-
-      // Left-click on name: use weapon (attack roll)
-      const weaponName = weaponItem.querySelector('.weapon-item-name');
-      if (weaponName) {
-        weaponName.addEventListener('click', this._onWeaponNameClick.bind(this));
-      }
-
-      // Right-click on row: delete weapon
-      weaponItem.addEventListener('contextmenu', this._onWeaponContextMenu.bind(this));
-    });
-
-    // Add click and context menu handlers for armor items
-    const armorItems = this.element.querySelectorAll('.armor-item-row[data-item-id]');
-    armorItems.forEach(armorItem => {
-      // Left-click on image: open item sheet
-      const armorImage = armorItem.querySelector('.armor-item-image');
-      if (armorImage) {
-        armorImage.addEventListener('click', this._onArmorImageClick.bind(this));
-      }
-
-      // Left-click on name: open item sheet (armor doesn't have a roll action like weapons)
-      const armorName = armorItem.querySelector('.armor-item-name');
-      if (armorName) {
-        armorName.addEventListener('click', this._onArmorImageClick.bind(this));
-      }
-
-      // Right-click on row: delete armor
-      armorItem.addEventListener('contextmenu', this._onArmorContextMenu.bind(this));
-    });
-
-    // Add click and context menu handlers for spell items
-    const spellItems = this.element.querySelectorAll('.spell-item-row[data-item-id]');
-    spellItems.forEach(spellItem => {
-      // Right-click on row: delete spell
-      spellItem.addEventListener('contextmenu', this._onSpellContextMenu.bind(this));
-    });
-
-    // NEW: Add spell casting event handlers
-    const spellRows = this.element.querySelectorAll('[data-spell-id]');
-    spellRows.forEach(spellRow => {
-      const spellId = spellRow.dataset.spellId;
-      if (!spellId) return;
-
-      // Initialize spell display with saved state
-      this._updateSpellDisplay(spellId);
-
-      // Delivery dropdown change
-      const deliverySelect = spellRow.querySelector('.spell-delivery-select');
-      if (deliverySelect) {
-        deliverySelect.addEventListener('change', async (event) => {
-          const state = this._getSpellState(spellId);
-          state.deliveryType = event.target.value || null;
-          state.deliveryIncrease = 0; // Reset increases when changing delivery
-          this._saveSpellStates();
-          this._updateSpellDisplay(spellId);
-
-          // Clear ALL previews (player is changing spell configuration)
-          await this._clearAllPreviews();
-        });
-      }
-
-      // Damage dice: left-click increase, right-click decrease
-      const damageElement = spellRow.querySelector('.spell-damage-dice');
-      if (damageElement) {
-        damageElement.addEventListener('click', async (event) => {
-          event.preventDefault();
-          const state = this._getSpellState(spellId);
-          state.damageDice++;
-          this._saveSpellStates();
-          this._updateSpellDisplay(spellId);
-
-          // Clear ALL previews (player is changing spell configuration)
-          await this._clearAllPreviews();
-        });
-
-        damageElement.addEventListener('contextmenu', async (event) => {
-          event.preventDefault();
-          const state = this._getSpellState(spellId);
-          state.damageDice = Math.max(0, state.damageDice - 1);
-
-          // Auto-enable Fx when damage is set to 0 (effect-only mode)
-          if (state.damageDice === 0) {
-            state.useFx = true;
-          }
-
-          this._saveSpellStates();
-          this._updateSpellDisplay(spellId);
-
-          // Clear ALL previews (player is changing spell configuration)
-          await this._clearAllPreviews();
-        });
-      }
-
-      // Delivery cost: left-click increase, right-click decrease
-      const deliveryCostElement = spellRow.querySelector('.spell-delivery-cost');
-      if (deliveryCostElement) {
-        deliveryCostElement.addEventListener('click', async (event) => {
-          event.preventDefault();
-          const state = this._getSpellState(spellId);
-
-          if (!state.deliveryType) {
-            ui.notifications.warn("Select a delivery type first!");
-            return;
-          }
-
-          // Check if this delivery can be increased
-          if (CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType] === 0) {
-            ui.notifications.warn("This delivery cannot be increased!");
-            return;
-          }
-
-          state.deliveryIncrease++;
-          this._saveSpellStates();
-          this._updateSpellDisplay(spellId);
-
-          // Clear ALL previews (player is changing spell configuration)
-          await this._clearAllPreviews();
-        });
-
-        deliveryCostElement.addEventListener('contextmenu', async (event) => {
-          event.preventDefault();
-          const state = this._getSpellState(spellId);
-          state.deliveryIncrease = Math.max(0, state.deliveryIncrease - 1);
-          this._saveSpellStates();
-          this._updateSpellDisplay(spellId);
-
-          // Clear ALL previews (player is changing spell configuration)
-          await this._clearAllPreviews();
-        });
-      }
-    });
-
-    // Inventory Grid Event Listeners
-    this._attachInventoryGridListeners();
   }
 
   /**
-   * Attach event listeners for inventory grid interactions
+   * Setup ancestry and class right-click delete handlers
    * @private
    */
-  _attachInventoryGridListeners() {
-    const inventoryCards = this.element.querySelectorAll('.inventory-card');
-
-    inventoryCards.forEach(card => {
-      const itemId = card.dataset.itemId;
-
-      // Single-click: Show mini-sheet (FOR TESTING)
-      card.addEventListener('click', (event) => {
+  _setupAncestryClassHandlers() {
+    // Ancestry right-click to delete
+    const ancestryElement = this.element.querySelector('.ancestry-name');
+    if (ancestryElement) {
+      ancestryElement.addEventListener('contextmenu', async (event) => {
         event.preventDefault();
-        this._showInventoryMiniSheet(event, itemId);
-      });
+        event.stopPropagation();
 
-      // Double-click: Open item sheet
-      card.addEventListener('dblclick', (event) => {
-        event.preventDefault();
-        const item = this.actor.items.get(itemId);
-        if (item) item.sheet.render(true);
-      });
+        const itemId = ancestryElement.dataset.itemId;
+        if (!itemId) return;
 
-      // Right-click: Show context menu
-      card.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        this._showInventoryContextMenu(event, itemId, card);
-      });
-
-      // Drag start
-      card.addEventListener('dragstart', (event) => {
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
-        event.dataTransfer.effectAllowed = 'move';
-
-        // Set proper Foundry drag data
-        const dragData = item.toDragData();
-        event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
-
-        // Clear any stuck dragging states first
-        this._clearAllDragStates();
-
-        card.classList.add('dragging');
-        card.dataset.isDragging = 'true';
-      });
-
-      // Drag end
-      card.addEventListener('dragend', (event) => {
-        this._clearAllDragStates();
-      });
-
-      // Double-click to open item sheet (containers open their own sheet)
-      card.addEventListener('dblclick', async (event) => {
-        const item = this.actor.items.get(itemId);
-        if (item) {
-          event.preventDefault();
-          event.stopPropagation();
-          event.stopImmediatePropagation();
-          item.sheet.render(true);
-        }
-      });
-
-      // Allow dropping on other cards (to slide into position)
-      card.addEventListener('dragover', (event) => {
-        event.preventDefault();
-
-        const dragData = event.dataTransfer.getData('text/plain');
-        const draggedItemId = this._extractItemIdFromDragData(dragData);
-        const targetItemId = card.dataset.itemId;
-
-        if (draggedItemId === targetItemId) {
-          // Dragging on self - invalid
-          card.classList.remove('drag-target-valid', 'drag-target-invalid');
-          card.classList.add('drag-target-invalid');
-          return;
-        }
-
-        const targetItem = this.actor.items.get(targetItemId);
-        if (!targetItem) return;
-
-        const targetPos = targetItem.system.gridPosition || 0;
-        const isValid = this._canDropAtPosition(draggedItemId, targetPos);
-
-        // Apply visual feedback (left margin only)
-        card.classList.remove('drag-target-valid', 'drag-target-invalid');
-        card.classList.add(isValid ? 'drag-target-valid' : 'drag-target-invalid');
-      });
-
-      card.addEventListener('dragleave', (event) => {
-        card.classList.remove('drag-target-valid', 'drag-target-invalid');
-      });
-
-      card.addEventListener('drop', async (event) => {
-        const dragData = event.dataTransfer.getData('text/plain');
-        const draggedItemId = this._extractItemIdFromDragData(dragData);
-        
-        // Check if item is internal (reordering)
-        const draggedItem = this.actor.items.get(draggedItemId);
-        if (!draggedItem) {
-          // External item - let it bubble to main sheet handler
-          this._clearAllDragStates();
-          return;
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        const targetItemId = card.dataset.itemId;
-
-        // Clear drag states immediately
-        this._clearAllDragStates();
-
-        if (draggedItemId === targetItemId) return;
-
-        const targetItem = this.actor.items.get(targetItemId);
-        if (!targetItem) return;
-
-        // CONTAINER LOGIC: Check if dropping onto a container
-        if (targetItem.type === 'container') {
-          const draggedItem = this.actor.items.get(draggedItemId);
-          if (!draggedItem) return;
-
-          // Prevent putting containers inside containers
-          if (draggedItem.type === 'container') {
-            ui.notifications.warn("Cannot put containers inside other containers!");
-            return;
-          }
-
-          // Check capacity based on slots (0-slot items don't count)
-          const currentItems = targetItem.system.items || [];
-          const capacity = targetItem.system.capacity || 10;
-
-          // Calculate current slots used (skip 0-slot items)
-          const currentSlotsUsed = currentItems.reduce((total, item) => {
-            const itemSlots = item.system?.baseSlots || 0;
-            return total + (itemSlots > 0 ? itemSlots : 0);
-          }, 0);
-
-          // Get dragged item slots (0-slot items don't count toward capacity)
-          const draggedItemSlots = draggedItem.system.baseSlots || 0;
-
-          // If it's a 0-slot item, always allow
-          if (draggedItemSlots === 0) {
-            // Get full item data
-            const itemData = draggedItem.toObject();
-
-            // Add to container's items array
-            const newItems = [...currentItems, itemData];
-            await targetItem.update({ 'system.items': newItems });
-
-            // Delete the original item from actor inventory
-            await draggedItem.delete();
-
-            ui.notifications.info(`Placed ${draggedItem.name} into ${targetItem.name}`);
-            return; // Don't slide, we're done
-          }
-
-          // Check if there's enough space for non-zero slot items
-          if (currentSlotsUsed + draggedItemSlots > capacity) {
-            ui.notifications.warn(`${targetItem.name} doesn't have enough space! (${currentSlotsUsed}/${capacity} slots used, need ${draggedItemSlots} more)`);
-            return;
-          }
-
-          // Get full item data
-          const itemData = draggedItem.toObject();
-
-          // Add to container's items array
-          const newItems = [...currentItems, itemData];
-          await targetItem.update({ 'system.items': newItems });
-
-          // Delete the original item from actor inventory
-          await draggedItem.delete();
-
-          ui.notifications.info(`Placed ${draggedItem.name} into ${targetItem.name}`);
-          return; // Don't slide, we're done
-        }
-
-        // NORMAL SLIDING LOGIC (non-container drops)
-        const targetPos = targetItem.system.gridPosition || 0;
-
-        // Check if drop is valid
-        if (!this._canDropAtPosition(draggedItemId, targetPos)) {
-          ui.notifications.warn("Not enough capacity to place item here!");
-          return;
-        }
-
-        await this._slideItemToPosition(draggedItemId, targetPos);
-      });
-    });
-
-    // Handle drops on empty slots
-    const emptySlots = this.element.querySelectorAll('.inventory-slot.empty-slot');
-
-    emptySlots.forEach(slot => {
-      slot.addEventListener('dragover', (event) => {
-        event.preventDefault();
-
-        const dragData = event.dataTransfer.getData('text/plain');
-        const draggedItemId = this._extractItemIdFromDragData(dragData);
-        const slotIndex = parseInt(slot.dataset.slotIndex);
-
-        // Check if drop is valid (doesn't exceed capacity)
-        const isValid = this._canDropAtPosition(draggedItemId, slotIndex);
-
-        // Apply visual feedback (left margin only)
-        slot.classList.remove('drag-target-valid', 'drag-target-invalid');
-        slot.classList.add(isValid ? 'drag-target-valid' : 'drag-target-invalid');
-      });
-
-      slot.addEventListener('dragleave', (event) => {
-        slot.classList.remove('drag-target-valid', 'drag-target-invalid');
-      });
-
-      slot.addEventListener('drop', async (event) => {
-        const dragData = event.dataTransfer.getData('text/plain');
-        const itemId = this._extractItemIdFromDragData(dragData);
-        
-        // Check if item is internal (reordering)
-        const draggedItem = this.actor.items.get(itemId);
-        if (!draggedItem) {
-          // External item - let it bubble to main sheet handler
-          this._clearAllDragStates();
-          return;
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        // Clear drag states immediately
-        this._clearAllDragStates();
-
-        const slotIndex = parseInt(slot.dataset.slotIndex);
-
-        // Check if drop is valid
-        if (!this._canDropAtPosition(itemId, slotIndex)) {
-          ui.notifications.warn("Not enough capacity to place item here!");
-          return;
-        }
-
-        await this._slideItemToPosition(itemId, slotIndex);
-      });
-    });
-
-    // Add global click listener to clear stuck drag states
-    this.element.addEventListener('click', (event) => {
-      // If clicking anywhere (not during drag), clear any stuck states
-      const draggingItems = this.element.querySelectorAll('.inventory-card[data-is-dragging="true"]');
-      if (draggingItems.length > 0) {
-        this._clearAllDragStates();
-      }
-    });
-
-    // Add ESC key listener to cancel dragging
-    this.element.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        this._clearAllDragStates();
-      }
-    });
-  }
-
-  /**
-   * Clear all drag-related visual states
-   * Failsafe to prevent stuck dragging items
-   * @private
-   */
-  _clearAllDragStates() {
-    // Remove dragging class from all cards
-    this.element.querySelectorAll('.inventory-card.dragging').forEach(el => {
-      el.classList.remove('dragging');
-      delete el.dataset.isDragging;
-    });
-
-    // Remove drag target feedback from all slots and cards
-    this.element.querySelectorAll('.drag-target-valid, .drag-target-invalid').forEach(el => {
-      el.classList.remove('drag-target-valid', 'drag-target-invalid');
-    });
-  }
-
-  /**
-   * Slide/insert an item into a new grid position
-   * Process: 1) Remove item (close gap), 2) Insert at target (make room)
-   * @param {string} draggedItemId - ID of the item being dragged
-   * @param {number} targetPosition - Target grid position (left edge, before removal)
-   * @returns {Promise<boolean>} True if successful, false if invalid
-   * @private
-   */
-  async _slideItemToPosition(draggedItemId, targetPosition) {
-    const draggedItem = this.actor.items.get(draggedItemId);
-    if (!draggedItem) return false;
-
-    const oldPosition = draggedItem.system.gridPosition || 0;
-    const draggedSlots = draggedItem.system.slots || 0;
-
-    // For displacement purposes, 0-slot items count as 1 slot
-    const displacementSlots = Math.max(draggedSlots, 1);
-
-    // Don't do anything if dropping on self
-    if (oldPosition === targetPosition) return false;
-
-    // Get all inventory items (exclude items in containers and the dragged item)
-    const inventoryItems = this.actor.items.filter(i =>
-      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear' || i.type === 'container') &&
-      !i.system.containerId &&
-      i.id !== draggedItemId
-    );
-
-    const updates = [];
-
-    // Calculate effective target position (accounting for the gap left behind)
-    const effectiveTarget = targetPosition > oldPosition
-      ? targetPosition - displacementSlots
-      : targetPosition;
-
-    inventoryItems.forEach(item => {
-      let pos = item.system.gridPosition || 0;
-
-      // Step 1: Close gap from removing dragged item
-      if (pos > oldPosition) {
-        pos = pos - displacementSlots;
-      }
-
-      // Step 2: Make room for inserting dragged item
-      if (pos >= effectiveTarget) {
-        pos = pos + displacementSlots;
-      }
-
-      // Only update if position changed
-      if (pos !== item.system.gridPosition) {
-        updates.push({
-          _id: item.id,
-          'system.gridPosition': pos
+        const confirmed = await Dialog.confirm({
+          title: game.i18n.localize('VAGABOND.Dialog.DeleteItem'),
+          content: `<p>Are you sure you want to remove ${item.name}?</p>`,
         });
-      }
-    });
 
-    // Place the dragged item at its effective target position
-    updates.push({
-      _id: draggedItemId,
-      'system.gridPosition': effectiveTarget
-    });
-
-    // Apply all updates at once
-    if (updates.length > 0) {
-      await this.actor.updateEmbeddedDocuments('Item', updates);
-    }
-
-    return true;
-  }
-
-  /**
-   * Extract item ID from drag data
-   * @param {string} dragData - Raw drag data from dataTransfer
-   * @returns {string|null} Item ID or null if invalid
-   * @private
-   */
-  _extractItemIdFromDragData(dragData) {
-    if (!dragData) return null;
-
-    try {
-      // Try to parse as JSON (Foundry drag data format)
-      const parsed = JSON.parse(dragData);
-
-      // Extract ID from UUID format: "Actor.xxx.Item.yyy"
-      if (parsed.uuid) {
-        const parts = parsed.uuid.split('.');
-        return parts[parts.length - 1]; // Return the last part (item ID)
-      }
-
-      // If no uuid, might be just an item ID string
-      return parsed;
-    } catch (e) {
-      // Not JSON, assume it's a plain item ID
-      return dragData;
-    }
-  }
-
-  /**
-   * Check if dropping an item at a position is valid (doesn't overflow column)
-   * The only restriction is column overflow - items should always slide otherwise
-   * @param {string} draggedItemId - ID of the item being dragged
-   * @param {number} targetPosition - Target grid position
-   * @returns {boolean} True if valid, false if would overflow column
-   * @private
-   */
-  _canDropAtPosition(draggedItemId, targetPosition) {
-    const draggedItem = this.actor.items.get(draggedItemId);
-    if (!draggedItem) return false;
-
-    const draggedSlots = draggedItem.system.slots || 0;
-
-    // Slot-0 items don't consume space, always allow
-    if (draggedSlots === 0) return true;
-
-    // Grid is 3 columns wide
-    const COLUMNS = 3;
-
-    // Calculate which column this position is in
-    const column = targetPosition % COLUMNS;
-
-    // Check if item would overflow the column
-    // A 2-slot item can't start in column 2 (last column)
-    // A 3-slot item can't start in columns 1 or 2 (last two columns)
-    const columnsNeeded = draggedSlots;
-    const columnsAvailable = COLUMNS - column;
-
-    // If the item needs more columns than available, it would overflow
-    if (columnsNeeded > columnsAvailable) {
-      return false;
-    }
-
-    // Otherwise, allow the drop - items will slide to make room
-    return true;
-  }
-
-  /**
-   * Show context menu for inventory item
-   * @param {Event} event - The context menu event
-   * @param {string} itemId - The item ID
-   * @param {HTMLElement} card - The inventory card element
-   * @private
-   */
-  _showInventoryContextMenu(event, itemId, card) {
-    // Remove any existing context menu
-    this._hideInventoryContextMenu();
-
-    const item = this.actor.items.get(itemId);
-    if (!item) {
-      console.log('Item not found for context menu:', itemId);
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const menu = document.createElement('div');
-    menu.className = 'inventory-context-menu';
-    menu.style.position = 'fixed'; // Use fixed instead of absolute for better positioning
-    menu.style.left = `${event.clientX}px`;
-    menu.style.top = `${event.clientY}px`;
-    menu.style.zIndex = '10000'; // Very high z-index to ensure visibility
-
-    const isEquipped = this._isItemEquipped(item);
-    const isWeapon = (item.type === 'weapon') ||
-                     (item.type === 'equipment' && item.system.equipmentType === 'weapon');
-
-    const isAlchemical = item.type === 'equipment' && item.system.equipmentType === 'alchemical';
-    const hasAlchemicalDamage = isAlchemical && item.system.damageType && item.system.damageType !== '-';
-    const isArmor = item.type === 'equipment' && item.system.equipmentType === 'armor';
-    const isGear = item.type === 'equipment' && item.system.equipmentType === 'gear';
-    const isRelic = item.type === 'equipment' && item.system.equipmentType === 'relic';
-
-    // Determine if "Use" option should be shown
-    let showUseOption = false;
-
-    if (isWeapon) {
-      // Weapons can only be "used" (attacked with) if equipped
-      showUseOption = isEquipped;
-    } else if (isArmor) {
-      // Armor cannot be "used"
-      showUseOption = false;
-    } else if (isGear) {
-      // Gear can only be "used" if it's consumable
-      showUseOption = item.system.isConsumable === true;
-    } else {
-      // Alchemicals, relics, and other items can be used
-      showUseOption = true;
-    }
-
-    menu.innerHTML = `
-      ${showUseOption ? `
-        <div class="context-menu-item" data-action="use">
-          <i class="fas fa-hand-sparkles"></i>
-          <span>Use</span>
-        </div>
-      ` : ''}
-      <div class="context-menu-item" data-action="sendToChat">
-        <i class="fas fa-comment"></i>
-        <span>Send to Chat</span>
-      </div>
-      <div class="context-menu-item" data-action="equip">
-        <i class="fas fa-${isEquipped ? 'times' : 'check'}"></i>
-        <span>${isEquipped ? 'Unequip' : 'Equip'}</span>
-      </div>
-      <div class="context-menu-item" data-action="edit">
-        <i class="fas fa-edit"></i>
-        <span>Edit</span>
-      </div>
-      <div class="context-menu-item danger" data-action="delete">
-        <i class="fas fa-trash"></i>
-        <span>Delete</span>
-      </div>
-    `;
-
-    this.element.appendChild(menu);
-    this._currentContextMenu = menu;
-
-    // Add click handlers
-    // Use handler - actually uses the item (attacks, consumes, etc.)
-    if (showUseOption) {
-      menu.querySelector('[data-action="use"]')?.addEventListener('click', async () => {
-        // For weapons or alchemicals with damage, use rollWeapon
-        if (isWeapon || hasAlchemicalDamage) {
-          await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
-        } else {
-          // For everything else, use useItem (which delegates to item.roll())
-          await VagabondActorSheet._onUseItem.call(this, event, { dataset: { itemId } });
-        }
-        this._hideInventoryContextMenu();
-      });
-    }
-
-    // Send to Chat handler - shows item info without consuming
-    menu.querySelector('[data-action="sendToChat"]')?.addEventListener('click', async () => {
-      await VagabondChatCard.gearUse(this.actor, item);
-      this._hideInventoryContextMenu();
-    });
-
-    menu.querySelector('[data-action="equip"]').addEventListener('click', async () => {
-      if (isWeapon && item.system.equipmentState !== undefined) {
-        const newState = isEquipped ? 'unequipped' : 'oneHand';
-        await item.update({ 'system.equipmentState': newState });
-      }
-      // For armor, update worn state
-      else if (item.type === 'armor') {
-        await item.update({ 'system.worn': !isEquipped });
-      }
-      // For other items (gear, etc), update equipped
-      else if (item.system.equipped !== undefined) {
-        await item.update({ 'system.equipped': !isEquipped });
-      }
-      this._hideInventoryContextMenu();
-    });
-
-    menu.querySelector('[data-action="edit"]').addEventListener('click', () => {
-      item.sheet.render(true);
-      this._hideInventoryContextMenu();
-    });
-
-    menu.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: `Delete ${item.name}?` },
-        content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-        rejectClose: false,
-        modal: true
-      });
-      if (confirmed) {
-        await item.delete();
-      }
-      this._hideInventoryContextMenu();
-    });
-
-    // Close menu when clicking elsewhere
-    setTimeout(() => {
-      document.addEventListener('click', this._hideInventoryContextMenu.bind(this), { once: true });
-    }, 10);
-  }
-
-  /**
-   * Hide context menu
-   * @private
-   */
-  _hideInventoryContextMenu() {
-    if (this._currentContextMenu) {
-      this._currentContextMenu.remove();
-      this._currentContextMenu = null;
-    }
-  }
-
-  /**
-   * Show context menu for features, traits, and perks
-   * @param {Event} event - The contextmenu event
-   * @param {string|object} itemIdOrData - For perks: item ID string. For traits/features: object with {type, index}
-   * @param {string} [itemType] - 'perk' (only used when itemIdOrData is a string)
-   * @private
-   */
-  _showFeatureContextMenu(event, itemIdOrData, itemType) {
-    this._hideInventoryContextMenu();
-
-    let item = null;
-    let sourceItem = null;
-    let featureData = null;
-    let canDelete = false;
-    let editLabel = 'Edit';
-
-    // Handle perks (real items)
-    if (typeof itemIdOrData === 'string') {
-      item = this.actor.items.get(itemIdOrData);
-      if (!item) {
-        console.log('Perk not found:', itemIdOrData);
-        return;
-      }
-      canDelete = true;
-    }
-    // Handle traits (from ancestry)
-    else if (itemIdOrData.type === 'trait') {
-      sourceItem = this.actor.items.find(i => i.type === 'ancestry');
-      if (!sourceItem || !sourceItem.system.traits) {
-        console.log('Ancestry or traits not found');
-        return;
-      }
-      featureData = sourceItem.system.traits[itemIdOrData.index];
-      if (!featureData) {
-        console.log('Trait not found at index:', itemIdOrData.index);
-        return;
-      }
-      editLabel = 'Edit Ancestry';
-    }
-    // Handle features (from class)
-    else if (itemIdOrData.type === 'feature') {
-      sourceItem = this.actor.items.find(i => i.type === 'class');
-      if (!sourceItem || !sourceItem.system.levelFeatures) {
-        console.log('Class or features not found');
-        return;
-      }
-      featureData = sourceItem.system.levelFeatures[itemIdOrData.index];
-      if (!featureData) {
-        console.log('Feature not found at index:', itemIdOrData.index);
-        return;
-      }
-      editLabel = 'Edit Class';
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const menu = document.createElement('div');
-    menu.className = 'inventory-context-menu';
-    menu.style.position = 'fixed';
-    menu.style.left = `${event.clientX}px`;
-    menu.style.top = `${event.clientY}px`;
-    menu.style.zIndex = '10000';
-
-    menu.innerHTML = `
-      <div class="context-menu-item" data-action="sendToChat">
-        <i class="fas fa-comment"></i>
-        <span>Send to Chat</span>
-      </div>
-      <div class="context-menu-item" data-action="edit">
-        <i class="fas fa-edit"></i>
-        <span>${editLabel}</span>
-      </div>
-      ${canDelete ? `
-        <div class="context-menu-item danger" data-action="delete">
-          <i class="fas fa-trash"></i>
-          <span>Delete</span>
-        </div>
-      ` : ''}
-    `;
-
-    this.element.appendChild(menu);
-    this._currentContextMenu = menu;
-
-    // Add click handlers
-    menu.querySelector('[data-action="sendToChat"]').addEventListener('click', async () => {
-      if (item) {
-        // Perk
-        await VagabondChatCard.itemUse(this.actor, item);
-      } else if (featureData) {
-        // Trait or Feature
-        await VagabondChatCard.featureDataUse(this.actor, featureData, sourceItem, itemIdOrData.type);
-      }
-      this._hideInventoryContextMenu();
-    });
-
-    menu.querySelector('[data-action="edit"]').addEventListener('click', () => {
-      if (item) {
-        item.sheet.render(true);
-      } else if (sourceItem) {
-        sourceItem.sheet.render(true);
-      }
-      this._hideInventoryContextMenu();
-    });
-
-    if (canDelete) {
-      menu.querySelector('[data-action="delete"]').addEventListener('click', async () => {
-        const confirmed = await foundry.applications.api.DialogV2.confirm({
-          window: { title: `Delete ${item.name}?` },
-          content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-          rejectClose: false,
-          modal: true
-        });
         if (confirmed) {
           await item.delete();
+          ui.notifications.info(`Removed ${item.name}`);
         }
-        this._hideInventoryContextMenu();
       });
     }
 
-    // Close menu when clicking elsewhere
-    setTimeout(() => {
-      document.addEventListener('click', this._hideInventoryContextMenu.bind(this), { once: true });
-    }, 10);
-  }
-
-  /**
-   * Show mini-sheet popup for inventory item
-   * @param {Event} event - The click event
-   * @param {string} itemId - The item ID
-   * @private
-   */
-  _showInventoryMiniSheet(event, itemId) {
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Remove any existing mini-sheet
-    this._hideInventoryMiniSheet();
-
-    const miniSheet = document.createElement('div');
-    miniSheet.className = 'inventory-mini-sheet';
-    miniSheet.style.position = 'fixed';
-    miniSheet.style.zIndex = '10000';
-
-    // Position near the click
-    const x = Math.min(event.clientX + 10, window.innerWidth - 360);
-    const y = Math.min(event.clientY + 10, window.innerHeight - 400);
-    miniSheet.style.left = `${x}px`;
-    miniSheet.style.top = `${y}px`;
-
-    // Build content based on item type
-    const content = this._buildMiniSheetContent(item);
-    miniSheet.innerHTML = content;
-
-    document.body.appendChild(miniSheet);
-    this._currentMiniSheet = miniSheet;
-
-    // Add close button handler
-    const closeButton = miniSheet.querySelector('.mini-sheet-close');
-    if (closeButton) {
-      closeButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this._hideInventoryMiniSheet();
-      });
-    }
-
-    // Close on click outside
-    setTimeout(() => {
-      document.addEventListener('click', this._hideInventoryMiniSheet.bind(this), { once: true });
-    }, 10);
-
-    // Prevent the click from immediately closing it
-    event.stopPropagation();
-  }
-
-  /**
-   * Build HTML content for mini-sheet based on item type
-   * @param {VagabondItem} item - The item
-   * @returns {string} HTML content
-   * @private
-   */
-  _buildMiniSheetContent(item) {
-    const isWeapon = (item.type === 'weapon') || (item.type === 'equipment' && item.system.equipmentType === 'weapon');
-    const isArmor = (item.type === 'armor') || (item.type === 'equipment' && item.system.equipmentType === 'armor');
-    const isRelic = (item.type === 'equipment' && item.system.equipmentType === 'relic');
-    const isGear = (item.type === 'equipment' && ['gear', 'alchemical'].includes(item.system.equipmentType));
-
-    // Header: Image (100x100) + Type above Name + Lore (if relic) + Close button
-    let html = `
-      <div class="mini-sheet-header">
-        <img src="${item.img}" alt="${item.name}" class="mini-sheet-image" />
-        <div class="mini-sheet-title">
-          <span class="mini-sheet-type">${this._formatItemType(item)}</span>
-          <h3>${item.name}</h3>
-          ${isRelic && item.system.lore ? `<div class="mini-sheet-lore">${item.system.lore}</div>` : ''}
-        </div>
-        <button class="mini-sheet-close" type="button" aria-label="Close">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    `;
-
-    // Description (full width, no label)
-    if (item.system.description) {
-      html += `<div class="mini-sheet-description">${item.system.description}</div>`;
-    }
-
-    // Stats (two columns)
-    if (isWeapon) {
-      html += this._buildWeaponStats(item);
-    } else if (isArmor) {
-      html += this._buildArmorStats(item);
-    } else if (isGear || isRelic) {
-      html += this._buildGearStats(item);
-    }
-
-    // Properties with descriptions (full width at bottom)
-    if (isWeapon && item.system.properties && item.system.properties.length > 0) {
-      html += this._buildWeaponProperties(item);
-    }
-
-    return html;
-  }
-
-  /**
-   * Format item type for display
-   * @param {VagabondItem} item - The item
-   * @returns {string} Formatted type
-   * @private
-   */
-  _formatItemType(item) {
-    if (item.type === 'equipment') {
-      return item.system.equipmentType.charAt(0).toUpperCase() + item.system.equipmentType.slice(1);
-    }
-    return item.type.charAt(0).toUpperCase() + item.type.slice(1);
-  }
-
-  /**
-   * Build weapon stats HTML (two-column grid)
-   * @param {VagabondItem} item - The weapon item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildWeaponStats(item) {
-    const damageType = item.system.currentDamageType || item.system.damageType || '';
-    return `
-      <div class="mini-sheet-stats">
-        <div class="stat-row">
-          <span class="stat-name">Damage</span>
-          <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${damageType}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Range</span>
-          <span class="stat-value">${item.system.rangeDisplay || item.system.range || '—'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Grip</span>
-          <span class="stat-value">${item.system.gripDisplay || item.system.grip || '—'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Weapon Skill</span>
-          <span class="stat-value">${item.system.weaponSkill || '—'}</span>
-        </div>
-        ${item.system.metal && item.system.metal !== 'common' ? `
-        <div class="stat-row">
-          <span class="stat-name">Metal</span>
-          <span class="stat-value">${item.system.metal}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Cost</span>
-          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Slots</span>
-          <span class="stat-value">${item.system.slots || 1}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Build armor stats HTML (two-column grid)
-   * @param {VagabondItem} item - The armor item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildArmorStats(item) {
-    return `
-      <div class="mini-sheet-stats">
-        <div class="stat-row">
-          <span class="stat-name">Armor Rating</span>
-          <span class="stat-value">${item.system.finalRating || item.system.rating || '—'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Type</span>
-          <span class="stat-value">${item.system.armorType || '—'}</span>
-        </div>
-        ${item.system.metal && item.system.metal !== 'common' ? `
-        <div class="stat-row">
-          <span class="stat-name">Metal</span>
-          <span class="stat-value">${item.system.metal}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Cost</span>
-          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Slots</span>
-          <span class="stat-value">${item.system.slots || 1}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Build gear stats HTML (two-column grid)
-   * @param {VagabondItem} item - The gear item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildGearStats(item) {
-    return `
-      <div class="mini-sheet-stats">
-        ${item.system.quantity ? `
-        <div class="stat-row">
-          <span class="stat-name">Quantity</span>
-          <span class="stat-value">${item.system.quantity}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Cost</span>
-          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Slots</span>
-          <span class="stat-value">${item.system.slots || 1}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Build weapon properties with descriptions
-   * @param {VagabondItem} item - The weapon item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildWeaponProperties(item) {
-    const config = CONFIG.VAGABOND;
-
-    return `
-      <div class="mini-sheet-properties">
-        <div class="mini-sheet-label">Properties</div>
-        <div class="property-list">
-          ${item.system.properties.map(prop => {
-            const descriptionKey = config.weaponPropertyHints?.[prop] || '';
-            const description = descriptionKey ? game.i18n.localize(descriptionKey) : '';
-            return `
-              <div class="property-row">
-                <span class="property-name">${prop}:</span>
-                <span class="property-description">${description}</span>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Hide mini-sheet
-   * @private
-   */
-  _hideInventoryMiniSheet() {
-    if (this._currentMiniSheet) {
-      this._currentMiniSheet.remove();
-      this._currentMiniSheet = null;
-    }
-  }
-
-  /**************
-   *
-   *   ACTIONS
-   *
-   **************/
-
-  /**
-   * Handle changing a Document's image.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @returns {Promise}
-   * @protected
-   */
-  static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } =
-      this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ??
-      {};
-    const fp = new FilePicker({
-      current,
-      type: 'image',
-      redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
-      },
-      top: this.position.top + 40,
-      left: this.position.left + 10,
-    });
-    return fp.browse();
-  }
-
-  /**
-   * YOUR CUSTOM: Handle viewing the character's ancestry item
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _viewAncestry(event, target) {
-    const ancestry = this.actor.items.find(item => item.type === 'ancestry');
-    if (ancestry) {
-      ancestry.sheet.render(true);
-    }
-  }
-
-  /**
-   * YOUR CUSTOM: Handle viewing the character's class item
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _viewClass(event, target) {
-    const classItem = this.actor.items.find(item => item.type === 'class');
-    if (classItem) {
-      classItem.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle leveling up the character
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onLevelUp(event, target) {
-    const currentLevel = this.actor.system.attributes.level.value;
-    const newLevel = currentLevel + 1;
-
-    if (newLevel > 10) {
-      ui.notifications.warn("Maximum level (10) already reached!");
-      return;
-    }
-
-    // Get the class item to see what features will be granted
-    const classItem = this.actor.items.find(item => item.type === 'class');
-    if (!classItem) {
-      ui.notifications.warn("Character must have a class before leveling up!");
-      return;
-    }
-
-    // Get features for the new level
-    const newFeatures = classItem.system.levelFeatures.filter(f => f.level === newLevel);
-
-    // Build the dialog content
-    let content = `<p>Level up from <strong>${currentLevel}</strong> to <strong>${newLevel}</strong>?</p>`;
-
-    if (newFeatures.length > 0) {
-      content += `<p><strong>You will gain these features:</strong></p><ul>`;
-      for (const feature of newFeatures) {
-        content += `<li><strong>${feature.name}</strong>`;
-        if (feature.description) {
-          content += `: ${feature.description}`;
-        }
-        content += `</li>`;
-      }
-      content += `</ul>`;
-    } else {
-      content += `<p><em>No new features at this level.</em></p>`;
-    }
-
-    // Confirm the level up
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: `Level Up to ${newLevel}` },
-      content: content,
-    });
-
-    if (!confirmed) return;
-
-    // Level up and reset XP to 0
-    await this.actor.update({
-      'system.attributes.level.value': newLevel,
-      'system.attributes.xp': 0
-    });
-
-    ui.notifications.info(`Leveled up to ${newLevel}!`);
-  }
-
-  /**
-   * YOUR CUSTOM: Handle removing the character's ancestry item (right-click)
-   *
-   * @param {PointerEvent} event   The originating contextmenu event
-   * @protected
-   */
-  async _onRemoveAncestry(event) {
-    event.preventDefault();
-    const ancestry = this.actor.items.find(item => item.type === 'ancestry');
-    if (ancestry) {
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: 'Remove Ancestry' },
-        content: `<p>Are you sure you want to remove <strong>${ancestry.name}</strong>?</p>`,
-      });
-      if (confirmed) {
-        await ancestry.delete();
-      }
-    }
-  }
-
-  /**
-   * YOUR CUSTOM: Handle removing the character's class item (right-click)
-   *
-   * @param {PointerEvent} event   The originating contextmenu event
-   * @protected
-   */
-  async _onRemoveClass(event) {
-    event.preventDefault();
-    const classItem = this.actor.items.find(item => item.type === 'class');
-    if (classItem) {
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: 'Remove Class' },
-        content: `<p>Are you sure you want to remove <strong>${classItem.name}</strong>?</p>`,
-      });
-      if (confirmed) {
-        await classItem.delete();
-      }
-    }
-  }
-
-  /**
-   * Handle toggling feature accordion (click on feature header)
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onToggleFeature(event, target) {
-    event.preventDefault();
-    const featureId = target.dataset.featureId;
-    const accordionItem = target.closest('.feature.accordion-item');
-    if (accordionItem) {
-      accordionItem.classList.toggle('collapsed');
-    }
-  }
-
-  /**
-   * Handle toggling trait accordion (click on trait header)
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onToggleTrait(event, target) {
-    event.preventDefault();
-    const traitId = target.dataset.traitId;
-    const accordionItem = target.closest('.trait.accordion-item');
-    if (accordionItem) {
-      accordionItem.classList.toggle('collapsed');
-    }
-  }
-
-  /**
-   * Handle toggling perk accordion (click on perk header)
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onTogglePerk(event, target) {
-    event.preventDefault();
-    const perkId = target.dataset.perkId;
-    const accordionItem = this.element.querySelector(`.perk-card.accordion-item[data-item-id="${perkId}"]`);
-    if (accordionItem) {
-      accordionItem.classList.toggle('collapsed');
-    }
-  }
-
-  /**
-   * Handle toggling the sliding panel (open/close)
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onTogglePanel(event, target) {
-    event.preventDefault();
-    // Toggle the panel state
-    this.isPanelOpen = !this.isPanelOpen;
-
-    // Update the panel classes directly on the DOM element to preserve CSS transitions
-    const panel = this.element.querySelector('.sliding-panel');
-    if (panel) {
-      if (this.isPanelOpen) {
-        panel.classList.remove('panel-closed');
-        panel.classList.add('panel-open');
-      } else {
-        panel.classList.remove('panel-open');
-        panel.classList.add('panel-closed');
-      }
-    }
-  }
-
-  /**
-   * Handle toggling the favor/hinder state (none -> favor -> hinder -> none)
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onToggleFavorHinder(event, target) {
-    event.preventDefault();
-
-    // Submit pending form changes before toggling favor/hinder
-    if (this.hasFrame) {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting form before favor/hinder toggle:', err);
-      }
-    }
-
-    const currentState = this.actor.system.favorHinder || 'none';
-
-    // Cycle through states: none -> favor -> hinder -> none
-    let nextState;
-    if (currentState === 'none') {
-      nextState = 'favor';
-    } else if (currentState === 'favor') {
-      nextState = 'hinder';
-    } else {
-      nextState = 'none';
-    }
-
-    await this.actor.update({ 'system.favorHinder': nextState });
-  }
-
-  /**
-   * Handle toggling the NPC effects accordion (open/close)
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onToggleEffectsAccordion(event, target) {
-    event.preventDefault();
-    const accordionContent = this.element.querySelector('.npc-effects .accordion-content');
-    const accordionIcon = this.element.querySelector('.npc-effects .accordion-icon');
-
-    if (accordionContent) {
-      accordionContent.classList.toggle('collapsed');
-    }
-
-    if (accordionIcon) {
-      accordionIcon.classList.toggle('fa-chevron-right');
-      accordionIcon.classList.toggle('fa-chevron-down');
-    }
-  }
-
-  /**
-   * Handle toggling the NPC lock/unlock state
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The clicked element
-   * @protected
-   */
-  static async _onToggleLock(event, target) {
-    event.preventDefault();
-
-    // Submit pending form changes before toggling lock state
-    if (this.hasFrame) {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting form before lock toggle:', err);
-      }
-    }
-
-    const currentLocked = this.actor.system.locked;
-
-    // Clear dropdown state when toggling lock mode
-    this._openDropdowns = [];
-
-    await this.actor.update({ 'system.locked': !currentLocked });
-  }
-
-  /**
-   * Handle toggling NPC speed types
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleSpeedType(event, target) {
-    const type = target.dataset.type;
-    const isChecked = target.checked;
-    const currentTypes = this.actor.system.speedTypes || [];
-
-    let newTypes;
-    if (isChecked) {
-      if (!currentTypes.includes(type)) {
-        newTypes = [...currentTypes, type];
-      } else {
-        return;
-      }
-    } else {
-      newTypes = currentTypes.filter(t => t !== type);
-    }
-
-    this._captureDropdownState(); // Uses your existing state capture
-    await this.actor.update({ 'system.speedTypes': newTypes });
-  }
-
-  /**
-   * Handle removing NPC speed type tag
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRemoveSpeedType(event, target) {
-    const type = target.dataset.type;
-    if (!type) return;
-
-    const currentTypes = this.actor.system.speedTypes || [];
-    const newTypes = currentTypes.filter(t => t !== type);
-    await this.actor.update({ 'system.speedTypes': newTypes });
-
-    // Uncheck the corresponding checkbox
-    const checkbox = this.element.querySelector(`input[type="checkbox"][data-type="${type}"]`);
-    if (checkbox) checkbox.checked = false;
-  }
-
-  /**
-   * Handle toggling NPC damage immunity
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleImmunity(event, target) {
-    const immunity = target.dataset.immunity;
-    const isChecked = target.checked;
-    const immunities = this.actor.system.immunities || [];
-
-    let newImmunities;
-    if (isChecked) {
-      if (!immunities.includes(immunity)) {
-        newImmunities = [...immunities, immunity];
-      } else {
-        return;
-      }
-    } else {
-      newImmunities = immunities.filter(i => i !== immunity);
-    }
-
-    this._captureDropdownState();
-    await this.actor.update({ 'system.immunities': newImmunities });
-  }
-
-  /**
-   * Handle removing NPC damage immunity
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRemoveImmunity(event, target) {
-    const immunity = target.dataset.immunity;
-    if (!immunity) return;
-
-    const immunities = this.actor.system.immunities || [];
-    const newImmunities = immunities.filter(i => i !== immunity);
-    await this.actor.update({ 'system.immunities': newImmunities });
-
-    // Uncheck the corresponding checkbox
-    const checkbox = this.element.querySelector(`input[type="checkbox"][data-immunity="${immunity}"]`);
-    if (checkbox) checkbox.checked = false;
-  }
-
-  /**
-   * Handle toggling NPC damage weakness
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleWeakness(event, target) {
-    const weakness = target.dataset.weakness;
-    const isChecked = target.checked;
-    const weaknesses = this.actor.system.weaknesses || [];
-
-    let newWeaknesses;
-    if (isChecked) {
-      if (!weaknesses.includes(weakness)) {
-        newWeaknesses = [...weaknesses, weakness];
-      } else {
-        return;
-      }
-    } else {
-      newWeaknesses = weaknesses.filter(w => w !== weakness);
-    }
-
-    this._captureDropdownState();
-    await this.actor.update({ 'system.weaknesses': newWeaknesses });
-  }
-
-  /**
-   * Handle removing NPC damage weakness
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRemoveWeakness(event, target) {
-    const weakness = target.dataset.weakness;
-    if (!weakness) return;
-
-    const weaknesses = this.actor.system.weaknesses || [];
-    const newWeaknesses = weaknesses.filter(w => w !== weakness);
-    await this.actor.update({ 'system.weaknesses': newWeaknesses });
-
-    // Uncheck the corresponding checkbox
-    const checkbox = this.element.querySelector(`input[type="checkbox"][data-weakness="${weakness}"]`);
-    if (checkbox) checkbox.checked = false;
-  }
-
-  /**
-   * Handle toggling NPC status immunity
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleStatusImmunity(event, target) {
-    const status = target.dataset.status;
-    const isChecked = target.checked;
-    const statusImmunities = this.actor.system.statusImmunities || [];
-
-    let newStatusImmunities;
-    if (isChecked) {
-      if (!statusImmunities.includes(status)) {
-        newStatusImmunities = [...statusImmunities, status];
-      } else {
-        return;
-      }
-    } else {
-      newStatusImmunities = statusImmunities.filter(s => s !== status);
-    }
-
-    this._captureDropdownState();
-    await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
-  }
-
-  /**
-   * Handle removing NPC status immunity
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRemoveStatusImmunity(event, target) {
-    const status = target.dataset.status;
-    if (!status) return;
-
-    const statusImmunities = this.actor.system.statusImmunities || [];
-    const newStatusImmunities = statusImmunities.filter(s => s !== status);
-    await this.actor.update({ 'system.statusImmunities': newStatusImmunities });
-
-    // Uncheck the corresponding checkbox
-    const checkbox = this.element.querySelector(`input[type="checkbox"][data-status="${status}"]`);
-    if (checkbox) checkbox.checked = false;
-  }
-
-  /**
-   * Handle selecting NPC combat zone
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onSelectZone(event, target) {
-    const zone = target.dataset.zone;
-    if (!zone) return;
-
-    this._captureDropdownState();
-    await this.actor.update({ 'system.zone': zone });
-  }
-
-  /**
-   * Handle clearing NPC combat zone
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onClearZone(event, target) {
-    await this.actor.update({ 'system.zone': null });
-
-    // Uncheck all radio buttons
-    const radios = this.element.querySelectorAll('input[type="radio"][name="zone-selector"]');
-    radios.forEach(radio => radio.checked = false);
-  }
-
-  /**
-   * Handle adding a new NPC action
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onAddAction(event, target) {
-    event.preventDefault();
-    const actions = this.actor.system.actions || [];
-
-    // Add a new empty action
-    const newAction = {
-      name: '',
-      description: '',
-      type: null,
-      range: null,
-      note: '',
-      recharge: '',
-      flatDamage: '',
-      rollDamage: '',
-      extraInfo: ''
-    };
-
-    await this.actor.update({ 'system.actions': [...actions, newAction] });
-  }
-
-  /**
-   * Handle removing an NPC action
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRemoveAction(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const actions = this.actor.system.actions || [];
-
-    // Remove the action at the specified index
-    const newActions = actions.filter((_, i) => i !== index);
-    await this.actor.update({ 'system.actions': newActions });
-  }
-
-  /**
-     * Handle toggling action accordion in edit mode
-     * Saves data only when closing the accordion.
-     * @param {Event} event
-     * @param {HTMLElement} target
-     */
-    static async _onToggleActionAccordion(event, target) {
-      event.preventDefault();
-      const index = parseInt(target.dataset.index);
-      const actionEdit = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
-
-      if (actionEdit) {
-        const content = actionEdit.querySelector('.action-edit-content');
-        const icon = actionEdit.querySelector('.accordion-icon');
-
-        if (content && icon) {
-          const isCollapsed = content.classList.contains('collapsed');
-
-          // UX LOGIC:
-          // If we are currently OPEN (not collapsed) and about to CLOSE -> SAVE DATA
-          if (!isCollapsed) {
-            await this._saveNPCAction(index);
-          }
-
-          // Toggle visual state
-          content.classList.toggle('collapsed');
-          icon.classList.toggle('fa-chevron-right');
-          icon.classList.toggle('fa-chevron-down');
-
-          // Track state for re-renders
-          if (!this._openActionAccordions) {
-            this._openActionAccordions = new Set();
-          }
-
-          if (isCollapsed) {
-            // It was collapsed, now it is open -> Add to set
-            this._openActionAccordions.add(index);
-          } else {
-            // It was open, now it is collapsed -> Remove from set
-            this._openActionAccordions.delete(index);
-          }
-        }
-      }
-    }
-
-  /**
-     * Handle toggling ability accordion in edit mode
-     * Saves data only when closing the accordion.
-     * @param {Event} event
-     * @param {HTMLElement} target
-     */
-    static async _onToggleAbilityAccordion(event, target) {
-      event.preventDefault();
-      const index = parseInt(target.dataset.index);
-      const abilityEdit = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
-
-      if (abilityEdit) {
-        const content = abilityEdit.querySelector('.ability-edit-content');
-        const icon = abilityEdit.querySelector('.accordion-icon');
-
-        if (content && icon) {
-          const isCollapsed = content.classList.contains('collapsed');
-
-          // UX LOGIC:
-          // If we are currently OPEN (not collapsed) and about to CLOSE -> SAVE DATA
-          if (!isCollapsed) {
-            await this._saveNPCAbility(index);
-          }
-
-          // Toggle visual state
-          content.classList.toggle('collapsed');
-          icon.classList.toggle('fa-chevron-right');
-          icon.classList.toggle('fa-chevron-down');
-
-          // Track state for re-renders
-          if (!this._openAbilityAccordions) {
-            this._openAbilityAccordions = new Set();
-          }
-
-          if (isCollapsed) {
-            // It was collapsed, now it is open -> Add to set
-            this._openAbilityAccordions.add(index);
-          } else {
-            // It was open, now it is collapsed -> Remove from set
-            this._openAbilityAccordions.delete(index);
-          }
-        }
-      }
-    }
-
-  /**
-   * Handle morale check roll for NPCs
-   * Roll 2d6 vs Morale. If total >= Morale, the NPC fails and retreats.
-   * Blind GM roll - players don't see the result
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRollMorale(event, target) {
-    event.preventDefault();
-
-    const morale = this.actor.system.morale;
-
-    // Don't roll if morale is not set
-    if (!morale || morale === null) {
-      ui.notifications.warn(game.i18n.localize("VAGABOND.Actor.NPC.MoraleCheck.NoMorale"));
-      return;
-    }
-
-    // Roll 2d6
-    const roll = new Roll('2d6', this.actor.getRollData());
-    await roll.evaluate();
-
-    // Check if morale failed (roll >= morale means failure)
-    const isPassed = roll.total < morale;
-
-    // Create chat card using VagabondChatCard system
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-
-    // Build tags for metadata
-    const tags = [
-      { label: `${game.i18n.localize("VAGABOND.Actor.NPC.MoraleCheck.Target")}: ${morale}`, cssClass: 'tag-standard' }
-    ];
-
-    const card = new VagabondChatCard()
-      .setType('morale-check')
-      .setActor(this.actor)
-      .setTitle(game.i18n.localize("VAGABOND.Actor.NPC.MoraleCheck.Title"))
-      .setSubtitle(this.actor.name)
-      .addRoll(roll, morale)
-      .setOutcome(isPassed ? 'PASS' : 'FAIL')
-      .setMetadataTags(tags);
-
-    // Send as blind GM roll
-    await card.send({
-      whisper: ChatMessage.getWhisperRecipients("GM"),
-      blind: true
-    });
-  }
-
-  /**
-   * Handle clicking on action name (send to chat)
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onClickActionName(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const action = this.actor.system.actions[index];
-
-    if (!action || !action.name) return;
-
-    // Capture targeted tokens for NPC action
-    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src
-    }));
-
-    // Use the unified chat card system
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-    await VagabondChatCard.npcAction(this.actor, action, index, targetsAtRollTime);
-  }
-
-  /**
-   * Handle clicking on action damage roll (roll the dice)
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onClickActionDamageRoll(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const action = this.actor.system.actions[index];
-
-    if (!action || !action.rollDamage) return;
-
-    // Roll the damage dice
-    const roll = new Roll(action.rollDamage, this.actor.getRollData());
-    await roll.evaluate();
-    await VagabondChatHelper.postRoll(
-      this.actor,
-      roll,
-      `<strong>${action.name}</strong> Damage`
-    );
-  }
-
-  /**
-   * Handle adding a new NPC ability
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onAddAbility(event, target) {
-    event.preventDefault();
-    const abilities = this.actor.system.abilities || [];
-
-    // Add a new empty ability
-    const newAbility = {
-      name: '',
-      description: ''
-    };
-
-    await this.actor.update({ 'system.abilities': [...abilities, newAbility] });
-  }
-
-  /**
-   * Handle removing an NPC ability
-   * @param {Event} event
-   * @param {HTMLElement} target
-   */
-  static async _onRemoveAbility(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const abilities = this.actor.system.abilities || [];
-
-    // Remove the ability at the specified index
-    const newAbilities = abilities.filter((_, i) => i !== index);
-    await this.actor.update({ 'system.abilities': newAbilities });
-  }
-
-  /**
-   * Handle clicking on ability name (send to chat)
-   * FIX: Changed .npcAbility() to .npcAction() because that is the real method name.
-   */
-  static async _onClickAbilityName(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    
-    // "this" is the Sheet Instance, "this.actor" is the Actor
-    const ability = this.actor.system.abilities[index];
-
-    if (!ability || !ability.name) return;
-
-    // Use the existing static method from ChatCard
-    // Note: npcAction is smart enough to handle "text-only" abilities
-    await VagabondChatCard.npcAction(this.actor, ability, index);
-  }
-
-  /**
-   * Create countdown dice from NPC action/ability recharge
-   * Triggered when clicking on CdX recharge text in locked NPC sheet
-   * @param {Event} event - Click event
-   * @param {HTMLElement} target - The clicked element
-   */
-  static async _onCreateCountdownFromRecharge(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Extract dice type from data attribute
-    // Can be data-dice-type (from recharge) or data-dice-size (from descriptions)
-    let diceType = target.dataset.diceType || target.dataset.diceSize;
-
-    // If we got just a number (from data-dice-size), add the "d" prefix
-    if (diceType && !diceType.startsWith('d')) {
-      diceType = 'd' + diceType;
-    }
-
-    if (!diceType) return;
-
-    // Validate dice type
-    const validDiceTypes = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
-    if (!validDiceTypes.includes(diceType)) {
-      console.warn(`Invalid dice type for countdown: ${diceType}`);
-      return;
-    }
-
-    // Find the parent action/ability container
-    const actionView = target.closest('[data-action-index], [data-ability-index]');
-    if (!actionView) {
-      console.warn('Could not find action/ability container');
-      return;
-    }
-
-    // Determine if it's an action or ability
-    const actionIndex = actionView.dataset.actionIndex;
-    const abilityIndex = actionView.dataset.abilityIndex;
-
-    let name;
-    if (actionIndex !== undefined) {
-      const action = this.actor.system.actions[parseInt(actionIndex)];
-      name = `${this.actor.name}: ${action.name}`;
-    } else if (abilityIndex !== undefined) {
-      const ability = this.actor.system.abilities[parseInt(abilityIndex)];
-      name = `${this.actor.name}: ${ability.name}`;
-    } else {
-      console.warn('Could not determine action or ability');
-      return;
-    }
-
-    // Create countdown dice
-    const { CountdownDice } = globalThis.vagabond.documents;
-    await CountdownDice.create({
-      name: name,
-      diceType: diceType,
-      size: 'S', // Small size as requested
-    });
-  }
-
-  /**
-   * Handle viewing a perk item (left-click)
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onViewPerk(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const perkCard = event.currentTarget;
-    const perkId = perkCard.dataset.itemId;
-    const perk = this.actor.items.get(perkId);
-    if (perk) {
-      perk.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle removing a perk item (right-click)
-   *
-   * @param {PointerEvent} event   The originating contextmenu event
-   * @protected
-   */
-  async _onRemovePerk(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const perkCard = event.currentTarget;
-    const perkId = perkCard.dataset.itemId;
-    const perk = this.actor.items.get(perkId);
-    if (perk) {
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: 'Remove Perk' },
-        content: `<p>Are you sure you want to remove <strong>${perk.name}</strong>?</p>`,
-      });
-      if (confirmed) {
-        await perk.delete();
-      }
-    }
-  }
-
-  /**
-   * Handle left-click on gear item image - opens item sheet
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onGearImageClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget.closest('.gear-item-row');
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item) {
-      item.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle left-click on gear item name - uses/rolls item if applicable
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onGearNameClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget.closest('.gear-item-row');
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item && typeof item.roll === 'function') {
-      await item.roll();
-    }
-  }
-
-  /**
-   * Handle click on equipped icon - toggles equipped status
-   *
-   * @param {PointerEvent} event   The originating click event
-   * @protected
-   */
-  async _onToggleEquipped(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget.closest('.gear-item-row');
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    const newEquippedStatus = !item.system.equipped;
-
-    // Toggle equipped status
-    await item.update({ 'system.equipped': newEquippedStatus });
-
-    // Toggle all effects on this item: disabled when unequipped, enabled when equipped
-    const updates = item.effects.map(effect => ({
-      _id: effect.id,
-      disabled: !newEquippedStatus
-    }));
-
-    if (updates.length > 0) {
-      await item.updateEmbeddedDocuments('ActiveEffect', updates);
-    }
-  }
-
-  /**
-   * Handle right-click on gear item - deletes item with confirmation
-   *
-   * @param {PointerEvent} event   The originating contextmenu event
-   * @protected
-   */
-  async _onGearContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const gearRow = event.currentTarget;
-    const itemId = gearRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Item' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
-   * Handle left-click on weapon item image - opens item sheet
-   */
-  async _onWeaponImageClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const weaponRow = event.currentTarget.closest('.weapon-item-row');
-    const itemId = weaponRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item) {
-      item.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle left-click on weapon item name - makes attack roll
-   */
-  async _onWeaponNameClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const weaponRow = event.currentTarget.closest('.weapon-item-row');
-    const itemId = weaponRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    // FIX: Call the static method, forcing 'this' to be the current sheet instance
-    await VagabondActorSheet._onRollWeapon.call(this, event, { dataset: { itemId } });
-  }
-
-  /**
-   * Handle right-click on weapon item - deletes weapon with confirmation
-   */
-  async _onWeaponContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const weaponRow = event.currentTarget;
-    const itemId = weaponRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Weapon' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
-   * Handle left-click on armor item image - opens item sheet
-   */
-  async _onArmorImageClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const armorRow = event.currentTarget.closest('.armor-item-row');
-    const itemId = armorRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (item) {
-      item.sheet.render(true);
-    }
-  }
-
-  /**
-   * Handle right-click on armor item - deletes armor with confirmation
-   */
-  async _onArmorContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const armorRow = event.currentTarget;
-    const itemId = armorRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Armor' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
-   * Handle right-click on spell item - deletes spell with confirmation
-   */
-  async _onSpellContextMenu(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const spellRow = event.currentTarget;
-    const itemId = spellRow?.dataset?.itemId;
-
-    if (!itemId) return;
-
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    // Show delete confirmation dialog
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Spell' },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-    });
-
-    if (confirmed) {
-      await item.delete();
-    }
-  }
-
-  /**
-   * Renders an embedded document's sheet
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _viewDoc(event, target) {
-    const doc = this._getEmbeddedDocument(target);
-    doc.sheet.render(true);
-  }
-
-  /**
-   * Handles item deletion
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _deleteDoc(event, target) {
-    const doc = this._getEmbeddedDocument(target);
-    await doc.delete();
-  }
-
-  /**
-   * Handle creating a new Owned Item or ActiveEffect for the actor using initial data defined in the HTML dataset
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _createDoc(event, target) {
-    // Retrieve the configured document class for Item or ActiveEffect
-    const docCls = getDocumentClass(target.dataset.documentClass);
-    // Prepare the document creation data by initializing it a default name.
-    const docData = {
-      name: docCls.defaultName({
-        // defaultName handles an undefined type gracefully
-        type: target.dataset.type,
-        parent: this.actor,
-      }),
-    };
-    // Loop through the dataset and add it to our docData
-    for (const [dataKey, value] of Object.entries(target.dataset)) {
-      // These data attributes are reserved for the action handling
-      if (['action', 'documentClass'].includes(dataKey)) continue;
-      // Nested properties require dot notation in the HTML, e.g. anything with `system`
-      // Data attributes like `data-system.property` turn into the dataKey 'system.property'
-      foundry.utils.setProperty(docData, dataKey, value);
-    }
-
-    // Finally, create the embedded document!
-    await docCls.create(docData, { parent: this.actor });
-  }
-
-  /**
-   * Determines effect parent to pass to helper
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _toggleEffect(event, target) {
-    const effect = this._getEmbeddedDocument(target);
-    await effect.update({ disabled: !effect.disabled });
-  }
-
-  /**
-   * Handle weapon attack rolls.
-   * STATIC: DEFAULT_OPTIONS can find it.
-   */
-
-  static async _onRollWeapon(event, target = null) {
-    event.preventDefault();
-
-    // 1. Target Safety
-    const element = target || event.currentTarget;
-    const itemId = element.dataset.itemId || element.closest('[data-item-id]')?.dataset.itemId;
-    const item = this.actor.items.get(itemId);
-
-    if (!item) {
-      ui.notifications.error('Item not found!');
-      return;
-    }
-
-    // 2. Define Item Types
-    const isWeapon = (item.type === 'weapon') ||
-                     (item.type === 'equipment' && item.system.equipmentType === 'weapon');
-
-    // FIX: Remove the "damageType !== '-'" check here so we catch ALL alchemicals
-    const isAlchemical = item.type === 'equipment' &&
-                         item.system.equipmentType === 'alchemical';
-
-    if (!isWeapon && !isAlchemical) {
-      ui.notifications.warn(game.i18n.localize("VAGABOND.UI.Errors.ItemNotRollable"));
-      return;
-    }
-
-    // 3. Check consumable requirements
-    if (item.type === 'equipment') {
-      const canUse = await item.checkConsumableRequirements();
-      if (!canUse) {
-        return; // Notification already shown
-      }
-    }
-
-    // Capture targeted tokens at roll time
-    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src
-    }));
-
-    try {
-      /* PATH A: ALCHEMICAL */
-      if (isAlchemical) {
-        // SMART CHECK: If no damage type or no formula, treat as generic "Use Item"
-        const hasDamage = item.system.damageType && 
-                          item.system.damageType !== '-' && 
-                          item.system.damageAmount;
-
-        if (!hasDamage) {
-            // Redirect to the simple Gear Use card
-            await VagabondChatCard.gearUse(this.actor, item, targetsAtRollTime);
-            // Handle consumption after successful use
-            await item.handleConsumption();
-            return;
-        }
-
-        // Otherwise, proceed with the Roll logic
-        let damageFormula = item.system.damageAmount;
-        const roll = new Roll(damageFormula);
-        await roll.evaluate();
-
-        const damageTypeKey = item.system.damageType || 'physical';
-        const damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[damageTypeKey] || damageTypeKey);
-
-        // Check if it's restorative or harmful
-        const isRestorative = ['healing', 'recover', 'recharge'].includes(damageTypeKey);
-
-        // Build description with countdown dice parsing
-        let description = '';
-        if (item.system.description) {
-          // Parse countdown dice first
-          const parsedDescription = VagabondTextParser.parseCountdownDice(item.system.description);
-          description = await foundry.applications.ux.TextEditor.enrichHTML(parsedDescription, { async: true });
-        }
-
-        // Use createActionCard for consistency with other items
-        await VagabondChatCard.createActionCard({
-          actor: this.actor,
-          item: item,
-          title: item.name,
-          subtitle: this.actor.name,
-          damageRoll: roll,
-          damageType: damageTypeKey,
-          description: description,
-          attackType: isRestorative ? 'none' : 'melee',
-          hasDefenses: !isRestorative,
-          targetsAtRollTime: targetsAtRollTime
+    // Class right-click to delete
+    const classElement = this.element.querySelector('.class-name');
+    if (classElement) {
+      classElement.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const itemId = classElement.dataset.itemId;
+        if (!itemId) return;
+
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        const confirmed = await Dialog.confirm({
+          title: game.i18n.localize('VAGABOND.Dialog.DeleteItem'),
+          content: `<p>Are you sure you want to remove ${item.name}?</p>`,
         });
 
-        // Handle consumption after successful use
-        await item.handleConsumption();
-        return roll;
-      }
-
-      /* PATH B: WEAPONS */
-      const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-
-      const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
-        systemFavorHinder,
-        event.shiftKey,
-        event.ctrlKey
-      );
-
-      const attackResult = await item.rollAttack(this.actor, favorHinder);
-      if (!attackResult) return;
-
-      // Reset check bonus to 0 after any attack roll
-      if (this.actor.system.universalCheckBonus !== 0) {
-        await this.actor.update({ 'system.universalCheckBonus': 0 });
-      }
-
-      let damageRoll = null;
-      if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
-        const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey);
-      }
-
-      await VagabondChatCard.weaponAttack(this.actor, item, attackResult, damageRoll, targetsAtRollTime);
-      // Handle consumption after successful attack (regardless of hit/miss)
-      await item.handleConsumption();
-      return attackResult.roll;
-
-    } catch (error) {
-      console.error(error);
-      ui.notifications.warn(error.message);
-      return;
+        if (confirmed) {
+          await item.delete();
+          ui.notifications.info(`Removed ${item.name}`);
+        }
+      });
     }
   }
 
   /**
-   * Handle using an item (gear, relic, or alchemical) to post to chat.
-   * Delegates to item.roll() to avoid code duplication.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-
-  static async _onUseItem(event, target) {
-    event.preventDefault();
-
-    // 1. Target Safety
-    const element = target || event.currentTarget;
-    const itemId = element.dataset.itemId || element.closest('[data-item-id]')?.dataset.itemId;
-    const item = this.actor.items.get(itemId);
-
-    if (!item) {
-      ui.notifications.error('Item not found!');
-      return;
-    }
-
-    // 2. Capture targets at use time
-    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src
-    }));
-
-    // 3. Delegate to item.roll() which handles consumables, chat cards, and all logic
-    if (typeof item.roll === 'function') {
-      await item.roll(event, targetsAtRollTime);
-    }
-  }
-
-  /**
-   * Handle toggling weapon equipment state.
-   * Cycles through: unequipped -> oneHand -> twoHands -> unequipped
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleWeaponEquipment(event, target) {
-    event.preventDefault();
-
-    // Submit pending form changes before toggling weapon equipment
-    if (this.hasFrame) {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting form before weapon equipment toggle:', err);
-      }
-    }
-
-    const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
-    const isWeapon = weapon && ((weapon.type === 'weapon') ||
-                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
-
-    if (!isWeapon) {
-      ui.notifications.error('Weapon not found!');
-      return;
-    }
-
-    // Get the weapon's grip type
-    const grip = weapon.system.grip;
-    const currentState = weapon.system.equipmentState || 'unequipped';
-    let nextState;
-
-    // Cycle through equipment states based on grip type
-    if (grip === '2H') {
-      // Two-handed only weapons: unequipped <-> twoHands
-      nextState = currentState === 'unequipped' ? 'twoHands' : 'unequipped';
-    } else if (grip === '1H' || grip === 'F') {
-      // One-handed only or fist weapons: unequipped <-> oneHand
-      nextState = currentState === 'unequipped' ? 'oneHand' : 'unequipped';
-    } else if (grip === 'V') {
-      // Versatile weapons: full cycle unequipped -> oneHand -> twoHands -> unequipped
-      switch (currentState) {
-        case 'unequipped':
-          nextState = 'oneHand';
-          break;
-        case 'oneHand':
-          nextState = 'twoHands';
-          break;
-        case 'twoHands':
-          nextState = 'unequipped';
-          break;
-        default:
-          nextState = 'unequipped';
-      }
-    } else {
-      // Unknown grip type - default to one-handed behavior
-      nextState = currentState === 'unequipped' ? 'oneHand' : 'unequipped';
-    }
-
-    // Update the weapon's equipment state
-    await weapon.update({ 'system.equipmentState': nextState });
-  }
-
-  /**
-   * Handle toggling weapon grip (for versatile weapons in features panel).
-   * Toggles between: oneHand <-> twoHands
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleWeaponGrip(event, target) {
-    event.preventDefault();
-
-    // Submit pending form changes before toggling weapon grip
-    if (this.hasFrame) {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting form before weapon grip toggle:', err);
-      }
-    }
-
-    const itemId = target.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
-    const isWeapon = weapon && ((weapon.type === 'weapon') ||
-                                (weapon.type === 'equipment' && weapon.system.equipmentType === 'weapon'));
-
-    if (!isWeapon) {
-      ui.notifications.error('Weapon not found!');
-      return;
-    }
-
-    // Only allow toggling for versatile weapons
-    if (weapon.system.grip !== 'V') {
-      ui.notifications.warn('Only versatile weapons can switch grip!');
-      return;
-    }
-
-    // Toggle between oneHand and twoHands
-    const currentState = weapon.system.equipmentState;
-    const nextState = currentState === 'oneHand' ? 'twoHands' : 'oneHand';
-
-    // Update the weapon's equipment state
-    await weapon.update({ 'system.equipmentState': nextState });
-  }
-
-  /**
-   * Handle toggling armor equipment state.
-   * Toggles between: equipped <-> unequipped
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleArmorEquipment(event, target) {
-    event.preventDefault();
-
-    // Submit pending form changes before toggling armor equipment
-    if (this.hasFrame) {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting form before armor equipment toggle:', err);
-      }
-    }
-
-    const itemId = target.dataset.itemId;
-    const armor = this.actor.items.get(itemId);
-
-    // Check if this is armor (legacy armor item OR equipment with equipmentType='armor')
-    const isArmor = armor && ((armor.type === 'armor') ||
-                             (armor.type === 'equipment' && armor.system.equipmentType === 'armor'));
-
-    if (!isArmor) {
-      ui.notifications.error('Armor not found!');
-      return;
-    }
-
-    // Toggle equipped state
-    const newState = !armor.system.equipped;
-
-    // Update the armor's equipment state
-    await armor.update({ 'system.equipped': newState });
-  }
-
-  /**
-   * NEW: Handle casting a spell with the inline controls
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onCastSpell(event, target) {
-    event.preventDefault();
-    const spellId = target.dataset.spellId;
-    const spell = this.actor.items.get(spellId);
-    const state = this._getSpellState(spellId);
-    const costs = this._calculateSpellCost(spellId);
-
-    if (!spell || spell.type !== 'spell') {
-      ui.notifications.error('Spell not found!');
-      return;
-    }
-
-    // Validation: Must select delivery
-    if (!state.deliveryType) {
-      ui.notifications.warn("Select a delivery type first!");
-      return;
-    }
-
-    // Validation: Enough mana
-    if (costs.totalCost > this.actor.system.mana.current) {
-      ui.notifications.error(`Not enough mana! Need ${costs.totalCost}, have ${this.actor.system.mana.current}.`);
-      return;
-    }
-
-    // Validation: Within casting max
-    if (costs.totalCost > this.actor.system.mana.castingMax) {
-      ui.notifications.error(`Cost exceeds casting max! Max: ${this.actor.system.mana.castingMax}, Cost: ${costs.totalCost}.`);
-      return;
-    }
-
-    // Capture targeted tokens at cast time
-    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src
-    }));
-
-    // Get mana skill
-    const manaSkill = this.actor.system.classData?.manaSkill;
-    if (!manaSkill) {
-      ui.notifications.error("No mana skill configured for this class!");
-      return;
-    }
-
-    // Check if spellcaster
-    if (!this.actor.system.classData?.isSpellcaster) {
-      ui.notifications.warn("Your class cannot cast spells!");
-      return;
-    }
-
-    // Get skill information for display
-    const skill = this.actor.system.skills[manaSkill];
-    const difficulty = skill.difficulty;
-
-    // Check if spell bypasses roll requirement
-    let roll = null;
-    let isSuccess = false;
-    let isCritical = false;
-
-    if (spell.system.noRollRequired) {
-      // BYPASS PATH: No roll needed, always succeeds, no criticals
-      isSuccess = true;
-      isCritical = false;
-      roll = null; // No roll object created
-    } else {
-      // NORMAL PATH: Perform casting check roll
-      const label = `${spell.name} (${skill.label})`;
-
-      // Get roll data WITH this spell's "on-use" effects applied
-      const rollData = this.actor.getRollDataWithItemEffects(spell);
-
-      // Import roll builder and build roll with centralized utility
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-
-      // Apply favor/hinder with keyboard modifiers
-      const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
-        systemFavorHinder,
-        event.shiftKey,
-        event.ctrlKey
-      );
-
-      roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(
-        rollData,
-        favorHinder
-      );
-
-      isSuccess = roll.total >= difficulty;
-
-      // ✅ CRITICAL: Use critNumber from rollData (includes item effects)
-      const critNumber = rollData.critNumber || 20;
-      const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
-      const d20Result = d20Term?.results?.[0]?.result || 0;
-      isCritical = d20Result >= critNumber;
-    }
-
-    // Deduct mana on success (whether from successful roll or bypass)
-    if (isSuccess) {
-      const newMana = this.actor.system.mana.current - costs.totalCost;
-      await this.actor.update({ 'system.mana.current': newMana });
-    }
-    // Failed - no mana cost (chat card will show failure)
-    // Note: Bypass spells always succeed, so mana is always deducted
-
-    // Create chat message
-    await this._createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical, targetsAtRollTime);
-
-    // Reset spell state (keep deliveryType, reset useFx to default)
-    const defaultUseFx = spell?.system?.damageType === '-';
-    this.spellStates[spellId] = {
-      damageDice: 1,
-      deliveryType: state.deliveryType, // Keep last selected delivery
-      deliveryIncrease: 0,
-      useFx: defaultUseFx  // Reset to default based on spell type
-    };
-    this._saveSpellStates();
-    this._updateSpellDisplay(spellId);
-  }
-
-  /**
-   * NEW: Create chat card for spell cast
-   * @param {Item} spell - The spell item
-   * @param {Object} state - Spell state
-   * @param {Object} costs - Cost breakdown
-   * @param {Roll|null} roll - The roll result (null if noRollRequired)
-   * @param {number} difficulty - Target difficulty
-   * @param {boolean} isSuccess - Whether the cast succeeded
-   * @param {boolean} isCritical - Whether the roll was a critical hit
-   * @param {Array} targetsAtRollTime - Targets captured at cast time
+   * Setup context menu listeners for features, traits, and perks
    * @private
    */
-  async _createSpellChatCard(spell, state, costs, roll, difficulty, isSuccess, isCritical, targetsAtRollTime = []) {
-    // Import damage helper
-    const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
+  _setupFeatureContextMenuListeners() {
+    // Feature headers (from class)
+    const featureHeaders = this.element.querySelectorAll('.feature-header');
+    featureHeaders.forEach(header => {
+      header.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
 
-    // Build delivery text with total area (e.g., "Cone 20'")
-    const deliveryName = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[state.deliveryType]);
-    const totalArea = this._getDeliveryTotalArea(state.deliveryType, state.deliveryIncrease);
-    const deliveryText = totalArea ? `${deliveryName} ${totalArea}` : deliveryName;
+        const featureItem = header.closest('[data-feature-index]');
+        if (!featureItem) return;
 
-    // Get the mana skill's stat for crit bonus damage
-    const manaSkillKey = this.actor.system.classData?.manaSkill;
-    const manaSkill = manaSkillKey ? this.actor.system.skills[manaSkillKey] : null;
-    const manaSkillStat = manaSkill?.stat || 'reason'; // Fallback to reason if not found
+        const featureIndex = parseInt(featureItem.dataset.featureIndex);
+        if (isNaN(featureIndex)) return;
 
-    // Determine if we should auto-roll damage
-    let damageRoll = null;
-    if (spell.system.damageType !== '-') {
-      if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
-        damageRoll = await VagabondDamageHelper.rollSpellDamage(this.actor, spell, state, isCritical, manaSkillStat);
-      }
-    }
-
-    // Build spell cast result object
-    const spellCastResult = {
-      roll,
-      difficulty,
-      isSuccess,
-      isCritical,
-      manaSkill,
-      manaSkillKey,
-      spellState: state,
-      costs,
-      deliveryText
-    };
-
-    // Use universal chat card
-    await VagabondChatCard.spellCast(this.actor, spell, spellCastResult, damageRoll, targetsAtRollTime);
-  }
-
-  /**
-   * NEW: Handle modifying spell damage (left-click increase, right-click decrease)
-   * Note: The actual click handling is in _onRender, this is here for action registry
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onModifyDamage(event, target) {
-    // This is handled inline in _onRender for left/right click differentiation
-  }
-
-  /**
-   * NEW: Handle modifying spell delivery increase (left-click increase, right-click decrease)
-   * Note: The actual click handling is in _onRender, this is here for action registry
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onModifyDelivery(event, target) {
-    // This is handled inline in _onRender for left/right click differentiation
-  }
-
-  /**
-   * Toggle Fx (Effect) checkbox for a spell
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleFx(event, target) {
-    event.preventDefault();
-    const spellId = target.dataset.spellId;
-    const state = this._getSpellState(spellId);
-
-    // Toggle Fx state
-    state.useFx = !state.useFx;
-
-    this._saveSpellStates();
-    this._updateSpellDisplay(spellId);
-
-    // Clear ALL previews (player is changing spell configuration)
-    await this._clearAllPreviews();
-  }
-
-  /**
-   * Handle toggling spell favorite state.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onToggleSpellFavorite(event, target) {
-    event.preventDefault();
-
-    // Submit pending form changes before toggling spell favorite
-    if (this.hasFrame) {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting form before spell favorite toggle:', err);
-      }
-    }
-
-    const itemId = target.dataset.itemId;
-    const spell = this.actor.items.get(itemId);
-
-    if (!spell || spell.type !== 'spell') {
-      ui.notifications.error('Spell not found!');
-      return;
-    }
-
-    // Toggle favorite state
-    const newState = !spell.system.favorite;
-    await spell.update({ 'system.favorite': newState });
-  }
-
-  /**
-   * ✅ REMOVED - This method has been centralized to VagabondRollBuilder.calculateEffectiveFavorHinder()
-   *
-   * All favor/hinder calculation logic is now handled by the VagabondRollBuilder class
-   * in module/helpers/roll-builder.mjs for consistency across the system.
-   *
-   * Use: VagabondRollBuilder.calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey)
-   */
-
-  /**
-   * Handle clickable rolls.
-   *
-   * @this VagabondActorSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onRoll(event, target) {
-    event.preventDefault();
-    const dataset = target.dataset;
-
-    // Handle item rolls.
-    switch (dataset.rollType) {
-      case 'item':
-        const item = this._getEmbeddedDocument(target);
-        if (item) return item.roll();
-    }
-
-    // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
-      // Import roll builder and build roll with centralized utility
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-
-      // Apply favor/hinder based on system state and keyboard modifiers
-      const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
-        systemFavorHinder,
-        event.shiftKey,
-        event.ctrlKey
-      );
-
-      const roll = await VagabondRollBuilder.buildAndEvaluateD20(
-        this.actor,
-        favorHinder,
-        dataset.roll  // Base formula (usually 'd20')
-      );
-
-      // Reset check bonus to 0 after any roll
-      if (this.actor.system.universalCheckBonus !== 0) {
-        await this.actor.update({ 'system.universalCheckBonus': 0 });
-      }
-
-      // Determine roll type and use VagabondChatCard for stats, saves, and skills
-      const rollType = dataset.rollType;
-      
-      /* DISABLED - No stat rolls in Vagabond currently
-      if (rollType === 'stat') {
-        // Stat roll
-        const statKey = dataset.statKey;
-        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
-        const isSuccess = difficulty ? roll.total >= difficulty : null;
-
-        await VagabondChatCard.statRoll(
-          this.actor,
-          statKey,
-          roll,
-          difficulty,
-          isSuccess
-        );
-        return roll;
-      } else*/
-        if (rollType === 'save') {
-        // Save roll
-        const saveKey = dataset.saveKey;
-        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
-        const isSuccess = difficulty ? roll.total >= difficulty : null;
-
-        await VagabondChatCard.saveRoll(
-          this.actor,
-          saveKey,
-          roll,
-          difficulty,
-          isSuccess
-        );
-        return roll;
-      } else if (rollType === 'skill' || rollType === 'weapon-skill') {
-        // Skill roll (including weapon skills)
-        const skillKey = dataset.skillKey;
-        const difficulty = dataset.difficulty ? parseInt(dataset.difficulty) : null;
-        const isSuccess = difficulty ? roll.total >= difficulty : null;
-
-        await VagabondChatCard.skillRoll(
-          this.actor,
-          skillKey,
-          roll,
-          difficulty,
-          isSuccess
-        );
-        return roll;
-      } else {
-        // Fallback to old behavior for other rolls
-        let label = dataset.label ? `[ability] ${dataset.label}` : '';
-        if (favorHinder === 'favor') {
-          label += ' [Favor +1d6]';
-        } else if (favorHinder === 'hinder') {
-          label += ' [Hinder -1d6]';
-        }
-        await VagabondChatHelper.postRoll(this.actor, roll, label);
-        return roll;
-      }
-    }
-  }
-
-  /** Helper Functions */
-
-  /**
-   * Fetches the embedded document representing the containing HTML element
-   *
-   * @param {HTMLElement} target    The element subject to search
-   * @returns {Item | ActiveEffect} The embedded Item or ActiveEffect
-   */
-  _getEmbeddedDocument(target) {
-    const docRow = target.closest('li[data-document-class]');
-    if (docRow.dataset.documentClass === 'Item') {
-      return this.actor.items.get(docRow.dataset.itemId);
-    } else if (docRow.dataset.documentClass === 'ActiveEffect') {
-      const parent =
-        docRow.dataset.parentId === this.actor.id
-          ? this.actor
-          : this.actor.items.get(docRow?.dataset.parentId);
-      return parent.effects.get(docRow?.dataset.effectId);
-    } else return console.warn('Could not find document class');
-  }
-
-  /***************
-   *
-   * Drag and Drop
-   *
-   ***************/
-
-  /**
-   * Handle dropping of items onto the actor sheet
-   * @param {DragEvent} event     The concluding DragEvent which contains drop data
-   * @returns {Promise}
-   * @protected
-   */
-  async _onDrop(event) {
-    // CRITICAL: Check for ProseMirror BEFORE calling getDragEventData()
-    // The dataTransfer can only be read once, so we must not consume it
-    const proseMirror = event.target.closest('prose-mirror');
-    if (proseMirror) {
-      // Don't consume the event - let ProseMirror handle it
-      return;
-    }
-
-    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
-    const actor = this.actor;
-    const allowed = Hooks.call('dropActorSheetData', actor, this, data);
-    if (allowed === false) return;
-
-    // Handle different data types
-    switch (data.type) {
-      case 'ContainerItem':
-        return this._onDropContainerItem(event, data);
-      case 'ActiveEffect':
-        return this._onDropActiveEffect(event, data);
-      case 'Actor':
-        return this._onDropActor(event, data);
-      case 'Item':
-        return this._onDropItem(event, data);
-      case 'Folder':
-        return this._onDropFolder(event, data);
-    }
-  }
-
-  /**
-   * MISSING FROM YOUR VERSION: Item drop handler that routes to item creation
-   * Handle dropping an item onto the actor sheet
-   * @param {DragEvent} event     The concluding DragEvent which contains drop data
-   * @param {object} data         The data transfer extracted from the event
-   * @returns {Promise<Item[]>}
-   * @protected
-   */
-  async _onDropItem(event, data) {
-    if (!this.actor.isOwner) return false;
-
-    const item = await Item.implementation.fromDropData(data);
-    const itemData = item.toObject();
-
-    // Handle item sorting within this Actor
-    if (this.actor.uuid === item.parent?.uuid)
-      return this._onSortItem(event, item);
-
-    // Create the owned item (this will call your custom ancestry logic)
-    return this._onDropItemCreate(itemData, event);
-  }
-
-  /**
-   * MISSING FROM YOUR VERSION: Item sorting handler
-   * Handle item sorting within the same actor
-   * @param {DragEvent} event
-   * @param {Item} item
-   */
-  async _onSortItem(event, item) {
-    // Get the drop target
-    const dropTarget = event.target.closest('[data-item-id]');
-    if (!dropTarget) return;
-
-    // Get the target item
-    const target = this.actor.items.get(dropTarget.dataset.itemId);
-    if (!target) return;
-
-    // Don't sort on yourself
-    if (item.id === target.id) return;
-
-    // Identify sibling items based on adjacent HTML elements
-    const siblings = [];
-    for (const el of dropTarget.parentElement.children) {
-      const siblingId = el.dataset.itemId;
-      if (siblingId && siblingId !== item.id) {
-        siblings.push(this.actor.items.get(siblingId));
-      }
-    }
-
-    // Perform the sort
-    const sortUpdates = SortingHelpers.performIntegerSort(item, {
-      target,
-      siblings,
+        await this.inventoryHandler.showFeatureContextMenu(event, {
+          type: 'feature',
+          index: featureIndex
+        });
+      });
     });
 
-    const updateData = sortUpdates.map((u) => {
-      const update = u.update;
-      update._id = u.target._id;
-      return update;
+    // Trait headers (from ancestry)
+    const traitHeaders = this.element.querySelectorAll('.trait-header');
+    traitHeaders.forEach(header => {
+      header.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const traitItem = header.closest('[data-trait-index]');
+        if (!traitItem) return;
+
+        const traitIndex = parseInt(traitItem.dataset.traitIndex);
+        if (isNaN(traitIndex)) return;
+
+        await this.inventoryHandler.showFeatureContextMenu(event, {
+          type: 'trait',
+          index: traitIndex
+        });
+      });
     });
 
-    // Perform the update
-    return this.actor.updateEmbeddedDocuments('Item', updateData);
-  }
-
-  /**
-   * Handle the dropping of ActiveEffect data onto an Actor Sheet
-   * @param {DragEvent} event                  The concluding DragEvent which contains drop data
-   * @param {object} data                      The data transfer extracted from the event
-   * @returns {Promise<ActiveEffect|boolean>}  The created ActiveEffect object or false if it couldn't be created.
-   * @protected
-   */
-  async _onDropActiveEffect(event, data) {
-    const aeCls = getDocumentClass('ActiveEffect');
-    const effect = await aeCls.fromDropData(data);
-    if (!this.actor.isOwner || !effect) return false;
-    if (effect.target === this.actor)
-      return this._onSortActiveEffect(event, effect);
-    return aeCls.create(effect, { parent: this.actor });
-  }
-
-  /**
-   * Handle a drop event for an existing embedded Active Effect to sort that Active Effect relative to its siblings
-   *
-   * @param {DragEvent} event
-   * @param {ActiveEffect} effect
-   */
-  async _onSortActiveEffect(event, effect) {
-    /** @type {HTMLElement} */
-    const dropTarget = event.target.closest('[data-effect-id]');
-    if (!dropTarget) return;
-    const target = this._getEmbeddedDocument(dropTarget);
-
-    // Don't sort on yourself
-    if (effect.uuid === target.uuid) return;
-
-    // Identify sibling items based on adjacent HTML elements
-    const siblings = [];
-    for (const el of dropTarget.parentElement.children) {
-      const siblingId = el.dataset.effectId;
-      const parentId = el.dataset.parentId;
-      if (
-        siblingId &&
-        parentId &&
-        (siblingId !== effect.id || parentId !== effect.parent.id)
-      )
-        siblings.push(this._getEmbeddedDocument(el));
-    }
-
-    // Perform the sort
-    const sortUpdates = SortingHelpers.performIntegerSort(effect, {
-      target,
-      siblings,
-    });
-
-    // Split the updates up by parent document
-    const directUpdates = [];
-
-    const grandchildUpdateData = sortUpdates.reduce((items, u) => {
-      const parentId = u.target.parent.id;
-      const update = { _id: u.target.id, ...u.update };
-      if (parentId === this.actor.id) {
-        directUpdates.push(update);
-        return items;
-      }
-      if (items[parentId]) items[parentId].push(update);
-      else items[parentId] = [update];
-      return items;
-    }, {});
-
-    // Effects-on-items updates
-    for (const [itemId, updates] of Object.entries(grandchildUpdateData)) {
-      await this.actor.items
-        .get(itemId)
-        .updateEmbeddedDocuments('ActiveEffect', updates);
-    }
-
-    // Update on the main actor
-    return this.actor.updateEmbeddedDocuments('ActiveEffect', directUpdates);
-  }
-
-  /**
-   * Handle dropping of an Actor data onto another Actor sheet
-   * @param {DragEvent} event            The concluding DragEvent which contains drop data
-   * @param {object} data                The data transfer extracted from the event
-   * @returns {Promise<object|boolean>}  A data object which describes the result of the drop, or false if the drop was
-   *                                     not permitted.
-   * @protected
-   */
-  async _onDropActor(event, data) {
-    if (!this.actor.isOwner) return false;
-  }
-
-  /**
-   * Handle dropping a container item onto the actor sheet
-   * @param {DragEvent} event     The concluding DragEvent which contains drop data
-   * @param {object} data         The data transfer with containerUuid, itemUuid, itemIndex
-   * @returns {Promise}
-   * @protected
-   */
-  async _onDropContainerItem(event, data) {
-    if (!this.actor.isOwner) return false;
-
-    try {
-      // Get the container
-      const container = await fromUuid(data.containerUuid);
-      if (!container || container.type !== 'container') {
-        ui.notifications.error('Invalid container.');
-        return false;
-      }
-
-      // Use the item data from the drag event
-      const itemData = data.itemData;
-      if (!itemData) {
-        ui.notifications.error('Failed to load item data.');
-        return false;
-      }
-
-      // Check if character has enough slots
-      const itemSlots = itemData.system?.slots || itemData.system?.baseSlots || 1;
-      const availableSlots = this.actor.system.inventory.max - this.actor.system.inventory.used;
-
-      if (availableSlots < itemSlots) {
-        ui.notifications.warn(`Not enough inventory space. Need ${itemSlots} slots, have ${availableSlots} available.`);
-        return false;
-      }
-
-      // Set equipped state based on item type
-      if (itemData.type === 'equipment') {
-        if (itemData.system.equipmentType === 'weapon') {
-          // Equip weapon based on grip
-          if (itemData.system.grip === '1H' || itemData.system.grip === 'V') {
-            itemData.system.equipmentState = 'oneHand';
-          } else if (itemData.system.grip === '2H') {
-            itemData.system.equipmentState = 'twoHands';
-          }
-        } else if (itemData.system.equipmentType === 'armor') {
-          itemData.system.equipmentState = 'equipped';
-        }
-      }
-
-      await this.actor.createEmbeddedDocuments('Item', [itemData]);
-
-      // Remove from container
-      const newItems = container.system.items.filter((_, i) => i !== data.itemIndex);
-      await container.update({ 'system.items': newItems });
-
-      ui.notifications.info(`${itemData.name} moved to character inventory.`);
-
-      return true;
-    } catch (error) {
-      console.error('Error dropping container item:', error);
-      ui.notifications.error('Failed to move item.');
-      return false;
-    }
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Handle dropping of a Folder on an Actor Sheet.
-   * The core sheet currently supports dropping a Folder of Items to create all items as owned items.
-   * @param {DragEvent} event     The concluding DragEvent which contains drop data
-   * @param {object} data         The data transfer extracted from the event
-   * @returns {Promise<Item[]>}
-   * @protected
-   */
-  async _onDropFolder(event, data) {
-    if (!this.actor.isOwner) return [];
-    const folder = await Folder.implementation.fromDropData(data);
-    if (folder.type !== 'Item') return [];
-    const droppedItemData = await Promise.all(
-      folder.contents.map(async (item) => {
-        if (!(document instanceof Item)) item = await fromUuid(item.uuid);
-        return item;
-      })
-    );
-    return this._onDropItemCreate(droppedItemData, event);
-  }
-
-  /**
-   * YOUR CUSTOM LOGIC: Handle the final creation of dropped Item data on the Actor.
-   * This method is factored out to allow downstream classes the opportunity to override item creation behavior.
-   * @param {object[]|object} itemData      The item data requested for creation
-   * @param {DragEvent} event               The concluding DragEvent which provided the drop data
-   * @returns {Promise<Item[]>}
-   * @private
-   */
-  async _onDropItemCreate(itemData, event) {
-    itemData = itemData instanceof Array ? itemData : [itemData];
-
-    // YOUR CUSTOM: Handle ancestry replacement logic BEFORE creating any items
-    const ancestryItems = itemData.filter(data => data.type === 'ancestry');
-
-    if (ancestryItems.length > 0) {
-      // Find existing ancestry and remove it FIRST, including its effects
-      const existingAncestry = this.actor.items.find(item => item.type === 'ancestry');
-      if (existingAncestry) {
-        // Delete the existing ancestry - this should also remove its effects
-        await existingAncestry.delete();
-      }
-
-      // Only keep the FIRST ancestry if multiple are dropped
-      const selectedAncestry = ancestryItems[0];
-
-      // Filter out ALL ancestry items from original data, then add back only the selected one
-      const nonAncestryItems = itemData.filter(data => data.type !== 'ancestry');
-      itemData = [...nonAncestryItems, selectedAncestry];
-    }
-
-    // YOUR CUSTOM: Handle class replacement logic BEFORE creating any items
-    const classItems = itemData.filter(data => data.type === 'class');
-
-    if (classItems.length > 0) {
-      // Find existing class and remove it FIRST, including its effects
-      const existingClass = this.actor.items.find(item => item.type === 'class');
-      if (existingClass) {
-        // Delete the existing class - this should also remove its effects
-        await existingClass.delete();
-      }
-
-      // Only keep the FIRST class if multiple are dropped
-      const selectedClass = classItems[0];
-
-      // Filter out ALL class items from original data, then add back only the selected one
-      const nonClassItems = itemData.filter(data => data.type !== 'class');
-      itemData = [...nonClassItems, selectedClass];
-    }
-
-    // YOUR CUSTOM: Handle starter pack unpacking BEFORE creating any items
-    const starterPackItems = itemData.filter(data => data.type === 'starterPack');
-
-    if (starterPackItems.length > 0) {
-      // Process each starter pack
-      for (const packData of starterPackItems) {
-        // Load the pack items from UUIDs
-        const itemsToCreate = [];
-
-        for (const packItem of packData.system.items) {
-          try {
-            const item = await fromUuid(packItem.uuid);
-            if (item) {
-              // Create separate instances for each quantity (no longer use quantity field)
-              for (let i = 0; i < packItem.quantity; i++) {
-                const itemClone = item.toObject();
-
-                // Reset quantity to 1 (we create multiple instances instead)
-                if (itemClone.system.quantity !== undefined) {
-                  itemClone.system.quantity = 1;
-                }
-
-                itemsToCreate.push(itemClone);
-              }
-            }
-          } catch (error) {
-            console.warn(`Failed to load item with UUID ${packItem.uuid}:`, error);
-          }
-        }
-
-        // Set the character's currency
-        if (this.actor.type === 'character') {
-          await this.actor.update({
-            'system.currency.gold': packData.system.currency.gold,
-            'system.currency.silver': packData.system.currency.silver,
-            'system.currency.copper': packData.system.currency.copper,
-          });
-        }
-
-        // Create all items from the pack
-        if (itemsToCreate.length > 0) {
-          await this.actor.createEmbeddedDocuments('Item', itemsToCreate);
-        }
-
-        // Show notification
-        ui.notifications.info(`Unpacked "${packData.name}" - added ${itemsToCreate.length} items and set currency to ${packData.system.currency.gold}g ${packData.system.currency.silver}s ${packData.system.currency.copper}c`);
-      }
-
-      // Remove starter packs from itemData (we don't want to add the pack itself)
-      itemData = itemData.filter(data => data.type !== 'starterPack');
-    }
-
-    // YOUR CUSTOM: Handle stack splitting for inventory items
-    // 1 Item Document = 1 Physical Item rule
-    const itemsToCreate = [];
-
-    for (const data of itemData) {
-      const isInventory = ['equipment', 'weapon', 'armor', 'gear'].includes(data.type);
-      const qty = data.system?.quantity || 1;
-
-      if (isInventory && qty > 1) {
-        // Create 'qty' number of separate items
-        for (let i = 0; i < qty; i++) {
-          const clone = foundry.utils.deepClone(data);
-          clone.system.quantity = 1; // Force to 1
-          itemsToCreate.push(clone);
-        }
-        ui.notifications.info(`Split "${data.name}" into ${qty} separate items.`);
-      } else {
-        // Ensure quantity is 1 for inventory items
-        if (isInventory) foundry.utils.setProperty(data, 'system.quantity', 1);
-        itemsToCreate.push(data);
-      }
-    }
-
-    return this.actor.createEmbeddedDocuments('Item', itemsToCreate);
-  }
-
-  /********************
-   *
-   * Inventory Grid Interactions
-   *
-   ********************/
-
-  /*
-   * REMOVED: Auto-arrange inventory - User requested only sliding behavior
-   * Keeping this commented out for reference
-   *
-  static async _onAutoArrangeInventory(event, target) {
-    const sheet = target.closest('.vagabond.actor');
-    if (!sheet) return;
-
-    const actor = game.actors.get(sheet.dataset.actorId);
-    if (!actor) return;
-
-    const items = actor.items.filter(i =>
-      (i.type === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'gear') &&
-      !i.system.containerId
-    );
-
-    const slot0Items = [];
-    const slot1Items = [];
-    const slot2Items = [];
-    const slot3Items = [];
-    const slot4PlusItems = [];
-
-    items.forEach(item => {
-      const slots = item.system.slots || 0;
-      if (slots === 0) slot0Items.push(item);
-      else if (slots === 1) slot1Items.push(item);
-      else if (slots === 2) slot2Items.push(item);
-      else if (slots === 3) slot3Items.push(item);
-      else slot4PlusItems.push(item);
-    });
-
-    const arranged = [];
-    arranged.push(...slot0Items);
-    arranged.push(...slot4PlusItems.sort((a, b) => (b.system.slots || 0) - (a.system.slots || 0)));
-
-    while (slot3Items.length > 0 && slot1Items.length > 0) {
-      arranged.push(slot3Items.shift());
-      arranged.push(slot1Items.shift());
-    }
-
-    while (slot2Items.length >= 2) {
-      arranged.push(slot2Items.shift());
-      arranged.push(slot2Items.shift());
-    }
-
-    while (slot2Items.length > 0 && slot1Items.length >= 2) {
-      arranged.push(slot2Items.shift());
-      arranged.push(slot1Items.shift());
-      arranged.push(slot1Items.shift());
-    }
-
-    while (slot1Items.length >= 4) {
-      arranged.push(slot1Items.shift());
-      arranged.push(slot1Items.shift());
-      arranged.push(slot1Items.shift());
-      arranged.push(slot1Items.shift());
-    }
-
-    arranged.push(...slot3Items);
-    arranged.push(...slot2Items);
-    arranged.push(...slot1Items);
-
-    const updates = arranged.map((item, index) => ({
-      _id: item.id,
-      'system.gridPosition': index
-    }));
-
-    await actor.updateEmbeddedDocuments('Item', updates);
-    ui.notifications.info('Inventory auto-arranged for optimal packing');
-  }
-  */
-
-  /**
-   * Equip an item from context menu
-   * @param {Event} event - The click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
-   */
-  static async _onEquipItem(event, target) {
-    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
-    if (!itemId) return;
-
-    const sheet = target.closest('.vagabond.actor');
-    if (!sheet) return;
-
-    const actor = game.actors.get(sheet.dataset.actorId);
-    if (!actor) return;
-
-    const item = actor.items.get(itemId);
-    if (!item) return;
-
-    // Toggle equipped state
-    const isEquipped = item.system.equipped !== undefined
-      ? item.system.equipped
-      : item.system.equipmentState !== 'unequipped';
-
-    if (item.system.equipped !== undefined) {
-      await item.update({ 'system.equipped': !isEquipped });
-    } else if (item.system.equipmentState) {
-      const newState = isEquipped ? 'unequipped' : 'oneHand';
-      await item.update({ 'system.equipmentState': newState });
-    }
-  }
-
-  /**
-   * Edit an item from context menu
-   * @param {Event} event - The click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
-   */
-  static async _onEditItem(event, target) {
-    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
-    if (!itemId) return;
-
-    const sheet = target.closest('.vagabond.actor');
-    if (!sheet) return;
-
-    const actor = game.actors.get(sheet.dataset.actorId);
-    if (!actor) return;
-
-    const item = actor.items.get(itemId);
-    if (!item) return;
-
-    item.sheet.render(true);
-  }
-
-  /**
-   * Delete an item from context menu
-   * @param {Event} event - The click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
-   */
-  static async _onDeleteItem(event, target) {
-    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
-    if (!itemId) return;
-
-    const sheet = target.closest('.vagabond.actor');
-    if (!sheet) return;
-
-    const actor = game.actors.get(sheet.dataset.actorId);
-    if (!actor) return;
-
-    const item = actor.items.get(itemId);
-    if (!item) return;
-
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: `Delete ${item.name}?` },
-      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-      rejectClose: false,
-      modal: true
-    });
-
-    if (confirmed) {
-      await item.delete();
-      // ui.notifications.info(`Deleted ${item.name}`);
-    }
-  }
-
-  /**
-   * Handle spending or recharging luck
-   * Left-click: Spend 1 luck and post chat card
-   * Shift+Left-click: Recharge 1 luck (no chat message)
-   * @param {Event} event - The click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
-   */
-  static async _onSpendLuck(event, target) {
-    event.preventDefault();
-
-    const currentLuck = this.actor.system.currentLuck || 0;
-    const maxLuck = this.actor.system.maxLuck || 8;
-
-    // Shift+Click: Recharge luck
-    if (event.shiftKey) {
-      if (currentLuck >= maxLuck) {
-        ui.notifications.warn(game.i18n.localize('VAGABOND.Notifications.LuckAlreadyMax'));
-        return;
-      }
-      await this.actor.update({ 'system.currentLuck': Math.min(currentLuck + 1, maxLuck) });
-      return;
-    }
-
-    // Normal click: Spend luck
-    if (currentLuck <= 0) {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Notifications.NoLuckRemaining'));
-      return;
-    }
-
-    // Decrease luck and get the new value
-    const newLuck = currentLuck - 1;
-    await this.actor.update({ 'system.currentLuck': newLuck });
-
-    // Create chat message using VagabondChatCard
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-    await VagabondChatCard.luckSpend(this.actor, newLuck, maxLuck);
-  }
-
-  /**
-   * Handle spending or adding studied dice
-   * @param {Event} event - The triggering event
-   * @param {HTMLElement} target - The target element
-   */
-  static async _onSpendStudiedDie(event, target) {
-    event.preventDefault();
-
-    const currentDice = this.actor.system.studiedDice || 0;
-
-    // Shift+Click: Add a studied die
-    if (event.shiftKey) {
-      await this.actor.update({ 'system.studiedDice': currentDice + 1 });
-      ui.notifications.info(`Added a Studied Die (${currentDice} → ${currentDice + 1})`);
-      return;
-    }
-
-    // Normal click: Spend a studied die
-    if (currentDice <= 0) {
-      ui.notifications.warn('No Studied Dice available to spend!');
-      return;
-    }
-
-    const newDice = currentDice - 1;
-    await this.actor.update({ 'system.studiedDice': newDice });
-
-    // Create chat message
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
-    const card = new VagabondChatCard()
-      .setType('generic')
-      .setActor(this.actor)
-      .setTitle('Studied Die Spent')
-      .setSubtitle(this.actor.name)
-      .setDescription(`
-        <p><i class="fas fa-book-open"></i> <strong>${this.actor.name}</strong> spends a Studied Die.</p>
-        <p><em>Remaining: ${newDice}</em></p>
-        <p style="font-size: 0.8em; color: #666;">Use this to gain Favor on your next d20 roll.</p>
-      `);
-
-    await card.send();
-  }
-
-  /**
-   * Handle modifying the check bonus (left-click only)
-   * @param {Event} event - The triggering event
-   * @param {HTMLElement} target - The target element
-   */
-  static async _onModifyCheckBonus(event, target) {
-    event.preventDefault();
-    console.log('Vagabond | Check Mod clicked', this);
-
-    const currentBonus = this.actor.system.universalCheckBonus || 0;
-    console.log('Vagabond | Current bonus:', currentBonus);
-
-    await this.actor.update({ 'system.universalCheckBonus': currentBonus + 1 });
-    console.log('Vagabond | Updated to:', currentBonus + 1);
-  }
-
-  /**
-   * Open the downtime activities dialog
-   * @param {Event} event - The triggering event
-   * @param {HTMLElement} target - The target element
-   */
-  static async _onOpenDowntime(event, target) {
-    event.preventDefault();
-
-    // Import and instantiate the DowntimeApp
-    const { DowntimeApp } = await import('../applications/downtime-app.mjs');
-    const app = new DowntimeApp(this.actor);
-    app.render({ force: true });
-  }
-
-  /**
-   * Open the character builder
-   * @param {Event} event - The triggering event
-   * @param {HTMLElement} target - The target element
-   */
-  static async _onOpenCharBuilder(event, target) {
-    event.preventDefault();
-
-    // Only allow for character type actors
-    if (this.actor.type !== 'character') {
-      ui.notifications.warn("Character builder is only available for character-type actors.");
-      return;
-    }
-
-    // Create and render the character builder
-    const builder = new VagabondCharBuilder(this.actor);
-    builder.render({ force: true });
-  }
-
-  /**
-   * Dismiss the character builder permanently
-   * @param {Event} event - The triggering event
-   * @param {HTMLElement} target - The target element
-   */
-  static async _onDismissCharBuilder(event, target) {
-    event.preventDefault();
-
-    // Confirm dismissal
-    const confirmed = await Dialog.confirm({
-      title: "Dismiss Character Builder",
-      content: `<p>Are you sure you want to dismiss the character builder?</p>
-                <p>You can still manually build your character using the normal character sheet.</p>
-                <p><strong>This action cannot be undone.</strong></p>`,
-      yes: () => true,
-      no: () => false,
-      defaultYes: false
-    });
-
-    if (confirmed) {
-      await this.actor.update({ "system.details.builderDismissed": true });
-      ui.notifications.info("Character builder dismissed. You can use the normal character sheet to build your character.");
-    }
-  }
-
-  /**
-     * Saves the state of a dropdown container to the actor.
-     * Handles both Checkboxes (Arrays) and Radio Buttons (Single Strings).
-     * @param {HTMLElement} detailsElement - The <details> element
-     */
-    async _saveDropdown(detailsElement) {
-      const targetField = detailsElement.dataset.saveTarget;
-      if (!targetField) return;
-
-      // Detect input type by checking the first input found
-      const firstInput = detailsElement.querySelector('input');
-      if (!firstInput) return;
-      
-      // --- CASE A: Radio Buttons (Single Value) ---
-      if (firstInput.type === 'radio') {
-        const checked = detailsElement.querySelector('input:checked');
-        const newValue = checked ? checked.value : null;
-        const currentValue = foundry.utils.getProperty(this.actor, targetField);
-
-        if (newValue !== currentValue) {
-          await this.actor.update({ [targetField]: newValue });
-        }
-      } 
-      
-      // --- CASE B: Checkboxes (Array of Values) ---
-      else {
-        const checkboxes = detailsElement.querySelectorAll('input[type="checkbox"]');
-        const newValues = Array.from(checkboxes)
-          .filter(cb => cb.checked)
-          .map(cb => cb.value);
-
-        const currentValues = foundry.utils.getProperty(this.actor, targetField) || [];
-        
-        const isSame = newValues.length === currentValues.length && 
-                      newValues.every(v => currentValues.includes(v));
-
-        if (!isSame) {
-          await this.actor.update({ [targetField]: newValues });
-        }
-      }
-    }
-
-  /**
-   * Manually saves the data from an NPC action accordion to the actor.
-   * Used to prevent constant re-renders while typing.
-   * @param {number} index - The index of the action in the system.actions array
-   * @private
-   */
-  async _saveNPCAction(index) {
-    const actionEl = this.element.querySelector(`.npc-action-edit[data-action-index="${index}"]`);
-    if (!actionEl) return;
-
-    // 1. Get the current array from the actor to avoid overwriting other data
-    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
-    if (!actions[index]) return;
-
-    // 2. Read values directly from the DOM inputs
-    // We look for inputs with 'data-field' attributes (defined in your template)
-    const inputs = actionEl.querySelectorAll('[data-field]');
-    let hasChanges = false;
-
-    inputs.forEach(input => {
-      const field = input.dataset.field; // e.g., "name", "description", "rollDamage"
-      const value = input.value;
-      
-      // Only update if changed
-      if (actions[index][field] !== value) {
-        actions[index][field] = value;
-        hasChanges = true;
-      }
-    });
-
-    // 3. Update the actor only if something actually changed
-    if (hasChanges) {
-      await this.actor.update({ 'system.actions': actions });
-    }
-  }
-
-  // Duplicate logic for Abilities if needed
-  async _saveNPCAbility(index) {
-    const abilityEl = this.element.querySelector(`.npc-ability-edit[data-ability-index="${index}"]`);
-    if (!abilityEl) return;
-
-    const abilities = foundry.utils.deepClone(this.actor.system.abilities || []);
-    if (!abilities[index]) return;
-
-    const inputs = abilityEl.querySelectorAll('[data-field]');
-    let hasChanges = false;
-
-    inputs.forEach(input => {
-      const field = input.dataset.field;
-      const value = input.value;
-      
-      if (abilities[index][field] !== value) {
-        abilities[index][field] = value;
-        hasChanges = true;
-      }
-    });
-
-    if (hasChanges) {
-      await this.actor.update({ 'system.abilities': abilities });
-    }
-  }
-
-  /********************
-   *
-   * Actor Override Handling
-   *
-   ********************/
-
-  /**
-   * Submit a document update based on the processed form data.
-   * @param {SubmitEvent} event                   The originating form submission event
-   * @param {HTMLFormElement} form                The form element that was submitted
-   * @param {object} submitData                   Processed and validated form data to be used for a document update
-   * @returns {Promise<void>}
-   * @protected
-   * @override
-   */
-  async _processSubmitData(event, form, submitData) {
-    // Clear any pending debounce
-    if (this._formSubmitDebounce) {
-      clearTimeout(this._formSubmitDebounce);
-    }
-
-    // Debounce the actual update by 500ms (fallback if submitDelay not supported)
-    this._formSubmitDebounce = setTimeout(async () => {
-      // Store which immunity dropdowns are open before update
-      this._captureDropdownState();
-
-      const overrides = foundry.utils.flattenObject(this.actor.overrides);
-      for (let k of Object.keys(overrides)) delete submitData[k];
-      await this.document.update(submitData);
-    }, 500);
-  }
-
-  /**
-   * Capture the open state of immunity dropdowns
-   * @private
-   */
-  _captureDropdownState() {
-    this._openDropdowns = [];
-    const dropdowns = this.element.querySelectorAll('.npc-immunity-dropdown');
-    dropdowns.forEach((dropdown, index) => {
-      if (dropdown.hasAttribute('open')) {
-        this._openDropdowns.push(index);
-      }
+    // Perk headers (real items)
+    const perkHeaders = this.element.querySelectorAll('.perk-header');
+    perkHeaders.forEach(header => {
+      header.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const perkItem = header.closest('[data-item-id]');
+        if (!perkItem) return;
+
+        const itemId = perkItem.dataset.itemId;
+        if (!itemId) return;
+
+        await this.inventoryHandler.showFeatureContextMenu(event, itemId, 'perk');
+      });
     });
   }
 
   /**
    * Setup click outside handler for accordions
-   * @private
-   */
-/**
-   * Sets up global click listener to close Accordions and Dropdowns when clicking outside.
-   * Also triggers "Buffered Save" logic.
    * @private
    */
   _setupAccordionClickOutside() {
@@ -5355,56 +1576,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     this._accordionClickOutsideHandler = async (event) => {
-      
-      // --- 1. Handle NPC Actions (Accordion) ---
-      const openActionAccordions = this.element.querySelectorAll('.npc-action-edit .action-edit-content:not(.collapsed)');
-      for (const content of openActionAccordions) {
-        const accordion = content.closest('.npc-action-edit');
-        if (accordion && !accordion.contains(event.target)) {
-          const index = parseInt(accordion.dataset.actionIndex);
-          const icon = accordion.querySelector('.accordion-icon');
+      // Handle clicks outside accordions
+      const accordions = this.element.querySelectorAll('.accordion.open');
 
-          await this._saveNPCAction(index); // Save
-
-          content.classList.add('collapsed');
-          if (icon) {
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-right');
-          }
-          if (this._openActionAccordions) this._openActionAccordions.delete(index);
-        }
-      }
-
-      // --- 2. Handle NPC Abilities (Accordion) ---
-      const openAbilityAccordions = this.element.querySelectorAll('.npc-ability-edit .ability-edit-content:not(.collapsed)');
-      for (const content of openAbilityAccordions) {
-        const accordion = content.closest('.npc-ability-edit');
-        if (accordion && !accordion.contains(event.target)) {
-          const index = parseInt(accordion.dataset.abilityIndex);
-          const icon = accordion.querySelector('.accordion-icon');
-
-          await this._saveNPCAbility(index); // Save
-
-          content.classList.add('collapsed');
-          if (icon) {
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-right');
-          }
-          if (this._openAbilityAccordions) this._openAbilityAccordions.delete(index);
-        }
-      }
-
-      // --- 3. Handle NPC Dropdowns (Immunities, Weaknesses, etc) ---
-      // Select any open <details> element that has a save target
-      const openDropdowns = this.element.querySelectorAll('details.npc-immunity-dropdown[open][data-save-target]');
-      
-      for (const details of openDropdowns) {
-        // If the click happened OUTSIDE this details element
-        if (!details.contains(event.target)) {
-          
-          await this._saveDropdown(details); // Save selections
-          
-          details.removeAttribute('open');   // Close the dropdown
+      for (const accordion of accordions) {
+        if (!accordion.contains(event.target)) {
+          AccordionHelper.close(accordion);
         }
       }
     };
@@ -5413,7 +1590,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Disables inputs subject to active effects
+   * Disable inputs subject to active effects
+   * @private
    */
   #disableOverrides() {
     const flatOverrides = foundry.utils.flattenObject(this.actor.overrides);
@@ -5425,4 +1603,181 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
+  // ===========================
+  // DRAG & DROP
+  // ===========================
+
+  /**
+   * Handle drop events
+   * @param {DragEvent} event - The originating drop event
+   * @override
+   */
+  async _onDrop(event) {
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
+
+    if (data.type === 'Item') {
+      return this._onDropItem(event, data);
+    } else if (data.type === 'ActiveEffect') {
+      return this._onDropActiveEffect(event, data);
+    } else if (data.type === 'Actor') {
+      return this._onDropActor(event, data);
+    } else if (data.type === 'Folder') {
+      return this._onDropFolder(event, data);
+    }
+
+    return super._onDrop(event);
+  }
+
+  /**
+   * Handle dropping an item
+   * @param {DragEvent} event - The originating drop event
+   * @param {Object} data - The drop data
+   * @private
+   */
+  async _onDropItem(event, data) {
+    if (!this.actor.isOwner) return false;
+
+    const item = await Item.implementation.fromDropData(data);
+    const itemData = item.toObject();
+
+    // Handle item from same actor (sorting)
+    if (this.actor.uuid === item.parent?.uuid) {
+      return this._onSortItem(event, itemData);
+    }
+
+    // Create new item
+    return this._onDropItemCreate(itemData, event);
+  }
+
+  /**
+   * Handle sorting an item
+   * @param {DragEvent} event - The originating drop event
+   * @param {Object} itemData - The item data
+   * @private
+   */
+  async _onSortItem(event, itemData) {
+    // Get all items of the same type
+    const items = this.actor.items.filter(i => i.type === itemData.type);
+
+    // Perform standard sorting
+    const sortUpdates = SortingHelpers.performIntegerSort(itemData, {
+      target: event.target,
+      siblings: items,
+    });
+
+    const updateData = sortUpdates.map(u => {
+      const update = u.update;
+      update._id = u.target._id;
+      return update;
+    });
+
+    return this.actor.updateEmbeddedDocuments('Item', updateData);
+  }
+
+  /**
+   * Handle creating an item from drop
+   * @param {Object} itemData - The item data
+   * @param {DragEvent} event - The originating drop event
+   * @private
+   */
+  async _onDropItemCreate(itemData, event) {
+    // Handle ancestry replacement
+    if (itemData.type === 'ancestry') {
+      const existingAncestry = this.actor.items.find(i => i.type === 'ancestry');
+      if (existingAncestry) {
+        await existingAncestry.delete();
+      }
+    }
+
+    // Handle class replacement
+    if (itemData.type === 'class') {
+      const existingClass = this.actor.items.find(i => i.type === 'class');
+      if (existingClass) {
+        await existingClass.delete();
+      }
+    }
+
+    // Assign gridPosition for equipment items if not set
+    if (itemData.type === 'equipment' && itemData.system && !itemData.system.gridPosition) {
+      // Find highest gridPosition in current inventory
+      const maxPosition = this.actor.items
+        .filter(i => i.type === 'equipment' && i.system.gridPosition != null)
+        .reduce((max, item) => Math.max(max, item.system.gridPosition || 0), -1);
+
+      itemData.system.gridPosition = maxPosition + 1;
+    }
+
+    // Create the item
+    return this.actor.createEmbeddedDocuments('Item', [itemData]);
+  }
+
+  /**
+   * Handle dropping an active effect
+   * @param {DragEvent} event - The originating drop event
+   * @param {Object} data - The drop data
+   * @private
+   */
+  async _onDropActiveEffect(event, data) {
+    const effect = await ActiveEffect.implementation.fromDropData(data);
+    if (!this.actor.isOwner || !effect) return false;
+
+    if (this.actor.uuid === effect.parent?.uuid) {
+      return this._onSortActiveEffect(event, effect);
+    }
+
+    return ActiveEffect.create(effect.toObject(), { parent: this.actor });
+  }
+
+  /**
+   * Handle sorting an active effect
+   * @param {DragEvent} event - The originating drop event
+   * @param {ActiveEffect} effect - The active effect
+   * @private
+   */
+  async _onSortActiveEffect(event, effect) {
+    const effects = this.actor.effects.contents;
+
+    const sortUpdates = SortingHelpers.performIntegerSort(effect, {
+      target: event.target,
+      siblings: effects,
+    });
+
+    const updateData = sortUpdates.map(u => {
+      const update = u.update;
+      update._id = u.target._id;
+      return update;
+    });
+
+    return this.actor.updateEmbeddedDocuments('ActiveEffect', updateData);
+  }
+
+  /**
+   * Handle dropping an actor
+   * @param {DragEvent} event - The originating drop event
+   * @param {Object} data - The drop data
+   * @private
+   */
+  async _onDropActor(event, data) {
+    // Currently does nothing
+    return false;
+  }
+
+  /**
+   * Handle dropping a folder
+   * @param {DragEvent} event - The originating drop event
+   * @param {Object} data - The drop data
+   * @private
+   */
+  async _onDropFolder(event, data) {
+    if (!this.actor.isOwner) return false;
+
+    const folder = await Folder.implementation.fromDropData(data);
+    if (!folder) return false;
+
+    // Get all items in folder
+    const items = folder.contents.map(item => item.toObject());
+
+    // Create all items
+    return this.actor.createEmbeddedDocuments('Item', items);
+  }
 }

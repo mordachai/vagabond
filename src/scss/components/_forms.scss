@@ -1,4 +1,4 @@
-.item-form {
+.vagabond.item .item-form {
   font-family: $font-primary;
 
   // Item-specific header layout (different from character header)
@@ -7,7 +7,7 @@
     min-height: fit-content;
     overflow: visible;
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;  // Force row layout for item sheets
     flex-wrap: nowrap;
     gap: 12px;
     margin-bottom: 10px;
@@ -114,6 +114,227 @@
   }
 }
 
+// Dark theme support for TinyMCE editor
+.theme-dark .tox {
+  // Main editor container
+  .tox-editor-container {
+    background: var(--vagabond-c-lite);
+    border-color: var(--vagabond-c-faint);
+  }
+
+  // Toolbar styling
+  .tox-toolbar,
+  .tox-toolbar__primary {
+    background: var(--vagabond-c-dark) !important;
+    border-color: var(--vagabond-c-faint) !important;
+  }
+
+  // Toolbar buttons
+  .tox-tbtn {
+    color: var(--vagabond-c-lite) !important;
+    
+    &:hover {
+      background: var(--vagabond-c-faint) !important;
+      color: var(--vagabond-c-white) !important;
+    }
+
+    &--enabled,
+    &--enabled:hover {
+      background: var(--vagabond-c-tan) !important;
+      color: var(--vagabond-c-dark) !important;
+    }
+  }
+
+  // Button icons - more specific targeting
+  .tox-icon,
+  .tox-icon svg,
+  .tox-tbtn .tox-icon svg {
+    fill: var(--vagabond-c-lite) !important;
+    color: var(--vagabond-c-lite) !important;
+  }
+
+  .tox-tbtn:hover .tox-icon,
+  .tox-tbtn:hover .tox-icon svg {
+    fill: var(--vagabond-c-white) !important;
+    color: var(--vagabond-c-white) !important;
+  }
+
+  .tox-tbtn--enabled .tox-icon,
+  .tox-tbtn--enabled .tox-icon svg {
+    fill: var(--vagabond-c-dark) !important;
+    color: var(--vagabond-c-dark) !important;
+  }
+
+  // Additional icon selectors for different TinyMCE versions
+  .tox-tbtn__select-label,
+  .tox-tbtn__icon-wrap,
+  .tox-icon__bold,
+  .tox-icon__italic,
+  .tox-icon__underline,
+  .tox-icon__strike-through,
+  .tox-icon__unordered-list,
+  .tox-icon__ordered-list {
+    color: var(--vagabond-c-lite) !important;
+    fill: var(--vagabond-c-lite) !important;
+  }
+
+  // Dropdown buttons
+  .tox-split-button {
+    .tox-tbtn {
+      color: var(--vagabond-c-lite) !important;
+    }
+    
+    .tox-icon svg {
+      fill: var(--vagabond-c-lite) !important;
+    }
+  }
+
+  // Editor content area
+  .tox-edit-area {
+    background: var(--vagabond-c-lite) !important;
+  }
+
+  // Status bar
+  .tox-statusbar {
+    background: var(--vagabond-c-dark) !important;
+    border-color: var(--vagabond-c-faint) !important;
+    color: var(--vagabond-c-lite) !important;
+  }
+}
+
+// Dark theme support for ProseMirror editor
+.theme-dark {
+  .prosemirror,
+  prose-mirror {
+    // Toolbar buttons
+    .ProseMirror-menubar {
+      background: var(--vagabond-c-dark) !important;
+      border-color: var(--vagabond-c-faint) !important;
+
+      .ProseMirror-menu-item {
+        color: var(--vagabond-c-lite) !important;
+        
+        &:hover {
+          background: var(--vagabond-c-faint) !important;
+          color: var(--vagabond-c-white) !important;
+        }
+
+        &.ProseMirror-menu-active {
+          background: var(--vagabond-c-tan) !important;
+          color: var(--vagabond-c-dark) !important;
+        }
+      }
+    }
+
+    // Editor content
+    .editor-content {
+      background: var(--vagabond-c-lite) !important;
+      color: var(--vagabond-c-dark) !important;
+      border-color: var(--vagabond-c-faint) !important;
+    }
+  }
+
+  // Specific ProseMirror editor menu styling
+  .editor-menu {
+    background: var(--vagabond-c-dark) !important;
+    border-color: var(--vagabond-c-faint) !important;
+
+    li button {
+      color: var(--vagabond-c-lite) !important;
+      background: transparent !important;
+
+      &:hover {
+        background: var(--vagabond-c-faint) !important;
+        color: var(--vagabond-c-white) !important;
+      }
+
+      &.active {
+        background: var(--vagabond-c-tan) !important;
+        color: var(--vagabond-c-dark) !important;
+      }
+
+      // Target all FontAwesome icons in the editor menu
+      i.fa-solid,
+      i.fa,
+      i.fas,
+      i.far,
+      i.fab {
+        color: var(--vagabond-c-lite) !important;
+      }
+
+      &:hover i.fa-solid,
+      &:hover i.fa,
+      &:hover i.fas,
+      &:hover i.far,
+      &:hover i.fab {
+        color: var(--vagabond-c-white) !important;
+      }
+
+      &.active i.fa-solid,
+      &.active i.fa,
+      &.active i.fas,
+      &.active i.far,
+      &.active i.fab {
+        color: var(--vagabond-c-dark) !important;
+      }
+    }
+
+    // Direct targeting of all i elements in editor menu
+    i {
+      color: var(--vagabond-c-lite) !important;
+    }
+
+    button:hover i {
+      color: var(--vagabond-c-white) !important;
+    }
+
+    button.active i {
+      color: var(--vagabond-c-dark) !important;
+    }
+
+    // Dropdown menus
+    ul {
+      background: var(--vagabond-c-dark) !important;
+      border-color: var(--vagabond-c-faint) !important;
+
+      li {
+        color: var(--vagabond-c-lite) !important;
+
+        &:hover {
+          background: var(--vagabond-c-faint) !important;
+          color: var(--vagabond-c-white) !important;
+        }
+
+        // Icons in dropdown items
+        i.fa-solid,
+        i.fa,
+        i.fas,
+        i.far,
+        i.fab {
+          color: var(--vagabond-c-lite) !important;
+        }
+
+        &:hover i.fa-solid,
+        &:hover i.fa,
+        &:hover i.fas,
+        &:hover i.far,
+        &:hover i.fab {
+          color: var(--vagabond-c-white) !important;
+        }
+
+        // Direct targeting of all i elements in dropdowns
+        i {
+          color: var(--vagabond-c-lite) !important;
+        }
+
+        &:hover i {
+          color: var(--vagabond-c-white) !important;
+        }
+      }
+    }
+  }
+}
+
 // Fix Foundry's ProseMirror min-height and positioning
 // Override the --min-height CSS variable that Foundry uses
 .prosemirror,
@@ -127,6 +348,116 @@ prose-mirror .editor-content {
   position: unset;
   min-height: 35px;
   height: fit-content;
+}
+
+// Additional dark theme support for Foundry's editor elements
+.theme-dark {
+  // Foundry's editor wrapper
+  .editor {
+    background: var(--vagabond-c-lite);
+    border-color: var(--vagabond-c-faint);
+  }
+
+  // Any generic editor toolbar
+  .editor-toolbar {
+    background: var(--vagabond-c-dark) !important;
+    border-color: var(--vagabond-c-faint) !important;
+
+    button, .button {
+      color: var(--vagabond-c-lite) !important;
+      background: transparent !important;
+      border-color: var(--vagabond-c-faint) !important;
+
+      &:hover {
+        background: var(--vagabond-c-faint) !important;
+        color: var(--vagabond-c-white) !important;
+      }
+
+      &.active {
+        background: var(--vagabond-c-tan) !important;
+        color: var(--vagabond-c-dark) !important;
+      }
+
+      // Icon styling for generic buttons
+      i, .fa, .fas, .far, .fab {
+        color: var(--vagabond-c-lite) !important;
+      }
+
+      &:hover i, &:hover .fa, &:hover .fas, &:hover .far, &:hover .fab {
+        color: var(--vagabond-c-white) !important;
+      }
+
+      &.active i, &.active .fa, &.active .fas, &.active .far, &.active .fab {
+        color: var(--vagabond-c-dark) !important;
+      }
+    }
+  }
+
+  // Text editor content areas
+  .editor-content,
+  .ProseMirror {
+    background: var(--vagabond-c-lite) !important;
+    color: var(--vagabond-c-dark) !important;
+  }
+
+  // Fix for inline control buttons (like addChange button)
+  .controls button.inline-control,
+  button.inline-control {
+    color: var(--vagabond-c-dark) !important;
+    background: var(--vagabond-c-lite) !important;
+    border: 1px solid var(--vagabond-c-faint) !important;
+
+    &:hover {
+      background: var(--vagabond-c-white) !important;
+      color: var(--vagabond-c-dark) !important;
+    }
+
+    &.icon {
+      color: var(--vagabond-c-dark) !important;
+    }
+  }
+
+  // Generic button fixes for dark theme
+  .controls button,
+  button[data-action] {
+    &.fa-regular,
+    &.fa-solid,
+    &.icon {
+      color: var(--vagabond-c-dark) !important;
+      background: var(--vagabond-c-lite) !important;
+      border: 1px solid var(--vagabond-c-faint) !important;
+
+      &:hover {
+        background: var(--vagabond-c-white) !important;
+        color: var(--vagabond-c-dark) !important;
+      }
+    }
+  }
+
+  // Force icon visibility with very high specificity
+  .tox .tox-toolbar .tox-tbtn .tox-icon,
+  .tox .tox-toolbar .tox-tbtn .tox-icon svg,
+  .tox .tox-toolbar .tox-tbtn .tox-icon path {
+    fill: var(--vagabond-c-lite) !important;
+    color: var(--vagabond-c-lite) !important;
+    stroke: var(--vagabond-c-lite) !important;
+  }
+
+  .tox .tox-toolbar .tox-tbtn:hover .tox-icon,
+  .tox .tox-toolbar .tox-tbtn:hover .tox-icon svg,
+  .tox .tox-toolbar .tox-tbtn:hover .tox-icon path {
+    fill: var(--vagabond-c-white) !important;
+    color: var(--vagabond-c-white) !important;
+    stroke: var(--vagabond-c-white) !important;
+  }
+
+  .tox .tox-toolbar .tox-tbtn--enabled .tox-icon,
+  .tox .tox-toolbar .tox-tbtn--enabled .tox-icon svg,
+  .tox .tox-toolbar .tox-tbtn--enabled .tox-icon path {
+    fill: var(--vagabond-c-dark) !important;
+    color: var(--vagabond-c-dark) !important;
+    stroke: var(--vagabond-c-dark) !important;
+  }
 }
 
 // Cost inputs - 3 column grid layout

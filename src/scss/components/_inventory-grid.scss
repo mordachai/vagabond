@@ -265,45 +265,5 @@
   }
 }
 
-// Context Menu (Right-click)
-.inventory-context-menu {
-  position: fixed;
-  z-index: 10000;
-  background: $c-faint;
-  border: 2px solid $c-dark;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  min-width: 150px;
-  overflow: hidden;
-  color: $c-dark;
-
-  .context-menu-item {
-    padding: 5px 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    transition: background 0.15s ease;
-    color: $c-dark;
-
-    &:hover {
-      background: $c-tan-lite;
-      color: $c-black;
-    }
-
-    i {
-      width: 16px;
-      text-align: center;
-      color: inherit;
-    }
-
-    &.danger {
-      color: $c-red;
-
-      &:hover {
-        background: rgba(217, 83, 79, 0.1);
-      }
-    }
-  }
-}
+// Context Menu (Right-click) - Mixin applied via global selectors in main SCSS file
+// (Selectors moved to top level to work with document.body appended menus)

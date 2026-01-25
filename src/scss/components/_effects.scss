@@ -7,6 +7,7 @@
   background: rgba(0, 0, 0, 0.05);
   border: $border-groove;
   font-weight: bold;
+  color: $c-dark;
   > * {
     font-size: 14px;
     text-align: center;
@@ -16,6 +17,7 @@
     padding-left: 5px;
     text-align: left;
     display: flex;
+    color: $c-dark;
   }
 }
 
@@ -29,6 +31,7 @@
   padding: 0;
   overflow-y: auto;
   scrollbar-width: thin;
+  color: $c-dark;
 
   // Child lists
   .effect-list {
@@ -130,6 +133,13 @@
   }
 }
 
+&.active-effect-config,
+.effects {
+  .form-group > label, .form-group > span.label {
+    color: $c-dark;
+  }
+}
+
 .vagabond-effect-config-wrapper {
   overflow-y: auto;
   max-height: 600px;
@@ -146,6 +156,7 @@
 .vagabond-effect-fields legend {
   font-weight: bold;
   padding: 0 0.5rem;
+  color: $c-dark;
 }
 
 .application-mode-hint {
@@ -160,6 +171,7 @@
   border-radius: 4px;
   padding: 0.5rem;
   margin-top: 0.5rem;
+  color: $c-dark;
 }
 
 .info-box i {
@@ -225,4 +237,114 @@
   font-style: italic;
   font-size: 0.9em;
   color: var(--color-text-dark-secondary);
+}
+// Dark theme support for Active Effects
+.theme-dark {
+  // Active Effect controls and buttons
+  .controls button,
+  .effect-controls button,
+  button.inline-control {
+    color: var(--vagabond-c-dark) !important;
+    background: var(--vagabond-c-white) !important;  // Changed to white for better visibility
+    border: 2px solid var(--vagabond-c-dark) !important;  // Stronger border
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+
+    &:hover {
+      background: var(--vagabond-c-tan) !important;
+      color: var(--vagabond-c-dark) !important;
+      transform: scale(1.1) !important;
+    }
+
+    // For icon buttons like fa-square-plus
+    &.icon,
+    &.fa-regular,
+    &.fa-solid {
+      color: var(--vagabond-c-dark) !important;
+      font-size: 16px !important;  // Make icon bigger
+      font-weight: bold !important;
+    }
+  }
+
+  // Specific targeting for addChange button - make it very prominent
+  button[data-action="addChange"] {
+    color: var(--vagabond-c-dark) !important;
+    background: var(--vagabond-c-white) !important;
+    border: 2px solid var(--vagabond-c-dark) !important;
+    padding: 6px 10px !important;
+    border-radius: 4px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+
+    &:hover {
+      background: var(--vagabond-c-tan) !important;
+      color: var(--vagabond-c-dark) !important;
+      transform: scale(1.15) !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+  }
+
+  // Foundry's default Active Effect change row buttons
+  .effect-change .effect-control,
+  .effect-change button,
+  .changes-list button,
+  .changes-list .effect-control {
+    color: var(--vagabond-c-red) !important;
+    background: var(--vagabond-c-white) !important;
+    border: 2px solid var(--vagabond-c-red) !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+
+    &:hover {
+      background: var(--vagabond-c-red) !important;
+      color: var(--vagabond-c-white) !important;
+      transform: scale(1.1) !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+  }
+
+  // Target Foundry's default change list structure
+  .changes .form-group button,
+  .changes .form-fields button {
+    color: var(--vagabond-c-red) !important;
+    background: var(--vagabond-c-white) !important;
+    border: 2px solid var(--vagabond-c-red) !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+
+    &:hover {
+      background: var(--vagabond-c-red) !important;
+      color: var(--vagabond-c-white) !important;
+      transform: scale(1.1) !important;
+    }
+
+    // Make delete icons more visible
+    i.fa-trash,
+    i.fa-times,
+    i.fa-minus {
+      color: inherit !important;
+    }
+  }
+
+  // Delete buttons for effect changes
+  button[data-action="removeChange"],
+  button.fa-trash,
+  button.fa-times,
+  button.fa-minus {
+    color: var(--vagabond-c-red) !important;
+    background: var(--vagabond-c-white) !important;
+    border: 2px solid var(--vagabond-c-red) !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+
+    &:hover {
+      background: var(--vagabond-c-red) !important;
+      color: var(--vagabond-c-white) !important;
+      transform: scale(1.1) !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+  }
 }

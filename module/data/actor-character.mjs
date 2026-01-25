@@ -411,15 +411,16 @@ export default class VagabondCharacter extends VagabondActorBase {
     // We do this BEFORE other combat values in case they depend on Max HP
     // ------------------------------------------------------------------
     const mightTotal = this.stats.might?.total || 0;
-    const levelValue = this.attributes.level?.value || 0;
+    const levelValue = this.attributes.level?.value || 1; // Ensure minimum level 1
     const hpPerLevelBonus = this.bonuses.hpPerLevel || 0;
     const flatHpBonus = this.health.bonus || 0;
 
-    // Calculate base derived Max HP
+    // Calculate base derived Max HP with active effects integration
     const baseMaxHP = (mightTotal * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
     
     // Add to existing value (which includes Active Effects modifications)
-    this.health.max = (this.health.max || 0) + baseMaxHP;
+    // Ensure minimum HP of 1 regardless of negative modifiers
+    this.health.max = Math.max(1, (this.health.max || 0) + baseMaxHP);
 
 
     // ------------------------------------------------------------------

@@ -755,6 +755,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 4px;
   max-width: 100%;
   /* Standard Tag */
+  /* Feature and Trait Info Tags */
+  /* Perk Prerequisite Tags */
   /* The Slash Separator // */
   /* The Properties Group (Clickable) */
 }
@@ -772,6 +774,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag i {
   opacity: 0.7;
   font-size: 12px;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-feature-info {
+  color: var(--c-dark-blue);
+  font-style: italic;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-trait-info {
+  color: var(--c-dark-blue);
+  font-style: italic;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-prerequisite {
+  color: var(--c-dark-blue);
+  font-size: 14px;
+  font-style: italic;
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .template-trigger {
   cursor: pointer;
@@ -1710,6 +1725,181 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
+/* Level Up Card Styling */
+.vagabond-chat-card-v2[data-card-type=level-up] .tag-level {
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* FEATURES SECTION (for level up cards) */
+.vagabond-chat-card-v2 .features-section {
+  margin-bottom: 10px;
+}
+.vagabond-chat-card-v2 .features-section .features-header-container {
+  display: flex;
+  align-items: center;
+  padding-right: 30px;
+  margin-left: -16px;
+}
+.vagabond-chat-card-v2 .features-section .features-header-arrow {
+  background-image: url("../assets/ui/chat/damage-title-bg.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+.vagabond-chat-card-v2 .features-section .features-header-arrow span {
+  color: white;
+  font-weight: 900;
+  font-family: "Eskapade", serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 #000;
+}
+.vagabond-chat-card-v2 .features-section .features-header-arrow::before {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--vagabond-c-bluey);
+  border-radius: 1px;
+  max-width: 25px;
+}
+.vagabond-chat-card-v2 .features-section .features-header-arrow::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--vagabond-c-bluey);
+  border-radius: 1px;
+  max-width: 25px;
+}
+.vagabond-chat-card-v2 .features-section .features-content {
+  padding: 8px 20px;
+}
+.vagabond-chat-card-v2 .features-section .features-content .feature-item {
+  margin-bottom: 12px;
+}
+.vagabond-chat-card-v2 .features-section .features-content .feature-item:last-child {
+  margin-bottom: 0;
+}
+.vagabond-chat-card-v2 .features-section .features-content .feature-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-dark-blue);
+  border: none;
+}
+.vagabond-chat-card-v2 .features-section .features-content .feature-item p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--c-dark-blue);
+}
+
+.vagabond-chat-card-v2 .level-up-card .hp-section,
+.chat-message .level-up-card .hp-section {
+  background: rgba(220, 20, 60, 0.1);
+  border-left: 4px solid #DC143C;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+.vagabond-chat-card-v2 .level-up-card .hp-section .hp-breakdown,
+.chat-message .level-up-card .hp-section .hp-breakdown {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8px;
+  border-radius: 3px;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.vagabond-chat-card-v2 .level-up-card .mana-section,
+.chat-message .level-up-card .mana-section {
+  background: rgba(100, 149, 237, 0.1);
+  border-left: 4px solid #6495ED;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+.vagabond-chat-card-v2 .level-up-card .mana-section .mana-breakdown,
+.chat-message .level-up-card .mana-section .mana-breakdown {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8px;
+  border-radius: 3px;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.vagabond-chat-card-v2 .level-up-card .spell-amount-section,
+.chat-message .level-up-card .spell-amount-section {
+  background: rgba(138, 43, 226, 0.1);
+  border-left: 4px solid #8A2BE2;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+.vagabond-chat-card-v2 .level-up-card .spell-amount-section .spell-amount-increase,
+.chat-message .level-up-card .spell-amount-section .spell-amount-increase {
+  color: #28a745;
+  font-weight: 600;
+}
+.vagabond-chat-card-v2 .level-up-card .spell-amount-section .spell-amount-decrease,
+.chat-message .level-up-card .spell-amount-section .spell-amount-decrease {
+  color: #dc3545;
+  font-weight: 600;
+}
+.vagabond-chat-card-v2 .level-up-card .spell-amount-section .spell-amount-unchanged,
+.chat-message .level-up-card .spell-amount-section .spell-amount-unchanged {
+  color: #6c757d;
+  font-weight: 400;
+}
+.vagabond-chat-card-v2 .level-up-card .feature-section,
+.chat-message .level-up-card .feature-section {
+  background: rgba(255, 193, 7, 0.1);
+  border-left: 4px solid #FFC107;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+.vagabond-chat-card-v2 .level-up-card .feature-section h3,
+.chat-message .level-up-card .feature-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .level-up-card .feature-section .feature-item,
+.chat-message .level-up-card .feature-section .feature-item {
+  margin-bottom: 12px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  border-left: 3px solid #FFC107;
+}
+.vagabond-chat-card-v2 .level-up-card .feature-section .feature-item:last-child,
+.chat-message .level-up-card .feature-section .feature-item:last-child {
+  margin-bottom: 0;
+}
+.vagabond-chat-card-v2 .level-up-card .feature-section .feature-item h4,
+.chat-message .level-up-card .feature-section .feature-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFC107;
+}
+.vagabond-chat-card-v2 .level-up-card .feature-section .feature-item p,
+.chat-message .level-up-card .feature-section .feature-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--c-dark-blue);
+}
+
 /* Animations */
 @keyframes popIn {
   from {
@@ -1973,7 +2163,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-weight: 700;
   line-height: 1.2;
   word-wrap: break-word;
-  color: inherit;
+  color: var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore {
   font-size: 12px;
@@ -3375,6 +3565,63 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-right: 5px;
 }
 
+/* Context menus - imported at top level because they render outside sheets (appended to document.body) */
+/* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
+.vagabond .inventory-context-menu,
+.vagabond-context-menu.inventory-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: var(--vagabond-c-faint);
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  overflow: hidden;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .inventory-context-menu .context-menu-item,
+.vagabond-context-menu.inventory-context-menu .context-menu-item {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: background 0.15s ease;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .inventory-context-menu .context-menu-item:hover,
+.vagabond-context-menu.inventory-context-menu .context-menu-item:hover {
+  background: var(--vagabond-c-tan-lite);
+  color: var(--vagabond-c-black);
+}
+.vagabond .inventory-context-menu .context-menu-item i,
+.vagabond-context-menu.inventory-context-menu .context-menu-item i {
+  width: 16px;
+  text-align: center;
+  color: inherit;
+}
+.vagabond .inventory-context-menu .context-menu-item.danger,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.danger {
+  color: var(--vagabond-c-red);
+}
+.vagabond .inventory-context-menu .context-menu-item.danger:hover,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.danger:hover {
+  background: rgba(217, 83, 79, 0.1);
+}
+
+/* 
+ * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu) 
+ * currently use custom implementations that don't follow the ContextMenuHelper pattern.
+ * They create menus directly without the 'vagabond-context-menu' base class, so the 
+ * dual-selector pattern doesn't apply to them.
+ * 
+ * If these are refactored to use ContextMenuHelper in the future, add dual selectors like:
+ * .vagabond .progress-clock-context-menu,
+ * .vagabond-context-menu.progress-clock-context-menu {
+ *   @include context-menu-styles;
+ * }
+ */
 /* Styles limited to vagabond sheets */
 .vagabond {
   /* Container Item Styles */
@@ -3388,6 +3635,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* When closed, panel slides behind main sheet, only 20px trigger visible */
   /* When open, panel at natural position next to main sheet */
   /* Click zone - visible sliver on the RIGHT edge of panel when closed */
+  /* Pulse animation for the active tooltip area */
+  /* First-time tooltip for sliding panel */
   /* Panel content area */
   /* Features & Perks columns */
   /* Mana info row */
@@ -3448,36 +3697,36 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-bottom-color: var(--vagabond-c-dark);
   cursor: text;
 }
-.vagabond .item-form {
+.vagabond .vagabond.item .item-form {
   font-family: "Paradigm", serif;
 }
-.vagabond .item-form .sheet-header {
+.vagabond .vagabond.item .item-form .sheet-header {
   flex: 0 0 auto;
   min-height: fit-content;
   overflow: visible;
   display: flex;
-  flex-direction: row;
+  flex-direction: row !important;
   flex-wrap: nowrap;
   gap: 12px;
   margin-bottom: 10px;
 }
-.vagabond .item-form .sheet-header .profile-img {
+.vagabond .vagabond.item .item-form .sheet-header .profile-img {
   flex: 0 0 150px;
   height: 150px;
   border-radius: 4px;
   object-fit: cover;
 }
-.vagabond .item-form .sheet-header .header-fields {
+.vagabond .vagabond.item .item-form .sheet-header .header-fields {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   align-content: start;
 }
-.vagabond .item-form .sheet-header .document-name {
+.vagabond .vagabond.item .item-form .sheet-header .document-name {
   grid-column: 1/-1;
 }
-.vagabond .item-form .sheet-header .document-name input[name=name] {
+.vagabond .vagabond.item .item-form .sheet-header .document-name input[name=name] {
   border: none !important;
   background: transparent !important;
   text-align: left;
@@ -3490,11 +3739,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   transition: border-bottom 0.2s ease;
   border-bottom: 2px solid transparent;
 }
-.vagabond .item-form .sheet-header .document-name input[name=name]:hover, .vagabond .item-form .sheet-header .document-name input[name=name]:focus {
+.vagabond .vagabond.item .item-form .sheet-header .document-name input[name=name]:hover, .vagabond .vagabond.item .item-form .sheet-header .document-name input[name=name]:focus {
   border-bottom: 2px solid var(--vagabond-c-dark);
   background: transparent !important;
 }
-.vagabond .item-form .sheet-header .form-group {
+.vagabond .vagabond.item .item-form .sheet-header .form-group {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -3535,6 +3784,157 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .tox .tox-edit-area {
   padding: 0 8px;
 }
+.vagabond .theme-dark .tox .tox-editor-container {
+  background: var(--vagabond-c-lite);
+  border-color: var(--vagabond-c-faint);
+}
+.vagabond .theme-dark .tox .tox-toolbar,
+.vagabond .theme-dark .tox .tox-toolbar__primary {
+  background: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .tox .tox-tbtn {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-tbtn:hover {
+  background: var(--vagabond-c-faint) !important;
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .tox .tox-tbtn--enabled, .vagabond .theme-dark .tox .tox-tbtn--enabled:hover {
+  background: var(--vagabond-c-tan) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .tox .tox-icon,
+.vagabond .theme-dark .tox .tox-icon svg,
+.vagabond .theme-dark .tox .tox-tbtn .tox-icon svg {
+  fill: var(--vagabond-c-lite) !important;
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-tbtn:hover .tox-icon,
+.vagabond .theme-dark .tox .tox-tbtn:hover .tox-icon svg {
+  fill: var(--vagabond-c-white) !important;
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .tox .tox-tbtn--enabled .tox-icon,
+.vagabond .theme-dark .tox .tox-tbtn--enabled .tox-icon svg {
+  fill: var(--vagabond-c-dark) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .tox .tox-tbtn__select-label,
+.vagabond .theme-dark .tox .tox-tbtn__icon-wrap,
+.vagabond .theme-dark .tox .tox-icon__bold,
+.vagabond .theme-dark .tox .tox-icon__italic,
+.vagabond .theme-dark .tox .tox-icon__underline,
+.vagabond .theme-dark .tox .tox-icon__strike-through,
+.vagabond .theme-dark .tox .tox-icon__unordered-list,
+.vagabond .theme-dark .tox .tox-icon__ordered-list {
+  color: var(--vagabond-c-lite) !important;
+  fill: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-split-button .tox-tbtn {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-split-button .tox-icon svg {
+  fill: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-edit-area {
+  background: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-statusbar {
+  background: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .prosemirror .ProseMirror-menubar,
+.vagabond .theme-dark prose-mirror .ProseMirror-menubar {
+  background: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .prosemirror .ProseMirror-menubar .ProseMirror-menu-item,
+.vagabond .theme-dark prose-mirror .ProseMirror-menubar .ProseMirror-menu-item {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .prosemirror .ProseMirror-menubar .ProseMirror-menu-item:hover,
+.vagabond .theme-dark prose-mirror .ProseMirror-menubar .ProseMirror-menu-item:hover {
+  background: var(--vagabond-c-faint) !important;
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .prosemirror .ProseMirror-menubar .ProseMirror-menu-item.ProseMirror-menu-active,
+.vagabond .theme-dark prose-mirror .ProseMirror-menubar .ProseMirror-menu-item.ProseMirror-menu-active {
+  background: var(--vagabond-c-tan) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .prosemirror .editor-content,
+.vagabond .theme-dark prose-mirror .editor-content {
+  background: var(--vagabond-c-lite) !important;
+  color: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .editor-menu {
+  background: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .editor-menu li button {
+  color: var(--vagabond-c-lite) !important;
+  background: transparent !important;
+}
+.vagabond .theme-dark .editor-menu li button:hover {
+  background: var(--vagabond-c-faint) !important;
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-menu li button.active {
+  background: var(--vagabond-c-tan) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .editor-menu li button i.fa-solid,
+.vagabond .theme-dark .editor-menu li button i.fa,
+.vagabond .theme-dark .editor-menu li button i.fas,
+.vagabond .theme-dark .editor-menu li button i.far,
+.vagabond .theme-dark .editor-menu li button i.fab {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .editor-menu li button:hover i.fa-solid, .vagabond .theme-dark .editor-menu li button:hover i.fa, .vagabond .theme-dark .editor-menu li button:hover i.fas, .vagabond .theme-dark .editor-menu li button:hover i.far, .vagabond .theme-dark .editor-menu li button:hover i.fab {
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-menu li button.active i.fa-solid, .vagabond .theme-dark .editor-menu li button.active i.fa, .vagabond .theme-dark .editor-menu li button.active i.fas, .vagabond .theme-dark .editor-menu li button.active i.far, .vagabond .theme-dark .editor-menu li button.active i.fab {
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .editor-menu i {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .editor-menu button:hover i {
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-menu button.active i {
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .editor-menu ul {
+  background: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .editor-menu ul li {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .editor-menu ul li:hover {
+  background: var(--vagabond-c-faint) !important;
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-menu ul li i.fa-solid,
+.vagabond .theme-dark .editor-menu ul li i.fa,
+.vagabond .theme-dark .editor-menu ul li i.fas,
+.vagabond .theme-dark .editor-menu ul li i.far,
+.vagabond .theme-dark .editor-menu ul li i.fab {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .editor-menu ul li:hover i.fa-solid, .vagabond .theme-dark .editor-menu ul li:hover i.fa, .vagabond .theme-dark .editor-menu ul li:hover i.fas, .vagabond .theme-dark .editor-menu ul li:hover i.far, .vagabond .theme-dark .editor-menu ul li:hover i.fab {
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-menu ul li i {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .editor-menu ul li:hover i {
+  color: var(--vagabond-c-white) !important;
+}
 .vagabond .prosemirror,
 .vagabond prose-mirror {
   --min-height: 35px;
@@ -3544,6 +3944,92 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   position: unset;
   min-height: 35px;
   height: fit-content;
+}
+.vagabond .theme-dark .editor {
+  background: var(--vagabond-c-lite);
+  border-color: var(--vagabond-c-faint);
+}
+.vagabond .theme-dark .editor-toolbar {
+  background: var(--vagabond-c-dark) !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .editor-toolbar button, .vagabond .theme-dark .editor-toolbar .button {
+  color: var(--vagabond-c-lite) !important;
+  background: transparent !important;
+  border-color: var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .editor-toolbar button:hover, .vagabond .theme-dark .editor-toolbar .button:hover {
+  background: var(--vagabond-c-faint) !important;
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-toolbar button.active, .vagabond .theme-dark .editor-toolbar .button.active {
+  background: var(--vagabond-c-tan) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .editor-toolbar button i, .vagabond .theme-dark .editor-toolbar button .fa, .vagabond .theme-dark .editor-toolbar button .fas, .vagabond .theme-dark .editor-toolbar button .far, .vagabond .theme-dark .editor-toolbar button .fab, .vagabond .theme-dark .editor-toolbar .button i, .vagabond .theme-dark .editor-toolbar .button .fa, .vagabond .theme-dark .editor-toolbar .button .fas, .vagabond .theme-dark .editor-toolbar .button .far, .vagabond .theme-dark .editor-toolbar .button .fab {
+  color: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .editor-toolbar button:hover i, .vagabond .theme-dark .editor-toolbar button:hover .fa, .vagabond .theme-dark .editor-toolbar button:hover .fas, .vagabond .theme-dark .editor-toolbar button:hover .far, .vagabond .theme-dark .editor-toolbar button:hover .fab, .vagabond .theme-dark .editor-toolbar .button:hover i, .vagabond .theme-dark .editor-toolbar .button:hover .fa, .vagabond .theme-dark .editor-toolbar .button:hover .fas, .vagabond .theme-dark .editor-toolbar .button:hover .far, .vagabond .theme-dark .editor-toolbar .button:hover .fab {
+  color: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .editor-toolbar button.active i, .vagabond .theme-dark .editor-toolbar button.active .fa, .vagabond .theme-dark .editor-toolbar button.active .fas, .vagabond .theme-dark .editor-toolbar button.active .far, .vagabond .theme-dark .editor-toolbar button.active .fab, .vagabond .theme-dark .editor-toolbar .button.active i, .vagabond .theme-dark .editor-toolbar .button.active .fa, .vagabond .theme-dark .editor-toolbar .button.active .fas, .vagabond .theme-dark .editor-toolbar .button.active .far, .vagabond .theme-dark .editor-toolbar .button.active .fab {
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .editor-content,
+.vagabond .theme-dark .ProseMirror {
+  background: var(--vagabond-c-lite) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .controls button.inline-control,
+.vagabond .theme-dark button.inline-control {
+  color: var(--vagabond-c-dark) !important;
+  background: var(--vagabond-c-lite) !important;
+  border: 1px solid var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .controls button.inline-control:hover,
+.vagabond .theme-dark button.inline-control:hover {
+  background: var(--vagabond-c-white) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .controls button.inline-control.icon,
+.vagabond .theme-dark button.inline-control.icon {
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .controls button.fa-regular, .vagabond .theme-dark .controls button.fa-solid, .vagabond .theme-dark .controls button.icon,
+.vagabond .theme-dark button[data-action].fa-regular,
+.vagabond .theme-dark button[data-action].fa-solid,
+.vagabond .theme-dark button[data-action].icon {
+  color: var(--vagabond-c-dark) !important;
+  background: var(--vagabond-c-lite) !important;
+  border: 1px solid var(--vagabond-c-faint) !important;
+}
+.vagabond .theme-dark .controls button.fa-regular:hover, .vagabond .theme-dark .controls button.fa-solid:hover, .vagabond .theme-dark .controls button.icon:hover,
+.vagabond .theme-dark button[data-action].fa-regular:hover,
+.vagabond .theme-dark button[data-action].fa-solid:hover,
+.vagabond .theme-dark button[data-action].icon:hover {
+  background: var(--vagabond-c-white) !important;
+  color: var(--vagabond-c-dark) !important;
+}
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn .tox-icon,
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn .tox-icon svg,
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn .tox-icon path {
+  fill: var(--vagabond-c-lite) !important;
+  color: var(--vagabond-c-lite) !important;
+  stroke: var(--vagabond-c-lite) !important;
+}
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn:hover .tox-icon,
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn:hover .tox-icon svg,
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn:hover .tox-icon path {
+  fill: var(--vagabond-c-white) !important;
+  color: var(--vagabond-c-white) !important;
+  stroke: var(--vagabond-c-white) !important;
+}
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn--enabled .tox-icon,
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn--enabled .tox-icon svg,
+.vagabond .theme-dark .tox .tox-toolbar .tox-tbtn--enabled .tox-icon path {
+  fill: var(--vagabond-c-dark) !important;
+  color: var(--vagabond-c-dark) !important;
+  stroke: var(--vagabond-c-dark) !important;
 }
 .vagabond .cost-inputs {
   display: grid;
@@ -4248,6 +4734,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex: 0 0 30px;
   justify-content: flex-end;
+  gap: 5px;
 }
 .vagabond .items-list .item-controls a {
   font-size: 12px;
@@ -4515,6 +5002,33 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond .spell-col-favorite .favorite-inactive {
   color: var(--vagabond-c-dark);
+}
+.vagabond .spell-col-controls {
+  flex: 0 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.items-header .vagabond .spell-col-controls {
+  justify-content: center;
+}
+.vagabond .spell-col-controls i {
+  font-size: 12px;
+}
+.vagabond .spell-item-row {
+  min-height: 44px;
+}
+.vagabond .spell-item-row .item-image {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+}
+.vagabond .spell-item-row .item-image img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 5px;
 }
 .vagabond .spell-col-chat {
   flex: 0 0 30px;
@@ -5270,42 +5784,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .inventory-overload-warning i {
   font-size: 16px;
 }
-.vagabond .inventory-context-menu {
-  position: fixed;
-  z-index: 10000;
-  background: var(--vagabond-c-faint);
-  border: 2px solid var(--vagabond-c-dark);
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  min-width: 150px;
-  overflow: hidden;
-  color: var(--vagabond-c-dark);
-}
-.vagabond .inventory-context-menu .context-menu-item {
-  padding: 5px 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  transition: background 0.15s ease;
-  color: var(--vagabond-c-dark);
-}
-.vagabond .inventory-context-menu .context-menu-item:hover {
-  background: var(--vagabond-c-tan-lite);
-  color: var(--vagabond-c-black);
-}
-.vagabond .inventory-context-menu .context-menu-item i {
-  width: 16px;
-  text-align: center;
-  color: inherit;
-}
-.vagabond .inventory-context-menu .context-menu-item.danger {
-  color: var(--vagabond-c-red);
-}
-.vagabond .inventory-context-menu .context-menu-item.danger:hover {
-  background: rgba(217, 83, 79, 0.1);
-}
 .vagabond .effects-header {
   height: 28px;
   margin: 2px 0;
@@ -5314,6 +5792,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: rgba(0, 0, 0, 0.05);
   border: 2px groove var(--vagabond-c-dark);
   font-weight: bold;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .effects-header > * {
   font-size: 14px;
@@ -5324,6 +5803,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding-left: 5px;
   text-align: left;
   display: flex;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .effects-list {
   list-style: none;
@@ -5331,6 +5811,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding: 0;
   overflow-y: auto;
   scrollbar-width: thin;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .effects-list .effect-list {
   list-style: none;
@@ -5414,6 +5895,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .effects .item .effect-controls {
   border: none;
 }
+.vagabond.active-effect-config .form-group > label, .vagabond.active-effect-config .form-group > span.label,
+.vagabond .effects .form-group > label,
+.vagabond .effects .form-group > span.label {
+  color: var(--vagabond-c-dark);
+}
 .vagabond .vagabond-effect-config-wrapper {
   overflow-y: auto;
   max-height: 600px;
@@ -5428,6 +5914,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .vagabond-effect-fields legend {
   font-weight: bold;
   padding: 0 0.5rem;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .application-mode-hint {
   font-style: italic;
@@ -5440,6 +5927,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 4px;
   padding: 0.5rem;
   margin-top: 0.5rem;
+  color: var(--vagabond-c-dark);
 }
 .vagabond .info-box i {
   color: var(--color-info);
@@ -5494,7 +5982,113 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 0.9em;
   color: var(--color-text-dark-secondary);
 }
-.vagabond .sheet-header {
+.vagabond .theme-dark .controls button,
+.vagabond .theme-dark .effect-controls button,
+.vagabond .theme-dark button.inline-control {
+  color: var(--vagabond-c-dark) !important;
+  background: var(--vagabond-c-white) !important;
+  border: 2px solid var(--vagabond-c-dark) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+}
+.vagabond .theme-dark .controls button:hover,
+.vagabond .theme-dark .effect-controls button:hover,
+.vagabond .theme-dark button.inline-control:hover {
+  background: var(--vagabond-c-tan) !important;
+  color: var(--vagabond-c-dark) !important;
+  transform: scale(1.1) !important;
+}
+.vagabond .theme-dark .controls button.icon, .vagabond .theme-dark .controls button.fa-regular, .vagabond .theme-dark .controls button.fa-solid,
+.vagabond .theme-dark .effect-controls button.icon,
+.vagabond .theme-dark .effect-controls button.fa-regular,
+.vagabond .theme-dark .effect-controls button.fa-solid,
+.vagabond .theme-dark button.inline-control.icon,
+.vagabond .theme-dark button.inline-control.fa-regular,
+.vagabond .theme-dark button.inline-control.fa-solid {
+  color: var(--vagabond-c-dark) !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
+.vagabond .theme-dark button[data-action=addChange] {
+  color: var(--vagabond-c-dark) !important;
+  background: var(--vagabond-c-white) !important;
+  border: 2px solid var(--vagabond-c-dark) !important;
+  padding: 6px 10px !important;
+  border-radius: 4px !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+}
+.vagabond .theme-dark button[data-action=addChange]:hover {
+  background: var(--vagabond-c-tan) !important;
+  color: var(--vagabond-c-dark) !important;
+  transform: scale(1.15) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+.vagabond .theme-dark .effect-change .effect-control,
+.vagabond .theme-dark .effect-change button,
+.vagabond .theme-dark .changes-list button,
+.vagabond .theme-dark .changes-list .effect-control {
+  color: var(--vagabond-c-red) !important;
+  background: var(--vagabond-c-white) !important;
+  border: 2px solid var(--vagabond-c-red) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+}
+.vagabond .theme-dark .effect-change .effect-control:hover,
+.vagabond .theme-dark .effect-change button:hover,
+.vagabond .theme-dark .changes-list button:hover,
+.vagabond .theme-dark .changes-list .effect-control:hover {
+  background: var(--vagabond-c-red) !important;
+  color: var(--vagabond-c-white) !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+.vagabond .theme-dark .changes .form-group button,
+.vagabond .theme-dark .changes .form-fields button {
+  color: var(--vagabond-c-red) !important;
+  background: var(--vagabond-c-white) !important;
+  border: 2px solid var(--vagabond-c-red) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+}
+.vagabond .theme-dark .changes .form-group button:hover,
+.vagabond .theme-dark .changes .form-fields button:hover {
+  background: var(--vagabond-c-red) !important;
+  color: var(--vagabond-c-white) !important;
+  transform: scale(1.1) !important;
+}
+.vagabond .theme-dark .changes .form-group button i.fa-trash,
+.vagabond .theme-dark .changes .form-group button i.fa-times,
+.vagabond .theme-dark .changes .form-group button i.fa-minus,
+.vagabond .theme-dark .changes .form-fields button i.fa-trash,
+.vagabond .theme-dark .changes .form-fields button i.fa-times,
+.vagabond .theme-dark .changes .form-fields button i.fa-minus {
+  color: inherit !important;
+}
+.vagabond .theme-dark button[data-action=removeChange],
+.vagabond .theme-dark button.fa-trash,
+.vagabond .theme-dark button.fa-times,
+.vagabond .theme-dark button.fa-minus {
+  color: var(--vagabond-c-red) !important;
+  background: var(--vagabond-c-white) !important;
+  border: 2px solid var(--vagabond-c-red) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+}
+.vagabond .theme-dark button[data-action=removeChange]:hover,
+.vagabond .theme-dark button.fa-trash:hover,
+.vagabond .theme-dark button.fa-times:hover,
+.vagabond .theme-dark button.fa-minus:hover {
+  background: var(--vagabond-c-red) !important;
+  color: var(--vagabond-c-white) !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+.vagabond .vagabond.actor .sheet-header,
+.vagabond .sliding-panel .sheet-header {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -6000,6 +6594,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   max-width: 45px;
   word-wrap: break-word;
 }
+.vagabond .speed-stats-row .stat-item .stat-label.stat-label-with-unit {
+  line-height: 1.2;
+}
+.vagabond .speed-stats-row .stat-item .stat-label.stat-label-with-unit .stat-unit {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-top: 2px;
+}
 .vagabond .speed-stats-row .stat-item .check-mod-value {
   pointer-events: none;
   color: var(--vagabond-c-dark);
@@ -6114,7 +6718,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   word-break: break-word;
 }
 @media (max-width: 600px) {
-  .vagabond .sheet-header {
+  .vagabond .vagabond.actor .sheet-header,
+  .vagabond .sliding-panel .sheet-header {
     flex-direction: column;
     align-items: center;
   }
@@ -6145,7 +6750,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   pointer-events: all;
   z-index: 100 !important; /* Always on top of main sheet */
   /* Smooth transition */
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) !important;
   /* Anti-aliasing for smooth rotation */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -6172,6 +6777,65 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease;
+  /* When tooltip is active, highlight the click area */
+}
+.vagabond .panel-click-zone:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.vagabond .panel-click-zone.tooltip-active {
+  background-color: rgba(213, 0, 0, 0.4);
+  animation: pulse-highlight 2s ease-in-out infinite;
+}
+.vagabond .panel-click-zone.tooltip-active:hover {
+  background-color: rgba(213, 0, 0, 0.4);
+}
+@keyframes pulse-highlight {
+  0%, 100% {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+.vagabond .sliding-panel-tooltip {
+  position: absolute;
+  left: 100%; /* Position to the right of the click zone */
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 15px; /* Space from the panel edge */
+  background: var(--vagabond-c-dark);
+  color: var(--vagabond-c-lite);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--vagabond-c-tan);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  min-width: 200px;
+}
+.vagabond .sliding-panel-tooltip.visible {
+  opacity: 1;
+}
+.vagabond .sliding-panel-tooltip .tooltip-arrow {
+  position: absolute;
+  left: -10px; /* Arrow points from left toward the panel */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 8px 8px 0;
+  border-color: transparent var(--vagabond-c-tan) transparent transparent; /* Match border color */
+}
+.vagabond .sliding-panel-tooltip .tooltip-content {
+  line-height: 1.4;
+  text-align: center;
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
@@ -6313,7 +6977,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   overflow-y: auto;
   overflow-x: hidden;
 }
-.vagabond i {
+.vagabond .vagabond.actor .npc-content i,
+.vagabond .vagabond.actor .npc-header i {
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-sheet textarea,
@@ -6921,6 +7586,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .ability-edit-header .accordion-icon.fa-chevron-down {
   transform: rotate(90deg);
 }
+.vagabond .accordion-item.open .accordion-header .accordion-icon,
+.vagabond .npc-edit-item.open .npc-edit-header .accordion-icon,
+.vagabond .npc-action-edit.open .action-edit-header .accordion-icon,
+.vagabond .npc-ability-edit.open .ability-edit-header .accordion-icon {
+  transform: rotate(90deg);
+}
 .vagabond .npc-type-row {
   display: flex;
   width: fit-content;
@@ -6945,9 +7616,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .action-edit-content,
 .vagabond .ability-edit-content {
   overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+}
+.vagabond .npc-edit-content.open,
+.vagabond .action-edit-content.open,
+.vagabond .ability-edit-content.open {
   max-height: 1500px;
   opacity: 1;
-  transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 .vagabond .npc-edit-content.collapsed,
 .vagabond .action-edit-content.collapsed,
@@ -7071,7 +7752,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  border: 1px solid var(--vagabond-c-tan);
+  border: 1px solid var(--vagabond-c-dark);
   border-radius: 4px;
   background: var(--vagabond-c-faint);
 }
@@ -7093,12 +7774,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   width: 24px;
   height: 24px;
   border-radius: 3px;
-  border: 1px solid var(--vagabond-c-tan);
+  border: 1px solid var(--vagabond-c-dark);
 }
 .vagabond .npc-effects .effect-source {
   font-size: 14px;
   font-family: "Manofa", serif;
-  color: var(--vagabond-c-muted);
+  color: var(--vagabond-c-dark);
   min-width: 80px;
   text-align: center;
 }
@@ -7118,7 +7799,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--vagabond-c-muted);
+  color: var(--vagabond-c-dark);
   font-size: 14px;
   width: 20px;
   height: 20px;

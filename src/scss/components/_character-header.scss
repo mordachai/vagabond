@@ -1,7 +1,8 @@
 // Character Sheet Header Styles
 
-// Sheet Header Container
-.sheet-header {
+// Sheet Header Container - specific to character sheets and sliding panel
+.vagabond.actor .sheet-header,
+.sliding-panel .sheet-header {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -619,6 +620,18 @@
         max-width: 45px;
         word-wrap: break-word;
       }
+
+      &.stat-label-with-unit {
+        line-height: 1.2;
+
+        .stat-unit {
+          display: block;
+          font-size: 10px;
+          font-weight: 400;
+          opacity: 0.7;
+          margin-top: 2px;
+        }
+      }
     }
 
     // Check Modifier specific styles
@@ -774,7 +787,8 @@
 
 // Responsive adjustments for smaller screens
 @media (max-width: 600px) {
-  .sheet-header {
+  .vagabond.actor .sheet-header,
+  .sliding-panel .sheet-header {
     flex-direction: column;
     align-items: center;
   }
@@ -814,7 +828,7 @@
   z-index: 100 !important;  /* Always on top of main sheet */
 
   /* Smooth transition */
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 
   /* Anti-aliasing for smooth rotation */
   -webkit-font-smoothing: antialiased;
@@ -834,6 +848,8 @@
   transform: translateX(0) rotate(2deg);
 }
 
+
+
 /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 .panel-click-zone {
   position: absolute;
@@ -848,6 +864,75 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  /* When tooltip is active, highlight the click area */
+  &.tooltip-active {
+    background-color: rgba(213, 0, 0, 0.4);
+    animation: pulse-highlight 2s ease-in-out infinite;
+    
+    &:hover {
+      background-color: rgba(213, 0, 0, 0.4);
+    }
+  }
+}
+
+/* Pulse animation for the active tooltip area */
+@keyframes pulse-highlight {
+  0%, 100% {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* First-time tooltip for sliding panel */
+.sliding-panel-tooltip {
+  position: absolute;
+  left: 100%;  /* Position to the right of the click zone */
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 15px;  /* Space from the panel edge */
+  background: $c-dark;
+  color: $c-lite;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid $c-tan;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  min-width: 200px;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  .tooltip-arrow {
+    position: absolute;
+    left: -10px;  /* Arrow points from left toward the panel */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 8px 8px 0;
+    border-color: transparent $c-tan transparent transparent;  /* Match border color */
+  }
+
+  .tooltip-content {
+    line-height: 1.4;
+    text-align: center;
+  }
 }
 
 /* Panel content area */

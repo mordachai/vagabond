@@ -847,11 +847,24 @@ export class VagabondChatCard {
       );
     }
 
+    // Build title and subtitle with enhanced metadata
+    let title = item.name || "Feature";
+    let subtitle = actor.name;
+
+    // For perks, add prerequisite information as a tag
+    if (item.type === 'perk' && item.system?.getPrerequisiteString) {
+      const prereqString = item.system.getPrerequisiteString();
+      if (prereqString) {
+        tags.push({ label: `Prereq: ${prereqString}`, cssClass: 'tag-prerequisite' });
+      }
+    }
+
     return this.createActionCard({
         actor,
         // Only pass 'item' if it's a real document, otherwise null prevents linking errors
         item: isRealItem ? item : null,
-        title: item.name || "Feature",
+        title,
+        subtitle,
         cardType: 'item-use',
         tags,
         description,
@@ -1059,9 +1072,53 @@ export class VagabondChatCard {
   }
 
   // 10. FEATURE DATA USE ADAPTER
-  static async featureDataUse(actor, item) {
-    // This receives the plain data object {name, description} from the sheet
-    return this.itemUse(actor, item);
+  static async featureDataUse(actor, featureData, sourceItem, type) {
+    let description = '';
+
+    // Get the description from featureData
+    let rawDescription = featureData.description || featureData.enrichedDescription || '';
+
+    if (rawDescription) {
+      description = await foundry.applications.ux.TextEditor.enrichHTML(rawDescription, {
+        async: true, secrets: actor.isOwner, relativeTo: sourceItem
+      });
+    }
+
+    // Build metadata tags based on type
+    const tags = [];
+    
+    if (type === 'feature') {
+      // Features: Add level and class info as tags
+      const level = featureData.level || 1;
+      const className = sourceItem?.name || "Class";
+      tags.push({ label: `${className} - Level ${level}`, cssClass: 'tag-feature-info' });
+    } else if (type === 'trait') {
+      // Traits: Add ancestry info as tag
+      const ancestryName = sourceItem?.name || "Ancestry";
+      tags.push({ label: `${ancestryName} Trait`, cssClass: 'tag-trait-info' });
+    }
+
+    // Create the chat card directly to have full control over the image
+    const card = new VagabondChatCard()
+      .setType('item-use')
+      .setActor(actor)
+      .setTitle(featureData.name || "Feature")
+      .setSubtitle(actor.name);
+
+    // Override the icon with the source item's image (class for features, ancestry for traits)
+    if (sourceItem?.img) {
+      card.data.icon = sourceItem.img;
+    }
+
+    // Set the description
+    if (description) {
+      card.setDescription(description);
+    }
+
+    // Add the metadata tags
+    card.data.standardTags = tags;
+
+    return card.send();
   }
 
   // 11. LUCK SPEND ADAPTER
@@ -1081,6 +1138,68 @@ export class VagabondChatCard {
       .setDescription(`
         <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a Luck point.</p>
         <p><strong>Remaining Luck:</strong> ${newLuck} / ${maxLuck}</p>
+      `);
+
+    return await card.send();
+  }
+
+  /**
+   * Create a chat card for recharging luck
+   * @param {VagabondActor} actor - The actor recharging luck
+   * @param {number} maxLuck - Maximum luck value
+   * @returns {Promise<ChatMessage>}
+   */
+  static async luckRecharge(actor, maxLuck) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Luck Recharged')
+      .setSubtitle(actor.name)
+      .setDescription(`
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> recharges their Luck.</p>
+        <p><strong>Luck Pool:</strong> ${maxLuck} / ${maxLuck}</p>
+      `);
+
+    return await card.send();
+  }
+
+  /**
+   * Create a chat card for spending a studied die
+   * @param {VagabondActor} actor - The actor spending the die
+   * @param {Roll} roll - The d6 roll
+   * @param {number} remainingDice - Remaining studied dice
+   * @returns {Promise<ChatMessage>}
+   */
+  static async studiedDieSpend(actor, roll, remainingDice) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Studied Die Used')
+      .setSubtitle(actor.name)
+      .addRoll(roll)
+      .setDescription(`
+        <p><i class="fas fa-dice-d6"></i> <strong>${actor.name}</strong> uses a Studied Die and rolls <strong>${roll.total}</strong>.</p>
+        <p><strong>Remaining Studied Dice:</strong> ${remainingDice}</p>
+      `);
+
+    return await card.send();
+  }
+
+  /**
+   * Create a chat card for adding a studied die
+   * @param {VagabondActor} actor - The actor gaining the die
+   * @param {number} newCount - New studied dice count
+   * @returns {Promise<ChatMessage>}
+   */
+  static async studiedDieGain(actor, newCount) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Studied Die Gained')
+      .setSubtitle(actor.name)
+      .setDescription(`
+        <p><i class="fas fa-dice-d6"></i> <strong>${actor.name}</strong> gains a Studied Die.</p>
+        <p><strong>Total Studied Dice:</strong> ${newCount}</p>
       `);
 
     return await card.send();

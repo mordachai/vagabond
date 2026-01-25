@@ -84,7 +84,7 @@ export default class VagabondPerk extends VagabondItemBase {
 
   /**
    * Get formatted prerequisite string for display
-   * @returns {string} Formatted prerequisites like "DEX 5+   Trained: Ranged"
+   * @returns {string} Formatted prerequisites like "DEX 5+; Trained: Ranged"
    */
   getPrerequisiteString() {
     const parts = [];
@@ -96,7 +96,7 @@ export default class VagabondPerk extends VagabondItemBase {
         const localizedAbbr = game.i18n.localize(abbr);
         return `${localizedAbbr} ${s.value}+`;
       });
-      parts.push(statStrings.join('   '));
+      parts.push(statStrings.join('; '));
     }
 
     // Format trained skill prerequisites
@@ -122,7 +122,7 @@ export default class VagabondPerk extends VagabondItemBase {
       parts.push(this.prerequisites.other.join(', '));
     }
 
-    return parts.join('   ');
+    return parts.join('; ');
   }
 
   /**

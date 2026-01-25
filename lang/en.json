@@ -728,6 +728,11 @@
         "StudiedDie": "Study Dice",
         "SkillTraining": "Trained Skills"
       },
+      "Units": {
+        "Feet": "in feet",
+        "Miles": "in miles",
+        "GridUnits": "in grid units"
+      },
       "Labels": {
         "GuaranteedSkills": "Trained Skills:",
         "SkillChoices": "Grouped Choices:",
@@ -803,6 +808,21 @@
         "CloseContent": "Are you sure you want to close the builder? All unsaved progress will be lost."
       },
       "FinishMessage": "Your Vagabond is ready! Remember to double-check your Features and Traits on your new sheet to ensure you've manually added all promised Perks and Spells."
+    },
+    "LevelUp": {
+      "Title": "Level Up!",
+      "NewLevel": "New Level: {level}",
+      "MaxHP": "Max HP:",
+      "MaxMana": "Max Mana:",
+      "ManaPerCast": "Mana per Cast:",
+      "SpellAmount": "Spells Amount:",
+      "NewFeatures": "New Features",
+      "NotificationLevelUp": "{name} is now level {level}! HP increased by {hpChange}.",
+      "NotificationMana": " Mana increased by {manaChange}.",
+      "NotificationSpells": " Gained {spellCount} spell{plural}.",
+      "NotificationFeatures": " Gained {featureCount} new feature{plural}.",
+      "ErrorLevelUpFailed": "Level up failed: {error}",
+      "ErrorConsoleMessage": "Vagabond | Level up failed:"
     }
   },
   "TYPES": {

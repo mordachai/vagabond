@@ -30,6 +30,27 @@
 
 @import 'apps/character-builder';
 
+/* Context menus - imported at top level because they render outside sheets (appended to document.body) */
+
+/* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
+.vagabond .inventory-context-menu,
+.vagabond-context-menu.inventory-context-menu {
+  @include context-menu-styles;
+}
+
+/* 
+ * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu) 
+ * currently use custom implementations that don't follow the ContextMenuHelper pattern.
+ * They create menus directly without the 'vagabond-context-menu' base class, so the 
+ * dual-selector pattern doesn't apply to them.
+ * 
+ * If these are refactored to use ContextMenuHelper in the future, add dual selectors like:
+ * .vagabond .progress-clock-context-menu,
+ * .vagabond-context-menu.progress-clock-context-menu {
+ *   @include context-menu-styles;
+ * }
+ */
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

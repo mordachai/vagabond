@@ -39,7 +39,7 @@
   .locked-section {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid $c-light;
+    border-bottom: 2px solid $c-lite;
 
     &:last-child {
       border-bottom: none;
@@ -52,7 +52,7 @@
       font-weight: bold;
       margin: 0 0 12px 0;
       padding-bottom: 5px;
-      border-bottom: 1px solid $c-light;
+      border-bottom: 1px solid $c-lite;
     }
   }
 
@@ -61,7 +61,7 @@
     line-height: 1.5;
     margin-bottom: 15px;
     padding: 10px;
-    background: rgba($c-light, 0.3);
+    background: rgba($c-lite, 0.3);
     border-radius: 4px;
   }
 
@@ -113,7 +113,7 @@
     .property-tag-locked {
       display: inline-block;
       padding: 4px 10px;
-      background: $c-light;
+      background: $c-lite;
       border: 1px solid $c-dark;
       border-radius: 12px;
       font-size: 0.85em;
@@ -147,7 +147,7 @@
       line-height: 1.5;
       margin: 0;
       padding: 8px 12px;
-      background: rgba($c-light, 0.3);
+      background: rgba($c-lite, 0.3);
       border-radius: 4px;
       border-left: 3px solid $c-tan;
     }

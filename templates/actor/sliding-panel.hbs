@@ -216,7 +216,7 @@
           class='stat-value-input check-mod-value'
           readonly
         />
-        <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>Check<br>Mod</label>
+        <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' oncontextmenu='return false;' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>Check<br>Mod</label>
       </div>
 
       {{!-- {{! Universal Check Bonus }}
@@ -265,7 +265,7 @@
           data-dtype='Number'
           class='stat-value-input'
         />
-        <label class='stat-label'>{{localize "VAGABOND.UI.Sections.Speed"}}</label>
+        <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Speed"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
       </div>
       <div class='stat-item'>
         <input
@@ -275,7 +275,7 @@
           data-dtype='Number'
           class='stat-value-input'
         />
-        <label class='stat-label'>{{localize "VAGABOND.UI.Sections.Crawl"}}</label>
+        <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Crawl"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
       </div>
       <div class='stat-item'>
         <input
@@ -285,7 +285,7 @@
           data-dtype='Number'
           class='stat-value-input'
         />
-        <label class='stat-label'>{{localize "VAGABOND.UI.Sections.Travel"}}</label>
+        <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Travel"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Miles"}}</span></label>
       </div>
       <div class='stat-item luck-item'>
         <div class='luck-display'>
@@ -326,8 +326,8 @@
                 class='skill-label rollable'
                 data-action='roll'
                 data-roll='d20'
-                data-roll-type='skill'
-                data-skill-key='{{key}}'
+                data-type='skill'
+                data-key='{{key}}'
                 data-difficulty='{{skill.difficulty}}'
                 data-trained='{{skill.trained}}'
                 data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
@@ -365,8 +365,8 @@
                   class='skill-label rollable'
                   data-action='roll'
                   data-roll='d20'
-                  data-roll-type='weapon-skill'
-                  data-skill-key='{{key}}'
+                  data-type='skill'
+                  data-key='{{key}}'
                   data-difficulty='{{weaponSkill.difficulty}}'
                   data-trained='{{weaponSkill.trained}}'
                   data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
@@ -382,7 +382,7 @@
       <section class='right-column grid-span-1'>
         {{! Saves Section - Horizontal layout }}
         <div class='saves'>
-          {{!-- <h4>Saves</h4> --}}
+          <h4>Saves</h4>
           <div class='saves-row flexrow'>
             {{#each system.saves as |save key|}}
               <div class='save flexcol align-center'>
@@ -390,8 +390,8 @@
                   class='resource-label rollable'
                   data-action='roll'
                   data-roll='d20'
-                  data-roll-type='save'
-                  data-save-key='{{key}}'
+                  data-type='save'
+                  data-key='{{key}}'
                   data-difficulty='{{save.difficulty}}'
                   data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
                   data-tooltip='{{save.description}}'

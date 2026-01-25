@@ -9,7 +9,11 @@
   }
 }
 
-i {color: $c-dark}
+// Scope the i element styling to NPC sheets only, not globally
+.vagabond.actor .npc-content i,
+.vagabond.actor .npc-header i {
+  color: $c-dark;
+}
 
 // Default dropdown styling (scoped to NPC sheet)
 // This matches the immunity dropdown reference styling
@@ -494,7 +498,10 @@ i {color: $c-dark}
   min-width: 0; // Allow content to shrink/wrap
   word-wrap: break-word;
 
-  i {color: $c-dark}
+  // Scope i element styling to this specific context
+  i {
+    color: $c-dark;
+  }
 }
 
 // Fatigue Display with Skull Icons (in info column)
@@ -750,6 +757,14 @@ i {color: $c-dark}
   }
 }
 
+// Accordion icon rotation when parent accordion is open
+.accordion-item.open .accordion-header .accordion-icon,
+.npc-edit-item.open .npc-edit-header .accordion-icon,
+.npc-action-edit.open .action-edit-header .accordion-icon,
+.npc-ability-edit.open .ability-edit-header .accordion-icon {
+  transform: rotate(90deg);
+}
+
 // NPC Type Row (Size and Being Type)
 .npc-type-row {
   display: flex;
@@ -785,9 +800,18 @@ i {color: $c-dark}
 .action-edit-content,
 .ability-edit-content {
   overflow: hidden;
-  max-height: 1500px;
-  opacity: 1;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   transition: max-height 0.25s ease-in-out, opacity 0.2s ease-in-out, padding 0.25s ease-in-out;
+
+  &.open {
+    max-height: 1500px;
+    opacity: 1;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 
   &.collapsed {
     max-height: 0;
@@ -931,7 +955,7 @@ i {color: $c-dark}
     align-items: center;
     justify-content: space-between;
     padding: 8px;
-    border: 1px solid var(--vagabond-c-tan);
+    border: 1px solid $c-dark;
     border-radius: 4px;
     background: var(--vagabond-c-faint);
 
@@ -956,13 +980,13 @@ i {color: $c-dark}
     width: 24px;
     height: 24px;
     border-radius: 3px;
-    border: 1px solid var(--vagabond-c-tan);
+    border: 1px solid $c-dark;
   }
 
   .effect-source {
     font-size: 14px;
     font-family: $font-secondary;
-    color: var(--vagabond-c-muted);
+    color: $c-dark;
     min-width: 80px;
     text-align: center;
   }
@@ -985,7 +1009,7 @@ i {color: $c-dark}
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--vagabond-c-muted);
+    color: $c-dark;
     font-size: 14px;
     width: 20px;
     height: 20px;
