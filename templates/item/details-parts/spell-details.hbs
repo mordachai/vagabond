@@ -22,7 +22,7 @@
     {{! Damage Base and Duration - Same Line }}
     <div class='flexrow gap-8'>
       <div class='form-group flex-1'>
-        <label class='resource-label'>Damage Base</label>
+        <label class='resource-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</label>
         {{> "systems/vagabond/templates/shared/damage-type-select.hbs" 
             name="system.damageType" 
             selected=system.damageType 
@@ -42,7 +42,7 @@
 
     {{! Exploding Dice Configuration }}
     <div class='form-group'>
-      <label class='resource-label'>Exploding Dice</label>
+      <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
       <div class='grid grid-2col gap-8'>
         <div class='explode-checkbox-field'>
           <label class='checkbox-label'>
@@ -52,11 +52,11 @@
               {{#if system.canExplode}}checked{{/if}}
               data-dtype='Boolean'
             />
-            <span>Can Explode</span>
+            <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
           </label>
         </div>
         <div class='explode-values-field'>
-          <label class='resource-label'>Explode On (comma-separated)</label>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
           <input
             type='text'
             name='system.explodeValues'
@@ -78,7 +78,7 @@
           {{#if system.noRollRequired}}checked{{/if}}
           data-dtype='Boolean'
         />
-        <span>No Roll Required</span>
+        <span>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}</span>
       </label>
       <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
     </div>

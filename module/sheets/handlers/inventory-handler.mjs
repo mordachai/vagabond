@@ -43,8 +43,8 @@ export class InventoryHandler {
         metalColor: EquipmentHelper.getMetalColor(item),
         weaponSkillIcon: EquipmentHelper.getWeaponSkillIcon(item),
         damageTypeIcon: EquipmentHelper.getDamageTypeIcon(item),
-        isSlotZero: item.system.slots === 0,
-        totalSlots: item.system.slots || 0,
+        isSlotZero: (item.system.slots || item.system.baseSlots || 0) === 0,
+        totalSlots: item.system.slots || item.system.baseSlots || 0,
       };
 
       // Add range abbreviation for weapons

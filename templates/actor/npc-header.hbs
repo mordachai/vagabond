@@ -109,7 +109,7 @@
     {{! Render if zone exists OR if the sheet is NOT locked }}
     {{#if (or system.zone (not system.locked))}}
       <div class="npc-zone-field">
-        <label class="npc-field-label">Zone:</label>
+        <label class="npc-field-label">{{localize "VAGABOND.UI.Labels.ZoneColon"}}</label>
         <select name="system.zone" class="npc-zone-select" {{#if system.locked}}disabled{{/if}}>
           {{selectOptions config.combatZones selected=system.zone localize=true blank=""}}
         </select>

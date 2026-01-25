@@ -25,30 +25,30 @@
           <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.WeaponStats"}}</h3>
           <div class='locked-stats-grid'>
             <div class='locked-stat'>
-              <span class='stat-label'>Skill:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.SkillColon"}}</span>
               <span class='stat-value'>{{localize (lookup config.weaponSkills system.weaponSkill)}}</span>
             </div>
             <div class='locked-stat'>
-              <span class='stat-label'>Range:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.RangeColon"}}</span>
               <span class='stat-value'>{{system.range}}</span>
             </div>
             <div class='locked-stat'>
-              <span class='stat-label'>Grip:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.GripColon"}}</span>
               <span class='stat-value'>{{system.gripDisplay}}</span>
             </div>
             <div class='locked-stat'>
-              <span class='stat-label'>Damage (1H):</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.DamageOneHandColon"}}</span>
               <span class='stat-value'>{{system.damageOneHand}} {{localize (lookup config.damageTypes system.damageTypeOneHand)}}</span>
             </div>
             {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
               <div class='locked-stat'>
-                <span class='stat-label'>Damage (2H):</span>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.DamageTwoHandColon"}}</span>
                 <span class='stat-value'>{{system.damageTwoHands}} {{localize (lookup config.damageTypes system.damageTypeTwoHands)}}</span>
               </div>
             {{/if}}
             {{#if system.canExplode}}
               <div class='locked-stat'>
-                <span class='stat-label'>Can Explode:</span>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.CanExplodeColon"}}</span>
                 <span class='stat-value'>{{system.explodeValues}}</span>
               </div>
             {{/if}}

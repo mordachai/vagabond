@@ -1,3 +1,5 @@
+import { TargetHelper } from '../../helpers/target-helper.mjs';
+
 /**
  * Handler for roll-related functionality.
  * Manages generic rolls, weapon rolls, and item usage.
@@ -136,13 +138,7 @@ export class RollHandler {
     }
 
     // Capture targeted tokens at roll time
-    const targetsAtRollTime = Array.from(game.user.targets).map((token) => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src,
-    }));
+    const targetsAtRollTime = TargetHelper.captureCurrentTargets();
 
     try {
       /* PATH A: ALCHEMICAL */
@@ -261,13 +257,7 @@ export class RollHandler {
     }
 
     // 2. Capture targets at use time
-    const targetsAtRollTime = Array.from(game.user.targets).map((token) => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src,
-    }));
+    const targetsAtRollTime = TargetHelper.captureCurrentTargets();
 
     // 3. Delegate to item.roll() which handles consumables, chat cards, and all logic
     if (typeof item.roll === 'function') {

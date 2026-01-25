@@ -37,13 +37,13 @@
       {{#unless system.locked}}
         <div class='grid grid-1col'>
           <div class='resource'>
-            <label class='resource-label'>Equipment Type</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.EquipmentType"}}</label>
             <select name='system.equipmentType' data-dtype='String'>
-              <option value='weapon' {{#if (eq system.equipmentType 'weapon')}}selected{{/if}}>Weapon</option>
-              <option value='armor' {{#if (eq system.equipmentType 'armor')}}selected{{/if}}>Armor</option>
-              <option value='gear' {{#if (eq system.equipmentType 'gear')}}selected{{/if}}>Gear</option>
-              <option value='alchemical' {{#if (eq system.equipmentType 'alchemical')}}selected{{/if}}>Alchemical</option>
-              <option value='relic' {{#if (eq system.equipmentType 'relic')}}selected{{/if}}>Relic</option>
+              <option value='weapon' {{#if (eq system.equipmentType 'weapon')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.Weapon"}}</option>
+              <option value='armor' {{#if (eq system.equipmentType 'armor')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.Armor"}}</option>
+              <option value='gear' {{#if (eq system.equipmentType 'gear')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.Gear"}}</option>
+              <option value='alchemical' {{#if (eq system.equipmentType 'alchemical')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.Alchemical"}}</option>
+              <option value='relic' {{#if (eq system.equipmentType 'relic')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.Relic"}}</option>
             </select>
           </div>
         </div>
@@ -81,9 +81,9 @@
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.range.label'}}</label>
           <select name='system.range' data-dtype='String'>
-            <option value="close" {{#if (eq system.range 'close')}}selected{{/if}}>Close</option>
-            <option value="near" {{#if (eq system.range 'near')}}selected{{/if}}>Near</option>
-            <option value="far" {{#if (eq system.range 'far')}}selected{{/if}}>Far</option>
+            <option value="close" {{#if (eq system.range 'close')}}selected{{/if}}>{{localize "VAGABOND.Weapon.Range.Close"}}</option>
+            <option value="near" {{#if (eq system.range 'near')}}selected{{/if}}>{{localize "VAGABOND.Weapon.Range.Near"}}</option>
+            <option value="far" {{#if (eq system.range 'far')}}selected{{/if}}>{{localize "VAGABOND.Weapon.Range.Far"}}</option>
           </select>
         </div>
         <div class='resource'>
@@ -126,20 +126,20 @@
       {{#if system.locked}}
         <div class='grid grid-3col'>
           <div class='resource'>
-            <label class='resource-label'>Slots</label>
-            <div class='calculated-properties'>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Slots"}}</label>
+            <div class='calculated-item'>
               <span class='calc-value'>{{system.slots}}</span>
             </div>
           </div>
           <div class='resource'>
-            <label class='resource-label'>Capacity</label>
-            <div class='calculated-properties'>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Capacity"}}</label>
+            <div class='calculated-item'>
               <span class='calc-value'>{{system.currentCapacity}} / {{system.capacity}}</span>
             </div>
           </div>
           <div class='resource'>
-            <label class='resource-label'>Cost</label>
-            <div class='calculated-properties'>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Cost"}}</label>
+            <div class='calculated-item'>
               <span class='calc-value'>{{system.costDisplay}}</span>
             </div>
           </div>
@@ -148,7 +148,7 @@
         <div class='grid grid-1col'>
           <div class='grid grid-3col gap-8'>
             <div class='resource'>
-              <label class='resource-label'>Slots (Space Occupied)</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.SlotsSpaceOccupied"}}</label>
               <input
                 type='number'
                 name='system.slots'
@@ -158,7 +158,7 @@
               />
             </div>
             <div class='resource'>
-              <label class='resource-label'>Capacity (Items It Holds)</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.CapacityItemsItHolds"}}</label>
               <input
                 type='number'
                 name='system.capacity'
@@ -168,15 +168,15 @@
               />
             </div>
             <div class='resource'>
-              <label class='resource-label'>Current Capacity</label>
-              <div class='calculated-properties'>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.CurrentCapacity"}}</label>
+              <div class='calculated-item'>
                 <span class='calc-value'>{{system.currentCapacity}} / {{system.capacity}}</span>
               </div>
             </div>
           </div>
           <div class='grid grid-3col gap-8'>
             <div class='resource'>
-              <label class='resource-label'>Gold</label>
+              <label class='resource-label'>{{localize "VAGABOND.Wealth.Gold"}}</label>
               <input
                 type='number'
                 name='system.baseCost.gold'
@@ -186,7 +186,7 @@
               />
             </div>
             <div class='resource'>
-              <label class='resource-label'>Silver</label>
+              <label class='resource-label'>{{localize "VAGABOND.Wealth.Silver"}}</label>
               <input
                 type='number'
                 name='system.baseCost.silver'
@@ -196,7 +196,7 @@
               />
             </div>
             <div class='resource'>
-              <label class='resource-label'>Copper</label>
+              <label class='resource-label'>{{localize "VAGABOND.Wealth.Copper"}}</label>
               <input
                 type='number'
                 name='system.baseCost.copper'
@@ -226,7 +226,7 @@
             </label>
           </div>
           <div class='resource'>
-            <label class='resource-label'>Mana Multiplier</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ManaMultiplier"}}</label>
             <input
               type='number'
               name='system.manaMultiplier'
@@ -241,33 +241,33 @@
         {{! Second row: Mana Skill + Casting Stat }}
         <div class='grid grid-2col'>
           <div class='resource'>
-            <label class='resource-label'>Mana Skill</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ManaSkill"}}</label>
             <select name='system.manaSkill' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
-              <option value=''>-- Select Skill --</option>
-              <option value='arcana' {{#if (eq system.manaSkill 'arcana')}}selected{{/if}}>Arcana</option>
-              <option value='craft' {{#if (eq system.manaSkill 'craft')}}selected{{/if}}>Craft</option>
-              <option value='medicine' {{#if (eq system.manaSkill 'medicine')}}selected{{/if}}>Medicine</option>
-              <option value='brawl' {{#if (eq system.manaSkill 'brawl')}}selected{{/if}}>Brawl</option>
-              <option value='finesse' {{#if (eq system.manaSkill 'finesse')}}selected{{/if}}>Finesse</option>
-              <option value='sneak' {{#if (eq system.manaSkill 'sneak')}}selected{{/if}}>Sneak</option>
-              <option value='detect' {{#if (eq system.manaSkill 'detect')}}selected{{/if}}>Detect</option>
-              <option value='mysticism' {{#if (eq system.manaSkill 'mysticism')}}selected{{/if}}>Mysticism</option>
-              <option value='survival' {{#if (eq system.manaSkill 'survival')}}selected{{/if}}>Survival</option>
-              <option value='influence' {{#if (eq system.manaSkill 'influence')}}selected{{/if}}>Influence</option>
-              <option value='leadership' {{#if (eq system.manaSkill 'leadership')}}selected{{/if}}>Leadership</option>
-              <option value='performance' {{#if (eq system.manaSkill 'performance')}}selected{{/if}}>Performance</option>
+              <option value=''>{{localize "VAGABOND.UI.Labels.SelectSkill"}}</option>
+              <option value='arcana' {{#if (eq system.manaSkill 'arcana')}}selected{{/if}}>{{localize "VAGABOND.Skills.Arcana"}}</option>
+              <option value='craft' {{#if (eq system.manaSkill 'craft')}}selected{{/if}}>{{localize "VAGABOND.Skills.Craft"}}</option>
+              <option value='medicine' {{#if (eq system.manaSkill 'medicine')}}selected{{/if}}>{{localize "VAGABOND.Skills.Medicine"}}</option>
+              <option value='brawl' {{#if (eq system.manaSkill 'brawl')}}selected{{/if}}>{{localize "VAGABOND.Skills.Brawl"}}</option>
+              <option value='finesse' {{#if (eq system.manaSkill 'finesse')}}selected{{/if}}>{{localize "VAGABOND.Skills.Finesse"}}</option>
+              <option value='sneak' {{#if (eq system.manaSkill 'sneak')}}selected{{/if}}>{{localize "VAGABOND.Skills.Sneak"}}</option>
+              <option value='detect' {{#if (eq system.manaSkill 'detect')}}selected{{/if}}>{{localize "VAGABOND.Skills.Detect"}}</option>
+              <option value='mysticism' {{#if (eq system.manaSkill 'mysticism')}}selected{{/if}}>{{localize "VAGABOND.Skills.Mysticism"}}</option>
+              <option value='survival' {{#if (eq system.manaSkill 'survival')}}selected{{/if}}>{{localize "VAGABOND.Skills.Survival"}}</option>
+              <option value='influence' {{#if (eq system.manaSkill 'influence')}}selected{{/if}}>{{localize "VAGABOND.Skills.Influence"}}</option>
+              <option value='leadership' {{#if (eq system.manaSkill 'leadership')}}selected{{/if}}>{{localize "VAGABOND.Skills.Leadership"}}</option>
+              <option value='performance' {{#if (eq system.manaSkill 'performance')}}selected{{/if}}>{{localize "VAGABOND.Skills.Performance"}}</option>
             </select>
           </div>
           <div class='resource'>
-            <label class='resource-label'>Casting Stat</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.CastingStat"}}</label>
             <select name='system.castingStat' {{#unless editable}}disabled{{/unless}} {{#unless system.isSpellcaster}}disabled{{/unless}}>
-              <option value=''>-- Select Stat --</option>
-              <option value='might' {{#if (eq system.castingStat 'might')}}selected{{/if}}>Might</option>
-              <option value='dexterity' {{#if (eq system.castingStat 'dexterity')}}selected{{/if}}>Dexterity</option>
-              <option value='reason' {{#if (eq system.castingStat 'reason')}}selected{{/if}}>Reason</option>
-              <option value='awareness' {{#if (eq system.castingStat 'awareness')}}selected{{/if}}>Awareness</option>
-              <option value='presence' {{#if (eq system.castingStat 'presence')}}selected{{/if}}>Presence</option>
-              <option value='luck' {{#if (eq system.castingStat 'luck')}}selected{{/if}}>Luck</option>
+              <option value=''>{{localize "VAGABOND.UI.Labels.SelectStat"}}</option>
+              <option value='might' {{#if (eq system.castingStat 'might')}}selected{{/if}}>{{localize "VAGABOND.Stat.Might.long"}}</option>
+              <option value='dexterity' {{#if (eq system.castingStat 'dexterity')}}selected{{/if}}>{{localize "VAGABOND.Stat.Dexterity.long"}}</option>
+              <option value='reason' {{#if (eq system.castingStat 'reason')}}selected{{/if}}>{{localize "VAGABOND.Stat.Reason.long"}}</option>
+              <option value='awareness' {{#if (eq system.castingStat 'awareness')}}selected{{/if}}>{{localize "VAGABOND.Stat.Awareness.long"}}</option>
+              <option value='presence' {{#if (eq system.castingStat 'presence')}}selected{{/if}}>{{localize "VAGABOND.Stat.Presence.long"}}</option>
+              <option value='luck' {{#if (eq system.castingStat 'luck')}}selected{{/if}}>{{localize "VAGABOND.Stat.Luck.long"}}</option>
             </select>
           </div>
         </div>

@@ -4735,7 +4735,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond .items-list .item-controls {
   display: flex;
   flex: 0 0 30px;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 5px;
 }
 .vagabond .items-list .item-controls a {
@@ -6974,6 +6974,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1.3rem;
   padding-bottom: 4px;
 }
+.vagabond .vagabond.sheet.actor.character {
+  width: 430px;
+  min-width: 430px;
+}
+.vagabond .vagabond.sheet.actor.npc {
+  width: 360px;
+  min-width: 360px;
+}
 .vagabond .vagabond.sheet.actor.npc .window-content {
   max-height: calc(100vh - 100px);
   overflow-y: auto;
@@ -8270,5 +8278,3 @@ details[open] .vagabond .npc-immunity-toggle i {
   white-space: nowrap;
   word-break: break-all;
 }
-
-/*# sourceMappingURL=vagabond.css.map */

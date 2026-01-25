@@ -14,7 +14,7 @@ export default class VagabondAncestry extends VagabondItemBase {
     // Ancestry size - affects character size when equipped
     schema.size = new fields.StringField({
       initial: 'medium',
-      choices: ['small', 'medium', 'large', 'huge', 'giant', 'colossal']
+      choices: Object.keys(CONFIG.VAGABOND.sizes)
     });
 
     // Ancestry type (like "Humanlike", "Cryptid", etc.)

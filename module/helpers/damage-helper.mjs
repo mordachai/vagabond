@@ -297,7 +297,7 @@ export class VagabondDamageHelper {
 
     // Apply manual explosions if item supports it
     if (item) {
-      const explodeValues = this._getExplodeValues(item);
+      const explodeValues = this._getExplodeValues(item, actor);
       if (explodeValues) {
         await this._manuallyExplodeDice(damageRoll, explodeValues);
       }
@@ -359,104 +359,6 @@ export class VagabondDamageHelper {
     });
   }
 
-/**
-   * Update a chat card with damage information and save buttons
-   * @param {string} messageId - The chat message ID
-   * @param {Roll} damageRoll - The damage roll
-   * @param {string} damageType - Type of damage (localized label)
-   * @param {boolean} isCritical - Whether this is critical damage
-   * @param {Actor} actor - The actor dealing damage
-   * @param {Item} item - The item used (optional)
-   * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
-   * @param {string} attackType - 'melee' or 'ranged' or 'cast' (for Hinder logic)
-   * @deprecated Use postDamageResult() instead
-   */
-  static async updateChatCardDamage(messageId, damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee') {
-    const message = game.messages.get(messageId);
-    if (!message) {
-      console.error('VagabondDamageHelper: Message not found:', messageId);
-      return;
-    }
-
-    // Get the current message content
-    let content = message.content;
-
-    // Build damage HTML using the template partial
-    const damageHTML = await this._renderDamagePartial(damageRoll, damageType, isCritical, damageTypeKey);
-
-    // Build save buttons HTML (unless it's a restorative type)
-    const isRestorative = this.isRestorativeDamageType(damageType);
-    let buttonsHTML;
-    if (isRestorative) {
-      // Use apply button for healing/recover/recharge
-      buttonsHTML = this.createApplyDamageButton(
-        damageRoll.total,
-        damageType,
-        actor.id,
-        item?.id,
-        []  // No targets available in deprecated update method
-      );
-    } else {
-      // Use save buttons for all harmful damage
-      buttonsHTML = this.createSaveButtons(
-        damageRoll.total,
-        damageTypeKey || 'physical',
-        damageRoll,
-        actor.id,
-        item?.id,
-        attackType,
-        []  // No targets available in deprecated update method
-      );
-    }
-
-    // Build defend options HTML (unless it's a restorative type)
-    const defendHTML = isRestorative ? '' : this.createDefendOptions();
-
-    // 1. Inject Damage Display
-    // Check if damage section already exists
-    if (content.includes('class="damage-section"')) {
-      // Replace existing damage section
-      content = content.replace(
-        /(<div class=['"]damage-section['"]>)([\s\S]*?)(<\/div>)/,
-        damageHTML
-      );
-    } else {
-      // Inject new damage section after roll-strip or at start of content-body
-      if (content.includes('class="roll-strip"')) {
-        content = content.replace(
-          /(<\/section>)(\s*<section class=['"]content-body['"]>)/,
-          `$1$2${damageHTML}`
-        );
-      } else if (content.includes('class="content-body"')) {
-        content = content.replace(
-          /(<section class=['"]content-body['"]>)/,
-          `$1${damageHTML}`
-        );
-      }
-    }
-
-    // 2. Replace Footer Actions with Save Buttons
-    if (content.includes('class="action-buttons-container"')) {
-      // Replace the entire action-buttons-container content
-      content = content.replace(
-        /(<div class=['"]action-buttons-container['"]>)([\s\S]*?)(<\/div>)/,
-        `$1${buttonsHTML}${defendHTML}$3`
-      );
-    } else if (content.includes('class="card-actions"')) {
-      // Inject new action-buttons-container into card-actions footer
-      content = content.replace(
-        /(<footer class=['"]card-actions['"]>)/,
-        `$1<div class="action-buttons-container">${buttonsHTML}${defendHTML}</div>`
-      );
-    }
-
-    // IMPORTANT: We DON'T add the roll to the message's rolls array
-    // This prevents Dice So Nice from showing the dice again
-    // The dice were already shown by Foundry when we evaluated the roll
-    // We only update the content to show the damage result
-    await message.update({ content });
-  }
-
   /**
    * Render the Block/Dodge info section as an accordion
    * @param {string} attackType - 'melee' or 'ranged' or 'cast'
@@ -500,23 +402,40 @@ export class VagabondDamageHelper {
 
   /**
    * Get explosion values from an item if enabled
-   *
-   * ⚠️ PARTIAL DUPLICATE: Similar method exists in module/documents/item.mjs but with DIFFERENT logic.
-   * - This version (static): Simple item property check
-   * - item.mjs version (instance): Also checks actor.system.bonuses.globalExplode
-   * Consider consolidating or clearly documenting the different use cases.
+   * Checks both item properties AND actor global explode bonuses
    *
    * @param {Item} item - The item (spell or equipment) with canExplode and explodeValues
+   * @param {Actor} actor - Optional actor for global explode bonuses
    * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
    * @private
    */
-  static _getExplodeValues(item) {
-    if (!item?.system?.canExplode || !item?.system?.explodeValues) {
+  static _getExplodeValues(item, actor = null) {
+    // 1. Get Local Item Settings
+    let canExplode = item?.system?.canExplode;
+    let explodeValuesStr = item?.system?.explodeValues;
+
+    // 2. Check Global Actor Bonuses (from Perks/Traits Active Effects)
+    if (actor) {
+      // If a global effect says "Explode All", treat canExplode as true
+      if (actor.system.bonuses?.globalExplode) {
+        canExplode = true;
+      }
+
+      // If a global effect provides specific values (e.g. "1,2"), use those
+      // You can decide if this overrides or appends. Here we override if present.
+      const globalValues = actor.system.bonuses?.globalExplodeValues;
+      if (globalValues) {
+        explodeValuesStr = globalValues;
+      }
+    }
+
+    // 3. Validation
+    if (!canExplode || !explodeValuesStr) {
       return null;
     }
 
     // Parse explode values (comma-separated)
-    const explodeValues = item.system.explodeValues
+    const explodeValues = explodeValuesStr
       .split(',')
       .map(v => v.trim())
       .filter(v => v && !isNaN(v))
@@ -577,22 +496,12 @@ export class VagabondDamageHelper {
     await roll.evaluate();
 
     // Apply manual explosions if enabled
-    const explodeValues = this._getExplodeValues(spell);
+    const explodeValues = this._getExplodeValues(spell, actor);
     if (explodeValues) {
       await this._manuallyExplodeDice(roll, explodeValues);
     }
 
     return roll;
-  }
-
-  /**
-   * Roll weapon damage
-   * @param {Actor} actor - The actor attacking
-   * @param {Item} weapon - The weapon item
-   * @returns {Roll} The damage roll
-   */
-  static async rollWeaponDamage(actor, weapon) {
-    return await weapon.rollDamage(actor);
   }
 
   /**

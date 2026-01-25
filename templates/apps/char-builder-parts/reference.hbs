@@ -60,13 +60,13 @@
     {{!-- Origin Refs (Ancestry Traits/Class Features for later steps) --}}
     {{#if (or (eq step 'perks') (eq step 'spells'))}}
         {{#if originRefs.ancestry}}
-            <h4 class="ref-header">Traits ({{originRefs.ancestry.name}})</h4>
+            <h4 class="ref-header">{{localize "VAGABOND.UI.Sections.Traits"}} ({{originRefs.ancestry.name}})</h4>
             {{#each originRefs.ancestry.traits}}
                 <div class="ref-entry"><strong>{{this.name}}: </strong> {{{this.description}}}</div>
             {{/each}}
         {{/if}}
         {{#if originRefs.class}}
-            <h4 class="ref-header">Features ({{originRefs.class.name}})</h4>
+            <h4 class="ref-header">{{localize "VAGABOND.UI.Sections.Features"}} ({{originRefs.class.name}})</h4>
             {{#each originRefs.class.features}}
                 <div class="ref-entry"><strong>{{this.name}}: </strong>{{{this.enrichedDescription}}}</div>
             {{/each}}

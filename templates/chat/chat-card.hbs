@@ -87,7 +87,7 @@
                 {{!-- RESULT BANNER --}}
                 <div class="roll-result-banner {{#if (or (eq outcome 'success') (eq outcome 'HIT') (eq outcome 'PASS'))}}result-hit{{else}}result-miss{{/if}}">
                     <span class="roll-value">{{rollTotal}}</span>
-                    <span class="roll-vs">vs</span>
+                    <span class="roll-vs">{{localize "VAGABOND.UI.Labels.Vs"}}</span>
                     <span class="roll-target">{{difficulty}}</span>
                     <span class="roll-outcome-text">{{outcome}}</span>
                 </div>
@@ -105,7 +105,7 @@
         <section class="chat-targets-section">
           <div class="targets-header">
             <i class="fas fa-crosshairs"></i>
-            <span>Targets</span>
+            <span>{{localize "VAGABOND.UI.Labels.Targets"}}</span>
           </div>
           <div class="targets-list">
             {{#each targetsAtRollTime}}

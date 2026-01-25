@@ -28,9 +28,9 @@
     <div class="form-field">
       <label for="dice-size">{{localize 'VAGABOND.CountdownDice.Size'}}</label>
       <select id="dice-size" name="size">
-        <option value="S" {{#if (eq size "S")}}selected{{/if}}>Small (50px)</option>
-        <option value="M" {{#if (eq size "M")}}selected{{/if}}>Medium (75px)</option>
-        <option value="L" {{#if (eq size "L")}}selected{{/if}}>Large (100px)</option>
+        <option value="S" {{#if (eq size "S")}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.SmallSize"}}</option>
+        <option value="M" {{#if (eq size "M")}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.MediumSize"}}</option>
+        <option value="L" {{#if (eq size "L")}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.LargeSize"}}</option>
       </select>
     </div>
   </div>

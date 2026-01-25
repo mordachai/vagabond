@@ -1,5 +1,28 @@
 export const VAGABOND = {};
 
+/**
+ * Equipment types for items
+ * @type {Object}
+ */
+VAGABOND.equipmentTypes = {
+  'weapon': 'VAGABOND.EquipmentTypes.weapon',
+  'armor': 'VAGABOND.EquipmentTypes.armor',
+  'gear': 'VAGABOND.EquipmentTypes.gear',
+  'alchemical': 'VAGABOND.EquipmentTypes.alchemical',
+  'relic': 'VAGABOND.EquipmentTypes.relic',
+  'container': 'VAGABOND.EquipmentTypes.container'
+};
+
+/**
+ * Favor/Hinder states for rolls
+ * @type {Object}
+ */
+VAGABOND.favorHinderStates = {
+  'none': 'VAGABOND.FavorHinder.none',
+  'favor': 'VAGABOND.FavorHinder.favor',
+  'hinder': 'VAGABOND.FavorHinder.hinder'
+};
+
 
 //Default placeholder images
 VAGABOND.actorTypeImages = {
