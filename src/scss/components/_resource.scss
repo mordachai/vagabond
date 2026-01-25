@@ -328,23 +328,27 @@
 .saves {
   .saves-row {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     gap: 12px;
-    padding: 12px; 
+    padding: 0px 4px; 
     margin-bottom: 8px;
     border-radius: 4px;
-    box-shadow:
-      inset 0 0 13px $c-inset-1,
-      inset 0 0 0 5px $c-inset-2;
+    //box-shadow:
+    //  inset 0 0 13px $c-inset-1,
+    //  inset 0 0 0 5px $c-inset-2;
     }
 
   .save {
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
 
     .save-difficulty {
       font-weight: bold;
-      font-size: 20px;
+      font-size: 22px;
+      
+      i {
+        font-size: 16px;
+      }
     }
   }
 }

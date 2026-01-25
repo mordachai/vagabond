@@ -4496,20 +4496,22 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond .saves .saves-row {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   gap: 12px;
-  padding: 12px;
+  padding: 0px 4px;
   margin-bottom: 8px;
   border-radius: 4px;
-  box-shadow: inset 0 0 13px var(--vagabond-c-inset-1), inset 0 0 0 5px var(--vagabond-c-inset-2);
 }
 .vagabond .saves .save {
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
 }
 .vagabond .saves .save .save-difficulty {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 22px;
+}
+.vagabond .saves .save .save-difficulty i {
+  font-size: 16px;
 }
 .vagabond .features-list {
   list-style: none;

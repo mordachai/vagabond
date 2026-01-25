@@ -396,7 +396,7 @@
                   data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
                   data-tooltip='{{save.description}}'
                 >{{save.label}}</label>
-                <span class='save-difficulty'>{{save.difficulty}}</span>
+                <span class='save-difficulty'>{{#if (eq key 'reflex')}}<i class='fas fa-running'></i> {{else if (eq key 'endure')}}<i class='fas fa-shield-alt'></i> {{else if (eq key 'will')}}<i class='fas fa-brain'></i> {{/if}}{{save.difficulty}}</span>
               </div>
             {{/each}}
           </div>

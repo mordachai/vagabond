@@ -80,7 +80,19 @@ export class EquipmentHelper {
    * @returns {boolean} True if the weapon is versatile
    */
   static isVersatileWeapon(item) {
-    return this.isWeapon(item) && item.system.grip === 'versatile';
+    // Handle null/undefined items
+    if (!item || !item.system) {
+      return false;
+    }
+    
+    // Handle missing or invalid grip property
+    const grip = item.system.grip;
+    if (typeof grip !== 'string') {
+      return false;
+    }
+    
+    // Check for versatile grip value
+    return this.isWeapon(item) && grip === 'V';
   }
 
   /**
