@@ -1,4 +1,5 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
+import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -337,136 +338,6 @@ export class VagabondItem extends Item {
    * @param {string} statKey - The stat used for the attack (for crit bonus)
    * @returns {Promise<Roll>} The damage roll
    */
-  /**
-   * Get explosion values from this item if enabled
-   *
-   * ⚠️ PARTIAL DUPLICATE: Similar method exists in module/helpers/damage-helper.mjs with SIMPLER logic.
-   * - This version (instance): Checks both item properties AND actor.system.bonuses.globalExplode
-   * - damage-helper.mjs version (static): Only checks item properties (simpler)
-   * This version has MORE features (global actor bonuses). Consider if both are needed.
-   *
-   * @returns {Array<number>|null} Array of values to explode on, or null if not enabled
-   * @private
-   */
-  _getExplodeValues() {
-    // 1. Get Local Item Settings
-    let canExplode = this.system.canExplode;
-    let explodeValuesStr = this.system.explodeValues;
-
-    // 2. Check Global Actor Bonuses (from Perks/Traits Active Effects)
-    if (this.actor) {
-      // If a global effect says "Explode All", treat canExplode as true
-      if (this.actor.system.bonuses?.globalExplode) {
-        canExplode = true;
-      }
-
-      // If a global effect provides specific values (e.g. "1,2"), use those
-      // You can decide if this overrides or appends. Here we override if present.
-      const globalValues = this.actor.system.bonuses?.globalExplodeValues;
-      if (globalValues) {
-        explodeValuesStr = globalValues;
-      }
-    }
-
-    // 3. Validation
-    if (!canExplode || !explodeValuesStr) {
-      return null;
-    }
-
-    // Parse explode values (comma-separated)
-    const explodeValues = explodeValuesStr
-      .split(',')
-      .map(v => v.trim())
-      .filter(v => v && !isNaN(v))
-      .map(v => parseInt(v));
-
-    return explodeValues.length > 0 ? explodeValues : null;
-  }
-
-  /**
-   * Manually explode dice on specific values (recursive)
-   * This bypasses Foundry's potentially buggy x=1x=4 syntax
-   *
-   * ⚠️ TODO [CODE DUPLICATION]: This method is DUPLICATED in module/helpers/damage-helper.mjs
-   * Recommendation: Remove this duplicate and import VagabondDamageHelper instead:
-   *   import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
-   *   return await VagabondDamageHelper._manuallyExplodeDice(roll, explodeValues, maxExplosions);
-   *
-   * @param {Roll} roll - The evaluated roll to explode
-   * @param {Array<number>} explodeValues - Values that should trigger explosions (e.g., [1, 4])
-   * @param {number} maxExplosions - Safety limit to prevent infinite loops (default 100)
-   * @returns {Promise<Roll>} The modified roll with explosions applied
-   * @private
-   */
-  async _manuallyExplodeDice(roll, explodeValues, maxExplosions = 100) {
-    if (!explodeValues || explodeValues.length === 0) {
-      return roll;
-    }
-
-    // Convert explode values to numbers
-    const explodeSet = new Set(explodeValues.map(v => parseInt(v)));
-    let explosionCount = 0;
-
-    // Find all Die terms in the roll
-    for (let i = 0; i < roll.terms.length; i++) {
-      const term = roll.terms[i];
-
-      // Skip non-die terms (operators, numbers, etc.)
-      if (term.constructor.name !== 'Die') continue;
-
-      const faces = term.faces;
-      const results = term.results || [];
-
-      // Process each result in this die term
-      // We need to track the original length because we'll be adding results
-      const originalLength = results.length;
-
-      for (let j = 0; j < originalLength; j++) {
-        const result = results[j];
-
-        // Check if this result should explode
-        if (explodeSet.has(result.result)) {
-          // Mark this die as exploded (it's causing an explosion)
-          result.exploded = true;
-
-          // Roll new dice recursively
-          let previousResult = result;
-          let newRoll = result.result;
-
-          while (explodeSet.has(newRoll) && explosionCount < maxExplosions) {
-            explosionCount++;
-
-            // Roll another die of the same size
-            const explosionRoll = Math.floor(Math.random() * faces) + 1;
-
-            // Check if this new roll will also explode
-            const willExplode = explodeSet.has(explosionRoll);
-
-            // Add the explosion as a new result
-            const newResult = {
-              result: explosionRoll,
-              active: true,
-              exploded: willExplode  // Only mark as exploded if it will cause another explosion
-            };
-            results.push(newResult);
-
-            // Update for next iteration
-            previousResult = newResult;
-            newRoll = explosionRoll;
-          }
-        }
-      }
-
-      // Recalculate the term's total
-      term._total = results.reduce((sum, r) => sum + (r.active ? r.result : 0), 0);
-    }
-
-    // Recalculate the roll's total
-    roll._total = roll._evaluateTotal();
-
-    return roll;
-  }
-
   async rollDamage(actor, isCritical = false, statKey = null) {
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
     const isWeapon = (this.type === 'weapon') ||
@@ -513,55 +384,11 @@ export class VagabondItem extends Item {
     await roll.evaluate();
 
     // Apply manual explosions if enabled
-    const explodeValues = this._getExplodeValues();
+    const explodeValues = VagabondDamageHelper._getExplodeValues(this, actor);
     if (explodeValues) {
-      await this._manuallyExplodeDice(roll, explodeValues);
+      await VagabondDamageHelper._manuallyExplodeDice(roll, explodeValues);
     }
 
     return roll;
-  }
-
-  /**
-   * Build the flavor text for an attack roll
-   * @param {Object} attackResult - The result from rollAttack()
-   * @param {Roll} damageRoll - Optional damage roll if attack hit
-   * @returns {string} HTML flavor text
-   */
-  buildAttackFlavor(attackResult, damageRoll = null) {
-    const { difficulty, isHit, isCritical, weaponSkill, weaponSkillKey, favorHinder } = attackResult;
-
-    let flavorText = `<strong>${this.name}</strong> Attack`;
-
-    // Add favor/hinder indicator if applicable
-    if (favorHinder === 'favor') {
-      flavorText += ` [Favor +1d6]`;
-    } else if (favorHinder === 'hinder') {
-      flavorText += ` [Hinder -1d6]`;
-    }
-    flavorText += '<br/>';
-
-    flavorText += `<strong>Weapon Skill:</strong> ${weaponSkill?.label || weaponSkillKey} (Difficulty ${difficulty})<br/>`;
-    flavorText += `<strong>Attack Roll:</strong> ${attackResult.roll.total}`;
-
-    if (isHit) {
-      flavorText += ` - <span style="color: green;">SUCCESS!</span><br/>`;
-
-      if (damageRoll) {
-        flavorText += `<strong>Damage:</strong> ${damageRoll.total}`;
-
-        if (isCritical) {
-          flavorText += ` <span style="color: gold;">(CRITICAL!)</span>`;
-        }
-      }
-    } else {
-      flavorText += ` - <span style="color: red;">MISS!</span>`;
-    }
-
-    // Add weapon properties to flavor if any
-    if (this.system.properties && this.system.properties.length > 0) {
-      flavorText += `<br/><strong>Properties:</strong> ${this.system.propertiesDisplay}`;
-    }
-
-    return flavorText;
   }
 }

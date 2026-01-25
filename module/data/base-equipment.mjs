@@ -21,7 +21,7 @@ export default class VagabondEquipment extends VagabondItemBase {
     schema.equipmentType = new fields.StringField({
       ...requiredString,
       initial: 'gear',
-      choices: ['weapon', 'armor', 'gear', 'alchemical', 'relic']
+      choices: Object.keys(CONFIG.VAGABOND.equipmentTypes)
     });
 
     // Locked state - when true, displays as formatted text instead of inputs

@@ -30,7 +30,7 @@ export default class VagabondNPC extends VagabondActorBase {
     // NPC size
     schema.size = new fields.StringField({
       initial: 'medium',
-      choices: ['small', 'medium', 'large', 'huge', 'giant', 'colossal']
+      choices: Object.keys(CONFIG.VAGABOND.sizes)
     });
 
     // NPC being type

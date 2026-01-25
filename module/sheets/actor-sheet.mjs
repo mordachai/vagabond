@@ -1094,7 +1094,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleFavorHinder(event, target) {
     const currentState = this.actor.system.favorHinder || 'none';
-    const states = ['none', 'favor', 'hinder'];
+    const states = Object.keys(CONFIG.VAGABOND.favorHinderStates);
     const currentIndex = states.indexOf(currentState);
     const nextIndex = (currentIndex + 1) % states.length;
     const newState = states[nextIndex];

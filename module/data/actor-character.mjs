@@ -18,7 +18,7 @@ export default class VagabondCharacter extends VagabondActorBase {
       xp: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       size: new fields.StringField({
         initial: null,
-        choices: ['small', 'medium', 'large', 'huge', 'giant', 'colossal'],
+        choices: Object.keys(CONFIG.VAGABOND.sizes),
         required: false,
         nullable: true
       }),
@@ -160,7 +160,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Favor/Hinder system - toggle for roll modifiers
     schema.favorHinder = new fields.StringField({
       initial: 'none',
-      choices: ['none', 'favor', 'hinder'],
+      choices: Object.keys(CONFIG.VAGABOND.favorHinderStates),
       required: true,
       nullable: false
     });
@@ -328,7 +328,35 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Debug logging to track data preparation
     console.log(`Vagabond | prepareBaseData() called for ${this.parent?.name || 'Unknown Actor'}`);
     
-  // --- 1. Reset Flat Mechanics ---
+    // Reset all bonus values before Active Effects apply
+    this._resetBonuses();
+
+    // Apply Class Data
+    const classItem = this.parent.items.find(item => item.type === 'class');
+    if (classItem) {
+      if (classItem.system.isSpellcaster) {
+        this.attributes.isSpellcaster = true;
+      }
+
+      this.attributes.manaMultiplier = classItem.system.manaMultiplier ?? 0;
+
+      if (classItem.system.castingStat) {
+        this.attributes.castingStat = classItem.system.castingStat;
+      }
+
+      // CHANGED: Only set default from class if the User hasn't selected one yet.
+      if (classItem.system.manaSkill && !this.attributes.manaSkill) {
+        this.attributes.manaSkill = classItem.system.manaSkill;
+      }
+    }
+  }
+
+  /**
+   * Resets all bonus values to 0 before active effects apply
+   * @private
+   */
+  _resetBonuses() {
+    // --- 1. Reset Flat Mechanics ---
     this.inventory.bonusSlots = 0; // MUST reset - Active Effects will add to this
     this.mana.bonus = 0;
     this.mana.castingMaxBonus = 0;
@@ -362,28 +390,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     for (let s of Object.values(this.skills)) { s.bonus = 0; }
     for (let s of Object.values(this.weaponSkills)) { s.bonus = 0; }
 
-    // 5. Reset Defaults (Your existing code)
+    // 5. Reset Defaults
     this.attributes.isSpellcaster = false;
     this.attributes.manaMultiplier = 0;
-
-    // 6. Apply Class Data
-    const classItem = this.parent.items.find(item => item.type === 'class');
-    if (classItem) {
-      if (classItem.system.isSpellcaster) {
-        this.attributes.isSpellcaster = true;
-      }
-
-      this.attributes.manaMultiplier = classItem.system.manaMultiplier ?? 0;
-
-      if (classItem.system.castingStat) {
-        this.attributes.castingStat = classItem.system.castingStat;
-      }
-
-      // CHANGED: Only set default from class if the User hasn't selected one yet.
-      if (classItem.system.manaSkill && !this.attributes.manaSkill) {
-        this.attributes.manaSkill = classItem.system.manaSkill;
-      }
-    }
   }
 
 /**
