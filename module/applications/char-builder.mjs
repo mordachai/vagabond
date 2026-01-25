@@ -1477,9 +1477,21 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         updateData["system.currency.copper"] = remainingCopper;
     }
 
-    // Combine class perks and manual perks
-    const allPerks = [...new Set([...data.classPerks, ...data.perks])];
-    for (const uuid of [...allPerks, ...data.spells, ...data.gear]) await addByUuid(uuid);
+    // Add class perks with special flags
+    for (const perkUuid of data.classPerks) {
+        const perkItem = await fromUuid(perkUuid);
+        if (perkItem) {
+            const perkObj = perkItem.toObject();
+            // Mark as class-granted and non-removable
+            foundry.utils.setProperty(perkObj, 'flags.vagabond.source', 'class');
+            foundry.utils.setProperty(perkObj, 'flags.vagabond.classId', classItem?.id || null);
+            foundry.utils.setProperty(perkObj, 'flags.vagabond.nonRemovable', true);
+            itemsToCreate.push(perkObj);
+        }
+    }
+
+    // Add manual perks and other items
+    for (const uuid of [...data.perks, ...data.spells, ...data.gear]) await addByUuid(uuid);
 
     // FIX: Auto-equip items and favorite spells
     itemsToCreate.forEach(item => {

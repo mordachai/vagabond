@@ -1,7 +1,16 @@
 // NPC Sheet Styles
 
-// NPC sheet container - set max height and enable scrolling
+// Character sheet container - ensure correct width (430px)
+.vagabond.sheet.actor.character {
+  width: 430px;
+  min-width: 430px;
+}
+
+// NPC sheet container - set width and max height and enable scrolling
 .vagabond.sheet.actor.npc {
+  width: 360px;
+  min-width: 360px;
+
   .window-content {
     max-height: calc(100vh - 100px);
     overflow-y: auto;

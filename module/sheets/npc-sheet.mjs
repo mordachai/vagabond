@@ -1,4 +1,5 @@
 import { VagabondActorSheet } from './actor-sheet.mjs';
+import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import {
   RollHandler,
   NPCImmunityHandler,
@@ -20,15 +21,31 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     this.rollHandler = new RollHandler(this, { npcMode: true });
     this.immunityHandler = new NPCImmunityHandler(this);
     this.actionHandler = new NPCActionHandler(this);
+
+    // Debounced save to prevent accordion closing on every keystroke
+    this._debouncedSave = foundry.utils.debounce(
+      this._saveChanges.bind(this),
+      1000 // Save 1 second after last keystroke
+    );
+
+    // Track if we have unsaved changes
+    this._isDirty = false;
+
+    // Accordion state manager
+    this._accordionStateManager = null;
   }
 
   /**
    * @override
-   * Add NPC-specific classes
+   * Add NPC-specific classes and set correct width
    */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ['vagabond', 'actor', 'npc'],
-  });
+    position: {
+      width: 360,
+      height: 'auto'
+    }
+  }, { inplace: false });
 
   /**
    * @override
@@ -36,6 +53,17 @@ export class VagabondNPCSheet extends VagabondActorSheet {
    */
   async _onRender(context, options) {
     await super._onRender(context, options);
+
+    // Initialize accordion state manager if not already created
+    if (!this._accordionStateManager) {
+      this._accordionStateManager = AccordionHelper.createStateManager(
+        this.element,
+        '.npc-action-edit, .npc-ability-edit'
+      );
+    } else {
+      // Restore accordion state after render
+      this._accordionStateManager.restore();
+    }
 
     // Setup immunity handler listeners for checkboxes
     if (this.immunityHandler) {
@@ -46,6 +74,9 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     if (this.actionHandler) {
       this.actionHandler.setupListeners();
     }
+
+    // Setup debounced input listeners for action/ability editing
+    this._setupDebouncedInputListeners();
 
     // Manual binding for createDoc action (workaround for action inheritance issue)
     this._bindCreateDocActions();
@@ -177,4 +208,141 @@ export class VagabondNPCSheet extends VagabondActorSheet {
   // ===========================
   // These methods can be called from templates or by the base class
   // and will delegate to the appropriate handler
+
+  /**
+   * Setup debounced input listeners to prevent accordion closing on every keystroke
+   * @private
+   */
+  _setupDebouncedInputListeners() {
+    // Action inputs
+    const actionInputs = this.element.querySelectorAll('.npc-action-edit input, .npc-action-edit textarea, .npc-action-edit select');
+    actionInputs.forEach(input => {
+      // Remove existing listeners by cloning
+      const newInput = input.cloneNode(true);
+      input.parentNode.replaceChild(newInput, input);
+
+      // Add debounced change listener
+      newInput.addEventListener('input', (event) => {
+        this._isDirty = true;
+        this._debouncedSave();
+        // DO NOT call this.render() here - this prevents accordion closing
+      });
+
+      // Save immediately on blur (when user clicks away)
+      newInput.addEventListener('blur', async (event) => {
+        if (this._isDirty) {
+          await this._saveChanges();
+          this._isDirty = false;
+        }
+      });
+    });
+
+    // Ability inputs
+    const abilityInputs = this.element.querySelectorAll('.npc-ability-edit input, .npc-ability-edit textarea');
+    abilityInputs.forEach(input => {
+      // Remove existing listeners by cloning
+      const newInput = input.cloneNode(true);
+      input.parentNode.replaceChild(newInput, input);
+
+      // Add debounced change listener
+      newInput.addEventListener('input', (event) => {
+        this._isDirty = true;
+        this._debouncedSave();
+        // DO NOT call this.render() here - this prevents accordion closing
+      });
+
+      // Save immediately on blur (when user clicks away)
+      newInput.addEventListener('blur', async (event) => {
+        if (this._isDirty) {
+          await this._saveChanges();
+          this._isDirty = false;
+        }
+      });
+    });
+  }
+
+  /**
+   * Save pending changes to the actor
+   * @private
+   */
+  async _saveChanges() {
+    if (!this._isDirty) return;
+
+    try {
+      // Capture accordion state before potential re-render
+      if (this._accordionStateManager) {
+        this._accordionStateManager.capture();
+      }
+
+      // Collect all action data from inputs
+      const actionEdits = this.element.querySelectorAll('.npc-action-edit');
+      const actions = [];
+
+      actionEdits.forEach((actionEdit) => {
+        const actionIndex = parseInt(actionEdit.dataset.actionIndex);
+        const inputs = actionEdit.querySelectorAll('[data-field]');
+        
+        const actionData = {};
+        inputs.forEach(input => {
+          const field = input.dataset.field;
+          let value = input.value;
+
+          // Apply validation for damage type fields
+          if (field === 'damageType' && this.actionHandler) {
+            value = this.actionHandler.validateDamageType(value);
+          }
+
+          actionData[field] = value;
+        });
+
+        actions[actionIndex] = actionData;
+      });
+
+      // Collect all ability data from inputs
+      const abilityEdits = this.element.querySelectorAll('.npc-ability-edit');
+      const abilities = [];
+
+      abilityEdits.forEach((abilityEdit) => {
+        const abilityIndex = parseInt(abilityEdit.dataset.abilityIndex);
+        const inputs = abilityEdit.querySelectorAll('[data-field]');
+        
+        const abilityData = {};
+        inputs.forEach(input => {
+          const field = input.dataset.field;
+          abilityData[field] = input.value;
+        });
+
+        abilities[abilityIndex] = abilityData;
+      });
+
+      // Update actor with collected data
+      const updateData = {};
+      if (actions.length > 0) {
+        updateData['system.actions'] = actions;
+      }
+      if (abilities.length > 0) {
+        updateData['system.abilities'] = abilities;
+      }
+
+      if (Object.keys(updateData).length > 0) {
+        await this.actor.update(updateData);
+      }
+
+      this._isDirty = false;
+    } catch (error) {
+      console.error('Vagabond | Error saving NPC changes:', error);
+      ui.notifications.error('Failed to save changes');
+    }
+  }
+
+  /**
+   * @override
+   * Save changes before closing
+   */
+  async close(options) {
+    if (this._isDirty) {
+      await this._saveChanges();
+    }
+    return super.close(options);
+  }
 }

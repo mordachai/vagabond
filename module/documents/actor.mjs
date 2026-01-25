@@ -5,6 +5,19 @@
 export class VagabondActor extends Actor {
 
   /** @override */
+  async _preCreate(data, options, user) {
+    await super._preCreate(data, options, user);
+
+    // Set default prototype token for characters
+    if (data.type === 'character') {
+      this.updateSource({
+        'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.FRIENDLY, // 1
+        'prototypeToken.actorLink': true
+      });
+    }
+  }
+
+  /** @override */
   static getDefaultArtwork(actorData) {
     // 1. Check if the actor being created is an NPC
     if (actorData.type === "npc") {
@@ -32,11 +45,23 @@ export class VagabondActor extends Actor {
 
   /** @override */
   allApplicableEffects() {
-    // Get all effects from parent implementation
-    const allEffects = super.allApplicableEffects();
+    // Get all effects from the actor itself
+    const actorEffects = Array.from(this.effects);
+    
+    // Get all effects from owned items (including class items)
+    const itemEffects = [];
+    for (const item of this.items) {
+      // Include effects from all item types, especially class items
+      for (const effect of item.effects) {
+        itemEffects.push(effect);
+      }
+    }
+
+    // Combine all effects
+    const allEffects = [...actorEffects, ...itemEffects];
 
     // Filter based on application mode
-    return allEffects.filter(effect => {
+    const filteredEffects = allEffects.filter(effect => {
       const applicationMode = effect.flags.vagabond?.applicationMode || 'permanent';
 
       // Skip "on-use" effects - they're applied manually during rolls
@@ -57,9 +82,11 @@ export class VagabondActor extends Actor {
         return equipmentState !== 'unequipped';
       }
 
-      // "permanent" effects always apply
+      // "permanent" effects always apply (including class effects)
       return true;
     });
+    
+    return filteredEffects;
   }
 
   /** @override */

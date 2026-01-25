@@ -220,55 +220,12 @@ export class NPCActionHandler {
 
   /**
    * Setup event listeners for buffered action and ability editing
+   * NOTE: Input change handling is now managed by the main NPC sheet
+   * to prevent accordion closing issues. This method is kept for compatibility.
    */
   setupListeners() {
-    // Setup buffered action editing
-    const actionEdits = this.sheet.element.querySelectorAll('.npc-action-edit');
-    actionEdits.forEach((actionEdit, actionIndex) => {
-      const inputs = actionEdit.querySelectorAll('[data-field]');
-
-      inputs.forEach((input) => {
-        input.addEventListener('change', async (event) => {
-          event.stopPropagation();
-          const field = input.dataset.field;
-          let value = input.value;
-
-          // Apply validation for damage type fields
-          if (field === 'damageType') {
-            value = this.validateDamageType(value);
-          }
-
-          const actions = [...(this.actor.system.actions || [])];
-          const actualIndex = parseInt(actionEdit.dataset.actionIndex);
-
-          if (actions[actualIndex]) {
-            actions[actualIndex][field] = value;
-            await this.actor.update({ 'system.actions': actions });
-          }
-        });
-      });
-    });
-
-    // Setup buffered ability editing
-    const abilityEdits = this.sheet.element.querySelectorAll('.npc-ability-edit');
-    abilityEdits.forEach((abilityEdit, abilityIndex) => {
-      const inputs = abilityEdit.querySelectorAll('[data-field]');
-
-      inputs.forEach((input) => {
-        input.addEventListener('change', async (event) => {
-          event.stopPropagation();
-          const field = input.dataset.field;
-          const value = input.value;
-
-          const abilities = [...(this.actor.system.abilities || [])];
-          const actualIndex = parseInt(abilityEdit.dataset.abilityIndex);
-
-          if (abilities[actualIndex]) {
-            abilities[actualIndex][field] = value;
-            await this.actor.update({ 'system.abilities': abilities });
-          }
-        });
-      });
-    });
+    // Action and ability input handling is now managed by the main NPC sheet
+    // via debounced input listeners to prevent accordion closing on every keystroke.
+    // This method is kept for any future non-input event handling.
   }
 }

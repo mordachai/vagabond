@@ -324,8 +324,12 @@ export default class VagabondCharacter extends VagabondActorBase {
    */
   prepareBaseData() {
     super.prepareBaseData();
+    
+    // Debug logging to track data preparation
+    console.log(`Vagabond | prepareBaseData() called for ${this.parent?.name || 'Unknown Actor'}`);
+    
   // --- 1. Reset Flat Mechanics ---
-    this.inventory.bonusSlots = 0;
+    this.inventory.bonusSlots = 0; // MUST reset - Active Effects will add to this
     this.mana.bonus = 0;
     this.mana.castingMaxBonus = 0;
     this.speed.bonus = 0;
@@ -340,6 +344,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalWeaponDamageBonus = 0;
     this.universalSpellDamageBonus = 0;
     this.universalAlchemicalDamageBonus = 0;
+    
+    // Reset dice bonuses (these are strings)
+    this.universalDamageDice = '';
+    this.universalWeaponDamageDice = '';
+    this.universalSpellDamageDice = '';
+    this.universalAlchemicalDamageDice = '';
+    
+    // Reset spell damage die size to default
+    this.spellDamageDieSize = 6;
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
     for (let s of Object.values(this.stats)) { s.bonus = 0; }
@@ -642,7 +655,7 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateInventorySlots() {
-    // Might + 8 + Bonus (use total Might which includes bonuses)
+    // Might + 8 + Bonus (original formula)
     const mightTotal = this.stats.might?.total || 0;
     const bonusSlots = this.inventory.bonusSlots || 0;
 

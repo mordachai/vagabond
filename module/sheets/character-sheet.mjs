@@ -26,10 +26,13 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
 
   /**
    * @override
-   * Add character-specific actions
+   * Add character-specific classes and ensure correct width
    */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ['vagabond', 'actor', 'character'],
+    position: {
+      width: 430  // Ensure character sheet keeps its proper width
+    }
   });
 
   // ===========================

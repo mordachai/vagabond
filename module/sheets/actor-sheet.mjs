@@ -260,8 +260,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }));
     }
 
-    // Prepare active effects
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
+    // Prepare active effects (include effects from all sources, including class items)
+    const allEffects = this.actor.allApplicableEffects();
+    context.effects = prepareActiveEffectCategories(allEffects);
 
     return context;
   }

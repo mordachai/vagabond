@@ -273,7 +273,7 @@ export class VagabondChatCard {
     crit = null,
     hasDefenses = false, attackType = 'melee', footerActions = [],
     propertyDetails = null, damageFormula = null,
-    targetsAtRollTime = []
+    targetsAtRollTime = [], metadata = []
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -358,6 +358,11 @@ export class VagabondChatCard {
       if (propertyDetails) card.setPropertyDetails(propertyDetails);
       if (description) card.setDescription(description);
       if (crit) card.setCrit(crit);
+
+      // Add custom metadata (for relic lore, etc.)
+      if (metadata && metadata.length > 0) {
+        card.data.metadata = metadata;
+      }
 
       // 3. Handle Damage & Buttons
       if (damageRoll) {
@@ -813,9 +818,36 @@ export class VagabondChatCard {
       }
     }
 
-    // Add detailed stats to description for equipment items
+    // Build metadata for equipment items (including relic lore)
+    const metadata = [];
     if (item.type === 'equipment' && item.system) {
-      description += this._buildItemStatsHTML(item);
+      // Add relic lore to metadata if present
+      if (item.system.equipmentType === 'relic' && item.system.lore) {
+        metadata.push({
+          label: game.i18n.localize('VAGABOND.Relic.Lore') || 'Lore',
+          value: await foundry.applications.ux.TextEditor.enrichHTML(item.system.lore, {
+            async: true,
+            relativeTo: item
+          }),
+          type: 'text',
+          enriched: true
+        });
+      }
+
+      // Add relic-specific properties to metadata
+      if (item.system.equipmentType === 'relic' && item.system.properties) {
+        metadata.push({
+          label: game.i18n.localize('VAGABOND.Relic.Properties') || 'Properties',
+          value: item.system.properties.join(', '),
+          type: 'tags'
+        });
+      }
+
+      // Add detailed stats to description for non-relic equipment items
+      // For relics, we put lore in metadata instead of description
+      if (item.system.equipmentType !== 'relic') {
+        description += this._buildItemStatsHTML(item);
+      }
     }
 
     // Determine if this is a real item or just data
@@ -870,7 +902,8 @@ export class VagabondChatCard {
         description,
         crit: critText,
         targetsAtRollTime,
-        footerActions
+        footerActions,
+        metadata // Pass metadata for relic lore
     });
   }
 
@@ -915,7 +948,7 @@ export class VagabondChatCard {
         stats.push({ label: 'Effect', value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
       }
     } else if (equipType === 'relic') {
-      if (sys.lore) stats.push({ label: 'Lore', value: sys.lore });
+      // Relic lore is now handled in metadata, not stats
     }
 
     // Universal equipment stats
