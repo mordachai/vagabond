@@ -41,6 +41,22 @@
                         </div>
                     {{/if}}
 
+                    {{!-- 3. METADATA (for relic lore, etc.) - Always visible --}}
+                    {{#if metadata}}
+                        {{#each metadata}}
+                        <div class="meta-tag metadata-display" style="width: 100%; margin-top: 4px; display: block;">
+                            <strong>{{this.label}}:</strong>
+                            <span style="word-wrap: break-word; overflow-wrap: break-word;">
+                            {{#if this.enriched}}
+                                {{{this.value}}}
+                            {{else}}
+                                {{this.value}}
+                            {{/if}}
+                            </span>
+                        </div>
+                        {{/each}}
+                    {{/if}}
+
                 </div>
             </div>
         </header>

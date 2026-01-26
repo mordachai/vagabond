@@ -20,6 +20,7 @@ export class VagabondChatCard {
       damage: null,
       metadataTags: [],
       propertyDetails: null,
+      metadata: [],  // Metadata items (for relic lore, etc.)
       description: null,
       crit: null,  // Critical hit/success effect text
       footerTags: [],
@@ -224,17 +225,17 @@ export class VagabondChatCard {
           const f = this.data.roll.formula || '';
           this.data.isFavored = f.includes('+1d6') || f.includes('+ 1d6');
           this.data.isHindered = f.includes('-1d6') || f.includes('- 1d6');
-          
+
           // Pass FALSE so it uses Fav/Hind images
           this.data.rollDiceDisplay = this.constructor.formatRollWithDice(this.data.roll, false);
       }
-      
+
       // 2. Damage Rolls (isDamage = true)
       if (this.data.damage?.roll) {
            // Pass TRUE so it ignores Fav/Hind images and adds 'die-type-damage' class
            this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll, true);
       }
-      
+
       this.data.config = CONFIG.VAGABOND;
       const template = 'systems/vagabond/templates/chat/chat-card.hbs';
       return await foundry.applications.handlebars.renderTemplate(template, this.data);
@@ -823,8 +824,9 @@ export class VagabondChatCard {
     if (item.type === 'equipment' && item.system) {
       // Add relic lore to metadata if present
       if (item.system.equipmentType === 'relic' && item.system.lore) {
+        const loreLabel = game.i18n.localize('VAGABOND.Relic.Lore');
         metadata.push({
-          label: game.i18n.localize('VAGABOND.Relic.Lore') || 'Lore',
+          label: loreLabel !== 'VAGABOND.Relic.Lore' ? loreLabel : 'Lore',
           value: await foundry.applications.ux.TextEditor.enrichHTML(item.system.lore, {
             async: true,
             relativeTo: item
@@ -835,9 +837,10 @@ export class VagabondChatCard {
       }
 
       // Add relic-specific properties to metadata
-      if (item.system.equipmentType === 'relic' && item.system.properties) {
+      if (item.system.equipmentType === 'relic' && item.system.properties && item.system.properties.length > 0) {
+        const propsLabel = game.i18n.localize('VAGABOND.Relic.Properties');
         metadata.push({
-          label: game.i18n.localize('VAGABOND.Relic.Properties') || 'Properties',
+          label: propsLabel !== 'VAGABOND.Relic.Properties' ? propsLabel : 'Properties',
           value: item.system.properties.join(', '),
           type: 'tags'
         });
