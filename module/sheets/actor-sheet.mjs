@@ -138,6 +138,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /** @override */
+  async render(options = {}, _options = {}) {
+    // Wait for templates to be ready before rendering
+    if (typeof globalThis.vagabond?.templatesReady !== 'undefined' && !globalThis.vagabond.templatesReady) {
+      console.log("Vagabond | Waiting for templates to load before rendering sheet...");
+      // Wait up to 5 seconds for templates to load
+      const timeout = Date.now() + 5000;
+      while (!globalThis.vagabond.templatesReady && Date.now() < timeout) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      if (!globalThis.vagabond.templatesReady) {
+        console.warn("Vagabond | Templates not ready after timeout, rendering anyway");
+      }
+    }
+    return super.render(options, _options);
+  }
+
+  /** @override */
   async close(options) {
     // Clean up event listeners
     if (this._accordionClickOutsideHandler) {
@@ -198,21 +215,39 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       systemFields: this.document.system.schema.fields,
     };
 
-    // Enrich biography
-    context.enrichedBiography = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-      this.actor.system.biography,
-      {
-        async: true,
-        secrets: this.actor.isOwner,
-        relativeTo: this.actor,
-      }
-    );
+    // Enrich biography with error handling
+    try {
+      context.enrichedBiography = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+        this.actor.system.biography,
+        {
+          async: true,
+          secrets: this.actor.isOwner,
+          relativeTo: this.actor,
+        }
+      );
+    } catch (error) {
+      console.error("Vagabond | Error enriching biography:", error);
+      context.enrichedBiography = this.actor.system.biography || '';
+    }
 
     // Prepare tabs
     context.tabs = this._getTabs(options.parts);
 
-    // Prepare items
-    await this._prepareItems(context);
+    // Prepare items with error handling
+    try {
+      await this._prepareItems(context);
+    } catch (error) {
+      console.error("Vagabond | Error preparing items:", error);
+      // Set empty arrays as fallback
+      context.gear = [];
+      context.weapons = [];
+      context.armor = [];
+      context.containers = [];
+      context.spells = [];
+      context.perks = [];
+      context.features = [];
+      context.traits = [];
+    }
 
     // Add character-specific data
     if (context.isCharacter) {
@@ -280,16 +315,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     switch (partId) {
       case 'features':
         partContext.tab = context.tabs[partId];
-        await EnrichmentHelper.enrichFeatures(partContext, this.actor);
-        await EnrichmentHelper.enrichTraits(partContext, this.actor);
-        await EnrichmentHelper.enrichPerks(partContext, this.actor);
+        try {
+          await EnrichmentHelper.enrichFeatures(partContext, this.actor);
+          await EnrichmentHelper.enrichTraits(partContext, this.actor);
+          await EnrichmentHelper.enrichPerks(partContext, this.actor);
+        } catch (error) {
+          console.error("Vagabond | Error enriching features/traits/perks:", error);
+        }
         break;
 
       case 'spells':
         partContext.tab = context.tabs[partId];
         // Spell enrichment is handled by spellHandler
         if (this.spellHandler) {
-          await this.spellHandler.enrichSpellsContext(partContext);
+          try {
+            await this.spellHandler.enrichSpellsContext(partContext);
+          } catch (error) {
+            console.error("Vagabond | Error enriching spells:", error);
+          }
         }
         break;
 
@@ -317,26 +360,35 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         // Format appearing field for display in locked mode
         if (this.actor.system.locked && this.actor.system.appearing) {
-          // First, use VagabondTextParser to convert dice notation to roll links
-          const parsedText = VagabondTextParser.parseAll(this.actor.system.appearing);
-          
-          // Then, use Foundry's enrichment to make the roll links clickable
-          partContext.enrichedAppearing = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-            parsedText,
-            {
-              async: true,
-              secrets: this.actor.isOwner,
-              rollData: this.actor.getRollData(),
-              relativeTo: this.actor,
-            }
-          );
+          try {
+            // First, use VagabondTextParser to convert dice notation to roll links
+            const parsedText = VagabondTextParser.parseAll(this.actor.system.appearing);
+
+            // Then, use Foundry's enrichment to make the roll links clickable
+            partContext.enrichedAppearing = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+              parsedText,
+              {
+                async: true,
+                secrets: this.actor.isOwner,
+                rollData: this.actor.getRollData(),
+                relativeTo: this.actor,
+              }
+            );
+          } catch (error) {
+            console.error("Vagabond | Error enriching appearing field:", error);
+            partContext.enrichedAppearing = this.actor.system.appearing || '';
+          }
         } else {
           partContext.enrichedAppearing = this.actor.system.appearing || '';
         }
 
         // Enrich NPC actions and abilities
-        await EnrichmentHelper.enrichActions(partContext, this.actor);
-        await EnrichmentHelper.enrichAbilities(partContext, this.actor);
+        try {
+          await EnrichmentHelper.enrichActions(partContext, this.actor);
+          await EnrichmentHelper.enrichAbilities(partContext, this.actor);
+        } catch (error) {
+          console.error("Vagabond | Error enriching NPC actions/abilities:", error);
+        }
         break;
     }
 

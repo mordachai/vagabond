@@ -135,6 +135,9 @@ function registerGameSettings() {
 /*  Template Preloading                         */
 /* -------------------------------------------- */
 
+// Track template loading state
+let templatesReady = false;
+
 /**
  * Preload Handlebars templates for partials
  */
@@ -165,11 +168,17 @@ async function preloadHandlebarsTemplates() {
     'footer': 'systems/vagabond/templates/apps/char-builder-parts/footer.hbs'
   };
 
-  // Register each builder part as a Handlebars partial
-  for (const [name, path] of Object.entries(builderParts)) {
-    const template = await foundry.applications.handlebars.getTemplate(path);
-    Handlebars.registerPartial(name, template);
-  }
+  // Register each builder part as a Handlebars partial (parallel instead of sequential)
+  await Promise.all(
+    Object.entries(builderParts).map(async ([name, path]) => {
+      const template = await foundry.applications.handlebars.getTemplate(path);
+      Handlebars.registerPartial(name, template);
+    })
+  );
+
+  // Mark templates as ready (set both local and global flags)
+  templatesReady = true;
+  globalThis.vagabond.templatesReady = true;
 }
 
 /* -------------------------------------------- */
@@ -179,6 +188,7 @@ async function preloadHandlebarsTemplates() {
 // Add key classes to the global scope so they can be more easily used
 // by downstream developers
 globalThis.vagabond = {
+  templatesReady: false, // Track template loading state
   documents: {
     VagabondActor,
     VagabondItem,
@@ -219,12 +229,14 @@ Hooks.once('init', async function () {
 
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
-  
+
   // Loads placeholder images for character sheets
   CONFIG.Actor.typeImages = VAGABOND.actorTypeImages;
 
-  // Preload Handlebars templates
+  // Preload Handlebars templates (MUST complete before sheet registration)
+  console.log("Vagabond | Preloading templates...");
   await preloadHandlebarsTemplates();
+  console.log("Vagabond | Templates loaded successfully");
 
   /**
    * Set an initiative formula for the system
