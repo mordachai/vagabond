@@ -92,6 +92,45 @@ export default class VagabondNPC extends VagabondActorBase {
       min: 0,
     });
 
+    // Speed values for each movement type (stores specific speeds for Fly, Climb, etc.)
+    schema.speedValues = new fields.SchemaField({
+      climb: new fields.NumberField({
+        required: false,
+        nullable: false,
+        integer: true,
+        initial: 0,
+        min: 0
+      }),
+      cling: new fields.NumberField({
+        required: false,
+        nullable: false,
+        integer: true,
+        initial: 0,
+        min: 0
+      }),
+      fly: new fields.NumberField({
+        required: false,
+        nullable: false,
+        integer: true,
+        initial: 0,
+        min: 0
+      }),
+      phase: new fields.NumberField({
+        required: false,
+        nullable: false,
+        integer: true,
+        initial: 0,
+        min: 0
+      }),
+      swim: new fields.NumberField({
+        required: false,
+        nullable: false,
+        integer: true,
+        initial: 0,
+        min: 0
+      })
+    });
+
     schema.senses = new fields.StringField({
       required: false,
       nullable: false,
@@ -330,7 +369,36 @@ export default class VagabondNPC extends VagabondActorBase {
     } else {
       this.speedTypesDisplay = [];
     }
-  
+
+    // Format Speed Display with specific movement type values
+    // Example: "30' (Fly: 90', Swim, Climb: 15')" - types always show, values only if > 0
+    if (this.locked && this.speedTypes && this.speedTypes.length > 0) {
+      const speedParts = [];
+
+      // Collect all movement types - show name always, value only if > 0
+      for (const type of this.speedTypes) {
+        const speedValue = this.speedValues?.[type] || 0;
+        const label = game.i18n.localize(CONFIG.VAGABOND.speedTypes[type]);
+
+        if (speedValue > 0) {
+          // Custom speed value: "Fly: 90'"
+          speedParts.push(`${label}: ${speedValue}'`);
+        } else {
+          // No custom value, just show the type name: "Fly"
+          speedParts.push(label);
+        }
+      }
+
+      // Format: "30' (Fly: 90', Swim, Climb: 15')"
+      if (speedParts.length > 0) {
+        this.speedFormatted = `${this.speed}' (${speedParts.join(', ')})`;
+      } else {
+        this.speedFormatted = `${this.speed}'`;
+      }
+    } else {
+      this.speedFormatted = `${this.speed}'`;
+    }
+
   }
 
   /**

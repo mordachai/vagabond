@@ -48,75 +48,68 @@
 
         {{! LOCKED MODE }}
         {{#if system.locked}}
-          <div class="npc-speed-types">
-
-            {{! Input adjusted width to fit content }}
-            <input
-              type='text'
-              name='system.speed'
-              value='{{system.speed}}'
-              data-dtype='Number'
-              class='npc-number-input'
-              size='3'
-              readonly/>
-
-            {{! Fixed Logic: Loop through system.speedTypes directly }}
-            {{#if system.speedTypes.length}}
-              <div class="npc-immunity-text">
-                (
-                {{#each system.speedTypes as |type|}}
-                  {{! Use lookup config to get the label from the key }}
-                  <span data-tooltip="{{localize (lookup ../config.speedTypeHints type)}}">
-                    {{localize (lookup ../config.speedTypes type)}}
-                  </span>{{#unless @last}}, {{/unless}}
-                {{/each}}
-                )
-              </div>
-            {{/if}}
+          <div class="npc-speed-display">
+            {{system.speedFormatted}}
           </div>
 
         {{! UNLOCKED/EDIT MODE }}
         {{else}}
-          {{! Main container is now a ROW, allowing wrapping if many tags exist }}
-          <div style="display: flex; flex-direction: row; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px;">
+          {{! Main container - allows wrapping if many tags exist }}
+          <div style="display: flex; flex-direction: column; width: 100%; gap: 8px;">
 
-            {{! Speed Input }}
-            <input
-              type='text'
-              name='system.speed'
-              value='{{system.speed}}'
-              data-dtype='Number'
-              class='npc-number-input'
-              size='3'
-              placeholder='30'
-            />
+            {{! First row: Speed Input and Dropdown Button }}
+            <div style="display: flex; flex-direction: row; align-items: center; gap: 8px;">
+              {{! Speed Input }}
+              <input
+                type='text'
+                name='system.speed'
+                value='{{system.speed}}'
+                data-dtype='Number'
+                class='npc-number-input'
+                size='3'
+                placeholder='30'
+              />
 
-            {{! Speed Type Dropdown Button }}
-            <details class='npc-immunity-dropdown' data-save-target="system.speedTypes">
-              <summary class='npc-immunity-toggle' style="border:none; cursor: pointer;">
-                <i class='fas fa-plus-circle' data-tooltip="{{localize 'VAGABOND.SpeedTypes.Label'}}"></i>
-              </summary>
-              <div class='npc-immunity-checkboxes' style="right: auto; left: 0; z-index: 10;">
-                {{#each config.speedTypes as |label key|}}
-                  <label class='npc-immunity-checkbox-item'>
-                    {{!-- Remove data-action --}}
-                    <input type='checkbox' value='{{key}}'
-                          {{#if (contains ../system.speedTypes key)}}checked{{/if}}>
-                    <span>{{localize label}}</span>
-                  </label>
+              {{! Speed Type Dropdown Button }}
+              <details class='npc-immunity-dropdown' data-save-target="system.speedTypes">
+                <summary class='npc-immunity-toggle' style="border:none; cursor: pointer;">
+                  <i class='fas fa-plus-circle' data-tooltip="{{localize 'VAGABOND.SpeedTypes.Label'}}"></i>
+                </summary>
+                <div class='npc-immunity-checkboxes' style="right: auto; left: 0; z-index: 10;">
+                  {{#each config.speedTypes as |label key|}}
+                    <label class='npc-immunity-checkbox-item'>
+                      {{!-- Remove data-action --}}
+                      <input type='checkbox' value='{{key}}'
+                            {{#if (contains ../system.speedTypes key)}}checked{{/if}}>
+                      <span>{{localize label}}</span>
+                    </label>
+                  {{/each}}
+                </div>
+              </details>
+            </div>
+
+            {{! Speed Tags with Value Inputs - Second row with wrapping }}
+            {{#if system.speedTypes.length}}
+              <div class='npc-immunity-tags' style="display: flex; flex-wrap: wrap; gap: 4px; margin: 0; align-items: center;">
+                {{#each system.speedTypes as |type index|}}
+                  <span class='npc-immunity-tag' style="display: inline-flex; align-items: center; gap: 4px;">
+                    {{localize (lookup ../config.speedTypes type)}}:
+                    <input
+                      type='text'
+                      name='system.speedValues.{{type}}'
+                      value='{{lookup ../system.speedValues type}}'
+                      data-dtype='Number'
+                      class='npc-number-input'
+                      size='3'
+                      placeholder='0'
+                      style="width: 40px; margin: 0 2px;"
+                      data-tooltip="Speed for {{localize (lookup ../config.speedTypes type)}} (0 = same as base speed)"
+                    />
+                    <i class='fas fa-times' data-action='removeSpeedType' data-type='{{type}}' style="margin-left: 3px; cursor: pointer;"></i>
+                  </span>
                 {{/each}}
               </div>
-            </details>
-
-            {{! Speed Tags - Moved INSIDE the flex row }}
-            <div class='npc-immunity-tags' style="display: flex; gap: 4px; margin: 0;">
-              {{#each system.speedTypes as |type index|}}
-                <span class='npc-immunity-tag'>
-                  {{localize (lookup ../config.speedTypes type)}}
-                  <i class='fas fa-times' data-action='removeSpeedType' data-type='{{type}}' style="margin-left: 3px; cursor: pointer;"></i>
-                </span>
-              {{/each}}
-            </div>
+            {{/if}}
 
           </div>
         {{/if}}
