@@ -102,6 +102,21 @@
               </button>
             </div>
 
+            {{! Status Effects Display }}
+            {{#if statusEffects}}
+              <div class='status-display'>
+                {{#each statusEffects as |effect|}}
+                  <div class='status-icon'
+                       data-effect-id='{{effect.id}}'
+                       data-effect-uuid='{{effect.uuid}}'
+                       data-tooltip='{{effect.name}}'
+                       data-action='statusClick'>
+                    <img src='{{effect.icon}}' alt='{{effect.name}}' width='24' height='24' />
+                  </div>
+                {{/each}}
+              </div>
+            {{/if}}
+
             {{! Row 3: Hit Points }}
             <div class='hp-display'>
               <i class='fas fa-heart hp-icon'></i>

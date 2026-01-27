@@ -38,12 +38,18 @@
   @include context-menu-styles;
 }
 
-/* 
- * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu) 
+/* Status context menu - Uses ContextMenuHelper with dual-selector pattern */
+.vagabond .status-context-menu,
+.vagabond-context-menu.status-context-menu {
+  @include context-menu-styles;
+}
+
+/*
+ * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu)
  * currently use custom implementations that don't follow the ContextMenuHelper pattern.
- * They create menus directly without the 'vagabond-context-menu' base class, so the 
+ * They create menus directly without the 'vagabond-context-menu' base class, so the
  * dual-selector pattern doesn't apply to them.
- * 
+ *
  * If these are refactored to use ContextMenuHelper in the future, add dual selectors like:
  * .vagabond .progress-clock-context-menu,
  * .vagabond-context-menu.progress-clock-context-menu {

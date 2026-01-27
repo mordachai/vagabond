@@ -158,6 +158,50 @@
   text-transform: uppercase;
 }
 
+// Status Effects Display
+.status-display {
+  position: absolute;
+  bottom: 48px; // Above HP display
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 168px; // 6 icons × 24px + 5 gaps × 4px = 144px + 20px = 164px
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+
+  .status-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 24px;
+      height: 24px;
+      object-fit: cover;
+      border-radius: 3px;
+      filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+      transition: filter 0.2s ease;
+    }
+
+    &:hover {
+      transform: scale(1.15);
+      z-index: 10;
+
+      img {
+        filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.9));
+      }
+    }
+  }
+}
+
 // HP Display
 .hp-display {
   display: flex;

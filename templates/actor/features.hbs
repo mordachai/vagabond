@@ -68,7 +68,12 @@
       <div class='slots-info flexrow'>
         <div class='slot-field'>
           <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
-          <span class='slot-value'>{{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}</span>
+          <span class='slot-value'>
+            {{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}
+            {{#if (gt system.inventory.fatigueSlots 0)}}
+              <span class='fatigue-note'>[{{system.inventory.baseMaxSlots}} - {{system.inventory.fatigueSlots}} Fatigue]</span>
+            {{/if}}
+          </span>
         </div>
         {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
           <div class='slot-warning'>
@@ -103,11 +108,16 @@
 
         {{! Render empty slots (to complete grid) }}
         {{#each emptySlots as |slot|}}
-          <div class='inventory-slot empty-slot {{#if slot.unavailable}}unavailable{{/if}}'
+          <div class='inventory-slot empty-slot {{#if slot.unavailable}}unavailable{{/if}} {{#if slot.fatigueOccupied}}fatigue-occupied{{/if}}'
                data-slot-index='{{slot.index}}'
                data-droppable='true'>
             {{#if slot.displayNumber}}
               <div class='slot-number'>{{slot.displayNumber}}</div>
+            {{/if}}
+            {{#if slot.fatigueOccupied}}
+              <div class='fatigue-slot-overlay'>
+                <i class='fas fa-skull'></i>
+              </div>
             {{/if}}
           </div>
         {{/each}}

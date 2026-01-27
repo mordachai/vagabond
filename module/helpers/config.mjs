@@ -209,6 +209,373 @@ VAGABOND.statusConditions = {
 };
 
 /**
+ * Full status effect definitions for token HUD
+ * Used when "Use Vagabond Status Conditions" setting is enabled
+ * Uses Foundry's default icons as placeholders until custom artwork is provided
+ * All 17 status conditions from the Vagabond rulebook (see docs/VAGABOND-STATUSES.md)
+ *
+ * AUTOMATED STATUS CONDITIONS:
+ * Status effects with "changes" arrays automatically apply Active Effects when applied to tokens.
+ * These implement the mechanical effects of the status condition using the Active Effects system.
+ *
+ * @type {Array}
+ */
+VAGABOND.statusEffectDefinitions = [
+  // MANUAL TRACKING (Phase 3 - Future)
+  {
+    id: 'berserk',
+    name: 'VAGABOND.StatusConditions.Berserk',
+    icon: 'icons/svg/terror.svg',
+    statuses: ['berserk'],
+    description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. [MANUAL TRACKING]'
+  },
+  {
+    id: 'burning',
+    name: 'VAGABOND.StatusConditions.Burning',
+    icon: 'icons/svg/fire.svg',
+    statuses: ['burning'],
+    description: 'Takes damage at the start of its turn. Can be ended by an appropriate action. [MANUAL TRACKING]'
+  },
+  {
+    id: 'charmed',
+    name: 'VAGABOND.StatusConditions.Charmed',
+    icon: 'icons/svg/heal.svg',
+    statuses: ['charmed'],
+    description: 'Can\'t willingly make an Attack Action targeting the one who Charmed it. [MANUAL TRACKING]'
+  },
+  {
+    id: 'suffocating',
+    name: 'VAGABOND.StatusConditions.Suffocating',
+    icon: 'icons/svg/stoned.svg',
+    statuses: ['suffocating'],
+    description: 'After not breathing for 1 minute, each round: Heroes roll d8 (if ≥ Might, gain 1 Fatigue), Enemies gain 1 Fatigue. [MANUAL TRACKING]'
+  },
+
+  // PARTIAL AUTOMATION
+  {
+    id: 'dazed',
+    name: 'VAGABOND.StatusConditions.Dazed',
+    icon: 'icons/svg/sleep.svg',
+    statuses: ['dazed'],
+    description: 'Can\'t Focus or Move unless it uses an Action to do so. Speed reduced to 0. [AUTOMATED: Speed = 0. MANUAL: Action restrictions]',
+    changes: [
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      }
+    ]
+  },
+  {
+    id: 'fatigued',
+    name: 'VAGABOND.StatusConditions.Fatigued',
+    icon: 'icons/svg/degen.svg',
+    statuses: ['fatigued'],
+    description: 'Each Fatigue occupies an Item Slot. At 3+ Fatigue, can\'t Rush. At 5 Fatigue, dies. [AUTOMATED: Use Fatigue tracker (skull icons) on character sheet. Slot reduction is automatic.]'
+    // NOTE: Fatigued is managed via system.fatigue value, not Active Effects
+  },
+  {
+    id: 'prone',
+    name: 'VAGABOND.StatusConditions.Prone',
+    icon: 'icons/svg/falling.svg',
+    statuses: ['prone'],
+    description: 'Speed = 0. Costs 10\' Speed to stand. Can crawl (2:1 ratio). Can\'t Rush. Vulnerable (attacks/saves Hindered, incoming attacks Favored). [AUTOMATED: Speed = 0, Vulnerable. MANUAL: Stand cost, crawl ratio]',
+    changes: [
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      },
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+
+  // FULLY AUTOMATED
+  {
+    id: 'frightened',
+    name: 'VAGABOND.StatusConditions.Frightened',
+    icon: 'icons/svg/hazard.svg',
+    statuses: ['frightened'],
+    description: '-2 penalty to all damage dealt. [FULLY AUTOMATED]',
+    changes: [
+      {
+        key: 'system.universalDamageBonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-2'
+      }
+    ]
+  },
+  {
+    id: 'sickened',
+    name: 'VAGABOND.StatusConditions.Sickened',
+    icon: 'icons/svg/poison.svg',
+    statuses: ['sickened'],
+    description: '-2 penalty to any healing received. [FULLY AUTOMATED]',
+    changes: [
+      {
+        key: 'system.incomingHealingModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-2'
+      }
+    ]
+  },
+  {
+    id: 'confused',
+    name: 'VAGABOND.StatusConditions.Confused',
+    icon: 'icons/svg/daze.svg',
+    statuses: ['confused'],
+    description: 'Checks and Saves have Hinder. Saves against its Actions have Favor. [FULLY AUTOMATED]',
+    changes: [
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    id: 'vulnerable',
+    name: 'VAGABOND.StatusConditions.Vulnerable',
+    icon: 'icons/svg/downgrade.svg',
+    statuses: ['vulnerable'],
+    description: 'Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor. [FULLY AUTOMATED]',
+    changes: [
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    id: 'blinded',
+    name: 'VAGABOND.StatusConditions.Blinded',
+    icon: 'icons/svg/blind.svg',
+    statuses: ['blinded'],
+    description: 'Can\'t see. Vulnerable. [FULLY AUTOMATED]',
+    changes: [
+      // Same as Vulnerable
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    id: 'invisible',
+    name: 'VAGABOND.StatusConditions.Invisible',
+    icon: 'icons/svg/invisible.svg',
+    statuses: ['invisible'],
+    description: 'Can\'t be seen. Attackers act as Blinded (attacks Hindered). [FULLY AUTOMATED]',
+    changes: [
+      {
+        key: 'system.defenderStatusModifiers.attackersAreBlinded',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'true' // Note: Must be string for Active Effects
+      }
+    ]
+  },
+  {
+    id: 'restrained',
+    name: 'VAGABOND.StatusConditions.Restrained',
+    icon: 'icons/svg/net.svg',
+    statuses: ['restrained'],
+    description: 'Vulnerable + Speed = 0. [FULLY AUTOMATED]',
+    changes: [
+      // Vulnerable + Speed = 0
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      },
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    id: 'incapacitated',
+    name: 'VAGABOND.StatusConditions.Incapacitated',
+    icon: 'icons/svg/unconscious.svg',
+    statuses: ['incapacitated'],
+    description: 'Can\'t Focus, use Actions, or Move. Automatically fails Might and Dexterity checks. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
+    changes: [
+      // Auto-fail Might/Dex
+      {
+        key: 'system.autoFailStats',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: 'might'
+      },
+      {
+        key: 'system.autoFailStats',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: 'dexterity'
+      },
+      // Speed = 0
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      },
+      // Vulnerable effects
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    id: 'paralyzed',
+    name: 'VAGABOND.StatusConditions.Paralyzed',
+    icon: 'icons/svg/paralysis.svg',
+    statuses: ['paralyzed'],
+    description: 'Incapacitated + Speed = 0. [FULLY AUTOMATED]',
+    changes: [
+      // Same as Incapacitated (already includes Speed = 0)
+      {
+        key: 'system.autoFailStats',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: 'might'
+      },
+      {
+        key: 'system.autoFailStats',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: 'dexterity'
+      },
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      },
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    id: 'unconscious',
+    name: 'VAGABOND.StatusConditions.Unconscious',
+    icon: 'icons/svg/sleep.svg',
+    statuses: ['unconscious'],
+    description: 'Blinded + Incapacitated + Prone. Close Attacks (range: close) always Crit. [FULLY AUTOMATED]',
+    changes: [
+      // All Incapacitated effects
+      {
+        key: 'system.autoFailStats',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: 'might'
+      },
+      {
+        key: 'system.autoFailStats',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: 'dexterity'
+      },
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      },
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      // Plus: Close attacks auto-crit
+      {
+        key: 'system.defenderStatusModifiers.closeAttacksAutoCrit',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'true' // Note: Must be string for Active Effects
+      }
+    ]
+  }
+];
+
+/**
  * Combat zones for NPCs
  * @type {Object}
  */

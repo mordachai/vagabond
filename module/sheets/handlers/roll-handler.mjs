@@ -38,6 +38,37 @@ export class RollHandler {
       const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
       const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
+      // Determine if this is a skill or save roll FIRST (for auto-fail check)
+      const rollKey = dataset.key; // e.g., 'awareness', 'might', 'reaction'
+      const rollType = dataset.type; // 'skill' or 'save' or 'stat'
+
+      // Check for auto-fail stats (e.g., Incapacitated: auto-fail Might/Dex)
+      const autoFailStats = this.actor.system.autoFailStats || [];
+      if (autoFailStats.includes(rollKey)) {
+        // Create a dummy roll with 0 result for display
+        const autoFailRoll = new Roll('0');
+        await autoFailRoll.evaluate();
+
+        // Post auto-fail message to chat
+        const label = dataset.label || game.i18n.localize(CONFIG.VAGABOND.stats[rollKey]) || rollKey;
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+          content: `<div class="vagabond-auto-fail-roll">
+            <div class="auto-fail-header">
+              <h3>${label} Check</h3>
+              <span class="auto-fail-badge">AUTOMATIC FAILURE</span>
+            </div>
+            <p class="auto-fail-reason">
+              ${this.actor.name} automatically fails this check due to status conditions.
+            </p>
+          </div>`,
+          rollMode: game.settings.get('core', 'rollMode'),
+        });
+
+        ui.notifications.warn(`${this.actor.name} automatically fails ${label} checks due to status conditions.`);
+        return autoFailRoll;
+      }
+
       // Apply favor/hinder based on system state and keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
       const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
@@ -51,10 +82,6 @@ export class RollHandler {
         favorHinder,
         dataset.roll // Base formula (usually 'd20')
       );
-
-      // Determine if this is a skill or save roll
-      const rollKey = dataset.key; // e.g., 'awareness', 'might', 'reaction'
-      const rollType = dataset.type; // 'skill' or 'save'
 
       // For skills and saves, use the formatted chat cards
       if (rollType === 'skill' && rollKey) {

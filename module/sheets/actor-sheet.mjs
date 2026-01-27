@@ -60,6 +60,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       togglePerk: this._onTogglePerk,
       togglePanel: this._onTogglePanel,
       toggleFavorHinder: this._onToggleFavorHinder,
+      statusClick: this._onStatusClick,
       spendLuck: this._onSpendLuck,
       spendStudiedDie: this._onSpendStudiedDie,
       modifyCheckBonus: this._onModifyCheckBonus,
@@ -293,6 +294,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         checked: i < fatigue,
         level: i + 1
       }));
+
+      // Prepare status effects for display
+      context.statusEffects = this._prepareStatusEffects();
     }
 
     // Prepare active effects (include effects from all sources, including class items)
@@ -450,6 +454,44 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {Object} context - Render context
    * @private
    */
+  /**
+   * Prepare status effects for display
+   * Only includes status conditions from CONFIG.statusEffects (not item effects)
+   * @returns {Array} Array of status effect data
+   * @private
+   */
+  _prepareStatusEffects() {
+    const effects = [];
+
+    // Get valid status IDs from CONFIG.statusEffects
+    const validStatusIds = new Set(
+      CONFIG.statusEffects?.map(s => s.id) || []
+    );
+
+    // Get all active effects
+    for (const effect of this.actor.effects) {
+      if (effect.disabled) continue; // Skip disabled effects
+
+      // Only include effects that have a status matching our defined status conditions
+      const hasValidStatus = Array.from(effect.statuses || []).some(statusId =>
+        validStatusIds.has(statusId)
+      );
+
+      if (!hasValidStatus) continue; // Skip non-status effects (item effects, etc.)
+
+      effects.push({
+        id: effect.id,
+        uuid: effect.uuid,
+        name: effect.name || effect.label || 'Unknown',
+        icon: effect.icon || 'icons/svg/aura.svg',
+        description: effect.description || '',
+        statuses: Array.from(effect.statuses || [])
+      });
+    }
+
+    return effects;
+  }
+
   async _prepareItems(context) {
     const gear = [];
     const weapons = [];
@@ -558,6 +600,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (this.inventoryHandler) {
       this._setupFeatureContextMenuListeners();
     }
+
+    // Setup status icon listeners
+    this._setupStatusIconListeners();
 
     // Show sliding panel tooltip (first time only)
     this._showSlidingPanelTooltip();
@@ -1077,6 +1122,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Handle status icon click - send to chat
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onStatusClick(event, target) {
+    const effectId = target.dataset.effectId;
+    if (!effectId) return;
+
+    const effect = this.actor.effects.get(effectId);
+    if (!effect) return;
+
+    const { VagabondChatCard } = globalThis.vagabond.utils;
+    await VagabondChatCard.statusEffect(this.actor, effect);
+  }
+
+  /**
    * Show sliding panel tooltip (first time only)
    * @private
    */
@@ -1463,6 +1525,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
 
         await this.actor.update({ 'system.fatigue': newFatigue });
+
+        // Auto-apply/remove Fatigued status effect based on fatigue value
+        const hasFatiguedStatus = this.actor.effects.some(e => e.statuses.has('fatigued'));
+
+        if (newFatigue > 0 && !hasFatiguedStatus) {
+          // Apply Fatigued status when fatigue > 0
+          await this.actor.toggleStatusEffect('fatigued', { active: true });
+        } else if (newFatigue === 0 && hasFatiguedStatus) {
+          // Remove Fatigued status when fatigue = 0
+          await this.actor.toggleStatusEffect('fatigued', { active: false });
+        }
       });
     });
 
@@ -1617,6 +1690,57 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         if (!itemId) return;
 
         await this.inventoryHandler.showFeatureContextMenu(event, itemId, 'perk');
+      });
+    });
+  }
+
+  /**
+   * Setup status icon context menu listeners
+   * @private
+   */
+  _setupStatusIconListeners() {
+    const statusIcons = this.element.querySelectorAll('.status-icon');
+
+    statusIcons.forEach(icon => {
+      // Right-click: Show context menu
+      icon.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const effectId = icon.dataset.effectId;
+        if (!effectId) return;
+
+        const effect = this.actor.effects.get(effectId);
+        if (!effect) return;
+
+        const { ContextMenuHelper } = globalThis.vagabond.utils;
+        const { VagabondChatCard } = globalThis.vagabond.utils;
+
+        const menuItems = [
+          {
+            label: 'Send to Chat',
+            icon: 'fas fa-comment',
+            enabled: true,
+            action: async () => {
+              await VagabondChatCard.statusEffect(this.actor, effect);
+            }
+          },
+          {
+            label: 'Remove Status',
+            icon: 'fas fa-times',
+            enabled: true,
+            action: async () => {
+              await effect.delete();
+            }
+          }
+        ];
+
+        ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: menuItems,
+          onClose: () => {},
+          className: 'status-context-menu'
+        });
       });
     });
   }
