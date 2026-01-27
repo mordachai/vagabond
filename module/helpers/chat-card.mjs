@@ -9,6 +9,7 @@ export class VagabondChatCard {
     this.data = {
       type: 'generic',
       icon: null,
+      iconBackground: null,  // Optional background color/class for icon
       title: '',
       subtitle: '',
       hasRoll: false,
@@ -45,6 +46,16 @@ export class VagabondChatCard {
   
   setMetadataTags(tags) { this.data.metadataTags = tags; return this; }
   setPropertyDetails(props) { this.data.propertyDetails = props; return this; }
+
+  /**
+   * Set icon background color or CSS class
+   * @param {string} background - CSS color (e.g., "black", "#000000") or CSS class name
+   * @returns {VagabondChatCard}
+   */
+  setIconBackground(background) {
+    this.data.iconBackground = background;
+    return this;
+  }
 
   /**
    * Set targets captured at roll time
@@ -1237,6 +1248,81 @@ export class VagabondChatCard {
         <p><i class="fas fa-dice-d6"></i> <strong>${actor.name}</strong> gains a Studied Die.</p>
         <p><strong>Total Studied Dice:</strong> ${newCount}</p>
       `);
+
+    return await card.send();
+  }
+
+  /**
+   * Post status effect information to chat
+   * @param {VagabondActor} actor - The actor with the status effect
+   * @param {ActiveEffect} effect - The status effect
+   * @returns {Promise<ChatMessage>}
+   */
+  static async statusEffect(actor, effect) {
+    // Get status name and description
+    const statusName = effect.name || effect.label || 'Unknown Status';
+    const statusIcon = effect.icon || 'icons/svg/aura.svg';
+
+    // Try to get description from the effect or from CONFIG
+    let fullDescription = '';
+
+    // Get the status ID from the effect
+    const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
+
+    // First check if effect has a description field
+    if (effect.description) {
+      fullDescription = effect.description;
+    } else if (statusId) {
+      // Try to find description in CONFIG.statusEffects (Foundry's format)
+      const statusDef = CONFIG.statusEffects?.find(s => s.id === statusId);
+      if (statusDef?.description) {
+        fullDescription = statusDef.description;
+      }
+    }
+
+    // Extract automation status from description (text in square brackets)
+    let automationStatus = '';
+    let cleanDescription = fullDescription;
+
+    const bracketMatch = fullDescription.match(/\[(.*?)\]$/);
+    if (bracketMatch) {
+      automationStatus = bracketMatch[1]; // Text inside brackets
+      cleanDescription = fullDescription.replace(/\s*\[.*?\]$/, '').trim(); // Remove brackets from description
+    }
+
+    // Build description HTML (without brackets)
+    let descriptionHTML = `<div class="status-effect-info">`;
+
+    if (cleanDescription) {
+      descriptionHTML += `<p>${cleanDescription}</p>`;
+    } else {
+      descriptionHTML += `<p><em>No description available.</em></p>`;
+    }
+
+    descriptionHTML += `</div>`;
+
+    // Prepare metadata array
+    const metadata = [];
+    if (automationStatus) {
+      metadata.push({
+        value: automationStatus
+        // No label - just show the automation status text
+      });
+    }
+
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle(statusName)
+      .setSubtitle(actor.name)
+      .setDescription(descriptionHTML)
+      .setIconBackground('black'); // Add black background for status icons
+
+    // Add metadata
+    card.data.metadata = metadata;
+
+    // Override icon with status icon
+    card.data.icon = statusIcon;
 
     return await card.send();
   }

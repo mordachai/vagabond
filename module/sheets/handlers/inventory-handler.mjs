@@ -58,14 +58,18 @@ export class InventoryHandler {
     // Sort by grid position
     context.inventoryItems.sort((a, b) => a.gridPosition - b.gridPosition);
 
-    // Calculate overload for warning message
-    const maxSlots = this.actor.system.inventory?.maxSlots || 20;
+    // Get inventory slot data (with fatigue integration)
+    const baseMaxSlots = this.actor.system.inventory?.baseMaxSlots || 20;
+    const maxSlots = this.actor.system.inventory?.maxSlots || 20; // Effective max (after fatigue)
     const occupiedSlots = this.actor.system.inventory?.occupiedSlots || 0;
+    const currentFatigue = this.actor.system.inventory?.fatigueSlots || 0; // Current fatigue value (0-5)
+
+    // Calculate overload for warning message
     const overloadAmount = Math.max(0, occupiedSlots - maxSlots);
     context.isOverloaded = overloadAmount > 0;
     context.overloadAmount = overloadAmount;
 
-    // DYNAMIC GRID SIZE - Show all items + empty slots to display all capacity numbers up to maxSlots
+    // DYNAMIC GRID SIZE - Show all items + empty slots to display all capacity numbers up to baseMaxSlots
     const totalItemCount = context.inventoryItems.length;
 
     // NEW NUMBERING LOGIC:
@@ -84,21 +88,26 @@ export class InventoryHandler {
       }
     });
 
-    // Calculate how many empty slots we need to show remaining capacity
+    // Calculate how many empty slots we need to show full base capacity (including fatigue slots)
     // capacityNumber is now at the next available capacity number
-    // We need empty slots until capacityNumber reaches maxSlots + 1
-    const remainingCapacity = maxSlots - (capacityNumber - 1);
+    // We need empty slots until capacityNumber reaches baseMaxSlots + 1
+    const remainingCapacity = baseMaxSlots - (capacityNumber - 1);
     const emptySlotCount = Math.max(0, remainingCapacity);
 
-    // Create empty slots to show remaining capacity
+    // Create empty slots to show full base capacity (mark fatigue-occupied slots)
+    // Fatigue occupies the LAST N slots (where N = currentFatigue)
     context.emptySlots = Array.from({ length: emptySlotCount }, (_, i) => {
       const gridPosition = totalItemCount + i;
       const slotNumber = capacityNumber + i;
 
+      // Check if this slot is fatigue-occupied (beyond effective maxSlots)
+      const isFatigueOccupied = slotNumber > maxSlots;
+
       return {
         index: gridPosition,
         displayNumber: slotNumber,
-        unavailable: false, // All these slots are within capacity
+        unavailable: isFatigueOccupied, // Mark fatigue slots as unavailable
+        fatigueOccupied: isFatigueOccupied, // Flag for red skull overlay
       };
     });
 

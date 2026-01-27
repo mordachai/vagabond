@@ -28,6 +28,14 @@
       .slot-value {
         font-size: 16px;
         font-weight: bold;
+
+        .fatigue-note {
+          font-size: 12px;
+          font-weight: normal;
+          color: $c-red;
+          margin-left: 6px;
+          opacity: 0.9;
+        }
       }
     }
 
@@ -119,6 +127,34 @@
 
     .slot-number {
       color: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  // Fatigue-occupied slots (red tint)
+  &.fatigue-occupied {
+    background: rgba(139, 0, 0, 0.15);
+    border-color: rgba(139, 0, 0, 0.3);
+    position: relative;
+
+    .slot-number {
+      color: rgba(139, 0, 0, 0.4);
+    }
+  }
+
+  // Fatigue skull overlay (centered red skull)
+  .fatigue-slot-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $c-red;
+    font-size: 24px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 5;
+
+    i {
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
     }
   }
 

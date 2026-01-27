@@ -1270,12 +1270,16 @@ export class VagabondDamageHelper {
       // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
       const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
 
+      // Check if attacker has outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
+      const sourceActor = actorId ? game.actors.get(actorId) : null;
+      const attackerModifier = sourceActor?.system?.outgoingSavesModifier || 'none';
+
       // Extract keyboard modifiers from event
       const shiftKey = event?.shiftKey || false;
       const ctrlKey = event?.ctrlKey || false;
 
-      // Roll the save with keyboard modifiers
-      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
+      // Roll the save with keyboard modifiers and attacker's outgoing modifier
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, attackerModifier);
 
       // Dice So Nice animation is handled automatically by roll.evaluate() in Foundry v13
       // No need to manually call showForRoll here
@@ -1296,7 +1300,7 @@ export class VagabondDamageHelper {
       }
 
       // Apply armor/immune/weak modifiers and track armor reduction
-      const sourceActor = game.actors.get(actorId);
+      // sourceActor already declared above for outgoingSavesModifier check
       const sourceItem = sourceActor?.items.get(itemId);
       const finalDamage = this.calculateFinalDamage(targetActor, damageAfterSave, damageType, sourceItem);
       const armorReduction = damageAfterSave - finalDamage;
@@ -1398,12 +1402,16 @@ export class VagabondDamageHelper {
       // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
       const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
 
+      // Check if attacker has outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
+      const sourceActor = actorId ? game.actors.get(actorId) : null;
+      const attackerModifier = sourceActor?.system?.outgoingSavesModifier || 'none';
+
       // Extract keyboard modifiers from event
       const shiftKey = event?.shiftKey || false;
       const ctrlKey = event?.ctrlKey || false;
 
-      // Roll the save with keyboard modifiers
-      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey);
+      // Roll the save with keyboard modifiers and attacker's outgoing modifier
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, attackerModifier);
 
       // Dice So Nice animation is handled automatically by roll.evaluate() in Foundry v13
       // No need to manually call showForRoll here
@@ -1492,21 +1500,42 @@ export class VagabondDamageHelper {
    * @param {boolean} isHindered - Whether the save is Hindered by conditions
    * @param {boolean} shiftKey - Whether Shift key was pressed (Favor modifier)
    * @param {boolean} ctrlKey - Whether Ctrl key was pressed (Hinder modifier)
+   * @param {string} attackerModifier - Attacker's outgoingSavesModifier ('none', 'favor', 'hinder')
    * @returns {Promise<Roll>} The save roll
    * @private
    */
-  static async _rollSave(actor, saveType, isHindered, shiftKey = false, ctrlKey = false) {
+  static async _rollSave(actor, saveType, isHindered, shiftKey = false, ctrlKey = false, attackerModifier = 'none') {
     // Use centralized roll builder for all favor/hinder logic
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
 
     // Calculate effective favor/hinder from system state and keyboard modifiers
     const systemState = actor.system.favorHinder || 'none';
 
-    const effectiveFavorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
+    let effectiveFavorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
       systemState,
       shiftKey,
       ctrlKey
     );
+
+    // Apply attacker's outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
+    // This simulates the attacker's status affecting the defender's save
+    if (attackerModifier === 'favor') {
+      // If already favored/hindered, they cancel out
+      if (effectiveFavorHinder === 'hinder') {
+        effectiveFavorHinder = 'none';
+      } else if (effectiveFavorHinder === 'none') {
+        effectiveFavorHinder = 'favor';
+      }
+      // If already favored, stays favored (no double-favor)
+    } else if (attackerModifier === 'hinder') {
+      // If already favored/hindered, they cancel out
+      if (effectiveFavorHinder === 'favor') {
+        effectiveFavorHinder = 'none';
+      } else if (effectiveFavorHinder === 'none') {
+        effectiveFavorHinder = 'hinder';
+      }
+      // If already hindered, stays hindered (no double-hinder)
+    }
 
     // Build and evaluate roll with conditional hinder support
     // (isHindered = true when heavy armor for Dodge, or ranged/cast attack for Block)
@@ -1831,12 +1860,19 @@ export class VagabondDamageHelper {
       // Apply the appropriate restorative effect
       if (damageType === 'healing') {
         // Healing: Increase HP (up to max)
+        // Apply incoming healing modifier (e.g., Sickened: -2)
+        const healingModifier = targetActor.system.incomingHealingModifier || 0;
+        const modifiedAmount = Math.max(0, amount + healingModifier);
+
         const currentHP = targetActor.system.health?.value || 0;
         const maxHP = targetActor.system.health?.max || 0;
-        const newHP = Math.min(maxHP, currentHP + amount);
+        const newHP = Math.min(maxHP, currentHP + modifiedAmount);
         const actualHealing = newHP - currentHP;
         await targetActor.update({ 'system.health.value': newHP });
-        ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP`);
+
+        // Show modifier in notification if present
+        const modifierText = healingModifier !== 0 ? ` (${amount} ${healingModifier >= 0 ? '+' : ''}${healingModifier})` : '';
+        ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP${modifierText}`);
       } else if (damageType === 'recover') {
         // Recover: Decrease Fatigue (down to 0)
         const currentFatigue = targetActor.system.fatigue?.value || 0;

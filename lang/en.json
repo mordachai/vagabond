@@ -168,6 +168,34 @@
       "Unconscious": "Unconscious",
       "Vulnerable": "Vulnerable"
     },
+    "StatusConditionDescriptions": {
+      "Frightened": "-2 penalty to damage dealt [AUTOMATED]",
+      "Dazed": "Can't Focus or Move unless uses an Action. Speed = 0 [PARTIAL - Speed automated]",
+      "Fatigued": "Each Fatigue occupies an Item Slot. At 3+: can't Rush. At 5: dies [PARTIAL - Slots automated]",
+      "Prone": "Costs 10' Speed to stand. Crawl only (2:1 ratio), can't Rush, Vulnerable [PARTIAL - Speed automated]",
+      "Confused": "Checks/Saves Hindered. Saves against its Actions Favored [AUTOMATED]",
+      "Sickened": "-2 penalty to healing received [AUTOMATED]",
+      "Vulnerable": "Attacks/Saves Hindered. Incoming attacks Favored. Saves vs its attacks Favored [AUTOMATED]",
+      "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
+      "Blinded": "Can't see. Vulnerable [AUTOMATED]",
+      "Incapacitated": "Can't Focus/Actions/Move. Auto-fail Might/Dex. Vulnerable. Speed = 0 [AUTOMATED]",
+      "Paralyzed": "Incapacitated + Speed = 0 [AUTOMATED]",
+      "Unconscious": "Blinded + Incapacitated + Prone. Close Attacks auto-crit [AUTOMATED]",
+      "Invisible": "Can't be seen. Attackers act as Blinded [AUTOMATED]",
+      "Berserk": "Can't Cast/Focus. Immune to Frightened [PARTIAL - Manual tracking]",
+      "Burning": "Takes damage at start of turn [FUTURE - Requires combat tracker hooks]",
+      "Charmed": "Can't willingly attack the charmer [FUTURE - Requires target validation]",
+      "Suffocating": "After 1 minute: Heroes roll d8 vs Might for fatigue. Enemies gain 1 fatigue [FUTURE - Requires combat tracker]"
+    },
+    "StatusModifiers": {
+      "IncomingHealingModifier": "Incoming Healing Modifier",
+      "IncomingAttacksModifier": "Incoming Attacks Modifier",
+      "OutgoingSavesModifier": "Outgoing Saves Modifier",
+      "AutoFailStats": "Auto-Fail Stats",
+      "DefenderStatusModifiers": "Defender Status Modifiers",
+      "AttackersAreBlinded": "Attackers Are Blinded",
+      "CloseAttacksAutoCrit": "Close Attacks Auto-Crit"
+    },
     "CombatZones": {
       "Frontline": "Frontline",
       "Midline": "Midline",
@@ -264,6 +292,12 @@
         "hint": "Choose what icon appears on the chat card",
         "item": "Always Item Icon (Default)",
         "smart": "Actor Face for Attacks/Spells, Item Icon for Gear"
+      },
+      "statusEffectsMode": {
+        "name": "Status Conditions Mode",
+        "hint": "Choose which status conditions appear in the token HUD menu. Vagabond mode shows all 17 system-specific conditions from the rulebook. Foundry mode shows all default conditions. Requires world reload to apply.",
+        "vagabond": "Vagabond Conditions (17 Custom)",
+        "foundry": "Foundry Default Conditions"
       }
     },
     "Actor": {

@@ -305,12 +305,66 @@ export class VagabondItem extends Item {
                       rollData.saves?.[weaponSkillKey];
     const difficulty = weaponSkill?.difficulty || 10;
 
-    // Use centralized roll builder with modified roll data
+    // Check target's incomingAttacksModifier (e.g., Vulnerable: incoming attacks Favored)
+    // Also check for Invisible (attackersAreBlinded: attackers act as Blinded = Hindered)
+    // Apply this BEFORE rolling to modify the favor/hinder state
+    let effectiveFavorHinder = favorHinder;
+    const targets = Array.from(game.user.targets);
+    if (targets.length > 0) {
+      const targetActor = targets[0].actor;
+      if (targetActor) {
+        // Check incoming attacks modifier
+        const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
+
+        // Apply target's modifier using same cancellation logic as saves
+        if (targetModifier === 'favor') {
+          if (effectiveFavorHinder === 'hinder') {
+            effectiveFavorHinder = 'none';
+          } else if (effectiveFavorHinder === 'none') {
+            effectiveFavorHinder = 'favor';
+          }
+        } else if (targetModifier === 'hinder') {
+          if (effectiveFavorHinder === 'favor') {
+            effectiveFavorHinder = 'none';
+          } else if (effectiveFavorHinder === 'none') {
+            effectiveFavorHinder = 'hinder';
+          }
+        }
+
+        // Check if target is Invisible (attackers are treated as Blinded)
+        const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
+        if (attackersAreBlinded) {
+          // Apply Blinded effect (Hinder)
+          if (effectiveFavorHinder === 'favor') {
+            effectiveFavorHinder = 'none';
+          } else if (effectiveFavorHinder === 'none') {
+            effectiveFavorHinder = 'hinder';
+          }
+          // If already hindered, stays hindered (no double-hinder)
+        }
+      }
+    }
+
+    // Use centralized roll builder with modified roll data and effective favor/hinder
     const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-    const roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, favorHinder);
+    const roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, effectiveFavorHinder);
 
     // Check if the attack succeeds
     const isHit = roll.total >= difficulty;
+
+    // Check for auto-crit conditions (Unconscious: close attacks auto-crit)
+    let forceCritical = false;
+    if (targets.length > 0) {
+      const targetActor = targets[0].actor;
+      if (targetActor) {
+        const closeAttacksAutoCrit = targetActor.system.defenderStatusModifiers?.closeAttacksAutoCrit || false;
+        // Check if this is a close attack (weapon range = 'close')
+        const isCloseAttack = this.system.range === 'close';
+        if (closeAttacksAutoCrit && isCloseAttack) {
+          forceCritical = true;
+        }
+      }
+    }
 
     // Check critical - ONLY the d20 result, not including favor/hinder
     // ✅ CRITICAL: Use critNumber from rollData (which includes item effects)
@@ -318,7 +372,7 @@ export class VagabondItem extends Item {
     const critNumber = rollData.critNumber || 20;
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
-    const isCritical = d20Result >= critNumber;
+    const isCritical = forceCritical || (d20Result >= critNumber);
 
     return {
       roll,
@@ -327,7 +381,7 @@ export class VagabondItem extends Item {
       isCritical,
       weaponSkill,
       weaponSkillKey,
-      favorHinder,
+      favorHinder: effectiveFavorHinder, // Use modified favor/hinder (includes target's modifier)
     };
   }
 

@@ -720,14 +720,25 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-header .header-icon {
   flex: 0 0 55px;
   height: 55px;
-  border-radius: 4px border-radius;
+  border-radius: 4px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .vagabond-chat-card-v2 .card-header .header-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border: none;
+}
+.vagabond-chat-card-v2 .card-header .header-icon.has-background {
+  padding: 4px;
+}
+.vagabond-chat-card-v2 .card-header .header-icon.has-background img {
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  object-fit: contain;
 }
 .vagabond-chat-card-v2 .card-header .header-info {
   flex: 1;
@@ -1898,6 +1909,46 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 13px;
   line-height: 1.4;
   color: var(--c-dark-blue);
+}
+
+/* ========================================
+   AUTO-FAIL ROLLS (Status Conditions)
+   ======================================== */
+.vagabond-auto-fail-roll {
+  padding: 12px;
+  background: linear-gradient(135deg, #1a0000 0%, #330000 100%);
+  border: 2px solid #cc0000;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: var(--font-primary, "Eskapade", serif);
+}
+.vagabond-auto-fail-roll .auto-fail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.vagabond-auto-fail-roll .auto-fail-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #ff6666;
+  font-weight: bold;
+}
+.vagabond-auto-fail-roll .auto-fail-header .auto-fail-badge {
+  background: #cc0000;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.vagabond-auto-fail-roll .auto-fail-reason {
+  margin: 0;
+  font-size: 13px;
+  color: #cccccc;
+  font-style: italic;
 }
 
 /* Animations */
@@ -3610,12 +3661,56 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: rgba(217, 83, 79, 0.1);
 }
 
-/* 
- * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu) 
+/* Status context menu - Uses ContextMenuHelper with dual-selector pattern */
+.vagabond .status-context-menu,
+.vagabond-context-menu.status-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: var(--vagabond-c-faint);
+  border: 2px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 150px;
+  overflow: hidden;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .status-context-menu .context-menu-item,
+.vagabond-context-menu.status-context-menu .context-menu-item {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: background 0.15s ease;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .status-context-menu .context-menu-item:hover,
+.vagabond-context-menu.status-context-menu .context-menu-item:hover {
+  background: var(--vagabond-c-tan-lite);
+  color: var(--vagabond-c-black);
+}
+.vagabond .status-context-menu .context-menu-item i,
+.vagabond-context-menu.status-context-menu .context-menu-item i {
+  width: 16px;
+  text-align: center;
+  color: inherit;
+}
+.vagabond .status-context-menu .context-menu-item.danger,
+.vagabond-context-menu.status-context-menu .context-menu-item.danger {
+  color: var(--vagabond-c-red);
+}
+.vagabond .status-context-menu .context-menu-item.danger:hover,
+.vagabond-context-menu.status-context-menu .context-menu-item.danger:hover {
+  background: rgba(217, 83, 79, 0.1);
+}
+
+/*
+ * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu)
  * currently use custom implementations that don't follow the ContextMenuHelper pattern.
- * They create menus directly without the 'vagabond-context-menu' base class, so the 
+ * They create menus directly without the 'vagabond-context-menu' base class, so the
  * dual-selector pattern doesn't apply to them.
- * 
+ *
  * If these are refactored to use ContextMenuHelper in the future, add dual selectors like:
  * .vagabond .progress-clock-context-menu,
  * .vagabond-context-menu.progress-clock-context-menu {
@@ -5608,6 +5703,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 16px;
   font-weight: bold;
 }
+.vagabond .inventory-slots-section .slots-info .slot-field .slot-value .fatigue-note {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--vagabond-c-red);
+  margin-left: 6px;
+  opacity: 0.9;
+}
 .vagabond .inventory-slots-section .slots-info .slot-warning {
   display: flex;
   align-items: center;
@@ -5678,6 +5780,28 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond .inventory-slot.empty-slot.unavailable .slot-number {
   color: rgba(0, 0, 0, 0.25);
+}
+.vagabond .inventory-slot.empty-slot.fatigue-occupied {
+  background: rgba(139, 0, 0, 0.15);
+  border-color: rgba(139, 0, 0, 0.3);
+  position: relative;
+}
+.vagabond .inventory-slot.empty-slot.fatigue-occupied .slot-number {
+  color: rgba(139, 0, 0, 0.4);
+}
+.vagabond .inventory-slot.empty-slot .fatigue-slot-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--vagabond-c-red);
+  font-size: 24px;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 5;
+}
+.vagabond .inventory-slot.empty-slot .fatigue-slot-overlay i {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 .vagabond .inventory-slot.empty-slot.drag-target-valid {
   border-left: 4px solid #5cb85c;
@@ -6213,6 +6337,44 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-weight: 600;
   margin-right: 4px;
   text-transform: uppercase;
+}
+.vagabond .status-display {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 168px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.vagabond .status-display .status-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .status-display .status-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 3px;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+  transition: filter 0.2s ease;
+}
+.vagabond .status-display .status-icon:hover {
+  transform: scale(1.15);
+  z-index: 10;
+}
+.vagabond .status-display .status-icon:hover img {
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.9));
 }
 .vagabond .hp-display {
   display: flex;
@@ -8278,3 +8440,5 @@ details[open] .vagabond .npc-immunity-toggle i {
   white-space: nowrap;
   word-break: break-all;
 }
+
+/*# sourceMappingURL=vagabond.css.map */

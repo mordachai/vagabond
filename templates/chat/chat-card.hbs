@@ -9,7 +9,7 @@
         
         {{!-- A. HEADER (Icon + Title + Tags) --}}
         <header class="card-header">
-            <div class="header-icon">
+            <div class="header-icon {{#if iconBackground}}has-background{{/if}}" {{#if iconBackground}}style="background-color: {{iconBackground}};"{{/if}}>
                 <img src="{{icon}}" alt="{{title}}">
             </div>
             <div class="header-info">
@@ -45,7 +45,9 @@
                     {{#if metadata}}
                         {{#each metadata}}
                         <div class="meta-tag metadata-display" style="width: 100%; margin-top: 4px; display: block;">
+                            {{#if this.label}}
                             <strong>{{this.label}}:</strong>
+                            {{/if}}
                             <span style="word-wrap: break-word; overflow-wrap: break-word;">
                             {{#if this.enriched}}
                                 {{{this.value}}}

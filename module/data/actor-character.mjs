@@ -316,6 +316,65 @@ export default class VagabondCharacter extends VagabondActorBase {
       { required: true, initial: [] }
     );
 
+    // ==========================================
+    // STATUS CONDITION AUTOMATION FIELDS
+    // ==========================================
+
+    // Bidirectional Status Modifiers (Phase 2)
+    // These fields enable status effects to modify both the actor and targets
+
+    // Incoming healing modifier (e.g., Sickened: -2 to healing received)
+    schema.incomingHealingModifier = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Incoming Healing Modifier"
+    });
+
+    // Incoming attacks modifier (e.g., Vulnerable: attackers have Favor)
+    schema.incomingAttacksModifier = new fields.StringField({
+      initial: 'none',
+      choices: ['none', 'favor', 'hinder'],
+      label: "Incoming Attacks Modifier"
+    });
+
+    // Outgoing saves modifier (e.g., Confused: enemy saves have Favor)
+    schema.outgoingSavesModifier = new fields.StringField({
+      initial: 'none',
+      choices: ['none', 'favor', 'hinder'],
+      label: "Outgoing Saves Modifier"
+    });
+
+    // Auto-fail stats (e.g., Incapacitated: auto-fail Might and Dexterity)
+    schema.autoFailStats = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Auto-Fail Stats" }
+    );
+
+    // Defender status modifiers (affects attackers targeting this actor)
+    schema.defenderStatusModifiers = new fields.SchemaField({
+      // Invisible: attackers are treated as Blinded
+      attackersAreBlinded: new fields.BooleanField({ initial: false }),
+      // Unconscious: close attacks auto-crit
+      closeAttacksAutoCrit: new fields.BooleanField({ initial: false })
+    });
+
+    // Status-specific data (for conditions that need extra context)
+    schema.statusEffectData = new fields.SchemaField({
+      // Charmed: UUID of the charmer
+      charmed: new fields.SchemaField({
+        charmerUuid: new fields.StringField({ initial: '', blank: true })
+      }),
+      // Burning: ongoing damage formula
+      burning: new fields.SchemaField({
+        damageFormula: new fields.StringField({ initial: '1d6', blank: true }),
+        damageType: new fields.StringField({ initial: 'fire' })
+      }),
+      // Suffocating: track start round
+      suffocating: new fields.SchemaField({
+        startRound: new fields.NumberField({ ...requiredInteger, initial: 0 })
+      })
+    });
+
     return schema;
   }
 
@@ -393,6 +452,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     // 5. Reset Defaults
     this.attributes.isSpellcaster = false;
     this.attributes.manaMultiplier = 0;
+
+    // --- 6. Reset Status Condition Fields ---
+    this.incomingHealingModifier = 0;
+    this.incomingAttacksModifier = 'none';
+    this.outgoingSavesModifier = 'none';
+    this.autoFailStats = [];
+    this.defenderStatusModifiers.attackersAreBlinded = false;
+    this.defenderStatusModifiers.closeAttacksAutoCrit = false;
+    // Don't reset statusEffectData - it contains persistent state like charmerUuid
   }
 
 /**
@@ -642,10 +710,11 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // 3. Apply bonus and set final values
     // Note: We only add bonus to base speed unless otherwise specified
+    // Clamp all speed values to minimum 0 (prevents negative display from status effects)
     this.speed = {
-      base: speedTier.base + speedBonus,
-      crawl: speedTier.crawl, 
-      travel: speedTier.travel,
+      base: Math.max(0, speedTier.base + speedBonus),
+      crawl: Math.max(0, speedTier.crawl),
+      travel: Math.max(0, speedTier.travel),
       bonus: speedBonus // Preserve the bonus value
     };
 
@@ -664,11 +733,18 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateInventorySlots() {
-    // Might + 8 + Bonus (original formula)
+    // Base slots: Might + 8 + Bonus
     const mightTotal = this.stats.might?.total || 0;
     const bonusSlots = this.inventory.bonusSlots || 0;
+    const baseMaxSlots = 8 + mightTotal + bonusSlots;
 
-    this.inventory.maxSlots = 8 + mightTotal + bonusSlots;
+    // Get current fatigue (0-5)
+    const currentFatigue = this.fatigue || 0;
+
+    // Calculate effective max slots (fatigue reduces available slots)
+    this.inventory.baseMaxSlots = baseMaxSlots; // Store for display: e.g., "16 - 2 Fatigue"
+    this.inventory.fatigueSlots = currentFatigue; // Store fatigue count
+    this.inventory.maxSlots = Math.max(0, baseMaxSlots - currentFatigue); // Effective max
 
     let occupiedSlots = 0;
     let occupiedSlotsWithZero = 0;
@@ -701,7 +777,7 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     this.inventory.occupiedSlots = occupiedSlots; // Only counts non-zero slot items
     this.inventory.totalItems = occupiedSlotsWithZero; // All items for grid sizing
-    this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots;
+    this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots; // Available = Effective max - occupied
   }
 
   _calculateManaValues() {

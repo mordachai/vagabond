@@ -126,8 +126,23 @@ function registerGameSettings() {
       'item': 'VAGABOND.Settings.chatCardIconStyle.item', // "Always Item Icon (Default)"
       'smart': 'VAGABOND.Settings.chatCardIconStyle.smart' // "Actor Face for Attacks/Spells, Item Icon for Gear"
     },
-    default: 'item', 
+    default: 'item',
     requiresReload: false
+  });
+
+  // Setting 7: Status Effects Mode
+  game.settings.register('vagabond', 'statusEffectsMode', {
+    name: 'VAGABOND.Settings.statusEffectsMode.name',
+    hint: 'VAGABOND.Settings.statusEffectsMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      'vagabond': 'VAGABOND.Settings.statusEffectsMode.vagabond',
+      'foundry': 'VAGABOND.Settings.statusEffectsMode.foundry'
+    },
+    default: 'vagabond',
+    requiresReload: true
   });
 }
 
@@ -229,6 +244,14 @@ Hooks.once('init', async function () {
 
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
+
+  // Apply custom status effects based on game setting
+  const statusEffectsMode = game.settings.get('vagabond', 'statusEffectsMode');
+  if (statusEffectsMode === 'vagabond') {
+    CONFIG.statusEffects = VAGABOND.statusEffectDefinitions;
+    console.log('Vagabond | Using custom Vagabond status conditions');
+  }
+  // If 'foundry', do nothing - Foundry's defaults will remain active
 
   // Loads placeholder images for character sheets
   CONFIG.Actor.typeImages = VAGABOND.actorTypeImages;
