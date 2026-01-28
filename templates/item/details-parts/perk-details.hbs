@@ -89,7 +89,7 @@
 
         </div>
 
-        {{!-- RIGHT COLUMN: Spells & Other --}}
+        {{!-- RIGHT COLUMN: Spells & Resources --}}
         <div class="perk-col">
 
             {{!-- Spells --}}
@@ -99,28 +99,56 @@
                     <a class="add-btn-mini" data-action="addSpellPrerequisite"><i class="fas fa-plus"></i></a>
                 </div>
                 <div class="prereq-list">
-                    {{#each item.system.prerequisites.spells as |spell index|}}
+                    {{!-- "Has Any Spell" Checkbox --}}
                     <div class="prereq-row">
-                        <input type="text" name="system.prerequisites.spells.{{index}}" value="{{spell}}" placeholder="{{localize 'VAGABOND.Item.Perk.SpellNamePlaceholder'}}">
-                        <a class="delete-btn" data-action="removeSpellPrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="system.prerequisites.hasAnySpell" {{checked item.system.prerequisites.hasAnySpell}}>
+                            {{localize 'VAGABOND.Item.Perk.HasAnySpell'}}
+                        </label>
+                    </div>
+
+                    {{!-- Specific Spell Prerequisites --}}
+                    {{#each spellPrerequisites as |prereq|}}
+                    <div class="prereq-row">
+                        <select name="system.prerequisites.spells.{{prereq.index}}">
+                            <option value="">{{localize 'VAGABOND.Item.Perk.SelectSpell'}}</option>
+                            {{#each prereq.availableSpells as |spell|}}
+                                <option value="{{spell.uuid}}" {{#if spell.isSelected}}selected{{/if}}>
+                                    {{spell.name}} ({{spell.packLabel}})
+                                </option>
+                            {{/each}}
+                        </select>
+                        <a class="delete-btn" data-action="removeSpellPrerequisite" data-index="{{prereq.index}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{else}}
+                    {{#unless item.system.prerequisites.hasAnySpell}}
                     <div class="empty-placeholder">{{localize "VAGABOND.None"}}</div>
+                    {{/unless}}
                     {{/each}}
                 </div>
             </div>
 
-            {{!-- Other --}}
+            {{!-- Resources --}}
             <div class="prereq-group">
                 <div class="group-header">
-                    <span><i class="fas fa-scroll"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.other.label'}}</span>
-                    <a class="add-btn-mini" data-action="addOtherPrerequisite"><i class="fas fa-plus"></i></a>
+                    <span><i class="fas fa-coins"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.resources.label'}}</span>
+                    <a class="add-btn-mini" data-action="addResourcePrerequisite"><i class="fas fa-plus"></i></a>
                 </div>
                 <div class="prereq-list">
-                    {{#each item.system.prerequisites.other as |other index|}}
+                    {{#each item.system.prerequisites.resources as |resource index|}}
                     <div class="prereq-row">
-                        <input type="text" name="system.prerequisites.other.{{index}}" value="{{other}}" placeholder="{{localize 'VAGABOND.Item.Perk.OtherPrerequisitePlaceholder'}}">
-                        <a class="delete-btn" data-action="removeOtherPrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
+                        <select name="system.prerequisites.resources.{{index}}.resourceType">
+                            <option value="">{{localize 'VAGABOND.Item.Perk.SelectResource'}}</option>
+                            <option value="maxMana" {{#if (eq resource.resourceType 'maxMana')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.MaxMana'}}</option>
+                            <option value="manaPerCast" {{#if (eq resource.resourceType 'manaPerCast')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.ManaPerCast'}}</option>
+                            <option value="wealth" {{#if (eq resource.resourceType 'wealth')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.Wealth'}}</option>
+                            <option value="inventorySlots" {{#if (eq resource.resourceType 'inventorySlots')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.InventorySlots'}}</option>
+                            <option value="speed" {{#if (eq resource.resourceType 'speed')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.Speed'}}</option>
+                            <option value="maxHP" {{#if (eq resource.resourceType 'maxHP')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.MaxHP'}}</option>
+                            <option value="currentLuck" {{#if (eq resource.resourceType 'currentLuck')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}}</option>
+                        </select>
+                        <input type="number" name="system.prerequisites.resources.{{index}}.minimum" value="{{resource.minimum}}" min="0" placeholder="Min" style="width: 60px;">
+                        <a class="delete-btn" data-action="removeResourcePrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{else}}
                     <div class="empty-placeholder">{{localize "VAGABOND.None"}}</div>

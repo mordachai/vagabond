@@ -125,6 +125,25 @@
             {{/if}}
         </div>
 
+        {{!-- Perk Prerequisites Display --}}
+        {{#if (eq selectedItem.type "perk")}}
+            {{#if selectedItem.hasPrerequisites}}
+                <div class="perk-prerequisites-compact">
+                    <h4 class="prereq-header">
+                        {{localize "VAGABOND.Item.Perk.FIELDS.prerequisites.label"}}
+                        {{#if selectedItem.prerequisitesMet}}
+                            <i class="fas fa-check prereq-met-icon"></i>
+                        {{else}}
+                            <i class="fas fa-times prereq-not-met-icon"></i>
+                        {{/if}}
+                    </h4>
+                    <div class="prereq-line">
+                        {{{selectedItem.prerequisitesCompactHTML}}}
+                    </div>
+                </div>
+            {{/if}}
+        {{/if}}
+
         <div class="preview-description">{{{selectedItem.enrichedDescription}}}</div>
 
         {{#if (eq selectedItem.type "spell")}}

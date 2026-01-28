@@ -33,6 +33,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     this.openCategories = new Set();
     this.indices = {};
     this.compendiumTypeCache = {}; // Cache which compendiums contain which types
+    this.showAllPerks = false; // Toggle for showing all perks regardless of prerequisites
 
     // Step 3: The 1d12 Stat Array Table
     this.statArrays = {
@@ -44,7 +45,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   // Navigation order for steps
-  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
 
   static DEFAULT_OPTIONS = {
     id: "vagabond-char-builder",
@@ -69,7 +70,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       clearTray: VagabondCharBuilder.prototype._onClearTray,
       removeStartingPack: VagabondCharBuilder.prototype._onRemoveStartingPack,
       finish: VagabondCharBuilder.prototype._onFinish,
-      dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder
+      dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder,
+      toggleShowAllPerks: VagabondCharBuilder.prototype._onToggleShowAllPerks
     }
   };
 
@@ -216,7 +218,138 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               selectedItem.size = sys.size || 'medium';
               selectedItem.ancestryType = sys.ancestryType || 'Humanlike';
             }
-            
+
+            // Enrich perk prerequisites for compact display
+            if (item.type === 'perk') {
+              const prereqs = sys.prerequisites;
+
+              // Check if perk has any prerequisites
+              const hasAnyPrereqs =
+                prereqs.stats?.length > 0 ||
+                prereqs.trainedSkills?.length > 0 ||
+                prereqs.spells?.length > 0 ||
+                prereqs.hasAnySpell ||
+                prereqs.resources?.length > 0;
+
+              selectedItem.hasPrerequisites = hasAnyPrereqs;
+
+              if (hasAnyPrereqs) {
+                // Get prerequisite check results
+                let prereqCheck = { met: true, missing: [] };
+                if (this.currentStep === 'perks') {
+                  prereqCheck = await VagabondCharBuilder.checkPerkPrerequisites(
+                    item,
+                    previewActor,
+                    this.builderData.spells
+                  );
+                  selectedItem.prerequisitesMet = prereqCheck.met;
+                  selectedItem.missingPrereqs = prereqCheck.missing;
+                }
+
+                // Build compact HTML string
+                const parts = [];
+
+                // Stat prerequisites
+                if (prereqs.stats?.length > 0) {
+                  const statParts = prereqs.stats.map(s => {
+                    const abbr = CONFIG.VAGABOND.statAbbreviations[s.stat];
+                    const localizedAbbr = game.i18n.localize(abbr);
+                    const statValue = previewActor?.system.stats[s.stat]?.value || 0;
+                    const isMet = statValue >= s.value;
+                    const text = `${localizedAbbr} ${s.value}+`;
+                    return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
+                  });
+                  parts.push(`Stat: ${statParts.join(', ')}`);
+                }
+
+                // Trained skill prerequisites
+                if (prereqs.trainedSkills?.length > 0) {
+                  const skillParts = prereqs.trainedSkills.map(skill => {
+                    const skillKey = skill.charAt(0).toUpperCase() + skill.slice(1);
+                    const skillLabel = CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
+                                      CONFIG.VAGABOND.skills?.[skillKey] ||
+                                      skill;
+                    const localizedSkill = game.i18n.localize(skillLabel);
+                    const isTrained = previewActor?.system.skills?.[skill]?.trained ||
+                                     previewActor?.system.weaponSkills?.[skill]?.trained ||
+                                     false;
+                    return isTrained ? localizedSkill : `<span class="prereq-not-met">${localizedSkill}</span>`;
+                  });
+                  parts.push(`Trained: ${skillParts.join(', ')}`);
+                }
+
+                // "Has any spell" prerequisite
+                if (prereqs.hasAnySpell) {
+                  const hasAnySpellMet = this.builderData.spells?.length > 0;
+                  const text = game.i18n.localize('VAGABOND.Item.Perk.HasAnySpell');
+                  parts.push(`Spell: ${hasAnySpellMet ? text : `<span class="prereq-not-met">${text}</span>`}`);
+                }
+
+                // Specific spell prerequisites
+                if (prereqs.spells?.length > 0) {
+                  const spellParts = [];
+                  for (const uuid of prereqs.spells) {
+                    if (!uuid) continue;
+                    try {
+                      const spell = await fromUuid(uuid);
+                      if (spell) {
+                        const hasSpell = this.builderData.spells?.includes(uuid);
+                        spellParts.push(hasSpell ? spell.name : `<span class="prereq-not-met">${spell.name}</span>`);
+                      }
+                    } catch (error) {
+                      console.warn(`Failed to resolve spell UUID: ${uuid}`);
+                    }
+                  }
+                  if (spellParts.length > 0) {
+                    parts.push(`Spell: ${spellParts.join(', ')}`);
+                  }
+                }
+
+                // Resource prerequisites
+                if (prereqs.resources?.length > 0) {
+                  const resourceParts = prereqs.resources.map(r => {
+                    const resourceLabel = CONFIG.VAGABOND.resourceTypes?.[r.resourceType] || r.resourceType;
+                    const localizedLabel = game.i18n.localize(resourceLabel);
+
+                    // Get current value based on resource type
+                    let currentValue = 0;
+                    if (previewActor) {
+                      switch (r.resourceType) {
+                        case 'maxMana':
+                          currentValue = previewActor.system.mana?.max || 0;
+                          break;
+                        case 'manaPerCast':
+                          currentValue = previewActor.system.mana?.castingMax || 0;
+                          break;
+                        case 'wealth':
+                          const currency = previewActor.system.currency || {};
+                          currentValue = (currency.gold || 0) * 100 + (currency.silver || 0) + (currency.copper || 0) / 10;
+                          break;
+                        case 'inventorySlots':
+                          currentValue = previewActor.system.inventory?.max || 0;
+                          break;
+                        case 'speed':
+                          currentValue = previewActor.system.attributes?.speed || 0;
+                          break;
+                        case 'maxHP':
+                          currentValue = previewActor.system.health?.max || 0;
+                          break;
+                        case 'currentLuck':
+                          currentValue = previewActor.system.stats?.luck?.value || 0;
+                          break;
+                      }
+                    }
+
+                    const isMet = currentValue >= r.minimum;
+                    const text = `${localizedLabel} ${r.minimum}+`;
+                    return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
+                  });
+                  parts.push(`Resc: ${resourceParts.join(', ')}`);
+                }
+
+                selectedItem.prerequisitesCompactHTML = parts.join(' | ');
+              }
+            }
             if (item.type === 'class') {
                 const features = sys.levelFeatures || [];
 
@@ -371,6 +504,24 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const spellLimit = this.currentStep === 'spells' ? await this._getSpellLimit() : null;
     const currentSpellCount = this.currentStep === 'spells' ? this.builderData.spells.length : null;
 
+    // Enrich perks with prerequisite checking
+    if (this.currentStep === 'perks') {
+      for (const perkOption of availableOptions) {
+        // Get the perk item document
+        const perkItem = await fromUuid(perkOption.uuid);
+        if (perkItem) {
+          // Check prerequisites using the static method
+          const prereqCheck = await VagabondCharBuilder.checkPerkPrerequisites(
+            perkItem,
+            previewActor,
+            this.builderData.spells // Pass spell UUIDs from builder
+          );
+          perkOption.prerequisitesMet = prereqCheck.met;
+          perkOption.missingPrereqs = prereqCheck.missing;
+        }
+      }
+    }
+
 
     return {
       actor: previewActor,
@@ -407,7 +558,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       showRandomButton: ["ancestry", "class", "stats", "spells", "starting-packs"].includes(this.currentStep),
       showFullRandomButton: this.currentStep === "ancestry",
       canAdvance: this._isStepComplete(this.currentStep),
-      canFinish: this._areMandatoryStepsComplete()
+      canFinish: this._areMandatoryStepsComplete(),
+      showAllPerks: this.showAllPerks
     };
   }
 
@@ -830,6 +982,120 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   /**
+   * Check if a perk's prerequisites are met based on an actor
+   * This is a reusable static method that can be called from anywhere (char builder, level up, etc.)
+   * @param {Object} perkItem - The perk item document
+   * @param {Object} actor - The actor to check prerequisites against
+   * @param {Array<string>} knownSpellUuids - Optional array of spell UUIDs the character knows (for builder context)
+   * @returns {Promise<Object>} { met: boolean, missing: string[] } - Whether prerequisites are met and list of missing prereqs
+   */
+  static async checkPerkPrerequisites(perkItem, actor, knownSpellUuids = []) {
+    const prereqs = perkItem.system.prerequisites;
+    const missing = [];
+
+    // If no prerequisites are set at all, perk is available
+    const hasAnyPrereqs =
+      prereqs.stats.length > 0 ||
+      prereqs.trainedSkills.length > 0 ||
+      prereqs.spells.length > 0 ||
+      prereqs.hasAnySpell ||
+      prereqs.resources.length > 0;
+
+    if (!hasAnyPrereqs) {
+      return { met: true, missing: [] };
+    }
+
+    // Check stat prerequisites
+    for (const statReq of prereqs.stats) {
+      const statValue = actor.system.stats[statReq.stat]?.value || 0;
+      if (statValue < statReq.value) {
+        const statLabel = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[statReq.stat]);
+        missing.push(`${statLabel} ${statReq.value}+`);
+      }
+    }
+
+    // Check trained skill prerequisites
+    for (const skillKey of prereqs.trainedSkills) {
+      const isTrained =
+        actor.system.skills?.[skillKey]?.trained ||
+        actor.system.weaponSkills?.[skillKey]?.trained ||
+        false;
+      if (!isTrained) {
+        const skillLabel = game.i18n.localize(
+          CONFIG.VAGABOND.skills?.[skillKey] ||
+          CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
+          skillKey
+        );
+        missing.push(`Trained: ${skillLabel}`);
+      }
+    }
+
+    // Get spell UUIDs - either from parameter (char builder) or from actor items (level up)
+    let actorSpellUuids = knownSpellUuids;
+    if (actorSpellUuids.length === 0 && actor.items) {
+      actorSpellUuids = actor.items.filter(i => i.type === 'spell').map(i => i.uuid);
+    }
+
+    // Check "has any spell" prerequisite
+    if (prereqs.hasAnySpell && actorSpellUuids.length === 0) {
+      missing.push('Has Any Spell');
+    }
+
+    // Check specific spell prerequisites
+    for (const spellUuid of prereqs.spells) {
+      if (!spellUuid) continue; // Skip empty strings
+      if (!actorSpellUuids.includes(spellUuid)) {
+        try {
+          const spell = await fromUuid(spellUuid);
+          missing.push(`Spell: ${spell?.name || 'Unknown Spell'}`);
+        } catch (error) {
+          missing.push('Spell: [Invalid UUID]');
+        }
+      }
+    }
+
+    // Check resource prerequisites
+    for (const resourceReq of prereqs.resources) {
+      let currentValue = 0;
+      const resourceType = resourceReq.resourceType;
+
+      // Map resource types to actor data paths
+      switch (resourceType) {
+        case 'maxMana':
+          currentValue = actor.system.mana?.max || 0;
+          break;
+        case 'manaPerCast':
+          currentValue = actor.system.mana?.castingMax || 0;
+          break;
+        case 'wealth':
+          // Convert to silver
+          const currency = actor.system.currency || {};
+          currentValue = (currency.gold || 0) * 100 + (currency.silver || 0) + (currency.copper || 0) / 10;
+          break;
+        case 'inventorySlots':
+          currentValue = actor.system.inventory?.max || 0;
+          break;
+        case 'speed':
+          currentValue = actor.system.attributes?.speed || 0;
+          break;
+        case 'maxHP':
+          currentValue = actor.system.health?.max || 0;
+          break;
+        case 'currentLuck':
+          currentValue = actor.system.stats?.luck?.value || 0;
+          break;
+      }
+
+      if (currentValue < resourceReq.minimum) {
+        const resourceLabel = game.i18n.localize(CONFIG.VAGABOND.resourceTypes?.[resourceType] || resourceType);
+        missing.push(`${resourceLabel} ${resourceReq.minimum}+`);
+      }
+    }
+
+    return { met: missing.length === 0, missing };
+  }
+
+  /**
    * Get the spell limit for level 1 from the selected class
    * @returns {number} Number of spells the character can learn at level 1
    */
@@ -1183,6 +1449,81 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               if (newTotal > budget) {
                   const overage = Math.round((newTotal - budget) * 10) / 10; // Round to 1 decimal
                   ui.notifications.warn(`You would be ${overage}s over budget! Remove items or change your starting pack.`);
+                  // Still allow adding (don't return), just warn
+              }
+          }
+      }
+
+      // For perks, check prerequisites and warn if not met
+      if (stepKey === 'perks') {
+          const perkItem = await fromUuid(uuid);
+          if (perkItem) {
+              // Need to create a preview actor to check prerequisites
+              // Recreate the preview actor logic from _prepareContext
+              const actorData = this.actor.toObject();
+              actorData.effects = [];
+              if (actorData.system.inventory) actorData.system.inventory.bonusSlots = 0;
+              if (actorData.system.stats) {
+                  for (const key of Object.keys(actorData.system.stats)) {
+                      if (actorData.system.stats[key]) {
+                          actorData.system.stats[key].bonus = 0;
+                          actorData.system.stats[key].mod = 0;
+                      }
+                  }
+              }
+
+              // Apply builder stats
+              for (const [key, val] of Object.entries(this.builderData.stats)) {
+                  if (val !== null && actorData.system.stats[key]) actorData.system.stats[key].value = val;
+              }
+
+              // Apply skills
+              const skillsToTrain = [...this.builderData.skills];
+              const classItemObj = this.builderData.class ? await fromUuid(this.builderData.class) : null;
+              if (classItemObj) {
+                  const guaranteed = classItemObj.system.skillGrant?.guaranteed || [];
+                  for (const s of guaranteed) {
+                      if (!skillsToTrain.includes(s)) skillsToTrain.push(s);
+                  }
+              }
+              for (const sKey of skillsToTrain) {
+                  if (actorData.system.skills && actorData.system.skills[sKey]) actorData.system.skills[sKey].trained = true;
+                  if (actorData.system.weaponSkills && actorData.system.weaponSkills[sKey]) actorData.system.weaponSkills[sKey].trained = true;
+              }
+
+              // Inject items
+              const allPerks = [...new Set([...this.builderData.classPerks, ...this.builderData.perks])];
+              const itemUuids = [
+                  this.builderData.ancestry,
+                  this.builderData.class,
+                  this.builderData.startingPack,
+                  ...allPerks,
+                  ...this.builderData.gear
+              ].filter(uuid => uuid);
+              const validItemDocs = itemUuids.length > 0 ? await Promise.all(itemUuids.map(uuid => fromUuid(uuid))) : [];
+              const validItems = validItemDocs.filter(i => i);
+              if (validItems.length > 0) {
+                  const itemObjects = validItems.map(item => item.toObject());
+                  const singletonTypes = ['ancestry', 'class'];
+                  const typesBeingAdded = new Set(itemObjects.map(i => i.type));
+                  actorData.items = actorData.items.filter(existingItem => {
+                      return !(singletonTypes.includes(existingItem.type) && typesBeingAdded.has(existingItem.type));
+                  });
+                  actorData.items.push(...itemObjects);
+              }
+
+              const previewActor = new Actor.implementation(actorData);
+              previewActor.prepareData();
+
+              // Check prerequisites
+              const prereqCheck = await VagabondCharBuilder.checkPerkPrerequisites(
+                  perkItem,
+                  previewActor,
+                  this.builderData.spells
+              );
+
+              if (!prereqCheck.met) {
+                  ui.notifications.warn(game.i18n.localize('VAGABOND.CharBuilder.PrerequisitesNotMet') + ': ' + prereqCheck.missing.join(', '));
                   // Still allow adding (don't return), just warn
               }
           }
@@ -1580,6 +1921,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       ui.notifications.info("Character builder dismissed. You can use the normal character sheet to build your character.");
       this.close();
     }
+  }
+
+  _onToggleShowAllPerks() {
+    this.showAllPerks = !this.showAllPerks;
+    this.render();
   }
 
   // RANDOMIZATION METHODS

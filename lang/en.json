@@ -127,6 +127,15 @@
       "Primordials": "Primordials",
       "Undead": "Undead"
     },
+    "ResourceTypes": {
+      "MaxMana": "Max Mana",
+      "ManaPerCast": "Mana per Cast",
+      "Wealth": "Wealth (in silver)",
+      "InventorySlots": "Inventory Slots",
+      "Speed": "Speed",
+      "MaxHP": "Max HP",
+      "CurrentLuck": "Luck Pool"
+    },
     "DamageTypes": {
       "None": "-",
       "Acid": "Acid",
@@ -490,14 +499,17 @@
             "stats": {"label": "Stat Prerequisites"},
             "trainedSkills": {"label": "Trained Skill Prerequisites"},
             "spells": {"label": "Spell Prerequisites"},
-            "other": {"label": "Other Prerequisites"}
+            "resources": {"label": "Resource Prerequisites"}
           }
         },
         "AddStatPrerequisite": "Add Stat Prerequisite",
         "AddTrainedSkillPrerequisite": "Add Trained Skill",
         "AddSpellPrerequisite": "Add Spell Prerequisite",
-        "AddOtherPrerequisite": "Add Other Prerequisite",
+        "AddResourcePrerequisite": "Add Resource Prerequisite",
         "RemovePrerequisite": "Remove Prerequisite",
+        "SelectSpell": "-- Select a Spell --",
+        "SelectResource": "-- Select a Resource --",
+        "HasAnySpell": "Has Any Spell",
         "SpellNamePlaceholder": "Enter spell name...",
         "OtherPrerequisitePlaceholder": "Enter prerequisite..."
       },
@@ -879,8 +891,8 @@
         "Ancestry": "Ancestry",
         "Class": "Class",
         "Stats": "Stats",
-        "Perks": "Perks",
         "Spells": "Spells",
+        "Perks": "Perks",
         "Startingpacks": "Starting Packs",
         "Gear": "Gear"
       },
@@ -896,8 +908,8 @@
         "Ancestry": "Choose your Ancestry. It grants you Traits shared by every member of that Ancestry, such as their Type and Size. ",
         "Class": "Select a Class. They grant Training and Features, and provides a guide for how the Hero best perform in Combat.",
         "Stats": "Select a Stat array from the list on the left to begin assigning values on top.",
-        "Perks": "Check your starting perks. Perks are marks of achievement and signals of arcs in one’s life journey.",
         "Spells": "If your class or ancestry allows, choose your starting spells. Spells can create devastating and miraculous effects.",
+        "Perks": "Check your starting perks. Perks are marks of achievement and signals of arcs in one's life journey.",
         "StartingPacks": "You can choose any pack you like, but there are recommended Starter Packs in your class Playing section",
         "Gear": "You can spend your remaining silver on additional equipment, weapons, and supplies."
       },
@@ -912,6 +924,9 @@
         "ClearTray": "Clear Tray",
         "RemovePack": "Remove Starting Pack"
       },
+      "ShowAll": "Show All",
+      "PrerequisitesNotMet": "You don't have the prerequisites",
+      "PrerequisitesMet": "Prerequisites Met",
       "TrayTitle": "Your Selections",
       "TrayInstructions": "Drag items from the list or click 'Add to Tray' to collect your choices.",
       "TrayEmpty": "Your tray is empty. Select items from the list and drop it here.",

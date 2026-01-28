@@ -68,6 +68,21 @@ VAGABOND.skills = {
 };
 
 /**
+ * Resource types for perk prerequisites
+ * Used to define minimum resource requirements (e.g., "Must have 50 max mana")
+ * @type {Object}
+ */
+VAGABOND.resourceTypes = {
+  maxMana: "VAGABOND.ResourceTypes.MaxMana",
+  manaPerCast: "VAGABOND.ResourceTypes.ManaPerCast",
+  wealth: "VAGABOND.ResourceTypes.Wealth",
+  inventorySlots: "VAGABOND.ResourceTypes.InventorySlots",
+  speed: "VAGABOND.ResourceTypes.Speed",
+  maxHP: "VAGABOND.ResourceTypes.MaxHP",
+  currentLuck: "VAGABOND.ResourceTypes.CurrentLuck"
+};
+
+/**
  * Size categories for actors
  * @type {Object}
  */

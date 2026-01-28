@@ -66,8 +66,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeTrainedSkillPrerequisite: this._onRemoveTrainedSkillPrerequisite,
       addSpellPrerequisite: this._onAddSpellPrerequisite,
       removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
-      addOtherPrerequisite: this._onAddOtherPrerequisite,
-      removeOtherPrerequisite: this._onRemoveOtherPrerequisite,
+      addResourcePrerequisite: this._onAddResourcePrerequisite,
+      removeResourcePrerequisite: this._onRemoveResourcePrerequisite,
       toggleWeaponProperty: this._onToggleWeaponProperty,
       removeWeaponProperty: this._onRemoveWeaponProperty,
       toggleImmunity: this._onToggleImmunity,
@@ -94,11 +94,13 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   };
 
   /** * V13 Standard: Define Event Listeners here.
-   * This maps the "change" event on elements with data-action="update-grip" 
+   * This maps the "change" event on elements with data-action="update-grip"
    * to the _onUpdateGrip function.
    */
   static EVENTS = {
     'change [data-action="update-grip"]': "_onUpdateGrip",
+    'change select[name^="system.prerequisites.spells"]': "_onSpellPrerequisiteChange",
+    'change select[name^="system.prerequisites.resources"]': "_onResourcePrerequisiteChange",
   }
 
   /* -------------------------------------------- */
@@ -330,6 +332,47 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             }
           )
         };
+
+        // Load all spells from compendiums for spell prerequisite dropdown
+        context.availableSpells = [];
+        for (const pack of game.packs) {
+          // Only include Item compendiums
+          if (pack.metadata.type !== 'Item') continue;
+
+          // Check if this compendium contains spell items
+          const index = await pack.getIndex({ fields: ["type"] });
+          const spells = index.filter(i => i.type === 'spell');
+
+          if (spells.length > 0) {
+            // Add spells from this compendium
+            for (const spell of spells) {
+              context.availableSpells.push({
+                uuid: spell.uuid,
+                name: spell.name,
+                packLabel: pack.metadata.label
+              });
+            }
+          }
+        }
+
+        // Sort spells alphabetically by name
+        context.availableSpells.sort((a, b) => a.name.localeCompare(b.name));
+
+        // Preprocess spell prerequisites to include spell details for easier template rendering
+        const storedSpellUuids = this.item.system.prerequisites?.spells || [];
+        context.spellPrerequisites = [];
+        for (let i = 0; i < storedSpellUuids.length; i++) {
+          const storedUuid = storedSpellUuids[i];
+          context.spellPrerequisites.push({
+            index: i,
+            selectedUuid: storedUuid,
+            availableSpells: context.availableSpells.map(spell => ({
+              ...spell,
+              isSelected: spell.uuid === storedUuid
+            }))
+          });
+        }
+
         break;
 
       case 'starterPackDetails':
@@ -1036,34 +1079,81 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle adding a new other prerequisite to a perk item
-   *
+   * Handle change event on spell prerequisite dropdown
    * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @param {Event} event - The change event
    * @private
    */
-  static async _onAddOtherPrerequisite(event, target) {
-    const other = this.item.system.prerequisites?.other || [];
-    const newOther = [...other, ''];
-    await this.item.update({ 'system.prerequisites.other': newOther });
+  static async _onSpellPrerequisiteChange(event) {
+    const select = event.currentTarget;
+    const name = select.name;
+    const value = select.value;
+
+    // Extract index from name like "system.prerequisites.spells.0"
+    const match = name.match(/system\.prerequisites\.spells\.(\d+)/);
+    if (!match) return;
+
+    const index = parseInt(match[1]);
+    const spells = [...(this.item.system.prerequisites?.spells || [])];
+    spells[index] = value;
+
+    await this.item.update({ 'system.prerequisites.spells': spells });
   }
 
   /**
-   * Handle removing an other prerequisite from a perk item
+   * Handle change event on resource prerequisite dropdown
+   * @this VagabondItemSheet
+   * @param {Event} event - The change event
+   * @private
+   */
+  static async _onResourcePrerequisiteChange(event) {
+    const select = event.currentTarget;
+    const name = select.name;
+    const value = select.value;
+
+    // Extract index and field from name like "system.prerequisites.resources.0.resourceType"
+    const match = name.match(/system\.prerequisites\.resources\.(\d+)\.(\w+)/);
+    if (!match) return;
+
+    const index = parseInt(match[1]);
+    const field = match[2];
+    const resources = foundry.utils.deepClone(this.item.system.prerequisites?.resources || []);
+
+    if (resources[index]) {
+      resources[index][field] = value;
+      await this.item.update({ 'system.prerequisites.resources': resources });
+    }
+  }
+
+  /**
+   * Handle adding a new resource prerequisite to a perk item
    *
    * @this VagabondItemSheet
    * @param {PointerEvent} event   The originating click event
    * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
    * @private
    */
-  static async _onRemoveOtherPrerequisite(event, target) {
+  static async _onAddResourcePrerequisite(event, target) {
+    const resources = this.item.system.prerequisites?.resources || [];
+    const newResources = [...resources, { resourceType: 'maxMana', minimum: 1 }];
+    await this.item.update({ 'system.prerequisites.resources': newResources });
+  }
+
+  /**
+   * Handle removing a resource prerequisite from a perk item
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveResourcePrerequisite(event, target) {
     const index = parseInt(target.dataset.index);
     if (isNaN(index)) return;
 
-    const other = this.item.system.prerequisites?.other || [];
-    const newOther = other.filter((_, i) => i !== index);
-    await this.item.update({ 'system.prerequisites.other': newOther });
+    const resources = this.item.system.prerequisites?.resources || [];
+    const newResources = resources.filter((_, i) => i !== index);
+    await this.item.update({ 'system.prerequisites.resources': newResources });
   }
 
   /**

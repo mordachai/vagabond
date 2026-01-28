@@ -57,15 +57,44 @@ export default class VagabondPerk extends VagabondItemBase {
         { initial: [] }
       ),
 
-      // Spell prerequisites - e.g., "Spell: Fireball"
+      // Spell prerequisites - stores spell UUIDs to prevent misspelling
+      // e.g., "Compendium.vagabond.spells.Item.xyz123"
       spells: new fields.ArrayField(
-        new fields.StringField({ initial: '' }),
+        new fields.StringField({
+          initial: '',
+          blank: true // Allow empty strings for new entries before selection
+        }),
         { initial: [] }
       ),
 
-      // Other prerequisites - free-form text
-      other: new fields.ArrayField(
-        new fields.StringField({ initial: '' }),
+      // Has any spell - simple boolean flag for "must know at least one spell"
+      hasAnySpell: new fields.BooleanField({
+        initial: false
+      }),
+
+      // Resource prerequisites - e.g., "Max Mana 20+", "Wealth 500s+"
+      resources: new fields.ArrayField(
+        new fields.SchemaField({
+          resourceType: new fields.StringField({
+            ...requiredString,
+            initial: 'maxMana',
+            choices: {
+              maxMana: 'VAGABOND.ResourceTypes.MaxMana',
+              manaPerCast: 'VAGABOND.ResourceTypes.ManaPerCast',
+              wealth: 'VAGABOND.ResourceTypes.Wealth',
+              inventorySlots: 'VAGABOND.ResourceTypes.InventorySlots',
+              speed: 'VAGABOND.ResourceTypes.Speed',
+              maxHP: 'VAGABOND.ResourceTypes.MaxHP',
+              currentLuck: 'VAGABOND.ResourceTypes.CurrentLuck'
+            }
+          }),
+          minimum: new fields.NumberField({
+            required: true,
+            initial: 1,
+            min: 0,
+            integer: true
+          })
+        }),
         { initial: [] }
       )
     });
@@ -79,14 +108,15 @@ export default class VagabondPerk extends VagabondItemBase {
       this.prerequisites.stats.length +
       this.prerequisites.trainedSkills.length +
       this.prerequisites.spells.length +
-      this.prerequisites.other.length;
+      (this.prerequisites.hasAnySpell ? 1 : 0) +
+      this.prerequisites.resources.length;
   }
 
   /**
    * Get formatted prerequisite string for display
-   * @returns {string} Formatted prerequisites like "DEX 5+; Trained: Ranged"
+   * @returns {Promise<string>} Formatted prerequisites like "DEX 5+; Trained: Ranged"
    */
-  getPrerequisiteString() {
+  async getPrerequisiteString() {
     const parts = [];
 
     // Format stat prerequisites
@@ -112,14 +142,41 @@ export default class VagabondPerk extends VagabondItemBase {
       parts.push(`Trained: ${skillNames.join(', ')}`);
     }
 
-    // Format spell prerequisites
-    if (this.prerequisites.spells.length > 0) {
-      parts.push(`Spell: ${this.prerequisites.spells.join(', ')}`);
+    // Format "has any spell" prerequisite
+    if (this.prerequisites.hasAnySpell) {
+      parts.push('Has Any Spell');
     }
 
-    // Format other prerequisites
-    if (this.prerequisites.other.length > 0) {
-      parts.push(this.prerequisites.other.join(', '));
+    // Format spell prerequisites - resolve UUIDs to spell names
+    if (this.prerequisites.spells.length > 0) {
+      const spellNames = [];
+      for (const uuid of this.prerequisites.spells) {
+        if (!uuid) continue; // Skip empty strings
+        try {
+          const spell = await fromUuid(uuid);
+          if (spell) {
+            spellNames.push(spell.name);
+          } else {
+            spellNames.push('[Unknown Spell]');
+          }
+        } catch (error) {
+          console.warn(`Failed to resolve spell UUID: ${uuid}`, error);
+          spellNames.push('[Invalid UUID]');
+        }
+      }
+      if (spellNames.length > 0) {
+        parts.push(`Spell: ${spellNames.join(', ')}`);
+      }
+    }
+
+    // Format resource prerequisites
+    if (this.prerequisites.resources.length > 0) {
+      const resourceStrings = this.prerequisites.resources.map(r => {
+        const resourceLabel = CONFIG.VAGABOND.resourceTypes?.[r.resourceType] || r.resourceType;
+        const localizedLabel = game.i18n.localize(resourceLabel);
+        return `${localizedLabel} ${r.minimum}+`;
+      });
+      parts.push(resourceStrings.join('; '));
     }
 
     return parts.join('; ');
@@ -177,19 +234,19 @@ export default class VagabondPerk extends VagabondItemBase {
   }
 
   /**
-   * Add an other prerequisite
+   * Add a resource prerequisite
    */
-  async addOtherPrerequisite(text = '') {
-    const newOther = [...this.prerequisites.other, text];
-    await this.parent.update({ 'system.prerequisites.other': newOther });
+  async addResourcePrerequisite(resourceType = 'maxMana', minimum = 1) {
+    const newResources = [...this.prerequisites.resources, { resourceType, minimum }];
+    await this.parent.update({ 'system.prerequisites.resources': newResources });
   }
 
   /**
-   * Remove an other prerequisite by index
+   * Remove a resource prerequisite by index
    */
-  async removeOtherPrerequisite(index) {
-    if (index < 0 || index >= this.prerequisites.other.length) return;
-    const newOther = this.prerequisites.other.filter((_, i) => i !== index);
-    await this.parent.update({ 'system.prerequisites.other': newOther });
+  async removeResourcePrerequisite(index) {
+    if (index < 0 || index >= this.prerequisites.resources.length) return;
+    const newResources = this.prerequisites.resources.filter((_, i) => i !== index);
+    await this.parent.update({ 'system.prerequisites.resources': newResources });
   }
 }

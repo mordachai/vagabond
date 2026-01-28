@@ -2554,7 +2554,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: white;
   margin-bottom: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .search-input {
   width: 100%;
@@ -2572,8 +2573,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column .search-sticky .search-clear {
   position: absolute;
   right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 4px;
   width: 24px;
   height: 24px;
   border: none;
@@ -2592,6 +2592,23 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .search-clear i {
   font-size: 12px;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .show-all-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .show-all-checkbox input[type=checkbox] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .show-all-checkbox:hover {
+  color: var(--vagabond-c-red);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-list {
   flex: 1;
@@ -2625,6 +2642,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.in-tray.previewing {
   background: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified {
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified .name {
+  color: #999;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified:hover {
+  opacity: 0.7;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item img {
   width: 48px;
@@ -2704,6 +2731,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   align-items: baseline;
   gap: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .prereq-warning {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #d32f2f;
+  font-style: italic;
+  margin-top: 2px;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .prereq-warning i {
+  font-size: 0.75rem;
 }
 .vagabond-builder .builder-body .right-column {
   display: flex;
@@ -2899,6 +2938,35 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .ancestry-info .info-row strong {
   font-weight: 700;
   color: var(--vagabond-c-white);
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact {
+  margin-bottom: 15px;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-header .prereq-met-icon {
+  color: #4CAF50;
+  font-size: 1rem;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-header .prereq-not-met-icon {
+  color: var(--vagabond-c-red);
+  font-size: 1rem;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-line {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #555;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-line .prereq-not-met {
+  color: var(--vagabond-c-red);
+  font-weight: 600;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-description {
   margin-bottom: 20px;

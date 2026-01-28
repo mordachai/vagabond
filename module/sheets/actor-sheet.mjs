@@ -483,7 +483,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         id: effect.id,
         uuid: effect.uuid,
         name: effect.name || effect.label || 'Unknown',
-        icon: effect.icon || 'icons/svg/aura.svg',
+        icon: effect.img || 'icons/svg/aura.svg',
         description: effect.description || '',
         statuses: Array.from(effect.statuses || [])
       });
