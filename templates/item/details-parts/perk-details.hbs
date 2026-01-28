@@ -21,17 +21,17 @@
     {{!-- 2. Prerequisites Section --}}
     <div class="perk-prerequisites-section">
         <div class="prereq-add-header">
-            <label for="prereq-type-select"><i class="fas fa-plus-circle"></i> Add Prerequisite:</label>
+            <label for="prereq-type-select"><i class="fas fa-plus-circle"></i> {{localize 'VAGABOND.Item.Perk.AddPrerequisiteLabel'}}</label>
             <select id="prereq-type-select" data-action="addPrerequisiteType">
-                <option value="">-- Select Type --</option>
-                <option value="stat">Stat (e.g., DEX 4+)</option>
-                <option value="statOrGroup">Stat OR Group (e.g., MIG 4+ or DEX 4+)</option>
-                <option value="trainedSkill">Trained Skill (e.g., Melee)</option>
-                <option value="trainedSkillOrGroup">Trained Skill OR Group (e.g., Melee or Ranged)</option>
-                <option value="spell">Spell (specific spell / Any)</option>
-                <option value="spellOrGroup">Spell OR Group (e.g., Burn or Erupt)</option>
-                <option value="resource">Resource (e.g., Max Mana 7+)</option>
-                <option value="resourceOrGroup">Resource OR Group (e.g., Max Mana 7+ or Wealth 500s+)</option>
+                <option value="">{{localize 'VAGABOND.Item.Perk.SelectPrerequisiteType'}}</option>
+                <option value="stat">{{localize 'VAGABOND.Item.Perk.PrereqTypeStat'}}</option>
+                <option value="statOrGroup">{{localize 'VAGABOND.Item.Perk.PrereqTypeStatOrGroup'}}</option>
+                <option value="trainedSkill">{{localize 'VAGABOND.Item.Perk.PrereqTypeTrainedSkill'}}</option>
+                <option value="trainedSkillOrGroup">{{localize 'VAGABOND.Item.Perk.PrereqTypeTrainedSkillOrGroup'}}</option>
+                <option value="spell">{{localize 'VAGABOND.Item.Perk.PrereqTypeSpell'}}</option>
+                <option value="spellOrGroup">{{localize 'VAGABOND.Item.Perk.PrereqTypeSpellOrGroup'}}</option>
+                <option value="resource">{{localize 'VAGABOND.Item.Perk.PrereqTypeResource'}}</option>
+                <option value="resourceOrGroup">{{localize 'VAGABOND.Item.Perk.PrereqTypeResourceOrGroup'}}</option>
             </select>
         </div>
 

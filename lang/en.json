@@ -6,11 +6,11 @@
       "No": "no"
     },
     "Stat": {
-      "Might": { "long": "Might", "abbr": "MIG" },
+      "Might": { "long": "Might", "abbr": "MIT" },
       "Dexterity": { "long": "Dexterity", "abbr": "DEX" },
       "Awareness": { "long": "Awareness", "abbr": "AWR" },
-      "Reason": { "long": "Reason", "abbr": "REA" },
-      "Presence": { "long": "Presence", "abbr": "PRE" },
+      "Reason": { "long": "Reason", "abbr": "RSN" },
+      "Presence": { "long": "Presence", "abbr": "PRS" },
       "Luck": { "long": "Luck", "abbr": "LUK" }
     },
     "Skills": {
@@ -184,14 +184,14 @@
       "Prone": "Costs 10' Speed to stand. Crawl only (2:1 ratio), can't Rush, Vulnerable [PARTIAL - Speed automated]",
       "Confused": "Checks/Saves Hindered. Saves against its Actions Favored [AUTOMATED]",
       "Sickened": "-2 penalty to healing received [AUTOMATED]",
-      "Vulnerable": "Attacks/Saves Hindered. Incoming attacks Favored. Saves vs its attacks Favored [AUTOMATED]",
+      "Vulnerable": "Its attacks and its Saves against attacks have Hinder. Attacks targeting it and Saves against its attacks have Favor [AUTOMATED]",
       "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
       "Blinded": "Can't see. Vulnerable [AUTOMATED]",
       "Incapacitated": "Can't Focus/Actions/Move. Auto-fail Might/Dex. Vulnerable. Speed = 0 [AUTOMATED]",
       "Paralyzed": "Incapacitated + Speed = 0 [AUTOMATED]",
       "Unconscious": "Blinded + Incapacitated + Prone. Close Attacks auto-crit [AUTOMATED]",
       "Invisible": "Can't be seen. Attackers act as Blinded [AUTOMATED]",
-      "Berserk": "Can't Cast/Focus. Immune to Frightened [PARTIAL - Manual tracking]",
+      "Berserk": "It can’t take the Cast Action or Focus, it can’t be Frightened, and it doesn’t make Morale Checks [PARTIAL - Manual tracking]",
       "Burning": "Takes damage at start of turn [FUTURE - Requires combat tracker hooks]",
       "Charmed": "Can't willingly attack the charmer [FUTURE - Requires target validation]",
       "Suffocating": "After 1 minute: Heroes roll d8 vs Might for fatigue. Enemies gain 1 fatigue [FUTURE - Requires combat tracker]"
@@ -511,7 +511,17 @@
         "SelectResource": "-- Select a Resource --",
         "HasAnySpell": "Has Any Spell",
         "SpellNamePlaceholder": "Enter spell name...",
-        "OtherPrerequisitePlaceholder": "Enter prerequisite..."
+        "OtherPrerequisitePlaceholder": "Enter prerequisite...",
+        "AddPrerequisiteLabel": "Add Prerequisite:",
+        "SelectPrerequisiteType": "-- Select Type --",
+        "PrereqTypeStat": "Stat (e.g., DEX 4+)",
+        "PrereqTypeStatOrGroup": "Stat OR Group (e.g., MIG 4+ or DEX 4+)",
+        "PrereqTypeTrainedSkill": "Trained Skill (e.g., Melee)",
+        "PrereqTypeTrainedSkillOrGroup": "Trained Skill OR Group (e.g., Melee or Ranged)",
+        "PrereqTypeSpell": "Spell (specific spell / Any)",
+        "PrereqTypeSpellOrGroup": "Spell OR Group (e.g., Burn or Erupt)",
+        "PrereqTypeResource": "Resource (e.g., Max Mana 7+)",
+        "PrereqTypeResourceOrGroup": "Resource OR Group (e.g., Max Mana 7+ or Wealth 500s+)"
       },
       "StarterPack": {
         "FIELDS": {
