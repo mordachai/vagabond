@@ -259,7 +259,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     const text = `${localizedAbbr} ${s.value}+`;
                     return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
                   });
-                  parts.push(`Stat: ${statParts.join(', ')}`);
+                  parts.push(`<strong>Stat:</strong> ${statParts.join(', ')}`);
                 }
 
                 // Stat OR groups
@@ -284,7 +284,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     return allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`;
                   });
 
-                  parts.push(`Stat: ${orGroupParts.join('; ')}`);
+                  parts.push(`<strong>Stat:</strong> ${orGroupParts.join('; ')}`);
                 }
 
                 // Trained skill prerequisites
@@ -294,13 +294,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     const skillLabel = CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
                                       CONFIG.VAGABOND.skills?.[skillKey] ||
                                       skill;
-                    const localizedSkill = game.i18n.localize(skillLabel);
+                    let localizedSkill = game.i18n.localize(skillLabel);
+                    localizedSkill = localizedSkill.charAt(0).toUpperCase() + localizedSkill.slice(1);
                     const isTrained = previewActor?.system.skills?.[skill]?.trained ||
                                      previewActor?.system.weaponSkills?.[skill]?.trained ||
                                      false;
                     return isTrained ? localizedSkill : `<span class="prereq-not-met">${localizedSkill}</span>`;
                   });
-                  parts.push(`Trained: ${skillParts.join(', ')}`);
+                  parts.push(`<strong>Trained:</strong> ${skillParts.join(', ')}`);
                 }
 
                 // Trained skill OR groups
@@ -311,7 +312,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                       const skillLabel = CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
                                         CONFIG.VAGABOND.skills?.[skillKey] ||
                                         skill;
-                      const localizedSkill = game.i18n.localize(skillLabel);
+                      let localizedSkill = game.i18n.localize(skillLabel);
+                      localizedSkill = localizedSkill.charAt(0).toUpperCase() + localizedSkill.slice(1);
 
                       const isTrained = previewActor?.system.skills?.[skill]?.trained ||
                                        previewActor?.system.weaponSkills?.[skill]?.trained ||
@@ -330,14 +332,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     return allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`;
                   });
 
-                  parts.push(`Trained: ${orGroupParts.join('; ')}`);
+                  parts.push(`<strong>Trained:</strong> ${orGroupParts.join('; ')}`);
                 }
 
                 // "Has any spell" prerequisite
                 if (prereqs.hasAnySpell) {
                   const hasAnySpellMet = this.builderData.spells?.length > 0;
                   const text = game.i18n.localize('VAGABOND.Item.Perk.HasAnySpell');
-                  parts.push(`Spell: ${hasAnySpellMet ? text : `<span class="prereq-not-met">${text}</span>`}`);
+                  parts.push(`<strong>Spell:</strong> ${hasAnySpellMet ? text : `<span class="prereq-not-met">${text}</span>`}`);
                 }
 
                 // Specific spell prerequisites
@@ -356,7 +358,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     }
                   }
                   if (spellParts.length > 0) {
-                    parts.push(`Spell: ${spellParts.join(', ')}`);
+                    parts.push(`<strong>Spell:</strong> ${spellParts.join(', ')}`);
                   }
                 }
 
@@ -388,7 +390,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                   }
 
                   if (orGroupParts.length > 0) {
-                    parts.push(`Spell: ${orGroupParts.join('; ')}`);
+                    parts.push(`<strong>Spell:</strong> ${orGroupParts.join('; ')}`);
                   }
                 }
 
@@ -431,7 +433,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     const text = `${localizedLabel} ${r.minimum}+`;
                     return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
                   });
-                  parts.push(`Resc: ${resourceParts.join(', ')}`);
+                  parts.push(`<strong>Resc:</strong> ${resourceParts.join(', ')}`);
                 }
 
                 // Resource OR groups
@@ -511,7 +513,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     return allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`;
                   });
 
-                  parts.push(`Resc: ${orGroupParts.join('; ')}`);
+                  parts.push(`<strong>Resc:</strong> ${orGroupParts.join('; ')}`);
                 }
 
                 selectedItem.prerequisitesCompactHTML = parts.join(' | ');

@@ -2960,7 +2960,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1rem;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-line {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   line-height: 1.4;
   color: #555;
 }

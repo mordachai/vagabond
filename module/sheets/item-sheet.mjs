@@ -79,6 +79,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       clearAllTrainedSkillOrGroups: this._onClearAllTrainedSkillOrGroups,
       addSpellPrerequisite: this._onAddSpellPrerequisite,
       removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
+      toggleHasAnySpell: this._onToggleHasAnySpell,
       clearAllSpells: this._onClearAllSpells,
       addSpellOrGroup: this._onAddSpellOrGroup,
       removeSpellOrGroup: this._onRemoveSpellOrGroup,
@@ -1307,6 +1308,28 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const spells = this.item.system.prerequisites?.spells || [];
     const newSpells = spells.filter((_, i) => i !== index);
     await this.item.update({ 'system.prerequisites.spells': newSpells });
+  }
+
+  /**
+   * Handle toggling the "Has Any Spell" checkbox and hide/show specific spell selectors
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onToggleHasAnySpell(event, target) {
+    const checkbox = target;
+    const isChecked = checkbox.checked;
+
+    // Find the specific spell prerequisites container and toggle visibility
+    const prereqList = checkbox.closest('.prereq-list');
+    if (prereqList) {
+      const specificSpellsContainer = prereqList.querySelector('.specific-spell-prerequisites');
+      if (specificSpellsContainer) {
+        specificSpellsContainer.style.display = isChecked ? 'none' : '';
+      }
+    }
   }
 
   /**

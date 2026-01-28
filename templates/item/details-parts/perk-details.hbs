@@ -24,14 +24,14 @@
             <label for="prereq-type-select"><i class="fas fa-plus-circle"></i> Add Prerequisite:</label>
             <select id="prereq-type-select" data-action="addPrerequisiteType">
                 <option value="">-- Select Type --</option>
-                <option value="stat">Stat Requirement (e.g., DEX 5+)</option>
-                <option value="statOrGroup">Stat OR Group (e.g., MIG 5+ or DEX 5+)</option>
+                <option value="stat">Stat (e.g., DEX 4+)</option>
+                <option value="statOrGroup">Stat OR Group (e.g., MIG 4+ or DEX 4+)</option>
                 <option value="trainedSkill">Trained Skill (e.g., Melee)</option>
-                <option value="trainedSkillOrGroup">Skill OR Group (e.g., Melee or Ranged)</option>
-                <option value="spell">Spell Requirement (specific spell)</option>
-                <option value="spellOrGroup">Spell OR Group (e.g., Fireball or Lightning Bolt)</option>
-                <option value="resource">Resource Requirement (e.g., Max Mana 20+)</option>
-                <option value="resourceOrGroup">Resource OR Group (e.g., Max Mana 20+ or Wealth 500s+)</option>
+                <option value="trainedSkillOrGroup">Trained Skill OR Group (e.g., Melee or Ranged)</option>
+                <option value="spell">Spell (specific spell / Any)</option>
+                <option value="spellOrGroup">Spell OR Group (e.g., Burn or Erupt)</option>
+                <option value="resource">Resource (e.g., Max Mana 7+)</option>
+                <option value="resourceOrGroup">Resource OR Group (e.g., Max Mana 7+ or Wealth 500s+)</option>
             </select>
         </div>
 
@@ -41,9 +41,8 @@
             {{#if item.system.prerequisites.stats.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-chart-bar"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</span>
+                    <span><a class="add-btn" data-action="addStatPrerequisite" title="Add stat"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addStatPrerequisite" title="Add stat"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllStats" title="Clear all stats"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -70,9 +69,8 @@
             {{#if item.system.prerequisites.statOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-code-branch"></i> Stat OR Groups</span>
+                    <span><a class="add-btn" data-action="addStatOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Stat OR Groups</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addStatOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllStatOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -124,9 +122,8 @@
             {{#if item.system.prerequisites.trainedSkills.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-graduation-cap"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</span>
+                    <span><a class="add-btn" data-action="addTrainedSkillPrerequisite" title="Add skill"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addTrainedSkillPrerequisite" title="Add skill"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllTrainedSkills" title="Clear all skills"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -164,9 +161,8 @@
             {{#if item.system.prerequisites.trainedSkillOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-code-branch"></i> Trained Skill OR Groups</span>
+                    <span><a class="add-btn" data-action="addTrainedSkillOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Trained Skill OR Groups</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addTrainedSkillOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllTrainedSkillOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -232,9 +228,8 @@
             {{#if item.system.prerequisites.spells.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-magic"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</span>
+                    <span><a class="add-btn" data-action="addSpellPrerequisite" title="Add spell"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addSpellPrerequisite" title="Add spell"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllSpells" title="Clear all spells"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -242,12 +237,13 @@
                     {{!-- "Has Any Spell" Checkbox --}}
                     <div class="prereq-row">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="system.prerequisites.hasAnySpell" {{checked item.system.prerequisites.hasAnySpell}}>
+                            <input type="checkbox" name="system.prerequisites.hasAnySpell" {{checked item.system.prerequisites.hasAnySpell}} data-action="toggleHasAnySpell">
                             {{localize 'VAGABOND.Item.Perk.HasAnySpell'}}
                         </label>
                     </div>
 
                     {{!-- Specific Spell Prerequisites --}}
+                    <div class="specific-spell-prerequisites" {{#if item.system.prerequisites.hasAnySpell}}style="display: none;"{{/if}}>
                     {{#each spellPrerequisites as |prereq|}}
                     <div class="prereq-row">
                         <select name="system.prerequisites.spells.{{prereq.index}}">
@@ -261,6 +257,7 @@
                         <a class="delete-btn" data-action="removeSpellPrerequisite" data-index="{{prereq.index}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{/each}}
+                    </div>
                 </div>
             </div>
             {{/if}}
@@ -269,9 +266,8 @@
             {{#if item.system.prerequisites.spellOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-code-branch"></i> Spell OR Groups</span>
+                    <span><a class="add-btn" data-action="addSpellOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Spell OR Groups</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addSpellOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllSpellOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -322,9 +318,8 @@
             {{#if item.system.prerequisites.resources.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-coins"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.resources.label'}}</span>
+                    <span><a class="add-btn" data-action="addResourcePrerequisite" title="Add resource"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.resources.label'}}</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addResourcePrerequisite" title="Add resource"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllResources" title="Clear all resources"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
@@ -353,9 +348,8 @@
             {{#if item.system.prerequisites.resourceOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><i class="fas fa-code-branch"></i> Resource OR Groups</span>
+                    <span><a class="add-btn" data-action="addResourceOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Resource OR Groups</span>
                     <div class="header-actions">
-                        <a class="add-btn-mini" data-action="addResourceOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
                         <a class="clear-btn" data-action="clearAllResourceOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
