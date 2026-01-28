@@ -262,6 +262,31 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                   parts.push(`Stat: ${statParts.join(', ')}`);
                 }
 
+                // Stat OR groups
+                if (prereqs.statOrGroups?.length > 0) {
+                  const orGroupParts = prereqs.statOrGroups.map(orGroup => {
+                    const statLabels = orGroup.map(s => {
+                      const abbr = CONFIG.VAGABOND.statAbbreviations[s.stat];
+                      const localizedAbbr = game.i18n.localize(abbr);
+                      const statValue = previewActor?.system.stats[s.stat]?.value || 0;
+                      const isMet = statValue >= s.value;
+                      const text = `${localizedAbbr} ${s.value}+`;
+                      return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
+                    });
+
+                    // Check if entire OR group is unmet (all stats not met)
+                    const allNotMet = orGroup.every(s => {
+                      const statValue = previewActor?.system.stats[s.stat]?.value || 0;
+                      return statValue < s.value;
+                    });
+
+                    const groupText = statLabels.join(' or ');
+                    return allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`;
+                  });
+
+                  parts.push(`Stat: ${orGroupParts.join('; ')}`);
+                }
+
                 // Trained skill prerequisites
                 if (prereqs.trainedSkills?.length > 0) {
                   const skillParts = prereqs.trainedSkills.map(skill => {
@@ -276,6 +301,36 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     return isTrained ? localizedSkill : `<span class="prereq-not-met">${localizedSkill}</span>`;
                   });
                   parts.push(`Trained: ${skillParts.join(', ')}`);
+                }
+
+                // Trained skill OR groups
+                if (prereqs.trainedSkillOrGroups?.length > 0) {
+                  const orGroupParts = prereqs.trainedSkillOrGroups.map(orGroup => {
+                    const skillLabels = orGroup.map(skill => {
+                      const skillKey = skill.charAt(0).toUpperCase() + skill.slice(1);
+                      const skillLabel = CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
+                                        CONFIG.VAGABOND.skills?.[skillKey] ||
+                                        skill;
+                      const localizedSkill = game.i18n.localize(skillLabel);
+
+                      const isTrained = previewActor?.system.skills?.[skill]?.trained ||
+                                       previewActor?.system.weaponSkills?.[skill]?.trained ||
+                                       false;
+
+                      return isTrained ? localizedSkill : `<span class="prereq-not-met">${localizedSkill}</span>`;
+                    });
+
+                    // Check if entire OR group is unmet (all skills not trained)
+                    const allNotMet = orGroup.every(skill => {
+                      return !(previewActor?.system.skills?.[skill]?.trained ||
+                               previewActor?.system.weaponSkills?.[skill]?.trained);
+                    });
+
+                    const groupText = skillLabels.join(' or ');
+                    return allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`;
+                  });
+
+                  parts.push(`Trained: ${orGroupParts.join('; ')}`);
                 }
 
                 // "Has any spell" prerequisite
@@ -302,6 +357,38 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                   }
                   if (spellParts.length > 0) {
                     parts.push(`Spell: ${spellParts.join(', ')}`);
+                  }
+                }
+
+                // Spell OR groups
+                if (prereqs.spellOrGroups?.length > 0) {
+                  const orGroupParts = [];
+                  for (const orGroup of prereqs.spellOrGroups) {
+                    const spellLabels = [];
+                    let allNotMet = true;
+
+                    for (const uuid of orGroup) {
+                      if (!uuid) continue;
+                      try {
+                        const spell = await fromUuid(uuid);
+                        if (spell) {
+                          const hasSpell = this.builderData.spells?.includes(uuid);
+                          if (hasSpell) allNotMet = false;
+                          spellLabels.push(hasSpell ? spell.name : `<span class="prereq-not-met">${spell.name}</span>`);
+                        }
+                      } catch (error) {
+                        console.warn(`Failed to resolve spell UUID: ${uuid}`);
+                      }
+                    }
+
+                    if (spellLabels.length > 0) {
+                      const groupText = spellLabels.join(' or ');
+                      orGroupParts.push(allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`);
+                    }
+                  }
+
+                  if (orGroupParts.length > 0) {
+                    parts.push(`Spell: ${orGroupParts.join('; ')}`);
                   }
                 }
 
@@ -345,6 +432,86 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                     return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
                   });
                   parts.push(`Resc: ${resourceParts.join(', ')}`);
+                }
+
+                // Resource OR groups
+                if (prereqs.resourceOrGroups?.length > 0) {
+                  const orGroupParts = prereqs.resourceOrGroups.map(orGroup => {
+                    const resourceLabels = orGroup.map(r => {
+                      const resourceLabel = CONFIG.VAGABOND.resourceTypes?.[r.resourceType] || r.resourceType;
+                      const localizedLabel = game.i18n.localize(resourceLabel);
+
+                      // Get current value based on resource type
+                      let currentValue = 0;
+                      if (previewActor) {
+                        switch (r.resourceType) {
+                          case 'maxMana':
+                            currentValue = previewActor.system.mana?.max || 0;
+                            break;
+                          case 'manaPerCast':
+                            currentValue = previewActor.system.mana?.castingMax || 0;
+                            break;
+                          case 'wealth':
+                            const currency = previewActor.system.currency || {};
+                            currentValue = (currency.gold || 0) * 100 + (currency.silver || 0) + (currency.copper || 0) / 10;
+                            break;
+                          case 'inventorySlots':
+                            currentValue = previewActor.system.inventory?.max || 0;
+                            break;
+                          case 'speed':
+                            currentValue = previewActor.system.attributes?.speed || 0;
+                            break;
+                          case 'maxHP':
+                            currentValue = previewActor.system.health?.max || 0;
+                            break;
+                          case 'currentLuck':
+                            currentValue = previewActor.system.stats?.luck?.value || 0;
+                            break;
+                        }
+                      }
+
+                      const isMet = currentValue >= r.minimum;
+                      const text = `${localizedLabel} ${r.minimum}+`;
+                      return isMet ? text : `<span class="prereq-not-met">${text}</span>`;
+                    });
+
+                    // Check if entire OR group is unmet (all resources not met)
+                    const allNotMet = orGroup.every(r => {
+                      let currentValue = 0;
+                      if (previewActor) {
+                        switch (r.resourceType) {
+                          case 'maxMana':
+                            currentValue = previewActor.system.mana?.max || 0;
+                            break;
+                          case 'manaPerCast':
+                            currentValue = previewActor.system.mana?.castingMax || 0;
+                            break;
+                          case 'wealth':
+                            const currency = previewActor.system.currency || {};
+                            currentValue = (currency.gold || 0) * 100 + (currency.silver || 0) + (currency.copper || 0) / 10;
+                            break;
+                          case 'inventorySlots':
+                            currentValue = previewActor.system.inventory?.max || 0;
+                            break;
+                          case 'speed':
+                            currentValue = previewActor.system.attributes?.speed || 0;
+                            break;
+                          case 'maxHP':
+                            currentValue = previewActor.system.health?.max || 0;
+                            break;
+                          case 'currentLuck':
+                            currentValue = previewActor.system.stats?.luck?.value || 0;
+                            break;
+                        }
+                      }
+                      return currentValue < r.minimum;
+                    });
+
+                    const groupText = resourceLabels.join(' or ');
+                    return allNotMet ? `<span class="prereq-not-met">(${groupText})</span>` : `(${groupText})`;
+                  });
+
+                  parts.push(`Resc: ${orGroupParts.join('; ')}`);
                 }
 
                 selectedItem.prerequisitesCompactHTML = parts.join(' | ');
@@ -1014,6 +1181,22 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
+    // Check stat OR groups - at least ONE stat requirement in each group must be met
+    for (const orGroup of prereqs.statOrGroups || []) {
+      const hasAnyInGroup = orGroup.some(statReq => {
+        const statValue = actor.system.stats[statReq.stat]?.value || 0;
+        return statValue >= statReq.value;
+      });
+
+      if (!hasAnyInGroup) {
+        const statLabels = orGroup.map(s => {
+          const statLabel = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[s.stat]);
+          return `${statLabel} ${s.value}+`;
+        });
+        missing.push(statLabels.join(' or '));
+      }
+    }
+
     // Check trained skill prerequisites
     for (const skillKey of prereqs.trainedSkills) {
       const isTrained =
@@ -1027,6 +1210,29 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
           skillKey
         );
         missing.push(`Trained: ${skillLabel}`);
+      }
+    }
+
+    // Check trained skill OR groups - at least ONE skill in each group must be trained
+    for (const orGroup of prereqs.trainedSkillOrGroups || []) {
+      const hasAnyInGroup = orGroup.some(skillKey => {
+        return actor.system.skills?.[skillKey]?.trained ||
+               actor.system.weaponSkills?.[skillKey]?.trained ||
+               false;
+      });
+
+      if (!hasAnyInGroup) {
+        // Format: "Melee or Ranged" for display
+        const skillLabels = orGroup.map(skill => {
+          const skillKey = skill.charAt(0).toUpperCase() + skill.slice(1);
+          const skillLabel = game.i18n.localize(
+            CONFIG.VAGABOND.skills?.[skillKey] ||
+            CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
+            skill
+          );
+          return skillLabel;
+        });
+        missing.push(`Trained: ${skillLabels.join(' or ')}`);
       }
     }
 
@@ -1054,41 +1260,74 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Check resource prerequisites
-    for (const resourceReq of prereqs.resources) {
-      let currentValue = 0;
-      const resourceType = resourceReq.resourceType;
+    // Check spell OR groups - at least ONE spell in each group must be known
+    for (const orGroup of prereqs.spellOrGroups || []) {
+      const hasAnyInGroup = orGroup.some(spellUuid => {
+        return spellUuid && actorSpellUuids.includes(spellUuid);
+      });
 
-      // Map resource types to actor data paths
+      if (!hasAnyInGroup) {
+        const spellNames = [];
+        for (const uuid of orGroup) {
+          if (!uuid) continue;
+          try {
+            const spell = await fromUuid(uuid);
+            spellNames.push(spell?.name || 'Unknown Spell');
+          } catch (error) {
+            spellNames.push('[Invalid UUID]');
+          }
+        }
+        if (spellNames.length > 0) {
+          missing.push(`Spell: ${spellNames.join(' or ')}`);
+        }
+      }
+    }
+
+    // Helper function to get resource value from actor
+    const getResourceValue = (resourceType) => {
       switch (resourceType) {
         case 'maxMana':
-          currentValue = actor.system.mana?.max || 0;
-          break;
+          return actor.system.mana?.max || 0;
         case 'manaPerCast':
-          currentValue = actor.system.mana?.castingMax || 0;
-          break;
+          return actor.system.mana?.castingMax || 0;
         case 'wealth':
-          // Convert to silver
           const currency = actor.system.currency || {};
-          currentValue = (currency.gold || 0) * 100 + (currency.silver || 0) + (currency.copper || 0) / 10;
-          break;
+          return (currency.gold || 0) * 100 + (currency.silver || 0) + (currency.copper || 0) / 10;
         case 'inventorySlots':
-          currentValue = actor.system.inventory?.max || 0;
-          break;
+          return actor.system.inventory?.max || 0;
         case 'speed':
-          currentValue = actor.system.attributes?.speed || 0;
-          break;
+          return actor.system.attributes?.speed || 0;
         case 'maxHP':
-          currentValue = actor.system.health?.max || 0;
-          break;
+          return actor.system.health?.max || 0;
         case 'currentLuck':
-          currentValue = actor.system.stats?.luck?.value || 0;
-          break;
+          return actor.system.stats?.luck?.value || 0;
+        default:
+          return 0;
       }
+    };
 
+    // Check resource prerequisites
+    for (const resourceReq of prereqs.resources) {
+      const currentValue = getResourceValue(resourceReq.resourceType);
       if (currentValue < resourceReq.minimum) {
-        const resourceLabel = game.i18n.localize(CONFIG.VAGABOND.resourceTypes?.[resourceType] || resourceType);
+        const resourceLabel = game.i18n.localize(CONFIG.VAGABOND.resourceTypes?.[resourceReq.resourceType] || resourceReq.resourceType);
         missing.push(`${resourceLabel} ${resourceReq.minimum}+`);
+      }
+    }
+
+    // Check resource OR groups - at least ONE resource requirement in each group must be met
+    for (const orGroup of prereqs.resourceOrGroups || []) {
+      const hasAnyInGroup = orGroup.some(resourceReq => {
+        const currentValue = getResourceValue(resourceReq.resourceType);
+        return currentValue >= resourceReq.minimum;
+      });
+
+      if (!hasAnyInGroup) {
+        const resourceLabels = orGroup.map(r => {
+          const resourceLabel = game.i18n.localize(CONFIG.VAGABOND.resourceTypes?.[r.resourceType] || r.resourceType);
+          return `${resourceLabel} ${r.minimum}+`;
+        });
+        missing.push(resourceLabels.join(' or '));
       }
     }
 

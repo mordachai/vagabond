@@ -18,17 +18,34 @@
 
     <hr class="perk-divider">
 
-    {{!-- 2. Prerequisites Grid (Two Columns) --}}
-    <div class="perk-prerequisites-grid">
+    {{!-- 2. Prerequisites Section --}}
+    <div class="perk-prerequisites-section">
+        <div class="prereq-add-header">
+            <label for="prereq-type-select"><i class="fas fa-plus-circle"></i> Add Prerequisite:</label>
+            <select id="prereq-type-select" data-action="addPrerequisiteType">
+                <option value="">-- Select Type --</option>
+                <option value="stat">Stat Requirement (e.g., DEX 5+)</option>
+                <option value="statOrGroup">Stat OR Group (e.g., MIG 5+ or DEX 5+)</option>
+                <option value="trainedSkill">Trained Skill (e.g., Melee)</option>
+                <option value="trainedSkillOrGroup">Skill OR Group (e.g., Melee or Ranged)</option>
+                <option value="spell">Spell Requirement (specific spell)</option>
+                <option value="spellOrGroup">Spell OR Group (e.g., Fireball or Lightning Bolt)</option>
+                <option value="resource">Resource Requirement (e.g., Max Mana 20+)</option>
+                <option value="resourceOrGroup">Resource OR Group (e.g., Max Mana 20+ or Wealth 500s+)</option>
+            </select>
+        </div>
 
-        {{!-- LEFT COLUMN: Stats & Skills --}}
-        <div class="perk-col">
-            
-            {{!-- Stats --}}
-            <div class="prereq-group">
+        <div class="prereq-sections-wrapper">
+
+            {{!-- Stats (only show if exists) --}}
+            {{#if item.system.prerequisites.stats.length}}
+            <div class="prereq-group prereq-section-card">
                 <div class="group-header">
                     <span><i class="fas fa-chart-bar"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</span>
-                    <a class="add-btn-mini" data-action="addStatPrerequisite"><i class="fas fa-plus"></i></a>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addStatPrerequisite" title="Add stat"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllStats" title="Clear all stats"><i class="fas fa-times-circle"></i></a>
+                    </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.stats as |stat index|}}
@@ -44,17 +61,74 @@
                         <input type="number" name="system.prerequisites.stats.{{index}}.value" value="{{stat.value}}" min="1" max="10" placeholder="Val">
                         <a class="delete-btn" data-action="removeStatPrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
                     </div>
-                    {{else}}
-                    <div class="empty-placeholder">{{localize "VAGABOND.None"}}</div>
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
 
-            {{!-- Trained Skills --}}
-            <div class="prereq-group">
+            {{!-- Stat OR Groups (only show if exists) --}}
+            {{#if item.system.prerequisites.statOrGroups.length}}
+            <div class="prereq-group prereq-section-card">
+                <div class="group-header">
+                    <span><i class="fas fa-code-branch"></i> Stat OR Groups</span>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addStatOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllStatOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                </div>
+                <div class="prereq-list">
+                    {{#each item.system.prerequisites.statOrGroups as |group groupIndex|}}
+                    <div class="prereq-or-group">
+                        <div class="or-group-header">
+                            <span>OR Group {{add groupIndex 1}} ({{group.length}} stats)</span>
+                            <a class="delete-btn" data-action="removeStatOrGroup"
+                               data-index="{{groupIndex}}" title="Remove this OR group">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <div class="or-group-items">
+                            {{#each group as |stat statIndex|}}
+                            <div class="prereq-row">
+                                <select name="system.prerequisites.statOrGroups.{{groupIndex}}.{{statIndex}}.stat">
+                                    <option value="might" {{#if (eq stat.stat 'might')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Might.abbr'}}</option>
+                                    <option value="dexterity" {{#if (eq stat.stat 'dexterity')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Dexterity.abbr'}}</option>
+                                    <option value="awareness" {{#if (eq stat.stat 'awareness')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Awareness.abbr'}}</option>
+                                    <option value="reason" {{#if (eq stat.stat 'reason')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Reason.abbr'}}</option>
+                                    <option value="presence" {{#if (eq stat.stat 'presence')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Presence.abbr'}}</option>
+                                    <option value="luck" {{#if (eq stat.stat 'luck')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Luck.abbr'}}</option>
+                                </select>
+                                <input type="number" name="system.prerequisites.statOrGroups.{{groupIndex}}.{{statIndex}}.value" value="{{stat.value}}" min="1" max="10" placeholder="Val" style="width: 60px;">
+                                <a class="delete-btn"
+                                   data-action="removeStatFromOrGroup"
+                                   data-group="{{groupIndex}}"
+                                   data-stat="{{statIndex}}"
+                                   title="Remove stat from OR group">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                            {{/each}}
+                            <a class="add-btn-mini"
+                               data-action="addStatToOrGroup"
+                               data-index="{{groupIndex}}"
+                               title="Add stat to this OR group">
+                                <i class="fas fa-plus"></i> Add stat to group
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+
+            {{!-- Trained Skills (only show if exists) --}}
+            {{#if item.system.prerequisites.trainedSkills.length}}
+            <div class="prereq-group prereq-section-card">
                 <div class="group-header">
                     <span><i class="fas fa-graduation-cap"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</span>
-                    <a class="add-btn-mini" data-action="addTrainedSkillPrerequisite"><i class="fas fa-plus"></i></a>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addTrainedSkillPrerequisite" title="Add skill"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllTrainedSkills" title="Clear all skills"><i class="fas fa-times-circle"></i></a>
+                    </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.trainedSkills as |skill index|}}
@@ -81,22 +155,88 @@
                         </select>
                         <a class="delete-btn" data-action="removeTrainedSkillPrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
                     </div>
-                    {{else}}
-                    <div class="empty-placeholder">{{localize "VAGABOND.None"}}</div>
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
 
-        </div>
+            {{!-- Trained Skills OR Groups (only show if exists) --}}
+            {{#if item.system.prerequisites.trainedSkillOrGroups.length}}
+            <div class="prereq-group prereq-section-card">
+                <div class="group-header">
+                    <span><i class="fas fa-code-branch"></i> Trained Skill OR Groups</span>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addTrainedSkillOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllTrainedSkillOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                </div>
+                <div class="prereq-list">
+                    {{#each item.system.prerequisites.trainedSkillOrGroups as |group groupIndex|}}
+                    <div class="prereq-or-group">
+                        <div class="or-group-header">
+                            <span>OR Group {{add groupIndex 1}} ({{group.length}} skills)</span>
+                            <a class="delete-btn" data-action="removeTrainedSkillOrGroup"
+                               data-index="{{groupIndex}}" title="Remove this OR group">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <div class="or-group-items">
+                            {{#each group as |skill skillIndex|}}
+                            <div class="prereq-row">
+                                <select name="system.prerequisites.trainedSkillOrGroups.{{groupIndex}}.{{skillIndex}}">
+                                    {{#select skill}}
+                                    <option value="">-- Select Skill --</option>
+                                    <optgroup label="Skills">
+                                        <option value="arcana">{{localize 'VAGABOND.Skills.Arcana'}}</option>
+                                        <option value="craft">{{localize 'VAGABOND.Skills.Craft'}}</option>
+                                        <option value="medicine">{{localize 'VAGABOND.Skills.Medicine'}}</option>
+                                        <option value="brawl">{{localize 'VAGABOND.Skills.Brawl'}}</option>
+                                        <option value="finesse">{{localize 'VAGABOND.Skills.Finesse'}}</option>
+                                        <option value="sneak">{{localize 'VAGABOND.Skills.Sneak'}}</option>
+                                        <option value="detect">{{localize 'VAGABOND.Skills.Detect'}}</option>
+                                        <option value="mysticism">{{localize 'VAGABOND.Skills.Mysticism'}}</option>
+                                        <option value="survival">{{localize 'VAGABOND.Skills.Survival'}}</option>
+                                        <option value="influence">{{localize 'VAGABOND.Skills.Influence'}}</option>
+                                        <option value="leadership">{{localize 'VAGABOND.Skills.Leadership'}}</option>
+                                        <option value="performance">{{localize 'VAGABOND.Skills.Performance'}}</option>
+                                    </optgroup>
+                                    <optgroup label="Weapon Skills">
+                                        <option value="melee">{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+                                        <option value="ranged">{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
+                                    </optgroup>
+                                    {{/select}}
+                                </select>
+                                <a class="delete-btn"
+                                   data-action="removeSkillFromOrGroup"
+                                   data-group="{{groupIndex}}"
+                                   data-skill="{{skillIndex}}"
+                                   title="Remove skill from OR group">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                            {{/each}}
+                            <a class="add-btn-mini"
+                               data-action="addSkillToOrGroup"
+                               data-index="{{groupIndex}}"
+                               title="Add skill to this OR group">
+                                <i class="fas fa-plus"></i> Add skill to group
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
 
-        {{!-- RIGHT COLUMN: Spells & Resources --}}
-        <div class="perk-col">
-
-            {{!-- Spells --}}
-            <div class="prereq-group">
+            {{!-- Spells (only show if exists) --}}
+            {{#if item.system.prerequisites.spells.length}}
+            <div class="prereq-group prereq-section-card">
                 <div class="group-header">
                     <span><i class="fas fa-magic"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</span>
-                    <a class="add-btn-mini" data-action="addSpellPrerequisite"><i class="fas fa-plus"></i></a>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addSpellPrerequisite" title="Add spell"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllSpells" title="Clear all spells"><i class="fas fa-times-circle"></i></a>
+                    </div>
                 </div>
                 <div class="prereq-list">
                     {{!-- "Has Any Spell" Checkbox --}}
@@ -120,19 +260,73 @@
                         </select>
                         <a class="delete-btn" data-action="removeSpellPrerequisite" data-index="{{prereq.index}}"><i class="fas fa-trash"></i></a>
                     </div>
-                    {{else}}
-                    {{#unless item.system.prerequisites.hasAnySpell}}
-                    <div class="empty-placeholder">{{localize "VAGABOND.None"}}</div>
-                    {{/unless}}
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
 
-            {{!-- Resources --}}
-            <div class="prereq-group">
+            {{!-- Spell OR Groups (only show if exists) --}}
+            {{#if item.system.prerequisites.spellOrGroups.length}}
+            <div class="prereq-group prereq-section-card">
+                <div class="group-header">
+                    <span><i class="fas fa-code-branch"></i> Spell OR Groups</span>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addSpellOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllSpellOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                </div>
+                <div class="prereq-list">
+                    {{#each item.system.prerequisites.spellOrGroups as |group groupIndex|}}
+                    <div class="prereq-or-group">
+                        <div class="or-group-header">
+                            <span>OR Group {{add groupIndex 1}} ({{group.length}} spells)</span>
+                            <a class="delete-btn" data-action="removeSpellOrGroup"
+                               data-index="{{groupIndex}}" title="Remove this OR group">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <div class="or-group-items">
+                            {{#each group as |spellUuid spellIndex|}}
+                            <div class="prereq-row">
+                                <select name="system.prerequisites.spellOrGroups.{{groupIndex}}.{{spellIndex}}">
+                                    <option value="">{{localize 'VAGABOND.Item.Perk.SelectSpell'}}</option>
+                                    {{#each @root.spellPrerequisites.[0].availableSpells as |spell|}}
+                                        <option value="{{spell.uuid}}" {{#if (eq spellUuid spell.uuid)}}selected{{/if}}>
+                                            {{spell.name}} ({{spell.packLabel}})
+                                        </option>
+                                    {{/each}}
+                                </select>
+                                <a class="delete-btn"
+                                   data-action="removeSpellFromOrGroup"
+                                   data-group="{{groupIndex}}"
+                                   data-spell="{{spellIndex}}"
+                                   title="Remove spell from OR group">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                            {{/each}}
+                            <a class="add-btn-mini"
+                               data-action="addSpellToOrGroup"
+                               data-index="{{groupIndex}}"
+                               title="Add spell to this OR group">
+                                <i class="fas fa-plus"></i> Add spell to group
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+
+            {{!-- Resources (only show if exists) --}}
+            {{#if item.system.prerequisites.resources.length}}
+            <div class="prereq-group prereq-section-card">
                 <div class="group-header">
                     <span><i class="fas fa-coins"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.resources.label'}}</span>
-                    <a class="add-btn-mini" data-action="addResourcePrerequisite"><i class="fas fa-plus"></i></a>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addResourcePrerequisite" title="Add resource"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllResources" title="Clear all resources"><i class="fas fa-times-circle"></i></a>
+                    </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.resources as |resource index|}}
@@ -150,11 +344,66 @@
                         <input type="number" name="system.prerequisites.resources.{{index}}.minimum" value="{{resource.minimum}}" min="0" placeholder="Min" style="width: 60px;">
                         <a class="delete-btn" data-action="removeResourcePrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
                     </div>
-                    {{else}}
-                    <div class="empty-placeholder">{{localize "VAGABOND.None"}}</div>
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
+
+            {{!-- Resource OR Groups (only show if exists) --}}
+            {{#if item.system.prerequisites.resourceOrGroups.length}}
+            <div class="prereq-group prereq-section-card">
+                <div class="group-header">
+                    <span><i class="fas fa-code-branch"></i> Resource OR Groups</span>
+                    <div class="header-actions">
+                        <a class="add-btn-mini" data-action="addResourceOrGroup" title="Add new OR group"><i class="fas fa-plus"></i></a>
+                        <a class="clear-btn" data-action="clearAllResourceOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                </div>
+                <div class="prereq-list">
+                    {{#each item.system.prerequisites.resourceOrGroups as |group groupIndex|}}
+                    <div class="prereq-or-group">
+                        <div class="or-group-header">
+                            <span>OR Group {{add groupIndex 1}} ({{group.length}} resources)</span>
+                            <a class="delete-btn" data-action="removeResourceOrGroup"
+                               data-index="{{groupIndex}}" title="Remove this OR group">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <div class="or-group-items">
+                            {{#each group as |resource resourceIndex|}}
+                            <div class="prereq-row">
+                                <select name="system.prerequisites.resourceOrGroups.{{groupIndex}}.{{resourceIndex}}.resourceType">
+                                    <option value="">{{localize 'VAGABOND.Item.Perk.SelectResource'}}</option>
+                                    <option value="maxMana" {{#if (eq resource.resourceType 'maxMana')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.MaxMana'}}</option>
+                                    <option value="manaPerCast" {{#if (eq resource.resourceType 'manaPerCast')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.ManaPerCast'}}</option>
+                                    <option value="wealth" {{#if (eq resource.resourceType 'wealth')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.Wealth'}}</option>
+                                    <option value="inventorySlots" {{#if (eq resource.resourceType 'inventorySlots')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.InventorySlots'}}</option>
+                                    <option value="speed" {{#if (eq resource.resourceType 'speed')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.Speed'}}</option>
+                                    <option value="maxHP" {{#if (eq resource.resourceType 'maxHP')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.MaxHP'}}</option>
+                                    <option value="currentLuck" {{#if (eq resource.resourceType 'currentLuck')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}}</option>
+                                </select>
+                                <input type="number" name="system.prerequisites.resourceOrGroups.{{groupIndex}}.{{resourceIndex}}.minimum" value="{{resource.minimum}}" min="0" placeholder="Min" style="width: 60px;">
+                                <a class="delete-btn"
+                                   data-action="removeResourceFromOrGroup"
+                                   data-group="{{groupIndex}}"
+                                   data-resource="{{resourceIndex}}"
+                                   title="Remove resource from OR group">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                            {{/each}}
+                            <a class="add-btn-mini"
+                               data-action="addResourceToOrGroup"
+                               data-index="{{groupIndex}}"
+                               title="Add resource to this OR group">
+                                <i class="fas fa-plus"></i> Add resource to group
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
 
         </div>
     </div>
