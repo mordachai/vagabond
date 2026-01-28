@@ -1,3 +1,5 @@
-2026/01/25-16:49:47.406 5bbc Recovering log #634
-2026/01/25-16:49:47.409 5bbc Delete type=0 #634
-2026/01/25-16:49:47.409 5bbc Delete type=3 #633
+2026/01/28-03:07:10.355 a0fc Recovering log #658
+2026/01/28-03:07:10.355 a0fc Level-0 table #660: started
+2026/01/28-03:07:10.359 a0fc Level-0 table #660: 9116 bytes OK
+2026/01/28-03:07:10.368 a0fc Delete type=0 #658
+2026/01/28-03:07:10.369 a0fc Delete type=3 #657
