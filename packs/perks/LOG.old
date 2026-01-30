@@ -1,5 +1,3 @@
-2026/01/28-03:07:10.355 a0fc Recovering log #658
-2026/01/28-03:07:10.355 a0fc Level-0 table #660: started
-2026/01/28-03:07:10.359 a0fc Level-0 table #660: 9116 bytes OK
-2026/01/28-03:07:10.368 a0fc Delete type=0 #658
-2026/01/28-03:07:10.369 a0fc Delete type=3 #657
+2026/01/30-10:22:37.468 6ee0 Recovering log #674
+2026/01/30-10:22:37.477 6ee0 Delete type=0 #674
+2026/01/30-10:22:37.478 6ee0 Delete type=3 #673
