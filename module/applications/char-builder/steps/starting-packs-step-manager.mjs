@@ -241,7 +241,7 @@ export class StartingPacksStepManager extends BaseStepManager {
       this.updateState('selectedStartingPack', uuid);
       this.updateState('previewUuid', uuid);
 
-      ui.notifications.info(`Selected starting pack: ${item.name}`);
+      // ui.notifications.info(`Selected starting pack: ${item.name}`);
     } catch (error) {
       console.error('Failed to select starting pack:', error);
       ui.notifications.error('Failed to select starting pack');
@@ -295,7 +295,7 @@ export class StartingPacksStepManager extends BaseStepManager {
       this.updateState('selectedStartingPack', null);
       this.updateState('previewUuid', null);
 
-      ui.notifications.info('Starting pack removed');
+      // ui.notifications.info('Starting pack removed');
 
       // Trigger re-render through parent (delegator will call this.render())
       return true; // Signal successful removal

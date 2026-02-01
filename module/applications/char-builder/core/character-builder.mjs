@@ -721,7 +721,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    ui.notifications.info("Full character randomized!");
+    // ui.notifications.info("Full character randomized!");
     this.render();
   }
 
@@ -813,7 +813,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Update the actor
     await this.actor.update(actorData);
 
-    ui.notifications.info("Character creation completed!");
+    // ui.notifications.info("Character creation completed!");
     this.close();
   }
 
