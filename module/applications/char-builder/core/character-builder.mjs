@@ -244,20 +244,51 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   _isStepComplete(stepName) {
     // If step managers aren't initialized yet, use fallback logic
     if (!this.stepManagers) {
+      console.log(`[CharBuilder _isStepComplete] Step managers not initialized for ${stepName}, using fallback`);
       // Use fallback logic below
     } else {
       const stepManager = this.stepManagers[stepName];
       if (stepManager) {
-        return stepManager.isComplete();
+        const result = stepManager.isComplete();
+        console.log(`[CharBuilder _isStepComplete] ${stepName}: ${result ? '✓ COMPLETE' : '✗ INCOMPLETE'} (from step manager)`);
+        return result;
+      } else {
+        console.log(`[CharBuilder _isStepComplete] No step manager found for ${stepName}, using fallback`);
       }
     }
 
     // Fallback to original logic if step manager not found
     const completionMap = {
       ancestry: () => !!this.builderData.ancestry,
-      class: () => !!this.builderData.class,
+      class: () => {
+        // Check if class is selected AND skills are assigned
+        const state = this.stateManager?.getCurrentState();
+        if (!state) return !!this.builderData.class;
+
+        const classSelected = !!state.selectedClass;
+        const skillGrant = state.skillGrant;
+
+        if (!classSelected) return false;
+        if (!skillGrant || !skillGrant.choices) return true; // No skill choices required
+
+        const currentSkills = state.skills || [];
+        const guaranteed = skillGrant.guaranteed || [];
+
+        // Validate each choice pool
+        for (const choice of skillGrant.choices) {
+          const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
+          const selectedFromPool = currentSkills.filter(skill =>
+            pool.includes(skill) && !guaranteed.includes(skill)
+          ).length;
+
+          if (selectedFromPool < choice.count) {
+            return false; // Not enough skills from this pool
+          }
+        }
+        return true;
+      },
       stats: () => {
-        return !!this.builderData.selectedArrayId && 
+        return !!this.builderData.selectedArrayId &&
                Object.values(this.builderData.stats).every(v => v !== null);
       },
       spells: () => true, // Optional step
@@ -267,7 +298,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     };
 
     const checkFunction = completionMap[stepName];
-    return checkFunction ? checkFunction() : false;
+    const result = checkFunction ? checkFunction() : false;
+    console.log(`[CharBuilder _isStepComplete] ${stepName}: ${result ? '✓ COMPLETE' : '✗ INCOMPLETE'} (from fallback)`);
+    return result;
   }
 
   /**
@@ -275,8 +308,23 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
    * @returns {boolean} True if all mandatory steps are complete
    */
   _areMandatoryStepsComplete() {
-    const mandatorySteps = ['ancestry', 'class', 'stats'];
-    return mandatorySteps.every(step => this._isStepComplete(step));
+    // Check the actual state data directly to avoid step manager issues
+    const state = this.stateManager.getCurrentState();
+
+    const ancestryComplete = !!state.selectedAncestry;
+    const classComplete = !!state.selectedClass;
+    const statsComplete = state.assignedStats && Object.keys(state.assignedStats).length === 6;
+
+    console.log('CharBuilder Finish Validation:', {
+      ancestryComplete,
+      classComplete,
+      statsComplete,
+      ancestry: state.selectedAncestry,
+      class: state.selectedClass,
+      stats: state.assignedStats
+    });
+
+    return ancestryComplete && classComplete && statsComplete;
   }
 
   // Navigation order for steps (fallback)
@@ -759,9 +807,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       actorData.items.push(...itemObjects);
     }
 
+    // Mark character as constructed (hides builder button)
+    actorData.system.details.constructed = true;
+
     // Update the actor
     await this.actor.update(actorData);
-    
+
     ui.notifications.info("Character creation completed!");
     this.close();
   }
@@ -777,6 +828,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     });
 
     if (confirmed) {
+      // Mark builder as dismissed (hides builder button)
+      await this.actor.update({
+        'system.details.builderDismissed': true
+      });
+
       this.close();
     }
   }
@@ -788,16 +844,19 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   _getStepsContext() {
     const stepOrder = this.stepsOrder;
     const currentStep = this.currentStep;
-    
+
     return stepOrder.map((stepKey, i) => {
       let disabled = false;
       if (i > 0) {
         // Can't access step 2+ without completing step 1 (ancestry)
-        if (!this.builderData.ancestry) disabled = true;
-        // Can't access step 3+ without completing step 2 (class)
-        else if (i >= 2 && !this.builderData.class) disabled = true;
+        if (!this._isStepComplete('ancestry')) disabled = true;
+        // Can't access step 3+ without completing step 2 (class with skill selection)
+        else if (i >= 2 && !this._isStepComplete('class')) disabled = true;
         // Can't access step 4+ without completing step 3 (stats)
         else if (i >= 3 && !this._isStepComplete('stats')) disabled = true;
+        // Can't access step 5+ without completing step 4 (perks - mandatory)
+        else if (i >= 4 && !this._isStepComplete('perks')) disabled = true;
+        // Spells and beyond: allow access (spells optional, gear optional)
       }
 
       // Special handling for step names

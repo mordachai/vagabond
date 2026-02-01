@@ -166,8 +166,15 @@ export class SpellsStepManager extends BaseStepManager {
       }
     }
 
+    // Calculate empty slots
+    const state = this.getCurrentState();
+    const spellLimit = state.spellLimit || 0;
+    const emptySlotCount = Math.max(0, spellLimit - trayItems.length);
+    const emptySlots = Array(emptySlotCount).fill({});
+
     return {
       spells: trayItems,
+      emptySlots: emptySlots,
       isEmpty: trayItems.length === 0
     };
   }

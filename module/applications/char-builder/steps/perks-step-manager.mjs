@@ -327,7 +327,9 @@ export class PerksStepManager extends BaseStepManager {
       const actorSkills = actor.system.skills || [];
       const skillParts = prereqs.trainedSkills.map(skill => {
         const isMet = actorSkills.includes(skill);
-        const skillName = game.i18n.localize(`VAGABOND.Skills.${skill}`);
+        // Capitalize first letter to match en.json keys (e.g., "athletics" -> "Athletics")
+        const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
+        const skillName = game.i18n.localize(`VAGABOND.Skills.${capitalizedSkill}`);
         return isMet ? skillName : `<span class="prereq-not-met">${skillName}</span>`;
       });
       parts.push(`<strong>Skill:</strong> ${skillParts.join(', ')}`);

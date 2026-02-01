@@ -289,6 +289,10 @@ export class ClassStepManager extends BaseStepManager {
         return;
       }
 
+      console.log('═══════════════════════════════════════════════════');
+      console.log('🎓 CLASS SELECTED:', item.name);
+      console.log('═══════════════════════════════════════════════════');
+
       // For class, directly select (no preview/tray system)
       this.updateState('selectedClass', uuid);
       this.updateState('previewUuid', uuid);
@@ -298,9 +302,46 @@ export class ClassStepManager extends BaseStepManager {
       // Start fresh with only the new class's guaranteed skills
       const newSkills = [...skillGrant.guaranteed];
 
+      console.log('[Class Change] Skill Grant Structure:', {
+        guaranteed: skillGrant.guaranteed,
+        numberOfChoiceGroups: skillGrant.choices.length,
+        choiceGroups: skillGrant.choices.map((c, i) => ({
+          group: i + 1,
+          pick: c.count,
+          from: c.pool.length || 'all skills',
+          label: c.label || `Group ${i + 1}`
+        }))
+      });
+
       this.updateState('skills', newSkills);
 
-      // Extract and add class perks
+      // RESET user-selected perks (class perks will be set below)
+      // User must re-select perks since old ones might not meet new prerequisites
+      this.updateState('perks', []);
+
+      // RESET spells since different class might have different spell list
+      this.updateState('spells', []);
+
+      // Calculate how many skill choices are needed
+      const skillChoicesNeeded = skillGrant.choices.reduce((total, choice) => total + choice.count, 0);
+      this.updateState('skillChoicesNeeded', skillChoicesNeeded);
+
+      console.log('[Class Change] Total skill points to assign:', skillChoicesNeeded);
+
+      // Store the skill grant structure for validation
+      this.updateState('skillGrant', skillGrant);
+
+      // Calculate spell limit for level 1 character
+      let spellLimit = 0;
+      if (item.system.isSpellcaster) {
+        // Get spell count for level 1
+        const levelSpells = item.system.levelSpells || [];
+        const level1Spells = levelSpells.find(ls => ls.level === 1);
+        spellLimit = level1Spells?.spells || 0;
+      }
+      this.updateState('spellLimit', spellLimit);
+
+      // Extract and add class perks (replaces old class perks)
       const classPerkUuids = await this._extractPerksFromClass(uuid);
       this.updateState('classPerks', classPerkUuids);
       this.updateState('lastClassForPerks', uuid);
@@ -376,6 +417,7 @@ export class ClassStepManager extends BaseStepManager {
       let newSkills;
       if (currentSkills.includes(skill)) {
         newSkills = currentSkills.filter(s => s !== skill);
+        console.log(`[Skill Toggle] ✗ REMOVED: ${skill}`);
       } else {
         // Check if we can add more skills from this choice pool
         const relevantChoice = skillGrant.choices.find(choice => 
@@ -393,7 +435,10 @@ export class ClassStepManager extends BaseStepManager {
         }
         
         newSkills = [...currentSkills, skill];
+        console.log(`[Skill Toggle] ✓ ADDED: ${skill}`);
       }
+
+      console.log(`[Skill Toggle] Total skills now: ${newSkills.length}`, newSkills);
 
       this.updateState('skills', newSkills);
       
@@ -433,12 +478,42 @@ export class ClassStepManager extends BaseStepManager {
     }
 
     if (selectedClass) {
+      // Load the class item to get its data
+      const classItem = await fromUuid(selectedClass.uuid);
+      if (!classItem) return;
+
       this.updateState('selectedClass', selectedClass.uuid);
       this.updateState('previewUuid', selectedClass.uuid);
-      
+
+      // RESET user-selected perks and spells
+      this.updateState('perks', []);
+      this.updateState('spells', []);
+
+      // Calculate skill choices needed
+      const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
+      const skillChoicesNeeded = skillGrant.choices.reduce((total, choice) => total + choice.count, 0);
+      this.updateState('skillChoicesNeeded', skillChoicesNeeded);
+
+      // Store the skill grant structure for validation
+      this.updateState('skillGrant', skillGrant);
+
+      // Calculate spell limit for level 1 character
+      let spellLimit = 0;
+      if (classItem.system.isSpellcaster) {
+        const levelSpells = classItem.system.levelSpells || [];
+        const level1Spells = levelSpells.find(ls => ls.level === 1);
+        spellLimit = level1Spells?.spells || 0;
+      }
+      this.updateState('spellLimit', spellLimit);
+
+      // Extract and set class perks
+      const classPerkUuids = await this._extractPerksFromClass(selectedClass.uuid);
+      this.updateState('classPerks', classPerkUuids);
+      this.updateState('lastClassForPerks', selectedClass.uuid);
+
       // Auto-select skills
       await this._autoSelectSkills(selectedClass.uuid);
-      
+
     }
   }
 

@@ -190,6 +190,9 @@ export class CharacterBuilderUIComponents {
         showAllPerks: state.showAllPerks || false,
         navigation: navigationContext,
         sidebar: sidebarContext,
+        // Navigation button states (for footer template)
+        canAdvance: this._canProceedToNext(state), // Can click Next button
+        canFinish: this._isCharacterComplete(state), // Can click Finish button
         ui: {
           currentStep: state.currentStep,
           isValid: this._validateCurrentState(state),
@@ -216,6 +219,10 @@ export class CharacterBuilderUIComponents {
       }
 
       this._recordPerformance('prepareContext', performance.now() - startTime, false);
+
+      // Log button states for debugging
+      console.log(`[UI Context] Step: ${state.currentStep} | Next Button: ${completeContext.canAdvance ? '✓ ENABLED' : '✗ DISABLED'} | Finish Button: ${completeContext.canFinish ? '✓ ENABLED' : '✗ DISABLED'}`);
+
       return completeContext;
       
     } catch (error) {
@@ -642,18 +649,89 @@ export class CharacterBuilderUIComponents {
     switch (stepName) {
       case 'ancestry':
         return !!state.selectedAncestry;
+
       case 'class':
-        return !!state.selectedClass;
+        // Need class selected AND all skill choices satisfied
+        if (!state.selectedClass) {
+          console.log('[Class Validation] No class selected');
+          return false;
+        }
+
+        // Check each skill choice pool
+        const skillGrant = state.skillGrant;
+        if (!skillGrant || !skillGrant.choices) {
+          // No skill grant data - just check if class is selected
+          console.log('[Class Validation] No skillGrant data, class step complete');
+          return true;
+        }
+
+        const currentSkills = state.skills || [];
+        const guaranteed = skillGrant.guaranteed || [];
+
+        console.log('[Class Validation] Starting validation:', {
+          totalSkills: currentSkills.length,
+          currentSkills: currentSkills,
+          guaranteed: guaranteed,
+          numberOfGroups: skillGrant.choices.length
+        });
+
+        // Validate each choice pool
+        let totalNeeded = 0;
+        let totalSelected = 0;
+        let isValid = true;
+
+        for (let i = 0; i < skillGrant.choices.length; i++) {
+          const choice = skillGrant.choices[i];
+          const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
+          const selectedFromPool = currentSkills.filter(skill =>
+            pool.includes(skill) && !guaranteed.includes(skill)
+          ).length;
+
+          totalNeeded += choice.count;
+          totalSelected += selectedFromPool;
+
+          const poolValid = selectedFromPool >= choice.count;
+          console.log(`[Class Validation] Group ${i + 1}:`, {
+            required: choice.count,
+            selected: selectedFromPool,
+            poolSize: pool.length,
+            valid: poolValid ? '✓' : '✗'
+          });
+
+          if (!poolValid) {
+            isValid = false;
+          }
+        }
+
+        console.log('[Class Validation] Summary:', {
+          totalNeeded: totalNeeded,
+          totalSelected: totalSelected,
+          freePoints: totalNeeded - totalSelected,
+          isValid: isValid ? '✓ VALID' : '✗ INVALID'
+        });
+
+        return isValid;
+
       case 'stats':
         return Object.keys(state.assignedStats || {}).length === 6;
+
       case 'perks':
-        return true; // Perks are optional
+        // Perks step is always complete - user can choose to take no perks
+        // (class perks are granted automatically)
+        return true;
+
       case 'spells':
-        return true; // Spells are optional or class-dependent
+        // Need exact spell count for spellcasters
+        const spellLimit = state.spellLimit || 0;
+        const spellsSelected = (state.spells || []).length;
+        return spellLimit === 0 || spellsSelected === spellLimit;
+
       case 'starting-packs':
         return !!state.selectedStartingPack;
+
       case 'gear':
         return true; // Additional gear is optional
+
       default:
         return false;
     }
@@ -694,10 +772,30 @@ export class CharacterBuilderUIComponents {
    * @returns {boolean} True if character is complete
    */
   _isCharacterComplete(state) {
-    return this._isStepCompleted('ancestry', state) &&
-           this._isStepCompleted('class', state) &&
-           this._isStepCompleted('stats', state) &&
-           this._isStepCompleted('starting-packs', state);
+    // Mandatory steps: ancestry, class, stats, perks, spells (if spellcaster)
+    // Optional steps: starting-packs, gear
+    const mandatoryComplete = this._isStepCompleted('ancestry', state) &&
+                               this._isStepCompleted('class', state) &&
+                               this._isStepCompleted('stats', state);
+
+    if (!mandatoryComplete) return false;
+
+    // Check if current step index is at least at perks step
+    // This ensures user has gone through perks step (even if they didn't select any)
+    const stepOrder = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+    const currentStepIndex = stepOrder.indexOf(state.currentStep);
+    const perksStepIndex = stepOrder.indexOf('perks');
+    const spellsStepIndex = stepOrder.indexOf('spells');
+
+    // Must have at least reached the perks step
+    if (currentStepIndex < perksStepIndex) return false;
+
+    // For spellcasters, must have at least reached the spells step
+    // Note: We can't easily check if class is spellcaster here without loading the class item
+    // So we require reaching the spells step for all characters
+    if (currentStepIndex < spellsStepIndex) return false;
+
+    return true;
   }
 
   /**

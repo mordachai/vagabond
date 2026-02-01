@@ -43,6 +43,8 @@ export class ValidationEngine {
     this.validators.set('single_selection', this._validateSingleSelection.bind(this));
     this.validators.set('valid_equipment', this._validateValidEquipment.bind(this));
     this.validators.set('no_duplicates_unless_allowed', this._validateNoDuplicatesUnlessAllowed.bind(this));
+    this.validators.set('skills_assigned', this._validateSkillsAssigned.bind(this));
+    this.validators.set('perks_selected', this._validatePerksSelected.bind(this));
   }
 
   /**
@@ -90,9 +92,15 @@ export class ValidationEngine {
    * @returns {Object} Validation result
    */
   validateStepCompletion(stepName, state) {
+    // Temporarily disable caching for class step to debug
+    const useCache = stepName !== 'class';
+
     const cacheKey = this._generateCacheKey('step', stepName, state);
-    const cached = this._getCachedResult(cacheKey);
-    if (cached) return cached;
+    const cached = useCache ? this._getCachedResult(cacheKey) : null;
+    if (cached) {
+      console.log(`[ValidationEngine] ${stepName}: Using cached result: ${cached.isValid ? '✓ VALID' : '✗ INVALID'}`);
+      return cached;
+    }
 
     const result = {
       isValid: false,
@@ -106,32 +114,62 @@ export class ValidationEngine {
     try {
       stepConfig = this.configSystem?.getStepConfig(stepName);
     } catch (error) {
-      // Configuration not loaded yet, cannot validate
-      console.debug(`Configuration not loaded for step ${stepName}, cannot validate completion`);
-      result.errors.push(`Configuration not loaded yet`);
+      // Configuration not loaded yet, use fallback validation
+      console.log(`[ValidationEngine] ${stepName}: Configuration not loaded, using fallback`);
+      const fallbackResult = this._validateStepCompleteFallback(stepName, state);
+      result.isValid = fallbackResult.isValid;
+      result.canProceed = fallbackResult.isValid;
+      if (!fallbackResult.isValid) {
+        result.errors.push(`Step ${stepName} not complete`);
+      }
       this._setCachedResult(cacheKey, result);
       return result;
     }
 
     if (!stepConfig) {
-      result.errors.push(`Unknown step: ${stepName}`);
-      result.isValid = false;
+      // Unknown step, use fallback validation
+      console.log(`[ValidationEngine] ${stepName}: Unknown step config, using fallback`);
+      const fallbackResult = this._validateStepCompleteFallback(stepName, state);
+      result.isValid = fallbackResult.isValid;
+      result.canProceed = fallbackResult.isValid;
+      if (!fallbackResult.isValid) {
+        result.errors.push(`Step ${stepName} not complete`);
+      }
       this._setCachedResult(cacheKey, result);
       return result;
     }
 
     // Check completion criteria
     const completionCriteria = stepConfig.completionCriteria || [];
+
+    // If no criteria defined, use fallback validation
+    if (completionCriteria.length === 0) {
+      console.log(`[ValidationEngine] ${stepName}: No completion criteria, using fallback`);
+      const fallbackResult = this._validateStepCompleteFallback(stepName, state);
+      result.isValid = fallbackResult.isValid;
+      result.canProceed = fallbackResult.isValid;
+      if (!fallbackResult.isValid) {
+        result.errors.push(`Step ${stepName} not complete`);
+      }
+      this._setCachedResult(cacheKey, result);
+      return result;
+    }
+
+    // Validate using configuration criteria
+    console.log(`[ValidationEngine] ${stepName}: Using config criteria (${completionCriteria.length} criteria)`);
+    result.isValid = true; // Start as valid, criteria will invalidate if needed
     for (const criterion of completionCriteria) {
       const criterionResult = this._validateCriterion(criterion, state);
-      
+
       if (!criterionResult.isValid) {
         result.isValid = false;
         result.errors.push(...criterionResult.errors);
       }
-      
+
       result.warnings.push(...criterionResult.warnings);
     }
+    console.log(`[ValidationEngine] ${stepName}: Config validation result: ${result.isValid ? '✓ VALID' : '✗ INVALID'}`);
+
 
     result.canProceed = result.isValid;
     this._setCachedResult(cacheKey, result);
@@ -668,30 +706,115 @@ export class ValidationEngine {
 
     // Also check specific completion criteria for each step
     if (!isComplete) {
-      switch (stepName) {
-        case 'ancestry':
-          return { isValid: !!state.selectedAncestry };
-        case 'class':
-          return { isValid: !!state.selectedClass };
-        case 'stats':
-          const stats = state.assignedStats || {};
-          const requiredStats = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
-          return {
-            isValid: requiredStats.every(stat => stats[stat] !== null && stats[stat] !== undefined) &&
-                     !!state.selectedArrayId
-          };
-        case 'spells':
-        case 'perks':
-        case 'starting-packs':
-        case 'gear':
-          // Optional steps are always considered complete
-          return { isValid: true };
-        default:
-          return { isValid: false };
-      }
+      return this._validateStepCompleteFallback(stepName, state);
     }
 
     return { isValid: true };
+  }
+
+  /**
+   * Fallback validation when config isn't available
+   * @param {string} stepName - Step name
+   * @param {Object} state - Character builder state
+   * @returns {Object} Validation result
+   * @private
+   */
+  _validateStepCompleteFallback(stepName, state) {
+    switch (stepName) {
+      case 'ancestry':
+        // Just need to select an ancestry
+        return { isValid: !!state.selectedAncestry };
+
+      case 'class':
+        // Need to have a class selected AND all required skills assigned
+        if (!state.selectedClass) {
+          console.log('[ValidationEngine Fallback] class: no class selected');
+          return { isValid: false };
+        }
+
+        // Check if all skill choice pools are satisfied
+        // The state should have skillGrant structure from the class
+        const skillGrant = state.skillGrant;
+        if (!skillGrant || !skillGrant.choices) {
+          console.log('[ValidationEngine Fallback] class: no skillGrant data, using simple count');
+          // If no skill grant data, fall back to simple count check
+          const skillsNeeded = state.skillChoicesNeeded || 0;
+          const skillsSelected = (state.skills || []).length;
+          const result = skillsSelected >= skillsNeeded;
+          console.log('[ValidationEngine Fallback] class:', {
+            skillsNeeded,
+            skillsSelected,
+            isValid: result ? '✓' : '✗'
+          });
+          return { isValid: result };
+        }
+
+        // Check each choice pool individually
+        const currentSkills = state.skills || [];
+        const guaranteed = skillGrant.guaranteed || [];
+
+        console.log('[ValidationEngine Fallback] class validation:', {
+          totalSkills: currentSkills.length,
+          currentSkills,
+          guaranteed,
+          numberOfGroups: skillGrant.choices.length
+        });
+
+        for (let i = 0; i < skillGrant.choices.length; i++) {
+          const choice = skillGrant.choices[i];
+          const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
+          // Count how many skills from this pool have been selected (excluding guaranteed)
+          const selectedFromPool = currentSkills.filter(skill =>
+            pool.includes(skill) && !guaranteed.includes(skill)
+          ).length;
+
+          console.log(`[ValidationEngine Fallback] class - Group ${i + 1}:`, {
+            required: choice.count,
+            selected: selectedFromPool,
+            poolSize: pool.length,
+            valid: selectedFromPool >= choice.count ? '✓' : '✗'
+          });
+
+          if (selectedFromPool < choice.count) {
+            // Not enough skills selected from this pool
+            console.log('[ValidationEngine Fallback] class: ✗ INVALID (insufficient skills from pool)');
+            return { isValid: false };
+          }
+        }
+
+        console.log('[ValidationEngine Fallback] class: ✓ VALID');
+        return { isValid: true };
+
+      case 'stats':
+        // Need all 6 stats assigned AND an array selected
+        const stats = state.assignedStats || {};
+        const requiredStats = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
+        const allStatsAssigned = requiredStats.every(stat =>
+          stats[stat] !== null && stats[stat] !== undefined
+        );
+        const arraySelected = !!state.selectedArrayId;
+
+        return { isValid: allStatsAssigned && arraySelected };
+
+      case 'spells':
+        // Need to select required number of spells based on class spell limit
+        // If not a spellcaster (spellLimit = 0), step is auto-complete
+        const spellLimit = state.spellLimit || 0;
+        const spellsSelected = (state.spells || []).length;
+
+        // If no spell limit, step is complete (not a spellcaster)
+        // If has spell limit, must select EXACTLY that many spells
+        return { isValid: spellLimit === 0 || spellsSelected === spellLimit };
+
+      case 'perks':
+      case 'starting-packs':
+      case 'gear':
+        // Optional steps are always considered complete
+        return { isValid: true };
+
+      default:
+        return { isValid: false };
+    }
   }
 
   _validateHasSelection(rule, state) {
@@ -723,6 +846,82 @@ export class ValidationEngine {
   _validateOptional(rule, state) {
     // Optional steps are always valid
     return { isValid: true };
+  }
+
+  _validateSkillsAssigned(rule, state) {
+    // Validate that all required skills from choice pools have been assigned
+    if (!state.selectedClass) {
+      return { isValid: false, errors: ['No class selected'] };
+    }
+
+    const skillGrant = state.skillGrant;
+    if (!skillGrant || !skillGrant.choices) {
+      // If no skill grant data, fall back to simple count check
+      const skillsNeeded = state.skillChoicesNeeded || 0;
+      const skillsSelected = (state.skills || []).length;
+      const isValid = skillsSelected >= skillsNeeded;
+      console.log('[Validator skills_assigned] Simple count:', {
+        skillsNeeded,
+        skillsSelected,
+        isValid: isValid ? '✓' : '✗'
+      });
+      return { isValid, errors: isValid ? [] : ['Not enough skills selected'] };
+    }
+
+    // Check each choice pool individually
+    const currentSkills = state.skills || [];
+    const guaranteed = skillGrant.guaranteed || [];
+
+    console.log('[Validator skills_assigned] Validating pools:', {
+      totalSkills: currentSkills.length,
+      currentSkills,
+      guaranteed,
+      numberOfGroups: skillGrant.choices.length
+    });
+
+    for (let i = 0; i < skillGrant.choices.length; i++) {
+      const choice = skillGrant.choices[i];
+      const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
+      const selectedFromPool = currentSkills.filter(skill =>
+        pool.includes(skill) && !guaranteed.includes(skill)
+      ).length;
+
+      console.log(`[Validator skills_assigned] Pool ${i + 1}:`, {
+        required: choice.count,
+        selected: selectedFromPool,
+        poolSize: pool.length,
+        valid: selectedFromPool >= choice.count ? '✓' : '✗'
+      });
+
+      if (selectedFromPool < choice.count) {
+        return {
+          isValid: false,
+          errors: [`Need ${choice.count} skills from pool ${i + 1}, only have ${selectedFromPool}`]
+        };
+      }
+    }
+
+    console.log('[Validator skills_assigned] ✓ All pools satisfied');
+    return { isValid: true, errors: [] };
+  }
+
+  _validatePerksSelected(rule, state) {
+    // Perks step requires at least the starting perk slots to be filled
+    // At level 1, characters get perk slots based on class
+    const perks = state.perks || [];
+    const perkLimit = state.perkLimit || 1; // Default to at least 1 perk required
+
+    console.log('[Validator perks_selected]:', {
+      perksSelected: perks.length,
+      perkLimit,
+      isValid: perks.length >= perkLimit ? '✓' : '✗'
+    });
+
+    const isValid = perks.length >= perkLimit;
+    return {
+      isValid,
+      errors: isValid ? [] : [`Need at least ${perkLimit} perk(s), only have ${perks.length}`]
+    };
   }
 
   _validateValidSpells(rule, state) {

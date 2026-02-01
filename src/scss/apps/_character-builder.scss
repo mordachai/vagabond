@@ -249,11 +249,11 @@
         }
 
         &.not-qualified {
-          opacity: 0.5;
+          opacity: 0.7;
           filter: grayscale(50%);
 
           .name {
-            color: #999;
+            color: #696969;
           }
 
           &:hover {
@@ -1353,6 +1353,37 @@
 
       i {
         font-size: 1.1rem;
+      }
+    }
+  }
+
+  // Empty spell slots
+  .spell-slot.empty {
+    background: rgba(200, 200, 200, 0.3);
+    border: 2px dashed rgba(0, 0, 0, 0.3);
+    justify-content: center;
+    cursor: default;
+
+    &:hover {
+      background: rgba(200, 200, 200, 0.4);
+      box-shadow: none;
+    }
+
+    .empty-slot-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: rgba(0, 0, 0, 0.4);
+
+      i {
+        font-size: 1.2rem;
+      }
+
+      .empty-slot-text {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
       }
     }
   }

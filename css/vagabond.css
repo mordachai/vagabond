@@ -2644,11 +2644,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: var(--vagabond-c-chat-yellow);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified {
-  opacity: 0.5;
+  opacity: 0.7;
   filter: grayscale(50%);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified .name {
-  color: #999;
+  color: #696969;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified:hover {
   opacity: 0.7;
@@ -3571,6 +3571,31 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .tray-zone .tray-item-compact .btn-remove i {
   font-size: 1.1rem;
+}
+.tray-zone .spell-slot.empty {
+  background: rgba(200, 200, 200, 0.3);
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  cursor: default;
+}
+.tray-zone .spell-slot.empty:hover {
+  background: rgba(200, 200, 200, 0.4);
+  box-shadow: none;
+}
+.tray-zone .spell-slot.empty .empty-slot-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: rgba(0, 0, 0, 0.4);
+}
+.tray-zone .spell-slot.empty .empty-slot-placeholder i {
+  font-size: 1.2rem;
+}
+.tray-zone .spell-slot.empty .empty-slot-placeholder .empty-slot-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 .tray-zone .tray-empty-message {
   grid-column: 1/-1;

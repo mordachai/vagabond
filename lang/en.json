@@ -70,7 +70,7 @@
         "description": "Resist mental harm, such as charms, dreadful terrors, psychic enthrallment, and your resolve."
       }
     },
-        "Roll": {
+    "Roll": {
       "Favored": "Favored (+1d6)",
       "Hindered": "Hindered (-1d6)",
       "SaveRoll": "Save Roll"
@@ -931,8 +931,8 @@
         "Close": "Close",
         "Finish": "Finish",
         "Reset": "Reset",
-        "AddToTray": "Add to Tray",
-        "ClearTray": "Clear Tray",
+        "AddToTray": "Add to Char",
+        "ClearTray": "Clear",
         "RemovePack": "Remove Starting Pack"
       },
       "ShowAll": "Show All",

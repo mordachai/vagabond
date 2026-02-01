@@ -43,6 +43,9 @@
         {
           "type": "has_selection",
           "path": "selectedClass"
+        },
+        {
+          "type": "skills_assigned"
         }
       ],
       "navigation": {
@@ -119,13 +122,13 @@
       "requiredData": ["perks"],
       "actions": [
         "add-to-tray",
-        "remove-from-tray", 
+        "remove-from-tray",
         "clear-tray",
         "toggle-show-all"
       ],
       "completionCriteria": [
         {
-          "type": "optional"
+          "type": "perks_selected"
         }
       ],
       "navigation": {
