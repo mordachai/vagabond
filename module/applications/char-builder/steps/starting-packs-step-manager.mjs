@@ -209,11 +209,25 @@ export class StartingPacksStepManager extends BaseStepManager {
       const curr = packItem.system.currency || {};
       const startingSilver = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
 
+      // Calculate total slots occupied by pack items
+      const totalSlotsOccupied = itemDetails.reduce((sum, item) => sum + (item.slots * item.qty), 0);
+
+      // Get max inventory slots from character's actual data model
+      const state = this.getCurrentState();
+      const previewActor = await this._createPreviewActor(state);
+      const maxSlots = previewActor?.system?.inventory?.maxSlots || 0;
+      const freeSlots = maxSlots - totalSlotsOccupied;
+
       return {
         packName: packItem.name,
         startingSilver: startingSilver,
         items: itemDetails,
-        totalItems: itemDetails.reduce((sum, item) => sum + item.qty, 0)
+        totalItems: itemDetails.reduce((sum, item) => sum + item.qty, 0),
+        inventorySlots: {
+          occupied: totalSlotsOccupied,
+          max: maxSlots,
+          free: freeSlots
+        }
       };
     } catch (error) {
       console.error('Failed to get starting pack items:', error);
@@ -289,7 +303,6 @@ export class StartingPacksStepManager extends BaseStepManager {
     }
 
     try {
-      console.log('Removing starting pack:', state.selectedStartingPack);
 
       // Clear both selected pack and preview
       this.updateState('selectedStartingPack', null);
@@ -396,6 +409,88 @@ export class StartingPacksStepManager extends BaseStepManager {
   }
 
   /**
+   * Create a preview actor to get calculated values
+   * @private
+   */
+  async _createPreviewActor(state) {
+    try {
+      const trainedSkills = state.skills || [];
+      const assignedStats = state.assignedStats || {};
+
+      // Build skills object
+      const skillsDefinition = {
+        arcana: { stat: 'reason' },
+        craft: { stat: 'reason' },
+        medicine: { stat: 'reason' },
+        brawl: { stat: 'might' },
+        finesse: { stat: 'dexterity' },
+        sneak: { stat: 'dexterity' },
+        detect: { stat: 'awareness' },
+        mysticism: { stat: 'awareness' },
+        survival: { stat: 'awareness' },
+        influence: { stat: 'presence' },
+        leadership: { stat: 'presence' },
+        performance: { stat: 'presence' }
+      };
+
+      const skills = {};
+      for (const [key, def] of Object.entries(skillsDefinition)) {
+        skills[key] = {
+          trained: trainedSkills.includes(key),
+          stat: def.stat,
+          bonus: 0
+        };
+      }
+
+      const weaponSkills = {
+        melee: { trained: trainedSkills.includes('melee'), stat: 'might', bonus: 0 },
+        brawl: { trained: trainedSkills.includes('brawl'), stat: 'might', bonus: 0 },
+        finesse: { trained: trainedSkills.includes('finesse'), stat: 'dexterity', bonus: 0 },
+        ranged: { trained: trainedSkills.includes('ranged'), stat: 'dexterity', bonus: 0 }
+      };
+
+      const actorData = {
+        name: 'Preview Character',
+        type: 'character',
+        system: {
+          stats: {
+            might: { value: assignedStats.might || 0 },
+            dexterity: { value: assignedStats.dexterity || 0 },
+            awareness: { value: assignedStats.awareness || 0 },
+            reason: { value: assignedStats.reason || 0 },
+            presence: { value: assignedStats.presence || 0 },
+            luck: { value: assignedStats.luck || 0 }
+          },
+          skills: skills,
+          weaponSkills: weaponSkills
+        },
+        items: []
+      };
+
+      // Apply builder selections
+      const itemUuids = [
+        state.selectedAncestry,
+        state.selectedClass,
+        ...(state.perks || []),
+        ...(state.classPerks || [])
+      ].filter(uuid => uuid);
+
+      if (itemUuids.length > 0) {
+        const items = await Promise.all(itemUuids.map(uuid => fromUuid(uuid)));
+        actorData.items = items.filter(i => i).map(i => i.toObject());
+      }
+
+      const previewActor = new Actor.implementation(actorData);
+      previewActor.prepareData();
+
+      return previewActor;
+    } catch (error) {
+      console.error('Failed to create preview actor:', error);
+      return null;
+    }
+  }
+
+  /**
    * Check if step is complete (optional step)
    */
   isComplete() {
@@ -409,7 +504,6 @@ export class StartingPacksStepManager extends BaseStepManager {
    */
   _onReset() {
     this.updateState('selectedStartingPack', null, { skipValidation: true });
-    console.log('Starting packs step reset');
   }
 
   /**

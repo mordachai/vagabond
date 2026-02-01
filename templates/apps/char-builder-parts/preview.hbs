@@ -12,7 +12,7 @@
             <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.DerivedStats"}}</h3>
             <div class="preview-skills-grid stats-grid">
                 {{!-- Primary Derived Stats --}}
-                <div class="skill-item">
+                <div class="skill-item" title="{{statData.derived.hp.tooltip}}">
                     <span class="skill-name">{{statData.derived.hp.label}}</span>
                     <span class="skill-dots"></span>
                     <span class="skill-value">{{statData.derived.hp.value}}</span>
@@ -20,30 +20,30 @@
 
                 {{!-- Spellcasting Stats (Only visible if Spellcaster) --}}
                 {{#if statData.derived.isSpellcaster}}
-                    <div class="skill-item">
+                    <div class="skill-item" title="{{statData.derived.manaMax.tooltip}}">
                         <span class="skill-name">{{statData.derived.manaMax.label}}</span>
                         <span class="skill-dots"></span>
                         <span class="skill-value">{{statData.derived.manaMax.value}}</span>
                     </div>
-                    <div class="skill-item">
+                    <div class="skill-item" title="{{statData.derived.manaCast.tooltip}}">
                         <span class="skill-name">{{statData.derived.manaCast.label}}</span>
                         <span class="skill-dots"></span>
                         <span class="skill-value">{{statData.derived.manaCast.value}}</span>
                     </div>
                 {{/if}}
 
-                <div class="skill-item">
+                <div class="skill-item" title="{{statData.derived.inventory.tooltip}}">
                     <span class="skill-name">{{statData.derived.inventory.label}}</span>
                     <span class="skill-dots"></span>
                     <span class="skill-value">{{statData.derived.inventory.value}}</span>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" title="{{statData.derived.luck.tooltip}}">
                     <span class="skill-name">{{statData.derived.luck.label}}</span>
                     <span class="skill-dots"></span>
                     <span class="skill-value">{{statData.derived.luck.value}}</span>
                 </div>
 
-                <div class="skill-item">
+                <div class="skill-item" title="{{statData.derived.speed.tooltip}}">
                     <span class="skill-name">{{statData.derived.speed.label}}</span>
                     <span class="skill-dots"></span>
                     <span class="skill-value">{{statData.derived.speed.value}}</span>
@@ -117,6 +117,11 @@
                     {{/if}}
                 {{/if}}
             </div>
+            {{#if showTray}}
+                <button type="button" class="btn-add-to-tray preview-header-btn" data-action="addToTray" data-uuid="{{selectedItem.uuid}}" title="{{localize 'VAGABOND.CharBuilder.Buttons.AddToTray'}}">
+                    <i class="fas fa-plus"></i>
+                </button>
+            {{/if}}
         </div>
 
         {{!-- Perk Prerequisites Display --}}
@@ -183,14 +188,6 @@
             {{/if}}
         {{/if}}
 
-        {{!-- Add to Tray button --}}
-        {{#if showTray}}
-            <div class="preview-actions">
-                <button type="button" class="btn-add-to-tray" data-action="addToTray" data-uuid="{{selectedItem.uuid}}">
-                    <i class="fas fa-plus"></i> {{localize "VAGABOND.CharBuilder.Buttons.AddToTray"}}
-                </button>
-            </div>
-        {{/if}}
 
         {{!-- Starting Pack Contents Display --}}
         {{#if (eq step 'starting-packs')}}
@@ -198,7 +195,14 @@
                 <div class="starting-pack-contents">
                     <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.PackContents"}}</h3>
                     <div class="pack-budget-info">
-                        <strong>{{localize "VAGABOND.CharBuilder.Budget"}}:</strong> {{startingPackItems.startingSilver}}s
+                        <div>
+                            <strong>{{localize "VAGABOND.CharBuilder.Budget"}}:</strong> {{startingPackItems.startingSilver}}s
+                        </div>
+                        {{#if startingPackItems.inventorySlots}}
+                        <div>
+                            <strong>Inventory Slots:</strong> {{startingPackItems.inventorySlots.occupied}}/{{startingPackItems.inventorySlots.max}} (Free: {{startingPackItems.inventorySlots.free}})
+                        </div>
+                        {{/if}}
                     </div>
                     <div class="pack-items-list">
                         {{#each startingPackItems.items as |item|}}

@@ -98,7 +98,6 @@ export class ValidationEngine {
     const cacheKey = this._generateCacheKey('step', stepName, state);
     const cached = useCache ? this._getCachedResult(cacheKey) : null;
     if (cached) {
-      console.log(`[ValidationEngine] ${stepName}: Using cached result: ${cached.isValid ? '✓ VALID' : '✗ INVALID'}`);
       return cached;
     }
 
@@ -115,7 +114,6 @@ export class ValidationEngine {
       stepConfig = this.configSystem?.getStepConfig(stepName);
     } catch (error) {
       // Configuration not loaded yet, use fallback validation
-      console.log(`[ValidationEngine] ${stepName}: Configuration not loaded, using fallback`);
       const fallbackResult = this._validateStepCompleteFallback(stepName, state);
       result.isValid = fallbackResult.isValid;
       result.canProceed = fallbackResult.isValid;
@@ -128,7 +126,6 @@ export class ValidationEngine {
 
     if (!stepConfig) {
       // Unknown step, use fallback validation
-      console.log(`[ValidationEngine] ${stepName}: Unknown step config, using fallback`);
       const fallbackResult = this._validateStepCompleteFallback(stepName, state);
       result.isValid = fallbackResult.isValid;
       result.canProceed = fallbackResult.isValid;
@@ -144,7 +141,6 @@ export class ValidationEngine {
 
     // If no criteria defined, use fallback validation
     if (completionCriteria.length === 0) {
-      console.log(`[ValidationEngine] ${stepName}: No completion criteria, using fallback`);
       const fallbackResult = this._validateStepCompleteFallback(stepName, state);
       result.isValid = fallbackResult.isValid;
       result.canProceed = fallbackResult.isValid;
@@ -156,7 +152,6 @@ export class ValidationEngine {
     }
 
     // Validate using configuration criteria
-    console.log(`[ValidationEngine] ${stepName}: Using config criteria (${completionCriteria.length} criteria)`);
     result.isValid = true; // Start as valid, criteria will invalidate if needed
     for (const criterion of completionCriteria) {
       const criterionResult = this._validateCriterion(criterion, state);
@@ -168,7 +163,6 @@ export class ValidationEngine {
 
       result.warnings.push(...criterionResult.warnings);
     }
-    console.log(`[ValidationEngine] ${stepName}: Config validation result: ${result.isValid ? '✓ VALID' : '✗ INVALID'}`);
 
 
     result.canProceed = result.isValid;
@@ -728,7 +722,6 @@ export class ValidationEngine {
       case 'class':
         // Need to have a class selected AND all required skills assigned
         if (!state.selectedClass) {
-          console.log('[ValidationEngine Fallback] class: no class selected');
           return { isValid: false };
         }
 
@@ -736,30 +729,16 @@ export class ValidationEngine {
         // The state should have skillGrant structure from the class
         const skillGrant = state.skillGrant;
         if (!skillGrant || !skillGrant.choices) {
-          console.log('[ValidationEngine Fallback] class: no skillGrant data, using simple count');
           // If no skill grant data, fall back to simple count check
           const skillsNeeded = state.skillChoicesNeeded || 0;
           const skillsSelected = (state.skills || []).length;
           const result = skillsSelected >= skillsNeeded;
-          console.log('[ValidationEngine Fallback] class:', {
-            skillsNeeded,
-            skillsSelected,
-            isValid: result ? '✓' : '✗'
-          });
           return { isValid: result };
         }
 
         const currentSkills = state.skills || [];
         const guaranteed = skillGrant.guaranteed || [];
         const skillSelections = state.skillSelections || {};
-
-        console.log('[ValidationEngine Fallback] class validation:', {
-          totalSkills: currentSkills.length,
-          currentSkills,
-          guaranteed,
-          numberOfGroups: skillGrant.choices.length,
-          skillSelections
-        });
 
         // Sort groups by pool size (smallest first) for better allocation
         const sortedChoices = skillGrant.choices
@@ -781,17 +760,7 @@ export class ValidationEngine {
             group.pool.includes(skill) && !usedSkills.has(skill)
           );
 
-          console.log(`[ValidationEngine Fallback] class - Group ${group.originalIndex + 1}:`, {
-            required: group.count,
-            selected: validSkills.length,
-            poolSize: group.poolSize,
-            groupSkills,
-            validSkills,
-            valid: validSkills.length >= group.count ? '✓' : '✗'
-          });
-
           if (validSkills.length < group.count) {
-            console.log('[ValidationEngine Fallback] class: ✗ INVALID (insufficient skills from pool)');
             return { isValid: false };
           }
 
@@ -799,7 +768,6 @@ export class ValidationEngine {
           validSkills.forEach(skill => usedSkills.add(skill));
         }
 
-        console.log('[ValidationEngine Fallback] class: ✓ VALID');
         return { isValid: true };
 
       case 'stats':
@@ -877,25 +845,12 @@ export class ValidationEngine {
       const skillsNeeded = state.skillChoicesNeeded || 0;
       const skillsSelected = (state.skills || []).length;
       const isValid = skillsSelected >= skillsNeeded;
-      console.log('[Validator skills_assigned] Simple count:', {
-        skillsNeeded,
-        skillsSelected,
-        isValid: isValid ? '✓' : '✗'
-      });
       return { isValid, errors: isValid ? [] : ['Not enough skills selected'] };
     }
 
     const currentSkills = state.skills || [];
     const guaranteed = skillGrant.guaranteed || [];
     const skillSelections = state.skillSelections || {};
-
-    console.log('[Validator skills_assigned] Validating pools:', {
-      totalSkills: currentSkills.length,
-      currentSkills,
-      guaranteed,
-      numberOfGroups: skillGrant.choices.length,
-      skillSelections
-    });
 
     // Sort groups by pool size (smallest first) for better allocation
     const sortedGroups = skillGrant.choices
@@ -917,15 +872,6 @@ export class ValidationEngine {
         group.pool.includes(skill) && !usedSkills.has(skill)
       );
 
-      console.log(`[Validator skills_assigned] Group ${group.originalIndex + 1}:`, {
-        required: group.count,
-        selected: validSkills.length,
-        poolSize: group.poolSize,
-        groupSkills,
-        validSkills,
-        valid: validSkills.length >= group.count ? '✓' : '✗'
-      });
-
       if (validSkills.length < group.count) {
         return {
           isValid: false,
@@ -937,7 +883,6 @@ export class ValidationEngine {
       validSkills.forEach(skill => usedSkills.add(skill));
     }
 
-    console.log('[Validator skills_assigned] ✓ All pools satisfied');
     return { isValid: true, errors: [] };
   }
 
@@ -946,12 +891,6 @@ export class ValidationEngine {
     // At level 1, characters get perk slots based on class
     const perks = state.perks || [];
     const perkLimit = state.perkLimit || 1; // Default to at least 1 perk required
-
-    console.log('[Validator perks_selected]:', {
-      perksSelected: perks.length,
-      perkLimit,
-      isValid: perks.length >= perkLimit ? '✓' : '✗'
-    });
 
     const isValid = perks.length >= perkLimit;
     return {

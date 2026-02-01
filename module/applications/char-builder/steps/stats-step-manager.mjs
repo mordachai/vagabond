@@ -15,7 +15,6 @@ export class StatsStepManager extends BaseStepManager {
       'resetStats': this._onResetStats.bind(this),
       'randomize': this._onRandomize.bind(this)
     };
-    console.log('[StatsStepManager] Constructor: actionHandlers initialized to:', Object.keys(this.actionHandlers));
     
     // No external data required for stats step
     this.requiredData = [];
@@ -202,28 +201,34 @@ export class StatsStepManager extends BaseStepManager {
     return {
       hp: {
         label: 'HP',
-        value: previewActor.system.health.max
+        value: previewActor.system.health.max,
+        tooltip: game.i18n.localize('VAGABOND.Hints.HP')
       },
       isSpellcaster: isSpellcaster,
       manaMax: {
         label: 'Mana Max',
-        value: previewActor.system.mana.max
+        value: previewActor.system.mana.max,
+        tooltip: game.i18n.localize('VAGABOND.Hints.MaxMana')
       },
       manaCast: {
         label: 'Mana/Cast',
-        value: previewActor.system.mana.castingMax
+        value: previewActor.system.mana.castingMax,
+        tooltip: game.i18n.localize('VAGABOND.Hints.ManaPerCast')
       },
       luck: {
         label: 'Luck Pool',
-        value: previewActor.system.stats.luck.total
+        value: previewActor.system.stats.luck.total,
+        tooltip: game.i18n.localize('VAGABOND.Hints.LuckPool')
       },
       inventory: {
         label: 'Inventory',
-        value: previewActor.system.inventory.maxSlots
+        value: previewActor.system.inventory.maxSlots,
+        tooltip: game.i18n.localize('VAGABOND.Hints.Inventory')
       },
       speed: {
         label: 'Speed',
-        value: previewActor.system.speed.base
+        value: previewActor.system.speed.base,
+        tooltip: game.i18n.localize('VAGABOND.Hints.Speed')
       },
       saves: saves,
       skills: skills,
@@ -584,7 +589,6 @@ export class StatsStepManager extends BaseStepManager {
     };
 
     this.stateManager.updateMultiple(updates, { skipValidation: true });
-    console.log('Stats step reset');
   }
 
   /**
@@ -605,6 +609,5 @@ export class StatsStepManager extends BaseStepManager {
       }, { skipValidation: true });
     }
     
-    console.log('Stats step activated');
   }
 }

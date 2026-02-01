@@ -60,6 +60,7 @@ export class SpellsStepManager extends BaseStepManager {
 
           previewItem = {
             ...item.toObject(),
+            uuid: previewUuid,
             enrichedDescription: enrichedDescription,
             displayStats: this._prepareSpellDisplayStats(item),
             damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[item.system.damageType] || null,
@@ -77,6 +78,7 @@ export class SpellsStepManager extends BaseStepManager {
     return {
       availableOptions: availableSpells,
       selectedSpells: selectedSpells,
+      selectedItem: previewItem,
       previewItem: previewItem,
       spellLimit: spellLimit,
       currentSpellCount: selectedSpells.length,
@@ -85,7 +87,7 @@ export class SpellsStepManager extends BaseStepManager {
       showTray: true,
       trayData: trayData,
       useTripleColumn: true,
-      instruction: (selectedSpells.length === 0 && !previewUuid) ? 
+      instruction: (selectedSpells.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Spells') : null
     };
   }
@@ -364,7 +366,6 @@ export class SpellsStepManager extends BaseStepManager {
    */
   _onReset() {
     this.updateState('spells', [], { skipValidation: true });
-    console.log('Spells step reset');
   }
 
   /**
@@ -374,6 +375,5 @@ export class SpellsStepManager extends BaseStepManager {
   async _onActivate() {
     // Ensure spell data is loaded and ready
     await this.dataService.ensureDataLoaded(['spells']);
-    console.log('Spells step activated');
   }
 }

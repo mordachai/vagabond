@@ -38,17 +38,10 @@ export class AncestryStepManager extends BaseStepManager {
    * @protected
    */
   async _prepareStepSpecificContext(state) {
-    console.log('Ancestry _prepareStepSpecificContext called with state:', {
-      selectedAncestry: state.selectedAncestry,
-      previewUuid: state.previewUuid,
-      currentStep: state.currentStep
-    });
-
     const availableAncestries = await this._loadAncestryOptions();
     const selectedAncestry = state.selectedAncestry;
     const previewUuid = state.previewUuid;
 
-    console.log('After loading ancestries, previewUuid is:', previewUuid, 'selectedAncestry is:', selectedAncestry);
 
     // Mark items as selected/previewing for template
     const markedOptions = availableAncestries.map(ancestry => ({
@@ -85,18 +78,10 @@ export class AncestryStepManager extends BaseStepManager {
 
     // Get preview item details if different from selected
     let previewItem = null;
-    console.log('Checking preview condition:', {
-      hasPreviewUuid: !!previewUuid,
-      previewUuid,
-      selectedAncestry,
-      areDifferent: previewUuid !== selectedAncestry
-    });
 
     if (previewUuid && previewUuid !== selectedAncestry) {
-      console.log('Loading preview item for UUID:', previewUuid);
       try {
         const item = await fromUuid(previewUuid);
-        console.log('fromUuid returned:', item ? 'valid item' : 'null');
         if (item) {
           // Enrich the description for display
           const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description || '', {
@@ -112,13 +97,11 @@ export class AncestryStepManager extends BaseStepManager {
             ancestryType: item.system.ancestryType || 'Humanlike',
             enrichedDescription: enrichedDescription
           };
-          console.log('Created previewItem:', previewItem.name);
         }
       } catch (error) {
         console.warn('Failed to load preview ancestry:', error);
       }
     } else {
-      console.log('Preview condition not met, skipping preview item creation');
     }
 
     const context = {
@@ -132,15 +115,6 @@ export class AncestryStepManager extends BaseStepManager {
       instruction: (!selectedAncestry && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Ancestry') : null
     };
-
-    console.log('Ancestry step context:', {
-      selectedAncestry,
-      previewUuid,
-      hasSelectedItem: !!selectedItem,
-      hasPreviewItem: !!previewItem,
-      optionsCount: markedOptions.length,
-      markedOptionsPreview: markedOptions.filter(o => o.previewing).map(o => o.name)
-    });
 
     return context;
   }
@@ -173,7 +147,6 @@ export class AncestryStepManager extends BaseStepManager {
    */
   async _onSelectOption(event, target) {
     const uuid = target.dataset.uuid;
-    console.log('Ancestry selectOption called with uuid:', uuid);
 
     if (!uuid) {
       console.warn('No uuid found on target');
@@ -194,7 +167,6 @@ export class AncestryStepManager extends BaseStepManager {
 
       if (this.render) {
         this.render();
-        console.log('Render called');
       }
     } catch (error) {
       console.error('Failed to select ancestry:', error);
@@ -289,7 +261,6 @@ export class AncestryStepManager extends BaseStepManager {
    */
   _onReset() {
     // Clear any step-specific caches or state
-    console.log('Ancestry step reset');
   }
 
   /**
@@ -299,6 +270,5 @@ export class AncestryStepManager extends BaseStepManager {
   async _onActivate() {
     // Ensure ancestry data is loaded and ready
     await this.dataService.ensureDataLoaded(['ancestries']);
-    console.log('Ancestry step activated');
   }
 }

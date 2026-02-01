@@ -7,7 +7,11 @@
             <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
 
             {{#if (eq step 'gear')}}
-                {{#if budget}}<div class="pack-summary"><span>{{localize "VAGABOND.Currency.Silver.long"}}: <strong>{{budget.total}}</strong></span></div>{{/if}}
+                {{#if inventorySlots}}
+                    <div class="pack-summary">
+                        <p><strong>Inventory Slots:</strong> {{inventorySlots.occupied}}/{{inventorySlots.max}} (Free: {{inventorySlots.free}})</p>
+                    </div>
+                {{/if}}
             {{/if}}
 
             {{#if (eq step 'spells')}}

@@ -2973,6 +2973,29 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #555;
   font-family: "Eskapade", serif;
 }
+.vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  flex: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray i {
+  margin: 0;
+}
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .ancestry-info {
   display: flex;
   flex-direction: column;
@@ -3015,6 +3038,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1rem;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-line {
+  display: flex;
+  gap: 4px;
   font-size: 1.1rem;
   line-height: 1.4;
   color: #555;
@@ -3668,6 +3693,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 20px;
 }
 .starting-pack-contents .pack-budget-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background: rgba(255, 215, 0, 0.15);
   padding: 10px;
   margin: 10px 0;

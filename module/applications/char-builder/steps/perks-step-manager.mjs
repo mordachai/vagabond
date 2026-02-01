@@ -76,6 +76,7 @@ export class PerksStepManager extends BaseStepManager {
 
           previewItem = {
             ...item.toObject(),
+            uuid: previewUuid,
             enrichedDescription: enrichedDescription,
             hasPrerequisites: hasPrerequisites,
             prerequisitesMet: prereqCheck.met,
@@ -97,6 +98,7 @@ export class PerksStepManager extends BaseStepManager {
       availableOptions: availablePerks,
       selectedPerks: selectedPerks,
       classPerks: classPerks,
+      selectedItem: previewItem,
       previewItem: previewItem,
       hasSelection: selectedPerks.length > 0 || classPerks.length > 0,
       showTray: true,
@@ -104,7 +106,7 @@ export class PerksStepManager extends BaseStepManager {
       useTripleColumn: true,
       showAllPerks: this.showAllPerks,
       originReferences: originReferences,
-      instruction: (selectedPerks.length === 0 && classPerks.length === 0 && !previewUuid) ? 
+      instruction: (selectedPerks.length === 0 && classPerks.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Perks') : null
     };
   }
@@ -383,7 +385,7 @@ export class PerksStepManager extends BaseStepManager {
             img: item.img,
             type: 'perk',
             isClassPerk: classPerks.includes(uuid),
-            canRemove: !classPerks.includes(uuid) // Can't remove class perks
+            canDelete: !classPerks.includes(uuid) // Can't remove class perks
           });
         }
       } catch (error) {
@@ -582,7 +584,6 @@ export class PerksStepManager extends BaseStepManager {
    */
   _onReset() {
     this.updateState('perks', [], { skipValidation: true });
-    console.log('Perks step reset');
   }
 
   /**

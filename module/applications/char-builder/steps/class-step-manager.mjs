@@ -311,9 +311,6 @@ export class ClassStepManager extends BaseStepManager {
         return;
       }
 
-      console.log('═══════════════════════════════════════════════════');
-      console.log('🎓 CLASS SELECTED:', item.name);
-      console.log('═══════════════════════════════════════════════════');
 
       // For class, directly select (no preview/tray system)
       this.updateState('selectedClass', uuid);
@@ -323,17 +320,6 @@ export class ClassStepManager extends BaseStepManager {
       const skillGrant = item.system.skillGrant || { guaranteed: [], choices: [] };
       // Start fresh with only the new class's guaranteed skills
       const newSkills = [...skillGrant.guaranteed];
-
-      console.log('[Class Change] Skill Grant Structure:', {
-        guaranteed: skillGrant.guaranteed,
-        numberOfChoiceGroups: skillGrant.choices.length,
-        choiceGroups: skillGrant.choices.map((c, i) => ({
-          group: i + 1,
-          pick: c.count,
-          from: c.pool.length || 'all skills',
-          label: c.label || `Group ${i + 1}`
-        }))
-      });
 
       this.updateState('skills', newSkills);
       this.updateState('skillSelections', {}); // Reset per-group selections
@@ -349,7 +335,6 @@ export class ClassStepManager extends BaseStepManager {
       const skillChoicesNeeded = skillGrant.choices.reduce((total, choice) => total + choice.count, 0);
       this.updateState('skillChoicesNeeded', skillChoicesNeeded);
 
-      console.log('[Class Change] Total skill points to assign:', skillChoicesNeeded);
 
       // Store the skill grant structure for validation
       this.updateState('skillGrant', skillGrant);
@@ -452,7 +437,6 @@ export class ClassStepManager extends BaseStepManager {
           ...skillSelections,
           [groupIndex]: updatedGroupSkills
         };
-        console.log(`[Skill Toggle] ✗ REMOVED from Group ${groupIndex}: ${skill}`);
       } else {
         // Check if skill is selected in another group
         if (currentSkills.includes(skill)) {
@@ -478,7 +462,6 @@ export class ClassStepManager extends BaseStepManager {
           ...skillSelections,
           [groupIndex]: updatedGroupSkills
         };
-        console.log(`[Skill Toggle] ✓ ADDED to Group ${groupIndex}: ${skill}`);
       }
 
       // Rebuild combined skills list
@@ -487,8 +470,6 @@ export class ClassStepManager extends BaseStepManager {
         ...Object.values(newSkillSelections).flat()
       ];
 
-      console.log(`[Skill Toggle] Total skills now: ${newSkills.length}`, newSkills);
-      console.log(`[Skill Toggle] Per-group selections:`, newSkillSelections);
 
       this.updateState('skillSelections', newSkillSelections);
       this.updateState('skills', newSkills);
@@ -579,16 +560,24 @@ export class ClassStepManager extends BaseStepManager {
 
       const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
       const skills = [...skillGrant.guaranteed];
+      const skillSelections = {};
 
       // Auto-select random skills from choices
-      for (const choice of skillGrant.choices) {
+      skillGrant.choices.forEach((choice, groupIndex) => {
         const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND.skills);
         const available = pool.filter(s => !skills.includes(s));
         const shuffled = available.sort(() => Math.random() - 0.5);
-        skills.push(...shuffled.slice(0, choice.count));
-      }
+        const selected = shuffled.slice(0, choice.count);
+
+        // Store per-group selections for UI
+        skillSelections[groupIndex] = selected;
+
+        // Add to combined skills list
+        skills.push(...selected);
+      });
 
       this.updateState('skills', skills);
+      this.updateState('skillSelections', skillSelections);
     } catch (error) {
       console.error('Failed to auto-select skills:', error);
     }
@@ -615,7 +604,6 @@ export class ClassStepManager extends BaseStepManager {
    * @protected
    */
   _onReset() {
-    console.log('Class step reset');
   }
 
   /**
@@ -625,6 +613,5 @@ export class ClassStepManager extends BaseStepManager {
   async _onActivate() {
     // Ensure class data is loaded and ready
     await this.dataService.ensureDataLoaded(['classes']);
-    console.log('Class step activated');
   }
 }

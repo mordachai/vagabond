@@ -191,7 +191,6 @@ export class CharacterBuilderUIComponents {
       this._recordPerformance('prepareContext', performance.now() - startTime, false);
 
       // Log button states for debugging
-      console.log(`[UI Context] Step: ${state.currentStep} | Next Button: ${completeContext.canAdvance ? '✓ ENABLED' : '✗ DISABLED'} | Finish Button: ${completeContext.canFinish ? '✓ ENABLED' : '✗ DISABLED'}`);
 
       return completeContext;
       
@@ -623,7 +622,6 @@ export class CharacterBuilderUIComponents {
       case 'class':
         // Need class selected AND all skill choices satisfied
         if (!state.selectedClass) {
-          console.log('[Class Validation] No class selected');
           return false;
         }
 
@@ -631,19 +629,11 @@ export class CharacterBuilderUIComponents {
         const skillGrant = state.skillGrant;
         if (!skillGrant || !skillGrant.choices) {
           // No skill grant data - just check if class is selected
-          console.log('[Class Validation] No skillGrant data, class step complete');
           return true;
         }
 
         const currentSkills = state.skills || [];
         const guaranteed = skillGrant.guaranteed || [];
-
-        console.log('[Class Validation] Starting validation:', {
-          totalSkills: currentSkills.length,
-          currentSkills: currentSkills,
-          guaranteed: guaranteed,
-          numberOfGroups: skillGrant.choices.length
-        });
 
         // Validate each choice pool
         let totalNeeded = 0;
@@ -661,24 +651,11 @@ export class CharacterBuilderUIComponents {
           totalSelected += selectedFromPool;
 
           const poolValid = selectedFromPool >= choice.count;
-          console.log(`[Class Validation] Group ${i + 1}:`, {
-            required: choice.count,
-            selected: selectedFromPool,
-            poolSize: pool.length,
-            valid: poolValid ? '✓' : '✗'
-          });
 
           if (!poolValid) {
             isValid = false;
           }
         }
-
-        console.log('[Class Validation] Summary:', {
-          totalNeeded: totalNeeded,
-          totalSelected: totalSelected,
-          freePoints: totalNeeded - totalSelected,
-          isValid: isValid ? '✓ VALID' : '✗ INVALID'
-        });
 
         return isValid;
 

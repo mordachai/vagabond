@@ -195,7 +195,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
       
       this._configLoaded = true;
-      console.log('Character Builder configuration loaded successfully');
     } catch (error) {
       console.warn('Failed to load character builder configuration, using fallback values:', error);
       this._configLoaded = false; // Will use hardcoded fallbacks
@@ -244,16 +243,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   _isStepComplete(stepName) {
     // If step managers aren't initialized yet, use fallback logic
     if (!this.stepManagers) {
-      console.log(`[CharBuilder _isStepComplete] Step managers not initialized for ${stepName}, using fallback`);
       // Use fallback logic below
     } else {
       const stepManager = this.stepManagers[stepName];
       if (stepManager) {
         const result = stepManager.isComplete();
-        console.log(`[CharBuilder _isStepComplete] ${stepName}: ${result ? '✓ COMPLETE' : '✗ INCOMPLETE'} (from step manager)`);
         return result;
       } else {
-        console.log(`[CharBuilder _isStepComplete] No step manager found for ${stepName}, using fallback`);
       }
     }
 
@@ -299,7 +295,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     const checkFunction = completionMap[stepName];
     const result = checkFunction ? checkFunction() : false;
-    console.log(`[CharBuilder _isStepComplete] ${stepName}: ${result ? '✓ COMPLETE' : '✗ INCOMPLETE'} (from fallback)`);
     return result;
   }
 
@@ -314,15 +309,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const ancestryComplete = !!state.selectedAncestry;
     const classComplete = !!state.selectedClass;
     const statsComplete = state.assignedStats && Object.keys(state.assignedStats).length === 6;
-
-    console.log('CharBuilder Finish Validation:', {
-      ancestryComplete,
-      classComplete,
-      statsComplete,
-      ancestry: state.selectedAncestry,
-      class: state.selectedClass,
-      stats: state.assignedStats
-    });
 
     return ancestryComplete && classComplete && statsComplete;
   }
@@ -407,7 +393,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
         chip.addEventListener('dragstart', (ev) => {
             const target = ev.currentTarget;
-            console.log('[CharBuilder] Drag started:', { index: target.dataset.index, value: target.dataset.value });
 
             const transfer = {
                 index: target.dataset.index,
@@ -420,7 +405,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         });
 
         chip.addEventListener('dragend', (ev) => {
-            console.log('[CharBuilder] Drag ended');
             ev.currentTarget.classList.remove('dragging');
         });
     });
@@ -435,18 +419,15 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         });
 
         slot.addEventListener('dragenter', (ev) => {
-            console.log('[CharBuilder] Drag entered slot:', ev.currentTarget.dataset.stat);
             ev.currentTarget.classList.add('drag-over');
         });
         slot.addEventListener('dragleave', (ev) => {
-            console.log('[CharBuilder] Drag left slot:', ev.currentTarget.dataset.stat);
             ev.currentTarget.classList.remove('drag-over');
         });
 
         slot.addEventListener('drop', async (ev) => {
             ev.preventDefault();
             ev.currentTarget.classList.remove('drag-over');
-            console.log('[CharBuilder] Drop event on slot:', ev.currentTarget.dataset.stat);
 
             try {
                 const rawData = ev.dataTransfer.getData("text/plain");
@@ -457,7 +438,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
                 const data = JSON.parse(rawData);
                 const statKey = ev.currentTarget.dataset.stat;
-                console.log('[CharBuilder] Dropping value:', data, 'on stat:', statKey);
 
                 // Ensure step managers are initialized
                 await this._ensureInitialized();
@@ -465,7 +445,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                 // Delegate to stats step manager
                 const statsManager = this.stepManagers['stats'];
                 if (statsManager) {
-                  console.log('[CharBuilder] Calling _assignStatValue');
                   statsManager._assignStatValue(statKey, parseInt(data.value), parseInt(data.index));
                   // Re-render to show the updated state
                   this.render();
@@ -545,9 +524,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const items = html.querySelectorAll('.directory-item');
 
     items.forEach(item => {
-      const name = item.querySelector('.item-name')?.textContent?.toLowerCase() || '';
-      const description = item.querySelector('.item-description')?.textContent?.toLowerCase() || '';
-      const searchText = `${name} ${description}`;
+      // Get name from .name element (used by all item types)
+      const name = item.querySelector('.name')?.textContent?.toLowerCase() || '';
+
+      // For stat arrays, check the array values as well
+      const arrayValues = item.querySelector('.array-values')?.textContent?.toLowerCase() || '';
+
+      // Combine searchable text
+      const searchText = `${name} ${arrayValues}`;
 
       if (!query || searchText.includes(query)) {
         item.classList.remove('hidden');
@@ -556,7 +540,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     });
 
-    // Update category headers visibility
+    // Update category headers visibility (for gear step accordions)
     const categories = html.querySelectorAll('.category-header');
     categories.forEach(category => {
       const categoryItems = category.parentElement.querySelectorAll('.directory-item');

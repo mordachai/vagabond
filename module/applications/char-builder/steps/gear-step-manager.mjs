@@ -63,6 +63,7 @@ export class GearStepManager extends BaseStepManager {
 
           previewItem = {
             ...item.toObject(),
+            uuid: previewUuid,
             enrichedDescription: enrichedDescription,
             displayStats: this._prepareGearDisplayStats(item)
           };
@@ -75,6 +76,9 @@ export class GearStepManager extends BaseStepManager {
     // Prepare tray data
     const trayData = await this._prepareTrayData(selectedGear);
 
+    // Calculate inventory slots
+    const inventorySlots = await this._calculateInventorySlots(state, selectedGear);
+
     return {
       availableOptions: availableGear,
       options: availableGear, // Sidebar expects 'options'
@@ -86,6 +90,7 @@ export class GearStepManager extends BaseStepManager {
       trayData: trayData,
       isGearStep: true,
       budget: budget,
+      inventorySlots: inventorySlots,
       instruction: (selectedGear.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Gear') : null
     };
@@ -193,6 +198,68 @@ export class GearStepManager extends BaseStepManager {
   }
 
   /**
+   * Calculate inventory slots (from starting pack + added gear)
+   * @private
+   */
+  async _calculateInventorySlots(state, selectedGear) {
+    // Get max inventory slots from character's actual data model
+    const previewActor = await this._createPreviewActor(state);
+    const maxSlots = previewActor?.system?.inventory?.maxSlots || 0;
+
+    let slotsFromPack = 0;
+    let slotsFromGear = 0;
+
+    // Calculate slots from starting pack
+    if (state.selectedStartingPack) {
+      try {
+        const packItem = await fromUuid(state.selectedStartingPack);
+        if (packItem && packItem.system.items) {
+          const packItems = packItem.system.items || [];
+
+          for (const packItemData of packItems) {
+            try {
+              const item = await fromUuid(packItemData.uuid);
+              if (item) {
+                const qty = packItemData.quantity || 1;
+                const slots = item.system.baseSlots || 0;
+                slotsFromPack += slots * qty;
+              }
+            } catch (error) {
+              console.warn(`Failed to load pack item ${packItemData.uuid}:`, error);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load starting pack for slots calculation:', error);
+      }
+    }
+
+    // Calculate slots from manually added gear
+    for (const uuid of selectedGear) {
+      try {
+        const item = await fromUuid(uuid);
+        if (item) {
+          const slots = item.system.baseSlots || 0;
+          slotsFromGear += slots;
+        }
+      } catch (error) {
+        console.warn(`Failed to load gear item ${uuid} for slots calculation:`, error);
+      }
+    }
+
+    const totalOccupied = slotsFromPack + slotsFromGear;
+    const freeSlots = maxSlots - totalOccupied;
+
+    return {
+      occupied: totalOccupied,
+      max: maxSlots,
+      free: freeSlots,
+      fromPack: slotsFromPack,
+      fromGear: slotsFromGear
+    };
+  }
+
+  /**
    * Prepare gear display stats
    * @private
    */
@@ -232,16 +299,35 @@ export class GearStepManager extends BaseStepManager {
    */
   async _prepareTrayData(selectedGear) {
     const trayItems = [];
+    const state = this.getCurrentState();
+    const startingPackGear = await this._getStartingPackGear(state);
 
     for (const uuid of selectedGear) {
       try {
         const item = await fromUuid(uuid);
         if (item) {
+          const sys = item.system || {};
+          const baseCost = sys.baseCost || { gold: 0, silver: 0, copper: 0 };
+
+          // Format cost display
+          let costDisplay = '';
+          if (baseCost.gold > 0) costDisplay += `${baseCost.gold}g `;
+          if (baseCost.silver > 0) costDisplay += `${baseCost.silver}s `;
+          if (baseCost.copper > 0) costDisplay += `${baseCost.copper}c`;
+          if (!costDisplay) costDisplay = '0s';
+
+          const fromStartingPack = startingPackGear.includes(uuid);
+
           trayItems.push({
             uuid: uuid,
             name: item.name,
             img: item.img,
             type: item.type,
+            qty: 1, // Default quantity
+            slots: sys.baseSlots || 0,
+            costDisplay: costDisplay.trim(),
+            fromStartingPack: fromStartingPack,
+            canDelete: !fromStartingPack, // Can't delete items from starting pack
             displayStats: this._prepareGearDisplayStats(item)
           });
         }
@@ -254,6 +340,25 @@ export class GearStepManager extends BaseStepManager {
       gear: trayItems,
       isEmpty: trayItems.length === 0
     };
+  }
+
+  /**
+   * Get gear UUIDs from selected starting pack
+   * @private
+   */
+  async _getStartingPackGear(state) {
+    if (!state.selectedStartingPack) return [];
+
+    try {
+      const pack = await fromUuid(state.selectedStartingPack);
+      if (!pack) return [];
+
+      const gearList = pack.system.items || [];
+      return gearList.map(g => g.uuid).filter(Boolean);
+    } catch (error) {
+      console.warn('Failed to get starting pack gear:', error);
+      return [];
+    }
   }
 
   /**
@@ -411,6 +516,88 @@ export class GearStepManager extends BaseStepManager {
   }
 
   /**
+   * Create a preview actor to get calculated values
+   * @private
+   */
+  async _createPreviewActor(state) {
+    try {
+      const trainedSkills = state.skills || [];
+      const assignedStats = state.assignedStats || {};
+
+      // Build skills object
+      const skillsDefinition = {
+        arcana: { stat: 'reason' },
+        craft: { stat: 'reason' },
+        medicine: { stat: 'reason' },
+        brawl: { stat: 'might' },
+        finesse: { stat: 'dexterity' },
+        sneak: { stat: 'dexterity' },
+        detect: { stat: 'awareness' },
+        mysticism: { stat: 'awareness' },
+        survival: { stat: 'awareness' },
+        influence: { stat: 'presence' },
+        leadership: { stat: 'presence' },
+        performance: { stat: 'presence' }
+      };
+
+      const skills = {};
+      for (const [key, def] of Object.entries(skillsDefinition)) {
+        skills[key] = {
+          trained: trainedSkills.includes(key),
+          stat: def.stat,
+          bonus: 0
+        };
+      }
+
+      const weaponSkills = {
+        melee: { trained: trainedSkills.includes('melee'), stat: 'might', bonus: 0 },
+        brawl: { trained: trainedSkills.includes('brawl'), stat: 'might', bonus: 0 },
+        finesse: { trained: trainedSkills.includes('finesse'), stat: 'dexterity', bonus: 0 },
+        ranged: { trained: trainedSkills.includes('ranged'), stat: 'dexterity', bonus: 0 }
+      };
+
+      const actorData = {
+        name: 'Preview Character',
+        type: 'character',
+        system: {
+          stats: {
+            might: { value: assignedStats.might || 0 },
+            dexterity: { value: assignedStats.dexterity || 0 },
+            awareness: { value: assignedStats.awareness || 0 },
+            reason: { value: assignedStats.reason || 0 },
+            presence: { value: assignedStats.presence || 0 },
+            luck: { value: assignedStats.luck || 0 }
+          },
+          skills: skills,
+          weaponSkills: weaponSkills
+        },
+        items: []
+      };
+
+      // Apply builder selections
+      const itemUuids = [
+        state.selectedAncestry,
+        state.selectedClass,
+        ...(state.perks || []),
+        ...(state.classPerks || [])
+      ].filter(uuid => uuid);
+
+      if (itemUuids.length > 0) {
+        const items = await Promise.all(itemUuids.map(uuid => fromUuid(uuid)));
+        actorData.items = items.filter(i => i).map(i => i.toObject());
+      }
+
+      const previewActor = new Actor.implementation(actorData);
+      previewActor.prepareData();
+
+      return previewActor;
+    } catch (error) {
+      console.error('Failed to create preview actor:', error);
+      return null;
+    }
+  }
+
+  /**
    * Check if step is complete (optional step)
    */
   isComplete() {
@@ -425,7 +612,6 @@ export class GearStepManager extends BaseStepManager {
   _onReset() {
     this.updateState('gear', [], { skipValidation: true });
     this.updateState('gearCostSpent', 0, { skipValidation: true });
-    console.log('Gear step reset');
   }
 
   /**

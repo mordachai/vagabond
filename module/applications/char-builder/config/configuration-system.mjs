@@ -33,7 +33,6 @@ export class ConfigurationSystem {
       ]);
 
       this.loaded = true;
-      console.log('Character Builder configurations loaded successfully');
     } catch (error) {
       console.error('Failed to load character builder configurations:', error);
       throw new Error(`Configuration loading failed: ${error.message}`);
