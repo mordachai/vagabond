@@ -2768,6 +2768,50 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label {
   word-break: keep-all;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label.disabled input[type=checkbox] {
+  cursor: not-allowed;
+  accent-color: #666;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox]:disabled:checked {
+  opacity: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #888;
+  border: 2px solid #666;
+  border-radius: 2px;
+  position: relative;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox]:disabled:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label i.fa-lock {
+  font-size: 10px;
+  color: #999;
+  margin-left: 2px;
 }
 .vagabond-builder .builder-body .decision-zone .stat-assigner {
   display: grid;

@@ -31,7 +31,7 @@ export class ClassStepManager extends BaseStepManager {
    * @protected
    */
   _getStatePaths() {
-    return ['selectedClass', 'skills', 'classPerks', 'lastClassForPerks', 'previewUuid'];
+    return ['selectedClass', 'skills', 'skillSelections', 'classPerks', 'lastClassForPerks', 'previewUuid'];
   }
 
   /**
@@ -143,17 +143,39 @@ export class ClassStepManager extends BaseStepManager {
   async _prepareClassPreviewData(classItem, state) {
     const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
     const currentSkills = state.skills || [];
+    const skillSelections = state.skillSelections || {};
 
-    // Prepare skill choices data
-    const skillChoices = skillGrant.choices.map(choice => {
+    // Prepare skill choices data with detailed skill state
+    const skillChoices = skillGrant.choices.map((choice, groupIndex) => {
       const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND.skills);
-      const availableSkills = pool.filter(skill => !currentSkills.includes(skill));
+      const skillsInThisGroup = skillSelections[groupIndex] || [];
+
+      // Prepare each skill in the pool with its state
+      const skillsData = pool.map(skillKey => {
+        const isGuaranteed = skillGrant.guaranteed.includes(skillKey);
+        const isSelectedInThisGroup = skillsInThisGroup.includes(skillKey);
+        const isSelectedInOtherGroup = !isSelectedInThisGroup && currentSkills.includes(skillKey) && !isGuaranteed;
+
+        // Skill is disabled if guaranteed or selected in another group
+        const isDisabled = isGuaranteed || isSelectedInOtherGroup;
+        const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
+
+        return {
+          key: skillKey,
+          label: game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`),
+          isChecked: isChecked,
+          isDisabled: isDisabled,
+          isGuaranteed: isGuaranteed,
+          groupIndex: groupIndex
+        };
+      });
 
       return {
         count: choice.count,
         pool: pool,
-        available: availableSkills,
-        selected: currentSkills.filter(skill => pool.includes(skill)).length
+        skills: skillsData,
+        selected: skillsInThisGroup.length,
+        groupIndex: groupIndex
       };
     });
 
@@ -314,6 +336,7 @@ export class ClassStepManager extends BaseStepManager {
       });
 
       this.updateState('skills', newSkills);
+      this.updateState('skillSelections', {}); // Reset per-group selections
 
       // RESET user-selected perks (class perks will be set below)
       // User must re-select perks since old ones might not meet new prerequisites
@@ -393,8 +416,9 @@ export class ClassStepManager extends BaseStepManager {
    */
   async _onToggleSkill(event, target) {
     const skill = target.value;
+    const groupIndex = parseInt(target.dataset.groupIndex);
     const state = this.getCurrentState();
-    
+
     if (!state.selectedClass) {
       ui.notifications.warn('Please select a class first');
       return;
@@ -406,6 +430,7 @@ export class ClassStepManager extends BaseStepManager {
 
       const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
       const currentSkills = state.skills || [];
+      const skillSelections = state.skillSelections || {};
 
       // Check if this is a guaranteed skill (can't be toggled)
       if (skillGrant.guaranteed.includes(skill)) {
@@ -413,33 +438,59 @@ export class ClassStepManager extends BaseStepManager {
         return;
       }
 
+      // Get skills selected in this group
+      const skillsInThisGroup = skillSelections[groupIndex] || [];
+
       // Toggle the skill
+      let newSkillSelections;
       let newSkills;
-      if (currentSkills.includes(skill)) {
-        newSkills = currentSkills.filter(s => s !== skill);
-        console.log(`[Skill Toggle] ✗ REMOVED: ${skill}`);
+
+      if (skillsInThisGroup.includes(skill)) {
+        // Remove from this group
+        const updatedGroupSkills = skillsInThisGroup.filter(s => s !== skill);
+        newSkillSelections = {
+          ...skillSelections,
+          [groupIndex]: updatedGroupSkills
+        };
+        console.log(`[Skill Toggle] ✗ REMOVED from Group ${groupIndex}: ${skill}`);
       } else {
-        // Check if we can add more skills from this choice pool
-        const relevantChoice = skillGrant.choices.find(choice => 
-          choice.pool.includes(skill) || choice.pool.length === 0
-        );
-        
-        if (relevantChoice) {
-          const pool = relevantChoice.pool.length ? relevantChoice.pool : Object.keys(CONFIG.VAGABOND.skills);
-          const currentFromPool = currentSkills.filter(s => pool.includes(s) && !skillGrant.guaranteed.includes(s));
-          
-          if (currentFromPool.length >= relevantChoice.count) {
-            ui.notifications.warn(`You can only select ${relevantChoice.count} skills from this pool`);
-            return;
-          }
+        // Check if skill is selected in another group
+        if (currentSkills.includes(skill)) {
+          ui.notifications.warn('This skill is already selected in another group');
+          return;
         }
-        
-        newSkills = [...currentSkills, skill];
-        console.log(`[Skill Toggle] ✓ ADDED: ${skill}`);
+
+        // Check if we can add more skills to this group
+        const choice = skillGrant.choices[groupIndex];
+        if (!choice) {
+          console.error(`No choice definition for group ${groupIndex}`);
+          return;
+        }
+
+        if (skillsInThisGroup.length >= choice.count) {
+          ui.notifications.warn(`You can only select ${choice.count} skill(s) from this group`);
+          return;
+        }
+
+        // Add to this group
+        const updatedGroupSkills = [...skillsInThisGroup, skill];
+        newSkillSelections = {
+          ...skillSelections,
+          [groupIndex]: updatedGroupSkills
+        };
+        console.log(`[Skill Toggle] ✓ ADDED to Group ${groupIndex}: ${skill}`);
       }
 
-      console.log(`[Skill Toggle] Total skills now: ${newSkills.length}`, newSkills);
+      // Rebuild combined skills list
+      newSkills = [
+        ...skillGrant.guaranteed,
+        ...Object.values(newSkillSelections).flat()
+      ];
 
+      console.log(`[Skill Toggle] Total skills now: ${newSkills.length}`, newSkills);
+      console.log(`[Skill Toggle] Per-group selections:`, newSkillSelections);
+
+      this.updateState('skillSelections', newSkillSelections);
       this.updateState('skills', newSkills);
       
     } catch (error) {

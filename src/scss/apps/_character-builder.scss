@@ -397,6 +397,59 @@
 
         .checkbox-label {
             word-break: keep-all;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+
+            // Disabled checkboxes (guaranteed or selected in other group)
+            &.disabled {
+              opacity: 0.7;
+              cursor: not-allowed;
+
+              input[type="checkbox"] {
+                cursor: not-allowed;
+                accent-color: #666; // Darker gray for disabled
+              }
+            }
+
+            input[type="checkbox"] {
+              cursor: pointer;
+              width: 16px;
+              height: 16px;
+              accent-color: $c-red; // Brand color for enabled checkboxes
+
+              // When disabled and checked, show as filled square
+              &:disabled:checked {
+                opacity: 1;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-color: #888;
+                border: 2px solid #666;
+                border-radius: 2px;
+                position: relative;
+
+                // Show checkmark or fill
+                &::after {
+                  content: "✓";
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  color: white;
+                  font-size: 12px;
+                  font-weight: bold;
+                }
+              }
+            }
+
+            i.fa-lock {
+              font-size: 10px;
+              color: #999;
+              margin-left: 2px;
+            }
         }
       }
 

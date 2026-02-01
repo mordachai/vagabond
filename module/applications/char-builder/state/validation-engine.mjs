@@ -749,37 +749,54 @@ export class ValidationEngine {
           return { isValid: result };
         }
 
-        // Check each choice pool individually
         const currentSkills = state.skills || [];
         const guaranteed = skillGrant.guaranteed || [];
+        const skillSelections = state.skillSelections || {};
 
         console.log('[ValidationEngine Fallback] class validation:', {
           totalSkills: currentSkills.length,
           currentSkills,
           guaranteed,
-          numberOfGroups: skillGrant.choices.length
+          numberOfGroups: skillGrant.choices.length,
+          skillSelections
         });
 
-        for (let i = 0; i < skillGrant.choices.length; i++) {
-          const choice = skillGrant.choices[i];
-          const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
-          // Count how many skills from this pool have been selected (excluding guaranteed)
-          const selectedFromPool = currentSkills.filter(skill =>
-            pool.includes(skill) && !guaranteed.includes(skill)
-          ).length;
+        // Sort groups by pool size (smallest first) for better allocation
+        const sortedChoices = skillGrant.choices
+          .map((choice, index) => ({
+            ...choice,
+            originalIndex: index,
+            pool: choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {}),
+            poolSize: choice.pool.length || Object.keys(CONFIG.VAGABOND?.skills || {}).length
+          }))
+          .sort((a, b) => a.poolSize - b.poolSize);
 
-          console.log(`[ValidationEngine Fallback] class - Group ${i + 1}:`, {
-            required: choice.count,
-            selected: selectedFromPool,
-            poolSize: pool.length,
-            valid: selectedFromPool >= choice.count ? '✓' : '✗'
+        const usedSkills = new Set(guaranteed); // Start with guaranteed skills
+
+        for (const group of sortedChoices) {
+          const groupSkills = skillSelections[group.originalIndex] || [];
+
+          // Count skills from this group that haven't been used yet
+          const validSkills = groupSkills.filter(skill =>
+            group.pool.includes(skill) && !usedSkills.has(skill)
+          );
+
+          console.log(`[ValidationEngine Fallback] class - Group ${group.originalIndex + 1}:`, {
+            required: group.count,
+            selected: validSkills.length,
+            poolSize: group.poolSize,
+            groupSkills,
+            validSkills,
+            valid: validSkills.length >= group.count ? '✓' : '✗'
           });
 
-          if (selectedFromPool < choice.count) {
-            // Not enough skills selected from this pool
+          if (validSkills.length < group.count) {
             console.log('[ValidationEngine Fallback] class: ✗ INVALID (insufficient skills from pool)');
             return { isValid: false };
           }
+
+          // Mark these skills as used for future groups
+          validSkills.forEach(skill => usedSkills.add(skill));
         }
 
         console.log('[ValidationEngine Fallback] class: ✓ VALID');
@@ -868,37 +885,56 @@ export class ValidationEngine {
       return { isValid, errors: isValid ? [] : ['Not enough skills selected'] };
     }
 
-    // Check each choice pool individually
     const currentSkills = state.skills || [];
     const guaranteed = skillGrant.guaranteed || [];
+    const skillSelections = state.skillSelections || {};
 
     console.log('[Validator skills_assigned] Validating pools:', {
       totalSkills: currentSkills.length,
       currentSkills,
       guaranteed,
-      numberOfGroups: skillGrant.choices.length
+      numberOfGroups: skillGrant.choices.length,
+      skillSelections
     });
 
-    for (let i = 0; i < skillGrant.choices.length; i++) {
-      const choice = skillGrant.choices[i];
-      const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
-      const selectedFromPool = currentSkills.filter(skill =>
-        pool.includes(skill) && !guaranteed.includes(skill)
-      ).length;
+    // Sort groups by pool size (smallest first) for better allocation
+    const sortedGroups = skillGrant.choices
+      .map((choice, index) => ({
+        ...choice,
+        originalIndex: index,
+        pool: choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {}),
+        poolSize: choice.pool.length || Object.keys(CONFIG.VAGABOND?.skills || {}).length
+      }))
+      .sort((a, b) => a.poolSize - b.poolSize);
 
-      console.log(`[Validator skills_assigned] Pool ${i + 1}:`, {
-        required: choice.count,
-        selected: selectedFromPool,
-        poolSize: pool.length,
-        valid: selectedFromPool >= choice.count ? '✓' : '✗'
+    const usedSkills = new Set(guaranteed); // Start with guaranteed skills
+
+    for (const group of sortedGroups) {
+      const groupSkills = skillSelections[group.originalIndex] || [];
+
+      // Count skills from this group that haven't been used yet
+      const validSkills = groupSkills.filter(skill =>
+        group.pool.includes(skill) && !usedSkills.has(skill)
+      );
+
+      console.log(`[Validator skills_assigned] Group ${group.originalIndex + 1}:`, {
+        required: group.count,
+        selected: validSkills.length,
+        poolSize: group.poolSize,
+        groupSkills,
+        validSkills,
+        valid: validSkills.length >= group.count ? '✓' : '✗'
       });
 
-      if (selectedFromPool < choice.count) {
+      if (validSkills.length < group.count) {
         return {
           isValid: false,
-          errors: [`Need ${choice.count} skills from pool ${i + 1}, only have ${selectedFromPool}`]
+          errors: [`Need ${group.count} skills from group ${group.originalIndex + 1}, only have ${validSkills.length}`]
         };
       }
+
+      // Mark these skills as used for future groups
+      validSkills.forEach(skill => usedSkills.add(skill));
     }
 
     console.log('[Validator skills_assigned] ✓ All pools satisfied');

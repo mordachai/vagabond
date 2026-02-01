@@ -139,40 +139,10 @@ export class CharacterBuilderUIComponents {
                          (state.currentStep === 'stats');
 
       // Prepare classChoices for decision zone if on class step
+      // classPreviewData already contains properly formatted skill data with disabled/checked states
       let classChoices = null;
       if (state.currentStep === 'class' && mappedStepContext.classPreviewData) {
-        const skillGrant = mappedStepContext.classPreviewData.skillGrant || {};
-
-        // Helper to get localized skill/weapon skill label
-        const getSkillLabel = (skillKey) => {
-          // Check if it's a weapon skill first
-          if (CONFIG.VAGABOND.weaponSkills?.[skillKey]) {
-            return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[skillKey]);
-          }
-          // Otherwise check regular skills
-          if (CONFIG.VAGABOND.skills?.[skillKey]) {
-            return game.i18n.localize(CONFIG.VAGABOND.skills[skillKey]);
-          }
-          // Fallback to key
-          return skillKey;
-        };
-
-        classChoices = {
-          guaranteed: (skillGrant.guaranteed || []).map(skill => ({
-            key: skill,
-            label: getSkillLabel(skill)
-          })),
-          choices: (skillGrant.choices || []).map(choice => ({
-            count: choice.count,
-            label: choice.label || 'Skills',
-            pool: choice.pool.map(skill => ({
-              key: skill,
-              label: getSkillLabel(skill),
-              selected: state.skills?.includes(skill) || false,
-              disabled: false
-            }))
-          }))
-        };
+        classChoices = mappedStepContext.classPreviewData.skillGrant || {};
       }
 
       // Combine all contexts
