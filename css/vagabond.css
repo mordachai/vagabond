@@ -2536,7 +2536,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body {
   flex: 1;
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 230px 1fr;
   gap: 20px;
   min-height: 0;
   padding: 25px;
@@ -2829,12 +2829,20 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: white;
   border: none;
   margin: 8px;
-  cursor: pointer;
+  cursor: grab;
   font-size: 22px;
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+.vagabond-builder .builder-body .decision-zone .value-chip:active {
+  cursor: grabbing;
 }
 .vagabond-builder .builder-body .decision-zone .value-chip.active {
   background: var(--vagabond-c-red);
   outline: 2px solid gold;
+}
+.vagabond-builder .builder-body .decision-zone .value-chip.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
 }
 .vagabond-builder .builder-body .decision-zone .skill-tag.locked {
   background: #ccc;
@@ -3206,6 +3214,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1.1rem;
   line-height: 1.4;
 }
+.vagabond-builder .stat-slot {
+  cursor: pointer;
+}
 .vagabond-builder .stat-slot .hex-box {
   transition: transform 0.1s ease, border-color 0.2s;
 }
@@ -3219,6 +3230,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: white;
   color: black;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.vagabond-builder .stat-slot.drag-over {
+  cursor: copy;
 }
 .vagabond-builder .stat-slot.drag-over .hex-box {
   border-color: gold;

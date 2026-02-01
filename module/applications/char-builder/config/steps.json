@@ -1,0 +1,190 @@
+{
+  "order": [
+    "ancestry",
+    "class", 
+    "stats",
+    "spells",
+    "perks",
+    "starting-packs",
+    "gear"
+  ],
+  "steps": {
+    "ancestry": {
+      "displayName": "Choose Ancestry",
+      "order": 1,
+      "requiredData": ["ancestries", "ancestryFeatures"],
+      "actions": [
+        "select-ancestry",
+        "randomize-ancestry", 
+        "view-details"
+      ],
+      "completionCriteria": [
+        {
+          "type": "has_selection",
+          "path": "selectedAncestry"
+        }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": []
+      }
+    },
+    "class": {
+      "displayName": "Choose Class",
+      "order": 2,
+      "requiredData": ["classes", "classFeatures"],
+      "actions": [
+        "select-class",
+        "randomize-class",
+        "view-details",
+        "toggle-skill"
+      ],
+      "completionCriteria": [
+        {
+          "type": "has_selection",
+          "path": "selectedClass"
+        }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "ancestry"
+          }
+        ]
+      }
+    },
+    "stats": {
+      "displayName": "Assign Stats",
+      "order": 3,
+      "requiredData": [],
+      "actions": [
+        "pick-array",
+        "assign-stat", 
+        "reset-stats",
+        "randomize-stats"
+      ],
+      "completionCriteria": [
+        {
+          "type": "has_selection",
+          "path": "selectedArrayId"
+        },
+        {
+          "type": "all_stats_assigned"
+        }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "ancestry"
+          },
+          {
+            "type": "step_complete", 
+            "step": "class"
+          }
+        ]
+      }
+    },
+    "spells": {
+      "displayName": "Choose Spells",
+      "order": 4,
+      "requiredData": ["spells"],
+      "actions": [
+        "add-to-tray",
+        "remove-from-tray",
+        "clear-tray",
+        "randomize-spells"
+      ],
+      "completionCriteria": [
+        {
+          "type": "within_spell_limit"
+        }
+      ],
+      "navigation": {
+        "canSkip": true,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "stats"
+          }
+        ]
+      }
+    },
+    "perks": {
+      "displayName": "Choose Perks",
+      "order": 5,
+      "requiredData": ["perks"],
+      "actions": [
+        "add-to-tray",
+        "remove-from-tray", 
+        "clear-tray",
+        "toggle-show-all"
+      ],
+      "completionCriteria": [
+        {
+          "type": "optional"
+        }
+      ],
+      "navigation": {
+        "canSkip": true,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "stats"
+          }
+        ]
+      }
+    },
+    "starting-packs": {
+      "displayName": "Choose Starting Pack",
+      "order": 6,
+      "requiredData": ["startingPacks"],
+      "actions": [
+        "select-starting-pack",
+        "remove-starting-pack",
+        "randomize-starting-pack"
+      ],
+      "completionCriteria": [
+        {
+          "type": "optional"
+        }
+      ],
+      "navigation": {
+        "canSkip": true,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "stats"
+          }
+        ]
+      }
+    },
+    "gear": {
+      "displayName": "Choose Gear",
+      "order": 7,
+      "requiredData": ["equipment"],
+      "actions": [
+        "add-to-tray",
+        "remove-from-tray",
+        "clear-tray"
+      ],
+      "completionCriteria": [
+        {
+          "type": "within_budget"
+        }
+      ],
+      "navigation": {
+        "canSkip": true,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "stats"
+          }
+        ]
+      }
+    }
+  }
+}

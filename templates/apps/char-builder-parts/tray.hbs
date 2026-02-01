@@ -7,16 +7,7 @@
             <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
 
             {{#if (eq step 'gear')}}
-                {{#if startingPackItems}}
-                    <div class="pack-summary">
-                        <strong>{{startingPackItems.packName}}</strong>
-                        <p>{{localize "VAGABOND.CharBuilder.Budget"}}: {{startingPackItems.startingSilver}}s</p>
-                    </div>
-                {{else}}
-                    <div class="pack-summary">
-                        <p>{{localize "VAGABOND.CharBuilder.Budget"}}: 300s</p>
-                    </div>
-                {{/if}}
+                {{#if budget}}<div class="pack-summary"><span>{{localize "VAGABOND.Currency.Silver.long"}}: <strong>{{budget.total}}</strong></span></div>{{/if}}
             {{/if}}
 
             {{#if (eq step 'spells')}}

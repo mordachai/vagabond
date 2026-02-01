@@ -120,7 +120,7 @@
   .builder-body {
     flex: 1;
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 230px 1fr;
     gap: 20px;
     min-height: 0;
     padding: 25px;
@@ -468,12 +468,22 @@
         color: white;
         border: none;
         margin: 8px;
-        cursor: pointer;
+        cursor: grab;
         font-size: 22px;
+        transition: transform 0.1s ease, opacity 0.2s ease;
+
+        &:active {
+          cursor: grabbing;
+        }
 
         &.active {
           background: $c-red;
           outline: 2px solid gold;
+        }
+
+        &.dragging {
+          opacity: 0.5;
+          transform: scale(0.95);
         }
       }
 
@@ -925,9 +935,11 @@
   }
 
   .stat-slot {
+    cursor: pointer;
+
     .hex-box {
       transition: transform 0.1s ease, border-color 0.2s;
-      
+
       &.empty {
         border: 2px dashed #999;
         color: #999;
@@ -943,10 +955,14 @@
     }
 
     // Visual cue when dragging over
-    &.drag-over .hex-box {
-      border-color: gold;
-      transform: scale(1.1);
-      background: rgba(255, 215, 0, 0.2);
+    &.drag-over {
+      cursor: copy;
+
+      .hex-box {
+        border-color: gold;
+        transform: scale(1.1);
+        background: rgba(255, 215, 0, 0.2);
+      }
     }
   }
 

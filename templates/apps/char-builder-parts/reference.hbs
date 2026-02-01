@@ -1,4 +1,34 @@
 <aside class="reference-column custom-scroll {{#unless useTripleColumn}}hidden{{/unless}}">
+    {{!-- COLUMN 3: ANCESTRY DATA --}}
+    {{#if (eq step 'ancestry')}}
+        {{#if selectedItem}}
+            <div class="ancestry-summary-box">
+                <h4 class="ref-header">{{localize "VAGABOND.UI.Labels.AncestryDetails"}}</h4>
+
+                {{!-- Ancestry Info Grid --}}
+                <div class="ancestry-details-grid">
+                    <div class="detail-item">
+                        <span class="label">Type:</span>
+                        <span class="value">{{selectedItem.ancestryType}}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Size:</span>
+                        <span class="value">{{capitalize selectedItem.size}}</span>
+                    </div>
+                </div>
+
+                {{#if selectedItem.traits}}
+                    <h4 class="ref-header">{{localize "VAGABOND.CharBuilder.Traits"}}</h4>
+                    {{#each selectedItem.traits}}
+                        <div class="ref-entry">
+                            <strong>{{this.name}}:</strong> {{{this.description}}}
+                        </div>
+                    {{/each}}
+                {{/if}}
+            </div>
+        {{/if}}
+    {{/if}}
+
     {{!-- COLUMN 3: CLASS DATA --}}
     {{#if (eq step 'class')}}
         {{#if classPreviewData}}
@@ -13,14 +43,8 @@
                     </div>
                     {{#if (eq classPreviewData.isSpellcaster "Yes")}}
                         <div class="detail-item">
-                            <span class="label">Skill:</span>
-                            <span class="value">
-                            {{#if (eq classPreviewData.manaSkill "None")}}
-                                {{localize "VAGABOND.Terms.None"}}
-                            {{else}}
-                                {{localize (concat "VAGABOND.Skills." classPreviewData.manaSkill)}}
-                            {{/if}}
-                            </span>
+                            <span class="label">Mana Skill:</span>
+                            <span class="value">{{classPreviewData.manaSkillLabel}}</span>
                         </div>
                     {{/if}}
                 </div>

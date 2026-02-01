@@ -1,7 +1,7 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
-import { VagabondCharBuilder } from '../applications/char-builder.mjs';
+import { VagabondCharBuilder } from '../applications/char-builder/index.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';

@@ -1,0 +1,163 @@
+{
+  "steps": {
+    "ancestry": {
+      "enabled": true,
+      "method": "weighted_random",
+      "weights": "equal",
+      "filters": {
+        "excludeRare": false,
+        "excludeMonster": true,
+        "includeCustom": true
+      },
+      "fallback": "first_available"
+    },
+    "class": {
+      "enabled": true,
+      "method": "weighted_random", 
+      "weights": "equal",
+      "filters": {
+        "excludeRare": false,
+        "excludeNPC": true,
+        "includeCustom": true
+      },
+      "fallback": "first_available"
+    },
+    "stats": {
+      "enabled": true,
+      "method": "random_array",
+      "arrayWeights": "equal",
+      "autoAssign": false,
+      "assignmentStrategy": "optimal",
+      "strategies": {
+        "optimal": {
+          "description": "Assign highest values to class primary stats",
+          "priority": "class_dependent"
+        },
+        "balanced": {
+          "description": "Distribute values evenly",
+          "priority": "even_distribution"
+        },
+        "random": {
+          "description": "Completely random assignment",
+          "priority": "none"
+        }
+      }
+    },
+    "spells": {
+      "enabled": true,
+      "method": "random_selection",
+      "fillToLimit": true,
+      "preferences": {
+        "preferDamage": false,
+        "preferUtility": false,
+        "preferDefensive": false,
+        "balanceTypes": true
+      },
+      "filters": {
+        "excludeRitual": false,
+        "levelLimit": 1
+      }
+    },
+    "perks": {
+      "enabled": false,
+      "method": "prerequisite_aware",
+      "maxPerks": 3,
+      "respectPrerequisites": true,
+      "preferences": {
+        "preferCombat": false,
+        "preferUtility": false,
+        "preferSocial": false
+      }
+    },
+    "starting-packs": {
+      "enabled": true,
+      "method": "class_appropriate",
+      "weights": "class_based",
+      "classWeights": {
+        "fighter": {
+          "warrior-pack": 0.4,
+          "explorer-pack": 0.3,
+          "default-pack": 0.3
+        },
+        "wizard": {
+          "scholar-pack": 0.5,
+          "explorer-pack": 0.2,
+          "default-pack": 0.3
+        },
+        "rogue": {
+          "burglar-pack": 0.4,
+          "explorer-pack": 0.4,
+          "default-pack": 0.2
+        }
+      },
+      "fallback": "default-pack"
+    },
+    "gear": {
+      "enabled": false,
+      "method": "budget_aware",
+      "maxItems": 5,
+      "budgetUsage": 0.8,
+      "preferences": {
+        "preferWeapons": false,
+        "preferArmor": false,
+        "preferTools": false,
+        "balanceTypes": true
+      }
+    }
+  },
+  "fullCharacter": {
+    "enabled": true,
+    "steps": [
+      "ancestry",
+      "class", 
+      "stats",
+      "spells",
+      "starting-packs"
+    ],
+    "options": {
+      "autoAssignStats": true,
+      "skipOptionalSteps": false,
+      "respectPrerequisites": true,
+      "balanceCharacter": true
+    },
+    "profiles": {
+      "balanced": {
+        "description": "Well-rounded character suitable for most situations",
+        "statPriority": "balanced",
+        "spellPreference": "utility",
+        "perkPreference": "mixed"
+      },
+      "combat": {
+        "description": "Combat-focused character optimized for fighting",
+        "statPriority": "combat_stats",
+        "spellPreference": "damage",
+        "perkPreference": "combat"
+      },
+      "utility": {
+        "description": "Utility-focused character for exploration and problem-solving",
+        "statPriority": "mental_stats",
+        "spellPreference": "utility",
+        "perkPreference": "utility"
+      }
+    }
+  },
+  "weights": {
+    "equal": {
+      "description": "All options have equal probability"
+    },
+    "class_based": {
+      "description": "Weights based on class appropriateness"
+    },
+    "rarity_based": {
+      "description": "Common items more likely than rare ones",
+      "common": 0.6,
+      "uncommon": 0.3,
+      "rare": 0.1
+    }
+  },
+  "seeds": {
+    "useSeeds": true,
+    "defaultSeed": null,
+    "preserveAcrossSessions": false
+  }
+}

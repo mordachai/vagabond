@@ -1,0 +1,168 @@
+{
+  "layout": {
+    "window": {
+      "defaultSize": {
+        "width": 1100,
+        "height": 850
+      },
+      "minSize": {
+        "width": 800,
+        "height": 600
+      },
+      "resizable": true,
+      "title": "VAGABOND.CharBuilder.Title"
+    },
+    "columns": {
+      "single": [
+        "ancestry",
+        "stats", 
+        "starting-packs",
+        "gear"
+      ],
+      "triple": [
+        "class",
+        "perks",
+        "spells"
+      ]
+    },
+    "tray": {
+      "steps": [
+        "perks",
+        "spells", 
+        "gear"
+      ],
+      "maxItems": 8,
+      "showEmptySlots": true,
+      "allowReordering": false
+    },
+    "navigation": {
+      "showStepNumbers": true,
+      "showProgress": true,
+      "allowDirectNavigation": true,
+      "disableIncompleteSteps": true
+    },
+    "preview": {
+      "showByDefault": true,
+      "autoUpdate": true,
+      "showStats": true,
+      "showDerived": true
+    }
+  },
+  "styling": {
+    "colors": {
+      "primary": "#4a90e2",
+      "secondary": "#7b68ee",
+      "success": "#27ae60",
+      "warning": "#f39c12",
+      "error": "#e74c3c",
+      "info": "#3498db"
+    },
+    "dragDrop": {
+      "highlightColor": "#4a90e2",
+      "dragOpacity": 0.7,
+      "dropZoneColor": "#e8f4fd",
+      "invalidDropColor": "#ffeaea"
+    },
+    "selection": {
+      "selectedColor": "#4a90e2",
+      "hoverColor": "#6ba3e8",
+      "previewColor": "#a8c8ec"
+    },
+    "validation": {
+      "errorBorder": "#e74c3c",
+      "warningBorder": "#f39c12",
+      "successBorder": "#27ae60"
+    }
+  },
+  "behavior": {
+    "autoPreview": true,
+    "confirmActions": {
+      "clearTray": true,
+      "removeStartingPack": true,
+      "finishCharacter": false,
+      "dismissBuilder": true
+    },
+    "warnings": {
+      "showPrerequisiteWarnings": true,
+      "showBudgetWarnings": true,
+      "showValidationWarnings": true
+    },
+    "allowOverBudget": true,
+    "search": {
+      "enabled": true,
+      "placeholder": "Search...",
+      "clearButton": true,
+      "caseSensitive": false
+    },
+    "randomization": {
+      "showRandomButtons": true,
+      "showFullRandomButton": true,
+      "confirmFullRandom": true
+    }
+  },
+  "performance": {
+    "debounce": {
+      "search": 300,
+      "preview": 100,
+      "validation": 200
+    },
+    "loading": {
+      "maxConcurrentLoads": 5,
+      "showLoadingIndicators": true,
+      "timeoutMs": 10000
+    },
+    "caching": {
+      "enabled": true,
+      "timeoutMs": 300000,
+      "maxCacheSize": 100
+    }
+  },
+  "accessibility": {
+    "keyboardNavigation": true,
+    "screenReaderSupport": true,
+    "highContrast": false,
+    "focusIndicators": true,
+    "ariaLabels": {
+      "stepNavigation": "Character creation step navigation",
+      "itemSelection": "Item selection list",
+      "tray": "Selected items tray",
+      "preview": "Character preview"
+    }
+  },
+  "localization": {
+    "supportedLanguages": ["en"],
+    "fallbackLanguage": "en",
+    "keys": {
+      "instructions": {
+        "ancestry": "VAGABOND.CharBuilder.Instructions.Ancestry",
+        "class": "VAGABOND.CharBuilder.Instructions.Class",
+        "stats": "VAGABOND.CharBuilder.Instructions.Stats",
+        "spells": "VAGABOND.CharBuilder.Instructions.Spells",
+        "perks": "VAGABOND.CharBuilder.Instructions.Perks",
+        "startingPacks": "VAGABOND.CharBuilder.Instructions.StartingPacks",
+        "gear": "VAGABOND.CharBuilder.Instructions.Gear"
+      },
+      "buttons": {
+        "next": "VAGABOND.CharBuilder.Next",
+        "previous": "VAGABOND.CharBuilder.Previous",
+        "finish": "VAGABOND.CharBuilder.Finish",
+        "randomize": "VAGABOND.CharBuilder.Randomize",
+        "clear": "VAGABOND.CharBuilder.Clear"
+      },
+      "validation": {
+        "prerequisitesNotMet": "VAGABOND.CharBuilder.PrerequisitesNotMet",
+        "overBudget": "VAGABOND.CharBuilder.OverBudget",
+        "incompleteStep": "VAGABOND.CharBuilder.IncompleteStep"
+      }
+    }
+  },
+  "templates": {
+    "main": "systems/vagabond/templates/apps/char-builder.hbs",
+    "partials": {
+      "stepNavigation": "systems/vagabond/templates/apps/partials/step-navigation.hbs",
+      "itemList": "systems/vagabond/templates/apps/partials/item-list.hbs",
+      "tray": "systems/vagabond/templates/apps/partials/tray.hbs",
+      "preview": "systems/vagabond/templates/apps/partials/preview.hbs"
+    }
+  }
+}
