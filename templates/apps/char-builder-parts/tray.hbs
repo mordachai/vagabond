@@ -7,14 +7,9 @@
             <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
 
             {{#if (eq step 'gear')}}
-                {{#if startingPackItems}}
+                {{#if inventorySlots}}
                     <div class="pack-summary">
-                        <strong>{{startingPackItems.packName}}</strong>
-                        <p>{{localize "VAGABOND.CharBuilder.Budget"}}: {{startingPackItems.startingSilver}}s</p>
-                    </div>
-                {{else}}
-                    <div class="pack-summary">
-                        <p>{{localize "VAGABOND.CharBuilder.Budget"}}: 300s</p>
+                        <p><strong>Inventory Slots:</strong> {{inventorySlots.occupied}}/{{inventorySlots.max}} (Free: {{inventorySlots.free}})</p>
                     </div>
                 {{/if}}
             {{/if}}
@@ -59,14 +54,10 @@
                     {{/each}}
                 {{/if}}
             {{else if (eq step 'spells')}}
-                {{#if trayData.isEmpty}}
-                    <div class="tray-empty-message">
-                        <i class="fas fa-arrow-left"></i>
-                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
-                    </div>
-                {{else}}
+                {{#if spellLimit}}
+                    {{!-- Show spell slots (filled + empty) --}}
                     {{#each trayData.spells as |item|}}
-                        <div class="tray-item-compact" data-uuid="{{item.uuid}}">
+                        <div class="tray-item-compact spell-slot filled" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <span class="tray-name">{{item.name}}</span>
                             <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
@@ -74,6 +65,22 @@
                             </button>
                         </div>
                     {{/each}}
+                    {{#if trayData.emptySlots}}
+                        {{#each trayData.emptySlots as |slot|}}
+                            <div class="tray-item-compact spell-slot empty">
+                                <div class="empty-slot-placeholder">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span class="empty-slot-text">Empty</span>
+                                </div>
+                            </div>
+                        {{/each}}
+                    {{/if}}
+                {{else}}
+                    {{!-- No spell limit (not a spellcaster) - show message --}}
+                    <div class="tray-empty-message">
+                        <i class="fas fa-info-circle"></i>
+                        <p>This class cannot cast spells</p>
+                    </div>
                 {{/if}}
             {{else if (eq step 'gear')}}
                 {{#if trayData.isEmpty}}

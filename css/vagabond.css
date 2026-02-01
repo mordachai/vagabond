@@ -2536,7 +2536,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body {
   flex: 1;
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 230px 1fr;
   gap: 20px;
   min-height: 0;
   padding: 25px;
@@ -2644,11 +2644,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: var(--vagabond-c-chat-yellow);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified {
-  opacity: 0.5;
+  opacity: 0.7;
   filter: grayscale(50%);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified .name {
-  color: #999;
+  color: #696969;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified:hover {
   opacity: 0.7;
@@ -2768,6 +2768,53 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label {
   word-break: keep-all;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label.disabled input[type=checkbox] {
+  cursor: not-allowed;
+  accent-color: #666;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox]:disabled:checked {
+  opacity: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #888;
+  border: 2px solid #666;
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox]:disabled:checked::after {
+  content: "✓";
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label i.fa-lock {
+  font-size: 10px;
+  color: #999;
+  margin-left: 2px;
 }
 .vagabond-builder .builder-body .decision-zone .stat-assigner {
   display: grid;
@@ -2829,12 +2876,20 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: white;
   border: none;
   margin: 8px;
-  cursor: pointer;
+  cursor: grab;
   font-size: 22px;
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+.vagabond-builder .builder-body .decision-zone .value-chip:active {
+  cursor: grabbing;
 }
 .vagabond-builder .builder-body .decision-zone .value-chip.active {
   background: var(--vagabond-c-red);
   outline: 2px solid gold;
+}
+.vagabond-builder .builder-body .decision-zone .value-chip.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
 }
 .vagabond-builder .builder-body .decision-zone .skill-tag.locked {
   background: #ccc;
@@ -2918,6 +2973,29 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #555;
   font-family: "Eskapade", serif;
 }
+.vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  flex: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+.vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray i {
+  margin: 0;
+}
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .ancestry-info {
   display: flex;
   flex-direction: column;
@@ -2960,6 +3038,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1rem;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .perk-prerequisites-compact .prereq-line {
+  display: flex;
+  gap: 4px;
   font-size: 1.1rem;
   line-height: 1.4;
   color: #555;
@@ -3206,6 +3286,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1.1rem;
   line-height: 1.4;
 }
+.vagabond-builder .stat-slot {
+  cursor: pointer;
+}
 .vagabond-builder .stat-slot .hex-box {
   transition: transform 0.1s ease, border-color 0.2s;
 }
@@ -3219,6 +3302,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: white;
   color: black;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.vagabond-builder .stat-slot.drag-over {
+  cursor: copy;
 }
 .vagabond-builder .stat-slot.drag-over .hex-box {
   border-color: gold;
@@ -3558,6 +3644,31 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .tray-zone .tray-item-compact .btn-remove i {
   font-size: 1.1rem;
 }
+.tray-zone .spell-slot.empty {
+  background: rgba(200, 200, 200, 0.3);
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  cursor: default;
+}
+.tray-zone .spell-slot.empty:hover {
+  background: rgba(200, 200, 200, 0.4);
+  box-shadow: none;
+}
+.tray-zone .spell-slot.empty .empty-slot-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: rgba(0, 0, 0, 0.4);
+}
+.tray-zone .spell-slot.empty .empty-slot-placeholder i {
+  font-size: 1.2rem;
+}
+.tray-zone .spell-slot.empty .empty-slot-placeholder .empty-slot-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 .tray-zone .tray-empty-message {
   grid-column: 1/-1;
   display: flex;
@@ -3582,6 +3693,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 20px;
 }
 .starting-pack-contents .pack-budget-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background: rgba(255, 215, 0, 0.15);
   padding: 10px;
   margin: 10px 0;

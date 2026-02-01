@@ -30,6 +30,7 @@ import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-
 import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
 import { DowntimeApp } from './applications/downtime-app.mjs';
 import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
+import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -221,6 +222,7 @@ globalThis.vagabond = {
     CountdownDiceConfig,
     DowntimeApp,
     VagabondMeasureTemplates,
+    VagabondCharBuilder,
   },
   ui: {
     ProgressClockOverlay,

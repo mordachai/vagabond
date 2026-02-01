@@ -1,0 +1,74 @@
+{
+  "arrays": {
+    "1": [5, 5, 5, 4, 4, 3],
+    "2": [5, 5, 5, 5, 3, 2], 
+    "3": [6, 5, 4, 4, 4, 3],
+    "4": [6, 5, 5, 4, 3, 2],
+    "5": [6, 6, 4, 3, 3, 3],
+    "6": [6, 6, 4, 4, 3, 2],
+    "7": [6, 6, 5, 3, 2, 2],
+    "8": [7, 4, 4, 4, 4, 2],
+    "9": [7, 4, 4, 4, 3, 3],
+    "10": [7, 5, 4, 3, 3, 2],
+    "11": [7, 5, 5, 2, 2, 2],
+    "12": [7, 6, 4, 2, 2, 2]
+  },
+  "statNames": [
+    "might",
+    "dexterity", 
+    "awareness",
+    "reason",
+    "presence",
+    "luck"
+  ],
+  "statLabels": {
+    "might": "Might",
+    "dexterity": "Dexterity",
+    "awareness": "Awareness", 
+    "reason": "Reason",
+    "presence": "Presence",
+    "luck": "Luck"
+  },
+  "defaultBudget": 27,
+  "calculations": {
+    "pointBuy": {
+      "enabled": false,
+      "costs": {
+        "3": -1,
+        "4": 0,
+        "5": 1,
+        "6": 2,
+        "7": 4,
+        "8": 7
+      }
+    },
+    "derived": {
+      "hp": {
+        "base": 10,
+        "statMultiplier": "might",
+        "multiplier": 1
+      },
+      "mana": {
+        "base": 0,
+        "statMultiplier": "castingStat",
+        "levelMultiplier": 2
+      },
+      "inventory": {
+        "base": 6,
+        "statMultiplier": "might",
+        "multiplier": 1
+      },
+      "speed": {
+        "base": 25,
+        "statMultiplier": "dexterity",
+        "multiplier": 5
+      }
+    }
+  },
+  "validation": {
+    "minValue": 2,
+    "maxValue": 8,
+    "requiredStats": 6,
+    "allowDuplicates": true
+  }
+}

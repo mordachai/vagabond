@@ -25,7 +25,9 @@
       "Mysticism": "Mysticism",
       "Performance": "Performance",
       "Sneak": "Sneak",
-      "Survival": "Survival"
+      "Survival": "Survival",
+      "Melee": "Melee",
+      "Ranged": "Ranged"
     },
     "SkillsHints": {
       "Arcana": "Application and knowledge of magic.",
@@ -39,7 +41,9 @@
       "Mysticism": "Understanding of the supernatural.",
       "Performance": "Cultural talent and ability to inspire awe.",
       "Sneak": "Concealing your location.",
-      "Survival": "Tracking and a knowledge of beasts, plants, and other aspects of nature."
+      "Survival": "Tracking and a knowledge of beasts, plants, and other aspects of nature.",
+      "Melee": "Attacking with Melee Weapons.",
+      "Ranged": "Attacking with Ranged Weapons."
     },
     "WeaponSkillsHints": {
       "Melee": "Attacking with Melee Weapons.",
@@ -52,6 +56,14 @@
       "Ranged": "Ranged",
       "Brawl": "Brawl",
       "Finesse": "Finesse"
+    },
+    "Hints": {
+      "HP": "Max Hit Points equal to Might × Level.",
+      "LuckPool": "Total Luck points. Spend to gain Favor, reroll dice, or use Plot Armor.",
+      "Inventory": "Carrying capacity equal to 8 + Might slots.",
+      "Speed": "Movement distance in feet on solid ground.",
+      "MaxMana": "Maximum mana points equal to Mana Multiplier × Main Stat.",
+      "ManaPerCast": "The maximum Mana allowed per single spell cast."
     },
     "Saves": {
       "savesTitle": "Saves",
@@ -70,7 +82,7 @@
         "description": "Resist mental harm, such as charms, dreadful terrors, psychic enthrallment, and your resolve."
       }
     },
-        "Roll": {
+    "Roll": {
       "Favored": "Favored (+1d6)",
       "Hindered": "Hindered (-1d6)",
       "SaveRoll": "Save Roll"
@@ -818,6 +830,8 @@
         "Silver": "Silver",
         "Copper": "Copper",
         "Properties": "Properties",
+        "AncestryDetails": "Ancestry Details",
+        "SpellDetails": "Spell Details",
         "WeaponSkills": "Weapon Skills",
         "WeaponDetails": "Weapon Details",
         "ArmorDetails": "Armor Details",
@@ -930,8 +944,8 @@
         "Close": "Close",
         "Finish": "Finish",
         "Reset": "Reset",
-        "AddToTray": "Add to Tray",
-        "ClearTray": "Clear Tray",
+        "AddToTray": "Add to Char",
+        "ClearTray": "Clear",
         "RemovePack": "Remove Starting Pack"
       },
       "ShowAll": "Show All",

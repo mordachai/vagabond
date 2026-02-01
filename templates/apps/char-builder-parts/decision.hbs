@@ -5,14 +5,29 @@
         <div class="skill-decision flexrow">
             <div class="guaranteed-skills flexcol">
                 <strong>Obligatory Training:</strong>
-                {{#each classChoices.guaranteed}}<span class="skill-tag locked"><i class="fas fa-lock"></i> {{this.label}}</span>{{/each}}
+                {{#each classChoices.guaranteed}}
+                    <span class="skill-tag locked">
+                        <i class="fas fa-lock"></i>
+                        {{capitalize (localize (concat "VAGABOND.Skills." (capitalize this)))}}
+                    </span>
+                {{/each}}
             </div>
             {{#each classChoices.choices}}
                 <div class="pool-box">
-                    <strong>Choose {{this.count}} from {{this.label}}:</strong>
+                    <strong>Choose {{this.count}} skill(s) {{#if this.selected}}({{this.selected}}/{{this.count}} selected){{/if}}:</strong>
                     <div class="pool-options">
-                        {{#each this.pool}}
-                            <label class="checkbox-label"><input type="checkbox" value="{{this.key}}" {{#if this.selected}}checked{{/if}} {{#if this.disabled}}disabled{{/if}} data-action="toggleSkill"> {{this.label}}</label>
+                        {{#each this.skills}}
+                            <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isGuaranteed}}Granted by class{{else if this.isDisabled}}Selected in another group{{/if}}">
+                                <input
+                                    type="checkbox"
+                                    value="{{this.key}}"
+                                    {{#if this.isChecked}}checked{{/if}}
+                                    {{#if this.isDisabled}}disabled{{/if}}
+                                    data-group-index="{{this.groupIndex}}"
+                                    data-action="toggleSkill">
+                                {{this.label}}
+                                {{#if this.isGuaranteed}}<i class="fas fa-lock"></i>{{/if}}
+                            </label>
                         {{/each}}
                     </div>
                 </div>
@@ -39,8 +54,8 @@
         <div class="stat-assigner">
             {{#each statData.slots}}
             {{!-- Char Stats --}}
-            <div class="stat-slot" data-stat="{{this.key}}">
-                <label>{{this.label}}</label>
+            <div class="stat-slot" data-stat="{{this.key}}" data-action="assignStat" title="{{this.hint}}">
+                <label>{{this.abbreviation}}</label>
                 <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
                     {{#if this.value}}
                         {{this.value}}

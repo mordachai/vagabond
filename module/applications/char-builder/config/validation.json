@@ -1,0 +1,192 @@
+{
+  "rules": {
+    "ancestry_selection": [
+      {
+        "type": "required",
+        "message": "Ancestry selection is required",
+        "severity": "error"
+      },
+      {
+        "type": "valid_uuid",
+        "message": "Selected ancestry must be a valid UUID",
+        "severity": "error"
+      }
+    ],
+    "class_selection": [
+      {
+        "type": "required", 
+        "message": "Class selection is required",
+        "severity": "error"
+      },
+      {
+        "type": "valid_uuid",
+        "message": "Selected class must be a valid UUID",
+        "severity": "error"
+      }
+    ],
+    "stat_assignment": [
+      {
+        "type": "all_assigned",
+        "message": "All stats must be assigned",
+        "severity": "error"
+      },
+      {
+        "type": "valid_values",
+        "message": "Stat values must be from selected array",
+        "severity": "error"
+      },
+      {
+        "type": "no_duplicates_unless_allowed",
+        "message": "Cannot assign same value to multiple stats unless array allows it",
+        "severity": "warning"
+      }
+    ],
+    "spell_selection": [
+      {
+        "type": "within_limit",
+        "message": "Cannot exceed spell limit for class level",
+        "severity": "error"
+      },
+      {
+        "type": "valid_spells",
+        "message": "Selected spells must be valid",
+        "severity": "error"
+      },
+      {
+        "type": "spellcaster_only",
+        "message": "Only spellcasters can select spells",
+        "severity": "warning"
+      }
+    ],
+    "perk_selection": [
+      {
+        "type": "prerequisites_met",
+        "message": "Perk prerequisites must be met",
+        "severity": "warning"
+      },
+      {
+        "type": "valid_perks",
+        "message": "Selected perks must be valid",
+        "severity": "error"
+      },
+      {
+        "type": "no_duplicates",
+        "message": "Cannot select the same perk multiple times",
+        "severity": "error"
+      }
+    ],
+    "gear_selection": [
+      {
+        "type": "within_budget",
+        "message": "Gear selection exceeds available budget",
+        "severity": "warning"
+      },
+      {
+        "type": "valid_equipment",
+        "message": "Selected gear must be valid equipment",
+        "severity": "error"
+      }
+    ],
+    "starting_pack_selection": [
+      {
+        "type": "valid_pack",
+        "message": "Selected starting pack must be valid",
+        "severity": "error"
+      },
+      {
+        "type": "single_selection",
+        "message": "Can only select one starting pack",
+        "severity": "error"
+      }
+    ]
+  },
+  "prerequisites": {
+    "ancestry": [],
+    "class": [
+      {
+        "type": "step_complete",
+        "step": "ancestry",
+        "message": "Must complete ancestry selection first"
+      }
+    ],
+    "stats": [
+      {
+        "type": "step_complete",
+        "step": "ancestry",
+        "message": "Must complete ancestry selection first"
+      },
+      {
+        "type": "step_complete",
+        "step": "class", 
+        "message": "Must complete class selection first"
+      }
+    ],
+    "spells": [
+      {
+        "type": "step_complete",
+        "step": "stats",
+        "message": "Must complete stat assignment first"
+      }
+    ],
+    "perks": [
+      {
+        "type": "step_complete",
+        "step": "stats",
+        "message": "Must complete stat assignment first"
+      }
+    ],
+    "starting-packs": [
+      {
+        "type": "step_complete",
+        "step": "stats",
+        "message": "Must complete stat assignment first"
+      }
+    ],
+    "gear": [
+      {
+        "type": "step_complete",
+        "step": "stats",
+        "message": "Must complete stat assignment first"
+      }
+    ]
+  },
+  "perkPrerequisites": {
+    "validationTypes": [
+      "stats",
+      "trainedSkills",
+      "spells",
+      "hasAnySpell",
+      "resources",
+      "statOrGroups",
+      "trainedSkillOrGroups",
+      "spellOrGroups",
+      "resourceOrGroups"
+    ],
+    "resourceTypes": [
+      "maxMana",
+      "manaPerCast",
+      "wealth",
+      "inventorySlots",
+      "speed",
+      "maxHP",
+      "currentLuck"
+    ]
+  },
+  "budgets": {
+    "default": {
+      "stats": 27,
+      "spells": 0,
+      "perks": 0,
+      "gear": 300
+    },
+    "calculations": {
+      "gear": {
+        "currency": {
+          "gold": 100,
+          "silver": 1,
+          "copper": 0.1
+        }
+      }
+    }
+  }
+}

@@ -12,41 +12,41 @@
             <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.DerivedStats"}}</h3>
             <div class="preview-skills-grid stats-grid">
                 {{!-- Primary Derived Stats --}}
-                <div class="skill-item" title="{{statData.derived.hpTooltip}}">
-                    <span class="skill-name">{{statData.derived.hp.label}} <span class="stat-abbr">[{{statData.derived.hp.statAbbr}}]</span></span>
+                <div class="skill-item" title="{{statData.derived.hp.tooltip}}">
+                    <span class="skill-name">{{statData.derived.hp.label}}</span>
                     <span class="skill-dots"></span>
-                    <span class="skill-value">{{actor.system.health.max}}</span>
+                    <span class="skill-value">{{statData.derived.hp.value}}</span>
                 </div>
 
                 {{!-- Spellcasting Stats (Only visible if Spellcaster) --}}
-                {{#if isSpellcaster}}
-                    <div class="skill-item" title="{{statData.derived.manaMaxTooltip}}">
-                        <span class="skill-name">{{statData.derived.manaMax.label}} <span class="stat-abbr">[{{statData.derived.manaMax.statAbbr}}]</span></span>
+                {{#if statData.derived.isSpellcaster}}
+                    <div class="skill-item" title="{{statData.derived.manaMax.tooltip}}">
+                        <span class="skill-name">{{statData.derived.manaMax.label}}</span>
                         <span class="skill-dots"></span>
-                        <span class="skill-value">{{manaStats.max}}</span>
+                        <span class="skill-value">{{statData.derived.manaMax.value}}</span>
                     </div>
-                    <div class="skill-item" title="{{statData.derived.manaCastTooltip}}">
-                        <span class="skill-name">{{statData.derived.manaCast.label}} <span class="stat-abbr">[{{statData.derived.manaCast.statAbbr}}]</span></span>
+                    <div class="skill-item" title="{{statData.derived.manaCast.tooltip}}">
+                        <span class="skill-name">{{statData.derived.manaCast.label}}</span>
                         <span class="skill-dots"></span>
-                        <span class="skill-value">{{manaStats.castingMax}}</span>
+                        <span class="skill-value">{{statData.derived.manaCast.value}}</span>
                     </div>
                 {{/if}}
 
-                <div class="skill-item" title="{{statData.derived.luckTooltip}}">
-                    <span class="skill-name">{{statData.derived.luck.label}} <span class="stat-abbr">[{{statData.derived.luck.statAbbr}}]</span></span>
+                <div class="skill-item" title="{{statData.derived.inventory.tooltip}}">
+                    <span class="skill-name">{{statData.derived.inventory.label}}</span>
                     <span class="skill-dots"></span>
-                    <span class="skill-value">{{actor.system.stats.luck.value}}</span>
+                    <span class="skill-value">{{statData.derived.inventory.value}}</span>
                 </div>
-                <div class="skill-item" title="{{statData.derived.inventoryTooltip}}">
-                    <span class="skill-name">{{statData.derived.inventory.label}} <span class="stat-abbr">[{{statData.derived.inventory.statAbbr}}]</span></span>
+                <div class="skill-item" title="{{statData.derived.luck.tooltip}}">
+                    <span class="skill-name">{{statData.derived.luck.label}}</span>
                     <span class="skill-dots"></span>
-                    <span class="skill-value">{{actor.system.inventory.maxSlots}}</span>
+                    <span class="skill-value">{{statData.derived.luck.value}}</span>
                 </div>
 
-                <div class="skill-item" title="{{statData.derived.speedTooltip}}">
-                    <span class="skill-name">{{statData.derived.speed.label}} <span class="stat-abbr">[{{statData.derived.speed.statAbbr}}]</span></span>
+                <div class="skill-item" title="{{statData.derived.speed.tooltip}}">
+                    <span class="skill-name">{{statData.derived.speed.label}}</span>
                     <span class="skill-dots"></span>
-                    <span class="skill-value">{{actor.system.speed.base}}</span>
+                    <span class="skill-value">{{statData.derived.speed.value}}</span>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
             <div class="preview-skills-grid saves-grid grid-3col">
                 {{#each statData.derived.saves}}
                     <div class="skill-item" title="{{this.tooltip}}">
-                        <span class="skill-name">{{this.label}} <span class="stat-abbr">[{{this.statAbbr}}]</span></span>
+                        <span class="skill-name">{{this.label}}</span>
                         <span class="skill-dots"></span>
                         <span class="skill-value">{{this.value}}</span>
                     </div>
@@ -73,7 +73,7 @@
                     <div class="skill-item {{#if this.trained}}trained{{/if}}" title="{{this.tooltip}}">
                         <span class="skill-name">
                             {{#if this.trained}}<strong>{{/if}}
-                            {{this.label}} <span class="stat-abbr">[{{this.statAbbr}}]</span>
+                            {{this.label}}{{#if this.statAbbr}} <span class="stat-abbr">[{{this.statAbbr}}]</span>{{/if}}
                             {{#if this.trained}}</strong>{{/if}}
                         </span>
                         <span class="skill-dots"></span>
@@ -91,7 +91,7 @@
                     <div class="skill-item {{#if this.trained}}trained{{/if}}" title="{{this.tooltip}}">
                         <span class="skill-name">
                             {{#if this.trained}}<strong>{{/if}}
-                            {{this.label}} <span class="stat-abbr">[{{this.statAbbr}}]</span>
+                            {{this.label}}{{#if this.statAbbr}} <span class="stat-abbr">[{{this.statAbbr}}]</span>{{/if}}
                             {{#if this.trained}}</strong>{{/if}}
                         </span>
                         <span class="skill-dots"></span>
@@ -117,11 +117,10 @@
                     {{/if}}
                 {{/if}}
             </div>
-            {{#if (eq selectedItem.type "ancestry")}}
-            <div class="ancestry-info flexcol">
-                <div class="info-row"><strong>{{localize "VAGABOND.Actor.Character.FIELDS.attributes.beingType.label"}}:</strong> {{selectedItem.ancestryType}}</div>
-                <div class="info-row"><strong>{{localize "VAGABOND.Actor.Character.FIELDS.attributes.size.label"}}:</strong> {{capitalize selectedItem.size}}</div>
-            </div>
+            {{#if showTray}}
+                <button type="button" class="btn-add-to-tray preview-header-btn" data-action="addToTray" data-uuid="{{selectedItem.uuid}}" title="{{localize 'VAGABOND.CharBuilder.Buttons.AddToTray'}}">
+                    <i class="fas fa-plus"></i>
+                </button>
             {{/if}}
         </div>
 
@@ -147,32 +146,48 @@
         <div class="preview-description">{{{selectedItem.enrichedDescription}}}</div>
 
         {{#if (eq selectedItem.type "spell")}}
-            {{#if selectedItem.displayStats.crit}}
-                <div class="spell-crit-info">
-                    <strong>Crit:</strong> {{selectedItem.displayStats.crit}}
+            {{#if selectedItem.displayStats}}
+                <div class="spell-details">
+                    <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.SpellDetails"}}</h3>
+                    <div class="preview-details-grid">
+                        {{#if selectedItem.displayStats.baseDamage}}
+                            <div><strong>Base Damage:</strong> {{selectedItem.displayStats.baseDamage}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.damageType}}
+                            <div class="damage-type-row">
+                                <strong>Damage Type:</strong>
+                                {{#if selectedItem.displayStats.damageTypeIcon}}
+                                    <i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>
+                                {{/if}}
+                                {{selectedItem.displayStats.damageType}}
+                            </div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.crit}}
+                            <div><strong>Crit:</strong> {{selectedItem.displayStats.crit}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.deliveryLabel}}
+                            <div><strong>Delivery:</strong> {{selectedItem.displayStats.deliveryLabel}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.manaCost}}
+                            <div><strong>Mana Cost:</strong> {{selectedItem.displayStats.manaCost}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.range}}
+                            <div><strong>Range:</strong> {{selectedItem.displayStats.range}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.duration}}
+                            <div><strong>Duration:</strong> {{selectedItem.displayStats.duration}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.areaOfEffect}}
+                            <div><strong>Area of Effect:</strong> {{selectedItem.displayStats.areaOfEffect}}</div>
+                        {{/if}}
+                        {{#if selectedItem.displayStats.condition}}
+                            <div><strong>Condition:</strong> {{selectedItem.displayStats.condition}}</div>
+                        {{/if}}
+                    </div>
                 </div>
             {{/if}}
         {{/if}}
 
-        {{!-- Add to Tray button --}}
-        {{#if showTray}}
-            <div class="preview-actions">
-                <button type="button" class="btn-add-to-tray" data-action="addToTray" data-uuid="{{selectedItem.uuid}}">
-                    <i class="fas fa-plus"></i> {{localize "VAGABOND.CharBuilder.Buttons.AddToTray"}}
-                </button>
-            </div>
-        {{/if}}
-
-        {{#if (eq selectedItem.type "ancestry")}}
-            <div class="traits-container">
-                <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.Traits"}}</h3>
-                {{#each selectedItem.traits}}
-                    <div class="trait-item">
-                        <strong>{{this.name}}:</strong> {{{this.description}}}
-                    </div>
-                {{/each}}
-            </div>
-        {{/if}}
 
         {{!-- Starting Pack Contents Display --}}
         {{#if (eq step 'starting-packs')}}
@@ -180,7 +195,14 @@
                 <div class="starting-pack-contents">
                     <h3 class="preview-section-header">{{localize "VAGABOND.CharBuilder.PackContents"}}</h3>
                     <div class="pack-budget-info">
-                        <strong>{{localize "VAGABOND.CharBuilder.Budget"}}:</strong> {{startingPackItems.startingSilver}}s
+                        <div>
+                            <strong>{{localize "VAGABOND.CharBuilder.Budget"}}:</strong> {{startingPackItems.startingSilver}}s
+                        </div>
+                        {{#if startingPackItems.inventorySlots}}
+                        <div>
+                            <strong>Inventory Slots:</strong> {{startingPackItems.inventorySlots.occupied}}/{{startingPackItems.inventorySlots.max}} (Free: {{startingPackItems.inventorySlots.free}})
+                        </div>
+                        {{/if}}
                     </div>
                     <div class="pack-items-list">
                         {{#each startingPackItems.items as |item|}}
@@ -197,11 +219,13 @@
                             </div>
                         {{/each}}
                     </div>
+                    {{#if hasSelection}}
                     <div class="preview-actions">
                         <button type="button" class="btn-remove-pack" data-action="removeStartingPack">
                             <i class="fas fa-times-circle"></i> {{localize "VAGABOND.CharBuilder.Buttons.RemovePack"}}
                         </button>
                     </div>
+                    {{/if}}
                 </div>
             {{/if}}
         {{/if}}
