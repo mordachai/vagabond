@@ -13,28 +13,13 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 ) {
   constructor(options = {}) {
     super(options);
-
-    // Listen for updates to this item to re-render when ProseMirror saves
-    this._hookId = Hooks.on('updateItem', (item, changes, options, userId) => {
-      // Only re-render if this is our item and levelFeatures, levelSpells, or traits were updated
-      if (item.id === this.document.id) {
-        if (changes.system?.levelFeatures || changes.system?.traits || changes.system?.levelSpells) {
-          this.render({ force: true });
-        }
-      }
-    });
   }
 
   /**
-   * Clean up hooks when sheet is closed
+   * Clean up sheet when closed
    * @override
    */
   async close(options = {}) {
-    // Remove the hook listener
-    if (this._hookId !== undefined) {
-      Hooks.off('updateItem', this._hookId);
-    }
-
     // Submit the form BEFORE calling super.close() which removes it from DOM
     if (this.element && this.element.tagName === 'FORM') {
       try {
@@ -121,8 +106,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeFeaturePerk: this._onRemoveFeaturePerk,
     },
     form: {
-      submitOnChange: false,  // Disabled
-      submitOnClose: true,    // Only saves text fields, not grants arrays
+      submitOnChange: true,   // Enabled to ensure edits are saved immediately
+      submitOnClose: true,
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -1100,6 +1085,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           if (!traitData.allowedPerks && originalTrait.allowedPerks?.length) {
             traitData.allowedPerks = originalTrait.allowedPerks;
           }
+          // Ensure perkAmount is handled (if it's undefined in update, keep original)
+          if (traitData.perkAmount === undefined && originalTrait.perkAmount !== undefined) {
+            traitData.perkAmount = originalTrait.perkAmount;
+          }
         }
       }
     }
@@ -1124,6 +1113,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
            // If allowedPerks is missing in update but exists in original, preserve it
            if (!featureData.allowedPerks && originalFeature.allowedPerks?.length) {
              featureData.allowedPerks = originalFeature.allowedPerks;
+           }
+           // Ensure perkAmount is handled
+           if (featureData.perkAmount === undefined && originalFeature.perkAmount !== undefined) {
+             featureData.perkAmount = originalFeature.perkAmount;
            }
          }
        }

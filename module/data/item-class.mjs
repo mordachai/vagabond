@@ -112,6 +112,9 @@ export default class VagabondClass extends VagabondItemBase {
           new fields.StringField({ initial: '', blank: true }),
           { initial: [] }
         ),
+
+        // Perk amount - number of perks granted by this feature
+        perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
       }),
       { initial: [] }
     );

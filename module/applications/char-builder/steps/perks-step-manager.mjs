@@ -43,24 +43,29 @@ export class PerksStepManager extends BaseStepManager {
    * @protected
    */
   async _prepareStepSpecificContext(state) {
-    // Collect and auto-add guaranteed perks (single-choice allowed perks)
+    // Collect and auto-add guaranteed perks (where amount >= options)
     const guaranteedPerks = await this._collectGuaranteedPerks(state);
     const currentClassPerks = state.classPerks || [];
     const updatedClassPerks = [...new Set([...currentClassPerks, ...guaranteedPerks])];
     
     if (updatedClassPerks.length !== currentClassPerks.length) {
       this.updateState('classPerks', updatedClassPerks);
-      // Update local reference to use the new state
       state.classPerks = updatedClassPerks;
     }
 
-    const availablePerks = await this._loadPerkOptions(state);
+    // Collect all spells (mandatory + selected) for prerequisite checking
+    const mandatorySpells = await this._collectRequiredSpells(state);
+    const allKnownSpells = [...new Set([...(state.spells || []), ...mandatorySpells])];
+
+    const availablePerks = await this._loadPerkOptions(state, allKnownSpells);
     const selectedPerks = state.perks || [];
     const classPerks = state.classPerks || [];
     const previewUuid = state.previewUuid;
+    const perkLimit = await this._getPerkLimit(state);
 
     // Check if perks are being filtered by ancestry traits or class level 1 features
     let hasAllowedPerksRestriction = false;
+    let hasUnrestrictedGrant = false;
     let restrictionSource = '';
 
     if (state.selectedAncestry) {
@@ -68,11 +73,16 @@ export class PerksStepManager extends BaseStepManager {
         const ancestry = await fromUuid(state.selectedAncestry);
         const traits = ancestry.system.traits || [];
         for (const trait of traits) {
-          if ((trait.allowedPerks || []).length > 0) {
-            hasAllowedPerksRestriction = true;
-            restrictionSource = restrictionSource
-              ? `${restrictionSource}, ${trait.name}`
-              : trait.name;
+          const amount = trait.perkAmount || 0;
+          if (amount > 0) {
+            if ((trait.allowedPerks || []).length > 0) {
+              hasAllowedPerksRestriction = true;
+              restrictionSource = restrictionSource
+                ? `${restrictionSource}, ${trait.name}`
+                : trait.name;
+            } else {
+              hasUnrestrictedGrant = true;
+            }
           }
         }
       } catch (error) {
@@ -86,16 +96,26 @@ export class PerksStepManager extends BaseStepManager {
         const levelFeatures = classItem.system.levelFeatures || [];
         const level1Features = levelFeatures.filter(f => f.level === 1);
         for (const feature of level1Features) {
-          if ((feature.allowedPerks || []).length > 0) {
-            hasAllowedPerksRestriction = true;
-            restrictionSource = restrictionSource
-              ? `${restrictionSource}, ${feature.name}`
-              : feature.name;
+          const amount = feature.perkAmount || 0;
+          if (amount > 0) {
+            if ((feature.allowedPerks || []).length > 0) {
+              hasAllowedPerksRestriction = true;
+              restrictionSource = restrictionSource
+                ? `${restrictionSource}, ${feature.name}`
+                : feature.name;
+            } else {
+              hasUnrestrictedGrant = true;
+            }
           }
         }
       } catch (error) {
         console.warn('Failed to load class for restriction notice:', error);
       }
+    }
+
+    // If there is any unrestricted grant, we don't force the restriction filter
+    if (hasUnrestrictedGrant) {
+      hasAllowedPerksRestriction = false;
     }
 
     // Get preview item details with prerequisite checking
@@ -104,9 +124,9 @@ export class PerksStepManager extends BaseStepManager {
       try {
         const item = await fromUuid(previewUuid);
         if (item) {
-          const previewActor = await this._createPreviewActor(state);
-          const prereqCheck = await this._checkPerkPrerequisites(item, previewActor, state.spells || []);
-          const prerequisitesHTML = await this._formatPrerequisites(item, previewActor, state.spells || []);
+          const previewActor = await this._createPreviewActor(state, allKnownSpells);
+          const prereqCheck = await this._checkPerkPrerequisites(item, previewActor, allKnownSpells);
+          const prerequisitesHTML = await this._formatPrerequisites(item, previewActor, allKnownSpells);
 
           // Enrich the description for display
           const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description || '', {
@@ -150,6 +170,8 @@ export class PerksStepManager extends BaseStepManager {
       classPerks: classPerks,
       selectedItem: previewItem,
       previewItem: previewItem,
+      perkLimit: perkLimit,
+      currentPerkCount: selectedPerks.length + classPerks.length,
       hasSelection: selectedPerks.length > 0 || classPerks.length > 0,
       showTray: true,
       trayData: trayData,
@@ -165,7 +187,7 @@ export class PerksStepManager extends BaseStepManager {
 
   /**
    * Collect guaranteed perks from ancestry traits and class level 1 features
-   * (where allowedPerks has exactly 1 entry)
+   * (where perkAmount >= number of allowedPerks options)
    * @private
    */
   async _collectGuaranteedPerks(state) {
@@ -178,8 +200,12 @@ export class PerksStepManager extends BaseStepManager {
         const traits = ancestry.system.traits || [];
         for (const trait of traits) {
           const allowed = trait.allowedPerks || [];
-          if (allowed.length === 1 && allowed[0]) {
-            guaranteedPerks.add(allowed[0]);
+          const amount = trait.perkAmount || 0;
+          // If amount is >= options, they are all guaranteed
+          if (amount > 0 && amount >= allowed.length && allowed.length > 0) {
+            allowed.forEach(uuid => {
+              if (uuid) guaranteedPerks.add(uuid);
+            });
           }
         }
       } catch (error) {
@@ -195,8 +221,12 @@ export class PerksStepManager extends BaseStepManager {
         const level1Features = levelFeatures.filter(f => f.level === 1);
         for (const feature of level1Features) {
           const allowed = feature.allowedPerks || [];
-          if (allowed.length === 1 && allowed[0]) {
-            guaranteedPerks.add(allowed[0]);
+          const amount = feature.perkAmount || 0;
+          // If amount is >= options, they are all guaranteed
+          if (amount > 0 && amount >= allowed.length && allowed.length > 0) {
+            allowed.forEach(uuid => {
+              if (uuid) guaranteedPerks.add(uuid);
+            });
           }
         }
       } catch (error) {
@@ -208,20 +238,58 @@ export class PerksStepManager extends BaseStepManager {
   }
 
   /**
+   * Get total perk limit from selected ancestry and class
+   * @private
+   */
+  async _getPerkLimit(state) {
+    let limit = 0;
+
+    // From ancestry traits
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+        for (const trait of traits) {
+          limit += (trait.perkAmount || 0);
+        }
+      } catch (error) {
+        console.warn('Failed to get perk limit from ancestry:', error);
+      }
+    }
+
+    // From class level 1 features
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const levelFeatures = classItem.system.levelFeatures || [];
+        const level1Features = levelFeatures.filter(f => f.level === 1);
+        for (const feature of level1Features) {
+          limit += (feature.perkAmount || 0);
+        }
+      } catch (error) {
+        console.warn('Failed to get perk limit from class:', error);
+      }
+    }
+
+    return limit;
+  }
+
+  /**
    * Load available perk options with prerequisite checking
    * @private
    */
-  async _loadPerkOptions(state) {
+  async _loadPerkOptions(state, allKnownSpells = []) {
     await this.dataService.ensureDataLoaded(['perks']);
 
     const perks = this.dataService.getFilteredItems('perks', {});
     const selectedPerks = state.perks || [];
     const classPerks = state.classPerks || [];
-    const previewActor = await this._createPreviewActor(state);
+    const previewActor = await this._createPreviewActor(state, allKnownSpells);
 
     // Collect allowed perks from ancestry traits and class level 1 features
     const allowedPerkUuids = new Set();
     let hasAllowedPerksRestriction = false;
+    let hasUnrestrictedGrant = false;
 
     if (state.selectedAncestry) {
       try {
@@ -229,11 +297,16 @@ export class PerksStepManager extends BaseStepManager {
         const traits = ancestry.system.traits || [];
         for (const trait of traits) {
           const traitAllowed = trait.allowedPerks || [];
-          if (traitAllowed.length > 0) {
-            hasAllowedPerksRestriction = true;
-            traitAllowed.forEach(uuid => {
-              if (uuid) allowedPerkUuids.add(uuid);
-            });
+          const amount = trait.perkAmount || 0;
+          if (amount > 0) {
+            if (traitAllowed.length > 0) {
+              hasAllowedPerksRestriction = true;
+              traitAllowed.forEach(uuid => {
+                if (uuid) allowedPerkUuids.add(uuid);
+              });
+            } else {
+              hasUnrestrictedGrant = true;
+            }
           }
         }
       } catch (error) {
@@ -248,16 +321,26 @@ export class PerksStepManager extends BaseStepManager {
         const level1Features = levelFeatures.filter(f => f.level === 1);
         for (const feature of level1Features) {
           const featureAllowed = feature.allowedPerks || [];
-          if (featureAllowed.length > 0) {
-            hasAllowedPerksRestriction = true;
-            featureAllowed.forEach(uuid => {
-              if (uuid) allowedPerkUuids.add(uuid);
-            });
+          const amount = feature.perkAmount || 0;
+          if (amount > 0) {
+            if (featureAllowed.length > 0) {
+              hasAllowedPerksRestriction = true;
+              featureAllowed.forEach(uuid => {
+                if (uuid) allowedPerkUuids.add(uuid);
+              });
+            } else {
+              hasUnrestrictedGrant = true;
+            }
           }
         }
       } catch (error) {
         console.warn('Failed to load class for allowed perks:', error);
       }
+    }
+
+    // If there is any unrestricted grant, we don't force the restriction filter
+    if (hasUnrestrictedGrant) {
+      hasAllowedPerksRestriction = false;
     }
 
     // Sort perks alphabetically
@@ -270,7 +353,7 @@ export class PerksStepManager extends BaseStepManager {
         const perkItem = await fromUuid(perk.uuid);
         if (!perkItem) continue;
 
-        const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, state.spells || []);
+        const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, allKnownSpells);
         const isSelected = selectedPerks.includes(perk.uuid) || classPerks.includes(perk.uuid);
 
         // If there are allowed perks restrictions and this perk isn't in the list, skip it (unless already selected)
@@ -305,7 +388,7 @@ export class PerksStepManager extends BaseStepManager {
    * Create preview actor for prerequisite checking
    * @private
    */
-  async _createPreviewActor(state) {
+  async _createPreviewActor(state, allKnownSpells = []) {
     // Create a comprehensive preview actor with all current selections
     // for accurate prerequisite checking
 
@@ -358,7 +441,7 @@ export class PerksStepManager extends BaseStepManager {
     const systemData = {
       stats: stats,
       skills: state.skills || [],
-      spells: state.spells || [],
+      spells: allKnownSpells,
       perks: state.perks || [],
       classPerks: state.classPerks || [],
       attributes: {
@@ -602,10 +685,17 @@ export class PerksStepManager extends BaseStepManager {
     const state = this.getCurrentState();
     const currentPerks = state.perks || [];
     const classPerks = state.classPerks || [];
+    const perkLimit = await this._getPerkLimit(state);
 
     // Check if already selected
     if (currentPerks.includes(uuid) || classPerks.includes(uuid)) {
       ui.notifications.warn('Perk already selected');
+      return;
+    }
+
+    // Check perk limit
+    if (perkLimit > 0 && (currentPerks.length + classPerks.length) >= perkLimit) {
+      ui.notifications.warn(`You can only select ${perkLimit} perks`);
       return;
     }
 
@@ -618,8 +708,10 @@ export class PerksStepManager extends BaseStepManager {
       }
 
       // Check prerequisites
-      const previewActor = await this._createPreviewActor(state);
-      const prereqCheck = await this._checkPerkPrerequisites(item, previewActor, state.spells || []);
+      const mandatorySpells = await this._collectRequiredSpells(state);
+      const allKnownSpells = [...new Set([...(state.spells || []), ...mandatorySpells])];
+      const previewActor = await this._createPreviewActor(state, allKnownSpells);
+      const prereqCheck = await this._checkPerkPrerequisites(item, previewActor, allKnownSpells);
       
       if (!prereqCheck.met) {
         ui.notifications.warn(`Prerequisites not met: ${prereqCheck.missing.join(', ')}`);

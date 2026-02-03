@@ -407,65 +407,22 @@ export class SpellsStepManager extends BaseStepManager {
     this.updateState('spells', requiredSpells, { skipValidation: true });
   }
 
-  /**
-   * Step-specific activation logic
-   * @protected
-   */
-  async _onActivate() {
-    // Ensure spell data is loaded and ready
-    await this.dataService.ensureDataLoaded(['spells']);
+    /**
+
+     * Step-specific activation logic
+
+     * @protected
+
+     */
+
+    async _onActivate() {
+
+      // Ensure spell data is loaded and ready
+
+      await this.dataService.ensureDataLoaded(['spells']);
+
+    }
+
   }
 
-  /**
-   * Collect required spells from ancestry traits, class level 1 features, and perks
-   * @private
-   */
-  async _collectRequiredSpells(state) {
-    const requiredSpells = new Set();
-
-    // From ancestry traits
-    if (state.selectedAncestry) {
-      try {
-        const ancestry = await fromUuid(state.selectedAncestry);
-        const traits = ancestry.system.traits || [];
-        for (const trait of traits) {
-          (trait.requiredSpells || []).forEach(uuid => {
-            if (uuid) requiredSpells.add(uuid);
-          });
-        }
-      } catch (error) {
-        console.warn('Failed to load ancestry for required spells:', error);
-      }
-    }
-
-    // From class level 1 features
-    if (state.selectedClass) {
-      try {
-        const classItem = await fromUuid(state.selectedClass);
-        const levelFeatures = classItem.system.levelFeatures || [];
-        const level1Features = levelFeatures.filter(f => f.level === 1);
-        for (const feature of level1Features) {
-          (feature.requiredSpells || []).forEach(uuid => {
-            if (uuid) requiredSpells.add(uuid);
-          });
-        }
-      } catch (error) {
-        console.warn('Failed to load class for required spells:', error);
-      }
-    }
-
-    // From perks (perks have requiredSpells at item level)
-    for (const perkUuid of [...(state.perks || []), ...(state.classPerks || [])]) {
-      try {
-        const perk = await fromUuid(perkUuid);
-        (perk.system.requiredSpells || []).forEach(uuid => {
-          if (uuid) requiredSpells.add(uuid);
-        });
-      } catch (error) {
-        console.warn('Failed to load perk for required spells:', error);
-      }
-    }
-
-    return Array.from(requiredSpells);
-  }
-}
+  

@@ -130,6 +130,13 @@
                     </div>
                   </div>
 
+                  {{! Perk Amount }}
+                  <div class='form-group mt-10'>
+                    <label>Perks Amount:</label>
+                    <input type='number' name='system.traits.{{index}}.perkAmount' value='{{trait.perkAmount}}' min='0' max='10' style='width: 60px;' />
+                    <small class='hint'>Number of perks this trait allows choosing</small>
+                  </div>
+
                   {{! Allowed Perks }}
                   <div class='form-group mt-10'>
                     <label>Allowed Perks:</label>
