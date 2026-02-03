@@ -177,6 +177,7 @@
       "Charmed": "Charmed",
       "Confused": "Confused",
       "Dazed": "Dazed",
+      "Dead": "Dead",
       "Fatigued": "Fatigued",
       "Frightened": "Frightened",
       "Incapacitated": "Incapacitated",
@@ -192,6 +193,7 @@
     "StatusConditionDescriptions": {
       "Frightened": "-2 penalty to damage dealt [AUTOMATED]",
       "Dazed": "Can't Focus or Move unless uses an Action. Speed = 0 [PARTIAL - Speed automated]",
+      "Dead": "Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks) [FULLY AUTOMATED]",
       "Fatigued": "Each Fatigue occupies an Item Slot. At 3+: can't Rush. At 5: dies [PARTIAL - Slots automated]",
       "Prone": "Costs 10' Speed to stand. Crawl only (2:1 ratio), can't Rush, Vulnerable [PARTIAL - Speed automated]",
       "Confused": "Checks/Saves Hindered. Saves against its Actions Favored [AUTOMATED]",
@@ -903,6 +905,22 @@
     "Notifications": {
       "NoLuckRemaining": "No Luck remaining to spend!",
       "LuckAlreadyMax": "Luck is already at maximum!"
+    },
+    "Combat": {
+      "NoActivationsLeft": "This combatant has no activations left this round.",
+      "NoActivationsRemaining": "No combatants have activations remaining this round.",
+      "NoPreviousTurn": "No previous turn to go back to.",
+      "Factions": {
+        "Friendly": "Friendly",
+        "Neutral": "Neutral",
+        "Hostile": "Hostiles",
+        "Secret": "Secret"
+      },
+      "Context": {
+        "AddActivation": "Add Activation",
+        "RemoveActivation": "Remove Activation",
+        "UndoUse": "Undo Use"
+      }
     },
     "DiceSoNice": {
       "Category": "Vagabond",

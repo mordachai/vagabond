@@ -210,6 +210,7 @@ VAGABOND.statusConditions = {
   'charmed': 'VAGABOND.StatusConditions.Charmed',
   'confused': 'VAGABOND.StatusConditions.Confused',
   'dazed': 'VAGABOND.StatusConditions.Dazed',
+  'dead': 'VAGABOND.StatusConditions.Dead',
   'fatigued': 'VAGABOND.StatusConditions.Fatigued',
   'frightened': 'VAGABOND.StatusConditions.Frightened',
   'incapacitated': 'VAGABOND.StatusConditions.Incapacitated',
@@ -585,6 +586,43 @@ VAGABOND.statusEffectDefinitions = [
         key: 'system.defenderStatusModifiers.closeAttacksAutoCrit',
         mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
         value: 'true' // Note: Must be string for Active Effects
+      }
+    ]
+  },
+  {
+    id: 'dead',
+    name: 'VAGABOND.StatusConditions.Dead',
+    icon: 'icons/svg/skull.svg',
+    statuses: ['dead'],
+    description: 'Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks). [FULLY AUTOMATED]',
+    changes: [
+      // Auto-fail ALL rolls (new field)
+      {
+        key: 'system.autoFailAllRolls',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'true'
+      },
+      // Speed = 0
+      {
+        key: 'system.speed.bonus',
+        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        value: '-999'
+      },
+      // Vulnerable effects
+      {
+        key: 'system.favorHinder',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        value: 'favor'
       }
     ]
   }

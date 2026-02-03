@@ -1,0 +1,131 @@
+<section class="{{cssClass}} directory flexcol" id="{{cssId}}" data-tab="{{tabName}}">
+    {{#if combatCount}}
+    <header class="combat-tracker-header">
+        <div class="encounter-controls flexrow {{#if hasCombat}}combat{{/if}}">
+            {{#if combat.round}}
+            <h3 class="encounter-title">{{localize 'COMBAT.Round'}} {{combat.round}}</h3>
+            {{else}}
+            <h3 class="encounter-title">{{localize 'COMBAT.NotStarted'}}</h3>
+            {{/if}}
+
+            {{#if combat.round}}
+            <button type="button" class="combat-control icon" aria-label="{{localize 'COMBAT.TurnPrev'}}" data-action="previousTurn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" class="combat-control icon" aria-label="{{localize 'COMBAT.TurnNext'}}" data-action="nextTurn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button type="button" class="combat-control icon" aria-label="{{localize 'COMBAT.End'}}" data-action="endCombat">
+                <i class="fas fa-stop"></i>
+            </button>
+            <button type="button" class="combat-control icon" aria-label="{{localize 'COMBAT.NextRound'}}" data-action="nextRound">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            {{else}}
+            <button type="button" class="combat-control icon" aria-label="{{localize 'COMBAT.Begin'}}" data-action="startCombat">
+                <i class="fas fa-play"></i>
+            </button>
+            {{/if}}
+        </div>
+    </header>
+    {{/if}}
+
+    <ol id="combat-tracker" class="directory-list">
+        {{#each factions as |faction key|}}
+            {{#if faction.turns.length}}
+            <li class="faction-header {{faction.css}}">
+                <h4>{{localize faction.label}}</h4>
+            </li>
+            {{#each faction.turns as |turn|}}
+            <li class="combatant actor directory-item grid-4-col {{turn.factionClass}} {{#if turn.isSpent}}spent{{/if}} {{#if turn.active}}active{{/if}}" data-combatant-id="{{turn.id}}">
+
+                {{!-- Column 1: Identity & Controls --}}
+                <div class="col-1 flexcol">
+                    <div class="row-1 flexrow">
+                        <img class="token-image" src="{{turn.img}}" alt="{{turn.name}}" data-action="pingCombatant"/>
+                        <h4 class="name" title="{{turn.name}}">{{turn.name}}</h4>
+                    </div>
+                    <div class="row-2 flexrow operation-controls">
+                        {{#if ../../user.isGM}}
+                        <button type="button" class="combatant-control icon-only {{#if turn.hidden}}active{{/if}}" aria-label="{{localize 'COMBAT.ToggleVis'}}" data-action="toggleHidden">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                        <button type="button" class="combatant-control icon-only {{#if turn.defeated}}active{{/if}}" aria-label="{{localize 'COMBAT.ToggleDead'}}" data-action="toggleDefeated">
+                            <i class="fas fa-skull"></i>
+                        </button>
+                        {{/if}}
+                        <button type="button" class="combatant-control icon-only" aria-label="{{localize 'COMBAT.PingCombatant'}}" data-action="pingCombatant">
+                            <i class="fas fa-bullseye"></i>
+                        </button>
+                        
+                        <div class="initiative-box flexrow">
+                            {{#if turn.initiative includeZero=true}}
+                                <span class="init-value">{{turn.initiative}}</span>
+                            {{else}}
+                                <button type="button" class="combatant-control icon-only" aria-label="{{localize 'COMBAT.InitiativeRoll'}}" data-action="rollInitiative">
+                                    <i class="fas fa-dice-d20"></i>
+                                </button>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+
+                {{!-- Column 2: Status Effects --}}
+                <div class="col-2 effects-column">
+                    {{#if turn.effects}}
+                    <div class="effects-grid">
+                        {{#each turn.effects as |effect|}}
+                        <img src="{{effect.icon}}" alt="{{effect.name}}" title="{{effect.name}}" class="effect-icon" />
+                        {{/each}}
+                    </div>
+                    {{/if}}
+                </div>
+
+                {{!-- Column 3: Player Stats --}}
+                <div class="col-3 flexcol stats-column">
+                    <div class="res-row hp flexrow" title="HP">
+                        <i class="fas fa-heart"></i>
+                        <span class="val">{{turn.hp.value}}</span>
+                    </div>
+                    <div class="res-row fatigue flexrow" title="Fatigue">
+                        <i class="fas fa-skull"></i>
+                        <span class="val">{{turn.fatigue}}</span>
+                    </div>
+                    {{#if turn.mana}}
+                    <div class="res-row mana flexrow" title="Mana">
+                        <i class="fas fa-star-christmas"></i>
+                        <span class="val">{{turn.mana.current}}</span>
+                    </div>
+                    {{/if}}
+                </div>
+
+                {{!-- Column 4: Activation Button & Counter --}}
+                <div class="col-4 flexcol center-content">
+                    {{#if (and (not turn.isSpent) (not turn.active))}}
+                    <button type="button" class="combatant-control activate-btn" aria-label="Activate" data-action="activate">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    {{/if}}
+
+                    {{#if turn.active}}
+                    <button type="button" class="combatant-control deactivate-btn" aria-label="End Turn" data-action="deactivate">
+                        <i class="fas fa-circle-xmark"></i>
+                    </button>
+                    {{/if}}
+
+                    {{!-- Activation Counter --}}
+                    <div class="activation-counter {{#if turn.isSpent}}spent{{/if}}">
+                        <i class="fas fa-bolt"></i>
+                        {{#if (gt turn.activations.value 1)}}
+                        <span class="counter">x{{turn.activations.value}}</span>
+                        {{else}}
+                        <span class="counter">{{turn.activations.value}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+            {{/if}}
+        {{/each}}
+    </ol>
+</section>

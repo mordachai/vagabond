@@ -350,6 +350,12 @@ export default class VagabondCharacter extends VagabondActorBase {
       { required: true, initial: [], label: "Auto-Fail Stats" }
     );
 
+    // Auto-fail all rolls (e.g., Dead: automatically fails all checks, saves, and attacks)
+    schema.autoFailAllRolls = new fields.BooleanField({
+      initial: false,
+      label: "Auto-Fail All Rolls"
+    });
+
     // Defender status modifiers (affects attackers targeting this actor)
     schema.defenderStatusModifiers = new fields.SchemaField({
       // Invisible: attackers are treated as Blinded
@@ -458,6 +464,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.incomingAttacksModifier = 'none';
     this.outgoingSavesModifier = 'none';
     this.autoFailStats = [];
+    this.autoFailAllRolls = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
     // Don't reset statusEffectData - it contains persistent state like charmerUuid

@@ -531,6 +531,76 @@ export class VagabondChatCard {
     return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess);
   }
 
+  /**
+   * Create an auto-fail chat card (for Dead status and similar effects)
+   * @param {Actor} actor - The actor
+   * @param {string} type - The roll type: 'skill', 'save', 'stat', 'weapon', 'spell'
+   * @param {string} keyOrLabel - The skill/save/stat key, or item name for weapons/spells
+   * @returns {Promise<ChatMessage>}
+   */
+  static async autoFailRoll(actor, type, keyOrLabel) {
+    let title, tags = [];
+
+    switch (type) {
+      case 'stat':
+        const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[keyOrLabel]) || keyOrLabel;
+        title = `${statLabel} Check`;
+        tags = [{ label: statLabel, cssClass: 'tag-skill' }];
+        break;
+
+      case 'skill':
+        const entity = actor.system.skills?.[keyOrLabel] || actor.system.weaponSkills?.[keyOrLabel];
+        const entityLabel = entity?.label || keyOrLabel;
+        title = `${entityLabel} Check`;
+        tags = [{ label: entityLabel, cssClass: 'tag-skill' }];
+        if (entity?.stat) {
+          const statAbbr = game.i18n.localize(CONFIG.VAGABOND.stats[entity.stat]?.abbr) || entity.stat;
+          tags.push({ label: statAbbr, cssClass: 'tag-stat' });
+        }
+        break;
+
+      case 'save':
+        const save = actor.system.saves?.[keyOrLabel];
+        const saveLabel = save?.label || keyOrLabel;
+        title = `${saveLabel} Save`;
+        tags = [{ label: saveLabel, cssClass: 'tag-skill' }];
+        break;
+
+      case 'weapon':
+        title = `${keyOrLabel} Attack`;
+        tags = [{ label: 'Attack', cssClass: 'tag-action' }];
+        break;
+
+      case 'spell':
+        title = `${keyOrLabel} Cast`;
+        tags = [{ label: 'Spell', cssClass: 'tag-magic' }];
+        break;
+
+      default:
+        title = `${keyOrLabel}`;
+        break;
+    }
+
+    // Create card with auto-fail styling
+    const card = new VagabondChatCard();
+    card.setActor(actor);
+    card.setTitle(title);
+    card.setMetadataTags(tags);
+
+    // Set outcome to failure with special auto-fail class
+    card.data.outcome = 'AUTOMATIC FAILURE';
+    card.data.outcomeClass = 'outcome-auto-fail';
+    card.data.description = `${actor.name} automatically fails due to status conditions.`;
+
+    // Render and post to chat
+    const html = await card.render();
+    return ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: actor }),
+      content: html,
+      rollMode: game.settings.get('core', 'rollMode'),
+    });
+  }
+
   static async weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime = []) {
       const { weaponSkill, weaponSkillKey, isHit, isCritical } = attackResult;
       

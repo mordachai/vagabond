@@ -1,6 +1,8 @@
 // Import document classes.
 import { VagabondActor } from './documents/actor.mjs';
 import { VagabondItem } from './documents/item.mjs';
+import { VagabondCombat } from './documents/combat.mjs';
+import { VagabondCombatant } from './documents/combatant.mjs';
 import { VagabondActiveEffect } from './documents/active-effect.mjs';
 import { ProgressClock } from './documents/progress-clock.mjs';
 import { CountdownDice } from './documents/countdown-dice.mjs';
@@ -31,6 +33,7 @@ import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
 import { DowntimeApp } from './applications/downtime-app.mjs';
 import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
+import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -241,6 +244,7 @@ globalThis.vagabond = {
 };
 
 Hooks.once('init', async function () {
+  console.log("Vagabond | Initializing System...");
   // Register game settings first to avoid preparation errors
   registerGameSettings();
 
@@ -250,8 +254,14 @@ Hooks.once('init', async function () {
   // Apply custom status effects based on game setting
   const statusEffectsMode = game.settings.get('vagabond', 'statusEffectsMode');
   if (statusEffectsMode === 'vagabond') {
-    CONFIG.statusEffects = VAGABOND.statusEffectDefinitions;
-    console.log('Vagabond | Using custom Vagabond status conditions');
+    // Sort status effects alphabetically by localized name
+    const sortedEffects = [...VAGABOND.statusEffectDefinitions].sort((a, b) => {
+      const nameA = game.i18n.localize(a.name);
+      const nameB = game.i18n.localize(b.name);
+      return nameA.localeCompare(nameB);
+    });
+    CONFIG.statusEffects = sortedEffects;
+    console.log('Vagabond | Using custom Vagabond status conditions (sorted alphabetically)');
   }
   // If 'foundry', do nothing - Foundry's defaults will remain active
 
@@ -274,6 +284,47 @@ Hooks.once('init', async function () {
 
   // Define custom Document and DataModel classes
   CONFIG.Actor.documentClass = VagabondActor;
+
+  // Define custom Combat classes
+  console.log("Vagabond | Registering Combat classes...");
+  CONFIG.Combat.documentClass = VagabondCombat;
+  CONFIG.Combatant.documentClass = VagabondCombatant;
+
+  // Modify CombatTracker in place (Lancer Initiative pattern)
+  console.log("Vagabond | Modifying CombatTracker in place...");
+  const CombatTracker = foundry.applications.sidebar.tabs.CombatTracker;
+
+  // Store original methods we'll wrap
+  const originalPrepareTrackerContext = CombatTracker.prototype._prepareTrackerContext;
+  const originalGetEntryContextOptions = CombatTracker.prototype._getEntryContextOptions;
+
+  // Replace template
+  console.log("Vagabond | Setting custom combat tracker template");
+  CombatTracker.PARTS.tracker.template = "systems/vagabond/templates/sidebar/combat-tracker.hbs";
+
+  // Add custom actions
+  console.log("Vagabond | Adding custom combat tracker actions");
+  Object.assign(CombatTracker.DEFAULT_OPTIONS.actions, {
+    activate: VagabondCombatTracker.onActivate,
+    deactivate: VagabondCombatTracker.onDeactivate
+  });
+
+  // Wrap _prepareTrackerContext (NOT _prepareContext!)
+  console.log("Vagabond | Wrapping _prepareTrackerContext method");
+  CombatTracker.prototype._prepareTrackerContext = async function(context, options) {
+    return VagabondCombatTracker.prepareTrackerContext.call(this, originalPrepareTrackerContext, context, options);
+  };
+
+  // Wrap _getEntryContextOptions
+  console.log("Vagabond | Wrapping _getEntryContextOptions method");
+  CombatTracker.prototype._getEntryContextOptions = function() {
+    return VagabondCombatTracker.getEntryContextOptions.call(this, originalGetEntryContextOptions);
+  };
+
+  console.log("Vagabond | Combat document class:", CONFIG.Combat.documentClass.name);
+  console.log("Vagabond | Combatant document class:", CONFIG.Combatant.documentClass.name);
+  console.log("Vagabond | Combat Tracker template:", CombatTracker.PARTS.tracker.template);
+  console.log("Vagabond | Combat Tracker actions:", Object.keys(CombatTracker.DEFAULT_OPTIONS.actions));
 
   // Note that you don't need to declare a DataModel
   // for the base actor/item classes - they are included
@@ -360,6 +411,18 @@ Handlebars.registerHelper('add', (a, b) => a + b);
 
 Handlebars.registerHelper('gte', (a, b) => a >= b);
 
+Handlebars.registerHelper('and', function () {
+  const args = Array.prototype.slice.call(arguments, 0, -1);
+  return args.every(Boolean);
+});
+
+Handlebars.registerHelper('or', function () {
+  const args = Array.prototype.slice.call(arguments, 0, -1);
+  return args.some(Boolean);
+});
+
+Handlebars.registerHelper('not', (a) => !a);
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
@@ -424,6 +487,25 @@ Hooks.once('ready', () => {
 
   // Store in global for easy access
   globalThis.vagabond.ui.countdownDiceOverlay = diceOverlay;
+
+  // Verify Combat system registration
+  console.log("Vagabond | System Ready - Verifying Combat registration:");
+  console.log("  - CONFIG.Combat.documentClass:", CONFIG.Combat.documentClass?.name);
+  console.log("  - CONFIG.Combatant.documentClass:", CONFIG.Combatant.documentClass?.name);
+  console.log("  - ui.combat instance:", ui.combat?.constructor?.name);
+  console.log("  - CombatTracker template:", foundry.applications.sidebar.tabs.CombatTracker.PARTS.tracker.template);
+
+  // Check if methods are wrapped
+  const hasCustomActions = 'activate' in foundry.applications.sidebar.tabs.CombatTracker.DEFAULT_OPTIONS.actions;
+  console.log("  - Custom actions registered:", hasCustomActions);
+
+  if (CONFIG.Combat.documentClass?.name === "VagabondCombat" &&
+      CONFIG.Combatant.documentClass?.name === "VagabondCombatant" &&
+      hasCustomActions) {
+    console.log("Vagabond | Combat system successfully registered!");
+  } else {
+    console.warn("Vagabond | WARNING: Combat system not fully registered!");
+  }
 });
 
 /**

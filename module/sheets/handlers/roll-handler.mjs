@@ -42,30 +42,25 @@ export class RollHandler {
       const rollKey = dataset.key; // e.g., 'awareness', 'might', 'reaction'
       const rollType = dataset.type; // 'skill' or 'save' or 'stat'
 
-      // Check for auto-fail stats (e.g., Incapacitated: auto-fail Might/Dex)
+      // Check for auto-fail conditions
+      const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
       const autoFailStats = this.actor.system.autoFailStats || [];
-      if (autoFailStats.includes(rollKey)) {
-        // Create a dummy roll with 0 result for display
-        const autoFailRoll = new Roll('0');
-        await autoFailRoll.evaluate();
+
+      // Auto-fail if Dead (autoFailAllRolls) or if specific stat is in autoFailStats array
+      if (autoFailAllRolls || autoFailStats.includes(rollKey)) {
+        // Import chat card helper
+        const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
         // Post auto-fail message to chat
-        const label = dataset.label || game.i18n.localize(CONFIG.VAGABOND.stats[rollKey]) || rollKey;
-        await ChatMessage.create({
-          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          content: `<div class="vagabond-auto-fail-roll">
-            <div class="auto-fail-header">
-              <h3>${label} Check</h3>
-              <span class="auto-fail-badge">AUTOMATIC FAILURE</span>
-            </div>
-            <p class="auto-fail-reason">
-              ${this.actor.name} automatically fails this check due to status conditions.
-            </p>
-          </div>`,
-          rollMode: game.settings.get('core', 'rollMode'),
-        });
+        await VagabondChatCard.autoFailRoll(this.actor, rollType || 'stat', rollKey);
 
+        // Show notification
+        const label = dataset.label || game.i18n.localize(CONFIG.VAGABOND.stats[rollKey]) || rollKey;
         ui.notifications.warn(`${this.actor.name} automatically fails ${label} checks due to status conditions.`);
+
+        // Create and return a dummy roll for consistency
+        const autoFailRoll = new Roll('0');
+        await autoFailRoll.evaluate();
         return autoFailRoll;
       }
 
@@ -224,6 +219,20 @@ export class RollHandler {
       }
 
       /* PATH B: WEAPONS */
+      // Check for auto-fail conditions before rolling weapon attack
+      const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
+      if (autoFailAllRolls) {
+        // Import chat card helper
+        const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
+
+        // Post auto-fail message to chat
+        await VagabondChatCard.autoFailRoll(this.actor, 'weapon', item.name);
+
+        // Show notification
+        ui.notifications.warn(`${this.actor.name} cannot attack due to status conditions.`);
+        return;
+      }
+
       const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
       const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
 
