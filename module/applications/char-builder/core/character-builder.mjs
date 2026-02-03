@@ -734,8 +734,20 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Apply builder stats
-    for (const [key, val] of Object.entries(state.assignedStats || {})) {
+    // Apply builder stats with bonuses
+    const finalStats = { ...(state.assignedStats || {}) };
+    const appliedBonuses = state.appliedBonuses || {};
+
+    // Apply stat bonuses to final values
+    for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+      const statKey = application.target;
+      if (finalStats[statKey] !== null && finalStats[statKey] !== undefined) {
+        finalStats[statKey] += application.amount;
+      }
+    }
+
+    // Set final stat values on actor
+    for (const [key, val] of Object.entries(finalStats)) {
       if (val !== null && actorData.system.stats[key]) {
         actorData.system.stats[key].value = val;
       }

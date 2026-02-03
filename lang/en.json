@@ -62,7 +62,7 @@
       "LuckPool": "Total Luck points. Spend to gain Favor, reroll dice, or use Plot Armor.",
       "Inventory": "Carrying capacity equal to 8 + Might slots.",
       "Speed": "Movement distance in feet on solid ground.",
-      "MaxMana": "Maximum mana points equal to Mana Multiplier × Main Stat.",
+      "MaxMana": "Maximum mana points equal to Mana Multiplier × Key Stat.",
       "ManaPerCast": "The maximum Mana allowed per single spell cast."
     },
     "Saves": {

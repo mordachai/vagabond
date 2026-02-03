@@ -194,6 +194,57 @@
                         name='system.levelFeatures.{{feature.index}}.level'
                         value='{{feature.level}}'
                       />
+
+                      {{! Configuration fields for grants }}
+                      <details class='feature-grants mt-10'>
+                        <summary><small>⚙️ Configure Grants</small></summary>
+                        <div class='grants-content p-5'>
+
+                          {{! Stat Bonus Points }}
+                          <div class='form-group'>
+                            <label>Stat Bonus Points:</label>
+                            <input type='number' name='system.levelFeatures.{{feature.index}}.statBonusPoints' value='{{feature.statBonusPoints}}' min='0' max='10' style='width: 60px;' />
+                            <small class='hint'>Each point gives +1 to any stat &lt;7 (player chooses)</small>
+                          </div>
+
+                          {{! Required Spells }}
+                          <div class='form-group mt-10'>
+                            <label>Required Spells:</label>
+                            <div class='spell-drop-zone' data-feature-index='{{feature.index}}'>
+                              {{#if feature.enrichedSpells.length}}
+                                {{#each feature.enrichedSpells as |spell spellIndex|}}
+                                  <div class='spell-tag' data-uuid='{{spell.uuid}}'>
+                                    <img src='{{spell.img}}' alt='{{spell.name}}' />
+                                    <span>{{spell.name}}</span>
+                                    <button type='button' data-action='removeFeatureSpell' data-spell-uuid='{{spell.uuid}}'><i class='fas fa-times'></i></button>
+                                  </div>
+                                {{/each}}
+                              {{else}}
+                                <p class='placeholder-text'>Drag spells here</p>
+                              {{/if}}
+                            </div>
+                          </div>
+
+                          {{! Allowed Perks }}
+                          <div class='form-group mt-10'>
+                            <label>Allowed Perks (filters perk list):</label>
+                            <div class='perk-drop-zone' data-feature-index='{{feature.index}}'>
+                              {{#if feature.enrichedPerks.length}}
+                                {{#each feature.enrichedPerks as |perk perkIndex|}}
+                                  <div class='perk-tag' data-uuid='{{perk.uuid}}'>
+                                    <img src='{{perk.img}}' alt='{{perk.name}}' />
+                                    <span>{{perk.name}}</span>
+                                    <button type='button' data-action='removeFeaturePerk' data-perk-uuid='{{perk.uuid}}'><i class='fas fa-times'></i></button>
+                                  </div>
+                                {{/each}}
+                              {{else}}
+                                <p class='placeholder-text'>Drag perks here (leave empty for no restrictions)</p>
+                              {{/if}}
+                            </div>
+                          </div>
+
+                        </div>
+                      </details>
                     {{else}}
                       <strong class='feature-title'>{{feature.name}}</strong>
                       {{#if feature.enrichedDescription}}

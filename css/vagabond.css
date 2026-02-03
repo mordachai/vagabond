@@ -5764,6 +5764,75 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
   text-shadow: 0 0 2px var(--vagabond-c-red);
 }
+.vagabond .spell-tag,
+.vagabond .perk-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #f0f0f0;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 4px;
+  font-size: 13px;
+  margin: 4px;
+}
+.vagabond .spell-tag img,
+.vagabond .perk-tag img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.vagabond .spell-tag span,
+.vagabond .perk-tag span {
+  color: var(--vagabond-c-dark);
+  font-weight: 500;
+}
+.vagabond .spell-tag button,
+.vagabond .perk-tag button {
+  background: transparent;
+  border: none;
+  color: #b93636;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .spell-tag button:hover,
+.vagabond .perk-tag button:hover {
+  color: var(--vagabond-c-red);
+  transform: scale(1.2);
+}
+.vagabond .spell-tag button i,
+.vagabond .perk-tag button i {
+  font-size: 12px;
+}
+.vagabond .spell-drop-zone,
+.vagabond .perk-drop-zone {
+  min-height: 40px;
+  padding: 8px;
+  border: 2px dashed var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.vagabond .spell-drop-zone:empty,
+.vagabond .perk-drop-zone:empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vagabond .spell-drop-zone .placeholder-text,
+.vagabond .perk-drop-zone .placeholder-text {
+  color: var(--vagabond-c-faint);
+  font-style: italic;
+  font-size: 12px;
+  margin: 0;
+}
 .vagabond .starter-pack-details-wrapper .starter-pack-section {
   margin-bottom: 1rem;
 }
@@ -8936,5 +9005,3 @@ details[open] .vagabond .npc-immunity-toggle i {
   white-space: nowrap;
   word-break: break-all;
 }
-
-/*# sourceMappingURL=vagabond.css.map */

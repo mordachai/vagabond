@@ -47,7 +47,46 @@ export class PerksStepManager extends BaseStepManager {
     const selectedPerks = state.perks || [];
     const classPerks = state.classPerks || [];
     const previewUuid = state.previewUuid;
-    
+
+    // Check if perks are being filtered by ancestry traits or class level 1 features
+    let hasAllowedPerksRestriction = false;
+    let restrictionSource = '';
+
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+        for (const trait of traits) {
+          if ((trait.allowedPerks || []).length > 0) {
+            hasAllowedPerksRestriction = true;
+            restrictionSource = restrictionSource
+              ? `${restrictionSource}, ${trait.name}`
+              : trait.name;
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load ancestry for restriction notice:', error);
+      }
+    }
+
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const levelFeatures = classItem.system.levelFeatures || [];
+        const level1Features = levelFeatures.filter(f => f.level === 1);
+        for (const feature of level1Features) {
+          if ((feature.allowedPerks || []).length > 0) {
+            hasAllowedPerksRestriction = true;
+            restrictionSource = restrictionSource
+              ? `${restrictionSource}, ${feature.name}`
+              : feature.name;
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load class for restriction notice:', error);
+      }
+    }
+
     // Get preview item details with prerequisite checking
     let previewItem = null;
     if (previewUuid) {
@@ -106,6 +145,8 @@ export class PerksStepManager extends BaseStepManager {
       useTripleColumn: true,
       showAllPerks: this.showAllPerks,
       originReferences: originReferences,
+      hasAllowedPerksRestriction: hasAllowedPerksRestriction,
+      restrictionSource: restrictionSource,
       instruction: (selectedPerks.length === 0 && classPerks.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Perks') : null
     };
@@ -117,17 +158,58 @@ export class PerksStepManager extends BaseStepManager {
    */
   async _loadPerkOptions(state) {
     await this.dataService.ensureDataLoaded(['perks']);
-    
+
     const perks = this.dataService.getFilteredItems('perks', {});
     const selectedPerks = state.perks || [];
     const classPerks = state.classPerks || [];
     const previewActor = await this._createPreviewActor(state);
-    
+
+    // Collect allowed perks from ancestry traits and class level 1 features
+    const allowedPerkUuids = new Set();
+    let hasAllowedPerksRestriction = false;
+
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+        for (const trait of traits) {
+          const traitAllowed = trait.allowedPerks || [];
+          if (traitAllowed.length > 0) {
+            hasAllowedPerksRestriction = true;
+            traitAllowed.forEach(uuid => {
+              if (uuid) allowedPerkUuids.add(uuid);
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load ancestry for allowed perks:', error);
+      }
+    }
+
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const levelFeatures = classItem.system.levelFeatures || [];
+        const level1Features = levelFeatures.filter(f => f.level === 1);
+        for (const feature of level1Features) {
+          const featureAllowed = feature.allowedPerks || [];
+          if (featureAllowed.length > 0) {
+            hasAllowedPerksRestriction = true;
+            featureAllowed.forEach(uuid => {
+              if (uuid) allowedPerkUuids.add(uuid);
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load class for allowed perks:', error);
+      }
+    }
+
     // Sort perks alphabetically
     const sortedPerks = perks.sort((a, b) => a.name.localeCompare(b.name));
-    
+
     const perkOptions = [];
-    
+
     for (const perk of sortedPerks) {
       try {
         const perkItem = await fromUuid(perk.uuid);
@@ -135,7 +217,12 @@ export class PerksStepManager extends BaseStepManager {
 
         const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, state.spells || []);
         const isSelected = selectedPerks.includes(perk.uuid) || classPerks.includes(perk.uuid);
-        
+
+        // If there are allowed perks restrictions and this perk isn't in the list, skip it (unless already selected)
+        if (hasAllowedPerksRestriction && !allowedPerkUuids.has(perk.uuid) && !isSelected) {
+          continue;
+        }
+
         // Filter based on showAllPerks setting
         if (!this.showAllPerks && !prereqCheck.met && !isSelected) {
           continue;

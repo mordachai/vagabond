@@ -605,12 +605,85 @@
         cursor: pointer;
         text-align: center;
         font-size: 16px;
-        
+
         &:hover {
           color: $c-red;
           text-shadow: 0 0 2px $c-red;
         }
       }
     }
+  }
+}
+
+// Spell and Perk Tag Styles (for drag-drop zones)
+.spell-tag,
+.perk-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #f0f0f0;
+  border: 1px solid $c-tan;
+  border-radius: 4px;
+  font-size: 13px;
+  margin: 4px;
+
+  img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  span {
+    color: $c-dark;
+    font-weight: 500;
+  }
+
+  button {
+    background: transparent;
+    border: none;
+    color: #b93636;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: $c-red;
+      transform: scale(1.2);
+    }
+
+    i {
+      font-size: 12px;
+    }
+  }
+}
+
+// Drop zones for spells and perks
+.spell-drop-zone,
+.perk-drop-zone {
+  min-height: 40px;
+  padding: 8px;
+  border: 2px dashed $c-faint;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.3);
+
+  &:empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-text {
+    color: $c-faint;
+    font-style: italic;
+    font-size: 12px;
+    margin: 0;
   }
 }

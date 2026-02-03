@@ -66,6 +66,52 @@
             </div>
             {{/each}}
         </div>
+
+        {{!-- Bonus Points Section --}}
+        {{#if availableBonuses.length}}
+        <div class="bonus-points-section">
+            <h4>Available Bonus Points</h4>
+            <p class="help-text">Apply these bonuses to your stats. Some bonuses have conditions.</p>
+
+            {{#each availableBonuses}}
+            <div class="bonus-item {{#if this.applied}}applied{{/if}}" data-bonus-id="{{this.bonusId}}">
+                <div class="bonus-header">
+                    <strong>{{this.reason}}</strong>
+                    <span class="bonus-source">(from {{this.sourceName}})</span>
+                </div>
+
+                {{#if this.applied}}
+                <div class="bonus-applied">
+                    Applied to <strong>{{uppercase this.appliedTarget}}</strong>
+                    <button type="button" class="btn-remove-bonus" data-action="removeBonus" data-bonus-id="{{this.bonusId}}">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                </div>
+                {{else}}
+                <div class="bonus-stats">
+                    <span class="bonus-amount">+{{this.amount}}</span>
+                    {{#if this.conditionText}}
+                    <span class="bonus-condition">{{this.conditionText}}</span>
+                    {{/if}}
+                </div>
+
+                <div class="stat-buttons">
+                    {{#each ../statData.slots}}
+                    <button type="button"
+                            class="stat-bonus-button {{#if this.canApplyBonus}}available{{else}}disabled{{/if}}"
+                            data-action="applyBonus"
+                            data-bonus-id="{{../bonusId}}"
+                            data-stat="{{this.key}}"
+                            {{#unless this.canApplyBonus}}disabled{{/unless}}>
+                        {{this.abbreviation}}: {{this.value}}
+                    </button>
+                    {{/each}}
+                </div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
     {{/if}}
 </div>
 </section>

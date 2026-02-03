@@ -491,6 +491,17 @@ Handlebars.registerHelper('or', function () {
 
 Handlebars.registerHelper('not', (a) => !a);
 
+// Stringify object to JSON for textarea display
+Handlebars.registerHelper('json', function(context) {
+  if (context === undefined || context === null) return '';
+  if (typeof context === 'string') return context;
+  try {
+    return JSON.stringify(context, null, 2);
+  } catch (e) {
+    console.warn('Failed to stringify JSON:', e);
+    return '';
+  }
+});
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */

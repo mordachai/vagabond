@@ -4,6 +4,12 @@
         <input type="text" class="search-input" placeholder="Search..." autocomplete="off">
         <button type="button" class="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
         {{#if (eq step 'perks')}}
+        {{#if hasAllowedPerksRestriction}}
+        <div class="perk-restriction-notice">
+            <i class="fas fa-info-circle"></i>
+            Perk selection limited by {{restrictionSource}}
+        </div>
+        {{/if}}
         <label class="show-all-checkbox">
             <input type="checkbox" data-action="toggleShowAllPerks" {{checked showAllPerks}}>
             {{localize 'VAGABOND.CharBuilder.ShowAll'}}

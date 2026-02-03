@@ -54,15 +54,30 @@
                     {{/each}}
                 {{/if}}
             {{else if (eq step 'spells')}}
+                {{#if requiredSpellCount}}
+                    <div class="required-spells-notice">
+                        <i class="fas fa-star"></i>
+                        {{requiredSpellCount}} spell(s) automatically added by your ancestry/class/perks
+                    </div>
+                {{/if}}
                 {{#if spellLimit}}
                     {{!-- Show spell slots (filled + empty) --}}
                     {{#each trayData.spells as |item|}}
-                        <div class="tray-item-compact spell-slot filled" data-uuid="{{item.uuid}}">
+                        <div class="tray-item-compact spell-slot filled {{#if item.isRequired}}required{{/if}}" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
-                            <span class="tray-name">{{item.name}}</span>
-                            <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
-                                <i class="fas fa-times"></i>
-                            </button>
+                            <span class="tray-name">
+                                {{item.name}}
+                                {{#if item.isRequired}}
+                                    <span class="required-badge" title="Required by ancestry/class/perk">Required</span>
+                                {{/if}}
+                            </span>
+                            {{#if item.isRequired}}
+                                <i class="fas fa-lock required-lock" title="Required spell"></i>
+                            {{else}}
+                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            {{/if}}
                         </div>
                     {{/each}}
                     {{#if trayData.emptySlots}}

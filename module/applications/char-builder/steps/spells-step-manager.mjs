@@ -40,11 +40,22 @@ export class SpellsStepManager extends BaseStepManager {
    * @protected
    */
   async _prepareStepSpecificContext(state) {
-    const availableSpells = await this._loadSpellOptions();
-    const selectedSpells = state.spells || [];
+    // Collect required spells from ancestry, class, and perks
+    const requiredSpellUuids = await this._collectRequiredSpells(state);
+
+    // Auto-add required spells to state if not already there
+    const currentSpells = state.spells || [];
+    const updatedSpells = [...new Set([...currentSpells, ...requiredSpellUuids])];
+
+    if (updatedSpells.length !== currentSpells.length) {
+      this.updateState('spells', updatedSpells);
+    }
+
+    const availableSpells = await this._loadSpellOptions(requiredSpellUuids);
+    const selectedSpells = updatedSpells;
     const previewUuid = state.previewUuid;
     const spellLimit = await this._getSpellLimit(state);
-    
+
     // Get preview item details
     let previewItem = null;
     if (previewUuid) {
@@ -73,7 +84,7 @@ export class SpellsStepManager extends BaseStepManager {
     }
 
     // Prepare tray data
-    const trayData = await this._prepareTrayData(selectedSpells);
+    const trayData = await this._prepareTrayData(selectedSpells, requiredSpellUuids);
 
     return {
       availableOptions: availableSpells,
@@ -87,6 +98,8 @@ export class SpellsStepManager extends BaseStepManager {
       showTray: true,
       trayData: trayData,
       useTripleColumn: true,
+      requiredSpellCount: requiredSpellUuids.length,
+      requiredSpells: requiredSpellUuids,
       instruction: (selectedSpells.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Spells') : null
     };
@@ -96,16 +109,16 @@ export class SpellsStepManager extends BaseStepManager {
    * Load available spell options
    * @private
    */
-  async _loadSpellOptions() {
+  async _loadSpellOptions(requiredSpellUuids = []) {
     await this.dataService.ensureDataLoaded(['spells']);
-    
+
     const spells = this.dataService.getFilteredItems('spells', {});
     const state = this.getCurrentState();
     const selectedSpells = state.spells || [];
-    
+
     // Sort spells alphabetically and mark selected ones
     const sortedSpells = spells.sort((a, b) => a.name.localeCompare(b.name));
-    
+
     return sortedSpells.map(spell => ({
       ...spell,
       uuid: spell.uuid,
@@ -113,6 +126,7 @@ export class SpellsStepManager extends BaseStepManager {
       img: spell.img,
       type: 'spell',
       selected: selectedSpells.includes(spell.uuid),
+      isRequired: requiredSpellUuids.includes(spell.uuid),
       damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[spell.damageType] || null,
       damageTypeLabel: spell.damageType !== '-' ? spell.damageType : null
     }));
@@ -147,7 +161,7 @@ export class SpellsStepManager extends BaseStepManager {
    * Prepare tray data for selected spells
    * @private
    */
-  async _prepareTrayData(selectedSpells) {
+  async _prepareTrayData(selectedSpells, requiredSpellUuids = []) {
     const trayItems = [];
 
     for (const uuid of selectedSpells) {
@@ -159,6 +173,7 @@ export class SpellsStepManager extends BaseStepManager {
             name: item.name,
             img: item.img,
             type: 'spell',
+            isRequired: requiredSpellUuids.includes(uuid),
             damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[item.system.damageType] || null,
             damageTypeLabel: item.system.damageType !== '-' ? item.system.damageType : null
           });
@@ -278,18 +293,25 @@ export class SpellsStepManager extends BaseStepManager {
       return;
     }
 
+    // Check if spell is required
+    const requiredSpells = await this._collectRequiredSpells(state);
+    if (requiredSpells.includes(uuid)) {
+      ui.notifications.warn('Cannot remove required spell');
+      return;
+    }
+
     try {
       const item = await fromUuid(uuid);
       const newSpells = currentSpells.filter(spellUuid => spellUuid !== uuid);
-      
+
       this.updateState('spells', newSpells);
-      
+
       // Clear preview if removing the previewed item
       if (state.previewUuid === uuid) {
         this.updateState('previewUuid', null);
       }
-      
-      
+
+
     } catch (error) {
       console.error('Failed to remove spell:', error);
       ui.notifications.error('Failed to remove spell');
@@ -308,9 +330,11 @@ export class SpellsStepManager extends BaseStepManager {
       return;
     }
 
-    this.updateState('spells', []);
+    // Keep required spells, remove all others
+    const requiredSpells = await this._collectRequiredSpells(state);
+    this.updateState('spells', requiredSpells);
     this.updateState('previewUuid', null);
-    
+
   }
 
   /**
@@ -327,25 +351,37 @@ export class SpellsStepManager extends BaseStepManager {
   async randomize() {
     const state = this.getCurrentState();
     const spellLimit = await this._getSpellLimit(state);
-    
+
     if (spellLimit === 0) {
       ui.notifications.warn('Your class does not grant spells at level 1');
       return;
     }
 
-    const options = await this._loadSpellOptions();
-    if (options.length === 0) {
-      ui.notifications.warn('No spells available for randomization');
+    // Get required spells
+    const requiredSpells = await this._collectRequiredSpells(state);
+    const availableSlots = spellLimit - requiredSpells.length;
+
+    if (availableSlots <= 0) {
+      ui.notifications.info('All spell slots are filled with required spells');
       return;
     }
 
-    // Clear current spells
-    const shuffled = options.sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, spellLimit);
-    const selectedUuids = selected.map(s => s.uuid);
+    const options = await this._loadSpellOptions();
+    // Filter out already required spells
+    const nonRequiredOptions = options.filter(opt => !requiredSpells.includes(opt.uuid));
+
+    if (nonRequiredOptions.length === 0) {
+      ui.notifications.warn('No additional spells available for randomization');
+      return;
+    }
+
+    // Randomly select spells
+    const shuffled = nonRequiredOptions.sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, availableSlots);
+    const selectedUuids = [...requiredSpells, ...selected.map(s => s.uuid)];
 
     this.updateState('spells', selectedUuids);
-    
+
     if (selectedUuids.length > 0) {
       this.updateState('previewUuid', selectedUuids[0]);
     }
@@ -364,8 +400,11 @@ export class SpellsStepManager extends BaseStepManager {
    * Reset spells step
    * @protected
    */
-  _onReset() {
-    this.updateState('spells', [], { skipValidation: true });
+  async _onReset() {
+    const state = this.getCurrentState();
+    // Keep required spells when resetting
+    const requiredSpells = await this._collectRequiredSpells(state);
+    this.updateState('spells', requiredSpells, { skipValidation: true });
   }
 
   /**
@@ -375,5 +414,58 @@ export class SpellsStepManager extends BaseStepManager {
   async _onActivate() {
     // Ensure spell data is loaded and ready
     await this.dataService.ensureDataLoaded(['spells']);
+  }
+
+  /**
+   * Collect required spells from ancestry traits, class level 1 features, and perks
+   * @private
+   */
+  async _collectRequiredSpells(state) {
+    const requiredSpells = new Set();
+
+    // From ancestry traits
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+        for (const trait of traits) {
+          (trait.requiredSpells || []).forEach(uuid => {
+            if (uuid) requiredSpells.add(uuid);
+          });
+        }
+      } catch (error) {
+        console.warn('Failed to load ancestry for required spells:', error);
+      }
+    }
+
+    // From class level 1 features
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const levelFeatures = classItem.system.levelFeatures || [];
+        const level1Features = levelFeatures.filter(f => f.level === 1);
+        for (const feature of level1Features) {
+          (feature.requiredSpells || []).forEach(uuid => {
+            if (uuid) requiredSpells.add(uuid);
+          });
+        }
+      } catch (error) {
+        console.warn('Failed to load class for required spells:', error);
+      }
+    }
+
+    // From perks (perks have requiredSpells at item level)
+    for (const perkUuid of [...(state.perks || []), ...(state.classPerks || [])]) {
+      try {
+        const perk = await fromUuid(perkUuid);
+        (perk.system.requiredSpells || []).forEach(uuid => {
+          if (uuid) requiredSpells.add(uuid);
+        });
+      } catch (error) {
+        console.warn('Failed to load perk for required spells:', error);
+      }
+    }
+
+    return Array.from(requiredSpells);
   }
 }

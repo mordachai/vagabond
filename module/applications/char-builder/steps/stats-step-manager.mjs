@@ -13,7 +13,9 @@ export class StatsStepManager extends BaseStepManager {
       'pickValue': this._onPickValue.bind(this),
       'assignStat': this._onAssignStat.bind(this),
       'resetStats': this._onResetStats.bind(this),
-      'randomize': this._onRandomize.bind(this)
+      'randomize': this._onRandomize.bind(this),
+      'applyBonus': this._onApplyBonus.bind(this),
+      'removeBonus': this._onRemoveBonus.bind(this)
     };
     
     // No external data required for stats step
@@ -45,6 +47,10 @@ export class StatsStepManager extends BaseStepManager {
     const assignedStats = state.assignedStats || {};
     const unassignedValues = state.unassignedValues || [];
     const selectedValue = state.selectedValue;
+
+    // Collect available bonuses from ancestry, class, and perks
+    const availableBonuses = await this._collectAvailableBonuses(state);
+    const appliedBonuses = state.appliedBonuses || {};
     
     // Prepare stat arrays for display
     const statArrayOptions = Object.entries(statArrays).map(([id, values]) => ({
@@ -67,15 +73,27 @@ export class StatsStepManager extends BaseStepManager {
       luck: 'Fortune and fate. Your Luck Pool for rerolls and avoiding disaster.'
     };
 
-    const statsDisplay = statOrder.map(stat => ({
-      key: stat,
-      label: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
-      name: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
-      abbreviation: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[stat]) || stat.substring(0, 3).toUpperCase(),
-      value: assignedStats[stat] || null,
-      hasValue: assignedStats[stat] !== null && assignedStats[stat] !== undefined,
-      hint: statHints[stat] || ''
-    }));
+    const statsDisplay = statOrder.map(stat => {
+      const baseValue = assignedStats[stat] || null;
+      // Calculate if this stat can accept bonuses based on conditions
+      const canApplyBonuses = availableBonuses
+        .filter(b => !appliedBonuses[b.bonusId]) // Not already applied
+        .reduce((canApply, bonus) => {
+          if (baseValue === null) return false;
+          return canApply || this._checkBonusCondition(bonus.condition, baseValue);
+        }, false);
+
+      return {
+        key: stat,
+        label: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
+        name: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
+        abbreviation: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[stat]) || stat.substring(0, 3).toUpperCase(),
+        value: baseValue,
+        hasValue: baseValue !== null && baseValue !== undefined,
+        hint: statHints[stat] || '',
+        canApplyBonus: canApplyBonuses
+      };
+    });
 
     // Check if step is complete
     const isComplete = !!selectedArrayId &&
@@ -91,6 +109,19 @@ export class StatsStepManager extends BaseStepManager {
 
     // Prepare derived stats for preview (if all stats are assigned)
     const derivedStats = await this._prepareDerivedStats(assignedStats, state);
+
+    // Prepare bonuses for display
+    const bonusesDisplay = availableBonuses.map(bonus => {
+      const application = appliedBonuses[bonus.bonusId];
+      const isApplied = !!application;
+
+      return {
+        ...bonus,
+        applied: isApplied,
+        appliedTarget: isApplied ? application.target : null,
+        conditionText: this._getConditionText(bonus.condition)
+      };
+    });
 
     return {
       statArrays: statArrayOptions,
@@ -108,7 +139,8 @@ export class StatsStepManager extends BaseStepManager {
       isComplete: isComplete,
       showRandomButton: true,
       instruction: (!selectedArrayId) ?
-        game.i18n.localize('VAGABOND.CharBuilder.Instructions.Stats') : null
+        game.i18n.localize('VAGABOND.CharBuilder.Instructions.Stats') : null,
+      availableBonuses: bonusesDisplay
     };
   }
 
@@ -242,6 +274,16 @@ export class StatsStepManager extends BaseStepManager {
    */
   async _createPreviewActor(assignedStats, state) {
     try {
+      // Apply bonuses to stats
+      const finalStats = { ...assignedStats };
+      const appliedBonuses = state.appliedBonuses || {};
+
+      for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+        if (finalStats[application.target] !== null && finalStats[application.target] !== undefined) {
+          finalStats[application.target] += application.amount;
+        }
+      }
+
       // Get trained skills from builder state
       const trainedSkills = state.skills || [];
 
@@ -288,18 +330,18 @@ export class StatsStepManager extends BaseStepManager {
         };
       }
 
-      // Build actor data with assigned stats
+      // Build actor data with final stats (including bonuses)
       const actorData = {
         name: "Preview Character",
         type: "character",
         system: {
           stats: {
-            might: { value: assignedStats.might || 0 },
-            dexterity: { value: assignedStats.dexterity || 0 },
-            awareness: { value: assignedStats.awareness || 0 },
-            reason: { value: assignedStats.reason || 0 },
-            presence: { value: assignedStats.presence || 0 },
-            luck: { value: assignedStats.luck || 0 }
+            might: { value: finalStats.might || 0 },
+            dexterity: { value: finalStats.dexterity || 0 },
+            awareness: { value: finalStats.awareness || 0 },
+            reason: { value: finalStats.reason || 0 },
+            presence: { value: finalStats.presence || 0 },
+            luck: { value: finalStats.luck || 0 }
           },
           skills: skills,
           weaponSkills: weaponSkills
@@ -608,6 +650,186 @@ export class StatsStepManager extends BaseStepManager {
         luck: null
       }, { skipValidation: true });
     }
-    
+
+    // Collect available bonuses and update state
+    const availableBonuses = await this._collectAvailableBonuses(state);
+    this.updateState('availableBonuses', availableBonuses, { skipValidation: true });
+  }
+
+  /**
+   * Collect available bonuses from ancestry traits and class level 1 features
+   * @private
+   */
+  async _collectAvailableBonuses(state) {
+    const bonuses = [];
+
+    // Collect from ancestry traits
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+
+        for (const trait of traits) {
+          const statBonusPoints = trait.statBonusPoints || 0;
+          // Each stat bonus point creates individual +1 bonuses
+          for (let i = 0; i < statBonusPoints; i++) {
+            bonuses.push({
+              bonusId: `${ancestry.uuid}-${trait.name}-${i}`,
+              sourceUuid: state.selectedAncestry,
+              sourceName: `${ancestry.name} - ${trait.name}`,
+              type: 'stat',
+              amount: 1,
+              condition: 'value <= 6', // Can only apply to stats 6 or less
+              maxValue: 7,
+              reason: `${trait.name}`
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load ancestry for bonuses:', error);
+      }
+    }
+
+    // Collect from class level 1 features (character creation is level 1)
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const levelFeatures = classItem.system.levelFeatures || [];
+        const level1Features = levelFeatures.filter(f => f.level === 1);
+
+        for (const feature of level1Features) {
+          const statBonusPoints = feature.statBonusPoints || 0;
+          // Each stat bonus point creates individual +1 bonuses
+          for (let i = 0; i < statBonusPoints; i++) {
+            bonuses.push({
+              bonusId: `${classItem.uuid}-${feature.name}-${i}`,
+              sourceUuid: state.selectedClass,
+              sourceName: `${classItem.name} - ${feature.name}`,
+              type: 'stat',
+              amount: 1,
+              condition: 'value <= 6', // Can only apply to stats 6 or less
+              maxValue: 7,
+              reason: `${feature.name}`
+                maxValue: bonus.maxValue,
+                reason: bonus.reason || feature.name,
+                targetType: bonus.targetType,
+                target: bonus.target
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load class for bonuses:', error);
+      }
+    }
+
+    // Collect from perks (perks have bonuses at item level)
+    for (const perkUuid of [...(state.perks || []), ...(state.classPerks || [])]) {
+      try {
+        const perk = await fromUuid(perkUuid);
+        const perkBonuses = perk.system.grantedBonuses || [];
+
+        for (const bonus of perkBonuses) {
+          if (bonus.type === 'stat') {
+            bonuses.push({
+              bonusId: bonus.id,
+              sourceUuid: perkUuid,
+              sourceName: perk.name,
+              type: bonus.type,
+              amount: bonus.amount,
+              condition: bonus.condition,
+              maxValue: bonus.maxValue,
+              reason: bonus.reason || perk.name,
+              targetType: bonus.targetType,
+              target: bonus.target
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load perk for bonuses:', error);
+      }
+    }
+
+    return bonuses;
+  }
+
+  /**
+   * Check if a bonus condition is met for a given stat value
+   * @private
+   */
+  _checkBonusCondition(condition, value) {
+    switch (condition) {
+      case 'always': return true;
+      case 'value <= 6': return value <= 6;
+      case 'value < 7': return value < 7;
+      case 'value >= 5': return value >= 5;
+      default: return false;
+    }
+  }
+
+  /**
+   * Get human-readable condition text
+   * @private
+   */
+  _getConditionText(condition) {
+    switch (condition) {
+      case 'always': return 'No restrictions';
+      case 'value <= 6': return 'Can only apply to stats ≤6';
+      case 'value < 7': return 'Can only apply to stats <7';
+      case 'value >= 5': return 'Can only apply to stats ≥5';
+      default: return '';
+    }
+  }
+
+  /**
+   * Handle applying a bonus to a stat
+   * @private
+   */
+  async _onApplyBonus(event, target) {
+    const bonusId = target.dataset.bonusId;
+    const stat = target.dataset.stat;
+    const state = this.getCurrentState();
+
+    // Find the bonus
+    const bonus = state.availableBonuses.find(b => b.bonusId === bonusId);
+    if (!bonus) {
+      console.warn('Bonus not found:', bonusId);
+      return;
+    }
+
+    // Validate condition
+    const currentStatValue = state.assignedStats?.[stat] || 0;
+    const canApply = this._checkBonusCondition(bonus.condition, currentStatValue);
+
+    if (!canApply) {
+      ui.notifications.warn(`Cannot apply ${bonus.reason} to ${stat.toUpperCase()}: condition not met`);
+      return;
+    }
+
+    // Validate max value
+    if (currentStatValue + bonus.amount > bonus.maxValue) {
+      ui.notifications.warn(`Cannot apply ${bonus.reason}: would exceed maximum of ${bonus.maxValue}`);
+      return;
+    }
+
+    // Apply bonus
+    const appliedBonuses = { ...(state.appliedBonuses || {}) };
+    appliedBonuses[bonusId] = { target: stat, amount: bonus.amount };
+
+    this.updateState('appliedBonuses', appliedBonuses);
+  }
+
+  /**
+   * Handle removing a bonus
+   * @private
+   */
+  async _onRemoveBonus(event, target) {
+    const bonusId = target.dataset.bonusId;
+    const state = this.getCurrentState();
+    const appliedBonuses = { ...state.appliedBonuses };
+
+    delete appliedBonuses[bonusId];
+
+    this.updateState('appliedBonuses', appliedBonuses);
   }
 }

@@ -52,11 +52,18 @@ export class CharacterBuilderStateManager {
       gear: [],
       gearCostSpent: 0, // Total cost of selected gear in silver
 
+      // Bonus point tracking
+      availableBonuses: [],     // Array of { bonusId, sourceUuid, sourceName, type, amount, condition, maxValue, reason, targetType, target }
+      appliedBonuses: {},       // { bonusId: { target: 'might', amount: 1 } }
+
+      // Required spell tracking
+      requiredSpells: [],       // Array of spell UUIDs that must be included
+
       // UI state
       currentStep: 'ancestry',
       completedSteps: [],
       previewUuid: null,
-      
+
       // Metadata
       lastClassForPerks: null,
       timestamp: Date.now()
@@ -219,7 +226,8 @@ export class CharacterBuilderStateManager {
             reason: null, presence: null, luck: null
           },
           'unassignedValues': [],
-          'selectedValue': null
+          'selectedValue': null,
+          'appliedBonuses': {}
         });
       },
       spells: () => {

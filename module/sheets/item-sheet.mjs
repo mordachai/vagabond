@@ -110,6 +110,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       updateChoiceCount: this._onUpdateCount,
       saveChoices: this._onSaveChoices,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from spell description
+      removeTraitSpell: this._onRemoveTraitSpell,
+      removeTraitPerk: this._onRemoveTraitPerk,
+      removeFeatureSpell: this._onRemoveFeatureSpell,
+      removeFeaturePerk: this._onRemoveFeaturePerk,
     },
     form: {
       submitOnChange: true,
@@ -281,6 +285,48 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             relativeTo: this.item,
           }
         );
+
+        // Enrich traits with resolved spell and perk names
+        context.enrichedTraits = [];
+        for (const trait of this.item.system.traits || []) {
+          const enrichedTrait = { ...trait };
+
+          // Resolve spell UUIDs to names
+          enrichedTrait.enrichedSpells = [];
+          for (const uuid of trait.requiredSpells || []) {
+            if (uuid) {
+              try {
+                const spell = await fromUuid(uuid);
+                enrichedTrait.enrichedSpells.push({
+                  uuid: uuid,
+                  name: spell?.name || uuid,
+                  img: spell?.img || 'icons/svg/item-bag.svg'
+                });
+              } catch (e) {
+                enrichedTrait.enrichedSpells.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
+              }
+            }
+          }
+
+          // Resolve perk UUIDs to names
+          enrichedTrait.enrichedPerks = [];
+          for (const uuid of trait.allowedPerks || []) {
+            if (uuid) {
+              try {
+                const perk = await fromUuid(uuid);
+                enrichedTrait.enrichedPerks.push({
+                  uuid: uuid,
+                  name: perk?.name || uuid,
+                  img: perk?.img || 'icons/svg/item-bag.svg'
+                });
+              } catch (e) {
+                enrichedTrait.enrichedPerks.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
+              }
+            }
+          }
+
+          context.enrichedTraits.push(enrichedTrait);
+        }
         break;
 
       case 'classDetails':
@@ -326,6 +372,40 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                 relativeTo: this.item,
               }
             );
+
+            // Resolve spell UUIDs to names
+            feature.enrichedSpells = [];
+            for (const uuid of feature.requiredSpells || []) {
+              if (uuid) {
+                try {
+                  const spell = await fromUuid(uuid);
+                  feature.enrichedSpells.push({
+                    uuid: uuid,
+                    name: spell?.name || uuid,
+                    img: spell?.img || 'icons/svg/item-bag.svg'
+                  });
+                } catch (e) {
+                  feature.enrichedSpells.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
+                }
+              }
+            }
+
+            // Resolve perk UUIDs to names
+            feature.enrichedPerks = [];
+            for (const uuid of feature.allowedPerks || []) {
+              if (uuid) {
+                try {
+                  const perk = await fromUuid(uuid);
+                  feature.enrichedPerks.push({
+                    uuid: uuid,
+                    name: perk?.name || uuid,
+                    img: perk?.img || 'icons/svg/item-bag.svg'
+                  });
+                } catch (e) {
+                  feature.enrichedPerks.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
+                }
+              }
+            }
           }
 
           // Get spells for this level (level - 1 because array is 0-indexed but levels start at 1)
@@ -2032,6 +2112,94 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
 
+    // 0. Handle dropping spells/perks onto trait/feature grant zones
+    const dropZone = event.target.closest('.spell-drop-zone, .perk-drop-zone');
+    if (dropZone) {
+      const droppedItem = await Item.implementation.fromDropData(data);
+      if (!droppedItem) return false;
+
+      const isSpellZone = dropZone.classList.contains('spell-drop-zone');
+      const isPerkZone = dropZone.classList.contains('perk-drop-zone');
+
+      // Validate item type
+      if (isSpellZone && droppedItem.type !== 'spell') {
+        ui.notifications.warn('Only spells can be dropped here');
+        return false;
+      }
+      if (isPerkZone && droppedItem.type !== 'perk') {
+        ui.notifications.warn('Only perks can be dropped here');
+        return false;
+      }
+
+      // Handle ancestry trait drop zones
+      if (this.item.type === 'ancestry') {
+        const traitIndex = parseInt(dropZone.dataset.traitIndex);
+        if (isNaN(traitIndex)) return false;
+
+        const traits = foundry.utils.deepClone(this.item.system.traits);
+        if (!traits[traitIndex]) return false;
+
+        if (isSpellZone) {
+          // Add spell UUID to requiredSpells array
+          const spells = traits[traitIndex].requiredSpells || [];
+          if (!spells.includes(droppedItem.uuid)) {
+            spells.push(droppedItem.uuid);
+            traits[traitIndex].requiredSpells = spells;
+            await this.item.update({ 'system.traits': traits });
+            ui.notifications.info(`Added ${droppedItem.name} to trait`);
+          } else {
+            ui.notifications.warn('Spell already added to this trait');
+          }
+        } else if (isPerkZone) {
+          // Add perk UUID to allowedPerks array
+          const perks = traits[traitIndex].allowedPerks || [];
+          if (!perks.includes(droppedItem.uuid)) {
+            perks.push(droppedItem.uuid);
+            traits[traitIndex].allowedPerks = perks;
+            await this.item.update({ 'system.traits': traits });
+            ui.notifications.info(`Added ${droppedItem.name} to trait`);
+          } else {
+            ui.notifications.warn('Perk already added to this trait');
+          }
+        }
+        return true;
+      }
+
+      // Handle class level feature drop zones
+      if (this.item.type === 'class') {
+        const featureIndex = parseInt(dropZone.dataset.featureIndex);
+        if (isNaN(featureIndex)) return false;
+
+        const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
+        if (!levelFeatures[featureIndex]) return false;
+
+        if (isSpellZone) {
+          // Add spell UUID to requiredSpells array
+          const spells = levelFeatures[featureIndex].requiredSpells || [];
+          if (!spells.includes(droppedItem.uuid)) {
+            spells.push(droppedItem.uuid);
+            levelFeatures[featureIndex].requiredSpells = spells;
+            await this.item.update({ 'system.levelFeatures': levelFeatures });
+            ui.notifications.info(`Added ${droppedItem.name} to feature`);
+          } else {
+            ui.notifications.warn('Spell already added to this feature');
+          }
+        } else if (isPerkZone) {
+          // Add perk UUID to allowedPerks array
+          const perks = levelFeatures[featureIndex].allowedPerks || [];
+          if (!perks.includes(droppedItem.uuid)) {
+            perks.push(droppedItem.uuid);
+            levelFeatures[featureIndex].allowedPerks = perks;
+            await this.item.update({ 'system.levelFeatures': levelFeatures });
+            ui.notifications.info(`Added ${droppedItem.name} to feature`);
+          } else {
+            ui.notifications.warn('Perk already added to this feature');
+          }
+        }
+        return true;
+      }
+    }
+
     // 1. Handle dropping items onto starter packs
     if (this.item.type === 'starterPack') {
       const droppedItem = await Item.implementation.fromDropData(data);
@@ -2273,5 +2441,205 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       diceType: diceType,
       size: 'S', // Small size
     });
+  }
+
+  /**
+   * Handle removing a spell from an ancestry trait
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onRemoveTraitSpell(event, target) {
+    console.log('=== _onRemoveTraitSpell called ===');
+    console.log('Event:', event);
+    console.log('Target:', target);
+    console.log('Target dataset:', target.dataset);
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Get trait index from parent <li> element instead of button
+    const traitItem = target.closest('[data-trait-index]');
+    const traitIndex = traitItem ? parseInt(traitItem.dataset.traitIndex) : NaN;
+    const spellUuid = target.dataset.spellUuid;
+
+    console.log('Trait Item:', traitItem);
+    console.log('Trait Index:', traitIndex);
+    console.log('Spell UUID:', spellUuid);
+
+    if (isNaN(traitIndex) || !spellUuid) {
+      console.error('Invalid traitIndex or spellUuid', { traitIndex, spellUuid });
+      return;
+    }
+
+    const traits = foundry.utils.deepClone(this.item.system.traits);
+    console.log('Current traits:', traits);
+
+    if (!traits[traitIndex]) {
+      console.error('Trait not found at index', traitIndex);
+      return;
+    }
+
+    console.log('Current requiredSpells:', traits[traitIndex].requiredSpells);
+
+    // Remove by UUID instead of index
+    const filteredSpells = (traits[traitIndex].requiredSpells || []).filter(uuid => uuid !== spellUuid);
+    console.log('Filtered spells:', filteredSpells);
+
+    traits[traitIndex].requiredSpells = filteredSpells;
+
+    console.log('Updating item with traits:', traits);
+    await this.item.update({ 'system.traits': traits });
+    console.log('Update complete');
+  }
+
+  /**
+   * Handle removing a perk from an ancestry trait
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onRemoveTraitPerk(event, target) {
+    console.log('=== _onRemoveTraitPerk called ===');
+    console.log('Event:', event);
+    console.log('Target:', target);
+    console.log('Target dataset:', target.dataset);
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Get trait index from parent <li> element instead of button
+    const traitItem = target.closest('[data-trait-index]');
+    const traitIndex = traitItem ? parseInt(traitItem.dataset.traitIndex) : NaN;
+    const perkUuid = target.dataset.perkUuid;
+
+    console.log('Trait Item:', traitItem);
+    console.log('Trait Index:', traitIndex);
+    console.log('Perk UUID:', perkUuid);
+
+    if (isNaN(traitIndex) || !perkUuid) {
+      console.error('Invalid traitIndex or perkUuid', { traitIndex, perkUuid });
+      return;
+    }
+
+    const traits = foundry.utils.deepClone(this.item.system.traits);
+    console.log('Current traits:', traits);
+
+    if (!traits[traitIndex]) {
+      console.error('Trait not found at index', traitIndex);
+      return;
+    }
+
+    console.log('Current allowedPerks:', traits[traitIndex].allowedPerks);
+
+    // Remove by UUID instead of index
+    const filteredPerks = (traits[traitIndex].allowedPerks || []).filter(uuid => uuid !== perkUuid);
+    console.log('Filtered perks:', filteredPerks);
+
+    traits[traitIndex].allowedPerks = filteredPerks;
+
+    console.log('Updating item with traits:', traits);
+    await this.item.update({ 'system.traits': traits });
+    console.log('Update complete');
+  }
+
+  /**
+   * Handle removing a spell from a class level feature
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onRemoveFeatureSpell(event, target) {
+    console.log('=== _onRemoveFeatureSpell called ===');
+    console.log('Event:', event);
+    console.log('Target:', target);
+    console.log('Target dataset:', target.dataset);
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Get feature index from parent <li> element instead of button
+    const featureItem = target.closest('[data-feature-index]');
+    const featureIndex = featureItem ? parseInt(featureItem.dataset.featureIndex) : NaN;
+    const spellUuid = target.dataset.spellUuid;
+
+    console.log('Feature Item:', featureItem);
+    console.log('Feature Index:', featureIndex);
+    console.log('Spell UUID:', spellUuid);
+
+    if (isNaN(featureIndex) || !spellUuid) {
+      console.error('Invalid featureIndex or spellUuid', { featureIndex, spellUuid });
+      return;
+    }
+
+    const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
+    console.log('Current levelFeatures:', levelFeatures);
+
+    if (!levelFeatures[featureIndex]) {
+      console.error('Feature not found at index', featureIndex);
+      return;
+    }
+
+    console.log('Current requiredSpells:', levelFeatures[featureIndex].requiredSpells);
+
+    // Remove by UUID instead of index
+    const filteredSpells = (levelFeatures[featureIndex].requiredSpells || []).filter(uuid => uuid !== spellUuid);
+    console.log('Filtered spells:', filteredSpells);
+
+    levelFeatures[featureIndex].requiredSpells = filteredSpells;
+
+    console.log('Updating item with levelFeatures:', levelFeatures);
+    await this.item.update({ 'system.levelFeatures': levelFeatures });
+    console.log('Update complete');
+  }
+
+  /**
+   * Handle removing a perk from a class level feature
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The clicked element
+   * @private
+   */
+  static async _onRemoveFeaturePerk(event, target) {
+    console.log('=== _onRemoveFeaturePerk called ===');
+    console.log('Event:', event);
+    console.log('Target:', target);
+    console.log('Target dataset:', target.dataset);
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Get feature index from parent <li> element instead of button
+    const featureItem = target.closest('[data-feature-index]');
+    const featureIndex = featureItem ? parseInt(featureItem.dataset.featureIndex) : NaN;
+    const perkUuid = target.dataset.perkUuid;
+
+    console.log('Feature Item:', featureItem);
+    console.log('Feature Index:', featureIndex);
+    console.log('Perk UUID:', perkUuid);
+
+    if (isNaN(featureIndex) || !perkUuid) {
+      console.error('Invalid featureIndex or perkUuid', { featureIndex, perkUuid });
+      return;
+    }
+
+    const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
+    console.log('Current levelFeatures:', levelFeatures);
+
+    if (!levelFeatures[featureIndex]) {
+      console.error('Feature not found at index', featureIndex);
+      return;
+    }
+
+    console.log('Current allowedPerks:', levelFeatures[featureIndex].allowedPerks);
+
+    // Remove by UUID instead of index
+    const filteredPerks = (levelFeatures[featureIndex].allowedPerks || []).filter(uuid => uuid !== perkUuid);
+    console.log('Filtered perks:', filteredPerks);
+
+    levelFeatures[featureIndex].allowedPerks = filteredPerks;
+
+    console.log('Updating item with levelFeatures:', levelFeatures);
+    await this.item.update({ 'system.levelFeatures': levelFeatures });
+    console.log('Update complete');
   }
 }

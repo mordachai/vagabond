@@ -1,10 +1,5 @@
-2026/02/03-11:23:04.050 6118 Log #692: 145 ops saved to Table #713 OK
-2026/02/03-11:23:04.051 6118 Archiving ..\Data\systems\vagabond\packs\characters\bestiary/000692.log: OK
-2026/02/03-11:23:04.051 6118 Log #712: 0 ops saved to Table #714 OK
-2026/02/03-11:23:04.051 6118 Archiving ..\Data\systems\vagabond\packs\characters\bestiary/000712.log: OK
-2026/02/03-11:23:04.052 6118 Table #693: 305 entries OK
-2026/02/03-11:23:04.053 6118 Table #697: 383 entries OK
-2026/02/03-11:23:04.054 6118 Table #713: 145 entries OK
-2026/02/03-11:23:04.056 6118 Archiving ..\Data\systems\vagabond\packs\characters\bestiary/MANIFEST-000690: OK
-2026/02/03-11:23:04.056 6118 Archiving ..\Data\systems\vagabond\packs\characters\bestiary/MANIFEST-000711: OK
-2026/02/03-11:23:04.058 6118 **** Repaired leveldb ..\Data\systems\vagabond\packs\characters\bestiary; recovered 3 files; 1093178 bytes. Some data may have been lost. ****
+2026/02/03-14:05:35.686 acb8 Recovering log #716
+2026/02/03-14:05:35.686 acb8 Level-0 table #719: started
+2026/02/03-14:05:35.693 acb8 Level-0 table #719: 360 bytes OK
+2026/02/03-14:05:35.696 acb8 Delete type=0 #716
+2026/02/03-14:05:35.697 acb8 Delete type=3 #715
