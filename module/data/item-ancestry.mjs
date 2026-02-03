@@ -32,6 +32,9 @@ export default class VagabondAncestry extends VagabondItemBase {
         // Stat bonus points - each point gives +1 to any stat <7 (player's choice)
         statBonusPoints: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 
+        // Extra training - grants additional skill training choices
+        extraTraining: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
         // Required spells - spells that this trait grants (array of UUIDs)
         requiredSpells: new fields.ArrayField(
           new fields.StringField({ initial: '', blank: true }),

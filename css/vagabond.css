@@ -2783,14 +2783,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: 1px dashed black;
 }
 .vagabond-builder .builder-body .decision-zone .skill-decision {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: 10px;
 }
 .vagabond-builder .builder-body .decision-zone .pool-options {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: 6px;
 }
 .vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label {
   word-break: keep-all;

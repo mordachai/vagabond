@@ -99,6 +99,13 @@
                     <small class='hint'>Each point gives +1 to any stat &lt;7 (player chooses)</small>
                   </div>
 
+                  {{! Extra Training }}
+                  <div class='form-group mt-10'>
+                    <label>Extra Training:</label>
+                    <input type='number' name='system.traits.{{index}}.extraTraining' value='{{trait.extraTraining}}' min='0' max='10' style='width: 60px;' />
+                    <small class='hint'>Additional skill training choices (any skill)</small>
+                  </div>
+
                   {{! Required Spells }}
                   <div class='form-group mt-10'>
                     <label>Required Spells:</label>

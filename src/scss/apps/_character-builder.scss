@@ -385,15 +385,16 @@
       border: 1px dashed black;
 
       .skill-decision {
-        display: grid;
-        grid-template-columns: 1fr 4fr;
+        display: flex;
+        flex-direction: column;
         align-items: flex-start;
         gap: 10px;
       }
 
       .pool-options {
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(7, 1fr);
+        column-gap: 6px;
 
         .checkbox-label {
             word-break: keep-all;

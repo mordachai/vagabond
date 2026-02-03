@@ -2,19 +2,28 @@
 {{!-- <header class="zone-header">{{localize "VAGABOND.CharBuilder.ProposedChoices"}}</header> --}}
 <div class="decision-tray">
     {{#if (eq step 'class')}}
-        <div class="skill-decision flexrow">
-            <div class="guaranteed-skills flexcol">
-                <strong>Obligatory Training:</strong>
-                {{#each classChoices.guaranteed}}
-                    <span class="skill-tag locked">
-                        <i class="fas fa-lock"></i>
-                        {{capitalize (localize (concat "VAGABOND.Skills." (capitalize this)))}}
-                    </span>
-                {{/each}}
+        <div class="skill-decision skill-rows">
+            <div class="guaranteed-skills skill-row">
+                <div class="skill-tags">
+                    <strong>Obligatory Training:</strong>
+                    {{#each classChoices.guaranteed}}
+                        <span class="skill-tag locked">
+                            <i class="fas fa-lock"></i>
+                            {{capitalize (localize (concat "VAGABOND.Skills." (capitalize this)))}}
+                        </span>
+                    {{/each}}
+                </div>
             </div>
             {{#each classChoices.choices}}
-                <div class="pool-box">
-                    <strong>Choose {{this.count}} skill(s) {{#if this.selected}}({{this.selected}}/{{this.count}} selected){{/if}}:</strong>
+                <div class="pool-box skill-row {{#if this.isExtraTraining}}extra-training{{/if}}">
+                    <strong>{{#if this.isExtraTraining}}Extra Trained Skills: {{else}}Choose {{this.count}} skill(s){{/if}} {{#if this.selected}}({{this.selected}}/{{this.count}} selected){{/if}}:</strong>
+                    {{#if this.isExtraTraining}}
+                        <span class="extra-training-sources">
+                            {{#each this.extraTrainingSources}}
+                                <strong>+{{this.amount}} from {{this.name}} ({{this.origin}} {{this.type}})</strong>
+                            {{/each}}
+                        </span>
+                    {{/if}}
                     <div class="pool-options">
                         {{#each this.skills}}
                             <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isGuaranteed}}Granted by class{{else if this.isDisabled}}Selected in another group{{/if}}">

@@ -41,7 +41,10 @@ export class ClassStepManager extends BaseStepManager {
   async _prepareStepSpecificContext(state) {
     // Auto-populate perks from class features when entering perks step later
     await this._updateClassPerksIfNeeded(state);
-    
+
+    // Collect extra training points from ancestry and class
+    const extraTraining = await this._collectExtraTraining(state);
+
     const availableClasses = await this._loadClassOptions();
     const selectedClass = state.selectedClass;
     const previewUuid = state.previewUuid;
@@ -137,6 +140,74 @@ export class ClassStepManager extends BaseStepManager {
   }
 
   /**
+   * Collect extra training points from ancestry and class features
+   * @private
+   */
+  async _collectExtraTraining(state) {
+    const sources = [];
+    let total = 0;
+
+    // From ancestry traits
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        if (ancestry?.system?.traits) {
+          for (const trait of ancestry.system.traits) {
+            const amount = trait.extraTraining || 0;
+            if (amount > 0) {
+              sources.push({
+                name: trait.name,
+                amount: amount,
+                origin: ancestry.name,
+                type: 'Ancestry'
+              });
+              total += amount;
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load ancestry for extra training:', error);
+      }
+    }
+
+    // From class features (level 1 only for character creation)
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        if (classItem?.system?.levelFeatures) {
+          const level1Features = classItem.system.levelFeatures.filter(f => f.level === 1);
+          for (const feature of level1Features) {
+            const amount = feature.extraTraining || 0;
+            if (amount > 0) {
+              sources.push({
+                name: feature.name,
+                amount: amount,
+                origin: classItem.name,
+                type: 'Class'
+              });
+              total += amount;
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load class for extra training:', error);
+      }
+    }
+
+    return { total, sources };
+  }
+
+  /**
+   * Get all available skills including regular skills and weapon skills
+   * @private
+   */
+  _getAllSkillsWithWeaponSkills() {
+    const regularSkills = Object.keys(CONFIG.VAGABOND.skills);
+    const weaponSkills = ['melee', 'ranged']; // Add weapon skills at the end
+    return [...regularSkills, ...weaponSkills];
+  }
+
+  /**
    * Prepare class preview data including skills and features
    * @private
    */
@@ -145,9 +216,13 @@ export class ClassStepManager extends BaseStepManager {
     const currentSkills = state.skills || [];
     const skillSelections = state.skillSelections || {};
 
+    // Get extra training points and sources
+    const extraTrainingData = await this._collectExtraTraining(state);
+    const extraTraining = extraTrainingData.total;
+
     // Prepare skill choices data with detailed skill state
     const skillChoices = skillGrant.choices.map((choice, groupIndex) => {
-      const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND.skills);
+      const pool = choice.pool.length ? choice.pool : this._getAllSkillsWithWeaponSkills();
       const skillsInThisGroup = skillSelections[groupIndex] || [];
 
       // Prepare each skill in the pool with its state
@@ -160,9 +235,19 @@ export class ClassStepManager extends BaseStepManager {
         const isDisabled = isGuaranteed || isSelectedInOtherGroup;
         const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
 
+        // Get label - check if it's a weapon skill or regular skill
+        let label;
+        if (['melee', 'ranged', 'brawl', 'finesse'].includes(skillKey)) {
+          // Weapon skill - use weaponSkills localization
+          label = game.i18n.localize(CONFIG.VAGABOND.weaponSkills[skillKey]);
+        } else {
+          // Regular skill
+          label = game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`);
+        }
+
         return {
           key: skillKey,
-          label: game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`),
+          label: label,
           isChecked: isChecked,
           isDisabled: isDisabled,
           isGuaranteed: isGuaranteed,
@@ -178,6 +263,51 @@ export class ClassStepManager extends BaseStepManager {
         groupIndex: groupIndex
       };
     });
+
+    // Add extra training choice group if available
+    if (extraTraining > 0) {
+      const extraTrainingGroupIndex = skillChoices.length; // Next available index
+      const allSkills = this._getAllSkillsWithWeaponSkills();
+      const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
+
+      const extraTrainingSkillsData = allSkills.map(skillKey => {
+        const isGuaranteed = skillGrant.guaranteed.includes(skillKey);
+        const isSelectedInThisGroup = extraTrainingSelections.includes(skillKey);
+        const isSelectedInOtherGroup = !isSelectedInThisGroup && currentSkills.includes(skillKey) && !isGuaranteed;
+
+        const isDisabled = isGuaranteed || isSelectedInOtherGroup;
+        const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
+
+        // Get label - check if it's a weapon skill or regular skill
+        let label;
+        if (['melee', 'ranged', 'brawl', 'finesse'].includes(skillKey)) {
+          // Weapon skill - use weaponSkills localization
+          label = game.i18n.localize(CONFIG.VAGABOND.weaponSkills[skillKey]);
+        } else {
+          // Regular skill
+          label = game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`);
+        }
+
+        return {
+          key: skillKey,
+          label: label,
+          isChecked: isChecked,
+          isDisabled: isDisabled,
+          isGuaranteed: isGuaranteed,
+          groupIndex: extraTrainingGroupIndex
+        };
+      });
+
+      skillChoices.push({
+        count: extraTraining,
+        pool: allSkills,
+        skills: extraTrainingSkillsData,
+        selected: extraTrainingSelections.length,
+        groupIndex: extraTrainingGroupIndex,
+        isExtraTraining: true, // Flag to identify this special group
+        extraTrainingSources: extraTrainingData.sources // Include source information
+      });
+    }
 
     // Group level features by level and enrich descriptions
     const levelFeatures = classItem.system.levelFeatures || [];
@@ -445,14 +575,25 @@ export class ClassStepManager extends BaseStepManager {
         }
 
         // Check if we can add more skills to this group
-        const choice = skillGrant.choices[groupIndex];
-        if (!choice) {
-          console.error(`No choice definition for group ${groupIndex}`);
-          return;
+        let maxCount;
+
+        // Check if this is an extra training group (beyond normal class choices)
+        if (groupIndex >= skillGrant.choices.length) {
+          // This is the extra training group - get count from extra training
+          const extraTrainingData = await this._collectExtraTraining(state);
+          maxCount = extraTrainingData.total;
+        } else {
+          // Normal class choice group
+          const choice = skillGrant.choices[groupIndex];
+          if (!choice) {
+            console.error(`No choice definition for group ${groupIndex}`);
+            return;
+          }
+          maxCount = choice.count;
         }
 
-        if (skillsInThisGroup.length >= choice.count) {
-          ui.notifications.warn(`You can only select ${choice.count} skill(s) from this group`);
+        if (skillsInThisGroup.length >= maxCount) {
+          ui.notifications.warn(`You can only select ${maxCount} skill(s) from this group`);
           return;
         }
 
