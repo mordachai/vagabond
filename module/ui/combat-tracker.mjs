@@ -43,6 +43,8 @@ export class VagabondCombatTracker {
           value: actor.system.health?.value || 0,
           max: actor.system.health?.max || 0
         };
+        // Calculate HP percentage for health bar
+        turn.hpPercent = turn.hp.max > 0 ? Math.round((turn.hp.value / turn.hp.max) * 100) : 0;
         turn.fatigue = actor.system.fatigue || 0;
         if (actor.system.mana) {
           turn.mana = { current: actor.system.mana.current || 0 };
