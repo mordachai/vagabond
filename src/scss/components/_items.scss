@@ -687,3 +687,72 @@
     margin: 0;
   }
 }
+
+// Grant Tag (for ancestry/class config)
+.grant-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid $c-tan;
+  border-radius: 12px;
+  padding: 1px 6px 1px 1px;
+  margin: 2px;
+  font-size: 12px;
+  height: 24px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  
+  .grant-tag-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: none;
+    margin-right: 6px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .grant-tag-label {
+    margin-right: 4px;
+    color: $c-dark;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+
+  .grant-tag-remove {
+    cursor: pointer;
+    color: $c-muted;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-left: 2px;
+    
+    &:hover {
+      background: $c-red;
+      color: $c-white;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.grants-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+  padding: 4px;
+  margin: 5px 0;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 4px;
+  border: 1px inset rgba(0, 0, 0, 0.1);
+  min-height: 32px;
+}

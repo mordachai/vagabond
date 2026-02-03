@@ -210,36 +210,65 @@
                           {{! Required Spells }}
                           <div class='form-group mt-10'>
                             <label>Required Spells:</label>
-                            <div class='spell-drop-zone' data-feature-index='{{feature.index}}'>
+                            <div class='grants-list-container'>
                               {{#if feature.enrichedSpells.length}}
-                                {{#each feature.enrichedSpells as |spell spellIndex|}}
-                                  <div class='spell-tag' data-uuid='{{spell.uuid}}'>
-                                    <img src='{{spell.img}}' alt='{{spell.name}}' />
-                                    <span>{{spell.name}}</span>
-                                    <button type='button' data-action='removeFeatureSpell' data-spell-uuid='{{spell.uuid}}'><i class='fas fa-times'></i></button>
-                                  </div>
-                                {{/each}}
-                              {{else}}
-                                <p class='placeholder-text'>Drag spells here</p>
+                                <ul class='grants-list'>
+                                  {{#each feature.enrichedSpells as |spell spellIndex|}}
+                                    <li class='grant-tag'>
+                                      <img src='{{spell.img}}' alt='{{spell.name}}' class='grant-tag-icon' />
+                                      <span class='grant-tag-label'>{{spell.name}}</span>
+                                      <a class='grant-tag-remove' data-action='removeFeatureSpell' data-feature-index='{{../feature.index}}' data-spell-index='{{spellIndex}}'>
+                                        <i class='fas fa-times'></i>
+                                      </a>
+                                      {{! Hidden input for persistence }}
+                                      <input type='hidden' name='system.levelFeatures.{{../feature.index}}.requiredSpells.{{spellIndex}}' value='{{spell.uuid}}' />
+                                    </li>
+                                  {{/each}}
+                                </ul>
                               {{/if}}
+                              <div class='grants-add-controls'>
+                                <select class='grants-select' data-feature-index='{{feature.index}}' data-grant-type='spell'>
+                                  <option value=''>-- Select Spell --</option>
+                                  {{!-- Options will be populated via JS --}}
+                                </select>
+                                <button type='button' class='btn-sm' data-action='addFeatureSpell' data-feature-index='{{feature.index}}'>
+                                  <i class='fas fa-plus'></i> Add Spell
+                                </button>
+                              </div>
                             </div>
                           </div>
 
                           {{! Allowed Perks }}
                           <div class='form-group mt-10'>
-                            <label>Allowed Perks (filters perk list):</label>
-                            <div class='perk-drop-zone' data-feature-index='{{feature.index}}'>
+                            <label>Allowed Perks:</label>
+                            <small class='hint'>Empty list = Any perk allowed</small>
+                            <div class='grants-list-container'>
                               {{#if feature.enrichedPerks.length}}
-                                {{#each feature.enrichedPerks as |perk perkIndex|}}
-                                  <div class='perk-tag' data-uuid='{{perk.uuid}}'>
-                                    <img src='{{perk.img}}' alt='{{perk.name}}' />
-                                    <span>{{perk.name}}</span>
-                                    <button type='button' data-action='removeFeaturePerk' data-perk-uuid='{{perk.uuid}}'><i class='fas fa-times'></i></button>
-                                  </div>
-                                {{/each}}
+                                <ul class='grants-list'>
+                                  {{#each feature.enrichedPerks as |perk perkIndex|}}
+                                    <li class='grant-tag'>
+                                      <img src='{{perk.img}}' alt='{{perk.name}}' class='grant-tag-icon' />
+                                      <span class='grant-tag-label'>{{perk.name}}</span>
+                                      <a class='grant-tag-remove' data-action='removeFeaturePerk' data-feature-index='{{../feature.index}}' data-perk-index='{{perkIndex}}'>
+                                        <i class='fas fa-times'></i>
+                                      </a>
+                                      {{! Hidden input for persistence }}
+                                      <input type='hidden' name='system.levelFeatures.{{../feature.index}}.allowedPerks.{{perkIndex}}' value='{{perk.uuid}}' />
+                                    </li>
+                                  {{/each}}
+                                </ul>
                               {{else}}
-                                <p class='placeholder-text'>Drag perks here (leave empty for no restrictions)</p>
+                                <p class='text-info'><small><i class='fas fa-info-circle'></i> Any perk can be selected</small></p>
                               {{/if}}
+                              <div class='grants-add-controls'>
+                                <select class='grants-select' data-feature-index='{{feature.index}}' data-grant-type='perk'>
+                                  <option value=''>-- Select Perk --</option>
+                                  {{!-- Options will be populated via JS --}}
+                                </select>
+                                <button type='button' class='btn-sm' data-action='addFeaturePerk' data-feature-index='{{feature.index}}'>
+                                  <i class='fas fa-plus'></i> Add Perk
+                                </button>
+                              </div>
                             </div>
                           </div>
 

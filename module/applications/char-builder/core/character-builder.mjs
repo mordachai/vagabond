@@ -341,7 +341,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       removeStartingPack: VagabondCharBuilder.prototype._delegateToStepManager,
       finish: VagabondCharBuilder.prototype._onFinish,
       dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder,
-      toggleShowAllPerks: VagabondCharBuilder.prototype._delegateToStepManager
+      toggleShowAllPerks: VagabondCharBuilder.prototype._delegateToStepManager,
+      applyStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
+      removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
+      unassignStat: VagabondCharBuilder.prototype._delegateToStepManager
     }
   };
 
@@ -381,6 +384,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       });
     }
 
+    // Note: Bonus stat buttons use data-action="applyStatBonus" for click handling
     // Note: Directory items use data-action="selectOption" for click handling
     // This is handled by the action delegation system in DEFAULT_OPTIONS.actions
 
@@ -556,11 +560,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   /** @override */
   async _prepareContext(options) {
+    console.log('[CharBuilder] _prepareContext called');
     // Ensure configuration and step managers are initialized
     await this._ensureInitialized();
 
     // Use UI components to prepare context with step manager integration
     const state = this.stateManager.getCurrentState();
+    console.log('[CharBuilder] Current state appliedBonuses:', state.appliedBonuses);
     const currentStepManager = await this.getCurrentStepManager();
 
     if (!currentStepManager) {
@@ -579,6 +585,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         openCategories: this.openCategories
       };
       const context = await this.uiComponents.prepareContext(state, currentStepManager, contextOptions);
+
+      // Debug: Check if bonusStats is in the context
+      console.log('[CharBuilder] _prepareContext - bonusStats in context:', {
+        exists: !!context.bonusStats,
+        step: context.step,
+        bonusStats: context.bonusStats
+      });
+
       return context;
     } catch (error) {
       console.error('CharBuilder: Error in uiComponents.prepareContext:', error);
@@ -602,8 +616,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     try {
+      console.log(`[CharBuilder] Executing action: ${action}`);
       await currentStepManager.handleAction(action, event, target);
+      console.log(`[CharBuilder] Action ${action} completed, calling render...`);
       this.render();
+      console.log(`[CharBuilder] Render called after ${action}`);
     } catch (error) {
       console.error(`Error handling action '${action}' in step '${this.currentStep}':`, error);
       ui.notifications.error(`Failed to handle ${action} action`);

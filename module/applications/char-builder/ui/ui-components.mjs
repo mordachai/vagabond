@@ -29,6 +29,7 @@ export class CharacterBuilderUIComponents {
         'selectedAncestry',
         'selectedClass',
         'assignedStats',
+        'appliedBonuses',  // CRITICAL: Track bonus applications for stat updates
         'skills',
         'perks',
         'classPerks',

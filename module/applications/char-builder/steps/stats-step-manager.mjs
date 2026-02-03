@@ -12,10 +12,13 @@ export class StatsStepManager extends BaseStepManager {
       'selectOption': this._onSelectOption.bind(this),
       'pickValue': this._onPickValue.bind(this),
       'assignStat': this._onAssignStat.bind(this),
+      'unassignStat': this._onUnassignStat.bind(this), // Remove single stat value
       'resetStats': this._onResetStats.bind(this),
       'randomize': this._onRandomize.bind(this),
       'applyBonus': this._onApplyBonus.bind(this),
-      'removeBonus': this._onRemoveBonus.bind(this)
+      'removeBonus': this._onRemoveBonus.bind(this),
+      'applyStatBonus': this._onApplyStatBonus.bind(this), // Apply bonus via + button
+      'removeStatBonus': this._onRemoveStatBonus.bind(this) // Remove bonus via tag click
     };
     
     // No external data required for stats step
@@ -75,6 +78,14 @@ export class StatsStepManager extends BaseStepManager {
 
     const statsDisplay = statOrder.map(stat => {
       const baseValue = assignedStats[stat] || null;
+
+      // Calculate bonuses applied to this stat
+      const bonusesForThisStat = Object.entries(appliedBonuses)
+        .filter(([bonusId, application]) => application.target === stat)
+        .reduce((sum, [bonusId, application]) => sum + application.amount, 0);
+
+      const finalValue = baseValue !== null ? baseValue + bonusesForThisStat : null;
+
       // Calculate if this stat can accept bonuses based on conditions
       const canApplyBonuses = availableBonuses
         .filter(b => !appliedBonuses[b.bonusId]) // Not already applied
@@ -83,16 +94,22 @@ export class StatsStepManager extends BaseStepManager {
           return canApply || this._checkBonusCondition(bonus.condition, baseValue);
         }, false);
 
-      return {
+      const statData = {
         key: stat,
         label: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
         name: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
         abbreviation: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[stat]) || stat.substring(0, 3).toUpperCase(),
         value: baseValue,
+        finalValue: finalValue,
+        bonusAmount: bonusesForThisStat,
+        hasBonus: bonusesForThisStat > 0,
         hasValue: baseValue !== null && baseValue !== undefined,
         hint: statHints[stat] || '',
         canApplyBonus: canApplyBonuses
       };
+
+      console.log(`[StatsStep] Stat ${stat}:`, statData);
+      return statData;
     });
 
     // Check if step is complete
@@ -110,7 +127,7 @@ export class StatsStepManager extends BaseStepManager {
     // Prepare derived stats for preview (if all stats are assigned)
     const derivedStats = await this._prepareDerivedStats(assignedStats, state);
 
-    // Prepare bonuses for display
+    // Prepare bonuses for display (old system - kept for compatibility)
     const bonusesDisplay = availableBonuses.map(bonus => {
       const application = appliedBonuses[bonus.bonusId];
       const isApplied = !!application;
@@ -121,6 +138,55 @@ export class StatsStepManager extends BaseStepManager {
         appliedTarget: isApplied ? application.target : null,
         conditionText: this._getConditionText(bonus.condition)
       };
+    });
+
+    // Prepare simplified bonusStats for new dropdown UI
+    const allStatsAssigned = Object.values(assignedStats).every(v => v !== null && v !== undefined);
+    const totalBonuses = availableBonuses.length;
+    const appliedCount = Object.keys(appliedBonuses).length;
+    const remainingBonuses = totalBonuses - appliedCount;
+
+    let bonusStats = null;
+    if (totalBonuses > 0) {
+      // Calculate final stat values (base + applied bonuses)
+      const finalStats = { ...assignedStats };
+      for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+        if (finalStats[application.target] !== null && finalStats[application.target] !== undefined) {
+          finalStats[application.target] += application.amount;
+        }
+      }
+
+      // Find the next unapplied bonus for source display
+      const nextBonus = availableBonuses.find(b => !appliedBonuses[b.bonusId]);
+
+      // Prepare available stats for dropdown
+      const availableStats = statOrder.map(stat => {
+        const currentValue = finalStats[stat];
+        return {
+          key: stat,
+          label: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
+          value: currentValue,
+          disabled: currentValue === null || currentValue >= 7 // Disable if not assigned or at max
+        };
+      });
+
+      bonusStats = {
+        remaining: remainingBonuses,
+        isActive: allStatsAssigned && remainingBonuses > 0,
+        availableStats: availableStats,
+        sourceLabel: nextBonus ? nextBonus.sourceLabel : null
+      };
+
+      console.log('[StatsStep] bonusStats prepared:', bonusStats);
+    }
+
+    console.log('[StatsStep] Returning context with bonusStats:', bonusStats ? 'YES' : 'NO');
+    console.log('[StatsStep] bonusStats details:', {
+      exists: !!bonusStats,
+      remaining: bonusStats?.remaining,
+      isActive: bonusStats?.isActive,
+      availableStatsCount: bonusStats?.availableStats?.length,
+      sourceLabel: bonusStats?.sourceLabel
     });
 
     return {
@@ -140,7 +206,8 @@ export class StatsStepManager extends BaseStepManager {
       showRandomButton: true,
       instruction: (!selectedArrayId) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Stats') : null,
-      availableBonuses: bonusesDisplay
+      availableBonuses: bonusesDisplay,
+      bonusStats: bonusStats // New simplified bonus stats data
     };
   }
 
@@ -489,6 +556,61 @@ export class StatsStepManager extends BaseStepManager {
   }
 
   /**
+   * Handle unassigning a single stat value (return to pool)
+   * @private
+   */
+  _onUnassignStat(event, target) {
+    const statKey = target.dataset.stat;
+
+    if (!statKey) {
+      console.error('No stat key provided for unassignment');
+      return;
+    }
+
+    const state = this.getCurrentState();
+    const assignedStats = { ...(state.assignedStats || {}) };
+    const unassignedValues = [...(state.unassignedValues || [])];
+    const appliedBonuses = { ...(state.appliedBonuses || {}) };
+
+    // Get the current value
+    const valueToReturn = assignedStats[statKey];
+
+    if (valueToReturn === null || valueToReturn === undefined) {
+      console.warn('Stat has no value to remove');
+      return;
+    }
+
+    console.log(`[StatsStep] Unassigning ${statKey}: returning value ${valueToReturn} to pool`);
+
+    // Remove the stat assignment
+    assignedStats[statKey] = null;
+
+    // Return value to pool
+    unassignedValues.push(valueToReturn);
+
+    // Remove any bonus applied to this stat
+    const bonusToRemove = Object.entries(appliedBonuses).find(
+      ([bonusId, application]) => application.target === statKey
+    );
+
+    if (bonusToRemove) {
+      const [bonusIdToRemove] = bonusToRemove;
+      delete appliedBonuses[bonusIdToRemove];
+      console.log(`[StatsStep] Also removed bonus from ${statKey}`);
+    }
+
+    // Update state
+    const updates = {
+      'assignedStats': assignedStats,
+      'unassignedValues': unassignedValues,
+      'appliedBonuses': appliedBonuses,
+      'selectedValue': null
+    };
+
+    this.stateManager.updateMultiple(updates);
+  }
+
+  /**
    * Handle resetting stats
    * @private
    */
@@ -677,6 +799,10 @@ export class StatsStepManager extends BaseStepManager {
               bonusId: `${ancestry.uuid}-${trait.name}-${i}`,
               sourceUuid: state.selectedAncestry,
               sourceName: `${ancestry.name} - ${trait.name}`,
+              sourceType: 'ancestry',
+              ancestryName: ancestry.name,
+              traitName: trait.name,
+              sourceLabel: `${trait.name} - ${ancestry.name} Trait`,
               type: 'stat',
               amount: 1,
               condition: 'value <= 6', // Can only apply to stats 6 or less
@@ -705,6 +831,11 @@ export class StatsStepManager extends BaseStepManager {
               bonusId: `${classItem.uuid}-${feature.name}-${i}`,
               sourceUuid: state.selectedClass,
               sourceName: `${classItem.name} - ${feature.name}`,
+              sourceType: 'class',
+              className: classItem.name,
+              featureName: feature.name,
+              featureLevel: feature.level,
+              sourceLabel: `${classItem.name} ${feature.name} Feature (Lvl ${feature.level})`,
               type: 'stat',
               amount: 1,
               condition: 'value <= 6', // Can only apply to stats 6 or less
@@ -824,6 +955,164 @@ export class StatsStepManager extends BaseStepManager {
     const appliedBonuses = { ...state.appliedBonuses };
 
     delete appliedBonuses[bonusId];
+
+    this.updateState('appliedBonuses', appliedBonuses);
+  }
+
+  /**
+   * Handle applying a stat bonus via clickable button on stat slot
+   * Allows reassigning the last applied bonus if no unapplied bonuses remain
+   * @private
+   */
+  async _onApplyStatBonus(event, target) {
+    console.log('[StatsStep] === applyStatBonus CALLED ===');
+    console.log('[StatsStep] Event:', event);
+    console.log('[StatsStep] Target:', target);
+    console.log('[StatsStep] Target.dataset:', target.dataset);
+    console.log('[StatsStep] Target.dataset.stat:', target.dataset.stat);
+    console.log('[StatsStep] Target.value:', target.value);
+
+    // Get stat from data attribute (button) or value (select fallback)
+    const selectedStat = target.dataset.stat || target.value;
+
+    console.log('[StatsStep] === Resolved selectedStat:', selectedStat, '===');
+
+    if (!selectedStat) {
+      console.error('[StatsStep] No stat selected! Returning early.');
+      ui.notifications.warn('No stat selected for bonus application');
+      return; // No stat selected
+    }
+
+    const state = this.getCurrentState();
+    const availableBonuses = await this._collectAvailableBonuses(state);
+    const appliedBonuses = { ...(state.appliedBonuses || {}) };
+    const assignedStats = state.assignedStats || {};
+
+    console.log('[StatsStep] Current state:', {
+      availableBonuses,
+      appliedBonuses,
+      assignedStats,
+      appliedBonusesDetails: Object.entries(appliedBonuses).map(([id, app]) => `${id} -> ${app.target}`)
+    });
+
+    // Check if bonus is already applied to the selected stat
+    const alreadyAppliedToStat = Object.values(appliedBonuses).some(app => app.target === selectedStat);
+
+    if (alreadyAppliedToStat) {
+      console.log('[StatsStep] Bonus already applied to', selectedStat, '- ignoring duplicate selection');
+      return;
+    }
+
+    // Find the first unapplied bonus
+    let unappliedBonus = availableBonuses.find(b => !appliedBonuses[b.bonusId]);
+
+    // If no unapplied bonuses, allow reassigning the last applied one
+    let isReassignment = false;
+    let lastBonusId = null;
+
+    if (!unappliedBonus && Object.keys(appliedBonuses).length > 0) {
+      // Get the last applied bonus by finding the last one in the availableBonuses order
+      // This ensures deterministic behavior based on the source order (ancestry → class → perks)
+      const appliedBonusIds = Object.keys(appliedBonuses);
+      const sortedAppliedBonuses = availableBonuses
+        .filter(b => appliedBonusIds.includes(b.bonusId))
+        .sort((a, b) => {
+          // Sort by the order they appear in availableBonuses array
+          return availableBonuses.indexOf(b) - availableBonuses.indexOf(a);
+        });
+
+      if (sortedAppliedBonuses.length > 0) {
+        lastBonusId = sortedAppliedBonuses[0].bonusId;
+        unappliedBonus = availableBonuses.find(b => b.bonusId === lastBonusId);
+        isReassignment = true;
+
+        console.log('[StatsStep] Reassigning last bonus from', appliedBonuses[lastBonusId].target, 'to', selectedStat);
+      }
+    }
+
+    if (!unappliedBonus) {
+      ui.notifications.warn('No bonus points available');
+      return;
+    }
+
+    // Validate the stat can receive the bonus
+    const currentStatValue = assignedStats[selectedStat];
+
+    if (currentStatValue === null || currentStatValue === undefined) {
+      ui.notifications.warn('Please assign a value to this stat first');
+      return;
+    }
+
+    // Calculate final value including already applied bonuses (excluding the one being reassigned)
+    let finalValue = currentStatValue;
+    for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+      if (application.target === selectedStat && (!isReassignment || bonusId !== lastBonusId)) {
+        finalValue += application.amount;
+      }
+    }
+
+    // Add the new bonus
+    finalValue += unappliedBonus.amount;
+
+    // Check if this would exceed maximum
+    if (finalValue > 7) {
+      ui.notifications.warn(`Cannot apply bonus: ${selectedStat.toUpperCase()} would exceed maximum (7)`);
+      return;
+    }
+
+    // Check bonus condition (use base stat value)
+    if (!this._checkBonusCondition(unappliedBonus.condition, currentStatValue)) {
+      ui.notifications.warn(`Cannot apply bonus: ${selectedStat.toUpperCase()} does not meet the condition`);
+      return;
+    }
+
+    // Apply or reassign the bonus
+    appliedBonuses[unappliedBonus.bonusId] = {
+      target: selectedStat,
+      amount: unappliedBonus.amount
+    };
+
+    console.log('[StatsStep] Updating appliedBonuses:', appliedBonuses);
+    console.log('[StatsStep] Calling updateState with appliedBonuses');
+
+    const updateResult = this.updateState('appliedBonuses', appliedBonuses);
+    console.log('[StatsStep] updateState result:', updateResult);
+
+    // The render will be triggered by the change event handler in character-builder.mjs
+  }
+
+  /**
+   * Handle removing a stat bonus via clicking the applied bonus tag
+   * @private
+   */
+  async _onRemoveStatBonus(event, target) {
+    const statToRemoveFrom = target.dataset.stat;
+
+    console.log('[StatsStep] removeStatBonus called for stat:', statToRemoveFrom);
+
+    if (!statToRemoveFrom) {
+      console.error('[StatsStep] No stat specified for bonus removal');
+      return;
+    }
+
+    const state = this.getCurrentState();
+    const appliedBonuses = { ...(state.appliedBonuses || {}) };
+
+    // Find and remove the bonus applied to this stat
+    const bonusToRemove = Object.entries(appliedBonuses).find(
+      ([bonusId, application]) => application.target === statToRemoveFrom
+    );
+
+    if (!bonusToRemove) {
+      console.warn('[StatsStep] No bonus found applied to', statToRemoveFrom);
+      return;
+    }
+
+    const [bonusIdToRemove] = bonusToRemove;
+    delete appliedBonuses[bonusIdToRemove];
+
+    console.log('[StatsStep] Removed bonus from', statToRemoveFrom);
+    console.log('[StatsStep] Updated appliedBonuses:', appliedBonuses);
 
     this.updateState('appliedBonuses', appliedBonuses);
   }

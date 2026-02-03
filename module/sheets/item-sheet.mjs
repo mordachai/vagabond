@@ -1,4 +1,5 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { GrantsHandlers } from './item-sheet-grants.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -110,14 +111,18 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       updateChoiceCount: this._onUpdateCount,
       saveChoices: this._onSaveChoices,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from spell description
+      addTraitSpell: this._onAddTraitSpell,
+      addTraitPerk: this._onAddTraitPerk,
+      addFeatureSpell: this._onAddFeatureSpell,
+      addFeaturePerk: this._onAddFeaturePerk,
       removeTraitSpell: this._onRemoveTraitSpell,
       removeTraitPerk: this._onRemoveTraitPerk,
       removeFeatureSpell: this._onRemoveFeatureSpell,
       removeFeaturePerk: this._onRemoveFeaturePerk,
     },
     form: {
-      submitOnChange: true,
-      submitOnClose: true,
+      submitOnChange: false,  // Disabled
+      submitOnClose: true,    // Only saves text fields, not grants arrays
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -1056,6 +1061,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * Refined data processing for skill pools.
    * Since the pool is a comma-separated string in the UI but an Array in the DataModel,
    * we handle the conversion here.
+   * Also ensures grant arrays (requiredSpells, allowedPerks) are preserved during form submission.
    * @override
    */
   async _processFormData(event, form, formData) {
@@ -1071,6 +1077,56 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                     .filter(s => s !== "");
             }
         }
+    }
+
+    // Preserve grants for Ancestry traits
+    if (this.item.type === 'ancestry' && data.system?.traits) {
+      // Handle both object-based (sparse) and array-based updates
+      const entries = Array.isArray(data.system.traits) 
+        ? data.system.traits.map((v, i) => [i, v]) 
+        : Object.entries(data.system.traits);
+
+      for (const [key, traitData] of entries) {
+        const index = parseInt(key);
+        if (isNaN(index)) continue;
+        
+        const originalTrait = this.item.system.traits[index];
+        if (originalTrait) {
+          // If requiredSpells is missing in update but exists in original, preserve it
+          if (!traitData.requiredSpells && originalTrait.requiredSpells?.length) {
+            traitData.requiredSpells = originalTrait.requiredSpells;
+          }
+          // If allowedPerks is missing in update but exists in original, preserve it
+          if (!traitData.allowedPerks && originalTrait.allowedPerks?.length) {
+            traitData.allowedPerks = originalTrait.allowedPerks;
+          }
+        }
+      }
+    }
+
+    // Preserve grants for Class level features
+    if (this.item.type === 'class' && data.system?.levelFeatures) {
+       // Handle both object-based (sparse) and array-based updates
+       const entries = Array.isArray(data.system.levelFeatures) 
+         ? data.system.levelFeatures.map((v, i) => [i, v]) 
+         : Object.entries(data.system.levelFeatures);
+
+       for (const [key, featureData] of entries) {
+         const index = parseInt(key);
+         if (isNaN(index)) continue;
+         
+         const originalFeature = this.item.system.levelFeatures[index];
+         if (originalFeature) {
+           // If requiredSpells is missing in update but exists in original, preserve it
+           if (!featureData.requiredSpells && originalFeature.requiredSpells?.length) {
+             featureData.requiredSpells = originalFeature.requiredSpells;
+           }
+           // If allowedPerks is missing in update but exists in original, preserve it
+           if (!featureData.allowedPerks && originalFeature.allowedPerks?.length) {
+             featureData.allowedPerks = originalFeature.allowedPerks;
+           }
+         }
+       }
     }
 
     return this.document.update(data);
@@ -2136,27 +2192,42 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         const traitIndex = parseInt(dropZone.dataset.traitIndex);
         if (isNaN(traitIndex)) return false;
 
+        // Clone entire array (same approach as remove functions)
         const traits = foundry.utils.deepClone(this.item.system.traits);
         if (!traits[traitIndex]) return false;
 
         if (isSpellZone) {
           // Add spell UUID to requiredSpells array
-          const spells = traits[traitIndex].requiredSpells || [];
-          if (!spells.includes(droppedItem.uuid)) {
-            spells.push(droppedItem.uuid);
-            traits[traitIndex].requiredSpells = spells;
-            await this.item.update({ 'system.traits': traits });
+          const currentSpells = traits[traitIndex].requiredSpells || [];
+          console.log('Current spells before add:', currentSpells);
+          console.log('Dropped spell UUID:', droppedItem.uuid);
+
+          if (!currentSpells.includes(droppedItem.uuid)) {
+            // Modify the cloned array
+            traits[traitIndex].requiredSpells = [...currentSpells, droppedItem.uuid];
+
+            console.log('Updating entire traits array');
+            console.log('Modified trait:', traits[traitIndex]);
+
+            // Update the entire traits array (matches remove function approach)
+            // render: false prevents automatic re-render and scroll jump
+            const result = await this.item.update({ 'system.traits': traits }, { render: false });
+            console.log('Update result:', result);
+
+            // Verify the update persisted
+            const updatedTrait = this.item.system.traits[traitIndex];
+            console.log('Spells after update:', updatedTrait.requiredSpells);
+
             ui.notifications.info(`Added ${droppedItem.name} to trait`);
           } else {
             ui.notifications.warn('Spell already added to this trait');
           }
         } else if (isPerkZone) {
           // Add perk UUID to allowedPerks array
-          const perks = traits[traitIndex].allowedPerks || [];
-          if (!perks.includes(droppedItem.uuid)) {
-            perks.push(droppedItem.uuid);
-            traits[traitIndex].allowedPerks = perks;
-            await this.item.update({ 'system.traits': traits });
+          const currentPerks = traits[traitIndex].allowedPerks || [];
+          if (!currentPerks.includes(droppedItem.uuid)) {
+            traits[traitIndex].allowedPerks = [...currentPerks, droppedItem.uuid];
+            await this.item.update({ 'system.traits': traits }, { render: false });
             ui.notifications.info(`Added ${droppedItem.name} to trait`);
           } else {
             ui.notifications.warn('Perk already added to this trait');
@@ -2170,27 +2241,42 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         const featureIndex = parseInt(dropZone.dataset.featureIndex);
         if (isNaN(featureIndex)) return false;
 
+        // Clone entire array (same approach as remove functions)
         const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
         if (!levelFeatures[featureIndex]) return false;
 
         if (isSpellZone) {
           // Add spell UUID to requiredSpells array
-          const spells = levelFeatures[featureIndex].requiredSpells || [];
-          if (!spells.includes(droppedItem.uuid)) {
-            spells.push(droppedItem.uuid);
-            levelFeatures[featureIndex].requiredSpells = spells;
-            await this.item.update({ 'system.levelFeatures': levelFeatures });
+          const currentSpells = levelFeatures[featureIndex].requiredSpells || [];
+          console.log('Current spells before add:', currentSpells);
+          console.log('Dropped spell UUID:', droppedItem.uuid);
+
+          if (!currentSpells.includes(droppedItem.uuid)) {
+            // Modify the cloned array
+            levelFeatures[featureIndex].requiredSpells = [...currentSpells, droppedItem.uuid];
+
+            console.log('Updating entire levelFeatures array');
+            console.log('Modified feature:', levelFeatures[featureIndex]);
+
+            // Update the entire levelFeatures array (matches remove function approach)
+            // render: false prevents automatic re-render and scroll jump
+            const result = await this.item.update({ 'system.levelFeatures': levelFeatures }, { render: false });
+            console.log('Update result:', result);
+
+            // Verify the update persisted
+            const updatedFeature = this.item.system.levelFeatures[featureIndex];
+            console.log('Spells after update:', updatedFeature.requiredSpells);
+
             ui.notifications.info(`Added ${droppedItem.name} to feature`);
           } else {
             ui.notifications.warn('Spell already added to this feature');
           }
         } else if (isPerkZone) {
           // Add perk UUID to allowedPerks array
-          const perks = levelFeatures[featureIndex].allowedPerks || [];
-          if (!perks.includes(droppedItem.uuid)) {
-            perks.push(droppedItem.uuid);
-            levelFeatures[featureIndex].allowedPerks = perks;
-            await this.item.update({ 'system.levelFeatures': levelFeatures });
+          const currentPerks = levelFeatures[featureIndex].allowedPerks || [];
+          if (!currentPerks.includes(droppedItem.uuid)) {
+            levelFeatures[featureIndex].allowedPerks = [...currentPerks, droppedItem.uuid];
+            await this.item.update({ 'system.levelFeatures': levelFeatures }, { render: false });
             ui.notifications.info(`Added ${droppedItem.name} to feature`);
           } else {
             ui.notifications.warn('Perk already added to this feature');
@@ -2450,47 +2536,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveTraitSpell(event, target) {
-    console.log('=== _onRemoveTraitSpell called ===');
-    console.log('Event:', event);
-    console.log('Target:', target);
-    console.log('Target dataset:', target.dataset);
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Get trait index from parent <li> element instead of button
-    const traitItem = target.closest('[data-trait-index]');
-    const traitIndex = traitItem ? parseInt(traitItem.dataset.traitIndex) : NaN;
-    const spellUuid = target.dataset.spellUuid;
-
-    console.log('Trait Item:', traitItem);
-    console.log('Trait Index:', traitIndex);
-    console.log('Spell UUID:', spellUuid);
-
-    if (isNaN(traitIndex) || !spellUuid) {
-      console.error('Invalid traitIndex or spellUuid', { traitIndex, spellUuid });
-      return;
-    }
-
-    const traits = foundry.utils.deepClone(this.item.system.traits);
-    console.log('Current traits:', traits);
-
-    if (!traits[traitIndex]) {
-      console.error('Trait not found at index', traitIndex);
-      return;
-    }
-
-    console.log('Current requiredSpells:', traits[traitIndex].requiredSpells);
-
-    // Remove by UUID instead of index
-    const filteredSpells = (traits[traitIndex].requiredSpells || []).filter(uuid => uuid !== spellUuid);
-    console.log('Filtered spells:', filteredSpells);
-
-    traits[traitIndex].requiredSpells = filteredSpells;
-
-    console.log('Updating item with traits:', traits);
-    await this.item.update({ 'system.traits': traits });
-    console.log('Update complete');
+    return GrantsHandlers.removeTraitSpell(this, event, target);
   }
 
   /**
@@ -2500,47 +2546,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveTraitPerk(event, target) {
-    console.log('=== _onRemoveTraitPerk called ===');
-    console.log('Event:', event);
-    console.log('Target:', target);
-    console.log('Target dataset:', target.dataset);
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Get trait index from parent <li> element instead of button
-    const traitItem = target.closest('[data-trait-index]');
-    const traitIndex = traitItem ? parseInt(traitItem.dataset.traitIndex) : NaN;
-    const perkUuid = target.dataset.perkUuid;
-
-    console.log('Trait Item:', traitItem);
-    console.log('Trait Index:', traitIndex);
-    console.log('Perk UUID:', perkUuid);
-
-    if (isNaN(traitIndex) || !perkUuid) {
-      console.error('Invalid traitIndex or perkUuid', { traitIndex, perkUuid });
-      return;
-    }
-
-    const traits = foundry.utils.deepClone(this.item.system.traits);
-    console.log('Current traits:', traits);
-
-    if (!traits[traitIndex]) {
-      console.error('Trait not found at index', traitIndex);
-      return;
-    }
-
-    console.log('Current allowedPerks:', traits[traitIndex].allowedPerks);
-
-    // Remove by UUID instead of index
-    const filteredPerks = (traits[traitIndex].allowedPerks || []).filter(uuid => uuid !== perkUuid);
-    console.log('Filtered perks:', filteredPerks);
-
-    traits[traitIndex].allowedPerks = filteredPerks;
-
-    console.log('Updating item with traits:', traits);
-    await this.item.update({ 'system.traits': traits });
-    console.log('Update complete');
+    return GrantsHandlers.removeTraitPerk(this, event, target);
   }
 
   /**
@@ -2550,47 +2556,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveFeatureSpell(event, target) {
-    console.log('=== _onRemoveFeatureSpell called ===');
-    console.log('Event:', event);
-    console.log('Target:', target);
-    console.log('Target dataset:', target.dataset);
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Get feature index from parent <li> element instead of button
-    const featureItem = target.closest('[data-feature-index]');
-    const featureIndex = featureItem ? parseInt(featureItem.dataset.featureIndex) : NaN;
-    const spellUuid = target.dataset.spellUuid;
-
-    console.log('Feature Item:', featureItem);
-    console.log('Feature Index:', featureIndex);
-    console.log('Spell UUID:', spellUuid);
-
-    if (isNaN(featureIndex) || !spellUuid) {
-      console.error('Invalid featureIndex or spellUuid', { featureIndex, spellUuid });
-      return;
-    }
-
-    const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
-    console.log('Current levelFeatures:', levelFeatures);
-
-    if (!levelFeatures[featureIndex]) {
-      console.error('Feature not found at index', featureIndex);
-      return;
-    }
-
-    console.log('Current requiredSpells:', levelFeatures[featureIndex].requiredSpells);
-
-    // Remove by UUID instead of index
-    const filteredSpells = (levelFeatures[featureIndex].requiredSpells || []).filter(uuid => uuid !== spellUuid);
-    console.log('Filtered spells:', filteredSpells);
-
-    levelFeatures[featureIndex].requiredSpells = filteredSpells;
-
-    console.log('Updating item with levelFeatures:', levelFeatures);
-    await this.item.update({ 'system.levelFeatures': levelFeatures });
-    console.log('Update complete');
+    return GrantsHandlers.removeFeatureSpell(this, event, target);
   }
 
   /**
@@ -2600,46 +2566,38 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onRemoveFeaturePerk(event, target) {
-    console.log('=== _onRemoveFeaturePerk called ===');
-    console.log('Event:', event);
-    console.log('Target:', target);
-    console.log('Target dataset:', target.dataset);
+    return GrantsHandlers.removeFeaturePerk(this, event, target);
+  }
 
-    event.preventDefault();
-    event.stopPropagation();
+  /**
+   * Add handlers delegate to GrantsHandlers
+   */
+  static async _onAddTraitSpell(event, target) {
+    return GrantsHandlers.addTraitSpell(this, event, target);
+  }
 
-    // Get feature index from parent <li> element instead of button
-    const featureItem = target.closest('[data-feature-index]');
-    const featureIndex = featureItem ? parseInt(featureItem.dataset.featureIndex) : NaN;
-    const perkUuid = target.dataset.perkUuid;
+  static async _onAddTraitPerk(event, target) {
+    return GrantsHandlers.addTraitPerk(this, event, target);
+  }
 
-    console.log('Feature Item:', featureItem);
-    console.log('Feature Index:', featureIndex);
-    console.log('Perk UUID:', perkUuid);
+  static async _onAddFeatureSpell(event, target) {
+    return GrantsHandlers.addFeatureSpell(this, event, target);
+  }
 
-    if (isNaN(featureIndex) || !perkUuid) {
-      console.error('Invalid featureIndex or perkUuid', { featureIndex, perkUuid });
-      return;
+  static async _onAddFeaturePerk(event, target) {
+    return GrantsHandlers.addFeaturePerk(this, event, target);
+  }
+
+  /**
+   * Populate grants dropdowns after render
+   * @override
+   */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+
+    // Populate spell/perk dropdowns for grants system
+    if (this.item.type === 'ancestry' || this.item.type === 'class') {
+      GrantsHandlers.populateGrantsDropdowns(this);
     }
-
-    const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
-    console.log('Current levelFeatures:', levelFeatures);
-
-    if (!levelFeatures[featureIndex]) {
-      console.error('Feature not found at index', featureIndex);
-      return;
-    }
-
-    console.log('Current allowedPerks:', levelFeatures[featureIndex].allowedPerks);
-
-    // Remove by UUID instead of index
-    const filteredPerks = (levelFeatures[featureIndex].allowedPerks || []).filter(uuid => uuid !== perkUuid);
-    console.log('Filtered perks:', filteredPerks);
-
-    levelFeatures[featureIndex].allowedPerks = filteredPerks;
-
-    console.log('Updating item with levelFeatures:', levelFeatures);
-    await this.item.update({ 'system.levelFeatures': levelFeatures });
-    console.log('Update complete');
   }
 }

@@ -43,6 +43,17 @@ export class PerksStepManager extends BaseStepManager {
    * @protected
    */
   async _prepareStepSpecificContext(state) {
+    // Collect and auto-add guaranteed perks (single-choice allowed perks)
+    const guaranteedPerks = await this._collectGuaranteedPerks(state);
+    const currentClassPerks = state.classPerks || [];
+    const updatedClassPerks = [...new Set([...currentClassPerks, ...guaranteedPerks])];
+    
+    if (updatedClassPerks.length !== currentClassPerks.length) {
+      this.updateState('classPerks', updatedClassPerks);
+      // Update local reference to use the new state
+      state.classPerks = updatedClassPerks;
+    }
+
     const availablePerks = await this._loadPerkOptions(state);
     const selectedPerks = state.perks || [];
     const classPerks = state.classPerks || [];
@@ -150,6 +161,50 @@ export class PerksStepManager extends BaseStepManager {
       instruction: (selectedPerks.length === 0 && classPerks.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Perks') : null
     };
+  }
+
+  /**
+   * Collect guaranteed perks from ancestry traits and class level 1 features
+   * (where allowedPerks has exactly 1 entry)
+   * @private
+   */
+  async _collectGuaranteedPerks(state) {
+    const guaranteedPerks = new Set();
+
+    // From ancestry traits
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+        for (const trait of traits) {
+          const allowed = trait.allowedPerks || [];
+          if (allowed.length === 1 && allowed[0]) {
+            guaranteedPerks.add(allowed[0]);
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load ancestry for guaranteed perks:', error);
+      }
+    }
+
+    // From class level 1 features
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const levelFeatures = classItem.system.levelFeatures || [];
+        const level1Features = levelFeatures.filter(f => f.level === 1);
+        for (const feature of level1Features) {
+          const allowed = feature.allowedPerks || [];
+          if (allowed.length === 1 && allowed[0]) {
+            guaranteedPerks.add(allowed[0]);
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load class for guaranteed perks:', error);
+      }
+    }
+
+    return Array.from(guaranteedPerks);
   }
 
   /**

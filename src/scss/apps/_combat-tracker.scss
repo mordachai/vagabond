@@ -78,10 +78,10 @@ ol#combat-tracker.directory-list {
                     left: 0;
                     height: 100%;
                     z-index: 0;
-                    background: linear-gradient(90deg,
+                    background: linear-gradient(102deg,
                         rgba(139, 0, 0, 0.5) 0%,
-                        rgba(220, 20, 60, 0.6) 70%,
-                        rgba(255, 69, 96, 0.7) 100%);
+                        rgba(234, 13, 57, 0.80) 80%,
+                        rgba(255, 255, 255, 0.95) 100%);
                     transition: width 0.3s ease;
                     pointer-events: none;
                     clip-path: polygon(

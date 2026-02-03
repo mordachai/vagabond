@@ -18,6 +18,9 @@
                 {{#if spellLimit}}
                     <div class="pack-summary spell-limit-display">
                         <p><strong>Spells:</strong> {{currentSpellCount}}/{{spellLimit}}</p>
+                        {{#if requiredSpellCount}}
+                            <p class="text-info"><small>{{requiredSpellCount}} required</small></p>
+                        {{/if}}
                         {{#if (gte currentSpellCount spellLimit)}}
                             <p class="text-warning"><small>Maximum reached</small></p>
                         {{/if}}
@@ -57,7 +60,7 @@
                 {{#if requiredSpellCount}}
                     <div class="required-spells-notice">
                         <i class="fas fa-star"></i>
-                        {{requiredSpellCount}} spell(s) automatically added by your ancestry/class/perks
+                        <strong>{{requiredSpellCount}}</strong> {{#if (eq requiredSpellCount 1)}}spell{{else}}spells{{/if}} granted by your ancestry/class (cannot be removed)
                     </div>
                 {{/if}}
                 {{#if spellLimit}}
@@ -67,9 +70,6 @@
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <span class="tray-name">
                                 {{item.name}}
-                                {{#if item.isRequired}}
-                                    <span class="required-badge" title="Required by ancestry/class/perk">Required</span>
-                                {{/if}}
                             </span>
                             {{#if item.isRequired}}
                                 <i class="fas fa-lock required-lock" title="Required spell"></i>
