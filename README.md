@@ -95,4 +95,6 @@ No, installing the online version will not work, at least not yet...
 
 Huge thanks to KeyInk for the marvelous work designing the new chat cards and sheets (with sheets coming in the future).
 
+Relic Powers update: MadBlue - Discord: madblue2112 - https://bsky.app/profile/madblue2112.bsky.social
+
 A big thank-you as well to everyone on Indestructoboy’s Discord server for the incredible support, playtests, and awesome tables. You all rock!
