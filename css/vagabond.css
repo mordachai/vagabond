@@ -688,6 +688,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* ROLL STRIP */
   /*CARD DESCRIPTION*/
   /* SAVE CRIT RULE */
+  /* ==================================================
+   * AUTO-FAIL BANNER (for Dead status, etc.)
+   * ================================================== */
   /* DAMAGE SECTION */
   /* CRITICAL SECTION */
   /* PROPERTIES ACCORDION */
@@ -1046,6 +1049,29 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-damage-orange);
   text-transform: uppercase;
   font-size: 13px;
+}
+.vagabond-chat-card-v2 .auto-fail-banner {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 2px solid #666;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.vagabond-chat-card-v2 .auto-fail-banner.outcome-auto-fail {
+  border-color: #666;
+  background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+}
+.vagabond-chat-card-v2 .auto-fail-banner .auto-fail-text {
+  display: block;
+  color: #999;
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 .vagabond-chat-card-v2 .content-body {
   padding-top: 10px;
@@ -3796,6 +3822,272 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .preview-actions .btn-remove-pack i {
   margin-right: 5px;
+}
+
+ol#combat-tracker.directory-list {
+  padding: 0 0 0 0.4em !important;
+}
+
+#combat-tracker .faction-header {
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid #111;
+  padding: 5px 8px;
+  margin-top: 8px;
+  list-style: none;
+}
+#combat-tracker .faction-header h4 {
+  margin: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.15em;
+  letter-spacing: 0.05em;
+  font-family: "Eskapade", serif;
+}
+#combat-tracker .faction-header.friendly h4 {
+  color: #7fbf7f;
+  text-shadow: 0 0 2px #222;
+}
+#combat-tracker .faction-header.neutral h4 {
+  color: #dfdf7f;
+  text-shadow: 0 0 2px #222;
+}
+#combat-tracker .faction-header.hostile h4 {
+  color: #df7f7f;
+  text-shadow: 0 0 2px #222;
+}
+#combat-tracker .faction-header.secret h4 {
+  color: #bf7fdf;
+  text-shadow: 0 0 2px #222;
+}
+#combat-tracker .combatant {
+  padding: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid transparent;
+  display: grid !important;
+  grid-template-columns: minmax(100px, 2fr) auto 40px 24px;
+  gap: 5px;
+  align-items: center;
+}
+#combat-tracker .combatant.friendly {
+  border-left-color: #7fbf7f;
+}
+#combat-tracker .combatant.neutral {
+  border-left-color: #dfdf7f;
+}
+#combat-tracker .combatant.hostile {
+  border-left-color: #df7f7f;
+}
+#combat-tracker .combatant.secret {
+  border-left-color: #bf7fdf;
+}
+#combat-tracker .combatant.spent {
+  filter: grayscale(80%);
+  opacity: 0.6;
+}
+#combat-tracker .combatant.active {
+  border: 1px solid #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
+}
+#combat-tracker .combatant .col-1 .row-1 {
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+#combat-tracker .combatant .col-1 .row-1 .token-image {
+  flex: 0 0 32px;
+  height: 32px;
+  object-fit: cover;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#combat-tracker .combatant .col-1 .row-1 h4.name {
+  flex: 1;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.25em;
+  line-height: 1.25;
+}
+#combat-tracker .combatant .col-1 .operation-controls {
+  gap: 4px;
+  display: flex;
+  align-items: baseline;
+  align-content: center;
+  justify-content: center;
+}
+#combat-tracker .combatant .col-1 .operation-controls .combatant-control.icon-only {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  width: 14px;
+  height: 14px;
+  min-width: 0 !important;
+  line-height: 16px;
+  font-size: 14px;
+  color: #aaa;
+  cursor: pointer;
+}
+#combat-tracker .combatant .col-1 .operation-controls .combatant-control.icon-only:hover {
+  color: #fff;
+}
+#combat-tracker .combatant .col-1 .operation-controls .combatant-control.icon-only.active {
+  color: #ff6666;
+}
+#combat-tracker .combatant .col-1 .operation-controls .initiative-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  color: #ffd700;
+}
+#combat-tracker .combatant .col-1 .operation-controls .initiative-box .init-value {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+#combat-tracker .combatant .col-2.effects-column {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2px 0;
+}
+#combat-tracker .combatant .col-2.effects-column .effects-grid {
+  display: grid;
+  grid-template-rows: repeat(3, 18px);
+  grid-auto-flow: column;
+  grid-auto-columns: 18px;
+  gap: 2px;
+  align-content: start;
+}
+#combat-tracker .combatant .col-2.effects-column .effects-grid .effect-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+  border-radius: 2px;
+  cursor: help;
+  border: 1px solid transparent;
+}
+#combat-tracker .combatant .col-2.effects-column .effects-grid .effect-icon:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.2);
+}
+#combat-tracker .combatant .col-3.stats-column {
+  font-size: 0.95em;
+  gap: 1px;
+}
+#combat-tracker .combatant .col-3.stats-column .res-row {
+  align-items: center;
+  gap: 6px;
+}
+#combat-tracker .combatant .col-3.stats-column .res-row i {
+  width: 12px;
+  text-align: center;
+  font-size: 0.9em;
+}
+#combat-tracker .combatant .col-3.stats-column .res-row.hp {
+  color: #ff6666;
+}
+#combat-tracker .combatant .col-3.stats-column .res-row.fatigue {
+  color: #eebb00;
+}
+#combat-tracker .combatant .col-3.stats-column .res-row.mana {
+  color: #66aaff;
+}
+#combat-tracker .combatant .col-4.center-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+#combat-tracker .combatant .col-4.center-content .combatant-control {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0 !important;
+}
+#combat-tracker .combatant .col-4.center-content .combatant-control.activate-btn {
+  color: #ffd700;
+}
+#combat-tracker .combatant .col-4.center-content .combatant-control.activate-btn:hover {
+  text-shadow: 0 0 8px #ffd700;
+}
+#combat-tracker .combatant .col-4.center-content .combatant-control.deactivate-btn {
+  color: #ff4444;
+}
+#combat-tracker .combatant .col-4.center-content .combatant-control.deactivate-btn:hover {
+  text-shadow: 0 0 8px #ff4444;
+}
+#combat-tracker .combatant .col-4.center-content .activation-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 0.75em;
+  color: #ffd700;
+  font-weight: bold;
+}
+#combat-tracker .combatant .col-4.center-content .activation-counter i {
+  font-size: 0.9em;
+}
+#combat-tracker .combatant .col-4.center-content .activation-counter .counter {
+  font-size: 0.85em;
+  line-height: 1;
+}
+#combat-tracker .combatant .col-4.center-content .activation-counter.spent {
+  color: #444;
+  opacity: 0.5;
+}
+
+.combat-tracker-header .encounter-controls {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+  margin-bottom: 5px;
+  gap: 5px;
+}
+.combat-tracker-header .encounter-controls .encounter-title {
+  margin: 0;
+  flex: 1;
+}
+.combat-tracker-header button.combat-control,
+.combat-tracker-header button.combat-cycle {
+  background: none !important;
+  border: none !important;
+  color: #aaa;
+  padding: 0 !important;
+  width: 24px;
+  height: 24px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  min-width: 0 !important;
+}
+.combat-tracker-header button.combat-control:hover,
+.combat-tracker-header button.combat-cycle:hover {
+  color: #fff;
+}
+.combat-tracker-header button.combat-control[disabled],
+.combat-tracker-header button.combat-cycle[disabled] {
+  opacity: 0.3;
+  cursor: default;
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */

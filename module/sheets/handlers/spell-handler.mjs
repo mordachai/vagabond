@@ -449,6 +449,20 @@ export class SpellHandler {
       return;
     }
 
+    // Check for auto-fail conditions (Dead status)
+    const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
+    if (autoFailAllRolls) {
+      // Import chat card helper
+      const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
+
+      // Post auto-fail message to chat
+      await VagabondChatCard.autoFailRoll(this.actor, 'spell', spell.name);
+
+      // Show notification
+      ui.notifications.warn(`${this.actor.name} cannot cast spells due to status conditions.`);
+      return;
+    }
+
     // Get skill information for display
     const skill = this.actor.system.skills[manaSkill];
     const difficulty = skill.difficulty;

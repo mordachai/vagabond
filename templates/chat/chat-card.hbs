@@ -116,6 +116,11 @@
                 {{{rollDiceDisplay}}}
             </div>
         </section>
+        {{else if outcome}}
+        {{!-- AUTO-FAIL / NO ROLL OUTCOME BANNER --}}
+        <section class="auto-fail-banner {{outcomeClass}}">
+            <span class="auto-fail-text">{{outcome}}</span>
+        </section>
         {{/if}}
 
         {{!-- E. TARGETS SECTION --}}
