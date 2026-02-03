@@ -291,6 +291,25 @@ export class VagabondCombat extends Combat {
 
   /** @override */
   _sortCombatants(a, b) {
+    // Check if we're using initiative rolls
+    const useInitiative = !game.settings.get('vagabond', 'hideInitiativeRoll');
+
+    // If using initiative and both have initiative scores, sort by initiative (descending)
+    if (useInitiative) {
+      const ia = typeof a.initiative === 'number' ? a.initiative : -Infinity;
+      const ib = typeof b.initiative === 'number' ? b.initiative : -Infinity;
+
+      // If both have initiative, sort by initiative (highest first)
+      if (ia !== -Infinity && ib !== -Infinity) {
+        return ib - ia;
+      }
+
+      // If only one has initiative, it goes first
+      if (ia !== -Infinity) return -1;
+      if (ib !== -Infinity) return 1;
+    }
+
+    // Fallback to disposition and name sorting (for popcorn initiative or when no initiative rolled)
     const da = a.token?.disposition ?? -2;
     const db = b.token?.disposition ?? -2;
     if (da !== db) return db - da;

@@ -34,6 +34,7 @@ import { DowntimeApp } from './applications/downtime-app.mjs';
 import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
+import { EncounterSettings } from './applications/encounter-settings.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -148,6 +149,60 @@ function registerGameSettings() {
     default: 'vagabond',
     requiresReload: true
   });
+
+  // Setting 8: Hide Initiative Roll
+  game.settings.register('vagabond', 'hideInitiativeRoll', {
+    name: 'VAGABOND.Settings.hideInitiativeRoll.name',
+    hint: 'VAGABOND.Settings.hideInitiativeRoll.hint',
+    scope: 'world',
+    config: false, // Not shown in standard config - use Encounter Settings dialog instead
+    type: Boolean,
+    default: true,
+    requiresReload: false
+  });
+
+  // Setting 9: Use Activation Points
+  game.settings.register('vagabond', 'useActivationPoints', {
+    name: 'VAGABOND.Settings.useActivationPoints.name',
+    hint: 'VAGABOND.Settings.useActivationPoints.hint',
+    scope: 'world',
+    config: false, // Not shown in standard config - use Encounter Settings dialog instead
+    type: Boolean,
+    default: false,
+    requiresReload: false
+  });
+
+  // Setting 10: Custom Initiative Formula (PCs)
+  game.settings.register('vagabond', 'initiativeFormula', {
+    name: 'VAGABOND.Settings.initiativeFormula.name',
+    hint: 'VAGABOND.Settings.initiativeFormula.hint',
+    scope: 'world',
+    config: false, // Not shown in standard config - use Encounter Settings dialog instead
+    type: String,
+    default: '1d20 + @dexterity.value + @awareness.value',
+    requiresReload: false
+  });
+
+  // Setting 11: Custom Initiative Formula (NPCs)
+  game.settings.register('vagabond', 'npcInitiativeFormula', {
+    name: 'VAGABOND.Settings.npcInitiativeFormula.name',
+    hint: 'VAGABOND.Settings.npcInitiativeFormula.hint',
+    scope: 'world',
+    config: false, // Not shown in standard config - use Encounter Settings dialog instead
+    type: String,
+    default: '1d20 + ceil(@speed / 10)',
+    requiresReload: false
+  });
+
+  // Setting 12: Encounter Settings Button (Menu)
+  game.settings.registerMenu('vagabond', 'encounterSettingsMenu', {
+    name: 'VAGABOND.Settings.encounterSettings.name',
+    label: 'VAGABOND.Settings.encounterSettings.label',
+    hint: 'VAGABOND.Settings.encounterSettings.hint',
+    icon: 'fas fa-swords',
+    type: EncounterSettings,
+    restricted: true
+  });
 }
 
 /* -------------------------------------------- */
@@ -226,6 +281,7 @@ globalThis.vagabond = {
     DowntimeApp,
     VagabondMeasureTemplates,
     VagabondCharBuilder,
+    EncounterSettings,
   },
   ui: {
     ProgressClockOverlay,
@@ -274,11 +330,12 @@ Hooks.once('init', async function () {
   console.log("Vagabond | Templates loaded successfully");
 
   /**
-   * Set an initiative formula for the system
+   * Set default initiative formula for the system
+   * Note: PCs and NPCs use separate custom formulas from settings (see VagabondCombatant.getInitiativeRoll)
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: '1d20 + @dexterity.value',
+    formula: game.settings.get('vagabond', 'initiativeFormula') || '1d20 + @dexterity.value + @awareness.value',
     decimals: 2,
   };
 

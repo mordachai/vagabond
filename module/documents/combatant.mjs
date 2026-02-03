@@ -40,4 +40,23 @@ export class VagabondCombatant extends Combatant {
   get isSpent() {
     return this.activations.value <= 0;
   }
+
+  /**
+   * Get the initiative roll formula for this combatant
+   * Player characters and NPCs use different custom formulas from settings
+   * @override
+   * @param {string} formula - The default formula
+   * @returns {Roll}
+   */
+  getInitiativeRoll(formula) {
+    // NPCs use their own formula
+    if (this.actor?.type === 'npc') {
+      const npcFormula = game.settings.get('vagabond', 'npcInitiativeFormula');
+      return new Roll(npcFormula || '1d20 + ceil(@speed / 10)', this.actor?.getRollData() || {});
+    }
+
+    // Player characters use the PC formula from settings
+    const customFormula = game.settings.get('vagabond', 'initiativeFormula');
+    return new Roll(customFormula || formula, this.actor?.getRollData() || {});
+  }
 }

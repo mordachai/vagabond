@@ -686,6 +686,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* HEADER */
   /* MODIFIER BADGE */
   /* ROLL STRIP */
+  /*CARD DESCRIPTION*/
+  /* SAVE CRIT RULE */
+  /* ==================================================
+   * AUTO-FAIL BANNER (for Dead status, etc.)
+   * ================================================== */
+  /* DAMAGE SECTION */
+  /* CRITICAL SECTION */
+  /* PROPERTIES ACCORDION */
+  /* FOOTER BUTTONS */
 }
 .vagabond-chat-card-v2 .actor-name-header {
   color: var(--c-yellow-text);
@@ -960,49 +969,47 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-value, .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-outcome-text {
   text-shadow: 1px 1px 0 var(--c-dark-blue), -1px 1px 0 var(--c-dark-blue), -1px -1px 0 var(--c-dark-blue), 1px -1px 0 var(--c-dark-blue);
 }
-
-/*CARD DESCRIPTION*/
-.card-description {
+.vagabond-chat-card-v2 .card-description {
   margin: 8px 16px;
   font-family: "Paradigma", serif;
   font-size: 16px;
   /* Item Stats Grid - for Send to Chat detailed info */
   /* Item Properties - for weapon properties */
 }
-.card-description .item-stats-grid {
+.vagabond-chat-card-v2 .card-description .item-stats-grid {
   margin-top: 12px;
   padding: 10px;
   background: rgba(255, 255, 255, 0.3);
   border: 1px solid var(--c-dark-blue);
   border-radius: 3px;
 }
-.card-description .item-stats-grid .stat-row {
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row {
   display: flex;
   justify-content: space-between;
   padding: 4px 0;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
 }
-.card-description .item-stats-grid .stat-row:last-child {
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row:last-child {
   border-bottom: none;
 }
-.card-description .item-stats-grid .stat-row .stat-label {
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row .stat-label {
   font-weight: bold;
   color: var(--c-dark-blue);
 }
-.card-description .item-stats-grid .stat-row .stat-value {
+.vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row .stat-value {
   color: var(--c-dark-blue);
 }
-.card-description .item-properties {
+.vagabond-chat-card-v2 .card-description .item-properties {
   margin-top: 10px;
   padding: 8px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
-.card-description .item-properties strong {
+.vagabond-chat-card-v2 .card-description .item-properties strong {
   color: var(--c-dark-blue);
   font-weight: bold;
 }
-.card-description .item-properties .property-tag {
+.vagabond-chat-card-v2 .card-description .item-properties .property-tag {
   display: inline-block;
   padding: 2px 6px;
   margin: 2px;
@@ -1011,8 +1018,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 3px;
   font-size: 13px;
 }
-
-.card-crit {
+.vagabond-chat-card-v2 .card-crit {
   margin: 8px 16px;
   padding: 8px 12px;
   font-family: "Paradigm", serif;
@@ -1020,37 +1026,31 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 4px;
   box-shadow: 0px 1px 4px var(--vagabond-c-darkgray);
 }
-.card-crit strong {
+.vagabond-chat-card-v2 .card-crit strong {
   font-weight: bold;
   font-family: "Eskapade", serif;
   font-size: 18px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2705882353);
 }
-
-/* SAVE CRIT RULE */
-.save-crit-rule {
+.vagabond-chat-card-v2 .save-crit-rule {
   background: rgba(231, 87, 10, 0.1); /* Light orange background */
   border-left: 3px solid var(--vagabond-c-damage-orange);
   margin: 8px 16px;
   padding: 8px 12px;
   border-radius: 3px;
 }
-.save-crit-rule p {
+.vagabond-chat-card-v2 .save-crit-rule p {
   margin: 0;
   font-family: "Paradigma", serif;
   font-size: 15px;
   color: var(--c-dark-blue);
 }
-.save-crit-rule p strong {
+.vagabond-chat-card-v2 .save-crit-rule p strong {
   color: var(--vagabond-c-damage-orange);
   text-transform: uppercase;
   font-size: 13px;
 }
-
-/* ==================================================
- * AUTO-FAIL BANNER (for Dead status, etc.)
- * ================================================== */
-.auto-fail-banner {
+.vagabond-chat-card-v2 .auto-fail-banner {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
@@ -1060,11 +1060,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-align: center;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
-.auto-fail-banner.outcome-auto-fail {
+.vagabond-chat-card-v2 .auto-fail-banner.outcome-auto-fail {
   border-color: #666;
   background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
 }
-.auto-fail-banner .auto-fail-text {
+.vagabond-chat-card-v2 .auto-fail-banner .auto-fail-text {
   display: block;
   color: #999;
   font-size: 18px;
@@ -1073,25 +1073,22 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   letter-spacing: 1px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
-
-/* DAMAGE SECTION */
-.content-body {
+.vagabond-chat-card-v2 .content-body {
   padding-top: 10px;
 }
-
-.damage-section {
+.vagabond-chat-card-v2 .damage-section {
   margin-bottom: 10px;
   /* Add inside .vagabond-chat-card-v2 .damage-section */
   /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) */
 }
-.damage-section .damage-header-container {
+.vagabond-chat-card-v2 .damage-section .damage-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-right: 30px;
   /* Critical Label */
 }
-.damage-section .damage-header-container .crit-label {
+.vagabond-chat-card-v2 .damage-section .damage-header-container .crit-label {
   background: var(--vagabond-c-damage-orange);
   color: white;
   font-size: 13px;
@@ -1102,7 +1099,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   white-space: nowrap;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
-.damage-section .damage-header-arrow {
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow {
   background-image: url("../assets/ui/chat/damage-title-bg.webp");
   background-size: contain;
   background-repeat: no-repeat;
@@ -1115,14 +1112,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
   /* The Right Line */
 }
-.damage-section .damage-header-arrow span {
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow span {
   color: white;
   font-weight: 900;
   font-size: 14px;
   text-transform: uppercase;
   text-shadow: 1px 1px 0 #000;
 }
-.damage-section .damage-header-arrow::before {
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow::before {
   content: "";
   flex: 1; /* Grow to fill space */
   height: 2px;
@@ -1130,7 +1127,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 40px; /* Limit length so it doesn't touch edges */
 }
-.damage-section .damage-header-arrow::after {
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow::after {
   content: "";
   flex: 1; /* Grow to fill space */
   height: 2px;
@@ -1138,14 +1135,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 40px;
 }
-.damage-section .damage-row {
+.vagabond-chat-card-v2 .damage-section .damage-row {
   display: flex;
   align-items: center;
   justify-content: space-around;
   gap: 12px;
   padding: 0 20px;
 }
-.damage-section .damage-total-display {
+.vagabond-chat-card-v2 .damage-section .damage-total-display {
   width: 50px;
   height: 50px;
   display: flex;
@@ -1156,29 +1153,27 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Faded Background Icon (Burst/Skull/Fire) */
   /* The Number Value */
 }
-.damage-section .damage-total-display .damage-bg-icon {
+.vagabond-chat-card-v2 .damage-section .damage-total-display .damage-bg-icon {
   font-size: 30px;
   color: var(--vagabond-c-damage-orange);
   text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
 }
-.damage-section .damage-total-display .damage-value {
+.vagabond-chat-card-v2 .damage-section .damage-total-display .damage-value {
   font-family: var(--font-secondary);
   font-size: 34px;
   font-weight: 900;
   color: var(--vagabond-c-damage-orange); /* Dark Orange */
   text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
 }
-
-/* CRITICAL SECTION */
-.crit-section {
+.vagabond-chat-card-v2 .crit-section {
   margin-bottom: 10px;
 }
-.crit-section .crit-header-container {
+.vagabond-chat-card-v2 .crit-section .crit-header-container {
   display: flex;
   align-items: center;
   padding-right: 30px;
 }
-.crit-section .crit-header-arrow {
+.vagabond-chat-card-v2 .crit-section .crit-header-arrow {
   background-image: url("../assets/ui/chat/damage-title-bg.webp");
   background-size: contain;
   background-repeat: no-repeat;
@@ -1190,14 +1185,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-bottom: 5px;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
 }
-.crit-section .crit-header-arrow span {
+.vagabond-chat-card-v2 .crit-section .crit-header-arrow span {
   color: white;
   font-weight: 900;
   font-size: 14px;
   text-transform: uppercase;
   text-shadow: 1px 1px 0 #000;
 }
-.crit-section .crit-header-arrow::before {
+.vagabond-chat-card-v2 .crit-section .crit-header-arrow::before {
   content: "";
   flex: 1;
   height: 2px;
@@ -1205,7 +1200,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 40px;
 }
-.crit-section .crit-header-arrow::after {
+.vagabond-chat-card-v2 .crit-section .crit-header-arrow::after {
   content: "";
   flex: 1;
   height: 2px;
@@ -1213,7 +1208,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 40px;
 }
-.crit-section .crit-text {
+.vagabond-chat-card-v2 .crit-section .crit-text {
   padding: 8px 20px;
   background: rgba(255, 255, 255, 0.3);
   border-left: 3px solid var(--vagabond-c-damage-orange);
@@ -1222,16 +1217,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   line-height: 1.5;
   color: var(--c-dark-blue);
 }
-
-/* PROPERTIES ACCORDION */
-.metadata-item-expandable {
+.vagabond-chat-card-v2 .metadata-item-expandable {
   background: #f1f1f1;
   border-radius: 4px;
   margin-bottom: 8px;
   border: 1px solid #ccc;
   overflow: hidden;
 }
-.metadata-item-expandable .metadata-header {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-header {
   background: var(--vagabond-c-bg-lite);
   color: white;
   padding: 5px 8px;
@@ -1243,33 +1236,33 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   gap: 6px;
 }
-.metadata-item-expandable .metadata-header .expand-icon {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-header .expand-icon {
   margin-left: auto;
   transition: transform 0.2s;
 }
-.metadata-item-expandable .metadata-header:hover {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-header:hover {
   background: var(--vagabond-c-bluey);
 }
-.metadata-item-expandable .metadata-content {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-content {
   max-height: 0;
   overflow: hidden;
   transition: 0.3s;
   padding: 0 8px;
   background: rgba(255, 255, 255, 0.5);
 }
-.metadata-item-expandable .metadata-content ul {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-content ul {
   margin: 0;
   padding: 5px 0 5px 15px;
   list-style: none;
 }
-.metadata-item-expandable .metadata-content ul li {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-content ul li {
   font-size: 16px;
   font-family: "Paradigma", serif;
   color: var(--c-dark-blue);
   margin-bottom: 2px;
   position: relative;
 }
-.metadata-item-expandable .metadata-content ul li::before {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-content ul li::before {
   content: "•";
   color: var(--vagabond-c-damage-orange);
   font-weight: bold;
@@ -1277,21 +1270,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   width: 1em;
   margin-left: -1em;
 }
-.metadata-item-expandable .metadata-content ul li strong {
+.vagabond-chat-card-v2 .metadata-item-expandable .metadata-content ul li strong {
   color: #000;
   text-transform: uppercase;
   font-size: 10px;
 }
-.metadata-item-expandable.expanded .metadata-header .expand-icon {
+.vagabond-chat-card-v2 .metadata-item-expandable.expanded .metadata-header .expand-icon {
   transform: rotate(180deg);
 }
-.metadata-item-expandable.expanded .metadata-content {
+.vagabond-chat-card-v2 .metadata-item-expandable.expanded .metadata-content {
   max-height: 200px;
   padding-bottom: 5px;
 }
-
-/* FOOTER BUTTONS */
-.card-actions {
+.vagabond-chat-card-v2 .card-actions {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -1301,15 +1292,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Apply Save Damage Button Container (in save result cards) */
   /* Defend Options Accordion */
 }
-.card-actions button.vagabond-apply-direct-button,
-.card-actions button.vagabond-npc-damage-button,
-.card-actions button.vagabond-item-damage-button,
-.card-actions button.vagabond-damage-button,
-.card-actions button.vagabond-apply-save-damage-button,
-.card-actions button.vagabond-apply-healing-button,
-.card-actions button.vagabond-apply-recover-button,
-.card-actions button.vagabond-apply-recharge-button,
-.card-actions button.vagabond-apply-damage-button {
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-damage-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-save-damage-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-healing-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recover-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recharge-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-damage-button {
   width: 100%;
   background: transparent !important;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp") !important;
@@ -1334,49 +1325,49 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-align: center;
   line-height: 1.2;
 }
-.card-actions button.vagabond-apply-direct-button:hover,
-.card-actions button.vagabond-npc-damage-button:hover,
-.card-actions button.vagabond-item-damage-button:hover,
-.card-actions button.vagabond-damage-button:hover,
-.card-actions button.vagabond-apply-save-damage-button:hover,
-.card-actions button.vagabond-apply-healing-button:hover,
-.card-actions button.vagabond-apply-recover-button:hover,
-.card-actions button.vagabond-apply-recharge-button:hover,
-.card-actions button.vagabond-apply-damage-button:hover {
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-damage-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-save-damage-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-healing-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recover-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recharge-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-damage-button:hover {
   filter: brightness(1.6);
 }
-.card-actions button.vagabond-apply-direct-button:disabled,
-.card-actions button.vagabond-npc-damage-button:disabled,
-.card-actions button.vagabond-item-damage-button:disabled,
-.card-actions button.vagabond-damage-button:disabled,
-.card-actions button.vagabond-apply-save-damage-button:disabled,
-.card-actions button.vagabond-apply-healing-button:disabled,
-.card-actions button.vagabond-apply-recover-button:disabled,
-.card-actions button.vagabond-apply-recharge-button:disabled,
-.card-actions button.vagabond-apply-damage-button:disabled {
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-damage-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-save-damage-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-healing-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recover-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recharge-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-damage-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   filter: grayscale(1);
 }
-.card-actions button.vagabond-apply-direct-button i,
-.card-actions button.vagabond-npc-damage-button i,
-.card-actions button.vagabond-item-damage-button i,
-.card-actions button.vagabond-damage-button i,
-.card-actions button.vagabond-apply-save-damage-button i,
-.card-actions button.vagabond-apply-healing-button i,
-.card-actions button.vagabond-apply-recover-button i,
-.card-actions button.vagabond-apply-recharge-button i,
-.card-actions button.vagabond-apply-damage-button i {
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-damage-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-save-damage-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-healing-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recover-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-recharge-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-damage-button i {
   color: var(--c-yellow-text) !important;
   flex-shrink: 0;
 }
-.card-actions .save-buttons-row {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row {
   display: flex;
   gap: 6px;
   width: 100%;
 }
-.card-actions .save-buttons-row .vagabond-save-button,
-.card-actions .save-buttons-row .vagabond-save-reminder-button {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button,
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button {
   flex: 1;
   background: url("../assets/ui/chat/yellow-button.webp");
   border: none;
@@ -1393,26 +1384,26 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   white-space: nowrap;
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
 }
-.card-actions .save-buttons-row .vagabond-save-button:hover,
-.card-actions .save-buttons-row .vagabond-save-reminder-button:hover {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover,
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button:hover {
   filter: brightness(1.1);
   background: url("../assets/ui/chat/yellow-button.webp");
   color: var(--vagabond-c-dark);
 }
-.card-actions .vagabond-save-buttons-container {
+.vagabond-chat-card-v2 .card-actions .vagabond-save-buttons-container {
   margin-bottom: 10px;
 }
-.card-actions .save-apply-button-container {
+.vagabond-chat-card-v2 .card-actions .save-apply-button-container {
   margin-top: 10px;
   width: 100%;
 }
-.card-actions .defend-info-box {
+.vagabond-chat-card-v2 .card-actions .defend-info-box {
   background: #fff;
   border-bottom: 2px solid #000;
   border-radius: 3px;
   overflow: hidden;
 }
-.card-actions .defend-info-box .defend-header {
+.vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header {
   background: var(--vagabond-c-bluey);
   color: white;
   padding: 5px 8px;
@@ -1423,28 +1414,28 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   gap: 6px;
 }
-.card-actions .defend-info-box .defend-header:hover {
+.vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header:hover {
   background: var(--vagabond-c-bluey);
 }
-.card-actions .defend-info-box .defend-header .expand-icon {
+.vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header .expand-icon {
   margin-left: auto;
   transition: transform 0.2s;
 }
-.card-actions .defend-info-box .defend-content {
+.vagabond-chat-card-v2 .card-actions .defend-info-box .defend-content {
   max-height: 0;
   padding: 0 8px;
   overflow: hidden;
   transition: 0.3s;
 }
-.card-actions .defend-info-box .defend-content p {
+.vagabond-chat-card-v2 .card-actions .defend-info-box .defend-content p {
   font-size: 12px;
   margin: 4px 0;
   color: #222;
 }
-.card-actions .defend-info-box.expanded .defend-header .expand-icon {
+.vagabond-chat-card-v2 .card-actions .defend-info-box.expanded .defend-header .expand-icon {
   transform: rotate(180deg);
 }
-.card-actions .defend-info-box.expanded .defend-content {
+.vagabond-chat-card-v2 .card-actions .defend-info-box.expanded .defend-content {
   max-height: 200px;
   padding: 5px 8px;
 }

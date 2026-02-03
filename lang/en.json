@@ -321,6 +321,19 @@
         "hint": "Choose which status conditions appear in the token HUD menu. Vagabond mode shows all 17 system-specific conditions from the rulebook. Foundry mode shows all default conditions. Requires world reload to apply.",
         "vagabond": "Vagabond Conditions (17 Custom)",
         "foundry": "Foundry Default Conditions"
+      },
+      "encounterSettings": {
+        "name": "Encounter Settings",
+        "label": "Configure Encounter",
+        "hint": "Configure combat encounter display options and mechanics."
+      },
+      "hideInitiativeRoll": {
+        "name": "Hide Initiative Roll",
+        "hint": "Hide the initiative button in the combat tracker. The Vagabond system uses popcorn initiative and typically doesn't require traditional initiative rolls."
+      },
+      "useActivationPoints": {
+        "name": "Use Activation Points",
+        "hint": "Display activation counters below the play buttons. When disabled, combatants have one activation by default (as currently implemented)."
       }
     },
     "Actor": {
@@ -921,6 +934,30 @@
         "RemoveActivation": "Remove Activation",
         "UndoUse": "Undo Use"
       }
+    },
+    "EncounterSettings": {
+      "Title": "Encounter Settings",
+      "Description": "Configure how combat encounters are displayed and managed.",
+      "GeneralSettings": "General Settings",
+      "HideInitiativeRoll": {
+        "Name": "Hide Initiative Roll",
+        "Hint": "Hide the initiative button in the combat tracker. Vagabond uses popcorn initiative and typically doesn't require traditional initiative rolls."
+      },
+      "UseActivationPoints": {
+        "Name": "Use Activation Points",
+        "Hint": "Display activation counters below the play buttons for each combatant. When disabled, combatants have one activation by default."
+      },
+      "InitiativeFormula": {
+        "Name": "Initiative Formula (Player Characters)",
+        "Hint": "Custom formula for rolling initiative for PCs. Only used when initiative rolls are enabled (not hidden). Use @ to reference actor data (e.g., @dexterity.value, @awareness.value)."
+      },
+      "NPCInitiativeFormula": {
+        "Name": "Initiative Formula (NPCs)",
+        "Hint": "Custom formula for rolling initiative for NPCs. Only used when initiative rolls are enabled (not hidden). Use @ to reference actor data (e.g., @speed). Use ceil() for rounding up."
+      },
+      "Save": "Save Settings",
+      "Cancel": "Cancel",
+      "SaveSuccess": "Encounter settings saved successfully!"
     },
     "DiceSoNice": {
       "Category": "Vagabond",

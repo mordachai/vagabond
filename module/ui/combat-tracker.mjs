@@ -15,6 +15,10 @@ export class VagabondCombatTracker {
     // Call original method to populate base context
     await wrapped.call(this, context, options);
 
+    // Add encounter settings to context
+    context.hideInitiativeRoll = game.settings.get('vagabond', 'hideInitiativeRoll');
+    context.useActivationPoints = game.settings.get('vagabond', 'useActivationPoints');
+
     // Initialize Factions structure
     context.factions = {
       friendly: { label: "VAGABOND.Combat.Factions.Friendly", turns: [], css: "friendly" },

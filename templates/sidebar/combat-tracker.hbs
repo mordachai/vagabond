@@ -57,7 +57,8 @@
                         <button type="button" class="combatant-control icon-only" aria-label="{{localize 'COMBAT.PingCombatant'}}" data-action="pingCombatant">
                             <i class="fas fa-bullseye"></i>
                         </button>
-                        
+
+                        {{#unless @root.hideInitiativeRoll}}
                         <div class="initiative-box flexrow">
                             {{#if turn.initiative includeZero=true}}
                                 <span class="init-value">{{turn.initiative}}</span>
@@ -67,6 +68,7 @@
                                 </button>
                             {{/if}}
                         </div>
+                        {{/unless}}
                     </div>
                 </div>
 
@@ -113,6 +115,7 @@
                     </button>
                     {{/if}}
 
+                    {{#if @root.useActivationPoints}}
                     {{!-- Activation Counter --}}
                     <div class="activation-counter {{#if turn.isSpent}}spent{{/if}}">
                         <i class="fas fa-bolt"></i>
@@ -122,6 +125,7 @@
                         <span class="counter">{{turn.activations.value}}</span>
                         {{/if}}
                     </div>
+                    {{/if}}
                 </div>
             </li>
             {{/each}}
