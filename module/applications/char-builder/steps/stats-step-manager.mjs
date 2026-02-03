@@ -710,12 +710,7 @@ export class StatsStepManager extends BaseStepManager {
               condition: 'value <= 6', // Can only apply to stats 6 or less
               maxValue: 7,
               reason: `${feature.name}`
-                maxValue: bonus.maxValue,
-                reason: bonus.reason || feature.name,
-                targetType: bonus.targetType,
-                target: bonus.target
-              });
-            }
+            });
           }
         }
       } catch (error) {
