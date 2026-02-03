@@ -8,12 +8,13 @@ export class VagabondCombatant extends Combatant {
     await super._preCreate(data, options, user);
 
     // Initialize activations flags if missing
-    let max = 1;
-    if (this.actor?.type === 'npc') {
-      const rank = this.actor.system.rank;
-      if (rank === 'elite') max = 2;
-      else if (rank === 'boss') max = 3;
-    }
+    const useActivationPoints = game.settings.get('vagabond', 'useActivationPoints');
+
+    // If activation points are disabled, default to 1
+    // If enabled, use the configured default
+    const max = useActivationPoints
+      ? (game.settings.get('vagabond', 'defaultActivationPoints') || 2)
+      : 1;
 
     // Always initialize with max activations
     // The Combat.resetAll() method will handle resetting on round changes

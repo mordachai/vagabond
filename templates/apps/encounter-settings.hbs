@@ -23,6 +23,12 @@
     </div>
 
     <div class="form-group">
+      <label for="defaultActivationPoints">{{localize 'VAGABOND.EncounterSettings.DefaultActivationPoints.Name'}}</label>
+      <input type="number" name="defaultActivationPoints" id="defaultActivationPoints" value="{{defaultActivationPoints}}" min="1" max="10" step="1">
+      <p class="hint">{{localize 'VAGABOND.EncounterSettings.DefaultActivationPoints.Hint'}}</p>
+    </div>
+
+    <div class="form-group">
       <label for="initiativeFormula">{{localize 'VAGABOND.EncounterSettings.InitiativeFormula.Name'}}</label>
       <input type="text" name="initiativeFormula" id="initiativeFormula" value="{{initiativeFormula}}" placeholder="1d20 + @dexterity.value + @awareness.value">
       <p class="hint">{{localize 'VAGABOND.EncounterSettings.InitiativeFormula.Hint'}}</p>

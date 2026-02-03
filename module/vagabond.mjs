@@ -194,7 +194,18 @@ function registerGameSettings() {
     requiresReload: false
   });
 
-  // Setting 12: Encounter Settings Button (Menu)
+  // Setting 12: Default Activation Points
+  game.settings.register('vagabond', 'defaultActivationPoints', {
+    name: 'VAGABOND.Settings.defaultActivationPoints.name',
+    hint: 'VAGABOND.Settings.defaultActivationPoints.hint',
+    scope: 'world',
+    config: false, // Not shown in standard config - use Encounter Settings dialog instead
+    type: Number,
+    default: 2,
+    requiresReload: false
+  });
+
+  // Setting 13: Encounter Settings Button (Menu)
   game.settings.registerMenu('vagabond', 'encounterSettingsMenu', {
     name: 'VAGABOND.Settings.encounterSettings.name',
     label: 'VAGABOND.Settings.encounterSettings.label',

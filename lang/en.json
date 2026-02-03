@@ -334,6 +334,18 @@
       "useActivationPoints": {
         "name": "Use Activation Points",
         "hint": "Display activation counters below the play buttons. When disabled, combatants have one activation by default (as currently implemented)."
+      },
+      "defaultActivationPoints": {
+        "name": "Default Activation Points",
+        "hint": "The starting number of activation points for each combatant when combat begins. Most tables use 1, but you may want 2 or more to track multiple actions like Movement and Attack, or Movement and Cast."
+      },
+      "initiativeFormula": {
+        "name": "Initiative Formula (Player Characters)",
+        "hint": "Custom formula for rolling initiative for PCs. Only used when initiative rolls are enabled. Use @ to reference actor data (e.g., @dexterity.value, @awareness.value)."
+      },
+      "npcInitiativeFormula": {
+        "name": "Initiative Formula (NPCs)",
+        "hint": "Custom formula for rolling initiative for NPCs. Only used when initiative rolls are enabled. Use @ to reference actor data (e.g., @speed)."
       }
     },
     "Actor": {
@@ -946,6 +958,10 @@
       "UseActivationPoints": {
         "Name": "Use Activation Points",
         "Hint": "Display activation counters below the play buttons for each combatant. When disabled, combatants have one activation by default."
+      },
+      "DefaultActivationPoints": {
+        "Name": "Default Activation Points",
+        "Hint": "The starting number of activation points for each combatant when combat begins. Most tables use 1, but you may want 2 or more to track multiple actions like Movement and Attack, or Movement and Cast."
       },
       "InitiativeFormula": {
         "Name": "Initiative Formula (Player Characters)",

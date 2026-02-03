@@ -22,6 +22,7 @@ export class EncounterSettings extends FormApplication {
     return {
       hideInitiativeRoll: game.settings.get('vagabond', 'hideInitiativeRoll'),
       useActivationPoints: game.settings.get('vagabond', 'useActivationPoints'),
+      defaultActivationPoints: game.settings.get('vagabond', 'defaultActivationPoints'),
       initiativeFormula: game.settings.get('vagabond', 'initiativeFormula'),
       npcInitiativeFormula: game.settings.get('vagabond', 'npcInitiativeFormula'),
     };
@@ -34,14 +35,35 @@ export class EncounterSettings extends FormApplication {
     // Convert checkbox values to proper booleans
     const hideInitiativeRoll = !!formData.hideInitiativeRoll;
     const useActivationPoints = !!formData.useActivationPoints;
+    const defaultActivationPoints = parseInt(formData.defaultActivationPoints) || 2;
     const initiativeFormula = formData.initiativeFormula?.trim() || '1d20 + @dexterity.value + @awareness.value';
     const npcInitiativeFormula = formData.npcInitiativeFormula?.trim() || '1d20 + ceil(@speed / 10)';
 
     // Update settings
     await game.settings.set('vagabond', 'hideInitiativeRoll', hideInitiativeRoll);
     await game.settings.set('vagabond', 'useActivationPoints', useActivationPoints);
+    await game.settings.set('vagabond', 'defaultActivationPoints', defaultActivationPoints);
     await game.settings.set('vagabond', 'initiativeFormula', initiativeFormula);
     await game.settings.set('vagabond', 'npcInitiativeFormula', npcInitiativeFormula);
+
+    // Update existing combatants in active combats with new activation point settings
+    if (game.combats && game.combats.size > 0) {
+      const newMax = useActivationPoints ? defaultActivationPoints : 1;
+
+      for (const combat of game.combats) {
+        const updates = combat.combatants.map(c => ({
+          _id: c.id,
+          'flags.vagabond.activations': {
+            max: newMax,
+            value: newMax
+          }
+        }));
+
+        if (updates.length > 0) {
+          await combat.updateEmbeddedDocuments('Combatant', updates);
+        }
+      }
+    }
 
     ui.notifications.info(game.i18n.localize('VAGABOND.EncounterSettings.SaveSuccess'));
 
