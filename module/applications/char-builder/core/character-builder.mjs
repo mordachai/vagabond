@@ -718,12 +718,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     // Use existing finish logic but with state manager data
     const state = this.stateManager.getCurrentState();
-    
+
     // Create the final actor data
     const actorData = this.actor.toObject();
     actorData.effects = [];
     if (actorData.system.inventory) actorData.system.inventory.bonusSlots = 0;
-    
+
     // Apply stats
     if (actorData.system.stats) {
       for (const key of Object.keys(actorData.system.stats)) {
@@ -758,12 +758,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Add items
+    // Add items (excluding starting pack since we'll process it separately)
     const allPerks = [...new Set([...(state.classPerks || []), ...(state.perks || [])])];
     const itemUuids = [
       state.selectedAncestry,
       state.selectedClass,
-      state.selectedStartingPack,
       ...allPerks,
       ...(state.spells || []),
       ...(state.gear || [])
@@ -780,7 +779,17 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     if (validItems.length > 0) {
-      const itemObjects = validItems.map(item => item.toObject());
+      const itemObjects = validItems.map(item => {
+        const itemData = item.toObject();
+
+        // Auto-favorite spells selected in the builder
+        if (itemData.type === 'spell') {
+          itemData.system.favorite = true;
+        }
+
+        return itemData;
+      });
+
       const singletonTypes = ['ancestry', 'class'];
       const typesBeingAdded = new Set(itemObjects.map(i => i.type));
 
@@ -794,8 +803,111 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Mark character as constructed (hides builder button)
     actorData.system.details.constructed = true;
 
-    // Update the actor
+    // Update the actor (first update to apply stats and items, which triggers prepareDerivedData)
     await this.actor.update(actorData);
+
+    // Process starting pack (if selected)
+    if (state.selectedStartingPack) {
+      try {
+        const startingPack = await fromUuid(state.selectedStartingPack);
+        if (startingPack && startingPack.system.items) {
+          // Add currency from starting pack
+          const currentGold = this.actor.system.currency.gold || 0;
+          const currentSilver = this.actor.system.currency.silver || 0;
+          const currentCopper = this.actor.system.currency.copper || 0;
+
+          await this.actor.update({
+            'system.currency.gold': currentGold + (startingPack.system.currency.gold || 0),
+            'system.currency.silver': currentSilver + (startingPack.system.currency.silver || 0),
+            'system.currency.copper': currentCopper + (startingPack.system.currency.copper || 0)
+          });
+
+          // Add items from starting pack
+          const packItemsToAdd = [];
+          for (const packItem of startingPack.system.items) {
+            try {
+              const itemDoc = await fromUuid(packItem.uuid);
+              if (itemDoc) {
+                for (let i = 0; i < packItem.quantity; i++) {
+                  const itemData = itemDoc.toObject();
+
+                  // Auto-equip weapons and armor
+                  if (itemData.type === 'equipment') {
+                    if (itemData.system.equipmentType === 'weapon') {
+                      // Auto-equip weapons based on grip
+                      const grip = itemData.system.grip || '1H';
+                      if (grip === '2H') {
+                        itemData.system.equipmentState = 'twoHands';
+                      } else {
+                        itemData.system.equipmentState = 'oneHand';
+                      }
+                    } else if (itemData.system.equipmentType === 'armor') {
+                      // Auto-equip armor
+                      itemData.system.equipped = true;
+                    }
+                  }
+
+                  // Auto-favorite spells
+                  if (itemData.type === 'spell') {
+                    itemData.system.favorite = true;
+                  }
+
+                  packItemsToAdd.push(itemData);
+                }
+              }
+            } catch (error) {
+              console.warn(`Failed to load starting pack item ${packItem.uuid}:`, error);
+            }
+          }
+
+          if (packItemsToAdd.length > 0) {
+            await this.actor.createEmbeddedDocuments('Item', packItemsToAdd);
+          }
+        }
+      } catch (error) {
+        console.warn(`Failed to process starting pack ${state.selectedStartingPack}:`, error);
+      }
+    }
+
+    // After all updates, set current values to max values (HP, Mana, Luck)
+    // We need to manually calculate these because the actor reference might not have updated derived data yet
+    const updateData = {};
+
+    // Calculate max HP manually: Might × Level (with bonuses from items now applied)
+    const mightStat = state.assignedStats?.might || 0;
+    const level = 1; // New characters start at level 1
+    const calculatedMaxHP = mightStat * level; // Base formula for level 1 character
+
+    // Set HP to calculated max (use health.value, not health.current)
+    updateData['system.health.value'] = calculatedMaxHP;
+
+    // Set Mana to max (only if spellcaster)
+    if (classItemObj && classItemObj.system.isSpellcaster) {
+      const manaMultiplier = classItemObj.system.manaMultiplier || 0;
+      const calculatedMaxMana = manaMultiplier * level;
+      updateData['system.mana.current'] = calculatedMaxMana;
+    }
+
+    // Set Luck to max (Luck stat value for new character)
+    const luckStat = state.assignedStats?.luck || 0;
+    updateData['system.currentLuck'] = luckStat;
+
+    // Apply the final update
+    if (Object.keys(updateData).length > 0) {
+      await this.actor.update(updateData);
+    }
+
+    // Favorite all spells on the character (post-creation fix)
+    const spellUpdates = [];
+    for (const item of this.actor.items) {
+      if (item.type === 'spell' && !item.system.favorite) {
+        spellUpdates.push({ _id: item.id, 'system.favorite': true });
+      }
+    }
+
+    if (spellUpdates.length > 0) {
+      await this.actor.updateEmbeddedDocuments('Item', spellUpdates);
+    }
 
     // ui.notifications.info("Character creation completed!");
     this.close();
