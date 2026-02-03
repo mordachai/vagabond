@@ -43,7 +43,10 @@
                 <div class="col-1 flexcol">
                     <div class="row-1 flexrow">
                         <img class="token-image" src="{{turn.img}}" alt="{{turn.name}}" data-action="pingCombatant"/>
-                        <h4 class="name" title="{{turn.name}}">{{turn.name}}</h4>
+                        <div class="name-with-healthbar">
+                            <div class="healthbar-bg" style="width: {{turn.hpPercent}}%;"></div>
+                            <h4 class="name" title="{{turn.name}}">{{turn.name}}</h4>
+                        </div>
                     </div>
                     <div class="row-2 flexrow operation-controls">
                         {{#if ../../user.isGM}}

@@ -65,14 +65,47 @@ ol#combat-tracker.directory-list {
                 cursor: pointer;
             }
 
-            h4.name {
+            .name-with-healthbar {
                 flex: 1;
-                margin: 0;
-                white-space: nowrap;
+                position: relative;
                 overflow: hidden;
-                text-overflow: ellipsis;
-                font-size: 1.25em;
-                line-height: 1.25;
+                border-radius: 4px;
+                background: rgba(0, 0, 0, 0.3);
+
+                .healthbar-bg {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    z-index: 0;
+                    background: linear-gradient(90deg,
+                        rgba(139, 0, 0, 0.5) 0%,
+                        rgba(220, 20, 60, 0.6) 70%,
+                        rgba(255, 69, 96, 0.7) 100%);
+                    transition: width 0.3s ease;
+                    pointer-events: none;
+                    clip-path: polygon(
+                        0 0,
+                        100% 0,
+                        calc(100% - 8px) 100%,
+                        0 100%
+                    );
+                    box-shadow: 2px 0 4px rgba(255, 100, 120, 0.6);
+                }
+
+                h4.name {
+                    position: relative;
+                    z-index: 1;
+                    margin: 0;
+                    padding: 2px 6px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 1.25em;
+                    line-height: 1.25;
+                    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8),
+                                 0 0 2px rgba(0, 0, 0, 1);
+                }
             }
         }
 
