@@ -200,6 +200,12 @@
   font-weight: 500;
   font-family: $font-primary;
   white-space: nowrap;
+
+  &.key-stat-tag {
+    border-color: $c-red;
+    color: $c-red;
+    font-weight: 600;
+  }
 }
 
 .traits-section {

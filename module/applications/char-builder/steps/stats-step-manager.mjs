@@ -54,7 +54,20 @@ export class StatsStepManager extends BaseStepManager {
     // Collect available bonuses from ancestry, class, and perks
     const availableBonuses = await this._collectAvailableBonuses(state);
     const appliedBonuses = state.appliedBonuses || {};
-    
+
+    // Get key stats from selected class
+    let keyStats = [];
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        if (classItem && classItem.system.keyStats) {
+          keyStats = classItem.system.keyStats || [];
+        }
+      } catch (error) {
+        console.warn('Failed to load class for key stats:', error);
+      }
+    }
+
     // Prepare stat arrays for display
     const statArrayOptions = Object.entries(statArrays).map(([id, values]) => ({
       id: id,
@@ -94,6 +107,16 @@ export class StatsStepManager extends BaseStepManager {
           return canApply || this._checkBonusCondition(bonus.condition, baseValue);
         }, false);
 
+      // Check if this is a key stat for the selected class
+      const isKeyStat = keyStats.includes(stat);
+
+      // Build hint with key stat prefix if applicable
+      let hint = statHints[stat] || '';
+      if (isKeyStat) {
+        const keyStatLabel = game.i18n.localize('VAGABOND.Terms.KeyStat');
+        hint = `${keyStatLabel}: ${hint}`;
+      }
+
       const statData = {
         key: stat,
         label: game.i18n.localize(CONFIG.VAGABOND.stats[stat]) || stat,
@@ -104,8 +127,9 @@ export class StatsStepManager extends BaseStepManager {
         bonusAmount: bonusesForThisStat,
         hasBonus: bonusesForThisStat > 0,
         hasValue: baseValue !== null && baseValue !== undefined,
-        hint: statHints[stat] || '',
-        canApplyBonus: canApplyBonuses
+        hint: hint,
+        canApplyBonus: canApplyBonuses,
+        isKeyStat: isKeyStat
       };
 
       console.log(`[StatsStep] Stat ${stat}:`, statData);
@@ -235,13 +259,8 @@ export class StatsStepManager extends BaseStepManager {
    * @private
    */
   async _prepareDerivedStats(assignedStats, state) {
-    const allAssigned = Object.values(assignedStats).every(v => v !== null && v !== undefined);
-
-    if (!allAssigned) {
-      return null; // Don't show preview until all stats are assigned
-    }
-
     // Create a preview actor with the assigned stats to get calculated values
+    // Unassigned stats will default to 0 in the preview actor
     const previewActor = await this._createPreviewActor(assignedStats, state);
     if (!previewActor) {
       return null;
@@ -264,12 +283,20 @@ export class StatsStepManager extends BaseStepManager {
     }
 
     // Get saves from the preview actor
+    const savesAffectedBy = {
+      physical: ['might'],
+      reflex: ['dexterity', 'awareness'],
+      mental: ['reason', 'presence']
+    };
+
     const saves = Object.entries(previewActor.system.saves).map(([key, save]) => {
       return {
+        key: key,
         label: save.label,
         statAbbr: '', // Let the template decide or don't show
         value: save.difficulty,
-        tooltip: save.description
+        tooltip: save.description,
+        affectedBy: savesAffectedBy[key] || []
       };
     });
 
@@ -281,7 +308,8 @@ export class StatsStepManager extends BaseStepManager {
         statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]) || '',
         value: skill.difficulty,
         trained: skill.trained,
-        tooltip: game.i18n.localize(`VAGABOND.SkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label
+        tooltip: game.i18n.localize(`VAGABOND.SkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
+        affectedBy: [skill.stat]
       };
     });
 
@@ -293,7 +321,8 @@ export class StatsStepManager extends BaseStepManager {
         statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]) || '',
         value: skill.difficulty,
         trained: skill.trained,
-        tooltip: game.i18n.localize(`VAGABOND.WeaponSkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label
+        tooltip: game.i18n.localize(`VAGABOND.WeaponSkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
+        affectedBy: [skill.stat]
       };
     });
 
@@ -301,33 +330,39 @@ export class StatsStepManager extends BaseStepManager {
       hp: {
         label: 'HP',
         value: previewActor.system.health.max,
-        tooltip: game.i18n.localize('VAGABOND.Hints.HP')
+        tooltip: game.i18n.localize('VAGABOND.Hints.HP'),
+        affectedBy: ['might']
       },
       isSpellcaster: isSpellcaster,
       manaMax: {
         label: 'Mana Max',
         value: previewActor.system.mana.max,
-        tooltip: game.i18n.localize('VAGABOND.Hints.MaxMana')
+        tooltip: game.i18n.localize('VAGABOND.Hints.MaxMana'),
+        affectedBy: [castingStatKey]
       },
       manaCast: {
         label: 'Mana/Cast',
         value: previewActor.system.mana.castingMax,
-        tooltip: game.i18n.localize('VAGABOND.Hints.ManaPerCast')
+        tooltip: game.i18n.localize('VAGABOND.Hints.ManaPerCast'),
+        affectedBy: [castingStatKey]
       },
       luck: {
         label: 'Luck Pool',
         value: previewActor.system.stats.luck.total,
-        tooltip: game.i18n.localize('VAGABOND.Hints.LuckPool')
+        tooltip: game.i18n.localize('VAGABOND.Hints.LuckPool'),
+        affectedBy: ['luck']
       },
       inventory: {
         label: 'Inventory',
         value: previewActor.system.inventory.maxSlots,
-        tooltip: game.i18n.localize('VAGABOND.Hints.Inventory')
+        tooltip: game.i18n.localize('VAGABOND.Hints.Inventory'),
+        affectedBy: ['might']
       },
       speed: {
         label: 'Speed',
         value: previewActor.system.speed.base,
-        tooltip: game.i18n.localize('VAGABOND.Hints.Speed')
+        tooltip: game.i18n.localize('VAGABOND.Hints.Speed'),
+        affectedBy: ['dexterity']
       },
       saves: saves,
       skills: skills,

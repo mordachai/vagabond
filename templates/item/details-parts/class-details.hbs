@@ -20,6 +20,43 @@
       </div>
     </div>
 
+    {{! Key Stats Section }}
+    <div class='key-stats-section mt-20'>
+      <h3>{{localize "VAGABOND.Terms.KeyStat"}}</h3>
+
+      <div class='form-group-stacked'>
+        <div class='flex-row flex-wrap gap-5'>
+          {{#each system.keyStats as |statKey index|}}
+            <div class='skill-tag key-stat-tag'>
+              <span>{{localize (lookup @root.config.stats statKey)}}</span>
+              {{#if @root.editable}}
+                <a data-action="removeKeyStat" data-index="{{index}}">
+                  <i class="fas fa-times"></i>
+                </a>
+              {{/if}}
+            </div>
+          {{/each}}
+        </div>
+
+        {{#if editable}}
+          <div class='flex-row mt-5'>
+            <select id="key-stat-select">
+              <option value=''>{{localize "VAGABOND.UI.Labels.SelectStat"}}</option>
+              <option value='might'>{{localize "VAGABOND.Stat.Might.long"}}</option>
+              <option value='dexterity'>{{localize "VAGABOND.Stat.Dexterity.long"}}</option>
+              <option value='reason'>{{localize "VAGABOND.Stat.Reason.long"}}</option>
+              <option value='awareness'>{{localize "VAGABOND.Stat.Awareness.long"}}</option>
+              <option value='presence'>{{localize "VAGABOND.Stat.Presence.long"}}</option>
+              <option value='luck'>{{localize "VAGABOND.Stat.Luck.long"}}</option>
+            </select>
+            <button type="button" data-action="addKeyStat" class="btn-sm">
+              <i class="fas fa-plus"></i> {{localize "VAGABOND.UI.Buttons.AddStat"}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
     {{! Skill Training Section }}
     <div class='skill-training-section mt-20'>
       <h3>{{localize "VAGABOND.UI.Sections.SkillTraining"}}</h3>

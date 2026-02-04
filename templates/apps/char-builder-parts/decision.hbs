@@ -62,7 +62,7 @@
                 {{!-- Char Stats --}}
                 <div class="stat-slot-container">
                     <div class="stat-slot" data-stat="{{this.key}}" data-action="assignStat" title="{{this.hint}}">
-                        <label>{{this.abbreviation}}</label>
+                        <label class="{{#if this.isKeyStat}}key-stat{{/if}}">{{this.label}}</label>
                         <div class="hex-box-wrapper">
                             <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
                                 {{#if this.value}}

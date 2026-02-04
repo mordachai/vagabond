@@ -69,6 +69,25 @@ export default class VagabondClass extends VagabondItemBase {
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
 
+    // Key stats - the primary stats for this class (can be multiple)
+    schema.keyStats = new fields.ArrayField(
+      new fields.StringField({
+        choices: {
+          might: 'VAGABOND.Ability.Might.long',
+          dexterity: 'VAGABOND.Ability.Dexterity.long',
+          reason: 'VAGABOND.Ability.Reason.long',
+          awareness: 'VAGABOND.Ability.Awareness.long',
+          presence: 'VAGABOND.Ability.Presence.long',
+          luck: 'VAGABOND.Ability.Luck.long'
+        }
+      }),
+      {
+        initial: [],
+        label: 'VAGABOND.Item.Class.FIELDS.keyStats.label',
+        hint: 'VAGABOND.Item.Class.FIELDS.keyStats.hint'
+      }
+    );
+
     // Skill Grant System
     schema.skillGrant = new fields.SchemaField({
       // Fixed skills the class always provides (e.g., Alchemist -> Craft)

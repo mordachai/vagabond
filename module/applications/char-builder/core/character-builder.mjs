@@ -55,6 +55,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     this.compendiumTypeCache = {}; // Cache which compendiums contain which types
     this.showAllPerks = false; // Toggle for showing all perks regardless of prerequisites
 
+    // Track previous derived stat values for animation
+    this.previousDerivedValues = new Map();
+
     // Initialize with fallback values, will be replaced by config
     this.statArrays = {
       1: [5, 5, 5, 4, 4, 3], 2: [5, 5, 5, 5, 3, 2], 3: [6, 5, 4, 4, 4, 3],
@@ -515,6 +518,53 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
           }
         });
       }
+    }
+
+    // 4. Stat hover highlighting for derived stats preview
+    if (this.currentStep === 'stats') {
+      const statLabels = html.querySelectorAll('.stat-slot label');
+      const derivedItems = html.querySelectorAll('.skill-item[data-affected-by]');
+
+      statLabels.forEach(label => {
+        const statSlot = label.closest('.stat-slot');
+        if (!statSlot) return;
+
+        const statKey = statSlot.dataset.stat;
+
+        label.addEventListener('mouseenter', () => {
+          derivedItems.forEach(item => {
+            const affectedBy = item.dataset.affectedBy?.split(' ') || [];
+            if (affectedBy.includes(statKey)) {
+              item.classList.add('stat-hover-highlight');
+            }
+          });
+        });
+
+        label.addEventListener('mouseleave', () => {
+          derivedItems.forEach(item => {
+            item.classList.remove('stat-hover-highlight');
+          });
+        });
+      });
+
+      // Track value changes and trigger animation
+      derivedItems.forEach(item => {
+        const valueSpan = item.querySelector('.skill-value');
+        if (valueSpan) {
+          const currentValue = valueSpan.textContent.trim();
+          const skillName = item.querySelector('.skill-name')?.textContent?.trim() || 'unknown';
+          const previousValue = this.previousDerivedValues.get(skillName);
+
+          // If value changed, trigger animation
+          if (previousValue !== undefined && previousValue !== currentValue) {
+            item.classList.add('value-changed');
+            setTimeout(() => item.classList.remove('value-changed'), 600);
+          }
+
+          // Store current value for next render
+          this.previousDerivedValues.set(skillName, currentValue);
+        }
+      });
     }
   }
 

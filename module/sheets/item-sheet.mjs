@@ -90,6 +90,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       deleteFromContainer: this._onDeleteFromContainer,
       addGuaranteedSkill: this._onAddGuaranteedSkill,
       removeGuaranteedSkill: this._onRemoveGuaranteedSkill,
+      addKeyStat: this._onAddKeyStat,
+      removeKeyStat: this._onRemoveKeyStat,
       addSkillChoiceGroup: this._onAddSkillChoiceGroup,
       removeSkillChoiceGroup: this._onRemoveSkillChoiceGroup,
       updateChoicePool: this._onUpdatePool,
@@ -995,11 +997,47 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   static async _onRemoveGuaranteedSkill(event, target) {
     const index = parseInt(target.dataset.index);
-    
+
     const current = this.item.system.skillGrant.guaranteed || [];
     const newGuaranteed = current.filter((_, i) => i !== index);
-    
+
     await this.item.update({ "system.skillGrant.guaranteed": newGuaranteed });
+  }
+
+  /**
+   * Add a stat to the key stats list.
+   */
+  static async _onAddKeyStat(event, target) {
+    const select = this.element.querySelector('#key-stat-select');
+    if (!select) {
+      console.error("VAGABOND | Selector #key-stat-select not found");
+      return;
+    }
+
+    const stat = select.value.toLowerCase().trim();
+    if (!stat) {
+      console.warn("VAGABOND | No stat selected");
+      return;
+    }
+
+    const current = this.item.system.keyStats || [];
+
+    if (current.includes(stat)) {
+      console.warn(`VAGABOND | Stat ${stat} is already in the key stats list.`);
+      return;
+    }
+
+    const updateData = { "system.keyStats": [...current, stat] };
+    await this.item.update(updateData);
+  }
+
+  static async _onRemoveKeyStat(event, target) {
+    const index = parseInt(target.dataset.index);
+
+    const current = this.item.system.keyStats || [];
+    const newKeyStats = current.filter((_, i) => i !== index);
+
+    await this.item.update({ "system.keyStats": newKeyStats });
   }
 
   static async _onAddSkillChoiceGroup(event, target) {

@@ -74,8 +74,9 @@
                         <strong>{{requiredSpellCount}}</strong> {{#if (eq requiredSpellCount 1)}}spell{{else}}spells{{/if}} granted by your ancestry/class (cannot be removed)
                     </div>
                 {{/if}}
-                {{#if spellLimit}}
-                    {{!-- Show spell slots (filled + empty) --}}
+
+                {{!-- Always show selected spells, regardless of spell limit --}}
+                {{#if trayData.spells.length}}
                     {{#each trayData.spells as |item|}}
                         <div class="tray-item-compact spell-slot filled {{#if item.isRequired}}required{{/if}}" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
@@ -91,22 +92,24 @@
                             {{/if}}
                         </div>
                     {{/each}}
-                    {{#if trayData.emptySlots}}
-                        {{#each trayData.emptySlots as |slot|}}
-                            <div class="tray-item-compact spell-slot empty">
-                                <div class="empty-slot-placeholder">
-                                    <i class="fas fa-plus-circle"></i>
-                                    <span class="empty-slot-text">Empty</span>
-                                </div>
-                            </div>
-                        {{/each}}
-                    {{/if}}
                 {{else}}
-                    {{!-- No spell limit (not a spellcaster) - show message --}}
+                    {{!-- No spells selected yet --}}
                     <div class="tray-empty-message">
-                        <i class="fas fa-info-circle"></i>
-                        <p>This class cannot cast spells</p>
+                        <i class="fas fa-arrow-left"></i>
+                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
                     </div>
+                {{/if}}
+
+                {{!-- Show empty slots only if spell limit exists (for spellcaster classes) --}}
+                {{#if (and spellLimit trayData.emptySlots.length)}}
+                    {{#each trayData.emptySlots as |slot|}}
+                        <div class="tray-item-compact spell-slot empty">
+                            <div class="empty-slot-placeholder">
+                                <i class="fas fa-plus-circle"></i>
+                                <span class="empty-slot-text">Empty</span>
+                            </div>
+                        </div>
+                    {{/each}}
                 {{/if}}
             {{else if (eq step 'gear')}}
                 {{#if trayData.isEmpty}}

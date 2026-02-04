@@ -86,6 +86,15 @@ export class SpellsStepManager extends BaseStepManager {
     // Prepare tray data
     const trayData = await this._prepareTrayData(selectedSpells, requiredSpellUuids);
 
+    // Prepare mana stats from preview actor
+    const manaStats = await this._prepareManaStats(state);
+
+    // Prepare ancestry data for reference column
+    const ancestryData = await this._prepareAncestryData(state);
+
+    // Prepare class preview data for reference column
+    const classPreviewData = await this._prepareClassPreviewData(state);
+
     return {
       availableOptions: availableSpells,
       selectedSpells: selectedSpells,
@@ -101,7 +110,10 @@ export class SpellsStepManager extends BaseStepManager {
       requiredSpellCount: requiredSpellUuids.length,
       requiredSpells: requiredSpellUuids,
       instruction: (selectedSpells.length === 0 && !previewUuid) ?
-        game.i18n.localize('VAGABOND.CharBuilder.Instructions.Spells') : null
+        game.i18n.localize('VAGABOND.CharBuilder.Instructions.Spells') : null,
+      manaStats: manaStats,
+      ancestryData: ancestryData,
+      classPreviewData: classPreviewData
     };
   }
 
@@ -219,6 +231,225 @@ export class SpellsStepManager extends BaseStepManager {
     };
 
     return displayStats;
+  }
+
+  /**
+   * Prepare mana stats from preview actor
+   * @private
+   */
+  async _prepareManaStats(state) {
+    // Check if all stats are assigned
+    const assignedStats = state.assignedStats || {};
+    const allAssigned = Object.values(assignedStats).every(v => v !== null && v !== undefined);
+
+    if (!allAssigned) {
+      return null;
+    }
+
+    try {
+      // Create preview actor to get calculated mana values
+      const previewActor = await this._createPreviewActor(state);
+      if (!previewActor) {
+        return null;
+      }
+
+      return {
+        manaMax: previewActor.system.mana.max,
+        manaCast: previewActor.system.mana.castingMax
+      };
+    } catch (error) {
+      console.error('Failed to prepare mana stats:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Prepare ancestry data for reference column
+   * @private
+   */
+  async _prepareAncestryData(state) {
+    if (!state.selectedAncestry) {
+      return null;
+    }
+
+    try {
+      const ancestry = await fromUuid(state.selectedAncestry);
+      if (!ancestry) {
+        return null;
+      }
+
+      return {
+        name: ancestry.name,
+        traits: ancestry.system.traits || []
+      };
+    } catch (error) {
+      console.error('Failed to prepare ancestry data:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Prepare class preview data for reference column (all levels)
+   * @private
+   */
+  async _prepareClassPreviewData(state) {
+    if (!state.selectedClass) {
+      return null;
+    }
+
+    try {
+      const classItem = await fromUuid(state.selectedClass);
+      if (!classItem) {
+        return null;
+      }
+
+      // Get all level features
+      const levelFeatures = classItem.system.levelFeatures || [];
+
+      // Group features by level
+      const levelGroups = {};
+      for (const feature of levelFeatures) {
+        const level = feature.level || 1;
+        if (!levelGroups[level]) {
+          levelGroups[level] = [];
+        }
+
+        // Enrich feature description
+        const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+          feature.description || '',
+          {
+            async: true,
+            secrets: false,
+            relativeTo: classItem
+          }
+        );
+
+        levelGroups[level].push({
+          name: feature.name,
+          description: feature.description,
+          enrichedDescription: enrichedDescription
+        });
+      }
+
+      // Convert to array format
+      const levels = Object.keys(levelGroups).map(level => ({
+        level: parseInt(level),
+        features: levelGroups[level]
+      })).sort((a, b) => a.level - b.level);
+
+      return {
+        name: classItem.name,
+        levels: levels
+      };
+    } catch (error) {
+      console.error('Failed to prepare class preview data:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Create a preview actor with current builder state
+   * @private
+   */
+  async _createPreviewActor(state) {
+    try {
+      // Apply bonuses to stats
+      const finalStats = { ...state.assignedStats };
+      const appliedBonuses = state.appliedBonuses || {};
+
+      for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+        if (finalStats[application.target] !== null && finalStats[application.target] !== undefined) {
+          finalStats[application.target] += application.amount;
+        }
+      }
+
+      // Get trained skills from builder state
+      const trainedSkills = state.skills || [];
+
+      // Build skills object with trained status
+      const skillsDefinition = {
+        arcana: { stat: 'reason' },
+        craft: { stat: 'reason' },
+        medicine: { stat: 'reason' },
+        brawl: { stat: 'might' },
+        finesse: { stat: 'dexterity' },
+        sneak: { stat: 'dexterity' },
+        detect: { stat: 'awareness' },
+        mysticism: { stat: 'awareness' },
+        survival: { stat: 'awareness' },
+        influence: { stat: 'presence' },
+        leadership: { stat: 'presence' },
+        performance: { stat: 'presence' }
+      };
+
+      const skills = {};
+      for (const [key, def] of Object.entries(skillsDefinition)) {
+        skills[key] = {
+          trained: trainedSkills.includes(key),
+          stat: def.stat,
+          bonus: 0
+        };
+      }
+
+      // Build weapon skills object with trained status
+      const weaponSkillsDefinition = {
+        melee: { stat: 'might' },
+        brawl: { stat: 'might' },
+        finesse: { stat: 'dexterity' },
+        ranged: { stat: 'awareness' }
+      };
+
+      const weaponSkills = {};
+      for (const [key, def] of Object.entries(weaponSkillsDefinition)) {
+        weaponSkills[key] = {
+          trained: trainedSkills.includes(key),
+          stat: def.stat,
+          bonus: 0
+        };
+      }
+
+      // Build actor data
+      const actorData = {
+        name: "Preview Character",
+        type: "character",
+        system: {
+          stats: {
+            might: { value: finalStats.might || 0 },
+            dexterity: { value: finalStats.dexterity || 0 },
+            awareness: { value: finalStats.awareness || 0 },
+            reason: { value: finalStats.reason || 0 },
+            presence: { value: finalStats.presence || 0 },
+            luck: { value: finalStats.luck || 0 }
+          },
+          skills: skills,
+          weaponSkills: weaponSkills
+        },
+        items: []
+      };
+
+      // Apply builder selections (ancestry, class, perks)
+      const itemUuids = [
+        state.selectedAncestry,
+        state.selectedClass,
+        ...(state.perks || []),
+        ...(state.classPerks || [])
+      ].filter(uuid => uuid);
+
+      // Load all items
+      if (itemUuids.length > 0) {
+        const items = await Promise.all(itemUuids.map(uuid => fromUuid(uuid)));
+        actorData.items = items.filter(i => i).map(i => i.toObject());
+      }
+
+      // Create and prepare the preview actor
+      const previewActor = new Actor.implementation(actorData);
+      previewActor.prepareData();
+
+      return previewActor;
+    } catch (error) {
+      console.error('Failed to create preview actor:', error);
+      return null;
+    }
   }
 
   /**

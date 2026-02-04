@@ -3,7 +3,8 @@
     "Terms": {
       "None": "None",
       "Yes": "yes",
-      "No": "no"
+      "No": "no",
+      "KeyStat":"Key Stat"
     },
     "Stat": {
       "Might": { "long": "Might", "abbr": "MIT" },
@@ -439,7 +440,8 @@
           "LockForPlay": "Click to lock for play"
         },
         "Tooltips": {
-          "Unlock": "Click to unlock and edit",
+          "ModifyHP": "Left-click: -1 HP | Right-click: +1 HP",
+          "Unlock": "Unlock Sheet",
           "Lock": "Click to lock for play"
         },
         "MoraleCheck": {
@@ -879,6 +881,7 @@
         "NoRollRequired": "No Roll Required",
         "ManaMultiplier": "Mana Multiplier",
         "ManaSkill": "Mana Skill",
+        "Mana": "Mana",
         "CastingStat": "Casting Stat",
         "SelectSkill": "-- Select Skill --",
         "SelectStat": "-- Select Stat --",
@@ -921,7 +924,8 @@
       "Buttons": {
         "AddSkill": "Add Skill",
         "AddChoiceGroup":"Add Group",
-        "UpdateGroup":"Save/Update"
+        "UpdateGroup":"Save/Update",
+        "AddStat": "Add Key Stat"
       },
       "Hints": {
         "EmptyForAny": "Let Empty fo ANY skills"
