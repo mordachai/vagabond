@@ -206,6 +206,197 @@ export class VagabondItem extends Item {
   }
 
   /**
+   * This function runs AUTOMATICALLY after an item is created.
+   * Handle choice-based perks (New Training, Advancement, etc.)
+   */
+  async _onCreate(data, options, userId) {
+    await super._onCreate(data, options, userId);
+
+    console.log(`Vagabond | _onCreate fired for item "${this.name}" (type: ${this.type})`);
+
+    // Only handle perks
+    if (this.type !== 'perk') return;
+
+    console.log(`Vagabond | Processing perk "${this.name}"`, {
+      userId,
+      gameUserId: game.user.id,
+      hasParent: !!this.parent,
+      choiceConfig: this.system.choiceConfig
+    });
+
+    // Only prompt for the user who created the item
+    if (userId !== game.user.id) return;
+
+    // Only handle perks that require choices
+    if (!this.system.choiceConfig || this.system.choiceConfig.type === 'none') return;
+
+    // Must be on an actor
+    if (!this.parent) return;
+
+    let choice = this.system.choiceConfig.selected;
+    console.log(`Vagabond | Perk "${this.name}" - Choice already selected:`, choice || '(none)');
+
+    // If choice was already made (e.g., from character builder), skip dialog
+    if (!choice) {
+      // Import dialog class
+      const { default: PerkChoiceDialog } = await import('../applications/perk-choice-dialog.mjs');
+
+      // Show choice dialog
+      choice = await PerkChoiceDialog.show(this, this.parent);
+
+      if (!choice) {
+        // User cancelled - remove the perk
+        ui.notifications.info(`${this.name} was not added - no selection made.`);
+        await this.delete();
+        return;
+      }
+
+      // Store the choice
+      await this.update({
+        'system.choiceConfig.selected': choice
+      });
+    }
+
+    // Update perk name to show selection (use proper label)
+    const choiceLabel = await this._getChoiceLabel(choice);
+    const currentName = this.name;
+
+    // Only update name if it doesn't already include the selection
+    if (!currentName.includes(choiceLabel)) {
+      // Remove old UUID from name if present (from character builder)
+      const cleanName = currentName.replace(/\s*\(.*?\)\s*$/, '').trim();
+      await this.update({
+        name: `${cleanName} (${choiceLabel})`
+      });
+    }
+
+    // Create Active Effect or spell based on choice
+    await this._createChoiceEffect(choice);
+
+    ui.notifications.info(`${this.name} added with selection: ${choiceLabel}`);
+  }
+
+  /**
+   * Get human-readable label for a choice value
+   * @param {string} choice - The choice value (e.g., "arcana", "might", spell UUID)
+   * @returns {Promise<string>} Human-readable label
+   * @private
+   */
+  async _getChoiceLabel(choice) {
+    const choiceType = this.system.choiceConfig?.type;
+
+    switch (choiceType) {
+      case 'skill':
+        return game.i18n.localize(CONFIG.VAGABOND.skills[choice] || choice);
+
+      case 'weaponSkill':
+        return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[choice.charAt(0).toUpperCase() + choice.slice(1)] || choice);
+
+      case 'stat':
+        return game.i18n.localize(CONFIG.VAGABOND.stats[choice] || choice);
+
+      case 'spell':
+        // Resolve spell UUID to name
+        try {
+          const spell = await fromUuid(choice);
+          return spell?.name || choice;
+        } catch (error) {
+          console.warn(`Failed to resolve spell UUID: ${choice}`, error);
+          return choice;
+        }
+
+      default:
+        return choice;
+    }
+  }
+
+  /**
+   * Create Active Effect based on player's choice
+   * For spell choices, creates the spell item instead of an effect
+   * @param {string} choice - The selected choice value
+   * @private
+   */
+  async _createChoiceEffect(choice) {
+    const config = this.system.choiceConfig;
+
+    // Special handling for spell selection
+    if (config.type === 'spell') {
+      console.log(`Vagabond | Creating spell from choice: ${choice}`);
+      try {
+        // Resolve the spell UUID
+        console.log(`Vagabond | Resolving spell UUID: ${choice}`);
+        const spell = await fromUuid(choice);
+        if (!spell) {
+          console.error(`Vagabond | Failed to resolve spell UUID: ${choice}`);
+          ui.notifications.warn(`Failed to load spell: ${choice}`);
+          return;
+        }
+
+        console.log(`Vagabond | Resolved spell: ${spell.name}`, spell);
+
+        // Create the spell on the character
+        const spellData = spell.toObject();
+
+        // Auto-favorite the spell for easy access
+        spellData.system.favorite = true;
+
+        console.log(`Vagabond | Creating spell on actor: ${this.parent.name}`, spellData);
+
+        // Create the spell item on the actor
+        await this.parent.createEmbeddedDocuments('Item', [spellData]);
+
+        console.log(`Vagabond | Spell "${spell.name}" successfully created`);
+        ui.notifications.info(`Spell "${spell.name}" has been added to your character.`);
+      } catch (error) {
+        console.error('Vagabond | Failed to add spell from perk:', error);
+        ui.notifications.error(`Failed to add spell. See console for details.`);
+      }
+      return;
+    }
+
+    // For non-spell choices, create Active Effect (existing behavior)
+    // Only create effect if targetField is configured
+    if (!config.targetField || config.targetField.trim() === '') {
+      console.warn(`Vagabond | Perk "${this.name}" has no targetField configured. No Active Effect will be created.`);
+      return; // No effect to create
+    }
+
+    // Build attribute key by replacing {choice} placeholder
+    let attributeKey = config.targetField.replace('{choice}', choice);
+
+    console.log(`Vagabond | Creating Active Effect for perk "${this.name}"`, {
+      targetField: config.targetField,
+      attributeKey,
+      effectMode: config.effectMode,
+      effectValue: config.effectValue,
+      choice
+    });
+
+    // Create the effect
+    try {
+      await this.createEmbeddedDocuments('ActiveEffect', [{
+        name: `${this.name} Effect`,
+        icon: this.img,
+        disabled: false,
+        changes: [{
+          key: attributeKey,
+          mode: config.effectMode,
+          value: config.effectValue
+        }],
+        flags: {
+          vagabond: {
+            applicationMode: 'permanent'
+          }
+        }
+      }]);
+      console.log(`Vagabond | Active Effect created successfully for "${this.name}"`);
+    } catch (error) {
+      console.error(`Vagabond | Failed to create Active Effect for "${this.name}":`, error);
+      ui.notifications.error(`Failed to create effect for ${this.name}. See console for details.`);
+    }
+  }
+
+  /**
    * This function runs AUTOMATICALLY whenever an item is updated.
    */
   async _preUpdate(changed, options, user) {

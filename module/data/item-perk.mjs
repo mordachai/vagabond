@@ -186,6 +186,65 @@ export default class VagabondPerk extends VagabondItemBase {
       )
     });
 
+    // Choice configuration for perks that require player selection
+    // (e.g., New Training - select which skill, Advancement - select which stat)
+    schema.choiceConfig = new fields.SchemaField({
+      // What type of choice does this perk require?
+      type: new fields.StringField({
+        initial: 'none',
+        choices: {
+          none: 'VAGABOND.Perk.ChoiceType.None',
+          skill: 'VAGABOND.Perk.ChoiceType.Skill',
+          weaponSkill: 'VAGABOND.Perk.ChoiceType.WeaponSkill',
+          stat: 'VAGABOND.Perk.ChoiceType.Stat',
+          spell: 'VAGABOND.Perk.ChoiceType.Spell'
+        },
+        label: 'VAGABOND.Perk.ChoiceType.Label',
+        hint: 'VAGABOND.Perk.ChoiceType.Hint'
+      }),
+
+      // What was chosen by the player? (stored after selection)
+      selected: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: 'VAGABOND.Perk.ChoiceSelected.Label',
+        hint: 'VAGABOND.Perk.ChoiceSelected.Hint'
+      }),
+
+      // Which field should the generated Active Effect modify?
+      // Use {choice} as placeholder for selected value
+      // Examples: "system.skills.{choice}.trained", "system.stats.{choice}.bonus"
+      targetField: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: 'VAGABOND.Perk.ChoiceTargetField.Label',
+        hint: 'VAGABOND.Perk.ChoiceTargetField.Hint'
+      }),
+
+      // Active Effect mode (Add, Override, etc.)
+      effectMode: new fields.NumberField({
+        initial: 5, // ADD mode
+        choices: {
+          0: 'EFFECT.MODE_CUSTOM',
+          1: 'EFFECT.MODE_MULTIPLY',
+          2: 'EFFECT.MODE_OVERRIDE',
+          3: 'EFFECT.MODE_UPGRADE',
+          4: 'EFFECT.MODE_DOWNGRADE',
+          5: 'EFFECT.MODE_ADD'
+        },
+        label: 'VAGABOND.Perk.ChoiceEffectMode.Label',
+        hint: 'VAGABOND.Perk.ChoiceEffectMode.Hint'
+      }),
+
+      // Effect value (can be formula like "@attributes.level.value")
+      effectValue: new fields.StringField({
+        initial: '1',
+        blank: true,
+        label: 'VAGABOND.Perk.ChoiceEffectValue.Label',
+        hint: 'VAGABOND.Perk.ChoiceEffectValue.Hint'
+      })
+    });
+
     return schema;
   }
 
@@ -201,6 +260,10 @@ export default class VagabondPerk extends VagabondItemBase {
       (this.prerequisites.hasAnySpell ? 1 : 0) +
       this.prerequisites.resources.length +
       this.prerequisites.resourceOrGroups.length;
+
+    // Flag for UI: does this perk require a choice?
+    this.requiresChoice = this.choiceConfig?.type !== 'none';
+    this.hasChoice = Boolean(this.choiceConfig?.selected);
   }
 
   /**

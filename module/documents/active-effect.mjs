@@ -31,26 +31,26 @@
  * ## Example: Scaling Perks
  *
  * **"Secret of Mana" (Casting Max = Casting Max + Level):**
- * - Attribute Key: system.mana.castingMaxBonus
- * - Change Mode: Add
+ * - Attribute Key: mana.castingMaxBonus
+ * - Change Mode: Add (2)
  * - Effect Value: @attributes.level.value
  * - Result: Level 1 = +1, Level 5 = +5, Level 10 = +10
  *
  * **"Tough" (HP = HP + Level):**
- * - Attribute Key: system.bonuses.hpPerLevel
- * - Change Mode: Add
+ * - Attribute Key: bonuses.hpPerLevel
+ * - Change Mode: Add (2)
  * - Effect Value: 1
  * - Result: Grants +1 HP per level (multiplied by level in HP formula)
  *
  * **"Scaling Might" (Might = Might + Level/2):**
- * - Attribute Key: system.stats.might.bonus
- * - Change Mode: Add
+ * - Attribute Key: stats.might.bonus
+ * - Change Mode: Add (2)
  * - Effect Value: floor(@attributes.level.value / 2)
  * - Result: Level 1 = +0, Level 2-3 = +1, Level 4-5 = +2, etc.
  *
  * **"Stat-Based Armor" (Armor = Armor + Dexterity):**
- * - Attribute Key: system.armorBonus
- * - Change Mode: Add
+ * - Attribute Key: armorBonus
+ * - Change Mode: Add (2)
  * - Effect Value: @stats.dexterity.total
  * - Result: Armor increases with Dexterity score
  *
@@ -73,13 +73,16 @@
  * - **bonus**: Bonus from Active Effects (can be formula or number)
  * - **total**: Calculated value (value + bonus, clamped to 0-12)
  *
- * ## Effect Keys
- * - system.stats.might.bonus
- * - system.stats.dexterity.bonus
- * - system.stats.awareness.bonus
- * - system.stats.reason.bonus
- * - system.stats.presence.bonus
- * - system.stats.luck.bonus
+ * ## Effect Keys (DataModel Format - NO "system." prefix!)
+ * - stats.might.bonus
+ * - stats.dexterity.bonus
+ * - stats.awareness.bonus
+ * - stats.reason.bonus
+ * - stats.presence.bonus
+ * - stats.luck.bonus
+ *
+ * **IMPORTANT**: Do NOT include "system." prefix! Foundry v13 DataModels handle this automatically.
+ * Using "system.stats.luck.bonus" will NOT work - use "stats.luck.bonus" instead.
  *
  * ## What Stats Affect
  * Stat bonuses affect ALL derived calculations:
@@ -92,8 +95,8 @@
  *
  * ## Usage Example
  * "Belt of Giant Strength" (+2 Might):
- * - Attribute Key: system.stats.might.bonus
- * - Change Mode: Add
+ * - Attribute Key: stats.might.bonus
+ * - Change Mode: Add (2)
  * - Effect Value: 2
  * - Result: Increases Might total by +2, which increases HP and inventory slots
  *
@@ -142,22 +145,22 @@
  * ## Usage Examples
  *
  * **Example 1: "Weapon Master" Perk**
- * - Attribute Key: system.universalWeaponDamageBonus
- * - Change Mode: Add
+ * - Attribute Key: universalWeaponDamageBonus
+ * - Change Mode: Add (2)
  * - Effect Value: 2
  * - Result: All weapon attacks deal +2 damage (spells unaffected)
  *
  * **Example 2: "Empowered Magic" Perk**
- * - Attribute Key: system.spellDamageDieSize
- * - Change Mode: Upgrade (or Override)
+ * - Attribute Key: spellDamageDieSize
+ * - Change Mode: Upgrade (4) or Override (5)
  * - Effect Value: 8
  * - Result: All spell damage uses d8 instead of d6
  *   - Before: Fireball 3d6 fire
  *   - After: Fireball 3d8 fire
  *
  * **Example 3: "Alchemical Expertise" Perk**
- * - Attribute Key: system.universalAlchemicalDamageDice
- * - Change Mode: Add
+ * - Attribute Key: universalAlchemicalDamageDice
+ * - Change Mode: Add (2)
  * - Effect Value: "1d4"
  * - Result: All alchemical items deal +1d4 damage
  *

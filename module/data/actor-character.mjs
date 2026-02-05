@@ -635,12 +635,12 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   /**
-   * Evaluate all formula bonus fields and store results.
-   * This method converts string formulas to numeric values in-place.
+   * Evaluate all NON-STAT bonus fields (everything except stat bonuses).
+   * Stat bonuses are handled inline in prepareDerivedData to avoid StringField coercion issues.
    * @param {object} rollData - The roll data context
    * @private
    */
-  _evaluateAllBonusFields(rollData) {
+  _evaluateNonStatBonusFields(rollData) {
     // Top-level bonuses
     this.bonusLuck = this._evaluateFormulaField(this.bonusLuck, rollData);
     this.armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
@@ -660,25 +660,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
 
-    // Stat bonuses
-    for (const stat of Object.values(this.stats)) {
-      stat.bonus = this._evaluateFormulaField(stat.bonus, rollData);
-    }
-
-    // Save bonuses
-    for (const save of Object.values(this.saves)) {
-      save.bonus = this._evaluateFormulaField(save.bonus, rollData);
-    }
-
-    // Skill bonuses
-    for (const skill of Object.values(this.skills)) {
-      skill.bonus = this._evaluateFormulaField(skill.bonus, rollData);
-    }
-
-    // Weapon skill bonuses
-    for (const weaponSkill of Object.values(this.weaponSkills)) {
-      weaponSkill.bonus = this._evaluateFormulaField(weaponSkill.bonus, rollData);
-    }
+    // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
+    // are NOT evaluated here - they're done inline in prepareDerivedData
+    // to avoid StringField coercion issues (StringFields convert numbers back to strings)
   }
 
 /**
@@ -686,32 +670,27 @@ export default class VagabondCharacter extends VagabondActorBase {
    * This happens AFTER Active Effects.
    */
   prepareDerivedData() {
-    // CRITICAL: First, we need to calculate base stat totals WITHOUT formula evaluation
-    // so that formulas can reference stat values
+    // Get roll data for formula evaluation (need base stat values)
+    // Build minimal roll data for initial stat calculations
+    const initialRollData = this.getRollData();
+
+    // Calculate stat totals with evaluated bonuses
+    // NOTE: We evaluate formulas inline instead of storing back to StringFields
+    // because StringFields coerce numbers back to strings
     for (const [key, stat] of Object.entries(this.stats)) {
       const value = stat.value || 0;
-      // For initial calculation, treat bonus as 0 if it's a string formula
-      const bonusValue = (typeof stat.bonus === 'string') ? 0 : (stat.bonus || 0);
-      stat.total = value + bonusValue;
-      stat.total = Math.min(stat.total, 12);
-      stat.total = Math.max(stat.total, 0);
-    }
-
-    // NOW evaluate all formula bonus fields
-    // Get roll data for formula evaluation (includes stat totals we just calculated)
-    const rollData = this.getRollData();
-    this._evaluateAllBonusFields(rollData);
-
-    // Recalculate stat totals with evaluated bonuses
-    for (const [key, stat] of Object.entries(this.stats)) {
-      const value = stat.value || 0;
-      const bonus = stat.bonus || 0; // Now a number after evaluation
-      stat.total = value + bonus;
+      // Evaluate the bonus field (handles both simple numbers and formulas)
+      const evaluatedBonus = this._evaluateFormulaField(stat.bonus, initialRollData);
+      stat.total = value + evaluatedBonus;
       // Ensure total doesn't exceed 12 (max stat value)
       stat.total = Math.min(stat.total, 12);
       // Ensure total doesn't go below 0
       stat.total = Math.max(stat.total, 0);
     }
+
+    // Now evaluate all OTHER bonus fields (non-stat bonuses)
+    const rollData = this.getRollData();
+    this._evaluateNonStatBonusFields(rollData);
 
     // CRITICAL FIX: Active Effects pass string values, so we need to convert
     // isSpellcaster to a proper boolean if it's a truthy string like "1"
@@ -781,9 +760,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     const rsnTotal = this.stats.reason?.total || 0;
     const presTotal = this.stats.presence?.total || 0;
 
-    const reflexBonus = this.saves.reflex?.bonus || 0;
-    const endureBonus = this.saves.endure?.bonus || 0;
-    const willBonus = this.saves.will?.bonus || 0;
+    // Evaluate save bonuses inline (StringFields coerce numbers back to strings)
+    const reflexBonus = this._evaluateFormulaField(this.saves.reflex?.bonus, rollData);
+    const endureBonus = this._evaluateFormulaField(this.saves.endure?.bonus, rollData);
+    const willBonus = this._evaluateFormulaField(this.saves.will?.bonus, rollData);
 
     this.saves.reflex.difficulty = 20 - (dexTotal + awrTotal) - reflexBonus;
     this.saves.endure.difficulty = 20 - (mitTotal + mitTotal) - endureBonus;
@@ -813,7 +793,8 @@ export default class VagabondCharacter extends VagabondActorBase {
       const skill = this.skills[key];
       const associatedStat = this.stats[skill.stat];
       const statValue = associatedStat?.value || 0;
-      const skillBonus = skill.bonus || 0;
+      // Evaluate skill bonus inline (StringFields coerce numbers back to strings)
+      const skillBonus = this._evaluateFormulaField(skill.bonus, rollData);
 
       skill.difficulty = 20 - (skill.trained ? statValue * 2 : statValue) - skillBonus;
       skill.label = game.i18n.localize(`VAGABOND.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
@@ -824,7 +805,8 @@ export default class VagabondCharacter extends VagabondActorBase {
       const weaponSkill = this.weaponSkills[key];
       const associatedStat = this.stats[weaponSkill.stat];
       const statValue = associatedStat?.value || 0;
-      const weaponSkillBonus = weaponSkill.bonus || 0;
+      // Evaluate weapon skill bonus inline (StringFields coerce numbers back to strings)
+      const weaponSkillBonus = this._evaluateFormulaField(weaponSkill.bonus, rollData);
 
       weaponSkill.difficulty = 20 - (weaponSkill.trained ? statValue * 2 : statValue) - weaponSkillBonus;
       weaponSkill.label = game.i18n.localize(`VAGABOND.WeaponSkills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
