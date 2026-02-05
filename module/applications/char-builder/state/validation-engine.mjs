@@ -588,6 +588,17 @@ export class ValidationEngine {
 
   // Built-in validator implementations
 
+  /**
+   * Get all available skills including weapon skills (melee, ranged)
+   * Matches the logic in ClassStepManager._getAllSkillsWithWeaponSkills()
+   * @private
+   */
+  _getAllSkillsWithWeaponSkills() {
+    const regularSkills = Object.keys(CONFIG.VAGABOND?.skills || {});
+    const weaponSkills = ['melee', 'ranged']; // Add weapon skills at the end
+    return [...regularSkills, ...weaponSkills];
+  }
+
   _validateRequired(rule, state, category) {
     const pathMap = {
       ancestry_selection: 'selectedAncestry',
@@ -744,13 +755,34 @@ export class ValidationEngine {
         const guaranteed = skillGrant.guaranteed || [];
         const skillSelections = state.skillSelections || {};
 
+        // Get all skills including weapon skills (melee, ranged)
+        const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
+
+        // Build choices array (may include extra training group)
+        let allChoices = [...skillGrant.choices];
+
+        // Check if there's extra training from ancestry/class grants
+        const extraTrainingCount = state.extraTrainingCount || 0;
+
+        if (extraTrainingCount > 0) {
+          // Add extra training group dynamically (matches UI preparation logic)
+          const extraTrainingGroupIndex = skillGrant.choices.length;
+
+          // Extra training group always uses all skills and requires the exact count
+          allChoices.push({
+            count: extraTrainingCount,
+            pool: allSkillsWithWeaponSkills,
+            originalIndex: extraTrainingGroupIndex
+          });
+        }
+
         // Sort groups by pool size (smallest first) for better allocation
-        const sortedChoices = skillGrant.choices
+        const sortedChoices = allChoices
           .map((choice, index) => ({
             ...choice,
-            originalIndex: index,
-            pool: choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {}),
-            poolSize: choice.pool.length || Object.keys(CONFIG.VAGABOND?.skills || {}).length
+            originalIndex: choice.originalIndex !== undefined ? choice.originalIndex : index,
+            pool: (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills,
+            poolSize: (choice.pool && choice.pool.length > 0) ? choice.pool.length : allSkillsWithWeaponSkills.length
           }))
           .sort((a, b) => a.poolSize - b.poolSize);
 
@@ -783,7 +815,12 @@ export class ValidationEngine {
         );
         const arraySelected = !!state.selectedArrayId;
 
-        return { isValid: allStatsAssigned && arraySelected };
+        // Also need all bonus stats applied (if any)
+        const bonusStatsCount = state.bonusStatsCount || 0;
+        const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
+        const allBonusesApplied = appliedBonusesCount >= bonusStatsCount;
+
+        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied };
 
       case 'spells':
         // Need to select required number of spells based on class spell limit
@@ -856,13 +893,34 @@ export class ValidationEngine {
     const guaranteed = skillGrant.guaranteed || [];
     const skillSelections = state.skillSelections || {};
 
+    // Get all skills including weapon skills (melee, ranged)
+    const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
+
+    // Build choices array (may include extra training group)
+    let allChoices = [...skillGrant.choices];
+
+    // Check if there's extra training from ancestry/class grants
+    const extraTrainingCount = state.extraTrainingCount || 0;
+
+    if (extraTrainingCount > 0) {
+      // Add extra training group dynamically (matches UI preparation logic)
+      const extraTrainingGroupIndex = skillGrant.choices.length;
+
+      // Extra training group always uses all skills and requires the exact count
+      allChoices.push({
+        count: extraTrainingCount,
+        pool: allSkillsWithWeaponSkills,
+        originalIndex: extraTrainingGroupIndex
+      });
+    }
+
     // Sort groups by pool size (smallest first) for better allocation
-    const sortedGroups = skillGrant.choices
+    const sortedGroups = allChoices
       .map((choice, index) => ({
         ...choice,
-        originalIndex: index,
-        pool: choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {}),
-        poolSize: choice.pool.length || Object.keys(CONFIG.VAGABOND?.skills || {}).length
+        originalIndex: choice.originalIndex !== undefined ? choice.originalIndex : index,
+        pool: (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills,
+        poolSize: (choice.pool && choice.pool.length > 0) ? choice.pool.length : allSkillsWithWeaponSkills.length
       }))
       .sort((a, b) => a.poolSize - b.poolSize);
 

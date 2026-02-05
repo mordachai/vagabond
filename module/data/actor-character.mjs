@@ -389,10 +389,7 @@ export default class VagabondCharacter extends VagabondActorBase {
    */
   prepareBaseData() {
     super.prepareBaseData();
-    
-    // Debug logging to track data preparation
-    console.log(`Vagabond | prepareBaseData() called for ${this.parent?.name || 'Unknown Actor'}`);
-    
+
     // Reset all bonus values before Active Effects apply
     this._resetBonuses();
 

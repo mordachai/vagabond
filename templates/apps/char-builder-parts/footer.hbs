@@ -16,7 +16,9 @@
     </div>
     <div class="footer-nav flexrow">
         <button type="button" class="btn-prev" data-action="prev">Previous</button>
-        <button type="button" class="btn-next" data-action="next" {{#unless canAdvance}}disabled{{/unless}}>Next</button>
+        {{#unless isLastStep}}
+            <button type="button" class="btn-next" data-action="next" {{#unless canAdvance}}disabled{{/unless}}>Next</button>
+        {{/unless}}
         <button type="button" class="btn-finish" data-action="finish" {{#unless canFinish}}disabled{{/unless}}>Finish</button>
     </div>
 </footer>

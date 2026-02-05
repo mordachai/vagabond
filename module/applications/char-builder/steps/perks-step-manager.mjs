@@ -799,15 +799,15 @@ export class PerksStepManager extends BaseStepManager {
         return;
       }
 
-      // Check prerequisites
+      // Check prerequisites (warning only, not blocking)
       const mandatorySpells = await this._collectRequiredSpells(state);
       const allKnownSpells = [...new Set([...(state.spells || []), ...mandatorySpells])];
       const previewActor = await this._createPreviewActor(state, allKnownSpells);
       const prereqCheck = await this._checkPerkPrerequisites(item, previewActor, allKnownSpells);
 
       if (!prereqCheck.met) {
-        ui.notifications.warn(`Prerequisites not met: ${prereqCheck.missing.join(', ')}`);
-        return;
+        ui.notifications.warn(`Warning: Prerequisites not met - ${prereqCheck.missing.join(', ')}`);
+        // Continue anyway - prerequisites are warnings, not requirements
       }
 
       // Fulfill the active grant

@@ -21,6 +21,8 @@ export class ContextComponent {
       'selectedClass',
       'assignedStats',
       'skills',
+      'skillSelections',
+      'skillGrant',
       'perks',
       'classPerks',
       'spells',
@@ -143,7 +145,7 @@ export class ContextComponent {
     // Check if builder data changed
     const builderDataChanged = this._hasBuilderDataChanged(state, previousState);
     if (builderDataChanged) {
-      sectionsToUpdate.push('builderData', 'stepData', 'validation');
+      sectionsToUpdate.push('builderData', 'stepData', 'validation', 'ui', 'steps');
     }
 
     // Check if forms data changed
@@ -167,6 +169,8 @@ export class ContextComponent {
       'selectedClass',
       'assignedStats',
       'skills',
+      'skillSelections',
+      'skillGrant',
       'perks',
       'classPerks',
       'spells',
@@ -630,9 +634,88 @@ export class ContextComponent {
       case 'ancestry':
         return !!state.selectedAncestry;
       case 'class':
-        return !!state.selectedClass;
+        // Need to have a class selected AND all required skills assigned
+        if (!state.selectedClass) {
+          return false;
+        }
+
+        // Check if all skill choice pools are satisfied
+        const skillGrant = state.skillGrant;
+        if (!skillGrant || !skillGrant.choices) {
+          // If no skill grant data, fall back to simple count check
+          const skillsNeeded = state.skillChoicesNeeded || 0;
+          const skillsSelected = (state.skills || []).length;
+          return skillsSelected >= skillsNeeded;
+        }
+
+        const guaranteed = skillGrant.guaranteed || [];
+        const skillSelections = state.skillSelections || {};
+
+        // Get all skills including weapon skills (melee, ranged)
+        const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
+
+        // Build choices array (may include extra training group)
+        let allChoices = [...skillGrant.choices];
+
+        // Check if there's extra training from ancestry/class grants
+        const extraTrainingCount = state.extraTrainingCount || 0;
+
+        if (extraTrainingCount > 0) {
+          // Add extra training group dynamically (matches UI preparation logic)
+          const extraTrainingGroupIndex = skillGrant.choices.length;
+
+          // Extra training group always uses all skills and requires the exact count
+          allChoices.push({
+            count: extraTrainingCount,
+            pool: allSkillsWithWeaponSkills,
+            originalIndex: extraTrainingGroupIndex
+          });
+        }
+
+        // Sort groups by pool size (smallest first) for better allocation
+        const sortedChoices = allChoices
+          .map((choice, index) => ({
+            ...choice,
+            originalIndex: choice.originalIndex !== undefined ? choice.originalIndex : index,
+            pool: (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills,
+            poolSize: (choice.pool && choice.pool.length > 0) ? choice.pool.length : allSkillsWithWeaponSkills.length
+          }))
+          .sort((a, b) => a.poolSize - b.poolSize);
+
+        const usedSkills = new Set(guaranteed); // Start with guaranteed skills
+
+        for (const group of sortedChoices) {
+          const groupSkills = skillSelections[group.originalIndex] || [];
+
+          // Count skills from this group that haven't been used yet
+          const validSkills = groupSkills.filter(skill =>
+            group.pool.includes(skill) && !usedSkills.has(skill)
+          );
+
+          if (validSkills.length < group.count) {
+            return false;
+          }
+
+          // Mark these skills as used for future groups
+          validSkills.forEach(skill => usedSkills.add(skill));
+        }
+
+        return true;
+
       case 'stats':
-        return Object.keys(state.assignedStats || {}).length === 6;
+        // Need all 6 stats assigned (with actual values, not null)
+        const stats = state.assignedStats || {};
+        const requiredStats = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
+        const allStatsAssigned = requiredStats.every(stat =>
+          stats[stat] !== null && stats[stat] !== undefined
+        );
+        if (!allStatsAssigned) return false;
+
+        // Also need all bonus stats applied (if any)
+        const bonusStatsCount = state.bonusStatsCount || 0;
+        const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
+
+        return appliedBonusesCount >= bonusStatsCount;
       case 'perks':
         return true; // Perks are optional
       case 'spells':
@@ -644,6 +727,17 @@ export class ContextComponent {
       default:
         return false;
     }
+  }
+
+  /**
+   * Get all available skills including weapon skills (melee, ranged)
+   * Matches the logic in ClassStepManager._getAllSkillsWithWeaponSkills()
+   * @private
+   */
+  _getAllSkillsWithWeaponSkills() {
+    const regularSkills = Object.keys(CONFIG.VAGABOND?.skills || {});
+    const weaponSkills = ['melee', 'ranged']; // Add weapon skills at the end
+    return [...regularSkills, ...weaponSkills];
   }
 
   /**

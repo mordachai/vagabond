@@ -30,7 +30,11 @@ export class CharacterBuilderUIComponents {
         'selectedClass',
         'assignedStats',
         'appliedBonuses',  // CRITICAL: Track bonus applications for stat updates
+        'bonusStatsCount',  // CRITICAL: Track required bonus stat applications
         'skills',
+        'skillSelections',  // CRITICAL: Track per-group skill selections for validation
+        'skillGrant',  // CRITICAL: Track skill grant structure changes
+        'extraTrainingCount',  // CRITICAL: Track extra training from ancestry/class grants
         'perks',
         'classPerks',
         'perkGrants',  // CRITICAL: Track grant fulfillment for perks step
@@ -163,6 +167,7 @@ export class CharacterBuilderUIComponents {
         navigation: navigationContext,
         sidebar: sidebarContext,
         // Navigation button states (for footer template)
+        isLastStep: state.currentStep === 'gear', // Hide Next button on last step
         canAdvance: this._canProceedToNext(state), // Can click Next button
         canFinish: this._isCharacterComplete(state), // Can click Finish button
         ui: {
@@ -637,6 +642,13 @@ export class CharacterBuilderUIComponents {
         const currentSkills = state.skills || [];
         const guaranteed = skillGrant.guaranteed || [];
 
+        // Get all skills including weapon skills (melee, ranged)
+        const allSkillsWithWeaponSkills = [
+          ...Object.keys(CONFIG.VAGABOND?.skills || {}),
+          'melee',
+          'ranged'
+        ];
+
         // Validate each choice pool
         let totalNeeded = 0;
         let totalSelected = 0;
@@ -644,7 +656,7 @@ export class CharacterBuilderUIComponents {
 
         for (let i = 0; i < skillGrant.choices.length; i++) {
           const choice = skillGrant.choices[i];
-          const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
+          const pool = (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills;
           const selectedFromPool = currentSkills.filter(skill =>
             pool.includes(skill) && !guaranteed.includes(skill)
           ).length;
@@ -659,10 +671,34 @@ export class CharacterBuilderUIComponents {
           }
         }
 
+        // Also validate extra training skills if any
+        const extraTrainingCount = state.extraTrainingCount || 0;
+        if (extraTrainingCount > 0) {
+          const skillSelections = state.skillSelections || {};
+          const extraTrainingGroupIndex = skillGrant.choices.length;
+          const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
+
+          if (extraTrainingSelections.length < extraTrainingCount) {
+            isValid = false;
+          }
+        }
+
         return isValid;
 
       case 'stats':
-        return Object.keys(state.assignedStats || {}).length === 6;
+        // Need all 6 stats assigned (with actual values, not null)
+        const stats = state.assignedStats || {};
+        const requiredStats = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
+        const allStatsAssigned = requiredStats.every(stat =>
+          stats[stat] !== null && stats[stat] !== undefined
+        );
+        if (!allStatsAssigned) return false;
+
+        // Also need all bonus stats applied (if any)
+        const bonusStatsCount = state.bonusStatsCount || 0;
+        const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
+
+        return appliedBonusesCount >= bonusStatsCount;
 
       case 'perks':
         // Perks step is always complete - user can choose to take no perks

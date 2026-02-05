@@ -273,9 +273,16 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         const currentSkills = state.skills || [];
         const guaranteed = skillGrant.guaranteed || [];
 
+        // Get all skills including weapon skills (melee, ranged)
+        const allSkillsWithWeaponSkills = [
+          ...Object.keys(CONFIG.VAGABOND?.skills || {}),
+          'melee',
+          'ranged'
+        ];
+
         // Validate each choice pool
         for (const choice of skillGrant.choices) {
-          const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND?.skills || {});
+          const pool = (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills;
           const selectedFromPool = currentSkills.filter(skill =>
             pool.includes(skill) && !guaranteed.includes(skill)
           ).length;
@@ -284,11 +291,32 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             return false; // Not enough skills from this pool
           }
         }
+
+        // Also validate extra training skills if any
+        const extraTrainingCount = state.extraTrainingCount || 0;
+        if (extraTrainingCount > 0) {
+          const skillSelections = state.skillSelections || {};
+          const extraTrainingGroupIndex = skillGrant.choices.length;
+          const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
+
+          if (extraTrainingSelections.length < extraTrainingCount) {
+            return false; // Not enough extra training skills
+          }
+        }
+
         return true;
       },
       stats: () => {
-        return !!this.builderData.selectedArrayId &&
-               Object.values(this.builderData.stats).every(v => v !== null);
+        const state = this.stateManager?.getCurrentState();
+        const arraySelected = !!this.builderData.selectedArrayId;
+        const allStatsAssigned = Object.values(this.builderData.stats).every(v => v !== null);
+
+        // Also need all bonus stats applied (if any)
+        const bonusStatsCount = state?.bonusStatsCount || 0;
+        const appliedBonusesCount = Object.keys(state?.appliedBonuses || {}).length;
+        const allBonusesApplied = appliedBonusesCount >= bonusStatsCount;
+
+        return arraySelected && allStatsAssigned && allBonusesApplied;
       },
       spells: () => true, // Optional step
       perks: () => true, // Optional step
@@ -610,13 +638,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   /** @override */
   async _prepareContext(options) {
-    console.log('[CharBuilder] _prepareContext called');
     // Ensure configuration and step managers are initialized
     await this._ensureInitialized();
 
     // Use UI components to prepare context with step manager integration
     const state = this.stateManager.getCurrentState();
-    console.log('[CharBuilder] Current state appliedBonuses:', state.appliedBonuses);
     const currentStepManager = await this.getCurrentStepManager();
 
     if (!currentStepManager) {
@@ -635,13 +661,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         openCategories: this.openCategories
       };
       const context = await this.uiComponents.prepareContext(state, currentStepManager, contextOptions);
-
-      // Debug: Check if bonusStats is in the context
-      console.log('[CharBuilder] _prepareContext - bonusStats in context:', {
-        exists: !!context.bonusStats,
-        step: context.step,
-        bonusStats: context.bonusStats
-      });
 
       return context;
     } catch (error) {
@@ -666,11 +685,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     try {
-      console.log(`[CharBuilder] Executing action: ${action}`);
       await currentStepManager.handleAction(action, event, target);
-      console.log(`[CharBuilder] Action ${action} completed, calling render...`);
       this.render();
-      console.log(`[CharBuilder] Render called after ${action}`);
     } catch (error) {
       console.error(`Error handling action '${action}' in step '${this.currentStep}':`, error);
       ui.notifications.error(`Failed to handle ${action} action`);
@@ -838,7 +854,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     // Add items (excluding starting pack since we'll process it separately)
-    const allPerks = [...new Set([...(state.classPerks || []), ...(state.perks || [])])];
+    // Extract selected perks from perkGrants
+    const selectedPerks = (state.perkGrants || []).filter(g => g.fulfilled).map(g => g.fulfilled);
+    const allPerks = [...new Set([...(state.classPerks || []), ...selectedPerks])];
     const itemUuids = [
       state.selectedAncestry,
       state.selectedClass,
@@ -864,6 +882,22 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         // Auto-favorite spells selected in the builder
         if (itemData.type === 'spell') {
           itemData.system.favorite = true;
+        }
+
+        // Auto-equip weapons and armor from gear step
+        if (itemData.type === 'equipment') {
+          if (itemData.system.equipmentType === 'weapon') {
+            // Auto-equip weapons based on grip
+            const grip = itemData.system.grip || '1H';
+            if (grip === '2H') {
+              itemData.system.equipmentState = 'twoHands';
+            } else {
+              itemData.system.equipmentState = 'oneHand';
+            }
+          } else if (itemData.system.equipmentType === 'armor') {
+            // Auto-equip armor
+            itemData.system.equipped = true;
+          }
         }
 
         return itemData;

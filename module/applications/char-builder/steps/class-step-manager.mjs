@@ -484,6 +484,10 @@ export class ClassStepManager extends BaseStepManager {
       this.updateState('classPerks', classPerkUuids);
       this.updateState('lastClassForPerks', uuid);
 
+      // Calculate and store extra training count for validation
+      const extraTrainingData = await this._collectExtraTraining(this.getCurrentState());
+      this.updateState('extraTrainingCount', extraTrainingData.total);
+
       this.render();
     } catch (error) {
       console.error('Failed to select class:', error);
@@ -703,9 +707,12 @@ export class ClassStepManager extends BaseStepManager {
       const skills = [...skillGrant.guaranteed];
       const skillSelections = {};
 
-      // Auto-select random skills from choices
+      // Get all skills including weapon skills (melee, ranged)
+      const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
+
+      // Auto-select random skills from normal class choices
       skillGrant.choices.forEach((choice, groupIndex) => {
-        const pool = choice.pool.length ? choice.pool : Object.keys(CONFIG.VAGABOND.skills);
+        const pool = (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills;
         const available = pool.filter(s => !skills.includes(s));
         const shuffled = available.sort(() => Math.random() - 0.5);
         const selected = shuffled.slice(0, choice.count);
@@ -716,6 +723,22 @@ export class ClassStepManager extends BaseStepManager {
         // Add to combined skills list
         skills.push(...selected);
       });
+
+      // Auto-select extra training skills if any
+      const state = this.getCurrentState();
+      const extraTrainingData = await this._collectExtraTraining(state);
+      if (extraTrainingData.total > 0) {
+        const extraTrainingGroupIndex = skillGrant.choices.length;
+        const available = allSkillsWithWeaponSkills.filter(s => !skills.includes(s));
+        const shuffled = available.sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, extraTrainingData.total);
+
+        // Store per-group selections for UI
+        skillSelections[extraTrainingGroupIndex] = selected;
+
+        // Add to combined skills list
+        skills.push(...selected);
+      }
 
       this.updateState('skills', skills);
       this.updateState('skillSelections', skillSelections);
