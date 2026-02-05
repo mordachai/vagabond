@@ -27,7 +27,28 @@ export default class VagabondAncestry extends VagabondItemBase {
     schema.traits = new fields.ArrayField(
       new fields.SchemaField({
         name: new fields.StringField({ ...requiredString, initial: '' }),
-        description: new fields.StringField({ initial: '' })
+        description: new fields.StringField({ initial: '' }),
+
+        // Stat bonus points - each point gives +1 to any stat <7 (player's choice)
+        statBonusPoints: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Extra training - grants additional skill training choices
+        extraTraining: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Required spells - spells that this trait grants (array of UUIDs)
+        requiredSpells: new fields.ArrayField(
+          new fields.StringField({ initial: '', blank: true }),
+          { initial: [] }
+        ),
+
+        // Allowed perks - limits perk selection to these (array of UUIDs, empty = all allowed)
+        allowedPerks: new fields.ArrayField(
+          new fields.StringField({ initial: '', blank: true }),
+          { initial: [] }
+        ),
+
+        // Perk amount - number of perks granted by this trait
+        perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
       }),
       { initial: [] }
     );

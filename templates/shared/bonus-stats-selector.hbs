@@ -1,0 +1,30 @@
+{{!--
+  Bonus Stats Selector Partial
+
+  Displays bonus stat points with simple click-to-apply buttons.
+  Reusable in character builder and level-up dialogs.
+
+  Expected context:
+  - bonusStats.remaining: Number of bonus points remaining
+  - bonusStats.isActive: Boolean - true if all stats are assigned and bonuses can be applied
+  - bonusStats.availableStats: Array of stat objects with:
+    - key: stat key (might, dexterity, etc.)
+    - label: localized stat name
+    - value: current stat value
+    - disabled: boolean - true if stat is at max (7)
+  - bonusStats.sourceLabel: Label for the bonus source
+--}}
+
+{{#if bonusStats}}
+{{#if bonusStats.remaining}}
+<div class="bonus-stats-container {{#unless bonusStats.isActive}}disabled{{/unless}}">
+    <div class="bonus-stats-header">
+        <span class="bonus-label">
+            <i class="fas fa-plus-circle"></i>
+            {{bonusStats.sourceLabel}}:
+            <span class="bonus-value">+{{bonusStats.remaining}}</span> remaining
+        </span>
+    </div>
+</div>
+{{/if}}
+{{/if}}

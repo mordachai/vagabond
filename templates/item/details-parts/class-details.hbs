@@ -20,6 +20,43 @@
       </div>
     </div>
 
+    {{! Key Stats Section }}
+    <div class='key-stats-section mt-20'>
+      <h3>{{localize "VAGABOND.Terms.KeyStat"}}</h3>
+
+      <div class='form-group-stacked'>
+        <div class='flex-row flex-wrap gap-5'>
+          {{#each system.keyStats as |statKey index|}}
+            <div class='skill-tag key-stat-tag'>
+              <span>{{localize (lookup @root.config.stats statKey)}}</span>
+              {{#if @root.editable}}
+                <a data-action="removeKeyStat" data-index="{{index}}">
+                  <i class="fas fa-times"></i>
+                </a>
+              {{/if}}
+            </div>
+          {{/each}}
+        </div>
+
+        {{#if editable}}
+          <div class='flex-row mt-5'>
+            <select id="key-stat-select">
+              <option value=''>{{localize "VAGABOND.UI.Labels.SelectStat"}}</option>
+              <option value='might'>{{localize "VAGABOND.Stat.Might.long"}}</option>
+              <option value='dexterity'>{{localize "VAGABOND.Stat.Dexterity.long"}}</option>
+              <option value='reason'>{{localize "VAGABOND.Stat.Reason.long"}}</option>
+              <option value='awareness'>{{localize "VAGABOND.Stat.Awareness.long"}}</option>
+              <option value='presence'>{{localize "VAGABOND.Stat.Presence.long"}}</option>
+              <option value='luck'>{{localize "VAGABOND.Stat.Luck.long"}}</option>
+            </select>
+            <button type="button" data-action="addKeyStat" class="btn-sm">
+              <i class="fas fa-plus"></i> {{localize "VAGABOND.UI.Buttons.AddStat"}}
+            </button>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
     {{! Skill Training Section }}
     <div class='skill-training-section mt-20'>
       <h3>{{localize "VAGABOND.UI.Sections.SkillTraining"}}</h3>
@@ -194,6 +231,96 @@
                         name='system.levelFeatures.{{feature.index}}.level'
                         value='{{feature.level}}'
                       />
+
+                      {{! Configuration fields for grants }}
+                      <details class='feature-grants mt-10'>
+                        <summary><small>⚙️ Configure Grants</small></summary>
+                        <div class='grants-content p-5'>
+
+                          {{! Stat Bonus Points }}
+                          <div class='form-group'>
+                            <label>Stat Bonus Points:</label>
+                            <input type='number' name='system.levelFeatures.{{feature.index}}.statBonusPoints' value='{{feature.statBonusPoints}}' min='0' max='10' style='width: 60px;' />
+                            <small class='hint'>Each point gives +1 to any stat &lt;7 (player chooses)</small>
+                          </div>
+
+                          {{! Extra Training }}
+                          <div class='form-group mt-10'>
+                            <label>Extra Training:</label>
+                            <input type='number' name='system.levelFeatures.{{feature.index}}.extraTraining' value='{{feature.extraTraining}}' min='0' max='10' style='width: 60px;' />
+                            <small class='hint'>Additional skill training choices (any skill)</small>
+                          </div>
+
+                          {{! Required Spells }}
+                          <div class='form-group mt-10'>
+                            <label>Required Spells:</label>
+                            <div class='grants-list-container'>
+                              {{#if feature.enrichedSpells.length}}
+                                <ul class='grants-list'>
+                                  {{#each feature.enrichedSpells as |spell spellIndex|}}
+                                    <li class='grant-tag'>
+                                      <img src='{{spell.img}}' alt='{{spell.name}}' class='grant-tag-icon' />
+                                      <span class='grant-tag-label'>{{spell.name}}</span>
+                                      <a class='grant-tag-remove' data-action='removeFeatureSpell' data-feature-index='{{../index}}' data-spell-index='{{spellIndex}}'>
+                                        <i class='fas fa-times'></i>
+                                      </a>
+                                    </li>
+                                  {{/each}}
+                                </ul>
+                              {{/if}}
+                              <div class='grants-add-controls'>
+                                <select class='grants-select' data-feature-index='{{feature.index}}' data-grant-type='spell'>
+                                  <option value=''>-- Select Spell --</option>
+                                  {{!-- Options will be populated via JS --}}
+                                </select>
+                                <button type='button' class='btn-sm' data-action='addFeatureSpell' data-feature-index='{{feature.index}}'>
+                                  <i class='fas fa-plus'></i> Add Spell
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {{! Perk Amount }}
+                          <div class='form-group mt-10'>
+                            <label>Perks Amount:</label>
+                            <input type='number' name='system.levelFeatures.{{feature.index}}.perkAmount' value='{{feature.perkAmount}}' min='0' max='10' style='width: 60px;' />
+                            <small class='hint'>Number of perks this feature allows choosing</small>
+                          </div>
+
+                          {{! Allowed Perks }}
+                          <div class='form-group mt-10'>
+                            <label>Allowed Perks:</label>
+                            <small class='hint'>Empty list = Any perk allowed</small>
+                            <div class='grants-list-container'>
+                              {{#if feature.enrichedPerks.length}}
+                                <ul class='grants-list'>
+                                  {{#each feature.enrichedPerks as |perk perkIndex|}}
+                                    <li class='grant-tag'>
+                                      <img src='{{perk.img}}' alt='{{perk.name}}' class='grant-tag-icon' />
+                                      <span class='grant-tag-label'>{{perk.name}}</span>
+                                      <a class='grant-tag-remove' data-action='removeFeaturePerk' data-feature-index='{{../index}}' data-perk-index='{{perkIndex}}'>
+                                        <i class='fas fa-times'></i>
+                                      </a>
+                                    </li>
+                                  {{/each}}
+                                </ul>
+                              {{else}}
+                                <p class='text-info'><small><i class='fas fa-info-circle'></i> Any perk can be selected</small></p>
+                              {{/if}}
+                              <div class='grants-add-controls'>
+                                <select class='grants-select' data-feature-index='{{feature.index}}' data-grant-type='perk'>
+                                  <option value=''>-- Select Perk --</option>
+                                  {{!-- Options will be populated via JS --}}
+                                </select>
+                                <button type='button' class='btn-sm' data-action='addFeaturePerk' data-feature-index='{{feature.index}}'>
+                                  <i class='fas fa-plus'></i> Add Perk
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </details>
                     {{else}}
                       <strong class='feature-title'>{{feature.name}}</strong>
                       {{#if feature.enrichedDescription}}

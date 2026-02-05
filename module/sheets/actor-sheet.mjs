@@ -64,6 +64,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       spendLuck: this._onSpendLuck,
       spendStudiedDie: this._onSpendStudiedDie,
       modifyCheckBonus: this._onModifyCheckBonus,
+      modifyMana: this._onModifyMana,
       openDowntime: this._onOpenDowntime,
       openCharBuilder: this._onOpenCharBuilder,
       dismissCharBuilder: this._onDismissCharBuilder,
@@ -585,6 +586,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Setup ancestry/class right-click delete handlers
     this._setupAncestryClassHandlers();
+
+    // Setup mana right-click handlers
+    this._setupManaHandlers();
 
     // Setup inventory grid listeners (if inventory handler exists)
     if (this.inventoryHandler) {
@@ -1317,6 +1321,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Modify mana (spend or restore)
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onModifyMana(event, target) {
+    event.preventDefault();
+    const currentMana = this.actor.system.mana.current || 0;
+    const maxMana = this.actor.system.mana.max || 0;
+
+    // Left click: spend mana (decrement), Right click: restore mana (increment)
+    if (event.button === 2 || event.type === 'contextmenu') {
+      // Right click: restore (increment)
+      const newMana = Math.min(currentMana + 1, maxMana);
+      await this.actor.update({ 'system.mana.current': newMana });
+    } else {
+      // Left click: spend (decrement)
+      const newMana = Math.max(currentMana - 1, 0);
+      await this.actor.update({ 'system.mana.current': newMana });
+    }
+  }
+
+  /**
    * Open downtime activities application
    * @param {PointerEvent} event - The originating click event
    * @param {HTMLElement} target - The capturing HTML element
@@ -1539,11 +1566,26 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
     });
 
-    // Add HP heart icon click handlers for PC
-    const pcHpIcon = this.element.querySelector('.hp-icon');
-    if (pcHpIcon) {
-      // Left-click: increment HP
-      pcHpIcon.addEventListener('click', async (event) => {
+    // Add HP heart icon click handlers for PC and NPC
+    const hpIcons = this.element.querySelectorAll('.hp-icon, .npc-hp-heart-icon');
+    hpIcons.forEach(hpIcon => {
+      // Left-click: decrement HP
+      hpIcon.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const currentHP = this.actor.system.health.value || 0;
+        const newHP = Math.max(currentHP - 1, 0);
+
+        // Trigger heartbeat animation
+        hpIcon.classList.add('heartbeat');
+        setTimeout(() => hpIcon.classList.remove('heartbeat'), 300);
+
+        await this.actor.update({ 'system.health.value': newHP });
+      });
+
+      // Right-click: increment HP
+      hpIcon.addEventListener('contextmenu', async (event) => {
         event.preventDefault();
         event.stopPropagation();
 
@@ -1552,27 +1594,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const newHP = Math.min(currentHP + 1, maxHP);
 
         // Trigger heartbeat animation
-        pcHpIcon.classList.add('heartbeat');
-        setTimeout(() => pcHpIcon.classList.remove('heartbeat'), 300);
+        hpIcon.classList.add('heartbeat');
+        setTimeout(() => hpIcon.classList.remove('heartbeat'), 300);
 
         await this.actor.update({ 'system.health.value': newHP });
       });
-
-      // Right-click: decrement HP
-      pcHpIcon.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentHP = this.actor.system.health.value || 0;
-        const newHP = Math.max(currentHP - 1, 0);
-
-        // Trigger heartbeat animation
-        pcHpIcon.classList.add('heartbeat');
-        setTimeout(() => pcHpIcon.classList.remove('heartbeat'), 300);
-
-        await this.actor.update({ 'system.health.value': newHP });
-      });
-    }
+    });
   }
 
   /**
@@ -1627,6 +1654,23 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           await item.delete();
           ui.notifications.info(`Removed ${item.name}`);
         }
+      });
+    }
+  }
+
+  /**
+   * Setup right-click handlers for mana
+   * @private
+   */
+  _setupManaHandlers() {
+    const manaElement = this.element.querySelector('[data-action="modifyMana"]');
+    if (manaElement) {
+      manaElement.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Call the static _onModifyMana method with the contextmenu event
+        await this.constructor._onModifyMana.call(this, event, manaElement);
       });
     }
   }

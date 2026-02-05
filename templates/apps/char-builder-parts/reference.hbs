@@ -81,8 +81,76 @@
         {{/if}}
     {{/if}}
 
-    {{!-- Origin Refs (Ancestry Traits/Class Features for later steps) --}}
-    {{#if (or (eq step 'perks') (eq step 'spells'))}}
+    {{!-- COLUMN 3: SPELLS STEP - Mana Stats, Ancestry Traits, and Class Features --}}
+    {{#if (eq step 'spells')}}
+        {{#if manaStats}}
+            <div class="spells-summary-box">
+                {{!-- Mana Stats Row --}}
+                <div class="mana-stats-row">
+                    <div class="mana-stat">
+                        <span class="label"><i class="fas fa-star-christmas"></i> {{localize "VAGABOND.UI.Labels.Mana"}}:</span>
+                        <span class="value">{{manaStats.manaMax}}</span>
+                    </div>
+                    <div class="mana-stat">
+                        <span class="label">{{localize "VAGABOND.ResourceTypes.ManaPerCast"}}:</span>
+                        <span class="value">{{manaStats.manaCast}}</span>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+
+        {{!-- Ancestry Traits --}}
+        {{#if ancestryData}}
+            <div class="ancestry-summary-box mt-10">
+                <h4 class="ref-header">{{localize "TYPES.Item.ancestry"}}: {{ancestryData.name}}</h4>
+
+                {{#if ancestryData.traits.length}}
+                    <div class="traits-list">
+                        <strong>{{localize "VAGABOND.UI.Sections.Traits"}}:</strong>
+                        {{#each ancestryData.traits}}
+                            <div class="ref-entry">
+                                <strong>{{this.name}}:</strong> {{this.description}}
+                            </div>
+                        {{/each}}
+                    </div>
+                {{/if}}
+            </div>
+        {{/if}}
+
+        {{!-- Class Features (All Levels) --}}
+        {{#if classPreviewData}}
+            <div class="class-summary-box mt-10">
+                <h4 class="ref-header">{{localize "VAGABOND.CharBuilder.Steps.Class"}}: {{classPreviewData.name}}</h4>
+
+                {{#if classPreviewData.levels.length}}
+                    {{#each classPreviewData.levels}}
+                        <details class="level-accordion" {{#if (eq this.level 1)}}open{{/if}}>
+                            <summary class="level-header">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>{{localize "VAGABOND.UI.Sections.Level"}} {{this.level}}</span>
+                            </summary>
+                            <div class="level-content">
+                                {{#if this.features.length}}
+                                    {{#each this.features}}
+                                        <div class="ref-entry">
+                                            <strong>{{this.name}}:</strong> {{{this.enrichedDescription}}}
+                                        </div>
+                                    {{/each}}
+                                {{else}}
+                                    <p class="text-muted italic">No features at this level</p>
+                                {{/if}}
+                            </div>
+                        </details>
+                    {{/each}}
+                {{else}}
+                    <p class="text-muted italic">No class features defined</p>
+                {{/if}}
+            </div>
+        {{/if}}
+    {{/if}}
+
+    {{!-- Origin Refs (Ancestry Traits/Class Features for perks step) --}}
+    {{#if (eq step 'perks')}}
         {{#if originRefs.ancestry}}
             <h4 class="ref-header">{{localize "VAGABOND.UI.Sections.Traits"}} ({{originRefs.ancestry.name}})</h4>
             {{#each originRefs.ancestry.traits}}

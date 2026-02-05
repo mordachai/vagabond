@@ -55,6 +55,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     this.compendiumTypeCache = {}; // Cache which compendiums contain which types
     this.showAllPerks = false; // Toggle for showing all perks regardless of prerequisites
 
+    // Track previous derived stat values for animation
+    this.previousDerivedValues = new Map();
+
     // Initialize with fallback values, will be replaced by config
     this.statArrays = {
       1: [5, 5, 5, 4, 4, 3], 2: [5, 5, 5, 5, 3, 2], 3: [6, 5, 4, 4, 4, 3],
@@ -341,7 +344,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       removeStartingPack: VagabondCharBuilder.prototype._delegateToStepManager,
       finish: VagabondCharBuilder.prototype._onFinish,
       dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder,
-      toggleShowAllPerks: VagabondCharBuilder.prototype._delegateToStepManager
+      toggleShowAllPerks: VagabondCharBuilder.prototype._delegateToStepManager,
+      applyStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
+      removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
+      unassignStat: VagabondCharBuilder.prototype._delegateToStepManager
     }
   };
 
@@ -381,6 +387,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       });
     }
 
+    // Note: Bonus stat buttons use data-action="applyStatBonus" for click handling
     // Note: Directory items use data-action="selectOption" for click handling
     // This is handled by the action delegation system in DEFAULT_OPTIONS.actions
 
@@ -512,6 +519,53 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         });
       }
     }
+
+    // 4. Stat hover highlighting for derived stats preview
+    if (this.currentStep === 'stats') {
+      const statLabels = html.querySelectorAll('.stat-slot label');
+      const derivedItems = html.querySelectorAll('.skill-item[data-affected-by]');
+
+      statLabels.forEach(label => {
+        const statSlot = label.closest('.stat-slot');
+        if (!statSlot) return;
+
+        const statKey = statSlot.dataset.stat;
+
+        label.addEventListener('mouseenter', () => {
+          derivedItems.forEach(item => {
+            const affectedBy = item.dataset.affectedBy?.split(' ') || [];
+            if (affectedBy.includes(statKey)) {
+              item.classList.add('stat-hover-highlight');
+            }
+          });
+        });
+
+        label.addEventListener('mouseleave', () => {
+          derivedItems.forEach(item => {
+            item.classList.remove('stat-hover-highlight');
+          });
+        });
+      });
+
+      // Track value changes and trigger animation
+      derivedItems.forEach(item => {
+        const valueSpan = item.querySelector('.skill-value');
+        if (valueSpan) {
+          const currentValue = valueSpan.textContent.trim();
+          const skillName = item.querySelector('.skill-name')?.textContent?.trim() || 'unknown';
+          const previousValue = this.previousDerivedValues.get(skillName);
+
+          // If value changed, trigger animation
+          if (previousValue !== undefined && previousValue !== currentValue) {
+            item.classList.add('value-changed');
+            setTimeout(() => item.classList.remove('value-changed'), 600);
+          }
+
+          // Store current value for next render
+          this.previousDerivedValues.set(skillName, currentValue);
+        }
+      });
+    }
   }
 
   /**
@@ -556,11 +610,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   /** @override */
   async _prepareContext(options) {
+    console.log('[CharBuilder] _prepareContext called');
     // Ensure configuration and step managers are initialized
     await this._ensureInitialized();
 
     // Use UI components to prepare context with step manager integration
     const state = this.stateManager.getCurrentState();
+    console.log('[CharBuilder] Current state appliedBonuses:', state.appliedBonuses);
     const currentStepManager = await this.getCurrentStepManager();
 
     if (!currentStepManager) {
@@ -579,6 +635,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         openCategories: this.openCategories
       };
       const context = await this.uiComponents.prepareContext(state, currentStepManager, contextOptions);
+
+      // Debug: Check if bonusStats is in the context
+      console.log('[CharBuilder] _prepareContext - bonusStats in context:', {
+        exists: !!context.bonusStats,
+        step: context.step,
+        bonusStats: context.bonusStats
+      });
+
       return context;
     } catch (error) {
       console.error('CharBuilder: Error in uiComponents.prepareContext:', error);
@@ -602,8 +666,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     try {
+      console.log(`[CharBuilder] Executing action: ${action}`);
       await currentStepManager.handleAction(action, event, target);
+      console.log(`[CharBuilder] Action ${action} completed, calling render...`);
       this.render();
+      console.log(`[CharBuilder] Render called after ${action}`);
     } catch (error) {
       console.error(`Error handling action '${action}' in step '${this.currentStep}':`, error);
       ui.notifications.error(`Failed to handle ${action} action`);
@@ -718,12 +785,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     // Use existing finish logic but with state manager data
     const state = this.stateManager.getCurrentState();
-    
+
     // Create the final actor data
     const actorData = this.actor.toObject();
     actorData.effects = [];
     if (actorData.system.inventory) actorData.system.inventory.bonusSlots = 0;
-    
+
     // Apply stats
     if (actorData.system.stats) {
       for (const key of Object.keys(actorData.system.stats)) {
@@ -734,8 +801,20 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Apply builder stats
-    for (const [key, val] of Object.entries(state.assignedStats || {})) {
+    // Apply builder stats with bonuses
+    const finalStats = { ...(state.assignedStats || {}) };
+    const appliedBonuses = state.appliedBonuses || {};
+
+    // Apply stat bonuses to final values
+    for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+      const statKey = application.target;
+      if (finalStats[statKey] !== null && finalStats[statKey] !== undefined) {
+        finalStats[statKey] += application.amount;
+      }
+    }
+
+    // Set final stat values on actor
+    for (const [key, val] of Object.entries(finalStats)) {
       if (val !== null && actorData.system.stats[key]) {
         actorData.system.stats[key].value = val;
       }
@@ -758,12 +837,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Add items
+    // Add items (excluding starting pack since we'll process it separately)
     const allPerks = [...new Set([...(state.classPerks || []), ...(state.perks || [])])];
     const itemUuids = [
       state.selectedAncestry,
       state.selectedClass,
-      state.selectedStartingPack,
       ...allPerks,
       ...(state.spells || []),
       ...(state.gear || [])
@@ -780,7 +858,17 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     if (validItems.length > 0) {
-      const itemObjects = validItems.map(item => item.toObject());
+      const itemObjects = validItems.map(item => {
+        const itemData = item.toObject();
+
+        // Auto-favorite spells selected in the builder
+        if (itemData.type === 'spell') {
+          itemData.system.favorite = true;
+        }
+
+        return itemData;
+      });
+
       const singletonTypes = ['ancestry', 'class'];
       const typesBeingAdded = new Set(itemObjects.map(i => i.type));
 
@@ -794,8 +882,111 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Mark character as constructed (hides builder button)
     actorData.system.details.constructed = true;
 
-    // Update the actor
+    // Update the actor (first update to apply stats and items, which triggers prepareDerivedData)
     await this.actor.update(actorData);
+
+    // Process starting pack (if selected)
+    if (state.selectedStartingPack) {
+      try {
+        const startingPack = await fromUuid(state.selectedStartingPack);
+        if (startingPack && startingPack.system.items) {
+          // Add currency from starting pack
+          const currentGold = this.actor.system.currency.gold || 0;
+          const currentSilver = this.actor.system.currency.silver || 0;
+          const currentCopper = this.actor.system.currency.copper || 0;
+
+          await this.actor.update({
+            'system.currency.gold': currentGold + (startingPack.system.currency.gold || 0),
+            'system.currency.silver': currentSilver + (startingPack.system.currency.silver || 0),
+            'system.currency.copper': currentCopper + (startingPack.system.currency.copper || 0)
+          });
+
+          // Add items from starting pack
+          const packItemsToAdd = [];
+          for (const packItem of startingPack.system.items) {
+            try {
+              const itemDoc = await fromUuid(packItem.uuid);
+              if (itemDoc) {
+                for (let i = 0; i < packItem.quantity; i++) {
+                  const itemData = itemDoc.toObject();
+
+                  // Auto-equip weapons and armor
+                  if (itemData.type === 'equipment') {
+                    if (itemData.system.equipmentType === 'weapon') {
+                      // Auto-equip weapons based on grip
+                      const grip = itemData.system.grip || '1H';
+                      if (grip === '2H') {
+                        itemData.system.equipmentState = 'twoHands';
+                      } else {
+                        itemData.system.equipmentState = 'oneHand';
+                      }
+                    } else if (itemData.system.equipmentType === 'armor') {
+                      // Auto-equip armor
+                      itemData.system.equipped = true;
+                    }
+                  }
+
+                  // Auto-favorite spells
+                  if (itemData.type === 'spell') {
+                    itemData.system.favorite = true;
+                  }
+
+                  packItemsToAdd.push(itemData);
+                }
+              }
+            } catch (error) {
+              console.warn(`Failed to load starting pack item ${packItem.uuid}:`, error);
+            }
+          }
+
+          if (packItemsToAdd.length > 0) {
+            await this.actor.createEmbeddedDocuments('Item', packItemsToAdd);
+          }
+        }
+      } catch (error) {
+        console.warn(`Failed to process starting pack ${state.selectedStartingPack}:`, error);
+      }
+    }
+
+    // After all updates, set current values to max values (HP, Mana, Luck)
+    // We need to manually calculate these because the actor reference might not have updated derived data yet
+    const updateData = {};
+
+    // Calculate max HP manually: Might × Level (with bonuses from items now applied)
+    const mightStat = state.assignedStats?.might || 0;
+    const level = 1; // New characters start at level 1
+    const calculatedMaxHP = mightStat * level; // Base formula for level 1 character
+
+    // Set HP to calculated max (use health.value, not health.current)
+    updateData['system.health.value'] = calculatedMaxHP;
+
+    // Set Mana to max (only if spellcaster)
+    if (classItemObj && classItemObj.system.isSpellcaster) {
+      const manaMultiplier = classItemObj.system.manaMultiplier || 0;
+      const calculatedMaxMana = manaMultiplier * level;
+      updateData['system.mana.current'] = calculatedMaxMana;
+    }
+
+    // Set Luck to max (Luck stat value for new character)
+    const luckStat = state.assignedStats?.luck || 0;
+    updateData['system.currentLuck'] = luckStat;
+
+    // Apply the final update
+    if (Object.keys(updateData).length > 0) {
+      await this.actor.update(updateData);
+    }
+
+    // Favorite all spells on the character (post-creation fix)
+    const spellUpdates = [];
+    for (const item of this.actor.items) {
+      if (item.type === 'spell' && !item.system.favorite) {
+        spellUpdates.push({ _id: item.id, 'system.favorite': true });
+      }
+    }
+
+    if (spellUpdates.length > 0) {
+      await this.actor.updateEmbeddedDocuments('Item', spellUpdates);
+    }
 
     // ui.notifications.info("Character creation completed!");
     this.close();

@@ -29,9 +29,11 @@ export class CharacterBuilderUIComponents {
         'selectedAncestry',
         'selectedClass',
         'assignedStats',
+        'appliedBonuses',  // CRITICAL: Track bonus applications for stat updates
         'skills',
         'perks',
         'classPerks',
+        'perkGrants',  // CRITICAL: Track grant fulfillment for perks step
         'spells',
         'selectedStartingPack',
         'gear',

@@ -2,19 +2,28 @@
 {{!-- <header class="zone-header">{{localize "VAGABOND.CharBuilder.ProposedChoices"}}</header> --}}
 <div class="decision-tray">
     {{#if (eq step 'class')}}
-        <div class="skill-decision flexrow">
-            <div class="guaranteed-skills flexcol">
-                <strong>Obligatory Training:</strong>
-                {{#each classChoices.guaranteed}}
-                    <span class="skill-tag locked">
-                        <i class="fas fa-lock"></i>
-                        {{capitalize (localize (concat "VAGABOND.Skills." (capitalize this)))}}
-                    </span>
-                {{/each}}
+        <div class="skill-decision skill-rows">
+            <div class="guaranteed-skills skill-row">
+                <div class="skill-tags">
+                    <strong>Obligatory Training:</strong>
+                    {{#each classChoices.guaranteed}}
+                        <span class="skill-tag locked">
+                            <i class="fas fa-lock"></i>
+                            {{capitalize (localize (concat "VAGABOND.Skills." (capitalize this)))}}
+                        </span>
+                    {{/each}}
+                </div>
             </div>
             {{#each classChoices.choices}}
-                <div class="pool-box">
-                    <strong>Choose {{this.count}} skill(s) {{#if this.selected}}({{this.selected}}/{{this.count}} selected){{/if}}:</strong>
+                <div class="pool-box skill-row {{#if this.isExtraTraining}}extra-training{{/if}}">
+                    <strong>{{#if this.isExtraTraining}}Extra Trained Skills: {{else}}Choose {{this.count}} skill(s){{/if}} {{#if this.selected}}({{this.selected}}/{{this.count}} selected){{/if}}:</strong>
+                    {{#if this.isExtraTraining}}
+                        <span class="extra-training-sources">
+                            {{#each this.extraTrainingSources}}
+                                <strong>+{{this.amount}} from {{this.name}} ({{this.origin}} {{this.type}})</strong>
+                            {{/each}}
+                        </span>
+                    {{/if}}
                     <div class="pool-options">
                         {{#each this.skills}}
                             <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isGuaranteed}}Granted by class{{else if this.isDisabled}}Selected in another group{{/if}}">
@@ -37,35 +46,65 @@
 
     {{#if (eq step 'stats')}}
         {{!-- Stats to Pick and Drop --}}
+        {{#if statData.unassigned.length}}
         <div class="available-pool">
-            <div class="flex-center-gap-12 flex-around w-100">
-                <h6>{{localize "VAGABOND.CharBuilder.AssignStats"}}</h6>
-                <button type="button" class="btn-reset-stats w-80" data-action="resetStats"><i class="fas fa-undo"></i> {{localize "VAGABOND.CharBuilder.Buttons.Reset"}}</button>
-            </div>
             <div class="pool-values">
                 {{#each statData.unassigned}}
                 <button type="button" class="value-chip {{#if this.active}}active{{/if}}" data-index="{{this.index}}" data-value="{{this.value}}" data-action="pickValue">{{this.value}}</button>
                 {{/each}}
             </div>
-            {{#if statData.unassigned}}
             <div><i class="fa-light fa-chevrons-down chevrons-down"></i></div>
-            {{/if}}
         </div>
-        <div class="stat-assigner">
-            {{#each statData.slots}}
-            {{!-- Char Stats --}}
-            <div class="stat-slot" data-stat="{{this.key}}" data-action="assignStat" title="{{this.hint}}">
-                <label>{{this.abbreviation}}</label>
-                <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
-                    {{#if this.value}}
-                        {{this.value}}
-                    {{else}}
-                        ?
-                    {{/if}}
+        {{/if}}
+        <div class="stat-assigner-row">
+            <div class="stat-assigner">
+                {{#each statData.slots}}
+                {{!-- Char Stats --}}
+                <div class="stat-slot-container">
+                    <div class="stat-slot" data-stat="{{this.key}}" data-action="assignStat" title="{{this.hint}}">
+                        <label class="{{#if this.isKeyStat}}key-stat{{/if}}">{{this.label}}</label>
+                        <div class="hex-box-wrapper">
+                            <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
+                                {{#if this.value}}
+                                    {{#if this.hasBonus}}
+                                        {{this.finalValue}}
+                                    {{else}}
+                                        {{this.value}}
+                                    {{/if}}
+                                {{else}}
+                                    ?
+                                {{/if}}
+                            </div>
+                            {{!-- Remove stat value button (appears on hover) --}}
+                            {{#if this.value}}
+                            <button type="button" class="remove-stat-btn" data-action="unassignStat" data-stat="{{this.key}}" title="Remove {{this.value}} and return to pool">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            {{/if}}
+                            {{!-- Bonus tag and button in same position --}}
+                            {{#if this.hasBonus}}
+                            <button type="button" class="bonus-tag applied" data-action="removeStatBonus" data-stat="{{this.key}}" title="Click to remove bonus and reassign">
+                                +{{this.bonusAmount}}
+                            </button>
+                            {{else if this.canApplyBonus}}
+                            <button type="button" class="bonus-tag clickable" data-action="applyStatBonus" data-stat="{{this.key}}" title="Click to apply +1 bonus to {{this.label}}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            {{/if}}
+                        </div>
+                    </div>
                 </div>
+                {{/each}}
             </div>
-            {{/each}}
+            {{#unless statData.unassigned.length}}
+            <button type="button" class="btn-reset-stats-icon" data-action="resetStats" title="{{localize 'VAGABOND.CharBuilder.Buttons.Reset'}}">
+                <i class="fas fa-undo"></i>
+            </button>
+            {{/unless}}
         </div>
+
+        {{!-- Bonus Stats Selector - Reusable Partial --}}
+        {{> "systems/vagabond/templates/shared/bonus-stats-selector.hbs"}}
     {{/if}}
 </div>
 </section>

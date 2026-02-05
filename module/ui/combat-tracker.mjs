@@ -56,7 +56,7 @@ export class VagabondCombatTracker {
           .map(e => ({
             id: e.id,
             name: e.name,
-            icon: e.icon || 'icons/svg/aura.svg'
+            icon: e.img || 'icons/svg/aura.svg' // Use 'img' instead of deprecated 'icon'
           }));
       }
 

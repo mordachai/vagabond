@@ -69,6 +69,25 @@ export default class VagabondClass extends VagabondItemBase {
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
 
+    // Key stats - the primary stats for this class (can be multiple)
+    schema.keyStats = new fields.ArrayField(
+      new fields.StringField({
+        choices: {
+          might: 'VAGABOND.Ability.Might.long',
+          dexterity: 'VAGABOND.Ability.Dexterity.long',
+          reason: 'VAGABOND.Ability.Reason.long',
+          awareness: 'VAGABOND.Ability.Awareness.long',
+          presence: 'VAGABOND.Ability.Presence.long',
+          luck: 'VAGABOND.Ability.Luck.long'
+        }
+      }),
+      {
+        initial: [],
+        label: 'VAGABOND.Item.Class.FIELDS.keyStats.label',
+        hint: 'VAGABOND.Item.Class.FIELDS.keyStats.hint'
+      }
+    );
+
     // Skill Grant System
     schema.skillGrant = new fields.SchemaField({
       // Fixed skills the class always provides (e.g., Alchemist -> Craft)
@@ -96,7 +115,28 @@ export default class VagabondClass extends VagabondItemBase {
           integer: true
         }),
         name: new fields.StringField({ ...requiredString, initial: '' }),
-        description: new fields.StringField({ initial: '' })
+        description: new fields.StringField({ initial: '' }),
+
+        // Stat bonus points - each point gives +1 to any stat <7 (player's choice)
+        statBonusPoints: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Extra training - grants additional skill training choices
+        extraTraining: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Required spells - spells that this feature grants (array of UUIDs)
+        requiredSpells: new fields.ArrayField(
+          new fields.StringField({ initial: '', blank: true }),
+          { initial: [] }
+        ),
+
+        // Allowed perks - limits perk selection to these (array of UUIDs, empty = all allowed)
+        allowedPerks: new fields.ArrayField(
+          new fields.StringField({ initial: '', blank: true }),
+          { initial: [] }
+        ),
+
+        // Perk amount - number of perks granted by this feature
+        perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
       }),
       { initial: [] }
     );

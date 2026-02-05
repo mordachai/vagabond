@@ -45,6 +45,10 @@ export class ValidationEngine {
     this.validators.set('no_duplicates_unless_allowed', this._validateNoDuplicatesUnlessAllowed.bind(this));
     this.validators.set('skills_assigned', this._validateSkillsAssigned.bind(this));
     this.validators.set('perks_selected', this._validatePerksSelected.bind(this));
+
+    // Bonus validators
+    this.validators.set('all_bonuses_applied', this._validateAllBonusesApplied.bind(this));
+    this.validators.set('bonuses_within_limits', this._validateBonusesWithinLimits.bind(this));
   }
 
   /**
@@ -1045,6 +1049,69 @@ export class ValidationEngine {
   _calculateGearSpent(state) {
     // Return the tracked cost from state (updated by GearStepManager)
     return state.gearCostSpent || 0;
+  }
+
+  /**
+   * Validate that all required bonuses have been applied
+   * @private
+   */
+  async _validateAllBonusesApplied(rule, state) {
+    const availableBonuses = state.availableBonuses || [];
+    const appliedBonuses = state.appliedBonuses || {};
+
+    // Filter to only required bonuses (targetType === 'choice', not 'optional')
+    const requiredBonuses = availableBonuses.filter(b => b.targetType === 'choice');
+
+    const unappliedBonuses = [];
+    for (const bonus of requiredBonuses) {
+      if (!appliedBonuses[bonus.bonusId]) {
+        unappliedBonuses.push(bonus.reason || 'Unknown bonus');
+      }
+    }
+
+    if (unappliedBonuses.length > 0) {
+      return {
+        isValid: false,
+        errors: unappliedBonuses.map(reason => `Bonus "${reason}" must be applied`)
+      };
+    }
+
+    return { isValid: true };
+  }
+
+  /**
+   * Validate that applied bonuses don't exceed maximum values
+   * @private
+   */
+  async _validateBonusesWithinLimits(rule, state) {
+    const assignedStats = state.assignedStats || {};
+    const appliedBonuses = state.appliedBonuses || {};
+    const availableBonuses = state.availableBonuses || [];
+
+    // Calculate final stat values with bonuses
+    const finalStats = { ...assignedStats };
+    const errors = [];
+
+    for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+      const bonus = availableBonuses.find(b => b.bonusId === bonusId);
+      if (!bonus) continue;
+
+      const statKey = application.target;
+      if (!finalStats[statKey]) continue;
+
+      finalStats[statKey] += application.amount;
+
+      // Check max value
+      if (finalStats[statKey] > bonus.maxValue) {
+        errors.push(`${statKey.toUpperCase()} exceeds maximum of ${bonus.maxValue} with applied bonuses`);
+      }
+    }
+
+    if (errors.length > 0) {
+      return { isValid: false, errors };
+    }
+
+    return { isValid: true };
   }
 
   // Cache management

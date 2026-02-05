@@ -233,6 +233,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/size-select.hbs',
     'systems/vagabond/templates/shared/being-type-select.hbs',
     'systems/vagabond/templates/shared/weapon-skill-select.hbs',
+    'systems/vagabond/templates/shared/bonus-stats-selector.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     //Chat cards
@@ -491,6 +492,17 @@ Handlebars.registerHelper('or', function () {
 
 Handlebars.registerHelper('not', (a) => !a);
 
+// Stringify object to JSON for textarea display
+Handlebars.registerHelper('json', function(context) {
+  if (context === undefined || context === null) return '';
+  if (typeof context === 'string') return context;
+  try {
+    return JSON.stringify(context, null, 2);
+  } catch (e) {
+    console.warn('Failed to stringify JSON:', e);
+    return '';
+  }
+});
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
