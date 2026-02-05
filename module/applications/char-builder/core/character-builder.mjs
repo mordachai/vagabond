@@ -983,16 +983,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     // After all updates, set current values to max values (HP, Mana, Luck)
-    // We need to manually calculate these because the actor reference might not have updated derived data yet
+    // The actor has been updated with stats, so prepareDerivedData() has calculated max HP
     const updateData = {};
 
-    // Calculate max HP manually: Might × Level (with bonuses from items now applied)
-    const mightStat = state.assignedStats?.might || 0;
-    const level = 1; // New characters start at level 1
-    const calculatedMaxHP = mightStat * level; // Base formula for level 1 character
-
-    // Set HP to calculated max (use health.value, not health.current)
-    updateData['system.health.value'] = calculatedMaxHP;
+    // Set current HP to max HP (read from actor after stats update)
+    updateData['system.health.value'] = this.actor.system.health.max;
 
     // Set Mana to max (only if spellcaster)
     if (classItemObj && classItemObj.system.isSpellcaster) {
@@ -1001,9 +996,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       updateData['system.mana.current'] = calculatedMaxMana;
     }
 
-    // Set Luck to max (Luck stat value for new character)
-    const luckStat = state.assignedStats?.luck || 0;
-    updateData['system.currentLuck'] = luckStat;
+    // Set current Luck to max (read Luck stat value from actor after stats update)
+    updateData['system.currentLuck'] = this.actor.system.stats.luck.value;
 
     // Apply the final update
     if (Object.keys(updateData).length > 0) {
