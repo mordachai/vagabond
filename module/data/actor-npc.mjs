@@ -153,9 +153,11 @@ export default class VagabondNPC extends VagabondActorBase {
     });
 
     // Universal Damage Bonuses (NPCs don't get check bonus since they don't roll)
-    schema.universalDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0
+    schema.universalDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
     });
 
     schema.universalDamageDice = new fields.StringField({
@@ -164,9 +166,11 @@ export default class VagabondNPC extends VagabondActorBase {
     });
 
     // Separated Universal Damage Bonuses by Type (same as character)
-    schema.universalWeaponDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0
+    schema.universalWeaponDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Weapon Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
     });
 
     schema.universalWeaponDamageDice = new fields.StringField({
@@ -174,9 +178,11 @@ export default class VagabondNPC extends VagabondActorBase {
       blank: true
     });
 
-    schema.universalSpellDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0
+    schema.universalSpellDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Spell Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
     });
 
     schema.universalSpellDamageDice = new fields.StringField({
@@ -184,9 +190,11 @@ export default class VagabondNPC extends VagabondActorBase {
       blank: true
     });
 
-    schema.universalAlchemicalDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0
+    schema.universalAlchemicalDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Alchemical Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
     });
 
     schema.universalAlchemicalDamageDice = new fields.StringField({
@@ -315,7 +323,70 @@ export default class VagabondNPC extends VagabondActorBase {
     return schema;
   }
 
+  /**
+   * Evaluate a formula field that can contain either a simple number or a Roll formula.
+   * @param {string|number} formula - The formula to evaluate (e.g., "1", "@cr")
+   * @param {object} rollData - The roll data context (from getRollData())
+   * @returns {number} The evaluated result, or 0 if invalid
+   * @private
+   */
+  _evaluateFormulaField(formula, rollData) {
+    // Handle empty/null/undefined
+    if (!formula) return 0;
+
+    // Convert to string if it's a number
+    const formulaStr = String(formula).trim();
+    if (formulaStr === '') return 0;
+
+    try {
+      // Replace @variables with their values from rollData
+      const replaced = Roll.replaceFormulaData(formulaStr, rollData);
+
+      // Safely evaluate the expression
+      const result = Roll.safeEval(replaced);
+
+      // Handle NaN or invalid results
+      if (result === null || result === undefined || isNaN(result)) {
+        console.warn(`Vagabond | NPC Formula evaluation returned invalid result: ${formulaStr} → ${replaced} → ${result}`);
+        return 0;
+      }
+
+      return Number(result);
+    } catch (err) {
+      console.warn(`Vagabond | NPC Invalid formula in bonus field: "${formulaStr}"`, err);
+      return 0;
+    }
+  }
+
+  /**
+   * Evaluate all formula bonus fields for NPCs.
+   * @param {object} rollData - The roll data context
+   * @private
+   */
+  _evaluateAllBonusFields(rollData) {
+    // Universal damage bonuses
+    this.universalDamageBonus = this._evaluateFormulaField(this.universalDamageBonus, rollData);
+    this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
+    this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
+    this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
+
+    // Health bonus from base actor
+    if (this.health) {
+      this.health.bonus = this._evaluateFormulaField(this.health.bonus, rollData);
+    }
+  }
+
   prepareDerivedData() {
+    // Evaluate formula bonus fields first
+    // NPCs have simpler roll data (CR, stats, etc.)
+    const rollData = {
+      cr: this.cr || 0,
+      hd: this.hd || 0,
+      threatLevel: this.threatLevel || 0
+    };
+
+    this._evaluateAllBonusFields(rollData);
+
     this.xp = this.cr * this.cr * 100;
 
     // --- Format Threat Level to 2 decimal places (e.g., 1.60) ---

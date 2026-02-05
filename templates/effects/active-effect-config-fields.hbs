@@ -49,5 +49,53 @@
       </details>
     </div>
 
+    <div class="form-group help-box">
+      <details>
+        <summary><i class="fas fa-code"></i> Formula Support for Effect Values</summary>
+        <div class="mode-help">
+          <div class="mode-example">
+            <h4><i class="fas fa-calculator"></i> Using Formulas</h4>
+            <p>Effect values support both simple numbers and dynamic formulas. Start typing <code>@</code> to see autocomplete suggestions.</p>
+            <p class="example"><em>Examples:</em></p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><code>5</code> - Simple number</li>
+              <li><code>@attributes.level.value</code> - Character level</li>
+              <li><code>floor(@attributes.level.value / 2)</code> - Half level (rounded down)</li>
+              <li><code>@stats.might.total</code> - Might stat total</li>
+              <li><code>@might.value + @dexterity.value</code> - Sum of two stats</li>
+            </ul>
+          </div>
+          <div class="mode-example">
+            <h4><i class="fas fa-star"></i> Common Scaling Perks</h4>
+            <p class="example"><strong>Secret of Mana</strong> (Casting Max = Level):</p>
+            <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+              <li>Attribute Key: <code>system.mana.castingMaxBonus</code></li>
+              <li>Effect Value: <code>@attributes.level.value</code></li>
+            </ul>
+            <p class="example" style="margin-top: 0.75rem;"><strong>Tough</strong> (+1 HP per Level):</p>
+            <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+              <li>Attribute Key: <code>system.bonuses.hpPerLevel</code></li>
+              <li>Effect Value: <code>1</code></li>
+            </ul>
+            <p class="example" style="margin-top: 0.75rem;"><strong>Scaling Armor</strong> (Armor = Dexterity):</p>
+            <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+              <li>Attribute Key: <code>system.armorBonus</code></li>
+              <li>Effect Value: <code>@stats.dexterity.total</code></li>
+            </ul>
+          </div>
+          <div class="mode-example">
+            <h4><i class="fas fa-function"></i> Available Variables</h4>
+            <p>Type <code>@</code> in the Effect Value field to see all available variables including:</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Attributes:</strong> level, xp, isSpellcaster, etc.</li>
+              <li><strong>Stats:</strong> might, dexterity, awareness, reason, presence, luck</li>
+              <li><strong>Skills:</strong> arcana, craft, medicine, etc.</li>
+              <li><strong>Math:</strong> floor(), ceil(), round(), abs(), min(), max()</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+    </div>
+
   </fieldset>
 </div>

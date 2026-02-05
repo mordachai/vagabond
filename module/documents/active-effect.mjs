@@ -3,6 +3,63 @@
  * Provides attribute key autocomplete in the Active Effect configuration.
  *
  * ============================================================================
+ * FORMULA SUPPORT FOR BONUS FIELDS
+ * ============================================================================
+ *
+ * ## Overview
+ * All bonus fields now support BOTH simple numeric values AND dynamic formulas.
+ * This enables perks and effects that scale with character progression.
+ *
+ * ## Effect Value Format
+ * Bonus fields accept:
+ * - **Simple numbers**: "1", "5", "-2" (parsed as numbers)
+ * - **Formulas**: "@attributes.level.value", "@stats.might.value * 2"
+ * - **Complex**: "floor(@attributes.level.value / 2)", "@stats.might.total + 5"
+ *
+ * ## Available Formula Variables
+ * Use @ prefix to reference actor data:
+ * - **@attributes.level.value** - Character level
+ * - **@stats.[stat].value** - Base stat values (might, dexterity, etc.)
+ * - **@stats.[stat].total** - Stat totals (after bonuses)
+ * - **@cr** - NPC Challenge Rating (NPCs only)
+ * - Any other field in getRollData()
+ *
+ * ## Supported Math Functions
+ * - floor(), ceil(), round(), abs(), min(), max()
+ * - Standard operators: +, -, *, /, %
+ *
+ * ## Example: Scaling Perks
+ *
+ * **"Secret of Mana" (Casting Max = Casting Max + Level):**
+ * - Attribute Key: system.mana.castingMaxBonus
+ * - Change Mode: Add
+ * - Effect Value: @attributes.level.value
+ * - Result: Level 1 = +1, Level 5 = +5, Level 10 = +10
+ *
+ * **"Tough" (HP = HP + Level):**
+ * - Attribute Key: system.bonuses.hpPerLevel
+ * - Change Mode: Add
+ * - Effect Value: 1
+ * - Result: Grants +1 HP per level (multiplied by level in HP formula)
+ *
+ * **"Scaling Might" (Might = Might + Level/2):**
+ * - Attribute Key: system.stats.might.bonus
+ * - Change Mode: Add
+ * - Effect Value: floor(@attributes.level.value / 2)
+ * - Result: Level 1 = +0, Level 2-3 = +1, Level 4-5 = +2, etc.
+ *
+ * **"Stat-Based Armor" (Armor = Armor + Dexterity):**
+ * - Attribute Key: system.armorBonus
+ * - Change Mode: Add
+ * - Effect Value: @stats.dexterity.total
+ * - Result: Armor increases with Dexterity score
+ *
+ * ## Backward Compatibility
+ * - Existing numeric Active Effects work unchanged
+ * - Simple numbers like "1" or "5" are evaluated as numbers
+ * - Invalid formulas default to 0 with console warning
+ *
+ * ============================================================================
  * STAT BONUS SYSTEM
  * ============================================================================
  *
@@ -13,7 +70,7 @@
  * ## Stat Fields
  * Each stat has three values:
  * - **value**: Base stat value (0-12)
- * - **bonus**: Bonus from Active Effects (can be positive or negative)
+ * - **bonus**: Bonus from Active Effects (can be formula or number)
  * - **total**: Calculated value (value + bonus, clamped to 0-12)
  *
  * ## Effect Keys

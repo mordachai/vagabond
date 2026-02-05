@@ -238,6 +238,56 @@
   font-size: 0.9em;
   color: var(--color-text-dark-secondary);
 }
+
+// Formula autocomplete styling
+.active-effect-config {
+  // Style for effect value inputs with autocomplete
+  input[name^="changes"][name$=".value"] {
+    font-family: 'Courier New', monospace;
+
+    &::placeholder {
+      font-family: var(--font-primary);
+      font-style: italic;
+      color: var(--color-text-dark-hint);
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-border-highlight-alt);
+    }
+  }
+
+  // Formula hint that appears when typing @
+  .formula-hint {
+    color: var(--color-info);
+    font-size: 0.85em;
+    font-style: italic;
+    margin-top: 4px;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  // Add icon to indicate formula support
+  .form-group:has(input[name^="changes"][name$=".value"]) {
+    position: relative;
+
+    &::after {
+      content: "\f121"; // fa-code icon
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-dark-hint);
+      pointer-events: none;
+      font-size: 0.85em;
+    }
+  }
+}
 // Dark theme support for Active Effects
 .theme-dark {
   // Active Effect controls and buttons

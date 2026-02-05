@@ -49,48 +49,80 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Inventory system
     schema.inventory = new fields.SchemaField({
-      bonusSlots: new fields.NumberField({ ...requiredInteger, initial: 0 })
+      bonusSlots: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: "Bonus Slots",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      })
     });
 
     // Mana system for spellcasters
     schema.mana = new fields.SchemaField({
       current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       // NEW: Bonus field for Active Effects to add flat mana
-      bonus: new fields.NumberField({ ...requiredInteger, initial: 0 }), 
+      bonus: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: "Mana Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }),
       // Defined here so they appear in token structure, calculated in derived
       max: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       castingMax: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
-      castingMaxBonus: new fields.NumberField({ ...requiredInteger, initial: 0 }),
+      castingMaxBonus: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: "Casting Max Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }),
     });
 
     // Speed system - with explicit bonus field for Active Effects
     schema.speed = new fields.SchemaField({
-      bonus: new fields.NumberField({ ...requiredInteger, initial: 0 }),
+      bonus: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: "Speed Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }),
     });
 
     // Luck pool - tracks current luck separate from the Luck stat
     schema.currentLuck = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
     // Bonus luck from active effects
-    schema.bonusLuck = new fields.NumberField({ ...requiredInteger, initial: 0 });
+    schema.bonusLuck = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Bonus Luck",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+    });
 
     // Studied Die - tracks number of dice available to player
     schema.studiedDice = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
     // Armor Bonus from Active Effects
-    schema.armorBonus = new fields.NumberField({ ...requiredInteger, initial: 0 });
-
-    // Universal Bonuses - apply to all rolls/damage
-    schema.universalCheckBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0,
-      label: "Universal Check Bonus"
+    schema.armorBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Armor Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
     });
 
-    schema.universalDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0,
-      label: "Universal Damage Bonus"
+    // Universal Bonuses - apply to all rolls/damage
+    schema.universalCheckBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Check Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+    });
+
+    schema.universalDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
     });
 
     schema.universalDamageDice = new fields.StringField({
@@ -100,10 +132,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     });
 
     // Separated Universal Damage Bonuses by Type
-    schema.universalWeaponDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0,
-      label: "Universal Weapon Damage Bonus"
+    schema.universalWeaponDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Weapon Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
     });
 
     schema.universalWeaponDamageDice = new fields.StringField({
@@ -112,10 +145,11 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Universal Weapon Damage Dice"
     });
 
-    schema.universalSpellDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0,
-      label: "Universal Spell Damage Bonus"
+    schema.universalSpellDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Spell Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
     });
 
     schema.universalSpellDamageDice = new fields.StringField({
@@ -124,10 +158,11 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Universal Spell Damage Dice"
     });
 
-    schema.universalAlchemicalDamageBonus = new fields.NumberField({
-      ...requiredInteger,
-      initial: 0,
-      label: "Universal Alchemical Damage Bonus"
+    schema.universalAlchemicalDamageBonus = new fields.StringField({
+      initial: '',
+      blank: true,
+      label: "Universal Alchemical Damage Bonus",
+      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
     });
 
     schema.universalAlchemicalDamageDice = new fields.StringField({
@@ -149,11 +184,11 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Bonuses container for various character bonuses
     schema.bonuses = new fields.SchemaField({
-      hpPerLevel: new fields.NumberField({
-        ...requiredInteger,
-        initial: 0,
+      hpPerLevel: new fields.StringField({
+        initial: '',
+        blank: true,
         label: "HP per Level Bonus",
-        hint: "Bonus HP granted per character level (e.g., Tough perk adds +1)"
+        hint: "Bonus HP granted per character level. Can be a number (e.g., 1) or formula (e.g., floor(@attributes.level.value / 2))"
       })
     });
 
@@ -186,9 +221,11 @@ export default class VagabondCharacter extends VagabondActorBase {
             max: 12,
           }),
           // Bonus field for Active Effects to modify stats
-          bonus: new fields.NumberField({
-            ...requiredInteger,
-            initial: 0,
+          bonus: new fields.StringField({
+            initial: '',
+            blank: true,
+            label: "Stat Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., floor(@attributes.level.value / 2))"
           }),
         });
         return obj;
@@ -198,13 +235,28 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Saving Throws system
     schema.saves = new fields.SchemaField({
       reflex: new fields.SchemaField({
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Reflex Save Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       endure: new fields.SchemaField({
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Endure Save Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       will: new fields.SchemaField({
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Will Save Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       })
     });
 
@@ -214,70 +266,130 @@ export default class VagabondCharacter extends VagabondActorBase {
       arcana: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Arcana Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       craft: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Craft Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       medicine: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Medicine Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
 
       // Might-based skills
       brawl: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Brawl Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
 
       // Dexterity-based skills
       finesse: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Finesse Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       sneak: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Sneak Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
 
       // Awareness-based skills
       detect: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Detect Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       mysticism: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Mysticism Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       survival: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Survival Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
 
       // Presence-based skills
       influence: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Influence Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       leadership: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Leadership Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       performance: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Performance Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       })
     });
 
@@ -286,22 +398,42 @@ export default class VagabondCharacter extends VagabondActorBase {
       melee: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Melee Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       brawl: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Brawl Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       finesse: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Finesse Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       }),
       ranged: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.NumberField({ ...requiredInteger, initial: 0 })
+        bonus: new fields.StringField({
+          initial: '',
+          blank: true,
+          label: "Ranged Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        })
       })
     });
 
@@ -414,43 +546,43 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   /**
-   * Resets all bonus values to 0 before active effects apply
+   * Resets all bonus values to empty strings before active effects apply
    * @private
    */
   _resetBonuses() {
     // --- 1. Reset Flat Mechanics ---
-    this.inventory.bonusSlots = 0; // MUST reset - Active Effects will add to this
-    this.mana.bonus = 0;
-    this.mana.castingMaxBonus = 0;
-    this.speed.bonus = 0;
-    this.armorBonus = 0;
-    this.bonusLuck = 0;
-    this.health.bonus = 0;
-    this.bonuses.hpPerLevel = 0;
+    this.inventory.bonusSlots = ''; // MUST reset - Active Effects will add to this
+    this.mana.bonus = '';
+    this.mana.castingMaxBonus = '';
+    this.speed.bonus = '';
+    this.armorBonus = '';
+    this.bonusLuck = '';
+    this.health.bonus = '';
+    this.bonuses.hpPerLevel = '';
 
     // --- 2. Reset Universal Bonuses (from Active Effects) ---
     // NOTE: universalCheckBonus is NOT reset here - it's player-controlled and only resets after rolls
-    this.universalDamageBonus = 0;
-    this.universalWeaponDamageBonus = 0;
-    this.universalSpellDamageBonus = 0;
-    this.universalAlchemicalDamageBonus = 0;
-    
+    this.universalDamageBonus = '';
+    this.universalWeaponDamageBonus = '';
+    this.universalSpellDamageBonus = '';
+    this.universalAlchemicalDamageBonus = '';
+
     // Reset dice bonuses (these are strings)
     this.universalDamageDice = '';
     this.universalWeaponDamageDice = '';
     this.universalSpellDamageDice = '';
     this.universalAlchemicalDamageDice = '';
-    
-    // Reset spell damage die size to default
+
+    // Reset spell damage die size to default (keep as number)
     this.spellDamageDieSize = 6;
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
-    for (let s of Object.values(this.stats)) { s.bonus = 0; }
-    for (let s of Object.values(this.saves)) { s.bonus = 0; }
+    for (let s of Object.values(this.stats)) { s.bonus = ''; }
+    for (let s of Object.values(this.saves)) { s.bonus = ''; }
 
     // --- 4. Loop: Reset All Skill Bonuses ---
-    for (let s of Object.values(this.skills)) { s.bonus = 0; }
-    for (let s of Object.values(this.weaponSkills)) { s.bonus = 0; }
+    for (let s of Object.values(this.skills)) { s.bonus = ''; }
+    for (let s of Object.values(this.weaponSkills)) { s.bonus = ''; }
 
     // 5. Reset Defaults
     this.attributes.isSpellcaster = false;
@@ -467,16 +599,113 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Don't reset statusEffectData - it contains persistent state like charmerUuid
   }
 
+  /**
+   * Evaluate a formula field that can contain either a simple number or a Roll formula.
+   * @param {string|number} formula - The formula to evaluate (e.g., "1", "@attributes.level.value")
+   * @param {object} rollData - The roll data context (from getRollData())
+   * @returns {number} The evaluated result, or 0 if invalid
+   * @private
+   */
+  _evaluateFormulaField(formula, rollData) {
+    // Handle empty/null/undefined
+    if (!formula) return 0;
+
+    // Convert to string if it's a number
+    const formulaStr = String(formula).trim();
+    if (formulaStr === '') return 0;
+
+    try {
+      // Replace @variables with their values from rollData
+      const replaced = Roll.replaceFormulaData(formulaStr, rollData);
+
+      // Safely evaluate the expression
+      const result = Roll.safeEval(replaced);
+
+      // Handle NaN or invalid results
+      if (result === null || result === undefined || isNaN(result)) {
+        console.warn(`Vagabond | Formula evaluation returned invalid result: ${formulaStr} → ${replaced} → ${result}`);
+        return 0;
+      }
+
+      return Number(result);
+    } catch (err) {
+      console.warn(`Vagabond | Invalid formula in bonus field: "${formulaStr}"`, err);
+      return 0;
+    }
+  }
+
+  /**
+   * Evaluate all formula bonus fields and store results.
+   * This method converts string formulas to numeric values in-place.
+   * @param {object} rollData - The roll data context
+   * @private
+   */
+  _evaluateAllBonusFields(rollData) {
+    // Top-level bonuses
+    this.bonusLuck = this._evaluateFormulaField(this.bonusLuck, rollData);
+    this.armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
+    this.universalCheckBonus = this._evaluateFormulaField(this.universalCheckBonus, rollData);
+    this.universalDamageBonus = this._evaluateFormulaField(this.universalDamageBonus, rollData);
+    this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
+    this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
+    this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
+
+    // Mana bonuses
+    this.mana.bonus = this._evaluateFormulaField(this.mana.bonus, rollData);
+    this.mana.castingMaxBonus = this._evaluateFormulaField(this.mana.castingMaxBonus, rollData);
+
+    // Other bonuses
+    this.speed.bonus = this._evaluateFormulaField(this.speed.bonus, rollData);
+    this.health.bonus = this._evaluateFormulaField(this.health.bonus, rollData);
+    this.inventory.bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
+    this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
+
+    // Stat bonuses
+    for (const stat of Object.values(this.stats)) {
+      stat.bonus = this._evaluateFormulaField(stat.bonus, rollData);
+    }
+
+    // Save bonuses
+    for (const save of Object.values(this.saves)) {
+      save.bonus = this._evaluateFormulaField(save.bonus, rollData);
+    }
+
+    // Skill bonuses
+    for (const skill of Object.values(this.skills)) {
+      skill.bonus = this._evaluateFormulaField(skill.bonus, rollData);
+    }
+
+    // Weapon skill bonuses
+    for (const weaponSkill of Object.values(this.weaponSkills)) {
+      weaponSkill.bonus = this._evaluateFormulaField(weaponSkill.bonus, rollData);
+    }
+  }
+
 /**
    * V13 Best Practice: prepareDerivedData is for calculations.
    * This happens AFTER Active Effects.
    */
   prepareDerivedData() {
-    // Calculate total stat values (value + bonus) for each stat
-    // This happens AFTER Active Effects, so bonuses are already applied
+    // CRITICAL: First, we need to calculate base stat totals WITHOUT formula evaluation
+    // so that formulas can reference stat values
     for (const [key, stat] of Object.entries(this.stats)) {
       const value = stat.value || 0;
-      const bonus = stat.bonus || 0;
+      // For initial calculation, treat bonus as 0 if it's a string formula
+      const bonusValue = (typeof stat.bonus === 'string') ? 0 : (stat.bonus || 0);
+      stat.total = value + bonusValue;
+      stat.total = Math.min(stat.total, 12);
+      stat.total = Math.max(stat.total, 0);
+    }
+
+    // NOW evaluate all formula bonus fields
+    // Get roll data for formula evaluation (includes stat totals we just calculated)
+    const rollData = this.getRollData();
+    this._evaluateAllBonusFields(rollData);
+
+    // Recalculate stat totals with evaluated bonuses
+    for (const [key, stat] of Object.entries(this.stats)) {
+      const value = stat.value || 0;
+      const bonus = stat.bonus || 0; // Now a number after evaluation
       stat.total = value + bonus;
       // Ensure total doesn't exceed 12 (max stat value)
       stat.total = Math.min(stat.total, 12);
@@ -681,6 +910,11 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     }
     data.lvl = this.attributes.level.value;
+
+    // Add attributes for formula usage (enables @attributes.level.value, etc.)
+    if (this.attributes) {
+      data.attributes = foundry.utils.deepClone(this.attributes);
+    }
 
     // Add universal bonuses for formula usage
     data.universalCheckBonus = this.universalCheckBonus || 0;
