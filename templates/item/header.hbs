@@ -210,6 +210,18 @@
       {{/if}}
     {{/if}}
 
+    {{#if (eq item.type 'perk')}}
+      <div class='perk-description-in-header'>
+        {{#if editable}}
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true" button="false" enriched="true">
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div class="description-content">{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    {{/if}}
+
     {{#if (eq item.type 'class')}}
       <div class='class-spellcaster-fields'>
         {{! First row: Is Spellcaster + Mana Multiplier }}

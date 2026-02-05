@@ -66,7 +66,8 @@
                         <div class="hex-box-wrapper">
                             <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
                                 {{#if this.value}}
-                                    {{#if this.hasBonus}}
+                                    {{!-- Show finalValue if there are any bonuses (ancestry/class OR perk) --}}
+                                    {{#if (or this.hasBonus this.hasPerkBonus)}}
                                         {{this.finalValue}}
                                     {{else}}
                                         {{this.value}}
@@ -81,7 +82,11 @@
                                 <i class="fas fa-times"></i>
                             </button>
                             {{/if}}
-                            {{!-- Bonus tag and button in same position --}}
+                            {{!-- Perk bonus badge (green) - bottom right --}}
+                            {{#if this.hasPerkBonus}}
+                            <div class="perk-bonus-badge" title="Bonus from Perk">+{{this.perkBonus}}</div>
+                            {{/if}}
+                            {{!-- Ancestry/Class bonus button (interactive, top-left) --}}
                             {{#if this.hasBonus}}
                             <button type="button" class="bonus-tag applied" data-action="removeStatBonus" data-stat="{{this.key}}" title="Click to remove bonus and reassign">
                                 +{{this.bonusAmount}}

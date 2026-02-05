@@ -108,9 +108,21 @@ export class GearStepManager extends BaseStepManager {
     // Find all compendiums that contain equipment items
     const equipmentCompendiums = [];
 
+    // Get compendium filter settings
+    const settings = game.settings.get('vagabond', 'characterBuilderCompendiums');
+
     for (const pack of game.packs) {
       // Only include Item compendiums
       if (pack.metadata.type !== 'Item') continue;
+
+      // Filter by GM's compendium settings
+      if (!settings.useAll && settings.enabled.length > 0) {
+        if (!settings.enabled.includes(pack.collection)) {
+          continue; // Skip this compendium - it's not enabled
+        }
+      } else if (!settings.useAll && settings.enabled.length === 0) {
+        continue; // No compendiums enabled - skip all
+      }
 
       // Check if this compendium contains equipment items
       const index = await pack.getIndex({ fields: ["type", "system.equipmentType"] });

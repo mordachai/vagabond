@@ -1,0 +1,160 @@
+<div class="compendium-settings-content">
+  {{!-- Header Section --}}
+  <header class="settings-header">
+    <p class="settings-description">
+      Control which Item compendiums are available in the Character Builder.
+      This determines what content (ancestries, classes, equipment, etc.) players can choose from during character creation.
+    </p>
+  </header>
+
+  {{!-- Use All Toggle Section --}}
+  <section class="use-all-section">
+    <div class="flex-col-container">
+      <div class="use-all-row">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            name="useAll"
+            id="use-all-compendiums"
+            {{checked useAllCompendiums}}
+            data-action="toggleUseAll"
+          />
+          <strong>Use All Available Compendiums</strong>
+        </label>
+        <span class="selected-count">{{selectedCount}} / {{totalCompendiums}} compendiums selected</span>
+      </div>
+      <div class="use-all-hint">
+        <small>When enabled, automatically includes all Item compendiums (current and future). Disable to manually select specific compendiums.</small>
+      </div>
+    </div>
+  </section>
+
+  {{!-- Quick Selection Buttons --}}
+  <section class="button-section">
+    <div class="button-group">
+      <button type="button" data-action="selectAll" title="Select All Compendiums">
+        <i class="fas fa-check-square"></i> Select All
+      </button>
+      <button type="button" data-action="deselectAll" title="Deselect All Compendiums">
+        <i class="far fa-square"></i> Deselect All
+      </button>
+      <button type="button" data-action="selectSystem" title="Select System Compendiums Only">
+        <i class="fas fa-cube"></i> System
+      </button>
+      <button type="button" data-action="selectWorld" title="Select World Compendiums Only">
+        <i class="fas fa-globe"></i> World
+      </button>
+      <button type="button" data-action="selectModules" title="Select Module Compendiums Only">
+        <i class="fas fa-puzzle-piece"></i> Modules
+      </button>
+    </div>
+  </section>
+
+  {{!-- Compendium Lists --}}
+  {{#if grouped.system.length}}
+  <section class="compendium-section">
+    <h3 class="section-header">
+      <i class="fas fa-cube"></i>
+      <span>System Compendiums</span>
+      <span class="count-badge">{{systemCount}}</span>
+    </h3>
+    <div class="compendium-grid">
+      {{#each grouped.system}}
+      <label class="compendium-item">
+        <input
+          type="checkbox"
+          class="compendium-checkbox"
+          name="compendiums[{{id}}]"
+          data-source="system"
+          {{checked selected}}
+          {{#if ../useAllCompendiums}}disabled{{/if}}
+        />
+        <span class="compendium-info">
+          <span class="compendium-title">{{title}}</span>
+          <span class="compendium-meta">{{size}} items</span>
+        </span>
+      </label>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if grouped.world.length}}
+  <section class="compendium-section">
+    <h3 class="section-header">
+      <i class="fas fa-globe"></i>
+      <span>World Compendiums</span>
+      <span class="count-badge">{{worldCount}}</span>
+    </h3>
+    <div class="compendium-grid">
+      {{#each grouped.world}}
+      <label class="compendium-item">
+        <input
+          type="checkbox"
+          class="compendium-checkbox"
+          name="compendiums[{{id}}]"
+          data-source="world"
+          {{checked selected}}
+          {{#if ../useAllCompendiums}}disabled{{/if}}
+        />
+        <span class="compendium-info">
+          <span class="compendium-title">{{title}}</span>
+          <span class="compendium-meta">{{size}} items</span>
+        </span>
+      </label>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if grouped.module.length}}
+  <section class="compendium-section">
+    <h3 class="section-header">
+      <i class="fas fa-puzzle-piece"></i>
+      <span>Module Compendiums</span>
+      <span class="count-badge">{{moduleCount}}</span>
+    </h3>
+    <div class="compendium-grid">
+      {{#each grouped.module}}
+      <label class="compendium-item">
+        <input
+          type="checkbox"
+          class="compendium-checkbox"
+          name="compendiums[{{id}}]"
+          data-source="module"
+          {{checked selected}}
+          {{#if ../useAllCompendiums}}disabled{{/if}}
+        />
+        <span class="compendium-info">
+          <span class="compendium-title">{{title}}</span>
+          <span class="compendium-meta">{{size}} items · {{source}}</span>
+        </span>
+      </label>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#unless compendiums.length}}
+  <section class="no-compendiums">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>No Item compendiums found in this world.</p>
+  </section>
+  {{/unless}}
+
+  {{!-- Footer --}}
+  <footer class="settings-footer">
+    <div class="footer-info">
+      <i class="fas fa-lightbulb"></i>
+      Changes take effect immediately. The character builder cache will be cleared automatically.
+    </div>
+    <div class="footer-buttons">
+      <button type="button" data-action="reset" class="reset-button">
+        <i class="fas fa-undo"></i> Reset to Default
+      </button>
+      <button type="submit" class="save-button">
+        <i class="fas fa-save"></i> Save Settings
+      </button>
+    </div>
+  </footer>
+</div>

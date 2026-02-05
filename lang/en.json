@@ -328,6 +328,11 @@
         "label": "Configure Encounter",
         "hint": "Configure combat encounter display options and mechanics."
       },
+      "compendiumSettings": {
+        "name": "Character Builder Compendiums",
+        "label": "Manage Compendiums",
+        "hint": "Choose which Item compendiums are available in the Character Builder."
+      },
       "hideInitiativeRoll": {
         "name": "Hide Initiative Roll",
         "hint": "Hide the initiative button in the combat tracker. The Vagabond system uses popcorn initiative and typically doesn't require traditional initiative rolls."

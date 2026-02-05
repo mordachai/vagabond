@@ -714,8 +714,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     // ------------------------------------------------------------------
     const mightTotal = this.stats.might?.total || 0;
     const levelValue = this.attributes.level?.value || 1; // Ensure minimum level 1
-    const hpPerLevelBonus = this.bonuses.hpPerLevel || 0;
-    const flatHpBonus = this.health.bonus || 0;
+    // Evaluate HP bonuses inline (StringFields coerce numbers back to strings)
+    const hpPerLevelBonus = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
+    const flatHpBonus = this._evaluateFormulaField(this.health.bonus, rollData);
 
     // Calculate base derived Max HP with active effects integration
     const baseMaxHP = (mightTotal * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
@@ -728,14 +729,14 @@ export default class VagabondCharacter extends VagabondActorBase {
     // ------------------------------------------------------------------
     // 1. Calculate derived values that depend on Embedded Items/Effects
     // ------------------------------------------------------------------
-    this._calculateManaValues();
-    
+    this._calculateManaValues(rollData);
+
     // NOTE: Check your _calculateCombatValues function!
     // If it currently calculates health.max, you should remove that line
     // from inside the helper function so it doesn't overwrite the work we just did above.
-    this._calculateCombatValues();
-    
-    this._calculateInventorySlots();
+    this._calculateCombatValues(rollData);
+
+    this._calculateInventorySlots(rollData);
 
     // ------------------------------------------------------------------
     // 2. Prepare Display Data (Labels, Difficulty, etc.)
@@ -792,7 +793,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     for (const key in this.skills) {
       const skill = this.skills[key];
       const associatedStat = this.stats[skill.stat];
-      const statValue = associatedStat?.value || 0;
+      const statValue = associatedStat?.total || 0; // Use total (includes bonuses), not value
       // Evaluate skill bonus inline (StringFields coerce numbers back to strings)
       const skillBonus = this._evaluateFormulaField(skill.bonus, rollData);
 
@@ -804,7 +805,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     for (const key in this.weaponSkills) {
       const weaponSkill = this.weaponSkills[key];
       const associatedStat = this.stats[weaponSkill.stat];
-      const statValue = associatedStat?.value || 0;
+      const statValue = associatedStat?.total || 0; // Use total (includes bonuses), not value
       // Evaluate weapon skill bonus inline (StringFields coerce numbers back to strings)
       const weaponSkillBonus = this._evaluateFormulaField(weaponSkill.bonus, rollData);
 
@@ -906,15 +907,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     return data;
   }
 
-  _calculateCombatValues() {
+  _calculateCombatValues(rollData) {
     const mightTotal = this.stats.might?.total || 0;
     const dexTotal = this.stats.dexterity?.total || 0;
     const luckTotal = this.stats.luck?.total || 0;
     const level = this.attributes.level.value || 1;
 
-    // Luck Calculation - use total Luck stat plus bonusLuck
-    const bonusLuck = this.bonusLuck || 0;
-    this.maxLuck = luckTotal + bonusLuck;
+    // Luck Pool Max = Luck Stat Total (no additional bonusLuck)
+    // The luck stat total already includes any bonuses from Active Effects
+    this.maxLuck = luckTotal;
 
     if (this.currentLuck === undefined || this.currentLuck === null) {
       this.currentLuck = this.maxLuck;
@@ -925,7 +926,8 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Speed Calculation
     // 1. Get speed bonus from Active Effects (stored in system.speed.bonus)
-    const speedBonus = this.speed.bonus || 0;
+    // Evaluate speed bonus inline (StringFields coerce numbers back to strings)
+    const speedBonus = this._evaluateFormulaField(this.speed.bonus, rollData);
 
     // 2. Lookup base speed values from config table
     // We iterate to find the matching tier for current Dex (use total which includes bonus)
@@ -959,13 +961,16 @@ export default class VagabondCharacter extends VagabondActorBase {
         }
       }
     }
-    this.armor = totalArmor + (this.armorBonus || 0);
+    // Evaluate armor bonus inline (StringFields coerce numbers back to strings)
+    const armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
+    this.armor = totalArmor + armorBonus;
   }
 
-  _calculateInventorySlots() {
+  _calculateInventorySlots(rollData) {
     // Base slots: Might + 8 + Bonus
     const mightTotal = this.stats.might?.total || 0;
-    const bonusSlots = this.inventory.bonusSlots || 0;
+    // Evaluate inventory bonus slots inline (StringFields coerce numbers back to strings)
+    const bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
     const baseMaxSlots = 8 + mightTotal + bonusSlots;
 
     // Get current fatigue (0-5)
@@ -1010,7 +1015,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots; // Available = Effective max - occupied
   }
 
-  _calculateManaValues() {
+  _calculateManaValues(rollData) {
     // 1. Check isSpellcaster
     if (this.attributes.isSpellcaster) {
 
@@ -1020,14 +1025,16 @@ export default class VagabondCharacter extends VagabondActorBase {
 
       // Multiplier & Max Mana Logic
       const multiplier = this.attributes.manaMultiplier || 0;
-      const manaBonus = this.mana.bonus || 0;
+      // Evaluate mana bonus inline (StringFields coerce numbers back to strings)
+      const manaBonus = this._evaluateFormulaField(this.mana.bonus, rollData);
       this.mana.max = (multiplier * level) + manaBonus;
 
       // 2. Calculate Casting Max
       // Formula: (Stat + Level/2) + Bonus
       // Use total stat which includes bonuses from Active Effects
       const baseCastingMax = castingStatTotal + Math.ceil(level / 2);
-      const castingMaxBonus = this.mana.castingMaxBonus || 0; // Read the new bonus
+      // Evaluate casting max bonus inline (StringFields coerce numbers back to strings)
+      const castingMaxBonus = this._evaluateFormulaField(this.mana.castingMaxBonus, rollData);
 
       this.mana.castingMax = baseCastingMax + castingMaxBonus;
 

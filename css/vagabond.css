@@ -81,6 +81,8 @@
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
   --vagabond-bg-paper: url("../assets/images/old-paper.webp");
+  --vagabond-c-bluey: #202d32;
+  --vagabond-c-dark-bluey: #0b1e32;
   --vagabond-stat-bg: #231308ec;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
@@ -2986,6 +2988,25 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   width: 45px;
   height: 45px;
 }
+.vagabond-builder .builder-body .decision-zone .stat-slot .hex-box-wrapper .perk-bonus-badge {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: -5px;
+  right: -10px;
+  border-radius: 2px;
+  font-family: "Eskapade", serif;
+  font-size: 0.95em;
+  font-weight: 700;
+  background-color: #f3d71e;
+  color: #000000;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
 .vagabond-builder .builder-body .decision-zone .stat-slot .hex-box {
   width: 45px;
   height: 45px;
@@ -4176,6 +4197,43 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .preview-actions .btn-remove-pack i {
   margin-right: 5px;
 }
+.preview-actions .skill-item.from-perk {
+  background-color: #f1c40f !important;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.preview-actions .skill-item.from-perk .skill-name {
+  font-weight: 700;
+  color: #000;
+}
+.preview-actions .stat-bonus-badge.ancestry-class-bonus {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.75em;
+  font-weight: 700;
+  background-color: #f1c40f;
+  color: #000;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.preview-actions .skill-card.from-perk,
+.preview-actions .training-item.from-perk {
+  border: 2px solid #f1c40f;
+  background: linear-gradient(135deg, rgba(241, 196, 15, 0.0823529412) 0%, transparent 100%);
+}
+.preview-actions .skill-card.from-perk::before,
+.preview-actions .training-item.from-perk::before {
+  content: "⭐";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.9em;
+  opacity: 0.7;
+}
 
 ol#combat-tracker.directory-list {
   padding: 0 0 0 0.4em !important;
@@ -4463,6 +4521,323 @@ ol#combat-tracker.directory-list {
 .combat-tracker-header button.combat-cycle[disabled] {
   opacity: 0.3;
   cursor: default;
+}
+
+/* Compendium Settings Dialog (ApplicationV2) */
+.compendium-settings {
+  /* -------------------------------------------- */
+  /*  Header                                      */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Use All Section                             */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Button Section                              */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Compendium Sections                         */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Compendium Items                            */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  No Compendiums                              */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Footer                                      */
+  /* -------------------------------------------- */
+  /* -------------------------------------------- */
+  /*  Responsive Design                           */
+  /* -------------------------------------------- */
+}
+.compendium-settings .compendium-settings-content {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 70vh;
+  padding-right: 0.5rem;
+}
+.compendium-settings .settings-header {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(var(--vagabond-c-bluey), 0.15) 0%, rgba(var(--vagabond-c-bluey), 0.08) 100%);
+  border-bottom: 2px solid var(--vagabond-c-bluey);
+  margin-bottom: 1.5rem;
+}
+.compendium-settings .settings-header .settings-description {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--vagabond-c-dark);
+}
+.compendium-settings .use-all-section {
+  padding: 0 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--vagabond-c-inset-2);
+  border: 2px solid var(--vagabond-c-bluey);
+  border-radius: 6px;
+}
+.compendium-settings .use-all-section .use-all-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  transition: all 0.2s ease;
+}
+.compendium-settings .use-all-section .use-all-row:hover {
+  background: rgba(var(--vagabond-c-bluey), 0.15);
+  box-shadow: 0 2px 4px rgba(var(--vagabond-c-dark), 0.1);
+}
+.compendium-settings .use-all-section .use-all-row .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  cursor: pointer;
+  flex: 1;
+}
+.compendium-settings .use-all-section .use-all-row .checkbox-label input[type=checkbox] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+.compendium-settings .use-all-section .use-all-row .checkbox-label strong {
+  font-size: 1rem;
+  color: var(--vagabond-c-dark);
+}
+.compendium-settings .use-all-section .use-all-row .selected-count {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--vagabond-c-bluey);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+}
+.compendium-settings .use-all-section .use-all-hint {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--vagabond-c-dark);
+}
+.compendium-settings .button-section {
+  padding: 0 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.compendium-settings .button-section .button-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.compendium-settings .button-section .button-group button {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--vagabond-c-dark);
+  background: var(--vagabond-c-dark);
+  color: var(--vagabond-c-lite);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.compendium-settings .button-section .button-group button:hover {
+  background: var(--vagabond-c-faint);
+  border-color: var(--vagabond-c-bluey);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(var(--vagabond-c-dark), 0.15);
+}
+.compendium-settings .button-section .button-group button:active {
+  transform: translateY(0);
+}
+.compendium-settings .button-section .button-group button i {
+  font-size: 0.9rem;
+}
+.compendium-settings .compendium-section {
+  padding: 0 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.compendium-settings .compendium-section .section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--vagabond-c-dark);
+  background: var(--vagabond-c-inset-2);
+  border-left: 4px solid var(--vagabond-c-bluey);
+  border-radius: 4px;
+}
+.compendium-settings .compendium-section .section-header i {
+  font-size: 1.1rem;
+  color: var(--vagabond-c-bluey);
+}
+.compendium-settings .compendium-section .section-header span:first-of-type {
+  flex: 1;
+}
+.compendium-settings .compendium-section .section-header .count-badge {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--vagabond-c-lite);
+  background: var(--vagabond-c-bluey);
+  border-radius: 10px;
+}
+.compendium-settings .compendium-section .compendium-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.compendium-settings .compendium-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--vagabond-c-lite);
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0;
+}
+.compendium-settings .compendium-item:hover {
+  background: rgba(var(--vagabond-c-bluey), 0.12);
+  border-color: var(--vagabond-c-bluey);
+  transform: translateX(2px);
+}
+.compendium-settings .compendium-item input[type=checkbox] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.compendium-settings .compendium-item input[type=checkbox]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.compendium-settings .compendium-item .compendium-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+.compendium-settings .compendium-item .compendium-info .compendium-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compendium-settings .compendium-item .compendium-info .compendium-meta {
+  font-size: 0.8rem;
+  color: var(--vagabond-c-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compendium-settings .compendium-item:has(input:checked) {
+  background: rgba(var(--vagabond-c-bluey), 0.5);
+  border-color: var(--vagabond-c-bluey);
+}
+.compendium-settings .compendium-item:has(input:checked) .compendium-title {
+  color: var(--vagabond-c-dark);
+  font-weight: 600;
+}
+.compendium-settings .compendium-item:has(input:disabled) {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+.compendium-settings .no-compendiums {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--vagabond-c-muted);
+}
+.compendium-settings .no-compendiums i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--vagabond-c-damage-orange);
+  display: block;
+}
+.compendium-settings .no-compendiums p {
+  margin: 0;
+  font-size: 1rem;
+}
+.compendium-settings .settings-footer {
+  padding: 1.5rem 1.5rem 1rem;
+  border-top: 2px solid var(--vagabond-c-faint);
+  margin-top: 1.5rem;
+}
+.compendium-settings .settings-footer .footer-info {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--vagabond-c-dark);
+  background: rgba(var(--vagabond-c-chat-yellow), 0.15);
+  border-left: 3px solid var(--vagabond-c-chat-yellow);
+  border-radius: 0 4px 4px 0;
+}
+.compendium-settings .settings-footer .footer-info i {
+  margin-right: 0.5rem;
+  color: var(--vagabond-c-chat-yellow);
+}
+.compendium-settings .settings-footer .footer-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+.compendium-settings .settings-footer .footer-buttons button {
+  padding: 0.65rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.compendium-settings .settings-footer .footer-buttons button i {
+  font-size: 0.9rem;
+}
+.compendium-settings .settings-footer .footer-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(var(--vagabond-c-dark), 0.2);
+}
+.compendium-settings .settings-footer .footer-buttons button:active {
+  transform: translateY(0);
+}
+.compendium-settings .settings-footer .footer-buttons button.reset-button {
+  background: var(--vagabond-c-damage-orange);
+  color: var(--vagabond-c-lite);
+}
+.compendium-settings .settings-footer .footer-buttons button.reset-button:hover {
+  background: var(--vagabond-c-damage-orange);
+}
+.compendium-settings .settings-footer .footer-buttons button.save-button {
+  background: var(--vagabond-c-bluey);
+  color: var(--vagabond-c-lite);
+}
+.compendium-settings .settings-footer .footer-buttons button.save-button:hover {
+  background: var(--vagabond-c-bluey);
+}
+@media (max-width: 700px) {
+  .compendium-settings .compendium-section .compendium-grid {
+    grid-template-columns: 1fr;
+  }
+  .compendium-settings .button-section .button-group button {
+    min-width: 100px;
+  }
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
@@ -5784,6 +6159,12 @@ ol#combat-tracker.directory-list {
 .vagabond .pool-input::placeholder {
   color: var(--vagabond-c-red);
 }
+.vagabond #choice-selected::placeholder,
+.vagabond #choice-target-field::placeholder {
+  color: var(--vagabond-c-red);
+  opacity: 0.8;
+  font-style: italic;
+}
 .vagabond .skill-tag {
   display: inline-flex;
   align-items: center;
@@ -7093,6 +7474,47 @@ ol#combat-tracker.directory-list {
   font-size: 0.9em;
   color: var(--color-text-dark-secondary);
 }
+.vagabond .active-effect-config input[name^=changes][name$=".value"] {
+  font-family: "Courier New", monospace;
+}
+.vagabond .active-effect-config input[name^=changes][name$=".value"]::placeholder {
+  font-family: var(--font-primary);
+  font-style: italic;
+  color: var(--color-text-dark-hint);
+}
+.vagabond .active-effect-config input[name^=changes][name$=".value"]:focus {
+  outline: 2px solid var(--color-border-highlight-alt);
+}
+.vagabond .active-effect-config .formula-hint {
+  color: var(--color-info);
+  font-size: 0.85em;
+  font-style: italic;
+  margin-top: 4px;
+  animation: fadeIn 0.3s ease-in;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.vagabond .active-effect-config .form-group:has(input[name^=changes][name$=".value"]) {
+  position: relative;
+}
+.vagabond .active-effect-config .form-group:has(input[name^=changes][name$=".value"])::after {
+  content: "\f121";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-dark-hint);
+  pointer-events: none;
+  font-size: 0.85em;
+}
 .vagabond .theme-dark .controls button,
 .vagabond .theme-dark .effect-controls button,
 .vagabond .theme-dark button.inline-control {
@@ -7468,6 +7890,10 @@ ol#combat-tracker.directory-list {
   line-height: 1.2;
   font-family: "Manofa", sans-serif;
   padding: 4px 0;
+}
+.vagabond .stats-grid .stat-total {
+  cursor: default;
+  user-select: none;
 }
 .vagabond .fatigue-row {
   display: flex;

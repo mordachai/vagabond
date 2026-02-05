@@ -139,13 +139,16 @@
           <div class='stats-grid'>
             {{#each system.stats as |stat key|}}
               <div class='stat-item'>
+                {{! Show total value (read-only display) }}
+                <div class='stat-score stat-total' data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'>
+                  {{stat.total}}
+                </div>
+                {{! Hidden input for base value (can be edited via inspector/effects) }}
                 <input
-                  type='text'
+                  type='hidden'
                   name='system.stats.{{key}}.value'
                   value='{{stat.value}}'
-                  class='stat-score'
                   data-dtype='Number'
-                  placeholder='0'
                 />
                 <label
                   class='stat-label'
@@ -306,9 +309,11 @@
         <div class='luck-display'>
           <i class='luck-icon'></i>
           <input
-            type='text'
+            type='number'
             name='system.currentLuck'
             value='{{system.currentLuck}}'
+            min='0'
+            max='{{system.maxLuck}}'
             data-dtype='Number'
             class='luck-value'
           />

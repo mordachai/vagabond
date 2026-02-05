@@ -383,11 +383,20 @@ export class StatsStepManager extends BaseStepManager {
     try {
       // Apply bonuses to stats
       const finalStats = { ...assignedStats };
-      const appliedBonuses = state.appliedBonuses || {};
 
+      // Apply ancestry/class bonuses
+      const appliedBonuses = state.appliedBonuses || {};
       for (const [bonusId, application] of Object.entries(appliedBonuses)) {
         if (finalStats[application.target] !== null && finalStats[application.target] !== undefined) {
           finalStats[application.target] += application.amount;
+        }
+      }
+
+      // Apply perk bonuses
+      const perkStatBonuses = state.perkStatBonuses || {};
+      for (const [stat, bonus] of Object.entries(perkStatBonuses)) {
+        if (finalStats[stat] !== null && finalStats[stat] !== undefined) {
+          finalStats[stat] += bonus;
         }
       }
 

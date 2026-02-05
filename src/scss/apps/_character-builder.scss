@@ -622,6 +622,27 @@
           position: relative;
           width: 45px;
           height: 45px;
+
+            // Stat hex perk bonus badge (yellow tag in bottom-right corner)
+          .perk-bonus-badge {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            bottom: -5px;
+            right: -10px;
+            border-radius: 2px;
+            font-family: $font-title;
+            font-size: 0.95em;
+            font-weight: 700;
+            background-color: #f3d71e; // Green for perk bonuses
+            color: #000000;
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+          }
         }
 
         .hex-box {
@@ -2038,6 +2059,54 @@
 
     i {
       margin-right: 5px;
+    }
+  }
+
+  // ===========================
+  // Perk-Granted Items Styling
+  // ===========================
+
+  // Skills/Trainings granted by perks (yellow background)
+  .skill-item.from-perk {
+    background-color: #f1c40f !important;
+    padding: 2px 6px;
+    border-radius: 3px;
+
+    .skill-name {
+      font-weight: 700;
+      color: #000;
+    }
+  }
+
+  // Ancestry/Class bonus badge (yellow tag in bottom-left corner)
+  .stat-bonus-badge.ancestry-class-bonus {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.75em;
+    font-weight: 700;
+    background-color: #f1c40f; // Yellow for ancestry/class bonuses
+    color: #000;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  // Alternative: Yellow highlight for skills in selection lists
+  .skill-card.from-perk,
+  .training-item.from-perk {
+    border: 2px solid #f1c40f;
+    background: linear-gradient(135deg, #f1c40f15 0%, transparent 100%);
+
+    &::before {
+      content: '⭐';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 0.9em;
+      opacity: 0.7;
     }
   }
 }

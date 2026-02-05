@@ -45,13 +45,10 @@ export default class PerkChoiceDialog extends foundry.applications.api.DialogV2 
             <select name="choice" autofocus>
               ${options.map(opt => `
                 <option value="${opt.value}" ${opt.disabled ? 'disabled' : ''}>
-                  ${opt.label}${opt.info ? ` - ${opt.info}` : ''}
+                  ${opt.label}${opt.info ? ` (${opt.info})` : ''}
                 </option>
               `).join('')}
             </select>
-            ${options.some(o => o.disabled) ? `
-              <p class="hint">⚠️ Grayed out options are already trained or at maximum value.</p>
-            ` : ''}
           </div>
 
           <div class="form-group info-box">
@@ -92,13 +89,26 @@ export default class PerkChoiceDialog extends foundry.applications.api.DialogV2 
         return Object.entries(CONFIG.VAGABOND.skills).map(([key, label]) => {
           const skill = actor?.system.skills?.[key];
           const isTrained = skill?.trained || false;
-          const difficulty = skill?.difficulty || 10;
+
+          // Get difficulty - use calculated value or compute it
+          let difficulty = skill?.difficulty;
+          if (difficulty === undefined || difficulty === null) {
+            // Fallback: calculate manually if not set
+            const statKey = skill?.stat;
+            if (statKey && actor?.system.stats?.[statKey]) {
+              const statTotal = actor.system.stats[statKey].total || actor.system.stats[statKey].value || 0;
+              const skillBonus = 0; // Skills in dialog don't show bonuses
+              difficulty = 20 - (isTrained ? statTotal * 2 : statTotal) - skillBonus;
+            } else {
+              difficulty = 10; // Ultimate fallback
+            }
+          }
 
           return {
             value: key,
             label: game.i18n.localize(label),
             disabled: isTrained,
-            info: isTrained ? `Already Trained (${difficulty})` : `Untrained (${difficulty})`
+            info: isTrained ? `Trained ${difficulty}` : `${difficulty}`
           };
         }).sort((a, b) => {
           // Sort: available first, then alphabetically
@@ -110,13 +120,26 @@ export default class PerkChoiceDialog extends foundry.applications.api.DialogV2 
         return Object.entries(CONFIG.VAGABOND.weaponSkills).map(([key, label]) => {
           const weaponSkill = actor?.system.weaponSkills?.[key.toLowerCase()];
           const isTrained = weaponSkill?.trained || false;
-          const difficulty = weaponSkill?.difficulty || 10;
+
+          // Get difficulty - use calculated value or compute it
+          let difficulty = weaponSkill?.difficulty;
+          if (difficulty === undefined || difficulty === null) {
+            // Fallback: calculate manually if not set
+            const statKey = weaponSkill?.stat;
+            if (statKey && actor?.system.stats?.[statKey]) {
+              const statTotal = actor.system.stats[statKey].total || actor.system.stats[statKey].value || 0;
+              const weaponSkillBonus = 0; // Weapon skills in dialog don't show bonuses
+              difficulty = 20 - (isTrained ? statTotal * 2 : statTotal) - weaponSkillBonus;
+            } else {
+              difficulty = 10; // Ultimate fallback
+            }
+          }
 
           return {
             value: key,
             label: game.i18n.localize(label),
             disabled: isTrained,
-            info: isTrained ? `Already Trained (${difficulty})` : `Untrained (${difficulty})`
+            info: isTrained ? `Trained ${difficulty}` : `${difficulty}`
           };
         }).sort((a, b) => {
           if (a.disabled !== b.disabled) return a.disabled ? 1 : -1;

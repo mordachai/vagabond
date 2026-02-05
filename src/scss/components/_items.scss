@@ -188,6 +188,16 @@
   }
 }
 
+// Perk choice config field placeholders
+#choice-selected,
+#choice-target-field {
+  &::placeholder {
+    color: $c-red;
+    opacity: 0.8;
+    font-style: italic;
+  }
+}
+
 .skill-tag {
   display: inline-flex;
   align-items: center;

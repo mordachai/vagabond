@@ -464,10 +464,79 @@ export class PerksStepManager extends BaseStepManager {
     // Build stats object with value property for each stat
     const stats = {};
     const assignedStats = state.assignedStats || {};
+    const perkStatBonuses = state.perkStatBonuses || {};
+    const appliedBonuses = state.appliedBonuses || {};
+
     for (const [statName, statValue] of Object.entries(assignedStats)) {
+      const baseValue = statValue || 0;
+      let total = baseValue;
+
+      // Apply ancestry/class bonuses
+      for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+        if (application.target === statName) {
+          total += application.amount;
+        }
+      }
+
+      // Apply perk bonuses
+      if (perkStatBonuses[statName]) {
+        total += perkStatBonuses[statName];
+      }
+
       stats[statName] = {
-        value: statValue || 0,
-        total: statValue || 0
+        value: baseValue,
+        total: total
+      };
+    }
+
+    // Build skills object with proper structure
+    // Skill-to-stat mapping from actor-character.mjs schema
+    const skillStats = {
+      arcana: 'reason',
+      craft: 'reason',
+      medicine: 'reason',
+      brawl: 'might',
+      finesse: 'dexterity',
+      sneak: 'dexterity',
+      detect: 'awareness',
+      mysticism: 'awareness',
+      survival: 'awareness',
+      influence: 'presence',
+      leadership: 'presence',
+      performance: 'presence'
+    };
+
+    const trainedSkills = state.skills || [];
+    const skills = {};
+    for (const [skillKey, skillStat] of Object.entries(skillStats)) {
+      const isTrained = trainedSkills.includes(skillKey);
+      const statTotal = stats[skillStat]?.total || 0;
+      skills[skillKey] = {
+        trained: isTrained,
+        stat: skillStat,
+        bonus: '',
+        difficulty: 20 - (isTrained ? statTotal * 2 : statTotal)
+      };
+    }
+
+    // Build weapon skills object with proper structure
+    // Weapon skill-to-stat mapping from actor-character.mjs schema
+    const weaponSkillStats = {
+      melee: 'might',
+      brawl: 'might',
+      finesse: 'dexterity',
+      ranged: 'awareness'
+    };
+
+    const weaponSkills = {};
+    for (const [weaponSkillKey, weaponSkillStat] of Object.entries(weaponSkillStats)) {
+      const isTrained = trainedSkills.includes(weaponSkillKey);
+      const statTotal = stats[weaponSkillStat]?.total || 0;
+      weaponSkills[weaponSkillKey] = {
+        trained: isTrained,
+        stat: weaponSkillStat,
+        bonus: '',
+        difficulty: 20 - (isTrained ? statTotal * 2 : statTotal)
       };
     }
 
@@ -509,7 +578,8 @@ export class PerksStepManager extends BaseStepManager {
     // Build comprehensive system data
     const systemData = {
       stats: stats,
-      skills: state.skills || [],
+      skills: skills,
+      weaponSkills: weaponSkills,
       spells: allKnownSpells,
       perks: state.perks || [],
       classPerks: state.classPerks || [],
@@ -564,9 +634,9 @@ export class PerksStepManager extends BaseStepManager {
 
     // Check skill prerequisites
     if (prereqs.trainedSkills?.length > 0) {
-      const actorSkills = actor.system.skills || [];
+      const actorSkills = actor.system.skills || {};
       for (const skill of prereqs.trainedSkills) {
-        if (!actorSkills.includes(skill)) {
+        if (!actorSkills[skill]?.trained) {
           missing.push(`Skill: ${skill}`);
         }
       }
