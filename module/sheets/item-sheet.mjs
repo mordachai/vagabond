@@ -225,6 +225,22 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   /** @override */
   async _preparePartContext(partId, context) {
     switch (partId) {
+      case 'header':
+        // Enrich description for perks in header
+        if (this.item.type === 'perk') {
+          context.enriched = {
+            description: await foundry.applications.ux.TextEditor.enrichHTML(
+              this.item.system.description,
+              {
+                secrets: this.document.isOwner,
+                rollData: this.item.getRollData(),
+                relativeTo: this.item,
+              }
+            )
+          };
+        }
+        break;
+
       case 'equipmentDetails':
         // Equipment gets enriched description like the details tab
         context.tab = context.tabs[partId];

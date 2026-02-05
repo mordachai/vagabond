@@ -35,6 +35,7 @@ import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
+import { CompendiumSettings } from './applications/compendium-settings.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -212,6 +213,29 @@ function registerGameSettings() {
     hint: 'VAGABOND.Settings.encounterSettings.hint',
     icon: 'fas fa-swords',
     type: EncounterSettings,
+    restricted: true
+  });
+
+  // Setting 14: Character Builder Compendiums (Data)
+  game.settings.register('vagabond', 'characterBuilderCompendiums', {
+    name: 'Character Builder Compendiums',
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {
+      useAll: true,
+      enabled: []
+    },
+    requiresReload: false
+  });
+
+  // Setting 15: Character Builder Compendiums (Menu)
+  game.settings.registerMenu('vagabond', 'compendiumSettingsMenu', {
+    name: 'VAGABOND.Settings.compendiumSettings.name',
+    label: 'VAGABOND.Settings.compendiumSettings.label',
+    hint: 'VAGABOND.Settings.compendiumSettings.hint',
+    icon: 'fas fa-books',
+    type: CompendiumSettings,
     restricted: true
   });
 }

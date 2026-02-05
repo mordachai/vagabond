@@ -876,7 +876,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     if (validItems.length > 0) {
-      const itemObjects = validItems.map(item => {
+      const itemObjects = await Promise.all(validItems.map(async item => {
         const itemData = item.toObject();
 
         // Auto-favorite spells selected in the builder
@@ -900,8 +900,50 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
           }
         }
 
+        // Apply choice selections to perks (New Training, Advancement, etc.)
+        if (itemData.type === 'perk') {
+          const perkChoices = state.perkChoices || {};
+          const choice = perkChoices[item.uuid];
+
+          console.log(`Vagabond | CharBuilder - Processing perk "${itemData.name}"`, {
+            perkUuid: item.uuid,
+            hasChoiceConfig: !!itemData.system.choiceConfig,
+            choiceType: itemData.system.choiceConfig?.type,
+            storedChoice: choice,
+            allPerkChoices: perkChoices
+          });
+
+          if (choice && itemData.system.choiceConfig) {
+            // Store the selected choice in the perk's choiceConfig
+            itemData.system.choiceConfig.selected = choice;
+
+            // Update perk name to include the selection
+            // For spell choices, resolve the UUID to get the proper name
+            let choiceLabel;
+            if (itemData.system.choiceConfig.type === 'spell') {
+              try {
+                const spell = await fromUuid(choice);
+                choiceLabel = spell?.name || choice;
+              } catch (error) {
+                console.warn(`Failed to resolve spell UUID: ${choice}`, error);
+                choiceLabel = choice;
+              }
+            } else {
+              choiceLabel = this._getChoiceLabelSync(choice, itemData.system.choiceConfig.type);
+            }
+
+            itemData.name = `${itemData.name} (${choiceLabel})`;
+
+            console.log(`Vagabond | CharBuilder - Applied choice to perk`, {
+              perkName: itemData.name,
+              choice,
+              choiceLabel
+            });
+          }
+        }
+
         return itemData;
-      });
+      }));
 
       const singletonTypes = ['ancestry', 'class'];
       const typesBeingAdded = new Set(itemObjects.map(i => i.type));
@@ -992,6 +1034,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Set Mana to max (only if spellcaster)
     if (classItemObj && classItemObj.system.isSpellcaster) {
       const manaMultiplier = classItemObj.system.manaMultiplier || 0;
+      const level = this.actor.system.attributes.level.value || 1;
       const calculatedMaxMana = manaMultiplier * level;
       updateData['system.mana.current'] = calculatedMaxMana;
     }
@@ -1002,6 +1045,84 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Apply the final update
     if (Object.keys(updateData).length > 0) {
       await this.actor.update(updateData);
+    }
+
+    // Process perk choices for stat/skill bonuses (create Active Effects)
+    // Spell choices are already handled by adding them to state.spells
+    const perkChoices = state.perkChoices || {};
+    if (Object.keys(perkChoices).length > 0) {
+      console.log('Vagabond | CharBuilder - Processing perk choices for Active Effects', perkChoices);
+
+      for (const [perkUuid, choiceUuid] of Object.entries(perkChoices)) {
+        try {
+          // Find the perk on the actor by matching the choice in its choiceConfig
+          const perk = this.actor.items.find(i => {
+            return i.type === 'perk' &&
+                   i.system.choiceConfig?.selected === choiceUuid;
+          });
+
+          if (!perk) {
+            console.warn(`Vagabond | CharBuilder - Perk not found with choice: ${choiceUuid}`);
+            continue;
+          }
+
+          const choiceType = perk.system.choiceConfig?.type;
+
+          // Handle stat/skill/weaponSkill choices (create Active Effect)
+          if (['stat', 'skill', 'weaponSkill'].includes(choiceType)) {
+            console.log(`Vagabond | CharBuilder - Creating Active Effect for perk "${perk.name}" (${choiceType}: ${choiceUuid})`);
+
+            const config = perk.system.choiceConfig;
+
+            // Only create effect if targetField is configured
+            if (config.targetField && config.targetField.trim() !== '') {
+              // Build attribute key by replacing {choice} placeholder
+              const attributeKey = config.targetField.replace('{choice}', choiceUuid);
+
+              const effectData = {
+                name: `${perk.name} Effect`,
+                icon: perk.img,
+                disabled: false,
+                changes: [{
+                  key: attributeKey,
+                  mode: config.effectMode,
+                  value: config.effectValue
+                }],
+                flags: {
+                  vagabond: {
+                    applicationMode: 'permanent'
+                  }
+                }
+              };
+
+              console.log(`Vagabond | CharBuilder - Active Effect config:`, {
+                perkName: perk.name,
+                targetField: config.targetField,
+                attributeKey,
+                mode: config.effectMode,
+                value: config.effectValue,
+                effectData
+              });
+
+              // Create the Active Effect on the perk
+              await perk.createEmbeddedDocuments('ActiveEffect', [effectData]);
+
+              console.log(`Vagabond | CharBuilder - Active Effect created for "${perk.name}"`);
+            } else {
+              console.warn(`Vagabond | CharBuilder - Perk "${perk.name}" has no targetField configured!`, config);
+            }
+
+            // Update perk name with proper label
+            const choiceLabel = this._getChoiceLabelSync(choiceUuid, choiceType);
+            const cleanName = perk.name.replace(/\s*\(.*?\)\s*$/, '');
+            await perk.update({
+              name: `${cleanName} (${choiceLabel})`
+            });
+          }
+        } catch (error) {
+          console.error(`Vagabond | CharBuilder - Failed to process perk choice:`, error);
+        }
+      }
     }
 
     // Favorite all spells on the character (post-creation fix)
@@ -1018,6 +1139,32 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     // ui.notifications.info("Character creation completed!");
     this.close();
+  }
+
+  /**
+   * Synchronously convert a choice value to a human-readable label.
+   * @param {string} choice - The choice value (e.g., 'arcana', 'might', spell UUID)
+   * @param {string} choiceType - The type of choice ('skill', 'weaponSkill', 'stat', 'spell')
+   * @returns {string} Human-readable label
+   * @private
+   */
+  _getChoiceLabelSync(choice, choiceType) {
+    switch (choiceType) {
+      case 'skill':
+        return game.i18n.localize(CONFIG.VAGABOND.skills[choice] || choice);
+      case 'weaponSkill':
+        // Capitalize first letter for config lookup (e.g., 'melee' → 'Melee')
+        const capitalizedChoice = choice.charAt(0).toUpperCase() + choice.slice(1);
+        return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[capitalizedChoice] || choice);
+      case 'stat':
+        return game.i18n.localize(CONFIG.VAGABOND.stats[choice] || choice);
+      case 'spell':
+        // Spell UUIDs can't be resolved synchronously, return as-is
+        // The perk's _onCreate hook will handle proper name formatting
+        return choice;
+      default:
+        return choice;
+    }
   }
 
   async _onDismissBuilder() {

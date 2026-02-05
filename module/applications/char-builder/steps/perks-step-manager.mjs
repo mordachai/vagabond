@@ -464,10 +464,79 @@ export class PerksStepManager extends BaseStepManager {
     // Build stats object with value property for each stat
     const stats = {};
     const assignedStats = state.assignedStats || {};
+    const perkStatBonuses = state.perkStatBonuses || {};
+    const appliedBonuses = state.appliedBonuses || {};
+
     for (const [statName, statValue] of Object.entries(assignedStats)) {
+      const baseValue = statValue || 0;
+      let total = baseValue;
+
+      // Apply ancestry/class bonuses
+      for (const [bonusId, application] of Object.entries(appliedBonuses)) {
+        if (application.target === statName) {
+          total += application.amount;
+        }
+      }
+
+      // Apply perk bonuses
+      if (perkStatBonuses[statName]) {
+        total += perkStatBonuses[statName];
+      }
+
       stats[statName] = {
-        value: statValue || 0,
-        total: statValue || 0
+        value: baseValue,
+        total: total
+      };
+    }
+
+    // Build skills object with proper structure
+    // Skill-to-stat mapping from actor-character.mjs schema
+    const skillStats = {
+      arcana: 'reason',
+      craft: 'reason',
+      medicine: 'reason',
+      brawl: 'might',
+      finesse: 'dexterity',
+      sneak: 'dexterity',
+      detect: 'awareness',
+      mysticism: 'awareness',
+      survival: 'awareness',
+      influence: 'presence',
+      leadership: 'presence',
+      performance: 'presence'
+    };
+
+    const trainedSkills = state.skills || [];
+    const skills = {};
+    for (const [skillKey, skillStat] of Object.entries(skillStats)) {
+      const isTrained = trainedSkills.includes(skillKey);
+      const statTotal = stats[skillStat]?.total || 0;
+      skills[skillKey] = {
+        trained: isTrained,
+        stat: skillStat,
+        bonus: '',
+        difficulty: 20 - (isTrained ? statTotal * 2 : statTotal)
+      };
+    }
+
+    // Build weapon skills object with proper structure
+    // Weapon skill-to-stat mapping from actor-character.mjs schema
+    const weaponSkillStats = {
+      melee: 'might',
+      brawl: 'might',
+      finesse: 'dexterity',
+      ranged: 'awareness'
+    };
+
+    const weaponSkills = {};
+    for (const [weaponSkillKey, weaponSkillStat] of Object.entries(weaponSkillStats)) {
+      const isTrained = trainedSkills.includes(weaponSkillKey);
+      const statTotal = stats[weaponSkillStat]?.total || 0;
+      weaponSkills[weaponSkillKey] = {
+        trained: isTrained,
+        stat: weaponSkillStat,
+        bonus: '',
+        difficulty: 20 - (isTrained ? statTotal * 2 : statTotal)
       };
     }
 
@@ -509,7 +578,8 @@ export class PerksStepManager extends BaseStepManager {
     // Build comprehensive system data
     const systemData = {
       stats: stats,
-      skills: state.skills || [],
+      skills: skills,
+      weaponSkills: weaponSkills,
       spells: allKnownSpells,
       perks: state.perks || [],
       classPerks: state.classPerks || [],
@@ -564,9 +634,9 @@ export class PerksStepManager extends BaseStepManager {
 
     // Check skill prerequisites
     if (prereqs.trainedSkills?.length > 0) {
-      const actorSkills = actor.system.skills || [];
+      const actorSkills = actor.system.skills || {};
       for (const skill of prereqs.trainedSkills) {
-        if (!actorSkills.includes(skill)) {
+        if (!actorSkills[skill]?.trained) {
           missing.push(`Skill: ${skill}`);
         }
       }
@@ -761,6 +831,7 @@ export class PerksStepManager extends BaseStepManager {
   /**
    * Handle adding perk to tray
    * Fulfills the active grant with the selected perk
+   * Shows choice dialog if perk requires selection
    * @private
    */
   async _onAddToTray(event, target) {
@@ -810,6 +881,67 @@ export class PerksStepManager extends BaseStepManager {
         // Continue anyway - prerequisites are warnings, not requirements
       }
 
+      // Check if perk requires a choice (e.g., New Training, Advancement)
+      const choiceConfig = item.system.choiceConfig;
+      if (choiceConfig && choiceConfig.type !== 'none' && !choiceConfig.selected) {
+        // Import PerkChoiceDialog
+        const { default: PerkChoiceDialog } = await import('../../perk-choice-dialog.mjs');
+
+        // Show choice dialog
+        const choice = await PerkChoiceDialog.show(item, previewActor);
+
+        if (!choice) {
+          // User cancelled - don't add perk
+          ui.notifications.info(`${item.name} was not added - no selection made.`);
+          return;
+        }
+
+        // Store choice in state for this perk
+        // We'll use a map of perk UUIDs to their choices
+        const perkChoices = state.perkChoices || {};
+        perkChoices[uuid] = choice;
+        this.updateState('perkChoices', perkChoices);
+
+        // Apply choices immediately to builder state for visual feedback
+        if (choiceConfig.type === 'spell') {
+          // Add spell to the character's spell list immediately
+          const spells = state.spells || [];
+          if (!spells.includes(choice)) {
+            spells.push(choice);
+            this.updateState('spells', spells);
+            console.log(`Vagabond | Added spell from perk choice: ${choice}`);
+          }
+        } else if (choiceConfig.type === 'skill' || choiceConfig.type === 'weaponSkill') {
+          // Add training to skills list immediately
+          const skills = state.skills || [];
+          if (!skills.includes(choice)) {
+            skills.push(choice);
+            this.updateState('skills', skills);
+            console.log(`Vagabond | Added training from perk choice: ${choice}`);
+          }
+
+          // Track which skills come from perks for visual indication
+          const perkSkills = state.perkSkills || {};
+          perkSkills[choice] = uuid; // Map skill to perk UUID
+          this.updateState('perkSkills', perkSkills);
+        } else if (choiceConfig.type === 'stat') {
+          // Add stat bonus immediately
+          const perkStatBonuses = state.perkStatBonuses || {};
+          perkStatBonuses[choice] = (perkStatBonuses[choice] || 0) + parseInt(choiceConfig.effectValue || 1);
+          this.updateState('perkStatBonuses', perkStatBonuses);
+
+          // Track which stat bonuses come from which perks for removal
+          const perkStatSources = state.perkStatSources || {};
+          if (!perkStatSources[uuid]) perkStatSources[uuid] = [];
+          perkStatSources[uuid].push({ stat: choice, amount: parseInt(choiceConfig.effectValue || 1) });
+          this.updateState('perkStatSources', perkStatSources);
+
+          console.log(`Vagabond | Added stat bonus from perk choice: +${choiceConfig.effectValue} ${choice}`);
+        }
+
+        ui.notifications.info(`${item.name} added with selection: ${await this._getChoiceLabel(choice, choiceConfig.type)}`);
+      }
+
       // Fulfill the active grant
       activeGrant.fulfilled = uuid;
       this.updateState('perkGrants', grants);
@@ -818,6 +950,37 @@ export class PerksStepManager extends BaseStepManager {
     } catch (error) {
       console.error('Failed to add perk:', error);
       ui.notifications.error('Failed to add perk');
+    }
+  }
+
+  /**
+   * Get human-readable label for a choice value
+   * @param {string} choice - The choice value (e.g., "arcana", "might")
+   * @param {string} choiceType - The type of choice (skill, stat, etc.)
+   * @returns {Promise<string>} Human-readable label
+   * @private
+   */
+  async _getChoiceLabel(choice, choiceType) {
+    switch (choiceType) {
+      case 'skill':
+        return game.i18n.localize(CONFIG.VAGABOND.skills[choice] || choice);
+
+      case 'weaponSkill':
+        return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[choice.charAt(0).toUpperCase() + choice.slice(1)] || choice);
+
+      case 'stat':
+        return game.i18n.localize(CONFIG.VAGABOND.stats[choice] || choice);
+
+      case 'spell':
+        try {
+          const spell = await fromUuid(choice);
+          return spell?.name || choice;
+        } catch (error) {
+          return choice;
+        }
+
+      default:
+        return choice;
     }
   }
 
@@ -848,6 +1011,62 @@ export class PerksStepManager extends BaseStepManager {
     }
 
     try {
+      // Remove associated choices (spells, trainings, stat bonuses)
+      const perkChoices = state.perkChoices || {};
+      const choice = perkChoices[uuid];
+
+      if (choice) {
+        const item = await fromUuid(uuid);
+        const choiceType = item?.system.choiceConfig?.type;
+
+        if (choiceType === 'spell') {
+          // Remove spell from spell list
+          const spells = state.spells || [];
+          const spellIndex = spells.indexOf(choice);
+          if (spellIndex > -1) {
+            spells.splice(spellIndex, 1);
+            this.updateState('spells', spells);
+            console.log(`Vagabond | Removed spell from perk: ${choice}`);
+          }
+        } else if (choiceType === 'skill' || choiceType === 'weaponSkill') {
+          // Remove training from skills list
+          const skills = state.skills || [];
+          const skillIndex = skills.indexOf(choice);
+          if (skillIndex > -1) {
+            skills.splice(skillIndex, 1);
+            this.updateState('skills', skills);
+            console.log(`Vagabond | Removed training from perk: ${choice}`);
+          }
+
+          // Remove from perk skills tracking
+          const perkSkills = state.perkSkills || {};
+          delete perkSkills[choice];
+          this.updateState('perkSkills', perkSkills);
+        } else if (choiceType === 'stat') {
+          // Remove stat bonus
+          const perkStatSources = state.perkStatSources || {};
+          const statBonuses = perkStatSources[uuid] || [];
+
+          const perkStatBonuses = state.perkStatBonuses || {};
+          for (const bonus of statBonuses) {
+            perkStatBonuses[bonus.stat] = (perkStatBonuses[bonus.stat] || 0) - bonus.amount;
+            if (perkStatBonuses[bonus.stat] <= 0) {
+              delete perkStatBonuses[bonus.stat];
+            }
+          }
+          this.updateState('perkStatBonuses', perkStatBonuses);
+
+          delete perkStatSources[uuid];
+          this.updateState('perkStatSources', perkStatSources);
+
+          console.log(`Vagabond | Removed stat bonuses from perk`);
+        }
+
+        // Remove the choice record
+        delete perkChoices[uuid];
+        this.updateState('perkChoices', perkChoices);
+      }
+
       // Unfulfill the grant
       grant.fulfilled = null;
       this.updateState('perkGrants', grants);

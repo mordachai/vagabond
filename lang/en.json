@@ -328,6 +328,11 @@
         "label": "Configure Encounter",
         "hint": "Configure combat encounter display options and mechanics."
       },
+      "compendiumSettings": {
+        "name": "Character Builder Compendiums",
+        "label": "Manage Compendiums",
+        "hint": "Choose which Item compendiums are available in the Character Builder."
+      },
       "hideInitiativeRoll": {
         "name": "Hide Initiative Roll",
         "hint": "Hide the initiative button in the combat tracker. The Vagabond system uses popcorn initiative and typically doesn't require traditional initiative rolls."
@@ -541,7 +546,55 @@
             "trainedSkills": {"label": "Trained Skill Prerequisites"},
             "spells": {"label": "Spell Prerequisites"},
             "resources": {"label": "Resource Prerequisites"}
+          },
+          "choiceConfig": {
+            "label": "Choice Configuration",
+            "type": {
+              "label": "Choice Type",
+              "hint": "What type of choice does this perk require from the player?"
+            },
+            "selected": {
+              "label": "Selected Choice",
+              "hint": "The choice made by the player (automatically filled)"
+            },
+            "targetField": {
+              "label": "Target Field",
+              "hint": "Which system field to modify. Use {choice} as placeholder for the selected value."
+            },
+            "effectMode": {
+              "label": "Effect Mode",
+              "hint": "How the effect value is applied (Add, Override, etc.)"
+            },
+            "effectValue": {
+              "label": "Effect Value",
+              "hint": "The value to apply (can be a formula like @attributes.level.value)"
+            }
           }
+        },
+        "ChoiceType": {
+          "Label": "Choice Type",
+          "Hint": "What type of choice does this perk require?",
+          "None": "No Choice Required",
+          "Skill": "Skill Training",
+          "WeaponSkill": "Weapon Skill Training",
+          "Stat": "Stat Increase",
+          "Spell": "Spell Selection"
+        },
+        "ChoiceSelected": {
+          "Label": "Selected Choice",
+          "Hint": "The player's selection (filled automatically)"
+        },
+        "ChoiceTargetField": {
+          "Label": "Target Field",
+          "Hint": "Field to modify (use {choice} as placeholder)"
+        },
+        "ChoiceEffectMode": {
+          "Label": "Effect Mode",
+          "Hint": "How to apply the value"
+        },
+        "ChoiceEffectValue": {
+          "Label": "Effect Value",
+          "Hint": "Value or formula to apply"
         },
         "AddStatPrerequisite": "Add Stat Prerequisite",
         "AddTrainedSkillPrerequisite": "Add Trained Skill",

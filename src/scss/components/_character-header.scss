@@ -330,6 +330,12 @@
     font-family: $font-character-name;
     padding: 4px 0;
   }
+
+  // Allow stat-total to be a div instead of input
+  .stat-total {
+    cursor: default;
+    user-select: none;
+  }
 }
 
 // Fatigue Row (replaces old fatigue-overlay)

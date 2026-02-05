@@ -98,12 +98,16 @@ export class StatsStepManager extends BaseStepManager {
     const statsDisplay = statOrder.map(stat => {
       const baseValue = assignedStats[stat] || null;
 
-      // Calculate bonuses applied to this stat
+      // Calculate bonuses applied to this stat (from ancestry/class)
       const bonusesForThisStat = Object.entries(appliedBonuses)
         .filter(([bonusId, application]) => application.target === stat)
         .reduce((sum, [bonusId, application]) => sum + application.amount, 0);
 
-      const finalValue = baseValue !== null ? baseValue + bonusesForThisStat : null;
+      // Calculate perk bonuses for this stat
+      const perkStatBonuses = state.perkStatBonuses || {};
+      const perkBonus = perkStatBonuses[stat] || 0;
+
+      const finalValue = baseValue !== null ? baseValue + bonusesForThisStat + perkBonus : null;
 
       // Calculate if this stat can accept bonuses based on conditions
       const canApplyBonuses = availableBonuses
@@ -131,6 +135,8 @@ export class StatsStepManager extends BaseStepManager {
         value: baseValue,
         finalValue: finalValue,
         bonusAmount: bonusesForThisStat,
+        perkBonus: perkBonus,
+        hasPerkBonus: perkBonus > 0,
         hasBonus: bonusesForThisStat > 0,
         hasValue: baseValue !== null && baseValue !== undefined,
         hint: hint,
@@ -294,6 +300,9 @@ export class StatsStepManager extends BaseStepManager {
       };
     });
 
+    // Get perk skills for visual indication
+    const perkSkills = state.perkSkills || {};
+
     // Get skills from the preview actor
     const skills = Object.entries(previewActor.system.skills).map(([key, skill]) => {
       return {
@@ -302,6 +311,7 @@ export class StatsStepManager extends BaseStepManager {
         statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]) || '',
         value: skill.difficulty,
         trained: skill.trained,
+        fromPerk: perkSkills[key] !== undefined, // Flag if this training comes from a perk
         tooltip: game.i18n.localize(`VAGABOND.SkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
         affectedBy: [skill.stat]
       };
@@ -315,6 +325,7 @@ export class StatsStepManager extends BaseStepManager {
         statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]) || '',
         value: skill.difficulty,
         trained: skill.trained,
+        fromPerk: perkSkills[key] !== undefined, // Flag if this training comes from a perk
         tooltip: game.i18n.localize(`VAGABOND.WeaponSkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
         affectedBy: [skill.stat]
       };
@@ -372,11 +383,20 @@ export class StatsStepManager extends BaseStepManager {
     try {
       // Apply bonuses to stats
       const finalStats = { ...assignedStats };
-      const appliedBonuses = state.appliedBonuses || {};
 
+      // Apply ancestry/class bonuses
+      const appliedBonuses = state.appliedBonuses || {};
       for (const [bonusId, application] of Object.entries(appliedBonuses)) {
         if (finalStats[application.target] !== null && finalStats[application.target] !== undefined) {
           finalStats[application.target] += application.amount;
+        }
+      }
+
+      // Apply perk bonuses
+      const perkStatBonuses = state.perkStatBonuses || {};
+      for (const [stat, bonus] of Object.entries(perkStatBonuses)) {
+        if (finalStats[stat] !== null && finalStats[stat] !== undefined) {
+          finalStats[stat] += bonus;
         }
       }
 

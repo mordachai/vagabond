@@ -1,24 +1,6 @@
 <section class="tab details {{tab.cssClass}} perk-details-wrapper" data-group="primary" data-tab="details">
 
-    {{!-- 1. Description (Full Width) --}}
-    <div class="perk-section description-section">
-        <label class="section-header">
-            <i class="fas fa-book-open"></i> {{localize 'VAGABOND.Item.Perk.FIELDS.description.label'}}
-        </label>
-        <div class="editor-container">
-            {{#if editable}}
-                <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
-                    {{{enriched.description}}}
-                </prose-mirror>
-            {{else}}
-                <div class="editor-content">{{{enriched.description}}}</div>
-            {{/if}}
-        </div>
-    </div>
-
-    <hr class="perk-divider">
-
-    {{!-- 2. Prerequisites Section --}}
+    {{!-- 1. Prerequisites Section --}}
     <div class="perk-prerequisites-section">
         <div class="prereq-add-header">
             <label for="prereq-type-select"><i class="fas fa-plus-circle"></i> {{localize 'VAGABOND.Item.Perk.AddPrerequisiteLabel'}}</label>
@@ -400,5 +382,156 @@
             {{/if}}
 
         </div>
+    </div>
+
+    <hr class="perk-divider">
+
+    {{!-- 2. Choice Configuration Section --}}
+    <div class="perk-choice-config-section">
+        <label class="section-header">
+            <i class="fas fa-hand-pointer"></i> Choice Configuration
+        </label>
+
+        {{!-- Choice Type --}}
+        <div class="form-group">
+            <label for="choice-type">Type</label>
+            <select name="system.choiceConfig.type" id="choice-type">
+                <option value="none" {{#if (eq item.system.choiceConfig.type 'none')}}selected{{/if}}>
+                    {{localize 'VAGABOND.Item.Perk.ChoiceType.None'}}
+                </option>
+                <option value="skill" {{#if (eq item.system.choiceConfig.type 'skill')}}selected{{/if}}>
+                    {{localize 'VAGABOND.Item.Perk.ChoiceType.Skill'}}
+                </option>
+                <option value="weaponSkill" {{#if (eq item.system.choiceConfig.type 'weaponSkill')}}selected{{/if}}>
+                    {{localize 'VAGABOND.Item.Perk.ChoiceType.WeaponSkill'}}
+                </option>
+                <option value="stat" {{#if (eq item.system.choiceConfig.type 'stat')}}selected{{/if}}>
+                    {{localize 'VAGABOND.Item.Perk.ChoiceType.Stat'}}
+                </option>
+                <option value="spell" {{#if (eq item.system.choiceConfig.type 'spell')}}selected{{/if}}>
+                    {{localize 'VAGABOND.Item.Perk.ChoiceType.Spell'}}
+                </option>
+            </select>
+        </div>
+
+        {{!-- Show config fields only if type is not 'none' --}}
+        {{#unless (eq item.system.choiceConfig.type 'none')}}
+
+        {{!-- Selected Choice (Read-Only) --}}
+        <div class="form-group">
+            <label for="choice-selected">Selected</label>
+            <input type="text" name="system.choiceConfig.selected" id="choice-selected" value="{{item.system.choiceConfig.selected}}" readonly placeholder="(Filled automatically)" style="background-color: #f5f5f5;">
+        </div>
+
+        {{!-- Target Field --}}
+        <div class="form-group">
+            <label for="choice-target-field">Target Field</label>
+            <input type="text" name="system.choiceConfig.targetField" id="choice-target-field" value="{{item.system.choiceConfig.targetField}}" placeholder="skills.{choice}.trained" style="font-family: monospace;">
+            <p class="hint" style="color: #c53030; font-weight: 600;">⚠️ DO NOT include "system." prefix! DataModels handle this automatically.</p>
+            <p class="hint">Example: <code>stats.{choice}.bonus</code> or <code>skills.{choice}.trained</code></p>
+        </div>
+
+        {{!-- Effect Mode and Value (Same Row) --}}
+        <div class="grid grid-2col">
+            <div class="form-group">
+                <label for="choice-effect-mode">Effect Mode</label>
+                <select name="system.choiceConfig.effectMode" id="choice-effect-mode">
+                    <option value="0" {{#if (eq item.system.choiceConfig.effectMode 0)}}selected{{/if}}>0: Custom</option>
+                    <option value="1" {{#if (eq item.system.choiceConfig.effectMode 1)}}selected{{/if}}>1: Multiply</option>
+                    <option value="2" {{#if (eq item.system.choiceConfig.effectMode 2)}}selected{{/if}}>2: Add</option>
+                    <option value="3" {{#if (eq item.system.choiceConfig.effectMode 3)}}selected{{/if}}>3: Downgrade</option>
+                    <option value="4" {{#if (eq item.system.choiceConfig.effectMode 4)}}selected{{/if}}>4: Upgrade</option>
+                    <option value="5" {{#if (eq item.system.choiceConfig.effectMode 5)}}selected{{/if}}>5: Override</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="choice-effect-value">Effect Value</label>
+                <input type="text" name="system.choiceConfig.effectValue" id="choice-effect-value" value="{{item.system.choiceConfig.effectValue}}" placeholder="1" style="font-family: monospace;">
+            </div>
+        </div>
+
+        {{!-- Info Accordion --}}
+        <div class="help-box">
+            <details>
+                <summary><i class="fas fa-info-circle"></i> Info & Examples</summary>
+                <div class="mode-help">
+                    <div class="mode-example">
+                        <h4>How It Works</h4>
+                        <p>When a player adds this perk, a dialog appears asking them to choose from available options (skills, stats, etc.). The system then creates an Active Effect targeting the selected field.</p>
+                    </div>
+
+                    <div class="mode-example">
+                        <h4>Target Field Examples</h4>
+                        <p class="hint" style="color: #c53030; font-weight: 600; margin-bottom: 0.5rem;">⚠️ DO NOT include "system." prefix!</p>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
+                            <li><code>skills.{choice}.trained</code> - For skill training</li>
+                            <li><code>weaponSkills.{choice}.trained</code> - For weapon skill training</li>
+                            <li><code>stats.{choice}.bonus</code> - For stat increase</li>
+                            <li><em>(Leave empty for spell selection)</em> - For granting free spells</li>
+                        </ul>
+                        <p class="hint">Use <code>{choice}</code> as placeholder - it gets replaced with player's selection</p>
+                    </div>
+
+                    <div class="mode-example">
+                        <h4>Effect Modes</h4>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
+                            <li><strong>Add (2)</strong> - Add to existing value (use for numeric bonuses like <code>+1</code>)</li>
+                            <li><strong>Override (5)</strong> - Replace value entirely (use for <code>trained = true</code>)</li>
+                        </ul>
+                    </div>
+
+                    <div class="mode-example">
+                        <h4>Effect Value Examples</h4>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
+                            <li><code>true</code> - For boolean fields (trained)</li>
+                            <li><code>1</code> - Simple numeric bonus (+1)</li>
+                            <li><code>@attributes.level.value</code> - Bonus equal to character level</li>
+                            <li><code>floor(@attributes.level.value / 2)</code> - Half level, rounded down</li>
+                            <li><code>@stats.might.total</code> - Bonus equal to Might stat</li>
+                        </ul>
+                    </div>
+
+                    <div class="mode-example">
+                        <h4>Complete Examples</h4>
+                        <p><strong>New Training (Choose Skill)</strong></p>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+                            <li>Type: <code>skill</code></li>
+                            <li>Target Field: <code>skills.{choice}.trained</code></li>
+                            <li>Effect Mode: <code>Override (5)</code></li>
+                            <li>Effect Value: <code>true</code></li>
+                        </ul>
+
+                        <p style="margin-top: 0.75rem;"><strong>Advancement (Choose Stat +1)</strong></p>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+                            <li>Type: <code>stat</code></li>
+                            <li>Target Field: <code>stats.{choice}.bonus</code></li>
+                            <li>Effect Mode: <code>Add (2)</code></li>
+                            <li>Effect Value: <code>1</code></li>
+                        </ul>
+
+                        <p style="margin-top: 0.75rem;"><strong>Level-Scaling Stat Bonus</strong></p>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+                            <li>Type: <code>stat</code></li>
+                            <li>Target Field: <code>stats.{choice}.bonus</code></li>
+                            <li>Effect Mode: <code>Add (2)</code></li>
+                            <li>Effect Value: <code>floor(@attributes.level.value / 2)</code></li>
+                        </ul>
+
+                        <p style="margin-top: 0.75rem;"><strong>Learn New Spell (Grants Free Spell)</strong></p>
+                        <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
+                            <li>Type: <code>spell</code></li>
+                            <li>Target Field: <em>(Leave empty)</em></li>
+                            <li>Effect Mode: <em>(Not used)</em></li>
+                            <li>Effect Value: <em>(Leave empty)</em></li>
+                        </ul>
+                        <p class="hint" style="font-size: 0.85em; margin-top: 0.25rem;">
+                            <strong>Note:</strong> For spell selection, the chosen spell is automatically added to the character when the perk is granted. No Active Effect configuration needed - the spell itself is the benefit!
+                        </p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        {{/unless}}
     </div>
 </section>

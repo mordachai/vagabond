@@ -1253,7 +1253,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onSpendLuck(event, target) {
     event.preventDefault();
     const currentLuck = this.actor.system.currentLuck || 0;
-    const maxLuck = this.actor.system.luck?.value || this.actor.system.stats?.luck?.value || 0;
+    // Use maxLuck which equals luck stat total (includes bonuses)
+    const maxLuck = this.actor.system.maxLuck || 0;
 
     if (event.shiftKey) {
       // Shift+Click: Recharge to max

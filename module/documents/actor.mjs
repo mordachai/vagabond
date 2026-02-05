@@ -47,7 +47,7 @@ export class VagabondActor extends Actor {
   allApplicableEffects() {
     // Get all effects from the actor itself
     const actorEffects = Array.from(this.effects);
-    
+
     // Get all effects from owned items (including class items)
     const itemEffects = [];
     for (const item of this.items) {
@@ -85,7 +85,7 @@ export class VagabondActor extends Actor {
       // "permanent" effects always apply (including class effects)
       return true;
     });
-    
+
     return filteredEffects;
   }
 
