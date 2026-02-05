@@ -33,6 +33,7 @@ export class CharacterBuilderUIComponents {
         'skills',
         'perks',
         'classPerks',
+        'perkGrants',  // CRITICAL: Track grant fulfillment for perks step
         'spells',
         'selectedStartingPack',
         'gear',

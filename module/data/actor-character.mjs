@@ -563,14 +563,24 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.saves.endure.difficulty = 20 - (mitTotal + mitTotal) - endureBonus;
     this.saves.will.difficulty = 20 - (rsnTotal + presTotal) - willBonus;
 
+    // Get localized stat abbreviations
+    const dexAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.dexterity) || 'DEX';
+    const awrAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.awareness) || 'AWR';
+    const mitAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.might) || 'MIG';
+    const rsnAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.reason) || 'RSN';
+    const preAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.presence) || 'PRE';
+
     this.saves.reflex.label = game.i18n.localize('VAGABOND.Saves.Reflex.name') ?? 'Reflex';
     this.saves.reflex.description = game.i18n.localize('VAGABOND.Saves.Reflex.description') ?? 'Avoid area effects and attacks';
-    
+    this.saves.reflex.statAbbr = `${dexAbbr}+${awrAbbr}`;
+
     this.saves.endure.label = game.i18n.localize('VAGABOND.Saves.Endure.name') ?? 'Endure';
     this.saves.endure.description = game.i18n.localize('VAGABOND.Saves.Endure.description') ?? 'Withstand poison and death';
-    
+    this.saves.endure.statAbbr = `${mitAbbr}+${mitAbbr}`;
+
     this.saves.will.label = game.i18n.localize('VAGABOND.Saves.Will.name') ?? 'Will';
     this.saves.will.description = game.i18n.localize('VAGABOND.Saves.Will.description') ?? 'Resist curses and enthrallment';
+    this.saves.will.statAbbr = `${rsnAbbr}+${preAbbr}`;
 
     // Process Skills
     for (const key in this.skills) {

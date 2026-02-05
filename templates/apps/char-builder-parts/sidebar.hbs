@@ -4,10 +4,16 @@
         <input type="text" class="search-input" placeholder="Search..." autocomplete="off">
         <button type="button" class="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
         {{#if (eq step 'perks')}}
-        {{#if hasAllowedPerksRestriction}}
-        <div class="perk-restriction-notice">
-            <i class="fas fa-info-circle"></i>
-            Perk selection limited by {{restrictionSource}}
+        {{#if grants}}
+        <div class="perk-grants-list">
+            {{#each grants as |grant|}}
+            <div class="grant-item {{#if grant.isActive}}active{{/if}} {{#if grant.isFulfilled}}fulfilled{{/if}}">
+                <span class="grant-label">{{grant.label}}</span>
+                {{#if grant.isFulfilled}}
+                <i class="fas fa-check-circle"></i>
+                {{/if}}
+            </div>
+            {{/each}}
         </div>
         {{/if}}
         <label class="show-all-checkbox">
@@ -56,7 +62,7 @@
             {{#if (eq @root.step 'perks')}}
                 {{!-- Filter perks based on prerequisites unless showAllPerks is enabled --}}
                 {{#if (or @root.showAllPerks opt.prerequisitesMet)}}
-                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#unless opt.prerequisitesMet}}not-qualified{{/unless}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#unless opt.prerequisitesMet}}not-qualified{{/unless}} {{#if opt.isGhosted}}ghosted{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
                     <img src="{{opt.img}}" width="32" height="32">
                     <div class="item-info">
                         <div class="name">{{opt.name}}</div>

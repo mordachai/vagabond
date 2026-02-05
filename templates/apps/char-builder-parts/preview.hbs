@@ -57,7 +57,7 @@
             <div class="preview-skills-grid saves-grid grid-3col">
                 {{#each statData.derived.saves}}
                     <div class="skill-item" title="{{this.tooltip}}" data-affected-by="{{#each this.affectedBy}}{{this}}{{#unless @last}} {{/unless}}{{/each}}">
-                        <span class="skill-name">{{this.label}}</span>
+                        <span class="skill-name">{{this.label}}{{#if this.statAbbr}} <span class="stat-abbr">[{{this.statAbbr}}]</span>{{/if}}</span>
                         <span class="skill-dots"></span>
                         <span class="skill-value" data-value="{{this.value}}">{{this.value}}</span>
                     </div>

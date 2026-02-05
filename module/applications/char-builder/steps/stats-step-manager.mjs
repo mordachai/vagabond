@@ -284,16 +284,16 @@ export class StatsStepManager extends BaseStepManager {
 
     // Get saves from the preview actor
     const savesAffectedBy = {
-      physical: ['might'],
+      endure: ['might'],
       reflex: ['dexterity', 'awareness'],
-      mental: ['reason', 'presence']
+      will: ['reason', 'presence']
     };
 
     const saves = Object.entries(previewActor.system.saves).map(([key, save]) => {
       return {
         key: key,
         label: save.label,
-        statAbbr: '', // Let the template decide or don't show
+        statAbbr: save.statAbbr || '',
         value: save.difficulty,
         tooltip: save.description,
         affectedBy: savesAffectedBy[key] || []
@@ -691,12 +691,18 @@ export class StatsStepManager extends BaseStepManager {
   }
 
   /**
-   * Randomize stats selection and optionally auto-assign
+   * Randomize stats selection and auto-assign with key stat priority
+   *
+   * Logic:
+   * - Roll 1d12 to select stat array
+   * - Sort values descending (highest first)
+   * - Assign highest value to the class's key stat
+   * - Assign remaining values in order: might, dex, awr, rsn, pre, luck (skipping key stat)
    */
-  async randomize(autoAssign = false) {
+  async randomize() {
     const statArrays = this._getStatArrays();
     const arrayIds = Object.keys(statArrays);
-    
+
     if (arrayIds.length === 0) {
       ui.notifications.warn('No stat arrays available');
       return;
@@ -718,42 +724,55 @@ export class StatsStepManager extends BaseStepManager {
       return;
     }
 
-    if (autoAssign) {
-      // Auto-assign in order: Might, Dexterity, Awareness, Reason, Presence, Luck
-      const statOrder = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
-      const values = [...selectedArray];
+    // Get key stat from selected class
+    const state = this.getCurrentState();
+    let keyStat = null;
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        if (classItem && classItem.system.keyStats && classItem.system.keyStats.length > 0) {
+          keyStat = classItem.system.keyStats[0]; // Use first key stat
+        }
+      } catch (error) {
+        console.warn('Failed to load class for key stats:', error);
+      }
+    }
 
-      const assignedStats = {};
+    // Sort values descending (highest first)
+    const values = [...selectedArray].sort((a, b) => b - a);
+
+    // Stat order: might, dexterity, awareness, reason, presence, luck
+    const statOrder = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
+
+    const assignedStats = {};
+
+    if (keyStat && statOrder.includes(keyStat)) {
+      // Assign highest value to key stat
+      assignedStats[keyStat] = values[0];
+
+      // Assign remaining values to other stats in order
+      let valueIndex = 1;
+      for (const stat of statOrder) {
+        if (stat !== keyStat) {
+          assignedStats[stat] = values[valueIndex];
+          valueIndex++;
+        }
+      }
+    } else {
+      // No key stat or invalid key stat - assign in order
       statOrder.forEach((stat, index) => {
         assignedStats[stat] = values[index];
       });
-
-      const updates = {
-        'selectedArrayId': selectedId,
-        'assignedStats': assignedStats,
-        'unassignedValues': [],
-        'selectedValue': null
-      };
-
-      this.stateManager.updateMultiple(updates);
-    } else {
-      // Just select array, player will assign manually
-      const updates = {
-        'selectedArrayId': selectedId,
-        'unassignedValues': [...selectedArray],
-        'assignedStats': {
-          might: null,
-          dexterity: null,
-          awareness: null,
-          reason: null,
-          presence: null,
-          luck: null
-        },
-        'selectedValue': null
-      };
-
-      this.stateManager.updateMultiple(updates);
     }
+
+    const updates = {
+      'selectedArrayId': selectedId,
+      'assignedStats': assignedStats,
+      'unassignedValues': [],
+      'selectedValue': null
+    };
+
+    this.stateManager.updateMultiple(updates);
   }
 
   /**

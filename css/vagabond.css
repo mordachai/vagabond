@@ -2636,6 +2636,50 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column .search-sticky .show-all-checkbox:hover {
   color: var(--vagabond-c-red);
 }
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: white;
+  border-radius: 3px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item .grant-label {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item i {
+  color: #28a745;
+  font-size: 14px;
+  margin-left: 8px;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.active {
+  background: rgba(0, 255, 0, 0.15);
+  border-left: 3px solid green;
+  font-weight: 600;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.active .grant-label {
+  color: var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.fulfilled {
+  opacity: 0.7;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.fulfilled .grant-label {
+  color: #666;
+  text-decoration: line-through;
+}
 .vagabond-builder .builder-body .selection-list-column .directory-list {
   flex: 1;
   overflow-y: auto;
@@ -2678,6 +2722,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified:hover {
   opacity: 0.7;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.ghosted {
+  opacity: 0.4;
+  filter: grayscale(70%);
+  cursor: not-allowed;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.ghosted .name {
+  color: #999;
+  font-style: italic;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.ghosted:hover {
+  opacity: 0.5;
+  background: rgba(0, 0, 0, 0.05);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item img {
   width: 48px;
@@ -3075,26 +3132,23 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 12px;
-  background: rgba(76, 175, 80, 0.15);
-  border: 2px solid #4caf50;
+  padding: 4px 8px;
+  border: 1px solid var(--vagabond-c-dark);
   border-radius: 6px;
 }
 .vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header .bonus-label {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #2e7d32;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header .bonus-label i {
   color: #4caf50;
-  font-size: 1.1rem;
+  font-size: 0.8rem;
 }
 .vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header .bonus-label .bonus-value {
-  color: #1b5e20;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 800;
 }
 .vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-source-label {
@@ -3889,11 +3943,26 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
+.tray-zone .tray-item-compact .tray-item-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
 .tray-zone .tray-item-compact .tray-name {
   flex: 1;
   font-weight: 600;
   font-size: 0.9rem;
   line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tray-zone .tray-item-compact .tray-grant-label {
+  font-size: 0.7rem;
+  color: #666;
+  font-style: italic;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

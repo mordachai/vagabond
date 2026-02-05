@@ -202,6 +202,58 @@
             color: $c-red;
           }
         }
+
+        .perk-grants-list {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          padding: 8px;
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 4px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+
+          .grant-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            background: white;
+            border-radius: 3px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+
+            .grant-label {
+              flex: 1;
+              font-weight: 500;
+              color: #333;
+            }
+
+            i {
+              color: #28a745;
+              font-size: 14px;
+              margin-left: 8px;
+            }
+
+            &.active {
+              background: rgba(0, 255, 0, 0.15);
+              border-left: 3px solid green;
+              font-weight: 600;
+
+              .grant-label {
+                color: $c-red;
+              }
+            }
+
+            &.fulfilled {
+              opacity: 0.7;
+
+              .grant-label {
+                color: #666;
+                text-decoration: line-through;
+              }
+            }
+          }
+        }
       }
 
       .directory-list {
@@ -258,6 +310,22 @@
 
           &:hover {
             opacity: 0.7;
+          }
+        }
+
+        &.ghosted {
+          opacity: 0.4;
+          filter: grayscale(70%);
+          cursor: not-allowed;
+
+          .name {
+            color: #999;
+            font-style: italic;
+          }
+
+          &:hover {
+            opacity: 0.5;
+            background: rgba(0, 0, 0, 0.05);
           }
         }
 
@@ -727,27 +795,24 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 8px 12px;
-          background: rgba(76, 175, 80, 0.15);
-          border: 2px solid #4caf50;
+          padding: 4px 8px;
+          border: 1px solid $c-dark;
           border-radius: 6px;
 
           .bonus-label {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
-            color: #2e7d32;
             display: flex;
             align-items: center;
             gap: 8px;
 
             i {
               color: #4caf50;
-              font-size: 1.1rem;
+              font-size: 0.8rem;
             }
 
             .bonus-value {
-              color: #1b5e20;
-              font-size: 1.2rem;
+              font-size: 0.9rem;
               font-weight: 800;
             }
           }
@@ -1702,11 +1767,28 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
+    .tray-item-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+
     .tray-name {
       flex: 1;
       font-weight: 600;
       font-size: 0.9rem;
       line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tray-grant-label {
+      font-size: 0.7rem;
+      color: #666;
+      font-style: italic;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

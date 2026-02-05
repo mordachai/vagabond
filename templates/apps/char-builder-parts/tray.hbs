@@ -56,7 +56,12 @@
                     {{#each trayData.perks as |item|}}
                         <div class="tray-item-compact {{#if item.isClassPerk}}from-class{{/if}}" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
-                            <span class="tray-name">{{item.name}}{{#if item.isClassPerk}} <i class="fas fa-star" title="From Class"></i>{{/if}}</span>
+                            <div class="tray-item-text">
+                                <span class="tray-name">{{item.name}}{{#if item.isClassPerk}} <i class="fas fa-star" title="From Class"></i>{{/if}}</span>
+                                {{#if item.grantLabel}}
+                                    <span class="tray-grant-label">{{item.grantLabel}}</span>
+                                {{/if}}
+                            </div>
                             {{#if item.canDelete}}
                                 <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
                                     <i class="fas fa-times"></i>
