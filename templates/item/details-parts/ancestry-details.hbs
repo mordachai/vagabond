@@ -119,8 +119,6 @@
                               <a class='grant-tag-remove' data-action='removeTraitSpell' data-trait-index='{{../index}}' data-spell-index='{{spellIndex}}'>
                                 <i class='fas fa-times'></i>
                               </a>
-                              {{! Hidden input for persistence }}
-                              <input type='hidden' name='system.traits.{{../index}}.requiredSpells.{{spellIndex}}' value='{{spell.uuid}}' />
                             </li>
                           {{/each}}
                         </ul>
@@ -158,8 +156,6 @@
                               <a class='grant-tag-remove' data-action='removeTraitPerk' data-trait-index='{{../index}}' data-perk-index='{{perkIndex}}'>
                                 <i class='fas fa-times'></i>
                               </a>
-                              {{! Hidden input for persistence }}
-                              <input type='hidden' name='system.traits.{{../index}}.allowedPerks.{{perkIndex}}' value='{{perk.uuid}}' />
                             </li>
                           {{/each}}
                         </ul>

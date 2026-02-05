@@ -108,8 +108,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeFeaturePerk: this._onRemoveFeaturePerk,
     },
     form: {
-      submitOnChange: true,   // Enabled to ensure edits are saved immediately
-      submitOnClose: true,
+      submitOnChange: false,   // Disabled to prevent constant redraws on every keystroke
+      submitOnClose: true,     // Auto-save when closing the sheet
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -855,8 +855,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             await this.item.update({
               'system.delivery.cost': defaults.cost,
               'system.delivery.increase': defaults.increase
-            });
-            // Form will auto-render due to submitOnChange
+            }, { render: false });
           }
         });
       }
@@ -879,6 +878,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     // --- REMOVED THE OLD EQUIPMENT GRIP LISTENER BLOCK HERE ---
     // The previous listener code was manual and buggy.
     // We now use static EVENTS and _onUpdateGrip below.
+
+    // Populate spell/perk dropdowns for grants system
+    if (this.item.type === 'ancestry' || this.item.type === 'class') {
+      GrantsHandlers.populateGrantsDropdowns(this);
+    }
   }
 
   /**************
@@ -1518,7 +1522,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const spells = [...(this.item.system.prerequisites?.spells || [])];
     spells[index] = value;
 
-    await this.item.update({ 'system.prerequisites.spells': spells });
+    await this.item.update({ 'system.prerequisites.spells': spells }, { render: false });
   }
 
   /**
@@ -1615,7 +1619,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
     if (resources[index]) {
       resources[index][field] = value;
-      await this.item.update({ 'system.prerequisites.resources': resources });
+      await this.item.update({ 'system.prerequisites.resources': resources }, { render: false });
     }
   }
 
@@ -2619,16 +2623,4 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     return GrantsHandlers.addFeaturePerk(this, event, target);
   }
 
-  /**
-   * Populate grants dropdowns after render
-   * @override
-   */
-  _onRender(context, options) {
-    super._onRender?.(context, options);
-
-    // Populate spell/perk dropdowns for grants system
-    if (this.item.type === 'ancestry' || this.item.type === 'class') {
-      GrantsHandlers.populateGrantsDropdowns(this);
-    }
-  }
 }

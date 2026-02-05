@@ -29,8 +29,8 @@ export class GrantsHandlers {
 
     traits[traitIndex].requiredSpells = [...currentSpells, spellUuid];
 
-    await itemSheet.item.update({ 'system.traits': traits });
-    ui.notifications.info('Spell added to trait');
+    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -58,8 +58,8 @@ export class GrantsHandlers {
 
     traits[traitIndex].allowedPerks = [...currentPerks, perkUuid];
 
-    await itemSheet.item.update({ 'system.traits': traits });
-    ui.notifications.info('Perk added to trait');
+    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -87,8 +87,8 @@ export class GrantsHandlers {
 
     features[featureIndex].requiredSpells = [...currentSpells, spellUuid];
 
-    await itemSheet.item.update({ 'system.levelFeatures': features });
-    ui.notifications.info('Spell added to feature');
+    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -116,8 +116,8 @@ export class GrantsHandlers {
 
     features[featureIndex].allowedPerks = [...currentPerks, perkUuid];
 
-    await itemSheet.item.update({ 'system.levelFeatures': features });
-    ui.notifications.info('Perk added to feature');
+    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -135,8 +135,8 @@ export class GrantsHandlers {
     spells.splice(spellIndex, 1);
     traits[traitIndex].requiredSpells = spells;
 
-    await itemSheet.item.update({ 'system.traits': traits });
-    ui.notifications.info('Spell removed from trait');
+    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -154,8 +154,8 @@ export class GrantsHandlers {
     perks.splice(perkIndex, 1);
     traits[traitIndex].allowedPerks = perks;
 
-    await itemSheet.item.update({ 'system.traits': traits });
-    ui.notifications.info('Perk removed from trait');
+    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -173,8 +173,8 @@ export class GrantsHandlers {
     spells.splice(spellIndex, 1);
     features[featureIndex].requiredSpells = spells;
 
-    await itemSheet.item.update({ 'system.levelFeatures': features });
-    ui.notifications.info('Spell removed from feature');
+    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
+    itemSheet.render();
   }
 
   /**
@@ -192,8 +192,8 @@ export class GrantsHandlers {
     perks.splice(perkIndex, 1);
     features[featureIndex].allowedPerks = perks;
 
-    await itemSheet.item.update({ 'system.levelFeatures': features });
-    ui.notifications.info('Perk removed from feature');
+    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
+    itemSheet.render();
   }
 
   /**

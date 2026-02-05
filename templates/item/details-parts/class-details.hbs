@@ -261,11 +261,9 @@
                                     <li class='grant-tag'>
                                       <img src='{{spell.img}}' alt='{{spell.name}}' class='grant-tag-icon' />
                                       <span class='grant-tag-label'>{{spell.name}}</span>
-                                      <a class='grant-tag-remove' data-action='removeFeatureSpell' data-feature-index='{{../feature.index}}' data-spell-index='{{spellIndex}}'>
+                                      <a class='grant-tag-remove' data-action='removeFeatureSpell' data-feature-index='{{../index}}' data-spell-index='{{spellIndex}}'>
                                         <i class='fas fa-times'></i>
                                       </a>
-                                      {{! Hidden input for persistence }}
-                                      <input type='hidden' name='system.levelFeatures.{{../feature.index}}.requiredSpells.{{spellIndex}}' value='{{spell.uuid}}' />
                                     </li>
                                   {{/each}}
                                 </ul>
@@ -300,11 +298,9 @@
                                     <li class='grant-tag'>
                                       <img src='{{perk.img}}' alt='{{perk.name}}' class='grant-tag-icon' />
                                       <span class='grant-tag-label'>{{perk.name}}</span>
-                                      <a class='grant-tag-remove' data-action='removeFeaturePerk' data-feature-index='{{../feature.index}}' data-perk-index='{{perkIndex}}'>
+                                      <a class='grant-tag-remove' data-action='removeFeaturePerk' data-feature-index='{{../index}}' data-perk-index='{{perkIndex}}'>
                                         <i class='fas fa-times'></i>
                                       </a>
-                                      {{! Hidden input for persistence }}
-                                      <input type='hidden' name='system.levelFeatures.{{../feature.index}}.allowedPerks.{{perkIndex}}' value='{{perk.uuid}}' />
                                     </li>
                                   {{/each}}
                                 </ul>
