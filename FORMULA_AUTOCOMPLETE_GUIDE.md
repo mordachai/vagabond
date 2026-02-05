@@ -103,7 +103,6 @@ Alternative paths:
 
 ### NPCs Only
 ```
-@cr                              → Challenge Rating
 @hd                              → Hit Dice
 @threatLevel                     → Threat Level
 ```
