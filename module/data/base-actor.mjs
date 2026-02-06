@@ -14,12 +14,14 @@ export default class VagabondActorBase extends foundry.abstract
         min: 0,
       }),
       max: new fields.NumberField({ ...requiredInteger, initial: 10 }),
-      bonus: new fields.StringField({
-        initial: '',
-        blank: true,
-        label: "HP Bonus",
-        hint: "Flat bonus to maximum HP. Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value * 2)"
-      }),
+      bonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "HP Bonus",
+          hint: "Flat bonus to maximum HP. Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value * 2)"
+        }
+      ),
     });
     schema.power = new fields.SchemaField({
       value: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),

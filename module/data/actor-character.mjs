@@ -49,127 +49,157 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Inventory system
     schema.inventory = new fields.SchemaField({
-      bonusSlots: new fields.StringField({
-        initial: '',
-        blank: true,
-        label: "Bonus Slots",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-      })
+      bonusSlots: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Bonus Slots",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        }
+      )
     });
 
     // Mana system for spellcasters
     schema.mana = new fields.SchemaField({
       current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       // NEW: Bonus field for Active Effects to add flat mana
-      bonus: new fields.StringField({
-        initial: '',
-        blank: true,
-        label: "Mana Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-      }),
+      bonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Mana Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        }
+      ),
       // Defined here so they appear in token structure, calculated in derived
       max: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       castingMax: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
-      castingMaxBonus: new fields.StringField({
-        initial: '',
-        blank: true,
-        label: "Casting Max Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-      }),
+      castingMaxBonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Casting Max Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        }
+      ),
     });
 
     // Speed system - with explicit bonus field for Active Effects
     schema.speed = new fields.SchemaField({
-      bonus: new fields.StringField({
-        initial: '',
-        blank: true,
-        label: "Speed Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-      }),
+      bonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Speed Bonus",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        }
+      ),
     });
 
     // Luck pool - tracks current luck separate from the Luck stat
     schema.currentLuck = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
     // Bonus luck from active effects
-    schema.bonusLuck = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Bonus Luck",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.bonusLuck = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Bonus Luck",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
     // Studied Die - tracks number of dice available to player
     schema.studiedDice = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
     // Armor Bonus from Active Effects
-    schema.armorBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Armor Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.armorBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Armor Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
     // Universal Bonuses - apply to all rolls/damage
-    schema.universalCheckBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Check Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.universalCheckBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Check Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
-    schema.universalDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.universalDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
-    schema.universalDamageDice = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Damage Dice"
-    });
+    schema.universalDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Damage Dice"
+      }
+    );
 
     // Separated Universal Damage Bonuses by Type
-    schema.universalWeaponDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Weapon Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.universalWeaponDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Weapon Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
-    schema.universalWeaponDamageDice = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Weapon Damage Dice"
-    });
+    schema.universalWeaponDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Weapon Damage Dice"
+      }
+    );
 
-    schema.universalSpellDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Spell Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.universalSpellDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Spell Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
-    schema.universalSpellDamageDice = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Spell Damage Dice"
-    });
+    schema.universalSpellDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Spell Damage Dice"
+      }
+    );
 
-    schema.universalAlchemicalDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Alchemical Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-    });
+    schema.universalAlchemicalDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Alchemical Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+      }
+    );
 
-    schema.universalAlchemicalDamageDice = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Alchemical Damage Dice"
-    });
+    schema.universalAlchemicalDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Alchemical Damage Dice"
+      }
+    );
 
     // Spell Damage Die Size - allows changing spell damage from d6 to d8/d10/d12
     schema.spellDamageDieSize = new fields.NumberField({
@@ -184,12 +214,14 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Bonuses container for various character bonuses
     schema.bonuses = new fields.SchemaField({
-      hpPerLevel: new fields.StringField({
-        initial: '',
-        blank: true,
-        label: "HP per Level Bonus",
-        hint: "Bonus HP granted per character level. Can be a number (e.g., 1) or formula (e.g., floor(@attributes.level.value / 2))"
-      })
+      hpPerLevel: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "HP per Level Bonus",
+          hint: "Bonus HP granted per character level. Can be a number (e.g., 1) or formula (e.g., floor(@attributes.level.value / 2))"
+        }
+      )
     });
 
     // Favor/Hinder system - toggle for roll modifiers
@@ -221,12 +253,14 @@ export default class VagabondCharacter extends VagabondActorBase {
             max: 12,
           }),
           // Bonus field for Active Effects to modify stats
-          bonus: new fields.StringField({
-            initial: '',
-            blank: true,
-            label: "Stat Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., floor(@attributes.level.value / 2))"
-          }),
+          bonus: new fields.ArrayField(
+            new fields.StringField({ blank: true }),
+            {
+              initial: [],
+              label: "Stat Bonus",
+              hint: "Can be a number (e.g., 1, 5) or formula (e.g., floor(@attributes.level.value / 2))"
+            }
+          ),
         });
         return obj;
       }, {})
@@ -235,28 +269,34 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Saving Throws system
     schema.saves = new fields.SchemaField({
       reflex: new fields.SchemaField({
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Reflex Save Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Reflex Save Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       endure: new fields.SchemaField({
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Endure Save Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Endure Save Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       will: new fields.SchemaField({
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Will Save Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Will Save Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       })
     });
 
@@ -266,130 +306,154 @@ export default class VagabondCharacter extends VagabondActorBase {
       arcana: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Arcana Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Arcana Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       craft: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Craft Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Craft Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       medicine: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Medicine Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Medicine Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
 
       // Might-based skills
       brawl: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Brawl Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Brawl Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
 
       // Dexterity-based skills
       finesse: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Finesse Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Finesse Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       sneak: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Sneak Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Sneak Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
 
       // Awareness-based skills
       detect: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Detect Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Detect Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       mysticism: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Mysticism Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Mysticism Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       survival: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Survival Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Survival Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
 
       // Presence-based skills
       influence: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Influence Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Influence Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       leadership: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Leadership Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Leadership Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       performance: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Performance Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Performance Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       })
     });
 
@@ -398,42 +462,50 @@ export default class VagabondCharacter extends VagabondActorBase {
       melee: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Melee Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Melee Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       brawl: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Brawl Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Brawl Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       finesse: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Finesse Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Finesse Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       }),
       ranged: new fields.SchemaField({
         trained: new fields.BooleanField({ initial: false }),
         stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.StringField({
-          initial: '',
-          blank: true,
-          label: "Ranged Bonus",
-          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-        })
+        bonus: new fields.ArrayField(
+          new fields.StringField({ blank: true }),
+          {
+            initial: [],
+            label: "Ranged Bonus",
+            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+          }
+        )
       })
     });
 
@@ -546,43 +618,43 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   /**
-   * Resets all bonus values to empty strings before active effects apply
+   * Resets all bonus values to empty arrays before active effects apply
    * @private
    */
   _resetBonuses() {
     // --- 1. Reset Flat Mechanics ---
-    this.inventory.bonusSlots = ''; // MUST reset - Active Effects will add to this
-    this.mana.bonus = '';
-    this.mana.castingMaxBonus = '';
-    this.speed.bonus = '';
-    this.armorBonus = '';
-    this.bonusLuck = '';
-    this.health.bonus = '';
-    this.bonuses.hpPerLevel = '';
+    this.inventory.bonusSlots = []; // MUST reset - Active Effects will add to this
+    this.mana.bonus = [];
+    this.mana.castingMaxBonus = [];
+    this.speed.bonus = [];
+    this.armorBonus = [];
+    this.bonusLuck = [];
+    this.health.bonus = [];
+    this.bonuses.hpPerLevel = [];
 
     // --- 2. Reset Universal Bonuses (from Active Effects) ---
     // NOTE: universalCheckBonus is NOT reset here - it's player-controlled and only resets after rolls
-    this.universalDamageBonus = '';
-    this.universalWeaponDamageBonus = '';
-    this.universalSpellDamageBonus = '';
-    this.universalAlchemicalDamageBonus = '';
+    this.universalDamageBonus = [];
+    this.universalWeaponDamageBonus = [];
+    this.universalSpellDamageBonus = [];
+    this.universalAlchemicalDamageBonus = [];
 
-    // Reset dice bonuses (these are strings)
-    this.universalDamageDice = '';
-    this.universalWeaponDamageDice = '';
-    this.universalSpellDamageDice = '';
-    this.universalAlchemicalDamageDice = '';
+    // Reset dice bonuses (these are arrays)
+    this.universalDamageDice = [];
+    this.universalWeaponDamageDice = [];
+    this.universalSpellDamageDice = [];
+    this.universalAlchemicalDamageDice = [];
 
     // Reset spell damage die size to default (keep as number)
     this.spellDamageDieSize = 6;
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
-    for (let s of Object.values(this.stats)) { s.bonus = ''; }
-    for (let s of Object.values(this.saves)) { s.bonus = ''; }
+    for (let s of Object.values(this.stats)) { s.bonus = []; }
+    for (let s of Object.values(this.saves)) { s.bonus = []; }
 
     // --- 4. Loop: Reset All Skill Bonuses ---
-    for (let s of Object.values(this.skills)) { s.bonus = ''; }
-    for (let s of Object.values(this.weaponSkills)) { s.bonus = ''; }
+    for (let s of Object.values(this.skills)) { s.bonus = []; }
+    for (let s of Object.values(this.weaponSkills)) { s.bonus = []; }
 
     // 5. Reset Defaults
     this.attributes.isSpellcaster = false;
@@ -600,13 +672,37 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   /**
-   * Evaluate a formula field that can contain either a simple number or a Roll formula.
+   * Evaluate a formula field that can contain either a simple number, a Roll formula, or an array of formulas.
+   * @param {string|number|Array<string>} formula - The formula(s) to evaluate (e.g., "1", "@attributes.level.value", or ["1", "@attributes.level.value"])
+   * @param {object} rollData - The roll data context (from getRollData())
+   * @returns {number} The evaluated result (sum of all formulas), or 0 if invalid
+   * @private
+   */
+  _evaluateFormulaField(formula, rollData) {
+    // Handle empty/null/undefined
+    if (!formula) return 0;
+
+    // If it's an array, evaluate each formula and sum the results
+    if (Array.isArray(formula)) {
+      let total = 0;
+      for (const f of formula) {
+        total += this._evaluateSingleFormula(f, rollData);
+      }
+      return total;
+    }
+
+    // Single formula (backward compatibility with old StringField data)
+    return this._evaluateSingleFormula(formula, rollData);
+  }
+
+  /**
+   * Evaluate a single formula string or number.
    * @param {string|number} formula - The formula to evaluate (e.g., "1", "@attributes.level.value")
    * @param {object} rollData - The roll data context (from getRollData())
    * @returns {number} The evaluated result, or 0 if invalid
    * @private
    */
-  _evaluateFormulaField(formula, rollData) {
+  _evaluateSingleFormula(formula, rollData) {
     // Handle empty/null/undefined
     if (!formula) return 0;
 

@@ -153,54 +153,70 @@ export default class VagabondNPC extends VagabondActorBase {
     });
 
     // Universal Damage Bonuses (NPCs don't get check bonus since they don't roll)
-    schema.universalDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
-    });
+    schema.universalDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+      }
+    );
 
-    schema.universalDamageDice = new fields.StringField({
-      initial: '',
-      blank: true
-    });
+    schema.universalDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: []
+      }
+    );
 
     // Separated Universal Damage Bonuses by Type (same as character)
-    schema.universalWeaponDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Weapon Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
-    });
+    schema.universalWeaponDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Weapon Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+      }
+    );
 
-    schema.universalWeaponDamageDice = new fields.StringField({
-      initial: '',
-      blank: true
-    });
+    schema.universalWeaponDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: []
+      }
+    );
 
-    schema.universalSpellDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Spell Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
-    });
+    schema.universalSpellDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Spell Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+      }
+    );
 
-    schema.universalSpellDamageDice = new fields.StringField({
-      initial: '',
-      blank: true
-    });
+    schema.universalSpellDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: []
+      }
+    );
 
-    schema.universalAlchemicalDamageBonus = new fields.StringField({
-      initial: '',
-      blank: true,
-      label: "Universal Alchemical Damage Bonus",
-      hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
-    });
+    schema.universalAlchemicalDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Alchemical Damage Bonus",
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+      }
+    );
 
-    schema.universalAlchemicalDamageDice = new fields.StringField({
-      initial: '',
-      blank: true
-    });
+    schema.universalAlchemicalDamageDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: []
+      }
+    );
 
     // Locked/unlocked mode toggle
     schema.locked = new fields.BooleanField({
@@ -324,13 +340,56 @@ export default class VagabondNPC extends VagabondActorBase {
   }
 
   /**
-   * Evaluate a formula field that can contain either a simple number or a Roll formula.
+   * Reset bonus fields before Active Effects apply
+   */
+  prepareBaseData() {
+    super.prepareBaseData();
+
+    // Reset universal damage bonuses
+    this.universalDamageBonus = [];
+    this.universalWeaponDamageBonus = [];
+    this.universalSpellDamageBonus = [];
+    this.universalAlchemicalDamageBonus = [];
+
+    // Reset dice bonuses
+    this.universalDamageDice = [];
+    this.universalWeaponDamageDice = [];
+    this.universalSpellDamageDice = [];
+    this.universalAlchemicalDamageDice = [];
+  }
+
+  /**
+   * Evaluate a formula field that can contain either a simple number, a Roll formula, or an array of formulas.
+   * @param {string|number|Array<string>} formula - The formula(s) to evaluate (e.g., "1", "@cr", or ["1", "@cr"])
+   * @param {object} rollData - The roll data context (from getRollData())
+   * @returns {number} The evaluated result (sum of all formulas), or 0 if invalid
+   * @private
+   */
+  _evaluateFormulaField(formula, rollData) {
+    // Handle empty/null/undefined
+    if (!formula) return 0;
+
+    // If it's an array, evaluate each formula and sum the results
+    if (Array.isArray(formula)) {
+      let total = 0;
+      for (const f of formula) {
+        total += this._evaluateSingleFormula(f, rollData);
+      }
+      return total;
+    }
+
+    // Single formula (backward compatibility with old StringField data)
+    return this._evaluateSingleFormula(formula, rollData);
+  }
+
+  /**
+   * Evaluate a single formula string or number.
    * @param {string|number} formula - The formula to evaluate (e.g., "1", "@cr")
    * @param {object} rollData - The roll data context (from getRollData())
    * @returns {number} The evaluated result, or 0 if invalid
    * @private
    */
-  _evaluateFormulaField(formula, rollData) {
+  _evaluateSingleFormula(formula, rollData) {
     // Handle empty/null/undefined
     if (!formula) return 0;
 
