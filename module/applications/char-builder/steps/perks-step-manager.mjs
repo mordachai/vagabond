@@ -418,16 +418,21 @@ export class PerksStepManager extends BaseStepManager {
         const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, allKnownSpells);
         const isSelected = selectedPerks.includes(perk.uuid) || classPerks.includes(perk.uuid);
 
+        // Check if explicitly allowed by grant (by direct UUID or compendium source)
+        const isGrantAllowed = allowedPerkUuids.has(perk.uuid) || 
+                              (perkItem._stats?.compendiumSource && allowedPerkUuids.has(perkItem._stats.compendiumSource));
+
         // Determine if perk is allowed by active grant
-        const isAllowedByActiveGrant = !shouldFilter || allowedPerkUuids.has(perk.uuid) || isSelected;
+        const isAllowedByActiveGrant = !shouldFilter || isGrantAllowed || isSelected;
 
         // If "Show All" is disabled, filter by prerequisites
-        if (!this.showAllPerks && !prereqCheck.met && !isSelected) {
+        // EXCEPTION: If the perk is explicitly allowed by the active grant, show it even if prerequisites aren't met
+        if (!this.showAllPerks && !prereqCheck.met && !isSelected && !isGrantAllowed) {
           continue;
         }
 
         // Mark perks as ghosted if not allowed by active grant (when Show All is enabled)
-        const isGhosted = this.showAllPerks && shouldFilter && !allowedPerkUuids.has(perk.uuid) && !isSelected;
+        const isGhosted = this.showAllPerks && shouldFilter && !isGrantAllowed && !isSelected;
 
         // If Show All is disabled and not allowed by active grant, skip
         if (!this.showAllPerks && !isAllowedByActiveGrant) {
@@ -442,6 +447,7 @@ export class PerksStepManager extends BaseStepManager {
           type: 'perk',
           selected: isSelected,
           prerequisitesMet: prereqCheck.met,
+          isGrantAllowed: isGrantAllowed,
           isClassPerk: classPerks.includes(perk.uuid),
           isGhosted: isGhosted
         });
@@ -610,46 +616,106 @@ export class PerksStepManager extends BaseStepManager {
     const prereqs = perkItem.system.prerequisites || {};
     const missing = [];
 
-    // Check if any prerequisites are set
+    // Check if any prerequisites are set (including OR groups)
     const hasAnyPrereqs =
       (prereqs.stats?.length > 0) ||
+      (prereqs.statOrGroups?.length > 0) ||
       (prereqs.trainedSkills?.length > 0) ||
+      (prereqs.trainedSkillOrGroups?.length > 0) ||
       (prereqs.spells?.length > 0) ||
+      (prereqs.spellOrGroups?.length > 0) ||
       prereqs.hasAnySpell ||
-      (prereqs.resources?.length > 0);
+      (prereqs.resources?.length > 0) ||
+      (prereqs.resourceOrGroups?.length > 0);
 
     if (!hasAnyPrereqs) {
       return { met: true, missing: [] };
     }
 
-    // Check stat prerequisites
+    // Check stat prerequisites (AND)
     if (prereqs.stats?.length > 0) {
       for (const statReq of prereqs.stats) {
-        const statValue = actor.system.stats?.[statReq.stat]?.value || 0;
+        // Fix: Use total value (base + bonus) instead of just base value
+        const statValue = actor.system.stats?.[statReq.stat]?.total || 0;
         if (statValue < statReq.value) {
-          missing.push(`${statReq.stat} ${statReq.value}+`);
+           const abbr = CONFIG.VAGABOND.statAbbreviations[statReq.stat];
+           const localizedAbbr = game.i18n.localize(abbr);
+           missing.push(`${localizedAbbr} ${statReq.value}+`);
         }
       }
     }
 
-    // Check skill prerequisites
+    // Check stat OR groups
+    if (prereqs.statOrGroups?.length > 0) {
+      for (const group of prereqs.statOrGroups) {
+        let groupMet = false;
+        const groupLabels = [];
+        for (const statReq of group) {
+           const statValue = actor.system.stats?.[statReq.stat]?.total || 0;
+           if (statValue >= statReq.value) {
+             groupMet = true;
+             break;
+           }
+           const abbr = CONFIG.VAGABOND.statAbbreviations[statReq.stat];
+           groupLabels.push(`${game.i18n.localize(abbr)} ${statReq.value}+`);
+        }
+        if (!groupMet) {
+          missing.push(`(${groupLabels.join(' or ')})`);
+        }
+      }
+    }
+
+    // Check skill prerequisites (AND)
     if (prereqs.trainedSkills?.length > 0) {
       const actorSkills = actor.system.skills || {};
+      const weaponSkills = actor.system.weaponSkills || {};
       for (const skill of prereqs.trainedSkills) {
-        if (!actorSkills[skill]?.trained) {
-          missing.push(`Skill: ${skill}`);
+        // Check both regular skills and weapon skills
+        const isTrained = actorSkills[skill]?.trained || weaponSkills[skill]?.trained;
+        if (!isTrained) {
+          const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
+          const skillLabel = CONFIG.VAGABOND.weaponSkills?.[capitalizedSkill] ||
+                            CONFIG.VAGABOND.skills?.[capitalizedSkill] ||
+                            skill;
+          missing.push(`Trained: ${game.i18n.localize(skillLabel)}`);
+        }
+      }
+    }
+
+    // Check skill OR groups
+    if (prereqs.trainedSkillOrGroups?.length > 0) {
+      const actorSkills = actor.system.skills || {};
+      const weaponSkills = actor.system.weaponSkills || {};
+      for (const group of prereqs.trainedSkillOrGroups) {
+        let groupMet = false;
+        const groupLabels = [];
+        for (const skill of group) {
+           const isTrained = actorSkills[skill]?.trained || weaponSkills[skill]?.trained;
+           if (isTrained) {
+             groupMet = true;
+             break;
+           }
+           const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
+           const skillLabel = CONFIG.VAGABOND.weaponSkills?.[capitalizedSkill] ||
+                             CONFIG.VAGABOND.skills?.[capitalizedSkill] ||
+                             skill;
+           groupLabels.push(game.i18n.localize(skillLabel));
+        }
+        if (!groupMet) {
+          missing.push(`Trained: (${groupLabels.join(' or ')})`);
         }
       }
     }
 
     // Check "has any spell" prerequisite
     if (prereqs.hasAnySpell && knownSpellUuids.length === 0) {
-      missing.push('Any spell');
+      missing.push(game.i18n.localize('VAGABOND.Item.Perk.HasAnySpell'));
     }
 
-    // Check specific spell prerequisites
+    // Check specific spell prerequisites (AND)
     if (prereqs.spells?.length > 0) {
       for (const spellUuid of prereqs.spells) {
+        if (!spellUuid) continue;
         if (!knownSpellUuids.includes(spellUuid)) {
           try {
             const spell = await fromUuid(spellUuid);
@@ -659,6 +725,29 @@ export class PerksStepManager extends BaseStepManager {
           }
         }
       }
+    }
+
+    // Check spell OR groups
+    if (prereqs.spellOrGroups?.length > 0) {
+       for (const group of prereqs.spellOrGroups) {
+         let groupMet = false;
+         const groupLabels = [];
+         for (const spellUuid of group) {
+           if (knownSpellUuids.includes(spellUuid)) {
+             groupMet = true;
+             break;
+           }
+           try {
+             const spell = await fromUuid(spellUuid);
+             groupLabels.push(spell?.name || 'Unknown');
+           } catch (error) {
+             groupLabels.push('Unknown Spell');
+           }
+         }
+         if (!groupMet) {
+           missing.push(`Spell: (${groupLabels.join(' or ')})`);
+         }
+       }
     }
 
     return {
@@ -690,9 +779,10 @@ export class PerksStepManager extends BaseStepManager {
 
     // Skill prerequisites
     if (prereqs.trainedSkills?.length > 0) {
-      const actorSkills = actor.system.skills || [];
+      const actorSkills = actor.system.skills || {};
+      const weaponSkills = actor.system.weaponSkills || {};
       const skillParts = prereqs.trainedSkills.map(skill => {
-        const isMet = actorSkills.includes(skill);
+        const isMet = actorSkills[skill]?.trained || weaponSkills[skill]?.trained;
         // Capitalize first letter to match en.json keys (e.g., "athletics" -> "Athletics")
         const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
         const skillName = game.i18n.localize(`VAGABOND.Skills.${capitalizedSkill}`);
@@ -876,7 +966,11 @@ export class PerksStepManager extends BaseStepManager {
       const previewActor = await this._createPreviewActor(state, allKnownSpells);
       const prereqCheck = await this._checkPerkPrerequisites(item, previewActor, allKnownSpells);
 
-      if (!prereqCheck.met) {
+      // Check if explicitly allowed by grant (by direct UUID or compendium source)
+      const isGrantAllowed = activeGrant.allowedPerks.includes(uuid) || 
+                            (item._stats?.compendiumSource && activeGrant.allowedPerks.includes(item._stats.compendiumSource));
+
+      if (!prereqCheck.met && !isGrantAllowed) {
         ui.notifications.warn(`Warning: Prerequisites not met - ${prereqCheck.missing.join(', ')}`);
         // Continue anyway - prerequisites are warnings, not requirements
       }
