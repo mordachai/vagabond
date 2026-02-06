@@ -62,15 +62,17 @@
             {{#if (eq @root.step 'perks')}}
                 {{!-- Filter perks based on prerequisites unless showAllPerks is enabled --}}
                 {{#if (or @root.showAllPerks opt.prerequisitesMet opt.isGrantAllowed)}}
-                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#unless opt.prerequisitesMet}}not-qualified{{/unless}} {{#if opt.isGhosted}}ghosted{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#unless opt.prerequisitesMet}}{{#unless opt.isGrantAllowed}}not-qualified{{/unless}}{{/unless}} {{#if opt.isGhosted}}ghosted{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
                     <img src="{{opt.img}}" width="32" height="32">
                     <div class="item-info">
                         <div class="name">{{opt.name}}</div>
                         {{#unless opt.prerequisitesMet}}
+                            {{#unless opt.isGrantAllowed}}
                             <div class="prereq-warning">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 {{localize 'VAGABOND.CharBuilder.PrerequisitesNotMet'}}
                             </div>
+                            {{/unless}}
                         {{/unless}}
                     </div>
                 </li>

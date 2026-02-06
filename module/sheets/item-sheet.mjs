@@ -13,6 +13,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 ) {
   constructor(options = {}) {
     super(options);
+    /** @type {Map<string, number>} Saved scroll positions by CSS selector for state preservation */
+    this._savedScrollPositions = new Map();
+    /** @type {Set<string>} Saved open <details> identifiers for state preservation */
+    this._savedOpenDetails = new Set();
   }
 
   /**
@@ -765,6 +769,46 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Capture UI state before re-render so it can be restored after.
+   * Saves scroll position and which <details> elements are open.
+   * @param {ApplicationRenderContext} context
+   * @param {RenderOptions} options
+   * @protected
+   */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    if (!this.element) return;
+
+    // Capture scroll positions from all scrollable containers.
+    // Multiple elements can be independently scrolled: .window-content,
+    // the active tab section, and inner content divs like .class-item-content
+    this._savedScrollPositions.clear();
+    const scrollSelectors = [
+      '.window-content',
+      '.tab.active',
+      '.class-item-content',
+      '.perk-details-wrapper',
+      '.ancestry-details-wrapper',
+    ];
+    for (const selector of scrollSelectors) {
+      const el = this.element.querySelector(selector);
+      if (el && el.scrollTop > 0) {
+        this._savedScrollPositions.set(selector, el.scrollTop);
+      }
+    }
+
+    // Save open <details> elements by their stable ID or fallback to index
+    this._savedOpenDetails.clear();
+    const allDetails = this.element.querySelectorAll('details');
+    allDetails.forEach((el, i) => {
+      if (el.open) {
+        const id = el.dataset.detailsId || `details-${i}`;
+        this._savedOpenDetails.add(id);
+      }
+    });
+  }
+
+  /**
    * Actions performed after any render of the Application.
    * Post-render steps are not awaited by the render process.
    * @param {ApplicationRenderContext} context      Prepared context data
@@ -773,6 +817,25 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   async _onRender(context, options) {
     await super._onRender(context, options);
+
+    // Restore <details> open state
+    if (this._savedOpenDetails.size > 0) {
+      const allDetails = this.element.querySelectorAll('details');
+      allDetails.forEach((el, i) => {
+        const id = el.dataset.detailsId || `details-${i}`;
+        if (this._savedOpenDetails.has(id)) {
+          el.open = true;
+        }
+      });
+    }
+
+    // Restore scroll positions for all captured containers
+    for (const [selector, scrollTop] of this._savedScrollPositions) {
+      const el = this.element.querySelector(selector);
+      if (el) {
+        el.scrollTop = scrollTop;
+      }
+    }
 
     // Set up drag and drop for the entire sheet
     const dragDrop = new DragDrop.implementation({
@@ -899,6 +962,31 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type === 'ancestry' || this.item.type === 'class') {
       GrantsHandlers.populateGrantsDropdowns(this);
     }
+
+    // Auto-save select, number input, and checkbox changes immediately.
+    // With submitOnChange: false, form field changes are only saved on close.
+    // This means any handler that triggers a re-render (e.g., adding a prerequisite)
+    // would lose unsaved dropdown/input changes. These listeners save field values
+    // immediately on change so they persist through re-renders.
+    // Text/string inputs are excluded to avoid saving on every keystroke.
+    const autoSaveFields = this.element.querySelectorAll(
+      'select[name], input[type="number"][name], input[type="checkbox"][name]'
+    );
+    autoSaveFields.forEach(field => {
+      field.addEventListener('change', async (e) => {
+        const name = e.target.name;
+        if (!name) return;
+        let value;
+        if (e.target.type === 'checkbox') value = e.target.checked;
+        else if (e.target.type === 'number') value = Number(e.target.value) || 0;
+        else value = e.target.value;
+        try {
+          await this.document.update({ [name]: value }, { render: false });
+        } catch (err) {
+          // Silently ignore - field may have been removed during re-render
+        }
+      });
+    });
   }
 
   /**************
