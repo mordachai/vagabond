@@ -427,6 +427,7 @@ Hooks.once('init', async function () {
   // Store original methods we'll wrap
   const originalPrepareTrackerContext = CombatTracker.prototype._prepareTrackerContext;
   const originalGetEntryContextOptions = CombatTracker.prototype._getEntryContextOptions;
+  const originalActivateListeners = CombatTracker.prototype.activateListeners;
 
   // Replace template
   console.log("Vagabond | Setting custom combat tracker template");
@@ -450,6 +451,12 @@ Hooks.once('init', async function () {
   console.log("Vagabond | Wrapping _getEntryContextOptions method");
   CombatTracker.prototype._getEntryContextOptions = function() {
     return VagabondCombatTracker.getEntryContextOptions.call(this, originalGetEntryContextOptions);
+  };
+
+  // Wrap activateListeners
+  console.log("Vagabond | Wrapping activateListeners method");
+  CombatTracker.prototype.activateListeners = function(html) {
+    return VagabondCombatTracker.activateListeners.call(this, originalActivateListeners, html);
   };
 
   console.log("Vagabond | Combat document class:", CONFIG.Combat.documentClass.name);

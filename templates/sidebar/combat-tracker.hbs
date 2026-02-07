@@ -75,6 +75,10 @@
                                 </button>
                             {{/if}}
                         </div>
+                        {{else}}
+                        <div class="initiative-box flexrow">
+                            <input type="number" class="initiative-input" value="{{turn.initiative}}" data-combatant-id="{{turn.id}}" placeholder="-" style="width: 30px; text-align: center; background: transparent; border: none; color: white; font-weight: bold; -moz-appearance: textfield;"/>
+                        </div>
                         {{/unless}}
                     </div>
                 </div>

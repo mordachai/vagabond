@@ -163,6 +163,15 @@ export class VagabondCombatTracker {
    */
   static getEntryContextOptions(wrapped) {
     const options = wrapped.call(this);
+    
+    // Filter out standard "Reroll Initiative" if rolls are hidden
+    if (game.settings.get('vagabond', 'hideInitiativeRoll')) {
+      const rerollIndex = options.findIndex(o => o.name === "COMBAT.Reroll");
+      if (rerollIndex > -1) {
+        options.splice(rerollIndex, 1);
+      }
+    }
+
     options.push(
       {
         name: "VAGABOND.Combat.Context.AddActivation",
@@ -199,5 +208,29 @@ export class VagabondCombatTracker {
       }
     );
     return options;
+  }
+
+  /**
+   * Wrapped activateListeners method
+   * @param {Function} wrapped - Original activateListeners method
+   * @param {jQuery} html - The rendered HTML
+   */
+  static activateListeners(wrapped, html) {
+    wrapped.call(this, html);
+
+    // Manual Initiative Input Handler
+    html.on('change', '.initiative-input', async (event) => {
+      event.preventDefault();
+      const input = event.currentTarget;
+      const combatantId = input.dataset.combatantId;
+      const value = Number(input.value);
+
+      if (this.viewed && combatantId && !isNaN(value)) {
+        await this.viewed.updateEmbeddedDocuments("Combatant", [{
+          _id: combatantId,
+          initiative: value
+        }]);
+      }
+    });
   }
 }

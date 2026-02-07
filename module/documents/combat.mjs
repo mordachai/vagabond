@@ -292,24 +292,33 @@ export class VagabondCombat extends Combat {
   /** @override */
   _sortCombatants(a, b) {
     // Check if we're using initiative rolls
-    const useInitiative = !game.settings.get('vagabond', 'hideInitiativeRoll');
+    const hideInitiative = game.settings.get('vagabond', 'hideInitiativeRoll');
 
-    // If using initiative and both have initiative scores, sort by initiative (descending)
-    if (useInitiative) {
-      const ia = typeof a.initiative === 'number' ? a.initiative : -Infinity;
-      const ib = typeof b.initiative === 'number' ? b.initiative : -Infinity;
+    // Get initiative values (handling null/undefined)
+    const ia = typeof a.initiative === 'number' ? a.initiative : null;
+    const ib = typeof b.initiative === 'number' ? b.initiative : null;
 
-      // If both have initiative, sort by initiative (highest first)
-      if (ia !== -Infinity && ib !== -Infinity) {
+    if (!hideInitiative) {
+      // STANDARD MODE (Rolled Initiative)
+      // Sort by initiative (DESCENDING - Highest First)
+      if (ia !== null && ib !== null) {
         return ib - ia;
       }
-
       // If only one has initiative, it goes first
-      if (ia !== -Infinity) return -1;
-      if (ib !== -Infinity) return 1;
+      if (ia !== null) return -1;
+      if (ib !== null) return 1;
+    } else {
+      // MANUAL MODE (Popcorn/Hidden Initiative)
+      // Sort by initiative (ASCENDING - Smallest First) if manually set
+      if (ia !== null && ib !== null) {
+        return ia - ib;
+      }
+      // If only one has initiative, it goes first
+      if (ia !== null) return -1;
+      if (ib !== null) return 1;
     }
 
-    // Fallback to disposition and name sorting (for popcorn initiative or when no initiative rolled)
+    // Fallback to disposition and name sorting
     const da = a.token?.disposition ?? -2;
     const db = b.token?.disposition ?? -2;
     if (da !== db) return db - da;
