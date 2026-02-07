@@ -49,6 +49,27 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
   /**
    * @override
+   * Capture UI state before re-render
+   */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+
+    // Guard: element doesn't exist on first render
+    if (!this.element) return;
+
+    // Capture accordion state
+    if (this._accordionStateManager) {
+      this._accordionStateManager.capture();
+    }
+
+    // Capture dropdown (details) open state
+    if (this.immunityHandler) {
+      this.immunityHandler.captureDropdownState();
+    }
+  }
+
+  /**
+   * @override
    * Post-render setup for NPC-specific listeners
    */
   async _onRender(context, options) {
@@ -63,6 +84,11 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     } else {
       // Restore accordion state after render
       this._accordionStateManager.restore();
+    }
+
+    // Restore dropdown state after render
+    if (this.immunityHandler) {
+      this.immunityHandler.restoreDropdownState();
     }
 
     // Setup immunity handler listeners for checkboxes

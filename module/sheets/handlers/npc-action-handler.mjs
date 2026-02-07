@@ -23,7 +23,7 @@ export class NPCActionHandler {
   async addAction(event, target) {
     event.preventDefault();
 
-    const actions = this.actor.system.actions || [];
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
     actions.push({
       name: '',
       note: '',
@@ -47,7 +47,7 @@ export class NPCActionHandler {
     event.preventDefault();
 
     const index = parseInt(target.dataset.actionIndex);
-    const actions = this.actor.system.actions || [];
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
 
     actions.splice(index, 1);
 
@@ -81,7 +81,7 @@ export class NPCActionHandler {
   async addAbility(event, target) {
     event.preventDefault();
 
-    const abilities = this.actor.system.abilities || [];
+    const abilities = foundry.utils.deepClone(this.actor.system.abilities || []);
     abilities.push({
       name: '',
       description: '',
@@ -99,7 +99,7 @@ export class NPCActionHandler {
     event.preventDefault();
 
     const index = parseInt(target.dataset.abilityIndex);
-    const abilities = this.actor.system.abilities || [];
+    const abilities = foundry.utils.deepClone(this.actor.system.abilities || []);
 
     abilities.splice(index, 1);
 

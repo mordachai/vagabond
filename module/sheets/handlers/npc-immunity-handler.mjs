@@ -21,14 +21,12 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const damageType = target.dataset.damageType;
 
-    const immunities = this.actor.system.immunities || [];
+    const immunities = [...(this.actor.system.immunities || [])];
     const index = immunities.indexOf(damageType);
 
     if (index > -1) {
-      // Remove immunity
       immunities.splice(index, 1);
     } else {
-      // Add immunity
       immunities.push(damageType);
     }
 
@@ -44,7 +42,7 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const immunity = target.dataset.immunity;
 
-    const immunities = this.actor.system.immunities || [];
+    const immunities = [...(this.actor.system.immunities || [])];
     const index = immunities.indexOf(immunity);
 
     if (index > -1) {
@@ -62,14 +60,12 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const damageType = target.dataset.damageType;
 
-    const weaknesses = this.actor.system.weaknesses || [];
+    const weaknesses = [...(this.actor.system.weaknesses || [])];
     const index = weaknesses.indexOf(damageType);
 
     if (index > -1) {
-      // Remove weakness
       weaknesses.splice(index, 1);
     } else {
-      // Add weakness
       weaknesses.push(damageType);
     }
 
@@ -85,7 +81,7 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const weakness = target.dataset.weakness;
 
-    const weaknesses = this.actor.system.weaknesses || [];
+    const weaknesses = [...(this.actor.system.weaknesses || [])];
     const index = weaknesses.indexOf(weakness);
 
     if (index > -1) {
@@ -103,14 +99,12 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const condition = target.dataset.condition;
 
-    const statusImmunities = this.actor.system.statusImmunities || [];
+    const statusImmunities = [...(this.actor.system.statusImmunities || [])];
     const index = statusImmunities.indexOf(condition);
 
     if (index > -1) {
-      // Remove status immunity
       statusImmunities.splice(index, 1);
     } else {
-      // Add status immunity
       statusImmunities.push(condition);
     }
 
@@ -126,7 +120,7 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const status = target.dataset.status;
 
-    const statusImmunities = this.actor.system.statusImmunities || [];
+    const statusImmunities = [...(this.actor.system.statusImmunities || [])];
     const index = statusImmunities.indexOf(status);
 
     if (index > -1) {
@@ -144,14 +138,12 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const speedType = target.dataset.speedType;
 
-    const speedTypes = this.actor.system.speedTypes || [];
+    const speedTypes = [...(this.actor.system.speedTypes || [])];
     const index = speedTypes.indexOf(speedType);
 
     if (index > -1) {
-      // Remove speed type
       speedTypes.splice(index, 1);
     } else {
-      // Add speed type
       speedTypes.push(speedType);
     }
 
@@ -167,7 +159,7 @@ export class NPCImmunityHandler {
     event.preventDefault();
     const speedType = target.dataset.type;
 
-    const speedTypes = this.actor.system.speedTypes || [];
+    const speedTypes = [...(this.actor.system.speedTypes || [])];
     const index = speedTypes.indexOf(speedType);
 
     if (index > -1) {
@@ -223,107 +215,55 @@ export class NPCImmunityHandler {
   }
 
   /**
-   * Setup event listeners for immunity checkboxes
+   * Setup event listeners for immunity checkboxes and dropdown toggle
    */
   setupListeners() {
-    // Handle immunities dropdown
-    const immunitiesDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.immunities"]');
-    if (immunitiesDropdown) {
-      const checkboxes = immunitiesDropdown.querySelectorAll('input[type="checkbox"]');
+    // All dropdown configs: selector → system field name
+    const dropdownConfigs = [
+      { selector: 'system.immunities', field: 'system.immunities' },
+      { selector: 'system.weaknesses', field: 'system.weaknesses' },
+      { selector: 'system.statusImmunities', field: 'system.statusImmunities' },
+      { selector: 'system.speedTypes', field: 'system.speedTypes' },
+    ];
+
+    for (const { selector, field } of dropdownConfigs) {
+      const dropdown = this.sheet.element.querySelector(`.npc-immunity-dropdown[data-save-target="${selector}"]`);
+      if (!dropdown) continue;
+
+      // Checkbox changes save silently (no re-render) so dropdown stays open
+      const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
       checkboxes.forEach((checkbox) => {
         checkbox.addEventListener('change', async (event) => {
           const value = event.target.value;
-          const immunities = [...(this.actor.system.immunities || [])];
+          const arr = [...(foundry.utils.getProperty(this.actor, field) || [])];
 
           if (event.target.checked) {
-            if (!immunities.includes(value)) {
-              immunities.push(value);
-            }
+            if (!arr.includes(value)) arr.push(value);
           } else {
-            const index = immunities.indexOf(value);
-            if (index > -1) {
-              immunities.splice(index, 1);
-            }
+            const index = arr.indexOf(value);
+            if (index > -1) arr.splice(index, 1);
           }
 
-          await this.actor.update({ 'system.immunities': immunities });
+          await this.actor.update({ [field]: arr }, { render: false });
         });
+      });
+
+      // When the dropdown closes, re-render to update the tags display
+      dropdown.addEventListener('toggle', (event) => {
+        if (!dropdown.open) {
+          this.sheet.render(false);
+        }
       });
     }
 
-    // Handle weaknesses dropdown
-    const weaknessesDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.weaknesses"]');
-    if (weaknessesDropdown) {
-      const checkboxes = weaknessesDropdown.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', async (event) => {
-          const value = event.target.value;
-          const weaknesses = [...(this.actor.system.weaknesses || [])];
-
-          if (event.target.checked) {
-            if (!weaknesses.includes(value)) {
-              weaknesses.push(value);
-            }
-          } else {
-            const index = weaknesses.indexOf(value);
-            if (index > -1) {
-              weaknesses.splice(index, 1);
-            }
-          }
-
-          await this.actor.update({ 'system.weaknesses': weaknesses });
-        });
-      });
-    }
-
-    // Handle status immunities dropdown
-    const statusDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.statusImmunities"]');
-    if (statusDropdown) {
-      const checkboxes = statusDropdown.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', async (event) => {
-          const value = event.target.value;
-          const statusImmunities = [...(this.actor.system.statusImmunities || [])];
-
-          if (event.target.checked) {
-            if (!statusImmunities.includes(value)) {
-              statusImmunities.push(value);
-            }
-          } else {
-            const index = statusImmunities.indexOf(value);
-            if (index > -1) {
-              statusImmunities.splice(index, 1);
-            }
-          }
-
-          await this.actor.update({ 'system.statusImmunities': statusImmunities });
-        });
-      });
-    }
-
-    // Handle speed types dropdown
-    const speedTypesDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
-    if (speedTypesDropdown) {
-      const checkboxes = speedTypesDropdown.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', async (event) => {
-          const value = event.target.value;
-          const speedTypes = [...(this.actor.system.speedTypes || [])];
-
-          if (event.target.checked) {
-            if (!speedTypes.includes(value)) {
-              speedTypes.push(value);
-            }
-          } else {
-            const index = speedTypes.indexOf(value);
-            if (index > -1) {
-              speedTypes.splice(index, 1);
-            }
-          }
-
-          await this.actor.update({ 'system.speedTypes': speedTypes });
-        });
-      });
-    }
+    // Close open dropdowns when clicking outside them
+    this.sheet.element.addEventListener('pointerdown', (event) => {
+      const openDropdowns = this.sheet.element.querySelectorAll('.npc-immunity-dropdown[open]');
+      for (const dropdown of openDropdowns) {
+        if (!dropdown.contains(event.target)) {
+          dropdown.removeAttribute('open');
+        }
+      }
+    });
   }
 }
