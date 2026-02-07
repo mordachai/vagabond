@@ -1002,12 +1002,26 @@
         "AddActivation": "Add Activation",
         "RemoveActivation": "Remove Activation",
         "UndoUse": "Undo Use"
+      },
+      "Actions": {
+        "ToggleVis": "Toggle Visibility",
+        "ToggleDead": "Toggle Defeated",
+        "PingCombatant": "Ping Combatant",
+        "DetectRoll": "Roll Detect Skill",
+        "InitiativeRoll": "Roll Initiative"
       }
     },
     "EncounterSettings": {
       "Title": "Encounter Settings",
       "Description": "Configure how combat encounters are displayed and managed.",
       "GeneralSettings": "General Settings",
+      "Factions": {
+        "Title": "Faction Titles",
+        "Friendly": "Friendly Faction Title",
+        "Neutral": "Neutral Faction Title",
+        "Hostile": "Hostile Faction Title",
+        "Secret": "Secret Faction Title"
+      },
       "HideInitiativeRoll": {
         "Name": "Hide Initiative Roll",
         "Hint": "Hide the initiative button in the combat tracker. Vagabond uses popcorn initiative and typically doesn't require traditional initiative rolls."

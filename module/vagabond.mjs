@@ -206,6 +206,43 @@ function registerGameSettings() {
     requiresReload: false
   });
 
+  // Setting 12b: Faction Titles
+  game.settings.register('vagabond', 'factionFriendly', {
+    name: 'VAGABOND.EncounterSettings.Factions.Friendly',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'Heroes',
+    requiresReload: false
+  });
+
+  game.settings.register('vagabond', 'factionNeutral', {
+    name: 'VAGABOND.EncounterSettings.Factions.Neutral',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'Neutrals',
+    requiresReload: false
+  });
+
+  game.settings.register('vagabond', 'factionHostile', {
+    name: 'VAGABOND.EncounterSettings.Factions.Hostile',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'NPCs',
+    requiresReload: false
+  });
+
+  game.settings.register('vagabond', 'factionSecret', {
+    name: 'VAGABOND.EncounterSettings.Factions.Secret',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'Secret',
+    requiresReload: false
+  });
+
   // Setting 13: Encounter Settings Button (Menu)
   game.settings.registerMenu('vagabond', 'encounterSettingsMenu', {
     name: 'VAGABOND.Settings.encounterSettings.name',
@@ -399,7 +436,8 @@ Hooks.once('init', async function () {
   console.log("Vagabond | Adding custom combat tracker actions");
   Object.assign(CombatTracker.DEFAULT_OPTIONS.actions, {
     activate: VagabondCombatTracker.onActivate,
-    deactivate: VagabondCombatTracker.onDeactivate
+    deactivate: VagabondCombatTracker.onDeactivate,
+    rollDetect: VagabondCombatTracker.onRollDetect
   });
 
   // Wrap _prepareTrackerContext (NOT _prepareContext!)
