@@ -138,6 +138,12 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@attributes.size', label: 'Size Category' },
       { value: '@attributes.beingType', label: 'Being Type' },
 
+      // Bonuses
+      { value: '@bonuses.spellManaCostReduction', label: 'Spell Mana Cost Reduction' },
+      { value: '@bonuses.deliveryManaCostReduction', label: 'Delivery Mana Cost Reduction' },
+      { value: '@spellDamageDieSizeBonus', label: 'Spell Damage Die Size Bonus' },
+      { value: '@spellDamageDieSize', label: 'Final Spell Damage Die Size' },
+
       // Stats (6 Core Stats) - Base Values
       { value: '@might.value', label: 'Might (Base Value)' },
       { value: '@might.total', label: 'Might (Total with Bonuses)' },

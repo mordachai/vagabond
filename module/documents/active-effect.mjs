@@ -230,6 +230,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.currentLuck': 'Current Luck Pool',
       'system.studiedDice': 'Studied Dice Pool',
       'system.bonuses.hpPerLevel': 'Bonus: HP Per Level',
+      'system.bonuses.spellManaCostReduction': 'Bonus: Spell Mana Cost Reduction',
+      'system.bonuses.deliveryManaCostReduction': 'Bonus: Delivery Mana Cost Reduction',
 
       // -- Universal Bonuses --
       'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
@@ -243,7 +245,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.universalSpellDamageDice': 'Universal: Spell Damage (Dice Bonus)',
       'system.universalAlchemicalDamageBonus': 'Universal: Alchemical Damage (Flat Bonus)',
       'system.universalAlchemicalDamageDice': 'Universal: Alchemical Damage (Dice Bonus)',
-      'system.spellDamageDieSize': 'Spell: Damage Die Size (e.g., 6 for d6, 8 for d8)',
+      'system.spellDamageDieSizeBonus': 'Spell: Damage Die Size Bonus (Adds to d6)',
+      'system.spellDamageDieSize': 'Spell: Final Damage Die Size (Derived)',
 
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',

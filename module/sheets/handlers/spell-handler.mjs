@@ -80,9 +80,15 @@ export class SpellHandler {
     const fxCost = state.useFx && hasDamage ? 1 : 0;
 
     // Delivery base cost
-    const deliveryBaseCost = state.deliveryType
+    let deliveryBaseCost = state.deliveryType
       ? CONFIG.VAGABOND.deliveryDefaults[state.deliveryType].cost
       : 0;
+
+    // Apply delivery mana cost reduction bonus from actor
+    if (deliveryBaseCost > 0) {
+      const deliveryReduction = this.actor.system.bonuses?.deliveryManaCostReduction || 0;
+      deliveryBaseCost = Math.max(0, deliveryBaseCost - deliveryReduction);
+    }
 
     // Delivery increase cost
     const increasePerStep = state.deliveryType
@@ -90,7 +96,11 @@ export class SpellHandler {
       : 0;
     const deliveryIncreaseCost = state.deliveryIncrease * increasePerStep;
 
-    const totalCost = damageCost + fxCost + deliveryBaseCost + deliveryIncreaseCost;
+    let totalCost = damageCost + fxCost + deliveryBaseCost + deliveryIncreaseCost;
+
+    // Apply total spell mana cost reduction bonus from actor
+    const spellReduction = this.actor.system.bonuses?.spellManaCostReduction || 0;
+    totalCost = Math.max(0, totalCost - spellReduction);
 
     return { damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, totalCost };
   }

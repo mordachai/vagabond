@@ -457,8 +457,9 @@ export class VagabondDamageHelper {
     // Allow typeless damage ("-") - only skip if there are no damage dice at all
     if (!spellState.damageDice || spellState.damageDice <= 0) return null;
 
-    // Determine die size: spell override > actor default (6)
-    const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
+    // Determine die size: base (spell override or default 6) + actor bonus
+    const baseDieSize = spell.system.damageDieSize || 6;
+    const dieSize = baseDieSize + (actor.system.spellDamageDieSizeBonus || 0);
     let damageFormula = `${spellState.damageDice}d${dieSize}`;
 
     // Add stat bonus on critical hit (positive or negative)

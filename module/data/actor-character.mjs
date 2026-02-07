@@ -201,15 +201,24 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
-    // Spell Damage Die Size - allows changing spell damage from d6 to d8/d10/d12
+    // Spell Damage Die Size Bonus - allows increasing spell damage from d6 to d8/d10/d12
+    schema.spellDamageDieSizeBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Spell Damage Die Size Bonus",
+        hint: "Increases the base d6 die size. +2 for d8, +4 for d10, etc."
+      }
+    );
+
+    // Spell Damage Die Size - derived value
     schema.spellDamageDieSize = new fields.NumberField({
       ...requiredInteger,
       initial: 6,
       min: 4,
-      max: 20,
-      label: "Spell Damage Die Size",
-      hint: "Base die size for spell damage (e.g., 6 for d6, 8 for d8)"
+      max: 20
     });
+
     // ---------------------
 
     // Bonuses container for various character bonuses
@@ -220,6 +229,22 @@ export default class VagabondCharacter extends VagabondActorBase {
           initial: [],
           label: "HP per Level Bonus",
           hint: "Bonus HP granted per character level. Can be a number (e.g., 1) or formula (e.g., floor(@attributes.level.value / 2))"
+        }
+      ),
+      spellManaCostReduction: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Spell Mana Cost Reduction",
+          hint: "Reduces the total mana cost of spells. Can be a number or formula."
+        }
+      ),
+      deliveryManaCostReduction: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Delivery Mana Cost Reduction",
+          hint: "Reduces the delivery portion of spell mana cost. Can be a number or formula."
         }
       )
     });
@@ -631,6 +656,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonusLuck = [];
     this.health.bonus = [];
     this.bonuses.hpPerLevel = [];
+    this.bonuses.spellManaCostReduction = [];
+    this.bonuses.deliveryManaCostReduction = [];
 
     // --- 2. Reset Universal Bonuses (from Active Effects) ---
     // NOTE: universalCheckBonus is NOT reset here - it's player-controlled and only resets after rolls
@@ -645,8 +672,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalSpellDamageDice = [];
     this.universalAlchemicalDamageDice = [];
 
-    // Reset spell damage die size to default (keep as number)
-    this.spellDamageDieSize = 6;
+    // Reset spell damage die size bonus (evaluated in derived data)
+    this.spellDamageDieSizeBonus = [];
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
     for (let s of Object.values(this.stats)) { s.bonus = []; }
@@ -755,6 +782,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.health.bonus = this._evaluateFormulaField(this.health.bonus, rollData);
     this.inventory.bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
+    this.bonuses.spellManaCostReduction = this._evaluateFormulaField(this.bonuses.spellManaCostReduction, rollData);
+    this.bonuses.deliveryManaCostReduction = this._evaluateFormulaField(this.bonuses.deliveryManaCostReduction, rollData);
+    this.spellDamageDieSizeBonus = this._evaluateFormulaField(this.spellDamageDieSizeBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
     // are NOT evaluated here - they're done inline in prepareDerivedData
@@ -799,6 +829,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
     // Ensure it's always a boolean
     this.attributes.isSpellcaster = Boolean(this.attributes.isSpellcaster);
+
+    // Calculate final spell damage die size
+    this.spellDamageDieSize = 6 + (this.spellDamageDieSizeBonus || 0);
 
     // ------------------------------------------------------------------
     // Calculate Max HP
