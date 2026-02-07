@@ -558,9 +558,8 @@ export class VagabondItem extends Item {
     }
 
     // Check critical - ONLY the d20 result, not including favor/hinder
-    // ✅ CRITICAL: Use critNumber from rollData (which includes item effects)
-    // This allows "Keen" weapons to crit on 19-20 instead of just 20
-    const critNumber = rollData.critNumber || 20;
+    // ✅ CRITICAL: Use type-specific crit threshold from rollData
+    const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, weaponSkillKey);
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     const isCritical = forceCritical || (d20Result >= critNumber);
@@ -570,6 +569,7 @@ export class VagabondItem extends Item {
       difficulty,
       isHit,
       isCritical,
+      critNumber, // Pass used threshold for display/debugging
       weaponSkill,
       weaponSkillKey,
       favorHinder: effectiveFavorHinder, // Use modified favor/hinder (includes target's modifier)
@@ -593,6 +593,19 @@ export class VagabondItem extends Item {
     }
 
     let damageFormula = this.system.currentDamage;
+
+    // Apply specific die size bonus
+    const weaponSkillKey = this.system.weaponSkill;
+    const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
+    
+    if (dieSizeBonus !== 0 && damageFormula.includes('d')) {
+      // Logic: If formula is "2d6", and bonus is +2, it should become "2d8"
+      // We parse the formula (e.g. "2d6+1") and replace the dX part
+      damageFormula = damageFormula.replace(/(\d*)d(\d+)/, (match, count, size) => {
+        const newSize = parseInt(size) + dieSizeBonus;
+        return `${count}d${newSize}`;
+      });
+    }
 
     // Add stat bonus on critical hit (positive or negative)
     if (isCritical && statKey) {

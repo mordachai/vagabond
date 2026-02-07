@@ -25,6 +25,10 @@ export class EncounterSettings extends FormApplication {
       defaultActivationPoints: game.settings.get('vagabond', 'defaultActivationPoints'),
       initiativeFormula: game.settings.get('vagabond', 'initiativeFormula'),
       npcInitiativeFormula: game.settings.get('vagabond', 'npcInitiativeFormula'),
+      factionFriendly: game.settings.get('vagabond', 'factionFriendly'),
+      factionNeutral: game.settings.get('vagabond', 'factionNeutral'),
+      factionHostile: game.settings.get('vagabond', 'factionHostile'),
+      factionSecret: game.settings.get('vagabond', 'factionSecret'),
     };
   }
 
@@ -38,6 +42,10 @@ export class EncounterSettings extends FormApplication {
     const defaultActivationPoints = parseInt(formData.defaultActivationPoints) || 2;
     const initiativeFormula = formData.initiativeFormula?.trim() || '1d20 + @dexterity.value + @awareness.value';
     const npcInitiativeFormula = formData.npcInitiativeFormula?.trim() || '1d20 + ceil(@speed / 10)';
+    const factionFriendly = formData.factionFriendly?.trim() || 'Heroes';
+    const factionNeutral = formData.factionNeutral?.trim() || 'Neutrals';
+    const factionHostile = formData.factionHostile?.trim() || 'NPCs';
+    const factionSecret = formData.factionSecret?.trim() || 'Secret';
 
     // Update settings
     await game.settings.set('vagabond', 'hideInitiativeRoll', hideInitiativeRoll);
@@ -45,6 +53,10 @@ export class EncounterSettings extends FormApplication {
     await game.settings.set('vagabond', 'defaultActivationPoints', defaultActivationPoints);
     await game.settings.set('vagabond', 'initiativeFormula', initiativeFormula);
     await game.settings.set('vagabond', 'npcInitiativeFormula', npcInitiativeFormula);
+    await game.settings.set('vagabond', 'factionFriendly', factionFriendly);
+    await game.settings.set('vagabond', 'factionNeutral', factionNeutral);
+    await game.settings.set('vagabond', 'factionHostile', factionHostile);
+    await game.settings.set('vagabond', 'factionSecret', factionSecret);
 
     // Update existing combatants in active combats with new activation point settings
     if (game.combats && game.combats.size > 0) {

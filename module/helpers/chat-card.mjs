@@ -115,8 +115,7 @@ export class VagabondChatCard {
   /* Static Helpers                              */
   /* -------------------------------------------- */
 
-  static isRollCritical(roll, actor) {
-    const critNumber = actor?.system?.critNumber || 20;
+  static isRollCritical(roll, critNumber = 20) {
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     return d20Result >= critNumber;
@@ -498,7 +497,11 @@ export class VagabondChatCard {
     }
 
     // Check if critical
-    const isCritical = VagabondChatCard.isRollCritical(roll, actor);
+    // For skills, check if it's a weapon skill key to apply type-specific crit bonus
+    const critType = type === 'skill' && ['melee', 'ranged', 'brawl', 'finesse'].includes(key) ? key : null;
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+    const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
+    const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
 
     // Build roll data
     const rollData = {

@@ -50,15 +50,19 @@
                     </div>
                     <div class="row-2 flexrow operation-controls">
                         {{#if ../../user.isGM}}
-                        <button type="button" class="combatant-control icon-only {{#if turn.hidden}}active{{/if}}" aria-label="{{localize 'COMBAT.ToggleVis'}}" data-action="toggleHidden">
+                        <button type="button" class="combatant-control icon-only {{#if turn.hidden}}active{{/if}}" aria-label="{{localize 'VAGABOND.Combat.Actions.ToggleVis'}}" title="{{localize 'VAGABOND.Combat.Actions.ToggleVis'}}" data-action="toggleHidden">
                             <i class="fas fa-eye-slash"></i>
                         </button>
-                        <button type="button" class="combatant-control icon-only {{#if turn.defeated}}active{{/if}}" aria-label="{{localize 'COMBAT.ToggleDead'}}" data-action="toggleDefeated">
+                        <button type="button" class="combatant-control icon-only {{#if turn.defeated}}active{{/if}}" aria-label="{{localize 'VAGABOND.Combat.Actions.ToggleDead'}}" title="{{localize 'VAGABOND.Combat.Actions.ToggleDead'}}" data-action="toggleDefeated">
                             <i class="fas fa-skull"></i>
                         </button>
                         {{/if}}
-                        <button type="button" class="combatant-control icon-only" aria-label="{{localize 'COMBAT.PingCombatant'}}" data-action="pingCombatant">
+                        <button type="button" class="combatant-control icon-only" aria-label="{{localize 'VAGABOND.Combat.Actions.PingCombatant'}}" title="{{localize 'VAGABOND.Combat.Actions.PingCombatant'}}" data-action="pingCombatant">
                             <i class="fas fa-bullseye"></i>
+                        </button>
+
+                        <button type="button" class="combatant-control icon-only" aria-label="{{localize 'VAGABOND.Combat.Actions.DetectRoll'}}" title="{{localize 'VAGABOND.Combat.Actions.DetectRoll'}}" data-action="rollDetect">
+                            <i class="fa-regular fa-triangle-exclamation"></i>
                         </button>
 
                         {{#unless @root.hideInitiativeRoll}}
@@ -66,10 +70,14 @@
                             {{#if turn.initiative includeZero=true}}
                                 <span class="init-value">{{turn.initiative}}</span>
                             {{else}}
-                                <button type="button" class="combatant-control icon-only" aria-label="{{localize 'COMBAT.InitiativeRoll'}}" data-action="rollInitiative">
+                                <button type="button" class="combatant-control icon-only" aria-label="{{localize 'VAGABOND.Combat.Actions.InitiativeRoll'}}" title="{{localize 'VAGABOND.Combat.Actions.InitiativeRoll'}}" data-action="rollInitiative">
                                     <i class="fas fa-dice-d20"></i>
                                 </button>
                             {{/if}}
+                        </div>
+                        {{else}}
+                        <div class="initiative-box flexrow">
+                            <input type="number" class="initiative-input" value="{{turn.initiative}}" data-combatant-id="{{turn.id}}" placeholder="-" style="width: 30px; text-align: center; background: transparent; border: none; color: white; font-weight: bold; -moz-appearance: textfield;"/>
                         </div>
                         {{/unless}}
                     </div>

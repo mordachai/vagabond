@@ -4523,6 +4523,40 @@ ol#combat-tracker.directory-list {
   cursor: default;
 }
 
+/* Fix for Combat Tracker Layout */
+#combat-tracker .combatant .operation-controls {
+  flex-wrap: nowrap;
+}
+
+#combat-tracker .combatant .initiative-box {
+  flex: 0 0 auto; /* Do not grow or shrink */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px; /* Fixed width to accommodate the input */
+}
+
+#combat-tracker .combatant .initiative-input {
+  /* Override user agent styles or generic input styles */
+  margin: 0 !important;
+  height: 24px !important;
+  min-width: 32px;
+  width: 100% !important;
+  font-family: inherit;
+  font-size: 14px;
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+  text-align: center;
+  /* Hide spinner buttons */
+  -moz-appearance: textfield;
+}
+#combat-tracker .combatant .initiative-input::-webkit-outer-spin-button, #combat-tracker .combatant .initiative-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* Compendium Settings Dialog (ApplicationV2) */
 .compendium-settings {
   /* -------------------------------------------- */
