@@ -225,7 +225,15 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== GAME MECHANICS =====
       'system.favorHinder': 'Favor/Hinder State',
-      'system.critNumber': 'Critical Hit Threshold',
+      'system.critNumber': 'Critical Hit Threshold (Global)',
+      
+      // -- Specific Crit Bonuses (Lower is better, e.g. -1 for 19-20) --
+      'system.meleeCritBonus': 'Crit: Melee Threshold Bonus (-1 for 19-20)',
+      'system.rangedCritBonus': 'Crit: Ranged Threshold Bonus (-1 for 19-20)',
+      'system.brawlCritBonus': 'Crit: Brawl Threshold Bonus (-1 for 19-20)',
+      'system.finesseCritBonus': 'Crit: Finesse Threshold Bonus (-1 for 19-20)',
+      'system.spellCritBonus': 'Crit: Spell Threshold Bonus (-1 for 19-20)',
+
       'system.bonusLuck': 'Bonus Luck',
       'system.currentLuck': 'Current Luck Pool',
       'system.studiedDice': 'Studied Dice Pool',
@@ -245,7 +253,14 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.universalSpellDamageDice': 'Universal: Spell Damage (Dice Bonus)',
       'system.universalAlchemicalDamageBonus': 'Universal: Alchemical Damage (Flat Bonus)',
       'system.universalAlchemicalDamageDice': 'Universal: Alchemical Damage (Dice Bonus)',
+      
+      // -- Specific Die Size Bonuses --
+      'system.meleeDamageDieSizeBonus': 'Melee: Damage Die Size Bonus (+2 for d8)',
+      'system.rangedDamageDieSizeBonus': 'Ranged: Damage Die Size Bonus (+2 for d8)',
+      'system.brawlDamageDieSizeBonus': 'Brawl: Damage Die Size Bonus (+2 for d8)',
+      'system.finesseDamageDieSizeBonus': 'Finesse: Damage Die Size Bonus (+2 for d8)',
       'system.spellDamageDieSizeBonus': 'Spell: Damage Die Size Bonus (Adds to d6)',
+
       'system.spellDamageDieSize': 'Spell: Final Damage Die Size (Derived)',
 
       // -- NEW: Speed Bonus --

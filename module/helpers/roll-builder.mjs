@@ -166,4 +166,30 @@ export class VagabondRollBuilder {
     const formula = this.buildD20Formula(actor, finalFavorHinder, baseFormula);
     return this.evaluateRoll(formula, actor, finalFavorHinder);
   }
+
+  /**
+   * Calculate the final critical hit threshold based on base value and applicable bonuses
+   * @param {Object} rollData - The roll data containing critNumber and type-specific bonuses
+   * @param {string|null} type - The type of roll ('spell', 'melee', 'ranged', 'brawl', 'finesse')
+   * @returns {number} The final critical hit threshold (e.g., 19 for crit on 19-20)
+   */
+  static calculateCritThreshold(rollData, type = null) {
+    let critThreshold = rollData.critNumber || 20;
+
+    // Apply specific bonus if type provided
+    if (type === 'spell') {
+      critThreshold += (rollData.spellCritBonus || 0);
+    } else if (type === 'melee') {
+      critThreshold += (rollData.meleeCritBonus || 0);
+    } else if (type === 'ranged') {
+      critThreshold += (rollData.rangedCritBonus || 0);
+    } else if (type === 'brawl') {
+      critThreshold += (rollData.brawlCritBonus || 0);
+    } else if (type === 'finesse') {
+      critThreshold += (rollData.finesseCritBonus || 0);
+    }
+
+    // Ensure it doesn't go below 1 or above 20
+    return Math.clamp(critThreshold, 1, 20);
+  }
 }

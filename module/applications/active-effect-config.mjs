@@ -141,7 +141,19 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       // Bonuses
       { value: '@bonuses.spellManaCostReduction', label: 'Spell Mana Cost Reduction' },
       { value: '@bonuses.deliveryManaCostReduction', label: 'Delivery Mana Cost Reduction' },
-      { value: '@spellDamageDieSizeBonus', label: 'Spell Damage Die Size Bonus' },
+      
+      { value: '@meleeDamageDieSizeBonus', label: 'Melee Die Size Bonus' },
+      { value: '@rangedDamageDieSizeBonus', label: 'Ranged Die Size Bonus' },
+      { value: '@brawlDamageDieSizeBonus', label: 'Brawl Die Size Bonus' },
+      { value: '@finesseDamageDieSizeBonus', label: 'Finesse Die Size Bonus' },
+      { value: '@spellDamageDieSizeBonus', label: 'Spell Die Size Bonus' },
+
+      { value: '@meleeCritBonus', label: 'Melee Crit Bonus' },
+      { value: '@rangedCritBonus', label: 'Ranged Crit Bonus' },
+      { value: '@brawlCritBonus', label: 'Brawl Crit Bonus' },
+      { value: '@finesseCritBonus', label: 'Finesse Crit Bonus' },
+      { value: '@spellCritBonus', label: 'Spell Crit Bonus' },
+
       { value: '@spellDamageDieSize', label: 'Final Spell Damage Die Size' },
 
       // Stats (6 Core Stats) - Base Values

@@ -509,8 +509,8 @@ export class SpellHandler {
 
       isSuccess = roll.total >= difficulty;
 
-      // ✅ CRITICAL: Use critNumber from rollData (includes item effects)
-      const critNumber = rollData.critNumber || 20;
+      // ✅ CRITICAL: Use type-specific crit threshold from rollData
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, 'spell');
       const d20Term = roll.terms.find(
         (term) => term.constructor.name === 'Die' && term.faces === 20
       );

@@ -201,6 +201,24 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
+    // --- Specific Damage Die Size Bonuses ---
+    schema.meleeDamageDieSizeBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Melee Damage Die Size Bonus" }
+    );
+    schema.rangedDamageDieSizeBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Ranged Damage Die Size Bonus" }
+    );
+    schema.brawlDamageDieSizeBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Brawl Damage Die Size Bonus" }
+    );
+    schema.finesseDamageDieSizeBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Finesse Damage Die Size Bonus" }
+    );
+
     // Spell Damage Die Size Bonus - allows increasing spell damage from d6 to d8/d10/d12
     schema.spellDamageDieSizeBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -218,6 +236,29 @@ export default class VagabondCharacter extends VagabondActorBase {
       min: 4,
       max: 20
     });
+
+    // --- Specific Critical Hit Threshold Bonuses ---
+    // These REDUCE the critNumber (e.g. -1 means crit on 19)
+    schema.spellCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Spell Crit Bonus" }
+    );
+    schema.meleeCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Melee Crit Bonus" }
+    );
+    schema.rangedCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Ranged Crit Bonus" }
+    );
+    schema.brawlCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Brawl Crit Bonus" }
+    );
+    schema.finesseCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Finesse Crit Bonus" }
+    );
 
     // ---------------------
 
@@ -672,8 +713,21 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalSpellDamageDice = [];
     this.universalAlchemicalDamageDice = [];
 
+    // Reset specific die size bonuses
+    this.meleeDamageDieSizeBonus = [];
+    this.rangedDamageDieSizeBonus = [];
+    this.brawlDamageDieSizeBonus = [];
+    this.finesseDamageDieSizeBonus = [];
+
     // Reset spell damage die size bonus (evaluated in derived data)
     this.spellDamageDieSizeBonus = [];
+
+    // Reset specific crit bonuses
+    this.spellCritBonus = [];
+    this.meleeCritBonus = [];
+    this.rangedCritBonus = [];
+    this.brawlCritBonus = [];
+    this.finesseCritBonus = [];
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
     for (let s of Object.values(this.stats)) { s.bonus = []; }
@@ -773,6 +827,12 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
     this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
 
+    // Evaluate dice bonuses (join arrays into formula strings)
+    this.universalDamageDice = this.universalDamageDice.filter(d => !!d).join(' + ');
+    this.universalWeaponDamageDice = this.universalWeaponDamageDice.filter(d => !!d).join(' + ');
+    this.universalSpellDamageDice = this.universalSpellDamageDice.filter(d => !!d).join(' + ');
+    this.universalAlchemicalDamageDice = this.universalAlchemicalDamageDice.filter(d => !!d).join(' + ');
+
     // Mana bonuses
     this.mana.bonus = this._evaluateFormulaField(this.mana.bonus, rollData);
     this.mana.castingMaxBonus = this._evaluateFormulaField(this.mana.castingMaxBonus, rollData);
@@ -784,7 +844,20 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
     this.bonuses.spellManaCostReduction = this._evaluateFormulaField(this.bonuses.spellManaCostReduction, rollData);
     this.bonuses.deliveryManaCostReduction = this._evaluateFormulaField(this.bonuses.deliveryManaCostReduction, rollData);
+    
+    // Evaluate specific die size bonuses
+    this.meleeDamageDieSizeBonus = this._evaluateFormulaField(this.meleeDamageDieSizeBonus, rollData);
+    this.rangedDamageDieSizeBonus = this._evaluateFormulaField(this.rangedDamageDieSizeBonus, rollData);
+    this.brawlDamageDieSizeBonus = this._evaluateFormulaField(this.brawlDamageDieSizeBonus, rollData);
+    this.finesseDamageDieSizeBonus = this._evaluateFormulaField(this.finesseDamageDieSizeBonus, rollData);
     this.spellDamageDieSizeBonus = this._evaluateFormulaField(this.spellDamageDieSizeBonus, rollData);
+
+    // Evaluate specific crit bonuses
+    this.spellCritBonus = this._evaluateFormulaField(this.spellCritBonus, rollData);
+    this.meleeCritBonus = this._evaluateFormulaField(this.meleeCritBonus, rollData);
+    this.rangedCritBonus = this._evaluateFormulaField(this.rangedCritBonus, rollData);
+    this.brawlCritBonus = this._evaluateFormulaField(this.brawlCritBonus, rollData);
+    this.finesseCritBonus = this._evaluateFormulaField(this.finesseCritBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
     // are NOT evaluated here - they're done inline in prepareDerivedData
@@ -1032,6 +1105,19 @@ export default class VagabondCharacter extends VagabondActorBase {
     data.universalCheckBonus = this.universalCheckBonus || 0;
     data.universalDamageBonus = this.universalDamageBonus || 0;
     data.universalDamageDice = this.universalDamageDice || '';
+
+    // Add specific bonuses for formula usage
+    data.meleeDamageDieSizeBonus = this.meleeDamageDieSizeBonus || 0;
+    data.rangedDamageDieSizeBonus = this.rangedDamageDieSizeBonus || 0;
+    data.brawlDamageDieSizeBonus = this.brawlDamageDieSizeBonus || 0;
+    data.finesseDamageDieSizeBonus = this.finesseDamageDieSizeBonus || 0;
+    data.spellDamageDieSizeBonus = this.spellDamageDieSizeBonus || 0;
+
+    data.meleeCritBonus = this.meleeCritBonus || 0;
+    data.rangedCritBonus = this.rangedCritBonus || 0;
+    data.brawlCritBonus = this.brawlCritBonus || 0;
+    data.finesseCritBonus = this.finesseCritBonus || 0;
+    data.spellCritBonus = this.spellCritBonus || 0;
 
     return data;
   }

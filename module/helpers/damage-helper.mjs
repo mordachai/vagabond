@@ -273,21 +273,31 @@ export class VagabondDamageHelper {
       typeDiceBonus = actor.system.universalAlchemicalDamageDice || '';
     }
 
+    // Safety check: ensure it's a string
+    if (Array.isArray(typeDiceBonus)) {
+      typeDiceBonus = typeDiceBonus.filter(d => !!d).join(' + ');
+    }
+
     if (typeFlatBonus !== 0) {
       finalFormula += ` + ${typeFlatBonus}`;
     }
-    if (typeDiceBonus.trim() !== '') {
+    if (typeof typeDiceBonus === 'string' && typeDiceBonus.trim() !== '') {
       finalFormula += ` + ${typeDiceBonus}`;
     }
 
     // Add legacy universal damage bonuses (backward compatibility)
     const universalFlatBonus = actor.system.universalDamageBonus || 0;
-    const universalDiceBonus = actor.system.universalDamageDice || '';
+    let universalDiceBonus = actor.system.universalDamageDice || '';
+
+    // Safety check: ensure it's a string
+    if (Array.isArray(universalDiceBonus)) {
+      universalDiceBonus = universalDiceBonus.filter(d => !!d).join(' + ');
+    }
 
     if (universalFlatBonus !== 0) {
       finalFormula += ` + ${universalFlatBonus}`;
     }
-    if (universalDiceBonus.trim() !== '') {
+    if (typeof universalDiceBonus === 'string' && universalDiceBonus.trim() !== '') {
       finalFormula += ` + ${universalDiceBonus}`;
     }
 
@@ -472,23 +482,33 @@ export class VagabondDamageHelper {
 
     // Add spell-specific universal damage bonuses (new separated system)
     const spellFlatBonus = actor.system.universalSpellDamageBonus || 0;
-    const spellDiceBonus = actor.system.universalSpellDamageDice || '';
+    let spellDiceBonus = actor.system.universalSpellDamageDice || '';
+    
+    // Safety check: ensure it's a string (may be array if derived data failed to join)
+    if (Array.isArray(spellDiceBonus)) {
+      spellDiceBonus = spellDiceBonus.filter(d => !!d).join(' + ');
+    }
 
     if (spellFlatBonus !== 0) {
       damageFormula += ` + ${spellFlatBonus}`;
     }
-    if (spellDiceBonus.trim() !== '') {
+    if (typeof spellDiceBonus === 'string' && spellDiceBonus.trim() !== '') {
       damageFormula += ` + ${spellDiceBonus}`;
     }
 
     // Add legacy universal damage bonuses (backward compatibility)
     const universalFlatBonus = actor.system.universalDamageBonus || 0;
-    const universalDiceBonus = actor.system.universalDamageDice || '';
+    let universalDiceBonus = actor.system.universalDamageDice || '';
+
+    // Safety check: ensure it's a string
+    if (Array.isArray(universalDiceBonus)) {
+      universalDiceBonus = universalDiceBonus.filter(d => !!d).join(' + ');
+    }
 
     if (universalFlatBonus !== 0) {
       damageFormula += ` + ${universalFlatBonus}`;
     }
-    if (universalDiceBonus.trim() !== '') {
+    if (typeof universalDiceBonus === 'string' && universalDiceBonus.trim() !== '') {
       damageFormula += ` + ${universalDiceBonus}`;
     }
 
@@ -1289,7 +1309,9 @@ export class VagabondDamageHelper {
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
       const isSuccess = saveRoll.total >= difficulty;
       const { VagabondChatCard } = await import('./chat-card.mjs');
-      const isCritical = VagabondChatCard.isRollCritical(saveRoll, targetActor);
+      const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData());
+      const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
       // Calculate damage breakdown for display
       let damageAfterSave = damageAmount;
@@ -1421,7 +1443,9 @@ export class VagabondDamageHelper {
       const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
       const isSuccess = saveRoll.total >= difficulty;
       const { VagabondChatCard } = await import('./chat-card.mjs');
-      const isCritical = VagabondChatCard.isRollCritical(saveRoll, targetActor);
+      const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData());
+      const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
       // Post simplified save result to chat (no damage calculations)
       await this._postSaveReminderResult(

@@ -107,6 +107,14 @@ Alternative paths:
 @threatLevel                     → Threat Level
 ```
 
+### New Mana & Spell Bonuses
+```
+@bonuses.spellManaCostReduction  → Total mana reduction for spells
+@bonuses.deliveryManaCostReduction → Mana reduction for spell deliveries
+@spellDamageDieSizeBonus         → Bonus to base spell die (adds to d6)
+@spellDamageDieSize              → Final spell die size (e.g. 8 for d8)
+```
+
 ### Math Functions
 ```
 floor(x)                         → Round down
@@ -204,6 +212,37 @@ Result: Minimum 1, scales every 3 levels
 - **Change Mode:** Add
 - **Effect Value:** `floor(@attributes.level.value / 3)`
 - **Result:** Spell damage scales with level
+
+### Efficient Delivery
+*Spell Deliveries cost 1 less mana*
+- **Attribute Key:** `system.bonuses.deliveryManaCostReduction`
+- **Change Mode:** Add
+- **Effect Value:** `1`
+- **Result:** Reduces base delivery cost (e.g., Cone becomes 0, Remote becomes 1)
+
+### Master Spellcaster
+*All spells cost 1 less mana*
+- **Attribute Key:** `system.bonuses.spellManaCostReduction`
+- **Change Mode:** Add
+- **Effect Value:** `(@lvl >= 5) ? 1 : 0`
+- **Result:** Grants 1 mana reduction starting at Level 5
+
+### Empowered Magic
+*Spells deal d8 damage instead of d6*
+- **Attribute Key:** `system.spellDamageDieSizeBonus`
+- **Change Mode:** Add
+- **Effect Value:** `2`
+- **Result:** Increases base d6 to d8 (6 + 2 = 8)
+
+### Spell-Slinger (Sorcery Feature)
+*At Level 2+, crits on 19+ and deals d8 damage*
+- **Effect 1 (Crit):**
+  - **Attribute Key:** `system.spellCritBonus`
+  - **Value:** `(@lvl >= 2) ? -1 : 0`
+- **Effect 2 (Damage):**
+  - **Attribute Key:** `system.spellDamageDieSizeBonus`
+  - **Value:** `(@lvl >= 2) ? 2 : 0`
+- **Result:** Feature automatically activates once the character reaches Level 2.
 
 ### Giant's Belt
 *Inventory Slots = +Level/2*
