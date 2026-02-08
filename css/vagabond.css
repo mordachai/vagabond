@@ -56,8 +56,7 @@
   --vagabond-c-red: #9d0000;
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
   --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
-  --vagabond-bg-paper: url("../assets/images/white-paper.webp");
-  --vagabond-stat-bg: #1b1b1b;
+  --vagabond-bg-paper: url("../assets/images/sheets/card-bg.webp");
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-c-bluey: #5a6e76;
@@ -88,7 +87,6 @@ body[data-theme=dark] #sidebar {
   --vagabond-bg-paper: url("../assets/images/old-paper.webp");
   --vagabond-c-bluey: #202d32;
   --vagabond-c-dark-bluey: #0b1e32;
-  --vagabond-stat-bg: #231308ec;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff;
@@ -4781,8 +4779,8 @@ ol#combat-tracker.directory-list {
 /* Styles limited to vagabond sheets */
 .vagabond {
   /* Container Item Styles */
-  /* Character Name at Top - Full Width */
-  /* Combined Character Info Row */
+  /* Character Name at Top - 2x2 Grid: Name + XP on top, Character Info below */
+  /* Combined Character Info Row - sits inside .name-row-top grid */
   /* Character Builder Icon Button - Inline */
   /* Pulsing glow animation */
   /* ======================================
@@ -7464,56 +7462,81 @@ ol#combat-tracker.directory-list {
   gap: 4px;
   width: 100%;
 }
+.vagabond .header-main-wrapper {
+  background-image: url("../assets/images/sheets/statsBanner.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: var(--vagabond-c-white);
+  margin: 0 -30px 0 -25px !important;
+  padding: 16px 28px 12px 20px;
+}
+.vagabond .header-main-wrapper input {
+  color: var(--vagabond-c-white);
+}
 .vagabond .char-image-container {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 152px;
+  height: 150px;
   flex-shrink: 0;
-  background-image: url("../assets/images/portrait-frame.webp");
+  background-image: url("../assets/images/sheets/portraitFrame.webp");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 }
 .vagabond .char-image-container .profile-img {
   display: flex;
-  width: 180px;
-  height: 180px;
-  transform: scale(0.86);
+  width: 152px;
+  height: 150px;
   border: none;
   object-fit: cover;
   object-position: top center;
   cursor: pointer;
-  border-radius: 50%;
   align-self: center;
   mix-blend-mode: normal;
   background: var(--vagabond-c-dark);
+  -webkit-mask-image: url("../assets/images/sheets/portraitMask.webp");
+  mask-image: url("../assets/images/sheets/portraitMask.webp");
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-mode: luminance;
+  mask-mode: luminance;
 }
 .vagabond .char-image-container .profile-img:hover {
   opacity: 0.9;
 }
 .vagabond .armor-overlay {
   position: absolute;
-  top: -15px;
-  right: -10px;
-  width: 76px;
-  height: 90px;
-  background-image: url("../assets/images/armor-frame.webp");
-  background-size: contain;
-  background-position: top center;
+  top: 8px;
+  right: -22px;
+  width: 40px;
+  height: 47px;
+  background-image: url("../assets/images/sheets/armorBG.webp");
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 18px 35px;
   align-items: center;
   justify-content: center;
-  padding-left: 12px;
+}
+.vagabond .armor-overlay .armor-name {
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--vagabond-c-dark-bluey);
+  font-family: "Eskapade", serif;
 }
 .vagabond .armor-overlay .armor-value {
   position: relative;
-  bottom: 4px;
-  font-size: 28px;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(33, 33, 33, 0.424);
-  line-height: 1;
+  top: -8px;
+  font-family: "Ludlow", serif;
+  font-size: 2em;
+  color: var(--vagabond-c-white);
+  text-align: center;
 }
 .vagabond .downtime-overlay {
   position: absolute;
@@ -7553,34 +7576,6 @@ ol#combat-tracker.directory-list {
 .vagabond .downtime-overlay .downtime-overlay-button:hover i {
   color: #171002;
   text-shadow: 0 0 2px rgba(58, 42, 8, 0.6);
-}
-.vagabond .fatigue-skull {
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.vagabond .fatigue-skull.fatigue-active {
-  color: var(--vagabond-c-red);
-  opacity: 1;
-  text-shadow: 0 0 2px rgba(255, 68, 68, 0.6);
-}
-.vagabond .fatigue-skull.fatigue-active:hover {
-  color: var(--vagabond-c-red);
-  transform: scale(1.1);
-}
-.vagabond .fatigue-skull.fatigue-inactive {
-  opacity: 0.4;
-}
-.vagabond .fatigue-skull.fatigue-inactive:hover {
-  color: rgba(100, 100, 100, 0.7);
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-.vagabond .fatigue-label {
-  font-size: 12px;
-  font-weight: 600;
-  margin-right: 4px;
-  text-transform: uppercase;
 }
 .vagabond .status-display {
   position: absolute;
@@ -7625,22 +7620,23 @@ ol#combat-tracker.directory-list {
   align-items: center;
   justify-content: center;
   gap: 2px;
+  font-family: "Ludlow", serif;
   font-weight: bold;
-  padding-bottom: 12px;
   position: absolute;
-  bottom: 0;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: 75%;
   height: auto;
-  background-image: url(../assets/images/hp-banner.webp);
+  color: var(--vagabond-c-white);
+  background-image: url(../assets/images/sheets/healthBG.webp);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
 }
 .vagabond .hp-display .hp-icon {
   font-size: 18px;
-  color: var(--vagabond-c-red);
+  color: var(--vagabond-c-chat-yellow);
   cursor: pointer;
   transition: transform 0.1s ease;
 }
@@ -7655,6 +7651,7 @@ ol#combat-tracker.directory-list {
   padding: 2px 2px;
   font-size: 22px;
   font-weight: bold;
+  color: var(--vagabond-c-white);
 }
 .vagabond .hp-display .hp-separator {
   font-size: 20px;
@@ -7679,34 +7676,41 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 180px;
+  height: auto;
   flex: 1;
   gap: 4px;
 }
 .vagabond .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 6px 10px;
+  grid-template-columns: repeat(12, 1fr);
   flex: 1;
+  gap: 0;
 }
 .vagabond .stats-grid .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+}
+.vagabond .stats-grid .stat-item:nth-child(-n+3) {
+  grid-column: span 4;
+}
+.vagabond .stats-grid .stat-item:nth-child(n+4) {
+  grid-column: span 3;
 }
 .vagabond .stats-grid .stat-score {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
-  height: 40px;
+  height: 50px;
   font-size: 28px;
   font-weight: bold;
   text-align: center;
   border-radius: 3px;
-  background: var(--vagabond-stat-bg);
+  background: url("../assets/images/sheets/statBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
   padding-top: 5px;
   color: var(--vagabond-c-stat);
   font-family: "Manofa", serif;
@@ -7721,60 +7725,76 @@ ol#combat-tracker.directory-list {
   -webkit-text-stroke-width: 1px;
 }
 .vagabond .stats-grid .stat-label {
-  font-size: 13px;
-  font-weight: 500;
+  position: relative;
+  top: -12px;
+  font-size: 16px;
+  font-weight: 600;
   text-align: center;
-  line-height: 1.2;
-  font-family: "Manofa", sans-serif;
-  padding: 4px 0;
+  font-family: "Eskapade", serif;
+  text-transform: uppercase;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
 }
 .vagabond .stats-grid .stat-total {
   cursor: default;
   user-select: none;
 }
 .vagabond .fatigue-row {
-  display: flex;
+  position: relative;
+  top: -5px;
+  display: grid;
+  grid-template-columns: 65px 80px;
   align-items: center;
-  justify-content: space-around;
-  padding: 4px 0;
-  background: none;
-  border-radius: 4px;
+  justify-content: center;
+  background-image: url("../assets/images/sheets/fatigueBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   width: 100%;
+  gap: 15px;
+}
+.vagabond .fatigue-row .fatigue-skull {
+  cursor: pointer;
+  margin-right: 4px;
+  transition: all 0.2s ease;
+}
+.vagabond .fatigue-row .fatigue-skull.fatigue-active {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+  text-shadow: 0 0 2px rgba(250, 209, 3, 0.861);
+}
+.vagabond .fatigue-row .fatigue-skull.fatigue-active:hover {
+  color: var(--vagabond-c-chat-yellow);
+  transform: scale(1.1);
+}
+.vagabond .fatigue-row .fatigue-skull.fatigue-inactive {
+  opacity: 0.4;
+}
+.vagabond .fatigue-row .fatigue-skull.fatigue-inactive:hover {
+  color: rgba(195, 195, 195, 0.846);
+  opacity: 0.8;
+  transform: scale(1.2);
+}
+.vagabond .fatigue-row .fatigue-label {
+  font-family: "Eskapade", serif;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 4px;
+  text-transform: uppercase;
 }
 .vagabond .fatigue-row .fatigue-checkboxes {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.vagabond .name-row {
-  margin-bottom: 2px;
-}
-.vagabond .character-name-input {
-  border: none !important;
-  background: transparent !important;
-  text-align: left;
-  font-size: 20px;
-  font-family: "Manofa", sans-serif;
-  font-weight: bold;
-  outline: none;
-  width: 100%;
-  padding: 2px 0 4px 0;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
-}
-.vagabond .character-name-input:hover, .vagabond .character-name-input:focus {
-  border-bottom: 2px solid var(--vagabond-c-dark) !important;
-  background: transparent !important;
-}
 .vagabond .character-info-row {
   text-align: left;
   margin-bottom: 2px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.2;
 }
 .vagabond .character-info-row .level-input {
-  width: 15px;
+  width: 14px;
   text-align: center;
   display: inline-block;
   border: none;
@@ -7796,155 +7816,121 @@ ol#combat-tracker.directory-list {
   line-height: 1.2;
 }
 .vagabond .name-row-top {
-  width: 100%;
+  position: relative;
+  width: auto;
+  display: grid;
+  grid-template-columns: 1fr 85px;
+  grid-template-rows: 45px 18px;
+  align-items: center;
+  background-image: url("../assets/images/sheets/nameBanner.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  column-gap: 12px;
+  margin: 0 -15px 0 -25px;
+}
+.vagabond .name-row-top > input[type=text] {
+  color: var(--vagabond-c-white);
+  font-family: "Eskapade", serif;
+  padding-top: 12px;
+  font-size: 1.8em;
+  font-weight: 600;
+  text-align: center;
+  grid-column: 1;
+  grid-row: 1;
+}
+.vagabond .name-row-top > input[type=text]:hover, .vagabond .name-row-top > input[type=text]:focus {
+  border: none;
+  outline: none;
+  text-decoration: none;
+}
+.vagabond .name-row-top .top-right-controls {
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+.vagabond .name-row-top .top-right-controls * {
+  pointer-events: auto;
 }
 .vagabond .xp-field-inline {
   display: flex;
-  align-items: center;
-  font-size: 14px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  align-items: last baseline;
   white-space: nowrap;
-  flex-shrink: 0;
-  box-shadow: none;
+  flex: 0 0 auto;
+  padding-right: 25px;
+  padding-top: 30px;
+  color: var(--vagabond-c-chat-yellow);
+  font-family: "Eskapade", serif;
+  font-size: 14px;
+  gap: 0;
 }
 .vagabond .xp-field-inline .resource-label {
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 2px;
   cursor: pointer;
-}
-.vagabond .xp-field-inline .resource-label .level-up-icon {
-  animation: pulse 1.5s ease-in-out infinite;
-  color: var(--vagabond-c-red);
+  color: inherit;
+  font-size: 10px;
+  margin-right: 2px;
 }
 .vagabond .xp-field-inline .xp-input {
-  width: 35px;
+  width: 16px;
   text-align: center;
   border: none;
   background: transparent;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 2px 4px;
-  flex-shrink: 0;
-  cursor: text;
-  pointer-events: auto;
-}
-.vagabond .xp-field-inline .xp-input:hover, .vagabond .xp-field-inline .xp-input:focus {
-  border-bottom: 1px solid var(--vagabond-c-dark);
+  padding: 0;
 }
 .vagabond .xp-field-inline .xp-required {
   font-size: 16px;
-  font-weight: 500;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
-.vagabond .xp-field-inline.level-up-ready {
-  color: var(--vagabond-c-red);
-  animation: glow-pulse 2s ease-in-out infinite;
-}
-.vagabond .xp-field-inline.level-up-ready .resource-label {
-  color: var(--vagabond-c-red);
-  text-shadow: 0 0 4px var(--vagabond-c-red);
-}
-.vagabond .xp-field-inline.level-up-ready .resource-label:hover {
-  opacity: 0.85;
-}
-.vagabond .xp-field-inline.level-up-ready .xp-input {
-  font-weight: 700;
-  cursor: text;
-}
-.vagabond .xp-field-inline.level-up-ready .xp-input:hover, .vagabond .xp-field-inline.level-up-ready .xp-input:focus {
-  border-bottom-color: var(--vagabond-c-red);
-}
-.vagabond .xp-field-inline.level-up-ready .xp-required {
-  font-weight: 600;
-  font-size: 14px;
-}
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-}
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-}
-.vagabond .character-name-input-large {
-  border: none !important;
-  background: transparent !important;
-  text-align: center;
-  font-size: 28px;
-  font-family: "Manofa", sans-serif;
-  font-weight: 700;
-  width: 100%;
-  padding: 0;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
-}
-.vagabond .character-name-input-large:hover, .vagabond .character-name-input-large:focus {
-  border-bottom: 2px solid var(--vagabond-c-dark) !important;
-  background: transparent !important;
+.vagabond .xp-field-inline input[type=text] {
+  font-size: 1.15em;
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .character-info-combined-row {
-  text-align: center;
-  margin-bottom: 6px;
-  font-size: 16px;
+  grid-column: 1;
+  grid-row: 2;
+  text-align: left;
+  padding: 10px 5px 0px 5px;
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
-  font-family: "Paradigm", serif;
+  line-height: 1.3;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-dark-bluey);
 }
 .vagabond .character-info-combined-row .level-input {
-  width: 18px;
+  width: 14px;
   text-align: center;
   display: inline-block;
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
-  font-family: "Manofa", serif;
+  font-family: "Ludlow", serif;
   font-size: 16px;
-  font-weight: 600;
-  padding: 0 2px;
-  margin: 0 2px;
+  font-weight: 500;
+  padding: 0 1px;
+  margin: 0 1px;
 }
 .vagabond .character-info-combined-row .level-input:hover, .vagabond .character-info-combined-row .level-input:focus {
-  border-bottom: 1px solid var(--vagabond-c-dark);
+  border-bottom: 1px solid rgba(var(--vagabond-c-white), 0.5);
 }
 .vagabond .btn-char-builder-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 18px;
+  height: 18px;
   padding: 0;
-  margin-right: 8px;
+  margin-right: 4px;
   background: var(--vagabond-c-red);
   color: var(--vagabond-c-white);
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
   transition: all 0.2s ease;
   vertical-align: middle;
 }
 .vagabond .btn-char-builder-icon i {
-  font-size: 12px;
+  font-size: 9px;
   margin: 0;
   color: var(--vagabond-c-white);
 }
@@ -7972,7 +7958,9 @@ ol#combat-tracker.directory-list {
   gap: 0;
   padding: 6px 0;
   width: 100%;
-  margin-top: 2px;
+  margin-top: 10px;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
 }
 .vagabond .speed-stats-row .stat-item {
   display: flex;
@@ -7992,9 +7980,15 @@ ol#combat-tracker.directory-list {
   border-bottom: 1px solid transparent;
   background: transparent;
   padding: 2px 4px;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
 }
 .vagabond .speed-stats-row .stat-item .stat-value-input:hover, .vagabond .speed-stats-row .stat-item .stat-value-input:focus {
   border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .speed-stats-row .stat-item .stat-value-input input[type=text] {
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
 }
 .vagabond .speed-stats-row .stat-item .stat-label {
   font-size: 14px;
@@ -8018,46 +8012,11 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .speed-stats-row .stat-item .check-mod-value {
   pointer-events: none;
-  color: var(--vagabond-c-dark);
   font-weight: bold;
 }
 .vagabond .speed-stats-row .stat-item .check-mod-value:hover {
   cursor: default;
   border-bottom: 1px solid transparent;
-}
-.vagabond .speed-stats-row .luck-item .luck-display {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-}
-.vagabond .speed-stats-row .luck-item .luck-display .luck-icon {
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
-}
-.vagabond .speed-stats-row .luck-item .luck-display .luck-value {
-  position: relative;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  border: none;
-  background: transparent;
-  padding: 0;
-  font-size: 22px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  background-image: url("../assets/images/luck-frame.webp");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  mix-blend-mode: multiply;
 }
 .vagabond .speed-stats-row .universal-bonus-field .stat-value-input.damage-flat, .vagabond .speed-stats-row .universal-bonus-field .stat-value-input.damage-dice {
   width: 40px;
@@ -8073,6 +8032,175 @@ ol#combat-tracker.directory-list {
   align-items: center;
   height: 40px;
   justify-content: center;
+}
+.vagabond .speed-stats-row .speed-group {
+  display: grid;
+  grid-template-columns: auto auto 6px auto;
+  grid-template-rows: 22px 22px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  gap: 0 4px;
+  margin-left: -15px;
+  width: 160px;
+  height: 55px;
+  flex-shrink: 0;
+  background-image: url("../assets/images/sheets/speedBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  padding: 0 8px;
+}
+.vagabond .speed-stats-row .speed-group .speed-group-label {
+  grid-column: 1;
+  font-size: 14px;
+  font-family: "Eskapade", serif;
+  font-weight: 600;
+  text-align: right;
+  line-height: 1;
+}
+.vagabond .speed-stats-row .speed-group .speed-group-cell {
+  grid-column: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+.vagabond .speed-stats-row .speed-group .speed-group-cell:nth-of-type(2) {
+  grid-column: 4;
+  grid-row: 1;
+}
+.vagabond .speed-stats-row .speed-group .speed-group-speed-label {
+  grid-column: 4;
+  grid-row: 2;
+  font-size: 16px;
+  font-family: "Eskapade", serif;
+  font-weight: 600;
+  text-align: left;
+  line-height: 1;
+}
+.vagabond .speed-stats-row .speed-group .speed-group-input {
+  width: 30px;
+  font-family: "Ludlow", serif;
+  text-align: center;
+  font-size: 18px;
+  font-weight: normal;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 0;
+  line-height: 1.2;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+}
+.vagabond .speed-stats-row .speed-group .speed-group-input:hover, .vagabond .speed-stats-row .speed-group .speed-group-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .speed-stats-row .speed-group .speed-group-input.speed-group-input-main {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+}
+.vagabond .speed-stats-row .speed-group .speed-group-unit {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.6;
+}
+.vagabond .modifiers-group {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: 22px 22px;
+  align-items: center;
+  align-content: center;
+  width: 220px;
+  gap: 0 4px;
+  height: 55px;
+  flex-shrink: 0;
+  background-image: url("../assets/images/sheets/speedBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  padding: 0 25px;
+}
+.vagabond .modifiers-group .modifiers-group-icon {
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.vagabond .modifiers-group .modifiers-group-icon:hover {
+  opacity: 1;
+}
+.vagabond .modifiers-group .modifiers-group-label {
+  font-size: 13px;
+  font-family: "Eskapade", serif;
+  font-weight: 600;
+  text-align: right;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.vagabond .modifiers-group .modifiers-group-input {
+  width: 30px;
+  font-family: "Ludlow", serif;
+  text-align: center;
+  font-size: 18px;
+  font-weight: normal;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 0;
+  line-height: 1.2;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+}
+.vagabond .modifiers-group .modifiers-group-input:hover, .vagabond .modifiers-group .modifiers-group-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .modifiers-group .modifiers-group-input.check-mod-value {
+  pointer-events: none;
+  cursor: default;
+}
+.vagabond .modifiers-group .modifiers-group-dice {
+  grid-column: 4;
+  grid-row: 1;
+  position: relative;
+  top: -10px;
+  justify-self: center;
+  align-self: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  overflow: visible;
+  transition: transform 0.2s ease;
+}
+.vagabond .modifiers-group .modifiers-group-dice img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+.vagabond .modifiers-group .modifiers-group-dice:hover {
+  transform: scale(1.1);
+}
+.vagabond .modifiers-group .modifiers-group-favor-label {
+  grid-column: 4;
+  grid-row: 2;
+  justify-self: center;
+  align-self: center;
+  font-size: 18px;
+  font-family: "Eskapade", serif;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
 }
 .vagabond .favor-hinder-toggle-container {
   display: flex;
@@ -8383,6 +8511,43 @@ ol#combat-tracker.directory-list {
   text-shadow: 0 0 3px rgb(83, 54, 46);
   font-size: 1.3rem;
   padding-bottom: 4px;
+}
+.vagabond .luck-item {
+  display: grid !important;
+  grid-template-rows: 10px 30px 10px;
+  align-content: center;
+  justify-items: center;
+  background-image: url("../assets/images/sheets/luckPoolBg.webp");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 35px;
+  width: 40px;
+  height: 50px;
+}
+.vagabond .luck-item .luck-label {
+  font-weight: 600;
+  text-align: center;
+  font-family: "Eskapade", serif;
+  text-transform: uppercase;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.vagabond .luck-item .luck-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-family: "Ludlow", serif;
+  font-size: 24px;
+  font-weight: bold;
+  pointer-events: none;
+  width: 100%;
+  color: var(--vagabond-c-white);
 }
 .vagabond .vagabond.sheet.actor.character {
   width: 430px;

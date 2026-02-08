@@ -63,7 +63,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       statusClick: this._onStatusClick,
       spendLuck: this._onSpendLuck,
       spendStudiedDie: this._onSpendStudiedDie,
-      modifyCheckBonus: this._onModifyCheckBonus,
+      modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
       modifyMana: this._onModifyMana,
       openDowntime: this._onOpenDowntime,
       openCharBuilder: this._onOpenCharBuilder,

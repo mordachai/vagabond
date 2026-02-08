@@ -33,9 +33,8 @@
             <span class='xp-required'>/ {{system.attributes.xpRequired}}</span>
           </div>
         </div>
-      </div>
 
-      {{! Level, Ancestry, Class, Being Type, Size - All in One Row }}
+      {{! Level, Ancestry, Class, Being Type, Size - Inside name-row grid }}
       <div class='character-info-combined-row'>
         {{#if (and (not system.details.constructed) (not system.details.builderDismissed))}}
           <button type='button' class='btn-char-builder-icon pulse-glow' data-action='openCharBuilder' data-tooltip='Build Character'>
@@ -68,6 +67,7 @@
           {{/if}}
         </span>
       </div>
+    </div>
 
       <div class="header-main-wrapper">
         {{! Main Row: Image and Stats Side by Side }}
@@ -136,16 +136,13 @@
                       <div class='stats-grid'>
                         {{#each system.stats as |stat key|}}
                           <div class='stat-item'>
-                            {{! Show total value (read-only display) }}
-                            <div class='stat-score stat-total' data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'>
-                              {{stat.total}}
-                            </div>
-                            {{! Hidden input for base value (can be edited via inspector/effects) }}
                             <input
-                              type='hidden'
+                              type='text'
                               name='system.stats.{{key}}.value'
                               value='{{stat.value}}'
                               data-dtype='Number'
+                              class='stat-score'
+                              data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'
                             />
                             <label
                               class='stat-label'
@@ -194,11 +191,63 @@
 
         {{! Speed Stats - All in one row with space around }}
         <div class='speed-stats-row'>
-          {{! Favor/Hinder Toggle Button }}
-          <div class='favor-hinder-toggle-container'>
+
+          {{! Speed Group - compact 2x2 grid }}
+          <div class='speed-group'>
+            <label class='speed-group-label'>{{localize "VAGABOND.UI.Sections.Crawl"}}</label>
+            <div class='speed-group-cell'><input
+              type='text'
+              name='system.speed.crawl'
+              value='{{system.speed.crawl}}'
+              data-dtype='Number'
+              class='speed-group-input'
+            /><span class='speed-group-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></div>
+            <div class='speed-group-cell'><input
+              type='text'
+              name='system.speed.base'
+              value='{{system.speed.base}}'
+              data-dtype='Number'
+              class='speed-group-input speed-group-input-main'
+            /><span class='speed-group-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></div>
+            <label class='speed-group-label'>{{localize "VAGABOND.UI.Sections.Travel"}}</label>
+            <div class='speed-group-cell'><input
+              type='text'
+              name='system.speed.travel'
+              value='{{system.speed.travel}}'
+              data-dtype='Number'
+              class='speed-group-input'
+            /><span class='speed-group-unit'>{{localize "VAGABOND.UI.Units.Miles"}}</span></div>
+            <label class='speed-group-speed-label'>{{localize "VAGABOND.UI.Sections.Speed"}}</label>
+          </div>
+
+          {{! Modifiers Group - Study + Check Mod + Favor/Hinder }}
+          <div class='modifiers-group'>
+            {{! Row 1: Study }}
+            <i class='fas fa-book-open modifiers-group-icon rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'></i>
+            <label class='modifiers-group-label rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}:</label>
+            <input
+              type='number'
+              name='system.studiedDice'
+              value='{{system.studiedDice}}'
+              data-dtype='Number'
+              class='modifiers-group-input'
+              min='0'
+            />
+            {{! Row 2: Check Modifier }}
+            <i class='fas fa-plus-minus modifiers-group-icon rollable' data-action='modifyCheckBonus' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'></i>
+            <label class='modifiers-group-label rollable' data-action='modifyCheckBonus' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>{{localize "VAGABOND.UI.Labels.CheckMod"}}:</label>
+            <input
+              type='text'
+              name='system.universalCheckBonus'
+              value='{{system.universalCheckBonus}}'
+              data-dtype='Number'
+              class='modifiers-group-input check-mod-value'
+              readonly
+            />
+            {{! Favor/Hinder dice image - floats outside grid }}
             <button
               type='button'
-              class='favor-hinder-toggle {{system.favorHinder}}'
+              class='modifiers-group-dice favor-hinder-toggle {{system.favorHinder}}'
               data-action='toggleFavorHinder'
               data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
             >
@@ -210,7 +259,7 @@
                 <img src='systems/vagabond/assets/ui/dice/neutral-mark.webp' alt='Neutral' class='favor-hinder-marker' />
               {{/if}}
             </button>
-            <label class='favor-hinder-label favor-hinder-label-wrap'>
+            <label class='modifiers-group-favor-label'>
               {{#if (eq system.favorHinder "favor")}}
                 {{localize "VAGABOND.FavorHinder.States.favor"}}
               {{else if (eq system.favorHinder "hinder")}}
@@ -221,101 +270,6 @@
             </label>
           </div>
 
-          {{!-- Studied Die Tracker --}}
-          <div class='stat-item'>
-            <input
-              type='number'
-              name='system.studiedDice'
-              value='{{system.studiedDice}}'
-              data-dtype='Number'
-              class='stat-value-input'
-              min='0'
-            />
-            <label class='stat-label stat-label-wrap rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
-          </div>
-
-          {{!-- Check Modifier --}}
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.universalCheckBonus'
-              value='{{system.universalCheckBonus}}'
-              data-dtype='Number'
-              class='stat-value-input check-mod-value'
-              readonly
-            />
-            <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' oncontextmenu='return false;' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>{{localize "VAGABOND.UI.Labels.CheckMod"}}</label>
-          </div>
-
-          {{!-- {{! Universal Check Bonus }}
-          <div class='stat-item universal-bonus-field'>
-            <input
-              type='number'
-              name='system.universalCheckBonus'
-              value='{{system.universalCheckBonus}}'
-              data-dtype='Number'
-              class='stat-value-input'
-              placeholder='0'
-              data-tooltip='Universal bonus to all d20 rolls'
-            />
-            <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Check"}}</label>
-          </div>
-
-          {{! Universal Damage Bonus }}
-          <div class='stat-item universal-bonus-field'>
-            <div class='damage-bonus-group'>
-              <input
-                type='number'
-                name='system.universalDamageBonus'
-                value='{{system.universalDamageBonus}}'
-                data-dtype='Number'
-                class='stat-value-input damage-flat'
-                placeholder='0'
-                data-tooltip='Flat bonus to all damage'
-              />
-              <input
-                type='text'
-                name='system.universalDamageDice'
-                value='{{system.universalDamageDice}}'
-                class='stat-value-input damage-dice'
-                placeholder='dice'
-                data-tooltip='Dice bonus to all damage (e.g., 1d4)'
-              />
-            </div>
-            <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
-          </div> --}}
-
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.speed.base'
-              value='{{system.speed.base}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Speed"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
-          </div>
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.speed.crawl'
-              value='{{system.speed.crawl}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Crawl"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
-          </div>
-          <div class='stat-item'>
-            <input
-              type='text'
-              name='system.speed.travel'
-              value='{{system.speed.travel}}'
-              data-dtype='Number'
-              class='stat-value-input'
-            />
-            <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Travel"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Miles"}}</span></label>
-          </div>
-          
         </div>
       </div>
     </header>

@@ -770,7 +770,7 @@
     "FavorHinder": {
       "label": "Favor/Hinder",
       "States": {
-        "none": "Favor/Hinder",
+        "none": "Fv/Hd",
         "favor": "Favor",
         "hinder": "Hinder"
       },
@@ -892,7 +892,7 @@
       "Labels": {
         "UnknownAncestry": "Unknown Ancestry",
         "NoClass": "No Class",
-        "CheckMod": "Check Modif.",
+        "CheckMod": "Check Mod.",
         "Check": "Check",
         "Damage": "Damage",
         "Delivery": "Delivery",
@@ -972,8 +972,8 @@
         "OnUseEffect": "Example: Keen Dagger (crits on 19-20, but only with dagger attacks)"
       },
       "Units": {
-        "Feet": "in feet",
-        "Miles": "in miles",
+        "Feet": "'",
+        "Miles": "mi",
         "GridUnits": "in grid units"
       },
       "Buttons": {
