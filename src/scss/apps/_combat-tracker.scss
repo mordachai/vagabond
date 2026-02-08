@@ -1,14 +1,16 @@
+$c-combat-healthbar: rgba(234, 13, 57, 0.80);
+
+
 ol#combat-tracker.directory-list {
   padding: 0 0 0 0.4em !important;
 }
 
 #combat-tracker {
   .faction-header {
-    background: rgba(0, 0, 0, 0.4);
-    border-bottom: 2px solid #111;
+    border-bottom: 3px solid var(--table-header-border-color);
     padding: 5px 8px;
     margin-top: 8px;
-    list-style: none; // Remove list numbering
+    list-style: none;
 
     h4 {
       margin: 0;
@@ -16,34 +18,39 @@ ol#combat-tracker.directory-list {
       text-transform: uppercase;
       font-size: 1.15em;
       letter-spacing: 0.05em;
-      font-family: $font-title;
+      font-family: $font-secondary;
+      text-shadow:
+        1px 1px 0 var(--faction-color),
+        -1px 1px 0 var(--faction-color),
+        -1px -1px 0 var(--faction-color),
+        1px -1px 0 var(--faction-color);
     }
 
-    &.friendly h4 { color: #7fbf7f; text-shadow: 0 0 2px #222; }
-    &.neutral h4 { color: #dfdf7f; text-shadow: 0 0 2px #222; }
-    &.hostile h4 { color: #df7f7f; text-shadow: 0 0 2px #222; }
-    &.secret h4 { color: #bf7fdf; text-shadow: 0 0 2px #222; }
+    // &.friendly h4 { color: var(--color-text-primary); }
+    // &.neutral h4 { color: var(--color-text-primary); }
+    // &.hostile h4 { color: var(--color-text-primary); }
+    // &.secret h4 { color: var(--color-text-primary); }
   }
 
   .combatant {
     padding: 5px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid var(--sidebar-separator);
     border-left: 4px solid transparent;
     display: grid !important;
-    grid-template-columns: minmax(100px, 2fr) auto 40px 24px;
+    grid-template-columns: minmax(100px, 2fr) auto 46px 24px;
     gap: 5px;
     align-items: center;
 
-    &.friendly { border-left-color: #7fbf7f; }
-    &.neutral { border-left-color: #dfdf7f; }
-    &.hostile { border-left-color: #df7f7f; }
-    &.secret { border-left-color: #bf7fdf; }
-    
+    &.friendly { border-left-color: var(--faction-color, #2fc32f); }
+    &.neutral { border-left-color: var(--faction-color, #d7c630); }
+    &.hostile { border-left-color: var(--faction-color, #cc2424); }
+    &.secret { border-left-color: var(--faction-color, #8f24c5); }
+
     &.spent {
       filter: grayscale(80%);
       opacity: 0.6;
     }
-    
+
     &.active {
       border: 1px solid #ffd700;
       background: rgba(255, 215, 0, 0.1);
@@ -60,9 +67,14 @@ ol#combat-tracker.directory-list {
                 flex: 0 0 32px;
                 height: 32px;
                 object-fit: cover;
-                border: 1px solid #444;
+                border: none;
                 border-radius: 4px;
                 cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    transform: scale(1.1);                    
+                }
             }
 
             .name-with-healthbar {
@@ -70,7 +82,7 @@ ol#combat-tracker.directory-list {
                 position: relative;
                 overflow: hidden;
                 border-radius: 4px;
-                background: rgba(0, 0, 0, 0.3);
+                background: var(--table-header-bg-color);
 
                 .healthbar-bg {
                     position: absolute;
@@ -79,8 +91,8 @@ ol#combat-tracker.directory-list {
                     height: 100%;
                     z-index: 0;
                     background: linear-gradient(102deg,
-                        rgba(139, 0, 0, 0.5) 0%,
-                        rgba(234, 13, 57, 0.80) 80%,
+                        rgba(0, 0, 0, 0.5) 0%,
+                        var(--faction-color, $c-combat-healthbar) 80%,
                         rgba(255, 255, 255, 0.95) 100%);
                     transition: width 0.3s ease;
                     pointer-events: none;
@@ -90,7 +102,7 @@ ol#combat-tracker.directory-list {
                         calc(100% - 8px) 100%,
                         0 100%
                     );
-                    box-shadow: 2px 0 4px rgba(255, 100, 120, 0.6);
+                    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.5);
                 }
 
                 h4.name {
@@ -103,8 +115,9 @@ ol#combat-tracker.directory-list {
                     text-overflow: ellipsis;
                     font-size: 1.25em;
                     line-height: 1.25;
-                    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8),
-                                 0 0 2px rgba(0, 0, 0, 1);
+                    color: var(--color-text-selection);
+                    text-shadow: 0 0 4px $c-dark,
+                                 0 0 2px $c-dark;
                 }
             }
         }
@@ -125,11 +138,20 @@ ol#combat-tracker.directory-list {
                 min-width: 0 !important;
                 line-height: 16px;
                 font-size: 14px;
-                color: #aaa;
+                color: var(--color-text-secondary);
                 cursor: pointer;
+                transition: all 0.2s ease;
 
-                &:hover { color: #fff; }
-                &.active { color: #ff6666; }
+                &:hover { 
+                    color: var(--color-text-emphatic);
+                    transform: scale(1.1);
+                 }
+                &.active { 
+                    color: $c-red;
+                    border: none;
+                    outline: none;
+                    box-shadow: none;
+                 }
             }
 
             .initiative-box {
@@ -141,7 +163,7 @@ ol#combat-tracker.directory-list {
                 font-size: 0.9em;
                 font-weight: bold;
                 text-align: center;
-                color: #ffd700;
+                color: $c-tracker-col1;
 
                 .init-value {
                     display: block;
@@ -173,9 +195,10 @@ ol#combat-tracker.directory-list {
                 border-radius: 2px;
                 cursor: help;
                 border: 1px solid transparent;
+                filter: drop-shadow(0 0 3px black);
 
                 &:hover {
-                    border-color: rgba(255,255,255,0.6);
+                    border-color: var(--color-text-secondary);
                     transform: scale(1.2);
                 }
             }
@@ -196,9 +219,9 @@ ol#combat-tracker.directory-list {
                 font-size: 0.9em;
             }
 
-            &.hp { color: #ff6666; }
-            &.fatigue { color: #eebb00; }
-            &.mana { color: #66aaff; }
+            &.hp { color: var(--color-text-primary); }
+            &.fatigue { color: var(--color-text-primary); }
+            &.mana { color: var(--color-text-primary); }
         }
     }
 
@@ -222,8 +245,8 @@ ol#combat-tracker.directory-list {
             min-width: 0 !important;
 
             &.activate-btn {
-                color: #ffd700;
-                &:hover { text-shadow: 0 0 8px #ffd700; }
+                color: $c-tracker-col1;
+                &:hover { text-shadow: 0 0 8px $c-tracker-col1; }
             }
 
             &.deactivate-btn {
@@ -238,7 +261,7 @@ ol#combat-tracker.directory-list {
             justify-content: center;
             gap: 2px;
             font-size: 0.75em;
-            color: #ffd700;
+            color: $c-tracker-col1;
             font-weight: bold;
 
             i {
@@ -251,7 +274,7 @@ ol#combat-tracker.directory-list {
             }
 
             &.spent {
-                color: #444;
+                color: var(--color-text-subtle);
                 opacity: 0.5;
             }
         }
@@ -264,8 +287,8 @@ ol#combat-tracker.directory-list {
         display: flex;
         align-items: center;
         padding: 5px 0;
-        border-top: 1px solid #444;
-        border-bottom: 1px solid #444;
+        border-top: 1px solid var(--sidebar-separator);
+        border-bottom: 1px solid var(--sidebar-separator);
         margin-bottom: 5px;
         gap: 5px;
 
@@ -275,11 +298,11 @@ ol#combat-tracker.directory-list {
         }
     }
 
-    button.combat-control, 
+    button.combat-control,
     button.combat-cycle {
         background: none !important;
         border: none !important;
-        color: #aaa;
+        color: var(--color-text-secondary);
         padding: 0 !important;
         width: 24px;
         height: 24px;
@@ -291,7 +314,7 @@ ol#combat-tracker.directory-list {
         min-width: 0 !important;
 
         &:hover {
-            color: #fff;
+            color: var(--color-text-emphatic);
         }
 
         &[disabled] {
@@ -307,15 +330,14 @@ ol#combat-tracker.directory-list {
 }
 
 #combat-tracker .combatant .initiative-box {
-  flex: 0 0 auto; /* Do not grow or shrink */
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px; /* Fixed width to accommodate the input */
+  width: 30px;
 }
 
 #combat-tracker .combatant .initiative-input {
-  /* Override user agent styles or generic input styles */
   margin: 0 !important;
   height: 24px !important;
   min-width: 32px;
@@ -324,11 +346,10 @@ ol#combat-tracker.directory-list {
   font-size: 14px;
   background: transparent !important;
   border: none !important;
-  color: white !important;
+  color: var(--color-text-emphatic) !important;
   font-weight: bold;
   text-align: center;
-  
-  /* Hide spinner buttons */
+
   -moz-appearance: textfield;
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {

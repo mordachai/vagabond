@@ -20,9 +20,15 @@
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-bg-lite: #7f8c8d;
+  --vagabond-tracker-col1: #ffd900;
 }
 
-.theme-dark {
+// Target both application and interface themes (Foundry v13)
+.theme-dark,
+[data-theme="dark"],
+.vtt.sidebar.theme-dark,
+body.theme-dark #sidebar,
+body[data-theme="dark"] #sidebar {
   --vagabond-c-dark: #231308fa;
   --vagabond-c-lite: #cbc5af;
   --vagabond-c-faint: #c2bea9;
@@ -33,7 +39,7 @@
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
-  --vagabond-c-red: #a10000;
+  --vagabond-c-red: #b70000;
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
   --vagabond-bg-paper: url('../assets/images/old-paper.webp');
@@ -42,6 +48,7 @@
   --vagabond-stat-bg: #231308ec;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
 }
 
 $c-white: var(--vagabond-c-white);
@@ -65,6 +72,9 @@ $bg-stat: var(--vagabond-stat-bg);
 $c-stat: var(--vagabond-c-stat);
 $c-yellow: var(--vagabond-c-chat-yellow);
 $c-bluey: var(--vagabond-c-bluey);
-$c-dark-bluey: var(--vagabond-c-bluey);
+$c-dark-bluey: var(--vagabond-c-dark-bluey);
 $c-damage: var(--vagabond-c-damage-orange);
 $c-bg-lite: var(--vagabond-c-bg-lite);
+
+// Use Foundry's border-highlight for the tracker if not overridden by vagabond variable
+$c-tracker-col1: var(--vagabond-tracker-col1, var(--color-border-highlight));

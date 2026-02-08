@@ -1,65 +1,79 @@
-<form class="encounter-settings-form">
-  <p class="notes">
-    {{localize 'VAGABOND.EncounterSettings.Description'}}
-  </p>
+<div class="flexcol standard-form">
+  <section class="scrollable">
+    <p class="notes">
+      {{localize 'VAGABOND.EncounterSettings.Description'}}
+    </p>
 
-  <fieldset>
-    <legend>{{localize 'VAGABOND.EncounterSettings.GeneralSettings'}}</legend>
+    <fieldset>
+      <legend>{{localize 'VAGABOND.EncounterSettings.GeneralSettings'}}</legend>
 
-    <div class="form-group">
-      <label for="hideInitiativeRoll">
-        <input type="checkbox" name="hideInitiativeRoll" id="hideInitiativeRoll" {{checked hideInitiativeRoll}}>
-        {{localize 'VAGABOND.EncounterSettings.HideInitiativeRoll.Name'}}
-      </label>
-      <p class="hint">{{localize 'VAGABOND.EncounterSettings.HideInitiativeRoll.Hint'}}</p>
-    </div>
+      <div class="form-group">
+        <label for="hideInitiativeRoll">
+          <input type="checkbox" name="hideInitiativeRoll" id="hideInitiativeRoll" {{checked hideInitiativeRoll}}>
+          {{localize 'VAGABOND.EncounterSettings.HideInitiativeRoll.Name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.HideInitiativeRoll.Hint'}}</p>
+      </div>
 
-    <div class="form-group">
-      <label for="useActivationPoints">
-        <input type="checkbox" name="useActivationPoints" id="useActivationPoints" {{checked useActivationPoints}}>
-        {{localize 'VAGABOND.EncounterSettings.UseActivationPoints.Name'}}
-      </label>
-      <p class="hint">{{localize 'VAGABOND.EncounterSettings.UseActivationPoints.Hint'}}</p>
-    </div>
+      <div class="form-group">
+        <label for="useActivationPoints">
+          <input type="checkbox" name="useActivationPoints" id="useActivationPoints" {{checked useActivationPoints}}>
+          {{localize 'VAGABOND.EncounterSettings.UseActivationPoints.Name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.UseActivationPoints.Hint'}}</p>
+      </div>
 
-    <div class="form-group">
-      <label for="defaultActivationPoints">{{localize 'VAGABOND.EncounterSettings.DefaultActivationPoints.Name'}}</label>
-      <input type="number" name="defaultActivationPoints" id="defaultActivationPoints" value="{{defaultActivationPoints}}" min="1" max="10" step="1">
-      <p class="hint">{{localize 'VAGABOND.EncounterSettings.DefaultActivationPoints.Hint'}}</p>
-    </div>
+      <div class="form-group">
+        <label for="defaultActivationPoints">{{localize 'VAGABOND.EncounterSettings.DefaultActivationPoints.Name'}}</label>
+        <input type="number" name="defaultActivationPoints" id="defaultActivationPoints" value="{{defaultActivationPoints}}" min="1" max="10" step="1">
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.DefaultActivationPoints.Hint'}}</p>
+      </div>
 
-    <div class="form-group">
-      <label for="initiativeFormula">{{localize 'VAGABOND.EncounterSettings.InitiativeFormula.Name'}}</label>
-      <input type="text" name="initiativeFormula" id="initiativeFormula" value="{{initiativeFormula}}" placeholder="1d20 + @dexterity.value + @awareness.value">
-      <p class="hint">{{localize 'VAGABOND.EncounterSettings.InitiativeFormula.Hint'}}</p>
-    </div>
+      <div class="form-group">
+        <label for="initiativeFormula">{{localize 'VAGABOND.EncounterSettings.InitiativeFormula.Name'}}</label>
+        <input type="text" name="initiativeFormula" id="initiativeFormula" value="{{initiativeFormula}}" placeholder="3d6 + @dexterity.value + @awareness.value">
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.InitiativeFormula.Hint'}}</p>
+      </div>
 
-    <div class="form-group">
-      <label for="npcInitiativeFormula">{{localize 'VAGABOND.EncounterSettings.NPCInitiativeFormula.Name'}}</label>
-      <input type="text" name="npcInitiativeFormula" id="npcInitiativeFormula" value="{{npcInitiativeFormula}}" placeholder="1d20 + ceil(@speed / 10)">
-      <p class="hint">{{localize 'VAGABOND.EncounterSettings.NPCInitiativeFormula.Hint'}}</p>
-    </div>
-  </fieldset>
+      <div class="form-group">
+        <label for="npcInitiativeFormula">{{localize 'VAGABOND.EncounterSettings.NPCInitiativeFormula.Name'}}</label>
+        <input type="text" name="npcInitiativeFormula" id="npcInitiativeFormula" value="{{npcInitiativeFormula}}" placeholder="3d6 + ceil(@speed / 10)">
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.NPCInitiativeFormula.Hint'}}</p>
+      </div>
+    </fieldset>
 
-  <fieldset>
-    <legend>{{localize 'VAGABOND.EncounterSettings.Factions.Title'}}</legend>
-    <div class="form-group">
-      <label for="factionFriendly">{{localize 'VAGABOND.EncounterSettings.Factions.Friendly'}}</label>
-      <input type="text" name="factionFriendly" id="factionFriendly" value="{{factionFriendly}}">
-    </div>
-    <div class="form-group">
-      <label for="factionNeutral">{{localize 'VAGABOND.EncounterSettings.Factions.Neutral'}}</label>
-      <input type="text" name="factionNeutral" id="factionNeutral" value="{{factionNeutral}}">
-    </div>
-    <div class="form-group">
-      <label for="factionHostile">{{localize 'VAGABOND.EncounterSettings.Factions.Hostile'}}</label>
-      <input type="text" name="factionHostile" id="factionHostile" value="{{factionHostile}}">
-    </div>
-    <div class="form-group">
-      <label for="factionSecret">{{localize 'VAGABOND.EncounterSettings.Factions.Secret'}}</label>
-      <input type="text" name="factionSecret" id="factionSecret" value="{{factionSecret}}">
-    </div>
-  </fieldset>
+    <fieldset>
+      <legend>{{localize 'VAGABOND.EncounterSettings.Factions.Title'}}</legend>
+      <div class="form-group faction-setting">
+        <label for="factionFriendly">{{localize 'VAGABOND.EncounterSettings.Factions.Friendly'}}</label>
+        <div class="input-row flexrow">
+          <input type="text" name="factionFriendly" id="factionFriendly" value="{{factionFriendly}}">
+          <input type="color" name="factionFriendlyColor" value="{{factionFriendlyColor}}" style="flex: 0 0 30px; padding: 0; border: none; height: 26px; cursor: pointer;">
+        </div>
+      </div>
+      <div class="form-group faction-setting">
+        <label for="factionNeutral">{{localize 'VAGABOND.EncounterSettings.Factions.Neutral'}}</label>
+        <div class="input-row flexrow">
+          <input type="text" name="factionNeutral" id="factionNeutral" value="{{factionNeutral}}">
+          <input type="color" name="factionNeutralColor" value="{{factionNeutralColor}}" style="flex: 0 0 30px; padding: 0; border: none; height: 26px; cursor: pointer;">
+        </div>
+      </div>
+      <div class="form-group faction-setting">
+        <label for="factionHostile">{{localize 'VAGABOND.EncounterSettings.Factions.Hostile'}}</label>
+        <div class="input-row flexrow">
+          <input type="text" name="factionHostile" id="factionHostile" value="{{factionHostile}}">
+          <input type="color" name="factionHostileColor" value="{{factionHostileColor}}" style="flex: 0 0 30px; padding: 0; border: none; height: 26px; cursor: pointer;">
+        </div>
+      </div>
+      <div class="form-group faction-setting">
+        <label for="factionSecret">{{localize 'VAGABOND.EncounterSettings.Factions.Secret'}}</label>
+        <div class="input-row flexrow">
+          <input type="text" name="factionSecret" id="factionSecret" value="{{factionSecret}}">
+          <input type="color" name="factionSecretColor" value="{{factionSecretColor}}" style="flex: 0 0 30px; padding: 0; border: none; height: 26px; cursor: pointer;">
+        </div>
+      </div>
+    </fieldset>
+  </section>
 
   <footer class="form-footer flexrow">
     <button type="submit" class="dialog-button default">
@@ -71,4 +85,4 @@
       {{localize 'VAGABOND.EncounterSettings.Cancel'}}
     </button>
   </footer>
-</form>
+</div>

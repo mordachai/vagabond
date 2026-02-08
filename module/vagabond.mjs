@@ -180,7 +180,7 @@ function registerGameSettings() {
     scope: 'world',
     config: false, // Not shown in standard config - use Encounter Settings dialog instead
     type: String,
-    default: '1d20 + @dexterity.value + @awareness.value',
+    default: '3d6 + @dexterity.value + @awareness.value',
     requiresReload: false
   });
 
@@ -191,7 +191,7 @@ function registerGameSettings() {
     scope: 'world',
     config: false, // Not shown in standard config - use Encounter Settings dialog instead
     type: String,
-    default: '1d20 + ceil(@speed / 10)',
+    default: '3d6 + ceil(@speed / 10)',
     requiresReload: false
   });
 
@@ -216,12 +216,30 @@ function registerGameSettings() {
     requiresReload: false
   });
 
+  game.settings.register('vagabond', 'factionFriendlyColor', {
+    name: 'VAGABOND.EncounterSettings.Factions.FriendlyColor',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '#7fbf7f',
+    requiresReload: false
+  });
+
   game.settings.register('vagabond', 'factionNeutral', {
     name: 'VAGABOND.EncounterSettings.Factions.Neutral',
     scope: 'world',
     config: false,
     type: String,
     default: 'Neutrals',
+    requiresReload: false
+  });
+
+  game.settings.register('vagabond', 'factionNeutralColor', {
+    name: 'VAGABOND.EncounterSettings.Factions.NeutralColor',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '#dfdf7f',
     requiresReload: false
   });
 
@@ -234,12 +252,30 @@ function registerGameSettings() {
     requiresReload: false
   });
 
+  game.settings.register('vagabond', 'factionHostileColor', {
+    name: 'VAGABOND.EncounterSettings.Factions.HostileColor',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '#df7f7f',
+    requiresReload: false
+  });
+
   game.settings.register('vagabond', 'factionSecret', {
     name: 'VAGABOND.EncounterSettings.Factions.Secret',
     scope: 'world',
     config: false,
     type: String,
     default: 'Secret',
+    requiresReload: false
+  });
+
+  game.settings.register('vagabond', 'factionSecretColor', {
+    name: 'VAGABOND.EncounterSettings.Factions.SecretColor',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '#bf7fdf',
     requiresReload: false
   });
 
@@ -408,7 +444,7 @@ Hooks.once('init', async function () {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: game.settings.get('vagabond', 'initiativeFormula') || '1d20 + @dexterity.value + @awareness.value',
+    formula: game.settings.get('vagabond', 'initiativeFormula') || '3d6 + @dexterity.value + @awareness.value',
     decimals: 2,
   };
 
@@ -456,7 +492,8 @@ Hooks.once('init', async function () {
   // Wrap activateListeners
   console.log("Vagabond | Wrapping activateListeners method");
   CombatTracker.prototype.activateListeners = function(html) {
-    return VagabondCombatTracker.activateListeners.call(this, originalActivateListeners, html);
+    const jQueryHtml = html instanceof HTMLElement ? $(html) : html;
+    return VagabondCombatTracker.activateListeners.call(this, originalActivateListeners, jQueryHtml);
   };
 
   console.log("Vagabond | Combat document class:", CONFIG.Combat.documentClass.name);

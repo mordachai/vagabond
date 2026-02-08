@@ -1,0 +1,56 @@
+/* Encounter Settings Dialog (ApplicationV2) */
+
+#encounter-settings.encounter-settings-form {
+
+  .window-content {
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+  }
+
+  section.scrollable {
+    padding: 1rem;
+  }
+
+  footer.form-footer {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--vagabond-c-faint);
+    background: rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  fieldset {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+    padding: 1rem;
+
+    legend {
+      font-weight: bold;
+      padding: 0 0.5rem;
+      font-family: Manofa, sans-serif;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      width: auto;
+      border: none;
+      
+      &::before, &::after { display: none !important; }
+    }
+  }
+
+  .faction-setting {
+    margin-bottom: 1rem;
+    
+    .input-row {
+      gap: 4px;
+      align-items: center;
+      display: flex;
+      
+      input[type="text"] {
+        flex: 1;
+      }
+    }
+  }
+}
