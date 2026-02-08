@@ -9,6 +9,18 @@
   width: 100%;
 }
 
+.header-main-wrapper {
+  background-image: url('../assets/images/sheets/statsBanner.webp');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 10px;
+  color: $c-white;
+
+  input {
+    color: $c-white;
+  }
+}
+
 // Character Image Container (180x180 with overlays)
 .char-image-container {
   position: relative;
@@ -620,7 +632,6 @@
     // Check Modifier specific styles
     .check-mod-value {
       pointer-events: none;
-      color: $c-dark;
       font-weight: bold;
 
       &:hover {
@@ -630,44 +641,43 @@
     }
   }
 
-  // Luck Item with Clover Icon
+  // Luck Pool
   .luck-item {
-    .luck-display {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 40px;
-      width: 40px;
+      display: grid;
+      grid-template-rows: 12px 25px 12px;
+      align-content: center;
 
-      .luck-icon {
-        position: absolute;
-        z-index: 1;
-        pointer-events: none;
+      background-image: url('../assets/images/sheets/luckPoolBg.webp');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+
+
+      .luck-label {
+        font-weight: 600;
+        text-align: center;
+        font-family: $font-title;
+        text-transform: uppercase;
+        color: $c-yellow;
+        text-shadow:
+        1px 1px 0 $c-black,
+        -1px 1px 0 $c-black,
+        -1px -1px 0 $c-black,
+        1px -1px 0 $c-black;
       }
 
       .luck-value {
-        position: relative;
-        z-index: 2;
-        width: 40px;
-        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
         border: none;
         background: transparent;
         padding: 0;
-        font-size: 22px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-family: $font-number;
+        font-size: 2em;
         pointer-events: none;
-        background-image: url('../assets/images/luck-frame.webp');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        mix-blend-mode: multiply;
       }
-    }
   }
 
   // Universal Bonus Fields (Check and Damage)

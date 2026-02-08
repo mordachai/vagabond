@@ -884,6 +884,8 @@
         "Crawl": "Crawl",
         "Travel": "Travel",
         "LuckPool": "Luck Pool",
+        "luckTerm": "Luck",
+        "poolTerm": "Pool",
         "StudiedDie": "Study Dice",
         "SkillTraining": "Trained Skills"
       },

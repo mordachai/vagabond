@@ -69,259 +69,255 @@
         </span>
       </div>
 
-      {{! Main Row: Image and Stats Side by Side }}
-      <div class='header-main-row'>
-        {{! Character Image Container }}
-        <div class='image-column'>
-          <div class='char-image-container'>
-            <img
-              class='profile-img'
-              src='{{actor.img}}'
-              data-edit='img'
-              data-action='onEditImage'
-              data-tooltip='{{actor.name}}'
-              width='180'
-              height='180'
-            />
-
-            {{! Armor Info Overlay (Right side) }}
-            <div class='armor-overlay'>
-              {{!-- <div class='armor-type'>{{equippedArmorType}}</div> --}}
-              <div class='armor-name'>{{localize "VAGABOND.Armor.Label"}}</div>
-              <div class='armor-value'>{{system.armor}}</div>
+      <div class="header-main-wrapper">
+        {{! Main Row: Image and Stats Side by Side }}
+        <div class='header-main-row'>
+          {{! Character Image Container }}
+          <div class='image-column'>
+            <div class='char-image-container'>
+              <img
+                class='profile-img'
+                src='{{actor.img}}'
+                data-edit='img'
+                data-action='onEditImage'
+                data-tooltip='{{actor.name}}'
+                width='180'
+                height='180'
+              />
+              {{! Armor Info Overlay (Right side) }}
+              <div class='armor-overlay'>
+                {{!-- <div class='armor-type'>{{equippedArmorType}}</div> --}}
+                <div class='armor-name'>{{localize "VAGABOND.Armor.Label"}}</div>
+                <div class='armor-value'>{{system.armor}}</div>
+              </div>
+              {{! Downtime Button Overlay (Left side) }}
+              <div class='downtime-overlay'>
+                <button
+                  type='button'
+                  class='downtime-overlay-button'
+                  data-action='openDowntime'
+                  data-tooltip='{{localize "VAGABOND.Downtime.OpenTooltip"}}'
+                >
+                  <i class='fas fa-hourglass-half'></i>
+                </button>
+              </div>
+              {{! Status Effects Display }}
+              {{#if statusEffects}}
+                <div class='status-display'>
+                  {{#each statusEffects as |effect|}}
+                    <div class='status-icon'
+                         data-effect-id='{{effect.id}}'
+                         data-effect-uuid='{{effect.uuid}}'
+                         data-tooltip='{{effect.name}}'
+                         data-action='statusClick'>
+                      <img src='{{effect.icon}}' alt='{{effect.name}}' width='24' height='24' />
+                    </div>
+                  {{/each}}
+                </div>
+              {{/if}}
+              {{! Row 3: Hit Points }}
+              <div class='hp-display' data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.ModifyHP'}}">
+                <i class='fas fa-heart hp-icon'></i>
+                <input
+                  type='text'
+                  name='system.health.value'
+                  value='{{system.health.value}}'
+                  data-dtype='Number'
+                  class='hp-current'
+                />
+                <span class='hp-separator'>/</span>
+                <span class='hp-max'>{{system.health.max}}</span>
+              </div>
             </div>
-
-            {{! Downtime Button Overlay (Left side) }}
-            <div class='downtime-overlay'>
-              <button
-                type='button'
-                class='downtime-overlay-button'
-                data-action='openDowntime'
-                data-tooltip='{{localize "VAGABOND.Downtime.OpenTooltip"}}'
-              >
-                <i class='fas fa-hourglass-half'></i>
-              </button>
-            </div>
-
-            {{! Status Effects Display }}
-            {{#if statusEffects}}
-              <div class='status-display'>
-                {{#each statusEffects as |effect|}}
-                  <div class='status-icon'
-                       data-effect-id='{{effect.id}}'
-                       data-effect-uuid='{{effect.uuid}}'
-                       data-tooltip='{{effect.name}}'
-                       data-action='statusClick'>
-                    <img src='{{effect.icon}}' alt='{{effect.name}}' width='24' height='24' />
+          </div>
+          {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
+          <div class='stats-column'>
+            {{! Row 1: Stats Grid - 3x2 grid of stats }}
+            <div class='stats-grid'>
+              {{#each system.stats as |stat key|}}
+                <div class='stat-item'>
+                  {{! Show total value (read-only display) }}
+                  <div class='stat-score stat-total' data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'>
+                    {{stat.total}}
                   </div>
+                  {{! Hidden input for base value (can be edited via inspector/effects) }}
+                  <input
+                    type='hidden'
+                    name='system.stats.{{key}}.value'
+                    value='{{stat.value}}'
+                    data-dtype='Number'
+                  />
+                  <label
+                    class='stat-label'
+                  {{!-- data-action='roll'
+                    data-roll='d20'
+                    data-roll-type='stat'
+                    data-stat-key='{{key}}' --}}
+                    data-label='{{localize (lookup @root.config.stats key)}} Check'
+                    data-tooltip='{{localize (lookup @root.config.stats key)}}'
+                  >{{localize (lookup @root.config.stats key)}}</label>
+                </div>
+              {{/each}}
+            </div>
+            {{! Row 2: Fatigue Bar }}
+            <div class='fatigue-row'>
+              <div class="fatigue-label">{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}: </div>
+              <div class='fatigue-checkboxes'>
+                {{#each fatigueBoxes as |box index|}}
+                  <i
+                    class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                    data-index='{{index}}'
+                    data-tooltip='Fatigue Level {{box.level}}'
+                  ></i>
                 {{/each}}
               </div>
-            {{/if}}
-
-            {{! Row 3: Hit Points }}
-            <div class='hp-display' data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.ModifyHP'}}">
-              <i class='fas fa-heart hp-icon'></i>
-              <input
-                type='text'
-                name='system.health.value'
-                value='{{system.health.value}}'
-                data-dtype='Number'
-                class='hp-current'
-              />
-              <span class='hp-separator'>/</span>
-              <span class='hp-max'>{{system.health.max}}</span>
             </div>
           </div>
         </div>
 
-        {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
-        <div class='stats-column'>
-          {{! Row 1: Stats Grid - 3x2 grid of stats }}
-          <div class='stats-grid'>
-            {{#each system.stats as |stat key|}}
-              <div class='stat-item'>
-                {{! Show total value (read-only display) }}
-                <div class='stat-score stat-total' data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'>
-                  {{stat.total}}
-                </div>
-                {{! Hidden input for base value (can be edited via inspector/effects) }}
-                <input
-                  type='hidden'
-                  name='system.stats.{{key}}.value'
-                  value='{{stat.value}}'
-                  data-dtype='Number'
-                />
-                <label
-                  class='stat-label'
-                {{!-- data-action='roll'
-                  data-roll='d20'
-                  data-roll-type='stat'
-                  data-stat-key='{{key}}' --}}
-                  data-label='{{localize (lookup @root.config.stats key)}} Check'
-                  data-tooltip='{{localize (lookup @root.config.stats key)}}'
-                >{{localize (lookup @root.config.stats key)}}</label>
-              </div>
-            {{/each}}
+        {{! Speed Stats - All in one row with space around }}
+        <div class='speed-stats-row'>
+          {{! Favor/Hinder Toggle Button }}
+          <div class='favor-hinder-toggle-container'>
+            <button
+              type='button'
+              class='favor-hinder-toggle {{system.favorHinder}}'
+              data-action='toggleFavorHinder'
+              data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
+            >
+              {{#if (eq system.favorHinder "favor")}}
+                <img src='systems/vagabond/assets/ui/dice/favor-mark.webp' alt='Favored' class='favor-hinder-marker' />
+              {{else if (eq system.favorHinder "hinder")}}
+                <img src='systems/vagabond/assets/ui/dice/hinder-mark.webp' alt='Hindered' class='favor-hinder-marker' />
+              {{else}}
+                <img src='systems/vagabond/assets/ui/dice/neutral-mark.webp' alt='Neutral' class='favor-hinder-marker' />
+              {{/if}}
+            </button>
+            <label class='favor-hinder-label favor-hinder-label-wrap'>
+              {{#if (eq system.favorHinder "favor")}}
+                {{localize "VAGABOND.FavorHinder.States.favor"}}
+              {{else if (eq system.favorHinder "hinder")}}
+                {{localize "VAGABOND.FavorHinder.States.hinder"}}
+              {{else}}
+                {{localize "VAGABOND.FavorHinder.States.none"}}
+              {{/if}}
+            </label>
           </div>
 
-          {{! Row 2: Fatigue Bar }}
-          <div class='fatigue-row'>
-            <div class="fatigue-label">{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}: </div>
-            <div class='fatigue-checkboxes'>
-              {{#each fatigueBoxes as |box index|}}
-                <i
-                  class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
-                  data-index='{{index}}'
-                  data-tooltip='Fatigue Level {{box.level}}'
-                ></i>
-              {{/each}}
+          {{!-- Studied Die Tracker --}}
+          <div class='stat-item'>
+            <input
+              type='number'
+              name='system.studiedDice'
+              value='{{system.studiedDice}}'
+              data-dtype='Number'
+              class='stat-value-input'
+              min='0'
+            />
+            <label class='stat-label stat-label-wrap rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
+          </div>
+
+          {{!-- Check Modifier --}}
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.universalCheckBonus'
+              value='{{system.universalCheckBonus}}'
+              data-dtype='Number'
+              class='stat-value-input check-mod-value'
+              readonly
+            />
+            <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' oncontextmenu='return false;' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>{{localize "VAGABOND.UI.Labels.CheckMod"}}</label>
+          </div>
+
+          {{!-- {{! Universal Check Bonus }}
+          <div class='stat-item universal-bonus-field'>
+            <input
+              type='number'
+              name='system.universalCheckBonus'
+              value='{{system.universalCheckBonus}}'
+              data-dtype='Number'
+              class='stat-value-input'
+              placeholder='0'
+              data-tooltip='Universal bonus to all d20 rolls'
+            />
+            <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Check"}}</label>
+          </div>
+
+          {{! Universal Damage Bonus }}
+          <div class='stat-item universal-bonus-field'>
+            <div class='damage-bonus-group'>
+              <input
+                type='number'
+                name='system.universalDamageBonus'
+                value='{{system.universalDamageBonus}}'
+                data-dtype='Number'
+                class='stat-value-input damage-flat'
+                placeholder='0'
+                data-tooltip='Flat bonus to all damage'
+              />
+              <input
+                type='text'
+                name='system.universalDamageDice'
+                value='{{system.universalDamageDice}}'
+                class='stat-value-input damage-dice'
+                placeholder='dice'
+                data-tooltip='Dice bonus to all damage (e.g., 1d4)'
+              />
             </div>
+            <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
+          </div> --}}
+
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.speed.base'
+              value='{{system.speed.base}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Speed"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
           </div>
-
-
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.speed.crawl'
+              value='{{system.speed.crawl}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Crawl"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
+          </div>
+          <div class='stat-item'>
+            <input
+              type='text'
+              name='system.speed.travel'
+              value='{{system.speed.travel}}'
+              data-dtype='Number'
+              class='stat-value-input'
+            />
+            <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Travel"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Miles"}}</span></label>
+          </div>
+          <div class='stat-item luck-item'>
+            <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
+            <div class='luck-display'>
+              <input
+                type='number'
+                name='system.currentLuck'
+                value='{{system.currentLuck}}'
+                min='0'
+                max='{{system.maxLuck}}'
+                data-dtype='Number'
+                class='luck-value'
+              />
+            </div>
+            <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
+          </div>
         </div>
       </div>
     </header>
 
-    {{! Speed Stats - All in one row with space around }}
-    <div class='speed-stats-row'>
-      {{! Favor/Hinder Toggle Button }}
-      <div class='favor-hinder-toggle-container'>
-        <button
-          type='button'
-          class='favor-hinder-toggle {{system.favorHinder}}'
-          data-action='toggleFavorHinder'
-          data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
-        >
-          {{#if (eq system.favorHinder "favor")}}
-            <img src='systems/vagabond/assets/ui/dice/favor-mark.webp' alt='Favored' class='favor-hinder-marker' />
-          {{else if (eq system.favorHinder "hinder")}}
-            <img src='systems/vagabond/assets/ui/dice/hinder-mark.webp' alt='Hindered' class='favor-hinder-marker' />
-          {{else}}
-            <img src='systems/vagabond/assets/ui/dice/neutral-mark.webp' alt='Neutral' class='favor-hinder-marker' />
-          {{/if}}
-        </button>
-        <label class='favor-hinder-label favor-hinder-label-wrap'>
-          {{#if (eq system.favorHinder "favor")}}
-            {{localize "VAGABOND.FavorHinder.States.favor"}}
-          {{else if (eq system.favorHinder "hinder")}}
-            {{localize "VAGABOND.FavorHinder.States.hinder"}}
-          {{else}}
-            {{localize "VAGABOND.FavorHinder.States.none"}}
-          {{/if}}
-        </label>
-      </div>
 
-      {{!-- Studied Die Tracker --}}
-      <div class='stat-item'>
-        <input
-          type='number'
-          name='system.studiedDice'
-          value='{{system.studiedDice}}'
-          data-dtype='Number'
-          class='stat-value-input'
-          min='0'
-        />
-        <label class='stat-label stat-label-wrap rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}</label>
-      </div>
-
-      {{!-- Check Modifier --}}
-      <div class='stat-item'>
-        <input
-          type='text'
-          name='system.universalCheckBonus'
-          value='{{system.universalCheckBonus}}'
-          data-dtype='Number'
-          class='stat-value-input check-mod-value'
-          readonly
-        />
-        <label class='stat-label stat-label-wrap rollable' data-action='modifyCheckBonus' oncontextmenu='return false;' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>{{localize "VAGABOND.UI.Labels.CheckMod"}}</label>
-      </div>
-
-      {{!-- {{! Universal Check Bonus }}
-      <div class='stat-item universal-bonus-field'>
-        <input
-          type='number'
-          name='system.universalCheckBonus'
-          value='{{system.universalCheckBonus}}'
-          data-dtype='Number'
-          class='stat-value-input'
-          placeholder='0'
-          data-tooltip='Universal bonus to all d20 rolls'
-        />
-        <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Check"}}</label>
-      </div>
-
-      {{! Universal Damage Bonus }}
-      <div class='stat-item universal-bonus-field'>
-        <div class='damage-bonus-group'>
-          <input
-            type='number'
-            name='system.universalDamageBonus'
-            value='{{system.universalDamageBonus}}'
-            data-dtype='Number'
-            class='stat-value-input damage-flat'
-            placeholder='0'
-            data-tooltip='Flat bonus to all damage'
-          />
-          <input
-            type='text'
-            name='system.universalDamageDice'
-            value='{{system.universalDamageDice}}'
-            class='stat-value-input damage-dice'
-            placeholder='dice'
-            data-tooltip='Dice bonus to all damage (e.g., 1d4)'
-          />
-        </div>
-        <label class='stat-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
-      </div> --}}
-
-      <div class='stat-item'>
-        <input
-          type='text'
-          name='system.speed.base'
-          value='{{system.speed.base}}'
-          data-dtype='Number'
-          class='stat-value-input'
-        />
-        <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Speed"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
-      </div>
-      <div class='stat-item'>
-        <input
-          type='text'
-          name='system.speed.crawl'
-          value='{{system.speed.crawl}}'
-          data-dtype='Number'
-          class='stat-value-input'
-        />
-        <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Crawl"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></label>
-      </div>
-      <div class='stat-item'>
-        <input
-          type='text'
-          name='system.speed.travel'
-          value='{{system.speed.travel}}'
-          data-dtype='Number'
-          class='stat-value-input'
-        />
-        <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Travel"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Miles"}}</span></label>
-      </div>
-      <div class='stat-item luck-item'>
-        <div class='luck-display'>
-          <i class='luck-icon'></i>
-          <input
-            type='number'
-            name='system.currentLuck'
-            value='{{system.currentLuck}}'
-            min='0'
-            max='{{system.maxLuck}}'
-            data-dtype='Number'
-            class='luck-value'
-          />
-        </div>
-        <label class='stat-label stat-label-wrap rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.LuckPool"}}</label>
-      </div>
-    </div>
 
     <section class='skills-container grid-skills grid-skills-2col'>
       {{! Left column: Skills (1-column layout) }}
