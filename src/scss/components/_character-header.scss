@@ -45,36 +45,33 @@
   position: absolute;
   top: -15px;
   right: -10px;
-  width: 76px;
-  height: 90px;
-  background-image: url('../assets/images/armor-frame.webp');
-  background-size: contain;
-  background-position: top center;
+  width: 45px;
+  height: 53px;
+  background-image: url('../assets/images/sheets/armorBG.webp');
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 18px 35px;
   align-items: center;
   justify-content: center;
-  padding-left: 12px;
 
-  // .armor-type {
-  //   position: relative;
-  //   top: 0;
-  //   font-size: 9px;
-  //   font-weight: 700;
-  //   color: $c-dark;
-  //   text-transform: uppercase;
-  //   line-height: 1;
-  //   font-family: $font-primary;
-  // }
+  .armor-name {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: $c-dark;
+    text-transform: uppercase;
+    color: $c-dark-bluey;
+    font-family: $font-primary;
+  }
 
   .armor-value {
     position: relative;
-    bottom: 4px;
-    font-size: 28px;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(33, 33, 33, 0.424);
-    line-height: 1;
+    top: -5px;
+    font-family: $font-number;
+    font-size: 2.2em;
+    color: $c-white;
+    text-align: center;
   }
 }
 
@@ -208,23 +205,24 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
+  font-family: $font-number;
   font-weight: bold;
-  padding-bottom: 12px;
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: 80%;
   height: auto;
-  background-image: url(../assets/images/hp-banner.webp);
+  color: $c-white;
+  background-image: url(../assets/images/sheets/healthBG.webp);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
 
 
   .hp-icon {
     font-size: 18px;
-    color: $c-red;
+    color: $c-yellow;
     cursor: pointer;
     transition: transform 0.1s ease;
 
@@ -241,6 +239,7 @@
     padding: 2px 2px;
     font-size: 22px;
     font-weight: bold;
+    color: $c-white;
   }
 
   .hp-separator {
@@ -284,7 +283,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 6px 10px;
   flex: 1;
 
   .stat-item {
@@ -298,13 +296,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 50px;
     font-size: 28px;
     font-weight: bold;
     text-align: center;
     border-radius: 3px;
-    background: $bg-stat;
+    background: url('../assets/images/sheets/statBG.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
     padding-top: 5px;
     color: $c-stat;
     font-family: $font-secondary;
@@ -323,12 +324,19 @@
   }
 
   .stat-label {
-    font-size: 13px;
-    font-weight: 500;
+    position: relative;
+    top: -12px;
+    font-size: 16px;
+    font-weight: 600;
     text-align: center;
-    line-height: 1.2;
-    font-family: $font-character-name;
-    padding: 4px 0;
+    font-family: $font-title;
+    text-transform: uppercase;
+    color: $c-yellow;
+    text-shadow:
+    1px 1px 0 $c-black,
+    -1px 1px 0 $c-black,
+    -1px -1px 0 $c-black,
+    1px -1px 0 $c-black;
   }
 
   // Allow stat-total to be a div instead of input
@@ -352,32 +360,6 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-  }
-}
-
-// Name Row (old positioning)
-.name-row {
-  margin-bottom: 2px;
-}
-
-// Character Name Input
-.character-name-input {
-  border: none !important;
-  background: transparent !important;
-  text-align: left;
-  font-size: 20px;
-  font-family: $font-character-name;
-  font-weight: bold;
-  outline: none;
-  width: 100%;
-  padding: 2px 0 4px 0;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
-
-  &:hover,
-  &:focus {
-    border-bottom: 2px solid $c-dark !important;;
-    background: transparent !important;
   }
 }
 
@@ -419,134 +401,85 @@
 
 /* Character Name at Top - Full Width */
 .name-row-top {
+  position: relative;
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 85px;
   align-items: center;
   justify-content: center;
+  background-image: url('../assets/images/sheets/nameBanner.webp');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   gap: 12px;
+  height: 50px;
+
+  input[type=text] {
+    color: $c-white;
+    font-family: $font-title;
+    padding-bottom: 4px;
+    font-size: 1.8em;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+
+    &:hover,
+    &:focus { 
+      border: none;
+      outline: none;
+      text-decoration: none;
+    }
+  }
+
+  .top-right-controls {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    pointer-events: none; // Allow clicks through to the name input if they overlap slightly
+    
+    * {
+      pointer-events: auto; // Re-enable pointer events for the actual controls
+    }
+  }
 }
 
 // XP Field Inline (next to name)
 .xp-field-inline {
   display: flex;
-  align-items: center;
-  font-size: 14px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  align-items: last baseline;
   white-space: nowrap;
-  flex-shrink: 0;
-  box-shadow: none;
+  flex: 0 0 auto;
+  padding-right: 25px;
+  padding-top: 12px;
+  color: $c-yellow;
+  font-family: $font-title;
+  font-size: 14px;
+  gap: 0;
 
   .resource-label {
-    font-size: 12px;
-    font-weight: 700;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 2px;
     cursor: pointer;
-
-    .level-up-icon {
-      animation: pulse 1.5s ease-in-out infinite;
-      color: $c-red;
-    }
+    color: inherit;
+    font-size: 10px;
+    margin-right: 2px;
   }
 
   .xp-input {
-    width: 35px;
+    width: 16px;
     text-align: center;
     border: none;
     background: transparent;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 2px 4px;
-    flex-shrink: 0;
-    cursor: text;
-    pointer-events: auto;
-
-    &:hover,
-    &:focus {
-      border-bottom: 1px solid $c-dark;
-    }
+    padding: 0;
   }
 
   .xp-required {
     font-size: 16px;
-    font-weight: 500;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
 
-  // Level Up Ready State
-  &.level-up-ready {
-    color: $c-red;
-    animation: glow-pulse 2s ease-in-out infinite;
-
-    .resource-label {
-      color: $c-red;
-      text-shadow: 0 0 4px $c-red;
-
-      &:hover {
-        opacity: 0.85;
-      }
-    }
-
-    .xp-input {
-      font-weight: 700;
-      cursor: text;
-
-      &:hover,
-      &:focus {
-        border-bottom-color: $c-red;
-      }
-    }
-
-    .xp-required {
-      font-weight: 600;
-      font-size: 14px;
-    }
-  }
-}
-
-// Keyframe animations
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-}
-
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-}
-
-// Large Character Name Input (centered)
-.character-name-input-large {
-  border: none !important;
-  background: transparent !important;
-  text-align: center;
-  font-size: 28px;
-  font-family: $font-character-name;
-  font-weight: 700;
-  width: 100%;
-  padding: 0;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
-
-  &:hover,
-  &:focus {
-    border-bottom: 2px solid $c-dark !important;
-    background: transparent !important;
+  input[type=text] {
+      font-size: 1.15em;
+      color: $c-yellow;
   }
 }
 
