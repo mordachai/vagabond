@@ -26,21 +26,25 @@ export class VagabondCombatTracker {
     context.factions = {
       friendly: { 
         label: game.settings.get('vagabond', 'factionFriendly') || "VAGABOND.Combat.Factions.Friendly", 
+        color: game.settings.get('vagabond', 'factionFriendlyColor') || "#7fbf7f",
         turns: [], 
         css: "friendly" 
       },
       neutral: { 
         label: game.settings.get('vagabond', 'factionNeutral') || "VAGABOND.Combat.Factions.Neutral", 
+        color: game.settings.get('vagabond', 'factionNeutralColor') || "#dfdf7f",
         turns: [], 
         css: "neutral" 
       },
       hostile: { 
         label: game.settings.get('vagabond', 'factionHostile') || "VAGABOND.Combat.Factions.Hostile", 
+        color: game.settings.get('vagabond', 'factionHostileColor') || "#df7f7f",
         turns: [], 
         css: "hostile" 
       },
       secret: { 
         label: game.settings.get('vagabond', 'factionSecret') || "VAGABOND.Combat.Factions.Secret", 
+        color: game.settings.get('vagabond', 'factionSecretColor') || "#bf7fdf",
         turns: [], 
         css: "secret" 
       }
@@ -92,7 +96,9 @@ export class VagabondCombatTracker {
       else if (disposition === CONST.TOKEN_DISPOSITIONS.SECRET) factionKey = 'secret';
 
       turn.factionClass = factionKey;
-      context.factions[factionKey].turns.push(turn);
+      const faction = context.factions[factionKey];
+      turn.factionColor = faction.color;
+      faction.turns.push(turn);
     }
 
     // No need to return anything - we modified context in place

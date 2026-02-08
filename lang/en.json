@@ -1017,10 +1017,10 @@
       "GeneralSettings": "General Settings",
       "Factions": {
         "Title": "Faction Titles",
-        "Friendly": "Friendly Faction Title",
-        "Neutral": "Neutral Faction Title",
-        "Hostile": "Hostile Faction Title",
-        "Secret": "Secret Faction Title"
+        "Friendly": "Friendly: ",
+        "Neutral": "Neutral: ",
+        "Hostile": "Hostile: ",
+        "Secret": "Secret: "
       },
       "HideInitiativeRoll": {
         "Name": "Hide Initiative Roll",

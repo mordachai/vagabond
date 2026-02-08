@@ -241,28 +241,28 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'berserk',
     name: 'VAGABOND.StatusConditions.Berserk',
-    icon: 'icons/svg/terror.svg',
+    img: 'icons/svg/terror.svg',
     statuses: ['berserk'],
     description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. [MANUAL TRACKING]'
   },
   {
     id: 'burning',
     name: 'VAGABOND.StatusConditions.Burning',
-    icon: 'icons/svg/fire.svg',
+    img: 'icons/svg/fire.svg',
     statuses: ['burning'],
     description: 'Takes damage at the start of its turn. Can be ended by an appropriate action. [MANUAL TRACKING]'
   },
   {
     id: 'charmed',
     name: 'VAGABOND.StatusConditions.Charmed',
-    icon: 'icons/svg/heal.svg',
+    img: 'icons/svg/heal.svg',
     statuses: ['charmed'],
     description: 'Can\'t willingly make an Attack Action targeting the one who Charmed it. [MANUAL TRACKING]'
   },
   {
     id: 'suffocating',
     name: 'VAGABOND.StatusConditions.Suffocating',
-    icon: 'icons/svg/stoned.svg',
+    img: 'icons/svg/stoned.svg',
     statuses: ['suffocating'],
     description: 'After not breathing for 1 minute, each round: Heroes roll d8 (if ≥ Might, gain 1 Fatigue), Enemies gain 1 Fatigue. [MANUAL TRACKING]'
   },
@@ -271,7 +271,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'dazed',
     name: 'VAGABOND.StatusConditions.Dazed',
-    icon: 'icons/svg/sleep.svg',
+    img: 'icons/svg/sleep.svg',
     statuses: ['dazed'],
     description: 'Can\'t Focus or Move unless it uses an Action to do so. Speed reduced to 0. [AUTOMATED: Speed = 0. MANUAL: Action restrictions]',
     changes: [
@@ -285,7 +285,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'fatigued',
     name: 'VAGABOND.StatusConditions.Fatigued',
-    icon: 'icons/svg/degen.svg',
+    img: 'icons/svg/degen.svg',
     statuses: ['fatigued'],
     description: 'Each Fatigue occupies an Item Slot. At 3+ Fatigue, can\'t Rush. At 5 Fatigue, dies. [AUTOMATED: Use Fatigue tracker (skull icons) on character sheet. Slot reduction is automatic.]'
     // NOTE: Fatigued is managed via system.fatigue value, not Active Effects
@@ -293,7 +293,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'prone',
     name: 'VAGABOND.StatusConditions.Prone',
-    icon: 'icons/svg/falling.svg',
+    img: 'icons/svg/falling.svg',
     statuses: ['prone'],
     description: 'Speed = 0. Costs 10\' Speed to stand. Can crawl (2:1 ratio). Can\'t Rush. Vulnerable (attacks/saves Hindered, incoming attacks Favored). [AUTOMATED: Speed = 0, Vulnerable. MANUAL: Stand cost, crawl ratio]',
     changes: [
@@ -324,7 +324,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'frightened',
     name: 'VAGABOND.StatusConditions.Frightened',
-    icon: 'icons/svg/hazard.svg',
+    img: 'icons/svg/hazard.svg',
     statuses: ['frightened'],
     description: '-2 penalty to all damage dealt. [FULLY AUTOMATED]',
     changes: [
@@ -338,7 +338,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'sickened',
     name: 'VAGABOND.StatusConditions.Sickened',
-    icon: 'icons/svg/poison.svg',
+    img: 'icons/svg/poison.svg',
     statuses: ['sickened'],
     description: '-2 penalty to any healing received. [FULLY AUTOMATED]',
     changes: [
@@ -352,7 +352,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'confused',
     name: 'VAGABOND.StatusConditions.Confused',
-    icon: 'icons/svg/daze.svg',
+    img: 'icons/svg/daze.svg',
     statuses: ['confused'],
     description: 'Checks and Saves have Hinder. Saves against its Actions have Favor. [FULLY AUTOMATED]',
     changes: [
@@ -371,7 +371,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'vulnerable',
     name: 'VAGABOND.StatusConditions.Vulnerable',
-    icon: 'icons/svg/downgrade.svg',
+    img: 'icons/svg/downgrade.svg',
     statuses: ['vulnerable'],
     description: 'Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor. [FULLY AUTOMATED]',
     changes: [
@@ -395,7 +395,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'blinded',
     name: 'VAGABOND.StatusConditions.Blinded',
-    icon: 'icons/svg/blind.svg',
+    img: 'icons/svg/blind.svg',
     statuses: ['blinded'],
     description: 'Can\'t see. Vulnerable. [FULLY AUTOMATED]',
     changes: [
@@ -420,7 +420,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'invisible',
     name: 'VAGABOND.StatusConditions.Invisible',
-    icon: 'icons/svg/invisible.svg',
+    img: 'icons/svg/invisible.svg',
     statuses: ['invisible'],
     description: 'Can\'t be seen. Attackers act as Blinded (attacks Hindered). [FULLY AUTOMATED]',
     changes: [
@@ -434,7 +434,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'restrained',
     name: 'VAGABOND.StatusConditions.Restrained',
-    icon: 'icons/svg/net.svg',
+    img: 'icons/svg/net.svg',
     statuses: ['restrained'],
     description: 'Vulnerable + Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -464,7 +464,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'incapacitated',
     name: 'VAGABOND.StatusConditions.Incapacitated',
-    icon: 'icons/svg/unconscious.svg',
+    img: 'icons/svg/unconscious.svg',
     statuses: ['incapacitated'],
     description: 'Can\'t Focus, use Actions, or Move. Automatically fails Might and Dexterity checks. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -506,7 +506,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'paralyzed',
     name: 'VAGABOND.StatusConditions.Paralyzed',
-    icon: 'icons/svg/paralysis.svg',
+    img: 'icons/svg/paralysis.svg',
     statuses: ['paralyzed'],
     description: 'Incapacitated + Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -546,7 +546,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'unconscious',
     name: 'VAGABOND.StatusConditions.Unconscious',
-    icon: 'icons/svg/sleep.svg',
+    img: 'icons/svg/sleep.svg',
     statuses: ['unconscious'],
     description: 'Blinded + Incapacitated + Prone. Close Attacks (range: close) always Crit. [FULLY AUTOMATED]',
     changes: [
@@ -592,7 +592,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'dead',
     name: 'VAGABOND.StatusConditions.Dead',
-    icon: 'icons/svg/skull.svg',
+    img: 'icons/svg/skull.svg',
     statuses: ['dead'],
     description: 'Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks). [FULLY AUTOMATED]',
     changes: [

@@ -9,7 +9,7 @@ export class CompendiumSettings extends foundry.applications.api.HandlebarsAppli
 ) {
   static DEFAULT_OPTIONS = {
     id: 'compendium-settings',
-    classes: ['vagabond', 'compendium-settings'],
+    classes: ['compendium-settings'],
     tag: 'form',
     window: {
       title: 'Character Builder Compendium Settings',

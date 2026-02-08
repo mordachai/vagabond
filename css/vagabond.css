@@ -64,9 +64,14 @@
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-bg-lite: #7f8c8d;
+  --vagabond-tracker-col1: #ffd900;
 }
 
-.theme-dark {
+.theme-dark,
+[data-theme=dark],
+.vtt.sidebar.theme-dark,
+body.theme-dark #sidebar,
+body[data-theme=dark] #sidebar {
   --vagabond-c-dark: #231308fa;
   --vagabond-c-lite: #cbc5af;
   --vagabond-c-faint: #c2bea9;
@@ -77,7 +82,7 @@
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
-  --vagabond-c-red: #a10000;
+  --vagabond-c-red: #b70000;
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
   --vagabond-bg-paper: url("../assets/images/old-paper.webp");
@@ -86,6 +91,7 @@
   --vagabond-stat-bg: #231308ec;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-tracker-col1: #3db5ff;
 }
 
 .flex-025 {
@@ -1406,7 +1412,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   overflow: hidden;
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box .defend-header {
-  background: var(--vagabond-c-bluey);
+  background: var(--vagabond-c-dark-bluey);
   color: white;
   padding: 5px 8px;
   font-size: 12px;
@@ -1678,7 +1684,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .chat-targets-section {
   margin: 8px 0;
   padding: 4px 0;
-  border-bottom: 1px solid var(--vagabond-c-bluey);
+  border-bottom: 1px solid var(--vagabond-c-dark-bluey);
 }
 .chat-targets-section .targets-header {
   background-image: url("../assets/ui/chat/damage-title-bg.webp");
@@ -4240,8 +4246,7 @@ ol#combat-tracker.directory-list {
 }
 
 #combat-tracker .faction-header {
-  background: rgba(0, 0, 0, 0.4);
-  border-bottom: 2px solid #111;
+  border-bottom: 3px solid var(--table-header-border-color);
   padding: 5px 8px;
   margin-top: 8px;
   list-style: none;
@@ -4252,44 +4257,29 @@ ol#combat-tracker.directory-list {
   text-transform: uppercase;
   font-size: 1.15em;
   letter-spacing: 0.05em;
-  font-family: "Eskapade", serif;
-}
-#combat-tracker .faction-header.friendly h4 {
-  color: #7fbf7f;
-  text-shadow: 0 0 2px #222;
-}
-#combat-tracker .faction-header.neutral h4 {
-  color: #dfdf7f;
-  text-shadow: 0 0 2px #222;
-}
-#combat-tracker .faction-header.hostile h4 {
-  color: #df7f7f;
-  text-shadow: 0 0 2px #222;
-}
-#combat-tracker .faction-header.secret h4 {
-  color: #bf7fdf;
-  text-shadow: 0 0 2px #222;
+  font-family: "Manofa", serif;
+  text-shadow: 1px 1px 0 var(--faction-color), -1px 1px 0 var(--faction-color), -1px -1px 0 var(--faction-color), 1px -1px 0 var(--faction-color);
 }
 #combat-tracker .combatant {
   padding: 5px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--sidebar-separator);
   border-left: 4px solid transparent;
   display: grid !important;
-  grid-template-columns: minmax(100px, 2fr) auto 40px 24px;
+  grid-template-columns: minmax(100px, 2fr) auto 46px 24px;
   gap: 5px;
   align-items: center;
 }
 #combat-tracker .combatant.friendly {
-  border-left-color: #7fbf7f;
+  border-left-color: var(--faction-color, #2fc32f);
 }
 #combat-tracker .combatant.neutral {
-  border-left-color: #dfdf7f;
+  border-left-color: var(--faction-color, #d7c630);
 }
 #combat-tracker .combatant.hostile {
-  border-left-color: #df7f7f;
+  border-left-color: var(--faction-color, #cc2424);
 }
 #combat-tracker .combatant.secret {
-  border-left-color: #bf7fdf;
+  border-left-color: var(--faction-color, #8f24c5);
 }
 #combat-tracker .combatant.spent {
   filter: grayscale(80%);
@@ -4309,16 +4299,20 @@ ol#combat-tracker.directory-list {
   flex: 0 0 32px;
   height: 32px;
   object-fit: cover;
-  border: 1px solid #444;
+  border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+#combat-tracker .combatant .col-1 .row-1 .token-image:hover {
+  transform: scale(1.1);
 }
 #combat-tracker .combatant .col-1 .row-1 .name-with-healthbar {
   flex: 1;
   position: relative;
   overflow: hidden;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--table-header-bg-color);
 }
 #combat-tracker .combatant .col-1 .row-1 .name-with-healthbar .healthbar-bg {
   position: absolute;
@@ -4326,11 +4320,11 @@ ol#combat-tracker.directory-list {
   left: 0;
   height: 100%;
   z-index: 0;
-  background: linear-gradient(102deg, rgba(139, 0, 0, 0.5) 0%, rgba(234, 13, 57, 0.8) 80%, rgba(255, 255, 255, 0.95) 100%);
+  background: linear-gradient(102deg, rgba(0, 0, 0, 0.5) 0%, var(--faction-color, rgba(234, 13, 57, 0.8)) 80%, rgba(255, 255, 255, 0.95) 100%);
   transition: width 0.3s ease;
   pointer-events: none;
   clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-  box-shadow: 2px 0 4px rgba(255, 100, 120, 0.6);
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.5);
 }
 #combat-tracker .combatant .col-1 .row-1 .name-with-healthbar h4.name {
   position: relative;
@@ -4342,7 +4336,8 @@ ol#combat-tracker.directory-list {
   text-overflow: ellipsis;
   font-size: 1.25em;
   line-height: 1.25;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8), 0 0 2px rgb(0, 0, 0);
+  color: var(--color-text-selection);
+  text-shadow: 0 0 4px var(--vagabond-c-dark), 0 0 2px var(--vagabond-c-dark);
 }
 #combat-tracker .combatant .col-1 .operation-controls {
   gap: 4px;
@@ -4360,14 +4355,19 @@ ol#combat-tracker.directory-list {
   min-width: 0 !important;
   line-height: 16px;
   font-size: 14px;
-  color: #aaa;
+  color: var(--color-text-secondary);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 #combat-tracker .combatant .col-1 .operation-controls .combatant-control.icon-only:hover {
-  color: #fff;
+  color: var(--color-text-emphatic);
+  transform: scale(1.1);
 }
 #combat-tracker .combatant .col-1 .operation-controls .combatant-control.icon-only.active {
-  color: #ff6666;
+  color: var(--vagabond-c-red);
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 #combat-tracker .combatant .col-1 .operation-controls .initiative-box {
   display: flex;
@@ -4378,7 +4378,7 @@ ol#combat-tracker.directory-list {
   font-size: 0.9em;
   font-weight: bold;
   text-align: center;
-  color: #ffd700;
+  color: var(--vagabond-tracker-col1, var(--color-border-highlight));
 }
 #combat-tracker .combatant .col-1 .operation-controls .initiative-box .init-value {
   display: block;
@@ -4406,9 +4406,10 @@ ol#combat-tracker.directory-list {
   border-radius: 2px;
   cursor: help;
   border: 1px solid transparent;
+  filter: drop-shadow(0 0 3px black);
 }
 #combat-tracker .combatant .col-2.effects-column .effects-grid .effect-icon:hover {
-  border-color: rgba(255, 255, 255, 0.6);
+  border-color: var(--color-text-secondary);
   transform: scale(1.2);
 }
 #combat-tracker .combatant .col-3.stats-column {
@@ -4425,13 +4426,13 @@ ol#combat-tracker.directory-list {
   font-size: 0.9em;
 }
 #combat-tracker .combatant .col-3.stats-column .res-row.hp {
-  color: #ff6666;
+  color: var(--color-text-primary);
 }
 #combat-tracker .combatant .col-3.stats-column .res-row.fatigue {
-  color: #eebb00;
+  color: var(--color-text-primary);
 }
 #combat-tracker .combatant .col-3.stats-column .res-row.mana {
-  color: #66aaff;
+  color: var(--color-text-primary);
 }
 #combat-tracker .combatant .col-4.center-content {
   height: 100%;
@@ -4453,10 +4454,10 @@ ol#combat-tracker.directory-list {
   min-width: 0 !important;
 }
 #combat-tracker .combatant .col-4.center-content .combatant-control.activate-btn {
-  color: #ffd700;
+  color: var(--vagabond-tracker-col1, var(--color-border-highlight));
 }
 #combat-tracker .combatant .col-4.center-content .combatant-control.activate-btn:hover {
-  text-shadow: 0 0 8px #ffd700;
+  text-shadow: 0 0 8px var(--vagabond-tracker-col1, var(--color-border-highlight));
 }
 #combat-tracker .combatant .col-4.center-content .combatant-control.deactivate-btn {
   color: #ff4444;
@@ -4470,7 +4471,7 @@ ol#combat-tracker.directory-list {
   justify-content: center;
   gap: 2px;
   font-size: 0.75em;
-  color: #ffd700;
+  color: var(--vagabond-tracker-col1, var(--color-border-highlight));
   font-weight: bold;
 }
 #combat-tracker .combatant .col-4.center-content .activation-counter i {
@@ -4481,7 +4482,7 @@ ol#combat-tracker.directory-list {
   line-height: 1;
 }
 #combat-tracker .combatant .col-4.center-content .activation-counter.spent {
-  color: #444;
+  color: var(--color-text-subtle);
   opacity: 0.5;
 }
 
@@ -4489,8 +4490,8 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   padding: 5px 0;
-  border-top: 1px solid #444;
-  border-bottom: 1px solid #444;
+  border-top: 1px solid var(--sidebar-separator);
+  border-bottom: 1px solid var(--sidebar-separator);
   margin-bottom: 5px;
   gap: 5px;
 }
@@ -4502,7 +4503,7 @@ ol#combat-tracker.directory-list {
 .combat-tracker-header button.combat-cycle {
   background: none !important;
   border: none !important;
-  color: #aaa;
+  color: var(--color-text-secondary);
   padding: 0 !important;
   width: 24px;
   height: 24px;
@@ -4515,7 +4516,7 @@ ol#combat-tracker.directory-list {
 }
 .combat-tracker-header button.combat-control:hover,
 .combat-tracker-header button.combat-cycle:hover {
-  color: #fff;
+  color: var(--color-text-emphatic);
 }
 .combat-tracker-header button.combat-control[disabled],
 .combat-tracker-header button.combat-cycle[disabled] {
@@ -4529,15 +4530,14 @@ ol#combat-tracker.directory-list {
 }
 
 #combat-tracker .combatant .initiative-box {
-  flex: 0 0 auto; /* Do not grow or shrink */
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px; /* Fixed width to accommodate the input */
+  width: 30px;
 }
 
 #combat-tracker .combatant .initiative-input {
-  /* Override user agent styles or generic input styles */
   margin: 0 !important;
   height: 24px !important;
   min-width: 32px;
@@ -4546,10 +4546,9 @@ ol#combat-tracker.directory-list {
   font-size: 14px;
   background: transparent !important;
   border: none !important;
-  color: white !important;
+  color: var(--color-text-emphatic) !important;
   font-weight: bold;
   text-align: center;
-  /* Hide spinner buttons */
   -moz-appearance: textfield;
 }
 #combat-tracker .combatant .initiative-input::-webkit-outer-spin-button, #combat-tracker .combatant .initiative-input::-webkit-inner-spin-button {
@@ -4557,319 +4556,123 @@ ol#combat-tracker.directory-list {
   margin: 0;
 }
 
-/* Compendium Settings Dialog (ApplicationV2) */
-.compendium-settings {
-  /* -------------------------------------------- */
-  /*  Header                                      */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  Use All Section                             */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  Button Section                              */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  Compendium Sections                         */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  Compendium Items                            */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  No Compendiums                              */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  Footer                                      */
-  /* -------------------------------------------- */
-  /* -------------------------------------------- */
-  /*  Responsive Design                           */
-  /* -------------------------------------------- */
+/* Encounter Settings Dialog (ApplicationV2) */
+#encounter-settings.encounter-settings-form .window-content {
+  overflow-y: auto !important;
+  scrollbar-width: thin;
 }
+#encounter-settings.encounter-settings-form section.scrollable {
+  padding: 1rem;
+}
+#encounter-settings.encounter-settings-form footer.form-footer {
+  flex: 0 0 auto;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+#encounter-settings.encounter-settings-form fieldset {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 1rem;
+}
+#encounter-settings.encounter-settings-form fieldset legend {
+  font-weight: bold;
+  padding: 0 0.5rem;
+  font-family: Manofa, sans-serif;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  width: auto;
+  border: none;
+}
+#encounter-settings.encounter-settings-form fieldset legend::before, #encounter-settings.encounter-settings-form fieldset legend::after {
+  display: none !important;
+}
+#encounter-settings.encounter-settings-form .faction-setting {
+  margin-bottom: 1rem;
+}
+#encounter-settings.encounter-settings-form .faction-setting .input-row {
+  gap: 4px;
+  align-items: center;
+  display: flex;
+}
+#encounter-settings.encounter-settings-form .faction-setting .input-row input[type=text] {
+  flex: 1;
+}
+
+/* Compendium Settings Dialog (ApplicationV2) */
 .compendium-settings .compendium-settings-content {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  max-height: 70vh;
-  padding-right: 0.5rem;
+  padding: 0.5rem;
+  gap: 10px;
 }
-.compendium-settings .settings-header {
-  padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, rgba(var(--vagabond-c-bluey), 0.15) 0%, rgba(var(--vagabond-c-bluey), 0.08) 100%);
-  border-bottom: 2px solid var(--vagabond-c-bluey);
-  margin-bottom: 1.5rem;
-}
-.compendium-settings .settings-header .settings-description {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--vagabond-c-dark);
-}
-.compendium-settings .use-all-section {
-  padding: 0 1.5rem;
-  margin-bottom: 1.5rem;
-  background: var(--vagabond-c-inset-2);
-  border: 2px solid var(--vagabond-c-bluey);
-  border-radius: 6px;
-}
-.compendium-settings .use-all-section .use-all-row {
+.compendium-settings .use-all-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
-  transition: all 0.2s ease;
 }
-.compendium-settings .use-all-section .use-all-row:hover {
-  background: rgba(var(--vagabond-c-bluey), 0.15);
-  box-shadow: 0 2px 4px rgba(var(--vagabond-c-dark), 0.1);
-}
-.compendium-settings .use-all-section .use-all-row .checkbox-label {
+.compendium-settings .checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 0;
   cursor: pointer;
   flex: 1;
 }
-.compendium-settings .use-all-section .use-all-row .checkbox-label input[type=checkbox] {
-  margin: 0;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-.compendium-settings .use-all-section .use-all-row .checkbox-label strong {
-  font-size: 1rem;
-  color: var(--vagabond-c-dark);
-}
-.compendium-settings .use-all-section .use-all-row .selected-count {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--vagabond-c-bluey);
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-}
-.compendium-settings .use-all-section .use-all-hint {
-  margin-top: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--vagabond-c-dark);
-}
-.compendium-settings .button-section {
-  padding: 0 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.compendium-settings .button-section .button-group {
+.compendium-settings .button-group {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
-.compendium-settings .button-section .button-group button {
+.compendium-settings .button-group button {
   flex: 1;
   min-width: 120px;
-  padding: 0.6rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border: 1px solid var(--vagabond-c-dark);
-  background: var(--vagabond-c-dark);
-  color: var(--vagabond-c-lite);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
-.compendium-settings .button-section .button-group button:hover {
-  background: var(--vagabond-c-faint);
-  border-color: var(--vagabond-c-bluey);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(var(--vagabond-c-dark), 0.15);
-}
-.compendium-settings .button-section .button-group button:active {
-  transform: translateY(0);
-}
-.compendium-settings .button-section .button-group button i {
-  font-size: 0.9rem;
-}
-.compendium-settings .compendium-section {
-  padding: 0 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.compendium-settings .compendium-section .section-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0 0 1rem 0;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-inset-2);
-  border-left: 4px solid var(--vagabond-c-bluey);
-  border-radius: 4px;
-}
-.compendium-settings .compendium-section .section-header i {
-  font-size: 1.1rem;
-  color: var(--vagabond-c-bluey);
-}
-.compendium-settings .compendium-section .section-header span:first-of-type {
-  flex: 1;
-}
-.compendium-settings .compendium-section .section-header .count-badge {
-  padding: 0.2rem 0.6rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--vagabond-c-lite);
-  background: var(--vagabond-c-bluey);
-  border-radius: 10px;
-}
-.compendium-settings .compendium-section .compendium-grid {
+.compendium-settings .compendium-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
+  border: 1px solid var(--color-text-primary);
+  padding: 12px;
+  border-radius: 8px;
 }
 .compendium-settings .compendium-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: var(--vagabond-c-lite);
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
   margin: 0;
-}
-.compendium-settings .compendium-item:hover {
-  background: rgba(var(--vagabond-c-bluey), 0.12);
-  border-color: var(--vagabond-c-bluey);
-  transform: translateX(2px);
-}
-.compendium-settings .compendium-item input[type=checkbox] {
-  margin: 0;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.compendium-settings .compendium-item input[type=checkbox]:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 .compendium-settings .compendium-item .compendium-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
   min-width: 0;
 }
-.compendium-settings .compendium-item .compendium-info .compendium-title {
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--vagabond-c-dark);
+.compendium-settings .compendium-item .compendium-info .compendium-title,
+.compendium-settings .compendium-item .compendium-info .compendium-meta {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .compendium-settings .compendium-item .compendium-info .compendium-meta {
   font-size: 0.8rem;
-  color: var(--vagabond-c-dark);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  opacity: 0.8;
 }
-.compendium-settings .compendium-item:has(input:checked) {
-  background: rgba(var(--vagabond-c-bluey), 0.5);
-  border-color: var(--vagabond-c-bluey);
-}
-.compendium-settings .compendium-item:has(input:checked) .compendium-title {
-  color: var(--vagabond-c-dark);
-  font-weight: 600;
-}
-.compendium-settings .compendium-item:has(input:disabled) {
-  opacity: 0.85;
-  cursor: not-allowed;
-}
-.compendium-settings .no-compendiums {
-  padding: 3rem 1.5rem;
-  text-align: center;
-  color: var(--vagabond-c-muted);
-}
-.compendium-settings .no-compendiums i {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--vagabond-c-damage-orange);
-  display: block;
-}
-.compendium-settings .no-compendiums p {
-  margin: 0;
-  font-size: 1rem;
-}
-.compendium-settings .settings-footer {
-  padding: 1.5rem 1.5rem 1rem;
-  border-top: 2px solid var(--vagabond-c-faint);
-  margin-top: 1.5rem;
-}
-.compendium-settings .settings-footer .footer-info {
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--vagabond-c-dark);
-  background: rgba(var(--vagabond-c-chat-yellow), 0.15);
-  border-left: 3px solid var(--vagabond-c-chat-yellow);
-  border-radius: 0 4px 4px 0;
-}
-.compendium-settings .settings-footer .footer-info i {
-  margin-right: 0.5rem;
-  color: var(--vagabond-c-chat-yellow);
-}
-.compendium-settings .settings-footer .footer-buttons {
+.compendium-settings .footer-buttons {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
 }
-.compendium-settings .settings-footer .footer-buttons button {
-  padding: 0.65rem 1.5rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.compendium-settings .settings-footer .footer-buttons button i {
-  font-size: 0.9rem;
-}
-.compendium-settings .settings-footer .footer-buttons button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(var(--vagabond-c-dark), 0.2);
-}
-.compendium-settings .settings-footer .footer-buttons button:active {
-  transform: translateY(0);
-}
-.compendium-settings .settings-footer .footer-buttons button.reset-button {
-  background: var(--vagabond-c-damage-orange);
-  color: var(--vagabond-c-lite);
-}
-.compendium-settings .settings-footer .footer-buttons button.reset-button:hover {
-  background: var(--vagabond-c-damage-orange);
-}
-.compendium-settings .settings-footer .footer-buttons button.save-button {
-  background: var(--vagabond-c-bluey);
-  color: var(--vagabond-c-lite);
-}
-.compendium-settings .settings-footer .footer-buttons button.save-button:hover {
-  background: var(--vagabond-c-bluey);
-}
 @media (max-width: 700px) {
-  .compendium-settings .compendium-section .compendium-grid {
+  .compendium-settings .compendium-grid {
     grid-template-columns: 1fr;
   }
-  .compendium-settings .button-section .button-group button {
+  .compendium-settings .button-group button {
     min-width: 100px;
   }
 }

@@ -53,7 +53,7 @@ export class VagabondCombatant extends Combatant {
     // NPCs use their own formula
     if (this.actor?.type === 'npc') {
       const npcFormula = game.settings.get('vagabond', 'npcInitiativeFormula');
-      return new Roll(npcFormula || '1d20 + ceil(@speed / 10)', this.actor?.getRollData() || {});
+      return new Roll(npcFormula || '3d6 + ceil(@speed / 10)', this.actor?.getRollData() || {});
     }
 
     // Player characters use the PC formula from settings

@@ -1334,7 +1334,7 @@ export class VagabondChatCard {
   static async statusEffect(actor, effect) {
     // Get status name and description
     const statusName = effect.name || effect.label || 'Unknown Status';
-    const statusIcon = effect.icon || 'icons/svg/aura.svg';
+    const statusIcon = effect.img || 'icons/svg/aura.svg';
 
     // Try to get description from the effect or from CONFIG
     let fullDescription = '';

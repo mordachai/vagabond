@@ -53,11 +53,11 @@
   {{!-- Compendium Lists --}}
   {{#if grouped.system.length}}
   <section class="compendium-section">
-    <h3 class="section-header">
+    <h4 class="section-header">
       <i class="fas fa-cube"></i>
-      <span>System Compendiums</span>
+      <span> System Compendiums - </span>
       <span class="count-badge">{{systemCount}}</span>
-    </h3>
+    </h4>
     <div class="compendium-grid">
       {{#each grouped.system}}
       <label class="compendium-item">
@@ -81,11 +81,11 @@
 
   {{#if grouped.world.length}}
   <section class="compendium-section">
-    <h3 class="section-header">
+    <h4 class="section-header">
       <i class="fas fa-globe"></i>
-      <span>World Compendiums</span>
+      <span> World Compendiums - </span>
       <span class="count-badge">{{worldCount}}</span>
-    </h3>
+    </h4>
     <div class="compendium-grid">
       {{#each grouped.world}}
       <label class="compendium-item">
@@ -109,11 +109,11 @@
 
   {{#if grouped.module.length}}
   <section class="compendium-section">
-    <h3 class="section-header">
+    <h4 class="section-header">
       <i class="fas fa-puzzle-piece"></i>
-      <span>Module Compendiums</span>
+      <span> Module Compendiums - </span>
       <span class="count-badge">{{moduleCount}}</span>
-    </h3>
+    </h4>
     <div class="compendium-grid">
       {{#each grouped.module}}
       <label class="compendium-item">
