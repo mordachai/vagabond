@@ -13,8 +13,9 @@
   background-image: url('../assets/images/sheets/statsBanner.webp');
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: 10px;
   color: $c-white;
+  margin: 0 -16px 0 -25px !important;
+  padding: 16px 28px 12px 20px;
 
   input {
     color: $c-white;
@@ -24,18 +25,18 @@
 // Character Image Container (180x180 with overlays)
 .char-image-container {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 152px;
+  height: 150px;
   flex-shrink: 0;
-  background-image: url('../assets/images/portrait-frame.webp');
+  background-image: url('../assets/images/sheets/portraitFrame.webp');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 
   .profile-img {
     display: flex;
-    width: 180px;
-    height: 180px;
+    width: 152px;
+    height: 150px;
     transform: scale(0.86);
     border: none;
     object-fit: cover;
@@ -55,10 +56,10 @@
 // Armor Overlay (Top right, 40x50, overflowing by 10px)
 .armor-overlay {
   position: absolute;
-  top: -15px;
-  right: -10px;
-  width: 45px;
-  height: 53px;
+  top: 8px;
+  right: -22px;
+  width: 40px;
+  height: 47px;
   background-image: url('../assets/images/sheets/armorBG.webp');
   background-size: cover;
   background-position: center center;
@@ -220,10 +221,10 @@
   font-family: $font-number;
   font-weight: bold;
   position: absolute;
-  bottom: 0;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
+  width: 75%;
   height: auto;
   color: $c-white;
   background-image: url(../assets/images/sheets/healthBG.webp);
@@ -290,25 +291,34 @@
   gap: 4px;
 }
 
-// Stats Grid - 3x2 Grid for Ability Scores
+// Stats Grid - 12-column grid to support pyramid layout (Top 3, Base 4)
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   flex: 1;
+  gap: 0;
 
   .stat-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+
+    // First 3 items (Ability Scores row 1): span 4 cols each
+    &:nth-child(-n+3) {
+      grid-column: span 4;
+    }
+
+    // Remaining items (Ability Scores row 2 + Luck): span 3 cols each
+    &:nth-child(n+4) {
+      grid-column: span 3;
+    }
   }
 
   .stat-score {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 35px;
+    width: 40px;
     height: 50px;
     font-size: 28px;
     font-weight: bold;
@@ -639,45 +649,6 @@
         border-bottom: 1px solid transparent;
       }
     }
-  }
-
-  // Luck Pool
-  .luck-item {
-      display: grid;
-      grid-template-rows: 12px 25px 12px;
-      align-content: center;
-
-      background-image: url('../assets/images/sheets/luckPoolBg.webp');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-
-
-      .luck-label {
-        font-weight: 600;
-        text-align: center;
-        font-family: $font-title;
-        text-transform: uppercase;
-        color: $c-yellow;
-        text-shadow:
-        1px 1px 0 $c-black,
-        -1px 1px 0 $c-black,
-        -1px -1px 0 $c-black,
-        1px -1px 0 $c-black;
-      }
-
-      .luck-value {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        border: none;
-        background: transparent;
-        padding: 0;
-        font-family: $font-number;
-        font-size: 2em;
-        pointer-events: none;
-      }
   }
 
   // Universal Bonus Fields (Check and Damage)
@@ -1088,4 +1059,50 @@
       padding-bottom: 4px;      
     }
   }
+
+// Luck Pool - Moved from .speed-stats-row to be global
+.luck-item {
+  display: grid;
+  grid-template-rows: 12px 25px 12px;
+  align-content: center;
+  justify-items: center;
+
+  background-image: url('../assets/images/sheets/luckPoolBg.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 100%; 
+  height: 55px; // Approximate height to match stats
+
+  .luck-label {
+    font-weight: 600;
+    text-align: center;
+    font-family: $font-title;
+    text-transform: uppercase;
+    color: $c-yellow;
+    text-shadow:
+    1px 1px 0 $c-black,
+    -1px 1px 0 $c-black,
+    -1px -1px 0 $c-black,
+    1px -1px 0 $c-black;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .luck-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-family: $font-number;
+    font-size: 24px;
+    font-weight: bold;
+    pointer-events: none;
+    width: 100%;
+    color: $c-white;
+  }
+}
 

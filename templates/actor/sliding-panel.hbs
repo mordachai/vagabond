@@ -132,34 +132,51 @@
           </div>
           {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
           <div class='stats-column'>
-            {{! Row 1: Stats Grid - 3x2 grid of stats }}
-            <div class='stats-grid'>
-              {{#each system.stats as |stat key|}}
-                <div class='stat-item'>
-                  {{! Show total value (read-only display) }}
-                  <div class='stat-score stat-total' data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'>
-                    {{stat.total}}
-                  </div>
-                  {{! Hidden input for base value (can be edited via inspector/effects) }}
-                  <input
-                    type='hidden'
-                    name='system.stats.{{key}}.value'
-                    value='{{stat.value}}'
-                    data-dtype='Number'
-                  />
-                  <label
-                    class='stat-label'
-                  {{!-- data-action='roll'
-                    data-roll='d20'
-                    data-roll-type='stat'
-                    data-stat-key='{{key}}' --}}
-                    data-label='{{localize (lookup @root.config.stats key)}} Check'
-                    data-tooltip='{{localize (lookup @root.config.stats key)}}'
-                  >{{localize (lookup @root.config.stats key)}}</label>
-                </div>
-              {{/each}}
-            </div>
-            {{! Row 2: Fatigue Bar }}
+                      {{! Row 1: Stats Grid - 3x2 grid of stats }}
+                      <div class='stats-grid'>
+                        {{#each system.stats as |stat key|}}
+                          <div class='stat-item'>
+                            {{! Show total value (read-only display) }}
+                            <div class='stat-score stat-total' data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'>
+                              {{stat.total}}
+                            </div>
+                            {{! Hidden input for base value (can be edited via inspector/effects) }}
+                            <input
+                              type='hidden'
+                              name='system.stats.{{key}}.value'
+                              value='{{stat.value}}'
+                              data-dtype='Number'
+                            />
+                            <label
+                              class='stat-label'
+                            {{!-- data-action='roll'
+                              data-roll='d20'
+                              data-roll-type='stat'
+                              data-stat-key='{{key}}' --}}
+                              data-label='{{localize (lookup @root.config.stats key)}} Check'
+                              data-tooltip='{{localize (lookup @root.config.stats key)}}'
+                            >{{localize (lookup @root.config.stats key)}}</label>
+                          </div>
+                        {{/each}}
+            
+                                    {{!-- LUCK POOL SECTION --}}
+                                    <div class='stat-item luck-item'>
+                                      <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
+                                      <div class='luck-display'>
+                                        <input
+                                          type='number'
+                                          name='system.currentLuck'
+                                          value='{{system.currentLuck}}'
+                                          min='0'
+                                          max='{{system.maxLuck}}'
+                                          data-dtype='Number'
+                                          class='luck-value'
+                                        />
+                                      </div>
+                                      <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
+                                    </div>
+                                  </div>
+                                    {{! Row 2: Fatigue Bar }}
             <div class='fatigue-row'>
               <div class="fatigue-label">{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}: </div>
               <div class='fatigue-checkboxes'>
@@ -298,21 +315,7 @@
             />
             <label class='stat-label stat-label-with-unit'>{{localize "VAGABOND.UI.Sections.Travel"}}<br><span class='stat-unit'>{{localize "VAGABOND.UI.Units.Miles"}}</span></label>
           </div>
-          <div class='stat-item luck-item'>
-            <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
-            <div class='luck-display'>
-              <input
-                type='number'
-                name='system.currentLuck'
-                value='{{system.currentLuck}}'
-                min='0'
-                max='{{system.maxLuck}}'
-                data-dtype='Number'
-                class='luck-value'
-              />
-            </div>
-            <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
-          </div>
+          
         </div>
       </div>
     </header>
