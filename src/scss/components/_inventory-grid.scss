@@ -3,16 +3,37 @@
 // ==========================================
 
 // Inventory Slots Info Section
-.inventory-slots-section {
-  margin-bottom: 12px;
-  padding: 8px;
+.inventory-header-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 6px;
+  width: 100%;
+  margin-right: 0;
+  min-height: 32px;
+  box-sizing: border-box;
 
-  border-radius: 4px;
+  h4 {
+    margin: 0;
+    text-align: center;
+    color: $c-white;
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+}
+
+.inventory-slots-section {
+  position: absolute;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  color: $c-white;
 
   .slots-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 12px;
 
     .slot-field {
@@ -23,16 +44,18 @@
       .resource-label {
         font-weight: bold;
         font-size: 14px;
+        color: $c-white;
       }
 
       .slot-value {
         font-size: 16px;
         font-weight: bold;
+        color: $c-white;
 
         .fatigue-note {
           font-size: 12px;
           font-weight: normal;
-          color: $c-red;
+          color: #ffcccc; // Lighter red for visibility on dark background
           margin-left: 6px;
           opacity: 0.9;
         }
@@ -278,6 +301,7 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
   }
 }

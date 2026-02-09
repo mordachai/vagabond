@@ -407,8 +407,8 @@ body[data-theme=dark] #sidebar {
 }
 
 .rollable:hover, .rollable:focus {
-  color: var(--vagabond-c-black);
-  text-shadow: 0 0 10px red;
+  color: var(--vagabond-c-white);
+  text-shadow: 0 0 10px var(--vagabond-c-chat-yellow);
   cursor: pointer;
 }
 
@@ -4778,6 +4778,7 @@ ol#combat-tracker.directory-list {
  */
 /* Styles limited to vagabond sheets */
 .vagabond {
+  /* Features & Perks columns */
   /* Container Item Styles */
   /* Character Name at Top - 2x2 Grid: Name + XP on top, Character Info below */
   /* Combined Character Info Row - sits inside .name-row-top grid */
@@ -4792,7 +4793,6 @@ ol#combat-tracker.directory-list {
   /* Pulse animation for the active tooltip area */
   /* First-time tooltip for sliding panel */
   /* Panel content area */
-  /* Features & Perks columns */
   /* Mana info row */
   /* Currency fields in panel */
 }
@@ -4801,17 +4801,16 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
   margin: 0;
   margin-bottom: 4px;
-  color: var(--vagabond-c-dark);
   mix-blend-mode: multiply;
   opacity: 0.85;
 }
-.vagabond h2, .vagabond h4 {
+.vagabond h2 {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
 }
-.vagabond h2::before, .vagabond h2::after, .vagabond h4::before, .vagabond h4::after {
+.vagabond h2::before, .vagabond h2::after {
   content: "";
   flex-grow: 1;
   height: 18px;
@@ -4819,10 +4818,10 @@ ol#combat-tracker.directory-list {
   background-repeat: repeat-x;
   background-size: 200px 100%;
 }
-.vagabond h2::before, .vagabond h4::before {
+.vagabond h2::before {
   margin-right: 8px;
 }
-.vagabond h2::after, .vagabond h4::after {
+.vagabond h2::after {
   margin-left: 8px;
 }
 .vagabond .resource-label {
@@ -4928,7 +4927,7 @@ ol#combat-tracker.directory-list {
   z-index: 10 !important;
   background: none;
   margin-left: 0;
-  padding: 8px 32px 8px 8px;
+  padding: 8px;
   box-sizing: border-box;
   color: var(--vagabond-c-dark);
 }
@@ -5398,6 +5397,18 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-dark) !important;
   font-family: "Paradigm", serif;
 }
+.vagabond .skills-section h4.left-col {
+  background-image: url("../assets/images/sheets/leftColBg.webp");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  color: var(--vagabond-c-white);
+  margin-left: -25px;
+  width: 115%;
+  height: auto;
+  padding: 2px 0 2px 50px;
+}
 .vagabond .skills-list {
   display: flex;
   flex-direction: column;
@@ -5433,7 +5444,9 @@ ol#combat-tracker.directory-list {
 .vagabond .skills-list .skill .skill-label {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  color: var(--vagabond-c-dark-bluey);
+  font-family: "Eskapade", serif;
+  font-size: 18px;
   font-weight: 500;
   cursor: pointer;
   flex: 3;
@@ -5442,7 +5455,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .skills-list .skill .skill-label .mana-skill-icon {
   font-size: 13px;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark-bluey);
   margin-left: 4px;
   flex-shrink: 0;
   opacity: 0.8;
@@ -5455,7 +5468,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   margin-left: 6px;
   flex-grow: 1;
-  border-bottom: 1px dotted var(--vagabond-c-dark);
+  border-bottom: 1px dotted var(--vagabond-c-dark-bluey);
   margin-bottom: -12px;
   opacity: 0.4;
   width: 100%;
@@ -5474,6 +5487,9 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
   position: relative;
   z-index: 20 !important;
+}
+.vagabond .right-column h4 {
+  color: var(--vagabond-c-white);
 }
 .vagabond .right-column .equipped-weapon {
   display: flex;
@@ -5628,12 +5644,36 @@ ol#combat-tracker.directory-list {
   margin-top: 4px;
   flex-wrap: nowrap;
 }
+.vagabond .favorites-section h4.right-col {
+  color: var(--vagabond-c-white);
+  background-image: url("../assets/images/sheets/rightColBg.webp");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  width: 100%;
+  height: auto;
+  padding: 2px;
+  text-align: center;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+}
 .vagabond .favorites-section .title-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
+  background-image: url("../assets/images/sheets/titleBG.webp");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  padding: 8px 8px 3px 8px;
+  color: var(--vagabond-c-white);
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+}
+.vagabond .favorites-section .title-container h4 {
+  color: var(--vagabond-c-white);
+  mix-blend-mode: normal;
+  opacity: 1;
 }
 .vagabond .favorites-section .title-right-group {
   display: flex;
@@ -5652,9 +5692,13 @@ ol#combat-tracker.directory-list {
   display: flex;
   justify-content: space-evenly;
   gap: 12px;
-  padding: 0px 4px;
+  padding: 8px 4px;
   margin-bottom: 8px;
   border-radius: 4px;
+  background-image: url("../assets/images/sheets/savesBG.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 2px 2px 2px var(--vagabond-c-inset-1);
 }
 .vagabond .saves .save {
   text-align: center;
@@ -5666,6 +5710,27 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .saves .save .save-difficulty i {
   font-size: 16px;
+}
+.vagabond .features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+.vagabond .features-column,
+.vagabond .perks-column {
+  display: flex;
+  flex-direction: column;
+}
+.vagabond .features-column h4,
+.vagabond .perks-column h4 {
+  background-image: url("../assets/images/sheets/leftColBg.webp");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  color: var(--vagabond-c-white);
+  width: 100%;
+  height: auto;
+  padding: 2px 0 2px 25px;
 }
 .vagabond .features-list {
   list-style: none;
@@ -6880,15 +6945,35 @@ ol#combat-tracker.directory-list {
   font-size: 0.85em;
   font-style: italic;
 }
+.vagabond .inventory-header-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 6px;
+  width: 100%;
+  margin-right: 0;
+  min-height: 32px;
+  box-sizing: border-box;
+}
+.vagabond .inventory-header-container h4 {
+  margin: 0;
+  text-align: center;
+  color: var(--vagabond-c-white);
+  mix-blend-mode: normal;
+  opacity: 1;
+}
 .vagabond .inventory-slots-section {
-  margin-bottom: 12px;
-  padding: 8px;
-  border-radius: 4px;
+  position: absolute;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  color: var(--vagabond-c-white);
 }
 .vagabond .inventory-slots-section .slots-info {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
 }
 .vagabond .inventory-slots-section .slots-info .slot-field {
@@ -6899,15 +6984,17 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-slots-section .slots-info .slot-field .resource-label {
   font-weight: bold;
   font-size: 14px;
+  color: var(--vagabond-c-white);
 }
 .vagabond .inventory-slots-section .slots-info .slot-field .slot-value {
   font-size: 16px;
   font-weight: bold;
+  color: var(--vagabond-c-white);
 }
 .vagabond .inventory-slots-section .slots-info .slot-field .slot-value .fatigue-note {
   font-size: 12px;
   font-weight: normal;
-  color: var(--vagabond-c-red);
+  color: #ffcccc;
   margin-left: 6px;
   opacity: 0.9;
 }
@@ -7093,6 +7180,7 @@ ol#combat-tracker.directory-list {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 .vagabond .inventory-overload-warning {
@@ -7469,6 +7557,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-white);
   margin: 0 -30px 0 -25px !important;
   padding: 16px 28px 12px 20px;
+  filter: drop-shadow(2px 2px 2px var(--vagabond-c-inset-1));
 }
 .vagabond .header-main-wrapper input {
   color: var(--vagabond-c-white);
@@ -7482,6 +7571,7 @@ ol#combat-tracker.directory-list {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-inset-1));
 }
 .vagabond .char-image-container .profile-img {
   display: flex;
@@ -7522,6 +7612,7 @@ ol#combat-tracker.directory-list {
   grid-template-rows: 18px 35px;
   align-items: center;
   justify-content: center;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .armor-overlay .armor-name {
   font-size: 0.8em;
@@ -7621,7 +7712,6 @@ ol#combat-tracker.directory-list {
   justify-content: center;
   gap: 2px;
   font-family: "Ludlow", serif;
-  font-weight: bold;
   position: absolute;
   bottom: -15px;
   left: 50%;
@@ -7633,6 +7723,7 @@ ol#combat-tracker.directory-list {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .hp-display .hp-icon {
   font-size: 18px;
@@ -7649,8 +7740,7 @@ ol#combat-tracker.directory-list {
   border: none;
   background: transparent;
   padding: 2px 2px;
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 20px;
   color: var(--vagabond-c-white);
 }
 .vagabond .hp-display .hp-separator {
@@ -7658,7 +7748,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .hp-display .hp-max {
   min-width: 30px;
-  font-size: 18px;
+  font-size: 20px;
 }
 .vagabond .header-main-row {
   display: flex;
@@ -7754,7 +7844,6 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .fatigue-row .fatigue-skull {
   cursor: pointer;
-  margin-right: 4px;
   transition: all 0.2s ease;
 }
 .vagabond .fatigue-row .fatigue-skull.fatigue-active {
@@ -7776,7 +7865,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .fatigue-row .fatigue-label {
   font-family: "Eskapade", serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   margin-right: 4px;
   text-transform: uppercase;
@@ -7785,6 +7874,8 @@ ol#combat-tracker.directory-list {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-left: 1px;
+  gap: 5px;
 }
 .vagabond .character-info-row {
   text-align: left;
@@ -7859,7 +7950,7 @@ ol#combat-tracker.directory-list {
   align-items: last baseline;
   white-space: nowrap;
   flex: 0 0 auto;
-  padding-right: 25px;
+  padding-right: 30px;
   padding-top: 30px;
   color: var(--vagabond-c-chat-yellow);
   font-family: "Eskapade", serif;
@@ -8051,6 +8142,7 @@ ol#combat-tracker.directory-list {
   background-size: 100% 100%;
   background-position: center;
   padding: 0 8px;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .speed-stats-row .speed-group .speed-group-label {
   grid-column: 1;
@@ -8123,6 +8215,7 @@ ol#combat-tracker.directory-list {
   background-size: 100% 100%;
   background-position: center;
   padding: 0 25px;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .modifiers-group .modifiers-group-icon {
   font-size: 12px;
@@ -8193,14 +8286,20 @@ ol#combat-tracker.directory-list {
 .vagabond .modifiers-group .modifiers-group-favor-label {
   grid-column: 4;
   grid-row: 2;
+  background-image: url("../assets/images/sheets/subtitleBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
   justify-self: center;
   align-self: center;
-  font-size: 18px;
+  font-size: 14px;
   font-family: "Eskapade", serif;
   font-weight: 600;
   text-align: center;
   line-height: 1;
   white-space: nowrap;
+  min-width: 60px;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .favor-hinder-toggle-container {
   display: flex;
@@ -8396,18 +8495,18 @@ ol#combat-tracker.directory-list {
   padding-bottom: 0;
 }
 .vagabond .panel-title {
-  text-align: center;
-  margin-bottom: 4px;
-  font-family: "Eskapade", serif;
-}
-.vagabond .features-perks-section .grid {
-  margin: 0;
-  gap: 16px;
-}
-.vagabond .features-column,
-.vagabond .perks-column {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin-right: auto;
+  margin-bottom: 8px;
+  font-family: "Eskapade", serif;
+  background-image: url("../assets/images/sheets/titleBG.webp");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  padding: 8px;
+  color: var(--vagabond-c-white);
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .mana-info-row {
   display: flex;

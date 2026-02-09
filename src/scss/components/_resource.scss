@@ -18,6 +18,22 @@
   font-family: $font-primary;
 }
 
+.skills-section {
+  h4.left-col {
+    background-image: url('../assets/images/sheets/leftColBg.webp');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 100%;
+    filter: drop-shadow(2px 2px 1px $c-inset-1,);
+    color: $c-white;
+    margin-left: -25px;
+    width: 115%;
+    height: auto;
+    padding: 2px 0 2px 50px;
+  }
+}
+
+
 .skills-list {
   display: flex;
   flex-direction: column;
@@ -57,7 +73,9 @@
     .skill-label {
       display: flex;
       align-items: center;
-      font-size: 16px;
+      color: $c-dark-bluey;
+      font-family: $font-title;
+      font-size: 18px;
       font-weight: 500;
       cursor: pointer;
       flex: 3;
@@ -66,7 +84,7 @@
 
       .mana-skill-icon {
         font-size: 13px;
-        color: $c-dark;
+        color: $c-dark-bluey;
         margin-left: 4px;
         flex-shrink: 0;
         opacity: 0.8;
@@ -81,7 +99,7 @@
         display: flex;
         margin-left: 6px;
         flex-grow: 1;
-        border-bottom: 1px dotted $c-dark;
+        border-bottom: 1px dotted $c-dark-bluey;
         margin-bottom: -12px;
         opacity: 0.4;
         width: 100%;
@@ -107,6 +125,7 @@
   flex-direction: column;
   position: relative;
   z-index: 20 !important;
+        h4 { color: $c-white; }
 
   // Equipped weapons - follows same pattern as gear and spells
   .equipped-weapon {
@@ -296,13 +315,41 @@
   margin-top: 4px;
   flex-wrap: nowrap;
 
+  h4.right-col {
+    color: $c-white;
+    background-image: url('../assets/images/sheets/rightColBg.webp');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    width: 100%;
+    height: auto;
+    padding: 2px;
+    text-align: center;
+    filter: drop-shadow(2px 2px 1px $c-inset-1,);
+  }
+
   .title-container{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     flex-wrap: nowrap;
+    background-image: url('../assets/images/sheets/titleBG.webp');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 100%;
+    padding: 8px 8px 3px 8px;
+    color: $c-white;
+    filter: drop-shadow(2px 2px 1px $c-inset-1,);
+
+    h4 {
+      color: $c-white;
+      mix-blend-mode: normal;
+      opacity: 1;
+    }
   }
+
+
 
   .title-right-group{
     display: flex;
@@ -319,9 +366,7 @@
       }
   }
 
-
 }
-
 
 
 // Saves Section
@@ -330,12 +375,13 @@
     display: flex;
     justify-content: space-evenly;
     gap: 12px;
-    padding: 0px 4px; 
+    padding: 8px 4px; 
     margin-bottom: 8px;
     border-radius: 4px;
-    //box-shadow:
-    //  inset 0 0 13px $c-inset-1,
-    //  inset 0 0 0 5px $c-inset-2;
+    background-image: url('../assets/images/sheets/savesBG.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: 2px 2px 2px $c-inset-1,
     }
 
   .save {
@@ -350,6 +396,30 @@
         font-size: 16px;
       }
     }
+  }
+}
+
+/* Features & Perks columns */
+.features-perks-section .grid {
+  margin: 0;
+  gap: 16px;
+}
+
+.features-column,
+.perks-column {
+  display: flex;
+  flex-direction: column;
+
+  h4 {
+    background-image: url('../assets/images/sheets/leftColBg.webp');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 100%;
+    filter: drop-shadow(2px 2px 1px $c-inset-1,);
+    color: $c-white;
+    width: 100%;
+    height: auto;
+    padding: 2px 0 2px 25px;
   }
 }
 

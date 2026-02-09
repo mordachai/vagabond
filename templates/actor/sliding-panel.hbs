@@ -146,34 +146,30 @@
                             />
                             <label
                               class='stat-label'
-                            {{!-- data-action='roll'
-                              data-roll='d20'
-                              data-roll-type='stat'
-                              data-stat-key='{{key}}' --}}
                               data-label='{{localize (lookup @root.config.stats key)}} Check'
                               data-tooltip='{{localize (lookup @root.config.stats key)}}'
                             >{{localize (lookup @root.config.stats key)}}</label>
                           </div>
                         {{/each}}
-            
-                                    {{!-- LUCK POOL SECTION --}}
-                                    <div class='stat-item luck-item'>
-                                      <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
-                                      <div class='luck-display'>
-                                        <input
-                                          type='number'
-                                          name='system.currentLuck'
-                                          value='{{system.currentLuck}}'
-                                          min='0'
-                                          max='{{system.maxLuck}}'
-                                          data-dtype='Number'
-                                          class='luck-value'
-                                        />
-                                      </div>
-                                      <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
-                                    </div>
-                                  </div>
-                                    {{! Row 2: Fatigue Bar }}
+
+                          {{!-- LUCK POOL SECTION --}}
+                          <div class='stat-item luck-item'>
+                            <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
+                            <div class='luck-display'>
+                              <input
+                                type='number'
+                                name='system.currentLuck'
+                                value='{{system.currentLuck}}'
+                                min='0'
+                                max='{{system.maxLuck}}'
+                                data-dtype='Number'
+                                class='luck-value'
+                              />
+                            </div>
+                            <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
+                          </div>
+                      </div>
+            {{! Row 2: Fatigue Bar }}
             <div class='fatigue-row'>
               <div class="fatigue-label">{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}: </div>
               <div class='fatigue-checkboxes'>
@@ -279,7 +275,7 @@
     <section class='skills-container grid-skills grid-skills-2col'>
       {{! Left column: Skills (1-column layout) }}
       <section class='skills-section grid-span-1'>
-        <h4>{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
+        <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
         <div class='skills-list'>
           {{#each system.skills as |skill key|}}
             <div class='skill flexrow'>
@@ -318,7 +314,7 @@
 
                 {{! Weapon Skills / Attacks Section }}
         <div class='weapon-skills flexcol mt-10'>
-          <h4>{{localize "VAGABOND.UI.Sections.Attacks"}}</h4>
+          <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Attacks"}}</h4>
           <div class='skills-list'>
             {{#each system.weaponSkills as |weaponSkill key|}}
               <div class='skill flexrow'>
@@ -356,7 +352,7 @@
       <section class='right-column grid-span-1'>
         {{! Saves Section - Horizontal layout }}
         <div class='saves'>
-          <h4>{{localize "VAGABOND.UI.Sections.Saves"}}</h4>
+          {{!-- <h4>{{localize "VAGABOND.UI.Sections.Saves"}}</h4> --}}
           <div class='saves-row flexrow'>
             {{#each system.saves as |save key|}}
               <div class='save flexcol align-center'>
@@ -378,7 +374,7 @@
 
         {{! Favorites Section - Equipped Items }}
         <div class='favorites-section flexcol'>
-          <h4>{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
+          <h4 class="right-col">{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
 
           {{!-- Check if any items are equipped --}}
           {{#if hasEquippedItems}}

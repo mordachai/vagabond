@@ -16,6 +16,7 @@
   color: $c-white;
   margin: 0 -30px 0 -25px !important;
   padding: 16px 28px 12px 20px;
+  filter: drop-shadow(2px 2px 2px $c-inset-1,);
 
   input {
     color: $c-white;
@@ -32,6 +33,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  filter: drop-shadow(1px 1px 2px $c-inset-1);
 
   .profile-img {
     display: flex;
@@ -77,6 +79,7 @@
   grid-template-rows: 18px 35px;
   align-items: center;
   justify-content: center;
+  filter: drop-shadow(2px 2px 1px $c-inset-1,);
 
   .armor-name {
     font-size: 0.8em;
@@ -192,7 +195,6 @@
   justify-content: center;
   gap: 2px;
   font-family: $font-number;
-  font-weight: bold;
   position: absolute;
   bottom: -15px;
   left: 50%;
@@ -204,6 +206,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  filter: drop-shadow(2px 2px 1px $c-inset-1);
 
 
   .hp-icon {
@@ -223,8 +226,7 @@
     border: none;
     background: transparent;
     padding: 2px 2px;
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 20px;
     color: $c-white;
   }
 
@@ -234,7 +236,7 @@
 
   .hp-max {
     min-width: 30px;
-    font-size: 18px;
+    font-size: 20px;
   }
 }
 
@@ -355,11 +357,9 @@
   width: 100%;
   gap: 15px;
 
-
   // Fatigue Skull Icons (standalone, not nested in overlay)
   .fatigue-skull {
   cursor: pointer;
-  margin-right: 4px;
   transition: all 0.2s ease;
 
   &.fatigue-active {
@@ -384,18 +384,20 @@
   }
 }
 
-.fatigue-label {
-  font-family: $font-title;
-  font-size: 12px;
-  font-weight: 600;
-  margin-right: 4px;
-  text-transform: uppercase;
-}
+  .fatigue-label {
+    font-family: $font-title;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 4px;
+    text-transform: uppercase;
+  }
 
   .fatigue-checkboxes {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    margin-left: 1px;
+    gap: 5px;
   }
 }
 
@@ -488,7 +490,7 @@
   align-items: last baseline;
   white-space: nowrap;
   flex: 0 0 auto;
-  padding-right: 25px;
+  padding-right: 30px;
   padding-top: 30px;
   color: $c-yellow;
   font-family: $font-title;
@@ -740,6 +742,7 @@
     background-size: 100% 100%;
     background-position: center;
     padding: 0 8px;
+    filter: drop-shadow(2px 2px 1px $c-inset-1,);
 
     .speed-group-label {
       grid-column: 1;
@@ -837,6 +840,7 @@
   background-size: 100% 100%;
   background-position: center;
   padding: 0 25px;
+  filter: drop-shadow(2px 2px 1px $c-inset-1,);
 
   .modifiers-group-icon {
     font-size: 12px;
@@ -922,14 +926,20 @@
   .modifiers-group-favor-label {
     grid-column: 4;
     grid-row: 2;
+    background-image: url('../assets/images/sheets/subtitleBG.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
     justify-self: center;
     align-self: center;
-    font-size: 18px;
+    font-size: 14px;
     font-family: $font-title;
     font-weight: 600;
     text-align: center;
     line-height: 1;
     white-space: nowrap;
+    min-width: 60px;
+    filter: drop-shadow(2px 2px 1px $c-inset-1,);
   }
 }
 
@@ -1180,21 +1190,18 @@
 }
 
 .panel-title {
-  text-align: center;
-  margin-bottom: 4px;
-  font-family: $font-title;
-}
-
-/* Features & Perks columns */
-.features-perks-section .grid {
-  margin: 0;
-  gap: 16px;
-}
-
-.features-column,
-.perks-column {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin-right: auto;
+  margin-bottom: 8px;
+  font-family: $font-title;
+  background-image: url('../assets/images/sheets/titleBG.webp');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  padding: 8px;
+  color: $c-white;
+  filter: drop-shadow(2px 2px 1px $c-inset-1,);
 }
 
 /* Mana info row */

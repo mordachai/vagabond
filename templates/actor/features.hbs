@@ -51,39 +51,32 @@
       </div>
     </div>
 
-    <h4 class='panel-title section-title-with-add'>
-      {{localize "VAGABOND.UI.Sections.Inventory"}}
-      {{#if @root.editable}}
-        <i
-          class='fas fa-plus clickable'
-          data-tooltip='Add Gear'
-          data-action='createDoc'
-          data-document-class='Item'
-          data-type='equipment'
-        ></i>
-      {{/if}}
-    </h4>
-    {{! Inventory Slots Section }}
-    <div class='inventory-slots-section'>
-      <div class='slots-info flexrow'>
-        <div class='slot-field'>
-          <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
-          <span class='slot-value'>
-            {{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}
-            {{#if (gt system.inventory.fatigueSlots 0)}}
-              <span class='fatigue-note'>[{{system.inventory.baseMaxSlots}} - {{system.inventory.fatigueSlots}} Fatigue]</span>
-            {{/if}}
-          </span>
-        </div>
-        {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
-          <div class='slot-warning'>
-            <i class='fas fa-exclamation-triangle'></i>
-            <span>{{localize "VAGABOND.UI.Labels.Overloaded"}}</span>
+    <div class='inventory-header-container panel-title'>
+      <h4 class='section-title-with-add'>
+        {{localize "VAGABOND.UI.Sections.Inventory"}}
+      </h4>
+
+      {{! Inventory Slots Section }}
+      <div class='inventory-slots-section'>
+        <div class='slots-info flexrow'>
+          <div class='slot-field'>
+            <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
+            <span class='slot-value'>
+              {{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}
+              {{#if (gt system.inventory.fatigueSlots 0)}}
+                <span class='fatigue-note'>[{{system.inventory.baseMaxSlots}} - {{system.inventory.fatigueSlots}} Fatigue]</span>
+              {{/if}}
+            </span>
           </div>
-        {{/if}}
+          {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
+            <div class='slot-warning'>
+              <i class='fas fa-exclamation-triangle'></i>
+              <span>{{localize "VAGABOND.UI.Labels.Overloaded"}}</span>
+            </div>
+          {{/if}}
+        </div>
       </div>
     </div>
-
     {{! Visual Inventory Grid - DYNAMIC rows × 4 columns }}
     <div class='inventory-grid-container'>
       <div class='inventory-grid'
@@ -140,7 +133,7 @@
     <div class='grid grid-2col'>
       {{! Left Column: Features }}
       <div class='features-column grid-span-1'>
-        <h4>{{localize "VAGABOND.UI.Sections.Features"}}</h4>
+        <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
         <ul class='features-list'>
           {{#each enrichedFeatures as |feature id|}}
             <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class'>
