@@ -984,6 +984,9 @@
       },
       "Hints": {
         "EmptyForAny": "Let Empty fo ANY skills"
+      },
+      "Chat": {
+        "FlukeReroll": "Luck Reroll — Fluke"
       }
     },
     "Notifications": {

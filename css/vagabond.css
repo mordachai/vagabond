@@ -1983,6 +1983,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-style: italic;
 }
 
+/* Context Menu - Disabled Luck Reroll */
+#context-menu .context-item.vagabond-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: default;
+}
+
 /* Animations */
 @keyframes popIn {
   from {
@@ -7772,7 +7779,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .stats-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   flex: 1;
   gap: 0;
 }
@@ -7781,11 +7788,14 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
   align-items: center;
 }
-.vagabond .stats-grid .stat-item:nth-child(-n+3) {
-  grid-column: span 4;
-}
 .vagabond .stats-grid .stat-item:nth-child(n+4) {
-  grid-column: span 3;
+  grid-column: span 2;
+}
+.vagabond .stats-grid .stat-item:nth-child(-n+3) {
+  grid-column: span 2;
+}
+.vagabond .stats-grid .stat-item:nth-child(1) {
+  grid-column: 2/span 2;
 }
 .vagabond .stats-grid .stat-score {
   display: flex;

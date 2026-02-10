@@ -269,7 +269,7 @@
 // Stats Grid - 12-column grid to support pyramid layout (Top 3, Base 4)
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   flex: 1;
   gap: 0;
 
@@ -278,14 +278,19 @@
     flex-direction: column;
     align-items: center;
 
-    // First 3 items (Ability Scores row 1): span 4 cols each
-    &:nth-child(-n+3) {
-      grid-column: span 4;
+    // Bottom row: 4 items, span 2 cols each
+    &:nth-child(n+4) {
+      grid-column: span 2;
     }
 
-    // Remaining items (Ability Scores row 2 + Luck): span 3 cols each
-    &:nth-child(n+4) {
-      grid-column: span 3;
+    // Top row: 3 items, span 2 cols each
+    &:nth-child(-n+3) {
+      grid-column: span 2;
+    }
+
+    // Offset first item to center top row
+    &:nth-child(1) {
+      grid-column: 2 / span 2; // Start at column 2
     }
   }
 

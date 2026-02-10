@@ -152,22 +152,22 @@
                           </div>
                         {{/each}}
 
-                          {{!-- LUCK POOL SECTION --}}
-                          <div class='stat-item luck-item'>
-                            <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
-                            <div class='luck-display'>
-                              <input
-                                type='number'
-                                name='system.currentLuck'
-                                value='{{system.currentLuck}}'
-                                min='0'
-                                max='{{system.maxLuck}}'
-                                data-dtype='Number'
-                                class='luck-value'
-                              />
-                            </div>
-                            <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
+                        {{!-- LUCK POOL SECTION --}}
+                        <div class='stat-item luck-item'>
+                          <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
+                          <div class='luck-display'>
+                            <input
+                              type='number'
+                              name='system.currentLuck'
+                              value='{{system.currentLuck}}'
+                              min='0'
+                              max='{{system.maxLuck}}'
+                              data-dtype='Number'
+                              class='luck-value'
+                            />
                           </div>
+                          <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to recharge'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
+                        </div>
                       </div>
             {{! Row 2: Fatigue Bar }}
             <div class='fatigue-row'>
@@ -482,13 +482,13 @@
                   {{#if spell.system.favorite}}
                     <div class='favorited-spell' data-spell-id='{{spell._id}}'>
                       <label class='spell-name rollable' data-action='castSpell' data-spell-id='{{spell._id}}'>{{spell.name}}</label>
+                      <div class='spell-damage-icon'><i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i></div>
                       <div class='spell-damage-dice {{#unless (eq spell.system.damageType "-")}}clickable{{/unless}}' {{#unless (eq spell.system.damageType '-')}}data-action='modifyDamage' data-spell-id='{{spell._id}}' data-damage-type='{{spell.system.damageType}}' title='Left click to increase damage (+1 mana per d6), Right click to decrease'{{/unless}}>{{#unless (eq spell.system.damageType '-')}}1d6{{else}}0{{/unless}}</div>
                       <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='Toggle spell effect (adds +1 mana when combined with damage)'>
                         {{#if (eq @root.config.fxIcon.type "txt")}}<span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
                         {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
                         {{else}}<i class="{{@root.config.fxIcon.value}}"></i>{{/if}}
-                      </div>
-                      <div class='spell-damage-icon'><i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i></div>
+                      </div>                      
                       <select class='spell-delivery-select' data-spell-id='{{spell._id}}'>
                         <option value=''>{{localize "VAGABOND.UI.Labels.Delivery"}}</option>
                         {{#each @root.config.deliveryTypes as |label key|}}<option value='{{key}}'>{{localize label}}</option>{{/each}}
