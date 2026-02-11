@@ -964,7 +964,8 @@
         "Group": "Choose from Group",
         "Count": "Select:",
         "RestrictedPool": "Among these:",
-        "Targets": "Targets"
+        "Targets": "Targets",
+        "Bounds": "Bounds:"
       },
       "Examples": {
         "PermanentEffect": "Example: Perk that gives +2 Might to all rolls",
