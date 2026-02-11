@@ -20,6 +20,7 @@
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
+  --vagabond-inventory-hover: #ab612071;
 }
 
 // Target both application and interface themes (Foundry v13)
@@ -47,6 +48,7 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
+  --vagabond-inventory-hover: #ab612071;
 }
 
 $c-white: var(--vagabond-c-white);
@@ -72,6 +74,7 @@ $c-bluey: var(--vagabond-c-bluey);
 $c-dark-bluey: var(--vagabond-c-dark-bluey);
 $c-damage: var(--vagabond-c-damage-orange);
 $c-bg-lite: var(--vagabond-c-bg-lite);
+$c-inventory-hover: var(--vagabond-inventory-hover);
 
 // Use Foundry's border-highlight for the tracker if not overridden by vagabond variable
 $c-tracker-col1: var(--vagabond-tracker-col1, var(--color-border-highlight));

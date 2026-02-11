@@ -14,4 +14,13 @@
 >
   <img src='{{item.img}}' alt='{{item.name}}' class='item-image' />
   <div class='item-name-display'>{{item.name}}</div>
+  {{#if requiresBound}}
+    <div class='bound-marker'>
+      {{#if bound}}
+        <i class='fa-solid fa-diamond bound'></i>
+      {{else}}
+        <i class='fa-solid fa-diamond unbound'></i>
+      {{/if}}
+    </div>
+  {{/if}}
 </div>

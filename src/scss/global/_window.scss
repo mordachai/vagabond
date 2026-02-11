@@ -74,33 +74,49 @@
 
 /* Target the main container and the list of tabs */
 .vagabond nav.tabs {
+
+  background-image: url(../assets/ui/chat/roll-bg.webp);
+  background-size: 100% 100%;
+  background-position: center;
+  margin-left: -16px;
+  margin-right: -16px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 32px;
+  box-shadow: 2px 2px 2px $c-inset-2;
   
   /* Target the individual tab header elements */
   [data-tab] {
-    transition: opacity 0.2s ease-in-out; 
-    color: $c-dark;
-    font-weight: 700;
-    opacity: 0.9;
-    font-size: 1.4rem;
+    transition: opacity 0.2s ease-in-out;
+    background-image: url('../assets/images/sheets/navTabBG.webp');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    color: $c-dark-bluey;
+    font-weight: 600;
+    font-size: 1.2rem;
     overflow: visible;
-    padding: 5px 15px;
+    padding: 3px 8px;
+    flex: 1; 
+    flex-basis: 0; 
+    text-align: center;
+    filter: drop-shadow(1px 1px 2px black);  
 
     /* --- STATES --- */
     &:hover {
       cursor: pointer;
-      font-weight: 900;
+      font-weight: 700;
       opacity: 1;
-      text-shadow: 0 0 6px $c-red;
+      text-shadow: 0 0 3px $c-dark-bluey;
     }
 
     &.active {
-      font-weight: 700;
       opacity: 1;
-      background-image: url('../assets/ui/tab-marker.svg');
+      background-image: url('../assets/images/sheets/navTabBG-active.webp');
       background-repeat: no-repeat;
-      background-size: 100% 100%;
       background-position: center center;
-      mix-blend-mode: color-burn;
+      color: $c-yellow;
+      text-shadow: 0 0 3px $c-bluey;
     }    
   }
 }

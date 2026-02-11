@@ -64,6 +64,7 @@
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
+  --vagabond-inventory-hover: #ab612071;
 }
 
 .theme-dark,
@@ -90,6 +91,7 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff;
+  --vagabond-inventory-hover: #ab612071;
 }
 
 .flex-025 {
@@ -378,32 +380,47 @@ body[data-theme=dark] #sidebar {
 
 /* Target the main container and the list of tabs */
 .vagabond nav.tabs {
+  background-image: url(../assets/ui/chat/roll-bg.webp);
+  background-size: 100% 100%;
+  background-position: center;
+  margin-left: -16px;
+  margin-right: -16px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 32px;
+  box-shadow: 2px 2px 2px var(--vagabond-c-inset-2);
   /* Target the individual tab header elements */
 }
 .vagabond nav.tabs [data-tab] {
   transition: opacity 0.2s ease-in-out;
-  color: var(--vagabond-c-dark);
-  font-weight: 700;
-  opacity: 0.9;
-  font-size: 1.4rem;
+  background-image: url("../assets/images/sheets/navTabBG.webp");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  color: var(--vagabond-c-dark-bluey);
+  font-weight: 600;
+  font-size: 1.2rem;
   overflow: visible;
-  padding: 5px 15px;
+  padding: 3px 8px;
+  flex: 1;
+  flex-basis: 0;
+  text-align: center;
+  filter: drop-shadow(1px 1px 2px black);
   /* --- STATES --- */
 }
 .vagabond nav.tabs [data-tab]:hover {
   cursor: pointer;
-  font-weight: 900;
-  opacity: 1;
-  text-shadow: 0 0 6px var(--vagabond-c-red);
-}
-.vagabond nav.tabs [data-tab].active {
   font-weight: 700;
   opacity: 1;
-  background-image: url("../assets/ui/tab-marker.svg");
+  text-shadow: 0 0 3px var(--vagabond-c-dark-bluey);
+}
+.vagabond nav.tabs [data-tab].active {
+  opacity: 1;
+  background-image: url("../assets/images/sheets/navTabBG-active.webp");
   background-repeat: no-repeat;
-  background-size: 100% 100%;
   background-position: center center;
-  mix-blend-mode: color-burn;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 0 0 3px var(--vagabond-c-bluey);
 }
 
 .rollable:hover, .rollable:focus {
@@ -4801,7 +4818,6 @@ ol#combat-tracker.directory-list {
   /* First-time tooltip for sliding panel */
   /* Panel content area */
   /* Mana info row */
-  /* Currency fields in panel */
 }
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Eskapade", serif;
@@ -6952,23 +6968,39 @@ ol#combat-tracker.directory-list {
   font-size: 0.85em;
   font-style: italic;
 }
+.vagabond .inventory-section {
+  border: 3px solid var(--vagabond-c-chat-yellow);
+  border-radius: 1.3em;
+  corner-shape: scoop scoop round round;
+  overflow: hidden;
+  padding: 2px 4px;
+  background-color: black;
+  margin: 12px 0;
+  overflow: visible;
+}
 .vagabond .inventory-header-container {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 6px;
   width: 100%;
-  margin-right: 0;
-  min-height: 32px;
+  height: 20px;
+  padding: 4px 20px;
   box-sizing: border-box;
 }
 .vagabond .inventory-header-container h4 {
+  background-image: url("../assets/images/sheets/titleSmallBG.webp");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
   margin: 0;
   text-align: center;
   color: var(--vagabond-c-white);
   mix-blend-mode: normal;
   opacity: 1;
+  padding: 4px 8px;
+  position: relative;
+  top: -14px;
 }
 .vagabond .inventory-slots-section {
   position: absolute;
@@ -6998,7 +7030,11 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
   color: var(--vagabond-c-white);
 }
-.vagabond .inventory-slots-section .slots-info .slot-field .slot-value .fatigue-note {
+.vagabond .inventory-slots-section .slots-info .slot-field.overloaded .resource-label,
+.vagabond .inventory-slots-section .slots-info .slot-field.overloaded .slot-value {
+  color: var(--vagabond-c-red);
+}
+.vagabond .inventory-slots-section .slots-info .slot-field.overloaded .fatigue-note {
   font-size: 12px;
   font-weight: normal;
   color: #ffcccc;
@@ -7033,20 +7069,21 @@ ol#combat-tracker.directory-list {
   margin-right: 4px;
 }
 .vagabond .inventory-grid-container {
-  margin-bottom: 16px;
+  margin-bottom: 2px;
 }
 .vagabond .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: 50px;
   gap: 0;
   padding: 1px;
-  background: none;
+  background: whitesmoke;
   border-radius: 4px;
   width: 100%;
+  overflow: hidden;
 }
 .vagabond .inventory-slot.empty-slot {
-  background: none;
+  background: whitesmoke;
   border: 2px solid rgba(44, 18, 8, 0.1);
   border-top: none;
   border-left: none;
@@ -7058,10 +7095,10 @@ ol#combat-tracker.directory-list {
   transition: all 0.15s ease;
 }
 .vagabond .inventory-slot.empty-slot:nth-child(-n+4) {
-  border-top: 2px solid rgba(0, 0, 0, 0.1);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
 }
 .vagabond .inventory-slot.empty-slot:nth-child(4n+1) {
-  border-left: 2px solid rgba(0, 0, 0, 0.1);
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
 }
 .vagabond .inventory-slot.empty-slot .slot-number {
   font-size: 18px;
@@ -7071,10 +7108,10 @@ ol#combat-tracker.directory-list {
   mix-blend-mode: multiply;
 }
 .vagabond .inventory-slot.empty-slot.unavailable {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 .vagabond .inventory-slot.empty-slot.unavailable .slot-number {
-  color: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.25);
 }
 .vagabond .inventory-slot.empty-slot.fatigue-occupied {
   background: rgba(139, 0, 0, 0.15);
@@ -7107,7 +7144,7 @@ ol#combat-tracker.directory-list {
   box-shadow: -4px 0 8px rgba(217, 83, 79, 0.3);
 }
 .vagabond .inventory-card {
-  background: none;
+  background: whitesmoke;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 3px;
   padding: 2px;
@@ -7122,18 +7159,16 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-card:hover {
   z-index: 10;
   box-shadow: inset 0 0 8px var(--vagabond-c-inset-1), inset 0 0 0 2px var(--vagabond-c-inset-2), 0 2px 4px rgba(0, 0, 0, 0.15);
-  background: rgba(171, 97, 32, 0.4431372549);
+  background: var(--vagabond-inventory-hover);
   mix-blend-mode: multiply;
 }
 .vagabond .inventory-card.equipped {
   box-shadow: inset 0 0 12px var(--vagabond-c-inset-1), inset 0 0 0 2px var(--vagabond-c-inset-2);
-  background: rgba(129, 61, 30, 0.1490196078);
-  mix-blend-mode: multiply;
+  background: rgb(225, 225, 225);
 }
 .vagabond .inventory-card.equipped:hover {
   box-shadow: inset 0 0 8px var(--vagabond-c-inset-1), inset 0 0 0 2px var(--vagabond-c-inset-2), 0 2px 4px rgba(0, 0, 0, 0.15);
   background: rgba(143, 92, 47, 0.6196078431);
-  mix-blend-mode: multiply;
 }
 .vagabond .inventory-card.dragging {
   opacity: 0.4;
@@ -7175,7 +7210,6 @@ ol#combat-tracker.directory-list {
   flex-shrink: 0;
   border-radius: 2px;
   border: none;
-  mix-blend-mode: color-dodge;
 }
 .vagabond .inventory-card .item-name-display {
   flex: 1;
@@ -7190,6 +7224,24 @@ ol#combat-tracker.directory-list {
   line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+.vagabond .inventory-card .bound-marker {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  font-size: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+.vagabond .inventory-card .bound-marker .bound {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
+.vagabond .inventory-card .bound-marker .unbound {
+  color: var(--vagabond-c-dark-bluey);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.6;
+}
 .vagabond .inventory-overload-warning {
   margin-top: 8px;
   padding: 8px 12px;
@@ -7197,7 +7249,7 @@ ol#combat-tracker.directory-list {
   border: 1px solid rgba(220, 53, 69, 0.4);
   border-radius: 4px;
   color: #d9534f;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -7205,6 +7257,102 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .inventory-overload-warning i {
   font-size: 16px;
+}
+.vagabond .inventory-header-container .bounds-counter-section {
+  position: absolute;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  color: var(--vagabond-c-white);
+}
+.vagabond .inventory-header-container .bounds-counter-section .bounds-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .inventory-header-container .bounds-counter-section .bounds-info .resource-label {
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--vagabond-c-white);
+}
+.vagabond .inventory-header-container .bounds-counter-section .bounds-pips {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.vagabond .inventory-header-container .bounds-counter-section .bounds-pips .bound-pip {
+  font-size: 12px;
+}
+.vagabond .inventory-header-container .bounds-counter-section .bounds-pips .bound-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+.vagabond .inventory-header-container .bounds-counter-section .bounds-pips .bound-pip.empty {
+  color: var(--vagabond-c-dark-bluey);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.5;
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon {
+  font-size: 16px;
+  transition: color 0.15s ease;
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.bound {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.unbound {
+  color: var(--vagabond-c-dark-bluey);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.5;
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.8;
+}
+.vagabond .inventory-section .wealth-section {
+  padding: 3px 6px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+}
+.vagabond .inventory-section .wealth-section .currency-row {
+  gap: 4px;
+}
+.vagabond .inventory-section .wealth-section .wealth-title {
+  color: var(--vagabond-c-chat-yellow);
+  margin: 0;
+  font-family: "Eskapade", serif;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+.vagabond .inventory-section .wealth-section .wealth-title h5 {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .inventory-section .wealth-section .currency-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .inventory-section .wealth-section .currency-field .resource-label {
+  color: var(--vagabond-c-white);
+  font-weight: bold;
+  font-size: 14px;
+}
+.vagabond .inventory-section .wealth-section .currency-field input {
+  color: var(--vagabond-c-chat-yellow);
+  min-width: 30px;
+  max-width: 50px;
+  text-align: center;
 }
 .vagabond .effects-header {
   height: 28px;
@@ -8504,20 +8652,6 @@ ol#combat-tracker.directory-list {
   margin-bottom: 0;
   padding-bottom: 0;
 }
-.vagabond .panel-title {
-  display: flex;
-  justify-content: center;
-  margin-right: auto;
-  margin-bottom: 8px;
-  font-family: "Eskapade", serif;
-  background-image: url("../assets/images/sheets/titleBG.webp");
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 100% 100%;
-  padding: 8px;
-  color: var(--vagabond-c-white);
-  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
-}
 .vagabond .mana-info-row {
   display: flex;
   justify-content: space-around;
@@ -8587,39 +8721,6 @@ ol#combat-tracker.directory-list {
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-}
-.vagabond .currency-row {
-  justify-content: flex-end;
-  gap: 8px;
-}
-.vagabond .currency-field {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 4px;
-}
-.vagabond .currency-field input {
-  flex: 1;
-  min-width: 50px;
-  text-align: center;
-}
-.vagabond .currency-field .gold {
-  color: #ffb100;
-  text-shadow: 0 0 3px rgb(125, 90, 0);
-  font-size: 1.3rem;
-  padding-bottom: 4px;
-}
-.vagabond .currency-field .silver {
-  color: rgb(144, 144, 144);
-  text-shadow: 0 0 3px rgb(98, 100, 101);
-  font-size: 1.3rem;
-  padding-bottom: 4px;
-}
-.vagabond .currency-field .copper {
-  color: #9a3716;
-  text-shadow: 0 0 3px rgb(83, 54, 46);
-  font-size: 1.3rem;
-  padding-bottom: 4px;
 }
 .vagabond .luck-item {
   display: grid !important;

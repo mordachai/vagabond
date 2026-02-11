@@ -430,17 +430,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         case 'features':
           tab.id = 'features';
           tab.label += 'Features';
-          tab.icon = 'fa-solid fa-shield-halved';
+          //tab.icon = 'fa-solid fa-shield-halved';
           break;
         case 'spells':
           tab.id = 'spells';
           tab.label += 'Spells';
-          tab.icon = 'fa-solid fa-wand-sparkles';
+          //tab.icon = 'fa-solid fa-wand-sparkles';
           break;
         case 'effects':
           tab.id = 'effects';
           tab.label += 'Effects';
-          tab.icon = 'fa-solid fa-flask';
+          //tab.icon = 'fa-solid fa-flask';
           break;
       }
 

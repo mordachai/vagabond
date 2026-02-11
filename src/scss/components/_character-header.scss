@@ -1194,21 +1194,6 @@
   }
 }
 
-.panel-title {
-  display: flex;
-  justify-content: center;
-  margin-right: auto;
-  margin-bottom: 8px;
-  font-family: $font-title;
-  background-image: url('../assets/images/sheets/titleBG.webp');
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 100% 100%;
-  padding: 8px;
-  color: $c-white;
-  filter: drop-shadow(2px 2px 1px $c-inset-1,);
-}
-
 /* Mana info row */
 .mana-info-row {
   display: flex;
@@ -1289,46 +1274,6 @@
     text-align: center;
   }
 }
-
-  /* Currency fields in panel */
-  .currency-row {
-    justify-content: flex-end;
-    gap: 8px;
-  }
-
-  .currency-field {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    gap: 4px;
-
-    input {
-      flex:1;
-      min-width: 50px;
-      text-align: center;
-    }
-
-    .gold{
-      color: #ffb100;
-      text-shadow: 0 0 3px rgb(125, 90, 0);
-      font-size: 1.3rem;
-      padding-bottom: 4px;
-    }
-
-    .silver{
-      color: rgb(144, 144, 144);
-      text-shadow: 0 0 3px rgb(98, 100, 101);
-      font-size: 1.3rem;
-      padding-bottom: 4px;
-    }
-
-    .copper{
-      color: #9a3716;
-      text-shadow: 0 0 3px rgb(83, 54, 46);
-      font-size: 1.3rem;
-      padding-bottom: 4px;      
-    }
-  }
 
 // Luck Pool - Moved from .speed-stats-row to be global
 .luck-item {

@@ -56,6 +56,14 @@ export default class VagabondCharacter extends VagabondActorBase {
           label: "Bonus Slots",
           hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
         }
+      ),
+      boundsBonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Bonus Bounds",
+          hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
+        }
       )
     });
 
@@ -690,6 +698,7 @@ export default class VagabondCharacter extends VagabondActorBase {
   _resetBonuses() {
     // --- 1. Reset Flat Mechanics ---
     this.inventory.bonusSlots = []; // MUST reset - Active Effects will add to this
+    this.inventory.boundsBonus = [];
     this.mana.bonus = [];
     this.mana.castingMaxBonus = [];
     this.speed.bonus = [];
@@ -841,6 +850,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.speed.bonus = this._evaluateFormulaField(this.speed.bonus, rollData);
     this.health.bonus = this._evaluateFormulaField(this.health.bonus, rollData);
     this.inventory.bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
+    this.inventory.boundsBonus = this._evaluateFormulaField(this.inventory.boundsBonus, rollData);
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
     this.bonuses.spellManaCostReduction = this._evaluateFormulaField(this.bonuses.spellManaCostReduction, rollData);
     this.bonuses.deliveryManaCostReduction = this._evaluateFormulaField(this.bonuses.deliveryManaCostReduction, rollData);
@@ -939,6 +949,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this._calculateCombatValues(rollData);
 
     this._calculateInventorySlots(rollData);
+    this._calculateBounds(rollData);
 
     // ------------------------------------------------------------------
     // 2. Prepare Display Data (Labels, Difficulty, etc.)
@@ -1228,6 +1239,21 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.occupiedSlots = occupiedSlots; // Only counts non-zero slot items
     this.inventory.totalItems = occupiedSlotsWithZero; // All items for grid sizing
     this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots; // Available = Effective max - occupied
+  }
+
+  _calculateBounds(rollData) {
+    const boundsBonus = this._evaluateFormulaField(this.inventory.boundsBonus, rollData);
+    this.inventory.maxBounds = 3 + boundsBonus;
+
+    let currentBounds = 0;
+    if (this.parent?.items) {
+      for (const item of this.parent.items) {
+        if (item.type === 'equipment' && item.system.bound === true) {
+          currentBounds++;
+        }
+      }
+    }
+    this.inventory.currentBounds = currentBounds;
   }
 
   _calculateManaValues(rollData) {

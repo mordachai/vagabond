@@ -110,6 +110,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeTraitPerk: this._onRemoveTraitPerk,
       removeFeatureSpell: this._onRemoveFeatureSpell,
       removeFeaturePerk: this._onRemoveFeaturePerk,
+      toggleBound: this._onToggleBound,
     },
     form: {
       submitOnChange: false,   // Disabled to prevent constant redraws on every keystroke
@@ -2050,6 +2051,33 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
     // No need to close/reopen - template handles both states with conditionals
+  }
+
+  /**
+   * Toggle the bound state of an equipment item.
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleBound(event, target) {
+    const currentBound = this.item.system.bound || false;
+
+    // If trying to bind, check the actor's bounds limit
+    if (!currentBound && this.item.parent) {
+      const actor = this.item.parent;
+      const currentBounds = actor.system.inventory?.currentBounds ?? 0;
+      const maxBounds = actor.system.inventory?.maxBounds ?? 3;
+      if (currentBounds >= maxBounds) {
+        ui.notifications.warn(game.i18n.format('VAGABOND.UI.Labels.BoundsLimitReached', {
+          name: this.item.name,
+          current: currentBounds,
+          max: maxBounds,
+        }));
+        return;
+      }
+    }
+
+    await this.item.update({ 'system.bound': !currentBound });
   }
 
   /**

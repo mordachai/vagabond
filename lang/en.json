@@ -633,6 +633,12 @@
         "NoItems": "No items in this pack yet. Drag items here to add them.",
         "RemoveItem": "Remove item from pack"
       },
+      "Equipment": {
+        "FIELDS": {
+          "requiresBound": {"label": "Requires Bound"},
+          "bound": {"label": "Bound"}
+        }
+      },
       "Relic": {
         "FIELDS": {
           "lore": {"label": "Lore"},
@@ -965,7 +971,8 @@
         "Count": "Select:",
         "RestrictedPool": "Among these:",
         "Targets": "Targets",
-        "Bounds": "Bounds:"
+        "Bounds": "Bounds:",
+        "BoundsLimitReached": "Cannot bind {name}: all bound slots are full ({current}/{max})."
       },
       "Examples": {
         "PermanentEffect": "Example: Perk that gives +2 Might to all rolls",

@@ -217,6 +217,7 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== INVENTORY =====
       'system.inventory.bonusSlots': 'Inventory: Bonus Slots',
+      'system.inventory.boundsBonus': 'Inventory: Bonus Bounds',
 
       // ===== MANA =====
       'system.mana.current': 'Mana: Current',
