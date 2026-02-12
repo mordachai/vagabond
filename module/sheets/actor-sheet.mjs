@@ -51,6 +51,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleFx: this._onToggleFx,
       toggleSpellFavorite: this._onToggleSpellFavorite,
       toggleSpellPreview: this._onToggleSpellPreview,
+      toggleSpellAccordion: this._onToggleSpellAccordion,
       // Character-specific UI actions (handled in base class)
       viewAncestry: this._viewAncestry,
       viewClass: this._viewClass,
@@ -518,6 +519,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           containers.push(item);
           break;
         case 'spell':
+          // Calculate effective damage die size
+          const override = item.system.damageDieSize;
+          const defaultSize = this.actor.system.spellDamageDieSize || 6;
+          item.effectiveDamageDieSize = override || defaultSize;
           spells.push(item);
           break;
         case 'perk':
@@ -691,6 +696,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onToggleSpellPreview(event, target) {
     return this.spellHandler?.toggleSpellPreview(event, target);
+  }
+
+  static async _onToggleSpellAccordion(event, target) {
+    return this.spellHandler?.toggleSpellAccordion(event, target);
   }
 
   // --- NPC IMMUNITY HANDLERS ---

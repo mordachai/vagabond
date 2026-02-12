@@ -16,6 +16,8 @@
   gap: 20px;
   color: $c-dark !important;
   font-family: $font-primary;
+  flex: 1;
+  min-height: 0;
 }
 
 .skills-section {
@@ -123,6 +125,8 @@
 .right-column {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
   position: relative;
   z-index: 20 !important;
         h4 { color: $c-white; }
@@ -314,6 +318,10 @@
 .favorites-section {
   margin-top: 4px;
   flex-wrap: nowrap;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 
   h4.right-col {
     color: $c-white;

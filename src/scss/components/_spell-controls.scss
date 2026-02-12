@@ -39,183 +39,245 @@
 
 .favorited-spell {
   display: flex;
-  align-items: baseline;
-  
-  gap: 2px;
-  padding: 0;
+  flex-direction: column;
   width: 100%;
-  height: 20px;
-
-  // Column 1: Spell name (flexible, takes remaining space)
-  .spell-name {
-    flex: 1 1 auto;
-    min-width: 60px;
-    text-align: left;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: $font-title;
-    color: $c-dark;
+  margin-bottom: 2px;
+  
+  // Accordion state
+  &.collapsed .spell-accordion-content {
+    display: none;
   }
 
-  // Column 2: Damage dice (fixed width, centered)
-  .spell-damage-dice {
-    flex: 0 0 11px;
-    text-align: center;
-    font-family: $font-secondary;
-    color: $c-dark;
-
-    &.clickable {
-      cursor: pointer;
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.05);
-      }
-    }
-  }
-
-  // Column 2.5: Fx (Effect) Icon - clickable checkbox
-  .spell-fx-icon {
-    flex: 0 0 15px;
-    display: flex;
+  // Trigger Row (Grid)
+  .spell-trigger {
+    display: grid;
+    grid-template-columns: 30px 2fr 1fr 30px;
+    gap: 4px;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: opacity 0.2s, color 0.2s;
+    width: 100%;
+    min-height: 28px;
+    padding: 2px 0;
+    border-radius: 3px;
+    transition: background-color 0.2s;
 
-    i {
-      font-size: 13px;
-      transition: color 0.2s;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    // Col 1: Icon (Rolls)
+    .spell-icon-trigger {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      
+      img {
+        border: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 2px;
+        filter: sepia(0.3);
+        transition: filter 0.2s, transform 0.1s;
+      }
+      
+      &:hover img {
+        filter: sepia(0);
+        box-shadow: 0 0 4px $c-tan;
+        transform: scale(1.1);
+      }
+      
+      &:active img {
+        transform: scale(0.9);
+      }
     }
 
-    // Inactive state (not using effect)
-    &.fx-inactive {
-      opacity: 0.3;
+    // Col 2: Name + Damage Icon (Accordion Toggle)
+    .spell-name-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      cursor: pointer;
+      padding-right: 4px;
+      
+      &:hover .spell-name {
+        color: $c-red;
+        text-shadow: 0 0 2px rgba(212, 175, 55, 0.3);
+      }
 
-      i {
+      .spell-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 600;
+        font-family: $font-title;
         color: $c-dark;
+        font-size: 14px;
+        text-align: left;
       }
-
-      &:hover {
-        opacity: 0.5;
+      
+      .spell-damage-type-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        i {
+            color: $c-dark;
+            font-size: 13px;
+            opacity: 0.7;
+        }
       }
     }
 
-    // Active state (using effect)
-    &.fx-active {
-      opacity: 1.0;
-      color: $c-red;
-      font-weight: 500;
-
-      i {
+    // Col 3: Damage Display (Modifies Damage)
+    .spell-damage-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: $font-secondary;
+      font-weight: bold;
+      color: $c-dark;
+      font-size: 13px;
+      cursor: pointer;
+      
+      &:hover {
         color: $c-red;
       }
-
-      &:hover {
-        opacity: 0.8;
+      
+      .damage-placeholder {
+        color: rgba(0,0,0,0.3);
       }
     }
-  }
-
-  // Column 3: Damage icon (fixed width, centered)
-  .spell-damage-icon {
-    flex: 0 0 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    i {
+    
+    // Col 4: Mana Cost
+    .spell-mana-total {
+      text-align: center;
+      font-family: $font-secondary;
+      font-weight: bold;
+      color: $c-red;
       font-size: 13px;
-      color: $c-dark;
-    }
-  }
-
-  // Column 4: Delivery select (fixed width)
-  .spell-delivery-select {
-    flex: 0 0 40px;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    font-size: 14px;
-    font-family: $font-title;
-    font-weight: 500;
-    color: $c-dark;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    box-shadow: none;
-    outline: none;
-
-    &::-ms-expand {
-      display: none;
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: none;
-    }
-
-    option {
-      background: $c-tan-lite;
-      color: $c-dark;
-      font-family: $font-title;
-
-      &:checked {
-        background: $c-red;
-        color: $c-white;
-      }
-    }
-  }
-
-  // Column 5: Delivery cost (fixed width, centered)
-  .spell-delivery-cost {
-    flex: 0 0 11px;
-    text-align: center;
-    font-family: $font-secondary;
-    font-weight: normal;
-    color: $c-dark;
-
-    &.clickable {
       cursor: pointer;
-      border-radius: 3px;
-      transition: background-color 0.2s;
-
+      
       &:hover {
-        background: rgba(0, 0, 0, 0.05);
+        text-shadow: 0 0 3px $c-red;
       }
     }
+  }
 
-    &.disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+  // Accordion Content
+  .spell-accordion-content {
+    width: 100%;
+    padding: 4px 0 8px 0;
+    margin-bottom: 4px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    animation: fadein 0.2s ease-in-out;
+    
+    .accordion-inner-grid {
+      // Offset to match middle columns of trigger (30px + 4px gap)
+      margin-left: 34px;
+      margin-right: 34px;
+      
+      display: grid;
+      // 4 columns: 2fr, 1fr, 30px, 1fr
+      grid-template-columns: 2fr 1fr 30px 1fr;
+      gap: 4px;
+      align-items: center;
+      
+      // Col 1: Delivery Select
+      .delivery-select-wrapper {
+         width: 100%;
+         
+         .spell-delivery-select {
+             width: 100%;
+             min-width: 0;
+             border: none;
+             border-bottom: 1px solid rgba(0,0,0,0.1);
+             background: transparent;
+             font-size: 11px;
+             font-family: $font-title;
+             color: $c-dark;
+             padding: 0;
+             height: 18px;
+             
+             &:focus { outline: none; border-bottom-color: $c-red; }
+         }
+      }
+      
+      // Col 2: Delivery Cost
+      .spell-delivery-cost {
+         width: 100%;
+         text-align: center;
+         font-size: 11px;
+         font-weight: bold;
+         
+         &.clickable:hover { color: $c-red; background: rgba(0,0,0,0.05); }
+         &.disabled { opacity: 0.5; }
+      }
+      
+      // Col 3: Range
+      .spell-range {
+          text-align: center;
+          font-size: 11px;
+          color: $c-dark;
+          
+          &.preview-active {
+            color: $c-red;
+            text-shadow: 0 0 2px $c-red;
+          }
+      }
+      
+      // Col 4: Fx Toggle
+      .spell-fx-icon {
+          display: flex;
+          justify-content: center;
+          cursor: pointer;
+          
+          &.fx-active { color: $c-red; }
+          &.fx-inactive { opacity: 0.4; }
+          
+          &:hover { opacity: 1; }
+      }
     }
   }
+}
 
-  // Column 6: Range display (fixed width, centered)
-  .spell-range {
-    flex: 0 0 22px;
-    text-align: center;
-    font-family: $font-secondary;
-    font-size: 11px;
-    font-weight: normal;
-    color: $c-dark;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.weapon-skills {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
 
-  // Column 7: Mana total (fixed width, centered, bold)
-  .spell-mana-total {
-    flex: 0 0 13px;
-    text-align: center;
-    font-family: $font-secondary;
-    font-weight: bold;
-    color: $c-red;
+.favorited-spells-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  padding-right: 2px;
+  
+  /* Webkit scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 4px;
   }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 // Chat card styling for spell casts

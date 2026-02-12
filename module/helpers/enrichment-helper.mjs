@@ -100,6 +100,11 @@ export class EnrichmentHelper {
     if (!context.spells?.length) return;
 
     for (const spell of context.spells) {
+      // Calculate effective damage die size for display
+      const override = spell.system.damageDieSize;
+      const defaultSize = actor.system.spellDamageDieSize || 6;
+      spell.effectiveDamageDieSize = override || defaultSize;
+
       if (spell.system?.description) {
         spell.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
           spell.system.description,

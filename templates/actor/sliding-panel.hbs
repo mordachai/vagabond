@@ -478,31 +478,77 @@
               </div>
 
               {{#if hasFavoritedSpells}}
-                {{#each spells as |spell|}}
-                  {{#if spell.system.favorite}}
-                    <div class='favorited-spell' data-spell-id='{{spell._id}}'>
-                      <label class='spell-name rollable' data-action='castSpell' data-spell-id='{{spell._id}}'>{{spell.name}}</label>
-                      <div class='spell-damage-icon'><i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i></div>
-                      <div class='spell-damage-dice {{#unless (eq spell.system.damageType "-")}}clickable{{/unless}}' {{#unless (eq spell.system.damageType '-')}}data-action='modifyDamage' data-spell-id='{{spell._id}}' data-damage-type='{{spell.system.damageType}}' title='Left click to increase damage (+1 mana per d6), Right click to decrease'{{/unless}}>{{#unless (eq spell.system.damageType '-')}}1d6{{else}}0{{/unless}}</div>
-                      <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='Toggle spell effect (adds +1 mana when combined with damage)'>
-                        {{#if (eq @root.config.fxIcon.type "txt")}}<span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
-                        {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
-                        {{else}}<i class="{{@root.config.fxIcon.value}}"></i>{{/if}}
-                      </div>                      
-                      <select class='spell-delivery-select' data-spell-id='{{spell._id}}'>
-                        <option value=''>{{localize "VAGABOND.UI.Labels.Delivery"}}</option>
-                        {{#each @root.config.deliveryTypes as |label key|}}<option value='{{key}}'>{{localize label}}</option>{{/each}}
-                      </select>
-                      <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='Select a delivery type first'>0</div>
-                      <div class='spell-range clickable' 
-                        data-action='toggleSpellPreview' 
-                        data-spell-id='{{spell._id}}' 
-                        title='Draw template'>—
+                <div class="favorited-spells-list">
+                  {{#each spells as |spell|}}
+                    {{#if spell.system.favorite}}
+                      <div class='favorited-spell accordion-item collapsed' data-spell-id='{{spell._id}}'>
+                        {{!-- Trigger Row: 4 Column Grid --}}
+                        <div class="spell-trigger grid-4col">
+                          {{!-- Col 1: Spell Icon (Rolls Spell) --}}
+                          <div class="spell-icon-trigger clickable rollable" data-action="castSpell" data-spell-id='{{spell._id}}'>
+                             <img src="{{spell.img}}" alt="{{spell.name}}" />
+                          </div>
+
+                          {{!-- Col 2: Spell Name + Damage Icon (Opens Accordion) --}}
+                          <div class="spell-name-container clickable" data-action="toggleSpellAccordion">
+                              <label class='spell-name'>{{spell.name}}</label>
+                              <div class='spell-damage-type-icon'>
+                                <i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i>
+                              </div>
+                          </div>
+
+                          {{!-- Col 3: Damage Display (Modifies Damage) --}}
+                          <div class='spell-damage-trigger clickable' 
+                               data-action='modifyDamage' 
+                               data-spell-id='{{spell._id}}'
+                               data-damage-type='{{spell.system.damageType}}'
+                               title='Left click to increase damage (+1 mana per d6), Right click to decrease'>
+                            {{#unless (eq spell.system.damageType '-')}}
+                               <div class="damage-display-group">
+                                 <span class="spell-damage-dice">{{#if (lookup @root.spellStates spell._id)}}{{lookup (lookup @root.spellStates spell._id) 'damageDice'}}{{else}}1{{/if}}</span>d{{spell.effectiveDamageDieSize}}
+                               </div>
+                             {{else}}
+                               <span class="damage-placeholder">-</span>
+                             {{/unless}}
+                          </div>
+
+                          {{!-- Col 4: Mana Cost (Opens Accordion) --}}
+                          <div class='spell-mana-total clickable' data-action="toggleSpellAccordion">0</div>
+                        </div>
+
+                        {{!-- Accordion Content --}}
+                        <div class="spell-accordion-content accordion-content collapsed">
+                          <div class="accordion-inner-grid">
+                              {{!-- Col 1: Delivery Selector --}}
+                              <div class="delivery-select-wrapper">
+                                <select class='spell-delivery-select' data-spell-id='{{spell._id}}'>
+                                  <option value=''>{{localize "VAGABOND.UI.Labels.Delivery"}}</option>
+                                  {{#each @root.config.deliveryTypes as |label key|}}<option value='{{key}}'>{{localize label}}</option>{{/each}}
+                                </select>
+                              </div>
+
+                              {{!-- Col 2: Delivery Cost --}}
+                              <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='Select a delivery type first'>0</div>
+
+                              {{!-- Col 3: Range --}}
+                              <div class='spell-range clickable' 
+                                data-action='toggleSpellPreview' 
+                                data-spell-id='{{spell._id}}' 
+                                title='Draw template'>—
+                              </div>
+
+                              {{!-- Col 4: Effect Toggle --}}
+                              <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='Toggle spell effect (adds +1 mana when combined with damage)'>
+                                {{#if (eq @root.config.fxIcon.type "txt")}}<span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
+                                {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
+                                {{else}}<i class="{{@root.config.fxIcon.value}}"></i>{{/if}}
+                              </div>  
+                          </div>
+                        </div>
                       </div>
-                      <div class='spell-mana-total'>0</div>
-                    </div>
-                  {{/if}}
-                {{/each}}
+                    {{/if}}
+                  {{/each}}
+                </div>
               {{else}}
                 {{!-- Placeholder Text for Spells --}}
                 <div class="no-perks italic py-2-px-8">{{localize 'VAGABOND.UI.Sections.spellsPlaceholder'}}</div>

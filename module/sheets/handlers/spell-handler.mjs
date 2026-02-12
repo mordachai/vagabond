@@ -673,6 +673,20 @@ export class SpellHandler {
     await this._clearAllPreviews();
   }
 
+  /**
+   * Toggle spell accordion in sliding panel
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  async toggleSpellAccordion(event, target) {
+    event.preventDefault();
+    const accordion = target.closest('.favorited-spell.accordion-item');
+    if (accordion) {
+      const { AccordionHelper } = await import('../../helpers/accordion-helper.mjs');
+      AccordionHelper.toggle(accordion);
+    }
+  }
+
   // ===========================
   // Setup Listeners
   // ===========================
@@ -707,10 +721,14 @@ export class SpellHandler {
       }
 
       // Damage dice: left-click increase, right-click decrease
-      const damageElement = spellRow.querySelector('.spell-damage-dice');
+      // Support both old selector (spells tab) and new selector (sliding panel)
+      const damageElement = spellRow.querySelector('.spell-damage-dice, .spell-damage-dice-control, .spell-damage-trigger');
       if (damageElement) {
         damageElement.addEventListener('click', async (event) => {
           event.preventDefault();
+          // Prevent triggering accordion toggle if it's the control or trigger container
+          event.stopPropagation();
+          
           const state = this._getSpellState(spellId);
           state.damageDice++;
           this._saveSpellStates();
@@ -722,6 +740,8 @@ export class SpellHandler {
 
         damageElement.addEventListener('contextmenu', async (event) => {
           event.preventDefault();
+          event.stopPropagation();
+          
           const state = this._getSpellState(spellId);
           if (state.damageDice > 1) {
             state.damageDice--;
