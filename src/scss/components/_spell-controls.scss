@@ -51,14 +51,15 @@
   // Trigger Row (Grid)
   .spell-trigger {
     display: grid;
-    grid-template-columns: 30px 2fr 1fr 30px;
+    grid-template-columns: 30px 3fr 1fr 25px;
     gap: 4px;
-    align-items: center;
+    align-items: baseline;
     width: 100%;
     min-height: 28px;
     padding: 2px 0;
     border-radius: 3px;
     transition: background-color 0.2s;
+    font-size: 1.2em;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.02);
@@ -68,7 +69,7 @@
     .spell-icon-trigger {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-self: center;
       cursor: pointer;
       
       img {
@@ -109,10 +110,8 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-weight: 600;
         font-family: $font-title;
         color: $c-dark;
-        font-size: 14px;
         text-align: left;
       }
       
@@ -123,9 +122,12 @@
         
         i {
             color: $c-dark;
-            font-size: 13px;
-            opacity: 0.7;
+            font-size: 0.9em;
+            opacity: 0.8;
         }
+
+        // &::after,
+        // &::before {content: '-'; font-size: 0.8em;}
       }
     }
 
@@ -135,9 +137,8 @@
       align-items: center;
       justify-content: center;
       font-family: $font-secondary;
-      font-weight: bold;
       color: $c-dark;
-      font-size: 13px;
+      font-size: 1em;
       cursor: pointer;
       
       &:hover {
@@ -153,13 +154,11 @@
     .spell-mana-total {
       text-align: center;
       font-family: $font-secondary;
-      font-weight: bold;
       color: $c-red;
-      font-size: 13px;
       cursor: pointer;
       
       &:hover {
-        text-shadow: 0 0 3px $c-red;
+        text-shadow: 0 0 2px $c-red;
       }
     }
   }
@@ -169,35 +168,39 @@
     width: 100%;
     padding: 4px 0 8px 0;
     margin-bottom: 4px;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    font-size: 1.15em;
+    border-top: 2px solid $c-yellow;
     animation: fadein 0.2s ease-in-out;
+    color: $c-white;
     
     .accordion-inner-grid {
       // Offset to match middle columns of trigger (30px + 4px gap)
-      margin-left: 34px;
-      margin-right: 34px;
+      margin-left: 12px;
+      margin-right: 25px;
       
       display: grid;
       // 4 columns: 2fr, 1fr, 30px, 1fr
-      grid-template-columns: 2fr 1fr 30px 1fr;
+      grid-template-columns: 3fr 1fr 1fr 1fr;
       gap: 4px;
       align-items: center;
+
+      background-color: $c-dark-bluey;
       
       // Col 1: Delivery Select
       .delivery-select-wrapper {
-         width: 100%;
+        width: 100%;
          
          .spell-delivery-select {
              width: 100%;
-             min-width: 0;
+             min-width: 60px;
              border: none;
              border-bottom: 1px solid rgba(0,0,0,0.1);
              background: transparent;
-             font-size: 11px;
              font-family: $font-title;
-             color: $c-dark;
+             text-transform: uppercase;
              padding: 0;
-             height: 18px;
+             height: 1.2em;
+             color: $c-white;
              
              &:focus { outline: none; border-bottom-color: $c-red; }
          }
@@ -207,7 +210,6 @@
       .spell-delivery-cost {
          width: 100%;
          text-align: center;
-         font-size: 11px;
          font-weight: bold;
          
          &.clickable:hover { color: $c-red; background: rgba(0,0,0,0.05); }
@@ -217,8 +219,6 @@
       // Col 3: Range
       .spell-range {
           text-align: center;
-          font-size: 11px;
-          color: $c-dark;
           
           &.preview-active {
             color: $c-red;
@@ -232,7 +232,7 @@
           justify-content: center;
           cursor: pointer;
           
-          &.fx-active { color: $c-red; }
+          &.fx-active { color: $c-yellow; font-weight: 600; }
           &.fx-inactive { opacity: 0.4; }
           
           &:hover { opacity: 1; }

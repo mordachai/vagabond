@@ -146,8 +146,8 @@
 
 // Status Effects Display
 .status-display {
-  position: absolute;
-  bottom: 48px; // Above HP display
+  position: relative;
+  bottom: 45px; // Above HP display
   left: 50%;
   transform: translateX(-50%);
   width: 100%;

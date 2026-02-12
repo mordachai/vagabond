@@ -148,7 +148,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-weight: 600;
       cursor: pointer;
       font-family: $font-title;
       color: $c-dark;
@@ -228,7 +227,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-weight: 600;
       cursor: pointer;
       font-family: $font-title;
       color: $c-dark;
@@ -287,7 +285,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-weight: 600;
       cursor: pointer;
       font-family: $font-title;
       color: $c-dark;
@@ -431,213 +428,93 @@
   }
 }
 
-// Features List - Accordion Style
-.features-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-
-  .feature.accordion-item {
-    padding: 2px;
-    border-radius: 2px;
-    margin-bottom: 8px;
-    overflow: hidden;
-
-    .feature-header.accordion-header {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.2s ease;
-
-      &::before {
-        font-family: var(--font-awesome);
-        content: "\f219";   // CHANGE THIS VALUE to change the marker
-        margin-right: 4px;  // Space between marker and text
-        // 900 = Solid, 400 = Regular, 300 = Light (Pro only)
-        font-weight: 900; // Make it pop
-        font-size: 0.6em;   // Size relative to text
-        line-height: 1;     // Fix vertical alignment
-        flex-shrink: 0;     // Prevents marker from shrinking on small screens
-      }
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
-
-      .feature-name {
-        margin: 0;
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
-
-    .feature-description.accordion-content {
-      padding: 2px;
-      display: block;
-      max-height: 500px;
-      overflow-y: auto;
-      transition: max-height 0.3s ease;
-      font-family: $font-primary;
-      font-size: 14px;
-    }
-
-    // Collapsed state
-    &.collapsed {
-      .accordion-content {
-        display: none;
-      }
-    }
-  }
-
-  .no-features {
-    list-style: none;
-    padding: 14px;
-    text-align: center;
-    font-style: italic;
-  }
-}
-
-// Traits List - Accordion Style
-.traits-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 16px;
-
-  .trait.accordion-item {
-    padding: 2px;
-    border-radius: 2px;
-    margin-bottom: 8px;
-    overflow: hidden;
-
-    .trait-header.accordion-header {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.2s ease;
-
-      &::before {
-        font-family: var(--font-awesome);
-        content: "\f219";   // Circle marker
-        margin-right: 4px;  // Space between marker and text
-        font-weight: 900;   // Solid style
-        font-size: 0.6em;   // Size relative to text
-        line-height: 1;     // Fix vertical alignment
-        flex-shrink: 0;     // Prevents marker from shrinking on small screens
-      }
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
-
-      .trait-name {
-        margin: 0;
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
-
-    .trait-description.accordion-content {
-      padding: 2px;
-      display: block;
-      max-height: 500px;
-      overflow-y: auto;
-      transition: max-height 0.3s ease;
-      font-family: $font-primary;
-      font-size: 14px;
-    }
-
-    // Collapsed state
-    &.collapsed {
-      .accordion-content {
-        display: none;
-      }
-    }
-  }
-
-  .no-traits {
-    list-style: none;
-    padding: 14px;
-    text-align: center;
-    font-style: italic;
-  }
-}
-
-// Perks List - Accordion Style
+// Consolidated Accordion Lists (Features, Traits, Perks)
+.features-list,
+.traits-list,
 .perks-list {
   list-style: none;
   margin: 0;
   padding: 0;
 
-  .perk-card.accordion-item {
+  // Shared Accordion Item Styles
+  .accordion-item {
     padding: 2px;
     border-radius: 2px;
     margin-bottom: 8px;
+    overflow: hidden;
 
-    .perk-header.accordion-header {
+    // Header
+    .accordion-header {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      padding: 0 0 0 2px;
       cursor: pointer;
       transition: background 0.2s ease;
+      padding-left: 2px;
 
       &::before {
         font-family: var(--font-awesome);
-        content: "\f219";   // CHANGE THIS VALUE to change the marker
-        margin-right: 4px;  // Space between marker and text
-        // 900 = Solid, 400 = Regular, 300 = Light (Pro only)
-        font-weight: 900; // Make it pop
-        font-size: 0.6em;   // Size relative to text
-        line-height: 1;     // Fix vertical alignment
-        flex-shrink: 0;     // Prevents marker from shrinking on small screens
+        content: "\f219";   // Diamond marker
+        margin-right: 4px;
+        font-weight: 900;
+        font-size: 0.6em;
+        line-height: 1;
+        flex-shrink: 0;
       }
 
       &:hover {
         background: rgba(0, 0, 0, 0.1);
       }
 
-      .perk-name {
+      // Name styling (covers feature-name, trait-name, perk-name)
+      [class$="-name"] {
         margin: 0;
         font-size: 16px;
         font-weight: bold;
       }
     }
 
-    .perk-content.accordion-content {
+    // Content
+    .accordion-content {
       padding: 2px;
       display: block;
       max-height: 500px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
       font-family: $font-primary;
-
-      .perk-prerequisites {
-        font-size: 14px;
-        margin-bottom: 8px;
-        font-style: italic;
-      }
-
-      .perk-description {
-        font-size: 14px;
-      }
+      font-size: 14px;
     }
 
     // Collapsed state
-    &.collapsed {
-      .accordion-content {
-        display: none;
-      }
+    &.collapsed .accordion-content {
+      display: none;
     }
   }
 
-  .no-perks {
+  // Placeholder styles
+  .no-features, .no-traits, .no-perks {
     list-style: none;
     padding: 14px;
     text-align: center;
     font-style: italic;
+  }
+}
+
+// Specific Overrides
+.features-list {
+  overflow-y: auto;
+}
+
+.traits-list {
+  margin-bottom: 16px;
+}
+
+.perks-list {
+  .perk-content.accordion-content {
+    .perk-prerequisites {
+      font-size: 14px;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
   }
 }

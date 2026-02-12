@@ -5544,7 +5544,6 @@ ol#combat-tracker.directory-list {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 600;
   cursor: pointer;
   font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
@@ -5607,7 +5606,6 @@ ol#combat-tracker.directory-list {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 600;
   cursor: pointer;
   font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
@@ -5655,7 +5653,6 @@ ol#combat-tracker.directory-list {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 600;
   cursor: pointer;
   font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
@@ -5774,133 +5771,34 @@ ol#combat-tracker.directory-list {
   height: auto;
   padding: 2px 0 2px 25px;
 }
-.vagabond .features-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-}
-.vagabond .features-list .feature.accordion-item {
-  padding: 2px;
-  border-radius: 2px;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-.vagabond .features-list .feature.accordion-item .feature-header.accordion-header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-.vagabond .features-list .feature.accordion-item .feature-header.accordion-header::before {
-  font-family: var(--font-awesome);
-  content: "\f219";
-  margin-right: 4px;
-  font-weight: 900;
-  font-size: 0.6em;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.vagabond .features-list .feature.accordion-item .feature-header.accordion-header:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-.vagabond .features-list .feature.accordion-item .feature-header.accordion-header .feature-name {
-  margin: 0;
-  font-size: 16px;
-  font-weight: bold;
-}
-.vagabond .features-list .feature.accordion-item .feature-description.accordion-content {
-  padding: 2px;
-  display: block;
-  max-height: 500px;
-  overflow-y: auto;
-  transition: max-height 0.3s ease;
-  font-family: "Eskapade", serif;
-  font-size: 14px;
-}
-.vagabond .features-list .feature.accordion-item.collapsed .accordion-content {
-  display: none;
-}
-.vagabond .features-list .no-features {
-  list-style: none;
-  padding: 14px;
-  text-align: center;
-  font-style: italic;
-}
-.vagabond .traits-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 16px;
-}
-.vagabond .traits-list .trait.accordion-item {
-  padding: 2px;
-  border-radius: 2px;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header::before {
-  font-family: var(--font-awesome);
-  content: "\f219";
-  margin-right: 4px;
-  font-weight: 900;
-  font-size: 0.6em;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-.vagabond .traits-list .trait.accordion-item .trait-header.accordion-header .trait-name {
-  margin: 0;
-  font-size: 16px;
-  font-weight: bold;
-}
-.vagabond .traits-list .trait.accordion-item .trait-description.accordion-content {
-  padding: 2px;
-  display: block;
-  max-height: 500px;
-  overflow-y: auto;
-  transition: max-height 0.3s ease;
-  font-family: "Eskapade", serif;
-  font-size: 14px;
-}
-.vagabond .traits-list .trait.accordion-item.collapsed .accordion-content {
-  display: none;
-}
-.vagabond .traits-list .no-traits {
-  list-style: none;
-  padding: 14px;
-  text-align: center;
-  font-style: italic;
-}
+.vagabond .features-list,
+.vagabond .traits-list,
 .vagabond .perks-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.vagabond .perks-list .perk-card.accordion-item {
+.vagabond .features-list .accordion-item,
+.vagabond .traits-list .accordion-item,
+.vagabond .perks-list .accordion-item {
   padding: 2px;
   border-radius: 2px;
   margin-bottom: 8px;
+  overflow: hidden;
 }
-.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header {
+.vagabond .features-list .accordion-item .accordion-header,
+.vagabond .traits-list .accordion-item .accordion-header,
+.vagabond .perks-list .accordion-item .accordion-header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 0 0 2px;
   cursor: pointer;
   transition: background 0.2s ease;
+  padding-left: 2px;
 }
-.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header::before {
+.vagabond .features-list .accordion-item .accordion-header::before,
+.vagabond .traits-list .accordion-item .accordion-header::before,
+.vagabond .perks-list .accordion-item .accordion-header::before {
   font-family: var(--font-awesome);
   content: "\f219";
   margin-right: 4px;
@@ -5909,37 +5807,55 @@ ol#combat-tracker.directory-list {
   line-height: 1;
   flex-shrink: 0;
 }
-.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header:hover {
+.vagabond .features-list .accordion-item .accordion-header:hover,
+.vagabond .traits-list .accordion-item .accordion-header:hover,
+.vagabond .perks-list .accordion-item .accordion-header:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-.vagabond .perks-list .perk-card.accordion-item .perk-header.accordion-header .perk-name {
+.vagabond .features-list .accordion-item .accordion-header [class$=-name],
+.vagabond .traits-list .accordion-item .accordion-header [class$=-name],
+.vagabond .perks-list .accordion-item .accordion-header [class$=-name] {
   margin: 0;
   font-size: 16px;
   font-weight: bold;
 }
-.vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content {
+.vagabond .features-list .accordion-item .accordion-content,
+.vagabond .traits-list .accordion-item .accordion-content,
+.vagabond .perks-list .accordion-item .accordion-content {
   padding: 2px;
   display: block;
   max-height: 500px;
   overflow-y: auto;
   transition: max-height 0.3s ease;
   font-family: "Eskapade", serif;
-}
-.vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-prerequisites {
-  font-size: 14px;
-  margin-bottom: 8px;
-  font-style: italic;
-}
-.vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-description {
   font-size: 14px;
 }
-.vagabond .perks-list .perk-card.accordion-item.collapsed .accordion-content {
+.vagabond .features-list .accordion-item.collapsed .accordion-content,
+.vagabond .traits-list .accordion-item.collapsed .accordion-content,
+.vagabond .perks-list .accordion-item.collapsed .accordion-content {
   display: none;
 }
+.vagabond .features-list .no-features, .vagabond .features-list .no-traits, .vagabond .features-list .no-perks,
+.vagabond .traits-list .no-features,
+.vagabond .traits-list .no-traits,
+.vagabond .traits-list .no-perks,
+.vagabond .perks-list .no-features,
+.vagabond .perks-list .no-traits,
 .vagabond .perks-list .no-perks {
   list-style: none;
   padding: 14px;
   text-align: center;
+  font-style: italic;
+}
+.vagabond .features-list {
+  overflow-y: auto;
+}
+.vagabond .traits-list {
+  margin-bottom: 16px;
+}
+.vagabond .perks-list .perk-content.accordion-content .perk-prerequisites {
+  font-size: 14px;
+  margin-bottom: 8px;
   font-style: italic;
 }
 .vagabond .inventory h3 {
@@ -7844,8 +7760,8 @@ ol#combat-tracker.directory-list {
   text-shadow: 0 0 2px rgba(58, 42, 8, 0.6);
 }
 .vagabond .status-display {
-  position: absolute;
-  bottom: 48px;
+  position: relative;
+  bottom: 45px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -9983,14 +9899,15 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .favorited-spell .spell-trigger {
   display: grid;
-  grid-template-columns: 30px 2fr 1fr 30px;
+  grid-template-columns: 30px 3fr 1fr 25px;
   gap: 4px;
-  align-items: center;
+  align-items: baseline;
   width: 100%;
   min-height: 28px;
   padding: 2px 0;
   border-radius: 3px;
   transition: background-color 0.2s;
+  font-size: 1.2em;
 }
 .vagabond .favorited-spell .spell-trigger:hover {
   background-color: rgba(0, 0, 0, 0.02);
@@ -9998,7 +9915,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .favorited-spell .spell-trigger .spell-icon-trigger {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-self: center;
   cursor: pointer;
 }
 .vagabond .favorited-spell .spell-trigger .spell-icon-trigger img {
@@ -10033,10 +9950,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 600;
   font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
-  font-size: 14px;
   text-align: left;
 }
 .vagabond .favorited-spell .spell-trigger .spell-name-container .spell-damage-type-icon {
@@ -10046,17 +9961,16 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .favorited-spell .spell-trigger .spell-name-container .spell-damage-type-icon i {
   color: var(--vagabond-c-dark);
-  font-size: 13px;
-  opacity: 0.7;
+  font-size: 0.9em;
+  opacity: 0.8;
 }
 .vagabond .favorited-spell .spell-trigger .spell-damage-trigger {
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "Manofa", serif;
-  font-weight: bold;
   color: var(--vagabond-c-dark);
-  font-size: 13px;
+  font-size: 1em;
   cursor: pointer;
 }
 .vagabond .favorited-spell .spell-trigger .spell-damage-trigger:hover {
@@ -10068,43 +9982,44 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .favorited-spell .spell-trigger .spell-mana-total {
   text-align: center;
   font-family: "Manofa", serif;
-  font-weight: bold;
   color: var(--vagabond-c-red);
-  font-size: 13px;
   cursor: pointer;
 }
 .vagabond .favorited-spell .spell-trigger .spell-mana-total:hover {
-  text-shadow: 0 0 3px var(--vagabond-c-red);
+  text-shadow: 0 0 2px var(--vagabond-c-red);
 }
 .vagabond .favorited-spell .spell-accordion-content {
   width: 100%;
   padding: 4px 0 8px 0;
   margin-bottom: 4px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 1.15em;
+  border-top: 2px solid var(--vagabond-c-chat-yellow);
   animation: fadein 0.2s ease-in-out;
+  color: var(--vagabond-c-white);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid {
-  margin-left: 34px;
-  margin-right: 34px;
+  margin-left: 12px;
+  margin-right: 25px;
   display: grid;
-  grid-template-columns: 2fr 1fr 30px 1fr;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
   gap: 4px;
   align-items: center;
+  background-color: var(--vagabond-c-dark-bluey);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper {
   width: 100%;
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper .spell-delivery-select {
   width: 100%;
-  min-width: 0;
+  min-width: 60px;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background: transparent;
-  font-size: 11px;
   font-family: "Germania", serif;
-  color: var(--vagabond-c-dark);
+  text-transform: uppercase;
   padding: 0;
-  height: 18px;
+  height: 1.2em;
+  color: var(--vagabond-c-white);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper .spell-delivery-select:focus {
   outline: none;
@@ -10113,7 +10028,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-delivery-cost {
   width: 100%;
   text-align: center;
-  font-size: 11px;
   font-weight: bold;
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-delivery-cost.clickable:hover {
@@ -10125,8 +10039,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-range {
   text-align: center;
-  font-size: 11px;
-  color: var(--vagabond-c-dark);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-range.preview-active {
   color: var(--vagabond-c-red);
@@ -10138,7 +10050,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   cursor: pointer;
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-fx-icon.fx-active {
-  color: var(--vagabond-c-red);
+  color: var(--vagabond-c-chat-yellow);
+  font-weight: 600;
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-fx-icon.fx-inactive {
   opacity: 0.4;
