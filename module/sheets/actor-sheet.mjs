@@ -434,7 +434,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           break;
         case 'spells':
           tab.id = 'spells';
-          tab.label += 'Spells';
+          tab.label += 'Magic';
           //tab.icon = 'fa-solid fa-wand-sparkles';
           break;
         case 'effects':

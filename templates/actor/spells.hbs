@@ -6,13 +6,7 @@
 >
   {{! Magic Section }}
   <section class='magic-section'>
-    <h2 class='panel-title'>{{localize "VAGABOND.UI.Sections.Magic"}}</h2>
-    <div class='mana-field'>
-      <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.manaSkill.label"}}</label>
-      <select name="system.attributes.manaSkill" {{#unless @root.editable}}disabled{{/unless}}>
-        {{selectOptions @root.config.skills selected=system.attributes.manaSkill blank="" localize=true}}
-      </select>
-    </div>
+    {{!-- <h2 class='panel-title'>{{localize "VAGABOND.UI.Sections.Magic"}}</h2> --}}
     {{! Mana Info Row }}
     <div class='mana-info-row'>
       <div class='mana-field'>
@@ -36,10 +30,18 @@
       </div>
     </div>
 
+    <div class='mana-skill-row'>
+      <i class="fa-duotone fa-regular fa-wand-magic-sparkles"></i>
+      <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.manaSkill.label"}}</label>
+      <select name="system.attributes.manaSkill" {{#unless @root.editable}}disabled{{/unless}}>
+        {{selectOptions @root.config.skills selected=system.attributes.manaSkill blank="" localize=true}}
+      </select>
+    </div>
+
     {{! Spells List }}
-    <h4 class='panel-title section-title-with-add'>
+    <h4 class='spells-title'>
       {{localize "VAGABOND.UI.Sections.Spells"}}
-      {{#if @root.editable}}
+      {{!-- {{#if @root.editable}}
         <i
           class='fas fa-plus clickable'
           data-tooltip='Create New Spell'
@@ -47,17 +49,17 @@
           data-document-class='Item'
           data-type='spell'
         ></i>
-      {{/if}}
+      {{/if}} --}}
     </h4>
     <ol class='items-list'>
-      <li class='item flexrow items-header'>
+      {{!-- <li class='item flexrow items-header'>
         <div class='item-name spell-col-name'>{{localize "VAGABOND.UI.Sections.Name"}}</div>
         <div class='item-damage spell-col-damage'>{{localize "VAGABOND.UI.Sections.Damage"}}</div>
         <div class='spell-col-favorite' data-tooltip='{{localize "VAGABOND.UI.Sections.Favorite"}}'>F</div>
         <div class='item-controls spell-col-controls' data-tooltip='Actions'>
           <i class='fas fa-cog'></i>
         </div>
-      </li>
+      </li> --}}
       {{#each spells as |spell|}}
         <li
           class='item flexrow draggable spell-item-row'

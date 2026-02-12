@@ -103,7 +103,7 @@
 .downtime-overlay {
   position: absolute;
   top: 2px;
-  left: 1px;
+  left: 0px;
   width: 20px;
   height: 20px;
   display: flex;
@@ -127,8 +127,8 @@
     border: none;
 
     i {
-      font-size: 18px;
-      color: $c-dark;
+      font-size: 0.9em;
+      color: $c-yellow;
       transition: color 0.3s ease, transform 0.3s ease;
     }
 
@@ -191,7 +191,7 @@
 // HP Display
 .hp-display {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
   gap: 2px;
   font-family: $font-number;
@@ -226,17 +226,17 @@
     border: none;
     background: transparent;
     padding: 2px 2px;
-    font-size: 20px;
+    font-size: 1.4em;
     color: $c-white;
   }
 
   .hp-separator {
-    font-size: 20px;
+    font-size: 1.0em;
   }
 
   .hp-max {
     min-width: 30px;
-    font-size: 20px;
+    font-size: 1.4em;
   }
 }
 
@@ -1194,49 +1194,19 @@
   }
 }
 
-/* Mana info row */
-.mana-info-row {
+/* Mana skill row - label and select on same line, baseline aligned */
+.mana-skill-row {
   display: flex;
-  justify-content: space-around;
+  align-items: baseline;
   gap: 8px;
-  margin-bottom: 4px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid var(--vagabond-c-dark);
-  border-radius: 4px;
-}
-
-.mana-field {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
+  margin: auto;
+  padding: 10px;
+  width: 70%;
 
   label {
-    font-size: 12px;
+    font-size: 1.2em;
     font-weight: bold;
-    text-align: center;
     white-space: nowrap;
-
-    &.mana-modifier {
-      cursor: pointer;
-      padding: 2px 4px;
-      border-radius: 3px;
-      transition: background-color 0.2s, color 0.2s;
-
-      &:hover {
-        background-color: rgba(212, 175, 55, 0.15);
-        color: var(--vagabond-c-red);
-      }
-    }
-  }
-
-  input {
-    width: 60px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
   }
 
   select {
@@ -1267,11 +1237,63 @@
       background-color: rgba(0, 0, 0, 0.02);
     }
   }
+}
 
-  .mana-value {
-    font-size: 16px;
+/* Mana info row - 3 columns, 2 rows (labels top, values bottom) */
+.mana-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: baseline;
+  gap: 4px 8px;
+  padding: 4px;
+  border: 4px solid $c-dark-bluey;
+  border-radius: 1em;
+  corner-shape: scoop;
+  background-color: $c-yellow;
+  color: $c-dark-bluey;
+  margin-top: 16px;
+
+
+  input {  color: $c-dark-bluey;}
+}
+
+.mana-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  label {
+    font-size: 1.15em;
     font-weight: bold;
     text-align: center;
+    white-space: nowrap;
+    color: $c-dark-bluey;
+
+    &.mana-modifier {
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+      transition: background-color 0.2s, color 0.2s;
+
+      &:hover {
+        background-color: rgba(212, 175, 55, 0.15);
+        color: var(--vagabond-c-red);
+      }
+    }
+  }
+
+  input,
+  .mana-value {
+    width: 60px;
+    text-align: center;
+    font-family: $font-number;
+    font-size: 2em;
+    line-height: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
   }
 }
 

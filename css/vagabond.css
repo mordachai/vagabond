@@ -42,6 +42,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "Germania";
+  src: url("../assets/fonts/germania-one-regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   --vagabond-c-dark: #1b1b1b;
   --vagabond-c-lite: #e3e2dd;
@@ -49,7 +55,7 @@
   --vagabond-c-tan: #a2a2a2;
   --vagabond-c-tan-lite: #acacac6c;
   --vagabond-c-muted: #666666;
-  --vagabond-c-white: #ffffff;
+  --vagabond-c-white: #ececec;
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #ffffffc0;
   --vagabond-c-darkgray: #666666;
@@ -312,7 +318,7 @@ body[data-theme=dark] #sidebar {
 
 /* Global styles */
 .window-app {
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 
 .vagabond.application {
@@ -356,7 +362,7 @@ body[data-theme=dark] #sidebar {
   background-size: 100% 100%;
   position: relative;
   color: var(--vagabond-c-dark);
-  filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(-2px 2px 2px var(--vagabond-c-inset-1));
 }
 
 .vagabond.actor .window-content:has(.sliding-panel) {
@@ -376,6 +382,9 @@ body[data-theme=dark] #sidebar {
   min-height: 300px;
   max-height: calc(100vh - 150px);
   overflow-y: auto !important;
+  border-radius: 1.5em;
+  corner-shape: round round scoop scoop;
+  border: 8px solid var(--vagabond-c-chat-yellow);
 }
 
 /* Target the main container and the list of tabs */
@@ -400,6 +409,7 @@ body[data-theme=dark] #sidebar {
   color: var(--vagabond-c-dark-bluey);
   font-weight: 600;
   font-size: 1.2rem;
+  line-height: 1.2;
   overflow: visible;
   padding: 3px 8px;
   flex: 1;
@@ -684,7 +694,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header {
   border-bottom: none;
 }
 li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-sender {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 20px;
   font-weight: 700;
   text-transform: capitalize;
@@ -781,7 +791,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   line-height: 1.1;
   color: var(--c-dark-blue);
   border: none;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   border-bottom: 3px solid var(--c-dark-blue);
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
@@ -1044,14 +1054,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-crit {
   margin: 8px 16px;
   padding: 8px 12px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-size: 16px;
   border-radius: 4px;
   box-shadow: 0px 1px 4px var(--vagabond-c-darkgray);
 }
 .vagabond-chat-card-v2 .card-crit strong {
   font-weight: bold;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 18px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2705882353);
 }
@@ -1817,7 +1827,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .features-section .features-header-arrow span {
   color: white;
   font-weight: 900;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 14px;
   text-transform: uppercase;
   text-shadow: 1px 1px 0 #000;
@@ -2118,7 +2128,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 4px;
   font-size: 14px;
   font-weight: bold;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   color: var(--vagabond-c-white);
   text-shadow: 1px 1px 2px var(--vagabond-c-black);
   cursor: grab;
@@ -2135,7 +2145,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .countdown-dice-context-menu .context-item {
   padding: 6px 12px;
   cursor: pointer;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .countdown-dice-context-menu .context-item:hover {
   background: var(--vagabond-c-tan);
@@ -2146,7 +2156,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 4px;
   padding: 10px;
   background: var(--vagabond-c-tan-lite);
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   display: flex;
   flex-direction: column;
 }
@@ -2159,7 +2169,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .countdown-dice-chat .chat-header h4 {
   margin: 0;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   flex: 1;
   word-wrap: break-word;
 }
@@ -2312,7 +2322,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-bottom: 12px;
   padding: 8px;
   border-radius: 4px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .inventory-mini-sheet .mini-sheet-stats {
   display: grid;
@@ -2330,14 +2340,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
 }
 .inventory-mini-sheet .mini-sheet-stats .stat-row .stat-name::after {
   content: ":";
 }
 .inventory-mini-sheet .mini-sheet-stats .stat-row .stat-value {
   text-transform: capitalize;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .inventory-mini-sheet .mini-sheet-properties {
   padding-top: 12px;
@@ -2367,7 +2377,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .inventory-mini-sheet .mini-sheet-properties .property-list .property-row .property-description {
   flex: 1;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .inventory-mini-sheet::-webkit-scrollbar {
   width: 8px;
@@ -2523,7 +2533,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding: 3px 5px 0px 15px;
   border-radius: 3px;
   /* Text Styling */
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-white);
   font-weight: 700;
   font-size: 1.2rem;
@@ -2546,7 +2556,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   overflow: hidden;
   background: var(--vagabond-bg-paper) no-repeat center center;
   background-size: cover;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-size: 14px;
 }
 .vagabond-builder .hidden {
@@ -2780,7 +2790,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: block;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item .name {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 1.15rem;
   font-weight: 700;
 }
@@ -2803,13 +2813,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-right: 8px;
 }
 .vagabond-builder .builder-body .selection-list-column .stat-array-item .array-values {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 1.1rem;
 }
 .vagabond-builder .builder-body .selection-list-column .category-header {
   background: rgba(0, 0, 0, 0.1);
   padding: 8px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   cursor: pointer;
   list-style: none;
 }
@@ -2992,7 +3002,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 5px;
 }
 .vagabond-builder .builder-body .decision-zone .zone-header {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   border-bottom: 1px solid black;
   margin-bottom: 8px;
 }
@@ -3026,7 +3036,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   bottom: -5px;
   right: -10px;
   border-radius: 2px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 0.95em;
   font-weight: 700;
   background-color: #f3d71e;
@@ -3268,7 +3278,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1.2rem;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-section-header {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   border-bottom: 1px solid var(--vagabond-c-dark);
   margin: 15px 0 10px 0;
   text-transform: uppercase;
@@ -3315,13 +3325,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: none;
   margin: 0;
   font-size: 1.8rem;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-white) !important;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .name-block .sublabel {
   font-style: italic;
   color: #555;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .btn-add-to-tray {
   background: #4CAF50;
@@ -3356,7 +3366,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 4px;
   font-size: 1.25rem;
   min-width: 150px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-white);
 }
 .vagabond-builder .builder-body .content-zone .selection-preview .preview-header .ancestry-info .info-row {
@@ -3427,7 +3437,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 .vagabond-builder .builder-body .content-zone .reference-column .ref-header {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-red);
   border-bottom: 1px solid black;
   margin-bottom: 12px;
@@ -3560,7 +3570,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   grid-column: 1/-1;
   padding: 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
 }
 .vagabond-builder .stats-preview-results .preview-details-grid .movement-row {
   text-align: center;
@@ -3614,7 +3624,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .preview-skills-grid .skill-item .skill-value {
   flex: 0 0 auto;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: 600;
   font-size: 1.25rem;
   color: var(--vagabond-c-red);
@@ -3662,7 +3672,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .equipment-details .weapon-properties h4 {
   margin: 0 0 8px 0;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 1rem;
   color: var(--vagabond-c-dark);
 }
@@ -3689,7 +3699,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .equipment-details .relic-lore strong {
   margin: 0 4px 8px 0;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 1.2rem;
   color: var(--vagabond-c-dark);
   font-weight: 800;
@@ -3761,7 +3771,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 12px;
 }
 .vagabond-builder .builder-footer button {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   height: 40px;
   cursor: pointer;
   padding: 0 15px;
@@ -3851,7 +3861,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #eee;
   padding: 10px;
   text-align: right;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   border-radius: 4px;
 }
 .vagabond-builder .budget-tracker.bankrupt {
@@ -3907,7 +3917,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 10px;
 }
 .tray-zone .tray-sidebar h3 {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   margin: 0;
   border: none;
   font-size: 1.1rem;
@@ -4197,7 +4207,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.2s;
@@ -4214,7 +4224,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.2s;
@@ -4817,10 +4827,11 @@ ol#combat-tracker.directory-list {
   /* Pulse animation for the active tooltip area */
   /* First-time tooltip for sliding panel */
   /* Panel content area */
-  /* Mana info row */
+  /* Mana skill row - label and select on same line, baseline aligned */
+  /* Mana info row - 3 columns, 2 rows (labels top, values bottom) */
 }
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: bold;
   margin: 0;
   margin-bottom: 4px;
@@ -4848,7 +4859,7 @@ ol#combat-tracker.directory-list {
   margin-left: 8px;
 }
 .vagabond .resource-label {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: bold;
 }
 .vagabond input[type=text],
@@ -4874,7 +4885,7 @@ ol#combat-tracker.directory-list {
   cursor: text;
 }
 .vagabond .vagabond.item .item-form {
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .vagabond .vagabond.item .item-form .sheet-header {
   flex: 0 0 auto;
@@ -4928,7 +4939,7 @@ ol#combat-tracker.directory-list {
   flex: 0;
   position: relative;
   z-index: 10 !important;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 16px;
   font-weight: bold;
   border: none;
@@ -5418,7 +5429,7 @@ ol#combat-tracker.directory-list {
 .vagabond .skills-container {
   gap: 20px;
   color: var(--vagabond-c-dark) !important;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .vagabond .skills-section h4.left-col {
   background-image: url("../assets/images/sheets/leftColBg.webp");
@@ -5468,7 +5479,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   color: var(--vagabond-c-dark-bluey);
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 18px;
   font-weight: 500;
   cursor: pointer;
@@ -5531,7 +5542,7 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
   font-weight: 600;
   cursor: pointer;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .right-column .equipped-weapon .weapon-name:hover {
@@ -5594,7 +5605,7 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
   font-weight: 600;
   cursor: pointer;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .right-column .equipped-gear .item-name:hover {
@@ -5642,7 +5653,7 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
   font-weight: 600;
   cursor: pointer;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
   width: 100%;
 }
@@ -5797,7 +5808,7 @@ ol#combat-tracker.directory-list {
   max-height: 500px;
   overflow-y: auto;
   transition: max-height 0.3s ease;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-size: 14px;
 }
 .vagabond .features-list .feature.accordion-item.collapsed .accordion-content {
@@ -5851,7 +5862,7 @@ ol#combat-tracker.directory-list {
   max-height: 500px;
   overflow-y: auto;
   transition: max-height 0.3s ease;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-size: 14px;
 }
 .vagabond .traits-list .trait.accordion-item.collapsed .accordion-content {
@@ -5904,7 +5915,7 @@ ol#combat-tracker.directory-list {
   max-height: 500px;
   overflow-y: auto;
   transition: max-height 0.3s ease;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .vagabond .perks-list .perk-card.accordion-item .perk-content.accordion-content .perk-prerequisites {
   font-size: 14px;
@@ -5928,8 +5939,22 @@ ol#combat-tracker.directory-list {
   margin-bottom: 8px;
   font-weight: bold;
 }
+.vagabond .spells-title {
+  background-image: url("../assets/images/sheets/titleSmallBG.webp");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 100% 100%;
+  width: fit-content;
+  margin: auto;
+  text-align: center;
+  color: var(--vagabond-c-white);
+  mix-blend-mode: normal;
+  opacity: 1;
+  padding: 8px 16px;
+  position: relative;
+  bottom: -25px;
+}
 .vagabond .items-header {
-  height: 28px;
   margin: 6px 0;
   padding: 0;
   align-items: center;
@@ -5950,10 +5975,13 @@ ol#combat-tracker.directory-list {
 .vagabond .items-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 30px 12px 12px 12px;
   overflow-y: auto;
   scrollbar-width: thin;
-  color: var(--vagabond-c-dark);
+  border: 3px solid var(--vagabond-c-chat-yellow);
+  border-radius: 1.3em;
+  corner-shape: scoop scoop round round;
+  background-color: var(--vagabond-c-black);
 }
 .vagabond .items-list .item-list {
   list-style: none;
@@ -5964,7 +5992,6 @@ ol#combat-tracker.directory-list {
   flex: 2;
   margin: 0;
   overflow: hidden;
-  font-size: 13px;
   text-align: left;
   align-items: center;
   display: flex;
@@ -5976,55 +6003,61 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .items-list .item-controls {
   display: flex;
-  flex: 0 0 30px;
+  flex: 0 0 36px;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
 }
 .vagabond .items-list .item-controls a {
-  font-size: 12px;
   text-align: center;
   margin: 0 6px;
 }
 .vagabond .items-list .item {
   align-items: center;
-  padding: 0 2px;
-  border-bottom: 1px solid var(--vagabond-c-dark);
+  padding: 0 12px;
+  background: whitesmoke;
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-dark-bluey);
+  font-size: 1.2em;
+}
+.vagabond .items-list .item i {
+  font-size: 0.8em;
 }
 .vagabond .items-list .item:last-child {
   border-bottom: none;
+  border-bottom-left-radius: 0.8em;
+  border-bottom-right-radius: 0.8em;
 }
 .vagabond .items-list .item .item-name {
-  color: var(--vagabond-c-dark);
+  font-weight: 600;
 }
 .vagabond .items-list .item .item-name .item-image {
-  flex: 0 0 30px;
-  height: 30px;
-  background-size: 30px;
+  flex: 0 0 36px;
+  height: 36px;
+  background-size: 36px;
   border: none;
-  margin-right: 5px;
+  margin-right: 8px;
 }
 .vagabond .items-list .item-prop {
   text-align: center;
   border-left: 1px solid var(--vagabond-c-faint);
   border-right: 1px solid var(--vagabond-c-faint);
-  font-size: 12px;
 }
 .vagabond .items-list .items-header {
-  height: 28px;
+  height: 20px;
   margin: 2px 0;
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
-  border: 2px groove var(--vagabond-c-dark);
   font-weight: bold;
+  color: var(--vagabond-c-white);
 }
 .vagabond .items-list .items-header > * {
-  font-size: 12px;
   text-align: center;
 }
 .vagabond .items-list .items-header .item-name {
   padding-left: 5px;
-  text-align: center;
+  text-align: left;
+  color: var(--vagabond-c-white);
 }
 .vagabond .items-list .trait-description {
   width: 100%;
@@ -6098,7 +6131,7 @@ ol#combat-tracker.directory-list {
   border-radius: 3px;
   font-size: 13px;
   font-weight: 500;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   white-space: nowrap;
 }
 .vagabond .skill-tag.key-stat-tag {
@@ -6131,21 +6164,6 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.vagabond .section-title-with-add {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
-.vagabond .section-title-with-add .fa-plus {
-  font-size: 14px;
-  padding: 4px 8px;
-  border-radius: 3px;
-  transition: background 0.2s ease;
-}
-.vagabond .section-title-with-add .fa-plus:hover {
-  background: rgba(0, 0, 0, 0.1);
 }
 .vagabond .title-with-button {
   display: flex;
@@ -6231,7 +6249,6 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .spell-col-name {
   flex: 3;
-  padding-left: 5px;
   text-align: left;
   display: flex;
   align-items: center;
@@ -6252,12 +6269,6 @@ ol#combat-tracker.directory-list {
   align-items: center;
   justify-content: center;
 }
-.vagabond .spell-col-favorite .favorite-active {
-  color: var(--vagabond-c-dark);
-}
-.vagabond .spell-col-favorite .favorite-inactive {
-  color: var(--vagabond-c-dark);
-}
 .vagabond .spell-col-controls {
   flex: 0 0 60px;
   display: flex;
@@ -6269,24 +6280,25 @@ ol#combat-tracker.directory-list {
   justify-content: center;
 }
 .vagabond .spell-col-controls i {
-  font-size: 12px;
+  font-size: 0.8em;
 }
 .vagabond .spell-item-row {
-  min-height: 44px;
+  min-height: 40px;
 }
 .vagabond .spell-item-row .item-image {
   display: flex;
   align-items: center;
-  border-radius: 5px;
 }
 .vagabond .spell-item-row .item-image img {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
-  border-radius: 5px;
+  border-radius: 50%;
+  corner-shape: bevel;
+  border: 2px solid var(--vagabond-c-dark-bluey);
 }
 .vagabond .spell-col-chat {
-  flex: 0 0 30px;
+  flex: 0 0 36px;
   text-align: center;
   display: flex;
   align-items: center;
@@ -7215,7 +7227,7 @@ ol#combat-tracker.directory-list {
   flex: 1;
   font-size: 14px;
   font-weight: normal;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   text-align: center;
   line-height: 0.95;
   overflow: hidden;
@@ -7330,7 +7342,7 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-section .wealth-section .wealth-title {
   color: var(--vagabond-c-chat-yellow);
   margin: 0;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 1.3em;
   font-weight: 700;
 }
@@ -7774,7 +7786,7 @@ ol#combat-tracker.directory-list {
   font-weight: 700;
   text-transform: uppercase;
   color: var(--vagabond-c-dark-bluey);
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
 }
 .vagabond .armor-overlay .armor-value {
   position: relative;
@@ -7787,7 +7799,7 @@ ol#combat-tracker.directory-list {
 .vagabond .downtime-overlay {
   position: absolute;
   top: 2px;
-  left: 1px;
+  left: 0px;
   width: 20px;
   height: 20px;
   display: flex;
@@ -7811,8 +7823,8 @@ ol#combat-tracker.directory-list {
   border: none;
 }
 .vagabond .downtime-overlay .downtime-overlay-button i {
-  font-size: 18px;
-  color: var(--vagabond-c-dark);
+  font-size: 0.9em;
+  color: var(--vagabond-c-chat-yellow);
   transition: color 0.3s ease, transform 0.3s ease;
 }
 .vagabond .downtime-overlay .downtime-overlay-button:hover {
@@ -7863,7 +7875,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .hp-display {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
   gap: 2px;
   font-family: "Ludlow", serif;
@@ -7895,15 +7907,15 @@ ol#combat-tracker.directory-list {
   border: none;
   background: transparent;
   padding: 2px 2px;
-  font-size: 20px;
+  font-size: 1.4em;
   color: var(--vagabond-c-white);
 }
 .vagabond .hp-display .hp-separator {
-  font-size: 20px;
+  font-size: 1em;
 }
 .vagabond .hp-display .hp-max {
   min-width: 30px;
-  font-size: 20px;
+  font-size: 1.4em;
 }
 .vagabond .header-main-row {
   display: flex;
@@ -7978,7 +7990,7 @@ ol#combat-tracker.directory-list {
   font-size: 16px;
   font-weight: 600;
   text-align: center;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   text-transform: uppercase;
   color: var(--vagabond-c-chat-yellow);
   text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
@@ -8022,7 +8034,7 @@ ol#combat-tracker.directory-list {
   transform: scale(1.2);
 }
 .vagabond .fatigue-row .fatigue-label {
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 14px;
   font-weight: 600;
   margin-right: 4px;
@@ -8079,7 +8091,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .name-row-top > input[type=text] {
   color: var(--vagabond-c-white);
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   padding-top: 12px;
   font-size: 1.8em;
   font-weight: 600;
@@ -8111,7 +8123,7 @@ ol#combat-tracker.directory-list {
   padding-right: 30px;
   padding-top: 30px;
   color: var(--vagabond-c-chat-yellow);
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-size: 14px;
   gap: 0;
 }
@@ -8143,7 +8155,7 @@ ol#combat-tracker.directory-list {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.3;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark-bluey);
 }
 .vagabond .character-info-combined-row .level-input {
@@ -8305,7 +8317,7 @@ ol#combat-tracker.directory-list {
 .vagabond .speed-stats-row .speed-group .speed-group-label {
   grid-column: 1;
   font-size: 14px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: 600;
   text-align: right;
   line-height: 1;
@@ -8324,7 +8336,7 @@ ol#combat-tracker.directory-list {
   grid-column: 4;
   grid-row: 2;
   font-size: 16px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: 600;
   text-align: left;
   line-height: 1;
@@ -8385,7 +8397,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .modifiers-group .modifiers-group-label {
   font-size: 13px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: 600;
   text-align: right;
   line-height: 1;
@@ -8451,7 +8463,7 @@ ol#combat-tracker.directory-list {
   justify-self: center;
   align-self: center;
   font-size: 14px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: 600;
   text-align: center;
   line-height: 1;
@@ -8652,46 +8664,20 @@ ol#combat-tracker.directory-list {
   margin-bottom: 0;
   padding-bottom: 0;
 }
-.vagabond .mana-info-row {
+.vagabond .mana-skill-row {
   display: flex;
-  justify-content: space-around;
+  align-items: baseline;
   gap: 8px;
-  margin-bottom: 4px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid var(--vagabond-c-dark);
-  border-radius: 4px;
+  margin: auto;
+  padding: 10px;
+  width: 70%;
 }
-.vagabond .mana-field {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-}
-.vagabond .mana-field label {
-  font-size: 12px;
+.vagabond .mana-skill-row label {
+  font-size: 1.2em;
   font-weight: bold;
-  text-align: center;
   white-space: nowrap;
 }
-.vagabond .mana-field label.mana-modifier {
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 3px;
-  transition: background-color 0.2s, color 0.2s;
-}
-.vagabond .mana-field label.mana-modifier:hover {
-  background-color: rgba(212, 175, 55, 0.15);
-  color: var(--vagabond-c-red);
-}
-.vagabond .mana-field input {
-  width: 60px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-}
-.vagabond .mana-field select {
+.vagabond .mana-skill-row select {
   flex: 1;
   border: none;
   border-bottom: 1px solid var(--vagabond-c-tan);
@@ -8709,18 +8695,64 @@ ol#combat-tracker.directory-list {
   background-size: 12px;
   padding-right: 20px;
 }
-.vagabond .mana-field select:hover {
+.vagabond .mana-skill-row select:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
-.vagabond .mana-field select:focus {
+.vagabond .mana-skill-row select:focus {
   outline: none;
   border-bottom: 1px solid var(--vagabond-c-dark);
   background-color: rgba(0, 0, 0, 0.02);
 }
-.vagabond .mana-field .mana-value {
-  font-size: 16px;
+.vagabond .mana-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: baseline;
+  gap: 4px 8px;
+  padding: 4px;
+  border: 4px solid var(--vagabond-c-dark-bluey);
+  border-radius: 1em;
+  corner-shape: scoop;
+  background-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-dark-bluey);
+  margin-top: 16px;
+}
+.vagabond .mana-info-row input {
+  color: var(--vagabond-c-dark-bluey);
+}
+.vagabond .mana-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.vagabond .mana-field label {
+  font-size: 1.15em;
   font-weight: bold;
   text-align: center;
+  white-space: nowrap;
+  color: var(--vagabond-c-dark-bluey);
+}
+.vagabond .mana-field label.mana-modifier {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.vagabond .mana-field label.mana-modifier:hover {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: var(--vagabond-c-red);
+}
+.vagabond .mana-field input,
+.vagabond .mana-field .mana-value {
+  width: 60px;
+  text-align: center;
+  font-family: "Ludlow", serif;
+  font-size: 2em;
+  line-height: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
 }
 .vagabond .luck-item {
   display: grid !important;
@@ -8737,7 +8769,7 @@ ol#combat-tracker.directory-list {
 .vagabond .luck-item .luck-label {
   font-weight: 600;
   text-align: center;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   text-transform: uppercase;
   color: var(--vagabond-c-chat-yellow);
   text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
@@ -9073,7 +9105,7 @@ ol#combat-tracker.directory-list {
   background: transparent;
   opacity: 1 !important;
   color: var(--vagabond-c-dark);
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: normal;
   /* Hides the dropdown arrow */
   appearance: none;
@@ -9114,7 +9146,7 @@ ol#combat-tracker.directory-list {
   border-radius: 0;
   background: transparent;
   font-size: 16px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: normal;
   color: var(--vagabond-c-dark);
   box-shadow: none;
@@ -9175,7 +9207,7 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-field-display {
   padding: 2px 0;
   font-size: 16px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: normal;
   line-height: 1.2rem;
   flex: 1;
@@ -9209,7 +9241,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-armor-description-display {
   font-size: 16px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: normal;
   line-height: 1.2rem;
   color: var(--vagabond-c-dark);
@@ -9286,7 +9318,7 @@ ol#combat-tracker.directory-list {
   line-height: 1.2;
 }
 .vagabond .action-name-line {
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.1rem;
   padding-left: 4px;
@@ -9320,7 +9352,7 @@ ol#combat-tracker.directory-list {
   font-weight: normal;
 }
 .vagabond .action-extra-info {
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: normal;
 }
 .vagabond .npc-ability-view {
@@ -9337,7 +9369,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-ability-view .ability-description {
   font-weight: normal;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
 }
 .vagabond .npc-edit-item,
 .vagabond .npc-action-edit,
@@ -9652,7 +9684,7 @@ ol#combat-tracker.directory-list {
   border-radius: 4px;
   background: transparent;
   font-size: 16px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   font-weight: normal;
   font-style: italic;
   resize: vertical;
@@ -9686,7 +9718,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-immunity-text {
   font-size: 16px;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   line-height: 1.2rem;
   text-transform: capitalize;
   flex: 1;
@@ -9783,7 +9815,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   border-radius: 3px;
   font-size: 13px;
   font-weight: 500;
-  font-family: "Paradigm", serif;
+  font-family: "Eskapade", serif;
   white-space: nowrap;
 }
 .vagabond .npc-immunity-tag .damage-type-icon-prefix {
@@ -9796,23 +9828,43 @@ details[open] .vagabond .npc-immunity-toggle i {
   gap: 12px;
   width: 100%;
   align-items: flex-start;
+  margin-bottom: 10px;
 }
 .vagabond .item-image-column {
-  flex-shrink: 0;
+  position: relative;
   width: 150px;
   height: 150px;
+  flex-shrink: 0;
+  background-image: url("../assets/images/sheets/portraitFrame.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-inset-1));
 }
 .vagabond .item-image-column .item-profile-img {
+  display: flex;
   width: 150px;
   height: 150px;
-  border-radius: 4px;
-  border: 2px solid var(--vagabond-c-tan);
+  border: none;
   object-fit: cover;
+  object-position: top center;
   cursor: pointer;
+  align-self: center;
+  mix-blend-mode: normal;
+  background: var(--vagabond-c-dark);
+  -webkit-mask-image: url("../assets/images/sheets/portraitMask.webp");
+  mask-image: url("../assets/images/sheets/portraitMask.webp");
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-mode: luminance;
+  mask-mode: luminance;
 }
 .vagabond .item-image-column .item-profile-img:hover {
   opacity: 0.9;
-  border-color: var(--vagabond-c-dark);
 }
 .vagabond .item-header-fields {
   flex: 1;
@@ -9825,9 +9877,22 @@ details[open] .vagabond .npc-immunity-toggle i {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  background-image: url(../assets/images/sheets/titleBG.webp);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: var(--vagabond-c-white);
+  padding-top: 4px;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
+}
+.vagabond .item-name-row input, .vagabond .item-name-row button {
+  color: var(--vagabond-c-white);
+  border: none;
+}
+.vagabond .item-name-row input:hover, .vagabond .item-name-row button:hover {
+  border: none;
+  outline: none;
 }
 .vagabond .item-document-name {
   flex: 1;
@@ -9836,7 +9901,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .item-document-name input {
   width: 100%;
   border: none;
-  border-bottom: 2px solid var(--vagabond-c-tan);
   background: transparent;
   text-align: left;
   font-size: 20px;
@@ -9915,7 +9979,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   white-space: nowrap;
   font-weight: 600;
   cursor: pointer;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
 }
 .vagabond .favorited-spell .spell-damage-dice {
@@ -9979,7 +10043,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding: 0;
   margin: 0;
   font-size: 14px;
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
   font-weight: 500;
   color: var(--vagabond-c-dark);
   cursor: pointer;
@@ -9999,7 +10063,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .favorited-spell .spell-delivery-select option {
   background: var(--vagabond-c-tan-lite);
   color: var(--vagabond-c-dark);
-  font-family: "Eskapade", serif;
+  font-family: "Germania", serif;
 }
 .vagabond .favorited-spell .spell-delivery-select option:checked {
   background: var(--vagabond-c-red);

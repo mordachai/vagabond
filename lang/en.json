@@ -360,6 +360,7 @@
         "Features": "Features",
         "Inventory": "Inventory",
         "Spells": "Spells",
+        "Magic": "Magic",
         "Effects": "Effects"
       },
       "base": {
@@ -389,10 +390,10 @@
           "combat.speed.travel": {"label": "Travel Speed"},
           "combat.currentLuck": {"label": "Current Luck"},
           "combat.armor": {"label": "Armor Rating"},
-          "mana.current": {"label": "Current Mana"},
+          "mana.current": {"label": "Mana"},
           "mana.max": {"label": "Max Mana"},
           "mana.castingMax": {"label": "Mana/Cast"},
-          "manaSkill": {"label": "Casting Skill"}
+          "manaSkill": {"label": "Casting Skill:"}
         }
       },
       "NPC": {

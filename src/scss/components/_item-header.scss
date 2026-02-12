@@ -7,25 +7,45 @@
   gap: 12px;
   width: 100%;
   align-items: flex-start;
+  margin-bottom: 10px;
 }
 
-// Left Column: Item Image (150x150)
 .item-image-column {
-  flex-shrink: 0;
+  position: relative;
   width: 150px;
   height: 150px;
+  flex-shrink: 0;
+  background-image: url('../assets/images/sheets/portraitFrame.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: drop-shadow(1px 1px 2px $c-inset-1);
 
   .item-profile-img {
+    display: flex;
     width: 150px;
     height: 150px;
-    border-radius: 4px;
-    border: 2px solid var(--vagabond-c-tan);
+    //transform: scale(0.86);
+    border: none;
     object-fit: cover;
+    object-position: top center;
     cursor: pointer;
+    align-self: center;
+    mix-blend-mode: normal;
+    background: $c-dark;
+    -webkit-mask-image: url('../assets/images/sheets/portraitMask.webp');
+    mask-image: url('../assets/images/sheets/portraitMask.webp');
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-mode: luminance;
+    mask-mode: luminance;
 
     &:hover {
       opacity: 0.9;
-      border-color: var(--vagabond-c-dark);
     }
   }
 }
@@ -44,9 +64,21 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  background-image: url(../assets/images/sheets/titleBG.webp);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: $c-white;
+  padding-top: 4px;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
+
+  input, button { 
+    color: $c-white;
+    border: none;
+
+    &:hover { border: none; outline: none; }
+  }
 }
 
 // Item Name Input
@@ -57,7 +89,6 @@
   input {
     width: 100%;
     border: none;
-    border-bottom: 2px solid var(--vagabond-c-tan);
     background: transparent;
     text-align: left;
     font-size: 20px;

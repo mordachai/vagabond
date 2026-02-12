@@ -108,8 +108,8 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
             case 'deleteDoc':
               const deleteDoc = this.constructor._getEmbeddedDocument(newButton, this.actor);
               if (deleteDoc) {
-                const confirmed = await Dialog.confirm({
-                  title: `Delete ${deleteDoc.name}?`,
+                const confirmed = await foundry.applications.api.DialogV2.confirm({
+                  window: { title: `Delete ${deleteDoc.name}?` },
                   content: `<p>Are you sure you want to delete ${deleteDoc.name}?</p>`,
                 });
                 if (confirmed) {

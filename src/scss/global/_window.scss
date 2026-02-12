@@ -46,7 +46,8 @@
   background-size: 100% 100%;
   position: relative;
   color: $c-dark;
-  filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
+  filter: drop-shadow(-2px 2px 2px $c-inset-1);
+  //filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
 }
 
 // Character sheets: fixed height with scrolling
@@ -70,6 +71,9 @@
   min-height: 300px;
   max-height: calc(100vh - 150px);
   overflow-y: auto !important;
+  border-radius: 1.5em;
+  corner-shape: round round scoop scoop;
+  border: 8px solid $c-yellow;
 }
 
 /* Target the main container and the list of tabs */
@@ -95,6 +99,7 @@
     color: $c-dark-bluey;
     font-weight: 600;
     font-size: 1.2rem;
+    line-height: 1.2;
     overflow: visible;
     padding: 3px 8px;
     flex: 1; 

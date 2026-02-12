@@ -88,6 +88,12 @@ export default class VagabondSpell extends VagabondItemBase {
       hint: "Bypass the casting check roll for this spell (always succeeds, no criticals)"
     });
 
+    // Locked - toggle between read-only and editable views
+    schema.locked = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     return schema;
   }
 

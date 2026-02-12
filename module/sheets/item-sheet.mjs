@@ -231,8 +231,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'header':
-        // Enrich description for perks in header
-        if (this.item.type === 'perk') {
+        // Enrich description for perks and spells in header
+        if (this.item.type === 'perk' || this.item.type === 'spell') {
           context.enriched = {
             description: await foundry.applications.ux.TextEditor.enrichHTML(
               this.item.system.description,
@@ -2037,7 +2037,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onToggleLock(event, target) {
-    if (this.item.type !== 'equipment' && this.item.type !== 'container') return;
+    if (this.item.type !== 'equipment' && this.item.type !== 'container' && this.item.type !== 'spell') return;
 
     // Submit the form BEFORE toggling to save any pending changes
     if (this.element && this.element.tagName === 'FORM') {
