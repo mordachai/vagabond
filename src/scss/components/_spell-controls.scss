@@ -51,16 +51,17 @@
   // Trigger Row (Grid)
   .spell-trigger {
     display: grid;
-    grid-template-columns: 30px 3fr 1fr 25px;
+    grid-template-columns: 20px 3fr 1fr 25px;
     gap: 4px;
-    align-items: baseline;
+    align-items: flex-end;
     width: 100%;
-    min-height: 28px;
     padding: 2px 0;
     border-radius: 3px;
     transition: background-color 0.2s;
     font-size: 1.2em;
-
+    position: relative;
+    margin: 0 2px;
+    
     &:hover {
       background-color: rgba(0, 0, 0, 0.02);
     }
@@ -71,25 +72,54 @@
       justify-content: center;
       align-self: center;
       cursor: pointer;
+      position: relative;
+      z-index: 5;
       
+      // Frame styling
+      width: 20px;
+      height: 20px;
+      border: 2px solid $c-dark-bluey; // Default Closed
+      border-radius: 2px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      background: transparent;
+
       img {
         border: none;
-        width: 24px;
-        height: 24px;
-        border-radius: 2px;
-        filter: sepia(0.3);
-        transition: filter 0.2s, transform 0.1s;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: sepia(0.2);
+        transition: filter 0.2s, transform 0.3s ease;
       }
       
-      &:hover img {
-        filter: sepia(0);
-        box-shadow: 0 0 4px $c-tan;
-        transform: scale(1.1);
+      &:hover {
+        border-color: $c-yellow; // Hover Color
+        box-shadow: 0 0 1px $c-tan;
+        
+        img {
+          filter: sepia(0);
+        }
       }
       
       &:active img {
         transform: scale(0.9);
       }
+    }
+
+    // Open State Behavior
+    @at-root .favorited-spell:not(.collapsed) .spell-trigger {
+       .spell-icon-trigger {
+         border-color: $c-yellow;
+         transform: translateY(50%) rotate(45deg) scale(1.65);
+         z-index: 10;
+          margin-left: 12px;
+
+         img {
+           transform: rotate(-45deg) scale(1.4);
+           filter: sepia(0);
+         }
+       }
     }
 
     // Col 2: Name + Damage Icon (Accordion Toggle)
@@ -99,7 +129,7 @@
       align-items: center;
       width: 100%;
       cursor: pointer;
-      padding-right: 4px;
+      transition: padding-left 0.3s ease;
       
       &:hover .spell-name {
         color: $c-red;
@@ -136,7 +166,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: $font-secondary;
+      font-family: $font-title;
       color: $c-dark;
       font-size: 1em;
       cursor: pointer;
@@ -166,25 +196,26 @@
   // Accordion Content
   .spell-accordion-content {
     width: 100%;
-    padding: 4px 0 8px 0;
+    padding: 0 0 2px 5px;
     margin-bottom: 4px;
-    font-size: 1.15em;
-    border-top: 2px solid $c-yellow;
     animation: fadein 0.2s ease-in-out;
     color: $c-white;
     
     .accordion-inner-grid {
       // Offset to match middle columns of trigger (30px + 4px gap)
-      margin-left: 12px;
+      margin-left: 19px;
       margin-right: 25px;
       
       display: grid;
       // 4 columns: 2fr, 1fr, 30px, 1fr
       grid-template-columns: 3fr 1fr 1fr 1fr;
       gap: 4px;
-      align-items: center;
+      align-items: baseline;
+      padding: 2px 4px;
 
       background-color: $c-dark-bluey;
+      border-top: 2px solid $c-yellow;
+
       
       // Col 1: Delivery Select
       .delivery-select-wrapper {
@@ -192,16 +223,18 @@
          
          .spell-delivery-select {
              width: 100%;
-             min-width: 60px;
+             min-width: 75px;
              border: none;
              border-bottom: 1px solid rgba(0,0,0,0.1);
              background: transparent;
              font-family: $font-title;
+             font-size: 0.9em;
              text-transform: uppercase;
              padding: 0;
-             height: 1.2em;
+             padding-left: 12px;
+             height: 1.1em !important;
              color: $c-white;
-             
+          
              &:focus { outline: none; border-bottom-color: $c-red; }
          }
       }
