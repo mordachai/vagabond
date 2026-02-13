@@ -359,6 +359,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           level: i + 1
         }));
 
+        // Prepare status effects for portrait display
+        partContext.statusEffects = this._prepareNPCStatusEffects();
+
         // Format appearing field for display in locked mode
         if (this.actor.system.locked && this.actor.system.appearing) {
           try {
@@ -489,6 +492,27 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
     }
 
+    return effects;
+  }
+
+  /**
+   * Prepare status effects for NPC portrait display
+   * Shows all non-disabled effects on the actor
+   * @returns {Array} Array of effect data for display
+   * @private
+   */
+  _prepareNPCStatusEffects() {
+    const effects = [];
+    for (const effect of this.actor.effects) {
+      if (effect.disabled) continue;
+      effects.push({
+        id: effect.id,
+        uuid: effect.uuid,
+        name: effect.name || effect.label || 'Unknown',
+        icon: effect.img || 'icons/svg/aura.svg',
+        statuses: Array.from(effect.statuses || [])
+      });
+    }
     return effects;
   }
 

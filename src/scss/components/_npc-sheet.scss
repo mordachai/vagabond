@@ -115,17 +115,17 @@
 
 /* --- Column 1: Portrait --- */
 .npc-portrait-column {
-  flex: 0 0 140px; /* Fixed width */
+  flex: 0 0 150px; /* Fixed width */
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5px;
+  margin-right: 2px;
 }
 
 .npc-image-container {
   position: relative;
-  width: 145px;
-  height: 145px;
+  width: 150px;
+  height: 150px;
   background-image: none;
   border: 3px solid #000;
   border-radius: 4px;
@@ -142,6 +142,47 @@
     
     &:hover {
       opacity: 0.9;
+    }
+  }
+}
+
+/* Status Effects Display - grid overlapping portrait base, grows upward */
+.npc-status-display {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  gap: 3px;
+
+  .status-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 1px $c-inset-2);
+
+    img {
+      width: 20px;
+      height: 20px;
+      object-fit: cover;
+      border-radius: 3px;
+      filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+    }
+
+    &:hover {
+      transform: scale(1.2);
+      z-index: 10;
+
+      img {
+        filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.9));
+      }
     }
   }
 }
@@ -186,8 +227,9 @@
   flex-direction: column;
   gap: 4px;
   justify-content: flex-start;
-  margin-top: 2px;
+  margin-top: 0px;
   min-width: 0;
+  height: 150px;
 }
 
 .npc-stat-row {
@@ -272,12 +314,13 @@
   justify-content: space-between;
 }
 
-/* Speed group (left side of row 2) — max 60% */
+/* Speed group (left side of row 2) — max 70% */
 .npc-speed-group {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  flex: 0 1 60%;
+  flex: 0 1 70%;
   min-width: 0;
   background-image: url('../assets/images/sheets/speedNPCBg.webp');
   background-repeat: no-repeat;
@@ -419,7 +462,7 @@
   background-repeat: no-repeat;
   background-size: 100% 60%;
   background-position: center center;
-  gap: 3px;
+  gap: 1px;
   width: 80%;
   height: 15px;
   margin: auto;
@@ -488,19 +531,18 @@
   }
 }
 
-/* Armor group (right side of row 2) — 40% centered */
+/* Armor group (right side of row 2) — 30% centered */
 .npc-armor-group {
-  flex: 0 0 40%;
+  flex: 0 0 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: help;
 }
 
 .npc-armor-badge {
   width: 36px;
-  height: 44px;
+  height: 38px;
   background-image: url('../assets/images/sheets/armorNPCBG.webp');
   background-size: cover;
   background-position: center center;
@@ -529,6 +571,14 @@
     border: none;
     border-bottom: 1px solid rgba(255,255,255,0.4);
   }
+}
+
+.npc-armor-desc-label {
+  font-size: 0.8em;
+  text-align: center;
+  color: $c-dark;
+  line-height: 1;
+  padding-top: 2px
 }
 
 .npc-armor-desc-input {

@@ -4845,14 +4845,15 @@ ol#combat-tracker.directory-list {
      NPC HEADER - NEW LAYOUT
      ========================================= */
   /* --- Column 1: Portrait --- */
+  /* Status Effects Display - grid overlapping portrait base, grows upward */
   /* TL Display - in name row, position relative to not affect row height */
   /* --- Column 2: Stats --- */
   /* Row 1: HD & HP */
   /* Row 2: Speed + Armor */
-  /* Speed group (left side of row 2) — max 60% */
+  /* Speed group (left side of row 2) — max 70% */
   /* Row 3: Fatigue */
   /* Row 4: Morale + Appearance */
-  /* Armor group (right side of row 2) — 40% centered */
+  /* Armor group (right side of row 2) — 30% centered */
   /* --- Bottom Header Rows --- */
   /* =========================================
      ORIGINAL STYLES (RESTORED)
@@ -8886,16 +8887,16 @@ ol#combat-tracker.directory-list {
   box-shadow: 2px 2px 2px var(--vagabond-c-bluey);
 }
 .vagabond .npc-portrait-column {
-  flex: 0 0 140px; /* Fixed width */
+  flex: 0 0 150px; /* Fixed width */
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5px;
+  margin-right: 2px;
 }
 .vagabond .npc-image-container {
   position: relative;
-  width: 145px;
-  height: 145px;
+  width: 150px;
+  height: 150px;
   background-image: none;
   border: 3px solid #000;
   border-radius: 4px;
@@ -8912,6 +8913,41 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
   opacity: 0.9;
+}
+.vagabond .npc-status-display {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  gap: 3px;
+}
+.vagabond .npc-status-display .status-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 1px var(--vagabond-c-inset-2));
+}
+.vagabond .npc-status-display .status-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 3px;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+}
+.vagabond .npc-status-display .status-icon:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+.vagabond .npc-status-display .status-icon:hover img {
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.9));
 }
 .vagabond .npc-tl-container {
   position: relative;
@@ -8947,8 +8983,9 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
   gap: 4px;
   justify-content: flex-start;
-  margin-top: 2px;
+  margin-top: 0px;
   min-width: 0;
+  height: 150px;
 }
 .vagabond .npc-stat-row {
   display: flex;
@@ -9023,8 +9060,9 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-speed-group {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  flex: 0 1 60%;
+  flex: 0 1 70%;
   min-width: 0;
   background-image: url("../assets/images/sheets/speedNPCBg.webp");
   background-repeat: no-repeat;
@@ -9138,7 +9176,7 @@ ol#combat-tracker.directory-list {
   background-repeat: no-repeat;
   background-size: 100% 60%;
   background-position: center center;
-  gap: 3px;
+  gap: 1px;
   width: 80%;
   height: 15px;
   margin: auto;
@@ -9194,16 +9232,15 @@ ol#combat-tracker.directory-list {
   text-align: center;
 }
 .vagabond .npc-armor-group {
-  flex: 0 0 40%;
+  flex: 0 0 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: help;
 }
 .vagabond .npc-armor-badge {
   width: 36px;
-  height: 44px;
+  height: 38px;
   background-image: url("../assets/images/sheets/armorNPCBG.webp");
   background-size: cover;
   background-position: center center;
@@ -9228,6 +9265,13 @@ ol#combat-tracker.directory-list {
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+.vagabond .npc-armor-desc-label {
+  font-size: 0.8em;
+  text-align: center;
+  color: var(--vagabond-c-dark);
+  line-height: 1;
+  padding-top: 2px;
 }
 .vagabond .npc-armor-desc-input {
   width: 60px;

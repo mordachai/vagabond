@@ -93,6 +93,20 @@
           width='140'
           height='140'
         />
+        {{! Status Effects Display }}
+        {{#if statusEffects}}
+          <div class='npc-status-display'>
+            {{#each statusEffects as |effect|}}
+              <div class='status-icon'
+                   data-effect-id='{{effect.id}}'
+                   data-effect-uuid='{{effect.uuid}}'
+                   data-tooltip='{{effect.name}}'
+                   data-action='statusClick'>
+                <img src='{{effect.icon}}' alt='{{effect.name}}' width='20' height='20' />
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
       </div>
     </div>
 
@@ -197,7 +211,7 @@
         </div>
 
         {{! Armor column }}
-        <div class='npc-armor-group' data-tooltip="{{#if system.armorDescription}}{{system.armorDescription}}{{else}}{{localize 'VAGABOND.Armor.Label'}}{{/if}}">
+        <div class='npc-armor-group'>
           <div class='npc-armor-badge'>
             {{!-- <div class='npc-armor-label'>{{localize "VAGABOND.Armor.Label"}}</div> --}}
             {{#if system.locked}}
@@ -213,7 +227,11 @@
               />
             {{/if}}
           </div>
-          {{#unless system.locked}}
+          {{#if system.locked}}
+            {{#if system.armorDescription}}
+              <span class='npc-armor-desc-label'>{{system.armorDescription}}</span>
+            {{/if}}
+          {{else}}
             <input
               type='text'
               name='system.armorDescription'
@@ -222,7 +240,7 @@
               class='npc-armor-desc-input'
               placeholder='Armor desc.'
             />
-          {{/unless}}
+          {{/if}}
         </div>
       </div>
 
