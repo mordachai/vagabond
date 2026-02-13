@@ -18,8 +18,9 @@
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-c-green: #295223cb;
-  --vagabond-c-bluey: #5a6e76;
+  --vagabond-c-bluey: #62686a;
   --vagabond-c-dark-bluey: #2c3e50;
+  --vagabond-dark-yellow: #94913c;
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
@@ -48,8 +49,9 @@ body[data-theme="dark"] #sidebar {
   --vagabond-bg-paper: url('../assets/images/old-paper.webp');
   --vagabond-bg-repeat: no-repeat;
   --vagabond-bg-size: cover;
-  --vagabond-c-bluey: #202d32;
+  --vagabond-c-bluey: #1f2324da;
   --vagabond-c-dark-bluey: #0b1e32;
+  --vagabond-dark-yellow: #94913c;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
@@ -80,6 +82,7 @@ $c-yellow: var(--vagabond-c-chat-yellow);
 $c-green: var(--vagabond-c-green);
 $c-bluey: var(--vagabond-c-bluey);
 $c-dark-bluey: var(--vagabond-c-dark-bluey);
+$c-dark-yellow: var(--vagabond-dark-yellow);
 $c-damage: var(--vagabond-c-damage-orange);
 $c-bg-lite: var(--vagabond-c-bg-lite);
 $c-inventory-hover: var(--vagabond-inventory-hover);

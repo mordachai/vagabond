@@ -8,13 +8,14 @@
 
 // NPC sheet container - set width and max height and enable scrolling
 .vagabond.sheet.actor.npc {
-  width: 360px;
-  min-width: 360px;
+  width: 380px; /* Increased to accommodate 2 columns comfortable (140px portrait + ~240px stats) */
+  min-width: 380px;
 
   .window-content {
     max-height: calc(100vh - 100px);
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 0; /* Remove default padding to let header stretch */
   }
 }
 
@@ -24,13 +25,21 @@
   color: $c-dark;
 }
 
-// Default dropdown styling (scoped to NPC sheet)
-// This matches the immunity dropdown reference styling
+// Default styling (scoped to NPC sheet) — single font for everything
 .npc-sheet,
 .npc-header,
 .npc-content {
-  textarea {min-height: 10px;
-  height: fit-content;}
+  font-family: $font-title;
+
+  // Force form elements to inherit (they use browser defaults otherwise)
+  input, select, textarea, button {
+    font-family: $font-title;
+  }
+
+  textarea {
+    min-height: 10px;
+    height: fit-content;
+  }
 
   input {
     height: 1.2rem;
@@ -43,7 +52,7 @@
     padding: 4px;
     font-size: 14px;
     font-weight: 600;
-    font-family: $font-secondary;
+
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
@@ -52,7 +61,6 @@
     box-shadow: none;
     width: auto;
 
-    // Remove chevron/dropdown arrow styling
     &::-ms-expand {
       display: none;
     }
@@ -83,481 +91,588 @@
   }
 }
 
-// NPC Header
+/* =========================================
+   NPC HEADER - NEW LAYOUT
+   ========================================= */
+
 .npc-header {
-  padding-top: 2px;
+  padding: 0px;
 }
 
-// NPC Name Input (inside lock-name-row)
-.npc-lock-name-row{
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-
-  background: $c-dark;
-  color: $c-lite !important;
-  padding: 2px 4px;
-  border-radius: 4px;
-
-  input {
-    color: inherit;
-  }
-
-  .npc-name-input {
-    width: 100%;
-    font-size: 20px;
-    font-family: $font-character-name;
-    font-weight: bold;
-    border: none !important;
-    background: transparent !important;
-    text-align: left;
-    padding: 0;
-    outline: none;
-    transition: border-bottom 0.2s ease;
-    border-bottom: 2px solid transparent;
-    box-shadow: none;
-    flex: 1;
-
-    &:hover,
-    &:focus {
-      border-bottom: 2px solid var(--vagabond-c-dark) !important;
-      background: transparent !important;
-      box-shadow: none;
-    }
-
-    input[type='text'] {
-      min-width: 30px;
-    }
-  }
-}
-
-.npc-lock-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: $c-lite;
-
-  i {
-    font-size: 14px;
-    color: $c-lite;
-  }
-
-  &:hover {
-    color: var(--vagabond-c-tan);
-    transform: scale(1.1);
-  }
-}
-
-.npc-type-container {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  color: $c-dark !important;
-  padding: 2px 4px;  
-
-  input,select {
-    color: $c-dark;
-    line-height: 1.1rem;
-  } 
-}
-
-// Top Section - Image + Info Row
-.npc-top-section {
+.npc-header-content {
   display: flex;
   flex-direction: row;
-  gap: 2px;
+  gap: 0;
+  margin-bottom: 6px;
   align-items: flex-start;
-}
-
-// NPC Image Container (120x120 with frame and HP overlay)
-.npc-image-container {
-  position: relative;
-  width: 100%;
-  height: 180px;
-  flex-shrink: 0;
-  background: $c-dark;
-  background-image: url(../assets/images/npc-portrait-frame.webp);
+  background-image: url('../assets/images/sheets/headerNPCBanner.webp');
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: top center;
-  background-size: 100% 100%;
+  padding: 8px;
+  box-shadow: 2px 2px 2px $c-bluey;
+}
+
+/* --- Column 1: Portrait --- */
+.npc-portrait-column {
+  flex: 0 0 140px; /* Fixed width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.npc-image-container {
+  position: relative;
+  width: 145px;
+  height: 145px;
+  background-image: none;
+  border: 3px solid #000;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px $c-bluey;
 
   .npc-profile-img {
-    display: flex;
+    display: block;
     width: 100%;
-    height: 180px;
-    transform: scaleX(0.91) scaleY(0.89);
+    height: 100%;
     border: none;
     object-fit: cover;
-    object-position: top left;
+    object-position: top center;
     cursor: pointer;
-    align-self: flex;
-
+    
     &:hover {
       opacity: 0.9;
     }
   }
 }
 
+/* TL Display - Floating Top Left */
 .npc-tl-container {
   position: absolute;
-  bottom: 10px;
-  left: -11px;
-  width: 40px;
-  height: 40px;
-  background-image: url(../assets/images/tl-frame.webp);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
+  background-color: $c-black;
+  border: 3px solid $c-yellow;
+  top: -2px;
+  left: -2px;
+  width: 30px;
+  height: 30px;
+  transform: rotate(45deg);
   display: flex;
   justify-content: center;
   align-items: center;
-
+  z-index: 5;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
 
   .npc-tl {
-    font-family: $font-secondary;
-    font-size: 12px;
-    font-weight: 700;
+
+    font-size: 0.95em;
     padding-top: 3px;
-    color: $c-dark;
-   }
-
-   .npc-tl-input {
-
-   }
-}
-
-.npc-health-container {
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 106%;
-  height: auto;
-  padding: 2px 25px 2px 25px;
-
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  justify-content: space-around;
-  align-items: baseline;
-
-  // background: #ddddddfa;
-  // border: 1px solid $c-faint;
+    color: $c-white;
+    transform: rotate(-45deg);
+  }
   
-  background-image: url(../assets/images/npc-hp-banner.webp);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-
-}
-
-// NPC HP Display (overlay at bottom of portrait)
-.npc-hp-display {
-  display: flex;
-  flex-direction: row;
-  gap: 2px;
-  justify-content: space-around;
-  align-items: center;
-
-  .npc-hp-heart-icon {
-    font-size: 16px;
-    color: #c62828;
-    cursor: pointer;
-    transition: transform 0.1s ease;
-
-    &.heartbeat {
-      animation: heartbeat 0.3s ease-in-out;
-    }
-  }
-
-  .npc-hp-current {
-    width: 28px;
-    text-align: right;
-    border: none;
-    background: transparent;
-    padding: 2px 2px;
-    font-size: 18px;
-    font-weight: bold;
-    box-shadow: none;
-
-    &:focus {
-      outline: none;
-      box-shadow: none;
-    }
-  }
-
-  .npc-hp-separator {
-    font-size: 16px;
-  }
-
-  .npc-hp-max {
-    min-width: 24px;
-    font-size: 14px;
+  .npc-tl-input {
+     width: 30px;
+     text-align: center;
+     font-size: 1.2em;
+    color: $c-white;
   }
 }
 
-// NPC Info Column (Right side)
-.npc-info-column {
-  width: 100%;
-  height: 100%;
+
+/* --- Column 2: Stats --- */
+.npc-stats-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
-}
-
-// NPC Stats Compact Row (HD/HP and Morale/Speed in right column)
-.npc-stats-compact-row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  line-height: 1.2rem;
-  width: 100%;
-
-  .npc-stat-field {
-    flex: 1 0 auto; // Equal distribution, can grow and shrink
-    align-items: baseline;
-    justify-content: flex-start;
-    gap: 6px;
-    min-width: 0; // Allow content to shrink
-  }
-}
-
-.npc-zone-field {
-  display: flex;
-  align-items: center; /* Align label and text perfectly */
-  gap: 8px;
-}
-
-.npc-zone-select {
-  // Inherit the global select styles you already defined (border-bottom, transparent, etc.)
-  // We just enforce specific width or alignment here if needed.
-  
-  height: auto;
-  padding: 0; 
-  margin: 0;
-  border: none;
-  border-bottom: 1px solid var(--vagabond-c-tan); // Matches your theme
-  background: transparent;
-  
-  font-family: "Almendra", serif; // Or your $font-secondary variable
-  font-size: 16px;
-  font-weight: 600;
-  color: #191813; // Or your $c-dark variable
-  cursor: pointer;
-
-  &:hover {
-    border-bottom-color: #191813; // Darken on hover
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom: 2px solid #191813;
-  }
-
-  &:disabled {
-    border: none;         
-    cursor: default;           
-    background: transparent; 
-    opacity: 1 !important;      
-    color: $c-dark; 
-    font-family: $font-primary;
-    font-weight: normal;
-    
-    /* Hides the dropdown arrow */
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    
-    /* Removes hover effects */
-    &:hover {
-      border: none;
-    }
-  }
-  
-  // OPTIONAL: Aligns the text to the right if you prefer
-  text-align: left; 
-}
-
-.npc-speed-types {
-  display: flex;
+  gap: 4px;
   justify-content: flex-start;
-  align-items: baseline;
-  gap: 6px;
-  line-height: 1.2rem;
-  flex: 1;
-  min-width: 0; // Allow wrapping
+  margin-top: 2px;
+  min-width: 0;
+}
+
+.npc-stat-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  min-height: 28px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 2px;
+}
+
+/* Row 1: HD & HP */
+.npc-row-hd-hp {
+  justify-content: space-between;
+  padding-left: 2px;
+  padding-right: 2px;
+
+  > .npc-stat-field {
+    background-image: url('../assets/images/sheets/hdBG.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 4px 5px;
+    margin-left: -2px;
+    filter:drop-shadow(1px 1px 2px $c-bluey);
+  }
 }
 
 .npc-stat-field {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  gap: 6px;
-  line-height: 1.2rem;
-  min-width: 0; // Allow flex children to shrink below content size
-}
-
-.npc-field-label {
-  font-size: 16px;
-  font-weight: bold;
-  font-family: $font-secondary;
+  gap: 4px;
   white-space: nowrap;
-  flex-shrink: 0; // Don't shrink labels
-  line-height: 1.2rem;
+  color: $c-white;
+
+  .npc-field-label {
+
+    line-height: 1.2;
+  }
+
+  input { color: $c-white;}
 }
 
-// Base shared styles for all NPC inputs
-.npc-field-input {
-  border-bottom: 1px solid var(--vagabond-c-dark);
-  border-radius: 0;
-  background: transparent;
-  font-size: 16px;
-  font-family: $font-primary;
-  font-weight: normal;
-  color: $c-dark;
-  box-shadow: none;
-  line-height: 1.2rem;
-
-  &:hover {
-    border-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom-color: var(--vagabond-c-dark);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &::placeholder {
-    color: $c-red;
-    opacity: 0.9;
-  }
-}
-
-// Number inputs - short, centered, compact
-.npc-number-input {
-  @extend .npc-field-input;
-  padding: 2px 6px;
-  width: fit-content;
-  min-width: 0;
-  max-width: 35px;
-  text-align: left;
-  flex: 0 0 auto; // No shrink, no grow - just fit content
-
-
-  &[readonly] {
-    border: none;
-    cursor: default;
-    background: transparent;
-    padding: 2px 4px;
-    width: fit-content;
-    min-width: 0;
-    flex: 1 1 0;
-    text-align: left;
-
-    &:hover {
-      border: none;
-    }
-  }
-}
-
-// Text inputs - expandable, flex start
-.npc-text-input {
-  @extend .npc-field-input;
-  padding: 2px 4px;
-  flex: 1;
-  text-align: left;
-  justify-content: flex-start;
-  min-width: 60px;
-  flex: 1 1 auto;
-
-  &[readonly] {
-    border: none;
-    cursor: default;
-    background: transparent;
-    padding: 2px 0px;
-    flex: 1 1 0;
-
-    &:hover {
-      border: none;
-    }
-  }
-}
-
-.npc-field-display {
-  padding: 2px 0;
-  font-size: 16px;
-  font-family: $font-primary;
-  font-weight: normal;
-  line-height: 1.2rem;
-  flex: 1;
-  min-width: 0; // Allow content to shrink/wrap
-  word-wrap: break-word;
-
-  // Scope i element styling to this specific context
-  i {
-    color: $c-dark;
-  }
-}
-
-// Fatigue Display with Skull Icons (in info column)
-.npc-fatigue-field {
+.npc-hp-display {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  gap: 4px;
+  color: $c-black;
+  font-family: $font-number;
+
+  font-size: 1.6em;
+  border-bottom: 2px solid $c-black;
+
+  .npc-hp-heart-icon {
+    font-size: 0.8em;
+    color: $c-black;
+    cursor: pointer;
+  }
+
+  .npc-hp-current {
+    width: 30px;
+    text-align: right;
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: $c-black;
+    font-family: $font-number;
+  }
+  .npc-hp-separator {
+    font-size: 0.8em;
+  }
+}
+
+/* Row 2: Speed + Armor */
+.npc-row-speed-armor {
+  gap: 8px;
+  align-items: center;
+  padding: 0;
+  justify-content: space-between;
+}
+
+/* Speed group (left side of row 2) — max 60% */
+.npc-speed-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 1 60%;
+  min-width: 0;
+  background-image: url('../assets/images/sheets/speedNPCBg.webp');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 2px;
+  padding: 4px 18px 4px 5px;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+}
+
+.npc-speed-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-left: 5px;
+
+  .npc-speed-value-row {
+    display: flex;
+    align-items: baseline;
+    white-space: nowrap;
+  }
+
+  .npc-speed-input {
+    width: 32px;
+    text-align: center;
+
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    padding: 0;
+    line-height: 1.2;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid $c-dark;
+    }
+
+    &[readonly] {
+      border-bottom: none;
+    }
+  }
+
+  .npc-speed-label {
+    font-size: 12px;
+
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+}
+
+.npc-speed-unit {
+  font-size: 1em;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.npc-speed-types-col {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+
+  .npc-speed-type-add {
+    display: flex;
+    justify-content: flex-start;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    padding: 0;
+    border: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+.npc-speed-type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+
+  .npc-speed-type-label {
+    font-size: 1em;
+
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .npc-speed-type-value {
+
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  .npc-speed-type-input {
+    width: 30px;
+    text-align: center;
+
+    font-size: 16px;
+    font-weight: normal;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    padding: 0;
+
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid $c-dark;
+    }
+  }
+
+  .fa-times {
+    font-size: 10px;
+    cursor: pointer;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+      color: $c-red;
+    }
+  }
+}
+
+/* Row 3: Fatigue */
+.npc-row-fatigue {
+  background-image: url('../assets/images/sheets/fatigueNPCBG.webp');
+  background-repeat: no-repeat;
+  background-size: 100% 60%;
+  background-position: center center;
+  gap: 3px;
+  width: 80%;
+  height: 15px;
+  margin: auto;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  .npc-field-label {
+      min-width: 50px;
+  
+      color: $c-white;
+  }
 }
 
 .npc-fatigue-checkboxes {
   display: flex;
-  gap: 4px;
-  align-items: center;
-
-  // Make NPC skulls smaller than character skulls
+  gap: 2px;
+  
   .fatigue-skull {
-    font-size: 16px;
+    font-size: 0.95em;
+    cursor: pointer;
+    
+    &.fatigue-active {
+      color: $c-dark; 
+    }
+    &.fatigue-inactive {
+      color: rgba(0,0,0,0.2);
+    }
   }
 }
 
-// Armor Display (Value + Description)
-.npc-armor-display {
+/* Row 4: Morale + Appearance */
+.npc-row-morale-app {
+  gap: 8px;
+  padding: 4px;
+  margin: 0 5px;
+
+}
+
+.npc-morale-field {
   display: flex;
-  align-items: baseline;
-  gap: 6px;
-  flex: 1;
-  line-height: 1.2rem;
-  min-width: 0; // Allow content to shrink
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-image: url('../assets/images/sheets/moraleBG.webp');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 2px;
+  white-space: nowrap;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  input {
+
+    width: 30px;
+    text-align: center;
+  }
 }
 
-// Armor description display (locked mode) - shows [Light armor] style
-.npc-armor-description-display {
-  font-size: 16px;
-  font-family: $font-primary;
-  font-weight: normal;
-  line-height: 1.2rem;
-  color: $c-dark;
-  padding: 2px 0;
-  flex: 1;
-  min-width: 0;
-  word-wrap: break-word;
+.npc-app-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+
+  input {
+    width: 30px;
+    text-align: center;
+  }
 }
 
-// NPC Content
+/* Armor group (right side of row 2) — 40% centered */
+.npc-armor-group {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+
+.npc-armor-badge {
+  width: 36px;
+  height: 44px;
+  background-image: url('../assets/images/sheets/armorNPCBG.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  .npc-armor-value {
+
+    font-size: 1.9em;
+    color: $c-white;
+    text-align: center;
+    font-family: $font-number;
+  }
+
+  .npc-armor-input {
+    width: 2em;
+    text-align: center;
+
+    font-size: 1.4em;
+    font-weight: 900;
+    color: $c-white;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+}
+
+.npc-armor-desc-input {
+  @extend .npc-field-input;
+  width: 60px;
+  font-size: 10px;
+  text-align: center;
+  padding: 1px 2px;
+  margin-top: 2px;
+}
+
+
+/* --- Bottom Header Rows --- */
+
+.npc-lock-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 3px 5px;
+  border-radius: 2px;
+  color: $c-white;
+  background-image: url('../assets/images/sheets/titleBG.webp');
+  background-repeat: repeat;
+  background-size: 100% 100%;
+  line-height: 1.4;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  .npc-name-input {
+    flex: 1;
+    font-size: 20px;
+
+    font-weight: bold;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    color: $c-white;
+    
+
+    &:hover, &:focus {
+        border-bottom-color: $c-dark;
+    }
+  }
+
+  .npc-name-display {
+    flex: 1;
+    font-size: 20px;
+
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+        text-shadow:
+    2px 2px 0 $c-black,
+    -2px 2px 0 $c-black,
+    -2px -2px 0 $c-black,
+    2px -2px 0 $c-black;
+
+    &:hover {
+      color: $c-tan;
+    }
+  }
+}
+
+.npc-lock-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  
+  i {
+    font-size: 1em;
+    color: $c-white;
+  }
+  
+  &:hover {
+      transform: scale(1.1);
+  }
+}
+
+.npc-type-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 2px;
+  padding: 0 8px;
+  border-top: 3px solid $c-dark-bluey;
+  border-bottom: 6px double $c-dark-bluey;
+  color: $c-dark-bluey;
+  width: 100%;
+}
+
+.npc-description-row {
+  margin: 5px 6px;
+  padding: 5px 10px;
+  border: 2px solid $c-black;
+  border-radius: 10px;
+  corner-shape: scoop;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  textarea {
+    width: 100%;
+    font-style: italic;
+    background: transparent;
+    border: 4px solid rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 1em;
+
+    &:focus {
+        border-color: $c-dark;
+    }
+  }
+
+  &.npc-description-collapsible {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease, padding 0.3s ease;
+    margin-top: 0;
+    padding: 8px;
+
+    &.open {
+      max-height: 500px;
+      opacity: 1;
+      margin-top: 4px;
+      padding: 5px 10px;
+      background-color: $c-yellow;
+    }
+  }
+
+  .npc-description-text {
+    font-style: italic;
+    font-size: 1em;
+    line-height: 1.3;
+    padding: 2px 0;
+  }
+}
+
+/* =========================================
+   ORIGINAL STYLES (RESTORED)
+   ========================================= */
+
 .npc-content {
-  padding: 0;
+  padding: 0 5px 5px 5px;
   display: flex;
   flex-direction: column;
   gap: 0px;
@@ -565,9 +680,74 @@
   overflow-y: auto;
 }
 
-// NPC Section (Actions, Abilities, Effects)
+/* Senses section */
+.npc-senses-section {
+  background-color: $c-darkgray;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  .npc-field-label {
+    color: $c-white;
+    font-family: $font-secondary;
+    font-size: 1.2em;
+  }
+
+  .npc-field-display {
+    color: $c-white;
+    font-size: 1.1em;
+  }
+
+  .npc-text-input {
+    color: $c-white;
+    font-size: 1.1em;
+  }
+}
+
+/* Immunities / Weaknesses / Status Immunities */
+.npc-resistances-section {
+  background-color: $c-yellow;
+  border: 2px solid $c-dark-yellow;
+  border-radius: 3px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  filter:drop-shadow(1px 1px 2px $c-bluey);
+
+  .npc-field-label {
+    font-family: $font-secondary;
+    font-size: 1.2em;
+  }
+
+  .npc-immunity-text {
+    font-size: 1.1em;
+  }
+
+  > .npc-detail-row {
+    width: 100%;
+    padding: 4px 0;
+    position: relative;
+
+    & + .npc-detail-row {
+      padding-top: 8px;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 90%;
+        height: 2px;
+        background-color: $c-dark-bluey;
+        margin: 0 auto 4px auto;
+        position: absolute;
+        top: 0;
+        left: 5%;
+      }
+    }
+  }
+}
+
 .npc-section {
-  // Clean sections with no borders or backgrounds
   &.npc-actions,
   &.npc-abilities,
   &.npc-effects {
@@ -583,22 +763,30 @@
 }
 
 .npc-section-title {
-  // Clean sections with no borders or backgrounds
-  .npc-section.npc-actions &,
-  .npc-section.npc-abilities &,
-  .npc-section.npc-effects & {
-    border: none;
-    background: transparent;
-    padding: 8px 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 2px solid $c-dark-bluey;
   }
 
-  // Accordion header styling
+  &::before {
+    margin-right: 8px;
+  }
+
+  &::after {
+    margin-left: 8px;
+  }
+
   &.accordion-header {
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
 
     &:hover {
       color: var(--vagabond-c-tan);
@@ -607,7 +795,7 @@
     .accordion-icon {
       font-size: 14px;
       transition: transform 0.2s ease;
-      margin-left: auto;
+      margin-left: 4px;
 
       &.fa-chevron-down {
         transform: rotate(90deg);
@@ -619,14 +807,12 @@
 .npc-section-content {
   padding: 4px 0;
 
-  // Clean sections with reduced padding
   .npc-section.npc-actions &,
   .npc-section.npc-abilities &,
   .npc-section.npc-effects & {
     padding: 4px 0;
   }
 
-  // Accordion content (collapsed by default)
   &.accordion-content {
     max-height: 1000px;
     overflow-y: auto;
@@ -641,21 +827,19 @@
   }
 }
 
-// Actions Section
 .npc-actions-list {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-// Action View Mode (locked)
 .npc-action-view {
   padding: 4px 0;
   line-height: 1.2;
 }
 
 .action-name-line {
-  font-family: $font-primary;
+
   color: $c-dark;
   line-height: 1.1rem;
   padding-left: 4px;
@@ -664,7 +848,8 @@
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s ease;
-    font-family: $font-character-name;
+    font-family: $font-secondary;
+
 
     &:hover {
       color: $c-red;
@@ -698,19 +883,19 @@
 }
 
 .action-extra-info {
-  font-family: $font-primary;
+
   font-weight: normal;
 }
 
-// Ability View Mode (locked)
 .npc-ability-view {
   padding: 4px 0;
-  font-family: $font-secondary;
+
 
   .ability-name {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s ease;
+    font-family: $font-secondary;
 
     &:hover {
       color: var(--vagabond-c-tan);
@@ -719,11 +904,10 @@
 
   .ability-description {
     font-weight: normal;
-    font-family: $font-primary;
+
   }
 }
 
-// Shared Edit Mode Styles (actions, abilities, etc.)
 .npc-edit-item,
 .npc-action-edit,
 .npc-ability-edit {
@@ -735,7 +919,6 @@
   position: relative;
 }
 
-// Shared accordion header for named items
 .npc-edit-header,
 .action-edit-header,
 .ability-edit-header {
@@ -766,7 +949,6 @@
   }
 }
 
-// Accordion icon rotation when parent accordion is open
 .accordion-item.open .accordion-header .accordion-icon,
 .npc-edit-item.open .npc-edit-header .accordion-icon,
 .npc-action-edit.open .action-edit-header .accordion-icon,
@@ -774,7 +956,6 @@
   transform: rotate(90deg);
 }
 
-// NPC Type Row (Size and Being Type)
 .npc-type-row {
   display: flex;
   width: fit-content;
@@ -782,12 +963,12 @@
   font-style: italic;
   gap:4px;
 
-  .npc-size-select {
+  .npc-size-select,
+  .npc-being-select,
+  .npc-zone-select {
     text-transform: capitalize;
-  }
-
-  .npc-being-select {
-    // Inherit default styling
+    color: $c-dark-bluey;
+    font-size: 1.3em;
   }
 
   select:disabled {
@@ -795,16 +976,14 @@
   }
 }
 
-// Shared edit name styling
 .npc-edit-name,
 .action-edit-name,
 .ability-edit-name {
   font-size: 15px;
   font-weight: 600;
-  font-family: $font-secondary;
+
 }
 
-// Shared accordion content (collapsible)
 .npc-edit-content,
 .action-edit-content,
 .ability-edit-content {
@@ -830,7 +1009,6 @@
   }
 }
 
-// Shared edit row styles
 .npc-edit-row,
 .action-edit-row,
 .ability-edit-row {
@@ -842,13 +1020,7 @@
   label {
     font-size: 14px;
     font-weight: bold;
-    font-family: $font-secondary;
-  }
 
-  // Inputs and textareas inherit from .npc-field-input
-  input[type='text'],
-  textarea {
-    // All styling comes from .npc-field-input class
   }
 
   textarea {
@@ -857,7 +1029,6 @@
   }
 }
 
-// Shared name field with remove button container
 .npc-name-with-remove,
 .action-name-with-remove,
 .ability-name-with-remove {
@@ -871,7 +1042,6 @@
   }
 }
 
-// Shared remove button styling
 .npc-remove-btn,
 .action-remove-btn,
 .ability-remove-btn {
@@ -889,7 +1059,6 @@
   }
 }
 
-// Split row layout (for actions with multiple columns)
 .action-edit-row-split {
   flex-direction: row;
   gap: 8px;
@@ -902,7 +1071,6 @@
   }
 }
 
-// Shared styles for add-row containers (actions, abilities, etc.)
 .npc-add-row,
 .action-add-row,
 .ability-add-row {
@@ -913,7 +1081,6 @@
   border-top: 1px solid $c-dark;
 }
 
-// Shared styles for add buttons
 .npc-add-btn,
 .action-add-btn,
 .ability-add-btn {
@@ -926,7 +1093,7 @@
   background: transparent;
   color: $c-dark;
   font-size: 14px;
-  font-family: $font-secondary;
+
   font-weight: 600;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -937,7 +1104,6 @@
 }
 
 
-// Effects Section (in accordion)
 .npc-effects {
   .effects-list {
     list-style: none;
@@ -955,7 +1121,7 @@
   .effects-category-label {
     font-size: 15px;
     font-weight: 600;
-    font-family: $font-secondary;
+
     margin-bottom: 4px;
   }
 
@@ -979,7 +1145,7 @@
     align-items: center;
     gap: 8px;
     font-size: 15px;
-    font-family: $font-secondary;
+
     font-weight: 600;
     flex: 1;
   }
@@ -994,7 +1160,7 @@
 
   .effect-source {
     font-size: 14px;
-    font-family: $font-secondary;
+
     color: $c-dark;
     min-width: 80px;
     text-align: center;
@@ -1002,7 +1168,7 @@
 
   .effect-duration {
     font-size: 14px;
-    font-family: $font-secondary;
+
     min-width: 60px;
     text-align: center;
   }
@@ -1041,7 +1207,7 @@
     background: transparent;
     color: var(--vagabond-c-muted);
     font-size: 14px;
-    font-family: $font-secondary;
+
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -1056,7 +1222,6 @@
   }
 }
 
-// NPC Details Section
 .npc-details {
   display: flex;
   flex-direction: column;
@@ -1070,67 +1235,16 @@
   gap: 6px;
   line-height: 1.2rem;
   width: 100%;
-  min-width: 0; // Allow flex children to shrink
-}
-
-.npc-description-row {
-  display: block;
-  border-bottom: 1px solid $c-dark;
-  margin-bottom: 8px;
-}
-
-.npc-description-textarea {
-  width: 100%;
-  padding: 4px 8px;
-  border: 1px solid $c-dark;
-  border-radius: 4px;
-  background: transparent;
-  font-size: 16px;
-  font-family: $font-primary;
-  font-weight: normal;
-  font-style: italic;
-  resize: vertical;
-  line-height: 1.1;
-  box-shadow: none;
-  height: fit-content;
-
-  &:hover {
-    border-color: var(--vagabond-c-dark);
-  }
-
-  &:focus {
-    outline: none;
-    border-color: var(--vagabond-c-dark);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &[readonly] {
-    border: 1px solid transparent;
-    cursor: default;
-    background: transparent;
-    padding: 4px 0;
-    resize: none;
-
-    &:hover {
-      border-color: transparent;
-    }
-  }
-
-  &::placeholder {
-    color: $c-red;
-    opacity: 0.5;
-    font-style: italic;
-  }
+  min-width: 0;
 }
 
 .npc-immunity-text {
   font-size: 16px;
-  font-family: $font-primary;
+
   line-height: 1.2rem;
   text-transform: capitalize;
   flex: 1;
-  min-width: 0; // Allow text to wrap
+  min-width: 0;
   word-wrap: break-word;
 
   .damage-type-icon-prefix {
@@ -1138,7 +1252,6 @@
   }
 }
 
-// Immunity Dropdown (unlocked mode)
 .npc-immunity-dropdown {
   min-width: fit-content;
 
@@ -1164,7 +1277,7 @@
   border-radius: 2px;
   font-size: 14px;
   font-weight: 600;
-  font-family: $font-secondary;
+
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   transition: border-bottom-color 0.2s ease;
@@ -1199,7 +1312,7 @@
   max-height: 300px;
   overflow-y: auto;
   font-size: 14px;
-  font-family: $font-secondary;
+
 }
 
 .npc-immunity-checkbox-item {
@@ -1228,33 +1341,93 @@
   }
 }
 
-// Immunity Tags (unlocked mode)
-// .npc-immunity-tags {
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 4px;
-//   align-items: center;
-//   flex: 1;
-// }
+.npc-field-input {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  border-radius: 0;
+  background: transparent;
+  font-size: 16px;
 
-.npc-immunity-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  background: #e2e2e255;
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: $font-primary;
+  font-weight: normal;
+  color: $c-dark;
+  box-shadow: none;
+  line-height: 1.2rem;
 
-  .damage-type-icon-prefix {
-    font-size: 12px;
-    margin-right: 2px;
+  &:hover {
+    border-color: var(--vagabond-c-dark);
   }
-  white-space: nowrap;
 
+  &:focus {
+    outline: none;
+    border-bottom-color: var(--vagabond-c-dark);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &::placeholder {
+    color: $c-red;
+    opacity: 0.9;
+  }
 }
 
-// Note: .countdown-dice-trigger styles moved to _countdown-dice.scss for global access
+.npc-number-input {
+  @extend .npc-field-input;
+  padding: 2px 6px;
+  width: fit-content;
+  min-width: 0;
+  max-width: 35px;
+  text-align: left;
+  flex: 0 0 auto;
+
+
+  &[readonly] {
+    border: none;
+    cursor: default;
+    background: transparent;
+    padding: 2px 4px;
+    width: fit-content;
+    min-width: 0;
+    flex: 1 1 0;
+    text-align: left;
+
+    &:hover {
+      border: none;
+    }
+  }
+}
+
+.npc-text-input {
+  @extend .npc-field-input;
+  padding: 2px 4px;
+  flex: 1;
+  text-align: left;
+  justify-content: flex-start;
+  min-width: 60px;
+  flex: 1 1 auto;
+
+  &[readonly] {
+    border: none;
+    cursor: default;
+    background: transparent;
+    padding: 2px 0px;
+    flex: 1 1 0;
+
+    &:hover {
+      border: none;
+    }
+  }
+}
+
+.npc-field-display {
+  padding: 2px 0;
+  font-size: 16px;
+
+  font-weight: normal;
+  line-height: 1.2rem;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+
+  i {
+    color: $c-dark;
+  }
+}

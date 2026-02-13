@@ -94,6 +94,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickActionName: this._onClickActionName,
       clickActionDamageRoll: this._onClickActionDamageRoll,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
+      toggleDescription: this._onToggleDescription,
     },
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
     form: {
@@ -357,20 +358,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           checked: i < fatigue,
           level: i + 1
         }));
-        break;
-
-      case 'npcContent':
-        // Add actions and abilities from actor system
-        partContext.actions = this.actor.system.actions || [];
-        partContext.abilities = this.actor.system.abilities || [];
 
         // Format appearing field for display in locked mode
         if (this.actor.system.locked && this.actor.system.appearing) {
           try {
-            // First, use VagabondTextParser to convert dice notation to roll links
             const parsedText = VagabondTextParser.parseAll(this.actor.system.appearing);
-
-            // Then, use Foundry's enrichment to make the roll links clickable
             partContext.enrichedAppearing = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
               parsedText,
               {
@@ -387,6 +379,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         } else {
           partContext.enrichedAppearing = this.actor.system.appearing || '';
         }
+        break;
+
+      case 'npcContent':
+        // Add actions and abilities from actor system
+        partContext.actions = this.actor.system.actions || [];
+        partContext.abilities = this.actor.system.abilities || [];
 
         // Enrich NPC actions and abilities
         try {
@@ -1251,6 +1249,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onToggleLock(event, target) {
     const currentState = this.actor.system.locked ?? false;
     await this.actor.update({ 'system.locked': !currentState });
+  }
+
+  /**
+   * Toggle NPC description visibility (locked mode)
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static _onToggleDescription(event, target) {
+    const descRow = this.element.querySelector('.npc-description-collapsible');
+    if (descRow) {
+      descRow.classList.toggle('collapsed');
+      descRow.classList.toggle('open');
+    }
   }
 
   /**

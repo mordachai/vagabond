@@ -68,8 +68,9 @@
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-c-green: #295223cb;
-  --vagabond-c-bluey: #5a6e76;
+  --vagabond-c-bluey: #62686a;
   --vagabond-c-dark-bluey: #2c3e50;
+  --vagabond-dark-yellow: #94913c;
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
@@ -97,8 +98,9 @@ body[data-theme=dark] #sidebar {
   --vagabond-bg-paper: url("../assets/images/old-paper.webp");
   --vagabond-bg-repeat: no-repeat;
   --vagabond-bg-size: cover;
-  --vagabond-c-bluey: #202d32;
+  --vagabond-c-bluey: #1f2324da;
   --vagabond-c-dark-bluey: #0b1e32;
+  --vagabond-dark-yellow: #94913c;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff;
@@ -4839,6 +4841,24 @@ ol#combat-tracker.directory-list {
   /* Panel content area */
   /* Mana skill row - label and select on same line, baseline aligned */
   /* Mana info row - 3 columns, 2 rows (labels top, values bottom) */
+  /* =========================================
+     NPC HEADER - NEW LAYOUT
+     ========================================= */
+  /* --- Column 1: Portrait --- */
+  /* TL Display - Floating Top Left */
+  /* --- Column 2: Stats --- */
+  /* Row 1: HD & HP */
+  /* Row 2: Speed + Armor */
+  /* Speed group (left side of row 2) — max 60% */
+  /* Row 3: Fatigue */
+  /* Row 4: Morale + Appearance */
+  /* Armor group (right side of row 2) — 40% centered */
+  /* --- Bottom Header Rows --- */
+  /* =========================================
+     ORIGINAL STYLES (RESTORED)
+     ========================================= */
+  /* Senses section */
+  /* Immunities / Weaknesses / Status Immunities */
 }
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Germania", serif;
@@ -5649,7 +5669,7 @@ ol#combat-tracker.directory-list {
   font-style: italic;
   margin-left: 10px;
   padding: 0 12px;
-  clip-path: polygon(15px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
 }
 .vagabond .right-column .equipped-item .eq-row2 .eq-explode {
   flex-shrink: 0;
@@ -8758,17 +8778,34 @@ ol#combat-tracker.directory-list {
   min-width: 430px;
 }
 .vagabond .vagabond.sheet.actor.npc {
-  width: 360px;
-  min-width: 360px;
+  width: 380px; /* Increased to accommodate 2 columns comfortable (140px portrait + ~240px stats) */
+  min-width: 380px;
 }
 .vagabond .vagabond.sheet.actor.npc .window-content {
   max-height: calc(100vh - 100px);
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 0; /* Remove default padding to let header stretch */
 }
 .vagabond .vagabond.actor .npc-content i,
 .vagabond .vagabond.actor .npc-header i {
   color: var(--vagabond-c-dark);
+}
+.vagabond .npc-sheet,
+.vagabond .npc-header,
+.vagabond .npc-content {
+  font-family: "Germania", serif;
+}
+.vagabond .npc-sheet input, .vagabond .npc-sheet select, .vagabond .npc-sheet textarea, .vagabond .npc-sheet button,
+.vagabond .npc-header input,
+.vagabond .npc-header select,
+.vagabond .npc-header textarea,
+.vagabond .npc-header button,
+.vagabond .npc-content input,
+.vagabond .npc-content select,
+.vagabond .npc-content textarea,
+.vagabond .npc-content button {
+  font-family: "Germania", serif;
 }
 .vagabond .npc-sheet textarea,
 .vagabond .npc-header textarea,
@@ -8790,7 +8827,6 @@ ol#combat-tracker.directory-list {
   padding: 4px;
   font-size: 14px;
   font-weight: 600;
-  font-family: "Manofa", serif;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
@@ -8834,391 +8870,535 @@ ol#combat-tracker.directory-list {
   padding: 0;
 }
 .vagabond .npc-header {
-  padding-top: 2px;
+  padding: 0px;
 }
-.vagabond .npc-lock-name-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-  background: var(--vagabond-c-dark);
-  color: var(--vagabond-c-lite) !important;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-.vagabond .npc-lock-name-row input {
-  color: inherit;
-}
-.vagabond .npc-lock-name-row .npc-name-input {
-  width: 100%;
-  font-size: 20px;
-  font-family: "Manofa", sans-serif;
-  font-weight: bold;
-  border: none !important;
-  background: transparent !important;
-  text-align: left;
-  padding: 0;
-  outline: none;
-  transition: border-bottom 0.2s ease;
-  border-bottom: 2px solid transparent;
-  box-shadow: none;
-  flex: 1;
-}
-.vagabond .npc-lock-name-row .npc-name-input:hover, .vagabond .npc-lock-name-row .npc-name-input:focus {
-  border-bottom: 2px solid var(--vagabond-c-dark) !important;
-  background: transparent !important;
-  box-shadow: none;
-}
-.vagabond .npc-lock-name-row .npc-name-input input[type=text] {
-  min-width: 30px;
-}
-.vagabond .npc-lock-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: var(--vagabond-c-lite);
-}
-.vagabond .npc-lock-button i {
-  font-size: 14px;
-  color: var(--vagabond-c-lite);
-}
-.vagabond .npc-lock-button:hover {
-  color: var(--vagabond-c-tan);
-  transform: scale(1.1);
-}
-.vagabond .npc-type-container {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  color: var(--vagabond-c-dark) !important;
-  padding: 2px 4px;
-}
-.vagabond .npc-type-container input, .vagabond .npc-type-container select {
-  color: var(--vagabond-c-dark);
-  line-height: 1.1rem;
-}
-.vagabond .npc-top-section {
+.vagabond .npc-header-content {
   display: flex;
   flex-direction: row;
-  gap: 2px;
+  gap: 0;
+  margin-bottom: 6px;
   align-items: flex-start;
+  background-image: url("../assets/images/sheets/headerNPCBanner.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  padding: 8px;
+  box-shadow: 2px 2px 2px var(--vagabond-c-bluey);
+}
+.vagabond .npc-portrait-column {
+  flex: 0 0 140px; /* Fixed width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
 }
 .vagabond .npc-image-container {
   position: relative;
-  width: 100%;
-  height: 180px;
-  flex-shrink: 0;
-  background: var(--vagabond-c-dark);
-  background-image: url(../assets/images/npc-portrait-frame.webp);
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100% 100%;
+  width: 145px;
+  height: 145px;
+  background-image: none;
+  border: 3px solid #000;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px var(--vagabond-c-bluey);
 }
 .vagabond .npc-image-container .npc-profile-img {
-  display: flex;
+  display: block;
   width: 100%;
-  height: 180px;
-  transform: scaleX(0.91) scaleY(0.89);
+  height: 100%;
   border: none;
   object-fit: cover;
-  object-position: top left;
+  object-position: top center;
   cursor: pointer;
-  align-self: flex;
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
   opacity: 0.9;
 }
 .vagabond .npc-tl-container {
   position: absolute;
-  bottom: 10px;
-  left: -11px;
-  width: 40px;
-  height: 40px;
-  background-image: url(../assets/images/tl-frame.webp);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
+  background-color: var(--vagabond-c-black);
+  border: 3px solid var(--vagabond-c-chat-yellow);
+  top: -2px;
+  left: -2px;
+  width: 30px;
+  height: 30px;
+  transform: rotate(45deg);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
 }
 .vagabond .npc-tl-container .npc-tl {
-  font-family: "Manofa", serif;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 0.95em;
   padding-top: 3px;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-white);
+  transform: rotate(-45deg);
 }
-.vagabond .npc-health-container {
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 106%;
-  height: auto;
-  padding: 2px 25px 2px 25px;
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  justify-content: space-around;
-  align-items: baseline;
-  background-image: url(../assets/images/npc-hp-banner.webp);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
+.vagabond .npc-tl-container .npc-tl-input {
+  width: 30px;
+  text-align: center;
+  font-size: 1.2em;
+  color: var(--vagabond-c-white);
 }
-.vagabond .npc-hp-display {
-  display: flex;
-  flex-direction: row;
-  gap: 2px;
-  justify-content: space-around;
-  align-items: center;
-}
-.vagabond .npc-hp-display .npc-hp-heart-icon {
-  font-size: 16px;
-  color: #c62828;
-  cursor: pointer;
-  transition: transform 0.1s ease;
-}
-.vagabond .npc-hp-display .npc-hp-heart-icon.heartbeat {
-  animation: heartbeat 0.3s ease-in-out;
-}
-.vagabond .npc-hp-display .npc-hp-current {
-  width: 28px;
-  text-align: right;
-  border: none;
-  background: transparent;
-  padding: 2px 2px;
-  font-size: 18px;
-  font-weight: bold;
-  box-shadow: none;
-}
-.vagabond .npc-hp-display .npc-hp-current:focus {
-  outline: none;
-  box-shadow: none;
-}
-.vagabond .npc-hp-display .npc-hp-separator {
-  font-size: 16px;
-}
-.vagabond .npc-hp-display .npc-hp-max {
-  min-width: 24px;
-  font-size: 14px;
-}
-.vagabond .npc-info-column {
-  width: 100%;
-  height: 100%;
+.vagabond .npc-stats-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  justify-content: flex-start;
+  margin-top: 2px;
+  min-width: 0;
+}
+.vagabond .npc-stat-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  min-height: 28px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 2px;
+}
+.vagabond .npc-row-hd-hp {
   justify-content: space-between;
-  flex: 1;
+  padding-left: 2px;
+  padding-right: 2px;
 }
-.vagabond .npc-stats-compact-row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  line-height: 1.2rem;
-  width: 100%;
-}
-.vagabond .npc-stats-compact-row .npc-stat-field {
-  flex: 1 0 auto;
-  align-items: baseline;
-  justify-content: flex-start;
-  gap: 6px;
-  min-width: 0;
-}
-.vagabond .npc-zone-field {
-  display: flex;
-  align-items: center; /* Align label and text perfectly */
-  gap: 8px;
-}
-.vagabond .npc-zone-select {
-  height: auto;
-  padding: 0;
-  margin: 0;
-  border: none;
-  border-bottom: 1px solid var(--vagabond-c-tan);
-  background: transparent;
-  font-family: "Almendra", serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: #191813;
-  cursor: pointer;
-  text-align: left;
-}
-.vagabond .npc-zone-select:hover {
-  border-bottom-color: #191813;
-}
-.vagabond .npc-zone-select:focus {
-  outline: none;
-  border-bottom: 2px solid #191813;
-}
-.vagabond .npc-zone-select:disabled {
-  border: none;
-  cursor: default;
-  background: transparent;
-  opacity: 1 !important;
-  color: var(--vagabond-c-dark);
-  font-family: "Eskapade", serif;
-  font-weight: normal;
-  /* Hides the dropdown arrow */
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  /* Removes hover effects */
-}
-.vagabond .npc-zone-select:disabled:hover {
-  border: none;
-}
-.vagabond .npc-speed-types {
-  display: flex;
-  justify-content: flex-start;
-  align-items: baseline;
-  gap: 6px;
-  line-height: 1.2rem;
-  flex: 1;
-  min-width: 0;
+.vagabond .npc-row-hd-hp > .npc-stat-field {
+  background-image: url("../assets/images/sheets/hdBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 4px 5px;
+  margin-left: -2px;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-stat-field {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  gap: 6px;
-  line-height: 1.2rem;
-  min-width: 0;
-}
-.vagabond .npc-field-label {
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Manofa", serif;
+  gap: 4px;
   white-space: nowrap;
-  flex-shrink: 0;
-  line-height: 1.2rem;
+  color: var(--vagabond-c-white);
 }
-.vagabond .npc-field-input, .vagabond .npc-text-input, .vagabond .npc-number-input {
-  border-bottom: 1px solid var(--vagabond-c-dark);
-  border-radius: 0;
-  background: transparent;
-  font-size: 16px;
-  font-family: "Eskapade", serif;
-  font-weight: normal;
-  color: var(--vagabond-c-dark);
-  box-shadow: none;
-  line-height: 1.2rem;
+.vagabond .npc-stat-field .npc-field-label {
+  line-height: 1.2;
 }
-.vagabond .npc-field-input:hover, .vagabond .npc-text-input:hover, .vagabond .npc-number-input:hover {
-  border-color: var(--vagabond-c-dark);
+.vagabond .npc-stat-field input {
+  color: var(--vagabond-c-white);
 }
-.vagabond .npc-field-input:focus, .vagabond .npc-text-input:focus, .vagabond .npc-number-input:focus {
-  outline: none;
-  border-bottom-color: var(--vagabond-c-dark);
-  background: transparent;
-  box-shadow: none;
-}
-.vagabond .npc-field-input::placeholder, .vagabond .npc-text-input::placeholder, .vagabond .npc-number-input::placeholder {
-  color: var(--vagabond-c-red);
-  opacity: 0.9;
-}
-.vagabond .npc-number-input {
-  padding: 2px 6px;
-  width: fit-content;
-  min-width: 0;
-  max-width: 35px;
-  text-align: left;
-  flex: 0 0 auto;
-}
-.vagabond .npc-number-input[readonly] {
-  border: none;
-  cursor: default;
-  background: transparent;
-  padding: 2px 4px;
-  width: fit-content;
-  min-width: 0;
-  flex: 1 1 0;
-  text-align: left;
-}
-.vagabond .npc-number-input[readonly]:hover {
-  border: none;
-}
-.vagabond .npc-text-input {
-  padding: 2px 4px;
-  flex: 1;
-  text-align: left;
-  justify-content: flex-start;
-  min-width: 60px;
-  flex: 1 1 auto;
-}
-.vagabond .npc-text-input[readonly] {
-  border: none;
-  cursor: default;
-  background: transparent;
-  padding: 2px 0px;
-  flex: 1 1 0;
-}
-.vagabond .npc-text-input[readonly]:hover {
-  border: none;
-}
-.vagabond .npc-field-display {
-  padding: 2px 0;
-  font-size: 16px;
-  font-family: "Eskapade", serif;
-  font-weight: normal;
-  line-height: 1.2rem;
-  flex: 1;
-  min-width: 0;
-  word-wrap: break-word;
-}
-.vagabond .npc-field-display i {
-  color: var(--vagabond-c-dark);
-}
-.vagabond .npc-fatigue-field {
+.vagabond .npc-hp-display {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  gap: 4px;
+  color: var(--vagabond-c-black);
+  font-family: "Ludlow", serif;
+  font-size: 1.6em;
+  border-bottom: 2px solid var(--vagabond-c-black);
+}
+.vagabond .npc-hp-display .npc-hp-heart-icon {
+  font-size: 0.8em;
+  color: var(--vagabond-c-black);
+  cursor: pointer;
+}
+.vagabond .npc-hp-display .npc-hp-current {
+  width: 30px;
+  text-align: right;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--vagabond-c-black);
+  font-family: "Ludlow", serif;
+}
+.vagabond .npc-hp-display .npc-hp-separator {
+  font-size: 0.8em;
+}
+.vagabond .npc-row-speed-armor {
+  gap: 8px;
+  align-items: center;
+  padding: 0;
+  justify-content: space-between;
+}
+.vagabond .npc-speed-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 1 60%;
+  min-width: 0;
+  background-image: url("../assets/images/sheets/speedNPCBg.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 2px;
+  padding: 4px 18px 4px 5px;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-speed-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-left: 5px;
+}
+.vagabond .npc-speed-main .npc-speed-value-row {
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+.vagabond .npc-speed-main .npc-speed-input {
+  width: 32px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 0;
+  line-height: 1.2;
+}
+.vagabond .npc-speed-main .npc-speed-input:hover, .vagabond .npc-speed-main .npc-speed-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .npc-speed-main .npc-speed-input[readonly] {
+  border-bottom: none;
+}
+.vagabond .npc-speed-main .npc-speed-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.vagabond .npc-speed-unit {
+  font-size: 1em;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.vagabond .npc-speed-types-col {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+.vagabond .npc-speed-types-col .npc-speed-type-add {
+  display: flex;
+  justify-content: flex-start;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  border: none;
+}
+.vagabond .npc-speed-types-col .npc-speed-type-add::-webkit-details-marker {
+  display: none;
+}
+.vagabond .npc-speed-types-col .npc-speed-type-add i {
+  font-size: 14px;
+}
+.vagabond .npc-speed-type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+}
+.vagabond .npc-speed-type-row .npc-speed-type-label {
+  font-size: 1em;
+  font-weight: 600;
+  text-align: left;
+}
+.vagabond .npc-speed-type-row .npc-speed-type-value {
+  font-size: 16px;
+  font-weight: normal;
+}
+.vagabond .npc-speed-type-row .npc-speed-type-input {
+  width: 30px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: normal;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  padding: 0;
+}
+.vagabond .npc-speed-type-row .npc-speed-type-input:hover, .vagabond .npc-speed-type-row .npc-speed-type-input:focus {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+}
+.vagabond .npc-speed-type-row .fa-times {
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.vagabond .npc-speed-type-row .fa-times:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+}
+.vagabond .npc-row-fatigue {
+  background-image: url("../assets/images/sheets/fatigueNPCBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 60%;
+  background-position: center center;
+  gap: 3px;
+  width: 80%;
+  height: 15px;
+  margin: auto;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-row-fatigue .npc-field-label {
+  min-width: 50px;
+  color: var(--vagabond-c-white);
 }
 .vagabond .npc-fatigue-checkboxes {
   display: flex;
-  gap: 4px;
-  align-items: center;
+  gap: 2px;
 }
 .vagabond .npc-fatigue-checkboxes .fatigue-skull {
-  font-size: 16px;
+  font-size: 0.95em;
+  cursor: pointer;
 }
-.vagabond .npc-armor-display {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  flex: 1;
-  line-height: 1.2rem;
-  min-width: 0;
-}
-.vagabond .npc-armor-description-display {
-  font-size: 16px;
-  font-family: "Eskapade", serif;
-  font-weight: normal;
-  line-height: 1.2rem;
+.vagabond .npc-fatigue-checkboxes .fatigue-skull.fatigue-active {
   color: var(--vagabond-c-dark);
-  padding: 2px 0;
+}
+.vagabond .npc-fatigue-checkboxes .fatigue-skull.fatigue-inactive {
+  color: rgba(0, 0, 0, 0.2);
+}
+.vagabond .npc-row-morale-app {
+  gap: 8px;
+  padding: 4px;
+  margin: 0 5px;
+}
+.vagabond .npc-morale-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-image: url("../assets/images/sheets/moraleBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 2px;
+  white-space: nowrap;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-morale-field input {
+  width: 30px;
+  text-align: center;
+}
+.vagabond .npc-app-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.vagabond .npc-app-field input {
+  width: 30px;
+  text-align: center;
+}
+.vagabond .npc-armor-group {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+.vagabond .npc-armor-badge {
+  width: 36px;
+  height: 44px;
+  background-image: url("../assets/images/sheets/armorNPCBG.webp");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-armor-badge .npc-armor-value {
+  font-size: 1.9em;
+  color: var(--vagabond-c-white);
+  text-align: center;
+  font-family: "Ludlow", serif;
+}
+.vagabond .npc-armor-badge .npc-armor-input {
+  width: 2em;
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--vagabond-c-white);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+.vagabond .npc-armor-desc-input {
+  width: 60px;
+  font-size: 10px;
+  text-align: center;
+  padding: 1px 2px;
+  margin-top: 2px;
+}
+.vagabond .npc-lock-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 3px 5px;
+  border-radius: 2px;
+  color: var(--vagabond-c-white);
+  background-image: url("../assets/images/sheets/titleBG.webp");
+  background-repeat: repeat;
+  background-size: 100% 100%;
+  line-height: 1.4;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-lock-name-row .npc-name-input {
   flex: 1;
-  min-width: 0;
-  word-wrap: break-word;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  color: var(--vagabond-c-white);
+}
+.vagabond .npc-lock-name-row .npc-name-input:hover, .vagabond .npc-lock-name-row .npc-name-input:focus {
+  border-bottom-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-lock-name-row .npc-name-display {
+  flex: 1;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
+}
+.vagabond .npc-lock-name-row .npc-name-display:hover {
+  color: var(--vagabond-c-tan);
+}
+.vagabond .npc-lock-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.vagabond .npc-lock-button i {
+  font-size: 1em;
+  color: var(--vagabond-c-white);
+}
+.vagabond .npc-lock-button:hover {
+  transform: scale(1.1);
+}
+.vagabond .npc-type-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 2px;
+  padding: 0 8px;
+  border-top: 3px solid var(--vagabond-c-dark-bluey);
+  border-bottom: 6px double var(--vagabond-c-dark-bluey);
+  color: var(--vagabond-c-dark-bluey);
+  width: 100%;
+}
+.vagabond .npc-description-row {
+  margin: 5px 6px;
+  padding: 5px 10px;
+  border: 2px solid var(--vagabond-c-black);
+  border-radius: 10px;
+  corner-shape: scoop;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-description-row textarea {
+  width: 100%;
+  font-style: italic;
+  background: transparent;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 1em;
+}
+.vagabond .npc-description-row textarea:focus {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-description-row.npc-description-collapsible {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease, padding 0.3s ease;
+  margin-top: 0;
+  padding: 8px;
+}
+.vagabond .npc-description-row.npc-description-collapsible.open {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: 4px;
+  padding: 5px 10px;
+  background-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .npc-description-row .npc-description-text {
+  font-style: italic;
+  font-size: 1em;
+  line-height: 1.3;
+  padding: 2px 0;
 }
 .vagabond .npc-content {
-  padding: 0;
+  padding: 0 5px 5px 5px;
   display: flex;
   flex-direction: column;
   gap: 0px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.vagabond .npc-senses-section {
+  background-color: var(--vagabond-c-darkgray);
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-senses-section .npc-field-label {
+  color: var(--vagabond-c-white);
+  font-family: "Manofa", serif;
+  font-size: 1.2em;
+}
+.vagabond .npc-senses-section .npc-field-display {
+  color: var(--vagabond-c-white);
+  font-size: 1.1em;
+}
+.vagabond .npc-senses-section .npc-text-input {
+  color: var(--vagabond-c-white);
+  font-size: 1.1em;
+}
+.vagabond .npc-resistances-section {
+  background-color: var(--vagabond-c-chat-yellow);
+  border: 2px solid var(--vagabond-dark-yellow);
+  border-radius: 3px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+}
+.vagabond .npc-resistances-section .npc-field-label {
+  font-family: "Manofa", serif;
+  font-size: 1.2em;
+}
+.vagabond .npc-resistances-section .npc-immunity-text {
+  font-size: 1.1em;
+}
+.vagabond .npc-resistances-section > .npc-detail-row {
+  width: 100%;
+  padding: 4px 0;
+  position: relative;
+}
+.vagabond .npc-resistances-section > .npc-detail-row + .npc-detail-row {
+  padding-top: 8px;
+}
+.vagabond .npc-resistances-section > .npc-detail-row + .npc-detail-row::before {
+  content: "";
+  display: block;
+  width: 90%;
+  height: 2px;
+  background-color: var(--vagabond-c-dark-bluey);
+  margin: 0 auto 4px auto;
+  position: absolute;
+  top: 0;
+  left: 5%;
 }
 .vagabond .npc-section.npc-actions, .vagabond .npc-section.npc-abilities, .vagabond .npc-section.npc-effects {
   border: none;
@@ -9230,17 +9410,27 @@ ol#combat-tracker.directory-list {
   font-weight: 900;
   margin-top: 2px;
 }
-.npc-section.npc-actions .vagabond .npc-section-title, .npc-section.npc-abilities .vagabond .npc-section-title, .npc-section.npc-effects .vagabond .npc-section-title {
+.vagabond .npc-section-title {
+  display: flex;
+  align-items: center;
+  text-align: center;
   border: none;
   background: transparent;
   padding: 8px 0;
 }
+.vagabond .npc-section-title::before, .vagabond .npc-section-title::after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px solid var(--vagabond-c-dark-bluey);
+}
+.vagabond .npc-section-title::before {
+  margin-right: 8px;
+}
+.vagabond .npc-section-title::after {
+  margin-left: 8px;
+}
 .vagabond .npc-section-title.accordion-header {
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
 }
 .vagabond .npc-section-title.accordion-header:hover {
   color: var(--vagabond-c-tan);
@@ -9248,7 +9438,7 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-section-title.accordion-header .accordion-icon {
   font-size: 14px;
   transition: transform 0.2s ease;
-  margin-left: auto;
+  margin-left: 4px;
 }
 .vagabond .npc-section-title.accordion-header .accordion-icon.fa-chevron-down {
   transform: rotate(90deg);
@@ -9280,7 +9470,6 @@ ol#combat-tracker.directory-list {
   line-height: 1.2;
 }
 .vagabond .action-name-line {
-  font-family: "Eskapade", serif;
   color: var(--vagabond-c-dark);
   line-height: 1.1rem;
   padding-left: 4px;
@@ -9289,7 +9478,7 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease;
-  font-family: "Manofa", sans-serif;
+  font-family: "Manofa", serif;
 }
 .vagabond .action-name-line .action-name:hover {
   color: var(--vagabond-c-red);
@@ -9314,24 +9503,22 @@ ol#combat-tracker.directory-list {
   font-weight: normal;
 }
 .vagabond .action-extra-info {
-  font-family: "Eskapade", serif;
   font-weight: normal;
 }
 .vagabond .npc-ability-view {
   padding: 4px 0;
-  font-family: "Manofa", serif;
 }
 .vagabond .npc-ability-view .ability-name {
   font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease;
+  font-family: "Manofa", serif;
 }
 .vagabond .npc-ability-view .ability-name:hover {
   color: var(--vagabond-c-tan);
 }
 .vagabond .npc-ability-view .ability-description {
   font-weight: normal;
-  font-family: "Eskapade", serif;
 }
 .vagabond .npc-edit-item,
 .vagabond .npc-action-edit,
@@ -9388,8 +9575,12 @@ ol#combat-tracker.directory-list {
   font-style: italic;
   gap: 4px;
 }
-.vagabond .npc-type-row .npc-size-select {
+.vagabond .npc-type-row .npc-size-select,
+.vagabond .npc-type-row .npc-being-select,
+.vagabond .npc-type-row .npc-zone-select {
   text-transform: capitalize;
+  color: var(--vagabond-c-dark-bluey);
+  font-size: 1.3em;
 }
 .vagabond .npc-type-row select:disabled {
   cursor: default;
@@ -9399,7 +9590,6 @@ ol#combat-tracker.directory-list {
 .vagabond .ability-edit-name {
   font-size: 15px;
   font-weight: 600;
-  font-family: "Manofa", serif;
 }
 .vagabond .npc-edit-content,
 .vagabond .action-edit-content,
@@ -9440,7 +9630,6 @@ ol#combat-tracker.directory-list {
 .vagabond .ability-edit-row label {
   font-size: 14px;
   font-weight: bold;
-  font-family: "Manofa", serif;
 }
 .vagabond .npc-edit-row textarea,
 .vagabond .action-edit-row textarea,
@@ -9509,7 +9698,6 @@ ol#combat-tracker.directory-list {
   background: transparent;
   color: var(--vagabond-c-dark);
   font-size: 14px;
-  font-family: "Manofa", serif;
   font-weight: 600;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -9533,7 +9721,6 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-effects .effects-category-label {
   font-size: 15px;
   font-weight: 600;
-  font-family: "Manofa", serif;
   margin-bottom: 4px;
 }
 .vagabond .npc-effects .effect {
@@ -9554,7 +9741,6 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 8px;
   font-size: 15px;
-  font-family: "Manofa", serif;
   font-weight: 600;
   flex: 1;
 }
@@ -9567,14 +9753,12 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-effects .effect-source {
   font-size: 14px;
-  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   min-width: 80px;
   text-align: center;
 }
 .vagabond .npc-effects .effect-duration {
   font-size: 14px;
-  font-family: "Manofa", serif;
   min-width: 60px;
   text-align: center;
 }
@@ -9609,7 +9793,6 @@ ol#combat-tracker.directory-list {
   background: transparent;
   color: var(--vagabond-c-muted);
   font-size: 14px;
-  font-family: "Manofa", serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -9634,53 +9817,8 @@ ol#combat-tracker.directory-list {
   width: 100%;
   min-width: 0;
 }
-.vagabond .npc-description-row {
-  display: block;
-  border-bottom: 1px solid var(--vagabond-c-dark);
-  margin-bottom: 8px;
-}
-.vagabond .npc-description-textarea {
-  width: 100%;
-  padding: 4px 8px;
-  border: 1px solid var(--vagabond-c-dark);
-  border-radius: 4px;
-  background: transparent;
-  font-size: 16px;
-  font-family: "Eskapade", serif;
-  font-weight: normal;
-  font-style: italic;
-  resize: vertical;
-  line-height: 1.1;
-  box-shadow: none;
-  height: fit-content;
-}
-.vagabond .npc-description-textarea:hover {
-  border-color: var(--vagabond-c-dark);
-}
-.vagabond .npc-description-textarea:focus {
-  outline: none;
-  border-color: var(--vagabond-c-dark);
-  background: transparent;
-  box-shadow: none;
-}
-.vagabond .npc-description-textarea[readonly] {
-  border: 1px solid transparent;
-  cursor: default;
-  background: transparent;
-  padding: 4px 0;
-  resize: none;
-}
-.vagabond .npc-description-textarea[readonly]:hover {
-  border-color: transparent;
-}
-.vagabond .npc-description-textarea::placeholder {
-  color: var(--vagabond-c-red);
-  opacity: 0.5;
-  font-style: italic;
-}
 .vagabond .npc-immunity-text {
   font-size: 16px;
-  font-family: "Eskapade", serif;
   line-height: 1.2rem;
   text-transform: capitalize;
   flex: 1;
@@ -9712,7 +9850,6 @@ ol#combat-tracker.directory-list {
   border-radius: 2px;
   font-size: 14px;
   font-weight: 600;
-  font-family: "Manofa", serif;
   color: var(--vagabond-c-dark);
   white-space: nowrap;
   transition: border-bottom-color 0.2s ease;
@@ -9743,7 +9880,6 @@ details[open] .vagabond .npc-immunity-toggle i {
   max-height: 300px;
   overflow-y: auto;
   font-size: 14px;
-  font-family: "Manofa", serif;
 }
 .vagabond .npc-immunity-checkbox-item {
   display: flex;
@@ -9767,22 +9903,79 @@ details[open] .vagabond .npc-immunity-toggle i {
   margin-left: 2px;
   margin-right: 4px;
 }
-.vagabond .npc-immunity-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  background: rgba(226, 226, 226, 0.3333333333);
-  border: 1px solid var(--vagabond-c-tan);
-  border-radius: 3px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: "Eskapade", serif;
-  white-space: nowrap;
+.vagabond .npc-field-input, .vagabond .npc-text-input, .vagabond .npc-number-input, .vagabond .npc-armor-desc-input {
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  border-radius: 0;
+  background: transparent;
+  font-size: 16px;
+  font-weight: normal;
+  color: var(--vagabond-c-dark);
+  box-shadow: none;
+  line-height: 1.2rem;
 }
-.vagabond .npc-immunity-tag .damage-type-icon-prefix {
-  font-size: 12px;
-  margin-right: 2px;
+.vagabond .npc-field-input:hover, .vagabond .npc-text-input:hover, .vagabond .npc-number-input:hover, .vagabond .npc-armor-desc-input:hover {
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .npc-field-input:focus, .vagabond .npc-text-input:focus, .vagabond .npc-number-input:focus, .vagabond .npc-armor-desc-input:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-dark);
+  background: transparent;
+  box-shadow: none;
+}
+.vagabond .npc-field-input::placeholder, .vagabond .npc-text-input::placeholder, .vagabond .npc-number-input::placeholder, .vagabond .npc-armor-desc-input::placeholder {
+  color: var(--vagabond-c-red);
+  opacity: 0.9;
+}
+.vagabond .npc-number-input {
+  padding: 2px 6px;
+  width: fit-content;
+  min-width: 0;
+  max-width: 35px;
+  text-align: left;
+  flex: 0 0 auto;
+}
+.vagabond .npc-number-input[readonly] {
+  border: none;
+  cursor: default;
+  background: transparent;
+  padding: 2px 4px;
+  width: fit-content;
+  min-width: 0;
+  flex: 1 1 0;
+  text-align: left;
+}
+.vagabond .npc-number-input[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-text-input {
+  padding: 2px 4px;
+  flex: 1;
+  text-align: left;
+  justify-content: flex-start;
+  min-width: 60px;
+  flex: 1 1 auto;
+}
+.vagabond .npc-text-input[readonly] {
+  border: none;
+  cursor: default;
+  background: transparent;
+  padding: 2px 0px;
+  flex: 1 1 0;
+}
+.vagabond .npc-text-input[readonly]:hover {
+  border: none;
+}
+.vagabond .npc-field-display {
+  padding: 2px 0;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.2rem;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+}
+.vagabond .npc-field-display i {
+  color: var(--vagabond-c-dark);
 }
 .vagabond .item-sheet-header {
   display: flex;

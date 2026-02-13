@@ -1,94 +1,256 @@
 {{! NPC Sheet Header }}
 <header class='npc-header'>
-  {{! Top Character Image }}
-  <div class='npc-image-container'>
-    <img
-      class='npc-profile-img'
-      src='{{actor.img}}'
-      data-edit='img'
-      data-action='onEditImage'
-      data-tooltip='{{actor.name}}'
-      width='300'
-      height='180'
-    />
+  {{! 2-Column Layout: Portrait and Stats }}
+  <div class="npc-header-content">
 
-    {{! Health Display (Over portrait) }}
-    <div class="npc-health-container">
-
-      {{! HD }}
-      <div class='npc-stat-field'>
-        <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.hd.label"}}</label>
-        <input
-          type='text'
-          name='system.hd'
-          value='{{system.hd}}'
-          data-dtype='Number'
-          class='npc-number-input'
-          size='3'
-          placeholder='{{#unless system.locked}}1{{/unless}}'
-          {{#if system.locked}}readonly{{/if}}
+    {{! Column 1: Portrait }}
+    <div class="npc-portrait-column">
+      <div class='npc-image-container'>
+        <img
+          class='npc-profile-img'
+          src='{{actor.img}}'
+          data-edit='img'
+          data-action='onEditImage'
+          data-tooltip='{{actor.name}}'
+          width='140'
+          height='140'
         />
-      </div>
-
-      {{! HP }}
-      <div class='npc-hp-display' data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.ModifyHP'}}">
-        <i class='fas fa-heart npc-hp-heart-icon'></i>
-        <input
-          type='text'
-          name='system.health.value'
-          value='{{system.health.value}}'
-          data-dtype='Number'
-          class='npc-hp-current'
-        />
-        <span class='npc-hp-separator'>/</span>
-        <span class='npc-hp-max'>{{system.health.max}}</span>
-      </div>
-
-      {{! Fatigue - Skull icons }}
-      <div class='npc-fatigue-field'>
-        <div class='npc-fatigue-checkboxes'>
-          {{#each fatigueBoxes as |box index|}}
-            <i
-              class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
-              data-index='{{index}}'
-              data-tooltip='Fatigue Level {{box.level}}'
-            ></i>
-          {{/each}}
+        {{! TL Display (Floating Top Left) }}
+        <div class="npc-tl-container" title="{{localize "VAGABOND.Actor.NPC.FIELDS.threatLevel.label"}}">
+          <span class="npc-tl">
+            {{#if system.locked}}
+              {{system.threatLevelFormatted}}
+            {{else}}
+              <input
+                type="number"
+                name="system.threatLevel"
+                value="{{system.threatLevel}}"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                class="npc-tl-input"
+              />
+            {{/if}}
+          </span>
         </div>
       </div>
     </div>
-        {{! TL Display (Over portrait) }}
-    <div class="npc-tl-container" title="{{localize "VAGABOND.Actor.NPC.FIELDS.threatLevel.label"}}">
-      <span class="npc-tl">
-        {{#if system.locked}}
-          {{system.threatLevelFormatted}}
-        {{else}}
-          <input 
-            type="number" 
-            name="system.threatLevel" 
-            value="{{system.threatLevel}}" 
-            step="0.01" 
-            min="0"
-            placeholder="0.00"
-            class="npc-tl-input" 
+
+    {{! Column 2: Stats }}
+    <div class="npc-stats-column">
+
+      {{! Row 1: HD and HP }}
+      <div class="npc-stat-row npc-row-hd-hp">
+        {{! HD }}
+        <div class='npc-stat-field'>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.hd.label"}}</label>
+          <input
+            type='text'
+            name='system.hd'
+            value='{{system.hd}}'
+            data-dtype='Number'
+            class='npc-number-input'
+            size='3'
+            placeholder='{{#unless system.locked}}1{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
           />
+        </div>
+
+        {{! HP }}
+        <div class='npc-hp-display' data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.ModifyHP'}}">
+          <i class='fas fa-heart npc-hp-heart-icon'></i>
+          <input
+            type='text'
+            name='system.health.value'
+            value='{{system.health.value}}'
+            data-dtype='Number'
+            class='npc-hp-current'
+          />
+          <span class='npc-hp-separator'>/</span>
+          <span class='npc-hp-max'>{{system.health.max}}</span>
+        </div>
+      </div>
+
+      {{! Row 2: Speed + Armor }}
+      <div class="npc-stat-row npc-row-speed-armor">
+        {{! Speed column }}
+        <div class='npc-speed-group'>
+          {{! Speed value + label }}
+          <div class='npc-speed-main'>
+            <div class='npc-speed-value-row'><input
+              type='text'
+              name='system.speed'
+              value='{{system.speed}}'
+              data-dtype='Number'
+              class='npc-speed-input'
+              size='3'
+              placeholder='30'
+              {{#if system.locked}}readonly{{/if}}
+            /><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span></div>
+            <label class='npc-speed-label'>{{localize "VAGABOND.UI.Sections.Speed"}}</label>
+          </div>
+
+          {{! Speed types column }}
+          {{#if (or system.speedTypes.length (not system.locked))}}
+            <div class='npc-speed-types-col'>
+              {{! Add speed type selector }}
+              {{#unless system.locked}}
+                <details class='npc-immunity-dropdown' data-save-target="system.speedTypes">
+                  <summary class='npc-speed-type-add'>
+                    <i class='fas fa-plus-circle' data-tooltip="{{localize 'VAGABOND.SpeedTypes.Label'}}"></i>
+                  </summary>
+                  <div class='npc-immunity-checkboxes' style="right: auto; left: 0; z-index: 10;">
+                    {{#each config.speedTypes as |label key|}}
+                      <label class='npc-immunity-checkbox-item'>
+                        <input type='checkbox' value='{{key}}'
+                              {{#if (contains ../system.speedTypes key)}}checked{{/if}}>
+                        <span>{{localize label}}</span>
+                      </label>
+                    {{/each}}
+                  </div>
+                </details>
+              {{/unless}}
+
+              {{! Speed type rows }}
+              {{#each system.speedTypes as |type index|}}
+                <div class='npc-speed-type-row'>
+                  <span class='npc-speed-type-label'>{{localize (lookup ../config.speedTypes type)}}</span>
+                  {{#if ../system.locked}}
+                    <span class='npc-speed-type-value'>{{lookup ../system.speedValues type}}</span><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span>
+                  {{else}}
+                    <input
+                      type='text'
+                      name='system.speedValues.{{type}}'
+                      value='{{lookup ../system.speedValues type}}'
+                      data-dtype='Number'
+                      class='npc-speed-type-input'
+                      size='3'
+                      placeholder='0'
+                      data-tooltip="Speed for {{localize (lookup ../config.speedTypes type)}} (0 = same as base speed)"
+                    /><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span>
+                    <i class='fas fa-times' data-action='removeSpeedType' data-type='{{type}}'></i>
+                  {{/if}}
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+        </div>
+
+        {{! Armor column }}
+        <div class='npc-armor-group' data-tooltip="{{#if system.armorDescription}}{{system.armorDescription}}{{else}}{{localize 'VAGABOND.Armor.Label'}}{{/if}}">
+          <div class='npc-armor-badge'>
+            {{!-- <div class='npc-armor-label'>{{localize "VAGABOND.Armor.Label"}}</div> --}}
+            {{#if system.locked}}
+              <div class='npc-armor-value'>{{system.armor}}</div>
+            {{else}}
+              <input
+                type='text'
+                name='system.armor'
+                value='{{system.armor}}'
+                data-dtype='Number'
+                class='npc-armor-input'
+                placeholder='0'
+              />
+            {{/if}}
+          </div>
+          {{#unless system.locked}}
+            <input
+              type='text'
+              name='system.armorDescription'
+              value='{{system.armorDescription}}'
+              data-dtype='String'
+              class='npc-armor-desc-input'
+              placeholder='Armor desc.'
+            />
+          {{/unless}}
+        </div>
+      </div>
+
+      {{! Row 3: Fatigue }}
+      <div class="npc-stat-row npc-row-fatigue">
+        <label class='npc-field-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.fatigue.label"}}</label>
+        <div class='npc-fatigue-field'>
+          <div class='npc-fatigue-checkboxes'>
+            {{#each fatigueBoxes as |box index|}}
+              <i
+                class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
+                data-index='{{index}}'
+                data-tooltip='Fatigue Level {{box.level}}'
+              ></i>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      {{! Row 4: Morale and Appearance }}
+      <div class="npc-stat-row npc-row-morale-app">
+        {{! Morale (with background) }}
+        <div class='npc-morale-field'>
+          <label class='npc-field-label rollable' data-action='rollMorale' data-tooltip='{{localize "VAGABOND.Actor.NPC.MoraleCheck.tooltip"}}'>{{localize "VAGABOND.Actor.NPC.FIELDS.morale.label"}}</label>
+          <input
+            type='text'
+            name='system.morale'
+            value='{{system.morale}}'
+            data-dtype='Number'
+            class='npc-number-input'
+            size='3'
+            placeholder='{{#unless system.locked}}0{{/unless}}'
+            {{#if system.locked}}readonly{{/if}}
+          />
+        </div>
+
+        {{! Appearance (no background) }}
+        {{#if (or (not system.locked) system.appearing)}}
+          <div class='npc-app-field'>
+            <label class='npc-field-label'>App</label>
+            {{#if system.locked}}
+              <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
+            {{else}}
+              <input
+                type='text'
+                name='system.appearing'
+                value='{{system.appearing}}'
+                data-dtype='String'
+                class='npc-text-input'
+                placeholder='dX'
+              />
+            {{/if}}
+          </div>
         {{/if}}
-      </span>
+      </div>
+
     </div>
-
-
   </div>
 
-  {{! Lock/Unlock Toggle and Name Row }}
+  {{! Size, Being Type, Zone }}
+  <div class="npc-type-container">
+    <div class='npc-type-row'>
+      {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
+      {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
+    </div>
+    {{#if (or system.zone (not system.locked))}}
+      <div class="npc-zone-field">
+        <label class="npc-field-label">{{localize "VAGABOND.UI.Labels.ZoneColon"}}</label>
+        <select name="system.zone" class="npc-zone-select" {{#if system.locked}}disabled{{/if}}>
+          {{selectOptions config.combatZones selected=system.zone localize=true blank=""}}
+        </select>
+      </div>
+    {{/if}}
+  </div>
+
+  {{! Name + Lock }}
   <div class='npc-lock-name-row'>
-    <input
-      name='name'
-      type='text'
-      value='{{actor.name}}'
-      placeholder='{{#unless system.locked}}{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}{{/unless}}'
-      class='npc-name-input'
-      {{#if system.locked}}readonly{{/if}}
-    />
+    {{#if system.locked}}
+      <span class='npc-name-display' data-action='toggleDescription'>{{actor.name}}</span>
+    {{else}}
+      <input
+        name='name'
+        type='text'
+        value='{{actor.name}}'
+        placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}'
+        class='npc-name-input'
+      />
+    {{/if}}
 
     <button
       type='button'
@@ -100,33 +262,21 @@
     </button>
   </div>
 
-  {{! Row: Size and Being Type }}
-  <div class="npc-type-container">
-    <div class='npc-type-row'>
-          {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
-          {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
-    </div>
-    {{! Render if zone exists OR if the sheet is NOT locked }}
-    {{#if (or system.zone (not system.locked))}}
-      <div class="npc-zone-field">
-        <label class="npc-field-label">{{localize "VAGABOND.UI.Labels.ZoneColon"}}</label>
-        <select name="system.zone" class="npc-zone-select" {{#if system.locked}}disabled{{/if}}>
-          {{selectOptions config.combatZones selected=system.zone localize=true blank=""}}
-        </select>
+  {{! Description }}
+  {{#if system.locked}}
+    {{#if system.description}}
+      <div class='npc-description-row npc-description-collapsible collapsed'>
+        <div class='npc-description-text'>{{system.description}}</div>
       </div>
     {{/if}}
-  </div>
-
-  {{!-- NPC description --}}
-  {{#unless (and system.locked (not system.description))}}
-    <div class='npc-detail-row npc-description-row'>
+  {{else}}
+    <div class='npc-description-row'>
       <textarea
         name='system.description'
         class='npc-description-textarea'
         rows='2'
-        placeholder='{{#unless system.locked}}{{localize "VAGABOND.Actor.NPC.FIELDS.description.label"}}{{/unless}}'
-        {{#if system.locked}}readonly{{/if}}
+        placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.description.label"}}'
       >{{system.description}}</textarea>
     </div>
-  {{/unless}}
+  {{/if}}
 </header>

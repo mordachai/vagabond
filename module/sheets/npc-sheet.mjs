@@ -42,7 +42,7 @@ export class VagabondNPCSheet extends VagabondActorSheet {
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ['vagabond', 'actor', 'npc'],
     position: {
-      width: 360,
+      width: 380,
       height: 'auto'
     }
   }, { inplace: false });
@@ -66,6 +66,10 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     if (this.immunityHandler) {
       this.immunityHandler.captureDropdownState();
     }
+
+    // Capture description open state
+    const descRow = this.element.querySelector('.npc-description-collapsible');
+    this._descriptionOpen = descRow ? descRow.classList.contains('open') : false;
   }
 
   /**
@@ -89,6 +93,15 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     // Restore dropdown state after render
     if (this.immunityHandler) {
       this.immunityHandler.restoreDropdownState();
+    }
+
+    // Restore description open state
+    if (this._descriptionOpen) {
+      const descRow = this.element.querySelector('.npc-description-collapsible');
+      if (descRow) {
+        descRow.classList.remove('collapsed');
+        descRow.classList.add('open');
+      }
     }
 
     // Setup immunity handler listeners for checkboxes
