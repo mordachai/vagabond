@@ -103,7 +103,7 @@
   display: flex;
   flex-direction: row;
   gap: 0;
-  margin-bottom: 6px;
+  margin: 8px 0;
   align-items: flex-start;
   background-image: url('../assets/images/sheets/headerNPCBanner.webp');
   background-size: 100% 100%;
@@ -146,35 +146,35 @@
   }
 }
 
-/* TL Display - Floating Top Left */
+/* TL Display - in name row, position relative to not affect row height */
 .npc-tl-container {
-  position: absolute;
+  position: relative;
+  left: -4px;
   background-color: $c-black;
-  border: 3px solid $c-yellow;
-  top: -2px;
-  left: -2px;
-  width: 30px;
-  height: 30px;
+  border: 2px solid $c-yellow;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
   transform: rotate(45deg);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 5;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
+  margin: -4px 4px -4px 0;
+  align-self: center;
 
   .npc-tl {
-
-    font-size: 0.95em;
-    padding-top: 3px;
+    font-size: 1.1em;
     color: $c-white;
     transform: rotate(-45deg);
   }
-  
+
   .npc-tl-input {
-     width: 30px;
-     text-align: center;
-     font-size: 1.2em;
+    width: 26px;
+    text-align: center;
+    font-size: 1em;
     color: $c-white;
+    transform: rotate(-45deg);
   }
 }
 
@@ -249,13 +249,15 @@
   }
 
   .npc-hp-current {
-    width: 30px;
+    width: 3ch;
+    min-width: 1ch;
     text-align: right;
     border: none;
     background: transparent;
     padding: 0;
     color: $c-black;
     font-family: $font-number;
+    field-sizing: content;
   }
   .npc-hp-separator {
     font-size: 0.8em;
@@ -612,7 +614,7 @@
   gap: 8px;
   font-style: italic;
   font-size: 13px;
-  margin-top: 2px;
+  margin: 6px 0 0 0;
   padding: 0 8px;
   border-top: 3px solid $c-dark-bluey;
   border-bottom: 6px double $c-dark-bluey;
@@ -646,9 +648,10 @@
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease, padding 0.3s ease;
-    margin-top: 0;
-    padding: 8px;
+    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease, padding 0.3s ease, border 0.3s ease;
+    margin: 0;
+    padding: 0;
+    border: none;
 
     &.open {
       max-height: 500px;
@@ -672,7 +675,7 @@
    ========================================= */
 
 .npc-content {
-  padding: 0 5px 5px 5px;
+  padding: 5px 0;
   display: flex;
   flex-direction: column;
   gap: 0px;
@@ -898,7 +901,7 @@
     font-family: $font-secondary;
 
     &:hover {
-      color: var(--vagabond-c-tan);
+      color: $c-red;
     }
   }
 

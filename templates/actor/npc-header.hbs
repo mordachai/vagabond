@@ -1,5 +1,83 @@
 {{! NPC Sheet Header }}
 <header class='npc-header'>
+
+  {{! Name + Lock }}
+  <div class='npc-lock-name-row'>
+    {{! TL Display }}
+    <div class="npc-tl-container" title="{{localize "VAGABOND.Actor.NPC.FIELDS.threatLevel.label"}}">
+      <span class="npc-tl">
+        {{#if system.locked}}
+          {{system.threatLevelFormatted}}
+        {{else}}
+          <input
+            type="number"
+            name="system.threatLevel"
+            value="{{system.threatLevel}}"
+            step="0.01"
+            min="0"
+            placeholder="0.00"
+            class="npc-tl-input"
+          />
+        {{/if}}
+      </span>
+    </div>
+
+    {{#if system.locked}}
+      <span class='npc-name-display' data-action='toggleDescription'>{{actor.name}}</span>
+    {{else}}
+      <input
+        name='name'
+        type='text'
+        value='{{actor.name}}'
+        placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}'
+        class='npc-name-input'
+      />
+    {{/if}}
+
+    <button
+      type='button'
+      data-action='toggleLock'
+      class='npc-lock-button {{#if system.locked}}locked{{else}}unlocked{{/if}}'
+      data-tooltip='{{#if system.locked}}{{localize "VAGABOND.Actor.NPC.Tooltips.Unlock"}}{{else}}{{localize "VAGABOND.Actor.NPC.Tooltips.Lock"}}{{/if}}'
+    >
+      <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
+    </button>
+  </div>
+
+  {{! Size, Being Type, Zone }}
+  <div class="npc-type-container">
+    <div class='npc-type-row'>
+      {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
+      {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
+    </div>
+    {{#if (or system.zone (not system.locked))}}
+      <div class="npc-zone-field">
+        <label class="npc-field-label">{{localize "VAGABOND.UI.Labels.ZoneColon"}}</label>
+        <select name="system.zone" class="npc-zone-select" {{#if system.locked}}disabled{{/if}}>
+          {{selectOptions config.combatZones selected=system.zone localize=true blank=""}}
+        </select>
+      </div>
+    {{/if}}
+  </div>
+
+  {{! Description }}
+  {{#if system.locked}}
+    {{#if system.description}}
+      <div class='npc-description-row npc-description-collapsible collapsed'>
+        <div class='npc-description-text'>{{system.description}}</div>
+      </div>
+    {{/if}}
+  {{else}}
+    <div class='npc-description-row'>
+      <textarea
+        name='system.description'
+        class='npc-description-textarea'
+        rows='2'
+        placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.description.label"}}'
+      >{{system.description}}</textarea>
+    </div>
+  {{/if}}
+
   {{! 2-Column Layout: Portrait and Stats }}
   <div class="npc-header-content">
 
@@ -15,24 +93,6 @@
           width='140'
           height='140'
         />
-        {{! TL Display (Floating Top Left) }}
-        <div class="npc-tl-container" title="{{localize "VAGABOND.Actor.NPC.FIELDS.threatLevel.label"}}">
-          <span class="npc-tl">
-            {{#if system.locked}}
-              {{system.threatLevelFormatted}}
-            {{else}}
-              <input
-                type="number"
-                name="system.threatLevel"
-                value="{{system.threatLevel}}"
-                step="0.01"
-                min="0"
-                placeholder="0.00"
-                class="npc-tl-input"
-              />
-            {{/if}}
-          </span>
-        </div>
       </div>
     </div>
 
@@ -222,61 +282,5 @@
     </div>
   </div>
 
-  {{! Size, Being Type, Zone }}
-  <div class="npc-type-container">
-    <div class='npc-type-row'>
-      {{> "systems/vagabond/templates/shared/size-select.hbs" name="system.size" selected=system.size cssClass="npc-size-select" disabled=system.locked}}
-      {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.beingType" selected=system.beingType cssClass="npc-being-select" disabled=system.locked}}
-    </div>
-    {{#if (or system.zone (not system.locked))}}
-      <div class="npc-zone-field">
-        <label class="npc-field-label">{{localize "VAGABOND.UI.Labels.ZoneColon"}}</label>
-        <select name="system.zone" class="npc-zone-select" {{#if system.locked}}disabled{{/if}}>
-          {{selectOptions config.combatZones selected=system.zone localize=true blank=""}}
-        </select>
-      </div>
-    {{/if}}
-  </div>
 
-  {{! Name + Lock }}
-  <div class='npc-lock-name-row'>
-    {{#if system.locked}}
-      <span class='npc-name-display' data-action='toggleDescription'>{{actor.name}}</span>
-    {{else}}
-      <input
-        name='name'
-        type='text'
-        value='{{actor.name}}'
-        placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}'
-        class='npc-name-input'
-      />
-    {{/if}}
-
-    <button
-      type='button'
-      data-action='toggleLock'
-      class='npc-lock-button {{#if system.locked}}locked{{else}}unlocked{{/if}}'
-      data-tooltip='{{#if system.locked}}{{localize "VAGABOND.Actor.NPC.Tooltips.Unlock"}}{{else}}{{localize "VAGABOND.Actor.NPC.Tooltips.Lock"}}{{/if}}'
-    >
-      <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
-    </button>
-  </div>
-
-  {{! Description }}
-  {{#if system.locked}}
-    {{#if system.description}}
-      <div class='npc-description-row npc-description-collapsible collapsed'>
-        <div class='npc-description-text'>{{system.description}}</div>
-      </div>
-    {{/if}}
-  {{else}}
-    <div class='npc-description-row'>
-      <textarea
-        name='system.description'
-        class='npc-description-textarea'
-        rows='2'
-        placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.description.label"}}'
-      >{{system.description}}</textarea>
-    </div>
-  {{/if}}
 </header>

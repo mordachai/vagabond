@@ -4845,7 +4845,7 @@ ol#combat-tracker.directory-list {
      NPC HEADER - NEW LAYOUT
      ========================================= */
   /* --- Column 1: Portrait --- */
-  /* TL Display - Floating Top Left */
+  /* TL Display - in name row, position relative to not affect row height */
   /* --- Column 2: Stats --- */
   /* Row 1: HD & HP */
   /* Row 2: Speed + Armor */
@@ -8876,7 +8876,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: row;
   gap: 0;
-  margin-bottom: 6px;
+  margin: 8px 0;
   align-items: flex-start;
   background-image: url("../assets/images/sheets/headerNPCBanner.webp");
   background-size: 100% 100%;
@@ -8914,31 +8914,32 @@ ol#combat-tracker.directory-list {
   opacity: 0.9;
 }
 .vagabond .npc-tl-container {
-  position: absolute;
+  position: relative;
+  left: -4px;
   background-color: var(--vagabond-c-black);
-  border: 3px solid var(--vagabond-c-chat-yellow);
-  top: -2px;
-  left: -2px;
-  width: 30px;
-  height: 30px;
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
   transform: rotate(45deg);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 5;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.6));
+  margin: -4px 4px -4px 0;
+  align-self: center;
 }
 .vagabond .npc-tl-container .npc-tl {
-  font-size: 0.95em;
-  padding-top: 3px;
+  font-size: 1.1em;
   color: var(--vagabond-c-white);
   transform: rotate(-45deg);
 }
 .vagabond .npc-tl-container .npc-tl-input {
-  width: 30px;
+  width: 26px;
   text-align: center;
-  font-size: 1.2em;
+  font-size: 1em;
   color: var(--vagabond-c-white);
+  transform: rotate(-45deg);
 }
 .vagabond .npc-stats-column {
   flex: 1;
@@ -9000,13 +9001,15 @@ ol#combat-tracker.directory-list {
   cursor: pointer;
 }
 .vagabond .npc-hp-display .npc-hp-current {
-  width: 30px;
+  width: 3ch;
+  min-width: 1ch;
   text-align: right;
   border: none;
   background: transparent;
   padding: 0;
   color: var(--vagabond-c-black);
   font-family: "Ludlow", serif;
+  field-sizing: content;
 }
 .vagabond .npc-hp-display .npc-hp-separator {
   font-size: 0.8em;
@@ -9289,7 +9292,7 @@ ol#combat-tracker.directory-list {
   gap: 8px;
   font-style: italic;
   font-size: 13px;
-  margin-top: 2px;
+  margin: 6px 0 0 0;
   padding: 0 8px;
   border-top: 3px solid var(--vagabond-c-dark-bluey);
   border-bottom: 6px double var(--vagabond-c-dark-bluey);
@@ -9320,9 +9323,10 @@ ol#combat-tracker.directory-list {
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease, padding 0.3s ease;
-  margin-top: 0;
-  padding: 8px;
+  transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease, padding 0.3s ease, border 0.3s ease;
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 .vagabond .npc-description-row.npc-description-collapsible.open {
   max-height: 500px;
@@ -9338,7 +9342,7 @@ ol#combat-tracker.directory-list {
   padding: 2px 0;
 }
 .vagabond .npc-content {
-  padding: 0 5px 5px 5px;
+  padding: 5px 0;
   display: flex;
   flex-direction: column;
   gap: 0px;
@@ -9515,7 +9519,7 @@ ol#combat-tracker.directory-list {
   font-family: "Manofa", serif;
 }
 .vagabond .npc-ability-view .ability-name:hover {
-  color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-red);
 }
 .vagabond .npc-ability-view .ability-description {
   font-weight: normal;
