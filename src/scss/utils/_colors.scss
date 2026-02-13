@@ -13,8 +13,11 @@
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
   --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
   --vagabond-bg-paper: url('../assets/images/sheets/card-bg.webp');
+  --vagabond-bg-repeat: repeat;
+  --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-c-green: #295223cb;
   --vagabond-c-bluey: #5a6e76;
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-c-damage-orange: #e7570a;
@@ -43,6 +46,8 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
   --vagabond-bg-paper: url('../assets/images/old-paper.webp');
+  --vagabond-bg-repeat: no-repeat;
+  --vagabond-bg-size: cover;
   --vagabond-c-bluey: #202d32;
   --vagabond-c-dark-bluey: #0b1e32;
   --vagabond-c-stat: #ffd07d;
@@ -68,8 +73,11 @@ $c-inset-1: var(--vagabond-c-inset-1);
 $c-inset-2: var(--vagabond-c-inset-2);
 
 $bg-paper: var(--vagabond-bg-paper);
+$bg-repeat: var(--vagabond-bg-repeat);
+$bg-size: var(--vagabond-bg-size);
 $c-stat: var(--vagabond-c-stat);
 $c-yellow: var(--vagabond-c-chat-yellow);
+$c-green: var(--vagabond-c-green);
 $c-bluey: var(--vagabond-c-bluey);
 $c-dark-bluey: var(--vagabond-c-dark-bluey);
 $c-damage: var(--vagabond-c-damage-orange);

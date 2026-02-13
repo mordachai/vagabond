@@ -72,11 +72,12 @@ export class SpellHandler {
     const state = this._getSpellState(spellId);
     const spell = this.actor.items.get(spellId);
 
-    // Damage cost: 0 for 1d6, +1 per extra die
+    // Damage cost: 0 for 1d6, +1 per extra die, 0 dice = no damage cost
     const hasDamage = spell.system.damageType !== '-' && state.damageDice >= 1;
     const damageCost = hasDamage && state.damageDice > 1 ? state.damageDice - 1 : 0;
 
     // Fx cost: +1 mana ONLY when using both damage AND effects
+    // 0 dice = effect-only cast, Fx is free (no combo surcharge)
     const fxCost = state.useFx && hasDamage ? 1 : 0;
 
     // Delivery base cost
@@ -290,11 +291,16 @@ export class SpellHandler {
     const container = this.sheet.element.querySelector(`[data-spell-id="${spellId}"]`);
     if (!container) return;
 
-    // Update damage dice display
+    // Update damage dice display and color
     if (spell.system.damageType !== '-') {
       const damageElement = container.querySelector('.spell-damage-dice');
       if (damageElement) {
         damageElement.textContent = `${state.damageDice}`;
+      }
+      if (damageElement) {
+        damageElement.style.color = state.damageDice > 1
+          ? 'var(--vagabond-c-damage-orange)'
+          : '';
       }
     }
 
@@ -585,9 +591,9 @@ export class SpellHandler {
     const manaSkill = manaSkillKey ? this.actor.system.skills[manaSkillKey] : null;
     const manaSkillStat = manaSkill?.stat || 'reason'; // Fallback to reason if not found
 
-    // Determine if we should auto-roll damage
+    // Determine if we should auto-roll damage (skip if 0 dice = effect-only cast)
     let damageRoll = null;
-    if (spell.system.damageType !== '-') {
+    if (spell.system.damageType !== '-' && state.damageDice > 0) {
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         damageRoll = await VagabondDamageHelper.rollSpellDamage(
           this.actor,
@@ -728,8 +734,14 @@ export class SpellHandler {
           event.preventDefault();
           // Prevent triggering accordion toggle if it's the control or trigger container
           event.stopPropagation();
-          
+
           const state = this._getSpellState(spellId);
+
+          // When increasing from 0, turn off auto-Fx (damage is back)
+          if (state.damageDice === 0) {
+            state.useFx = false;
+          }
+
           state.damageDice++;
           this._saveSpellStates();
           this._updateSpellDisplay(spellId);
@@ -741,10 +753,16 @@ export class SpellHandler {
         damageElement.addEventListener('contextmenu', async (event) => {
           event.preventDefault();
           event.stopPropagation();
-          
+
           const state = this._getSpellState(spellId);
-          if (state.damageDice > 1) {
+          if (state.damageDice > 0) {
             state.damageDice--;
+
+            // Auto-activate Fx when damage reaches 0 (effect-only cast, no mana cost)
+            if (state.damageDice === 0) {
+              state.useFx = true;
+            }
+
             this._saveSpellStates();
             this._updateSpellDisplay(spellId);
 

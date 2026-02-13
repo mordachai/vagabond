@@ -977,8 +977,8 @@ VAGABOND.damageTypeIcons = {
  * @type {Object}
  */
 VAGABOND.fxIcon = {
-  type: 'txt',   // 'fa' for Font Awesome, 'img' for image
-  value: 'Fx'    // FA class or image path
+  type: 'fa',    // 'fa' for Font Awesome, 'img' for image, 'txt' for text
+  value: 'fa-solid fa-explosion'
 };
 
 /**

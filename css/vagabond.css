@@ -63,8 +63,11 @@
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
   --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
   --vagabond-bg-paper: url("../assets/images/sheets/card-bg.webp");
+  --vagabond-bg-repeat: repeat;
+  --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-c-green: #295223cb;
   --vagabond-c-bluey: #5a6e76;
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-c-damage-orange: #e7570a;
@@ -92,6 +95,8 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
   --vagabond-bg-paper: url("../assets/images/old-paper.webp");
+  --vagabond-bg-repeat: no-repeat;
+  --vagabond-bg-size: cover;
   --vagabond-c-bluey: #202d32;
   --vagabond-c-dark-bluey: #0b1e32;
   --vagabond-c-stat: #ffd07d;
@@ -358,8 +363,8 @@ body[data-theme=dark] #sidebar {
 .vagabond .window-content {
   background: none;
   background-image: var(--vagabond-bg-paper);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-repeat: var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
   position: relative;
   color: var(--vagabond-c-dark);
   filter: drop-shadow(-2px 2px 2px var(--vagabond-c-inset-1));
@@ -2379,20 +2384,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex: 1;
   font-family: "Eskapade", serif;
 }
-.inventory-mini-sheet::-webkit-scrollbar {
-  width: 8px;
-}
-.inventory-mini-sheet::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 0 8px 8px 0;
-}
-.inventory-mini-sheet::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-}
-.inventory-mini-sheet::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.5);
-}
 
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 .downtime-container {
@@ -2554,8 +2545,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--vagabond-bg-paper) no-repeat center center;
-  background-size: cover;
+  background-image: var(--vagabond-bg-paper);
+  background-repeat: var(--vagabond-bg-repeat);
   font-family: "Eskapade", serif;
   font-size: 14px;
 }
@@ -2723,7 +2714,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column .directory-list {
   flex: 1;
   overflow-y: auto;
-  scrollbar-width: thin;
   padding-right: 10px;
   font-size: 1.2rem;
 }
@@ -3273,7 +3263,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .content-zone .reference-column {
   height: 100%;
   overflow-y: auto;
-  scrollbar-width: thin;
   padding-right: 10px;
   font-size: 1.2rem;
 }
@@ -4591,7 +4580,6 @@ ol#combat-tracker.directory-list {
 /* Encounter Settings Dialog (ApplicationV2) */
 #encounter-settings.encounter-settings-form .window-content {
   overflow-y: auto !important;
-  scrollbar-width: thin;
 }
 #encounter-settings.encounter-settings-form section.scrollable {
   padding: 1rem;
@@ -4810,6 +4798,28 @@ ol#combat-tracker.directory-list {
  *   @include context-menu-styles;
  * }
  */
+/* Global scrollbar styling for vagabond sheets and chat */
+.vagabond *,
+#chat-log {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vagabond-c-green) var(--vagabond-c-chat-yellow);
+}
+.vagabond *::-webkit-scrollbar,
+#chat-log::-webkit-scrollbar {
+  width: 7px;
+}
+.vagabond *::-webkit-scrollbar-track,
+#chat-log::-webkit-scrollbar-track {
+  background: var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+}
+.vagabond *::-webkit-scrollbar-thumb,
+#chat-log::-webkit-scrollbar-thumb {
+  background: var(--vagabond-c-green);
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-black);
+}
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   /* Features & Perks columns */
@@ -5529,151 +5539,171 @@ ol#combat-tracker.directory-list {
 .vagabond .right-column h4 {
   color: var(--vagabond-c-white);
 }
-.vagabond .right-column .equipped-weapon {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0;
-  width: 100%;
-  height: 20px;
+.vagabond .right-column .right-column-scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-.vagabond .right-column .equipped-weapon .weapon-name {
-  flex: 1 1 auto;
-  min-width: 60px;
-  text-align: left;
+.vagabond .right-column .equipped-item {
+  display: grid;
+  grid-template-columns: 20px 3fr 1fr 18px 1fr 24px;
+  grid-template-rows: 1.2em auto;
+  align-items: baseline;
+  width: 100%;
+  padding: 0px 5px;
+  line-height: 1.1;
+  margin: 3px 0;
+}
+.vagabond .right-column .equipped-item .eq-icon-frame {
+  grid-column: 1;
+  grid-row: 1;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--vagabond-c-dark-bluey);
+  align-self: center;
+  overflow: hidden;
+  transform: translateY(30%) rotate(45deg);
+}
+.vagabond .right-column .equipped-item .eq-icon-frame .eq-icon {
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: cover;
+  transform: rotate(-45deg) scale(1.45);
+}
+.vagabond .right-column .equipped-item .eq-name {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 1.1em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
   font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
+  padding-left: 4px;
 }
-.vagabond .right-column .equipped-weapon .weapon-name:hover {
+.vagabond .right-column .equipped-item .eq-name:hover {
   text-decoration: none;
 }
-.vagabond .right-column .equipped-weapon .weapon-damage {
-  flex: 0 0 30px;
+.vagabond .right-column .equipped-item .eq-name.eq-name-wide {
+  grid-column: 2/6;
+}
+.vagabond .right-column .equipped-item .eq-qty {
+  grid-column: 3;
+  grid-row: 1;
+  font-size: 1.1em;
   text-align: right;
   font-family: "Manofa", serif;
-  font-weight: normal;
   color: var(--vagabond-c-dark);
 }
-.vagabond .right-column .equipped-weapon .weapon-damage-icon {
-  flex: 0 0 15px;
+.vagabond .right-column .equipped-item .eq-dmgtype {
+  grid-column: 4;
+  grid-row: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.vagabond .right-column .equipped-weapon .weapon-damage-icon i {
+.vagabond .right-column .equipped-item .eq-dmgtype i {
   font-size: 13px;
   color: var(--vagabond-c-dark);
 }
-.vagabond .right-column .equipped-weapon .weapon-range {
-  flex: 0 0 11px;
-  text-align: center;
-  font-family: "Manofa", serif;
-  font-weight: normal;
+.vagabond .right-column .equipped-item .eq-damage {
+  grid-column: 5;
+  grid-row: 1;
+  font-size: 1.1em;
+  text-align: right;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
 }
-.vagabond .right-column .equipped-weapon .weapon-grip-icon {
-  flex: 0 0 14px;
+.vagabond .right-column .equipped-item .eq-grip {
+  grid-column: 6;
+  grid-row: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1em;
+  color: var(--vagabond-c-dark-bluey);
 }
-.vagabond .right-column .equipped-weapon .weapon-grip-icon i {
-  font-size: 13px;
-  color: var(--vagabond-c-dark);
+.vagabond .right-column .equipped-item .eq-grip i {
+  font-size: 1em;
+  color: var(--vagabond-c-dark-bluey);
 }
-.vagabond .right-column .equipped-weapon .weapon-grip-icon i.clickable {
+.vagabond .right-column .equipped-item .eq-grip i.clickable {
   cursor: pointer;
+  color: var(--vagabond-c-damage-orange);
 }
-.vagabond .right-column .equipped-weapon .weapon-grip-icon i.clickable:hover {
+.vagabond .right-column .equipped-item .eq-grip i.clickable:hover {
   color: var(--vagabond-c-tan);
 }
-.vagabond .right-column .equipped-gear {
+.vagabond .right-column .equipped-item .eq-row2 {
+  grid-column: 1/-1;
+  grid-row: 2;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 0;
-  width: 100%;
-  height: 20px;
+  font-size: 0.9em;
+  font-family: "Eskapade", serif;
+  background-color: var(--vagabond-c-dark-bluey);
+  color: var(--vagabond-c-white);
+  font-style: italic;
+  margin-left: 10px;
+  padding: 0 12px;
+  clip-path: polygon(15px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
 }
-.vagabond .right-column .equipped-gear .item-name {
-  flex: 1 1 auto;
-  min-width: 60px;
-  text-align: left;
+.vagabond .right-column .equipped-item .eq-row2 .eq-explode {
+  flex-shrink: 0;
+  font-style: normal;
+}
+.vagabond .right-column .equipped-item .eq-row2 .eq-explode:first-child {
+  margin-left: auto;
+}
+.vagabond .right-column .equipped-item .eq-row2 .eq-properties {
+  flex-shrink: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  cursor: pointer;
-  font-family: "Germania", serif;
-  color: var(--vagabond-c-dark);
-}
-.vagabond .right-column .equipped-gear .item-name:hover {
-  text-decoration: none;
-}
-.vagabond .right-column .equipped-gear .item-damage {
-  flex: 0 0 32px;
   text-align: right;
-  font-family: "Manofa", serif;
-  font-weight: normal;
-  color: var(--vagabond-c-dark);
+  padding-right: 2px;
 }
-.vagabond .right-column .equipped-gear .item-damage-icon {
-  flex: 0 0 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.vagabond .right-column .equipped-item .eq-row2 .eq-properties:first-child {
+  margin-left: auto;
 }
-.vagabond .right-column .equipped-gear .item-damage-icon i {
-  font-size: 13px;
-  color: var(--vagabond-c-dark);
+.vagabond .right-column .equipped-item .eq-row2 .eq-separator {
+  margin: 0 4px;
+  font-style: normal;
 }
-.vagabond .right-column .equipped-gear .item-quantity {
-  flex: 0 0 14px;
-  text-align: center;
-  font-family: "Manofa", serif;
-  font-weight: normal;
-  color: var(--vagabond-c-dark);
-  padding-right: 4px;
+.vagabond .right-column .equipped-item .eq-row2 .eq-range {
+  flex-shrink: 0;
 }
-.vagabond .right-column .equipped-armor {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 0;
-  width: 100%;
-  height: 20px;
+.vagabond .right-column .equipped-item .eq-row2 .eq-range::after, .vagabond .right-column .equipped-item .eq-row2 .eq-range::before {
+  content: " - ";
 }
-.vagabond .right-column .equipped-armor .resource-label {
-  flex: 1 1 auto;
-  min-width: 60px;
-  text-align: left;
+.vagabond .right-column .equipped-item .eq-row2 .eq-bound {
+  flex-shrink: 0;
+  font-style: normal;
+}
+.vagabond .right-column .equipped-item .eq-row2 .eq-bound:first-child {
+  margin-left: auto;
+}
+.vagabond .right-column .equipped-item .eq-row2 .eq-lore {
+  flex-shrink: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  cursor: pointer;
-  font-family: "Germania", serif;
-  color: var(--vagabond-c-dark);
-  width: 100%;
 }
-.vagabond .right-column .equipped-armor .resource-label:hover {
-  text-decoration: none;
+.vagabond .right-column .equipped-item .eq-row2 .eq-lore:first-child {
+  margin-left: auto;
 }
-.vagabond .right-column .weapon-info,
-.vagabond .right-column .item-info,
-.vagabond .right-column .spell-info {
-  font-size: 13px;
-  white-space: nowrap;
-  flex: 0 0 auto;
-  text-align: right;
-  margin-left: 8px;
+.vagabond .right-column .equipped-item .eq-row2 .eq-alch-type {
+  flex-shrink: 0;
+  font-style: normal;
+  text-transform: capitalize;
 }
-.vagabond .right-column .weapon-info i,
-.vagabond .right-column .item-info i,
-.vagabond .right-column .spell-info i {
-  margin-right: 2px;
+.vagabond .right-column .equipped-item .eq-row2 .eq-alch-type:first-child {
+  margin-left: auto;
 }
 .vagabond .favorites-section {
   margin-top: 4px;
@@ -5699,26 +5729,34 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: nowrap;
+  position: relative;
   background-image: url("../assets/images/sheets/titleBG.webp");
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 100% 100%;
-  padding: 8px 8px 3px 8px;
+  margin-bottom: 8px;
+  padding: 2px 0;
   color: var(--vagabond-c-white);
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .favorites-section .title-container h4 {
   color: var(--vagabond-c-white);
   mix-blend-mode: normal;
   opacity: 1;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
 }
 .vagabond .favorites-section .title-right-group {
+  position: absolute;
+  right: 4px;
   display: flex;
   flex-direction: row;
+  align-items: baseline;
   flex-wrap: nowrap;
-  margin-left: 8px;
   gap: 2px;
   font-size: 16px;
   font-family: "Manofa", serif;
@@ -5901,7 +5939,6 @@ ol#combat-tracker.directory-list {
   margin: 0;
   padding: 30px 12px 12px 12px;
   overflow-y: auto;
-  scrollbar-width: thin;
   border: 3px solid var(--vagabond-c-chat-yellow);
   border-radius: 1.3em;
   corner-shape: scoop scoop round round;
@@ -7316,7 +7353,6 @@ ol#combat-tracker.directory-list {
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  scrollbar-width: thin;
   color: var(--vagabond-c-dark);
 }
 .vagabond .effects-list .effect-list {
@@ -8474,8 +8510,8 @@ ol#combat-tracker.directory-list {
   height: 100%;
   background: none;
   background-image: var(--vagabond-bg-paper);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-repeat: var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
   filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
   display: flex;
   flex-direction: row;
@@ -9899,15 +9935,15 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .favorited-spell .spell-trigger {
   display: grid;
-  grid-template-columns: 30px 3fr 1fr 25px;
+  grid-template-columns: 20px 3fr 1fr 0.5fr;
   gap: 4px;
-  align-items: baseline;
+  align-items: flex-end;
   width: 100%;
-  min-height: 28px;
-  padding: 2px 0;
-  border-radius: 3px;
+  padding: 0 2px;
   transition: background-color 0.2s;
-  font-size: 1.2em;
+  font-size: 1.1em;
+  position: relative;
+  margin: 0 2px;
 }
 .vagabond .favorited-spell .spell-trigger:hover {
   background-color: rgba(0, 0, 0, 0.02);
@@ -9917,34 +9953,59 @@ details[open] .vagabond .npc-immunity-toggle i {
   justify-content: center;
   align-self: center;
   cursor: pointer;
+  position: relative;
+  z-index: 5;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--vagabond-c-dark-bluey);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  background: transparent;
 }
 .vagabond .favorited-spell .spell-trigger .spell-icon-trigger img {
   border: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 2px;
-  filter: sepia(0.3);
-  transition: filter 0.2s, transform 0.1s;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.2);
+  transition: filter 0.2s, transform 0.3s ease;
+}
+.vagabond .favorited-spell .spell-trigger .spell-icon-trigger:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 1px var(--vagabond-c-tan);
 }
 .vagabond .favorited-spell .spell-trigger .spell-icon-trigger:hover img {
   filter: sepia(0);
-  box-shadow: 0 0 4px var(--vagabond-c-tan);
-  transform: scale(1.1);
 }
 .vagabond .favorited-spell .spell-trigger .spell-icon-trigger:active img {
   transform: scale(0.9);
 }
+.favorited-spell:not(.collapsed) .spell-trigger .spell-icon-trigger {
+  border-color: var(--vagabond-c-chat-yellow);
+  transform: translateY(60%) rotate(45deg) scale(1.65);
+  z-index: 10;
+  margin-left: 12px;
+}
+.favorited-spell:not(.collapsed) .spell-trigger .spell-icon-trigger img {
+  transform: rotate(-45deg) scale(1.4);
+  filter: sepia(0);
+}
+.favorited-spell:not(.collapsed) .spell-trigger .spell-name-container {
+  padding-left: 20px;
+}
+
 .vagabond .favorited-spell .spell-trigger .spell-name-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   cursor: pointer;
-  padding-right: 4px;
+  transition: padding-left 0.3s ease;
 }
 .vagabond .favorited-spell .spell-trigger .spell-name-container:hover .spell-name {
   color: var(--vagabond-c-red);
-  text-shadow: 0 0 2px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 1px rgba(212, 175, 55, 0.3);
 }
 .vagabond .favorited-spell .spell-trigger .spell-name-container .spell-name {
   overflow: hidden;
@@ -9968,7 +10029,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Manofa", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-dark);
   font-size: 1em;
   cursor: pointer;
@@ -9980,9 +10041,13 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: rgba(0, 0, 0, 0.3);
 }
 .vagabond .favorited-spell .spell-trigger .spell-mana-total {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
   font-family: "Manofa", serif;
-  color: var(--vagabond-c-red);
+  color: var(--vagabond-c-damage-orange);
+  font-size: 0.95em;
+  font-weight: 400;
   cursor: pointer;
 }
 .vagabond .favorited-spell .spell-trigger .spell-mana-total:hover {
@@ -9990,40 +10055,47 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .favorited-spell .spell-accordion-content {
   width: 100%;
-  padding: 4px 0 8px 0;
+  padding: 0 0 2px 5px;
   margin-bottom: 4px;
-  font-size: 1.15em;
-  border-top: 2px solid var(--vagabond-c-chat-yellow);
   animation: fadein 0.2s ease-in-out;
   color: var(--vagabond-c-white);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid {
-  margin-left: 12px;
-  margin-right: 25px;
+  margin-left: 19px;
+  margin-right: 5px;
   display: grid;
   grid-template-columns: 3fr 1fr 1fr 1fr;
   gap: 4px;
-  align-items: center;
+  align-items: baseline;
+  padding: 0 8px 0 4px;
   background-color: var(--vagabond-c-dark-bluey);
+  border-top: 3px solid var(--vagabond-c-chat-yellow);
+  border-bottom-left-radius: 5px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper {
   width: 100%;
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper .spell-delivery-select {
   width: 100%;
-  min-width: 60px;
+  min-width: 80px;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background: transparent;
   font-family: "Germania", serif;
+  font-size: 0.9em;
   text-transform: uppercase;
   padding: 0;
-  height: 1.2em;
-  color: var(--vagabond-c-white);
+  padding-left: 14px;
+  height: 1.1em !important;
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper .spell-delivery-select:focus {
   outline: none;
   border-bottom-color: var(--vagabond-c-red);
+}
+.vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .delivery-select-wrapper .spell-delivery-select option {
+  color: var(--vagabond-c-black);
 }
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-delivery-cost {
   width: 100%;
@@ -10070,22 +10142,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
   padding-right: 2px;
-  /* Webkit scrollbar styling */
-}
-.vagabond .favorited-spells-list::-webkit-scrollbar {
-  width: 4px;
-}
-.vagabond .favorited-spells-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-.vagabond .favorited-spells-list::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-}
-.vagabond .favorited-spells-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
 }
 @keyframes fadein {
   from {

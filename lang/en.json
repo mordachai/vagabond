@@ -777,7 +777,7 @@
     "FavorHinder": {
       "label": "Favor/Hinder",
       "States": {
-        "none": "Fv/Hd",
+        "none": "Fvr/Hdr",
         "favor": "Favor",
         "hinder": "Hinder"
       },

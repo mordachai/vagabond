@@ -131,44 +131,78 @@
   z-index: 20 !important;
         h4 { color: $c-white; }
 
-  // Equipped weapons - follows same pattern as gear and spells
-  .equipped-weapon {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 0;
-    width: 100%;
-    height: 20px;
+  .right-column-scrollable {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
-    // Column 1: Weapon name (flexible, takes remaining space)
-    .weapon-name {
-      flex: 1 1 auto;
-      min-width: 60px;
-      text-align: left;
+  // Equipped item - 2-row grid layout for all equipped items
+  .equipped-item {
+    display: grid;
+    grid-template-columns: 20px 3fr 1fr 18px 1fr 24px;
+    grid-template-rows: 1.2em auto;
+    align-items: baseline;
+    width: 100%;
+    padding: 0px 5px;
+    line-height: 1.1;
+    margin:3px 0;
+
+
+    // Row 1 elements (font-size: 1.1em)
+    .eq-icon-frame {
+      grid-column: 1;
+      grid-row: 1;
+      width: 20px;
+      height: 20px;
+      border: 2px solid $c-dark-bluey;
+      align-self: center;
+      overflow: hidden;
+      transform: translateY(30%) rotate(45deg);
+
+      .eq-icon {
+        width: 100%;
+        height: 100%;
+        border: none;
+        object-fit: cover;
+        transform: rotate(-45deg) scale(1.45);
+      }
+    }
+
+    .eq-name {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: 1.1em;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
       font-family: $font-title;
       color: $c-dark;
+      padding-left: 4px;
 
       &:hover {
         text-decoration: none;
       }
+
+      &.eq-name-wide {
+        grid-column: 2 / 6;
+      }
     }
 
-    // Column 2: Damage amount (fixed width)
-    .weapon-damage {
-      flex: 0 0 30px;
+    .eq-qty {
+      grid-column: 3;
+      grid-row: 1;
+      font-size: 1.1em;
       text-align: right;
       font-family: $font-secondary;
-      font-weight: normal;
       color: $c-dark;
     }
 
-    // Column 3: Damage type icon (fixed width, centered)
-    .weapon-damage-icon {
-      flex: 0 0 15px;
+    .eq-dmgtype {
+      grid-column: 4;
+      grid-row: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -179,28 +213,31 @@
       }
     }
 
-    // Column 4: Range abbreviation (fixed width, centered)
-    .weapon-range {
-      flex: 0 0 11px;
-      text-align: center;
-      font-family: $font-secondary;
-      font-weight: normal;
+    .eq-damage {
+      grid-column: 5;
+      grid-row: 1;
+      font-size: 1.1em;
+      text-align: right;
+      font-family: $font-title;
       color: $c-dark;
     }
 
-    // Column 5: Grip icon (fixed width, centered)
-    .weapon-grip-icon {
-      flex: 0 0 14px;
+    .eq-grip {
+      grid-column: 6;
+      grid-row: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1em;
+      color: $c-dark-bluey;
 
       i {
-        font-size: 13px;
-        color: $c-dark;
+        font-size: 1em;
+        color: $c-dark-bluey;
 
         &.clickable {
           cursor: pointer;
+          color: $c-damage;
 
           &:hover {
             color: $c-tan;
@@ -208,105 +245,80 @@
         }
       }
     }
-  }
 
-  // Equipped gear - follows same pattern as weapons and spells
-  .equipped-gear {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 0;
-    width: 100%;
-    height: 20px;
-
-    // Column 1: Item name (flexible, takes remaining space)
-    .item-name {
-      flex: 1 1 auto;
-      min-width: 60px;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      cursor: pointer;
-      font-family: $font-title;
-      color: $c-dark;
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
-
-    // Column 2: Damage amount (fixed width)
-    .item-damage {
-      flex: 0 0 32px;
-      text-align: right;
-      font-family: $font-secondary;
-      font-weight: normal;
-      color: $c-dark;
-    }
-
-    // Column 3: Damage type icon (fixed width, centered)
-    .item-damage-icon {
-      flex: 0 0 15px;
+    // Row 2 - single bar: / properties // range /
+    .eq-row2 {
+      grid-column: 1 / -1;
+      grid-row: 2;
       display: flex;
       align-items: center;
-      justify-content: center;
+      font-size: 0.9em;
+      font-family: $font-primary;
+      background-color: $c-dark-bluey;
+      color: $c-white;
+      font-style: italic;
+      margin-left: 10px;
+      padding: 0 12px;
+      clip-path: polygon(15px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
 
-      i {
-        font-size: 13px;
-        color: $c-dark;
+      .eq-explode {
+        flex-shrink: 0;
+        font-style: normal;
+        &:first-child {
+          margin-left: auto;
+        }
       }
-    }
 
-    // Column 4: Quantity (fixed width)
-    .item-quantity {
-      flex: 0 0 14px;
-      text-align: center;
-      font-family: $font-secondary;
-      font-weight: normal;
-      color: $c-dark;
-      padding-right: 4px;
-    }
-  }
-
-  // Equipped armor - different layout, simpler
-  .equipped-armor {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 0;
-    width: 100%;
-    height: 20px;
-
-    .resource-label {
-      flex: 1 1 auto;
-      min-width: 60px;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      cursor: pointer;
-      font-family: $font-title;
-      color: $c-dark;
-      width: 100%;
-
-      &:hover {
-        text-decoration: none;
+      .eq-properties {
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right;
+        padding-right: 2px;
+        &:first-child {
+          margin-left: auto;
+        }
       }
-    }
-  }
 
-  .weapon-info,
-  .item-info,
-  .spell-info {
-    font-size: 13px;
-    white-space: nowrap;
-    flex: 0 0 auto; // Don't grow or shrink, stay at content size
-    text-align: right;
-    margin-left: 8px;
+      .eq-separator {
+        margin: 0 4px;
+        font-style: normal;
+      }
 
-    i {
-      margin-right: 2px;
+      .eq-range {
+        flex-shrink: 0;
+        &::after, &::before {content: ' - ';}
+      }
+
+      .eq-bound {
+        flex-shrink: 0;
+        font-style: normal;
+        &:first-child {
+          margin-left: auto;
+        }
+      }
+
+      .eq-lore {
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        &:first-child {
+          margin-left: auto;
+        }
+      }
+
+      .eq-alch-type {
+        flex-shrink: 0;
+        font-style: normal;
+        text-transform: capitalize;
+        &:first-child {
+          margin-left: auto;
+        }
+      }
     }
   }
 }
@@ -337,30 +349,41 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: nowrap;
+    position: relative;
     background-image: url('../assets/images/sheets/titleBG.webp');
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 100% 100%;
-    padding: 8px 8px 3px 8px;
+    margin-bottom: 8px;
+    padding: 2px 0;
     color: $c-white;
+    text-shadow:
+    2px 2px 0 $c-black,
+    -2px 2px 0 $c-black,
+    -2px -2px 0 $c-black,
+    2px -2px 0 $c-black;
+
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
 
     h4 {
       color: $c-white;
       mix-blend-mode: normal;
       opacity: 1;
+      align-self: center;
+      justify-self: center;
+      text-align: center;
     }
   }
 
-
-
   .title-right-group{
+    position: absolute;
+    right: 4px;
     display: flex;
     flex-direction: row;
+    align-items: baseline;
     flex-wrap: nowrap;
-    margin-left: 8px;
     gap: 2px;
     font-size: 16px;
     font-family: $font-secondary;

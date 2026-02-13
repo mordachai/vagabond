@@ -51,14 +51,13 @@
   // Trigger Row (Grid)
   .spell-trigger {
     display: grid;
-    grid-template-columns: 20px 3fr 1fr 25px;
+    grid-template-columns: 20px 3fr 1fr 0.5fr;
     gap: 4px;
     align-items: flex-end;
     width: 100%;
-    padding: 2px 0;
-    border-radius: 3px;
+    padding: 0 2px;
     transition: background-color 0.2s;
-    font-size: 1.2em;
+    font-size: 1.1em;
     position: relative;
     margin: 0 2px;
     
@@ -111,7 +110,7 @@
     @at-root .favorited-spell:not(.collapsed) .spell-trigger {
        .spell-icon-trigger {
          border-color: $c-yellow;
-         transform: translateY(50%) rotate(45deg) scale(1.65);
+         transform: translateY(60%) rotate(45deg) scale(1.65);
          z-index: 10;
           margin-left: 12px;
 
@@ -119,6 +118,10 @@
            transform: rotate(-45deg) scale(1.4);
            filter: sepia(0);
          }
+       }
+
+       .spell-name-container {
+         padding-left: 20px;
        }
     }
 
@@ -133,7 +136,7 @@
       
       &:hover .spell-name {
         color: $c-red;
-        text-shadow: 0 0 2px rgba(212, 175, 55, 0.3);
+        text-shadow: 0 0 1px rgba(212, 175, 55, 0.3);
       }
 
       .spell-name {
@@ -182,9 +185,14 @@
     
     // Col 4: Mana Cost
     .spell-mana-total {
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-content: flex-start;
       font-family: $font-secondary;
-      color: $c-red;
+      color: $c-damage;
+      font-size: 0.95em;
+      font-weight: 400;
+
       cursor: pointer;
       
       &:hover {
@@ -204,18 +212,26 @@
     .accordion-inner-grid {
       // Offset to match middle columns of trigger (30px + 4px gap)
       margin-left: 19px;
-      margin-right: 25px;
+      margin-right: 5px;
       
       display: grid;
       // 4 columns: 2fr, 1fr, 30px, 1fr
       grid-template-columns: 3fr 1fr 1fr 1fr;
       gap: 4px;
       align-items: baseline;
-      padding: 2px 4px;
+      padding: 0  8px 0 4px;
 
       background-color: $c-dark-bluey;
-      border-top: 2px solid $c-yellow;
+      border-top: 3px solid $c-yellow;
 
+      border-bottom-left-radius: 5px;
+      //border-top-right-radius: 7px;
+      clip-path: polygon(
+              0 0,                      /* Top Left */
+              100% 0,                   /* Top Right (Full Width) */
+              calc(100% - 10px) 100%,   /* Bottom Right (Indented to create /) */
+              0 100%                    /* Bottom Left */
+          );
       
       // Col 1: Delivery Select
       .delivery-select-wrapper {
@@ -223,7 +239,7 @@
          
          .spell-delivery-select {
              width: 100%;
-             min-width: 75px;
+             min-width: 80px;
              border: none;
              border-bottom: 1px solid rgba(0,0,0,0.1);
              background: transparent;
@@ -231,11 +247,13 @@
              font-size: 0.9em;
              text-transform: uppercase;
              padding: 0;
-             padding-left: 12px;
+             padding-left: 14px;
              height: 1.1em !important;
-             color: $c-white;
+             color: $c-yellow;
           
              &:focus { outline: none; border-bottom-color: $c-red; }
+
+             option { color: $c-black; }
          }
       }
       
@@ -286,26 +304,7 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
   padding-right: 2px;
-  
-  /* Webkit scrollbar styling */
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
 }
 
 @keyframes fadein {

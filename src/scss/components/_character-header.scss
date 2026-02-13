@@ -1055,8 +1055,8 @@
   height: 100%;
   background: none;
   background-image: $bg-paper;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
   filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
   display: flex;
   flex-direction: row;

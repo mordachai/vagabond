@@ -60,6 +60,12 @@
  * }
  */
 
+/* Global scrollbar styling for vagabond sheets and chat */
+.vagabond *,
+#chat-log {
+  @include vagabond-scrollbar;
+}
+
 /* Styles limited to vagabond sheets */
 .vagabond {
   // Apply Eskapade Bold to all titles

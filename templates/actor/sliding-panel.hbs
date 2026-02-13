@@ -372,6 +372,7 @@
           </div>
         </div>
 
+        <div class='right-column-scrollable'>
         {{! Favorites Section - Equipped Items }}
         <div class='favorites-section flexcol'>
           <h4 class="right-col">{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
@@ -382,12 +383,13 @@
             {{! 1. Equipped Weapons }}
             {{#each weapons as |weapon|}}
               {{#if weapon.system.equipped}}
-                <div class='equipped-weapon' data-weapon-id='{{weapon._id}}'>
-                  <label class='weapon-name rollable' data-action='rollWeapon' data-item-id='{{weapon._id}}' {{#if weapon.system.propertiesDisplay}}data-tooltip='Properties: {{weapon.system.propertiesDisplay}}'{{/if}}>{{weapon.name}}</label>
-                  <div class='weapon-damage'>{{weapon.system.currentDamage}}</div>
-                  <div class='weapon-damage-icon'><i class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'></i></div>
-                  <div class='weapon-range'>{{weapon.system.rangeAbbrev}}</div>
-                  <div class='weapon-grip-icon'>
+                <div class='equipped-item' data-item-id='{{weapon._id}}'>
+                  <div class='eq-icon-frame'><img class='eq-icon' src='{{weapon.img}}' alt='' /></div>
+                  <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{weapon._id}}' title='{{weapon.name}}'>{{weapon.name}}</label>
+                  <div class='eq-qty'></div>
+                  <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'></i></div>
+                  <div class='eq-damage'>{{weapon.system.currentDamage}}</div>
+                  <div class='eq-grip'>
                     {{#if (eq weapon.system.grip '1H')}}<i class='fas fa-hand-fist'></i>
                     {{else if (eq weapon.system.grip '2H')}}<i class='fas fa-hands'></i>
                     {{else if (eq weapon.system.grip 'F')}}<i class='fas fa-hand-fist'></i>
@@ -397,6 +399,17 @@
                       {{/if}}
                     {{/if}}
                   </div>
+                  <div class='eq-row2'>
+                    {{#if weapon.system.canExplode}}
+                      <span class='eq-explode'><i class='fas fa-burst'></i> ({{weapon.system.explodeValues}})</span>
+                      <span class='eq-separator'>//</span>
+                    {{/if}}
+                    {{#unless (eq weapon.system.propertiesDisplay '-')}}
+                      <span class='eq-properties'>{{weapon.system.propertiesDisplay}}</span>
+                      <span class='eq-separator'>//</span>
+                    {{/unless}}
+                    <span class='eq-range'>{{weapon.system.rangeAbbrev}}</span>
+                  </div>
                 </div>
               {{/if}}
             {{/each}}
@@ -404,11 +417,19 @@
             {{! 2. Equipped Relics }}
             {{#each gear as |item|}}
               {{#if (and item.system.equipped (eq item.system.equipmentType 'relic'))}}
-                <div class='equipped-gear' data-item-id='{{item._id}}'>
-                  <label class='item-name rollable' data-action='useItem' data-item-id='{{item._id}}'>{{item.name}}</label>
-                  <div class='item-damage'>—</div>
-                  <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons "-"}}'></i></div>
-                  <div class='item-quantity'>×{{item.system.quantity}}</div>
+                <div class='equipped-item' data-item-id='{{item._id}}'>
+                  <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
+                  <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                  <div class='eq-grip'>×{{item.system.quantity}}</div>
+                  <div class='eq-row2'>
+                    {{#if item.system.requiresBound}}
+                      <span class='eq-bound {{#if item.system.bound}}is-bound{{/if}}'>{{#if item.system.bound}}Bound{{else}}Unbound{{/if}}</span>
+                    {{/if}}
+                    {{#if item.system.lore}}
+                      {{#if item.system.requiresBound}}<span class='eq-separator'>//</span>{{/if}}
+                      <span class='eq-lore'>{{item.system.lore}}</span>
+                    {{/if}}
+                  </div>
                 </div>
               {{/if}}
             {{/each}}
@@ -418,19 +439,34 @@
               {{#if (and item.system.equipped (eq item.system.equipmentType 'alchemical'))}}
                 {{#unless (eq item.system.damageType '-')}}
                   {{! Alchemicals with damage }}
-                  <div class='equipped-gear' data-item-id='{{item._id}}'>
-                    <label class='item-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}'>{{item.name}}</label>
-                    <div class='item-damage'>{{item.system.damageAmount}}</div>
-                    <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
-                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  <div class='equipped-item' data-item-id='{{item._id}}'>
+                    <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
+                    <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                    <div class='eq-qty'></div>
+                    <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
+                    <div class='eq-damage'>{{item.system.damageAmount}}</div>
+                    <div class='eq-grip'>×{{item.system.quantity}}</div>
+                    <div class='eq-row2'>
+                      {{#if item.system.canExplode}}
+                        <span class='eq-explode'><i class='fas fa-burst'></i> ({{item.system.explodeValues}})</span>
+                        <span class='eq-separator'>//</span>
+                      {{/if}}
+                      <span class='eq-alch-type'>{{item.system.alchemicalType}}</span>
+                    </div>
                   </div>
                 {{else}}
                   {{! Alchemicals without damage }}
-                  <div class='equipped-gear' data-item-id='{{item._id}}'>
-                    <label class='item-name rollable' data-action='useItem' data-item-id='{{item._id}}'>{{item.name}}</label>
-                    <div class='item-damage'>—</div>
-                    <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons "-"}}'></i></div>
-                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  <div class='equipped-item' data-item-id='{{item._id}}'>
+                    <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
+                    <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                    <div class='eq-grip'>×{{item.system.quantity}}</div>
+                    <div class='eq-row2'>
+                      {{#if item.system.canExplode}}
+                        <span class='eq-explode'><i class='fas fa-burst'></i> ({{item.system.explodeValues}})</span>
+                        <span class='eq-separator'>//</span>
+                      {{/if}}
+                      <span class='eq-alch-type'>{{item.system.alchemicalType}}</span>
+                    </div>
                   </div>
                 {{/unless}}
               {{/if}}
@@ -440,11 +476,10 @@
             {{#each gear as |item|}}
               {{#if item.system.equipped}}
                 {{#unless (or (eq item.system.equipmentType 'relic') (eq item.system.equipmentType 'alchemical'))}}
-                  <div class='equipped-gear' data-item-id='{{item._id}}'>
-                    <label class='item-name rollable' data-action='useItem' data-item-id='{{item._id}}'>{{item.name}}</label>
-                    <div class='item-damage'>—</div>
-                    <div class='item-damage-icon'><i class='{{lookup @root.config.damageTypeIcons "-"}}'></i></div>
-                    <div class='item-quantity'>×{{item.system.quantity}}</div>
+                  <div class='equipped-item' data-item-id='{{item._id}}'>
+                    <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
+                    <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                    <div class='eq-grip'>×{{item.system.quantity}}</div>
                   </div>
                 {{/unless}}
               {{/if}}
@@ -467,7 +502,7 @@
           {{/if}}
 
           {{! Spells Section }}
-          {{#if system.attributes.isSpellcaster}}
+          {{#if spells.length}}
             <div class='weapon-skills flexcol mt-10'>
               <div class="title-container">
                 <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
@@ -491,7 +526,7 @@
 
                           {{!-- Col 2: Spell Name + Damage Icon (Opens Accordion) --}}
                           <div class="spell-name-container clickable" data-action="toggleSpellAccordion">
-                              <label class='spell-name'>{{spell.name}}</label>
+                              <label class='spell-name' title='{{spell.name}}'>{{spell.name}}</label>
                               <div class='spell-damage-type-icon'>
                                 <i class='{{lookup @root.config.damageTypeIcons spell.system.damageType}}' data-tooltip='{{localize (lookup @root.config.damageTypes spell.system.damageType)}}'></i>
                               </div>
@@ -557,7 +592,8 @@
           {{/if}}
 
         </div>
-        
+        </div>{{! close .right-column-scrollable }}
+
   </div>
 
   {{! Click Zone - visible sliver when closed (on the right) }}

@@ -42,8 +42,8 @@
 .vagabond .window-content {
   background: none;
   background-image: $bg-paper;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
   position: relative;
   color: $c-dark;
   filter: drop-shadow(-2px 2px 2px $c-inset-1);
