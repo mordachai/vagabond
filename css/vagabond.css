@@ -58,6 +58,7 @@
   --vagabond-c-white: #ececec;
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #ffffffc0;
+  --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
@@ -75,6 +76,9 @@
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
   --vagabond-inventory-hover: #ab612071;
+  --vagabond-scrollbar-bg: #0000002e;
+  --vagabond-scrollbar-thumb1:#A4AC55;
+  --vagabond-scrollbar-thumb2:#93CA55;
 }
 
 .theme-dark,
@@ -92,6 +96,7 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
+  --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-red: #b70000;
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
@@ -105,6 +110,9 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff;
   --vagabond-inventory-hover: #ab612071;
+  --vagabond-scrollbar-bg: #000000;
+  --vagabond-scrollbar-thumb1:#A4AC55;
+  --vagabond-scrollbar-thumb2:#93CA55;
 }
 
 .flex-025 {
@@ -4803,21 +4811,21 @@ ol#combat-tracker.directory-list {
 /* Global scrollbar styling for vagabond sheets and chat */
 .vagabond *,
 #chat-log {
-  scrollbar-width: thin;
-  scrollbar-color: var(--vagabond-c-green) var(--vagabond-c-chat-yellow);
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
 }
 .vagabond *::-webkit-scrollbar,
 #chat-log::-webkit-scrollbar {
-  width: 7px;
+  width: 6px;
 }
 .vagabond *::-webkit-scrollbar-track,
 #chat-log::-webkit-scrollbar-track {
-  background: var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-scrollbar-bg);
   border-radius: 4px;
 }
 .vagabond *::-webkit-scrollbar-thumb,
 #chat-log::-webkit-scrollbar-thumb {
-  background: var(--vagabond-c-green);
+  background: linear-gradient(180deg, var(--vagabond-scrollbar-thumb1) 0%, var(--vagabond-scrollbar-thumb2) 100%);
   border-radius: 4px;
   border: 1px solid var(--vagabond-c-black);
 }
@@ -5565,6 +5573,9 @@ ol#combat-tracker.directory-list {
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+}
+.vagabond .right-column .right-column-scrollable.has-scroll {
+  padding-right: 4px;
 }
 .vagabond .right-column .equipped-item {
   display: grid;
@@ -8020,9 +8031,9 @@ ol#combat-tracker.directory-list {
   padding: 0 20px;
 }
 .vagabond .fatigue-row .fatigue-checkboxes {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 4px 6px;
   background-image: url("../assets/images/sheets/fatigueBG-end.webp");
   background-repeat: no-repeat;
   background-size: 100% cover;
@@ -8809,6 +8820,7 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-content textarea,
 .vagabond .npc-content button {
   font-family: "Germania", serif;
+  box-shadow: none;
 }
 .vagabond .npc-sheet textarea,
 .vagabond .npc-header textarea,
@@ -8893,7 +8905,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 2px;
+  z-index: 2;
 }
 .vagabond .npc-image-container {
   position: relative;
@@ -8912,6 +8924,7 @@ ol#combat-tracker.directory-list {
   object-fit: cover;
   object-position: top center;
   cursor: pointer;
+  background-color: black;
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
   opacity: 0.9;
@@ -8982,11 +8995,11 @@ ol#combat-tracker.directory-list {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
   justify-content: flex-start;
   margin-top: 0px;
   min-width: 0;
-  height: 150px;
+  min-height: 150px;
+  overflow: visible;
 }
 .vagabond .npc-stat-row {
   display: flex;
@@ -9057,19 +9070,22 @@ ol#combat-tracker.directory-list {
   align-items: center;
   padding: 0;
   justify-content: space-between;
+  position: relative;
+  z-index: 5;
 }
 .vagabond .npc-speed-group {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  flex: 0 1 70%;
+  flex: 0 1 auto;
+  max-width: 70%;
   min-width: 0;
   background-image: url("../assets/images/sheets/speedNPCBg.webp");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border-radius: 2px;
-  padding: 4px 18px 4px 5px;
+  padding: 4px 45px 4px 3px;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-speed-main {
@@ -9187,7 +9203,8 @@ ol#combat-tracker.directory-list {
   padding: 2px 12px;
 }
 .vagabond .npc-fatigue-checkboxes {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
   gap: 2px;
   background-image: url("../assets/images/sheets/fatigueNPCBG-end.webp");
   background-repeat: no-repeat;
@@ -9236,7 +9253,7 @@ ol#combat-tracker.directory-list {
   text-align: center;
 }
 .vagabond .npc-armor-group {
-  flex: 0 0 30%;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9351,6 +9368,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-type-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
   font-style: italic;
@@ -9365,7 +9383,6 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-description-row {
   margin: 5px 6px;
   padding: 5px 10px;
-  border: 2px solid var(--vagabond-c-black);
   border-radius: 10px;
   corner-shape: scoop;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
@@ -9396,7 +9413,9 @@ ol#combat-tracker.directory-list {
   opacity: 1;
   margin-top: 4px;
   padding: 5px 10px;
-  background-color: var(--vagabond-c-chat-yellow);
+  background-color: var(--vagabond-c-lightgrey);
+  border: 1px solid var(--vagabond-c-black);
+  margin: 10px 0;
 }
 .vagabond .npc-description-row .npc-description-text {
   font-style: italic;
@@ -9411,6 +9430,9 @@ ol#combat-tracker.directory-list {
   gap: 0px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.vagabond .npc-content.has-scroll {
+  padding-right: 8px;
 }
 .vagabond .npc-senses-section {
   background-color: var(--vagabond-c-darkgray);
@@ -9912,6 +9934,8 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-immunity-dropdown {
   min-width: fit-content;
+  position: relative;
+  z-index: 10;
 }
 .vagabond .npc-immunity-dropdown summary {
   list-style: none;
@@ -9947,6 +9971,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   transform: rotate(90deg);
 }
 .vagabond .npc-immunity-checkboxes {
+  position: absolute;
   background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
@@ -9956,6 +9981,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   max-height: 400px;
   overflow-y: auto;
   font-size: 14px;
+  z-index: 20;
 }
 .vagabond .npc-immunity-checkboxes.npc-resistance-panel {
   display: flex;

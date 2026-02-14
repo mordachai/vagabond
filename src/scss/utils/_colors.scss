@@ -8,6 +8,7 @@
   --vagabond-c-white: #ececec;
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #ffffffc0;
+  --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
@@ -25,6 +26,9 @@
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
   --vagabond-inventory-hover: #ab612071;
+  --vagabond-scrollbar-bg: #0000002e;
+  --vagabond-scrollbar-thumb1:#A4AC55;
+  --vagabond-scrollbar-thumb2:#93CA55;
 }
 
 // Target both application and interface themes (Foundry v13)
@@ -43,6 +47,7 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-black: #000000;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
+  --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-red: #b70000;
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
@@ -56,6 +61,9 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
   --vagabond-inventory-hover: #ab612071;
+  --vagabond-scrollbar-bg: #000000;
+  --vagabond-scrollbar-thumb1:#A4AC55;
+  --vagabond-scrollbar-thumb2:#93CA55;
 }
 
 $c-white: var(--vagabond-c-white);
@@ -69,6 +77,7 @@ $c-tan: var(--vagabond-c-tan);
 $c-tan-lite: var(--vagabond-c-tan-lite);
 $c-muted: var(--vagabond-c-muted);
 $c-darkgray: var(--vagabond-c-darkgray);
+$c-lightgrey: var(--vagabond-c-lightgrey);
 $c-transparent: var(--vagabond-c-transparent);
 
 $c-inset-1: var(--vagabond-c-inset-1);
@@ -86,6 +95,9 @@ $c-dark-yellow: var(--vagabond-dark-yellow);
 $c-damage: var(--vagabond-c-damage-orange);
 $c-bg-lite: var(--vagabond-c-bg-lite);
 $c-inventory-hover: var(--vagabond-inventory-hover);
+$c-scrollbar-bg: var(--vagabond-scrollbar-bg); 
+$c-scrollbar-thumb1: var(--vagabond-scrollbar-thumb1);
+$c-scrollbar-thumb2: var(--vagabond-scrollbar-thumb2);
 
 // Use Foundry's border-highlight for the tracker if not overridden by vagabond variable
 $c-tracker-col1: var(--vagabond-tracker-col1, var(--color-border-highlight));

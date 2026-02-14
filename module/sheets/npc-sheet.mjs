@@ -114,6 +114,16 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       this.actionHandler.setupListeners();
     }
 
+    // Toggle padding on npc-content when it has scrollable overflow
+    const npcContent = this.element.querySelector('.npc-content');
+    if (npcContent) {
+      const updateScrollClass = () => npcContent.classList.toggle('has-scroll', npcContent.scrollHeight > npcContent.clientHeight);
+      requestAnimationFrame(updateScrollClass);
+      this._scrollObserver?.disconnect();
+      this._scrollObserver = new ResizeObserver(updateScrollClass);
+      this._scrollObserver.observe(npcContent);
+    }
+
     // Setup debounced input listeners for action/ability editing
     this._setupDebouncedInputListeners();
 

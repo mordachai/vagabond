@@ -34,6 +34,7 @@
   // Force form elements to inherit (they use browser defaults otherwise)
   input, select, textarea, button {
     font-family: $font-title;
+    box-shadow: none;
   }
 
   textarea {
@@ -119,7 +120,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 2px;
+  z-index: 2;
 }
 
 .npc-image-container {
@@ -139,6 +140,7 @@
     object-fit: cover;
     object-position: top center;
     cursor: pointer;
+    background-color: black;
     
     &:hover {
       opacity: 0.9;
@@ -224,11 +226,11 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
   justify-content: flex-start;
   margin-top: 0px;
   min-width: 0;
-  height: 150px;
+  min-height: 150px;
+  overflow: visible;
 }
 
 .npc-stat-row {
@@ -311,6 +313,8 @@
   align-items: center;
   padding: 0;
   justify-content: space-between;
+  position: relative;
+  z-index: 5;
 }
 
 /* Speed group (left side of row 2) — max 70% */
@@ -319,13 +323,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  flex: 0 1 70%;
+  flex: 0 1 auto;
+  max-width: 70%;
   min-width: 0;
   background-image: url('../assets/images/sheets/speedNPCBg.webp');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border-radius: 2px;
-  padding: 4px 18px 4px 5px;
+  padding: 4px 45px 4px 3px;
   filter:drop-shadow(1px 1px 2px $c-bluey);
 
 }
@@ -473,7 +478,8 @@
 }
 
 .npc-fatigue-checkboxes {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
   gap: 2px;
 
   background-image: url('../assets/images/sheets/fatigueNPCBG-end.webp');
@@ -535,7 +541,7 @@
 
 /* Armor group (right side of row 2) — 30% centered */
 .npc-armor-group {
-  flex: 0 0 30%;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -680,6 +686,7 @@
 
 .npc-type-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
   font-style: italic;
@@ -695,7 +702,6 @@
 .npc-description-row {
   margin: 5px 6px;
   padding: 5px 10px;
-  border: 2px solid $c-black;
   border-radius: 10px;
   corner-shape: scoop;
   filter:drop-shadow(1px 1px 2px $c-bluey);
@@ -728,7 +734,9 @@
       opacity: 1;
       margin-top: 4px;
       padding: 5px 10px;
-      background-color: $c-yellow;
+      background-color: $c-lightgrey;
+      border: 1px solid $c-black;
+      margin: 10px 0;
     }
   }
 
@@ -751,6 +759,10 @@
   gap: 0px;
   overflow-x: hidden;
   overflow-y: auto;
+
+  &.has-scroll {
+    padding-right: 8px;
+  }
 }
 
 /* Senses section */
@@ -1339,6 +1351,8 @@
 
 .npc-immunity-dropdown {
   min-width: fit-content;
+  position: relative;
+  z-index: 10;
 
   summary {
     list-style: none;
@@ -1382,6 +1396,7 @@
 }
 
 .npc-immunity-checkboxes {
+  position: absolute;
   background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
@@ -1391,6 +1406,7 @@
   max-height: 400px;
   overflow-y: auto;
   font-size: 14px;
+  z-index: 20;
 
   &.npc-resistance-panel {
     display: flex;

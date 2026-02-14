@@ -1,19 +1,23 @@
 // Global scrollbar styling — thin bar with system colors
 @mixin vagabond-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: $c-green $c-yellow;
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
 
   &::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
   }
 
   &::-webkit-scrollbar-track {
-    background: $c-yellow;
+    background: $c-scrollbar-bg;
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: $c-green;
+    background: linear-gradient(
+      180deg,
+      $c-scrollbar-thumb1 0%,
+      $c-scrollbar-thumb2 100%
+    );
     border-radius: 4px;
     border: 1px solid $c-black;
   }

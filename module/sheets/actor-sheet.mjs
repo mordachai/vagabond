@@ -634,11 +634,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       this._setupFeatureContextMenuListeners();
     }
 
+    // Setup panel favorites context menu listeners
+    this._setupPanelContextMenuListeners();
+
     // Setup status icon listeners
     this._setupStatusIconListeners();
 
     // Show sliding panel tooltip (first time only)
     this._showSlidingPanelTooltip();
+
+    // Toggle margin on right-column-scrollable when content overflows
+    const scrollable = this.element.querySelector('.right-column-scrollable');
+    if (scrollable) {
+      const updateScrollClass = () => scrollable.classList.toggle('has-scroll', scrollable.scrollHeight > scrollable.clientHeight);
+      requestAnimationFrame(updateScrollClass);
+      this._scrollObserver?.disconnect();
+      this._scrollObserver = new ResizeObserver(updateScrollClass);
+      this._scrollObserver.observe(scrollable);
+    }
 
     // Fix inline roll dice icons to match actual die type
     EnrichmentHelper.fixInlineRollIcons(this.element);
@@ -1786,6 +1799,155 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         if (!itemId) return;
 
         await this.inventoryHandler.showFeatureContextMenu(event, itemId, 'perk');
+      });
+    });
+  }
+
+  /**
+   * Setup context menu listeners for equipped items and favorited spells in the sliding panel.
+   * Options: Send to Chat, Use (if applicable), Unequip, Unbind (relics only).
+   * @private
+   */
+  _setupPanelContextMenuListeners() {
+    // Equipped items (weapons, relics, alchemicals, gear)
+    const equippedItems = this.element.querySelectorAll('.equipped-item .eq-name');
+    equippedItems.forEach(label => {
+      label.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const itemId = label.closest('[data-item-id]')?.dataset.itemId;
+        if (!itemId) return;
+
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        const isWeapon = EquipmentHelper.isWeapon(item);
+        const isAlchemical = EquipmentHelper.isAlchemical(item);
+        const hasAlchemicalDamage = isAlchemical && item.system.damageType && item.system.damageType !== '-';
+        const isArmor = EquipmentHelper.isArmor(item);
+        const isGear = EquipmentHelper.isGear(item);
+
+        // Determine if "Use" option should be shown
+        let showUseOption = false;
+        if (isWeapon || hasAlchemicalDamage) {
+          showUseOption = true;
+        } else if (isArmor) {
+          showUseOption = false;
+        } else if (isGear) {
+          showUseOption = item.system.isConsumable === true;
+        } else {
+          showUseOption = true;
+        }
+
+        const menuItems = [];
+
+        // Use
+        if (showUseOption) {
+          menuItems.push({
+            label: 'Use',
+            icon: 'fas fa-hand-sparkles',
+            enabled: true,
+            action: async () => {
+              if (isWeapon || hasAlchemicalDamage) {
+                await VagabondActorSheet._onRollWeapon.call(this, event, {
+                  dataset: { itemId },
+                });
+              } else {
+                await VagabondActorSheet._onUseItem.call(this, event, {
+                  dataset: { itemId },
+                });
+              }
+            },
+          });
+        }
+
+        // Send to Chat
+        menuItems.push({
+          label: 'Send to Chat',
+          icon: 'fas fa-comment',
+          enabled: true,
+          action: async () => {
+            await VagabondChatCard.gearUse(this.actor, item);
+          },
+        });
+
+        // Unequip
+        menuItems.push({
+          label: 'Unequip',
+          icon: 'fas fa-times',
+          enabled: true,
+          action: async () => {
+            if (isWeapon && item.system.equipmentState !== undefined) {
+              await item.update({ 'system.equipmentState': 'unequipped' });
+            } else if (isArmor) {
+              await item.update({ 'system.worn': false });
+            } else if (item.system.equipped !== undefined) {
+              await item.update({ 'system.equipped': false });
+            }
+          },
+        });
+
+        // Unbind (relics only)
+        if (item.system.requiresBound) {
+          const isBound = item.system.bound === true;
+          if (isBound) {
+            menuItems.push({
+              label: 'Unbind',
+              icon: 'fa-solid fa-diamond',
+              enabled: true,
+              action: async () => {
+                await item.update({ 'system.bound': false });
+              },
+            });
+          }
+        }
+
+        ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: menuItems,
+          className: 'inventory-context-menu',
+        });
+      });
+    });
+
+    // Favorited spells
+    const spellNames = this.element.querySelectorAll('.favorited-spell .spell-name-container');
+    spellNames.forEach(container => {
+      container.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const spellId = container.closest('[data-spell-id]')?.dataset.spellId;
+        if (!spellId) return;
+
+        const spell = this.actor.items.get(spellId);
+        if (!spell) return;
+
+        const menuItems = [
+          {
+            label: 'Send to Chat',
+            icon: 'fas fa-comment',
+            enabled: true,
+            action: async () => {
+              await VagabondChatCard.itemUse(this.actor, spell);
+            },
+          },
+          {
+            label: 'Unfavorite',
+            icon: 'fas fa-star',
+            enabled: true,
+            action: async () => {
+              await spell.update({ 'system.favorite': false });
+            },
+          },
+        ];
+
+        ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: menuItems,
+          className: 'inventory-context-menu',
+        });
       });
     });
   }

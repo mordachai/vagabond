@@ -396,9 +396,9 @@
   }
 
   .fatigue-checkboxes {
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: 4px 6px;
     background-image: url('../assets/images/sheets/fatigueBG-end.webp');
     background-repeat: no-repeat;
     background-size: 100% cover;

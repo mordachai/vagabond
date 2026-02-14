@@ -136,6 +136,10 @@
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
+
+    &.has-scroll {
+      padding-right: 4px;
+    }
   }
 
   // Equipped item - 2-row grid layout for all equipped items
