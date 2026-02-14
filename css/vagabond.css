@@ -8539,7 +8539,7 @@ ol#combat-tracker.directory-list {
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
-  left: 430px; /* Base position next to main sheet when open */
+  left: 410px; /* Base position next to main sheet when open */
   width: 430px;
   height: 100%;
   background: none;
