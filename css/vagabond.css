@@ -7983,15 +7983,10 @@ ol#combat-tracker.directory-list {
 .vagabond .fatigue-row {
   position: relative;
   top: -5px;
-  display: grid;
-  grid-template-columns: 65px 80px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("../assets/images/sheets/fatigueBG.webp");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
   width: 100%;
-  gap: 15px;
 }
 .vagabond .fatigue-row .fatigue-skull {
   cursor: pointer;
@@ -8018,15 +8013,22 @@ ol#combat-tracker.directory-list {
   font-family: "Germania", serif;
   font-size: 14px;
   font-weight: 600;
-  margin-right: 4px;
   text-transform: uppercase;
+  background-image: url("../assets/images/sheets/fatigueBG-label.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 0 20px;
 }
 .vagabond .fatigue-row .fatigue-checkboxes {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  margin-left: 1px;
-  gap: 5px;
+  gap: 6px;
+  background-image: url("../assets/images/sheets/fatigueBG-end.webp");
+  background-repeat: no-repeat;
+  background-size: 100% cover;
+  background-position: center right;
+  padding-right: 20px;
+  width: fit-content;
 }
 .vagabond .character-info-row {
   text-align: left;
@@ -8975,7 +8977,6 @@ ol#combat-tracker.directory-list {
   text-align: center;
   font-size: 1em;
   color: var(--vagabond-c-white);
-  transform: rotate(-45deg);
 }
 .vagabond .npc-stats-column {
   flex: 1;
@@ -9172,23 +9173,26 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
 }
 .vagabond .npc-row-fatigue {
-  background-image: url("../assets/images/sheets/fatigueNPCBG.webp");
-  background-repeat: no-repeat;
-  background-size: 100% 60%;
-  background-position: center center;
   gap: 1px;
   width: 80%;
-  height: 15px;
-  margin: auto;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-row-fatigue .npc-field-label {
-  min-width: 50px;
+  background-image: url("../assets/images/sheets/fatigueNPCBG-label.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center left;
+  width: fit-content;
   color: var(--vagabond-c-white);
+  padding: 2px 12px;
 }
 .vagabond .npc-fatigue-checkboxes {
   display: flex;
   gap: 2px;
+  background-image: url("../assets/images/sheets/fatigueNPCBG-end.webp");
+  background-repeat: no-repeat;
+  background-position: center right;
+  padding: 2px 20px 2px 0px;
 }
 .vagabond .npc-fatigue-checkboxes .fatigue-skull {
   font-size: 0.95em;
@@ -9201,9 +9205,9 @@ ol#combat-tracker.directory-list {
   color: rgba(0, 0, 0, 0.2);
 }
 .vagabond .npc-row-morale-app {
-  gap: 8px;
-  padding: 4px;
-  margin: 0 5px;
+  gap: 10px;
+  padding: 0;
+  margin: auto;
 }
 .vagabond .npc-morale-field {
   display: flex;
@@ -9212,13 +9216,13 @@ ol#combat-tracker.directory-list {
   padding: 4px 8px;
   background-image: url("../assets/images/sheets/moraleBG.webp");
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: 90% 100%;
   border-radius: 2px;
   white-space: nowrap;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-morale-field input {
-  width: 30px;
+  width: 28px;
   text-align: center;
 }
 .vagabond .npc-app-field {
@@ -9438,23 +9442,16 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
   position: relative;
 }
-.vagabond .npc-resistances-section:has(.npc-immunity-dropdown[open]) {
-  z-index: 30;
-}
 .vagabond .npc-resistances-section .npc-field-label {
-  font-family: "Manofa", serif;
   font-size: 1.2em;
 }
 .vagabond .npc-resistances-section .npc-immunity-text {
-  font-size: 1.1em;
+  font-size: 1em;
 }
 .vagabond .npc-resistances-section > .npc-detail-row {
   width: 100%;
   padding: 4px 0;
   position: relative;
-}
-.vagabond .npc-resistances-section > .npc-detail-row:has(.npc-immunity-dropdown[open]) {
-  z-index: 20;
 }
 .vagabond .npc-resistances-section > .npc-detail-row + .npc-detail-row {
   padding-top: 8px;
@@ -9924,10 +9921,6 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-immunity-dropdown summary::-webkit-details-marker {
   display: none;
 }
-.vagabond .npc-immunity-dropdown[open] {
-  position: relative;
-  z-index: 20;
-}
 .vagabond .npc-immunity-toggle {
   display: flex;
   align-items: center;
@@ -9954,21 +9947,63 @@ details[open] .vagabond .npc-immunity-toggle i {
   transform: rotate(90deg);
 }
 .vagabond .npc-immunity-checkboxes {
-  position: absolute;
-  z-index: 10;
   background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
   margin-top: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4px;
-  min-width: 200px;
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   font-size: 14px;
+}
+.vagabond .npc-immunity-checkboxes.npc-resistance-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .npc-resistance-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+}
+.vagabond .npc-resistance-group-header {
+  grid-column: 1/-1;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 0 2px;
+  margin: 0;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-status-inline {
+  white-space: nowrap;
+}
+.vagabond .npc-tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+.vagabond .npc-tag-group-label {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-right: 2px;
+}
+.vagabond .status-condition-icon {
+  display: inline;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 2px;
+  background-color: black;
+  border: 2px solid black;
+  border-radius: 2px;
 }
 .vagabond .npc-immunity-checkbox-item {
   display: flex;
@@ -10447,7 +10482,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .vagabond-spell-cast strong {
   color: var(--vagabond-c-tan, #d4af37);
 }
-.vagabond .content-link, .vagabond .inline-roll {
+.vagabond .content-link {
   background: var(--vagabond-c-faint);
   border: 2px solid var(--vagabond-c-dark);
   border-radius: 4px;
@@ -10456,6 +10491,32 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding: 1px 4px 0;
   white-space: nowrap;
   word-break: break-all;
+}
+.vagabond .inline-roll {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  color: var(--vagabond-c-dark);
+  margin: 0 1px;
+  padding: 1px 6px 1px 4px;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+}
+.vagabond .inline-roll:hover {
+  background: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+.vagabond .inline-roll i {
+  font-size: 0.9em;
+  opacity: 0.7;
 }
 
 /*# sourceMappingURL=vagabond.css.map */

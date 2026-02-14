@@ -297,9 +297,14 @@ export class EnrichmentHelper {
       const iconClass = iconMap[size];
       if (!iconClass) continue;
 
-      const icon = roll.querySelector('i.fa-dice-d20');
+      // Find any <i> with a fa-dice- class to replace
+      const icon = roll.querySelector('i[class*="fa-dice-"]');
       if (icon) {
-        icon.classList.replace('fa-dice-d20', iconClass);
+        // Remove any existing fa-dice-* class and add the correct one
+        for (const cls of [...icon.classList]) {
+          if (cls.startsWith('fa-dice-')) icon.classList.remove(cls);
+        }
+        icon.classList.add(iconClass);
       }
     }
   }

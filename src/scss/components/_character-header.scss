@@ -352,15 +352,10 @@
 .fatigue-row {
   position: relative;
   top: -5px;
-  display: grid;
-  grid-template-columns: 65px 80px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('../assets/images/sheets/fatigueBG.webp');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
   width: 100%;
-  gap: 15px;
 
   // Fatigue Skull Icons (standalone, not nested in overlay)
   .fatigue-skull {
@@ -393,16 +388,23 @@
     font-family: $font-title;
     font-size: 14px;
     font-weight: 600;
-    margin-right: 4px;
     text-transform: uppercase;
+    background-image: url('../assets/images/sheets/fatigueBG-label.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0 20px;
   }
 
   .fatigue-checkboxes {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    margin-left: 1px;
-    gap: 5px;
+    gap: 6px;
+    background-image: url('../assets/images/sheets/fatigueBG-end.webp');
+    background-repeat: no-repeat;
+    background-size: 100% cover;
+    background-position: center right;
+    padding-right: 20px;
+    width: fit-content;
   }
 }
 
