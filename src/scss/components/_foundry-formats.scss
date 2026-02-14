@@ -1,4 +1,4 @@
-.content-link, .inline-roll {
+.content-link {
     background: $c-faint;
     border: 2px solid $c-dark;
     border-radius: 4px;
@@ -9,4 +9,31 @@
     word-break: break-all;
 }
 
+.inline-roll {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    color: $c-dark;
+    margin: 0 1px;
+    padding: 1px 6px 1px 4px;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    text-decoration: none;
 
+    &:hover {
+        background: rgba(0, 0, 0, 0.12);
+        border-color: rgba(0, 0, 0, 0.3);
+        text-decoration: none;
+    }
+
+    i {
+        font-size: 0.9em;
+        opacity: 0.7;
+    }
+}
