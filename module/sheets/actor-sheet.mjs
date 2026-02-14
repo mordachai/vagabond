@@ -143,6 +143,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /** @override */
   async render(options = {}, _options = {}) {
+    // Skip render when suppressed (e.g. during panel toggle flag save)
+    if (this._suppressRender) return;
+
     // Wait for templates to be ready before rendering
     if (typeof globalThis.vagabond?.templatesReady !== 'undefined' && !globalThis.vagabond.templatesReady) {
       console.log("Vagabond | Waiting for templates to load before rendering sheet...");
@@ -1167,8 +1170,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     });
 
-    // Save state to flag (without re-rendering)
+    // Save state to flag — suppress re-render so the CSS transition plays out
+    this._suppressRender = true;
     await this.actor.setFlag('vagabond', 'isPanelOpen', !isOpen);
+    this._suppressRender = false;
 
     // Hide the tooltip after first use
     this._hideSlidingPanelTooltip();

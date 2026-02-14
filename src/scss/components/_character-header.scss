@@ -1067,10 +1067,10 @@
   z-index: 100 !important;  /* Always on top of main sheet */
 
   /* Smooth transition */
-  transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
 
   /* Anti-aliasing for smooth rotation */
-  -webkit-font-smoothing: antialiased;
+  //-webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
