@@ -291,9 +291,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
       context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
 
-      // Prepare fatigue boxes (5 skulls)
+      // Prepare fatigue boxes (dynamic max from setting + bonus)
       const fatigue = this.actor.system.fatigue || 0;
-      context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+      const fatigueMax = this.actor.system.fatigueMax || 5;
+      context.fatigueBoxes = Array.from({ length: fatigueMax }, (_, i) => ({
         checked: i < fatigue,
         level: i + 1
       }));
@@ -352,9 +353,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         break;
 
       case 'npcHeader':
-        // Prepare fatigue boxes for NPC (5 skulls, same as character)
+        // Prepare fatigue boxes for NPC (dynamic max from setting + bonus)
         const fatigue = this.actor.system.fatigue || 0;
-        partContext.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+        const fatigueMax = this.actor.system.fatigueMax || 5;
+        partContext.fatigueBoxes = Array.from({ length: fatigueMax }, (_, i) => ({
           checked: i < fatigue,
           level: i + 1
         }));
@@ -1595,10 +1597,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.stopPropagation();
 
         const currentFatigue = this.actor.system.fatigue || 0;
+        const fatigueMax = this.actor.system.fatigueMax || 5;
 
         // If clicking on an active skull, reduce fatigue to that index
         // If clicking on an inactive skull, increase fatigue to index + 1
-        const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
+        const newFatigue = Math.min((index + 1 === currentFatigue) ? index : index + 1, fatigueMax);
 
         await this.actor.update({ 'system.fatigue': newFatigue });
 

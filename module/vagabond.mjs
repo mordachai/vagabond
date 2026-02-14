@@ -311,6 +311,54 @@ function registerGameSettings() {
     type: CompendiumSettings,
     restricted: true
   });
+
+  // Setting 16: PC Fatigue Max
+  game.settings.register('vagabond', 'pcFatigueMax', {
+    name: 'VAGABOND.Settings.pcFatigueMax.name',
+    hint: 'VAGABOND.Settings.pcFatigueMax.hint',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 5,
+    range: {
+      min: 1,
+      max: 20,
+      step: 1
+    },
+    requiresReload: false,
+    onChange: () => {
+      for (let actor of game.actors) {
+        if (actor.type === 'character') {
+          actor.prepareData();
+          actor.sheet?.render(false);
+        }
+      }
+    }
+  });
+
+  // Setting 17: NPC Fatigue Max
+  game.settings.register('vagabond', 'npcFatigueMax', {
+    name: 'VAGABOND.Settings.npcFatigueMax.name',
+    hint: 'VAGABOND.Settings.npcFatigueMax.hint',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 5,
+    range: {
+      min: 1,
+      max: 20,
+      step: 1
+    },
+    requiresReload: false,
+    onChange: () => {
+      for (let actor of game.actors) {
+        if (actor.type === 'npc') {
+          actor.prepareData();
+          actor.sheet?.render(false);
+        }
+      }
+    }
+  });
 }
 
 /* -------------------------------------------- */

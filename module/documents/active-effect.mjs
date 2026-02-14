@@ -196,7 +196,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.health.bonus': 'Health: Flat HP Bonus (Applied to Max)',
       'system.power.value': 'Power: Current',
       'system.power.max': 'Power: Max',
-      'system.fatigue': 'Fatigue (0-5)',
+      'system.fatigue': 'Fatigue: Current Value',
+      'system.fatigueBonus': 'Fatigue: Max Bonus',
 
       // ===== CHARACTER ATTRIBUTES =====
       'system.attributes.level.value': 'Level',

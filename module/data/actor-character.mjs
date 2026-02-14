@@ -705,6 +705,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.armorBonus = [];
     this.bonusLuck = [];
     this.health.bonus = [];
+    this.fatigueBonus = [];
     this.bonuses.hpPerLevel = [];
     this.bonuses.spellManaCostReduction = [];
     this.bonuses.deliveryManaCostReduction = [];
@@ -849,6 +850,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Other bonuses
     this.speed.bonus = this._evaluateFormulaField(this.speed.bonus, rollData);
     this.health.bonus = this._evaluateFormulaField(this.health.bonus, rollData);
+    this.fatigueBonus = this._evaluateFormulaField(this.fatigueBonus, rollData);
     this.inventory.bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
     this.inventory.boundsBonus = this._evaluateFormulaField(this.inventory.boundsBonus, rollData);
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
@@ -900,6 +902,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Now evaluate all OTHER bonus fields (non-stat bonuses)
     const rollData = this.getRollData();
     this._evaluateNonStatBonusFields(rollData);
+
+    // Calculate fatigueMax from game setting + bonus
+    this.fatigueMax = (game.settings?.get('vagabond', 'pcFatigueMax') ?? 5) + (this.fatigueBonus || 0);
+    // Clamp current fatigue to fatigueMax
+    if (this.fatigue > this.fatigueMax) this.fatigue = this.fatigueMax;
 
     // CRITICAL FIX: Active Effects pass string values, so we need to convert
     // isSpellcaster to a proper boolean if it's a truthy string like "1"

@@ -352,6 +352,14 @@
       "npcInitiativeFormula": {
         "name": "Initiative Formula (NPCs)",
         "hint": "Custom formula for rolling initiative for NPCs. Only used when initiative rolls are enabled. Use @ to reference actor data (e.g., @speed)."
+      },
+      "pcFatigueMax": {
+        "name": "PC Fatigue Max",
+        "hint": "Maximum fatigue level for player characters. Each fatigue occupies an inventory slot. Default is 5."
+      },
+      "npcFatigueMax": {
+        "name": "NPC Fatigue Max",
+        "hint": "Maximum fatigue level for NPCs. Default is 5."
       }
     },
     "Actor": {
