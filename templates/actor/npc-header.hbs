@@ -23,7 +23,7 @@
     </div>
 
     {{#if system.locked}}
-      <span class='npc-name-display' data-action='toggleDescription'>{{actor.name}}</span>
+      <span class='npc-name-display'>{{actor.name}}</span>
     {{else}}
       <input
         name='name'
@@ -32,6 +32,17 @@
         placeholder='{{localize "VAGABOND.Actor.NPC.FIELDS.name.label"}}'
         class='npc-name-input'
       />
+    {{/if}}
+
+    {{#if (and system.locked system.description)}}
+      <button
+        type='button'
+        data-action='toggleDescription'
+        class='npc-desc-toggle-button'
+        data-tooltip='Description'
+      >
+        <i class='fas fa-book-open'></i>
+      </button>
     {{/if}}
 
     <button
