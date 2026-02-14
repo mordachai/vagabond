@@ -215,7 +215,6 @@
     text-align: center;
     font-size: 1em;
     color: $c-white;
-    transform: rotate(-45deg);
   }
 }
 
@@ -494,9 +493,9 @@
 
 /* Row 4: Morale + Appearance */
 .npc-row-morale-app {
-  gap: 8px;
-  padding: 4px;
-  margin: 0 5px;
+  gap: 10px;
+  padding: 0;
+  margin: auto;
 
 }
 
@@ -507,14 +506,14 @@
   padding: 4px 8px;
   background-image: url('../assets/images/sheets/moraleBG.webp');
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: 90% 100%;
   border-radius: 2px;
   white-space: nowrap;
   filter:drop-shadow(1px 1px 2px $c-bluey);
 
   input {
 
-    width: 30px;
+    width: 28px;
     text-align: center;
   }
 }
@@ -787,27 +786,18 @@
   filter:drop-shadow(1px 1px 2px $c-bluey);
   position: relative;
 
-  &:has(.npc-immunity-dropdown[open]) {
-    z-index: 30;
-  }
-
   .npc-field-label {
-    font-family: $font-secondary;
     font-size: 1.2em;
   }
 
   .npc-immunity-text {
-    font-size: 1.1em;
+    font-size: 1.0em;
   }
 
   > .npc-detail-row {
     width: 100%;
     padding: 4px 0;
     position: relative;
-
-    &:has(.npc-immunity-dropdown[open]) {
-      z-index: 20;
-    }
 
     & + .npc-detail-row {
       padding-top: 8px;
@@ -1356,11 +1346,6 @@
       display: none;
     }
   }
-
-  &[open] {
-    position: relative;
-    z-index: 20;
-  }
 }
 
 .npc-immunity-toggle {
@@ -1394,22 +1379,70 @@
 }
 
 .npc-immunity-checkboxes {
-  position: absolute;
-  z-index: 10;
   background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
   margin-top: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4px;
-  min-width: 200px;
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   font-size: 14px;
 
+  &.npc-resistance-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.npc-resistance-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+}
+
+.npc-resistance-group-header {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 0 2px;
+  margin: 0;
+  border-bottom: 1px solid var(--vagabond-c-tan);
+  color: var(--vagabond-c-dark);
+}
+
+.npc-status-inline {
+  white-space: nowrap;
+}
+
+.npc-tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.npc-tag-group-label {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-right: 2px;
+}
+
+.status-condition-icon {
+  display: inline;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 2px;
+  background-color: black;
+  border: 2px solid black;
+  border-radius: 2px;
 }
 
 .npc-immunity-checkbox-item {

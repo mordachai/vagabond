@@ -1,3 +1,5 @@
+import { VagabondTextParser } from './text-parser.mjs';
+
 /**
  * Helper utilities for enriching HTML content in items.
  * Eliminates 3+ duplicate text enrichment loops across the codebase.
@@ -136,10 +138,10 @@ export class EnrichmentHelper {
       const action = context.actions[i];
       const enrichedAction = { ...action };
 
-      // Enrich description
+      // Enrich description (parse Cd4/dice patterns first)
       if (action.description) {
         enrichedAction.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-          action.description,
+          VagabondTextParser.parseAll(action.description),
           {
             async: true,
             secrets: actor.isOwner,
@@ -148,10 +150,10 @@ export class EnrichmentHelper {
         );
       }
 
-      // Format recharge field for display
+      // Format recharge field for display (parse Cd4/dice patterns first)
       if (action.recharge) {
         enrichedAction.rechargeFormatted = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-          action.recharge,
+          VagabondTextParser.parseAll(action.recharge),
           {
             async: true,
             secrets: actor.isOwner,
@@ -161,10 +163,10 @@ export class EnrichmentHelper {
         );
       }
 
-      // Format extra info field for display
+      // Format extra info field for display (parse Cd4/dice patterns first)
       if (action.extraInfo) {
         enrichedAction.extraInfoFormatted = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-          action.extraInfo,
+          VagabondTextParser.parseAll(action.extraInfo),
           {
             async: true,
             secrets: actor.isOwner,
@@ -190,7 +192,7 @@ export class EnrichmentHelper {
     for (const ability of context.abilities) {
       if (ability.description) {
         ability.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-          ability.description,
+          VagabondTextParser.parseAll(ability.description),
           {
             async: true,
             secrets: actor.isOwner,
@@ -264,5 +266,41 @@ export class EnrichmentHelper {
       secrets: options.secrets || false,
       relativeTo: options.relativeTo || null,
     });
+  }
+
+  /**
+   * Fix inline roll dice icons to match the actual die type in the formula.
+   * Foundry always renders fa-dice-d20; this swaps it to the correct die icon.
+   * Call this on a rendered DOM element after _onRender().
+   * @param {HTMLElement} element - The root element to search within
+   */
+  static fixInlineRollIcons(element) {
+    const iconMap = {
+      4: 'fa-dice-d4',
+      6: 'fa-dice-d6',
+      8: 'fa-dice-d8',
+      10: 'fa-dice-d10',
+      12: 'fa-dice-d12',
+      20: 'fa-dice-d20',
+    };
+
+    const rolls = element.querySelectorAll('.inline-roll[data-formula]');
+    for (const roll of rolls) {
+      const formula = roll.dataset.formula;
+      if (!formula) continue;
+
+      // Extract die size from formula (e.g., "3d6" → 6, "d8+2" → 8)
+      const match = formula.match(/d(\d+)/i);
+      if (!match) continue;
+
+      const size = parseInt(match[1]);
+      const iconClass = iconMap[size];
+      if (!iconClass) continue;
+
+      const icon = roll.querySelector('i.fa-dice-d20');
+      if (icon) {
+        icon.classList.replace('fa-dice-d20', iconClass);
+      }
+    }
   }
 }

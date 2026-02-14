@@ -629,6 +629,15 @@ VAGABOND.statusEffectDefinitions = [
 ];
 
 /**
+ * Status condition icon map (status ID → img path)
+ * Built from statusEffectDefinitions for use in NPC sheets
+ * @type {Object}
+ */
+VAGABOND.statusConditionIcons = Object.fromEntries(
+  VAGABOND.statusEffectDefinitions.map(e => [e.id, e.img])
+);
+
+/**
  * Combat zones for NPCs
  * @type {Object}
  */

@@ -637,6 +637,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Show sliding panel tooltip (first time only)
     this._showSlidingPanelTooltip();
+
+    // Fix inline roll dice icons to match actual die type
+    EnrichmentHelper.fixInlineRollIcons(this.element);
   }
 
   // ===========================

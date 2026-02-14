@@ -1,5 +1,6 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { GrantsHandlers } from './item-sheet-grants.mjs';
+import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -963,6 +964,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type === 'ancestry' || this.item.type === 'class') {
       GrantsHandlers.populateGrantsDropdowns(this);
     }
+
+    // Fix inline roll dice icons to match actual die type
+    EnrichmentHelper.fixInlineRollIcons(this.element);
 
     // Auto-save select, number input, and checkbox changes immediately.
     // With submitOnChange: false, form field changes are only saved on close.

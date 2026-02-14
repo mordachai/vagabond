@@ -413,10 +413,11 @@
           "armor": {"label": "Armor:"},
           "immunities": {"label": "Immune:"},
           "weaknesses": {"label": "Weak:"},
-          "statusImmunities": {"label": "Status:"},
+          "statusImmunities": {"label": "Status Immunities:"},
           "description": {"label": "Description"}
         },
         "Sections": {
+          "Resistances": "Resistances",
           "Actions": "Actions",
           "Abilities": "Abilities",
           "Effects": "Effects"
