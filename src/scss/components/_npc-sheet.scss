@@ -626,7 +626,7 @@
   margin-top: 4px;
   padding: 3px 5px;
   border-radius: 2px;
-  color: $c-title-1;
+  color: $c-white;
   background-image: url('../assets/images/sheets/titleBG.webp');
   background-position: center center;
   background-repeat: repeat-x;
@@ -658,15 +658,11 @@
     font-weight: bold;
     cursor: pointer;
     user-select: none;
-        text-shadow:
-    2px 2px 0 $c-black,
-    -2px 2px 0 $c-black,
-    -2px -2px 0 $c-black,
-    2px -2px 0 $c-black;
-
-    &:hover {
-      color: $c-tan;
-    }
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
   }
 }
 

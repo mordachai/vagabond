@@ -9331,7 +9331,7 @@ ol#combat-tracker.directory-list {
   margin-top: 4px;
   padding: 3px 5px;
   border-radius: 2px;
-  color: var(--vagabond-c-title1);
+  color: var(--vagabond-c-white);
   background-image: url("../assets/images/sheets/titleBG.webp");
   background-position: center center;
   background-repeat: repeat-x;
@@ -9359,9 +9359,6 @@ ol#combat-tracker.directory-list {
   cursor: pointer;
   user-select: none;
   text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
-}
-.vagabond .npc-lock-name-row .npc-name-display:hover {
-  color: var(--vagabond-c-tan);
 }
 .vagabond .npc-desc-toggle-button {
   background: transparent;
