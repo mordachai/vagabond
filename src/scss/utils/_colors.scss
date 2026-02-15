@@ -5,14 +5,6 @@
   --vagabond-c-tan: #a2a2a2;
   --vagabond-c-tan-lite: #acacac6c;
   --vagabond-c-muted: #666666;
-  --vagabond-c-white: #ececec;
-  --vagabond-c-black: #000000;
-  --vagabond-c-transparent: #ffffffc0;
-  --vagabond-c-lightgrey: #d0d0d0;
-  --vagabond-c-darkgray: #666666;
-  --vagabond-c-red: #9d0000;
-  --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
-  --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
   --vagabond-bg-paper: url('../assets/images/sheets/card-bg.webp');
   --vagabond-bg-repeat: repeat;
   --vagabond-bg-size: 200px 200px;
@@ -20,16 +12,44 @@
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-c-green: #4ed639f2;
   --vagabond-c-bluey: #62686a;
-  --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-dark-yellow: #94913c;
-  --vagabond-c-damage-orange: #e7570a;
+  --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
+  --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
   --vagabond-inventory-hover: #ab612071;
   --vagabond-scrollbar-bg: #0000002e;
   --vagabond-scrollbar-thumb1:#A4AC55;
   --vagabond-scrollbar-thumb2:#93CA55;
+  --vagabond-c-damage-orange: #e7570a;
+  --vagabond-c-dark-bluey: #2c3e50;
+  --vagabond-c-transparent: #ffffffc0;
+  --vagabond-c-lightgrey: #d0d0d0;
+  --vagabond-c-darkgray: #666666;
+  --vagabond-c-red: #9d0000;
+  --vagabond-c-white: #ececec;
+  --vagabond-c-black: #000000;
+  --vagabond-c-title1: white;
+  --vagabond-c-title2: black;
+  --vagabond-c-text-primary: #2c3e50;
+  --vagabond-c-text-secondary: #ded656;
+  --vagabond-c-bg1: #ded656;
+  --vagabond-c-bg2: #2c3e50;
+  --vagabond-detail-1: url('../assets/images/sheets/blackSquare.webp');
 }
+
+$c-title-1: var(--vagabond-c-title1);
+$c-title-2: var(--vagabond-c-title2);
+$c-text-1: var(--vagabond-c-text-primary);
+$c-text-2: var(--vagabond-c-text-secondary);
+$c-white: var(--vagabond-c-white);
+$c-black: var(--vagabond-c-black);
+$c-red: var(--vagabond-c-red);
+$c-yellow: var(--vagabond-c-chat-yellow);
+$c-green: var(--vagabond-c-green);
+$c-bg1: var(--vagabond-c-bg1);
+$c-bg2: var(--vagabond-c-bg2);
+$detail-1: var(--vagabond-detail-1);
 
 // Target both application and interface themes (Foundry v13)
 .theme-dark,
@@ -48,14 +68,14 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
   --vagabond-c-lightgrey: #d0d0d0;
-  --vagabond-c-red: #b70000;
+  --vagabond-c-red: #6c8647;
   --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
   --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
-  --vagabond-bg-paper: url('../assets/images/old-paper.webp');
-  --vagabond-bg-repeat: no-repeat;
-  --vagabond-bg-size: cover;
+  --vagabond-bg-paper: url('../assets/images/sheets/dark/dark-bg-300.webp');
+  --vagabond-bg-repeat: repeat;
+  --vagabond-bg-size: 300px 300px;
   --vagabond-c-bluey: #1f2324da;
-  --vagabond-c-dark-bluey: #0b1e32;
+  --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-dark-yellow: #94913c;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
@@ -64,11 +84,14 @@ body[data-theme="dark"] #sidebar {
   --vagabond-scrollbar-bg: #000000;
   --vagabond-scrollbar-thumb1:#A4AC55;
   --vagabond-scrollbar-thumb2:#93CA55;
+
+  --vagabond-c-text-primary: #BDC1C6 ;
+  --vagabond-c-bg1: #2c3e50;
+  --vagabond-c-bg2: #051a2f;
+  --vagabond-detail-1: url('../assets/images/sheets/dark/blackSquare.webp');
+
 }
 
-$c-white: var(--vagabond-c-white);
-$c-black: var(--vagabond-c-black);
-$c-red: var(--vagabond-c-red);
 
 $c-dark: var(--vagabond-c-dark);
 $c-lite: var(--vagabond-c-lite);
@@ -87,8 +110,6 @@ $bg-paper: var(--vagabond-bg-paper);
 $bg-repeat: var(--vagabond-bg-repeat);
 $bg-size: var(--vagabond-bg-size);
 $c-stat: var(--vagabond-c-stat);
-$c-yellow: var(--vagabond-c-chat-yellow);
-$c-green: var(--vagabond-c-green);
 $c-bluey: var(--vagabond-c-bluey);
 $c-dark-bluey: var(--vagabond-c-dark-bluey);
 $c-dark-yellow: var(--vagabond-dark-yellow);

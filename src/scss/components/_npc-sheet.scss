@@ -22,7 +22,7 @@
 // Scope the i element styling to NPC sheets only, not globally
 .vagabond.actor .npc-content i,
 .vagabond.actor .npc-header i {
-  color: $c-dark;
+  color: $c-text-1;
 }
 
 // Default styling (scoped to NPC sheet) — single font for everything
@@ -35,6 +35,7 @@
   input, select, textarea, button {
     font-family: $font-title;
     box-shadow: none;
+    color: $c-text-1;
   }
 
   textarea {
@@ -67,21 +68,21 @@
     }
 
     &:hover {
-      border-bottom-color: var(--vagabond-c-dark);
+      border-bottom-color: $c-text-1;
     }
 
     &:focus {
       outline: none;
-      border-bottom-color: var(--vagabond-c-dark);
+      border-bottom-color: $c-text-1;
       box-shadow: none;
     }
 
     option {
-      background: var(--vagabond-c-lite);
-      color: var(--vagabond-c-dark);
+      background: $c-bg1;
+      color: $c-text-1;
 
       &:checked {
-        background: var(--vagabond-c-faint);
+        background: $c-bg2;
       }
     }
 
@@ -362,6 +363,7 @@
     background: transparent;
     padding: 0;
     line-height: 1.2;
+    color: $c-black;
 
     &:hover,
     &:focus {
@@ -371,6 +373,7 @@
     &[readonly] {
       border-bottom: none;
     }
+
   }
 
   .npc-speed-label {
@@ -444,6 +447,7 @@
     border-bottom: 1px solid transparent;
     background: transparent;
     padding: 0;
+    color: $c-black;
 
     &:hover,
     &:focus {
@@ -530,6 +534,7 @@
   input {
     width: 28px;
     text-align: center;
+    color: $c-black;
   }
 }
 
@@ -542,10 +547,12 @@
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+      color: $c-black;
 
   input {
     width: 30px;
     text-align: center;
+    color: $c-black;
   }
 }
 
@@ -594,7 +601,7 @@
 .npc-armor-desc-label {
   font-size: 0.8em;
   text-align: center;
-  color: $c-dark;
+  color: $c-black;
   line-height: 1;
   padding-top: 2px
 }
@@ -618,7 +625,7 @@
   margin-top: 4px;
   padding: 3px 5px;
   border-radius: 2px;
-  color: $c-white;
+  color: $c-title-1;
   background-image: url('../assets/images/sheets/titleBG.webp');
   background-position: center center;
   background-repeat: repeat-x;
@@ -702,12 +709,12 @@
   align-items: center;
   gap: 8px;
   font-style: italic;
-  font-size: 13px;
+  font-size: 1em;
   margin: 6px 0 0 0;
   padding: 0 8px;
-  border-top: 3px solid $c-dark-bluey;
-  border-bottom: 6px double $c-dark-bluey;
-  color: $c-dark-bluey;
+  border-top: 3px solid $c-text-1;
+  border-bottom: 6px double $c-text-1;
+  color: $c-text-1;
   width: 100%;
 }
 
@@ -937,7 +944,7 @@
 
 .action-name-line {
 
-  color: $c-dark;
+  color: $c-text-1;
   line-height: 1.1rem;
   padding-left: 4px;
   font-family: $font-text;
@@ -948,7 +955,7 @@
     transition: color 0.2s ease;
     font-family: $font-secondary;
     text-transform: uppercase;
-    color: $c-dark-bluey;
+    color: $c-text-1;
 
     &::after {
       content: ':';
@@ -997,6 +1004,7 @@
 
 .npc-ability-view {
   padding: 4px 0;
+  color: $c-text-1;
 
   .ability-name {
     font-weight: bold;
@@ -1004,7 +1012,7 @@
     transition: color 0.2s ease;
     font-family: $font-secondary;
     text-transform: uppercase;
-    color: $c-dark-bluey;
+    color: $c-text-1;
 
     &:hover {
       color: $c-red;
@@ -1042,6 +1050,7 @@
   border-radius: 0;
   cursor: pointer;
   transition: border-bottom-color 0.2s ease;
+  color:$c-text-1;
 
   &:hover {
     border-bottom-color: var(--vagabond-c-dark);
@@ -1050,7 +1059,7 @@
   .accordion-icon {
     font-size: 12px;
     transition: transform 0.2s ease;
-    color: var(--vagabond-c-muted);
+    color: $c-text-1;
 
     &.fa-chevron-down {
       transform: rotate(90deg);
@@ -1076,7 +1085,7 @@
   .npc-being-select,
   .npc-zone-select {
     text-transform: capitalize;
-    color: $c-dark-bluey;
+    color: $c-text-1;
     font-size: 1.3em;
   }
 
@@ -1088,8 +1097,7 @@
 .npc-edit-name,
 .action-edit-name,
 .ability-edit-name {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 1.3em;
 
 }
 
@@ -1221,6 +1229,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    color: $c-text-1;
   }
 
   .effects-category {
@@ -1230,6 +1239,7 @@
   .effects-category-label {
     font-size: 15px;
     font-weight: 600;
+    color: $c-text-1;
 
     margin-bottom: 4px;
   }
@@ -1242,10 +1252,11 @@
     border: 1px solid $c-dark;
     border-radius: 4px;
     background: var(--vagabond-c-faint);
+    color: $c-text-1;
 
     &:hover {
       background: var(--vagabond-c-beige);
-      border-color: var(--vagabond-c-dark);
+      border-color: $c-text-1;
     }
   }
 
@@ -1254,6 +1265,7 @@
     align-items: center;
     gap: 8px;
     font-size: 15px;
+    color: $c-text-1;
 
     font-weight: 600;
     flex: 1;
@@ -1264,19 +1276,19 @@
     width: 24px;
     height: 24px;
     border-radius: 3px;
-    border: 1px solid $c-dark;
+    border: 1px solid $c-text-1;
   }
 
   .effect-source {
     font-size: 14px;
 
-    color: $c-dark;
+    color: $c-text-1;
     min-width: 80px;
     text-align: center;
   }
 
   .effect-duration {
-    font-size: 14px;
+    font-size: 1em;
 
     min-width: 60px;
     text-align: center;
@@ -1293,7 +1305,6 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: $c-dark;
     font-size: 14px;
     width: 20px;
     height: 20px;
@@ -1314,8 +1325,8 @@
     border: 1px dashed var(--vagabond-c-tan);
     border-radius: 4px;
     background: transparent;
-    color: var(--vagabond-c-muted);
     font-size: 14px;
+    color: $c-text-1;
 
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1365,6 +1376,12 @@
   min-width: fit-content;
   position: relative;
   z-index: 10;
+
+  // Resistances dropdown flows inline — no z-index stacking needed
+  &.npc-resistances-dropdown {
+    z-index: auto;
+    position: static;
+  }
 
   summary {
     list-style: none;
@@ -1420,10 +1437,20 @@
   font-size: 14px;
   z-index: 20;
 
+  // Resistances panel flows inline to push content down
   &.npc-resistance-panel {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    z-index: auto;
+    box-shadow: none;
+    border: none;
+    border-top: 1px solid var(--vagabond-c-tan);
+    border-radius: 0;
+    padding: 4px 0;
+    margin-top: 2px;
+    max-height: none;
   }
 }
 

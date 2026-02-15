@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    color: $c-text-1;
 }
 
 .downtime-grid {
@@ -18,7 +19,7 @@
 
 .activity-card {
     background: var(--color-bg-2);
-    border: 1px solid var(--color-border-light-2);
+    border: 1px solid $c-text-1;
     border-radius: 8px;
     padding: 15px;
     display: flex;
@@ -54,8 +55,8 @@
     padding: 8px;
     cursor: pointer;
     background: var(--color-ui-2);
-    color: var(--color-text-light-1);
-    border: 1px solid var(--color-border-dark);
+    color: $c-text-1;
+    border: 1px solid $c-text-1;
     border-radius: 4px;
 
     &:hover {
@@ -82,7 +83,7 @@
 
 .cost-badge {
     background: #333;
-    color: #fff;
+    color: $c-white;
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 0.7em;
@@ -95,20 +96,20 @@
     justify-content: flex-end;
     gap: 10px;
     padding: 15px;
-    border-top: 1px solid var(--color-border-light-2);
+    border-top: 1px solid $c-text-1;
     background: var(--color-bg-1);
 
     .downtime-footer-btn {
         padding: 8px 20px;
         cursor: pointer;
-        border: 1px solid var(--color-border-dark);
+        border: 1px solid $c-text-1;
         border-radius: 4px;
         font-weight: bold;
         transition: all 0.2s ease;
 
         &.cancel-btn {
             background: var(--color-bg-2);
-            color: var(--color-text-dark-primary);
+            color: $c-text-1;
 
             &:hover {
                 background: var(--color-bg-3);
@@ -118,7 +119,7 @@
 
         &.done-btn {
             background: var(--color-ui-2);
-            color: var(--color-text-light-1);
+            color: $c-text-1;
 
             &:hover {
                 background: var(--color-ui-1);

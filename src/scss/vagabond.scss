@@ -75,32 +75,7 @@
     margin: 0;
     margin-bottom: 4px;
     opacity: 1;
-  }
-
-  // h2 {
-  //   display: flex; 
-  //   align-items: center; 
-  //   justify-content: center;
-  //   width: 100%; 
-
-  //   &::before,
-  //   &::after {
-  //     content: "";
-  //     flex-grow: 1; 
-  //     height: 18px; 
-  //     background-image: url('../assets/images/line-01.svg');
-  //     background-repeat: repeat-x;
-  //     background-size: 200px 100%;
-  //   }
-
-  //   &::before {
-  //     margin-right: 8px;
-  //   }
-
-  //   &::after {
-  //     margin-left: 8px;
-  //   }
-  // }
+  } 
 
   // Apply Eskapade Bold to resource labels (also titles)
   .resource-label {
@@ -120,7 +95,7 @@
     background: transparent;
     border-radius: 0;
     outline: none;
-    color: $c-dark;
+    color: $c-text-1;
     transition: border-bottom-color 0.2s ease;
 
     &:hover {

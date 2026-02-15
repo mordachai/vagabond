@@ -18,7 +18,7 @@
   .mana-display {
     font-size: 13px;
     font-weight: 600;
-    color: $c-dark;
+    color: $c-text-1;
     font-family: $font-secondary;
 
     .mana-current {
@@ -135,8 +135,7 @@
       transition: padding-left 0.3s ease;
       
       &:hover .spell-name {
-        color: $c-red;
-        text-shadow: 0 0 1px rgba(212, 175, 55, 0.3);
+        text-shadow: 0 0 3px $c-green;
       }
 
       .spell-name {
@@ -144,7 +143,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: $font-title;
-        color: $c-dark;
+        color: $c-text-1;
         text-align: left;
       }
       
@@ -154,7 +153,7 @@
         align-items: center;
         
         i {
-            color: $c-dark;
+            color: $c-text-1;
             font-size: 0.9em;
             opacity: 0.8;
         }
@@ -170,7 +169,7 @@
       align-items: center;
       justify-content: center;
       font-family: $font-title;
-      color: $c-dark;
+      color: $c-text-1;
       font-size: 1em;
       cursor: pointer;
       
@@ -263,7 +262,7 @@
          text-align: center;
          font-weight: bold;
          
-         &.clickable:hover { color: $c-red; background: rgba(0,0,0,0.05); }
+         &.clickable:hover { color: $c-yellow; }
          &.disabled { opacity: 0.5; }
       }
       
