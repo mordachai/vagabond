@@ -83,7 +83,7 @@
         .fatigue-note {
           font-size: 12px;
           font-weight: normal;
-          color: #ffcccc; // Lighter red for visibility on dark background
+          color: #ffabab; // Lighter red for visibility on dark background
           margin-left: 6px;
           opacity: 0.9;
         }
@@ -104,25 +104,6 @@
         font-size: 14px;
       }
     }
-
-    .auto-arrange-button {
-      padding: 6px 12px;
-      border: 1px solid $c-dark;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: bold;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: $c-dark;
-        transform: translateY(-1px);
-      }
-
-      i {
-        margin-right: 4px;
-      }
-    }
   }
 }
 
@@ -139,7 +120,9 @@
   grid-auto-rows: 50px; // Reduced height for 2 lines
   gap: 0; // No gaps, use borders instead
   padding: 1px;
-  background: whitesmoke;
+  background-image: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
   border-radius: 4px;
   width: 100%;
   overflow: hidden;
@@ -147,8 +130,10 @@
 
 // Empty Slot
 .inventory-slot.empty-slot {
-  background: whitesmoke;
-  border: 2px solid rgba(44, 18, 8, 0.1);
+  background-image: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 2px solid $c-inventory-lines;
   border-top: none;
   border-left: none;
   display: flex;
@@ -160,20 +145,20 @@
 
   // Add top border to first row
   &:nth-child(-n + 4) {
-    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    border-top: 2px solid $c-inventory-lines;
   }
 
   // Add left border to first column
   &:nth-child(4n + 1) {
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid $c-inventory-lines;
   }
 
   .slot-number {
     font-size: 18px;
     font-weight: bold;
     font-family: $font-secondary;
+    color: $c-title-2;
     opacity: 0.7;
-    mix-blend-mode: multiply;
   }
 
   // Unavailable (darker) slots
@@ -192,7 +177,7 @@
     position: relative;
 
     .slot-number {
-      color: rgba(139, 0, 0, 0.4);
+      color: rgba(32, 22, 22, 0.4);
     }
   }
 
@@ -227,8 +212,10 @@
 
 // Inventory Card (Item) - Simplified: Image (50px left) + Name (wrapping)
 .inventory-card {
-  background: whitesmoke;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  background-image: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 1px solid $c-inventory-lines;
   border-radius: 3px;
   padding: 2px;
   height: 50px;
@@ -247,25 +234,25 @@
     box-shadow:
       inset 0 0 8px $c-inset-1,
       inset 0 0 0 2px $c-inset-2,
-      0 2px 4px rgba(0, 0, 0, 0.15);
+      0 2px 4px $c-title-2;
     background: $c-inventory-hover;
-    mix-blend-mode: multiply;
+    mix-blend-mode: $inventory-blend-hover;
   }
 
   &.equipped {
     box-shadow:
       inset 0 0 12px $c-inset-1,
       inset 0 0 0 2px $c-inset-2;
-      background: rgb(225, 225, 225);
-      //mix-blend-mode: multiply;
+      background-image: $bg-paper;
+      background-repeat: $bg-repeat;
+      background-size: $bg-size;
 
     &:hover {
       box-shadow:
         inset 0 0 8px $c-inset-1,
         inset 0 0 0 2px $c-inset-2,
         0 2px 4px rgba(0, 0, 0, 0.15);
-      background: #8f5c2f9e;
-      //mix-blend-mode: multiply;
+        background: #8f5c2f9e;
     }
   }
 
@@ -306,7 +293,6 @@
     font-weight: bold;
     font-family: $font-secondary;
     opacity: 0.7;
-    mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
   }
@@ -318,9 +304,6 @@
     flex-shrink: 0;
     border-radius: 2px;
     border: none;
-    //filter for make it monochrome
-    //filter: grayscale(100%) saturate(0) blur(1px) brightness(1.2) contrast(2.9) sepia(0.28);
-    //mix-blend-mode: color-dodge;
   }
 
   .item-name-display {
@@ -335,6 +318,7 @@
     -webkit-line-clamp: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
+    color: $c-title-2;
   }
 
   .bound-marker {
@@ -474,7 +458,6 @@
     margin: 0;
     font-family: $font-title;
     font-size: 1.3em;
-    font-weight: 700;
 
     h5 {color: $c-yellow;}
   }
@@ -487,7 +470,6 @@
 
     .resource-label {
       color: $c-white;
-      font-weight: bold;
       font-size: 14px;
     }
 

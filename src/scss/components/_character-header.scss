@@ -394,6 +394,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     padding: 4px 20px;
+    color: $c-white;
   }
 
   .fatigue-checkboxes {
@@ -500,7 +501,7 @@
   flex: 0 0 auto;
   padding-right: 25px;
   padding-top: 30px;
-  color: $c-text-2;
+  color: $c-yellow;
   font-family: $font-title;
   font-size: 14px;
   gap: 0;
@@ -526,7 +527,7 @@
 
   input[type=text] {
       font-size: 1.15em;
-      color: $c-text-2;
+      color: $c-yellow;
   }
 }
 
@@ -809,12 +810,12 @@
       &.speed-group-input-main {
         font-size: 22px;
         font-weight: bold;
-            color: $c-yellow;
-    text-shadow:
-    1px 1px 0 $c-black,
-    -1px 1px 0 $c-black,
-    -1px -1px 0 $c-black,
-    1px -1px 0 $c-black;
+        color: $c-yellow;
+        text-shadow:
+        1px 1px 0 $c-black,
+        -1px 1px 0 $c-black,
+        -1px -1px 0 $c-black,
+        1px -1px 0 $c-black;
       }
     }
 

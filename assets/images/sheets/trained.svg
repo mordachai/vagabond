@@ -1,1 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><use xlink:href="#_Image1" x="1" y="1" width="34px" height="34px"/><defs><image id="_Image1" width="34px" height="34px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADuUlEQVRYhcWYT2gcVRzHP7szU5umldhubbKtsZJOqfYgFOsoBVFQMBhP40G9tGCC/8DWQxEvFnsRoQiKJxUpEk/yPBnwICoK6kPx0EMKeVbLljZNtt1Os5vtzuzurIedTffvZHaStt/Tvve+83ufffP+/N4kWINMy34QmAWywA4lRS1urOQaIMYCiCIwAFyOGwtAiwlhAWeCogFsAAa37Xqomrt49pc4MRN9AgwDzwOfhdgOKSl+u2UgpmUfBN4EDkew/wRMKCmK6wpiWvYB4Ctgf9TAwBIwrKS4sS4gpmWPAF8Cz/YB0VAOSEVZTaGrxrTsAeD1mBAAW4Evohh7johp2QngGPBRTIhm3aOkcOKCvAx8vWd0Bx9/cBzDMGIR5HIOL752AuAcsE9JUenm07sAbAJeIhjSobs3s3t0Z2yQ9PD2xs8xIGta9i4lxXK7r2WOmJa9GXiPpvd6aTFHIlEfONfz8LwyS/kCjrOE55VXnq3VauSuORQKy1Sq1ZX65WLLohkC5oN+uoOYlr0ReAN4p9mwcPU6mlbfgH3fZ/KtEzzyzBGmjp3E9/0Vn+t5PDY+yYGnD3N6+lsqlfobyOc7/vwW4ELQXyuIadlJ4BXgw/anqlWfUskFwNB1Mpey7ZYOLV7JUanUR8W5nu9mGQIywYK4CUJ9TnzaK7CzlKfk1mEuZ0MnPwAX57Pouo5XLrOYvdrLth34r1HQTct+EpgOCzx19CQ7R1I4TgG/tvpJ/+PvZ3j17ffRdY2zc5kw6/2mZWeBEZ36uRCqufPzzJ2fXxWgoWrV59c/Z6PaU8BsEvg3cg+3TnNJJcUYN3OLO6HvlRQTSQAlxcPAwTsAMaGkGIemfURJ8Rfw7m2E+ERJMdMotJ++p4BrtwGiqKQ42lzRAhIcSGmg5+JfB/2hpBhsr+zIR5QUJSVFipANTtOS7B27r6VO13ReGD9EaqjjGGnW30qKx7s1hGZopmVngJYe9+4e4ZvTp0gAuq6h6/UD3Pd9XNfDMHSemJjkilNoD/ezkuKpXn2FZmhKilHqh9TKbrZlcICNd22ABFSqVUquS8l18cplEskEmqahax23lM/DICB68ryVpnmz74E0htGRygBwo+TyT2ahuWq/kmLVbbaf68QCcG9Uf6Bit4nZTf1cOdPAYh/+magQ0OdND8C07O+A51axTSkpImXvsUECGAk82qP5nJJiT78xY30NUFJYwEyXph/iQEDMEWnItOxlYFNQnFVS9HMlbVHs7yOB0kABmF4LBMD/695EKd+2K0MAAAAASUVORK5CYII="/></defs></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #253753;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <path class="cls-1" d="M15.3.29L.29,15.3c-.38.38-.38,1.01,0,1.39l15.02,15.02c.38.38,1.01.38,1.39,0l15.02-15.02c.38-.38.38-1.01,0-1.39L16.7.29c-.38-.38-1.01-.38-1.39,0ZM20.05,12.85l-.25-3.05-2.66-.15v11.87l1.62.49v1.06h-5.44v-.94l1.53-.49v-11.99l-2.68.15-.25,3.05h-1.3l-.32-4.63h11.4l-.32,4.63h-1.33Z"/>
+  </g>
+</svg>

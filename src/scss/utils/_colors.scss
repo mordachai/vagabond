@@ -17,6 +17,7 @@
   --vagabond-c-inset-2: rgba(118, 118, 118, 0.1);
   --vagabond-c-bg-lite: #7f8c8d;
   --vagabond-tracker-col1: #ffd900;
+  --vagabond-inventory-lines: #00000055;
   --vagabond-inventory-hover: #ab612071;
   --vagabond-scrollbar-bg: #0000002e;
   --vagabond-scrollbar-thumb1:#A4AC55;
@@ -32,24 +33,15 @@
   --vagabond-c-title1: white;
   --vagabond-c-title2: black;
   --vagabond-c-text-primary: #2c3e50;
-  --vagabond-c-text-secondary: #ded656;
+  --vagabond-c-text-secondary: #2c3e50;
   --vagabond-c-bg1: #ded656;
   --vagabond-c-bg2: #2c3e50;
   --vagabond-detail-1: url('../assets/images/sheets/blackSquare.webp');
+  --vagabond-img-leftcolbg: url('../assets/images/sheets/leftColBg.svg');
+  --vagabond-img-trained: url('../assets/images/sheets/trained.svg');
+  --vagabond-img-untrained: url('../assets/images/sheets/untrained.svg');
+  --vagabond-inventory-blend-hover: multiply;
 }
-
-$c-title-1: var(--vagabond-c-title1);
-$c-title-2: var(--vagabond-c-title2);
-$c-text-1: var(--vagabond-c-text-primary);
-$c-text-2: var(--vagabond-c-text-secondary);
-$c-white: var(--vagabond-c-white);
-$c-black: var(--vagabond-c-black);
-$c-red: var(--vagabond-c-red);
-$c-yellow: var(--vagabond-c-chat-yellow);
-$c-green: var(--vagabond-c-green);
-$c-bg1: var(--vagabond-c-bg1);
-$c-bg2: var(--vagabond-c-bg2);
-$detail-1: var(--vagabond-detail-1);
 
 // Target both application and interface themes (Foundry v13)
 .theme-dark,
@@ -69,30 +61,49 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-darkgray: #999999;
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-red: #6c8647;
-  --vagabond-c-inset-1: rgba(75, 39, 12, 0.65);
-  --vagabond-c-inset-2: rgba(123, 76, 15, 0.1);
+  --vagabond-c-inset-1: rgba(145, 150, 168, 0.451);
+  --vagabond-c-inset-2: rgba(89, 99, 106, 0.1);
   --vagabond-bg-paper: url('../assets/images/sheets/dark/dark-bg-300.webp');
   --vagabond-bg-repeat: repeat;
   --vagabond-bg-size: 300px 300px;
   --vagabond-c-bluey: #1f2324da;
   --vagabond-c-dark-bluey: #2c3e50;
-  --vagabond-dark-yellow: #94913c;
+  --vagabond-dark-yellow: #536c97;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
-  --vagabond-inventory-hover: #ab612071;
+  --vagabond-inventory-hover: #61abce71;
+  --vagabond-inventory-lines: #ffffff55;
   --vagabond-scrollbar-bg: #000000;
   --vagabond-scrollbar-thumb1:#A4AC55;
   --vagabond-scrollbar-thumb2:#93CA55;
 
   --vagabond-c-text-primary: #BDC1C6 ;
+  --vagabond-c-text-secondary: #DED656;
   --vagabond-c-bg1: #2c3e50;
   --vagabond-c-bg2: #051a2f;
   --vagabond-detail-1: url('../assets/images/sheets/dark/blackSquare.webp');
-
+  --vagabond-img-leftcolbg: url('../assets/images/sheets/leftColBg.svg');
+  --vagabond-img-trained: url('../assets/images/sheets/dark/trained.svg');
+  --vagabond-img-untrained: url('../assets/images/sheets/dark/untrained.svg');
+  --vagabond-c-title1: rgb(0,0,0);
+  --vagabond-c-title2: rgb(255,255,255);
+  --vagabond-inventory-blend-hover: normal;
 }
 
-
+$c-title-1: var(--vagabond-c-title1);
+$c-title-2: var(--vagabond-c-title2);
+$c-text-1: var(--vagabond-c-text-primary);
+$c-text-2: var(--vagabond-c-text-secondary);
+$c-white: var(--vagabond-c-white);
+$c-black: var(--vagabond-c-black);
+$c-red: var(--vagabond-c-red);
+$c-yellow: var(--vagabond-c-chat-yellow);
+$c-green: var(--vagabond-c-green);
+$c-bg1: var(--vagabond-c-bg1);
+$c-bg2: var(--vagabond-c-bg2);
+$detail-1: var(--vagabond-detail-1);
+$c-inventory-lines: var(--vagabond-inventory-lines);
 $c-dark: var(--vagabond-c-dark);
 $c-lite: var(--vagabond-c-lite);
 $c-faint: var(--vagabond-c-faint);
@@ -116,9 +127,15 @@ $c-dark-yellow: var(--vagabond-dark-yellow);
 $c-damage: var(--vagabond-c-damage-orange);
 $c-bg-lite: var(--vagabond-c-bg-lite);
 $c-inventory-hover: var(--vagabond-inventory-hover);
+$inventory-blend-hover: var(--vagabond-inventory-blend-hover);
 $c-scrollbar-bg: var(--vagabond-scrollbar-bg); 
 $c-scrollbar-thumb1: var(--vagabond-scrollbar-thumb1);
 $c-scrollbar-thumb2: var(--vagabond-scrollbar-thumb2);
+
+
+$img-leftcolbg: var(--vagabond-img-leftcolbg);
+$img-trained: var(--vagabond-img-trained);
+$img-untrained: var(--vagabond-img-untrained);
 
 // Use Foundry's border-highlight for the tracker if not overridden by vagabond variable
 $c-tracker-col1: var(--vagabond-tracker-col1, var(--color-border-highlight));

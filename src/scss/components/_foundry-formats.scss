@@ -14,7 +14,6 @@
     align-items: center;
     gap: 3px;
     background: $c-yellow;
-    //background: rgba(0, 0, 0, 0.06);
     border: 2px solid $c-dark-bluey;
     border-radius: 10px;
     color: $c-dark-bluey;
@@ -28,14 +27,20 @@
     text-decoration: none;
 
     &:hover {
-        background: rgba(0, 0, 0, 0.12);
-        border-color: rgba(0, 0, 0, 0.3);
+        border-color: $c-black;
         text-decoration: none;
+        color: $c-black;
     }
 
     i {
         font-size: 0.9em;
         opacity: 0.8;
         color: $c-dark-bluey;
+            
+        &:hover {
+            text-decoration: none;
+            color: $c-black;
+            opacity: 1;
+        }
     }
 }

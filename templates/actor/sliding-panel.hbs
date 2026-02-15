@@ -286,11 +286,7 @@
                   {{#if skill.trained}}checked{{/if}}
                   class='skill-checkbox-hidden'
                 />
-                {{#if skill.trained}}
-                  <img class='skill-checkbox-icon' src='systems/vagabond/assets/images/sheets/trained.svg' alt='Trained' />
-                {{else}}
-                  <img class='skill-checkbox-icon' src='systems/vagabond/assets/images/sheets/untrained.svg' alt='Untrained' />
-                {{/if}}
+                <span class='skill-checkbox-icon {{#if skill.trained}}trained{{else}}untrained{{/if}}'></span>
               </label>
               <label
                 class='skill-label rollable'
@@ -325,11 +321,7 @@
                     {{#if weaponSkill.trained}}checked{{/if}}
                     class='skill-checkbox-hidden'
                   />
-                  {{#if weaponSkill.trained}}
-                    <img class='skill-checkbox-icon' src='systems/vagabond/assets/images/sheets/trained.svg' alt='Trained' />
-                  {{else}}
-                    <img class='skill-checkbox-icon' src='systems/vagabond/assets/images/sheets/untrained.svg' alt='Untrained' />
-                  {{/if}}
+                  <span class='skill-checkbox-icon {{#if weaponSkill.trained}}trained{{else}}untrained{{/if}}'></span>
                 </label>
                 <label
                   class='skill-label rollable'

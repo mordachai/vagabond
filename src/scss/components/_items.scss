@@ -94,9 +94,11 @@
   .item {
     align-items: center;
     padding: 0 12px;
-    background: whitesmoke;
+    background-image: $bg-paper;
+    background-repeat: $bg-repeat;
+    background-size: $bg-size;
     font-family: $font-title;
-    color: $c-dark-bluey;
+    color: $c-text-1;
     font-size: 1.2em;
 
     i {font-size: 0.8em;}

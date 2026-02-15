@@ -1,5 +1,5 @@
 .resource-label {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 // General h3 styling for Features tab sections
@@ -7,7 +7,6 @@
   h3 {
     font-size: 18px;
     margin-bottom: 8px;
-    font-weight: bold;
   }
 }
 
@@ -22,16 +21,21 @@
 
 .skills-section {
   h4.left-col {
-    background-image: url('../assets/images/sheets/leftColBg.svg');
+    background-image: $img-leftcolbg;
     background-repeat: no-repeat;
     background-position: left center;
     background-size: cover;
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
-    color: $c-title-1;
+    color: $c-white;
     margin-left: -25px;
     width: 115%;
     height: auto;
     padding: 2px 0 2px 50px;
+    text-shadow:
+    2px 2px 0 $c-black,
+    -2px 2px 0 $c-black,
+    -2px -2px 0 $c-black,
+    2px -2px 0 $c-black;
   }
 }
 
@@ -48,7 +52,7 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
-    line-height: 1.2rem;
+    line-height: 1.25rem;
 
     .skill-checkbox-label {
       display: flex;
@@ -64,10 +68,22 @@
     }
 
     .skill-checkbox-icon {
+      display: inline-block;
       width: 20px;
       height: 20px;
       border: none;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       transition: opacity 0.2s ease;
+
+      &.trained {
+        background-image: $img-trained;
+      }
+
+      &.untrained {
+        background-image: $img-untrained;
+      }
 
       &:hover {
         opacity: 0.7;
@@ -79,8 +95,7 @@
       align-items: center;
       color: $c-text-1;
       font-family: $font-title;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 1.1em;
       cursor: pointer;
       flex: 3;
       overflow: hidden;
@@ -116,10 +131,10 @@
 
     .skill-difficulty {
       color: $c-text-1;
-      font-weight: bold;
       text-align: right;
       font-size: 20px;
       flex: 0.5;
+      font-family: $font-title;
     }
   }
 }
@@ -422,10 +437,10 @@
     padding: 8px 4px; 
     margin-bottom: 8px;
     border-radius: 4px;
-    background-image: url('../assets/images/sheets/savesBG.webp');
-    background-repeat: no-repeat;
-    background-size: cover;
-    box-shadow: 2px 2px 2px $c-inset-1,
+    background-color: $c-bg1;
+    border: 2px solid $c-dark-yellow;
+    color: $c-text-2;
+    box-shadow: 2px 2px 2px $c-inset-1;
     }
 
   .save {
@@ -448,7 +463,10 @@
   margin: 0;
   gap: 16px;
 
-    h5 {color: $c-text-1;}
+    h5 {
+      color: $c-text-1;
+      font-family: $font-primary;
+    }
 
 }
 
@@ -458,15 +476,20 @@
   flex-direction: column;
 
   h4 {
-    background-image: url('../assets/images/sheets/leftColBg.svg');
+    background-image: $img-leftcolbg;
     background-repeat: no-repeat;
     background-position: left center;
     background-size: cover;
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
-    color: $c-title-1;
+    color: $c-white;
     width: 100%;
     height: auto;
     padding: 2px 0 2px 25px;
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
   }
 }
 
@@ -524,7 +547,7 @@
       max-height: 500px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
-      font-family: $font-primary;
+      font-family: $font-text;
       color: $c-text-1;
       font-size: 1em;
     }
