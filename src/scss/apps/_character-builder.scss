@@ -4,7 +4,7 @@
   color: $c-text-1;
 
   h1,h2,h3,h4,h5,h6 {
-    color: $c-text-1;
+    color: $c-black;
   }
 
   table {
@@ -272,18 +272,18 @@
         cursor: pointer;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease;
+        color: $c-text-1;
 
         &.active {
           background: $c-tan-lite;
           border-left: 3px solid $c-red;
-          font-weight: 600;
         }
 
         &.in-tray {
           background: $c-yellow;
           // background: rgba(173, 216, 230, 0.2);
           // border-left: 3px solid #4CAF50;
-          font-weight: 600;
+          color: $c-black;
         }
 
         &.previewing {
@@ -313,7 +313,7 @@
         }
 
         &.ghosted {
-          opacity: 0.4;
+          opacity: 0.6;
           filter: grayscale(70%);
           cursor: not-allowed;
 
@@ -345,7 +345,6 @@
         .name {
           font-family: $font-title;
           font-size: 1.15rem;
-          font-weight: 700;
         }
       }
 

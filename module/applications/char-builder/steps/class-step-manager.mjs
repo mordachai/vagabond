@@ -48,7 +48,14 @@ export class ClassStepManager extends BaseStepManager {
     const availableClasses = await this._loadClassOptions();
     const selectedClass = state.selectedClass;
     const previewUuid = state.previewUuid;
-    
+
+    // Mark items as selected/previewing for template
+    const markedClasses = availableClasses.map(classItem => ({
+      ...classItem,
+      selected: classItem.uuid === selectedClass,
+      previewing: classItem.uuid === previewUuid
+    }));
+
     // Get selected item details if available
     let selectedItem = null;
     let classPreviewData = null;
@@ -104,7 +111,7 @@ export class ClassStepManager extends BaseStepManager {
     }
 
     return {
-      availableOptions: availableClasses,
+      availableOptions: markedClasses,
       selectedItem: selectedItem,
       previewItem: previewItem,
       classPreviewData: classPreviewData,

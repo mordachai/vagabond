@@ -2542,7 +2542,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-text-primary);
 }
 #vagabond-char-builder .window-content h1, #vagabond-char-builder .window-content h2, #vagabond-char-builder .window-content h3, #vagabond-char-builder .window-content h4, #vagabond-char-builder .window-content h5, #vagabond-char-builder .window-content h6 {
-  color: var(--vagabond-c-text-primary);
+  color: var(--vagabond-c-black);
 }
 #vagabond-char-builder .window-content table {
   background: rgba(0, 0, 0, 0.0862745098);
@@ -2760,15 +2760,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  color: var(--vagabond-c-text-primary);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.active {
   background: var(--vagabond-c-tan-lite);
   border-left: 3px solid var(--vagabond-c-red);
-  font-weight: 600;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.in-tray {
   background: var(--vagabond-c-chat-yellow);
-  font-weight: 600;
+  color: var(--vagabond-c-black);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.previewing {
   background: rgba(255, 215, 0, 0.15);
@@ -2789,7 +2789,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.7;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.ghosted {
-  opacity: 0.4;
+  opacity: 0.6;
   filter: grayscale(70%);
   cursor: not-allowed;
 }
@@ -2817,7 +2817,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column .directory-item .name {
   font-family: "Germania", serif;
   font-size: 1.15rem;
-  font-weight: 700;
 }
 .vagabond-builder .builder-body .selection-list-column .stat-array-item {
   font-size: 1rem;
