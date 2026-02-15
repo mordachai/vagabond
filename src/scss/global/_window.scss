@@ -92,10 +92,10 @@
   /* Target the individual tab header elements */
   [data-tab] {
     transition: opacity 0.2s ease-in-out;
-    background-image: url('../assets/images/sheets/navTabBG.webp');
+    background-image: url('../assets/images/sheets/navTabBG.svg');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: contain;
+    background-size: cover;
     color: $c-dark-bluey;
     font-weight: 600;
     font-size: 1.2rem;
@@ -117,11 +117,12 @@
 
     &.active {
       opacity: 1;
-      background-image: url('../assets/images/sheets/navTabBG-active.webp');
+      background-image: url('../assets/images/sheets/navTabBG-active.svg');
       background-repeat: no-repeat;
       background-position: center center;
+      background-size: cover;
       color: $c-yellow;
-      text-shadow: 0 0 3px $c-bluey;
+      text-shadow: 0 0 1px $c-bluey;
     }    
   }
 }
@@ -129,8 +130,7 @@
 .rollable {
   &:hover,
   &:focus {
-    color: $c-white;
-    text-shadow: 0 0 10px $c-yellow;
+    text-shadow: 0 0 3px $c-green;
     cursor: pointer;
   }
 }

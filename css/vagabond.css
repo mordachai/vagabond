@@ -68,7 +68,7 @@
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
-  --vagabond-c-green: #295223cb;
+  --vagabond-c-green: #4ed639f2;
   --vagabond-c-bluey: #62686a;
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-dark-yellow: #94913c;
@@ -417,10 +417,10 @@ body[data-theme=dark] #sidebar {
 }
 .vagabond nav.tabs [data-tab] {
   transition: opacity 0.2s ease-in-out;
-  background-image: url("../assets/images/sheets/navTabBG.webp");
+  background-image: url("../assets/images/sheets/navTabBG.svg");
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: contain;
+  background-size: cover;
   color: var(--vagabond-c-dark-bluey);
   font-weight: 600;
   font-size: 1.2rem;
@@ -441,16 +441,16 @@ body[data-theme=dark] #sidebar {
 }
 .vagabond nav.tabs [data-tab].active {
   opacity: 1;
-  background-image: url("../assets/images/sheets/navTabBG-active.webp");
+  background-image: url("../assets/images/sheets/navTabBG-active.svg");
   background-repeat: no-repeat;
   background-position: center center;
+  background-size: cover;
   color: var(--vagabond-c-chat-yellow);
-  text-shadow: 0 0 3px var(--vagabond-c-bluey);
+  text-shadow: 0 0 1px var(--vagabond-c-bluey);
 }
 
 .rollable:hover, .rollable:focus {
-  color: var(--vagabond-c-white);
-  text-shadow: 0 0 10px var(--vagabond-c-chat-yellow);
+  text-shadow: 0 0 3px var(--vagabond-c-green);
   cursor: pointer;
 }
 
@@ -5473,10 +5473,10 @@ ol#combat-tracker.directory-list {
   min-height: 0;
 }
 .vagabond .skills-section h4.left-col {
-  background-image: url("../assets/images/sheets/leftColBg.webp");
+  background-image: url("../assets/images/sheets/leftColBg.svg");
   background-repeat: no-repeat;
   background-position: left center;
-  background-size: 100% 100%;
+  background-size: cover;
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
   color: var(--vagabond-c-white);
   margin-left: -25px;
@@ -5510,11 +5510,13 @@ ol#combat-tracker.directory-list {
   display: none;
 }
 .vagabond .skills-list .skill .skill-checkbox-icon {
-  font-size: 16px;
-  transition: color 0.2s ease;
+  width: 20px;
+  height: 20px;
+  border: none;
+  transition: opacity 0.2s ease;
 }
 .vagabond .skills-list .skill .skill-checkbox-icon:hover {
-  color: var(--vagabond-c-tan);
+  opacity: 0.7;
 }
 .vagabond .skills-list .skill .skill-label {
   display: flex;
@@ -5575,7 +5577,7 @@ ol#combat-tracker.directory-list {
   overflow-x: hidden;
 }
 .vagabond .right-column .right-column-scrollable.has-scroll {
-  padding-right: 4px;
+  padding-right: 10px;
 }
 .vagabond .right-column .equipped-item {
   display: grid;
@@ -5747,15 +5749,16 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .favorites-section h4.right-col {
   color: var(--vagabond-c-white);
-  background-image: url("../assets/images/sheets/rightColBg.webp");
+  background-image: url("../assets/images/sheets/rightColBg.svg");
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   width: 100%;
   height: auto;
   padding: 2px;
   text-align: center;
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
 }
 .vagabond .favorites-section .title-container {
   display: flex;
@@ -5764,10 +5767,10 @@ ol#combat-tracker.directory-list {
   justify-content: center;
   flex-wrap: nowrap;
   position: relative;
-  background-image: url("../assets/images/sheets/titleBG.webp");
+  background-image: url("../assets/images/sheets/titleBG.svg");
   background-repeat: no-repeat;
   background-position: left center;
-  background-size: 100% 100%;
+  background-size: cover;
   margin-bottom: 8px;
   padding: 2px 0;
   color: var(--vagabond-c-white);
@@ -5831,10 +5834,10 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .features-column h4,
 .vagabond .perks-column h4 {
-  background-image: url("../assets/images/sheets/leftColBg.webp");
+  background-image: url("../assets/images/sheets/leftColBg.svg");
   background-repeat: no-repeat;
   background-position: left center;
-  background-size: 100% 100%;
+  background-size: cover;
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
   color: var(--vagabond-c-white);
   width: 100%;
@@ -7714,7 +7717,7 @@ ol#combat-tracker.directory-list {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   color: var(--vagabond-c-white);
-  margin: 0 -30px 0 -25px !important;
+  margin: 0 -13px 0 -25px !important;
   padding: 16px 28px 12px 20px;
   filter: drop-shadow(2px 2px 2px var(--vagabond-c-inset-1));
 }
@@ -7763,7 +7766,7 @@ ol#combat-tracker.directory-list {
   right: -22px;
   width: 40px;
   height: 47px;
-  background-image: url("../assets/images/sheets/armorBG.webp");
+  background-image: url("../assets/images/sheets/armorBG.svg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -7875,13 +7878,14 @@ ol#combat-tracker.directory-list {
   bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 75%;
+  width: 100%;
   height: auto;
   color: var(--vagabond-c-white);
-  background-image: url(../assets/images/sheets/healthBG.webp);
+  background-image: url(../assets/images/sheets/healthBG.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  padding: 2px;
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .hp-display .hp-icon {
@@ -8025,20 +8029,20 @@ ol#combat-tracker.directory-list {
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
-  background-image: url("../assets/images/sheets/fatigueBG-label.webp");
+  background-image: url("../assets/images/sheets/fatigueBG-label.svg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: 0 20px;
+  padding: 4px 20px;
 }
 .vagabond .fatigue-row .fatigue-checkboxes {
   display: grid;
   grid-template-columns: repeat(5, auto);
   gap: 4px 6px;
-  background-image: url("../assets/images/sheets/fatigueBG-end.webp");
+  background-image: url("../assets/images/sheets/fatigueBG-end.svg");
   background-repeat: no-repeat;
   background-size: 100% cover;
   background-position: center right;
-  padding-right: 20px;
+  padding: 4px 20px 4px 0;
   width: fit-content;
 }
 .vagabond .character-info-row {
@@ -8086,7 +8090,7 @@ ol#combat-tracker.directory-list {
 .vagabond .name-row-top > input[type=text] {
   color: var(--vagabond-c-white);
   font-family: "Germania", serif;
-  padding-top: 12px;
+  padding-top: 4px;
   font-size: 1.8em;
   font-weight: 600;
   text-align: center;
@@ -8114,7 +8118,7 @@ ol#combat-tracker.directory-list {
   align-items: last baseline;
   white-space: nowrap;
   flex: 0 0 auto;
-  padding-right: 30px;
+  padding-right: 25px;
   padding-top: 30px;
   color: var(--vagabond-c-chat-yellow);
   font-family: "Germania", serif;
@@ -8145,7 +8149,7 @@ ol#combat-tracker.directory-list {
   grid-column: 1;
   grid-row: 2;
   text-align: left;
-  padding: 10px 5px 0px 5px;
+  padding: 6px 5px 0px 35px;
   font-size: 14px;
   font-weight: 600;
   line-height: 1.3;
@@ -8374,7 +8378,7 @@ ol#combat-tracker.directory-list {
   gap: 0 4px;
   height: 55px;
   flex-shrink: 0;
-  background-image: url("../assets/images/sheets/speedBG.webp");
+  background-image: url("../assets/images/sheets/favorHinderBG.webp");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
@@ -8542,20 +8546,19 @@ ol#combat-tracker.directory-list {
   left: 410px; /* Base position next to main sheet when open */
   width: 430px;
   height: 100%;
-  background: none;
-  background-image: var(--vagabond-bg-paper);
-  background-repeat: var(--vagabond-bg-repeat);
-  background-size: var(--vagabond-bg-size);
+  background-image: url("../assets/images/sheets/blackSquare.webp"), var(--vagabond-bg-paper);
+  background-repeat: repeat-y, var(--vagabond-bg-repeat);
+  background-size: 20px auto, var(--vagabond-bg-size);
+  background-position: left top, left top;
   filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
   display: flex;
   flex-direction: row;
   transform-origin: left center;
   pointer-events: all;
-  z-index: 100 !important; /* Always on top of main sheet */
+  z-index: 1000 !important; /* Always on top of main sheet */
   /* Smooth transition */
-  transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
   /* Anti-aliasing for smooth rotation */
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -8644,7 +8647,8 @@ ol#combat-tracker.directory-list {
   margin-right: 8px; /* Make room for click zone on the right */
   padding: 25px 5px 25px 25px;
   height: 100%;
-  overflow-y: hidden;
+  overflow-y: clip;
+  overflow-x: visible;
   box-sizing: border-box;
   flex: 1;
   display: flex;
@@ -8911,9 +8915,12 @@ ol#combat-tracker.directory-list {
   position: relative;
   width: 150px;
   height: 150px;
-  background-image: none;
-  border: 3px solid #000;
+  background-image: url("../assets/images/sheets/portraitNPCFrame.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
   border-radius: 4px;
+  z-index: 15;
   box-shadow: 2px 2px 2px var(--vagabond-c-bluey);
 }
 .vagabond .npc-image-container .npc-profile-img {
@@ -9016,9 +9023,9 @@ ol#combat-tracker.directory-list {
   padding-right: 2px;
 }
 .vagabond .npc-row-hd-hp > .npc-stat-field {
-  background-image: url("../assets/images/sheets/hdBG.webp");
+  background-image: url("../assets/images/sheets/hdBG.svg");
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
   padding: 4px 5px;
   margin-left: -2px;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
@@ -9194,7 +9201,7 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-row-fatigue .npc-field-label {
-  background-image: url("../assets/images/sheets/fatigueNPCBG-label.webp");
+  background-image: url("../assets/images/sheets/fatigueBG-label.svg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center left;
@@ -9206,9 +9213,10 @@ ol#combat-tracker.directory-list {
   display: grid;
   grid-template-columns: repeat(5, auto);
   gap: 2px;
-  background-image: url("../assets/images/sheets/fatigueNPCBG-end.webp");
+  background-image: url("../assets/images/sheets/fatigueBG-end.svg");
   background-repeat: no-repeat;
   background-position: center right;
+  background-size: 15px 15px;
   padding: 2px 20px 2px 0px;
 }
 .vagabond .npc-fatigue-checkboxes .fatigue-skull {
@@ -9231,7 +9239,7 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
-  background-image: url("../assets/images/sheets/moraleBG.webp");
+  background-image: url("../assets/images/sheets/moraleBG.svg");
   background-repeat: no-repeat;
   background-size: 90% 100%;
   border-radius: 2px;
@@ -9261,7 +9269,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-armor-badge {
   width: 36px;
-  height: 38px;
+  height: 40px;
   background-image: url("../assets/images/sheets/armorNPCBG.webp");
   background-size: cover;
   background-position: center center;
@@ -9272,7 +9280,7 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-armor-badge .npc-armor-value {
-  font-size: 1.9em;
+  font-size: 1.7em;
   color: var(--vagabond-c-white);
   text-align: center;
   font-family: "Ludlow", serif;
@@ -9280,7 +9288,7 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-armor-badge .npc-armor-input {
   width: 2em;
   text-align: center;
-  font-size: 1.4em;
+  font-size: 1.2em;
   font-weight: 900;
   color: var(--vagabond-c-white);
   background: transparent;
@@ -9432,7 +9440,7 @@ ol#combat-tracker.directory-list {
   overflow-y: auto;
 }
 .vagabond .npc-content.has-scroll {
-  padding-right: 8px;
+  padding-right: 10px;
 }
 .vagabond .npc-senses-section {
   background-color: var(--vagabond-c-darkgray);
@@ -10512,7 +10520,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: var(--vagabond-c-faint);
   border: 2px solid var(--vagabond-c-dark);
   border-radius: 4px;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark-bluey);
   margin: -1px 0;
   padding: 1px 4px 0;
   white-space: nowrap;
@@ -10522,10 +10530,10 @@ details[open] .vagabond .npc-immunity-toggle i {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  background: rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: var(--vagabond-c-chat-yellow);
+  border: 2px solid var(--vagabond-c-dark-bluey);
   border-radius: 10px;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-dark-bluey);
   margin: 0 1px;
   padding: 1px 6px 1px 4px;
   white-space: nowrap;
@@ -10542,7 +10550,8 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .inline-roll i {
   font-size: 0.9em;
-  opacity: 0.7;
+  opacity: 0.8;
+  color: var(--vagabond-c-dark-bluey);
 }
 
 /*# sourceMappingURL=vagabond.css.map */

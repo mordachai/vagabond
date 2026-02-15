@@ -127,9 +127,12 @@
   position: relative;
   width: 150px;
   height: 150px;
-  background-image: none;
-  border: 3px solid #000;
+  background-image: url('../assets/images/sheets/portraitNPCFrame.webp');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
   border-radius: 4px;
+  z-index: 15;
   box-shadow: 2px 2px 2px $c-bluey;
 
   .npc-profile-img {
@@ -250,9 +253,9 @@
   padding-right: 2px;
 
   > .npc-stat-field {
-    background-image: url('../assets/images/sheets/hdBG.webp');
+    background-image: url('../assets/images/sheets/hdBG.svg');
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
     padding: 4px 5px;
     margin-left: -2px;
     filter:drop-shadow(1px 1px 2px $c-bluey);
@@ -467,7 +470,7 @@
   filter:drop-shadow(1px 1px 2px $c-bluey);
 
   .npc-field-label {
-    background-image: url('../assets/images/sheets/fatigueNPCBG-label.webp');
+    background-image: url('../assets/images/sheets/fatigueBG-label.svg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center left;
@@ -482,9 +485,10 @@
   grid-template-columns: repeat(5, auto);
   gap: 2px;
 
-  background-image: url('../assets/images/sheets/fatigueNPCBG-end.webp');
+  background-image: url('../assets/images/sheets/fatigueBG-end.svg');
   background-repeat: no-repeat;
   background-position: center right;
+  background-size: 15px 15px;
   padding: 2px 20px 2px 0px;
   
   .fatigue-skull {
@@ -513,7 +517,7 @@
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
-  background-image: url('../assets/images/sheets/moraleBG.webp');
+  background-image: url('../assets/images/sheets/moraleBG.svg'); 
   background-repeat: no-repeat;
   background-size: 90% 100%;
   border-radius: 2px;
@@ -550,7 +554,7 @@
 
 .npc-armor-badge {
   width: 36px;
-  height: 38px;
+  height: 40px;
   background-image: url('../assets/images/sheets/armorNPCBG.webp');
   background-size: cover;
   background-position: center center;
@@ -562,7 +566,7 @@
 
   .npc-armor-value {
 
-    font-size: 1.9em;
+    font-size: 1.7em;
     color: $c-white;
     text-align: center;
     font-family: $font-number;
@@ -572,7 +576,7 @@
     width: 2em;
     text-align: center;
 
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: 900;
     color: $c-white;
     background: transparent;
@@ -761,7 +765,7 @@
   overflow-y: auto;
 
   &.has-scroll {
-    padding-right: 8px;
+    padding-right: 10px;
   }
 }
 

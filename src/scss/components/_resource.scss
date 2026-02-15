@@ -22,10 +22,10 @@
 
 .skills-section {
   h4.left-col {
-    background-image: url('../assets/images/sheets/leftColBg.webp');
+    background-image: url('../assets/images/sheets/leftColBg.svg');
     background-repeat: no-repeat;
     background-position: left center;
-    background-size: 100% 100%;
+    background-size: cover;
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
     color: $c-white;
     margin-left: -25px;
@@ -64,11 +64,13 @@
     }
 
     .skill-checkbox-icon {
-      font-size: 16px;
-      transition: color 0.2s ease;
+      width: 20px;
+      height: 20px;
+      border: none;
+      transition: opacity 0.2s ease;
 
       &:hover {
-      color: $c-tan;
+        opacity: 0.7;
       }
     }
 
@@ -138,7 +140,7 @@
     overflow-x: hidden;
 
     &.has-scroll {
-      padding-right: 4px;
+      padding-right: 10px;
     }
   }
 
@@ -338,15 +340,21 @@
 
   h4.right-col {
     color: $c-white;
-    background-image: url('../assets/images/sheets/rightColBg.webp');
+    background-image: url('../assets/images/sheets/rightColBg.svg');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 100% 100%;
+    background-size: cover;
     width: 100%;
     height: auto;
     padding: 2px;
     text-align: center;
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
+
   }
 
   .title-container{
@@ -356,10 +364,10 @@
     justify-content: center;
     flex-wrap: nowrap;
     position: relative;
-    background-image: url('../assets/images/sheets/titleBG.webp');
+    background-image: url('../assets/images/sheets/titleBG.svg');
     background-repeat: no-repeat;
     background-position: left center;
-    background-size: 100% 100%;
+    background-size: cover;
     margin-bottom: 8px;
     padding: 2px 0;
     color: $c-white;
@@ -443,10 +451,10 @@
   flex-direction: column;
 
   h4 {
-    background-image: url('../assets/images/sheets/leftColBg.webp');
+    background-image: url('../assets/images/sheets/leftColBg.svg');
     background-repeat: no-repeat;
     background-position: left center;
-    background-size: 100% 100%;
+    background-size: cover;
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
     color: $c-white;
     width: 100%;
