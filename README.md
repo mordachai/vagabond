@@ -87,6 +87,8 @@ Inside the book there is the keys to unlock all the content for your Foundry tab
 
 ## Installation (for now):
 
+Go to Foundry >> Game Systems >> Install System and paste the link below in the Manifest URL field located at the bottom of the install window.
+
 ```
 https://github.com/mordachai/vagabond/releases/latest/download/system.json
 
