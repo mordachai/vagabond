@@ -123,7 +123,7 @@ No, installing the online version will not work, at least not yet...
 
 ## Acknowledgements
 
-Huge thanks to KeyInk for the marvelous work designing the new chat cards and sheets (with sheets coming in the future).
+Huge thanks to KeyInk for the marvelous work designing the new chat cards and sheets. Check their other works here: https://bsky.app/profile/keylligraphyink.bsky.social
 
 Relic Powers update: MadBlue - Discord: madblue2112 - https://bsky.app/profile/madblue2112.bsky.social
 
