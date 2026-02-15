@@ -201,7 +201,9 @@
                 <div class='npc-speed-type-row'>
                   <span class='npc-speed-type-label'>{{localize (lookup ../config.speedTypes type)}}</span>
                   {{#if ../system.locked}}
-                    <span class='npc-speed-type-value'>{{lookup ../system.speedValues type}}</span><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span>
+                    {{#if (lookup ../system.speedValues type)}}
+                      <span class='npc-speed-type-value'>{{lookup ../system.speedValues type}}</span><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span>
+                    {{/if}}
                   {{else}}
                     <input
                       type='text'

@@ -333,7 +333,7 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border-radius: 2px;
-  padding: 4px 45px 4px 3px;
+  padding: 4px 20px 4px 4px;
   filter:drop-shadow(1px 1px 2px $c-bluey);
 
 }
@@ -389,7 +389,7 @@
 }
 
 .npc-speed-types-col {
-  flex: 1;
+  flex: 0 1 auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -506,26 +506,28 @@
 
 /* Row 4: Morale + Appearance */
 .npc-row-morale-app {
-  gap: 10px;
+  gap: 6px;
   padding: 0;
   margin: auto;
-
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .npc-morale-field {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  background-image: url('../assets/images/sheets/moraleBG.svg'); 
+  padding: 4px 4px;
+  background-image: url('../assets/images/sheets/moraleBG.svg');
   background-repeat: no-repeat;
-  background-size: 90% 100%;
+  background-size: 100% 100%;
   border-radius: 2px;
   white-space: nowrap;
-  filter:drop-shadow(1px 1px 2px $c-bluey);
+  filter: drop-shadow(1px 1px 2px $c-bluey);
+  flex: 0 1 auto;
+  min-width: 0;
 
   input {
-
     width: 28px;
     text-align: center;
   }
@@ -536,6 +538,10 @@
   align-items: center;
   gap: 4px;
   white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   input {
     width: 30px;

@@ -9092,7 +9092,7 @@ ol#combat-tracker.directory-list {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border-radius: 2px;
-  padding: 4px 45px 4px 3px;
+  padding: 4px 20px 4px 4px;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-speed-main {
@@ -9136,7 +9136,7 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
 }
 .vagabond .npc-speed-types-col {
-  flex: 1;
+  flex: 0 1 auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -9230,21 +9230,25 @@ ol#combat-tracker.directory-list {
   color: rgba(0, 0, 0, 0.2);
 }
 .vagabond .npc-row-morale-app {
-  gap: 10px;
+  gap: 6px;
   padding: 0;
   margin: auto;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .vagabond .npc-morale-field {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
+  padding: 4px 4px;
   background-image: url("../assets/images/sheets/moraleBG.svg");
   background-repeat: no-repeat;
-  background-size: 90% 100%;
+  background-size: 100% 100%;
   border-radius: 2px;
   white-space: nowrap;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+  flex: 0 1 auto;
+  min-width: 0;
 }
 .vagabond .npc-morale-field input {
   width: 28px;
@@ -9255,6 +9259,10 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 4px;
   white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .vagabond .npc-app-field input {
   width: 30px;
