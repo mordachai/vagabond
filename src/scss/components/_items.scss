@@ -8,17 +8,16 @@
 }
 
 .spells-title {
-    background-image: url('../assets/images/sheets/titleSmallBG.webp');
+    background-image: url('../assets/images/sheets/healthBG.svg');
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 100% 100%;
-    width: fit-content;
     margin: auto;
     text-align: center;
     color: $c-white;
     mix-blend-mode: normal;
     opacity: 1;
-    padding: 8px 16px;
+    padding: 10px 20px;
     position: relative;
     bottom: -25px;
 }

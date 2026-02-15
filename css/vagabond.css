@@ -4871,31 +4871,10 @@ ol#combat-tracker.directory-list {
 }
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Germania", serif;
-  font-weight: bold;
+  font-weight: normal;
   margin: 0;
   margin-bottom: 4px;
-  mix-blend-mode: multiply;
-  opacity: 0.85;
-}
-.vagabond h2 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-.vagabond h2::before, .vagabond h2::after {
-  content: "";
-  flex-grow: 1;
-  height: 18px;
-  background-image: url("../assets/images/line-01.svg");
-  background-repeat: repeat-x;
-  background-size: 200px 100%;
-}
-.vagabond h2::before {
-  margin-right: 8px;
-}
-.vagabond h2::after {
-  margin-left: 8px;
+  opacity: 1;
 }
 .vagabond .resource-label {
   font-family: "Germania", serif;
@@ -5937,17 +5916,16 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
 }
 .vagabond .spells-title {
-  background-image: url("../assets/images/sheets/titleSmallBG.webp");
+  background-image: url("../assets/images/sheets/healthBG.svg");
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 100% 100%;
-  width: fit-content;
   margin: auto;
   text-align: center;
   color: var(--vagabond-c-white);
   mix-blend-mode: normal;
   opacity: 1;
-  padding: 8px 16px;
+  padding: 10px 20px;
   position: relative;
   bottom: -25px;
 }
@@ -6995,20 +6973,20 @@ ol#combat-tracker.directory-list {
   height: 20px;
   padding: 4px 20px;
   box-sizing: border-box;
+  z-index: 20;
 }
 .vagabond .inventory-header-container h4 {
-  background-image: url("../assets/images/sheets/titleSmallBG.webp");
+  background-image: url("../assets/images/sheets/healthBG.svg");
   background-repeat: no-repeat;
-  background-position: left center;
+  background-position: center center;
   background-size: 100% 100%;
   margin: 0;
   text-align: center;
   color: var(--vagabond-c-white);
-  mix-blend-mode: normal;
-  opacity: 1;
-  padding: 4px 8px;
+  padding: 10px 20px;
   position: relative;
   top: -14px;
+  z-index: 20;
 }
 .vagabond .inventory-slots-section {
   position: absolute;
@@ -9326,9 +9304,11 @@ ol#combat-tracker.directory-list {
   border-radius: 2px;
   color: var(--vagabond-c-white);
   background-image: url("../assets/images/sheets/titleBG.webp");
-  background-repeat: repeat;
+  background-position: center center;
+  background-repeat: repeat-x;
   background-size: 100% 100%;
   line-height: 1.4;
+  width: 100%;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
 }
 .vagabond .npc-lock-name-row .npc-name-input {
@@ -10199,7 +10179,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   flex-direction: row;
   flex-wrap: nowrap;
   background-image: url(../assets/images/sheets/titleBG.webp);
-  background-repeat: no-repeat;
+  background-repeat: repeat-x;
   background-size: 100% 100%;
   color: var(--vagabond-c-white);
   padding-top: 4px;

@@ -25,20 +25,22 @@
   height: 20px;
   padding: 4px 20px;
   box-sizing: border-box;
+  z-index: 20;
 
   h4 {
-    background-image: url('../assets/images/sheets/titleSmallBG.webp');
+    background-image: url('../assets/images/sheets/healthBG.svg');
     background-repeat: no-repeat;
-    background-position: left center;
+    background-position: center center;
     background-size: 100% 100%;
     margin: 0;
     text-align: center;
     color: $c-white;
-    mix-blend-mode: normal;
-    opacity: 1;
-    padding: 4px 8px;
+    // mix-blend-mode: normal;
+    // opacity: 1;
+    padding: 10px 20px;
     position: relative;
     top: -14px;
+    z-index: 20;
   }
 }
 
