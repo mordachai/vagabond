@@ -352,6 +352,14 @@
       "npcInitiativeFormula": {
         "name": "Initiative Formula (NPCs)",
         "hint": "Custom formula for rolling initiative for NPCs. Only used when initiative rolls are enabled. Use @ to reference actor data (e.g., @speed)."
+      },
+      "pcFatigueMax": {
+        "name": "PC Fatigue Max",
+        "hint": "Maximum fatigue level for player characters. Each fatigue occupies an inventory slot. Default is 5."
+      },
+      "npcFatigueMax": {
+        "name": "NPC Fatigue Max",
+        "hint": "Maximum fatigue level for NPCs. Default is 5."
       }
     },
     "Actor": {
@@ -360,6 +368,7 @@
         "Features": "Features",
         "Inventory": "Inventory",
         "Spells": "Spells",
+        "Magic": "Magic",
         "Effects": "Effects"
       },
       "base": {
@@ -389,10 +398,10 @@
           "combat.speed.travel": {"label": "Travel Speed"},
           "combat.currentLuck": {"label": "Current Luck"},
           "combat.armor": {"label": "Armor Rating"},
-          "mana.current": {"label": "Current Mana"},
+          "mana.current": {"label": "Mana"},
           "mana.max": {"label": "Max Mana"},
           "mana.castingMax": {"label": "Mana/Cast"},
-          "manaSkill": {"label": "Casting Skill"}
+          "manaSkill": {"label": "Casting Skill:"}
         }
       },
       "NPC": {
@@ -412,10 +421,11 @@
           "armor": {"label": "Armor:"},
           "immunities": {"label": "Immune:"},
           "weaknesses": {"label": "Weak:"},
-          "statusImmunities": {"label": "Status:"},
+          "statusImmunities": {"label": "Status Immunities:"},
           "description": {"label": "Description"}
         },
         "Sections": {
+          "Resistances": "Resistances",
           "Actions": "Actions",
           "Abilities": "Abilities",
           "Effects": "Effects"
@@ -633,6 +643,12 @@
         "NoItems": "No items in this pack yet. Drag items here to add them.",
         "RemoveItem": "Remove item from pack"
       },
+      "Equipment": {
+        "FIELDS": {
+          "requiresBound": {"label": "Requires Bound"},
+          "bound": {"label": "Bound"}
+        }
+      },
       "Relic": {
         "FIELDS": {
           "lore": {"label": "Lore"},
@@ -770,7 +786,7 @@
     "FavorHinder": {
       "label": "Favor/Hinder",
       "States": {
-        "none": "Favor/Hinder",
+        "none": "Fvr/Hdr",
         "favor": "Favor",
         "hinder": "Hinder"
       },
@@ -884,13 +900,15 @@
         "Crawl": "Crawl",
         "Travel": "Travel",
         "LuckPool": "Luck Pool",
+        "luckTerm": "Luck",
+        "poolTerm": "Pool",
         "StudiedDie": "Study Dice",
         "SkillTraining": "Trained Skills"
       },
       "Labels": {
         "UnknownAncestry": "Unknown Ancestry",
         "NoClass": "No Class",
-        "CheckMod": "Check Modif.",
+        "CheckMod": "Check Mod.",
         "Check": "Check",
         "Damage": "Damage",
         "Delivery": "Delivery",
@@ -962,7 +980,9 @@
         "Group": "Choose from Group",
         "Count": "Select:",
         "RestrictedPool": "Among these:",
-        "Targets": "Targets"
+        "Targets": "Targets",
+        "Bounds": "Bounds:",
+        "BoundsLimitReached": "Cannot bind {name}: all bound slots are full ({current}/{max})."
       },
       "Examples": {
         "PermanentEffect": "Example: Perk that gives +2 Might to all rolls",
@@ -970,8 +990,8 @@
         "OnUseEffect": "Example: Keen Dagger (crits on 19-20, but only with dagger attacks)"
       },
       "Units": {
-        "Feet": "in feet",
-        "Miles": "in miles",
+        "Feet": "'",
+        "Miles": "mi",
         "GridUnits": "in grid units"
       },
       "Buttons": {
@@ -982,6 +1002,9 @@
       },
       "Hints": {
         "EmptyForAny": "Let Empty fo ANY skills"
+      },
+      "Chat": {
+        "FlukeReroll": "Luck Reroll — Fluke"
       }
     },
     "Notifications": {

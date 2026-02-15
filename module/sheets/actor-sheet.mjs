@@ -51,6 +51,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleFx: this._onToggleFx,
       toggleSpellFavorite: this._onToggleSpellFavorite,
       toggleSpellPreview: this._onToggleSpellPreview,
+      toggleSpellAccordion: this._onToggleSpellAccordion,
       // Character-specific UI actions (handled in base class)
       viewAncestry: this._viewAncestry,
       viewClass: this._viewClass,
@@ -63,7 +64,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       statusClick: this._onStatusClick,
       spendLuck: this._onSpendLuck,
       spendStudiedDie: this._onSpendStudiedDie,
-      modifyCheckBonus: this._onModifyCheckBonus,
+      modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
       modifyMana: this._onModifyMana,
       openDowntime: this._onOpenDowntime,
       openCharBuilder: this._onOpenCharBuilder,
@@ -93,6 +94,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickActionName: this._onClickActionName,
       clickActionDamageRoll: this._onClickActionDamageRoll,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
+      toggleDescription: this._onToggleDescription,
     },
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
     form: {
@@ -141,6 +143,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /** @override */
   async render(options = {}, _options = {}) {
+    // Skip render when suppressed (e.g. during panel toggle flag save)
+    if (this._suppressRender) return;
+
     // Wait for templates to be ready before rendering
     if (typeof globalThis.vagabond?.templatesReady !== 'undefined' && !globalThis.vagabond.templatesReady) {
       console.log("Vagabond | Waiting for templates to load before rendering sheet...");
@@ -289,9 +294,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
       context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
 
-      // Prepare fatigue boxes (5 skulls)
+      // Prepare fatigue boxes (dynamic max from setting + bonus)
       const fatigue = this.actor.system.fatigue || 0;
-      context.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+      const fatigueMax = this.actor.system.fatigueMax || 5;
+      context.fatigueBoxes = Array.from({ length: fatigueMax }, (_, i) => ({
         checked: i < fatigue,
         level: i + 1
       }));
@@ -350,26 +356,21 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         break;
 
       case 'npcHeader':
-        // Prepare fatigue boxes for NPC (5 skulls, same as character)
+        // Prepare fatigue boxes for NPC (dynamic max from setting + bonus)
         const fatigue = this.actor.system.fatigue || 0;
-        partContext.fatigueBoxes = Array.from({ length: 5 }, (_, i) => ({
+        const fatigueMax = this.actor.system.fatigueMax || 5;
+        partContext.fatigueBoxes = Array.from({ length: fatigueMax }, (_, i) => ({
           checked: i < fatigue,
           level: i + 1
         }));
-        break;
 
-      case 'npcContent':
-        // Add actions and abilities from actor system
-        partContext.actions = this.actor.system.actions || [];
-        partContext.abilities = this.actor.system.abilities || [];
+        // Prepare status effects for portrait display
+        partContext.statusEffects = this._prepareNPCStatusEffects();
 
         // Format appearing field for display in locked mode
         if (this.actor.system.locked && this.actor.system.appearing) {
           try {
-            // First, use VagabondTextParser to convert dice notation to roll links
             const parsedText = VagabondTextParser.parseAll(this.actor.system.appearing);
-
-            // Then, use Foundry's enrichment to make the roll links clickable
             partContext.enrichedAppearing = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
               parsedText,
               {
@@ -386,6 +387,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         } else {
           partContext.enrichedAppearing = this.actor.system.appearing || '';
         }
+        break;
+
+      case 'npcContent':
+        // Add actions and abilities from actor system
+        partContext.actions = this.actor.system.actions || [];
+        partContext.abilities = this.actor.system.abilities || [];
 
         // Enrich NPC actions and abilities
         try {
@@ -430,17 +437,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         case 'features':
           tab.id = 'features';
           tab.label += 'Features';
-          tab.icon = 'fa-solid fa-shield-halved';
+          //tab.icon = 'fa-solid fa-shield-halved';
           break;
         case 'spells':
           tab.id = 'spells';
-          tab.label += 'Spells';
-          tab.icon = 'fa-solid fa-wand-sparkles';
+          tab.label += 'Magic';
+          //tab.icon = 'fa-solid fa-wand-sparkles';
           break;
         case 'effects':
           tab.id = 'effects';
           tab.label += 'Effects';
-          tab.icon = 'fa-solid fa-flask';
+          //tab.icon = 'fa-solid fa-flask';
           break;
       }
 
@@ -493,6 +500,27 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return effects;
   }
 
+  /**
+   * Prepare status effects for NPC portrait display
+   * Shows all non-disabled effects on the actor
+   * @returns {Array} Array of effect data for display
+   * @private
+   */
+  _prepareNPCStatusEffects() {
+    const effects = [];
+    for (const effect of this.actor.effects) {
+      if (effect.disabled) continue;
+      effects.push({
+        id: effect.id,
+        uuid: effect.uuid,
+        name: effect.name || effect.label || 'Unknown',
+        icon: effect.img || 'icons/svg/aura.svg',
+        statuses: Array.from(effect.statuses || [])
+      });
+    }
+    return effects;
+  }
+
   async _prepareItems(context) {
     const gear = [];
     const weapons = [];
@@ -518,6 +546,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           containers.push(item);
           break;
         case 'spell':
+          // Calculate effective damage die size
+          const override = item.system.damageDieSize;
+          const defaultSize = this.actor.system.spellDamageDieSize || 6;
+          item.effectiveDamageDieSize = override || defaultSize;
           spells.push(item);
           break;
         case 'perk':
@@ -605,11 +637,27 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       this._setupFeatureContextMenuListeners();
     }
 
+    // Setup panel favorites context menu listeners
+    this._setupPanelContextMenuListeners();
+
     // Setup status icon listeners
     this._setupStatusIconListeners();
 
     // Show sliding panel tooltip (first time only)
     this._showSlidingPanelTooltip();
+
+    // Toggle margin on right-column-scrollable when content overflows
+    const scrollable = this.element.querySelector('.right-column-scrollable');
+    if (scrollable) {
+      const updateScrollClass = () => scrollable.classList.toggle('has-scroll', scrollable.scrollHeight > scrollable.clientHeight);
+      requestAnimationFrame(updateScrollClass);
+      this._scrollObserver?.disconnect();
+      this._scrollObserver = new ResizeObserver(updateScrollClass);
+      this._scrollObserver.observe(scrollable);
+    }
+
+    // Fix inline roll dice icons to match actual die type
+    EnrichmentHelper.fixInlineRollIcons(this.element);
   }
 
   // ===========================
@@ -691,6 +739,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onToggleSpellPreview(event, target) {
     return this.spellHandler?.toggleSpellPreview(event, target);
+  }
+
+  static async _onToggleSpellAccordion(event, target) {
+    return this.spellHandler?.toggleSpellAccordion(event, target);
   }
 
   // --- NPC IMMUNITY HANDLERS ---
@@ -1118,8 +1170,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     });
 
-    // Save state to flag (without re-rendering)
+    // Save state to flag — suppress re-render so the CSS transition plays out
+    this._suppressRender = true;
     await this.actor.setFlag('vagabond', 'isPanelOpen', !isOpen);
+    this._suppressRender = false;
 
     // Hide the tooltip after first use
     this._hideSlidingPanelTooltip();
@@ -1242,6 +1296,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onToggleLock(event, target) {
     const currentState = this.actor.system.locked ?? false;
     await this.actor.update({ 'system.locked': !currentState });
+  }
+
+  /**
+   * Toggle NPC description visibility (locked mode)
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static _onToggleDescription(event, target) {
+    const descRow = this.element.querySelector('.npc-description-collapsible');
+    if (descRow) {
+      descRow.classList.toggle('collapsed');
+      descRow.classList.toggle('open');
+    }
   }
 
   /**
@@ -1547,10 +1615,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         event.stopPropagation();
 
         const currentFatigue = this.actor.system.fatigue || 0;
+        const fatigueMax = this.actor.system.fatigueMax || 5;
 
         // If clicking on an active skull, reduce fatigue to that index
         // If clicking on an inactive skull, increase fatigue to index + 1
-        const newFatigue = (index + 1 === currentFatigue) ? index : index + 1;
+        const newFatigue = Math.min((index + 1 === currentFatigue) ? index : index + 1, fatigueMax);
 
         await this.actor.update({ 'system.fatigue': newFatigue });
 
@@ -1735,6 +1804,155 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         if (!itemId) return;
 
         await this.inventoryHandler.showFeatureContextMenu(event, itemId, 'perk');
+      });
+    });
+  }
+
+  /**
+   * Setup context menu listeners for equipped items and favorited spells in the sliding panel.
+   * Options: Send to Chat, Use (if applicable), Unequip, Unbind (relics only).
+   * @private
+   */
+  _setupPanelContextMenuListeners() {
+    // Equipped items (weapons, relics, alchemicals, gear)
+    const equippedItems = this.element.querySelectorAll('.equipped-item .eq-name');
+    equippedItems.forEach(label => {
+      label.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const itemId = label.closest('[data-item-id]')?.dataset.itemId;
+        if (!itemId) return;
+
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        const isWeapon = EquipmentHelper.isWeapon(item);
+        const isAlchemical = EquipmentHelper.isAlchemical(item);
+        const hasAlchemicalDamage = isAlchemical && item.system.damageType && item.system.damageType !== '-';
+        const isArmor = EquipmentHelper.isArmor(item);
+        const isGear = EquipmentHelper.isGear(item);
+
+        // Determine if "Use" option should be shown
+        let showUseOption = false;
+        if (isWeapon || hasAlchemicalDamage) {
+          showUseOption = true;
+        } else if (isArmor) {
+          showUseOption = false;
+        } else if (isGear) {
+          showUseOption = item.system.isConsumable === true;
+        } else {
+          showUseOption = true;
+        }
+
+        const menuItems = [];
+
+        // Use
+        if (showUseOption) {
+          menuItems.push({
+            label: 'Use',
+            icon: 'fas fa-hand-sparkles',
+            enabled: true,
+            action: async () => {
+              if (isWeapon || hasAlchemicalDamage) {
+                await VagabondActorSheet._onRollWeapon.call(this, event, {
+                  dataset: { itemId },
+                });
+              } else {
+                await VagabondActorSheet._onUseItem.call(this, event, {
+                  dataset: { itemId },
+                });
+              }
+            },
+          });
+        }
+
+        // Send to Chat
+        menuItems.push({
+          label: 'Send to Chat',
+          icon: 'fas fa-comment',
+          enabled: true,
+          action: async () => {
+            await VagabondChatCard.gearUse(this.actor, item);
+          },
+        });
+
+        // Unequip
+        menuItems.push({
+          label: 'Unequip',
+          icon: 'fas fa-times',
+          enabled: true,
+          action: async () => {
+            if (isWeapon && item.system.equipmentState !== undefined) {
+              await item.update({ 'system.equipmentState': 'unequipped' });
+            } else if (isArmor) {
+              await item.update({ 'system.worn': false });
+            } else if (item.system.equipped !== undefined) {
+              await item.update({ 'system.equipped': false });
+            }
+          },
+        });
+
+        // Unbind (relics only)
+        if (item.system.requiresBound) {
+          const isBound = item.system.bound === true;
+          if (isBound) {
+            menuItems.push({
+              label: 'Unbind',
+              icon: 'fa-solid fa-diamond',
+              enabled: true,
+              action: async () => {
+                await item.update({ 'system.bound': false });
+              },
+            });
+          }
+        }
+
+        ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: menuItems,
+          className: 'inventory-context-menu',
+        });
+      });
+    });
+
+    // Favorited spells
+    const spellNames = this.element.querySelectorAll('.favorited-spell .spell-name-container');
+    spellNames.forEach(container => {
+      container.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const spellId = container.closest('[data-spell-id]')?.dataset.spellId;
+        if (!spellId) return;
+
+        const spell = this.actor.items.get(spellId);
+        if (!spell) return;
+
+        const menuItems = [
+          {
+            label: 'Send to Chat',
+            icon: 'fas fa-comment',
+            enabled: true,
+            action: async () => {
+              await VagabondChatCard.itemUse(this.actor, spell);
+            },
+          },
+          {
+            label: 'Unfavorite',
+            icon: 'fas fa-star',
+            enabled: true,
+            action: async () => {
+              await spell.update({ 'system.favorite': false });
+            },
+          },
+        ];
+
+        ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: menuItems,
+          className: 'inventory-context-menu',
+        });
       });
     });
   }

@@ -1,97 +1,121 @@
 {{! Spell Details Tab }}
 <section
-  class='tab details {{tab.cssClass}}'
+  class='tab details {{tab.cssClass}} {{#if system.locked}}spell-locked-view{{/if}}'
   data-group='primary'
   data-tab='details'
 >
-  <div class='spell-item-content'>
-    {{! Description Section }}
-    <div>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.description.label'}}</label>
-      <div class='spell-description'>
-        {{#if editable}}
-          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
-            {{{enriched.description}}}
-          </prose-mirror>
-        {{else}}
-          <div>{{{enriched.description}}}</div>
-        {{/if}}
-      </div>
-    </div>
-
-    {{! Damage Base and Duration - Same Line }}
-    <div class='flexrow gap-8'>
-      <div class='form-group flex-1'>
-        <label class='resource-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</label>
-        {{> "systems/vagabond/templates/shared/damage-type-select.hbs" 
-            name="system.damageType" 
-            selected=system.damageType 
-            includeNone=true 
-            config=config}}
-      </div>
-      <div class='form-group flex-2'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
-        <input
-          type='text'
-          name='system.duration'
-          value='{{system.duration}}'
-          placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
-        />
-      </div>
-    </div>
-
-    {{! Exploding Dice Configuration }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
-      <div class='grid grid-2col gap-8'>
-        <div class='explode-checkbox-field'>
-          <label class='checkbox-label'>
-            <input
-              type='checkbox'
-              name='system.canExplode'
-              {{#if system.canExplode}}checked{{/if}}
-              data-dtype='Boolean'
-            />
-            <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
-          </label>
+  {{#if system.locked}}
+    {{! ===== LOCKED VIEW ===== }}
+    <div class='equipment-locked-content'>
+      {{! Damage Type }}
+      {{#unless (eq system.damageType '-')}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</h3>
+          <div class='locked-stats-grid'>
+            <div class='locked-stat'>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}:</span>
+              <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
+            </div>
+          </div>
         </div>
-        <div class='explode-values-field'>
-          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
+      {{/unless}}
+
+      {{! Duration }}
+      {{#if system.duration}}
+        <div class='locked-section'>
+          <div class='locked-stat'>
+            <span class='stat-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}:</span>
+            <span class='stat-value'>{{system.duration}}</span>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! Exploding Dice }}
+      {{#if system.canExplode}}
+        <div class='locked-section'>
+          <div class='locked-stat'>
+            <span class='stat-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}:</span>
+            <span class='stat-value'>{{system.explodeValues}}</span>
+          </div>
+        </div>
+      {{/if}}
+
+      {{! No Roll Required }}
+      {{#if system.noRollRequired}}
+        <div class='locked-section'>
+          <div class='locked-stat'>
+            <span class='stat-label'>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}:</span>
+            <span class='stat-value'>Yes</span>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
+    <div class='spell-item-content'>
+      {{! Damage Base and Duration - Same Line }}
+      <div class='flexrow gap-8'>
+        <div class='form-group flex-1'>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</label>
+          {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+              name="system.damageType"
+              selected=system.damageType
+              includeNone=true
+              config=config}}
+        </div>
+        <div class='form-group flex-2'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
           <input
             type='text'
-            name='system.explodeValues'
-            value='{{system.explodeValues}}'
-            data-dtype='String'
-            placeholder='e.g., 1,4'
-            {{#unless system.canExplode}}disabled{{/unless}}
+            name='system.duration'
+            value='{{system.duration}}'
+            placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
           />
         </div>
       </div>
-    </div>
 
-    {{! No Roll Required Checkbox }}
-    <div class='form-group'>
-      <label class='checkbox-label'>
-        <input
-          type='checkbox'
-          name='system.noRollRequired'
-          {{#if system.noRollRequired}}checked{{/if}}
-          data-dtype='Boolean'
-        />
-        <span>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}</span>
-      </label>
-      <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
-    </div>
+      {{! Exploding Dice Configuration }}
+      <div class='form-group'>
+        <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
+        <div class='grid grid-2col gap-8'>
+          <div class='explode-checkbox-field'>
+            <label class='checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.canExplode'
+                {{#if system.canExplode}}checked{{/if}}
+                data-dtype='Boolean'
+              />
+              <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
+            </label>
+          </div>
+          <div class='explode-values-field'>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
+            <input
+              type='text'
+              name='system.explodeValues'
+              value='{{system.explodeValues}}'
+              data-dtype='String'
+              placeholder='e.g., 1,4'
+              {{#unless system.canExplode}}disabled{{/unless}}
+            />
+          </div>
+        </div>
+      </div>
 
-    {{! Crit }}
-    <div class='form-group'>
-      <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>
-      <input
-        type='text'
-        name='system.crit'
-        value='{{system.crit}}'
-        placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.crit.hint"}}'
-      />
+      {{! No Roll Required Checkbox }}
+      <div class='form-group'>
+        <label class='checkbox-label'>
+          <input
+            type='checkbox'
+            name='system.noRollRequired'
+            {{#if system.noRollRequired}}checked{{/if}}
+            data-dtype='Boolean'
+          />
+          <span>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}</span>
+        </label>
+        <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
+      </div>
     </div>
-  </div>
+  {{/if}}
 </section>

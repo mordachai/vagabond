@@ -8,82 +8,44 @@
   {{! Inventory Section }}
   <section class='inventory-section'>
 
-    {{! Wealth Section }}
-    <div class='wealth-section'>
-      <div class='currency-row flexrow'>
-        <h5>{{localize "VAGABOND.UI.Sections.Wealth"}}:</h5>
-        <div class='currency-field'>
-          <label class='resource-label'
-          title="{{localize "VAGABOND.Currency.Gold.long"}}">
-          <i class="gold fa-duotone fa-solid fa-coins"></i></label>
-          <input
-            type='text'
-            name='system.currency.gold'
-            value='{{system.currency.gold}}'
-            data-dtype='Number'
-            {{#unless @root.editable}}disabled{{/unless}}
-          />
-        </div>
-        <div class='currency-field'>
-          <label class='resource-label'
-          title="{{localize "VAGABOND.Currency.Silver.long"}}">
-          <i class="silver fa-duotone fa-solid fa-coins"></i></label>
-          <input
-            type='text'
-            name='system.currency.silver'
-            value='{{system.currency.silver}}'
-            data-dtype='Number'
-            {{#unless @root.editable}}disabled{{/unless}}
-          />
-        </div>
-        <div class='currency-field'>
-          <label class='resource-label'
-          title="{{localize "VAGABOND.Currency.Copper.long"}}">
-          <i class="copper fa-duotone fa-solid fa-coins"></i></label>
-          <input
-            type='text'
-            name='system.currency.copper'
-            value='{{system.currency.copper}}'
-            data-dtype='Number'
-            {{#unless @root.editable}}disabled{{/unless}}
-          />
-        </div>
-      </div>
-    </div>
+    <div class='inventory-header-container'>
+      <h4 class='section-title-with-add'>
+        {{localize "VAGABOND.UI.Sections.Inventory"}}
+      </h4>
 
-    <h4 class='panel-title section-title-with-add'>
-      {{localize "VAGABOND.UI.Sections.Inventory"}}
-      {{#if @root.editable}}
-        <i
-          class='fas fa-plus clickable'
-          data-tooltip='Add Gear'
-          data-action='createDoc'
-          data-document-class='Item'
-          data-type='equipment'
-        ></i>
-      {{/if}}
-    </h4>
-    {{! Inventory Slots Section }}
-    <div class='inventory-slots-section'>
-      <div class='slots-info flexrow'>
-        <div class='slot-field'>
-          <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
-          <span class='slot-value'>
-            {{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}
-            {{#if (gt system.inventory.fatigueSlots 0)}}
-              <span class='fatigue-note'>[{{system.inventory.baseMaxSlots}} - {{system.inventory.fatigueSlots}} Fatigue]</span>
-            {{/if}}
-          </span>
-        </div>
-        {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
-          <div class='slot-warning'>
-            <i class='fas fa-exclamation-triangle'></i>
-            <span>{{localize "VAGABOND.UI.Labels.Overloaded"}}</span>
+      {{! Bounds Counter }}
+      <div class='bounds-counter-section'>
+        <div class='bounds-info flexrow'>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Bounds"}}</label>
+          <div class='bounds-pips'>
+            {{#each boundsPips as |pip|}}
+              <i class='fa-solid fa-diamond bound-pip {{#if pip.filled}}filled{{else}}empty{{/if}}'></i>
+            {{/each}}
           </div>
-        {{/if}}
+        </div>
+      </div>
+
+      {{! Inventory Slots Section }}
+      <div class='inventory-slots-section'>
+        <div class='slots-info flexrow'>
+          <div class='slot-field {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}overloaded{{/if}}'>
+            <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
+            <span class='slot-value'>
+              {{system.inventory.occupiedSlots}} / {{system.inventory.maxSlots}}
+              {{!-- {{#if (gt system.inventory.fatigueSlots 0)}}
+                <span class='fatigue-note'>[{{system.inventory.baseMaxSlots}} - {{system.inventory.fatigueSlots}} Fatigue]</span>
+              {{/if}} --}}
+            </span>
+          </div>
+          {{!-- {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}
+            <div class='slot-warning'>
+              <i class='fas fa-exclamation-triangle'></i>
+              <span>{{localize "VAGABOND.UI.Labels.Overloaded"}}</span>
+            </div>
+          {{/if}} --}}
+        </div>
       </div>
     </div>
-
     {{! Visual Inventory Grid - DYNAMIC rows × 4 columns }}
     <div class='inventory-grid-container'>
       <div class='inventory-grid'
@@ -103,7 +65,9 @@
               totalSlots=itemData.totalSlots
               metalColor=itemData.metalColor
               weaponSkillIcon=itemData.weaponSkillIcon
-              damageTypeIcon=itemData.damageTypeIcon}}
+              damageTypeIcon=itemData.damageTypeIcon
+              requiresBound=itemData.requiresBound
+              bound=itemData.bound}}
         {{/each}}
 
         {{! Render empty slots (to complete grid) }}
@@ -131,6 +95,43 @@
         </div>
       {{/if}}
     </div>
+
+    {{! Wealth Section }}
+    <div class='wealth-section'>
+      <div class='currency-row flexrow'>
+        <div class='wealth-title'>{{localize "VAGABOND.UI.Sections.Wealth"}}:</div>
+        <div class='currency-field'>
+          <label class='resource-label gold-label'>{{localize "VAGABOND.Currency.Gold.long"}}</label>
+          <input
+            type='text'
+            name='system.currency.gold'
+            value='{{system.currency.gold}}'
+            data-dtype='Number'
+            {{#unless @root.editable}}disabled{{/unless}}
+          />
+        </div>
+        <div class='currency-field'>
+          <label class='resource-label silver-label'>{{localize "VAGABOND.Currency.Silver.long"}}</label>
+          <input
+            type='text'
+            name='system.currency.silver'
+            value='{{system.currency.silver}}'
+            data-dtype='Number'
+            {{#unless @root.editable}}disabled{{/unless}}
+          />
+        </div>
+        <div class='currency-field'>
+          <label class='resource-label copper-label'>{{localize "VAGABOND.Currency.Copper.long"}}</label>
+          <input
+            type='text'
+            name='system.currency.copper'
+            value='{{system.currency.copper}}'
+            data-dtype='Number'
+            {{#unless @root.editable}}disabled{{/unless}}
+          />
+        </div>
+      </div>
+    </div>
   </section>
   
   {{! Features & Perks Section }}
@@ -140,7 +141,7 @@
     <div class='grid grid-2col'>
       {{! Left Column: Features }}
       <div class='features-column grid-span-1'>
-        <h4>{{localize "VAGABOND.UI.Sections.Features"}}</h4>
+        <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
         <ul class='features-list'>
           {{#each enrichedFeatures as |feature id|}}
             <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class'>

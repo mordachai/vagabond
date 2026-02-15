@@ -31,8 +31,15 @@ export default class VagabondActorBase extends foundry.abstract
       ...requiredInteger,
       initial: 0,
       min: 0,
-      max: 5,
     });
+    schema.fatigueBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Fatigue Max Bonus",
+        hint: "Bonus to maximum fatigue. Can be a number or formula."
+      }
+    );
     schema.biography = new fields.HTMLField();
 
     return schema;

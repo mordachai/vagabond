@@ -52,6 +52,18 @@ export default class VagabondEquipment extends VagabondItemBase {
       copper: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
     });
 
+    // Bound system - marks items that require binding before use
+    schema.requiresBound = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
+    // Current bound state - whether this item is bound to a character
+    schema.bound = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     // Base slots (before metal modifier if applicable, can be negative for items like Backpack)
     schema.baseSlots = new fields.NumberField({
       required: true,

@@ -51,8 +51,6 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     // Manual binding for createDoc action (workaround for action inheritance issue)
     this._bindCreateDocActions();
 
-    // Manual binding for right-click on Check Mod
-    this._bindCheckModContextMenu();
   }
 
   /**
@@ -110,8 +108,8 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
             case 'deleteDoc':
               const deleteDoc = this.constructor._getEmbeddedDocument(newButton, this.actor);
               if (deleteDoc) {
-                const confirmed = await Dialog.confirm({
-                  title: `Delete ${deleteDoc.name}?`,
+                const confirmed = await foundry.applications.api.DialogV2.confirm({
+                  window: { title: `Delete ${deleteDoc.name}?` },
                   content: `<p>Are you sure you want to delete ${deleteDoc.name}?</p>`,
                 });
                 if (confirmed) {
@@ -135,23 +133,6 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     });
   }
 
-  /**
-   * Manually bind right-click event for Check Mod
-   * @private
-   */
-  _bindCheckModContextMenu() {
-    const checkModLabel = this.element.querySelector('[data-action="modifyCheckBonus"]');
-
-    if (checkModLabel) {
-      checkModLabel.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        // Call the static _onModifyCheckBonus method with the contextmenu event
-        await this.constructor._onModifyCheckBonus.call(this, event, checkModLabel);
-      });
-    }
-  }
 
   /**
    * Setup spell listeners (called during render)

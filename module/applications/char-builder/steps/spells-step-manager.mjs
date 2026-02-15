@@ -56,6 +56,12 @@ export class SpellsStepManager extends BaseStepManager {
     const previewUuid = state.previewUuid;
     const spellLimit = await this._getSpellLimit(state);
 
+    // Mark items as previewing for template
+    const markedSpells = availableSpells.map(spell => ({
+      ...spell,
+      previewing: spell.uuid === previewUuid
+    }));
+
     // Get preview item details
     let previewItem = null;
     if (previewUuid) {
@@ -96,7 +102,7 @@ export class SpellsStepManager extends BaseStepManager {
     const classPreviewData = await this._prepareClassPreviewData(state);
 
     return {
-      availableOptions: availableSpells,
+      availableOptions: markedSpells,
       selectedSpells: selectedSpells,
       selectedItem: previewItem,
       previewItem: previewItem,

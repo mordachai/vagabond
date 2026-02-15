@@ -35,12 +35,12 @@ VAGABOND.actorTypeImages = {
  * @type {Object}
  */
 VAGABOND.stats = {
-  might: 'VAGABOND.Stat.Might.long',
-  dexterity: 'VAGABOND.Stat.Dexterity.long',
-  awareness: 'VAGABOND.Stat.Awareness.long',
-  reason: 'VAGABOND.Stat.Reason.long',
-  presence: 'VAGABOND.Stat.Presence.long',
-  luck: 'VAGABOND.Stat.Luck.long',
+  might: 'VAGABOND.Stat.Might.abbr',
+  dexterity: 'VAGABOND.Stat.Dexterity.abbr',
+  awareness: 'VAGABOND.Stat.Awareness.abbr',
+  reason: 'VAGABOND.Stat.Reason.abbr',
+  presence: 'VAGABOND.Stat.Presence.abbr',
+  luck: 'VAGABOND.Stat.Luck.abbr',
 };
 
 VAGABOND.statAbbreviations = {
@@ -629,6 +629,15 @@ VAGABOND.statusEffectDefinitions = [
 ];
 
 /**
+ * Status condition icon map (status ID → img path)
+ * Built from statusEffectDefinitions for use in NPC sheets
+ * @type {Object}
+ */
+VAGABOND.statusConditionIcons = Object.fromEntries(
+  VAGABOND.statusEffectDefinitions.map(e => [e.id, e.img])
+);
+
+/**
  * Combat zones for NPCs
  * @type {Object}
  */
@@ -977,8 +986,8 @@ VAGABOND.damageTypeIcons = {
  * @type {Object}
  */
 VAGABOND.fxIcon = {
-  type: 'txt',   // 'fa' for Font Awesome, 'img' for image
-  value: 'Fx'    // FA class or image path
+  type: 'fa',    // 'fa' for Font Awesome, 'img' for image, 'txt' for text
+  value: 'fa-solid fa-explosion'
 };
 
 /**

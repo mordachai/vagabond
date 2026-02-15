@@ -7,9 +7,23 @@
   }
 }
 
+.spells-title {
+    background-image: url('../assets/images/sheets/healthBG.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 100%;
+    margin: auto;
+    text-align: center;
+    color: $c-white;
+    mix-blend-mode: normal;
+    opacity: 1;
+    padding: 10px 20px;
+    position: relative;
+    bottom: -25px;
+}
+
 // Section Header
 .items-header {
-  height: 28px;
   margin: 6px 0;
   padding: 0;
   align-items: center;
@@ -35,10 +49,12 @@
 .items-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 30px 12px 12px 12px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  color: $c-dark;
+  border: 3px solid $c-yellow;
+  border-radius: 1.3em;
+  corner-shape: scoop scoop round round;
+  background-color: $c-black;
 
   // Child lists
   .item-list {
@@ -52,7 +68,6 @@
     flex: 2;
     margin: 0;
     overflow: hidden;
-    font-size: 13px;
     text-align: left;
     align-items: center;
     display: flex;
@@ -66,11 +81,10 @@
   // Control Buttons
   .item-controls {
     display: flex;
-    flex: 0 0 30px;
+    flex: 0 0 36px;
     justify-content: center;
-    gap: 5px;
+    gap: 10px;
     a {
-      font-size: 12px;
       text-align: center;
       margin: 0 6px;
     }
@@ -79,17 +93,32 @@
   // Individual Item
   .item {
     align-items: center;
-    padding: 0 2px; // to align with the header border
-    border-bottom: 1px solid $c-dark;
-    &:last-child { border-bottom: none; }
+    padding: 0 12px;
+    background-image: $bg-paper;
+    background-repeat: $bg-repeat;
+    background-size: $bg-size;
+    font-family: $font-title;
+    color: $c-text-1;
+    font-size: 1.2em;
+
+    i {font-size: 0.8em;}
+
+
+    &:last-child { 
+      border-bottom: none; 
+      border-bottom-left-radius: 0.8em;
+      border-bottom-right-radius: 0.8em;
+    }
     .item-name {
-      color: $c-dark;
+
+      font-weight: 600;
+
       .item-image {
-        flex: 0 0 30px;
-        height: 30px;
-        background-size: 30px;
+        flex: 0 0 36px;
+        height: 36px;
+        background-size: 36px;
         border: none;
-        margin-right: 5px;
+        margin-right: 8px;
       }
     }
   }
@@ -98,25 +127,24 @@
     text-align: center;
     border-left: 1px solid $c-faint;
     border-right: 1px solid $c-faint;
-    font-size: 12px;
   }
 
   // Section Header
   .items-header {
-    height: 28px;
+    height: 20px;
     margin: 2px 0;
     padding: 0;
     align-items: center;
     background: rgba(0, 0, 0, 0.05);
-    border: $border-groove;
     font-weight: bold;
+    color: $c-white;
     > * {
-      font-size: 12px;
       text-align: center;
     }
     .item-name {
       padding-left: 5px;
-      text-align: center;
+      text-align: left;
+      color: $c-white;
     }
   }
 
@@ -258,25 +286,6 @@
   justify-content: center;
 }
 
-// Section title with add button
-.section-title-with-add {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-
-  .fa-plus {
-    font-size: 14px;
-    padding: 4px 8px;
-    border-radius: 3px;
-    transition: background 0.2s ease;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.1);
-    }
-  }
-}
-
 // Title with button on the same row (for class levels and ancestry traits)
 .title-with-button {
   display: flex;
@@ -389,7 +398,6 @@
 
 .spell-col-name {
   flex: 3; // Bigger column for spell names
-  padding-left: 5px;
   text-align: left;
   display: flex;
   align-items: center;
@@ -413,14 +421,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  .favorite-active {
-    color: $c-dark;
-  }
-
-  .favorite-inactive {
-    color: $c-dark;
-  }
 }
 
 .spell-col-controls {
@@ -436,30 +436,32 @@
   }
 
   i {
-    font-size: 12px;
+    font-size: 0.8em;
   }
 }
 
 // Spell item row - ensure enough height for images
 .spell-item-row {
-  min-height: 44px;
+  min-height: 40px;
+
 
   .item-image {
     display: flex;
     align-items: center;
-    border-radius: 5px;
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
-      border-radius: 5px;
+      border-radius: 50%;
+      corner-shape: bevel;
+      border: 2px solid $c-dark-bluey;
     }
   }
 }
 
 .spell-col-chat {
-  flex: 0 0 30px;
+  flex: 0 0 36px;
   text-align: center;
   display: flex;
   align-items: center;

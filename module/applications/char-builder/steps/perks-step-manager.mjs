@@ -150,7 +150,10 @@ export class PerksStepManager extends BaseStepManager {
     const fulfilledCount = grants.filter(g => g.fulfilled).length;
 
     return {
-      availableOptions: availablePerks,
+      availableOptions: availablePerks.map(perk => ({
+        ...perk,
+        previewing: perk.uuid === previewUuid
+      })),
       selectedPerks: allSelectedPerks,
       classPerks: classPerks,
       selectedItem: previewItem,

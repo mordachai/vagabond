@@ -1,5 +1,6 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { GrantsHandlers } from './item-sheet-grants.mjs';
+import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -110,6 +111,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeTraitPerk: this._onRemoveTraitPerk,
       removeFeatureSpell: this._onRemoveFeatureSpell,
       removeFeaturePerk: this._onRemoveFeaturePerk,
+      toggleBound: this._onToggleBound,
     },
     form: {
       submitOnChange: false,   // Disabled to prevent constant redraws on every keystroke
@@ -230,8 +232,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'header':
-        // Enrich description for perks in header
-        if (this.item.type === 'perk') {
+        // Enrich description for perks and spells in header
+        if (this.item.type === 'perk' || this.item.type === 'spell') {
           context.enriched = {
             description: await foundry.applications.ux.TextEditor.enrichHTML(
               this.item.system.description,
@@ -962,6 +964,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.item.type === 'ancestry' || this.item.type === 'class') {
       GrantsHandlers.populateGrantsDropdowns(this);
     }
+
+    // Fix inline roll dice icons to match actual die type
+    EnrichmentHelper.fixInlineRollIcons(this.element);
 
     // Auto-save select, number input, and checkbox changes immediately.
     // With submitOnChange: false, form field changes are only saved on close.
@@ -2036,7 +2041,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onToggleLock(event, target) {
-    if (this.item.type !== 'equipment' && this.item.type !== 'container') return;
+    if (this.item.type !== 'equipment' && this.item.type !== 'container' && this.item.type !== 'spell') return;
 
     // Submit the form BEFORE toggling to save any pending changes
     if (this.element && this.element.tagName === 'FORM') {
@@ -2050,6 +2055,33 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
     // No need to close/reopen - template handles both states with conditionals
+  }
+
+  /**
+   * Toggle the bound state of an equipment item.
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async _onToggleBound(event, target) {
+    const currentBound = this.item.system.bound || false;
+
+    // If trying to bind, check the actor's bounds limit
+    if (!currentBound && this.item.parent) {
+      const actor = this.item.parent;
+      const currentBounds = actor.system.inventory?.currentBounds ?? 0;
+      const maxBounds = actor.system.inventory?.maxBounds ?? 3;
+      if (currentBounds >= maxBounds) {
+        ui.notifications.warn(game.i18n.format('VAGABOND.UI.Labels.BoundsLimitReached', {
+          name: this.item.name,
+          current: currentBounds,
+          max: maxBounds,
+        }));
+        return;
+      }
+    }
+
+    await this.item.update({ 'system.bound': !currentBound });
   }
 
   /**

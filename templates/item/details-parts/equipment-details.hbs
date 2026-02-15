@@ -211,6 +211,16 @@
                 <span class='stat-label'>Cost:</span>
                 <span class='stat-value'>{{system.costDisplay}}</span>
               </div>
+              {{#if system.requiresBound}}
+                <div class='locked-stat bound-toggle-row'>
+                  <span class='stat-label'>{{localize "VAGABOND.Item.Equipment.FIELDS.bound.label"}}:</span>
+                  <span class='stat-value'>
+                    <label class='bound-toggle clickable' data-action='toggleBound'>
+                      <i class='fa-solid fa-diamond bound-icon {{#if system.bound}}bound{{else}}unbound{{/if}}'></i>
+                    </label>
+                  </span>
+                </div>
+              {{/if}}
             </div>
           </div>
         </div>
@@ -619,6 +629,19 @@
             </div>
           </div>
         </div>
+
+        {{! Requires Bound (Relic) }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.requiresBound'
+              {{#if system.requiresBound}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
+          </label>
+        </div>
       {{/if}}
 
       {{! ===== UNIVERSAL FIELDS (ALL EQUIPMENT) ===== }}
@@ -791,6 +814,21 @@
               />
             </div>
           </div>
+        </div>
+      {{/unless}}
+
+      {{! Requires Bound (non-relic, non-alchemical equipment) }}
+      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.requiresBound'
+              {{#if system.requiresBound}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
+          </label>
         </div>
       {{/unless}}
 

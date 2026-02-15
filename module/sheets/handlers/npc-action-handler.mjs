@@ -133,6 +133,40 @@ export class NPCActionHandler {
   async createCountdownFromRecharge(event, target) {
     event.preventDefault();
 
+    // The clicked element may be a countdown-dice-trigger span with data-dice-size,
+    // or it may be inside an action row with data-action-index
+    const trigger = target.closest('.countdown-dice-trigger') || target;
+    const diceSize = trigger.dataset.diceSize;
+
+    // If the trigger has a dice size directly (from text parser), use it
+    if (diceSize) {
+      const { CountdownDice } = globalThis.vagabond.documents;
+      const diceType = `d${diceSize}`;
+
+      // Try to get a name from the parent action/ability context
+      const actionRow = trigger.closest('[data-action-index]');
+      const abilityRow = trigger.closest('[data-ability-index]');
+      let name = 'Countdown';
+
+      if (actionRow) {
+        const idx = parseInt(actionRow.dataset.actionIndex);
+        const action = (this.actor.system.actions || [])[idx];
+        if (action?.name) name = action.name;
+      } else if (abilityRow) {
+        const idx = parseInt(abilityRow.dataset.abilityIndex);
+        const ability = (this.actor.system.abilities || [])[idx];
+        if (ability?.name) name = ability.name;
+      }
+
+      await CountdownDice.create({
+        name: name,
+        diceType: diceType,
+      });
+      ui.notifications.info(`Created ${diceType} countdown dice for ${name}`);
+      return;
+    }
+
+    // Fallback: action-based lookup (legacy path)
     const actionIndex = parseInt(target.dataset.actionIndex);
     const actions = this.actor.system.actions || [];
     const action = actions[actionIndex];
@@ -142,14 +176,12 @@ export class NPCActionHandler {
       return;
     }
 
-    // Import countdown dice
     const { CountdownDice } = globalThis.vagabond.documents;
 
-    // Create countdown dice journal entry
     await CountdownDice.create({
       name: action.name,
       actorId: this.actor.id,
-      dieSize: action.recharge,
+      diceType: action.recharge,
       actionIndex: actionIndex,
     });
 

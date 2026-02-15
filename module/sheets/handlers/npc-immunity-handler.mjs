@@ -9,7 +9,7 @@ export class NPCImmunityHandler {
   constructor(sheet) {
     this.sheet = sheet;
     this.actor = sheet.actor;
-    this._openDropdowns = [];
+    this._dropdownOpen = false;
   }
 
   /**
@@ -195,43 +195,43 @@ export class NPCImmunityHandler {
    * Capture dropdown state before re-render
    */
   captureDropdownState() {
-    this._openDropdowns = [];
-    const dropdowns = this.sheet.element.querySelectorAll('.npc-immunity-dropdown[open]');
-    dropdowns.forEach((dropdown, index) => {
-      this._openDropdowns.push(index);
-    });
+    const dropdown = this.sheet.element.querySelector('.npc-resistances-dropdown');
+    this._dropdownOpen = dropdown?.hasAttribute('open') ?? false;
+
+    // Also capture speed types dropdown
+    const speedDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
+    this._speedDropdownOpen = speedDropdown?.hasAttribute('open') ?? false;
   }
 
   /**
    * Restore dropdown state after re-render
    */
   restoreDropdownState() {
-    this._openDropdowns.forEach((index) => {
-      const dropdowns = this.sheet.element.querySelectorAll('.npc-immunity-dropdown');
-      if (dropdowns[index]) {
-        dropdowns[index].setAttribute('open', '');
-      }
-    });
+    if (this._dropdownOpen) {
+      const dropdown = this.sheet.element.querySelector('.npc-resistances-dropdown');
+      if (dropdown) dropdown.setAttribute('open', '');
+    }
+    if (this._speedDropdownOpen) {
+      const speedDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
+      if (speedDropdown) speedDropdown.setAttribute('open', '');
+    }
   }
 
   /**
    * Setup event listeners for immunity checkboxes and dropdown toggle
    */
   setupListeners() {
-    // All dropdown configs: selector → system field name
-    const dropdownConfigs = [
-      { selector: 'system.immunities', field: 'system.immunities' },
-      { selector: 'system.weaknesses', field: 'system.weaknesses' },
-      { selector: 'system.statusImmunities', field: 'system.statusImmunities' },
-      { selector: 'system.speedTypes', field: 'system.speedTypes' },
-    ];
+    // Find the single resistances dropdown (distinct from speed types dropdown)
+    const dropdown = this.sheet.element.querySelector('.npc-resistances-dropdown');
+    if (!dropdown) return;
 
-    for (const { selector, field } of dropdownConfigs) {
-      const dropdown = this.sheet.element.querySelector(`.npc-immunity-dropdown[data-save-target="${selector}"]`);
-      if (!dropdown) continue;
+    // Find all checkbox groups by data-save-target on wrapper divs
+    const groups = dropdown.querySelectorAll('.npc-resistance-group[data-save-target]');
+    for (const group of groups) {
+      const field = group.dataset.saveTarget;
 
       // Checkbox changes save silently (no re-render) so dropdown stays open
-      const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+      const checkboxes = group.querySelectorAll('input[type="checkbox"]');
       checkboxes.forEach((checkbox) => {
         checkbox.addEventListener('change', async (event) => {
           const value = event.target.value;
@@ -247,21 +247,48 @@ export class NPCImmunityHandler {
           await this.actor.update({ [field]: arr }, { render: false });
         });
       });
+    }
 
-      // When the dropdown closes, re-render to update the tags display
-      dropdown.addEventListener('toggle', (event) => {
-        if (!dropdown.open) {
+    // Also handle speed types dropdown (separate details element)
+    const speedDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
+    if (speedDropdown) {
+      const checkboxes = speedDropdown.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', async (event) => {
+          const value = event.target.value;
+          const arr = [...(foundry.utils.getProperty(this.actor, 'system.speedTypes') || [])];
+
+          if (event.target.checked) {
+            if (!arr.includes(value)) arr.push(value);
+          } else {
+            const index = arr.indexOf(value);
+            if (index > -1) arr.splice(index, 1);
+          }
+
+          await this.actor.update({ 'system.speedTypes': arr }, { render: false });
+        });
+      });
+
+      speedDropdown.addEventListener('toggle', (event) => {
+        if (!speedDropdown.open) {
           this.sheet.render(false);
         }
       });
     }
 
+    // When the resistances dropdown closes, re-render to update the tags display
+    dropdown.addEventListener('toggle', (event) => {
+      if (!dropdown.open) {
+        this.sheet.render(false);
+      }
+    });
+
     // Close open dropdowns when clicking outside them
     this.sheet.element.addEventListener('pointerdown', (event) => {
       const openDropdowns = this.sheet.element.querySelectorAll('.npc-immunity-dropdown[open]');
-      for (const dropdown of openDropdowns) {
-        if (!dropdown.contains(event.target)) {
-          dropdown.removeAttribute('open');
+      for (const dd of openDropdowns) {
+        if (!dd.contains(event.target)) {
+          dd.removeAttribute('open');
         }
       }
     });

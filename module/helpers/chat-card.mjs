@@ -266,7 +266,8 @@ export class VagabondChatCard {
             vagabond: {
                 actorId: this.data.actor.id,
                 itemId: this.data.item?.id || null,
-                targetsAtRollTime: this.data.targetsAtRollTime || []
+                targetsAtRollTime: this.data.targetsAtRollTime || [],
+                ...(this.data.rerollData ? { rerollData: this.data.rerollData } : {})
             }
         };
       }
@@ -284,7 +285,8 @@ export class VagabondChatCard {
     crit = null,
     hasDefenses = false, attackType = 'melee', footerActions = [],
     propertyDetails = null, damageFormula = null,
-    targetsAtRollTime = [], metadata = []
+    targetsAtRollTime = [], metadata = [],
+    rerollData = null
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -434,6 +436,11 @@ export class VagabondChatCard {
         }
       }
 
+      // Store reroll data in flags for Luck Reroll (Fluke)
+      if (rerollData) {
+        card.data.rerollData = rerollData;
+      }
+
       return await card.send();
   }
   
@@ -516,7 +523,13 @@ export class VagabondChatCard {
       actor: actor,
       title: title,
       rollData: rollData,
-      tags: tags
+      tags: tags,
+      rerollData: {
+        type: type,
+        key: key,
+        formula: roll.formula,
+        difficulty: difficulty
+      }
     });
   }
 
@@ -675,7 +688,14 @@ export class VagabondChatCard {
           description,
           hasDefenses: true,
           attackType,  // ✅ FIX: Pass attackType for save hinder logic
-          targetsAtRollTime
+          targetsAtRollTime,
+          rerollData: {
+            type: 'attack',
+            itemId: weapon.id,
+            weaponSkillKey: weaponSkillKey,
+            formula: attackResult.roll.formula,
+            difficulty: attackResult.difficulty
+          }
       });
   }
 
@@ -748,7 +768,14 @@ export class VagabondChatCard {
           hasDefenses: true,
           attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
           damageFormula: spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
-          targetsAtRollTime
+          targetsAtRollTime,
+          rerollData: {
+            type: 'cast',
+            itemId: spell.id,
+            manaSkillKey: manaSkill?.key || null,
+            formula: roll.formula,
+            difficulty: difficulty
+          }
       });
   }
   
@@ -1257,8 +1284,27 @@ export class VagabondChatCard {
       .setSubtitle(actor.name)
       .setDescription(`
         <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a Luck point.</p>
-        <p><strong>Remaining Luck:</strong> ${newLuck} / ${maxLuck}</p>
+        <p><strong>Advantage:</strong> Grant Favor on a d20 roll.</p>
+        <p><strong>Fluke:</strong> Reroll an unresolved die you rolled.</p>
       `);
+
+    card.data.metadata = [{
+      label: 'Remaining Luck',
+      value: `${newLuck} / ${maxLuck}`
+    }];
+
+    card.addFooterAction(`
+      <div class="defend-info-box variant-rule-box">
+        <div class="defend-header">
+          <i class="fas fa-dice-d6"></i>
+          <span>Plot Armor (Variant Rule)</span>
+          <i class="fas fa-chevron-down expand-icon"></i>
+        </div>
+        <div class="defend-content">
+          <p>Once per Round, if you are reduced to <strong>0 HP</strong>, you can spend <strong>1 Luck</strong> to regain <strong>d6 HP</strong>.</p>
+        </div>
+      </div>
+    `);
 
     return await card.send();
   }

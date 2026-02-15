@@ -345,6 +345,9 @@ export default class VagabondNPC extends VagabondActorBase {
   prepareBaseData() {
     super.prepareBaseData();
 
+    // Reset fatigue bonus
+    this.fatigueBonus = [];
+
     // Reset universal damage bonuses
     this.universalDamageBonus = [];
     this.universalWeaponDamageBonus = [];
@@ -429,6 +432,9 @@ export default class VagabondNPC extends VagabondActorBase {
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
     this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
 
+    // Fatigue bonus
+    this.fatigueBonus = this._evaluateFormulaField(this.fatigueBonus, rollData);
+
     // Health bonus from base actor
     if (this.health) {
       this.health.bonus = this._evaluateFormulaField(this.health.bonus, rollData);
@@ -445,6 +451,11 @@ export default class VagabondNPC extends VagabondActorBase {
     };
 
     this._evaluateAllBonusFields(rollData);
+
+    // Calculate fatigueMax from game setting + bonus
+    this.fatigueMax = (game.settings?.get('vagabond', 'npcFatigueMax') ?? 5) + (this.fatigueBonus || 0);
+    // Clamp current fatigue to fatigueMax
+    if (this.fatigue > this.fatigueMax) this.fatigue = this.fatigueMax;
 
     this.xp = this.cr * this.cr * 100;
 

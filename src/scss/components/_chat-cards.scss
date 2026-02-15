@@ -1429,6 +1429,13 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     }
 }
 
+/* Context Menu - Disabled Luck Reroll */
+#context-menu .context-item.vagabond-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+}
+
 /* Animations */
 @keyframes popIn {
     from { transform: scale(0); opacity: 0; }

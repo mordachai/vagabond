@@ -1,4 +1,5 @@
 import { TargetHelper } from '../../helpers/target-helper.mjs';
+import { VagabondTextParser } from '../../helpers/text-parser.mjs';
 
 /**
  * Handler for roll-related functionality.
@@ -190,7 +191,6 @@ export class RollHandler {
         // Build description
         let description = '';
         if (item.system.description) {
-          const { VagabondTextParser } = globalThis.vagabond.utils;
           const parsedDescription = VagabondTextParser.parseCountdownDice(
             item.system.description
           );

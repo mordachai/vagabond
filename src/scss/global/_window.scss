@@ -42,11 +42,12 @@
 .vagabond .window-content {
   background: none;
   background-image: $bg-paper;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
   position: relative;
-  color: $c-dark;
-  filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
+  color: $c-text-1;
+  filter: drop-shadow(-2px 2px 2px $c-inset-1);
+  //filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.85));
 }
 
 // Character sheets: fixed height with scrolling
@@ -70,37 +71,58 @@
   min-height: 300px;
   max-height: calc(100vh - 150px);
   overflow-y: auto !important;
+  border-radius: 1.5em;
+  corner-shape: round round scoop scoop;
+  border: 8px solid $c-yellow;
 }
 
 /* Target the main container and the list of tabs */
 .vagabond nav.tabs {
+
+  background-image: url(../assets/ui/chat/roll-bg.webp);
+  background-size: 100% 100%;
+  background-position: center;
+  margin-left: -16px;
+  margin-right: -16px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 32px;
+  box-shadow: 2px 2px 2px $c-inset-2;
   
   /* Target the individual tab header elements */
   [data-tab] {
-    transition: opacity 0.2s ease-in-out; 
-    color: $c-dark;
-    font-weight: 700;
-    opacity: 0.9;
-    font-size: 1.4rem;
+    transition: opacity 0.2s ease-in-out;
+    background-image: url('../assets/images/sheets/navTabBG.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    color: $c-dark-bluey;
+    font-weight: 600;
+    font-size: 1.2rem;
+    line-height: 1.2;
     overflow: visible;
-    padding: 5px 15px;
+    padding: 3px 8px;
+    flex: 1; 
+    flex-basis: 0; 
+    text-align: center;
+    filter: drop-shadow(1px 1px 2px black);  
 
     /* --- STATES --- */
     &:hover {
       cursor: pointer;
-      font-weight: 900;
+      font-weight: 700;
       opacity: 1;
-      text-shadow: 0 0 6px $c-red;
+      text-shadow: 0 0 3px $c-dark-bluey;
     }
 
     &.active {
-      font-weight: 700;
       opacity: 1;
-      background-image: url('../assets/ui/tab-marker.svg');
+      background-image: url('../assets/images/sheets/navTabBG-active.svg');
       background-repeat: no-repeat;
-      background-size: 100% 100%;
       background-position: center center;
-      mix-blend-mode: color-burn;
+      background-size: cover;
+      color: $c-yellow;
+      text-shadow: 0 0 1px $c-bluey;
     }    
   }
 }
@@ -108,8 +130,7 @@
 .rollable {
   &:hover,
   &:focus {
-    color: $c-black;
-    text-shadow: 0 0 10px red;
+    text-shadow: 0 0 3px $c-green;
     cursor: pointer;
   }
 }

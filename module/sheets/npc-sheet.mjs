@@ -42,7 +42,7 @@ export class VagabondNPCSheet extends VagabondActorSheet {
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ['vagabond', 'actor', 'npc'],
     position: {
-      width: 360,
+      width: 380,
       height: 'auto'
     }
   }, { inplace: false });
@@ -66,6 +66,10 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     if (this.immunityHandler) {
       this.immunityHandler.captureDropdownState();
     }
+
+    // Capture description open state
+    const descRow = this.element.querySelector('.npc-description-collapsible');
+    this._descriptionOpen = descRow ? descRow.classList.contains('open') : false;
   }
 
   /**
@@ -91,6 +95,15 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       this.immunityHandler.restoreDropdownState();
     }
 
+    // Restore description open state
+    if (this._descriptionOpen) {
+      const descRow = this.element.querySelector('.npc-description-collapsible');
+      if (descRow) {
+        descRow.classList.remove('collapsed');
+        descRow.classList.add('open');
+      }
+    }
+
     // Setup immunity handler listeners for checkboxes
     if (this.immunityHandler) {
       this.immunityHandler.setupListeners();
@@ -99,6 +112,16 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     // Setup action handler listeners for buffered editing
     if (this.actionHandler) {
       this.actionHandler.setupListeners();
+    }
+
+    // Toggle padding on npc-content when it has scrollable overflow
+    const npcContent = this.element.querySelector('.npc-content');
+    if (npcContent) {
+      const updateScrollClass = () => npcContent.classList.toggle('has-scroll', npcContent.scrollHeight > npcContent.clientHeight);
+      requestAnimationFrame(updateScrollClass);
+      this._scrollObserver?.disconnect();
+      this._scrollObserver = new ResizeObserver(updateScrollClass);
+      this._scrollObserver.observe(npcContent);
     }
 
     // Setup debounced input listeners for action/ability editing

@@ -1,3 +1,9 @@
-2026/02/07-16:38:41.430 f578 Recovering log #766
-2026/02/07-16:38:41.433 f578 Delete type=0 #766
-2026/02/07-16:38:41.433 f578 Delete type=3 #765
+2026/02/15-11:38:40.152 a17c Recovering log #815
+2026/02/15-11:38:40.156 a17c Delete type=0 #815
+2026/02/15-11:38:40.157 a17c Delete type=3 #814
+2026/02/15-20:36:02.547 c28c Compacting 1@0 + 1@1 files
+2026/02/15-20:36:02.551 c28c Generated table #818@0: 62 keys, 18747 bytes
+2026/02/15-20:36:02.551 c28c Compacted 1@0 + 1@1 files => 18747 bytes
+2026/02/15-20:36:02.552 c28c compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/02/15-20:36:02.552 c28c Delete type=2 #680
+2026/02/15-20:36:02.553 c28c Delete type=2 #810

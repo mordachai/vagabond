@@ -7,7 +7,7 @@
   background: rgba(0, 0, 0, 0.05);
   border: $border-groove;
   font-weight: bold;
-  color: $c-dark;
+  color: $c-text-1;
   > * {
     font-size: 14px;
     text-align: center;
@@ -17,7 +17,7 @@
     padding-left: 5px;
     text-align: left;
     display: flex;
-    color: $c-dark;
+    color: $c-text-1;
   }
 }
 
@@ -30,8 +30,7 @@
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  scrollbar-width: thin;
-  color: $c-dark;
+  color: $c-text-1;
 
   // Child lists
   .effect-list {
@@ -136,7 +135,7 @@
 &.active-effect-config,
 .effects {
   .form-group > label, .form-group > span.label {
-    color: $c-dark;
+    color: $c-text-1;
   }
 }
 
@@ -156,30 +155,35 @@
 .vagabond-effect-fields legend {
   font-weight: bold;
   padding: 0 0.5rem;
-  color: $c-dark;
+  color: $c-text-1;
 }
 
 .application-mode-hint {
   font-style: italic;
-  color: var(--color-text-dark-secondary);
+  color: $c-text-1;;
   margin-top: 0.25rem;
 }
 
 .info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
   background: rgba(13, 110, 253, 0.1);
   border: 1px solid rgba(13, 110, 253, 0.3);
   border-radius: 4px;
   padding: 0.5rem;
   margin-top: 0.5rem;
-  color: $c-dark;
+  color: $c-text-1;
 }
 
 .info-box i {
+  flex: 0 0 auto;
   color: var(--color-info);
-  margin-right: 0.5rem;
+  margin-top: 2px;
 }
 
 .info-box .notes {
+  flex: 1 1 0;
   margin: 0;
   font-size: 0.9em;
 }
@@ -191,12 +195,12 @@
 .help-box summary {
   cursor: pointer;
   font-weight: bold;
-  color: var(--color-text-dark-primary);
+  color: $c-text-1;
   user-select: none;
 }
 
 .help-box summary:hover {
-  color: var(--color-text-hyperlink);
+  color: $c-text-1;
 }
 
 .mode-help {
@@ -220,7 +224,7 @@
 
 .mode-example h4 {
   margin: 0 0 0.5rem 0;
-  color: var(--color-text-dark-primary);
+  color: $c-text-1;
 }
 
 .mode-example h4 i {
@@ -236,7 +240,7 @@
 .mode-example .example {
   font-style: italic;
   font-size: 0.9em;
-  color: var(--color-text-dark-secondary);
+  color: $c-text-1;
 }
 
 // Formula autocomplete styling
@@ -248,7 +252,7 @@
     &::placeholder {
       font-family: var(--font-primary);
       font-style: italic;
-      color: var(--color-text-dark-hint);
+      color: $c-text-1;
     }
 
     &:focus {
@@ -258,7 +262,7 @@
 
   // Formula hint that appears when typing @
   .formula-hint {
-    color: var(--color-info);
+    color: $c-text-1;
     font-size: 0.85em;
     font-style: italic;
     margin-top: 4px;
@@ -282,7 +286,7 @@
       right: 8px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--color-text-dark-hint);
+      color: $c-text-1;
       pointer-events: none;
       font-size: 0.85em;
     }
@@ -294,7 +298,7 @@
   .controls button,
   .effect-controls button,
   button.inline-control {
-    color: var(--vagabond-c-dark) !important;
+    color: $c-text-1 !important;
     background: var(--vagabond-c-white) !important;  // Changed to white for better visibility
     border: 2px solid var(--vagabond-c-dark) !important;  // Stronger border
     padding: 4px 8px !important;
@@ -302,7 +306,7 @@
 
     &:hover {
       background: var(--vagabond-c-tan) !important;
-      color: var(--vagabond-c-dark) !important;
+      color: $c-text-1 !important;
       transform: scale(1.1) !important;
     }
 
@@ -310,7 +314,7 @@
     &.icon,
     &.fa-regular,
     &.fa-solid {
-      color: var(--vagabond-c-dark) !important;
+      color: $c-text-1!important;
       font-size: 16px !important;  // Make icon bigger
       font-weight: bold !important;
     }
@@ -318,9 +322,9 @@
 
   // Specific targeting for addChange button - make it very prominent
   button[data-action="addChange"] {
-    color: var(--vagabond-c-dark) !important;
+    color: $c-text-1 !important;
     background: var(--vagabond-c-white) !important;
-    border: 2px solid var(--vagabond-c-dark) !important;
+    border: 2px solid $c-text-1 !important;
     padding: 6px 10px !important;
     border-radius: 4px !important;
     font-size: 18px !important;
@@ -328,7 +332,7 @@
 
     &:hover {
       background: var(--vagabond-c-tan) !important;
-      color: var(--vagabond-c-dark) !important;
+      color: $c-text-1 !important;
       transform: scale(1.15) !important;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
     }

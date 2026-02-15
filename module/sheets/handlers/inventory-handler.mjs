@@ -45,6 +45,8 @@ export class InventoryHandler {
         damageTypeIcon: EquipmentHelper.getDamageTypeIcon(item),
         isSlotZero: (item.system.slots || item.system.baseSlots || 0) === 0,
         totalSlots: item.system.slots || item.system.baseSlots || 0,
+        requiresBound: item.system.requiresBound || false,
+        bound: item.system.bound || false,
       };
 
       // Add range abbreviation for weapons
@@ -117,6 +119,15 @@ export class InventoryHandler {
 
     context.gridSize = gridSize;
     context.gridRows = gridRows;
+
+    // Bound system data for header counter
+    context.currentBounds = this.actor.system.inventory?.currentBounds || 0;
+    context.maxBounds = this.actor.system.inventory?.maxBounds || 3;
+
+    // Build bounds pips array for template rendering
+    context.boundsPips = Array.from({ length: context.maxBounds }, (_, i) => ({
+      filled: i < context.currentBounds,
+    }));
   }
 
   // ===========================
@@ -226,6 +237,32 @@ export class InventoryHandler {
         }
       },
     });
+
+    // Bound / Unbind (only for items that require binding)
+    if (item.system.requiresBound) {
+      const isBound = item.system.bound === true;
+      menuItems.push({
+        label: isBound ? 'Unbind' : 'Bind',
+        icon: 'fa-solid fa-diamond',
+        enabled: true,
+        action: async () => {
+          // If trying to bind, check the actor's bounds limit
+          if (!isBound) {
+            const currentBounds = this.actor.system.inventory?.currentBounds ?? 0;
+            const maxBounds = this.actor.system.inventory?.maxBounds ?? 3;
+            if (currentBounds >= maxBounds) {
+              ui.notifications.warn(game.i18n.format('VAGABOND.UI.Labels.BoundsLimitReached', {
+                name: item.name,
+                current: currentBounds,
+                max: maxBounds,
+              }));
+              return;
+            }
+          }
+          await item.update({ 'system.bound': !isBound });
+        },
+      });
+    }
 
     // Edit
     menuItems.push({
@@ -551,6 +588,12 @@ export class InventoryHandler {
           <span class="stat-name">Cost</span>
           <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
         </div>
+        ${item.system.requiresBound ? `
+        <div class="stat-row">
+          <span class="stat-name">Bound</span>
+          <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
+        </div>
+        ` : ''}
         <div class="stat-row">
           <span class="stat-name">Slots</span>
           <span class="stat-value">${item.system.slots || 1}</span>
@@ -586,6 +629,12 @@ export class InventoryHandler {
           <span class="stat-name">Cost</span>
           <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
         </div>
+        ${item.system.requiresBound ? `
+        <div class="stat-row">
+          <span class="stat-name">Bound</span>
+          <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
+        </div>
+        ` : ''}
         <div class="stat-row">
           <span class="stat-name">Slots</span>
           <span class="stat-value">${item.system.slots || 1}</span>
@@ -613,6 +662,12 @@ export class InventoryHandler {
           <span class="stat-name">Cost</span>
           <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
         </div>
+        ${item.system.requiresBound ? `
+        <div class="stat-row">
+          <span class="stat-name">Bound</span>
+          <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
+        </div>
+        ` : ''}
         <div class="stat-row">
           <span class="stat-name">Slots</span>
           <span class="stat-value">${item.system.slots || 1}</span>

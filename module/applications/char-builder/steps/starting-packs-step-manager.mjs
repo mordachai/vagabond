@@ -42,7 +42,14 @@ export class StartingPacksStepManager extends BaseStepManager {
     const availablePacks = await this._loadStartingPackOptions();
     const selectedPack = state.selectedStartingPack;
     const previewUuid = state.previewUuid;
-    
+
+    // Mark items as selected/previewing for template
+    const markedPacks = availablePacks.map(pack => ({
+      ...pack,
+      selected: pack.uuid === selectedPack,
+      previewing: pack.uuid === previewUuid
+    }));
+
     // Get selected item details if available
     let selectedItem = null;
     if (selectedPack) {
@@ -97,7 +104,7 @@ export class StartingPacksStepManager extends BaseStepManager {
     const startingPackItems = await this._getStartingPackItems(packToShow);
 
     const context = {
-      availableOptions: availablePacks,
+      availableOptions: markedPacks,
       selectedItem: selectedItem,
       previewItem: previewItem,
       startingPackItems: startingPackItems,

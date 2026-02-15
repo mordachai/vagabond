@@ -2,17 +2,59 @@
 // Inventory Grid - Visual Slot-Based System
 // ==========================================
 
-// Inventory Slots Info Section
-.inventory-slots-section {
-  margin-bottom: 12px;
-  padding: 8px;
 
-  border-radius: 4px;
+//Inventory Section Border
+.inventory-section {
+  border: 3px solid $c-yellow;
+  border-radius: 1.3em;
+  corner-shape: scoop scoop round round;
+  overflow: hidden;
+  padding: 2px 4px;
+  background-color: black;
+  margin: 12px 0;
+  overflow: visible;
+}
+
+// Inventory Slots Info Section
+.inventory-header-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20px;
+  padding: 4px 20px;
+  box-sizing: border-box;
+  z-index: 20;
+
+  h4 {
+    background-image: url('../assets/images/sheets/healthBG.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    margin: 0;
+    text-align: center;
+    color: $c-white;
+    // mix-blend-mode: normal;
+    // opacity: 1;
+    padding: 10px 20px;
+    position: relative;
+    top: -14px;
+    z-index: 20;
+  }
+}
+
+.inventory-slots-section {
+  position: absolute;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  color: $c-white;
 
   .slots-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 12px;
 
     .slot-field {
@@ -23,21 +65,32 @@
       .resource-label {
         font-weight: bold;
         font-size: 14px;
+        color: $c-white;
       }
 
       .slot-value {
         font-size: 16px;
         font-weight: bold;
+        color: $c-white;
+      }
+
+      &.overloaded {
+        .resource-label,
+        .slot-value {
+          color: $c-red;
+        }
 
         .fatigue-note {
           font-size: 12px;
           font-weight: normal;
-          color: $c-red;
+          color: #ffabab; // Lighter red for visibility on dark background
           margin-left: 6px;
           opacity: 0.9;
         }
       }
     }
+
+
 
     .slot-warning {
       display: flex;
@@ -51,49 +104,36 @@
         font-size: 14px;
       }
     }
-
-    .auto-arrange-button {
-      padding: 6px 12px;
-      border: 1px solid $c-dark;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: bold;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: $c-dark;
-        transform: translateY(-1px);
-      }
-
-      i {
-        margin-right: 4px;
-      }
-    }
   }
 }
 
 // Inventory Grid Container
 .inventory-grid-container {
-  margin-bottom: 16px;
+  margin-bottom: 2px;
 }
 
-// 6 rows × 3 columns grid (18 slots)
+// 6 rows × 4 columns grid (18 slots)
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  //grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: 50px; // Reduced height for 2 lines
   gap: 0; // No gaps, use borders instead
   padding: 1px;
-  background: none;
+  background-image: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
   border-radius: 4px;
   width: 100%;
+  overflow: hidden;
 }
 
 // Empty Slot
 .inventory-slot.empty-slot {
-  background: none;
-  border: 2px solid rgba(44, 18, 8, 0.1);
+  background-image: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 2px solid $c-inventory-lines;
   border-top: none;
   border-left: none;
   display: flex;
@@ -105,28 +145,28 @@
 
   // Add top border to first row
   &:nth-child(-n + 4) {
-    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    border-top: 2px solid $c-inventory-lines;
   }
 
   // Add left border to first column
   &:nth-child(4n + 1) {
-    border-left: 2px solid rgba(0, 0, 0, 0.1);
+    border-left: 2px solid $c-inventory-lines;
   }
 
   .slot-number {
     font-size: 18px;
     font-weight: bold;
     font-family: $font-secondary;
+    color: $c-title-2;
     opacity: 0.7;
-    mix-blend-mode: multiply;
   }
 
   // Unavailable (darker) slots
   &.unavailable {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
 
     .slot-number {
-      color: rgba(0, 0, 0, 0.25);
+      color: rgba(255, 255, 255, 0.25);
     }
   }
 
@@ -137,7 +177,7 @@
     position: relative;
 
     .slot-number {
-      color: rgba(139, 0, 0, 0.4);
+      color: rgba(32, 22, 22, 0.4);
     }
   }
 
@@ -172,8 +212,10 @@
 
 // Inventory Card (Item) - Simplified: Image (50px left) + Name (wrapping)
 .inventory-card {
-  background: none;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  background-image: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 1px solid $c-inventory-lines;
   border-radius: 3px;
   padding: 2px;
   height: 50px;
@@ -192,25 +234,25 @@
     box-shadow:
       inset 0 0 8px $c-inset-1,
       inset 0 0 0 2px $c-inset-2,
-      0 2px 4px rgba(0, 0, 0, 0.15);
-    background: #ab612071;
-    mix-blend-mode: multiply;
+      0 2px 4px $c-title-2;
+    background: $c-inventory-hover;
+    mix-blend-mode: $inventory-blend-hover;
   }
 
   &.equipped {
     box-shadow:
       inset 0 0 12px $c-inset-1,
       inset 0 0 0 2px $c-inset-2;
-      background: #813d1e26;
-      mix-blend-mode: multiply;
+      background-image: $bg-paper;
+      background-repeat: $bg-repeat;
+      background-size: $bg-size;
 
     &:hover {
       box-shadow:
         inset 0 0 8px $c-inset-1,
         inset 0 0 0 2px $c-inset-2,
         0 2px 4px rgba(0, 0, 0, 0.15);
-      background: #8f5c2f9e;
-      mix-blend-mode: multiply;
+        background: #8f5c2f9e;
     }
   }
 
@@ -251,7 +293,6 @@
     font-weight: bold;
     font-family: $font-secondary;
     opacity: 0.7;
-    mix-blend-mode: multiply;
     pointer-events: none;
     z-index: 0;
   }
@@ -263,9 +304,6 @@
     flex-shrink: 0;
     border-radius: 2px;
     border: none;
-    //filter for make it monochrome
-    //filter: grayscale(100%) saturate(0) blur(1px) brightness(1.2) contrast(2.9) sepia(0.28);
-    mix-blend-mode: color-dodge;
   }
 
   .item-name-display {
@@ -278,7 +316,30 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
+    color: $c-title-2;
+  }
+
+  .bound-marker {
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    font-size: 10px;
+    z-index: 10;
+    pointer-events: none;
+
+    .bound {
+      color: $c-yellow;
+      -webkit-text-stroke: 1px $c-dark-bluey;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+    }
+
+    .unbound {
+      color: $c-dark-bluey;
+      -webkit-text-stroke: 1px $c-dark-bluey;
+      opacity: 0.6;
+    }
   }
 }
 
@@ -290,7 +351,7 @@
   border: 1px solid rgba(220, 53, 69, 0.4);
   border-radius: 4px;
   color: #d9534f;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -298,6 +359,126 @@
 
   i {
     font-size: 16px;
+  }
+}
+
+// Bounds counter in inventory header
+.inventory-header-container {
+  .bounds-counter-section {
+    position: absolute;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    color: $c-white;
+
+    .bounds-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .resource-label {
+        font-weight: bold;
+        font-size: 14px;
+        color: $c-white;
+      }
+    }
+
+    .bounds-pips {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+
+      .bound-pip {
+        font-size: 12px;
+
+        &.filled {
+          color: $c-yellow;
+          -webkit-text-stroke: 1px $c-dark-bluey;
+          filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+        }
+
+        &.empty {
+          color: $c-dark-bluey;
+          -webkit-text-stroke: 1px $c-dark-bluey;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
+
+// Bound toggle in locked item sheet
+.equipment-locked-view {
+  .bound-toggle-row {
+    .bound-toggle {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+
+      .bound-icon {
+        font-size: 16px;
+        transition: color 0.15s ease;
+
+        &.bound {
+          color: $c-yellow;
+          -webkit-text-stroke: 1px $c-dark-bluey;
+          filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+        }
+
+        &.unbound {
+          color: $c-dark-bluey;
+          -webkit-text-stroke: 1px $c-dark-bluey;
+          opacity: 0.5;
+        }
+      }
+
+      &:hover .bound-icon {
+        color: $c-yellow;
+        -webkit-text-stroke: 1px $c-dark-bluey;
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// Wealth Section (bottom of inventory)
+.inventory-section .wealth-section {
+  padding: 3px 6px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+
+  .currency-row {
+    gap: 4px;
+  }
+
+  .wealth-title {
+    color: $c-yellow;
+    margin: 0;
+    font-family: $font-title;
+    font-size: 1.3em;
+
+    h5 {color: $c-yellow;}
+  }
+
+  .currency-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+
+    .resource-label {
+      color: $c-white;
+      font-size: 14px;
+    }
+
+    input {
+      color: $c-yellow;
+      min-width: 30px;
+      max-width: 50px;
+      text-align: center;
+    }
   }
 }
 

@@ -20,7 +20,7 @@
       <div class='item-document-name'>
         <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
       </div>
-      {{#if (or (eq item.type 'equipment') (eq item.type 'container'))}}
+      {{#if (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell'))}}
         <button
           type='button'
           class='equipment-lock-toggle'
@@ -220,6 +220,43 @@
           <div class="description-content">{{{enriched.description}}}</div>
         {{/if}}
       </div>
+    {{/if}}
+
+    {{#if (eq item.type 'spell')}}
+      {{#if system.locked}}
+        {{! Locked: read-only description }}
+        {{#if system.description}}
+          <div class='spell-description-in-header locked-description'>
+            {{{enriched.description}}}
+          </div>
+        {{/if}}
+        {{#if system.crit}}
+          <div class='spell-crit-in-header locked-stat'>
+            <span class='stat-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}:</span>
+            <span class='stat-value'>{{system.crit}}</span>
+          </div>
+        {{/if}}
+      {{else}}
+        {{! Unlocked: editable description }}
+        <div class='spell-description-in-header'>
+          {{#if editable}}
+            <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+              {{{enriched.description}}}
+            </prose-mirror>
+          {{else}}
+            <div class="description-content">{{{enriched.description}}}</div>
+          {{/if}}
+        </div>
+        <div class='form-group spell-crit-in-header'>
+          <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.crit.label'}}</label>
+          <input
+            type='text'
+            name='system.crit'
+            value='{{system.crit}}'
+            placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.crit.hint"}}'
+          />
+        </div>
+      {{/if}}
     {{/if}}
 
     {{#if (eq item.type 'class')}}

@@ -146,6 +146,9 @@ export class CountdownDiceOverlay {
 
       // Update or create dice elements
       for (const dice of allDice) {
+        // Re-verify dice still exists (may have been deleted during async iteration)
+        if (!game.journal.get(dice.id)) continue;
+
         const existingElement = this.diceElements.get(dice.id);
 
         if (existingElement) {
@@ -174,6 +177,9 @@ export class CountdownDiceOverlay {
    * @param {number} order - Stacking order
    */
   async createDiceElement(dice, order = 0) {
+    // Verify dice still exists before creating element
+    if (!game.journal.get(dice.id)) return;
+
     const flags = dice.flags.vagabond.countdownDice;
     const sceneId = canvas.scene?.id;
 
@@ -663,6 +669,15 @@ export class CountdownDiceOverlay {
       }
       element.remove();
       this.diceElements.delete(diceId);
+    }
+
+    // Also check DOM directly in case element wasn't in Map (ghost cleanup)
+    const domElement = this.container?.querySelector(`[data-dice-id="${diceId}"]`);
+    if (domElement && domElement !== element) {
+      if (domElement._cleanupListeners) {
+        domElement._cleanupListeners();
+      }
+      domElement.remove();
     }
   }
 }

@@ -1900,10 +1900,10 @@ export class VagabondDamageHelper {
         ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP${modifierText}`);
       } else if (damageType === 'recover') {
         // Recover: Decrease Fatigue (down to 0)
-        const currentFatigue = targetActor.system.fatigue?.value || 0;
+        const currentFatigue = targetActor.system.fatigue || 0;
         const newFatigue = Math.max(0, currentFatigue - amount);
         const actualRecovery = currentFatigue - newFatigue;
-        await targetActor.update({ 'system.fatigue.value': newFatigue });
+        await targetActor.update({ 'system.fatigue': newFatigue });
         ui.notifications.info(`${targetActor.name} recovered ${actualRecovery} fatigue`);
       } else if (damageType === 'recharge') {
         // Recharge: Increase Mana (up to max)

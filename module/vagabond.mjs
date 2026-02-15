@@ -311,6 +311,54 @@ function registerGameSettings() {
     type: CompendiumSettings,
     restricted: true
   });
+
+  // Setting 16: PC Fatigue Max
+  game.settings.register('vagabond', 'pcFatigueMax', {
+    name: 'VAGABOND.Settings.pcFatigueMax.name',
+    hint: 'VAGABOND.Settings.pcFatigueMax.hint',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 5,
+    range: {
+      min: 1,
+      max: 20,
+      step: 1
+    },
+    requiresReload: false,
+    onChange: () => {
+      for (let actor of game.actors) {
+        if (actor.type === 'character') {
+          actor.prepareData();
+          actor.sheet?.render(false);
+        }
+      }
+    }
+  });
+
+  // Setting 17: NPC Fatigue Max
+  game.settings.register('vagabond', 'npcFatigueMax', {
+    name: 'VAGABOND.Settings.npcFatigueMax.name',
+    hint: 'VAGABOND.Settings.npcFatigueMax.hint',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 5,
+    range: {
+      min: 1,
+      max: 20,
+      step: 1
+    },
+    requiresReload: false,
+    onChange: () => {
+      for (let actor of game.actors) {
+        if (actor.type === 'npc') {
+          actor.prepareData();
+          actor.sheet?.render(false);
+        }
+      }
+    }
+  });
 }
 
 /* -------------------------------------------- */
@@ -872,6 +920,132 @@ Hooks.on('preCreateItem', (item, data, options, userId) => {
       item.updateSource({ 'system.gridPosition': maxPosition + 1 });
     }
   }
+});
+
+/* -------------------------------------------- */
+/*  Chat Message Context Menu - Luck Reroll     */
+/* -------------------------------------------- */
+
+/**
+ * Luck Reroll (Fluke) context menu entry definition.
+ * Shared between hook and prototype override approaches.
+ */
+const FLUKE_REROLL_ENTRY = {
+  name: 'Luck Reroll (Fluke)',
+  icon: '<i class="fas fa-clover"></i>',
+  classes: '',
+  condition: function (li) {
+    const messageId = li.dataset.messageId;
+    const message = game.messages.get(messageId);
+    if (!message?.flags?.vagabond?.rerollData) return false;
+    const actor = game.actors.get(message.flags.vagabond.actorId);
+    if (!actor || !actor.isOwner) return false;
+    // Dynamically update name and classes based on current luck
+    const currentLuck = actor.system.currentLuck || 0;
+    const maxLuck = actor.system.maxLuck || 0;
+    const flukeLabel = game.i18n.localize('VAGABOND.UI.Chat.FlukeReroll');
+    const luckLabel = game.i18n.localize('VAGABOND.UI.Sections.LuckPool');
+    if (currentLuck > 0) {
+      this.name = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
+      this.classes = '';
+    } else {
+      this.name = `${flukeLabel} (${luckLabel}: 0/${maxLuck})`;
+      this.classes = 'vagabond-disabled';
+    }
+    return true;
+  },
+  callback: async (li) => {
+    const messageId = li.dataset.messageId;
+    const message = game.messages.get(messageId);
+    const flags = message.flags.vagabond;
+    const actor = game.actors.get(flags.actorId);
+    const rerollData = flags.rerollData;
+
+    if (!actor || !rerollData) return;
+
+    // Deduct luck
+    const currentLuck = actor.system.currentLuck || 0;
+    if (currentLuck <= 0) {
+      ui.notifications.warn(`${actor.name} has no Luck points remaining.`);
+      return;
+    }
+    const maxLuck = actor.system.maxLuck || 0;
+    const newLuck = currentLuck - 1;
+    await actor.update({ 'system.currentLuck': newLuck });
+
+    // Post fluke notification
+    const notifCard = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Fluke!')
+      .setSubtitle(actor.name)
+      .setDescription(`<p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a Luck point to reroll.</p>`);
+    notifCard.data.metadata = [{ label: 'Remaining Luck', value: `${newLuck} / ${maxLuck}` }];
+    await notifCard.send();
+
+    // Detect favor/hinder from the stored formula
+    const favorHinder = rerollData.formula.includes('[favored]') ? 'favor'
+      : rerollData.formula.includes('[hindered]') ? 'hinder' : 'none';
+
+    // Import helpers
+    const { VagabondRollBuilder } = await import('./helpers/roll-builder.mjs');
+
+    // Re-evaluate the roll with the same formula
+    const roll = await VagabondRollBuilder.evaluateRoll(rerollData.formula, actor, favorHinder);
+
+    // Determine success
+    const isSuccess = roll.total >= rerollData.difficulty;
+
+    // Route based on reroll type
+    if (rerollData.type === 'attack') {
+      // Weapon attack reroll - reconstruct full attack card
+      const weapon = actor.items.get(rerollData.itemId);
+      if (!weapon) {
+        ui.notifications.error('Weapon not found.');
+        return;
+      }
+      const weaponSkillKey = rerollData.weaponSkillKey;
+      const weaponSkill = actor.system.weaponSkills?.[weaponSkillKey];
+      const critType = ['melee', 'ranged', 'brawl', 'finesse'].includes(weaponSkillKey) ? weaponSkillKey : null;
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
+      const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
+
+      const attackResult = {
+        roll,
+        difficulty: rerollData.difficulty,
+        weaponSkill,
+        weaponSkillKey,
+        isHit: isSuccess,
+        isCritical
+      };
+
+      // Roll damage if hit
+      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+      let damageRoll = null;
+      if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
+        const statKey = weaponSkill?.stat || null;
+        damageRoll = await weapon.rollDamage(actor, isCritical, statKey);
+      }
+
+      const targetsAtRollTime = flags.targetsAtRollTime || [];
+      await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
+
+    } else if (rerollData.type === 'cast') {
+      // Spell cast reroll - show as a skill check with the mana skill
+      const key = rerollData.manaSkillKey || 'magic';
+      await VagabondChatCard._checkRoll(actor, 'skill', key, roll, rerollData.difficulty, isSuccess);
+
+    } else {
+      // Skill or save reroll
+      await VagabondChatCard._checkRoll(actor, rerollData.type, rerollData.key, roll, rerollData.difficulty, isSuccess);
+    }
+  }
+};
+
+// Hook: fires when ChatLog._createContextMenu dispatches "getChatMessageContextOptions" during _onFirstRender.
+// Registered at module top level to guarantee it exists before ChatLog renders.
+Hooks.on('getChatMessageContextOptions', (app, options) => {
+  options.push(FLUKE_REROLL_ENTRY);
 });
 
 /**

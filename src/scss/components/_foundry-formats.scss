@@ -1,12 +1,46 @@
-.content-link, .inline-roll {
+.content-link {
     background: $c-faint;
     border: 2px solid $c-dark;
     border-radius: 4px;
-    color: $c-dark;
+    color: $c-dark-bluey;
     margin: -1px 0;
     padding: 1px 4px 0;
     white-space: nowrap;
     word-break: break-all;
 }
 
+.inline-roll {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: $c-yellow;
+    border: 2px solid $c-dark-bluey;
+    border-radius: 10px;
+    color: $c-dark-bluey;
+    margin: 0 1px;
+    padding: 1px 6px 1px 4px;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    text-decoration: none;
 
+    &:hover {
+        border-color: $c-black;
+        text-decoration: none;
+        color: $c-black;
+    }
+
+    i {
+        font-size: 0.9em;
+        opacity: 0.8;
+        color: $c-dark-bluey;
+            
+        &:hover {
+            text-decoration: none;
+            color: $c-black;
+            opacity: 1;
+        }
+    }
+}
