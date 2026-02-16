@@ -7,7 +7,9 @@
 
 This is an non-official adaptation for Foundry VTT of **Indestructoboy's (Taron Pounds)** RPG system, **Vagabond**. 
 
-Check the awesome books here: [Vagabond - Land of the Blind](https://landoftheblind.myshopify.com/products/vagabond-pulp-fantasy-rpg-core-rulebook). Purchasing the book (digital or paperback) will grant you access to the full contents of the compendiums in Foundry VTT.
+Check the awesome books here: [Vagabond - Land of the Blind](https://landoftheblind.myshopify.com/products/vagabond-pulp-fantasy-rpg-core-rulebook). 
+
+_You need the book (digital or paperback) to have access to the compendia containing the content._
 
 ---
 
