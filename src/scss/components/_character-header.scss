@@ -15,8 +15,8 @@
   background-size: 100% 100%;
   color: $c-title-1;
   margin: 0 -13px 0 -25px !important;
-  padding: 16px 28px 12px 20px;
-  filter: drop-shadow(2px 2px 2px $c-inset-1,);
+  padding: 16px 16px 12px 20px;
+  filter: drop-shadow(2px 2px 2px $c-inset-1);
 
   input {
     color: $c-title-1;
@@ -745,7 +745,7 @@
     width: auto;
     height: 55px;
     flex-shrink: 0;
-    background-image: url('../assets/images/sheets/speedBG.webp');
+    background-image: url('../assets/images/sheets/speedBg.webp');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center;

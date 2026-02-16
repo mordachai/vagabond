@@ -8523,7 +8523,7 @@ ol#combat-tracker.directory-list {
   background-size: 100% 100%;
   color: var(--vagabond-c-title1);
   margin: 0 -13px 0 -25px !important;
-  padding: 16px 28px 12px 20px;
+  padding: 16px 16px 12px 20px;
   filter: drop-shadow(2px 2px 2px var(--vagabond-c-inset-1));
 }
 .vagabond .header-main-wrapper input {
@@ -9110,7 +9110,7 @@ ol#combat-tracker.directory-list {
   width: auto;
   height: 55px;
   flex-shrink: 0;
-  background-image: url("../assets/images/sheets/speedBG.webp");
+  background-image: url("../assets/images/sheets/speedBg.webp");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
