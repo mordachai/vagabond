@@ -7,19 +7,25 @@ ol#combat-tracker.directory-list {
 
 #combat-tracker {
   .faction-header {
-    border-bottom: 3px solid var(--table-header-border-color);
-    padding: 5px 8px;
-    margin-top: 8px;
+    //border-bottom: 1px solid $c-tan;
+    border-top: 1px solid $c-tan;
+    padding: 15px 0px;
+    margin-top: 20px;
     list-style: none;
 
     h4 {
-      margin: 0;
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 1.15em;
-      letter-spacing: 0.05em;
-      font-family: $font-secondary;
-      text-shadow:
+        margin: 0;
+        background-image: url('../assets/images/sheets/leftColBg.svg');
+        background-repeat: no-repeat;
+        background-size: cover 100%;
+        text-transform: uppercase;
+        font-size: 1.3em;
+        letter-spacing: 0.05em;
+        padding: 8px 20px;
+        margin-bottom: 4px;
+        font-family: $font-primary;
+        filter: drop-shadow(1px 1px 2px var(--faction-color));
+        text-shadow:
         1px 1px 0 var(--faction-color),
         -1px 1px 0 var(--faction-color),
         -1px -1px 0 var(--faction-color),

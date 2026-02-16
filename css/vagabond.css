@@ -4301,18 +4301,23 @@ ol#combat-tracker.directory-list {
 }
 
 #combat-tracker .faction-header {
-  border-bottom: 3px solid var(--table-header-border-color);
-  padding: 5px 8px;
-  margin-top: 8px;
+  border-top: 1px solid var(--vagabond-c-tan);
+  padding: 15px 0px;
+  margin-top: 20px;
   list-style: none;
 }
 #combat-tracker .faction-header h4 {
   margin: 0;
-  font-weight: bold;
+  background-image: url("../assets/images/sheets/leftColBg.svg");
+  background-repeat: no-repeat;
+  background-size: cover 100%;
   text-transform: uppercase;
-  font-size: 1.15em;
+  font-size: 1.3em;
   letter-spacing: 0.05em;
-  font-family: "Manofa", serif;
+  padding: 8px 20px;
+  margin-bottom: 4px;
+  font-family: "Eskapade", serif;
+  filter: drop-shadow(1px 1px 2px var(--faction-color));
   text-shadow: 1px 1px 0 var(--faction-color), -1px 1px 0 var(--faction-color), -1px -1px 0 var(--faction-color), 1px -1px 0 var(--faction-color);
 }
 #combat-tracker .combatant {
@@ -10247,22 +10252,20 @@ ol#combat-tracker.directory-list {
   padding-right: 10px;
 }
 .vagabond .npc-senses-section {
-  background-color: var(--vagabond-c-darkgray);
+  background-color: var(--vagabond-c-lightgrey);
   padding: 4px 8px;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   filter: drop-shadow(1px 1px 2px var(--vagabond-c-bluey));
+  color: var(--vagabond-c-black);
 }
 .vagabond .npc-senses-section .npc-field-label {
-  color: var(--vagabond-c-white);
-  font-family: "Manofa", serif;
+  font-family: "Germania", serif;
   font-size: 1.2em;
 }
 .vagabond .npc-senses-section .npc-field-display {
-  color: var(--vagabond-c-white);
   font-size: 1.1em;
 }
 .vagabond .npc-senses-section .npc-text-input {
-  color: var(--vagabond-c-white);
   font-size: 1.1em;
 }
 .vagabond .npc-resistances-section {
@@ -10482,10 +10485,10 @@ ol#combat-tracker.directory-list {
 .vagabond .ability-edit-header .accordion-icon.fa-chevron-down {
   transform: rotate(90deg);
 }
-.vagabond .accordion-item.open .accordion-header .accordion-icon,
-.vagabond .npc-edit-item.open .npc-edit-header .accordion-icon,
-.vagabond .npc-action-edit.open .action-edit-header .accordion-icon,
-.vagabond .npc-ability-edit.open .ability-edit-header .accordion-icon {
+.vagabond .accordion-item.expanded .accordion-header .accordion-icon,
+.vagabond .npc-edit-item.expanded .npc-edit-header .accordion-icon,
+.vagabond .npc-action-edit.expanded .action-edit-header .accordion-icon,
+.vagabond .npc-ability-edit.expanded .ability-edit-header .accordion-icon {
   transform: rotate(90deg);
 }
 .vagabond .npc-type-row {

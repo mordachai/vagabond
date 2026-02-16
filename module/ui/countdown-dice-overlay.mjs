@@ -570,6 +570,9 @@ export class CountdownDiceOverlay {
       });
 
       if (confirmed) {
+        // Remove DOM element immediately before async delete
+        const diceId = dice.id;
+        this.removeDice(diceId);
         await dice.delete();
       }
       menu.remove();
@@ -634,7 +637,7 @@ export class CountdownDiceOverlay {
     const dice = diceEntry || game.journal.get(diceId);
     if (!dice) {
       // Dice no longer exists, remove it
-      await this.removeDice(diceId);
+      this.removeDice(diceId);
       return;
     }
 
@@ -653,7 +656,7 @@ export class CountdownDiceOverlay {
    * Remove a dice from display
    * @param {string} diceId - The dice ID
    */
-  async removeDice(diceId) {
+  removeDice(diceId) {
     // Cancel any pending deletion/update timeout for this dice
     if (this.pendingDeletions.has(diceId)) {
       clearTimeout(this.pendingDeletions.get(diceId));
@@ -663,7 +666,6 @@ export class CountdownDiceOverlay {
     // Get element from map
     const element = this.diceElements.get(diceId);
     if (element) {
-      // Clean up event listeners
       if (element._cleanupListeners) {
         element._cleanupListeners();
       }
@@ -671,13 +673,23 @@ export class CountdownDiceOverlay {
       this.diceElements.delete(diceId);
     }
 
-    // Also check DOM directly in case element wasn't in Map (ghost cleanup)
+    // Also check overlay container directly in case element wasn't in Map
     const domElement = this.container?.querySelector(`[data-dice-id="${diceId}"]`);
     if (domElement && domElement !== element) {
       if (domElement._cleanupListeners) {
         domElement._cleanupListeners();
       }
       domElement.remove();
+    }
+
+    // Last resort: search entire document body for orphaned dice elements
+    // (handles stale container references after F5 refresh)
+    const orphaned = document.querySelectorAll(`[data-dice-id="${diceId}"]`);
+    for (const el of orphaned) {
+      if (el._cleanupListeners) {
+        el._cleanupListeners();
+      }
+      el.remove();
     }
   }
 }

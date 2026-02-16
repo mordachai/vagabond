@@ -853,20 +853,16 @@ Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
 
 /**
  * Remove clock/dice when journal is deleted
+ * Always attempt cleanup regardless of flags — after F5 refresh or in some
+ * Foundry V13 scenarios, journal.flags may be stripped before the hook fires.
+ * Both removeClock() and removeDice() are no-ops if no element exists.
  */
-Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
-  // Handle progress clocks
-  if (journal.flags?.vagabond?.progressClock?.type === 'progressClock') {
-    if (clockOverlay) {
-      await clockOverlay.removeClock(journal.id);
-    }
+Hooks.on('deleteJournalEntry', (journal, options, userId) => {
+  if (clockOverlay) {
+    clockOverlay.removeClock(journal.id);
   }
-
-  // Handle countdown dice
-  if (journal.flags?.vagabond?.countdownDice?.type === 'countdownDice') {
-    if (diceOverlay) {
-      await diceOverlay.removeDice(journal.id);
-    }
+  if (diceOverlay) {
+    diceOverlay.removeDice(journal.id);
   }
 });
 

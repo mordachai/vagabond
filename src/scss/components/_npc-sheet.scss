@@ -785,24 +785,22 @@
 
 /* Senses section */
 .npc-senses-section {
-  background-color: $c-darkgray;
+  background-color: $c-lightgrey;
   padding: 4px 8px;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   filter:drop-shadow(1px 1px 2px $c-bluey);
+  color: $c-black;
 
   .npc-field-label {
-    color: $c-white;
-    font-family: $font-secondary;
+    font-family: $font-title;
     font-size: 1.2em;
   }
 
   .npc-field-display {
-    color: $c-white;
     font-size: 1.1em;
   }
 
   .npc-text-input {
-    color: $c-white;
     font-size: 1.1em;
   }
 }
