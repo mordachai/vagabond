@@ -1,6 +1,9 @@
 !packs/_source/
 dist/
 
+CLAUDE.md
+GEMINI.md
+
 # IDE
 .idea/
 .nova/
