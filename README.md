@@ -13,7 +13,14 @@ Check the awesome books here: [Vagabond - Land of the Blind](https://landofthebl
 
 ## Key Features
 
-### New Character Sheet Styles: Light and Dark Themes
+### **New feature:** Level Up menu
+Click on the XP label at the top right of the character sheet to open the level up menu
+
+<img width="921" height="640" alt="image" src="https://github.com/user-attachments/assets/8d1c25e1-886a-4d0a-9900-d6dba9f5901c" />
+
+---
+
+### **New Character Sheets** Styles: Light and Dark Themes
 
 <img width="879" height="905" alt="image" src="https://github.com/user-attachments/assets/28b14f20-b3ee-4559-802a-1f0ee47a084e" />
 
