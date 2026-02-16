@@ -945,6 +945,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onLevelUp(event, target) {
+    const { LevelUpDialog } = globalThis.vagabond.applications;
+    new LevelUpDialog(this.actor).render(true);
+  }
+
+  /**
+   * Legacy level up logic (kept for reference, replaced by LevelUpDialog)
+   * @deprecated Use LevelUpDialog instead
+   */
+  static async _onLevelUpLegacy(event, target) {
     const currentLevel = this.actor.system.attributes.level.value;
     const newLevel = currentLevel + 1;
 

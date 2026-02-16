@@ -742,14 +742,14 @@
     justify-items: center;
     gap: 0 4px;
     margin-left: -15px;
-    width: 160px;
+    width: auto;
     height: 55px;
     flex-shrink: 0;
     background-image: url('../assets/images/sheets/speedBG.webp');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center;
-    padding: 0 8px;
+    padding: 0 25px;
     filter: drop-shadow(2px 2px 1px $c-inset-1,);
 
     .speed-group-label {
@@ -788,7 +788,7 @@
       width: 30px;
       font-family: $font-number;
       text-align: center;
-      font-size: 18px;
+      font-size: 1.4em;
       font-weight: normal;
       border: none;
       border-bottom: 1px solid transparent;
@@ -820,7 +820,7 @@
     }
 
     .speed-group-unit {
-      font-size: 9px;
+      font-size: 0.9em;
       font-weight: 400;
       opacity: 0.6;
 
@@ -874,7 +874,7 @@
     width: 30px;
     font-family: $font-number;
     text-align: center;
-    font-size: 18px;
+    font-size: 1.7em;
     font-weight: normal;
     border: none;
     border-bottom: 1px solid transparent;

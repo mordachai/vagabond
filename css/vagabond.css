@@ -60,7 +60,7 @@
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
-  --vagabond-c-green: #4ed639f2;
+  --vagabond-c-green: #278e17;
   --vagabond-c-bluey: #62686a;
   --vagabond-dark-yellow: #94913c;
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
@@ -106,10 +106,11 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-muted: #999999;
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
+  --vagabond-c-green: #26cb0c;
   --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
   --vagabond-c-lightgrey: #d0d0d0;
-  --vagabond-c-red: #7b3e18;
+  --vagabond-c-red: #ff8b9f;
   --vagabond-c-inset-1: rgba(145, 150, 168, 0.451);
   --vagabond-c-inset-2: rgba(89, 99, 106, 0.1);
   --vagabond-bg-paper: url("../assets/images/sheets/dark/dark-bg-300.webp");
@@ -4730,6 +4731,793 @@ ol#combat-tracker.directory-list {
   }
 }
 
+.level-up-dialog .window-content {
+  padding: 15px;
+  background: black !important;
+  border-radius: 20px;
+  corner-shape: round round scoop scoop;
+  color: var(--vagabond-c-text-primary);
+  border: 5px solid var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .level-up-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.level-up-dialog .level-up-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px 0 0;
+  background: var(--vagabond-c-black);
+  border-bottom: 2px solid var(--vagabond-c-dark);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.level-up-dialog .level-up-tabs .level-up-tab {
+  padding: 8px 14px;
+  border: none;
+  background: var(--vagabond-c-inset-1);
+  color: var(--vagabond-c-faint);
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 4px 4px 0 0;
+  transition: background 0.15s, color 0.15s;
+  height: 40px;
+}
+.level-up-dialog .level-up-tabs .level-up-tab:hover {
+  background: var(--vagabond-c-inset-2);
+  color: var(--vagabond-c-lite);
+}
+.level-up-dialog .level-up-tabs .level-up-tab.active {
+  background: var(--vagabond-dark-yellow);
+  color: var(--vagabond-c-lite);
+  font-weight: bold;
+}
+.level-up-dialog .level-up-tabs .level-up-tab i {
+  margin-right: 4px;
+}
+.level-up-dialog .level-up-tabs .gm-override-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-tan);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.level-up-dialog .level-up-tabs .gm-override-toggle input[type=checkbox] {
+  margin: 0;
+  cursor: pointer;
+}
+.level-up-dialog .level-up-tabs .gm-override-toggle i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.level-up-dialog .level-up-tab-content {
+  background: var(--vagabond-bg-paper);
+  background-repeat: var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 300px;
+  max-height: 550px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.level-up-dialog .lu-tab h3 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  color: var(--vagabond-c-text-secondary);
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  padding-bottom: 6px;
+}
+.level-up-dialog .lu-tab h3 i {
+  margin-right: 6px;
+}
+.level-up-dialog .lu-tab h4 {
+  margin: 12px 0 8px;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-instruction {
+  font-size: 0.9rem;
+  color: var(--vagabond-c-muted);
+  margin: 0 0 12px;
+}
+.level-up-dialog .lu-warning {
+  background: rgba(157, 0, 0, 0.15);
+  border: 1px solid var(--vagabond-c-red);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-red);
+  margin-bottom: 12px;
+}
+.level-up-dialog .lu-warning i {
+  margin-right: 6px;
+}
+.level-up-dialog .lu-btn {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: filter 0.15s;
+}
+.level-up-dialog .lu-btn:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+.level-up-dialog .lu-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.level-up-dialog .lu-btn i {
+  margin-right: 5px;
+}
+.level-up-dialog .lu-btn-primary {
+  background: var(--vagabond-c-dark-bluey);
+  color: var(--vagabond-c-lite);
+}
+.level-up-dialog .lu-btn-accent {
+  background: var(--vagabond-c-green);
+  color: var(--vagabond-c-white);
+}
+.level-up-dialog .lu-btn-small {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  background: var(--vagabond-c-inset-2);
+  color: var(--vagabond-c-text-primary);
+  border: 1px solid var(--vagabond-c-tan-lite);
+}
+.level-up-dialog .lu-btn-large {
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  width: 100%;
+  margin-top: 12px;
+}
+.level-up-dialog .lu-btn-note {
+  font-weight: 400;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+.level-up-dialog .lu-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  align-items: center;
+}
+.level-up-dialog .lu-awarded-badge {
+  color: var(--vagabond-c-green);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.level-up-dialog .lu-awarded-badge i {
+  margin-right: 4px;
+}
+.level-up-dialog .lu-xp-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+}
+.level-up-dialog .lu-xp-left {
+  min-width: 0;
+}
+.level-up-dialog .lu-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.level-up-dialog .lu-question {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.level-up-dialog .lu-question:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.level-up-dialog .lu-question.checked {
+  background: rgba(78, 214, 57, 0.1);
+}
+.level-up-dialog .lu-question .lu-checkbox {
+  font-size: 1.1rem;
+  color: var(--vagabond-c-tan);
+  width: 22px;
+  text-align: center;
+}
+.level-up-dialog .lu-question.checked .lu-checkbox {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-question .lu-question-text {
+  font-size: 0.9rem;
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-xp-right {
+  width: 160px;
+}
+.level-up-dialog .lu-stats-panel {
+  background: var(--vagabond-c-inset-2);
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  corner-shape: scoop;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.level-up-dialog .lu-stats-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vagabond-c-muted);
+  display: block;
+  text-align: center;
+}
+.level-up-dialog .lu-stats-big {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--vagabond-c-text-secondary);
+  line-height: 1;
+  display: block;
+  text-align: center;
+}
+.level-up-dialog .lu-next-level {
+  color: var(--vagabond-c-muted);
+  opacity: 0.6;
+}
+.level-up-dialog .lu-stats-panel-divider {
+  width: 80%;
+  height: 1px;
+  background: var(--vagabond-c-tan-lite);
+}
+.level-up-dialog .lu-stats-panel-xp {
+  text-align: center;
+  width: 100%;
+}
+.level-up-dialog .lu-xp-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+  margin: 4px 0;
+}
+.level-up-dialog .lu-xp-current {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-xp-current.lu-ready {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-xp-separator {
+  font-size: 1rem;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-xp-required {
+  font-size: 1.2rem;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-xp-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--vagabond-c-inset-1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.level-up-dialog .lu-xp-bar-fill {
+  height: 100%;
+  background: var(--vagabond-dark-yellow);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.level-up-dialog .lu-xp-bar-fill.lu-ready {
+  background: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-stats-gain {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--vagabond-c-green);
+  display: block;
+  text-align: center;
+}
+.level-up-dialog .lu-features {
+  margin-bottom: 12px;
+}
+.level-up-dialog .lu-feature {
+  background: var(--vagabond-c-inset-2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+}
+.level-up-dialog .lu-feature strong {
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-feature .lu-feature-desc {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-feature .lu-feature-tag {
+  display: inline-block;
+  background: var(--vagabond-dark-yellow);
+  color: var(--vagabond-c-lite);
+  font-size: 0.95rem;
+  padding: 4px 6px;
+  border-radius: 3px;
+  margin-top: 4px;
+  margin-right: 4px;
+}
+.level-up-dialog .lu-feature .lu-feature-tag i {
+  margin-right: 2px;
+}
+.level-up-dialog .lu-checklist {
+  margin-bottom: 12px;
+}
+.level-up-dialog .lu-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+.level-up-dialog .lu-checklist-item .lu-check-icon {
+  font-size: 0.9rem;
+  color: var(--vagabond-c-tan);
+}
+.level-up-dialog .lu-checklist-item.done .lu-check-icon {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-checklist-item .lu-check-label {
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-checklist-item .lu-check-label:hover {
+  text-decoration: underline;
+}
+.level-up-dialog .lu-checklist-item.done .lu-check-label {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+.level-up-dialog .lu-apply-section {
+  margin-top: 16px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+  padding-top: 12px;
+}
+.level-up-dialog .lu-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-top: 2px solid var(--vagabond-c-dark);
+  background: var(--vagabond-c-black);
+  flex-shrink: 0;
+}
+.level-up-dialog .lu-footer:empty {
+  display: none;
+}
+.level-up-dialog .lu-footer .lu-btn-large {
+  margin-top: 0;
+  width: auto;
+  min-width: 240px;
+}
+.level-up-dialog .lu-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.level-up-dialog .lu-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 6px 12px;
+  border: 2px solid var(--vagabond-c-text-secondary);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  overflow: visible;
+  min-height: 70px;
+}
+.level-up-dialog .lu-stat-card:hover:not(:disabled) {
+  border-color: var(--vagabond-dark-yellow);
+  background: rgba(148, 145, 60, 0.15);
+}
+.level-up-dialog .lu-stat-card.selected {
+  border-color: var(--vagabond-c-green);
+  background: rgba(78, 214, 57, 0.12);
+}
+.level-up-dialog .lu-stat-card.maxed {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.level-up-dialog .lu-stat-card .lu-stat-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--vagabond-c-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+}
+.level-up-dialog .lu-stat-card .lu-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--vagabond-c-text-secondary);
+  line-height: 1;
+}
+.level-up-dialog .lu-stat-card .lu-stat-delta {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-stat-card .lu-stat-max {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.7rem;
+  color: var(--vagabond-c-red);
+  text-transform: uppercase;
+}
+.level-up-dialog .lu-derived-stats {
+  margin-top: 16px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+  padding-top: 8px;
+}
+.level-up-dialog .lu-derived-stats h4 {
+  margin: 8px 0 4px 0;
+  font-size: 1.1rem;
+  color: var(--vagabond-c-text-secondary);
+  border-bottom: 1px dotted var(--vagabond-c-text-secondary);
+  padding-bottom: 2px;
+}
+.level-up-dialog .lu-derived-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px 12px;
+}
+.level-up-dialog .lu-derived-grid.lu-grid-2col {
+  grid-template-columns: 1fr 1fr;
+  padding: 4px 12px;
+}
+.level-up-dialog .lu-derived-grid.lu-grid-3col {
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 4px 12px;
+}
+.level-up-dialog .lu-derived-grid.lu-grid-4col {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 4px 12px;
+}
+.level-up-dialog .lu-derived-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 1px 0;
+}
+.level-up-dialog .lu-derived-item.lu-trained .lu-derived-label strong {
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-derived-item.lu-changed .lu-derived-value {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-derived-label {
+  flex: 0 0 auto;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-stat-abbr {
+  font-size: 0.65rem;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-derived-dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--vagabond-c-tan-lite);
+  min-width: 10px;
+  margin-bottom: 3px;
+}
+.level-up-dialog .lu-derived-value {
+  flex: 0 0 auto;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--vagabond-c-text-secondary);
+  min-width: 18px;
+  text-align: right;
+}
+.level-up-dialog .lu-old-val {
+  color: var(--vagabond-c-muted);
+  text-decoration: line-through;
+  font-size: 0.7rem;
+  margin-right: 2px;
+}
+.level-up-dialog .lu-owned-notice {
+  display: block;
+  text-align: center;
+  color: var(--vagabond-c-white);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: 8px;
+}
+.level-up-dialog .lu-owned-notice i {
+  margin-right: 4px;
+}
+.level-up-dialog .lu-perks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.level-up-dialog .lu-perks-header h3 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+.level-up-dialog .lu-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+.level-up-dialog .lu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  padding: 4px;
+}
+.level-up-dialog .lu-list-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.level-up-dialog .lu-list-item:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.level-up-dialog .lu-list-item.previewing {
+  background: rgba(148, 145, 60, 0.2);
+  border-left: 3px solid var(--vagabond-dark-yellow);
+}
+.level-up-dialog .lu-list-item.chosen {
+  background: rgba(78, 214, 57, 0.12);
+}
+.level-up-dialog .lu-list-item.owned {
+  opacity: 0.5;
+}
+.level-up-dialog .lu-list-item.prereq-fail {
+  opacity: 0.6;
+}
+.level-up-dialog .lu-list-item .lu-list-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-tan-lite);
+}
+.level-up-dialog .lu-list-item .lu-list-name {
+  font-size: 0.88rem;
+  color: var(--vagabond-c-text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.level-up-dialog .lu-list-item .lu-badge {
+  font-size: 0.7rem;
+  padding: 2px 5px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+.level-up-dialog .lu-list-item .lu-badge.owned {
+  background: var(--vagabond-c-muted);
+  color: var(--vagabond-c-white);
+}
+.level-up-dialog .lu-list-item .lu-badge.taken {
+  background: var(--vagabond-c-dark-bluey);
+  color: var(--vagabond-c-white);
+}
+.level-up-dialog .lu-list-item .lu-badge.prereq {
+  color: var(--vagabond-c-red);
+}
+.level-up-dialog .lu-list-item .lu-badge.required {
+  background: var(--vagabond-dark-yellow);
+  color: var(--vagabond-c-lite);
+}
+.level-up-dialog .lu-list-item .lu-spell-dmg {
+  font-size: 0.8rem;
+  color: var(--vagabond-c-damage-orange);
+}
+.level-up-dialog .lu-list-item .lu-spell-info {
+  font-size: 0.75rem;
+  color: var(--vagabond-c-muted);
+  white-space: nowrap;
+}
+.level-up-dialog .lu-preview {
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  padding: 12px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.level-up-dialog .lu-preview .lu-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.level-up-dialog .lu-preview .lu-preview-header .lu-preview-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-tan-lite);
+}
+.level-up-dialog .lu-preview .lu-preview-header h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-preview .lu-preview-body {
+  font-size: 0.9rem;
+  color: var(--vagabond-c-text-primary);
+  line-height: 1.45;
+}
+.level-up-dialog .lu-preview .lu-preview-body p {
+  margin: 5px 0;
+}
+.level-up-dialog .lu-preview .lu-placeholder {
+  color: var(--vagabond-c-muted);
+  font-style: italic;
+  text-align: center;
+  padding: 40px 0;
+}
+.level-up-dialog .lu-preview .lu-prereq-warning {
+  background: rgba(157, 0, 0, 0.1);
+  border: 1px solid var(--vagabond-c-red);
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  color: var(--vagabond-c-red);
+  margin: 8px 0;
+}
+.level-up-dialog .lu-preview .lu-prereq-warning i {
+  margin-right: 4px;
+}
+.level-up-dialog .lu-preview .lu-prereq-warning span {
+  display: inline-block;
+  margin-left: 4px;
+}
+.level-up-dialog .lu-preview .lu-prereq-warning span::after {
+  content: ", ";
+}
+.level-up-dialog .lu-preview .lu-prereq-warning span:last-child::after {
+  content: "";
+}
+.level-up-dialog .lu-preview .lu-prereq-list {
+  background: var(--vagabond-c-inset-2);
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+.level-up-dialog .lu-preview .lu-prereq-list strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-preview .lu-prereq-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.level-up-dialog .lu-preview .lu-prereq-list li {
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.level-up-dialog .lu-preview .lu-prereq-list li i {
+  font-size: 0.8rem;
+}
+.level-up-dialog .lu-preview .lu-prereq-list li.prereq-met {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-preview .lu-prereq-list li.prereq-met i {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-preview .lu-prereq-list li.prereq-unmet {
+  color: var(--vagabond-c-red);
+}
+.level-up-dialog .lu-preview .lu-prereq-list li.prereq-unmet i {
+  color: var(--vagabond-c-red);
+}
+.level-up-dialog .lu-spell-details {
+  background: var(--vagabond-c-inset-2);
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+}
+.level-up-dialog .lu-spell-details.lu-spell-details-bottom {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+.level-up-dialog .lu-spell-detail {
+  font-size: 0.82rem;
+  color: var(--vagabond-c-text-primary);
+  padding: 1px 0;
+}
+.level-up-dialog .lu-spell-detail strong {
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-spell-detail i {
+  margin: 0 2px;
+}
+.level-up-dialog .lu-tray {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+  padding: 6px;
+  background: var(--vagabond-c-inset-2);
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+}
+.level-up-dialog .lu-tray-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  background: rgba(78, 214, 57, 0.08);
+  border-radius: 3px;
+}
+.level-up-dialog .lu-tray-item .lu-tray-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  object-fit: cover;
+}
+.level-up-dialog .lu-tray-item .lu-tray-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--vagabond-c-text-primary);
+  flex: 1;
+}
+.level-up-dialog .lu-tray-item .lu-tray-choice {
+  font-size: 0.8rem;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-tray-item .lu-tray-remove {
+  border: none;
+  background: none;
+  color: var(--vagabond-c-red);
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+}
+.level-up-dialog .lu-tray-item .lu-tray-remove:hover {
+  color: var(--vagabond-c-damage-orange);
+}
+
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .inventory-context-menu,
@@ -8319,14 +9107,14 @@ ol#combat-tracker.directory-list {
   justify-items: center;
   gap: 0 4px;
   margin-left: -15px;
-  width: 160px;
+  width: auto;
   height: 55px;
   flex-shrink: 0;
   background-image: url("../assets/images/sheets/speedBG.webp");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
-  padding: 0 8px;
+  padding: 0 25px;
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
 }
 .vagabond .speed-stats-row .speed-group .speed-group-label {
@@ -8360,7 +9148,7 @@ ol#combat-tracker.directory-list {
   width: 30px;
   font-family: "Ludlow", serif;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.4em;
   font-weight: normal;
   border: none;
   border-bottom: 1px solid transparent;
@@ -8380,7 +9168,7 @@ ol#combat-tracker.directory-list {
   text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
 }
 .vagabond .speed-stats-row .speed-group .speed-group-unit {
-  font-size: 9px;
+  font-size: 0.9em;
   font-weight: 400;
   opacity: 0.6;
 }
@@ -8423,7 +9211,7 @@ ol#combat-tracker.directory-list {
   width: 30px;
   font-family: "Ludlow", serif;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.7em;
   font-weight: normal;
   border: none;
   border-bottom: 1px solid transparent;

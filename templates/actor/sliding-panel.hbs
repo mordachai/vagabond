@@ -16,8 +16,8 @@
         />
         <div class='top-right-controls'>
           {{! XP Field with Level Up Indicator }}
-          <div class='xp-field-inline {{#if system.attributes.canLevelUp}}level-up-ready{{/if}}' data-tooltip='{{#if system.attributes.canLevelUp}}Click label to Level Up!{{else}}XP: {{system.attributes.xp}} / {{system.attributes.xpRequired}}{{/if}}'>
-            <label class='resource-label' {{#if (and system.attributes.canLevelUp (lt system.attributes.level.value 10))}}data-action='levelUp'{{/if}}>
+          <div class='xp-field-inline {{#if system.attributes.canLevelUp}}level-up-ready{{/if}}' data-tooltip='{{#if system.attributes.canLevelUp}}Click label to Level Up!{{else}}Click to award session XP{{/if}}'>
+            <label class='resource-label' data-action='levelUp'>
               {{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}
               {{#if system.attributes.canLevelUp}}
                 <i class='fas fa-arrow-up level-up-icon'></i>

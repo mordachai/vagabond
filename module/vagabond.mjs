@@ -36,6 +36,7 @@ import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
 import { CompendiumSettings } from './applications/compendium-settings.mjs';
+import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -439,6 +440,7 @@ globalThis.vagabond = {
     VagabondMeasureTemplates,
     VagabondCharBuilder,
     EncounterSettings,
+    LevelUpDialog,
   },
   ui: {
     ProgressClockOverlay,
