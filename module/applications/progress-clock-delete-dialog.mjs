@@ -64,8 +64,8 @@ export class ProgressClockDeleteDialog extends api.HandlebarsApplicationMixin(
     }
 
     // Confirm deletion
-    const confirmed = await Dialog.confirm({
-      title: game.i18n.localize("VAGABOND.ProgressClock.DeleteDialog.ConfirmTitle"),
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("VAGABOND.ProgressClock.DeleteDialog.ConfirmTitle") },
       content: game.i18n.format("VAGABOND.ProgressClock.DeleteDialog.ConfirmMessage", {
         name: clock.name
       })

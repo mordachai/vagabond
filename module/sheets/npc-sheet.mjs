@@ -1,5 +1,4 @@
 import { VagabondActorSheet } from './actor-sheet.mjs';
-import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import {
   RollHandler,
   NPCImmunityHandler,
@@ -33,6 +32,9 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
     // Accordion state manager
     this._accordionStateManager = null;
+
+    // AbortController for cleaning up event listeners between renders
+    this._listenerController = null;
   }
 
   /**
@@ -49,18 +51,13 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
   /**
    * @override
-   * Capture UI state before re-render
+   * Capture UI state before the DOM is replaced.
    */
   async _preRender(context, options) {
     await super._preRender(context, options);
 
     // Guard: element doesn't exist on first render
     if (!this.element) return;
-
-    // Capture accordion state
-    if (this._accordionStateManager) {
-      this._accordionStateManager.capture();
-    }
 
     // Capture dropdown (details) open state
     if (this.immunityHandler) {
@@ -79,16 +76,10 @@ export class VagabondNPCSheet extends VagabondActorSheet {
   async _onRender(context, options) {
     await super._onRender(context, options);
 
-    // Initialize accordion state manager if not already created
-    if (!this._accordionStateManager) {
-      this._accordionStateManager = AccordionHelper.createStateManager(
-        this.element,
-        '.npc-action-edit, .npc-ability-edit'
-      );
-    } else {
-      // Restore accordion state after render
-      this._accordionStateManager.restore();
-    }
+    // Abort previous listeners and create a new controller
+    this._listenerController?.abort();
+    this._listenerController = new AbortController();
+    const { signal } = this._listenerController;
 
     // Restore dropdown state after render
     if (this.immunityHandler) {
@@ -120,74 +111,88 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       const updateScrollClass = () => npcContent.classList.toggle('has-scroll', npcContent.scrollHeight > npcContent.clientHeight);
       requestAnimationFrame(updateScrollClass);
       this._scrollObserver?.disconnect();
-      this._scrollObserver = new ResizeObserver(updateScrollClass);
+      this._scrollObserver = new ResizeObserver(() => {
+        requestAnimationFrame(updateScrollClass);
+      });
       this._scrollObserver.observe(npcContent);
     }
 
     // Setup debounced input listeners for action/ability editing
-    this._setupDebouncedInputListeners();
+    this._setupDebouncedInputListeners(signal);
 
     // Manual binding for createDoc action (workaround for action inheritance issue)
-    this._bindCreateDocActions();
+    this._bindCreateDocActions(signal);
+
+    // Bind manual save actions for creation
+    this._bindSaveActions(signal);
+  }
+
+  /**
+   * Bind save actions for manual save during creation
+   * @param {AbortSignal} signal - Signal for listener cleanup
+   * @private
+   */
+  _bindSaveActions(signal) {
+    const saveButtons = this.element.querySelectorAll('[data-action="saveAction"], [data-action="saveAbility"]');
+    saveButtons.forEach(button => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this._isDirty = true; // Force dirty to ensure save happens
+        await this._saveChanges(false); // Save data without relying on update's render
+
+        // Explicitly force a re-render to expand the accordion and update the UI
+        await this.render(true);
+      }, { signal });
+    });
   }
 
   /**
    * Manually bind createDoc actions to effect buttons
    * This is a workaround for action inheritance not working properly
+   * @param {AbortSignal} signal - Signal for listener cleanup
    * @private
    */
-  _bindCreateDocActions() {
+  _bindCreateDocActions(signal) {
     // Bind createDoc actions for effect creation
     const effectButtons = this.element.querySelectorAll('[data-action="createDoc"][data-document-class="ActiveEffect"]');
-    
+
     effectButtons.forEach(button => {
-      // Remove any existing listeners by cloning the button
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-      
-      // Add our enhanced createDoc logic
-      newButton.addEventListener('click', async (event) => {
+      button.addEventListener('click', async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        
+
         try {
-          // Call the static _createDoc method from the base class with proper context
-          await this.constructor._createDoc.call(this, event, newButton);
-          
-          // Force a re-render to show the new effect
+          await this.constructor._createDoc.call(this, event, button);
           await this.render(false);
         } catch (error) {
           console.error('Vagabond | Error creating effect:', error);
         }
-      });
+      }, { signal });
     });
 
     // Bind other effect actions (viewDoc, deleteDoc, toggleEffect)
     const effectActionButtons = this.element.querySelectorAll('[data-action="viewDoc"], [data-action="deleteDoc"], [data-action="toggleEffect"]');
-    
+
     effectActionButtons.forEach(button => {
       const action = button.dataset.action;
-      
-      // Remove any existing listeners by cloning the button
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-      
-      // Add the appropriate action handler
-      newButton.addEventListener('click', async (event) => {
+
+      button.addEventListener('click', async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        
+
         try {
           switch (action) {
             case 'viewDoc':
-              const viewDoc = this.constructor._getEmbeddedDocument(newButton, this.actor);
+              const viewDoc = this.constructor._getEmbeddedDocument(button, this.actor);
               if (viewDoc) viewDoc.sheet.render(true);
               break;
             case 'deleteDoc':
-              const deleteDoc = this.constructor._getEmbeddedDocument(newButton, this.actor);
+              const deleteDoc = this.constructor._getEmbeddedDocument(button, this.actor);
               if (deleteDoc) {
-                const confirmed = await Dialog.confirm({
-                  title: `Delete ${deleteDoc.name}?`,
+                const confirmed = await foundry.applications.api.DialogV2.confirm({
+                  window: { title: `Delete ${deleteDoc.name}?` },
                   content: `<p>Are you sure you want to delete ${deleteDoc.name}?</p>`,
                 });
                 if (confirmed) {
@@ -197,7 +202,7 @@ export class VagabondNPCSheet extends VagabondActorSheet {
               await this.render(false);
               break;
             case 'toggleEffect':
-              const toggleEffect = this.constructor._getEmbeddedDocument(newButton, this.actor);
+              const toggleEffect = this.constructor._getEmbeddedDocument(button, this.actor);
               if (toggleEffect) {
                 await toggleEffect.update({ disabled: !toggleEffect.disabled });
               }
@@ -207,49 +212,8 @@ export class VagabondNPCSheet extends VagabondActorSheet {
         } catch (error) {
           console.error(`Vagabond | Error with ${action}:`, error);
         }
-      });
+      }, { signal });
     });
-
-    // Bind effects accordion toggle
-    const effectsAccordionButton = this.element.querySelector('[data-action="toggleEffectsAccordion"]');
-    
-    if (effectsAccordionButton) {
-      // Remove any existing listeners by cloning the button
-      const newButton = effectsAccordionButton.cloneNode(true);
-      effectsAccordionButton.parentNode.replaceChild(newButton, effectsAccordionButton);
-      
-      // Add accordion toggle logic
-      newButton.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        
-        try {
-          const accordion = newButton.closest('.npc-effects');
-          if (accordion) {
-            const content = accordion.querySelector('.accordion-content');
-            const icon = newButton.querySelector('.accordion-icon');
-            
-            if (content && icon) {
-              const isCollapsed = content.classList.contains('collapsed');
-              
-              if (isCollapsed) {
-                content.classList.remove('collapsed');
-                content.classList.add('expanded');
-                icon.classList.remove('fa-chevron-right');
-                icon.classList.add('fa-chevron-down');
-              } else {
-                content.classList.remove('expanded');
-                content.classList.add('collapsed');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-right');
-              }
-            }
-          }
-        } catch (error) {
-          console.error('Vagabond | Error with toggleEffectsAccordion:', error);
-        }
-      });
-    }
   }
 
   // ===========================
@@ -260,69 +224,52 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
   /**
    * Setup debounced input listeners to prevent accordion closing on every keystroke
+   * @param {AbortSignal} signal - Signal for listener cleanup
    * @private
    */
-  _setupDebouncedInputListeners() {
+  _setupDebouncedInputListeners(signal) {
     // Action inputs
     const actionInputs = this.element.querySelectorAll('.npc-action-edit input, .npc-action-edit textarea, .npc-action-edit select');
     actionInputs.forEach(input => {
-      // Remove existing listeners by cloning
-      const newInput = input.cloneNode(true);
-      input.parentNode.replaceChild(newInput, input);
-
-      // Add debounced change listener
-      newInput.addEventListener('input', (event) => {
+      input.addEventListener('input', () => {
         this._isDirty = true;
         this._debouncedSave();
-        // DO NOT call this.render() here - this prevents accordion closing
-      });
+      }, { signal });
 
-      // Save immediately on blur (when user clicks away)
-      newInput.addEventListener('blur', async (event) => {
+      input.addEventListener('blur', async () => {
         if (this._isDirty) {
           await this._saveChanges();
           this._isDirty = false;
         }
-      });
+      }, { signal });
     });
 
     // Ability inputs
     const abilityInputs = this.element.querySelectorAll('.npc-ability-edit input, .npc-ability-edit textarea');
     abilityInputs.forEach(input => {
-      // Remove existing listeners by cloning
-      const newInput = input.cloneNode(true);
-      input.parentNode.replaceChild(newInput, input);
-
-      // Add debounced change listener
-      newInput.addEventListener('input', (event) => {
+      input.addEventListener('input', () => {
         this._isDirty = true;
         this._debouncedSave();
-        // DO NOT call this.render() here - this prevents accordion closing
-      });
+      }, { signal });
 
-      // Save immediately on blur (when user clicks away)
-      newInput.addEventListener('blur', async (event) => {
+      input.addEventListener('blur', async () => {
         if (this._isDirty) {
           await this._saveChanges();
           this._isDirty = false;
         }
-      });
+      }, { signal });
     });
   }
 
   /**
    * Save pending changes to the actor
+   * @param {boolean} render - Whether to re-render the sheet after update (default: false)
    * @private
    */
-  async _saveChanges() {
+  async _saveChanges(render = false) {
     if (!this._isDirty) return;
 
     try {
-      // Capture accordion state before potential re-render
-      if (this._accordionStateManager) {
-        this._accordionStateManager.capture();
-      }
-
       // Collect all action data from inputs
       const actionEdits = this.element.querySelectorAll('.npc-action-edit');
       const actions = [];
@@ -330,7 +277,7 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       actionEdits.forEach((actionEdit) => {
         const actionIndex = parseInt(actionEdit.dataset.actionIndex);
         const inputs = actionEdit.querySelectorAll('[data-field]');
-        
+
         const actionData = {};
         inputs.forEach(input => {
           const field = input.dataset.field;
@@ -354,7 +301,7 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       abilityEdits.forEach((abilityEdit) => {
         const abilityIndex = parseInt(abilityEdit.dataset.abilityIndex);
         const inputs = abilityEdit.querySelectorAll('[data-field]');
-        
+
         const abilityData = {};
         inputs.forEach(input => {
           const field = input.dataset.field;
@@ -374,7 +321,7 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       }
 
       if (Object.keys(updateData).length > 0) {
-        await this.actor.update(updateData);
+        await this.actor.update(updateData, { render: render });
       }
 
       this._isDirty = false;
@@ -386,12 +333,14 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
   /**
    * @override
-   * Save changes before closing
+   * Save changes and clean up before closing
    */
   async close(options) {
     if (this._isDirty) {
       await this._saveChanges();
     }
+    this._listenerController?.abort();
+    this._listenerController = null;
     return super.close(options);
   }
 }

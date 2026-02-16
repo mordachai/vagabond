@@ -137,6 +137,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   constructor(object, options) {
     super(object, options);
 
+    // Accordion state management
+    this._accordionStateManager = null;
+    this._savedAccordionState = null;
+
     // Note: Handlers are initialized in child classes (VagabondCharacterSheet, VagabondNPCSheet)
     // this.spellHandler, this.rollHandler, etc.
   }
@@ -159,6 +163,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }
     }
     return super.render(options, _options);
+  }
+
+  /**
+   * @override
+   * Capture accordion state before the DOM is replaced.
+   */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+
+    // Guard: element doesn't exist on first render
+    if (!this.element) return;
+
+    // Capture accordion state from the CURRENT element before it gets replaced
+    if (this._accordionStateManager) {
+      this._savedAccordionState = this._accordionStateManager.capture();
+    }
   }
 
   /** @override */
@@ -607,6 +627,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onRender(context, options) {
     await super._onRender(context, options);
 
+    // Initialize or re-initialize accordion state manager for the NEW element
+    // Broad selector to catch all types of accordions used in the system
+    this._accordionStateManager = AccordionHelper.createStateManager(this.element);
+
+    // Restore state if we have it
+    if (this._savedAccordionState) {
+      this._accordionStateManager.setState(this._savedAccordionState);
+      // forceClose: false ensures that new items (expanded by default) are not closed
+      this._accordionStateManager.restore({ forceClose: false });
+    }
+
     // Disable overridden inputs
     this.#disableOverrides();
 
@@ -652,7 +683,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       const updateScrollClass = () => scrollable.classList.toggle('has-scroll', scrollable.scrollHeight > scrollable.clientHeight);
       requestAnimationFrame(updateScrollClass);
       this._scrollObserver?.disconnect();
-      this._scrollObserver = new ResizeObserver(updateScrollClass);
+      this._scrollObserver = new ResizeObserver(() => {
+        requestAnimationFrame(updateScrollClass);
+      });
       this._scrollObserver.observe(scrollable);
     }
 
@@ -713,8 +746,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const item = this.actor.items.get(itemId);
     if (!item) return;
 
-    const confirmed = await Dialog.confirm({
-      title: game.i18n.localize('VAGABOND.Dialog.DeleteItem'),
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.Dialog.DeleteItem') },
       content: `<p>${game.i18n.format('VAGABOND.Dialog.DeleteItemContent', { name: item.name })}</p>`,
     });
 
@@ -1289,7 +1322,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onToggleEffectsAccordion(event, target) {
-    const accordion = target.closest('.npc-effects-accordion');
+    const accordion = target.closest('.npc-effects.accordion-item');
     AccordionHelper.toggle(accordion);
   }
 
@@ -1446,8 +1479,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onDismissCharBuilder(event, target) {
-    const confirmed = await Dialog.confirm({
-      title: 'Dismiss Character Builder',
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Dismiss Character Builder' },
       content: '<p>Are you sure you want to dismiss the character builder? This will hide the prompt permanently.</p>',
     });
 
@@ -1482,8 +1515,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const doc = this._getEmbeddedDocument(target, this.actor);
     if (!doc) return;
 
-    const confirmed = await Dialog.confirm({
-      title: `Delete ${doc.name}?`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Delete ${doc.name}?` },
       content: `<p>Are you sure you want to delete ${doc.name}?</p>`,
     });
 
@@ -1696,8 +1729,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
-        const confirmed = await Dialog.confirm({
-          title: game.i18n.localize('VAGABOND.Dialog.DeleteItem'),
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+          window: { title: game.i18n.localize('VAGABOND.Dialog.DeleteItem') },
           content: `<p>Are you sure you want to remove ${item.name}?</p>`,
         });
 
@@ -1721,8 +1754,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
-        const confirmed = await Dialog.confirm({
-          title: game.i18n.localize('VAGABOND.Dialog.DeleteItem'),
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+          window: { title: game.i18n.localize('VAGABOND.Dialog.DeleteItem') },
           content: `<p>Are you sure you want to remove ${item.name}?</p>`,
         });
 
@@ -2025,7 +2058,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     this._accordionClickOutsideHandler = async (event) => {
       // Handle clicks outside accordions
-      const accordions = this.element.querySelectorAll('.accordion.open');
+      const accordions = this.element.querySelectorAll('.accordion-item.expanded');
 
       for (const accordion of accordions) {
         if (!accordion.contains(event.target)) {

@@ -144,7 +144,7 @@
         <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
         <ul class='features-list'>
           {{#each enrichedFeatures as |feature id|}}
-            <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class'>
+            <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class' data-accordion-id='feature-{{feature.index}}'>
               <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
                 <h5 class='feature-name'>{{feature.name}}</h5>
               </div>
@@ -164,7 +164,7 @@
         <h4>{{localize "VAGABOND.UI.Sections.Traits"}}</h4>
         <ul class='traits-list'>
           {{#each enrichedTraits as |trait|}}
-            <li class='trait accordion-item collapsed' data-trait-index='{{trait.index}}' data-source-type='ancestry'>
+            <li class='trait accordion-item collapsed' data-trait-index='{{trait.index}}' data-source-type='ancestry' data-accordion-id='trait-{{trait.index}}'>
               <div class='trait-header accordion-header clickable' data-action='toggleTrait' data-trait-id='{{trait._id}}'>
                 <h5 class='trait-name'>{{trait.name}}</h5>
               </div>
@@ -181,7 +181,7 @@
         <h4>{{localize "VAGABOND.UI.Sections.Perks"}}</h4>
         <ul class='perks-list'>
           {{#each enrichedPerks as |perk|}}
-            <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}'>
+            <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}' data-accordion-id='perk-{{perk._id}}'>
               <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
                 <h5 class='perk-name'>{{perk.name}}</h5>
               </div>

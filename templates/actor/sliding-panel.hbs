@@ -508,7 +508,7 @@
                 <div class="favorited-spells-list">
                   {{#each spells as |spell|}}
                     {{#if spell.system.favorite}}
-                      <div class='favorited-spell accordion-item collapsed' data-spell-id='{{spell._id}}'>
+                      <div class='favorited-spell accordion-item collapsed' data-spell-id='{{spell._id}}' data-accordion-id='fav-spell-{{spell._id}}'>
                         {{!-- Trigger Row: 4 Column Grid --}}
                         <div class="spell-trigger grid-4col">
                           {{!-- Col 1: Spell Icon (Rolls Spell) --}}

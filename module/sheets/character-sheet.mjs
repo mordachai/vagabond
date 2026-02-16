@@ -22,6 +22,9 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     this.inventoryHandler = new InventoryHandler(this);
     this.rollHandler = new RollHandler(this, { npcMode: false });
     this.equipmentHandler = new EquipmentHandler(this);
+
+    // AbortController for cleaning up event listeners between renders
+    this._listenerController = null;
   }
 
   /**
@@ -48,65 +51,57 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
   async _onRender(context, options) {
     await super._onRender(context, options);
 
-    // Manual binding for createDoc action (workaround for action inheritance issue)
-    this._bindCreateDocActions();
+    // Abort previous listeners and create a new controller
+    this._listenerController?.abort();
+    this._listenerController = new AbortController();
+    const { signal } = this._listenerController;
 
+    // Manual binding for createDoc action (workaround for action inheritance issue)
+    this._bindCreateDocActions(signal);
   }
 
   /**
    * Manually bind createDoc actions to effect buttons
    * This is a workaround for action inheritance not working properly
+   * @param {AbortSignal} signal - Signal for listener cleanup
    * @private
    */
-  _bindCreateDocActions() {
+  _bindCreateDocActions(signal) {
     // Bind createDoc actions for effect creation
     const effectButtons = this.element.querySelectorAll('[data-action="createDoc"][data-document-class="ActiveEffect"]');
-    
+
     effectButtons.forEach(button => {
-      // Remove any existing listeners by cloning the button
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-      
-      // Add our enhanced createDoc logic
-      newButton.addEventListener('click', async (event) => {
+      button.addEventListener('click', async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        
+
         try {
-          // Call the static _createDoc method from the base class with proper context
-          await this.constructor._createDoc.call(this, event, newButton);
-          
-          // Force a re-render of the effects tab to show the new effect
+          await this.constructor._createDoc.call(this, event, button);
           await this.render(false, { parts: ['effects'] });
         } catch (error) {
           console.error('Vagabond | Error creating effect:', error);
         }
-      });
+      }, { signal });
     });
 
     // Bind other effect actions (viewDoc, deleteDoc, toggleEffect)
     const effectActionButtons = this.element.querySelectorAll('[data-action="viewDoc"], [data-action="deleteDoc"], [data-action="toggleEffect"]');
-    
+
     effectActionButtons.forEach(button => {
       const action = button.dataset.action;
-      
-      // Remove any existing listeners by cloning the button
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-      
-      // Add the appropriate action handler
-      newButton.addEventListener('click', async (event) => {
+
+      button.addEventListener('click', async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        
+
         try {
           switch (action) {
             case 'viewDoc':
-              const viewDoc = this.constructor._getEmbeddedDocument(newButton, this.actor);
+              const viewDoc = this.constructor._getEmbeddedDocument(button, this.actor);
               if (viewDoc) viewDoc.sheet.render(true);
               break;
             case 'deleteDoc':
-              const deleteDoc = this.constructor._getEmbeddedDocument(newButton, this.actor);
+              const deleteDoc = this.constructor._getEmbeddedDocument(button, this.actor);
               if (deleteDoc) {
                 const confirmed = await foundry.applications.api.DialogV2.confirm({
                   window: { title: `Delete ${deleteDoc.name}?` },
@@ -119,7 +114,7 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
               await this.render(false, { parts: ['effects'] });
               break;
             case 'toggleEffect':
-              const toggleEffect = this.constructor._getEmbeddedDocument(newButton, this.actor);
+              const toggleEffect = this.constructor._getEmbeddedDocument(button, this.actor);
               if (toggleEffect) {
                 await toggleEffect.update({ disabled: !toggleEffect.disabled });
               }
@@ -129,10 +124,19 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
         } catch (error) {
           console.error(`Vagabond | Error with ${action}:`, error);
         }
-      });
+      }, { signal });
     });
   }
 
+  /**
+   * @override
+   * Clean up before closing
+   */
+  async close(options) {
+    this._listenerController?.abort();
+    this._listenerController = null;
+    return super.close(options);
+  }
 
   /**
    * Setup spell listeners (called during render)

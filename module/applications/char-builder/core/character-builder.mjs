@@ -1169,12 +1169,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
   async _onDismissBuilder() {
     // Confirm dismissal
-    const confirmed = await Dialog.confirm({
-      title: "Dismiss Character Builder",
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Dismiss Character Builder" },
       content: "<p>Are you sure you want to dismiss the character builder? Any unsaved progress will be lost.</p>",
-      yes: () => true,
-      no: () => false,
-      defaultYes: false
     });
 
     if (confirmed) {

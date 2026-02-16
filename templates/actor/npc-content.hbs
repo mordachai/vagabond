@@ -205,6 +205,11 @@
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}:</label>
                     <div class='action-name-with-remove'>
                       <input type='text' data-field='name' value='{{action.name}}' placeholder='Action Name' class='npc-text-input' />
+                      {{#unless action.name}}
+                        <button type='button' class='action-remove-btn' data-action='saveAction' data-index='{{index}}' title='Save Action'>
+                          <i class='fas fa-check'></i>
+                        </button>
+                      {{/unless}}
                       <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
                         <i class='fas fa-trash'></i>
                       </button>
@@ -313,6 +318,11 @@
                     <label>{{localize "VAGABOND.Actor.NPC.Ability.Name"}}</label>
                     <div class='ability-name-with-remove'>
                       <input type='text' data-field='name' value='{{ability.name}}' placeholder='Ability Name' class='npc-text-input' />
+                      {{#unless ability.name}}
+                        <button type='button' class='ability-remove-btn' data-action='saveAbility' data-index='{{index}}' title='Save Ability'>
+                          <i class='fas fa-check'></i>
+                        </button>
+                      {{/unless}}
                       <button type='button' class='ability-remove-btn' data-action='removeAbility' data-index='{{index}}' title='Remove Ability'>
                         <i class='fas fa-trash'></i>
                       </button>
@@ -339,7 +349,7 @@
   </section>
 
   {{! Effects Section - Accordion }}
-  <section class='npc-section npc-effects'>
+  <section class='npc-section npc-effects accordion-item' data-accordion-id='npc-effects'>
     <h4 class='npc-section-title accordion-header' data-action='toggleEffectsAccordion'>
       {{localize "VAGABOND.Actor.NPC.Sections.Effects"}}
       <i class='fas fa-chevron-right accordion-icon'></i>

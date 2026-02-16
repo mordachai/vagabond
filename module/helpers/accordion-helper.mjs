@@ -14,8 +14,9 @@ export class AccordionHelper {
     const icon = accordion.querySelector('.accordion-icon');
     const header = accordion.querySelector('.accordion-header');
 
-    // Remove 'collapsed' from the accordion-item itself
+    // Remove 'collapsed' and add 'expanded'
     accordion.classList.remove('collapsed');
+    accordion.classList.add('expanded');
 
     if (content) {
       content.classList.add('open');
@@ -42,8 +43,9 @@ export class AccordionHelper {
     const icon = accordion.querySelector('.accordion-icon');
     const header = accordion.querySelector('.accordion-header');
 
-    // Add 'collapsed' to the accordion-item itself
+    // Add 'collapsed' and remove 'expanded'
     accordion.classList.add('collapsed');
+    accordion.classList.remove('expanded');
 
     if (content) {
       content.classList.remove('open');
@@ -84,17 +86,22 @@ export class AccordionHelper {
   static isOpen(accordion) {
     if (!accordion) return false;
 
-    // Check if the accordion-item itself has 'collapsed' class
-    // If it does NOT have 'collapsed', it's open
-    return !accordion.classList.contains('collapsed');
+    // Check content state first as the source of truth
+    const content = accordion.querySelector('.accordion-content');
+    if (content) {
+      return content.classList.contains('open') && !content.classList.contains('collapsed');
+    }
+
+    // Fallback: check wrapper classes
+    return accordion.classList.contains('expanded') && !accordion.classList.contains('collapsed');
   }
 
   /**
    * Close all accordions in a container
    * @param {HTMLElement} container - The container element
-   * @param {string} [selector='.accordion'] - CSS selector for accordions
+   * @param {string} [selector='.accordion-item'] - CSS selector for accordions
    */
-  static closeAll(container, selector = '.accordion') {
+  static closeAll(container, selector = '.accordion-item') {
     if (!container) return;
 
     const accordions = container.querySelectorAll(selector);
@@ -104,9 +111,9 @@ export class AccordionHelper {
   /**
    * Open all accordions in a container
    * @param {HTMLElement} container - The container element
-   * @param {string} [selector='.accordion'] - CSS selector for accordions
+   * @param {string} [selector='.accordion-item'] - CSS selector for accordions
    */
-  static openAll(container, selector = '.accordion') {
+  static openAll(container, selector = '.accordion-item') {
     if (!container) return;
 
     const accordions = container.querySelectorAll(selector);
@@ -116,10 +123,10 @@ export class AccordionHelper {
   /**
    * Get all open accordion IDs in a container
    * @param {HTMLElement} container - The container element
-   * @param {string} [selector='.accordion'] - CSS selector for accordions
+   * @param {string} [selector='.accordion-item'] - CSS selector for accordions
    * @returns {string[]} Array of accordion IDs that are open
    */
-  static getOpenIds(container, selector = '.accordion') {
+  static getOpenIds(container, selector = '.accordion-item') {
     if (!container) return [];
 
     const accordions = container.querySelectorAll(selector);
@@ -138,9 +145,11 @@ export class AccordionHelper {
    * Restore accordion states from a list of IDs
    * @param {HTMLElement} container - The container element
    * @param {string[]} openIds - Array of accordion IDs to open
-   * @param {string} [selector='.accordion'] - CSS selector for accordions
+   * @param {string} [selector='.accordion-item'] - CSS selector for accordions
+   * @param {Object} [options] - Additional options
+   * @param {boolean} [options.forceClose=true] - Whether to force close accordions not in the openIds list
    */
-  static restoreState(container, openIds, selector = '.accordion') {
+  static restoreState(container, openIds, selector = '.accordion-item', { forceClose = true } = {}) {
     if (!container || !openIds) return;
 
     const accordions = container.querySelectorAll(selector);
@@ -149,7 +158,7 @@ export class AccordionHelper {
       const accordionId = acc.dataset.accordionId;
       if (accordionId && openIds.includes(accordionId)) {
         this.open(acc);
-      } else {
+      } else if (forceClose) {
         this.close(acc);
       }
     });
@@ -159,10 +168,10 @@ export class AccordionHelper {
    * Create an accordion state manager for a specific container
    * Useful for persisting accordion states across re-renders
    * @param {HTMLElement} container - The container element
-   * @param {string} [selector='.accordion'] - CSS selector for accordions
+   * @param {string} [selector='.accordion-item'] - CSS selector for accordions
    * @returns {Object} State manager with capture() and restore() methods
    */
-  static createStateManager(container, selector = '.accordion') {
+  static createStateManager(container, selector = '.accordion-item') {
     let savedState = [];
 
     return {
@@ -177,9 +186,10 @@ export class AccordionHelper {
 
       /**
        * Restore previously captured states
+       * @param {Object} [options] - Options passed to restoreState
        */
-      restore() {
-        AccordionHelper.restoreState(container, savedState, selector);
+      restore(options) {
+        AccordionHelper.restoreState(container, savedState, selector, options);
       },
 
       /**

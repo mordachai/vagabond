@@ -183,11 +183,9 @@ export class CompendiumSettings extends foundry.applications.api.HandlebarsAppli
   }
 
   static async #onReset(event, target) {
-    const confirmed = await Dialog.confirm({
-      title: 'Reset to Default?',
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Reset to Default?' },
       content: '<p>This will reset compendium settings to default (use all compendiums).</p>',
-      yes: () => true,
-      no: () => false
     });
 
     if (confirmed) {
