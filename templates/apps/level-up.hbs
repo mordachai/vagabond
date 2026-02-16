@@ -414,7 +414,7 @@
       </button>
     {{/if}}
     {{#if showApplyBtn}}
-      <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="applyLevelUp">
+      <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="applyLevelUp" {{#unless allChecklistDone}}disabled{{/unless}}>
         <i class="fas fa-check-double"></i> Apply All Changes &amp; Close
       </button>
     {{/if}}

@@ -216,6 +216,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const canLevelFromXP = (sys.attributes.xp || 0) >= (sys.attributes.xpRequired || 10) && !this.levelApplied;
     context.showLevelUpBtn = (canLevelFromXP || (sys.attributes.canLevelUp && !this.levelApplied));
     context.showApplyBtn = this.levelApplied;
+    context.allChecklistDone = this._isChecklistComplete();
 
     // Tab state
     context.activeTab = this.activeTab;
@@ -1025,6 +1026,28 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     return list;
   }
 
+  /**
+   * Check if all required checklist items have been completed.
+   * Mirrors the checklist logic in _prepareSummaryContext.
+   */
+  _isChecklistComplete() {
+    const visible = this.visibleTabs;
+
+    // Stat increase required?
+    if (visible.includes('stats') && !this.selectedStat) return false;
+
+    // Perk required?
+    if (visible.includes('perks') && !this.chosenPerkUuid) return false;
+
+    // Spells required?
+    if (visible.includes('spells')) {
+      const maxNew = this.newSpellSlots;
+      if (maxNew > 0 && this.chosenSpells.length < maxNew) return false;
+    }
+
+    return true;
+  }
+
   _getResourceValue(resourceType) {
     const sys = this.actor.system;
     switch (resourceType) {
@@ -1236,7 +1259,35 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static _onToggleGmOverride(event, target) {
+    const wasOverride = this.gmOverride;
     this.gmOverride = !this.gmOverride;
+
+    // When turning OFF override, clear selections for tabs that are no longer visible
+    if (wasOverride && !this.gmOverride) {
+      const visible = this.visibleTabs;
+
+      if (!visible.includes('stats')) {
+        this.selectedStat = null;
+      }
+
+      if (!visible.includes('perks')) {
+        this.chosenPerkUuid = null;
+        this.selectedPerkUuid = null;
+        this.perkChoice = null;
+        this.chosenPerkPrereqsMet = true;
+      }
+
+      if (!visible.includes('spells')) {
+        this.chosenSpells = [];
+        this.selectedSpellUuid = null;
+      }
+
+      // If active tab was removed, go back to summary
+      if (!visible.includes(this.activeTab)) {
+        this.activeTab = 'summary';
+      }
+    }
+
     this.render();
   }
 
@@ -1250,6 +1301,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   static async _onApplyLevelUp(event, target) {
     if (!this.levelApplied) {
       ui.notifications.warn('You must level up first (use the XP tab).');
+      return;
+    }
+
+    if (!this._isChecklistComplete()) {
+      ui.notifications.warn('Complete all items in the To Do list before applying.');
       return;
     }
 
