@@ -140,6 +140,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
+    // Manual check bonus - player-controlled value (Favor/Hinder clicks), separate from Active Effects
+    schema.manualCheckBonus = new fields.NumberField({
+      required: true, nullable: false, integer: true,
+      initial: 0,
+      label: "Manual Check Bonus",
+      hint: "Player-set bonus to all d20 rolls. Resets after each roll."
+    });
+
     schema.universalDamageBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
       {
@@ -711,7 +719,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonuses.deliveryManaCostReduction = [];
 
     // --- 2. Reset Universal Bonuses (from Active Effects) ---
-    // NOTE: universalCheckBonus is NOT reset here - it's player-controlled and only resets after rolls
+    this.universalCheckBonus = [];
     this.universalDamageBonus = [];
     this.universalWeaponDamageBonus = [];
     this.universalSpellDamageBonus = [];
@@ -831,7 +839,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Top-level bonuses
     this.bonusLuck = this._evaluateFormulaField(this.bonusLuck, rollData);
     this.armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
-    this.universalCheckBonus = this._evaluateFormulaField(this.universalCheckBonus, rollData);
+    // Combine Active Effect check bonus + player-controlled manual bonus
+    this.universalCheckBonus = this._evaluateFormulaField(this.universalCheckBonus, rollData) + (this.manualCheckBonus || 0);
     this.universalDamageBonus = this._evaluateFormulaField(this.universalDamageBonus, rollData);
     this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);

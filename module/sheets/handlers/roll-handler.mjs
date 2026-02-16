@@ -88,8 +88,8 @@ export class RollHandler {
         await VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess);
 
         // Reset check bonus to 0 after any roll
-        if (this.actor.system.universalCheckBonus !== 0) {
-          await this.actor.update({ 'system.universalCheckBonus': 0 });
+        if (this.actor.system.manualCheckBonus !== 0) {
+          await this.actor.update({ 'system.manualCheckBonus': 0 });
         }
         return roll;
       } else if (rollType === 'save' && rollKey) {
@@ -99,8 +99,8 @@ export class RollHandler {
         await VagabondChatCard.saveRoll(this.actor, rollKey, roll, difficulty, isSuccess);
 
         // Reset check bonus to 0 after any roll
-        if (this.actor.system.universalCheckBonus !== 0) {
-          await this.actor.update({ 'system.universalCheckBonus': 0 });
+        if (this.actor.system.manualCheckBonus !== 0) {
+          await this.actor.update({ 'system.manualCheckBonus': 0 });
         }
         return roll;
       }
@@ -114,8 +114,8 @@ export class RollHandler {
       });
 
       // Reset check bonus to 0 after any roll
-      if (this.actor.system.universalCheckBonus !== 0) {
-        await this.actor.update({ 'system.universalCheckBonus': 0 });
+      if (this.actor.system.manualCheckBonus !== 0) {
+        await this.actor.update({ 'system.manualCheckBonus': 0 });
       }
       return roll;
     }
@@ -247,8 +247,8 @@ export class RollHandler {
       if (!attackResult) return;
 
       // Reset check bonus to 0 after any attack roll
-      if (this.actor.system.universalCheckBonus !== 0) {
-        await this.actor.update({ 'system.universalCheckBonus': 0 });
+      if (this.actor.system.manualCheckBonus !== 0) {
+        await this.actor.update({ 'system.manualCheckBonus': 0 });
       }
 
       let damageRoll = null;

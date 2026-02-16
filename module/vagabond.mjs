@@ -1603,7 +1603,7 @@ const CHALLENGES = [
 Hooks.once('init', () => {
   game.settings.register(SYSTEM_ID, SETTING_KEY, {
     name: 'Content Unlocked',
-    scope: 'client',
+    scope: 'world',
     config: false,
     type: Boolean,
     default: false
@@ -1621,7 +1621,7 @@ Hooks.on('renderCompendiumDirectory', (app, html, data) => {
   if (isUnlocked) {
     const existingBtn = directoryElement.querySelector('#vagabond-unlock-btn');
     if (existingBtn) existingBtn.remove();
-    return; 
+    return;
   }
 
   // Hide Packs
@@ -1638,6 +1638,9 @@ Hooks.on('renderCompendiumDirectory', (app, html, data) => {
     if (list && list.children.length === 0) dir.style.display = 'none';
   });
 
+  // Only show unlock button to GMs — players get access once the GM unlocks
+  if (!game.user.isGM) return;
+
   // Inject Button
   if (!directoryElement.querySelector('#vagabond-unlock-btn')) {
     const unlockBtn = document.createElement("button");
@@ -1648,9 +1651,9 @@ Hooks.on('renderCompendiumDirectory', (app, html, data) => {
       background: #222; color: #fff; border: 1px solid #444;
       cursor: pointer; font-family: monospace; text-transform: uppercase;
     `;
-    unlockBtn.onclick = (e) => { 
-      e.preventDefault(); 
-      promptRandomChallenge(); 
+    unlockBtn.onclick = (e) => {
+      e.preventDefault();
+      promptRandomChallenge();
     };
 
     const header = directoryElement.querySelector('.directory-header');

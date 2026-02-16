@@ -1135,9 +1135,6 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       'system.attributes.xp': 0,
     });
 
-    // Force data refresh
-    await this.actor.prepareData();
-
     this.levelApplied = true;
     this.xpAwarded = true; // prevent re-awarding
     this.activeTab = 'summary';
@@ -1396,13 +1393,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     }
 
-    // 4. Refresh data
-    await this.actor.prepareData();
-
-    // 5. Build and send chat card
+    // 4. Build and send chat card
     await this._sendLevelUpChatCard(previousMaxHP, previousMaxMana, previousCastingMax);
 
-    // 6. Close dialog
+    // 5. Close dialog
     this.close();
   }
 

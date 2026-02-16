@@ -979,9 +979,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         'system.attributes.xp': 0
       });
 
-      // Force a data refresh to ensure calculations include all active effects
-      await this.actor.prepareData();
-
       // Calculate changes after level up
       const newMaxHP = this.actor.system.health.max;
       const hpChange = newMaxHP - previousMaxHP;
@@ -1384,17 +1381,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onModifyCheckBonus(event, target) {
     event.preventDefault();
-    const currentBonus = this.actor.system.universalCheckBonus || 0;
+    const currentBonus = this.actor.system.manualCheckBonus || 0;
 
     // Left click: +1, Right click: -1
     if (event.button === 2 || event.type === 'contextmenu') {
       // Right click: decrement
       const newBonus = currentBonus - 1;
-      await this.actor.update({ 'system.universalCheckBonus': newBonus });
+      await this.actor.update({ 'system.manualCheckBonus': newBonus });
     } else {
       // Left click: increment
       const newBonus = currentBonus + 1;
-      await this.actor.update({ 'system.universalCheckBonus': newBonus });
+      await this.actor.update({ 'system.manualCheckBonus': newBonus });
     }
   }
 
