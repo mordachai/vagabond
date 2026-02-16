@@ -320,6 +320,10 @@
   justify-content: space-between;
   position: relative;
   z-index: 5;
+
+  .npc-speed-group {
+    z-index: 10; // Speed types dropdown must overlay the armor group beside it
+  }
 }
 
 /* Speed group (left side of row 2) — max 70% */
@@ -600,7 +604,7 @@
 }
 
 .npc-armor-desc-label {
-  font-size: 0.8em;
+  font-size: 0.7em;
   text-align: center;
   color: $c-black;
   line-height: 1;
@@ -610,7 +614,7 @@
 .npc-armor-desc-input {
   @extend .npc-field-input;
   width: 60px;
-  font-size: 10px;
+  font-size: 0.8em;
   text-align: center;
   padding: 1px 2px;
   margin-top: 2px;
@@ -1436,6 +1440,11 @@
   font-size: 14px;
   z-index: 20;
   color: black;
+
+  // Speed types panel needs its own background
+  &.npc-speed-type-checkboxes {
+    background: var(--vagabond-c-lite);
+  }
 
   // Resistances panel flows inline to push content down
   &.npc-resistance-panel {
