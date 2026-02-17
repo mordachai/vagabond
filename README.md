@@ -1,8 +1,6 @@
 ![Foundry v13](https://img.shields.io/badge/foundry-v13-green?style=for-the-badge) ![Github All Releases](https://img.shields.io/github/downloads/mordachai/vagabond/total.svg?style=for-the-badge) ![GitHub Release](https://img.shields.io/github/v/release/mordachai/vagabond?display_name=tag&style=for-the-badge&label=Current%20version)
 
 
-<img src="https://raw.githubusercontent.com/mordachai/vagabond/main/assets/splash.png" width="100%" alt="Vagabond RPG System Splash">
-
 # Vagabond - Pulp Fantasy Roleplaying Game
 
 This is an non-official adaptation for Foundry VTT of **Indestructoboy's (Taron Pounds)** RPG system, **Vagabond**. 
@@ -137,3 +135,8 @@ Huge thanks to KeyInk for the marvelous work designing the new chat cards and sh
 Relic Powers update: MadBlue - Discord: madblue2112 - https://bsky.app/profile/madblue2112.bsky.social
 
 A big thank-you as well to everyone on Indestructoboy’s Discord server for the incredible support, playtests, and awesome tables. You all rock!
+
+---
+
+“Vagabond for Foundry is an independent product published under the Land of the Blind Third-Party License and is not affiliated with Land of the Blind, LLC.
+Vagabond // Pulp Fantasy RPG © 2025 Land of theBlind, LLC.”
