@@ -736,7 +736,19 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
     
     if (targetStep.disabled) {
-      ui.notifications.warn("Complete previous steps before accessing this step.");
+      let message;
+      if (!this._isStepComplete('ancestry')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedAncestry');
+      } else if (!this._isStepComplete('class')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedClass');
+      } else if (!this._isStepComplete('stats')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedStats');
+      } else if (!this._isStepComplete('perks')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedPerks');
+      } else {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedPreviousStep');
+      }
+      ui.notifications.warn(message);
       return;
     }
     
@@ -773,6 +785,21 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const stepOrder = ['ancestry', 'class', 'stats', 'spells', 'starting-packs'];
 
     for (const stepName of stepOrder) {
+      // Skip spells for non-spellcaster classes
+      if (stepName === 'spells') {
+        const state = this.stateManager.getCurrentState();
+        if (state.selectedClass) {
+          try {
+            const classItem = await fromUuid(state.selectedClass);
+            if (!classItem?.system.isSpellcaster) continue;
+          } catch (e) {
+            continue;
+          }
+        } else {
+          continue;
+        }
+      }
+
       const stepManager = this.stepManagers[stepName];
       if (stepManager) {
         try {

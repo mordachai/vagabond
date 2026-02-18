@@ -71,9 +71,16 @@
     display: none !important;
   }
 
-  // Chevrons down icon sizing
+  // Chevrons down icon sizing — red to signal unassigned stats remain
   .chevrons-down {
     font-size: 2rem;
+    color: $c-red;
+  }
+
+  // Incomplete counter label (class skill count, tray spell/perk count)
+  .incomplete {
+    color: $c-red;
+    font-weight: 700;
   }
 
   // Class-granted perk lock icon
@@ -401,8 +408,7 @@
           gap: 4px;
 
           .name {
-            font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.2rem;
           }
 
           .item-meta {
@@ -770,7 +776,7 @@
       .value-chip {
         width: 44px;
         height: 44px;
-        background: #444;
+        background: $c-red;
         color: white;
         border: none;
         margin: 8px;

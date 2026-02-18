@@ -493,24 +493,37 @@
   }
 }
 
+// Level-up icon bounce animation
+@keyframes level-up-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
 // XP Field Inline (next to name)
 .xp-field-inline {
   display: flex;
   align-items: last baseline;
   white-space: nowrap;
-  flex: 0 0 auto;
-  padding-right: 25px;
-  padding-top: 30px;
+  flex: 1 0 auto;
+  margin-right: 25px;
+  margin-top: 26px;
   color: $c-yellow;
-  font-family: $font-title;
-  font-size: 14px;
-  gap: 0;
+  font-family: $font-primary;
+  font-size: 1.1em;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  font-stretch: condensed;
+  gap: 1px;
 
   .resource-label {
     cursor: pointer;
     color: inherit;
-    font-size: 10px;
-    margin-right: 2px;
+    margin-right: 1px;
+
+    .level-up-icon {
+      animation: level-up-bounce 1s ease-in-out infinite;
+      display: inline-block;
+    }
   }
 
   .xp-input {
@@ -521,12 +534,8 @@
     padding: 0;
   }
 
-  .xp-required {
-    font-size: 16px;
-  }
-
   input[type=text] {
-      font-size: 1.15em;
+      font-size: 1em;
       color: $c-yellow;
   }
 }
@@ -576,18 +585,13 @@
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
   vertical-align: middle;
 
   i {
     font-size: 9px;
     margin: 0;
     color: $c-white;
-  }
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(145, 0, 0, 0.3);
   }
 
   &:active {
@@ -606,7 +610,14 @@
 }
 
 .pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  animation: pulse-glow 2s ease-in-out infinite, level-up-bounce 1s ease-in-out infinite;
+  overflow: visible;
+
+  &:hover {
+    animation: pulse-glow 2s ease-in-out infinite;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(145, 0, 0, 0.3);
+  }
 }
 
 // Speed Stats Row

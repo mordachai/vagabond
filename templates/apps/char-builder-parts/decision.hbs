@@ -16,7 +16,7 @@
             </div>
             {{#each classChoices.choices}}
                 <div class="pool-box skill-row {{#if this.isExtraTraining}}extra-training{{/if}}">
-                    <strong>{{#if this.isExtraTraining}}Extra Trained Skills: {{else}}Choose {{this.count}} skill(s){{/if}} {{#if this.selected}}({{this.selected}}/{{this.count}} selected){{/if}}:</strong>
+                    <strong>{{#if this.isExtraTraining}}Extra Trained Skills: {{else}}Choose {{this.count}} skill(s){{/if}} {{#if this.selected}}<span class="skill-count {{#unless (eq this.selected this.count)}}incomplete{{/unless}}">({{this.selected}}/{{this.count}} selected)</span>{{/if}}:</strong>
                     {{#if this.isExtraTraining}}
                         <span class="extra-training-sources">
                             {{#each this.extraTrainingSources}}

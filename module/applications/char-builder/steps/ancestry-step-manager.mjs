@@ -162,6 +162,11 @@ export class AncestryStepManager extends BaseStepManager {
       }
 
       // For ancestry, directly select (no preview/tray system)
+      // Reset user-selected perks since ancestry affects perk grants
+      const prevAncestry = this.getCurrentState().selectedAncestry;
+      if (prevAncestry && prevAncestry !== uuid) {
+        this.updateState('perks', [], { skipValidation: true });
+      }
       this.updateState('selectedAncestry', uuid, { skipValidation: true });
       this.updateState('previewUuid', uuid, { skipValidation: true });
 

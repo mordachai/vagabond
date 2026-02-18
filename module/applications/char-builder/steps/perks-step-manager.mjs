@@ -159,7 +159,7 @@ export class PerksStepManager extends BaseStepManager {
       selectedItem: previewItem,
       previewItem: previewItem,
       perkLimit: perkLimit,
-      currentPerkCount: fulfilledCount + classPerks.length,
+      currentPerkCount: fulfilledCount,
       hasSelection: fulfilledCount > 0 || classPerks.length > 0,
       showTray: true,
       trayData: trayData,

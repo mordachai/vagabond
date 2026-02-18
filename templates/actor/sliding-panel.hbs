@@ -18,10 +18,10 @@
           {{! XP Field with Level Up Indicator }}
           <div class='xp-field-inline {{#if system.attributes.canLevelUp}}level-up-ready{{/if}}' data-tooltip='{{#if system.attributes.canLevelUp}}Click label to Level Up!{{else}}Click to award session XP{{/if}}'>
             <label class='resource-label' data-action='levelUp'>
-              {{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}
               {{#if system.attributes.canLevelUp}}
-                <i class='fas fa-arrow-up level-up-icon'></i>
+                <i class='fas fa-chevron-double-up level-up-icon'></i>
               {{/if}}
+              {{localize 'VAGABOND.Actor.Character.FIELDS.attributes.xp.label'}}
             </label>
             <input
               type='text'
@@ -148,7 +148,7 @@
                               class='stat-label'
                               data-label='{{localize (lookup @root.config.stats key)}} Check'
                               data-tooltip='{{localize (lookup @root.config.stats key)}}'
-                            >{{localize (lookup @root.config.stats key)}}</label>
+                            >{{localize (lookup @root.config.statAbbreviations key)}}</label>
                           </div>
                         {{/each}}
 

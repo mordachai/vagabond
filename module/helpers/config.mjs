@@ -35,12 +35,12 @@ VAGABOND.actorTypeImages = {
  * @type {Object}
  */
 VAGABOND.stats = {
-  might: 'VAGABOND.Stat.Might.abbr',
-  dexterity: 'VAGABOND.Stat.Dexterity.abbr',
-  awareness: 'VAGABOND.Stat.Awareness.abbr',
-  reason: 'VAGABOND.Stat.Reason.abbr',
-  presence: 'VAGABOND.Stat.Presence.abbr',
-  luck: 'VAGABOND.Stat.Luck.abbr',
+  might: 'VAGABOND.Stat.Might.long',
+  dexterity: 'VAGABOND.Stat.Dexterity.long',
+  awareness: 'VAGABOND.Stat.Awareness.long',
+  reason: 'VAGABOND.Stat.Reason.long',
+  presence: 'VAGABOND.Stat.Presence.long',
+  luck: 'VAGABOND.Stat.Luck.long',
 };
 
 VAGABOND.statAbbreviations = {

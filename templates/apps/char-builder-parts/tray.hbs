@@ -17,7 +17,7 @@
             {{#if (eq step 'perks')}}
                 {{#if perkLimit}}
                     <div class="pack-summary perk-limit-display">
-                        <p><strong>Perks:</strong> {{currentPerkCount}}/{{perkLimit}}</p>
+                        <p class="{{#unless (gte currentPerkCount perkLimit)}}incomplete{{/unless}}"><strong>Perks:</strong> {{currentPerkCount}}/{{perkLimit}}</p>
                         {{#if (gte currentPerkCount perkLimit)}}
                             <p class="text-warning"><small>Maximum reached</small></p>
                         {{/if}}
@@ -28,7 +28,7 @@
             {{#if (eq step 'spells')}}
                 {{#if spellLimit}}
                     <div class="pack-summary spell-limit-display">
-                        <p><strong>Spells:</strong> {{currentSpellCount}}/{{spellLimit}}</p>
+                        <p class="{{#unless (gte currentSpellCount spellLimit)}}incomplete{{/unless}}"><strong>Spells:</strong> {{currentSpellCount}}/{{spellLimit}}</p>
                         {{#if requiredSpellCount}}
                             <p class="text-info"><small>{{requiredSpellCount}} required</small></p>
                         {{/if}}

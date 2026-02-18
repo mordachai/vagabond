@@ -1125,7 +1125,14 @@
         "CloseTitle": "Abandon Character Construction?",
         "CloseContent": "Are you sure you want to close the builder? All unsaved progress will be lost."
       },
-      "FinishMessage": "Your Vagabond is ready! Remember to double-check your Features and Traits on your new sheet to ensure you've manually added all promised Perks and Spells."
+      "FinishMessage": "Your Vagabond is ready! Remember to double-check your Features and Traits on your new sheet to ensure you've manually added all promised Perks and Spells.",
+      "Warnings": {
+        "NeedAncestry": "Select an Ancestry before continuing.",
+        "NeedClass": "Choose a Class and assign your starting skills before continuing.",
+        "NeedStats": "Assign all your Stats before continuing.",
+        "NeedPerks": "Complete the Perks step before continuing.",
+        "NeedPreviousStep": "Complete the previous step before continuing."
+      }
     },
     "LevelUp": {
       "Title": "Level Up!",
