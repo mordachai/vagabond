@@ -2126,8 +2126,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return this._onSortItem(event, itemData);
     }
 
-    // Create new item
-    return this._onDropItemCreate(itemData, event);
+    const created = await this._onDropItemCreate(itemData, event);
+
+    // Transfer (not copy): delete from source actor if it's actor-owned equipment
+    if (created?.length && item.parent?.documentName === 'Actor' && item.type === 'equipment' && item.parent.isOwner) {
+      await item.delete();
+    }
+
+    return created;
   }
 
   /**
