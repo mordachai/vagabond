@@ -421,6 +421,33 @@ export class VagabondItem extends Item {
   }
 
   /**
+   * This function runs AUTOMATICALLY after an item is deleted.
+   * Removes any Active Effects on the parent actor whose origin is this item.
+   * This cleans up effects that may have been transferred to the actor via the
+   * built-in Foundry transfer mechanism.
+   */
+  async _onDelete(options, userId) {
+    await super._onDelete(options, userId);
+
+    // Only run on the triggering client to avoid duplicate operations
+    if (userId !== game.user.id) return;
+
+    // Remove any actor-level effects that originated from this item
+    if (this.parent?.documentName === 'Actor') {
+      const actor = this.parent;
+      const itemUuid = this.uuid;
+
+      const effectIdsToDelete = actor.effects
+        .filter(e => e.origin === itemUuid)
+        .map(e => e.id);
+
+      if (effectIdsToDelete.length > 0) {
+        await actor.deleteEmbeddedDocuments('ActiveEffect', effectIdsToDelete);
+      }
+    }
+  }
+
+  /**
    * This function runs AUTOMATICALLY before an item is deleted.
    * For containers with items, show a confirmation dialog.
    */

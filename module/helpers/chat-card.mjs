@@ -339,12 +339,13 @@ export class VagabondChatCard {
               // Extract Skill Label (moves to roll strip)
               const skillIndex = tags.findIndex(t => t.cssClass === 'tag-skill');
               if (skillIndex > -1) {
-                  card.data.rollSkillLabel = tags[skillIndex].label;
+                  const baseLabel = tags[skillIndex].label;
+                  card.data.rollSkillLabel = isCritical ? `${baseLabel} (Crit)` : baseLabel;
                   tags.splice(skillIndex, 1);
               }
           } else if (typeof isCritical !== 'undefined') {
-              // If no roll but has critical info, just set the outcome
-              card.setOutcome('NEUTRAL', isCritical);
+              // No roll, but track isCritical for damage display — no outcome banner
+              card.data.isCritical = isCritical;
           }
       }
 
@@ -700,7 +701,7 @@ export class VagabondChatCard {
   }
 
   static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = []) {
-      const { roll, difficulty, isSuccess, isCritical, manaSkill, costs, deliveryText, spellState } = spellCastResult;
+      const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState } = spellCastResult;
       
       const tags = [];
       
@@ -772,8 +773,8 @@ export class VagabondChatCard {
           rerollData: {
             type: 'cast',
             itemId: spell.id,
-            manaSkillKey: manaSkill?.key || null,
-            formula: roll.formula,
+            manaSkillKey: manaSkillKey || null,
+            formula: roll?.formula || null,
             difficulty: difficulty
           }
       });

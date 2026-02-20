@@ -1266,10 +1266,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 15px;
+    font-size: 0.8em;
     color: $c-text-1;
-
-    font-weight: 600;
     flex: 1;
   }
 
@@ -1282,7 +1280,7 @@
   }
 
   .effect-source {
-    font-size: 14px;
+    font-size: 0.8em;
 
     color: $c-text-1;
     min-width: 80px;
@@ -1409,7 +1407,7 @@
   font-size: 14px;
   font-weight: 600;
 
-  color: var(--vagabond-c-dark);
+  color: $c-black;
   white-space: nowrap;
   transition: border-bottom-color 0.2s ease;
 

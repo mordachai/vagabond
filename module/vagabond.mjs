@@ -1040,10 +1040,180 @@ const FLUKE_REROLL_ENTRY = {
   }
 };
 
+/* -------------------------------------------- */
+/*  Chat Message Context Menu - Force Critical  */
+/* -------------------------------------------- */
+
+/**
+ * Force Critical context menu entry. GM-only.
+ * Replays the existing roll as a guaranteed critical hit, re-rolling damage with the crit bonus.
+ */
+const FORCE_CRIT_ENTRY = {
+  name: 'Force Critical',
+  icon: '<i class="fas fa-star"></i>',
+  condition: (li) => {
+    if (!game.user.isGM) return false;
+    const message = game.messages.get(li.dataset.messageId);
+    return !!message?.flags?.vagabond?.rerollData;
+  },
+  callback: async (li) => {
+    const message = game.messages.get(li.dataset.messageId);
+    const flags = message.flags.vagabond;
+    const actor = game.actors.get(flags.actorId);
+    const rerollData = flags.rerollData;
+    if (!actor || !rerollData) return;
+
+    // Reuse the original rolls exactly — no dice are re-rolled.
+    // rolls[0] = d20, rolls[1] = damage (if it was auto-rolled on the original card).
+    // Convert to Array first — in Foundry V13, message.rolls may be a Collection/iterable
+    // where numeric index access ([0]) returns undefined instead of the first element.
+    const rolls = Array.from(message.rolls ?? []);
+    const roll = rolls[0] ?? null;
+    if (!roll) { ui.notifications.error('No roll found on this card.'); return; }
+    const existingDamageRoll = rolls[1] ?? null;
+
+    const targetsAtRollTime = flags.targetsAtRollTime || [];
+
+    if (rerollData.type === 'attack') {
+      const weapon = actor.items.get(rerollData.itemId);
+      if (!weapon) { ui.notifications.error('Weapon not found.'); return; }
+
+      const weaponSkillKey = rerollData.weaponSkillKey;
+      const weaponSkill = actor.system.weaponSkills?.[weaponSkillKey];
+      const statKey = weaponSkill?.stat || null;
+
+      const attackResult = {
+        roll,
+        difficulty: rerollData.difficulty,
+        weaponSkill,
+        weaponSkillKey,
+        isHit: true,
+        isCritical: true
+      };
+
+      // Build the crit damage roll:
+      // - If damage was already rolled on the original card, carry those exact dice results
+      //   over and append the crit stat bonus (Might, Dex, etc.) as a numeric term.
+      //   This preserves the original rolled value (e.g. 2 on 1d4) and adds the stat on top.
+      // - If there was no prior damage roll, pass null so weaponAttack handles it normally.
+      let critDamageRoll = existingDamageRoll;
+      if (existingDamageRoll && statKey) {
+        const statValue = actor.system.stats[statKey]?.value || 0;
+        if (statValue !== 0) {
+          const rollJSON = existingDamageRoll.toJSON();
+          const operator = statValue > 0 ? '+' : '-';
+          const absValue = Math.abs(statValue);
+          rollJSON.terms.push({ class: 'OperatorTerm', options: {}, evaluated: true, operator });
+          rollJSON.terms.push({ class: 'NumericTerm', options: {}, evaluated: true, number: absValue });
+          rollJSON.formula = `${rollJSON.formula} ${operator} ${absValue}`;
+          rollJSON.total = (rollJSON.total ?? 0) + statValue;
+          critDamageRoll = Roll.fromData(rollJSON);
+        }
+      }
+      await VagabondChatCard.weaponAttack(actor, weapon, attackResult, critDamageRoll, targetsAtRollTime);
+
+    } else if (rerollData.type === 'cast') {
+      const spell = actor.items.get(rerollData.itemId);
+      const manaSkillKey = rerollData.manaSkillKey || 'magic';
+      const manaSkill = actor.system.skills?.[manaSkillKey] || null;
+
+      const entityLabel = manaSkill?.label || manaSkillKey;
+      const tags = [{ label: entityLabel, cssClass: 'tag-skill' }];
+      if (manaSkill?.stat) {
+        const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[manaSkill.stat]?.abbr) || manaSkill.stat;
+        tags.push({ label: statLabel, cssClass: 'tag-stat' });
+      }
+
+      // Include crit effect text from the spell if it has one
+      let critText = null;
+      if (spell?.system?.crit) {
+        critText = spell.system.formatDescription
+          ? spell.system.formatDescription(spell.system.crit)
+          : spell.system.crit;
+      }
+
+      // Carry over the existing damage roll and append the crit stat bonus as a numeric term —
+      // same approach as weapons: no dice re-rolled, just the stat value appended on top.
+      let critSpellDamageRoll = existingDamageRoll;
+      if (existingDamageRoll && manaSkill?.stat) {
+        const statValue = actor.system.stats[manaSkill.stat]?.value || 0;
+        if (statValue !== 0) {
+          const rollJSON = existingDamageRoll.toJSON();
+          const operator = statValue > 0 ? '+' : '-';
+          const absValue = Math.abs(statValue);
+          rollJSON.terms.push({ class: 'OperatorTerm', options: {}, evaluated: true, operator });
+          rollJSON.terms.push({ class: 'NumericTerm', options: {}, evaluated: true, number: absValue });
+          rollJSON.formula = `${rollJSON.formula} ${operator} ${absValue}`;
+          rollJSON.total = (rollJSON.total ?? 0) + statValue;
+          critSpellDamageRoll = Roll.fromData(rollJSON);
+        }
+      }
+
+      await VagabondChatCard.createActionCard({
+        actor,
+        item: spell || null,
+        title: spell?.name || `${entityLabel} Check`,
+        // isHit: true — always HIT for a forced crit, even if original roll missed
+        rollData: { roll, difficulty: rerollData.difficulty, isSuccess: true, isCritical: true, isHit: true, manaSkill },
+        tags,
+        damageRoll: critSpellDamageRoll,
+        damageType: spell?.system?.damageType,
+        crit: critText,
+        hasDefenses: true,
+        attackType: 'cast',
+        targetsAtRollTime
+      });
+
+    } else {
+      // Skill or save — carry roll over, force crit marker only (no damage involved)
+      const type = rerollData.type;
+      const key = rerollData.key;
+      const isSuccess = roll.total >= rerollData.difficulty;
+
+      let entity, entityLabel, title, tags;
+      switch (type) {
+        case 'skill':
+          entity = actor.system.skills?.[key] || actor.system.weaponSkills?.[key];
+          entityLabel = entity?.label || key;
+          title = `${entityLabel} Check`;
+          tags = [{ label: entityLabel, cssClass: 'tag-skill' }];
+          if (entity?.stat) {
+            const statLabel = game.i18n.localize(CONFIG.VAGABOND.stats[entity.stat]?.abbr) || entity.stat;
+            tags.push({ label: statLabel, cssClass: 'tag-stat' });
+          }
+          if (entity) tags.push({ label: entity.trained ? 'Trained' : 'Untrained', cssClass: 'tag-info' });
+          break;
+        case 'save':
+          entity = actor.system.saves?.[key];
+          entityLabel = entity?.label || key;
+          title = `${entityLabel} Save`;
+          tags = [{ label: entityLabel, cssClass: 'tag-skill' }];
+          break;
+        default:
+          entity = actor.system.stats[key];
+          entityLabel = game.i18n.localize(CONFIG.VAGABOND.stats[key]?.long) || key;
+          title = `${entityLabel} Check`;
+          tags = [
+            { label: entityLabel, cssClass: 'tag-skill' },
+            { label: `${entity?.value || 0}`, icon: 'fas fa-hashtag' }
+          ];
+      }
+
+      await VagabondChatCard.createActionCard({
+        actor,
+        title,
+        rollData: { roll, difficulty: rerollData.difficulty, isSuccess, isCritical: true },
+        tags
+      });
+    }
+  }
+};
+
 // Hook: fires when ChatLog._createContextMenu dispatches "getChatMessageContextOptions" during _onFirstRender.
 // Registered at module top level to guarantee it exists before ChatLog renders.
 Hooks.on('getChatMessageContextOptions', (app, options) => {
   options.push(FLUKE_REROLL_ENTRY);
+  options.push(FORCE_CRIT_ENTRY);
 });
 
 /**

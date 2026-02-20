@@ -98,7 +98,7 @@
 .vtt.sidebar.theme-dark,
 body.theme-dark #sidebar,
 body[data-theme=dark] #sidebar {
-  --vagabond-c-dark: #231308fa;
+  --vagabond-c-dark: #17191d;
   --vagabond-c-lite: #cbc5af;
   --vagabond-c-faint: #c2bea9;
   --vagabond-c-tan: #706d65;
@@ -429,7 +429,7 @@ body[data-theme=dark] #sidebar {
 
 /* Target the main container and the list of tabs */
 .vagabond nav.tabs {
-  background-image: url(../assets/ui/chat/roll-bg.webp);
+  background-image: url(../assets/images/sheets/tabNavBG.webp);
   background-size: 100% 100%;
   background-position: center;
   margin-left: -16px;
@@ -5781,7 +5781,7 @@ ol#combat-tracker.directory-list {
   font-size: 16px;
   font-weight: bold;
   border: none;
-  border-bottom: 2px solid var(--vagabond-c-dark);
+  border-bottom: 2px solid var(--vagabond-c-black);
 }
 .vagabond .sheet-body,
 .vagabond .sheet-body .tab,
@@ -8184,20 +8184,20 @@ ol#combat-tracker.directory-list {
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
-  border: 2px groove var(--vagabond-c-dark);
-  font-weight: bold;
+  border: 2px solid var(--vagabond-c-faint);
+  border-radius: 3px;
   color: var(--vagabond-c-text-primary);
 }
 .vagabond .effects-header > * {
-  font-size: 14px;
+  font-size: 0.8em;
   text-align: center;
 }
 .vagabond .effects-header .effect-name {
-  font-weight: bold;
   padding-left: 5px;
   text-align: left;
   display: flex;
   color: var(--vagabond-c-text-primary);
+  font-size: 0.8em;
 }
 .vagabond .effects-list {
   list-style: none;
@@ -8255,23 +8255,6 @@ ol#combat-tracker.directory-list {
   border-left: 1px solid var(--vagabond-c-faint);
   border-right: 1px solid var(--vagabond-c-faint);
   font-size: 12px;
-}
-.vagabond .effects-list .effects-header {
-  height: 28px;
-  margin: 2px 0;
-  padding: 0;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  border: 2px groove var(--vagabond-c-dark);
-  font-weight: bold;
-}
-.vagabond .effects-list .effects-header > * {
-  font-size: 12px;
-  text-align: center;
-}
-.vagabond .effects-list .effects-header .effect-name {
-  padding-left: 5px;
-  text-align: left;
 }
 .vagabond .effect-formula {
   flex: 0 0 200px;
@@ -8426,7 +8409,7 @@ ol#combat-tracker.directory-list {
 .vagabond .theme-dark button.inline-control {
   color: var(--vagabond-c-text-primary) !important;
   background: var(--vagabond-c-white) !important;
-  border: 2px solid var(--vagabond-c-dark) !important;
+  border: 2px solid var(--vagabond-c-faint) !important;
   padding: 4px 8px !important;
   border-radius: 4px !important;
 }
@@ -10691,9 +10674,8 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  font-size: 0.8em;
   color: var(--vagabond-c-text-primary);
-  font-weight: 600;
   flex: 1;
 }
 .vagabond .npc-effects .effect-image,
@@ -10704,7 +10686,7 @@ ol#combat-tracker.directory-list {
   border: 1px solid var(--vagabond-c-text-primary);
 }
 .vagabond .npc-effects .effect-source {
-  font-size: 14px;
+  font-size: 0.8em;
   color: var(--vagabond-c-text-primary);
   min-width: 80px;
   text-align: center;
@@ -10808,7 +10790,7 @@ ol#combat-tracker.directory-list {
   border-radius: 2px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-black);
   white-space: nowrap;
   transition: border-bottom-color 0.2s ease;
 }

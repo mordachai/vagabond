@@ -71,6 +71,7 @@ export class SpellHandler {
   _calculateSpellCost(spellId) {
     const state = this._getSpellState(spellId);
     const spell = this.actor.items.get(spellId);
+    if (!spell) return { damageCost: 0, fxCost: 0, deliveryBaseCost: 0, deliveryIncreaseCost: 0, totalCost: 0 };
 
     // Damage cost: 0 for 1d6, +1 per extra die, 0 dice = no damage cost
     const hasDamage = spell.system.damageType !== '-' && state.damageDice >= 1;

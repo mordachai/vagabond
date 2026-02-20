@@ -1594,8 +1594,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const li = target.closest('[data-effect-id], [data-item-id], [data-document-id]');
     if (!li) return null;
 
-    const { effectId, itemId, documentId, documentClass } = li.dataset;
-    
+    const { effectId, itemId, parentId, documentId, documentClass } = li.dataset;
+
     // Determine the document ID and class
     let docId, docClass;
     if (effectId) {
@@ -1611,10 +1611,31 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return null;
     }
 
+    // ActiveEffects may live on the actor OR on an embedded item
+    if (docClass === 'ActiveEffect') {
+      // 1. Check the actor's own effects first
+      const actorEffect = actor.effects.get(docId);
+      if (actorEffect) return actorEffect;
+
+      // 2. If the template told us which item owns it, check there first
+      if (parentId && parentId !== actor.id) {
+        const parentItem = actor.items.get(parentId);
+        const itemEffect = parentItem?.effects.get(docId);
+        if (itemEffect) return itemEffect;
+      }
+
+      // 3. Fallback: search every item's effect collection
+      for (const item of actor.items) {
+        const effect = item.effects.get(docId);
+        if (effect) return effect;
+      }
+
+      return null;
+    }
+
     // Map document class names to collection names
     const collectionMap = {
       'Item': 'items',
-      'ActiveEffect': 'effects',
     };
 
     const collectionName = collectionMap[docClass] || docClass;

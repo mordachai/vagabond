@@ -5,19 +5,19 @@
   padding: 0;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
-  border: $border-groove;
-  font-weight: bold;
+  border: 2px solid $c-faint;
+  border-radius: 3px;
   color: $c-text-1;
   > * {
-    font-size: 14px;
+    font-size: 0.8em;
     text-align: center;
   }
   .effect-name {
-    font-weight: bold;
     padding-left: 5px;
     text-align: left;
     display: flex;
     color: $c-text-1;
+    font-size: 0.8em;
   }
 }
 
@@ -89,25 +89,6 @@
     border-left: 1px solid $c-faint;
     border-right: 1px solid $c-faint;
     font-size: 12px;
-  }
-
-  // Section Header
-  .effects-header {
-    height: 28px;
-    margin: 2px 0;
-    padding: 0;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.05);
-    border: $border-groove;
-    font-weight: bold;
-    > * {
-      font-size: 12px;
-      text-align: center;
-    }
-    .effect-name {
-      padding-left: 5px;
-      text-align: left;
-    }
   }
 }
 
@@ -300,7 +281,7 @@
   button.inline-control {
     color: $c-text-1 !important;
     background: var(--vagabond-c-white) !important;  // Changed to white for better visibility
-    border: 2px solid var(--vagabond-c-dark) !important;  // Stronger border
+    border: 2px solid $c-faint !important;  // Stronger border
     padding: 4px 8px !important;
     border-radius: 4px !important;
 
