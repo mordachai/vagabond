@@ -6310,8 +6310,8 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .skills-list .skill .skill-checkbox-icon {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border: none;
   background-size: contain;
   background-repeat: no-repeat;
@@ -7992,6 +7992,13 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-card.dragging {
   opacity: 0.4;
   transform: scale(0.95);
+  cursor: grabbing;
+}
+.vagabond .inventory-card.reorder-dragging {
+  opacity: 0.3;
+  outline: 2px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: -2px;
+  pointer-events: none;
   cursor: grabbing;
 }
 .vagabond .inventory-card.drag-target-valid {

@@ -262,6 +262,16 @@
     cursor: grabbing;
   }
 
+  // Card actively being reordered via drag-to-reorder
+  // Stays in DOM at the preview position; dimmed so user can see through it
+  &.reorder-dragging {
+    opacity: 0.3;
+    outline: 2px dashed $c-yellow;
+    outline-offset: -2px;
+    pointer-events: none;
+    cursor: grabbing;
+  }
+
   // Drag-over state (left margin only)
   &.drag-target-valid {
     border-left: 4px solid #5cb85c;

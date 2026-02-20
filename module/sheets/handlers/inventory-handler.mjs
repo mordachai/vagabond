@@ -11,6 +11,7 @@ export class InventoryHandler {
     this.actor = sheet.actor;
     this._currentContextMenu = null;
     this._currentMiniSheet = null;
+    this._dragState = null;
   }
 
   // ===========================
@@ -719,7 +720,7 @@ export class InventoryHandler {
 
   /**
    * Setup event listeners for inventory grid cards
-   * Called after render to attach click, double-click, and context menu handlers
+   * Called after render to attach click, double-click, context menu, and drag-to-reorder handlers
    */
   setupListeners() {
     const inventoryCards = this.sheet.element.querySelectorAll('.inventory-card');
@@ -745,6 +746,141 @@ export class InventoryHandler {
         event.preventDefault();
         this.showInventoryContextMenu(event, itemId);
       });
+
+      // Drag-to-reorder: dragstart/dragend on the card directly.
+      // Foundry's DragDrop calls stopPropagation() on .draggable elements,
+      // so grid-level delegation never sees dragstart — bind directly instead.
+      card.addEventListener('dragstart', (e) => {
+        e.dataTransfer.effectAllowed = 'move';
+
+        this._dragState = {
+          active: true,
+          draggedItemId: itemId,
+          draggedCard: card,
+          originalNextSibling: card.nextSibling,
+          gridEl: card.closest('.inventory-grid'),
+        };
+
+        requestAnimationFrame(() => {
+          if (this._dragState?.active) card.classList.add('reorder-dragging');
+        });
+      });
+
+      card.addEventListener('dragend', () => {
+        if (!this._dragState?.active) return; // drop already cleaned up
+
+        // Cancelled drag: restore original position
+        const { draggedCard, originalNextSibling, gridEl } = this._dragState;
+        draggedCard?.classList.remove('reorder-dragging');
+        if (draggedCard && gridEl) {
+          gridEl.insertBefore(draggedCard, originalNextSibling ?? null);
+        }
+        this._dragState = null;
+      });
     });
+
+    // dragover + drop on the grid (confirmed to fire via event bubbling)
+    const inventoryGrid = this.sheet.element.querySelector('.inventory-grid');
+    this.setupDragToReorder(inventoryGrid);
+  }
+
+  // ===========================
+  // Drag-to-Reorder
+  // ===========================
+
+  /**
+   * Setup drag-to-reorder within the inventory grid.
+   * Moving the dragged card in the DOM during dragover lets the CSS Grid reflow
+   * in real-time, giving a live preview of where the item will land.
+   * @param {HTMLElement} gridEl - The .inventory-grid element
+   */
+  setupDragToReorder(gridEl) {
+    if (!gridEl) return;
+    this._cleanupDrag();
+
+    gridEl.addEventListener('dragover', (e) => {
+      if (!this._dragState?.active) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+
+      const { draggedCard } = this._dragState;
+      const insertBefore = this._getInsertionPoint(e.clientX, e.clientY, gridEl, draggedCard);
+
+      if (insertBefore) {
+        if (draggedCard.nextSibling !== insertBefore) {
+          gridEl.insertBefore(draggedCard, insertBefore);
+        }
+      } else {
+        // Move to end of items (before empty slots if any)
+        const firstEmpty = gridEl.querySelector('.inventory-slot.empty-slot');
+        if (firstEmpty && draggedCard.nextSibling !== firstEmpty) {
+          gridEl.insertBefore(draggedCard, firstEmpty);
+        } else if (!firstEmpty && gridEl.lastChild !== draggedCard) {
+          gridEl.appendChild(draggedCard);
+        }
+      }
+    });
+
+    gridEl.addEventListener('drop', async (e) => {
+      if (!this._dragState?.active) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const { draggedCard } = this._dragState;
+      this._dragState = null;
+      draggedCard?.classList.remove('reorder-dragging');
+
+      const orderedIds = [...gridEl.querySelectorAll('.inventory-card')]
+        .map(c => c.dataset.itemId)
+        .filter(Boolean);
+
+      if (orderedIds.length > 0) {
+        const updates = orderedIds.map((id, i) => ({ _id: id, 'system.gridPosition': i }));
+        try {
+          await this.actor.updateEmbeddedDocuments('Item', updates);
+        } catch (err) {
+          console.error('Vagabond | Failed to save inventory order:', err);
+        }
+      }
+    });
+  }
+
+  /**
+   * Find the element in the grid to insert the dragged card before.
+   * Iterates cards in DOM order (= visual order) and returns the first one
+   * whose bounding rect is entirely below the cursor, or whose left half
+   * contains the cursor.
+   * @param {number} cursorX
+   * @param {number} cursorY
+   * @param {HTMLElement} gridEl
+   * @param {HTMLElement} draggedCard
+   * @returns {HTMLElement|null} Insert before this element; null = insert at end
+   * @private
+   */
+  _getInsertionPoint(cursorX, cursorY, gridEl, draggedCard) {
+    const candidates = [...gridEl.querySelectorAll('.inventory-card')].filter(c => c !== draggedCard);
+
+    for (const card of candidates) {
+      const rect = card.getBoundingClientRect();
+
+      // Cursor is above this card's row → insert before it
+      if (cursorY < rect.top) return card;
+
+      // Cursor is on this card's row, in the left half → insert before it
+      if (cursorY <= rect.bottom && cursorX < rect.left + rect.width / 2) return card;
+    }
+
+    return null; // Insert at the end
+  }
+
+  /**
+   * Remove drag visual state without persisting anything
+   * @private
+   */
+  _cleanupDrag() {
+    if (!this._dragState) return;
+    this._dragState.draggedCard?.classList.remove('reorder-dragging');
+    this._dragState = null;
   }
 }

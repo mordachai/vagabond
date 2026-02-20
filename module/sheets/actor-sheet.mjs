@@ -2147,7 +2147,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const items = this.actor.items.filter(i => i.type === itemData.type);
 
     // Perform standard sorting
-    const sortUpdates = SortingHelpers.performIntegerSort(itemData, {
+    const sortUpdates = foundry.utils.performIntegerSort(itemData, {
       target: event.target,
       siblings: items,
     });
