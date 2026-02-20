@@ -1337,7 +1337,7 @@ export class VagabondDamageHelper {
       }
 
       // Post save result to chat
-      await this._postSaveResult(
+      const saveMessage = await this._postSaveResult(
         targetActor,
         saveType,
         saveRoll,
@@ -1352,6 +1352,7 @@ export class VagabondDamageHelper {
         damageType,
         autoApply
       );
+      if (isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, saveMessage, 'Critical Save');
     }
 
     // Button remains active so multiple players can roll saves
@@ -1448,7 +1449,7 @@ export class VagabondDamageHelper {
       const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
       // Post simplified save result to chat (no damage calculations)
-      await this._postSaveReminderResult(
+      const saveMessage = await this._postSaveReminderResult(
         targetActor,
         saveType,
         saveRoll,
@@ -1457,6 +1458,7 @@ export class VagabondDamageHelper {
         isCritical,
         isHindered
       );
+      if (isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, saveMessage, 'Critical Save');
     }
 
     // Button remains active so multiple players can roll saves

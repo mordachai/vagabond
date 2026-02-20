@@ -519,8 +519,8 @@ export class VagabondChatCard {
       isCritical: isCritical
     };
 
-    // Create and send card
-    return VagabondChatCard.createActionCard({
+    // Create and send card first, then reveal luck gain
+    const result = await VagabondChatCard.createActionCard({
       actor: actor,
       title: title,
       rollData: rollData,
@@ -532,6 +532,8 @@ export class VagabondChatCard {
         difficulty: difficulty
       }
     });
+    if (isCritical) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical');
+    return result;
   }
 
   static async skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
@@ -620,7 +622,7 @@ export class VagabondChatCard {
 
   static async weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime = []) {
       const { weaponSkill, weaponSkillKey, isHit, isCritical } = attackResult;
-      
+
       // FIX: Auto-roll damage if settings allow or if it's a critical hit
       // This ensures the orange damage section and save buttons appear immediately
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
@@ -677,7 +679,7 @@ export class VagabondChatCard {
       // Determine attack type from weapon skill (ranged vs melee)
       const attackType = weaponSkillKey === 'ranged' ? 'ranged' : 'melee';
 
-      return this.createActionCard({
+      const result = await this.createActionCard({
           actor,
           item: weapon,
           title: `${weapon.name} Attack`,
@@ -698,11 +700,13 @@ export class VagabondChatCard {
             difficulty: attackResult.difficulty
           }
       });
+      if (isCritical) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Hit');
+      return result;
   }
 
   static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = []) {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState } = spellCastResult;
-      
+
       const tags = [];
       
       // 1. Skill Tag
@@ -758,7 +762,7 @@ export class VagabondChatCard {
           critText = spell.system.formatDescription(spell.system.crit);  // Format for countdown dice triggers
       }
 
-      return this.createActionCard({
+      const result = await this.createActionCard({
           actor, item: spell, title: spell.name,
           rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill },  // ✅ FIX: Include manaSkill for statKey lookup
           tags,
@@ -778,6 +782,8 @@ export class VagabondChatCard {
             difficulty: difficulty
           }
       });
+      if (isCritical) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Cast');
+      return result;
   }
   
   static async npcAction(actor, action, actionIndex, targetsAtRollTime = []) {
@@ -1328,6 +1334,68 @@ export class VagabondChatCard {
       `);
 
     return await card.send();
+  }
+
+  /**
+   * Create a chat card for gaining luck
+   * @param {VagabondActor} actor - The actor gaining luck
+   * @param {number} newLuck - New luck value after gain
+   * @param {number} maxLuck - Maximum luck value
+   * @param {string} [reason] - Optional reason (e.g. 'Critical Hit')
+   * @returns {Promise<ChatMessage>}
+   */
+  static async luckGain(actor, newLuck, maxLuck, reason = '') {
+    const reasonText = reason ? ` from <strong>${reason}</strong>` : '';
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle('Luck Gained')
+      .setSubtitle(actor.name)
+      .setDescription(`
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> gains 1 Luck${reasonText}.</p>
+        <p><strong>Luck Pool:</strong> ${newLuck} / ${maxLuck}</p>
+      `);
+
+    return await card.send();
+  }
+
+  /**
+   * Grant +1 luck to a character actor on a critical hit/success (capped at max).
+   * No-ops for non-character actors (e.g. NPCs).
+   * @param {VagabondActor} actor - The actor that rolled the crit
+   * @param {string} [reason] - Label to show in chat (e.g. 'Critical Hit')
+   * @returns {Promise<void>}
+   */
+  /**
+   * Wait for Dice So Nice 3D animation to finish for a given message.
+   * No-ops if DSN is not active or no message is provided.
+   * @param {ChatMessage|null} message
+   * @returns {Promise<void>}
+   */
+  static async _waitForDiceAnimation(message) {
+    if (!message?.id) return;
+    if (!game.modules.get('dice-so-nice')?.active) return;
+    await new Promise(resolve => {
+      const hookId = Hooks.on('diceSoNiceRollComplete', (id) => {
+        if (id === message.id) {
+          Hooks.off('diceSoNiceRollComplete', hookId);
+          resolve();
+        }
+      });
+      // Fallback: resolve after 10 s in case the hook never fires
+      setTimeout(() => { Hooks.off('diceSoNiceRollComplete', hookId); resolve(); }, 10000);
+    });
+  }
+
+  static async _grantLuckOnCrit(actor, rollMessage = null, reason = 'Critical') {
+    if (actor.system.currentLuck === undefined) return;
+    await VagabondChatCard._waitForDiceAnimation(rollMessage);
+    const currentLuck = actor.system.currentLuck ?? 0;
+    const maxLuck = actor.system.maxLuck ?? 0;
+    if (currentLuck >= maxLuck) return;
+    const newLuck = currentLuck + 1;
+    await actor.update({ 'system.currentLuck': newLuck });
+    await VagabondChatCard.luckGain(actor, newLuck, maxLuck, reason);
   }
 
   /**

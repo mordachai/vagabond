@@ -1364,9 +1364,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const maxLuck = this.actor.system.maxLuck || 0;
 
     if (event.shiftKey) {
-      // Shift+Click: Recharge to max
-      await this.actor.update({ 'system.currentLuck': maxLuck });
-      await VagabondChatCard.luckRecharge(this.actor, maxLuck);
+      // Shift+Click: Add +1 luck (capped at max)
+      if (currentLuck < maxLuck) {
+        const newLuck = currentLuck + 1;
+        await this.actor.update({ 'system.currentLuck': newLuck });
+        await VagabondChatCard.luckGain(this.actor, newLuck, maxLuck);
+      }
     } else {
       // Regular Click: Spend (decrement)
       if (currentLuck > 0) {
