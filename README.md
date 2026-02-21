@@ -94,9 +94,19 @@ Inside the book there is the keys to unlock all the content for your Foundry tab
 - 300+ NPCs
 - 500+ Items!
 
-## Installation (for now):
+---
 
-Go to Foundry >> Game Systems >> Install System and paste the link below in the Manifest URL field located at the bottom of the install window.
+# Installation:
+
+Go to Foundry >> Game Systems >> Install System and look for "vagabond" and click the Install button 
+
+<img width="1710" height="268" alt="image" src="https://github.com/user-attachments/assets/3d4b4ea5-7c10-4aeb-980d-e1defa2f5e81" />
+
+
+**- OR -**
+
+
+Paste the link below in the Manifest URL field located at the bottom of the same install window and click the **Install** button at the end.
 
 ```
 https://github.com/mordachai/vagabond/releases/latest/download/system.json
