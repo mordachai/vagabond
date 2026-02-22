@@ -48,6 +48,12 @@
   @include context-menu-styles;
 }
 
+/* Party compact view context menu */
+.vagabond .party-compact-context-menu,
+.vagabond-context-menu.party-compact-context-menu {
+  @include context-menu-styles;
+}
+
 /*
  * Note: Other context menu types (progress-clock-context-menu, countdown-dice-context-menu)
  * currently use custom implementations that don't follow the ContextMenuHelper pattern.

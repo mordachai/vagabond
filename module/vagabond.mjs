@@ -38,6 +38,7 @@ import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
 import { CompendiumSettings } from './applications/compendium-settings.mjs';
 import { LevelUpDialog } from './applications/level-up-dialog.mjs';
+import { PartyCompactView } from './applications/party-compact-view.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -386,6 +387,7 @@ async function preloadHandlebarsTemplates() {
     // Party sheet partials
     'systems/vagabond/templates/party/party-member-card.hbs',
     'systems/vagabond/templates/party/vehicle-part-card.hbs',
+    'systems/vagabond/templates/party/party-compact-view.hbs',
     //Chat cards
     'systems/vagabond/templates/chat/damage-display.hbs',
   ];
@@ -445,6 +447,7 @@ globalThis.vagabond = {
     VagabondCharBuilder,
     EncounterSettings,
     LevelUpDialog,
+    PartyCompactView,
   },
   ui: {
     ProgressClockOverlay,
@@ -1221,6 +1224,82 @@ const FORCE_CRIT_ENTRY = {
     }
   }
 };
+
+/* -------------------------------------------- */
+/*  Vehicle Crew — Auto Permission Sync          */
+/* -------------------------------------------- */
+
+/**
+ * Recalculate which non-GM users should have Owner permission on a party actor
+ * based on who is currently assigned as crew across all vehicle parts.
+ * Grants Owner to players whose character is crew, revokes from those who are not.
+ * Only runs on the GM client.
+ */
+async function syncVehicleCrewPermissions(partyActor) {
+  if (!game.user.isGM) return;
+
+  // Collect all crew actor UUIDs across every vehiclePart owned by this actor
+  const allCrewUuids = new Set();
+  for (const part of partyActor.items.filter(i => i.type === 'vehiclePart')) {
+    for (const { uuid } of (part.system.crew ?? [])) {
+      allCrewUuids.add(uuid);
+    }
+  }
+
+  // Resolve each UUID → find the non-GM user whose character matches
+  const crewUserIds = new Set();
+  for (const uuid of allCrewUuids) {
+    try {
+      const actor = await fromUuid(uuid);
+      if (!actor) continue;
+      const user = game.users.find(u => !u.isGM && u.character?.id === actor.id);
+      if (user) crewUserIds.add(user.id);
+    } catch { /* UUID no longer valid — skip */ }
+  }
+
+  const ownerLevel = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+  const noneLevel  = CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE;
+  const current    = partyActor.ownership ?? {};
+  const updates    = {};
+
+  // Grant Owner to current crew users who don't already have it
+  for (const userId of crewUserIds) {
+    if (current[userId] !== ownerLevel) updates[userId] = ownerLevel;
+  }
+
+  // Revoke Owner from non-GM users no longer in the crew
+  for (const [userId, level] of Object.entries(current)) {
+    if (userId === 'default') continue;
+    const user = game.users.get(userId);
+    if (!user || user.isGM) continue;
+    if (level === ownerLevel && !crewUserIds.has(userId)) updates[userId] = noneLevel;
+  }
+
+  if (Object.keys(updates).length > 0) await partyActor.updateOwnership(updates);
+}
+
+function _getPartyParent(item) {
+  const parent = item.parent;
+  return parent?.type === 'party' ? parent : null;
+}
+
+Hooks.on('createItem', (item) => {
+  if (item.type !== 'vehiclePart') return;
+  const party = _getPartyParent(item);
+  if (party) syncVehicleCrewPermissions(party);
+});
+
+Hooks.on('updateItem', (item) => {
+  if (item.type !== 'vehiclePart') return;
+  const party = _getPartyParent(item);
+  if (party) syncVehicleCrewPermissions(party);
+});
+
+Hooks.on('deleteItem', (item) => {
+  if (item.type !== 'vehiclePart') return;
+  const party = _getPartyParent(item);
+  if (party) syncVehicleCrewPermissions(party);
+});
 
 // Hook: fires when ChatLog._createContextMenu dispatches "getChatMessageContextOptions" during _onFirstRender.
 // Registered at module top level to guarantee it exists before ChatLog renders.

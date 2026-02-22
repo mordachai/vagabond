@@ -15,17 +15,17 @@
   font-size: 1.2em;
 
   .supplies-label {
-    color: $c-muted;
-    font-size: 1.2em;
+    color: $c-yellow;
+    font-size: 1.0em;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
 
   .supplies-value {
-    font-family: $font-number;
-    font-size: 15px;
+    font-family: $font-title;
+    font-size: 1em;
     font-weight: bold;
-    color: $c-text-1;
+    color: $c-yellow;
     min-width: 20px;
   }
 
@@ -41,14 +41,14 @@
     align-items: center;
     gap: 6px;
 
-    i { color: $c-muted; font-size: 0.95em; }
+    i { color: $c-yellow; font-size: 1em; }
   }
 }
 
 // Currency abbreviation (g / s / c)
 .currency-abbr {
   font-size: 0.75em;
-  color: $c-muted;
+  color: $c-yellow;
   margin-left: 1px;
 }
 
@@ -56,7 +56,29 @@
 .party-members-header {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
   padding: 6px 10px;
+
+  .party-compact-view-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: $c-inset-2;
+    color: $c-tan;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s, color 0.15s;
+    margin-right: auto;
+
+    &:hover { opacity: 0.9; color: $c-yellow; }
+
+    i { font-size: 1.1em; }
+  }
 
   .party-add-member {
     display: flex;
@@ -96,8 +118,8 @@
 // ── Member card grid ───────────────────────────────────────────────────────────
 .party-member-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(clamp(2, var(--member-count, 2), 4), 1fr);
+  gap: 15px;
   padding: 10px;
 }
 
@@ -106,60 +128,114 @@
   background: $bg-paper;
   background-repeat: $bg-repeat;
   background-size: $bg-size;
-  border: 1px solid $c-tan-lite;
-  border-radius: 6px;
-  overflow: hidden;
+  border: 2px solid $c-tan-lite;
+  overflow: visible;
   display: flex;
   flex-direction: column;
+  border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 
-  // ── Card Header ────────────────────────────────────────────────────────────
+  // ── Div 1: Card Header ─────────────────────────────────────────────────────
   .member-card-header {
     display: flex;
     align-items: flex-start;
     gap: 8px;
     padding: 8px;
-    background: $c-inset-2;
+    //background: $c-inset-2;
+    background-image: url('../assets/images/sheets/tabNavBG.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
     border-bottom: 1px solid $c-tan-lite;
     position: relative;
+    color: $c-yellow;
+    border-bottom: 3px solid $c-black;
   }
 
   .member-remove-btn {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: -13px;
+    right: -10px;
     width: 18px;
     height: 18px;
-    padding: 0;
-    background: transparent;
+    padding: 1px 10px;
     border: none;
-    color: $c-muted;
-    font-size: 1.0em;
+    font-size: 0.85em;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.15s, background 0.15s;
-    line-height: 1;
+    opacity: 0.9;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
 
-    &:hover {
-      color: $c-red;
-      background: rgba(157, 0, 0, 0.1);
-    }
+    &:hover { color: $c-white; background: rgba(198, 5, 5, 0.7); opacity: 1; }
+  }
+
+  .member-portrait-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
   }
 
   .member-portrait {
-    width: 52px;
-    height: 52px;
+    width: 54px;
+    height: 54px;
     object-fit: cover;
+    object-position: top center;
+    display: block;
+    background-color: $c-black;
     border-radius: 4px;
-    border: 1px solid $c-tan-lite;
-    flex-shrink: 0;
+    border: 1px solid $c-yellow;
     cursor: pointer;
     transition: border-color 0.15s;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
 
     &:hover { border-color: $c-bg2; }
+  }
+
+  .member-level {
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-yellow;
+    margin: 0;
+    white-space: nowrap;
+    text-shadow:
+      1px 1px 0 $c-dark-bluey,
+      -1px 1px 0 $c-dark-bluey,
+      -1px -1px 0 $c-dark-bluey,
+      1px -1px 0 $c-dark-bluey;
+  }
+
+  .member-subtitle {
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-yellow;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px;
+    text-shadow:
+      1px 1px 0 $c-dark-bluey,
+      -1px 1px 0 $c-dark-bluey,
+      -1px -1px 0 $c-dark-bluey,
+      1px -1px 0 $c-dark-bluey;
+
+    .member-sep { opacity: 0.5; }
+
+    > span:first-child {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+  }
+
+  .member-speed {
+    flex-shrink: 0;
+    opacity: 0.85;
   }
 
   .member-header-info {
@@ -168,146 +244,160 @@
     flex-direction: column;
     gap: 4px;
     min-width: 0;
-    padding-right: 20px; // space for remove btn
+  }
+
+  // Row 1: Name + XP
+  .member-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
   }
 
   .member-name {
+    flex: 1;
     font-family: $font-title;
-    font-size: 14px;
-    color: $c-text-1;
+    font-size: 1.2em;
+    color: $c-yellow;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
     cursor: pointer;
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
 
     &:hover { text-decoration: underline; }
   }
 
-  .member-subtitle {
-    font-family: $font-title;
-    font-size: 1.05em;
-    color: $c-muted;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    .member-sep { opacity: 0.5; margin: 0 2px; }
-  }
-
-  .member-player {
-    font-family: $font-title;
-    font-size: 1.0em;
-    color: $c-muted;
-    margin: 0;
-    opacity: 0.8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    .member-player-icon { font-size: 0.85em; margin-right: 2px; }
-  }
-
-  // ── Resource bars (HP + Mana) ────────────────────────────────────────────
-  .member-resource-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .resource-icon {
-    font-size: 1.0em;
-    width: 12px;
-    text-align: center;
+  .member-xp {
     flex-shrink: 0;
-  }
-
-  .hp-icon   { color: #c0392b; }
-  .mana-icon { color: #8e44ad; }
-  .xp-icon   { color: #c0912b; }
-
-  .member-resource-bar {
-    flex: 1;
-    height: 6px;
-    background: $c-tan-lite;
-    border-radius: 3px;
-    overflow: hidden;
-
-    &.mana-bar { height: 5px; }
-  }
-
-  .member-resource-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.3s ease;
-
-    &.hp-fill   { background: linear-gradient(90deg, #c0392b, #e74c3c); }
-    &.mana-fill { background: linear-gradient(90deg, #6c3483, #9b59b6); }
-    &.xp-fill   { background: linear-gradient(90deg, #c0912b, #f0b429); }
-  }
-
-  .resource-label {
-    font-family: $font-number;
-    font-size: 1.2em;
-    color: $c-text-1;
+    font-family: $font-title;
+    font-size: 1em;
+    color: $c-yellow;
     white-space: nowrap;
-    flex-shrink: 0;
+
+    i { font-size: 0.8em; color: #c0912b; margin-right: 1px; }
   }
 
-  .resource-sep {
-    color: $c-tan;
-    margin: 0 1px;
-  }
-
-  // ── Fatigue pips ──────────────────────────────────────────────────────────
-  .member-fatigue-row {
+  // Row 2: HP + Fatigue as bar-backgrounds
+  .member-hpfatigue-row {
     display: flex;
-    align-items: center;
     gap: 4px;
   }
 
-  .fatigue-icon { color: $c-muted; }
-
-  .member-fatigue-pips {
-    display: flex;
-    gap: 3px;
-  }
-
-  .fatigue-pip {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    border-radius: 2px;
-    border: 1px solid $c-tan;
-    background: transparent;
-
-    &.filled {
-      background: $c-dark;
-      border-color: $c-dark;
-    }
-  }
-
-  // ── Stats row ────────────────────────────────────────────────────────────
-  .member-stats-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 6px 8px;
-    border-bottom: 1px solid $c-tan-lite;
-  }
-
-  .member-stat {
+  .member-hp-bar-bg,
+  .member-fatigue-bar-bg {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    overflow: hidden;
+    font-family: $font-title;
+    font-size: 1.05em;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.4);
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      border-radius: 3px;
+      z-index: 0;
+      transition: width 0.3s ease;
+    }
+
+    i, span { position: relative; z-index: 1; }
+    i { font-size: 0.85em; }
+    span { color: $c-yellow; }
+  }
+
+  .member-hp-bar-bg {
+    flex: 1;
+    &::before { width: var(--hp-fill, 0%); background: rgba(238, 69, 50, 0.561); }
+    i { color: $c-yellow; }
+  }
+
+  .member-fatigue-bar-bg {
+    flex: 0 0 auto;
+    margin-left: auto;
+    &::before { width: var(--fatigue-fill, 0%); background: rgba(80, 80, 80, 0.35); }
+    i { color: $c-yellow; }
+  }
+
+  // ── Div 2: Statuses ────────────────────────────────────────────────────────
+  .member-statuses {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .member-status-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid $c-tan-lite;
+    background-color: black;
+    cursor: pointer;
+    transition: transform 0.1s, border-color 0.15s;
+
+    &:hover { transform: scale(1.15); border-color: $c-bg2; }
+  }
+
+  // ── Div 3: Saves row ───────────────────────────────────────────────────────
+  .member-saves-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 4px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+  }
+
+  .member-save {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .save-icon { font-size: 1.2em; color: $c-text-2; }
+
+  .save-value {
+    font-family: $font-title;
+    font-size: 1.3em;
+    color: $c-text-2;
+  }
+
+  // ── Div 4: Stats grid (2 columns) ─────────────────────────────────────────
+  .member-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 6px;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .member-stat-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.1em;
+    min-width: 0;
 
     &.non-caster { opacity: 0.35; }
   }
 
   .stat-icon {
-    font-size: 1.2em;
+    font-size: 1em;
     width: 14px;
     text-align: center;
     color: $c-muted;
@@ -315,63 +405,33 @@
   }
 
   .stat-value {
-    font-family: $font-number;
-    font-size: 1.2em;
+    font-family: $font-title;
+    font-size: 1em;
     color: $c-text-1;
+    white-space: nowrap;
   }
 
-  .mana-cast-label {
-    font-family: $font-number;
-    font-size: 1.2em;
+  .stat-sub {
+    font-family: $font-title;
+    font-size: 0.9em;
     color: $c-muted;
-    margin-left: 2px;
+    white-space: nowrap;
   }
 
-  .member-stat-pair {
-    display: flex;
-    gap: 12px;
-
-    .member-stat { flex: 1; }
-  }
-
-  // ── Saves row ────────────────────────────────────────────────────────────
-  .member-saves-row {
-    display: flex;
-    justify-content: space-around;
-    padding: 5px 8px;
-    border-bottom: 1px solid $c-tan-lite;
-    background: $c-inset-2;
-  }
-
-  .member-save {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .save-icon  { font-size: 1.2em; color: $c-muted; }
-
-  .save-value {
-    font-family: $font-number;
-    font-size: 14px;
-    font-weight: bold;
-    color: $c-text-1;
-  }
-
-  // ── Equipped items + spells ───────────────────────────────────────────────
+  // ── Div 5 & 6: Equipped + Spells ──────────────────────────────────────────
   .member-equipped-list,
   .member-spells-list {
     padding: 4px 8px;
-    border-bottom: 1px solid $c-tan-lite;
+
+    &:not(:last-child) { border-bottom: 1px solid $c-tan-lite; }
   }
 
   .member-list-label {
     font-family: $font-title;
-    font-size: 1.0em;
+    font-size: 1em;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: $c-muted;
+    color: $c-text-2;
     margin: 0 0 3px;
   }
 
@@ -405,34 +465,11 @@
 
   .member-item-name {
     font-family: $font-title;
-    font-size: 1.0em;
+    font-size: 1em;
     color: $c-text-1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  // ── Status icons ──────────────────────────────────────────────────────────
-  .member-statuses {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    padding: 4px 8px;
-  }
-
-  .member-status-icon {
-    width: 22px;
-    height: 22px;
-    object-fit: cover;
-    border-radius: 3px;
-    border: 1px solid $c-tan-lite;
-    cursor: pointer;
-    transition: transform 0.1s, border-color 0.15s;
-
-    &:hover {
-      transform: scale(1.15);
-      border-color: $c-bg2;
-    }
   }
 }
 
@@ -446,16 +483,22 @@
   align-items: flex-start;
   gap: 12px;
   padding: 10px;
-  border-bottom: 1px solid $c-tan-lite;
-  background: $c-inset-2;
+  border-bottom: 2px solid $c-black;
+  background-image: url('../assets/images/sheets/tabNavBG.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
 
   .vehicle-portrait {
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 110px;
     object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid $c-tan-lite;
+    object-position: top center;
+    border-radius: 10px;
+    corner-shape: scoop scoop round round;
+    border: 2px solid $c-yellow;
     flex-shrink: 0;
+    background-color: $c-black;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
   }
 
   .vehicle-info {
@@ -468,43 +511,79 @@
 
   .vehicle-name {
     font-family: $font-title;
-    font-size: 1.8em;
-    font-weight: bold;
-    color: $c-text-1;
-    border-bottom: 1px solid $c-tan-lite;
-    padding-bottom: 2px;
+    font-size: 1.5em;
+    color: $c-white;
+    border-bottom: none;
     width: 100%;
+    line-height: 2;
+    background-image: url('../assets/images/sheets/titleBG.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
   }
 
   .vehicle-type {
     font-family: $font-title;
     font-size: 1.3em;
-    color: $c-muted;
+    color: $c-yellow;
     width: 100%;
   }
 
   .vehicle-speeds {
     display: flex;
-    gap: 10px;
+    justify-content: space-around;
+    gap: 8px;
     margin-top: 2px;
+    text-shadow:
+      2px 2px 0 $c-dark-bluey,
+      -2px 2px 0 $c-dark-bluey,
+      -2px -2px 0 $c-dark-bluey,
+      2px -2px 0 $c-dark-bluey;
+    background: $c-tan-lite;
+    padding: 4px 8px;
+    border-radius: 8px;
   }
 
   .vehicle-speed-stat {
     display: flex;
     align-items: center;
-    gap: 4px;
+    white-space: nowrap;
 
-    .speed-icon {
-      font-size: 1.0em;
-      color: $c-muted;
+    .speed-label {
+      font-family: $font-title;
+      font-size: 1.3em;
+      color: $c-yellow;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .speed-unit {
+      font-family: $font-title;
+      font-size: 0.9em;
+      color: $c-yellow;
+      margin-left: -5px;
+      text-align: left;
     }
 
     .speed-input {
-      width: 40px;
+      field-sizing: content;
+      min-width: 1ch;
       font-family: $font-number;
-      font-size: 1.2em;
-      text-align: center;
+      font-size: 1.3em;
+      text-align: left;
+      text-shadow:
+        1px 1px 0 $c-dark-bluey,
+        -1px 1px 0 $c-dark-bluey,
+        -1px -1px 0 $c-dark-bluey,
+        1px -1px 0 $c-dark-bluey;
     }
+
+    input {color: $c-yellow;}
   }
 }
 
@@ -633,31 +712,81 @@
     gap: 4px;
     padding: 5px 8px;
     border-bottom: 1px solid $c-tan-lite;
+    font-size: 1.2em;
   }
 
   .part-hp-icon {
     font-size: 1.0em;
-    color: #c0392b;
+    color: $c-text-1;
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+
+  .part-hp-clicker {
+    cursor: pointer;
+    transition: color 0.15s, transform 0.1s;
+    &:hover { color: #ff8f83; transform: scale(1.2); }
+  }
+
+  .part-armor-stat {
+    margin-right: 4px;
+    padding-right: 6px;
+    border-right: 1px solid $c-tan-lite;
     flex-shrink: 0;
   }
 
-  .part-sep { color: $c-tan; font-size: 1.2em; }
+  .part-sep { color: $c-tan; font-size: 1.1em; font-family: $font-title; }
 
-  .part-hp-bar-wrap {
-    flex: 1;
-    height: 5px;
-    background: $c-tan-lite;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-left: 4px;
+  .part-armor-input {
+    width: 52px;
+    text-align: center;
+    font-family: $font-title;
   }
 
-  .part-hp-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #c0392b, #27ae60);
-    background-size: 200% 100%;
+  .part-hp-bg {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 2px 6px;
     border-radius: 3px;
-    transition: width 0.3s ease;
+    overflow: hidden;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.25);
+    font-family: $font-title;
+    font-size: 1.2em;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: var(--hp-fill, 0%);
+      background: linear-gradient(102deg,
+        #5c0000 0%,
+        #c0392b 55%,
+      );
+      border-radius: 3px;
+      z-index: 0;
+      transition: width 0.3s ease;
+    }
+
+    > * { position: relative; z-index: 1; }
+  }
+
+  .part-hp-input {
+    field-sizing: content;
+    min-width: 1ch;
+    width: auto;
+    padding: 0;
+    text-align: center;
+    font-family: $font-title;
+
+    // Strip spin buttons so they don't inflate the width
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    -moz-appearance: textfield;
   }
 
   // Stats row
@@ -667,7 +796,6 @@
     gap: 6px;
     padding: 5px 8px;
     border-bottom: 1px solid $c-tan-lite;
-    flex-wrap: wrap;
   }
 
   .part-stat {
@@ -692,8 +820,14 @@
     text-align: center;
   }
 
+  .part-formula-stat {
+    flex: 1;
+    min-width: 0;
+  }
+
   .part-formula-input {
-    width: 52px;
+    flex: 1;
+    min-width: 50px;
     font-family: $font-title;
     font-size: 1.2em;
   }
@@ -707,7 +841,8 @@
     color: $c-text-1;
     cursor: pointer;
     padding: 1px 2px;
-    max-width: 150px;
+    width: auto;
+    flex-shrink: 0;
   }
 
   // Part field shared input styles
@@ -771,6 +906,7 @@
       width: 36px;
       height: 36px;
       object-fit: cover;
+      object-position: top center;
       border-radius: 2px;
       border: 1px solid $c-tan-lite;
       flex-shrink: 0;
@@ -813,11 +949,11 @@
     }
 
     .crew-attack-btn {
-      background: $c-bg2;
       border: none;
       border-radius: 3px;
-      color: $c-white;
-      font-size: 1.0em;
+      background: none;
+      color: $c-text-2;
+      font-size: 1.3em;
       cursor: pointer;
       padding: 2px 5px;
       flex-shrink: 0;
@@ -851,6 +987,170 @@
   }
 }
 
+// ── Party Compact View (floating frameless overlay) ────────────────────────
+// Root element has classes `vagabond party-compact-view` → matches as `&.party-compact-view`.
+&.party-compact-view {
+  z-index: 200;
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 2px solid $c-tan-lite;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  cursor: grab;
+  user-select: none;
+
+  &:active { cursor: grabbing; }
+
+  // Horizontal strip of member columns
+  .compact-members {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 8px;
+  }
+
+  // One column per member
+  .compact-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+
+    & + .compact-member {
+      border-left: 1px solid rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  // Portrait + aside (armor + fatigue) side by side
+  .compact-portrait-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .compact-portrait {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 4px;
+    border: 2px solid $c-tan-lite;
+    flex-shrink: 0;
+    cursor: default;
+  }
+
+  // Speed + luck stacked beside the portrait
+  .compact-portrait-aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1;
+  }
+
+  // Stats column: two rows of paired stats below portrait row
+  .compact-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+  }
+
+  // Two stats side-by-side in one row
+  .compact-stat-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 4px;
+    width: 100%;
+  }
+
+  // Each individual stat: icon + value centered
+  .compact-stat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-text-1;
+    white-space: nowrap;
+    padding: 1px 0;
+
+    i {
+      font-size: 0.85em;
+      color: $c-tan;
+      flex-shrink: 0;
+    }
+
+    // Clickable stats: pointer cursor + subtle hover
+    &.compact-hp,
+    &.compact-fatigue {
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background 0.12s;
+      &:hover { background: rgba(255, 255, 255, 0.08); }
+    }
+
+    &.compact-hp i     { color: #e74c3c; }
+    &.compact-fatigue  { opacity: 0.85; }
+
+    &.non-caster { opacity: 0.3; cursor: default; }
+
+    // Aside stats (speed + luck next to portrait): slightly smaller
+    .compact-portrait-aside & {
+      font-size: 0.82em;
+      padding: 0;
+    }
+  }
+
+  // "S" letter used as speed icon — matches FA icon sizing/colour
+  .compact-speed-icon {
+    font-family: $font-title;
+    font-size: 0.82em;
+    font-weight: bold;
+    color: $c-tan;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  // Saves row
+  .compact-saves-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+    width: 100%;
+    padding-top: 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+  }
+
+  .compact-save {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    cursor: default;
+
+    .save-icon {
+      font-size: 0.72em;
+      color: $c-muted;
+      line-height: 1;
+    }
+
+    .save-num {
+      font-family: $font-title;
+      font-size: 0.95em;
+      font-weight: bold;
+      color: $c-text-2;
+      line-height: 1.1;
+    }
+  }
+}
+
+
 // ── Cargo ───────────────────────────────────────────────────────────────────
 .vehicle-cargo-section {
   padding-bottom: 8px;
@@ -875,15 +1175,16 @@
   border-radius: 3px;
 
   .cargo-icon {
-    width: 18px;
-    height: 18px;
+    width: 32px;
+    height: 32px;
     object-fit: cover;
+    background: $c-black;
     border-radius: 2px;
   }
 
   .cargo-name {
     font-family: $font-title;
-    font-size: 12px;
+    font-size: 1.2em;
     color: $c-text-1;
   }
 }

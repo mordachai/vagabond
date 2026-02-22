@@ -19,50 +19,49 @@
     ><i class="fas fa-trash"></i></button>
   </div>
 
-  {{! ── HP bar ───────────────────────────────────────────────────────────── }}
+  {{! ── HP + Armor ───────────────────────────────────────────────────────── }}
   <div class="part-hp-row">
-    <i class="fas fa-heart part-hp-icon"></i>
-    <input
-      type="number"
-      class="part-field"
-      data-part-field="system.health.value"
-      value="{{health.value}}"
-      min="0"
-      data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.HPCurrent'}}"
-    >
-    <span class="part-sep">/</span>
-    <input
-      type="number"
-      class="part-field"
-      data-part-field="system.health.max"
-      value="{{health.max}}"
-      min="0"
-      data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.HPMax'}}"
-    >
-    <div class="part-hp-bar-wrap">
-      <div class="part-hp-bar-fill" style="width: {{health.pct}}%"></div>
+    <div class="part-stat part-armor-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Armor'}}">
+      <i class="fas fa-shield-halved part-stat-icon"></i>
+      <input
+        type="number"
+        class="part-field part-armor-input"
+        data-part-field="system.armor"
+        value="{{armor}}"
+        min="0"
+      >
+    </div>
+    <div class="part-hp-bg" style="--hp-fill: {{health.pct}}%">
+      <i
+        class="fas fa-heart part-hp-icon part-hp-clicker"
+        data-tooltip="Left: -1 / Right: +1 | Shift: ±10"
+      ></i>
+      <input
+        type="number"
+        class="part-field part-hp-input"
+        data-part-field="system.health.value"
+        value="{{health.value}}"
+        min="0"
+        data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.HPCurrent'}}"
+      >
+      <span class="part-sep">/</span>
+      <input
+        type="number"
+        class="part-field part-hp-input"
+        data-part-field="system.health.max"
+        value="{{health.max}}"
+        min="0"
+        data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.HPMax'}}"
+      >
     </div>
   </div>
 
   {{! ── Stats row ────────────────────────────────────────────────────────── }}
   <div class="part-stats-row">
 
-    {{! Armor }}
-    <div class="part-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Armor'}}">
-      <i class="fas fa-shield-halved part-stat-icon"></i>
-      <input
-        type="number"
-        class="part-field part-stat-input"
-        data-part-field="system.armor"
-        value="{{armor}}"
-        min="0"
-      >
-    </div>
-
     {{! Attack modifier }}
     <div class="part-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.AttackMod'}}">
-      <i class="fas fa-crosshairs part-stat-icon"></i>
-      <span class="part-sign">+</span>
+      <i class="fa-solid fa-plus-minus"></i>
       <input
         type="number"
         class="part-field part-stat-input"
@@ -72,7 +71,7 @@
     </div>
 
     {{! Damage formula }}
-    <div class="part-stat">
+    <div class="part-stat part-formula-stat">
       <i
         class="fas fa-burst part-stat-icon part-roll-damage"
         data-part-id="{{id}}"
@@ -87,13 +86,11 @@
       >
     </div>
 
-    {{! Damage type }}
+    {{! Damage type (includes "None") }}
     <div class="part-stat">
       <select class="part-field part-damage-type" data-part-field="system.damageType">
         {{#each config.damageTypes as |label key|}}
-          {{#unless (eq key '-')}}
-            <option value="{{key}}" {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
-          {{/unless}}
+          <option value="{{key}}" {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
         {{/each}}
       </select>
     </div>
@@ -117,6 +114,14 @@
       <div class="part-crew-list">
         {{#each crew}}
           <div class="part-crew-member" data-actor-uuid="{{uuid}}">
+            <button
+              type="button"
+              class="crew-remove-btn"
+              data-action="removeCrew"
+              data-part-id="{{../id}}"
+              data-actor-uuid="{{uuid}}"
+              data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.RemoveCrew'}}"
+            ><i class="fas fa-times"></i></button>
             <img class="crew-portrait" src="{{img}}" alt="{{name}}" data-tooltip="{{name}}">
             <span class="crew-name">{{name}}</span>
             <select
@@ -141,14 +146,6 @@
               data-actor-uuid="{{uuid}}"
               data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Attack'}}"
             ><i class="fas fa-dice-d20"></i></button>
-            <button
-              type="button"
-              class="crew-remove-btn"
-              data-action="removeCrew"
-              data-part-id="{{../id}}"
-              data-actor-uuid="{{uuid}}"
-              data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.RemoveCrew'}}"
-            ><i class="fas fa-times"></i></button>
           </div>
         {{/each}}
       </div>

@@ -2,6 +2,7 @@ import { VagabondActorSheet } from './actor-sheet.mjs';
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
+import { PartyCompactView } from '../applications/party-compact-view.mjs';
 
 /**
  * Party/Vehicle actor sheet.
@@ -45,9 +46,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
   /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
-    options.parts = ['tabs', 'party', 'vehicle', 'effects'];
-    if (this.document.limited) {
-      options.parts = ['party'];
+    if (game.user.isGM) {
+      options.parts = ['tabs', 'party', 'vehicle', 'effects'];
+    } else {
+      // Non-GM players (crew members with Owner permission) see only the Vehicle tab.
+      options.parts = ['vehicle'];
+      this.tabGroups['primary'] = 'vehicle';
     }
   }
 
@@ -137,13 +141,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
         img: e.img,
       }));
 
-    // Fatigue boxes
+    // Fatigue
     const fatigue = sys.fatigue ?? 0;
     const fatigueMax = sys.fatigueMax ?? 5;
-    const fatigueBoxes = Array.from({ length: fatigueMax }, (_, i) => ({
-      checked: i < fatigue,
-      index: i,
-    }));
+    const fatiguePct = fatigueMax > 0
+      ? Math.clamp(Math.round((fatigue / fatigueMax) * 100), 0, 100)
+      : 0;
 
     // HP percentage for bar fill
     const hpMax = sys.health.max || 1;
@@ -175,6 +178,11 @@ export class VagabondPartySheet extends VagabondActorSheet {
       level: sys.attributes.level?.value ?? 1,
       ancestry: sys.ancestryData?.name ?? null,
       characterClass: sys.classData?.name ?? null,
+      speed: {
+        base:   sys.speed?.base   ?? 0,
+        crawl:  sys.speed?.crawl  ?? 0,
+        travel: sys.speed?.travel ?? 0,
+      },
       xp: {
         current: xpCurrent,
         required: xpRequired,
@@ -187,7 +195,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
       },
       fatigue,
       fatigueMax,
-      fatigueBoxes,
+      fatiguePct,
       mana: {
         current: sys.mana?.current ?? 0,
         max: sys.mana?.max ?? 0,
@@ -374,6 +382,25 @@ export class VagabondPartySheet extends VagabondActorSheet {
       deleteItem: Hooks.on('deleteItem', reRenderVehicle),
     };
 
+    // Re-register ActiveEffect hooks so status changes on members refresh the party tab immediately.
+    // Status effects fire createActiveEffect / deleteActiveEffect, not updateActor.
+    if (this._effectHookIds) {
+      Hooks.off('createActiveEffect', this._effectHookIds.create);
+      Hooks.off('updateActiveEffect', this._effectHookIds.update);
+      Hooks.off('deleteActiveEffect', this._effectHookIds.delete);
+    }
+    const reRenderIfMember = (effect) => {
+      const parentUuid = effect.parent?.uuid;
+      if (parentUuid && this.actor.system.members?.includes(parentUuid)) {
+        this.render(false, { parts: ['party'] });
+      }
+    };
+    this._effectHookIds = {
+      create: Hooks.on('createActiveEffect', reRenderIfMember),
+      update: Hooks.on('updateActiveEffect', reRenderIfMember),
+      delete: Hooks.on('deleteActiveEffect', reRenderIfMember),
+    };
+
     // Wire up effects tab
     this._bindEffectActions(signal);
 
@@ -390,15 +417,103 @@ export class VagabondPartySheet extends VagabondActorSheet {
    * @private
    */
   _bindMemberActions(signal) {
-    // Portrait / name → open actor sheet
+    // Header info area → open actor sheet
     this.element
       .querySelectorAll('[data-action="openMemberSheet"]')
+      .forEach(el => {
+        el.addEventListener('click', async (e) => {
+          // Don't fire if click landed on a nested interactive element
+          if (e.target.closest('[data-action]:not([data-action="openMemberSheet"])') ||
+              e.target.closest('button')) return;
+          const uuid = el.closest('[data-actor-uuid]')?.dataset.actorUuid;
+          if (!uuid) return;
+          const actor = await fromUuid(uuid);
+          actor?.sheet.render(true);
+        }, { signal });
+      });
+
+    // Portrait → pan camera to actor's token in the current scene
+    this.element
+      .querySelectorAll('[data-action="panToToken"]')
       .forEach(el => {
         el.addEventListener('click', async () => {
           const uuid = el.closest('[data-actor-uuid]')?.dataset.actorUuid;
           if (!uuid) return;
           const actor = await fromUuid(uuid);
-          actor?.sheet.render(true);
+          if (!actor) return;
+          const token = canvas.tokens?.placeables.find(
+            t => t.actor?.uuid === uuid || t.document.actorId === actor.id
+          );
+          if (!token) {
+            ui.notifications.warn(`${actor.name} has no token in this scene.`);
+            return;
+          }
+          canvas.animatePan({ x: token.center.x, y: token.center.y });
+        }, { signal });
+      });
+
+    // HP bar — left click: -1 HP, right click: +1 HP
+    this.element
+      .querySelectorAll('[data-action="memberHpChange"]')
+      .forEach(bar => {
+        bar.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const uuid = bar.closest('[data-actor-uuid]')?.dataset.actorUuid;
+          if (!uuid) return;
+          const actor = await fromUuid(uuid);
+          if (!actor) return;
+          const newVal = Math.max(0, actor.system.health.value - 1);
+          await actor.update({ 'system.health.value': newVal });
+        }, { signal });
+        bar.addEventListener('contextmenu', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const uuid = bar.closest('[data-actor-uuid]')?.dataset.actorUuid;
+          if (!uuid) return;
+          const actor = await fromUuid(uuid);
+          if (!actor) return;
+          const newVal = Math.min(actor.system.health.max, actor.system.health.value + 1);
+          await actor.update({ 'system.health.value': newVal });
+        }, { signal });
+      });
+
+    // Fatigue bar — left click: +1 fatigue, right click: -1 fatigue
+    this.element
+      .querySelectorAll('[data-action="memberFatigueChange"]')
+      .forEach(bar => {
+        bar.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const uuid = bar.closest('[data-actor-uuid]')?.dataset.actorUuid;
+          if (!uuid) return;
+          const actor = await fromUuid(uuid);
+          if (!actor) return;
+          const newVal = Math.min(actor.system.fatigueMax ?? 5, (actor.system.fatigue ?? 0) + 1);
+          await actor.update({ 'system.fatigue': newVal });
+        }, { signal });
+        bar.addEventListener('contextmenu', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const uuid = bar.closest('[data-actor-uuid]')?.dataset.actorUuid;
+          if (!uuid) return;
+          const actor = await fromUuid(uuid);
+          if (!actor) return;
+          const newVal = Math.max(0, (actor.system.fatigue ?? 0) - 1);
+          await actor.update({ 'system.fatigue': newVal });
+        }, { signal });
+      });
+
+    // Equipped items / spells → open item sheet on the member actor
+    this.element
+      .querySelectorAll('[data-action="openMemberItem"]')
+      .forEach(el => {
+        el.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const uuid = el.closest('[data-actor-uuid]')?.dataset.actorUuid;
+          const itemId = el.dataset.itemId;
+          if (!uuid || !itemId) return;
+          const actor = await fromUuid(uuid);
+          const item = actor?.items.get(itemId);
+          item?.sheet.render(true);
         }, { signal });
       });
 
@@ -415,6 +530,13 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const { VagabondChatCard } = globalThis.vagabond.utils;
           await VagabondChatCard.statusEffect(actor, effect);
         }, { signal });
+      });
+
+    // Compact view button
+    this.element
+      .querySelectorAll('[data-action="openCompactView"]')
+      .forEach(btn => {
+        btn.addEventListener('click', () => PartyCompactView.open(this.actor), { signal });
       });
 
     // "+" button → open actor picker
@@ -466,11 +588,18 @@ export class VagabondPartySheet extends VagabondActorSheet {
   }
 
   /**
-   * Remove an actor UUID from the party member list.
+   * Remove an actor UUID from the party member list, with a confirmation dialog.
    * @param {string} uuid
    * @private
    */
   async _removeMember(uuid) {
+    const actor = await fromUuid(uuid);
+    const name = actor?.name ?? uuid;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.Actor.Party.Card.Remove') },
+      content: `<p>${game.i18n.format('VAGABOND.Actor.Party.Card.RemoveConfirm', { name })}</p>`,
+    });
+    if (!confirmed) return;
     const members = (this.actor.system.members ?? []).filter(u => u !== uuid);
     await this.actor.update({ 'system.members': members });
   }
@@ -629,6 +758,29 @@ export class VagabondPartySheet extends VagabondActorSheet {
       }, { signal });
     });
 
+    // HP heart — left click: -1 (Shift: -10), right click: +1 (Shift: +10)
+    this.element.querySelectorAll('.part-hp-clicker').forEach(icon => {
+      icon.addEventListener('click', async (e) => {
+        const partId = icon.closest('[data-part-id]')?.dataset.partId;
+        if (!partId) return;
+        const item = this.actor.items.get(partId);
+        if (!item) return;
+        const delta = e.shiftKey ? -10 : -1;
+        const newVal = Math.max(0, item.system.health.value + delta);
+        await item.update({ 'system.health.value': newVal });
+      }, { signal });
+      icon.addEventListener('contextmenu', async (e) => {
+        e.preventDefault();
+        const partId = icon.closest('[data-part-id]')?.dataset.partId;
+        if (!partId) return;
+        const item = this.actor.items.get(partId);
+        if (!item) return;
+        const delta = e.shiftKey ? 10 : 1;
+        const newVal = Math.min(item.system.health.max, item.system.health.value + delta);
+        await item.update({ 'system.health.value': newVal });
+      }, { signal });
+    });
+
     // Roll part damage directly (damage-only card, no attack roll)
     // Use class selector rather than data-action to avoid ApplicationV2 interference.
     // data-part-id is set directly on the <i> element in the template.
@@ -707,6 +859,16 @@ export class VagabondPartySheet extends VagabondActorSheet {
         const partId = btn.dataset.partId;
         if (!partId) return;
         await this._openCrewPicker(partId);
+      }, { signal });
+    });
+
+    // Open cargo container item sheet
+    this.element.querySelectorAll('[data-action="openCargo"]').forEach(el => {
+      el.addEventListener('click', () => {
+        const itemId = el.closest('[data-item-id]')?.dataset.itemId;
+        if (!itemId) return;
+        const item = this.actor.items.get(itemId);
+        item?.sheet.render(true);
       }, { signal });
     });
 
@@ -910,6 +1072,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
       Hooks.off('updateItem', this._itemHookIds.updateItem);
       Hooks.off('deleteItem', this._itemHookIds.deleteItem);
       this._itemHookIds = null;
+    }
+    if (this._effectHookIds) {
+      Hooks.off('createActiveEffect', this._effectHookIds.create);
+      Hooks.off('updateActiveEffect', this._effectHookIds.update);
+      Hooks.off('deleteActiveEffect', this._effectHookIds.delete);
+      this._effectHookIds = null;
     }
     return super.close(options);
   }

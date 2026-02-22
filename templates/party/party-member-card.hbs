@@ -1,7 +1,7 @@
 {{! Member Card — rendered once per party member }}
 <div class="party-member-card" data-actor-uuid="{{uuid}}">
 
-  {{! ── Header: portrait + name + HP ────────────────────── }}
+  {{! ── Div 1: Header ─────────────────────────────────────── }}
   <header class="member-card-header">
     <button
       type="button"
@@ -10,156 +10,56 @@
       data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Remove'}}"
     ><i class="fas fa-times"></i></button>
 
-    <img
-      class="member-portrait clickable"
-      src="{{img}}"
-      alt="{{name}}"
-      data-action="openMemberSheet"
-      data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.OpenSheet'}}"
-    >
-
-    <div class="member-header-info">
-      <h3 class="member-name clickable" data-action="openMemberSheet">{{name}}</h3>
-
-      {{! Level · Ancestry · Class subtitle }}
-      <p class="member-subtitle">
-        {{localize 'VAGABOND.Actor.Party.Card.LevelAbbr'}} {{level}}
-        {{#if ancestry}}<span class="member-sep">·</span> {{ancestry}}{{/if}}
-        {{#if characterClass}}<span class="member-sep">·</span> {{characterClass}}{{/if}}
-      </p>
-
-      {{! Player name }}
-      {{#if playerName}}
-        <p class="member-player">
-          <i class="fas fa-user member-player-icon"></i> {{playerName}}
-        </p>
-      {{/if}}
-
-      {{! HP bar }}
-      <div class="member-resource-row" data-tooltip="{{localize 'VAGABOND.Actor.base.FIELDS.health.value.label'}} {{hp.value}}/{{hp.max}}">
-        <i class="fas fa-heart resource-icon hp-icon"></i>
-        <div class="member-resource-bar">
-          <div class="member-resource-fill hp-fill" style="width: {{hp.pct}}%"></div>
-        </div>
-        <span class="resource-label">{{hp.value}}<span class="resource-sep">/</span>{{hp.max}}</span>
-      </div>
-
-      {{! Fatigue skulls }}
-      <div class="member-fatigue-row" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}}">
-        <i class="fas fa-skull resource-icon fatigue-icon"></i>
-        <div class="member-fatigue-pips">
-          {{#each fatigueBoxes}}
-            <span class="fatigue-pip {{#if checked}}filled{{/if}}"></span>
-          {{/each}}
-        </div>
-      </div>
-
-      {{! XP bar }}
-      <div class="member-resource-row member-xp-row" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.XP'}}: {{xp.current}}/{{xp.required}}">
-        <i class="fas fa-star resource-icon xp-icon"></i>
-        <div class="member-resource-bar">
-          <div class="member-resource-fill xp-fill" style="width: {{xp.pct}}%"></div>
-        </div>
-        <span class="resource-label">{{xp.current}}<span class="resource-sep">/</span>{{xp.required}}</span>
-      </div>
+    <div class="member-portrait-wrap">
+      <img
+        class="member-portrait clickable"
+        src="{{img}}"
+        alt="{{name}}"
+        data-action="panToToken"
+        data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.PanToToken'}}"
+      >
+      <p class="member-level">{{localize 'VAGABOND.Actor.Party.Card.LevelAbbr'}} {{level}}</p>
     </div>
+
+    <div class="member-header-info clickable" data-action="openMemberSheet">
+
+      {{! Row 1: Name + XP }}
+      <div class="member-name-row">
+        <h3 class="member-name">{{name}}</h3>
+        <span class="member-xp" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.XP'}}">
+          XP: {{xp.current}}/{{xp.required}}
+        </span>
+      </div>
+
+      {{! Row 2: Ancestry · Class · Speed }}
+      {{#if ancestry}}{{#if characterClass}}
+      <p class="member-subtitle">
+        <span>{{ancestry}}<span class="member-sep"> · </span>{{characterClass}}</span>
+        <span class="member-speed" data-tooltip="Crawl: {{speed.crawl}}' · Travel: {{speed.travel}}mi">Speed: {{speed.base}}'</span>
+      </p>
+      {{/if}}{{/if}}
+
+      {{! Row 3: HP bar-background | Fatigue bar-background }}
+      <div class="member-hpfatigue-row">
+        <div class="member-hp-bar-bg clickable" style="--hp-fill: {{hp.pct}}%"
+          data-action="memberHpChange"
+          data-tooltip="{{localize 'VAGABOND.Actor.base.FIELDS.health.value.label'}} {{hp.value}}/{{hp.max}} | Left: -1 / Right: +1">
+          <i class="fas fa-heart"></i>
+          <span>{{hp.value}}/{{hp.max}}</span>
+        </div>
+        <div class="member-fatigue-bar-bg clickable" style="--fatigue-fill: {{fatiguePct}}%"
+          data-action="memberFatigueChange"
+          data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}} {{fatigue}}/{{fatigueMax}} | Left: +1 / Right: -1">
+          <i class="fas fa-skull"></i>
+          <span>×{{fatigue}}</span>
+        </div>
+      </div>
+
+    </div>
+
   </header>
 
-  {{! ── Stats Row ──────────────────────────────────────── }}
-  <div class="member-stats-row">
-
-    {{! Mana (only for spellcasters, but show grayed row otherwise) }}
-    <div class="member-stat mana-stat {{#unless mana.isSpellcaster}}non-caster{{/unless}}"
-         data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Mana'}} {{mana.current}}/{{mana.max}} | {{localize 'VAGABOND.Actor.Party.Card.ManaCast'}} {{mana.castingMax}}">
-      <i class="fas fa-star resource-icon mana-icon"></i>
-      <div class="member-resource-bar mana-bar">
-        <div class="member-resource-fill mana-fill" style="width: {{mana.pct}}%"></div>
-      </div>
-      <span class="resource-label">{{mana.current}}<span class="resource-sep">/</span>{{mana.max}}</span>
-      <span class="mana-cast-label">| {{mana.castingMax}}</span>
-    </div>
-
-    {{! Armor + Inventory on one row }}
-    <div class="member-stat-pair">
-      <div class="member-stat armor-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Armor'}}">
-        <i class="fas fa-shield-halved stat-icon"></i>
-        <span class="stat-value">{{armor}}</span>
-      </div>
-      <div class="member-stat slots-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Slots'}}">
-        <i class="fas fa-briefcase stat-icon"></i>
-        <span class="stat-value">{{inventory.used}}<span class="resource-sep">/</span>{{inventory.total}}</span>
-      </div>
-    </div>
-
-    {{! Luck + Studied Dice on one row }}
-    <div class="member-stat-pair">
-      <div class="member-stat luck-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Luck'}}">
-        <i class="fas fa-clover stat-icon"></i>
-        <span class="stat-value">{{luck.current}}<span class="resource-sep">/</span>{{luck.total}}</span>
-      </div>
-      <div class="member-stat studied-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.StudiedDice'}}">
-        <i class="fas fa-dice-d6 stat-icon"></i>
-        <span class="stat-value">{{studiedDice}}</span>
-      </div>
-    </div>
-
-    {{! Currency }}
-    <div class="member-stat member-currency" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Wealth'}}">
-      <i class="fas fa-coins stat-icon"></i>
-      <span class="stat-value">{{currency.gold}}<span class="currency-abbr">g</span></span>
-      <span class="stat-value">{{currency.silver}}<span class="currency-abbr">s</span></span>
-      <span class="stat-value">{{currency.copper}}<span class="currency-abbr">c</span></span>
-    </div>
-
-  </div>
-
-  {{! ── Saves Row ───────────────────────────────────────── }}
-  <div class="member-saves-row">
-    <div class="member-save reflex-save" data-tooltip="{{saves.reflex.label}}">
-      <i class="fas fa-bolt save-icon"></i>
-      <span class="save-value">{{saves.reflex.difficulty}}</span>
-    </div>
-    <div class="member-save endure-save" data-tooltip="{{saves.endure.label}}">
-      <i class="fas fa-shield-heart save-icon"></i>
-      <span class="save-value">{{saves.endure.difficulty}}</span>
-    </div>
-    <div class="member-save will-save" data-tooltip="{{saves.will.label}}">
-      <i class="fas fa-brain save-icon"></i>
-      <span class="save-value">{{saves.will.difficulty}}</span>
-    </div>
-  </div>
-
-  {{! ── Equipped Items ───────────────────────────────────── }}
-  {{#if equippedItems.length}}
-  <div class="member-equipped-list">
-    <p class="member-list-label">{{localize 'VAGABOND.Actor.Party.Card.Equipped'}}</p>
-    <ul class="member-item-list">
-      {{#each equippedItems}}
-        <li class="member-item-entry" data-tooltip="{{name}}">
-          <img class="member-item-icon" src="{{img}}" alt="{{name}}">
-          <span class="member-item-name">{{name}}</span>
-        </li>
-      {{/each}}
-    </ul>
-  </div>
-  {{/if}}
-
-  {{! ── Favorited Spells ────────────────────────────────── }}
-  {{#if favoritedSpells.length}}
-  <div class="member-spells-list">
-    <p class="member-list-label">{{localize 'VAGABOND.Actor.Party.Card.Spells'}}</p>
-    <ul class="member-item-list">
-      {{#each favoritedSpells}}
-        <li class="member-item-entry" data-tooltip="{{name}}">
-          <img class="member-item-icon" src="{{img}}" alt="{{name}}">
-          <span class="member-item-name">{{name}}</span>
-        </li>
-      {{/each}}
-    </ul>
-  </div>
-  {{/if}}
-
-  {{! ── Status Effects ──────────────────────────────────── }}
+  {{! ── Div 2: Statuses ────────────────────────────────────── }}
   {{#if statuses.length}}
   <div class="member-statuses">
     {{#each statuses}}
@@ -173,6 +73,91 @@
         alt="{{label}}"
       >
     {{/each}}
+  </div>
+  {{/if}}
+
+  {{! ── Div 3: Saves ───────────────────────────────────────── }}
+  <div class="member-saves-row">
+    <div class="member-save" data-tooltip="{{saves.reflex.label}}">
+      <i class="fas fa-person-running save-icon"></i>
+      <span class="save-value">{{saves.reflex.difficulty}}</span>
+    </div>
+    <div class="member-save" data-tooltip="{{saves.endure.label}}">
+      <i class="fas fa-shield-halved save-icon"></i>
+      <span class="save-value">{{saves.endure.difficulty}}</span>
+    </div>
+    <div class="member-save" data-tooltip="{{saves.will.label}}">
+      <i class="fas fa-brain save-icon"></i>
+      <span class="save-value">{{saves.will.difficulty}}</span>
+    </div>
+  </div>
+
+  {{! ── Div 4: Stats Grid (2 columns) ─────────────────────── }}
+  <div class="member-stats-grid">
+
+    <div class="member-stat-cell" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Armor'}}">
+      <i class="fas fa-shield stat-icon"></i>
+      <span class="stat-value">{{armor}}</span>
+    </div>
+
+    <div class="member-stat-cell {{#unless mana.isSpellcaster}}non-caster{{/unless}}"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Mana'}} {{mana.current}}/{{mana.max}} | {{localize 'VAGABOND.Actor.Party.Card.ManaCast'}} {{mana.castingMax}}">
+      <i class="fas fa-star-christmas stat-icon"></i>
+      <span class="stat-value">{{mana.current}}/{{mana.max}}</span>
+      <span class="stat-sub">| {{mana.castingMax}}</span>
+    </div>
+
+    <div class="member-stat-cell" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Luck'}}">
+      <i class="fas fa-clover stat-icon"></i>
+      <span class="stat-value">{{luck.current}}/{{luck.total}}</span>
+    </div>
+
+    <div class="member-stat-cell" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.StudiedDice'}}">
+      <i class="fas fa-dice-d6 stat-icon"></i>
+      <span class="stat-value">{{studiedDice}}</span>
+    </div>
+
+    <div class="member-stat-cell" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Slots'}}">
+      <i class="fas fa-sack stat-icon"></i>
+      <span class="stat-value">{{inventory.used}}/{{inventory.total}}</span>
+    </div>
+
+    <div class="member-stat-cell" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Wealth'}}">
+      <i class="fas fa-coins stat-icon"></i>
+      <span class="stat-value">{{currency.gold}}<span class="currency-abbr">g</span></span>
+      <span class="stat-value">{{currency.silver}}<span class="currency-abbr">s</span></span>
+      <span class="stat-value">{{currency.copper}}<span class="currency-abbr">c</span></span>
+    </div>
+
+  </div>
+
+  {{! ── Div 5: Equipped ────────────────────────────────────── }}
+  {{#if equippedItems.length}}
+  <div class="member-equipped-list">
+    <p class="member-list-label">{{localize 'VAGABOND.Actor.Party.Card.Equipped'}}</p>
+    <ul class="member-item-list">
+      {{#each equippedItems}}
+        <li class="member-item-entry clickable" data-action="openMemberItem" data-item-id="{{id}}" data-tooltip="{{name}}">
+          <img class="member-item-icon" src="{{img}}" alt="{{name}}">
+          <span class="member-item-name">{{name}}</span>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+  {{! ── Div 6: Spells ──────────────────────────────────────── }}
+  {{#if favoritedSpells.length}}
+  <div class="member-spells-list">
+    <p class="member-list-label">{{localize 'VAGABOND.Actor.Party.Card.Spells'}}</p>
+    <ul class="member-item-list">
+      {{#each favoritedSpells}}
+        <li class="member-item-entry clickable" data-action="openMemberItem" data-item-id="{{id}}" data-tooltip="{{name}}">
+          <img class="member-item-icon" src="{{img}}" alt="{{name}}">
+          <span class="member-item-name">{{name}}</span>
+        </li>
+      {{/each}}
+    </ul>
   </div>
   {{/if}}
 

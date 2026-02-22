@@ -7,10 +7,10 @@
 
   {{! ── Supplies Bar ───────────────────────────────────── }}
   <div class="party-supplies-bar">
-    <span class="supplies-label">{{localize 'VAGABOND.Actor.Party.Card.Rations'}}</span>
+    <span class="supplies-label"><i class="fa-sharp fa-regular fa-wheat"></i> {{localize 'VAGABOND.Actor.Party.Card.Rations'}}: </span>
     <span class="supplies-value">{{supplies.rations}}</span>
     <span class="supplies-sep">·</span>
-    <span class="supplies-label">{{localize 'VAGABOND.Actor.Party.Card.Beverages'}}</span>
+    <span class="supplies-label"><i class="fa-solid fa-droplet"></i> {{localize 'VAGABOND.Actor.Party.Card.Beverages'}}: </span>
     <span class="supplies-value">{{supplies.beverages}}</span>
 
     <span class="supplies-wealth">
@@ -25,6 +25,15 @@
   <div class="party-members-header">
     <button
       type="button"
+      class="party-compact-view-btn"
+      data-action="openCompactView"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.CompactView.Open'}}"
+    >
+      <i class="fas fa-table-columns"></i>
+      {{localize 'VAGABOND.Actor.Party.CompactView.Open'}}
+    </button>
+    <button
+      type="button"
       class="party-add-member"
       data-action="openMemberPicker"
       data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.AddMember'}}"
@@ -36,7 +45,7 @@
 
   {{! ── Member Card Grid ───────────────────────────────── }}
   {{#if members.length}}
-    <div class="party-member-grid">
+    <div class="party-member-grid" style="--member-count: {{members.length}}">
       {{#each members}}
         {{> "systems/vagabond/templates/party/party-member-card.hbs"}}
       {{/each}}

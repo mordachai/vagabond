@@ -33,17 +33,20 @@
       >
 
       <div class="vehicle-speeds">
-        <div class="vehicle-speed-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Speed'}}">
-          <i class="fas fa-gauge-high speed-icon"></i>
+        <div class="vehicle-speed-stat">
+          <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.base.label'}}: </span>
           <input type="number" name="system.vehicle.speed" value="{{system.vehicle.speed}}" class="speed-input" min="0">
+          <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
         </div>
-        <div class="vehicle-speed-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Crawl'}}">
-          <i class="fas fa-snail speed-icon"></i>
+        <div class="vehicle-speed-stat">
+          <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label'}}: </span>
           <input type="number" name="system.vehicle.crawl" value="{{system.vehicle.crawl}}" class="speed-input" min="0">
+          <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
         </div>
-        <div class="vehicle-speed-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Travel'}}">
-          <i class="fas fa-map speed-icon"></i>
+        <div class="vehicle-speed-stat">
+          <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label'}}: </span>
           <input type="number" name="system.vehicle.travel" value="{{system.vehicle.travel}}" class="speed-input" min="0">
+          <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Miles'}}</span>
         </div>
       </div>
     </div>
@@ -87,8 +90,14 @@
     <ul class="vehicle-cargo-list">
       {{#each cargo}}
         <li class="vehicle-cargo-item" data-item-id="{{id}}">
-          <img class="cargo-icon" src="{{img}}" alt="{{name}}">
-          <span class="cargo-name">{{name}}</span>
+          <img
+            class="cargo-icon clickable"
+            src="{{img}}"
+            alt="{{name}}"
+            data-action="openCargo"
+            data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.OpenCargo'}}"
+          >
+          <span class="cargo-name clickable" data-action="openCargo">{{name}}</span>
         </li>
       {{/each}}
     </ul>
