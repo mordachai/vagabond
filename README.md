@@ -16,7 +16,15 @@ _You need the book (digital or paperback) to have access to the compendia contai
 ## Key Features
 
 ### **New feature:** Party Sheet and Vehicles
-GMs can check main data of the party in a easy way, including a mini dashboard that you can position anywhere (compact mode). And beyond that this sheet can be used for a party vehicle! Form simple rides to complex airships, it allows the creation of multiple parts, where you can palce crew members and ask for rolls. Each part with their indvidual HP, Armor and Damage. 
+<img width="1270" height="712" alt="image" src="https://github.com/user-attachments/assets/92924b4a-ec08-4eba-b5d6-d3f51946175c" />
+
+GMs can check main data of the party in a easy way, including a mini dashboard that you can position anywhere (compact mode). And beyond that this sheet can be used for a party vehicle!
+
+<img width="1431" height="817" alt="image" src="https://github.com/user-attachments/assets/45b2bcb5-b5bf-4893-b313-de232eb61179" />
+
+From simple rides to complex airships, it allows the creation of multiple parts where you can place crew members and request rolls. Each part has its own individual HP, Armor, and Damage. All vehicles also have a Cargo section where you can place any number of Container items. With this, you can have huge transporters with high capacity and smaller stashes for your smugglers, all in the same vehicle. The parts system gives you freedom to choose the level of complexity you want at your table.
+
+---
 
 ### **New feature:** Level Up menu
 Click on the XP label at the top right of the character sheet to open the level up menu
