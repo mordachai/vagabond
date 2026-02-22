@@ -15,6 +15,9 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Key Features
 
+### **New feature:** Party Sheet and Vehicles
+GMs can check main data of the party in a easy way, including a mini dashboard that you can position anywhere (compact mode). And beyond that this sheet can be used for a party vehicle! Form simple rides to complex airships, it allows the creation of multiple parts, where you can palce crew members and ask for rolls. Each part with their indvidual HP, Armor and Damage. 
+
 ### **New feature:** Level Up menu
 Click on the XP label at the top right of the character sheet to open the level up menu
 
