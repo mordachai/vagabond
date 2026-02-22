@@ -1,0 +1,111 @@
+{{! Vehicle Part Details Tab }}
+<section
+  class='tab details vehicle-part-details {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='details'
+>
+  <div class='equipment-item-content'>
+
+    {{! ── Description ──────────────────────────────────────────────────── }}
+    <div class='form-group'>
+      <div class='equipment-description'>
+        {{#if editable}}
+          <prose-mirror
+            name='system.description'
+            data-document-uuid='{{item.uuid}}'
+            value='{{system.description}}'
+            collaborate='true'
+            toggled='true'
+          >
+            {{{enriched.description}}}
+          </prose-mirror>
+        {{else}}
+          <div>{{{enriched.description}}}</div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{! ── Part Statistics ──────────────────────────────────────────────── }}
+    <div class='form-group'>
+      <label class='resource-label'>{{localize 'VAGABOND.Item.VehiclePart.Stats'}}</label>
+
+      {{! HP }}
+      <div class='vehicle-part-field-row'>
+        <label class='vehicle-part-field-label'>{{localize 'VAGABOND.Item.VehiclePart.HP'}}</label>
+        <div class='vehicle-part-hp-inputs'>
+          <input
+            type='number'
+            name='system.health.value'
+            value='{{system.health.value}}'
+            min='0'
+            data-tooltip='{{localize "VAGABOND.Item.VehiclePart.HPCurrent"}}'
+          >
+          <span class='vehicle-part-sep'>/</span>
+          <input
+            type='number'
+            name='system.health.max'
+            value='{{system.health.max}}'
+            min='0'
+            data-tooltip='{{localize "VAGABOND.Item.VehiclePart.HPMax"}}'
+          >
+        </div>
+      </div>
+
+      {{! Armor }}
+      <div class='vehicle-part-field-row'>
+        <label class='vehicle-part-field-label'>{{localize 'VAGABOND.Item.VehiclePart.Armor'}}</label>
+        <input
+          type='number'
+          name='system.armor'
+          value='{{system.armor}}'
+          min='0'
+          class='vehicle-part-number-input'
+        >
+      </div>
+
+      {{! Attack Modifier }}
+      <div class='vehicle-part-field-row'>
+        <label class='vehicle-part-field-label'>{{localize 'VAGABOND.Item.VehiclePart.AttackModifier'}}</label>
+        <input
+          type='number'
+          name='system.attackModifier'
+          value='{{system.attackModifier}}'
+          class='vehicle-part-number-input'
+        >
+      </div>
+
+      {{! Damage Formula }}
+      <div class='vehicle-part-field-row'>
+        <label class='vehicle-part-field-label'>{{localize 'VAGABOND.Item.VehiclePart.DamageFormula'}}</label>
+        <input
+          type='text'
+          name='system.damageFormula'
+          value='{{system.damageFormula}}'
+          placeholder='1d6'
+          class='vehicle-part-formula-input'
+        >
+      </div>
+
+      {{! Damage Type }}
+      <div class='vehicle-part-field-row'>
+        <label class='vehicle-part-field-label'>{{localize 'VAGABOND.Item.VehiclePart.DamageType'}}</label>
+        <select name='system.damageType' class='vehicle-part-select'>
+          {{#each config.damageTypes as |label key|}}
+            {{#unless (eq key '-')}}
+              <option value='{{key}}' {{#if (eq ../system.damageType key)}}selected{{/if}}>
+                {{localize label}}
+              </option>
+            {{/unless}}
+          {{/each}}
+        </select>
+      </div>
+
+    </div>
+
+    {{! ── Crew note ────────────────────────────────────────────────────── }}
+    <p class='vehicle-part-crew-note hint'>
+      {{localize 'VAGABOND.Item.VehiclePart.CrewNote'}}
+    </p>
+
+  </div>
+</section>

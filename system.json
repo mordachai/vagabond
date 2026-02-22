@@ -22,6 +22,9 @@
         },
         "npc": {
             "htmlFields": ["biography"]
+        },
+        "party": {
+            "htmlFields": ["biography"]
         }
     },
     "Item": {
@@ -31,7 +34,8 @@
       "class": {"htmlFields": ["description"]},
       "perk": {"htmlFields": ["description"]},
       "starterPack": {"htmlFields": ["description"]},
-      "container": {"htmlFields": ["description"]}
+      "container": {"htmlFields": ["description"]},
+      "vehiclePart": {"htmlFields": ["description"]}
     }
   },
   "flags": {

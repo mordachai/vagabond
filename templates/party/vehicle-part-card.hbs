@@ -1,0 +1,160 @@
+{{! Vehicle Part Card — one per vehiclePart item owned by the party actor }}
+<div class="vehicle-part-card" data-part-id="{{id}}">
+
+  {{! ── Part Header ──────────────────────────────────────────────────────── }}
+  <div class="part-header">
+    <img
+      class="part-icon clickable"
+      src="{{img}}"
+      alt="{{name}}"
+      data-action="editPart"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.EditPart'}}"
+    >
+    <h4 class="part-name clickable" data-action="editPart">{{name}}</h4>
+    <button
+      type="button"
+      class="part-delete-btn"
+      data-action="deletePart"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.DeletePart'}}"
+    ><i class="fas fa-trash"></i></button>
+  </div>
+
+  {{! ── HP bar ───────────────────────────────────────────────────────────── }}
+  <div class="part-hp-row">
+    <i class="fas fa-heart part-hp-icon"></i>
+    <input
+      type="number"
+      class="part-field"
+      data-part-field="system.health.value"
+      value="{{health.value}}"
+      min="0"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.HPCurrent'}}"
+    >
+    <span class="part-sep">/</span>
+    <input
+      type="number"
+      class="part-field"
+      data-part-field="system.health.max"
+      value="{{health.max}}"
+      min="0"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.HPMax'}}"
+    >
+    <div class="part-hp-bar-wrap">
+      <div class="part-hp-bar-fill" style="width: {{health.pct}}%"></div>
+    </div>
+  </div>
+
+  {{! ── Stats row ────────────────────────────────────────────────────────── }}
+  <div class="part-stats-row">
+
+    {{! Armor }}
+    <div class="part-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Armor'}}">
+      <i class="fas fa-shield-halved part-stat-icon"></i>
+      <input
+        type="number"
+        class="part-field part-stat-input"
+        data-part-field="system.armor"
+        value="{{armor}}"
+        min="0"
+      >
+    </div>
+
+    {{! Attack modifier }}
+    <div class="part-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.AttackMod'}}">
+      <i class="fas fa-crosshairs part-stat-icon"></i>
+      <span class="part-sign">+</span>
+      <input
+        type="number"
+        class="part-field part-stat-input"
+        data-part-field="system.attackModifier"
+        value="{{attackModifier}}"
+      >
+    </div>
+
+    {{! Damage formula }}
+    <div class="part-stat">
+      <i
+        class="fas fa-burst part-stat-icon part-roll-damage"
+        data-part-id="{{id}}"
+        data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.RollDamage'}}"
+      ></i>
+      <input
+        type="text"
+        class="part-field part-formula-input"
+        data-part-field="system.damageFormula"
+        value="{{damageFormula}}"
+        placeholder="1d6"
+      >
+    </div>
+
+    {{! Damage type }}
+    <div class="part-stat">
+      <select class="part-field part-damage-type" data-part-field="system.damageType">
+        {{#each config.damageTypes as |label key|}}
+          {{#unless (eq key '-')}}
+            <option value="{{key}}" {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+          {{/unless}}
+        {{/each}}
+      </select>
+    </div>
+
+  </div>
+
+  {{! ── Crew ─────────────────────────────────────────────────────────────── }}
+  <div class="part-crew-section">
+    <div class="part-crew-header">
+      <span class="part-crew-label">{{localize 'VAGABOND.Actor.Party.Vehicle.Crew'}}</span>
+      <button
+        type="button"
+        class="part-add-crew"
+        data-action="addCrew"
+        data-part-id="{{id}}"
+        data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.AddCrew'}}"
+      ><i class="fas fa-user-plus"></i></button>
+    </div>
+
+    {{#if crew.length}}
+      <div class="part-crew-list">
+        {{#each crew}}
+          <div class="part-crew-member" data-actor-uuid="{{uuid}}">
+            <img class="crew-portrait" src="{{img}}" alt="{{name}}" data-tooltip="{{name}}">
+            <span class="crew-name">{{name}}</span>
+            <select
+              class="crew-skill-select"
+              data-part-id="{{../id}}"
+              data-actor-uuid="{{uuid}}"
+              data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.AttackSkill'}}"
+            >
+              {{#each ../config.weaponSkills as |label key|}}
+                <option value="{{key}}" {{#if (eq ../skill key)}}selected{{/if}}>{{localize label}}</option>
+              {{/each}}
+            </select>
+            <span
+              class="crew-skill-difficulty"
+              data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Difficulty'}}"
+            >–</span>
+            <button
+              type="button"
+              class="crew-attack-btn"
+              data-action="attackPart"
+              data-part-id="{{../id}}"
+              data-actor-uuid="{{uuid}}"
+              data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Attack'}}"
+            ><i class="fas fa-dice-d20"></i></button>
+            <button
+              type="button"
+              class="crew-remove-btn"
+              data-action="removeCrew"
+              data-part-id="{{../id}}"
+              data-actor-uuid="{{uuid}}"
+              data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.RemoveCrew'}}"
+            ><i class="fas fa-times"></i></button>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="part-crew-empty">{{localize 'VAGABOND.Actor.Party.Vehicle.NoCrew'}}</p>
+    {{/if}}
+  </div>
+
+</div>

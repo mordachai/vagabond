@@ -1,0 +1,889 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Party Sheet — party tab, member cards, vehicle tab
+// Imported inside `.vagabond {}` in vagabond.scss — do NOT add an outer wrapper
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Supplies bar ──────────────────────────────────────────────────────────────
+.party-supplies-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: $c-inset-1;
+  border-bottom: 1px solid $c-tan-lite;
+  font-family: $font-title;
+  font-size: 1.2em;
+
+  .supplies-label {
+    color: $c-muted;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .supplies-value {
+    font-family: $font-number;
+    font-size: 15px;
+    font-weight: bold;
+    color: $c-text-1;
+    min-width: 20px;
+  }
+
+  .supplies-sep {
+    color: $c-tan;
+    margin: 0 4px;
+  }
+
+  // Wealth group pushed to the far right
+  .supplies-wealth {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i { color: $c-muted; font-size: 0.95em; }
+  }
+}
+
+// Currency abbreviation (g / s / c)
+.currency-abbr {
+  font-size: 0.75em;
+  color: $c-muted;
+  margin-left: 1px;
+}
+
+// ── Add Member header ──────────────────────────────────────────────────────────
+.party-members-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 10px;
+
+  .party-add-member {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: $c-bg2;
+    color: $c-white;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 0.8; }
+
+    i { font-size: 1.2em; }
+  }
+}
+
+// ── Empty state ────────────────────────────────────────────────────────────────
+.party-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: $c-muted;
+  text-align: center;
+  font-family: $font-title;
+
+  p { margin: 4px 0; }
+  .hint { font-size: 12px; opacity: 0.7; }
+}
+
+// ── Member card grid ───────────────────────────────────────────────────────────
+.party-member-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+// ── Member card ────────────────────────────────────────────────────────────────
+.party-member-card {
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 1px solid $c-tan-lite;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  // ── Card Header ────────────────────────────────────────────────────────────
+  .member-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px;
+    background: $c-inset-2;
+    border-bottom: 1px solid $c-tan-lite;
+    position: relative;
+  }
+
+  .member-remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: $c-muted;
+    font-size: 1.0em;
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+
+    &:hover {
+      color: $c-red;
+      background: rgba(157, 0, 0, 0.1);
+    }
+  }
+
+  .member-portrait {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid $c-tan-lite;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.15s;
+
+    &:hover { border-color: $c-bg2; }
+  }
+
+  .member-header-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    padding-right: 20px; // space for remove btn
+  }
+
+  .member-name {
+    font-family: $font-title;
+    font-size: 14px;
+    color: $c-text-1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .member-subtitle {
+    font-family: $font-title;
+    font-size: 1.05em;
+    color: $c-muted;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .member-sep { opacity: 0.5; margin: 0 2px; }
+  }
+
+  .member-player {
+    font-family: $font-title;
+    font-size: 1.0em;
+    color: $c-muted;
+    margin: 0;
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .member-player-icon { font-size: 0.85em; margin-right: 2px; }
+  }
+
+  // ── Resource bars (HP + Mana) ────────────────────────────────────────────
+  .member-resource-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .resource-icon {
+    font-size: 1.0em;
+    width: 12px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .hp-icon   { color: #c0392b; }
+  .mana-icon { color: #8e44ad; }
+  .xp-icon   { color: #c0912b; }
+
+  .member-resource-bar {
+    flex: 1;
+    height: 6px;
+    background: $c-tan-lite;
+    border-radius: 3px;
+    overflow: hidden;
+
+    &.mana-bar { height: 5px; }
+  }
+
+  .member-resource-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+
+    &.hp-fill   { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+    &.mana-fill { background: linear-gradient(90deg, #6c3483, #9b59b6); }
+    &.xp-fill   { background: linear-gradient(90deg, #c0912b, #f0b429); }
+  }
+
+  .resource-label {
+    font-family: $font-number;
+    font-size: 1.2em;
+    color: $c-text-1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .resource-sep {
+    color: $c-tan;
+    margin: 0 1px;
+  }
+
+  // ── Fatigue pips ──────────────────────────────────────────────────────────
+  .member-fatigue-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .fatigue-icon { color: $c-muted; }
+
+  .member-fatigue-pips {
+    display: flex;
+    gap: 3px;
+  }
+
+  .fatigue-pip {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    border: 1px solid $c-tan;
+    background: transparent;
+
+    &.filled {
+      background: $c-dark;
+      border-color: $c-dark;
+    }
+  }
+
+  // ── Stats row ────────────────────────────────────────────────────────────
+  .member-stats-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .member-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+
+    &.non-caster { opacity: 0.35; }
+  }
+
+  .stat-icon {
+    font-size: 1.2em;
+    width: 14px;
+    text-align: center;
+    color: $c-muted;
+    flex-shrink: 0;
+  }
+
+  .stat-value {
+    font-family: $font-number;
+    font-size: 1.2em;
+    color: $c-text-1;
+  }
+
+  .mana-cast-label {
+    font-family: $font-number;
+    font-size: 1.2em;
+    color: $c-muted;
+    margin-left: 2px;
+  }
+
+  .member-stat-pair {
+    display: flex;
+    gap: 12px;
+
+    .member-stat { flex: 1; }
+  }
+
+  // ── Saves row ────────────────────────────────────────────────────────────
+  .member-saves-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+  }
+
+  .member-save {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .save-icon  { font-size: 1.2em; color: $c-muted; }
+
+  .save-value {
+    font-family: $font-number;
+    font-size: 14px;
+    font-weight: bold;
+    color: $c-text-1;
+  }
+
+  // ── Equipped items + spells ───────────────────────────────────────────────
+  .member-equipped-list,
+  .member-spells-list {
+    padding: 4px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .member-list-label {
+    font-family: $font-title;
+    font-size: 1.0em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $c-muted;
+    margin: 0 0 3px;
+  }
+
+  .member-item-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  .member-item-entry {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: $c-inset-2;
+    border: 1px solid $c-tan-lite;
+    border-radius: 3px;
+    padding: 1px 4px;
+    max-width: 130px;
+  }
+
+  .member-item-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .member-item-name {
+    font-family: $font-title;
+    font-size: 1.0em;
+    color: $c-text-1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Status icons ──────────────────────────────────────────────────────────
+  .member-statuses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+
+  .member-status-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid $c-tan-lite;
+    cursor: pointer;
+    transition: transform 0.1s, border-color 0.15s;
+
+    &:hover {
+      transform: scale(1.15);
+      border-color: $c-bg2;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Vehicle Tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Vehicle Header ─────────────────────────────────────────────────────────
+.vehicle-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 1px solid $c-tan-lite;
+  background: $c-inset-2;
+
+  .vehicle-portrait {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid $c-tan-lite;
+    flex-shrink: 0;
+  }
+
+  .vehicle-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .vehicle-name {
+    font-family: $font-title;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: $c-text-1;
+    border-bottom: 1px solid $c-tan-lite;
+    padding-bottom: 2px;
+    width: 100%;
+  }
+
+  .vehicle-type {
+    font-family: $font-title;
+    font-size: 1.3em;
+    color: $c-muted;
+    width: 100%;
+  }
+
+  .vehicle-speeds {
+    display: flex;
+    gap: 10px;
+    margin-top: 2px;
+  }
+
+  .vehicle-speed-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .speed-icon {
+      font-size: 1.0em;
+      color: $c-muted;
+    }
+
+    .speed-input {
+      width: 40px;
+      font-family: $font-number;
+      font-size: 1.2em;
+      text-align: center;
+    }
+  }
+}
+
+// ── Section header (shared by Parts and Cargo) ─────────────────────────────
+.vehicle-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid $c-tan-lite;
+  background: $c-inset-2;
+
+  .vehicle-section-title {
+    font-family: $font-title;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $c-muted;
+    margin: 0;
+  }
+
+  .vehicle-add-part {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: $c-bg2;
+    color: $c-white;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 0.8; }
+    i { font-size: 1.0em; }
+  }
+}
+
+// ── Empty state ────────────────────────────────────────────────────────────
+.vehicle-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  color: $c-muted;
+  text-align: center;
+  font-family: $font-title;
+
+  p { margin: 4px 0; }
+  .hint { font-size: 12px; opacity: 0.7; }
+}
+
+// ── Parts grid ─────────────────────────────────────────────────────────────
+.vehicle-parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+// ── Vehicle Part Card ──────────────────────────────────────────────────────
+.vehicle-part-card {
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 1px solid $c-tan-lite;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+
+  .part-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: $c-inset-2;
+    border-bottom: 1px solid $c-tan-lite;
+    position: relative;
+  }
+
+  .part-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid $c-tan-lite;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.15s;
+    &:hover { border-color: $c-bg2; }
+  }
+
+  .part-name {
+    flex: 1;
+    font-family: $font-title;
+    font-size: 1.2em;
+    color: $c-text-1;
+    margin: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover { text-decoration: underline; }
+  }
+
+  .part-delete-btn {
+    background: transparent;
+    border: none;
+    color: $c-muted;
+    font-size: 1.0em;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: color 0.15s, background 0.15s;
+    &:hover { color: $c-red; background: rgba(157, 0, 0, 0.1); }
+  }
+
+  // HP bar row
+  .part-hp-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .part-hp-icon {
+    font-size: 1.0em;
+    color: #c0392b;
+    flex-shrink: 0;
+  }
+
+  .part-sep { color: $c-tan; font-size: 1.2em; }
+
+  .part-hp-bar-wrap {
+    flex: 1;
+    height: 5px;
+    background: $c-tan-lite;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-left: 4px;
+  }
+
+  .part-hp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c0392b, #27ae60);
+    background-size: 200% 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  // Stats row
+  .part-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+    flex-wrap: wrap;
+  }
+
+  .part-stat {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 1.2em;
+
+    .part-stat-icon { font-size: 1.0em; color: $c-muted; }
+    .part-roll-damage {
+      cursor: pointer;
+      transition: color 0.15s;
+      &:hover { color: $c-bg2; }
+    }
+    .part-sign { color: $c-muted; font-size: 1.2em; }
+  }
+
+  .part-stat-input {
+    width: 38px;
+    font-family: $font-title;
+    font-size: 1.2em;
+    text-align: center;
+  }
+
+  .part-formula-input {
+    width: 52px;
+    font-family: $font-title;
+    font-size: 1.2em;
+  }
+
+  .part-damage-type {
+    font-family: $font-title;
+    font-size: 1.2em;
+    border: none;
+    border-bottom: 1px solid $c-tan-lite;
+    background: transparent;
+    color: $c-text-1;
+    cursor: pointer;
+    padding: 1px 2px;
+    max-width: 150px;
+  }
+
+  // Part field shared input styles
+  .part-field {
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: $c-text-1;
+    border-radius: 0;
+    transition: border-color 0.15s;
+
+    &:focus { border-bottom-color: $c-bg2; outline: none; }
+  }
+
+  // Crew section
+  .part-crew-section {
+    padding: 5px 8px;
+  }
+
+  .part-crew-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .part-crew-label {
+    font-family: $font-title;
+    font-size: 1.0em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $c-muted;
+  }
+
+  .part-add-crew {
+    background: transparent;
+    border: 1px solid $c-tan-lite;
+    border-radius: 3px;
+    color: $c-muted;
+    font-size: 1.0em;
+    padding: 1px 5px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover { color: $c-bg2; border-color: $c-bg2; }
+  }
+
+  .part-crew-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .part-crew-member {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 0;
+
+    .crew-portrait {
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 2px;
+      border: 1px solid $c-tan-lite;
+      flex-shrink: 0;
+    }
+
+    .crew-name {
+      flex: 1;
+      font-family: $font-title;
+      font-size: 1.2em;
+      color: $c-text-1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .crew-skill-select {
+      font-family: $font-title;
+      font-size: 1.0em;
+      border: none;
+      border-bottom: 1px solid $c-tan-lite;
+      background: transparent;
+      color: $c-text-1;
+      cursor: pointer;
+      padding: 1px 2px;
+      max-width: 64px;
+      flex-shrink: 0;
+
+      &:focus { outline: none; border-bottom-color: $c-bg2; }
+    }
+
+    .crew-skill-difficulty {
+      font-family: $font-title;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: $c-text-1;
+      min-width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .crew-attack-btn {
+      background: $c-bg2;
+      border: none;
+      border-radius: 3px;
+      color: $c-white;
+      font-size: 1.0em;
+      cursor: pointer;
+      padding: 2px 5px;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+      &:hover { opacity: 0.8; }
+    }
+
+    .crew-remove-btn {
+      background: transparent;
+      border: none;
+      color: $c-muted;
+      font-size: 9px;
+      cursor: pointer;
+      padding: 1px 3px;
+      border-radius: 2px;
+      transition: color 0.15s;
+      flex-shrink: 0;
+      &:hover { color: $c-red; }
+    }
+  }
+
+  .part-crew-empty {
+    font-family: $font-title;
+    font-size: 1.0em;
+    color: $c-muted;
+    text-align: center;
+    padding: 4px 0;
+    border: 1px dashed $c-tan-lite;
+    border-radius: 3px;
+    margin: 2px 0;
+  }
+}
+
+// ── Cargo ───────────────────────────────────────────────────────────────────
+.vehicle-cargo-section {
+  padding-bottom: 8px;
+}
+
+.vehicle-cargo-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vehicle-cargo-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: $c-inset-2;
+  border: 1px solid $c-tan-lite;
+  border-radius: 3px;
+
+  .cargo-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .cargo-name {
+    font-family: $font-title;
+    font-size: 12px;
+    color: $c-text-1;
+  }
+}

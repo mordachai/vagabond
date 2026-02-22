@@ -1,0 +1,51 @@
+{{! Party Tab — supplies bar + member card grid }}
+<section
+  class="tab party scrollable {{tab.cssClass}}"
+  data-group="primary"
+  data-tab="party"
+>
+
+  {{! ── Supplies Bar ───────────────────────────────────── }}
+  <div class="party-supplies-bar">
+    <span class="supplies-label">{{localize 'VAGABOND.Actor.Party.Card.Rations'}}</span>
+    <span class="supplies-value">{{supplies.rations}}</span>
+    <span class="supplies-sep">·</span>
+    <span class="supplies-label">{{localize 'VAGABOND.Actor.Party.Card.Beverages'}}</span>
+    <span class="supplies-value">{{supplies.beverages}}</span>
+
+    <span class="supplies-wealth">
+      <i class="fas fa-coins" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.TotalWealth'}}"></i>
+      <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Gold'}}">{{supplies.currency.gold}}<span class="currency-abbr">g</span></span>
+      <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Silver'}}">{{supplies.currency.silver}}<span class="currency-abbr">s</span></span>
+      <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Copper'}}">{{supplies.currency.copper}}<span class="currency-abbr">c</span></span>
+    </span>
+  </div>
+
+  {{! ── Member Management Header ──────────────────────── }}
+  <div class="party-members-header">
+    <button
+      type="button"
+      class="party-add-member"
+      data-action="openMemberPicker"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.AddMember'}}"
+    >
+      <i class="fas fa-user-plus"></i>
+      {{localize 'VAGABOND.Actor.Party.Card.AddMember'}}
+    </button>
+  </div>
+
+  {{! ── Member Card Grid ───────────────────────────────── }}
+  {{#if members.length}}
+    <div class="party-member-grid">
+      {{#each members}}
+        {{> "systems/vagabond/templates/party/party-member-card.hbs"}}
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="party-empty-state">
+      <p>{{localize 'VAGABOND.Actor.Party.Card.NoMembers'}}</p>
+      <p class="hint">{{localize 'VAGABOND.Actor.Party.Card.NoMembersHint'}}</p>
+    </div>
+  {{/if}}
+
+</section>

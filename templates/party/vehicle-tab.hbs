@@ -1,0 +1,98 @@
+{{! Vehicle Tab — vehicle stats + parts + cargo }}
+<section
+  class="tab vehicle scrollable {{tab.cssClass}}"
+  data-group="primary"
+  data-tab="vehicle"
+>
+
+  {{! ── Vehicle Header ───────────────────────────────────────────────────── }}
+  <div class="vehicle-header">
+    <img
+      class="vehicle-portrait"
+      src="{{actor.img}}"
+      alt="{{actor.name}}"
+      data-edit="img"
+      data-action="onEditImage"
+      data-tooltip="{{actor.name}}"
+    >
+
+    <div class="vehicle-info">
+      <input
+        type="text"
+        name="name"
+        value="{{actor.name}}"
+        class="vehicle-name"
+        placeholder="{{localize 'VAGABOND.Actor.Party.Vehicle.NamePlaceholder'}}"
+      >
+      <input
+        type="text"
+        name="system.vehicle.type"
+        value="{{system.vehicle.type}}"
+        class="vehicle-type"
+        placeholder="{{localize 'VAGABOND.Actor.Party.Vehicle.TypePlaceholder'}}"
+      >
+
+      <div class="vehicle-speeds">
+        <div class="vehicle-speed-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Speed'}}">
+          <i class="fas fa-gauge-high speed-icon"></i>
+          <input type="number" name="system.vehicle.speed" value="{{system.vehicle.speed}}" class="speed-input" min="0">
+        </div>
+        <div class="vehicle-speed-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Crawl'}}">
+          <i class="fas fa-snail speed-icon"></i>
+          <input type="number" name="system.vehicle.crawl" value="{{system.vehicle.crawl}}" class="speed-input" min="0">
+        </div>
+        <div class="vehicle-speed-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.Travel'}}">
+          <i class="fas fa-map speed-icon"></i>
+          <input type="number" name="system.vehicle.travel" value="{{system.vehicle.travel}}" class="speed-input" min="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{! ── Vehicle Parts ─────────────────────────────────────────────────────── }}
+  <div class="vehicle-parts-section">
+    <div class="vehicle-section-header">
+      <h3 class="vehicle-section-title">{{localize 'VAGABOND.Actor.Party.Vehicle.Parts'}}</h3>
+      <button
+        type="button"
+        class="vehicle-add-part"
+        data-action="addPart"
+        data-tooltip="{{localize 'VAGABOND.Actor.Party.Vehicle.AddPart'}}"
+      >
+        <i class="fas fa-plus"></i>
+        {{localize 'VAGABOND.Actor.Party.Vehicle.AddPart'}}
+      </button>
+    </div>
+
+    {{#if vehicleParts.length}}
+      <div class="vehicle-parts-grid">
+        {{#each vehicleParts}}
+          {{> "systems/vagabond/templates/party/vehicle-part-card.hbs" config=../config}}
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="vehicle-empty-state">
+        <p>{{localize 'VAGABOND.Actor.Party.Vehicle.NoParts'}}</p>
+        <p class="hint">{{localize 'VAGABOND.Actor.Party.Vehicle.NoPartsHint'}}</p>
+      </div>
+    {{/if}}
+  </div>
+
+  {{! ── Cargo ────────────────────────────────────────────────────────────── }}
+  {{#if cargo.length}}
+  <div class="vehicle-cargo-section">
+    <div class="vehicle-section-header">
+      <h3 class="vehicle-section-title">{{localize 'VAGABOND.Actor.Party.Vehicle.Cargo'}}</h3>
+    </div>
+    <ul class="vehicle-cargo-list">
+      {{#each cargo}}
+        <li class="vehicle-cargo-item" data-item-id="{{id}}">
+          <img class="cargo-icon" src="{{img}}" alt="{{name}}">
+          <span class="cargo-name">{{name}}</span>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+</section>

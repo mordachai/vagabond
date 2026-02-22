@@ -7384,6 +7384,45 @@ ol#combat-tracker.directory-list {
   border: 1px inset rgba(0, 0, 0, 0.1);
   min-height: 32px;
 }
+.vagabond .vehicle-part-details .vehicle-part-field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.vagabond .vehicle-part-details .vehicle-part-field-row .vehicle-part-field-label {
+  flex: 0 0 130px;
+  font-size: 0.9em;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .vehicle-part-details .vehicle-part-hp-inputs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .vehicle-part-details .vehicle-part-hp-inputs input {
+  width: 50px;
+  text-align: center;
+}
+.vagabond .vehicle-part-details .vehicle-part-hp-inputs .vehicle-part-sep {
+  color: var(--vagabond-c-muted);
+}
+.vagabond .vehicle-part-details .vehicle-part-number-input {
+  width: 60px;
+  text-align: center;
+}
+.vagabond .vehicle-part-details .vehicle-part-formula-input {
+  width: 80px;
+}
+.vagabond .vehicle-part-details .vehicle-part-select {
+  flex: 1;
+}
+.vagabond .vehicle-part-details .vehicle-part-crew-note {
+  margin-top: 12px;
+  font-size: 0.85em;
+  color: var(--vagabond-c-muted);
+  font-style: italic;
+}
 .vagabond .starter-pack-details-wrapper .starter-pack-section {
   margin-bottom: 1rem;
 }
@@ -10973,6 +11012,832 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-field-display i {
   color: var(--vagabond-c-dark);
+}
+.vagabond .party-supplies-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--vagabond-c-inset-1);
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+}
+.vagabond .party-supplies-bar .supplies-label {
+  color: var(--vagabond-c-muted);
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.vagabond .party-supplies-bar .supplies-value {
+  font-family: "Ludlow", serif;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--vagabond-c-text-primary);
+  min-width: 20px;
+}
+.vagabond .party-supplies-bar .supplies-sep {
+  color: var(--vagabond-c-tan);
+  margin: 0 4px;
+}
+.vagabond .party-supplies-bar .supplies-wealth {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .party-supplies-bar .supplies-wealth i {
+  color: var(--vagabond-c-muted);
+  font-size: 0.95em;
+}
+.vagabond .currency-abbr {
+  font-size: 0.75em;
+  color: var(--vagabond-c-muted);
+  margin-left: 1px;
+}
+.vagabond .party-members-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 10px;
+}
+.vagabond .party-members-header .party-add-member {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-white);
+  border: none;
+  border-radius: 4px;
+  font-family: "Germania", serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.vagabond .party-members-header .party-add-member:hover {
+  opacity: 0.8;
+}
+.vagabond .party-members-header .party-add-member i {
+  font-size: 1.2em;
+}
+.vagabond .party-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--vagabond-c-muted);
+  text-align: center;
+  font-family: "Germania", serif;
+}
+.vagabond .party-empty-state p {
+  margin: 4px 0;
+}
+.vagabond .party-empty-state .hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .party-member-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+.vagabond .party-member-card {
+  background: var(--vagabond-bg-paper);
+  background-repeat: var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.vagabond .party-member-card .member-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px;
+  background: var(--vagabond-c-inset-2);
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  position: relative;
+}
+.vagabond .party-member-card .member-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--vagabond-c-muted);
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.vagabond .party-member-card .member-remove-btn:hover {
+  color: var(--vagabond-c-red);
+  background: rgba(157, 0, 0, 0.1);
+}
+.vagabond .party-member-card .member-portrait {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.vagabond .party-member-card .member-portrait:hover {
+  border-color: var(--vagabond-c-bg2);
+}
+.vagabond .party-member-card .member-header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-right: 20px;
+}
+.vagabond .party-member-card .member-name {
+  font-family: "Germania", serif;
+  font-size: 14px;
+  color: var(--vagabond-c-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  cursor: pointer;
+}
+.vagabond .party-member-card .member-name:hover {
+  text-decoration: underline;
+}
+.vagabond .party-member-card .member-subtitle {
+  font-family: "Germania", serif;
+  font-size: 1.05em;
+  color: var(--vagabond-c-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .party-member-card .member-subtitle .member-sep {
+  opacity: 0.5;
+  margin: 0 2px;
+}
+.vagabond .party-member-card .member-player {
+  font-family: "Germania", serif;
+  font-size: 1em;
+  color: var(--vagabond-c-muted);
+  margin: 0;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .party-member-card .member-player .member-player-icon {
+  font-size: 0.85em;
+  margin-right: 2px;
+}
+.vagabond .party-member-card .member-resource-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .party-member-card .resource-icon {
+  font-size: 1em;
+  width: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.vagabond .party-member-card .hp-icon {
+  color: #c0392b;
+}
+.vagabond .party-member-card .mana-icon {
+  color: #8e44ad;
+}
+.vagabond .party-member-card .xp-icon {
+  color: #c0912b;
+}
+.vagabond .party-member-card .member-resource-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.vagabond .party-member-card .member-resource-bar.mana-bar {
+  height: 5px;
+}
+.vagabond .party-member-card .member-resource-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.vagabond .party-member-card .member-resource-fill.hp-fill {
+  background: linear-gradient(90deg, #c0392b, #e74c3c);
+}
+.vagabond .party-member-card .member-resource-fill.mana-fill {
+  background: linear-gradient(90deg, #6c3483, #9b59b6);
+}
+.vagabond .party-member-card .member-resource-fill.xp-fill {
+  background: linear-gradient(90deg, #c0912b, #f0b429);
+}
+.vagabond .party-member-card .resource-label {
+  font-family: "Ludlow", serif;
+  font-size: 1.2em;
+  color: var(--vagabond-c-text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.vagabond .party-member-card .resource-sep {
+  color: var(--vagabond-c-tan);
+  margin: 0 1px;
+}
+.vagabond .party-member-card .member-fatigue-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .party-member-card .fatigue-icon {
+  color: var(--vagabond-c-muted);
+}
+.vagabond .party-member-card .member-fatigue-pips {
+  display: flex;
+  gap: 3px;
+}
+.vagabond .party-member-card .fatigue-pip {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid var(--vagabond-c-tan);
+  background: transparent;
+}
+.vagabond .party-member-card .fatigue-pip.filled {
+  background: var(--vagabond-c-dark);
+  border-color: var(--vagabond-c-dark);
+}
+.vagabond .party-member-card .member-stats-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond .party-member-card .member-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+.vagabond .party-member-card .member-stat.non-caster {
+  opacity: 0.35;
+}
+.vagabond .party-member-card .stat-icon {
+  font-size: 1.2em;
+  width: 14px;
+  text-align: center;
+  color: var(--vagabond-c-muted);
+  flex-shrink: 0;
+}
+.vagabond .party-member-card .stat-value {
+  font-family: "Ludlow", serif;
+  font-size: 1.2em;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .party-member-card .mana-cast-label {
+  font-family: "Ludlow", serif;
+  font-size: 1.2em;
+  color: var(--vagabond-c-muted);
+  margin-left: 2px;
+}
+.vagabond .party-member-card .member-stat-pair {
+  display: flex;
+  gap: 12px;
+}
+.vagabond .party-member-card .member-stat-pair .member-stat {
+  flex: 1;
+}
+.vagabond .party-member-card .member-saves-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond .party-member-card .member-save {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.vagabond .party-member-card .save-icon {
+  font-size: 1.2em;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .party-member-card .save-value {
+  font-family: "Ludlow", serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .party-member-card .member-equipped-list,
+.vagabond .party-member-card .member-spells-list {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond .party-member-card .member-list-label {
+  font-family: "Germania", serif;
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vagabond-c-muted);
+  margin: 0 0 3px;
+}
+.vagabond .party-member-card .member-item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.vagabond .party-member-card .member-item-entry {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  padding: 1px 4px;
+  max-width: 130px;
+}
+.vagabond .party-member-card .member-item-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.vagabond .party-member-card .member-item-name {
+  font-family: "Germania", serif;
+  font-size: 1em;
+  color: var(--vagabond-c-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .party-member-card .member-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 8px;
+}
+.vagabond .party-member-card .member-status-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.15s;
+}
+.vagabond .party-member-card .member-status-icon:hover {
+  transform: scale(1.15);
+  border-color: var(--vagabond-c-bg2);
+}
+.vagabond .vehicle-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond .vehicle-header .vehicle-portrait {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  flex-shrink: 0;
+}
+.vagabond .vehicle-header .vehicle-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.vagabond .vehicle-header .vehicle-name {
+  font-family: "Germania", serif;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: var(--vagabond-c-text-primary);
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  padding-bottom: 2px;
+  width: 100%;
+}
+.vagabond .vehicle-header .vehicle-type {
+  font-family: "Germania", serif;
+  font-size: 1.3em;
+  color: var(--vagabond-c-muted);
+  width: 100%;
+}
+.vagabond .vehicle-header .vehicle-speeds {
+  display: flex;
+  gap: 10px;
+  margin-top: 2px;
+}
+.vagabond .vehicle-header .vehicle-speed-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .vehicle-header .vehicle-speed-stat .speed-icon {
+  font-size: 1em;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .vehicle-header .vehicle-speed-stat .speed-input {
+  width: 40px;
+  font-family: "Ludlow", serif;
+  font-size: 1.2em;
+  text-align: center;
+}
+.vagabond .vehicle-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond .vehicle-section-header .vehicle-section-title {
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vagabond-c-muted);
+  margin: 0;
+}
+.vagabond .vehicle-section-header .vehicle-add-part {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-white);
+  border: none;
+  border-radius: 4px;
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.vagabond .vehicle-section-header .vehicle-add-part:hover {
+  opacity: 0.8;
+}
+.vagabond .vehicle-section-header .vehicle-add-part i {
+  font-size: 1em;
+}
+.vagabond .vehicle-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  color: var(--vagabond-c-muted);
+  text-align: center;
+  font-family: "Germania", serif;
+}
+.vagabond .vehicle-empty-state p {
+  margin: 4px 0;
+}
+.vagabond .vehicle-empty-state .hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .vehicle-parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+.vagabond .vehicle-part-card {
+  background: var(--vagabond-bg-paper);
+  background-repeat: var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+.vagabond .vehicle-part-card .part-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--vagabond-c-inset-2);
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  position: relative;
+}
+.vagabond .vehicle-part-card .part-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+.vagabond .vehicle-part-card .part-icon:hover {
+  border-color: var(--vagabond-c-bg2);
+}
+.vagabond .vehicle-part-card .part-name {
+  flex: 1;
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  color: var(--vagabond-c-text-primary);
+  margin: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .vehicle-part-card .part-name:hover {
+  text-decoration: underline;
+}
+.vagabond .vehicle-part-card .part-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--vagabond-c-muted);
+  font-size: 1em;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.vagabond .vehicle-part-card .part-delete-btn:hover {
+  color: var(--vagabond-c-red);
+  background: rgba(157, 0, 0, 0.1);
+}
+.vagabond .vehicle-part-card .part-hp-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond .vehicle-part-card .part-hp-icon {
+  font-size: 1em;
+  color: #c0392b;
+  flex-shrink: 0;
+}
+.vagabond .vehicle-part-card .part-sep {
+  color: var(--vagabond-c-tan);
+  font-size: 1.2em;
+}
+.vagabond .vehicle-part-card .part-hp-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-left: 4px;
+}
+.vagabond .vehicle-part-card .part-hp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c0392b, #27ae60);
+  background-size: 200% 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.vagabond .vehicle-part-card .part-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  flex-wrap: wrap;
+}
+.vagabond .vehicle-part-card .part-stat {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 1.2em;
+}
+.vagabond .vehicle-part-card .part-stat .part-stat-icon {
+  font-size: 1em;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .vehicle-part-card .part-stat .part-roll-damage {
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.vagabond .vehicle-part-card .part-stat .part-roll-damage:hover {
+  color: var(--vagabond-c-bg2);
+}
+.vagabond .vehicle-part-card .part-stat .part-sign {
+  color: var(--vagabond-c-muted);
+  font-size: 1.2em;
+}
+.vagabond .vehicle-part-card .part-stat-input {
+  width: 38px;
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  text-align: center;
+}
+.vagabond .vehicle-part-card .part-formula-input {
+  width: 52px;
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+}
+.vagabond .vehicle-part-card .part-damage-type {
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+  padding: 1px 2px;
+  max-width: 150px;
+}
+.vagabond .vehicle-part-card .part-field {
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+  border-radius: 0;
+  transition: border-color 0.15s;
+}
+.vagabond .vehicle-part-card .part-field:focus {
+  border-bottom-color: var(--vagabond-c-bg2);
+  outline: none;
+}
+.vagabond .vehicle-part-card .part-crew-section {
+  padding: 5px 8px;
+}
+.vagabond .vehicle-part-card .part-crew-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.vagabond .vehicle-part-card .part-crew-label {
+  font-family: "Germania", serif;
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .vehicle-part-card .part-add-crew {
+  background: transparent;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  color: var(--vagabond-c-muted);
+  font-size: 1em;
+  padding: 1px 5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.vagabond .vehicle-part-card .part-add-crew:hover {
+  color: var(--vagabond-c-bg2);
+  border-color: var(--vagabond-c-bg2);
+}
+.vagabond .vehicle-part-card .part-crew-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.vagabond .vehicle-part-card .part-crew-member {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-portrait {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  flex-shrink: 0;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-name {
+  flex: 1;
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  color: var(--vagabond-c-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-skill-select {
+  font-family: "Germania", serif;
+  font-size: 1em;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+  padding: 1px 2px;
+  max-width: 64px;
+  flex-shrink: 0;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-skill-select:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-bg2);
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-skill-difficulty {
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--vagabond-c-text-primary);
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-attack-btn {
+  background: var(--vagabond-c-bg2);
+  border: none;
+  border-radius: 3px;
+  color: var(--vagabond-c-white);
+  font-size: 1em;
+  cursor: pointer;
+  padding: 2px 5px;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-attack-btn:hover {
+  opacity: 0.8;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--vagabond-c-muted);
+  font-size: 9px;
+  cursor: pointer;
+  padding: 1px 3px;
+  border-radius: 2px;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.vagabond .vehicle-part-card .part-crew-member .crew-remove-btn:hover {
+  color: var(--vagabond-c-red);
+}
+.vagabond .vehicle-part-card .part-crew-empty {
+  font-family: "Germania", serif;
+  font-size: 1em;
+  color: var(--vagabond-c-muted);
+  text-align: center;
+  padding: 4px 0;
+  border: 1px dashed var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  margin: 2px 0;
+}
+.vagabond .vehicle-cargo-section {
+  padding-bottom: 8px;
+}
+.vagabond .vehicle-cargo-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond .vehicle-cargo-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+}
+.vagabond .vehicle-cargo-item .cargo-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.vagabond .vehicle-cargo-item .cargo-name {
+  font-family: "Germania", serif;
+  font-size: 12px;
+  color: var(--vagabond-c-text-primary);
 }
 .vagabond .item-sheet-header {
   display: flex;

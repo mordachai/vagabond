@@ -284,6 +284,9 @@
     },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
+      "Character": "Vagabond Character Sheet",
+      "NPC": "Vagabond NPC Sheet",
+      "Party": "Vagabond Party Sheet",
       "Item": "Vagabond Item Sheet"
     },
     "Settings": {
@@ -402,6 +405,87 @@
           "mana.max": {"label": "Max Mana"},
           "mana.castingMax": {"label": "Mana/Cast"},
           "manaSkill": {"label": "Casting Skill:"}
+        }
+      },
+      "Party": {
+        "Tabs": {
+          "Party": "Party",
+          "Vehicle": "Vehicle",
+          "Effects": "Effects"
+        },
+        "FIELDS": {
+          "members": {"label": "Party Members"},
+          "vehicle": {"label": "Vehicle"},
+          "vehicle.type": {"label": "Vehicle Type"},
+          "vehicle.speed": {"label": "Speed"},
+          "vehicle.crawl": {"label": "Crawl Speed"},
+          "vehicle.travel": {"label": "Travel Speed"}
+        },
+        "Vehicle": {
+          "NamePlaceholder": "Vehicle name...",
+          "TypePlaceholder": "e.g. Airship, Wagon...",
+          "Speed": "Speed",
+          "Crawl": "Crawl speed",
+          "Travel": "Travel speed",
+          "Parts": "Vehicle Parts",
+          "AddPart": "Add Part",
+          "NewPart": "New Part",
+          "EditPart": "Edit part",
+          "DeletePart": "Delete Part",
+          "DeletePartConfirm": "Delete {name}? This cannot be undone.",
+          "NoParts": "No vehicle parts yet.",
+          "NoPartsHint": "Click 'Add Part' to create a vehicle part.",
+          "HPCurrent": "Current HP",
+          "HPMax": "Maximum HP",
+          "Armor": "Armor",
+          "AttackMod": "Attack Modifier",
+          "Damage": "Damage",
+          "Crew": "Crew",
+          "AddCrew": "Add crew member",
+          "RemoveCrew": "Remove from crew",
+          "NoCrew": "No crew assigned.",
+          "NoCrewAvailable": "No available characters to assign.",
+          "Attack": "Attack with this part",
+          "AttackSkill": "Select attack skill",
+          "Difficulty": "Skill difficulty (roll this or higher)",
+          "RollDamage": "Roll damage",
+          "Cargo": "Cargo"
+        },
+        "Card": {
+          "OpenSheet": "Open character sheet",
+          "LevelAbbr": "Lv.",
+          "Player": "Player",
+          "XP": "XP",
+          "Fatigue": "Fatigue",
+          "Mana": "Mana",
+          "ManaCast": "Mana/Cast",
+          "Armor": "Armor Rating",
+          "Slots": "Inventory Slots",
+          "Luck": "Luck Points",
+          "StudiedDice": "Studied Dice",
+          "Equipped": "Equipped",
+          "Spells": "Favorite Spells",
+          "Rations": "Rations",
+          "Beverages": "Water/Beverages",
+          "NoMembers": "No party members yet.",
+          "NoMembersHint": "Drag actors onto this tab or use the + button to add members.",
+          "AddMember": "Add Member",
+          "Remove": "Remove from Party",
+          "AlreadyMember": "That actor is already a party member.",
+          "NoAvailable": "No available characters to add.",
+          "PickCharacter": "Character",
+          "Add": "Add",
+          "Wealth": "Wealth",
+          "TotalWealth": "Party Total Wealth"
+        },
+        "TokenHUD": {
+          "GatherTooltip": "Gather Party — hide all member tokens",
+          "ReleaseTooltip": "Release Party — show and spread member tokens",
+          "NoMembers": "This party has no members.",
+          "NoTokens": "No party member tokens found on this scene.",
+          "UnlinkedWarning": "Note: {names} use unlinked tokens. Their current state will be saved and restored, but any changes made while gathered will be lost.",
+          "GatherDone": "Gathered {count} party member(s).",
+          "ReleaseDone": "Released party members."
         }
       },
       "NPC": {
@@ -647,7 +731,9 @@
         "FIELDS": {
           "requiresBound": {"label": "Requires Bound"},
           "bound": {"label": "Bound"}
-        }
+        },
+        "IsSupply": "Counts as rations (tracked in party sheet)",
+        "IsBeverage": "Counts as water/beverage (tracked in party sheet)"
       },
       "Relic": {
         "FIELDS": {
@@ -682,6 +768,17 @@
           "Potion": "Concoctions that cause magical effects when consumed.",
           "Torch": "Provides Near Light for 1 hour."
         }
+      },
+      "VehiclePart": {
+        "Stats": "Part Statistics",
+        "HP": "Hit Points",
+        "HPCurrent": "Current HP",
+        "HPMax": "Max HP",
+        "Armor": "Armor",
+        "AttackModifier": "Attack Modifier",
+        "DamageFormula": "Damage Formula",
+        "DamageType": "Damage Type",
+        "CrewNote": "Crew assignment is managed from the Party sheet Vehicle tab."
       },
       "Delete": "Delete Item"
     },
@@ -1155,7 +1252,8 @@
   "TYPES": {
     "Actor": {
       "character": "Character",
-      "npc": "NPC"
+      "npc": "NPC",
+      "party": "Party"
     },
     "Item": {
       "gear": "- Remove",
@@ -1168,7 +1266,8 @@
       "perk": "Perk",
       "equipment": "Gear",
       "starterPack": "Starter Pack",
-      "container": "Container"
+      "container": "Container",
+      "vehiclePart": "Vehicle Part"
     },
     "CountdownDice": {
       "SceneControls": {

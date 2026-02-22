@@ -774,3 +774,43 @@
   border: 1px inset rgba(0, 0, 0, 0.1);
   min-height: 32px;
 }
+
+// ── Vehicle Part item sheet ──────────────────────────────────────────────
+.vehicle-part-details {
+
+  .vehicle-part-field-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+
+    .vehicle-part-field-label {
+      flex: 0 0 130px;
+      font-size: 0.9em;
+      color: $c-text-2;
+    }
+  }
+
+  .vehicle-part-hp-inputs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    input { width: 50px; text-align: center; }
+
+    .vehicle-part-sep { color: $c-muted; }
+  }
+
+  .vehicle-part-number-input { width: 60px; text-align: center; }
+
+  .vehicle-part-formula-input { width: 80px; }
+
+  .vehicle-part-select { flex: 1; }
+
+  .vehicle-part-crew-note {
+    margin-top: 12px;
+    font-size: 0.85em;
+    color: $c-muted;
+    font-style: italic;
+  }
+}
