@@ -1,0 +1,77 @@
+{{! Compact Party View — floating frameless overlay.
+    Right-click anywhere for options. Left/right-click HP and Fatigue icons to adjust. }}
+<div class="compact-members">
+  {{#each members}}
+  <div class="compact-member" data-actor-uuid="{{uuid}}">
+
+    {{! Portrait row: aside (speed + luck) LEFT, portrait RIGHT }}
+    <div class="compact-portrait-row">
+      <div class="compact-portrait-aside">
+        <div class="compact-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Speed'}}">
+          <span class="compact-speed-icon">S</span>
+          <span>{{speed}}</span>
+        </div>
+        <div class="compact-stat compact-luck"
+          data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Luck'}}">
+          <i class="fas fa-clover"></i>
+          <span>{{luck}}</span>
+        </div>
+      </div>
+      <img
+        class="compact-portrait"
+        src="{{img}}"
+        alt="{{name}}"
+        data-tooltip="{{name}} · {{localize 'VAGABOND.Actor.Party.Card.LevelAbbr'}} {{level}}"
+      >
+    </div>
+
+    {{! Stats: Armor+HP row, then Mana+Fatigue row }}
+    <div class="compact-stats">
+
+      <div class="compact-stat-row">
+        <div class="compact-stat"
+          data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Armor'}}">
+          <i class="fas fa-shield-halved"></i>
+          <span>{{armor}}</span>
+        </div>
+        <div class="compact-stat compact-hp"
+          data-tooltip="HP {{hp.value}}/{{hp.max}} | Left: −1 / Right: +1">
+          <i class="fas fa-heart"></i>
+          <span>{{hp.value}}/{{hp.max}}</span>
+        </div>
+      </div>
+
+      <div class="compact-stat-row">
+        <div class="compact-stat compact-fatigue"
+          data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}} {{fatigue}} | Left: +1 / Right: −1">
+          <i class="fas fa-skull"></i>
+          <span>{{fatigue}}</span>
+        </div>
+        <div class="compact-stat{{#unless mana.isSpellcaster}} non-caster{{/unless}}"
+          data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Mana'}} {{mana.current}}/{{mana.max}}">
+          <i class="fas fa-star-christmas"></i>
+          <span>{{mana.current}}/{{mana.max}}</span>
+        </div>
+      </div>
+
+    </div>
+
+    {{! Saves row: Reflex · Endure · Will }}
+    <div class="compact-saves-row">
+      <span class="compact-save" data-tooltip="{{saves.reflex.label}}">
+        <i class="fas fa-person-running save-icon"></i>
+        <span class="save-num">{{saves.reflex.difficulty}}</span>
+      </span>
+      <span class="compact-save" data-tooltip="{{saves.endure.label}}">
+        <i class="fas fa-shield-halved save-icon"></i>
+        <span class="save-num">{{saves.endure.difficulty}}</span>
+      </span>
+      <span class="compact-save" data-tooltip="{{saves.will.label}}">
+        <i class="fas fa-brain save-icon"></i>
+        <span class="save-num">{{saves.will.difficulty}}</span>
+      </span>
+    </div>
+
+  </div>
+  {{/each}}
+</div>

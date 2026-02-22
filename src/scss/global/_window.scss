@@ -86,7 +86,7 @@
   margin-right: -16px;
   display: flex;
   justify-content: space-around;
-  padding: 10px 32px;
+  padding: 12px 50px;
   box-shadow: 2px 2px 2px $c-inset-2;
   
   /* Target the individual tab header elements */
@@ -95,13 +95,13 @@
     background-image: url('../assets/images/sheets/navTabBG.svg');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover;
+    background-size: 100% 100%;
     color: $c-dark-bluey;
     font-weight: 600;
     font-size: 1.2rem;
     line-height: 1.2;
     overflow: visible;
-    padding: 3px 8px;
+    padding: 6px 12px;
     flex: 1; 
     flex-basis: 0; 
     text-align: center;
@@ -120,7 +120,7 @@
       background-image: url('../assets/images/sheets/navTabBG-active.svg');
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: cover;
+      background-size: 100% 100%;
       color: $c-yellow;
       text-shadow: 0 0 1px $c-bluey;
     }    

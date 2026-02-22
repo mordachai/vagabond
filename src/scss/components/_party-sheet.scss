@@ -1,0 +1,1190 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Party Sheet — party tab, member cards, vehicle tab
+// Imported inside `.vagabond {}` in vagabond.scss — do NOT add an outer wrapper
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Supplies bar ──────────────────────────────────────────────────────────────
+.party-supplies-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: $c-inset-1;
+  border-bottom: 1px solid $c-tan-lite;
+  font-family: $font-title;
+  font-size: 1.2em;
+
+  .supplies-label {
+    color: $c-yellow;
+    font-size: 1.0em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .supplies-value {
+    font-family: $font-title;
+    font-size: 1em;
+    font-weight: bold;
+    color: $c-yellow;
+    min-width: 20px;
+  }
+
+  .supplies-sep {
+    color: $c-tan;
+    margin: 0 4px;
+  }
+
+  // Wealth group pushed to the far right
+  .supplies-wealth {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i { color: $c-yellow; font-size: 1em; }
+  }
+}
+
+// Currency abbreviation (g / s / c)
+.currency-abbr {
+  font-size: 0.75em;
+  color: $c-yellow;
+  margin-left: 1px;
+}
+
+// ── Add Member header ──────────────────────────────────────────────────────────
+.party-members-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+
+  .party-compact-view-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: $c-inset-2;
+    color: $c-tan;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s, color 0.15s;
+    margin-right: auto;
+
+    &:hover { opacity: 0.9; color: $c-yellow; }
+
+    i { font-size: 1.1em; }
+  }
+
+  .party-add-member {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: $c-bg2;
+    color: $c-white;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 0.8; }
+
+    i { font-size: 1.2em; }
+  }
+}
+
+// ── Empty state ────────────────────────────────────────────────────────────────
+.party-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: $c-muted;
+  text-align: center;
+  font-family: $font-title;
+
+  p { margin: 4px 0; }
+  .hint { font-size: 12px; opacity: 0.7; }
+}
+
+// ── Member card grid ───────────────────────────────────────────────────────────
+.party-member-grid {
+  display: grid;
+  grid-template-columns: repeat(clamp(2, var(--member-count, 2), 4), 1fr);
+  gap: 15px;
+  padding: 10px;
+}
+
+// ── Member card ────────────────────────────────────────────────────────────────
+.party-member-card {
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 2px solid $c-tan-lite;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  // ── Div 1: Card Header ─────────────────────────────────────────────────────
+  .member-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px;
+    //background: $c-inset-2;
+    background-image: url('../assets/images/sheets/tabNavBG.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-bottom: 1px solid $c-tan-lite;
+    position: relative;
+    color: $c-yellow;
+    border-bottom: 3px solid $c-black;
+  }
+
+  .member-remove-btn {
+    position: absolute;
+    top: -13px;
+    right: -10px;
+    width: 18px;
+    height: 18px;
+    padding: 1px 10px;
+    border: none;
+    font-size: 0.85em;
+    cursor: pointer;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
+
+    &:hover { color: $c-white; background: rgba(198, 5, 5, 0.7); opacity: 1; }
+  }
+
+  .member-portrait-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .member-portrait {
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    background-color: $c-black;
+    border-radius: 4px;
+    border: 1px solid $c-yellow;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+
+    &:hover { border-color: $c-bg2; }
+  }
+
+  .member-level {
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-yellow;
+    margin: 0;
+    white-space: nowrap;
+    text-shadow:
+      1px 1px 0 $c-dark-bluey,
+      -1px 1px 0 $c-dark-bluey,
+      -1px -1px 0 $c-dark-bluey,
+      1px -1px 0 $c-dark-bluey;
+  }
+
+  .member-subtitle {
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-yellow;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px;
+    text-shadow:
+      1px 1px 0 $c-dark-bluey,
+      -1px 1px 0 $c-dark-bluey,
+      -1px -1px 0 $c-dark-bluey,
+      1px -1px 0 $c-dark-bluey;
+
+    .member-sep { opacity: 0.5; }
+
+    > span:first-child {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+  }
+
+  .member-speed {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .member-header-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  // Row 1: Name + XP
+  .member-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .member-name {
+    flex: 1;
+    font-family: $font-title;
+    font-size: 1.2em;
+    color: $c-yellow;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    cursor: pointer;
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .member-xp {
+    flex-shrink: 0;
+    font-family: $font-title;
+    font-size: 1em;
+    color: $c-yellow;
+    white-space: nowrap;
+
+    i { font-size: 0.8em; color: #c0912b; margin-right: 1px; }
+  }
+
+  // Row 2: HP + Fatigue as bar-backgrounds
+  .member-hpfatigue-row {
+    display: flex;
+    gap: 4px;
+  }
+
+  .member-hp-bar-bg,
+  .member-fatigue-bar-bg {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    overflow: hidden;
+    font-family: $font-title;
+    font-size: 1.05em;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.4);
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      border-radius: 3px;
+      z-index: 0;
+      transition: width 0.3s ease;
+    }
+
+    i, span { position: relative; z-index: 1; }
+    i { font-size: 0.85em; }
+    span { color: $c-yellow; }
+  }
+
+  .member-hp-bar-bg {
+    flex: 1;
+    &::before { width: var(--hp-fill, 0%); background: rgba(238, 69, 50, 0.561); }
+    i { color: $c-yellow; }
+  }
+
+  .member-fatigue-bar-bg {
+    flex: 0 0 auto;
+    margin-left: auto;
+    &::before { width: var(--fatigue-fill, 0%); background: rgba(80, 80, 80, 0.35); }
+    i { color: $c-yellow; }
+  }
+
+  // ── Div 2: Statuses ────────────────────────────────────────────────────────
+  .member-statuses {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .member-status-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid $c-tan-lite;
+    background-color: black;
+    cursor: pointer;
+    transition: transform 0.1s, border-color 0.15s;
+
+    &:hover { transform: scale(1.15); border-color: $c-bg2; }
+  }
+
+  // ── Div 3: Saves row ───────────────────────────────────────────────────────
+  .member-saves-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 4px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+  }
+
+  .member-save {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .save-icon { font-size: 1.2em; color: $c-text-2; }
+
+  .save-value {
+    font-family: $font-title;
+    font-size: 1.3em;
+    color: $c-text-2;
+  }
+
+  // ── Div 4: Stats grid (2 columns) ─────────────────────────────────────────
+  .member-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 6px;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .member-stat-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.1em;
+    min-width: 0;
+
+    &.non-caster { opacity: 0.35; }
+  }
+
+  .stat-icon {
+    font-size: 1em;
+    width: 14px;
+    text-align: center;
+    color: $c-muted;
+    flex-shrink: 0;
+  }
+
+  .stat-value {
+    font-family: $font-title;
+    font-size: 1em;
+    color: $c-text-1;
+    white-space: nowrap;
+  }
+
+  .stat-sub {
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-muted;
+    white-space: nowrap;
+  }
+
+  // ── Div 5 & 6: Equipped + Spells ──────────────────────────────────────────
+  .member-equipped-list,
+  .member-spells-list {
+    padding: 4px 8px;
+
+    &:not(:last-child) { border-bottom: 1px solid $c-tan-lite; }
+  }
+
+  .member-list-label {
+    font-family: $font-title;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $c-text-2;
+    margin: 0 0 3px;
+  }
+
+  .member-item-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  .member-item-entry {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: $c-inset-2;
+    border: 1px solid $c-tan-lite;
+    border-radius: 3px;
+    padding: 1px 4px;
+    max-width: 130px;
+  }
+
+  .member-item-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .member-item-name {
+    font-family: $font-title;
+    font-size: 1em;
+    color: $c-text-1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Vehicle Tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Vehicle Header ─────────────────────────────────────────────────────────
+.vehicle-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 2px solid $c-black;
+  background-image: url('../assets/images/sheets/tabNavBG.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .vehicle-portrait {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 10px;
+    corner-shape: scoop scoop round round;
+    border: 2px solid $c-yellow;
+    flex-shrink: 0;
+    background-color: $c-black;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+  }
+
+  .vehicle-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .vehicle-name {
+    font-family: $font-title;
+    font-size: 1.5em;
+    color: $c-white;
+    border-bottom: none;
+    width: 100%;
+    line-height: 2;
+    background-image: url('../assets/images/sheets/titleBG.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
+  }
+
+  .vehicle-type {
+    font-family: $font-title;
+    font-size: 1.3em;
+    color: $c-yellow;
+    width: 100%;
+  }
+
+  .vehicle-speeds {
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+    margin-top: 2px;
+    text-shadow:
+      2px 2px 0 $c-dark-bluey,
+      -2px 2px 0 $c-dark-bluey,
+      -2px -2px 0 $c-dark-bluey,
+      2px -2px 0 $c-dark-bluey;
+    background: $c-tan-lite;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+
+  .vehicle-speed-stat {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
+    .speed-label {
+      font-family: $font-title;
+      font-size: 1.3em;
+      color: $c-yellow;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .speed-unit {
+      font-family: $font-title;
+      font-size: 0.9em;
+      color: $c-yellow;
+      margin-left: -5px;
+      text-align: left;
+    }
+
+    .speed-input {
+      field-sizing: content;
+      min-width: 1ch;
+      font-family: $font-number;
+      font-size: 1.3em;
+      text-align: left;
+      text-shadow:
+        1px 1px 0 $c-dark-bluey,
+        -1px 1px 0 $c-dark-bluey,
+        -1px -1px 0 $c-dark-bluey,
+        1px -1px 0 $c-dark-bluey;
+    }
+
+    input {color: $c-yellow;}
+  }
+}
+
+// ── Section header (shared by Parts and Cargo) ─────────────────────────────
+.vehicle-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid $c-tan-lite;
+  background: $c-inset-2;
+
+  .vehicle-section-title {
+    font-family: $font-title;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $c-muted;
+    margin: 0;
+  }
+
+  .vehicle-add-part {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: $c-bg2;
+    color: $c-white;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 0.8; }
+    i { font-size: 1.0em; }
+  }
+}
+
+// ── Empty state ────────────────────────────────────────────────────────────
+.vehicle-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  color: $c-muted;
+  text-align: center;
+  font-family: $font-title;
+
+  p { margin: 4px 0; }
+  .hint { font-size: 12px; opacity: 0.7; }
+}
+
+// ── Parts grid ─────────────────────────────────────────────────────────────
+.vehicle-parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+// ── Vehicle Part Card ──────────────────────────────────────────────────────
+.vehicle-part-card {
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 1px solid $c-tan-lite;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+
+  .part-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: $c-inset-2;
+    border-bottom: 1px solid $c-tan-lite;
+    position: relative;
+  }
+
+  .part-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid $c-tan-lite;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.15s;
+    &:hover { border-color: $c-bg2; }
+  }
+
+  .part-name {
+    flex: 1;
+    font-family: $font-title;
+    font-size: 1.2em;
+    color: $c-text-1;
+    margin: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover { text-decoration: underline; }
+  }
+
+  .part-delete-btn {
+    background: transparent;
+    border: none;
+    color: $c-muted;
+    font-size: 1.0em;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: color 0.15s, background 0.15s;
+    &:hover { color: $c-red; background: rgba(157, 0, 0, 0.1); }
+  }
+
+  // HP bar row
+  .part-hp-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+    font-size: 1.2em;
+  }
+
+  .part-hp-icon {
+    font-size: 1.0em;
+    color: $c-text-1;
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+
+  .part-hp-clicker {
+    cursor: pointer;
+    transition: color 0.15s, transform 0.1s;
+    &:hover { color: #ff8f83; transform: scale(1.2); }
+  }
+
+  .part-armor-stat {
+    margin-right: 4px;
+    padding-right: 6px;
+    border-right: 1px solid $c-tan-lite;
+    flex-shrink: 0;
+  }
+
+  .part-sep { color: $c-tan; font-size: 1.1em; font-family: $font-title; }
+
+  .part-armor-input {
+    width: 52px;
+    text-align: center;
+    font-family: $font-title;
+  }
+
+  .part-hp-bg {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.25);
+    font-family: $font-title;
+    font-size: 1.2em;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: var(--hp-fill, 0%);
+      background: linear-gradient(102deg,
+        #5c0000 0%,
+        #c0392b 55%,
+      );
+      border-radius: 3px;
+      z-index: 0;
+      transition: width 0.3s ease;
+    }
+
+    > * { position: relative; z-index: 1; }
+  }
+
+  .part-hp-input {
+    field-sizing: content;
+    min-width: 1ch;
+    width: auto;
+    padding: 0;
+    text-align: center;
+    font-family: $font-title;
+
+    // Strip spin buttons so they don't inflate the width
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    -moz-appearance: textfield;
+  }
+
+  // Stats row
+  .part-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .part-stat {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 1.2em;
+
+    .part-stat-icon { font-size: 1.0em; color: $c-muted; }
+    .part-roll-damage {
+      cursor: pointer;
+      transition: color 0.15s;
+      &:hover { color: $c-bg2; }
+    }
+    .part-sign { color: $c-muted; font-size: 1.2em; }
+  }
+
+  .part-stat-input {
+    width: 38px;
+    font-family: $font-title;
+    font-size: 1.2em;
+    text-align: center;
+  }
+
+  .part-formula-stat {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .part-formula-input {
+    flex: 1;
+    min-width: 50px;
+    font-family: $font-title;
+    font-size: 1.2em;
+  }
+
+  .part-damage-type {
+    font-family: $font-title;
+    font-size: 1.2em;
+    border: none;
+    border-bottom: 1px solid $c-tan-lite;
+    background: transparent;
+    color: $c-text-1;
+    cursor: pointer;
+    padding: 1px 2px;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  // Part field shared input styles
+  .part-field {
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: $c-text-1;
+    border-radius: 0;
+    transition: border-color 0.15s;
+
+    &:focus { border-bottom-color: $c-bg2; outline: none; }
+  }
+
+  // Crew section
+  .part-crew-section {
+    padding: 5px 8px;
+  }
+
+  .part-crew-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .part-crew-label {
+    font-family: $font-title;
+    font-size: 1.0em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $c-muted;
+  }
+
+  .part-add-crew {
+    background: transparent;
+    border: 1px solid $c-tan-lite;
+    border-radius: 3px;
+    color: $c-muted;
+    font-size: 1.0em;
+    padding: 1px 5px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover { color: $c-bg2; border-color: $c-bg2; }
+  }
+
+  .part-crew-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .part-crew-member {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 0;
+
+    .crew-portrait {
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 2px;
+      border: 1px solid $c-tan-lite;
+      flex-shrink: 0;
+    }
+
+    .crew-name {
+      flex: 1;
+      font-family: $font-title;
+      font-size: 1.2em;
+      color: $c-text-1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .crew-skill-select {
+      font-family: $font-title;
+      font-size: 1.0em;
+      border: none;
+      border-bottom: 1px solid $c-tan-lite;
+      background: transparent;
+      color: $c-text-1;
+      cursor: pointer;
+      padding: 1px 2px;
+      max-width: 64px;
+      flex-shrink: 0;
+
+      &:focus { outline: none; border-bottom-color: $c-bg2; }
+    }
+
+    .crew-skill-difficulty {
+      font-family: $font-title;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: $c-text-1;
+      min-width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .crew-attack-btn {
+      border: none;
+      border-radius: 3px;
+      background: none;
+      color: $c-text-2;
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 2px 5px;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+      &:hover { opacity: 0.8; }
+    }
+
+    .crew-remove-btn {
+      background: transparent;
+      border: none;
+      color: $c-muted;
+      font-size: 9px;
+      cursor: pointer;
+      padding: 1px 3px;
+      border-radius: 2px;
+      transition: color 0.15s;
+      flex-shrink: 0;
+      &:hover { color: $c-red; }
+    }
+  }
+
+  .part-crew-empty {
+    font-family: $font-title;
+    font-size: 1.0em;
+    color: $c-muted;
+    text-align: center;
+    padding: 4px 0;
+    border: 1px dashed $c-tan-lite;
+    border-radius: 3px;
+    margin: 2px 0;
+  }
+}
+
+// ── Party Compact View (floating frameless overlay) ────────────────────────
+// Root element has classes `vagabond party-compact-view` → matches as `&.party-compact-view`.
+&.party-compact-view {
+  z-index: 200;
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 2px solid $c-tan-lite;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  cursor: grab;
+  user-select: none;
+
+  &:active { cursor: grabbing; }
+
+  // Horizontal strip of member columns
+  .compact-members {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 8px;
+  }
+
+  // One column per member
+  .compact-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+
+    & + .compact-member {
+      border-left: 1px solid rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  // Portrait + aside (armor + fatigue) side by side
+  .compact-portrait-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .compact-portrait {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 4px;
+    border: 2px solid $c-tan-lite;
+    flex-shrink: 0;
+    cursor: default;
+  }
+
+  // Speed + luck stacked beside the portrait
+  .compact-portrait-aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1;
+  }
+
+  // Stats column: two rows of paired stats below portrait row
+  .compact-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+  }
+
+  // Two stats side-by-side in one row
+  .compact-stat-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 4px;
+    width: 100%;
+  }
+
+  // Each individual stat: icon + value centered
+  .compact-stat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-family: $font-title;
+    font-size: 0.9em;
+    color: $c-text-1;
+    white-space: nowrap;
+    padding: 1px 0;
+
+    i {
+      font-size: 0.85em;
+      color: $c-tan;
+      flex-shrink: 0;
+    }
+
+    // Clickable stats: pointer cursor + subtle hover
+    &.compact-hp,
+    &.compact-fatigue {
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background 0.12s;
+      &:hover { background: rgba(255, 255, 255, 0.08); }
+    }
+
+    &.compact-hp i     { color: #e74c3c; }
+    &.compact-fatigue  { opacity: 0.85; }
+
+    &.non-caster { opacity: 0.3; cursor: default; }
+
+    // Aside stats (speed + luck next to portrait): slightly smaller
+    .compact-portrait-aside & {
+      font-size: 0.82em;
+      padding: 0;
+    }
+  }
+
+  // "S" letter used as speed icon — matches FA icon sizing/colour
+  .compact-speed-icon {
+    font-family: $font-title;
+    font-size: 0.82em;
+    font-weight: bold;
+    color: $c-tan;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  // Saves row
+  .compact-saves-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+    width: 100%;
+    padding-top: 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+  }
+
+  .compact-save {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    cursor: default;
+
+    .save-icon {
+      font-size: 0.72em;
+      color: $c-muted;
+      line-height: 1;
+    }
+
+    .save-num {
+      font-family: $font-title;
+      font-size: 0.95em;
+      font-weight: bold;
+      color: $c-text-2;
+      line-height: 1.1;
+    }
+  }
+}
+
+
+// ── Cargo ───────────────────────────────────────────────────────────────────
+.vehicle-cargo-section {
+  padding-bottom: 8px;
+}
+
+.vehicle-cargo-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vehicle-cargo-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: $c-inset-2;
+  border: 1px solid $c-tan-lite;
+  border-radius: 3px;
+
+  .cargo-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    background: $c-black;
+    border-radius: 2px;
+  }
+
+  .cargo-name {
+    font-family: $font-title;
+    font-size: 1.2em;
+    color: $c-text-1;
+  }
+}

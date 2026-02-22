@@ -65,6 +65,20 @@
     border-radius: 4px;
   }
 
+  .locked-supply-icons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 0 2px;
+
+    i {
+      font-size: 1.1em;
+      color: $c-muted;
+      cursor: default;
+      &:hover { color: $c-text-1; }
+    }
+  }
+
   .locked-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

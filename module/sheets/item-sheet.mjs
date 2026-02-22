@@ -166,6 +166,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     containerDetails: {
       template: 'systems/vagabond/templates/item/details-parts/container-details.hbs',
     },
+    vehiclePartDetails: {
+      template: 'systems/vagabond/templates/item/details-parts/vehicle-part-details.hbs',
+    },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
     },
@@ -198,6 +201,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         break;
       case 'container':
         options.parts.push('containerDetails', 'effects');
+        break;
+      case 'vehiclePart':
+        options.parts.push('vehiclePartDetails', 'effects');
         break;
     }
   }
@@ -707,6 +713,20 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         );
         break;
 
+      case 'vehiclePartDetails':
+        context.tab = context.tabs[partId];
+        context.enriched = {
+          description: await foundry.applications.ux.TextEditor.enrichHTML(
+            this.item.system.description,
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          )
+        };
+        break;
+
       case 'effects':
         context.tab = context.tabs[partId];
         // Prepare active effects for easier access
@@ -727,7 +747,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const tabGroup = 'primary';
     // Default tab for spell, ancestry, class, perk, equipment, starterPack, and container is details, others default to description
     if (!this.tabGroups[tabGroup]) {
-      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment' || this.document.type === 'starterPack' || this.document.type === 'container') ? 'details' : 'description';
+      this.tabGroups[tabGroup] = (this.document.type === 'spell' || this.document.type === 'ancestry' || this.document.type === 'class' || this.document.type === 'perk' || this.document.type === 'equipment' || this.document.type === 'starterPack' || this.document.type === 'container' || this.document.type === 'vehiclePart') ? 'details' : 'description';
     }
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -756,6 +776,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         case 'equipmentDetails':
         case 'starterPackDetails':
         case 'containerDetails':
+        case 'vehiclePartDetails':
           tab.id = 'details';
           tab.label += 'Details';
           break;

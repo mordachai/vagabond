@@ -290,6 +290,14 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: ''
     });
 
+    // ===== SUPPLY FIELDS =====
+
+    // Marks this item as a ration — counted toward the party supply total
+    schema.isSupply = new fields.BooleanField({ required: true, initial: false });
+
+    // Marks this item as a beverage/water — counted toward the party beverage total
+    schema.isBeverage = new fields.BooleanField({ required: true, initial: false });
+
     // ===== CONSUMABLE FIELDS =====
 
     // Consumable - whether this item is consumable (reduces quantity on use)

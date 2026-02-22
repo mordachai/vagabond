@@ -2,6 +2,7 @@
 export { default as VagabondActorBase } from './base-actor.mjs';
 export { default as VagabondCharacter } from './actor-character.mjs';
 export { default as VagabondNPC } from './actor-npc.mjs';
+export { default as VagabondParty } from './actor-party.mjs';
 
 // Export Items
 export { default as VagabondItemBase } from './base-item.mjs';
@@ -11,5 +12,6 @@ export { default as VagabondAncestry } from './item-ancestry.mjs';
 export { default as VagabondClass } from './item-class.mjs';
 export { default as VagabondPerk } from './item-perk.mjs';
 export { default as VagabondStarterPack } from './item-starter-pack.mjs';
-export { default as VagabondContainerData } from './item-container.mjs'; 
+export { default as VagabondContainerData } from './item-container.mjs';
+export { default as VagabondVehiclePart } from './item-vehicle-part.mjs';
 

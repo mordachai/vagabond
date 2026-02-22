@@ -16,6 +16,18 @@
         </div>
       {{/if}}
 
+      {{! Supply / beverage classification icons }}
+      {{#if (or system.isSupply system.isBeverage)}}
+        <div class='locked-supply-icons'>
+          {{#if system.isSupply}}
+            <i class='fas fa-wheat-awn' data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Rations'}}"></i>
+          {{/if}}
+          {{#if system.isBeverage}}
+            <i class='fas fa-droplet' data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Beverages'}}"></i>
+          {{/if}}
+        </div>
+      {{/if}}
+
       {{! Two-column layout: Main content | Details }}
       <div class='locked-two-column'>
         <div class='locked-column-left'>
@@ -845,6 +857,28 @@
                 data-dtype='Boolean'
               />
               <span>Consumable (reduces quantity on use)</span>
+            </label>
+          </div>
+          <div class='consumable-checkbox-field'>
+            <label class='checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.isSupply'
+                {{#if system.isSupply}}checked{{/if}}
+                data-dtype='Boolean'
+              />
+              <span>{{localize 'VAGABOND.Item.Equipment.IsSupply'}}</span>
+            </label>
+          </div>
+          <div class='consumable-checkbox-field'>
+            <label class='checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.isBeverage'
+                {{#if system.isBeverage}}checked{{/if}}
+                data-dtype='Boolean'
+              />
+              <span>{{localize 'VAGABOND.Item.Equipment.IsBeverage'}}</span>
             </label>
           </div>
           <div class='linked-consumable-field'>
