@@ -84,8 +84,9 @@
   --vagabond-c-title2: black;
   --vagabond-c-text-primary: #2c3e50;
   --vagabond-c-text-secondary: #2c3e50;
+  --vagabond-c-text-3: rgb(222, 214, 86);
   --vagabond-c-bg1: #ded656;
-  --vagabond-c-bg2: #2c3e50;
+  --vagabond-c-bg2: rgb(44, 62, 80);
   --vagabond-detail-1: url("../assets/images/sheets/blackSquare.webp");
   --vagabond-img-leftcolbg: url("../assets/images/sheets/leftColBg.svg");
   --vagabond-img-trained: url("../assets/images/sheets/trained.svg");
@@ -128,7 +129,8 @@ body[data-theme=dark] #sidebar {
   --vagabond-scrollbar-thumb1:#A4AC55;
   --vagabond-scrollbar-thumb2:#93CA55;
   --vagabond-c-text-primary: #BDC1C6 ;
-  --vagabond-c-text-secondary: #DED656;
+  --vagabond-c-text-secondary: rgb(222, 214, 86);
+  --vagabond-c-text-3: rgb(44, 62, 80);
   --vagabond-c-bg1: #2c3e50;
   --vagabond-c-bg2: #051a2f;
   --vagabond-detail-1: url("../assets/images/sheets/dark/blackSquare.webp");
@@ -7759,6 +7761,10 @@ ol#combat-tracker.directory-list {
 .vagabond .container-items-list {
   margin-top: 12px;
 }
+.vagabond .tab.container-locked .container-items-list {
+  max-height: calc(100vh - 380px);
+  overflow-y: auto;
+}
 .vagabond .container-items-table {
   width: 100%;
   border-collapse: collapse;
@@ -11772,7 +11778,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   left: 0;
   bottom: 0;
   width: var(--hp-fill, 0%);
-  background: linear-gradient(102deg, #5c0000 0%, #c0392b 55%);
+  background: linear-gradient(102deg, var(--vagabond-c-text-secondary) 0%, var(--vagabond-c-text-secondary) 55%);
   border-radius: 3px;
   z-index: 0;
   transition: width 0.3s ease;
@@ -11854,13 +11860,17 @@ details[open] .vagabond .npc-immunity-toggle i {
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
-  color: var(--vagabond-c-text-primary);
+  color: var(--vagabond-c-text-secondary);
   border-radius: 0;
   transition: border-color 0.15s;
 }
 .vagabond .vehicle-part-card .part-field:focus {
   border-bottom-color: var(--vagabond-c-bg2);
   outline: none;
+}
+.vagabond .vehicle-part-card .hp-bar-text {
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
 }
 .vagabond .vehicle-part-card .part-crew-section {
   padding: 5px 8px;

@@ -1,3 +1,7 @@
-2026/02/19-11:26:41.042 7e30 Recovering log #801
-2026/02/19-11:26:41.045 7e30 Delete type=0 #801
-2026/02/19-11:26:41.045 7e30 Delete type=3 #800
+2026/02/22-20:17:31.284 1acc Recovering log #808
+2026/02/22-20:17:31.288 1acc Delete type=0 #808
+2026/02/22-20:17:31.288 1acc Delete type=3 #806
+2026/02/22-20:22:32.308 97e4 Compacting 1@0 + 1@1 files
+2026/02/22-20:22:32.314 97e4 Generated table #811@0: 362 keys, 119501 bytes
+2026/02/22-20:22:32.314 97e4 Compacted 1@0 + 1@1 files => 119501 bytes
+2026/02/22-20:22:32.315 97e4 compacted to: files[ 0 1 0 0 0 0 0 ]

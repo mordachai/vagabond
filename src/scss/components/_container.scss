@@ -71,6 +71,13 @@
   margin-top: 12px;
 }
 
+// Locked mode: the reduced content above the items table means the tab's
+// own overflow-y may not trigger. Give the list its own scroll context.
+.tab.container-locked .container-items-list {
+  max-height: calc(100vh - 380px);
+  overflow-y: auto;
+}
+
 .container-items-table {
   width: 100%;
   border-collapse: collapse;

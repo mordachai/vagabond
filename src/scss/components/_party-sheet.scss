@@ -764,8 +764,8 @@
       top: 0; left: 0; bottom: 0;
       width: var(--hp-fill, 0%);
       background: linear-gradient(102deg,
-        #5c0000 0%,
-        #c0392b 55%,
+        $c-text-2 0%,
+        $c-text-2 55%,
       );
       border-radius: 3px;
       z-index: 0;
@@ -850,11 +850,20 @@
     border: none;
     border-bottom: 1px solid transparent;
     background: transparent;
-    color: $c-text-1;
+    color: $c-text-2;
     border-radius: 0;
     transition: border-color 0.15s;
 
     &:focus { border-bottom-color: $c-bg2; outline: none; }
+  }
+
+  .hp-bar-text { 
+    color: $c-yellow;
+    text-shadow:
+      1px 1px 0 $c-black,
+      -1px 1px 0 $c-black,
+      -1px -1px 0 $c-black,
+      1px -1px 0 $c-black;
   }
 
   // Crew section

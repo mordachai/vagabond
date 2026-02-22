@@ -33,12 +33,12 @@
     </div>
     <div class="part-hp-bg" style="--hp-fill: {{health.pct}}%">
       <i
-        class="fas fa-heart part-hp-icon part-hp-clicker"
+        class="fas fa-heart part-hp-icon part-hp-clicker hp-bar-text"
         data-tooltip="Left: -1 / Right: +1 | Shift: ±10"
       ></i>
       <input
         type="number"
-        class="part-field part-hp-input"
+        class="part-field part-hp-input hp-bar-text"
         data-part-field="system.health.value"
         value="{{health.value}}"
         min="0"
@@ -47,7 +47,7 @@
       <span class="part-sep">/</span>
       <input
         type="number"
-        class="part-field part-hp-input"
+        class="part-field part-hp-input hp-bar-text"
         data-part-field="system.health.max"
         value="{{health.max}}"
         min="0"

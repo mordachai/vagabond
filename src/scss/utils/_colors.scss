@@ -34,8 +34,9 @@
   --vagabond-c-title2: black;
   --vagabond-c-text-primary: #2c3e50;
   --vagabond-c-text-secondary: #2c3e50;
+  --vagabond-c-text-3: rgb(222, 214, 86);
   --vagabond-c-bg1: #ded656;
-  --vagabond-c-bg2: #2c3e50;
+  --vagabond-c-bg2: rgb(44, 62, 80);
   --vagabond-detail-1: url('../assets/images/sheets/blackSquare.webp');
   --vagabond-img-leftcolbg: url('../assets/images/sheets/leftColBg.svg');
   --vagabond-img-trained: url('../assets/images/sheets/trained.svg');
@@ -80,7 +81,8 @@ body[data-theme="dark"] #sidebar {
   --vagabond-scrollbar-thumb2:#93CA55;
 
   --vagabond-c-text-primary: #BDC1C6 ;
-  --vagabond-c-text-secondary: #DED656;
+  --vagabond-c-text-secondary: rgb(222, 214, 86);
+  --vagabond-c-text-3: rgb(44, 62, 80);
   --vagabond-c-bg1: #2c3e50;
   --vagabond-c-bg2: #051a2f;
   --vagabond-detail-1: url('../assets/images/sheets/dark/blackSquare.webp');
@@ -96,6 +98,7 @@ $c-title-1: var(--vagabond-c-title1);
 $c-title-2: var(--vagabond-c-title2);
 $c-text-1: var(--vagabond-c-text-primary);
 $c-text-2: var(--vagabond-c-text-secondary);
+$c-text-3: var(--vagabond-c-text-3);
 $c-white: var(--vagabond-c-white);
 $c-black: var(--vagabond-c-black);
 $c-red: var(--vagabond-c-red);
