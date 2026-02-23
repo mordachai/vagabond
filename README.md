@@ -15,12 +15,11 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Key Features
 
-### **New feature:** Party Sheet and Vehicles
-<img width="1270" height="712" alt="image" src="https://github.com/user-attachments/assets/92924b4a-ec08-4eba-b5d6-d3f51946175c" />
+### **New feature:** Party Sheet and Vehicles (YouTube video below):
+
+[![Vagabond for Foundry VTT - Party Sheet](https://img.youtube.com/vi/nol-E072Weo/0.jpg)](https://www.youtube.com/watch?v=nol-E072Weo)
 
 GMs can check main data of the party in a easy way, including a mini dashboard that you can position anywhere (compact mode). And beyond that this sheet can be used for a party vehicle!
-
-<img width="1431" height="817" alt="image" src="https://github.com/user-attachments/assets/45b2bcb5-b5bf-4893-b313-de232eb61179" />
 
 From simple rides to complex airships, it allows the creation of multiple parts where you can place crew members and request rolls. Each part has its own individual HP, Armor, and Damage. All vehicles also have a Cargo section where you can place any number of Container items. With this, you can have huge transporters with high capacity and smaller stashes for your smugglers, all in the same vehicle. The parts system gives you freedom to choose the level of complexity you want at your table.
 
