@@ -56,6 +56,18 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     this._listenerController = new AbortController();
     const { signal } = this._listenerController;
 
+    // Sync brawl/finesse trained state between the Skills section and the Attacks section —
+    // they are separate schema fields but represent the same logical trained state.
+    // Mirror whichever checkbox the player toggles to its counterpart before the 500ms
+    // debounced form submit fires, so both values land in the database together.
+    for (const key of ['brawl', 'finesse']) {
+      const skillCb = this.element.querySelector(`[name="system.skills.${key}.trained"]`);
+      const wsCb    = this.element.querySelector(`[name="system.weaponSkills.${key}.trained"]`);
+      if (!skillCb || !wsCb) continue;
+      skillCb.addEventListener('change', () => { wsCb.checked = skillCb.checked; }, { signal });
+      wsCb.addEventListener('change',    () => { skillCb.checked = wsCb.checked; }, { signal });
+    }
+
     // Manual binding for createDoc action (workaround for action inheritance issue)
     this._bindCreateDocActions(signal);
   }

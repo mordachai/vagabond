@@ -873,10 +873,15 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Train skills
+    // Train skills — system.skills holds most skills; system.weaponSkills holds
+    // melee/ranged (exclusively) plus brawl/finesse (duplicated). Apply to both
+    // so nothing is missed regardless of which namespace a key belongs to.
     for (const skill of skillsToTrain) {
       if (actorData.system.skills[skill]) {
         actorData.system.skills[skill].trained = true;
+      }
+      if (actorData.system.weaponSkills[skill]) {
+        actorData.system.weaponSkills[skill].trained = true;
       }
     }
 
