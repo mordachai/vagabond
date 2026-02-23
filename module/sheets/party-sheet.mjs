@@ -841,15 +841,26 @@ export class VagabondPartySheet extends VagabondActorSheet {
     });
 
     // Attack with part — per crew member
+    // Shift = favored, Ctrl = hindered (same as character sheet rolls)
     this.element.querySelectorAll('[data-action="attackPart"]').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', async (event) => {
         const partId = btn.dataset.partId;
         const crewUuid = btn.dataset.actorUuid;
         if (!partId || !crewUuid) return;
         // Read the skill selector in the same crew row
         const row = btn.closest('.part-crew-member');
         const skillKey = row?.querySelector('.crew-skill-select')?.value ?? 'melee';
-        await this._attackWithPart(partId, crewUuid, skillKey);
+        // Resolve crew actor now so we can read their favorHinder state
+        const crewActor = await fromUuid(crewUuid);
+        if (!crewActor) return;
+        const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+        const systemFavorHinder = crewActor.system.favorHinder || 'none';
+        const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
+          systemFavorHinder,
+          event.shiftKey,
+          event.ctrlKey
+        );
+        await this._attackWithPart(partId, crewActor, skillKey, favorHinder);
       }, { signal });
     });
 
@@ -1007,16 +1018,14 @@ export class VagabondPartySheet extends VagabondActorSheet {
    * Roll a vehicle part attack for a specific crew member using a chosen weapon skill.
    * Flow: d20 + attackModifier ≥ weaponSkill.difficulty → hit → roll damage.
    * @param {string} partId        - ID of the vehiclePart item
-   * @param {string} crewUuid      - UUID of the crew member actor
+   * @param {Actor} crewActor      - Resolved crew member actor
    * @param {string} skillKey      - Weapon skill key: 'melee' | 'brawl' | 'finesse' | 'ranged'
+   * @param {string} favorHinder   - 'favor' | 'hinder' | 'none'
    * @private
    */
-  async _attackWithPart(partId, crewUuid, skillKey) {
+  async _attackWithPart(partId, crewActor, skillKey, favorHinder = 'none') {
     const part = this.actor.items.get(partId);
     if (!part) return;
-
-    const crewActor = await fromUuid(crewUuid);
-    if (!crewActor) return;
 
     const { VagabondChatCard } = globalThis.vagabond.utils;
 
@@ -1039,13 +1048,11 @@ export class VagabondPartySheet extends VagabondActorSheet {
     // critNumber is a schema-defined field, always safe to read from system directly
     const critNumber = crewActor.system.critNumber ?? 20;
 
-    // Build attack roll formula — attackModifier shifts the roll up or down
-    const rollFormula = attackModifier !== 0
-      ? `1d20 + ${attackModifier}`
-      : '1d20';
-
-    const roll = new Roll(rollFormula);
-    await roll.evaluate();
+    // Build attack roll formula — attackModifier shifts the roll up or down.
+    // VagabondRollBuilder handles favor/hinder dice and custom dice appearance.
+    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
+    const baseFormula = attackModifier !== 0 ? `1d20 + ${attackModifier}` : '1d20';
+    const roll = await VagabondRollBuilder.buildAndEvaluateD20(crewActor, favorHinder, baseFormula);
 
     // Check hit and crit using the natural d20 result
     const naturalResult = roll.dice[0]?.results?.[0]?.result ?? roll.total;
