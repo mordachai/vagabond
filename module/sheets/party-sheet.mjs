@@ -872,6 +872,31 @@ export class VagabondPartySheet extends VagabondActorSheet {
       }, { signal });
     });
 
+    // Add a new container to cargo
+    this.element.querySelectorAll('[data-action="addCargo"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await this.actor.createEmbeddedDocuments('Item', [{
+          name: game.i18n.localize('VAGABOND.Actor.Party.Vehicle.NewContainer'),
+          type: 'container',
+        }]);
+      }, { signal });
+    });
+
+    // Delete a cargo container (with confirmation)
+    this.element.querySelectorAll('[data-action="deleteCargo"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const itemId = btn.closest('[data-item-id]')?.dataset.itemId;
+        if (!itemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+          window: { title: `${game.i18n.localize('VAGABOND.Actor.Party.Vehicle.DeleteCargo')}: ${item.name}` },
+          content: `<p>${game.i18n.format('VAGABOND.Actor.Party.Vehicle.DeleteCargoConfirm', { name: item.name })}</p>`,
+        });
+        if (confirmed) await item.delete();
+      }, { signal });
+    });
+
     // Remove crew member from a part
     this.element.querySelectorAll('[data-action="removeCrew"]').forEach(btn => {
       btn.addEventListener('click', async () => {

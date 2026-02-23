@@ -1163,37 +1163,78 @@
 // ── Cargo ───────────────────────────────────────────────────────────────────
 .vehicle-cargo-section {
   padding-bottom: 8px;
+
+  .vehicle-add-cargo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: $c-bg2;
+    color: $c-white;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-title;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 0.8; }
+    i { font-size: 1.0em; }
+  }
 }
 
-.vehicle-cargo-list {
-  list-style: none;
-  margin: 0;
-  padding: 6px 10px;
+.vehicle-cargo-hint {
+  margin: 4px 10px 6px;
+  font-size: 12px;
+  opacity: 0.7;
+  color: $c-muted;
+}
+
+.vehicle-cargo-cards {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 10px;
 }
 
-.vehicle-cargo-item {
+.vehicle-cargo-card {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 6px;
+  padding: 4px 8px;
   background: $c-inset-2;
   border: 1px solid $c-tan-lite;
-  border-radius: 3px;
+  border-radius: 4px;
 
   .cargo-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     object-fit: cover;
     background: $c-black;
     border-radius: 2px;
+    flex-shrink: 0;
   }
 
   .cargo-name {
     font-family: $font-title;
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: $c-text-1;
+  }
+
+  .cargo-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: $c-muted;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-left: 2px;
+    transition: color 0.15s, background 0.15s;
+
+    &:hover { color: $c-red; background: rgba(157, 0, 0, 0.1); }
+    i { font-size: 0.85em; }
   }
 }

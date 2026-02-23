@@ -450,7 +450,12 @@
           "Difficulty": "Difficulty",
           "RollDamage": "Roll damage",
           "Cargo": "Cargo",
-          "OpenCargo": "Open container"
+          "OpenCargo": "Open container",
+          "AddCargo": "Add Container",
+          "NewContainer": "New Container",
+          "CargoHint": "Add Container items here to store and organize cargo for your vehicle.",
+          "DeleteCargo": "Delete Container",
+          "DeleteCargoConfirm": "Delete \"{name}\"? All items stored inside this container will also be deleted. This cannot be undone."
         },
         "Card": {
           "OpenSheet": "Open character sheet",
