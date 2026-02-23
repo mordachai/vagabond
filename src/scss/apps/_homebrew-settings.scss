@@ -1,0 +1,512 @@
+/* Homebrew Settings Dialog */
+
+#homebrew-settings.homebrew-settings-form {
+
+  .window-content {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .homebrew-layout {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  // Left sidebar: tab navigation
+  .homebrew-tabs {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    min-width: 150px;
+    border-right: 1px solid var(--vagabond-c-faint);
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.5rem 0;
+    gap: 2px;
+    overflow-y: auto;
+  }
+
+  .homebrew-tab-button {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-left: 3px solid transparent;
+    background: transparent;
+    color: var(--vagabond-c-muted);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.8rem;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+    i:first-child {
+      width: 1em;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .tab-label {
+      flex: 1;
+    }
+
+    .reload-badge {
+      font-size: 0.65rem;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.07);
+      color: var(--vagabond-c-text-primary);
+    }
+
+    &.active {
+      border-left-color: var(--vagabond-c-dark-bluey);
+      background: rgba(44, 62, 80, 0.1);
+      color: var(--vagabond-c-dark-bluey);
+      font-weight: bold;
+    }
+  }
+
+  // Right: content + footer
+  .homebrew-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .homebrew-tab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+  }
+
+  // Placeholder content for unimplemented tabs
+  .tab-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    > i.fa-3x {
+      opacity: 0.2;
+      margin-bottom: 0.25rem;
+    }
+
+    h3 {
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+      max-width: 480px;
+    }
+
+    .coming-soon {
+      opacity: 0.6;
+      font-size: 0.85rem;
+    }
+  }
+
+  // Preview rows in placeholder tabs
+  .placeholder-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+    border: 1px solid var(--vagabond-c-faint);
+    max-width: 500px;
+    width: 100%;
+
+    strong {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      margin-bottom: 2px;
+    }
+  }
+
+  .preview-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    padding: 1px 0;
+
+    code {
+      background: rgba(0, 0, 0, 0.07);
+      border-radius: 3px;
+      padding: 0 4px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    span {
+      color: var(--vagabond-c-muted);
+    }
+  }
+
+  // ─── Shared form elements used across tabs ────────────────────────────
+
+  .hb-fieldset {
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+    padding: 0.75rem 1rem 1rem;
+    margin-bottom: 1rem;
+
+    legend {
+      font-family: Manofa, sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0 0.4rem;
+      width: auto;
+      border: none;
+      &::before, &::after { display: none !important; }
+    }
+  }
+
+  .hb-form-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    label {
+      min-width: 90px;
+      font-size: 0.88rem;
+      font-weight: bold;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      flex: 1;
+      max-width: 120px;
+    }
+  }
+
+  .hb-hint {
+    width: 100%;
+    font-size: 0.78rem;
+    opacity: 0.65;
+    margin: 0.25rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .hb-add-btn {
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  // ─── Tab 1: Stats ─────────────────────────────────────────────────────
+
+  .tab-stats {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-stat-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+    }
+
+    td {
+      padding: 0.18rem 0.4rem;
+      vertical-align: middle;
+    }
+
+    .hb-stat-key-input {
+      width: 110px;
+    }
+
+    .hb-stat-label-input {
+      width: 130px;
+    }
+
+    .hb-stat-abbr-input {
+      width: 55px;
+    }
+
+    .hb-stat-remove-btn {
+      padding: 0.15rem 0.35rem;
+      font-size: 0.75rem;
+      opacity: 0.45;
+      &:hover { opacity: 1; color: var(--vagabond-c-red); }
+    }
+  }
+
+  // ─── Tab 2: Skills & Saves ────────────────────────────────────────────
+
+  .tab-skills {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-skills-table,
+  .hb-saves-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.18rem 0.3rem;
+      vertical-align: middle;
+    }
+
+    input[type="text"]   { width: 88px; }
+    input[type="number"] { width: 52px; }
+    select               { width: 88px; font-size: 0.8rem; }
+    input[type="checkbox"] { width: auto; }
+
+    .hb-sk-remove-btn,
+    .hb-sv-remove-btn {
+      padding: 0.15rem 0.35rem;
+      font-size: 0.75rem;
+      opacity: 0.45;
+      &:hover { opacity: 1; color: var(--vagabond-c-red); }
+    }
+  }
+
+  // ─── Tab 3: Dice ──────────────────────────────────────────────────────
+
+  .tab-dice {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-dice-chart {
+    width: 100%;
+    overflow-x: auto;
+
+    .hb-chart-svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  // ─── Tab 4: Leveling ──────────────────────────────────────────────────
+
+  .tab-leveling {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-xp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+
+    th {
+      text-align: left;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+    }
+
+    td {
+      padding: 0.2rem 0.5rem;
+    }
+
+    .level-label {
+      font-size: 0.82rem;
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+
+    input[type="number"] {
+      width: 80px;
+    }
+  }
+
+  .hb-questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hb-question-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    .q-grip {
+      opacity: 0.3;
+      cursor: grab;
+      flex-shrink: 0;
+    }
+
+    .q-text {
+      flex: 1;
+      font-size: 0.85rem;
+    }
+
+    .q-xp-label {
+      font-size: 0.78rem;
+      opacity: 0.7;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .q-xp {
+      width: 55px;
+      flex-shrink: 0;
+    }
+
+    .q-remove-btn {
+      flex-shrink: 0;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      &:hover { opacity: 1; color: var(--vagabond-c-red); }
+    }
+  }
+
+  // ─── Tab 5: Derivations ───────────────────────────────────────────────
+
+  .tab-derivations {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-deriv-input {
+    flex: 1;
+    max-width: 240px;
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+
+  // ─── Tab 6: Damage Types ──────────────────────────────────────────────
+
+  .tab-damage-types {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-dt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+    }
+
+    td {
+      padding: 0.18rem 0.4rem;
+      vertical-align: middle;
+    }
+
+    .hb-dt-th-icon {
+      width: 2rem;
+    }
+
+    .hb-dt-icon-cell {
+      width: 2rem;
+      text-align: center;
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .hb-dt-key-input {
+      width: 88px;
+    }
+
+    .hb-dt-label-input {
+      width: 110px;
+    }
+
+    .hb-dt-icon-input {
+      width: 100%;
+      min-width: 160px;
+    }
+
+    .hb-dt-remove-btn {
+      padding: 0.15rem 0.35rem;
+      font-size: 0.75rem;
+      opacity: 0.45;
+      &:hover { opacity: 1; color: var(--vagabond-c-red); }
+    }
+  }
+
+  // ─── Tab 7: Stat Cap ──────────────────────────────────────────────────
+
+  .tab-stat-cap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ─── Tab 8: Advanced ──────────────────────────────────────────────────
+
+  .tab-advanced {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Footer
+  .homebrew-footer {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-top: 1px solid var(--vagabond-c-faint);
+    background: rgba(0, 0, 0, 0.04);
+
+    .reload-notice {
+      flex: 1;
+      font-size: 0.78rem;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .reset-btn {
+      margin-left: auto;
+    }
+  }
+}

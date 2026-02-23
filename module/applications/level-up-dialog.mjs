@@ -71,8 +71,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.activeTab = 'questionnaire';
     this.gmOverride = false;
 
-    // XP questionnaire state
-    this.questions = [false, false, false, false, false];
+    // XP questionnaire state — length matches configured question list
+    const xpQuestions = CONFIG.VAGABOND?.homebrew?.leveling?.xpQuestions ?? [];
+    this.questions = new Array(xpQuestions.length || 5).fill(false);
     this.xpAwarded = false;
 
     // Whether the level has been incremented in this dialog session
@@ -119,17 +120,17 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /**
-   * Whether the new level is even (stat increase)
+   * Total stat bonus points granted by class features at the new level
    */
-  get isEvenLevel() {
-    return this.newLevel % 2 === 0;
+  get statGrantsAtLevel() {
+    return this.newLevelFeatures.reduce((sum, f) => sum + (f.statBonusPoints || 0), 0);
   }
 
   /**
-   * Whether the new level qualifies for a perk (odd levels > 1)
+   * Total perks granted by class features at the new level
    */
-  get isPerkLevel() {
-    return this.newLevel > 1 && this.newLevel % 2 !== 0;
+  get perkGrantsAtLevel() {
+    return this.newLevelFeatures.reduce((sum, f) => sum + (f.perkAmount || 0), 0);
   }
 
   /**
@@ -173,14 +174,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   get visibleTabs() {
     const tabs = ['questionnaire'];
 
-    // Stat increase: even levels, or GM override
-    if (this.isEvenLevel || this.gmOverride) {
+    // Stat increase: driven by class feature statBonusPoints, or GM override
+    if (this.statGrantsAtLevel > 0 || this.gmOverride) {
       tabs.push('stats');
     }
 
-    // Perks: odd levels > 1, or if level features grant perks, or GM override
-    const hasPerkGrants = this.newLevelFeatures.some(f => (f.perkAmount || 0) > 0);
-    if (this.isPerkLevel || hasPerkGrants || this.gmOverride) {
+    // Perks: driven by class feature perkAmount or allowedPerks grants, or GM override
+    const hasPerkGrants = this.perkGrantsAtLevel > 0 || this.newLevelFeatures.some(f => f.allowedPerks?.length > 0);
+    if (hasPerkGrants || this.gmOverride) {
       tabs.push('perks');
     }
 
@@ -263,15 +264,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   _prepareQuestionnaireContext() {
     const sys = this.actor.system;
-    const questionLabels = [
-      'Did you complete a Quest?',
-      'Did you Fail and allow the Fail to resolve?',
-      'Did you pass a Hindered Check?',
-      'Did you make a discovery?',
-      'Did you loot at least 50g of treasure?',
-    ];
+    const xpQuestions = CONFIG.VAGABOND?.homebrew?.leveling?.xpQuestions ?? [];
 
-    const xpGained = this.questions.filter(Boolean).length;
+    const xpGained = xpQuestions.reduce((sum, q, i) => sum + (this.questions[i] ? (q.xp || 1) : 0), 0);
     const currentXP = sys.attributes.xp || 0;
     const xpRequired = sys.attributes.xpRequired || 10;
     const projectedXP = currentXP + (this.xpAwarded ? 0 : xpGained);
@@ -280,10 +275,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const xpProgress = Math.min(100, Math.round((projectedXP / xpRequired) * 100));
 
     return {
-      questions: questionLabels.map((label, i) => ({
+      questions: xpQuestions.map((q, i) => ({
         index: i,
-        label,
-        checked: this.questions[i],
+        label: q.question,
+        xp: q.xp || 1,
+        checked: this.questions[i] ?? false,
       })),
       xpGained,
       currentXP,
@@ -323,7 +319,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // so we show current values and what changes at the new level
     const checklist = [];
 
-    if (this.isEvenLevel || this.gmOverride) {
+    if (this.statGrantsAtLevel > 0 || this.gmOverride) {
       checklist.push({
         label: 'Choose a stat to increase by +1',
         tab: 'stats',
@@ -331,8 +327,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       });
     }
 
-    const hasPerkGrants = features.some(f => (f.perkAmount || 0) > 0);
-    if (this.isPerkLevel || hasPerkGrants || this.gmOverride) {
+    const hasPerkGrants = this.perkGrantsAtLevel > 0 || features.some(f => f.allowedPerks?.length > 0);
+    if (hasPerkGrants || this.gmOverride) {
       checklist.push({
         label: 'Choose a perk',
         tab: 'perks',
@@ -373,7 +369,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const statEntries = Object.entries(CONFIG.VAGABOND.stats).map(([key, label]) => {
       const current = stats[key]?.value || 0;
       const total = stats[key]?.total || current;
-      const isMaxed = current >= 7;
+      const isMaxed = current >= (CONFIG.VAGABOND.homebrew?.statCap ?? 7);
       const isSelected = selected === key;
       return {
         key,
@@ -390,11 +386,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Calculate preview derived stats using the +1 if stat is selected
     // Saves use the formula: difficulty = 20 - sum(stat totals) - bonus
     // We keep current bonuses and just adjust the stat contribution
-    const savesDef = {
-      reflex: { stats: ['dexterity', 'awareness'] },
-      endure: { stats: ['might', 'might'] },
-      will: { stats: ['reason', 'presence'] },
-    };
+    const savesDef = Object.fromEntries(
+      (CONFIG.VAGABOND.homebrew?.saves ?? []).map(s => [s.key, { stats: [s.stat1, s.stat2] }])
+    );
 
     const saves = Object.entries(sys.saves || {}).map(([key, save]) => {
       let previewValue = save.difficulty;
@@ -416,8 +410,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       };
     });
 
-    // Skills: difficulty = 20 - (trained ? stat*2 : stat) - bonus
-    const skills = Object.entries(sys.skills || {}).map(([key, skill]) => {
+    // Skills: split into regular and weapon groups
+    // difficulty = 20 - (trained ? stat*2 : stat) - bonus
+    const _mapSkill = ([key, skill]) => {
       let previewValue = skill.difficulty;
       if (selected && skill.stat === selected) {
         const multiplier = skill.trained ? 2 : 1;
@@ -432,42 +427,36 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         trained: skill.trained,
         changed: previewValue !== skill.difficulty,
       };
-    });
-
-    const weaponSkills = Object.entries(sys.weaponSkills || {}).map(([key, skill]) => {
-      let previewValue = skill.difficulty;
-      if (selected && skill.stat === selected) {
-        const multiplier = skill.trained ? 2 : 1;
-        previewValue = skill.difficulty - multiplier;
-      }
-      return {
-        key,
-        label: skill.label || key,
-        statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat] || ''),
-        value: skill.difficulty,
-        previewValue,
-        trained: skill.trained,
-        changed: previewValue !== skill.difficulty,
-      };
-    });
+    };
+    const allSkillEntries = Object.entries(sys.skills || {});
+    const skills = allSkillEntries.filter(([, s]) => !s.isWeaponSkill).map(_mapSkill);
+    const weaponSkills = allSkillEntries.filter(([, s]) => s.isWeaponSkill).map(_mapSkill);
 
     const isSpellcaster = sys.attributes.isSpellcaster;
 
-    // HP preview: HP increases with might (base formula depends on level + might)
-    // Simple approach: +1 might = +1 HP per level (from the hpPerLevel formula in prepareDerivedData)
-    // Actually the HP formula is complex, so we just note it might change
+    // Read derivation formulas from homebrew config to know which stat drives each derivation
+    const hpFormula  = CONFIG.VAGABOND?.homebrew?.derivations?.hp        ?? '@might.total';
+    const invFormula = CONFIG.VAGABOND?.homebrew?.derivations?.inventory ?? '8 + @might.total';
+    const levelValue = sys.attributes.level?.value || 1;
+
+    // HP preview: if the selected stat key appears in the HP formula, adding +1 to it
+    // increases HP by ~levelValue (formula is "HP per level", linear in the stat)
     const hpCurrent = sys.health.max;
-    const hpPreview = selected === 'might' ? hpCurrent + 1 : hpCurrent;
+    const hpPreview = hpFormula.includes(`@${selected}.`)
+      ? hpCurrent + levelValue
+      : hpCurrent;
 
     // Luck pool = luck total
     const luckCurrent = stats.luck?.total || 0;
     const luckPreview = selected === 'luck' ? luckCurrent + 1 : luckCurrent;
 
-    // Inventory = might based
+    // Inventory preview: if the selected stat appears in the inventory formula, +1 stat = +1 slot
     const invCurrent = sys.inventory?.maxSlots || 0;
-    const invPreview = selected === 'might' ? invCurrent + 1 : invCurrent;
+    const invPreview = invFormula.includes(`@${selected}.`)
+      ? invCurrent + 1
+      : invCurrent;
 
-    // Speed = dexterity based (speed.base is 25 + dex)
+    // Speed = dexterity based (uses speedTable lookup, not a derivation formula)
     const speedCurrent = sys.speed?.base || 0;
     const speedPreview = selected === 'dexterity' ? speedCurrent + 5 : speedCurrent;
 
@@ -799,11 +788,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Check skill prerequisites
     if (prereqs.trainedSkills?.length > 0) {
       for (const skill of prereqs.trainedSkills) {
-        const isTrained = sys.skills?.[skill]?.trained || sys.weaponSkills?.[skill]?.trained;
+        const isTrained = sys.skills?.[skill]?.trained;
         if (!isTrained) {
           const cap = skill.charAt(0).toUpperCase() + skill.slice(1);
-          const label = CONFIG.VAGABOND.weaponSkills?.[cap] || CONFIG.VAGABOND.skills?.[cap] || skill;
-          missing.push(`Trained: ${game.i18n.localize(label)}`);
+          missing.push(`Trained: ${game.i18n.localize(`VAGABOND.Skills.${cap}`)}`);
         }
       }
     }
@@ -814,11 +802,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         let groupMet = false;
         const groupLabels = [];
         for (const skill of group) {
-          const isTrained = sys.skills?.[skill]?.trained || sys.weaponSkills?.[skill]?.trained;
+          const isTrained = sys.skills?.[skill]?.trained;
           if (isTrained) { groupMet = true; break; }
           const cap = skill.charAt(0).toUpperCase() + skill.slice(1);
-          const label = CONFIG.VAGABOND.weaponSkills?.[cap] || CONFIG.VAGABOND.skills?.[cap] || skill;
-          groupLabels.push(game.i18n.localize(label));
+          groupLabels.push(game.i18n.localize(`VAGABOND.Skills.${cap}`));
         }
         if (!groupMet) missing.push(`Trained: (${groupLabels.join(' or ')})`);
       }
@@ -933,10 +920,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Trained skills
     if (prereqs.trainedSkills?.length > 0) {
       for (const skill of prereqs.trainedSkills) {
-        const isTrained = sys.skills?.[skill]?.trained || sys.weaponSkills?.[skill]?.trained;
+        const isTrained = sys.skills?.[skill]?.trained;
         const cap = skill.charAt(0).toUpperCase() + skill.slice(1);
-        const label = CONFIG.VAGABOND.weaponSkills?.[cap] || CONFIG.VAGABOND.skills?.[cap] || skill;
-        list.push({ text: `Trained: ${game.i18n.localize(label)}`, met: !!isTrained });
+        list.push({ text: `Trained: ${game.i18n.localize(`VAGABOND.Skills.${cap}`)}`, met: !!isTrained });
       }
     }
 
@@ -946,11 +932,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         let groupMet = false;
         const labels = [];
         for (const skill of group) {
-          const isTrained = sys.skills?.[skill]?.trained || sys.weaponSkills?.[skill]?.trained;
+          const isTrained = sys.skills?.[skill]?.trained;
           if (isTrained) groupMet = true;
           const cap = skill.charAt(0).toUpperCase() + skill.slice(1);
-          const label = CONFIG.VAGABOND.weaponSkills?.[cap] || CONFIG.VAGABOND.skills?.[cap] || skill;
-          labels.push(game.i18n.localize(label));
+          labels.push(game.i18n.localize(`VAGABOND.Skills.${cap}`));
         }
         list.push({ text: `Trained: ${labels.join(' or ')}`, met: groupMet });
       }
@@ -1072,7 +1057,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       case 'skill':
         return game.i18n.localize(CONFIG.VAGABOND.skills[choice] || choice);
       case 'weaponSkill':
-        return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[choice?.charAt(0).toUpperCase() + choice?.slice(1)] || choice);
+        return game.i18n.localize(`VAGABOND.Skills.${choice?.charAt(0).toUpperCase() + choice?.slice(1)}`);
       case 'stat':
         return game.i18n.localize(CONFIG.VAGABOND.stats[choice] || choice);
       case 'spell':
@@ -1094,14 +1079,16 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static _onToggleQuestion(event, target) {
     const index = parseInt(target.dataset.index);
-    if (!isNaN(index) && index >= 0 && index < 5) {
+    const maxIndex = CONFIG.VAGABOND?.homebrew?.leveling?.xpQuestions?.length ?? 5;
+    if (!isNaN(index) && index >= 0 && index < maxIndex) {
       this.questions[index] = !this.questions[index];
       this.render();
     }
   }
 
   static async _onAwardXP(event, target) {
-    const xpGained = this.questions.filter(Boolean).length;
+    const xpQuestions = CONFIG.VAGABOND?.homebrew?.leveling?.xpQuestions ?? [];
+    const xpGained = xpQuestions.reduce((sum, q, i) => sum + (this.questions[i] ? (q.xp || 1) : 0), 0);
     if (xpGained === 0) {
       ui.notifications.warn('No XP to award - answer at least one question.');
       return;
@@ -1112,7 +1099,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     await this.actor.update({ 'system.attributes.xp': newXP });
     this.xpAwarded = true;
-    this.questions = [false, false, false, false, false];
+    this.questions = new Array(xpQuestions.length || 5).fill(false);
 
     ui.notifications.info(`Awarded ${xpGained} XP to ${this.actor.name}. Total: ${newXP}`);
     this.render();
@@ -1124,8 +1111,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const currentLevel = this.actor.system.attributes.level.value;
     const newLevel = currentLevel + 1;
 
-    if (newLevel > 10) {
-      ui.notifications.warn('Maximum level (10) reached!');
+    const maxLevel = CONFIG.VAGABOND?.homebrew?.leveling?.maxLevel ?? 10;
+    if (newLevel > maxLevel) {
+      ui.notifications.warn(`Maximum level (${maxLevel}) reached!`);
       return;
     }
 
@@ -1148,8 +1136,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!stat) return;
 
     const current = this.actor.system.stats?.[stat]?.value || 0;
-    if (current >= 7) {
-      ui.notifications.warn('That stat is already at maximum (7).');
+    const statCap = CONFIG.VAGABOND.homebrew?.statCap ?? 7;
+    if (current >= statCap) {
+      ui.notifications.warn(`That stat is already at maximum (${statCap}).`);
       return;
     }
 

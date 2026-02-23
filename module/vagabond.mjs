@@ -16,6 +16,7 @@ import {
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
+import { loadHomebrewConfig } from './helpers/homebrew-config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
 import { EquipmentHelper } from './helpers/equipment-helper.mjs';
@@ -32,6 +33,7 @@ import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
 import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
 import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
 import { DowntimeApp } from './applications/downtime-app.mjs';
+import { HomebrewSettingsApp } from './applications/homebrew-settings-app.mjs';
 import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
@@ -39,6 +41,7 @@ import { EncounterSettings } from './applications/encounter-settings.mjs';
 import { CompendiumSettings } from './applications/compendium-settings.mjs';
 import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 import { PartyCompactView } from './applications/party-compact-view.mjs';
+import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -99,31 +102,6 @@ function registerGameSettings() {
     default: 'top-right',
   });
 
-  // Setting 5: Level Pacing
-  game.settings.register('vagabond', 'levelPacing', {
-    name: 'VAGABOND.Settings.levelPacing.name',
-    hint: 'VAGABOND.Settings.levelPacing.hint',
-    scope: 'world',
-    config: true,
-    type: String,
-    choices: {
-      'quick': 'VAGABOND.Settings.levelPacing.quick',
-      'normal': 'VAGABOND.Settings.levelPacing.normal',
-      'epic': 'VAGABOND.Settings.levelPacing.epic',
-      'saga': 'VAGABOND.Settings.levelPacing.saga'
-    },
-    default: 'normal',
-    requiresReload: true,
-    onChange: () => {
-      // Trigger re-render of all character sheets
-      for (let actor of game.actors) {
-        if (actor.type === 'character') {
-          actor.sheet?.render(false);
-        }
-      }
-    }
-  });
-  
   // Setting 6: Chat icons
   game.settings.register('vagabond', 'chatCardIconStyle', {
     name: 'VAGABOND.Settings.chatCardIconStyle.name', // "Chat Card Icon Style"
@@ -315,6 +293,25 @@ function registerGameSettings() {
     restricted: true
   });
 
+  // Setting 18: Homebrew Config (hidden data store)
+  game.settings.register('vagabond', 'homebrewConfig', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    requiresReload: false,
+  });
+
+  // Setting 19: Homebrew Settings Menu button
+  game.settings.registerMenu('vagabond', 'homebrewSettingsMenu', {
+    name: 'VAGABOND.Settings.homebrewSettings.name',
+    label: 'VAGABOND.Settings.homebrewSettings.label',
+    hint: 'VAGABOND.Settings.homebrewSettings.hint',
+    icon: 'fas fa-flask-round-potion',
+    type: HomebrewSettingsApp,
+    restricted: true,
+  });
+
   // Setting 16: PC Fatigue Max
   game.settings.register('vagabond', 'pcFatigueMax', {
     name: 'VAGABOND.Settings.pcFatigueMax.name',
@@ -446,6 +443,7 @@ globalThis.vagabond = {
     VagabondMeasureTemplates,
     VagabondCharBuilder,
     EncounterSettings,
+    HomebrewSettingsApp,
     LevelUpDialog,
     PartyCompactView,
   },
@@ -465,13 +463,17 @@ globalThis.vagabond = {
   models,
 };
 
-Hooks.once('init', async function () {
+Hooks.once('init', function () {
   console.log("Vagabond | Initializing System...");
   // Register game settings first to avoid preparation errors
   registerGameSettings();
 
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
+
+  // Load homebrew config and store at CONFIG.VAGABOND.homebrew.
+  // Must run before DataModel registration so schemas can read homebrew values.
+  loadHomebrewConfig();
 
   // Apply custom status effects based on game setting
   const statusEffectsMode = game.settings.get('vagabond', 'statusEffectsMode');
@@ -490,10 +492,9 @@ Hooks.once('init', async function () {
   // Loads placeholder images for character sheets
   CONFIG.Actor.typeImages = VAGABOND.actorTypeImages;
 
-  // Preload Handlebars templates (MUST complete before sheet registration)
-  console.log("Vagabond | Preloading templates...");
-  await preloadHandlebarsTemplates();
-  console.log("Vagabond | Templates loaded successfully");
+  // Preload Handlebars templates in the background — sheets don't render until
+  // after the ready hook, so templates will be available in time.
+  preloadHandlebarsTemplates();
 
   /**
    * Set default initiative formula for the system
@@ -586,7 +587,6 @@ Hooks.once('init', async function () {
   CONFIG.ActiveEffect.documentClass = VagabondActiveEffect;
 
   // Register custom ActiveEffectConfig sheet
-  const VagabondActiveEffectConfig = (await import('./applications/active-effect-config.mjs')).default;
   foundry.applications.apps.DocumentSheetConfig.registerSheet(ActiveEffect, 'vagabond', VagabondActiveEffectConfig, {
     makeDefault: true,
     label: 'VAGABOND.Effect.ConfigSheet'
@@ -1019,7 +1019,7 @@ const FLUKE_REROLL_ENTRY = {
         return;
       }
       const weaponSkillKey = rerollData.weaponSkillKey;
-      const weaponSkill = actor.system.weaponSkills?.[weaponSkillKey];
+      const weaponSkill = actor.system.skills?.[weaponSkillKey];
       const critType = ['melee', 'ranged', 'brawl', 'finesse'].includes(weaponSkillKey) ? weaponSkillKey : null;
       const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
       const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
@@ -1095,7 +1095,7 @@ const FORCE_CRIT_ENTRY = {
       if (!weapon) { ui.notifications.error('Weapon not found.'); return; }
 
       const weaponSkillKey = rerollData.weaponSkillKey;
-      const weaponSkill = actor.system.weaponSkills?.[weaponSkillKey];
+      const weaponSkill = actor.system.skills?.[weaponSkillKey];
       const statKey = weaponSkill?.stat || null;
 
       const attackResult = {
@@ -1189,7 +1189,7 @@ const FORCE_CRIT_ENTRY = {
       let entity, entityLabel, title, tags;
       switch (type) {
         case 'skill':
-          entity = actor.system.skills?.[key] || actor.system.weaponSkills?.[key];
+          entity = actor.system.skills?.[key];
           entityLabel = entity?.label || key;
           title = `${entityLabel} Check`;
           tags = [{ label: entityLabel, cssClass: 'tag-skill' }];

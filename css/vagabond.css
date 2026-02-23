@@ -5529,6 +5529,452 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-damage-orange);
 }
 
+/* Homebrew Settings Dialog */
+#homebrew-settings.homebrew-settings-form .window-content {
+  padding: 0;
+  overflow: hidden;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  min-width: 150px;
+  border-right: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 0;
+  gap: 2px;
+  overflow-y: auto;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.8rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-button i:first-child {
+  width: 1em;
+  text-align: center;
+  flex-shrink: 0;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-button .tab-label {
+  flex: 1;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-button .reload-badge {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-button:hover {
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--vagabond-c-text-primary);
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-button.active {
+  border-left-color: var(--vagabond-c-dark-bluey);
+  background: rgba(44, 62, 80, 0.1);
+  color: var(--vagabond-c-dark-bluey);
+  font-weight: bold;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+}
+#homebrew-settings.homebrew-settings-form .tab-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+#homebrew-settings.homebrew-settings-form .tab-placeholder > i.fa-3x {
+  opacity: 0.2;
+  margin-bottom: 0.25rem;
+}
+#homebrew-settings.homebrew-settings-form .tab-placeholder h3 {
+  margin: 0;
+}
+#homebrew-settings.homebrew-settings-form .tab-placeholder p {
+  margin: 0;
+  line-height: 1.5;
+  max-width: 480px;
+}
+#homebrew-settings.homebrew-settings-form .tab-placeholder .coming-soon {
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+#homebrew-settings.homebrew-settings-form .placeholder-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-faint);
+  max-width: 500px;
+  width: 100%;
+}
+#homebrew-settings.homebrew-settings-form .placeholder-preview strong {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  margin-bottom: 2px;
+}
+#homebrew-settings.homebrew-settings-form .preview-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  padding: 1px 0;
+}
+#homebrew-settings.homebrew-settings-form .preview-row code {
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+#homebrew-settings.homebrew-settings-form .preview-row span {
+  color: var(--vagabond-c-muted);
+}
+#homebrew-settings.homebrew-settings-form .hb-fieldset {
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 0.75rem 1rem 1rem;
+  margin-bottom: 1rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-fieldset legend {
+  font-family: Manofa, sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0 0.4rem;
+  width: auto;
+  border: none;
+}
+#homebrew-settings.homebrew-settings-form .hb-fieldset legend::before, #homebrew-settings.homebrew-settings-form .hb-fieldset legend::after {
+  display: none !important;
+}
+#homebrew-settings.homebrew-settings-form .hb-form-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+#homebrew-settings.homebrew-settings-form .hb-form-group label {
+  min-width: 90px;
+  font-size: 0.88rem;
+  font-weight: bold;
+}
+#homebrew-settings.homebrew-settings-form .hb-form-group input[type=number],
+#homebrew-settings.homebrew-settings-form .hb-form-group input[type=text] {
+  flex: 1;
+  max-width: 120px;
+}
+#homebrew-settings.homebrew-settings-form .hb-hint {
+  width: 100%;
+  font-size: 0.78rem;
+  opacity: 0.65;
+  margin: 0.25rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-add-btn {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+}
+#homebrew-settings.homebrew-settings-form .tab-stats {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table th {
+  text-align: left;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table td {
+  padding: 0.18rem 0.4rem;
+  vertical-align: middle;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table .hb-stat-key-input {
+  width: 110px;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table .hb-stat-label-input {
+  width: 130px;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table .hb-stat-abbr-input {
+  width: 55px;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table .hb-stat-remove-btn {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.45;
+}
+#homebrew-settings.homebrew-settings-form .hb-stat-table .hb-stat-remove-btn:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+}
+#homebrew-settings.homebrew-settings-form .tab-skills {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table,
+#homebrew-settings.homebrew-settings-form .hb-saves-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table th,
+#homebrew-settings.homebrew-settings-form .hb-saves-table th {
+  text-align: left;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+  white-space: nowrap;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table td,
+#homebrew-settings.homebrew-settings-form .hb-saves-table td {
+  padding: 0.18rem 0.3rem;
+  vertical-align: middle;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table input[type=text],
+#homebrew-settings.homebrew-settings-form .hb-saves-table input[type=text] {
+  width: 88px;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table input[type=number],
+#homebrew-settings.homebrew-settings-form .hb-saves-table input[type=number] {
+  width: 52px;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table select,
+#homebrew-settings.homebrew-settings-form .hb-saves-table select {
+  width: 88px;
+  font-size: 0.8rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table input[type=checkbox],
+#homebrew-settings.homebrew-settings-form .hb-saves-table input[type=checkbox] {
+  width: auto;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table .hb-sk-remove-btn,
+#homebrew-settings.homebrew-settings-form .hb-skills-table .hb-sv-remove-btn,
+#homebrew-settings.homebrew-settings-form .hb-saves-table .hb-sk-remove-btn,
+#homebrew-settings.homebrew-settings-form .hb-saves-table .hb-sv-remove-btn {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.45;
+}
+#homebrew-settings.homebrew-settings-form .hb-skills-table .hb-sk-remove-btn:hover,
+#homebrew-settings.homebrew-settings-form .hb-skills-table .hb-sv-remove-btn:hover,
+#homebrew-settings.homebrew-settings-form .hb-saves-table .hb-sk-remove-btn:hover,
+#homebrew-settings.homebrew-settings-form .hb-saves-table .hb-sv-remove-btn:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+}
+#homebrew-settings.homebrew-settings-form .tab-dice {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-dice-chart {
+  width: 100%;
+  overflow-x: auto;
+}
+#homebrew-settings.homebrew-settings-form .hb-dice-chart .hb-chart-svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+#homebrew-settings.homebrew-settings-form .tab-leveling {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-xp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-xp-table th {
+  text-align: left;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+#homebrew-settings.homebrew-settings-form .hb-xp-table td {
+  padding: 0.2rem 0.5rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-xp-table .level-label {
+  font-size: 0.82rem;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+#homebrew-settings.homebrew-settings-form .hb-xp-table input[type=number] {
+  width: 80px;
+}
+#homebrew-settings.homebrew-settings-form .hb-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row .q-grip {
+  opacity: 0.3;
+  cursor: grab;
+  flex-shrink: 0;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row .q-text {
+  flex: 1;
+  font-size: 0.85rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row .q-xp-label {
+  font-size: 0.78rem;
+  opacity: 0.7;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row .q-xp {
+  width: 55px;
+  flex-shrink: 0;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row .q-remove-btn {
+  flex-shrink: 0;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+#homebrew-settings.homebrew-settings-form .hb-question-row .q-remove-btn:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+}
+#homebrew-settings.homebrew-settings-form .tab-derivations {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-deriv-input {
+  flex: 1;
+  max-width: 240px;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+#homebrew-settings.homebrew-settings-form .tab-damage-types {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table th {
+  text-align: left;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table td {
+  padding: 0.18rem 0.4rem;
+  vertical-align: middle;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-th-icon {
+  width: 2rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-icon-cell {
+  width: 2rem;
+  text-align: center;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-key-input {
+  width: 88px;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-label-input {
+  width: 110px;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-icon-input {
+  width: 100%;
+  min-width: 160px;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-remove-btn {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.45;
+}
+#homebrew-settings.homebrew-settings-form .hb-dt-table .hb-dt-remove-btn:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+}
+#homebrew-settings.homebrew-settings-form .tab-stat-cap {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .tab-advanced {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.04);
+}
+#homebrew-settings.homebrew-settings-form .homebrew-footer .reload-notice {
+  flex: 1;
+  font-size: 0.78rem;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+#homebrew-settings.homebrew-settings-form .homebrew-footer .reset-btn {
+  margin-left: auto;
+}
+
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .inventory-context-menu,

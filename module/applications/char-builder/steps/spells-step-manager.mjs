@@ -372,13 +372,15 @@ export class SpellsStepManager extends BaseStepManager {
       // Get trained skills from builder state
       const trainedSkills = state.skills || [];
 
-      // Build skills object with trained status
+      // Build skills object with trained status (includes weapon skills)
       const skillsDefinition = {
         arcana: { stat: 'reason' },
         craft: { stat: 'reason' },
         medicine: { stat: 'reason' },
         brawl: { stat: 'might' },
         finesse: { stat: 'dexterity' },
+        melee: { stat: 'might' },
+        ranged: { stat: 'awareness' },
         sneak: { stat: 'dexterity' },
         detect: { stat: 'awareness' },
         mysticism: { stat: 'awareness' },
@@ -391,23 +393,6 @@ export class SpellsStepManager extends BaseStepManager {
       const skills = {};
       for (const [key, def] of Object.entries(skillsDefinition)) {
         skills[key] = {
-          trained: trainedSkills.includes(key),
-          stat: def.stat,
-          bonus: 0
-        };
-      }
-
-      // Build weapon skills object with trained status
-      const weaponSkillsDefinition = {
-        melee: { stat: 'might' },
-        brawl: { stat: 'might' },
-        finesse: { stat: 'dexterity' },
-        ranged: { stat: 'awareness' }
-      };
-
-      const weaponSkills = {};
-      for (const [key, def] of Object.entries(weaponSkillsDefinition)) {
-        weaponSkills[key] = {
           trained: trainedSkills.includes(key),
           stat: def.stat,
           bonus: 0
@@ -428,7 +413,6 @@ export class SpellsStepManager extends BaseStepManager {
             luck: { value: finalStats.luck || 0 }
           },
           skills: skills,
-          weaponSkills: weaponSkills
         },
         items: []
       };

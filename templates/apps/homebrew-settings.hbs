@@ -1,0 +1,553 @@
+<div class="homebrew-layout">
+
+  {{!-- Left sidebar: tab buttons --}}
+  <nav class="homebrew-tabs" role="tablist">
+    {{#each tabs}}
+    <button
+      type="button"
+      class="homebrew-tab-button {{#if active}}active{{/if}}"
+      data-action="switchTab"
+      data-tab="{{id}}"
+      role="tab"
+      aria-selected="{{active}}"
+      title="{{label}}"
+    >
+      <i class="{{icon}}"></i>
+      <span class="tab-label">{{label}}</span>
+      {{#if requiresReload}}
+      <i class="fa-solid fa-rotate reload-badge" title="Requires World Reload"></i>
+      {{/if}}
+    </button>
+    {{/each}}
+  </nav>
+
+  {{!-- Right: content + footer --}}
+  <div class="homebrew-main">
+
+    <div class="homebrew-tab-content">
+
+      {{!-- Tab 1: Stats --}}
+      {{#if showStats}}
+      <div class="tab-stats">
+
+        <fieldset class="hb-fieldset">
+          <legend>Stats</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Define the core stats used in your game. Each stat needs a unique key (used internally), a display label, and a 3-letter abbreviation. Requires world reload.
+          </p>
+          <table class="hb-stat-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Label</th>
+                <th>Abbreviation</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each config.stats}}
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    class="hb-stat-key-input"
+                    data-stat-index="{{@index}}"
+                    data-stat-field="key"
+                    value="{{key}}"
+                    placeholder="statKey"
+                  >
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="hb-stat-label-input"
+                    data-stat-index="{{@index}}"
+                    data-stat-field="label"
+                    value="{{label}}"
+                    placeholder="Stat Name"
+                  >
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="hb-stat-abbr-input"
+                    data-stat-index="{{@index}}"
+                    data-stat-field="abbreviation"
+                    value="{{abbreviation}}"
+                    placeholder="ABR"
+                  >
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="hb-stat-remove-btn"
+                    data-action="removeStat"
+                    data-index="{{@index}}"
+                    title="Remove"
+                  ><i class="fa-solid fa-xmark"></i></button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <button type="button" class="hb-add-btn" data-action="addStat">
+            <i class="fa-solid fa-plus"></i> Add Stat
+          </button>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 2: Skills & Saves --}}
+      {{#if showSkills}}
+      <div class="tab-skills">
+
+        {{!-- Skills --}}
+        <fieldset class="hb-fieldset">
+          <legend>Skills</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Each skill needs a unique key, label, hint, associated stat, and trained multiplier. Requires world reload.
+          </p>
+          <table class="hb-skills-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Label</th>
+                <th>Stat</th>
+                <th>Mult</th>
+                <th title="Weapon Skill">WS</th>
+                <th title="Show in regular skills list">SK</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each skillRows}}
+              <tr>
+                <td><input type="text" class="hb-sk-key" data-skill-index="{{index}}" data-skill-field="key" value="{{key}}" placeholder="key"></td>
+                <td><input type="text" class="hb-sk-label" data-skill-index="{{index}}" data-skill-field="label" value="{{label}}" placeholder="Label"></td>
+                <td>
+                  <select class="hb-sk-stat" data-skill-index="{{index}}" data-skill-field="stat">
+                    {{#each statOptions}}
+                    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                  </select>
+                </td>
+                <td><input type="number" class="hb-sk-mult" data-skill-index="{{index}}" data-skill-field="trainedMultiplier" value="{{trainedMultiplier}}" min="0" max="10" step="0.5"></td>
+                <td><input type="checkbox" data-skill-index="{{index}}" data-skill-field="isWeaponSkill" {{#if isWeaponSkill}}checked{{/if}}></td>
+                <td><input type="checkbox" data-skill-index="{{index}}" data-skill-field="showInSkillsList" {{#if showInSkillsList}}checked{{/if}}></td>
+                <td>
+                  <button type="button" class="hb-sk-remove-btn" data-action="removeSkill" data-index="{{index}}" title="Remove">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <button type="button" class="hb-add-btn" data-action="addSkill">
+            <i class="fa-solid fa-plus"></i> Add Skill
+          </button>
+        </fieldset>
+
+        {{!-- Saves --}}
+        <fieldset class="hb-fieldset">
+          <legend>Saves</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Each save needs a key, label, two stats (summed for difficulty), and a base value. Formula: <code>base − stat1 − stat2 − bonus</code>. Requires world reload.
+          </p>
+          <table class="hb-saves-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Label</th>
+                <th>Stat 1</th>
+                <th>Stat 2</th>
+                <th>Base</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each saveRows}}
+              <tr>
+                <td><input type="text" class="hb-sv-key" data-save-index="{{index}}" data-save-field="key" value="{{key}}" placeholder="key"></td>
+                <td><input type="text" class="hb-sv-label" data-save-index="{{index}}" data-save-field="label" value="{{label}}" placeholder="Label"></td>
+                <td>
+                  <select class="hb-sv-stat" data-save-index="{{index}}" data-save-field="stat1">
+                    {{#each stat1Options}}
+                    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                  </select>
+                </td>
+                <td>
+                  <select class="hb-sv-stat" data-save-index="{{index}}" data-save-field="stat2">
+                    {{#each stat2Options}}
+                    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                  </select>
+                </td>
+                <td><input type="number" class="hb-sv-base" data-save-index="{{index}}" data-save-field="baseValue" value="{{baseValue}}" min="1" max="40" step="1"></td>
+                <td>
+                  <button type="button" class="hb-sv-remove-btn" data-action="removeSave" data-index="{{index}}" title="Remove">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <button type="button" class="hb-add-btn" data-action="addSave">
+            <i class="fa-solid fa-plus"></i> Add Save
+          </button>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 3: Dice --}}
+      {{#if showDice}}
+      <div class="tab-dice">
+
+        <fieldset class="hb-fieldset">
+          <legend>Check Dice</legend>
+          <div class="hb-form-group">
+            <label for="hb-baseCheck">Base Check</label>
+            <input id="hb-baseCheck" type="text" data-field="dice.baseCheck" value="{{config.dice.baseCheck}}" placeholder="1d20">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Die used for skill checks, attacks, and saves.</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-favorBonus">Favor Bonus</label>
+            <input id="hb-favorBonus" type="text" data-field="dice.favorBonus" value="{{config.dice.favorBonus}}" placeholder="1d6[favored]">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Extra die added to favored rolls.</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-hinderPenalty">Hinder Penalty</label>
+            <input id="hb-hinderPenalty" type="text" data-field="dice.hinderPenalty" value="{{config.dice.hinderPenalty}}" placeholder="1d6[hindered]">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Die subtracted from hindered rolls.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Spell Damage</legend>
+          <div class="hb-form-group">
+            <label for="hb-spellDmg">Base Damage Die</label>
+            <input id="hb-spellDmg" type="text" data-field="dice.spellBaseDamage" value="{{config.dice.spellBaseDamage}}" placeholder="d6">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Default spell damage die (e.g. d6, d8). Actor bonuses stack on top.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Check Probability</legend>
+          <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> Probability of rolling <strong>at or above</strong> the target number.</p>
+          <div class="hb-dice-chart" id="hb-dice-chart"></div>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 4: Leveling --}}
+      {{#if showLeveling}}
+      <div class="tab-leveling">
+
+        {{!-- Max Level --}}
+        <fieldset class="hb-fieldset">
+          <legend>General</legend>
+          <div class="hb-form-group">
+            <label for="hb-maxLevel">Max Level</label>
+            <input
+              id="hb-maxLevel"
+              type="number"
+              data-field="leveling.maxLevel"
+              value="{{config.leveling.maxLevel}}"
+              min="1"
+              max="30"
+              step="1"
+            >
+            <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> Requires world reload to take effect.</p>
+          </div>
+        </fieldset>
+
+        {{!-- XP Per Level Table --}}
+        <fieldset class="hb-fieldset">
+          <legend>XP Per Level Table</legend>
+          <p class="hb-hint">XP required to reach each level. Edit the values directly.</p>
+          <table class="hb-xp-table">
+            <thead>
+              <tr><th>Reach Level</th><th>XP Required</th></tr>
+            </thead>
+            <tbody>
+              {{#each config.leveling.xpTable}}
+              <tr>
+                <td class="level-label">Level {{level}}</td>
+                <td>
+                  <input
+                    type="number"
+                    data-xp-level="{{level}}"
+                    value="{{xp}}"
+                    min="0"
+                    step="1"
+                  >
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </fieldset>
+
+        {{!-- XP Questionnaire --}}
+        <fieldset class="hb-fieldset">
+          <legend>XP Questionnaire</legend>
+          <p class="hb-hint">Questions asked at the end of a session. Each can award a different XP amount.</p>
+          <div class="hb-questions-list">
+            {{#each config.leveling.xpQuestions}}
+            <div class="hb-question-row">
+              <i class="fa-solid fa-grip-lines q-grip"></i>
+              <input
+                type="text"
+                class="q-text"
+                data-q-index="{{@index}}"
+                data-q-field="question"
+                value="{{question}}"
+                placeholder="Question text..."
+              >
+              <label class="q-xp-label">XP</label>
+              <input
+                type="number"
+                class="q-xp"
+                data-q-index="{{@index}}"
+                data-q-field="xp"
+                value="{{xp}}"
+                min="1"
+                max="10"
+                step="1"
+              >
+              <button
+                type="button"
+                class="q-remove-btn"
+                data-action="removeXpQuestion"
+                data-index="{{@index}}"
+                title="Remove question"
+              ><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            {{/each}}
+          </div>
+          <button type="button" class="hb-add-btn" data-action="addXpQuestion">
+            <i class="fa-solid fa-plus"></i> Add Question
+          </button>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 5: Derivations --}}
+      {{#if showDerivations}}
+      <div class="tab-derivations">
+
+        <fieldset class="hb-fieldset">
+          <legend>Derived Statistics</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Formulas use roll data keys: <code>@might.total</code>, <code>@dexterity.total</code>, <code>@attributes.level.value</code>, etc. Changes take effect on save — no reload needed.
+          </p>
+          <div class="hb-form-group">
+            <label for="hb-deriv-hp">HP per Level</label>
+            <input
+              id="hb-deriv-hp"
+              type="text"
+              class="hb-deriv-input"
+              data-field="derivations.hp"
+              value="{{config.derivations.hp}}"
+              placeholder="@might.total"
+            >
+            <p class="hb-hint">Evaluated × level = total base HP. Default: <code>@might.total</code></p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-deriv-inv">Inventory Slots</label>
+            <input
+              id="hb-deriv-inv"
+              type="text"
+              class="hb-deriv-input"
+              data-field="derivations.inventory"
+              value="{{config.derivations.inventory}}"
+              placeholder="8 + @might.total"
+            >
+            <p class="hb-hint">Total base inventory slots. Default: <code>8 + @might.total</code></p>
+          </div>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 6: Damage Types --}}
+      {{#if showDamageTypes}}
+      <div class="tab-damage-types">
+
+        <fieldset class="hb-fieldset">
+          <legend>Damage Types</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Add, remove, or rename damage types. Changes take effect on save — no reload needed.
+          </p>
+          <table class="hb-dt-table">
+            <thead>
+              <tr>
+                <th class="hb-dt-th-icon"></th>
+                <th>Key</th>
+                <th>Label</th>
+                <th>FA Icon Class</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each config.damageTypes}}
+              <tr>
+                <td class="hb-dt-icon-cell">
+                  <i class="{{icon}}" data-dt-icon-preview="{{@index}}"></i>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="hb-dt-key-input"
+                    data-dt-index="{{@index}}"
+                    data-dt-field="key"
+                    value="{{key}}"
+                    placeholder="key"
+                  >
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="hb-dt-label-input"
+                    data-dt-index="{{@index}}"
+                    data-dt-field="label"
+                    value="{{label}}"
+                    placeholder="Label"
+                  >
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="hb-dt-icon-input"
+                    data-dt-index="{{@index}}"
+                    data-dt-field="icon"
+                    value="{{icon}}"
+                    placeholder="fa-solid fa-star"
+                  >
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="hb-dt-remove-btn"
+                    data-action="removeDamageType"
+                    data-index="{{@index}}"
+                    title="Remove"
+                  ><i class="fa-solid fa-xmark"></i></button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <button type="button" class="hb-add-btn" data-action="addDamageType">
+            <i class="fa-solid fa-plus"></i> Add Damage Type
+          </button>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 7: Stat Cap --}}
+      {{#if showStatCap}}
+      <div class="tab-stat-cap">
+
+        <fieldset class="hb-fieldset">
+          <legend>Stat Cap</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Maximum stat value reachable through level-up increases. The skill difficulty formula is <code>20 − (stat × 2)</code> for trained skills; at cap 7 that gives difficulty 6, the minimum meaningful result on a d20 roll-over. Requires world reload.
+          </p>
+          <div class="hb-form-group">
+            <label for="hb-statCap">Stat Cap</label>
+            <input
+              id="hb-statCap"
+              type="number"
+              data-field="statCap"
+              value="{{config.statCap}}"
+              min="1"
+              max="20"
+              step="1"
+            >
+            <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> Requires world reload to take effect.</p>
+          </div>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 8: Advanced --}}
+      {{#if showAdvanced}}
+      <div class="tab-advanced">
+
+        <fieldset class="hb-fieldset">
+          <legend>Skill Multipliers</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Difficulty formula: <code>20 − (stat × mult) − bonus</code>. Changes take effect on save — no reload needed.
+          </p>
+          <div class="hb-form-group">
+            <label for="hb-mult-trained">Trained</label>
+            <input
+              id="hb-mult-trained"
+              type="number"
+              data-field="multipliers.trained"
+              value="{{config.multipliers.trained}}"
+              min="0"
+              max="10"
+              step="0.5"
+            >
+            <p class="hb-hint">Multiplier applied when a skill is trained. Default: 2</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-mult-untrained">Untrained</label>
+            <input
+              id="hb-mult-untrained"
+              type="number"
+              data-field="multipliers.untrained"
+              value="{{config.multipliers.untrained}}"
+              min="0"
+              max="10"
+              step="0.5"
+            >
+            <p class="hb-hint">Multiplier applied when a skill is untrained. Default: 1</p>
+          </div>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+    </div>{{!-- .homebrew-tab-content --}}
+
+    <footer class="form-footer homebrew-footer">
+      {{#if activeTabRequiresReload}}
+      <span class="reload-notice">
+        <i class="fa-solid fa-rotate"></i>
+        {{localize "VAGABOND.HomebrewSettings.RequiresReload"}}
+      </span>
+      {{/if}}
+      <button type="button" class="reset-btn" data-action="resetDefaults" data-tab="{{activeTab}}">
+        <i class="fa-solid fa-undo"></i>
+        {{localize "VAGABOND.HomebrewSettings.ResetTab"}}
+      </button>
+      <button type="submit">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{localize "VAGABOND.HomebrewSettings.Save"}}
+      </button>
+      <button type="button" data-action="close">
+        {{localize "Cancel"}}
+      </button>
+    </footer>
+
+  </div>{{!-- .homebrew-main --}}
+
+</div>{{!-- .homebrew-layout --}}

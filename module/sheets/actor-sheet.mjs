@@ -295,6 +295,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         };
       }
 
+      // Split skills into regular and weapon-attack groups for the sliding panel.
+      // Skills with showInSkillsList:true (brawl, finesse) appear in BOTH columns
+      // because they're used for non-attack actions too (grapples, thievery, etc.).
+      if (this.actor.system.skills) {
+        const allSkills = Object.entries(this.actor.system.skills);
+        context.regularSkills = Object.fromEntries(allSkills.filter(([, s]) => !s.isWeaponSkill || s.showInSkillsList));
+        context.attackSkills  = Object.fromEntries(allSkills.filter(([, s]) =>  s.isWeaponSkill));
+      }
+
       // Panel state
       context.isPanelOpen = this.actor.getFlag('vagabond', 'isPanelOpen') ?? true;
 

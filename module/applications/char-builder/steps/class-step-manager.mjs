@@ -209,9 +209,7 @@ export class ClassStepManager extends BaseStepManager {
    * @private
    */
   _getAllSkillsWithWeaponSkills() {
-    const regularSkills = Object.keys(CONFIG.VAGABOND.skills);
-    const weaponSkills = ['melee', 'ranged']; // Add weapon skills at the end
-    return [...regularSkills, ...weaponSkills];
+    return Object.keys(CONFIG.VAGABOND.skills);
   }
 
   /**
@@ -242,15 +240,7 @@ export class ClassStepManager extends BaseStepManager {
         const isDisabled = isGuaranteed || isSelectedInOtherGroup;
         const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
 
-        // Get label - check if it's a weapon skill or regular skill
-        let label;
-        if (['melee', 'ranged', 'brawl', 'finesse'].includes(skillKey)) {
-          // Weapon skill - use weaponSkills localization
-          label = game.i18n.localize(CONFIG.VAGABOND.weaponSkills[skillKey]);
-        } else {
-          // Regular skill
-          label = game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`);
-        }
+        const label = game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`);
 
         return {
           key: skillKey,
@@ -286,14 +276,7 @@ export class ClassStepManager extends BaseStepManager {
         const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
 
         // Get label - check if it's a weapon skill or regular skill
-        let label;
-        if (['melee', 'ranged', 'brawl', 'finesse'].includes(skillKey)) {
-          // Weapon skill - use weaponSkills localization
-          label = game.i18n.localize(CONFIG.VAGABOND.weaponSkills[skillKey]);
-        } else {
-          // Regular skill
-          label = game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`);
-        }
+        const label = game.i18n.localize(`VAGABOND.Skills.${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}`);
 
         return {
           key: skillKey,

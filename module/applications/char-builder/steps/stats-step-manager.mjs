@@ -303,33 +303,32 @@ export class StatsStepManager extends BaseStepManager {
     // Get perk skills for visual indication
     const perkSkills = state.perkSkills || {};
 
-    // Get skills from the preview actor
-    const skills = Object.entries(previewActor.system.skills).map(([key, skill]) => {
-      return {
+    // Split skills into regular and weapon-attack groups for the preview panel
+    const allSkillEntries = Object.entries(previewActor.system.skills);
+    const skills = allSkillEntries
+      .filter(([, s]) => !s.isWeaponSkill)
+      .map(([key, skill]) => ({
         key: key,
         label: skill.label,
         statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]) || '',
         value: skill.difficulty,
         trained: skill.trained,
-        fromPerk: perkSkills[key] !== undefined, // Flag if this training comes from a perk
+        fromPerk: perkSkills[key] !== undefined,
         tooltip: game.i18n.localize(`VAGABOND.SkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
         affectedBy: [skill.stat]
-      };
-    });
-
-    // Get weapon skills from the preview actor
-    const weaponSkills = Object.entries(previewActor.system.weaponSkills).map(([key, skill]) => {
-      return {
+      }));
+    const weaponSkills = allSkillEntries
+      .filter(([, s]) => s.isWeaponSkill)
+      .map(([key, skill]) => ({
         key: key,
         label: skill.label,
         statAbbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[skill.stat]) || '',
         value: skill.difficulty,
         trained: skill.trained,
-        fromPerk: perkSkills[key] !== undefined, // Flag if this training comes from a perk
-        tooltip: game.i18n.localize(`VAGABOND.WeaponSkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
+        fromPerk: perkSkills[key] !== undefined,
+        tooltip: game.i18n.localize(`VAGABOND.SkillsHints.${key.charAt(0).toUpperCase() + key.slice(1)}`) || skill.label,
         affectedBy: [skill.stat]
-      };
-    });
+      }));
 
     return {
       hp: {
@@ -371,7 +370,7 @@ export class StatsStepManager extends BaseStepManager {
       },
       saves: saves,
       skills: skills,
-      weaponSkills: weaponSkills
+      weaponSkills: weaponSkills,
     };
   }
 
@@ -403,7 +402,7 @@ export class StatsStepManager extends BaseStepManager {
       // Get trained skills from builder state
       const trainedSkills = state.skills || [];
 
-      // Build skills object with trained status matching schema
+      // Build skills object with trained status matching schema (includes weapon skills)
       // Each skill needs: trained (bool), stat (string), bonus (number)
       const skillsDefinition = {
         arcana: { stat: 'reason' },
@@ -411,6 +410,8 @@ export class StatsStepManager extends BaseStepManager {
         medicine: { stat: 'reason' },
         brawl: { stat: 'might' },
         finesse: { stat: 'dexterity' },
+        melee: { stat: 'might' },
+        ranged: { stat: 'awareness' },
         sneak: { stat: 'dexterity' },
         detect: { stat: 'awareness' },
         mysticism: { stat: 'awareness' },
@@ -423,23 +424,6 @@ export class StatsStepManager extends BaseStepManager {
       const skills = {};
       for (const [key, def] of Object.entries(skillsDefinition)) {
         skills[key] = {
-          trained: trainedSkills.includes(key),
-          stat: def.stat,
-          bonus: 0
-        };
-      }
-
-      // Build weapon skills object with trained status matching schema
-      const weaponSkillsDefinition = {
-        melee: { stat: 'might' },
-        brawl: { stat: 'might' },
-        finesse: { stat: 'dexterity' },
-        ranged: { stat: 'awareness' }
-      };
-
-      const weaponSkills = {};
-      for (const [key, def] of Object.entries(weaponSkillsDefinition)) {
-        weaponSkills[key] = {
           trained: trainedSkills.includes(key),
           stat: def.stat,
           bonus: 0
@@ -460,7 +444,6 @@ export class StatsStepManager extends BaseStepManager {
             luck: { value: finalStats.luck || 0 }
           },
           skills: skills,
-          weaponSkills: weaponSkills
         },
         items: []
       };

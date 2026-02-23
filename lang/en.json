@@ -306,14 +306,6 @@
         "name": "Default Clock Position",
         "hint": "Default corner position for new progress clocks."
       },
-      "levelPacing": {
-        "name": "Level Pacing",
-        "hint": "Controls how much XP is required to level up. This affects the pace of character progression throughout your campaign.",
-        "quick": "Quick (5 XP/Level) - Est. 2-5 Months",
-        "normal": "Normal (5 × Next Level) - Est. 5-12 Months",
-        "epic": "Epic (7 × Next Level) - Est. 1-2 Years",
-        "saga": "Saga (10 × Next Level) - Est. 2+ Years"
-      },
       "chatCardIconStyle": {
         "name": "Chat Card Icon Style",
         "hint": "Choose what icon appears on the chat card",
@@ -363,6 +355,28 @@
       "npcFatigueMax": {
         "name": "NPC Fatigue Max",
         "hint": "Maximum fatigue level for NPCs. Default is 5."
+      },
+      "homebrewSettings": {
+        "name": "Homebrew Configuration",
+        "label": "Configure Homebrew",
+        "hint": "Customize stats, skills, saves, dice, leveling, derivations, damage types, and more."
+      }
+    },
+    "HomebrewSettings": {
+      "Title": "Homebrew Configuration",
+      "Saved": "Homebrew configuration saved.",
+      "RequiresReload": "Changes to this tab require a world reload to take effect.",
+      "ResetTab": "Reset Tab to Defaults",
+      "Save": "Save & Close",
+      "Tabs": {
+        "Stats": "Stats",
+        "Skills": "Skills & Saves",
+        "Dice": "Dice",
+        "Leveling": "Leveling",
+        "Derivations": "Derivations",
+        "DamageTypes": "Damage Types",
+        "StatCap": "Stat Cap",
+        "Advanced": "Advanced"
       }
     },
     "Actor": {

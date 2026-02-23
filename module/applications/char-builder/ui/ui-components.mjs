@@ -805,7 +805,6 @@ export class CharacterBuilderUIComponents {
           luck: { value: state.assignedStats?.luck || 0 }
         },
         skills: {},
-        weaponSkills: {}
       },
       items: []
     };

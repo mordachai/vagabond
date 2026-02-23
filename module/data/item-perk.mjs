@@ -57,23 +57,7 @@ export default class VagabondPerk extends VagabondItemBase {
       trainedSkills: new fields.ArrayField(
         new fields.StringField({
           required: true,
-          choices: {
-            arcana: 'VAGABOND.Skills.Arcana',
-            craft: 'VAGABOND.Skills.Craft',
-            medicine: 'VAGABOND.Skills.Medicine',
-            brawl: 'VAGABOND.Skills.Brawl',
-            finesse: 'VAGABOND.Skills.Finesse',
-            sneak: 'VAGABOND.Skills.Sneak',
-            detect: 'VAGABOND.Skills.Detect',
-            mysticism: 'VAGABOND.Skills.Mysticism',
-            survival: 'VAGABOND.Skills.Survival',
-            influence: 'VAGABOND.Skills.Influence',
-            leadership: 'VAGABOND.Skills.Leadership',
-            performance: 'VAGABOND.Skills.Performance',
-            // Weapon skills (from WeaponSkills)
-            melee: 'VAGABOND.WeaponSkills.Melee',
-            ranged: 'VAGABOND.WeaponSkills.Ranged'
-          }
+          choices: Object.fromEntries((CONFIG.VAGABOND.homebrew?.skills ?? []).map(s => [s.key, s.label])),
         }),
         { initial: [] }
       ),
@@ -83,23 +67,7 @@ export default class VagabondPerk extends VagabondItemBase {
         new fields.ArrayField(
           new fields.StringField({
             required: true,
-            choices: {
-              arcana: 'VAGABOND.Skills.Arcana',
-              craft: 'VAGABOND.Skills.Craft',
-              medicine: 'VAGABOND.Skills.Medicine',
-              brawl: 'VAGABOND.Skills.Brawl',
-              finesse: 'VAGABOND.Skills.Finesse',
-              sneak: 'VAGABOND.Skills.Sneak',
-              detect: 'VAGABOND.Skills.Detect',
-              mysticism: 'VAGABOND.Skills.Mysticism',
-              survival: 'VAGABOND.Skills.Survival',
-              influence: 'VAGABOND.Skills.Influence',
-              leadership: 'VAGABOND.Skills.Leadership',
-              performance: 'VAGABOND.Skills.Performance',
-              // Weapon skills (from WeaponSkills)
-              melee: 'VAGABOND.WeaponSkills.Melee',
-              ranged: 'VAGABOND.WeaponSkills.Ranged'
-            }
+            choices: Object.fromEntries((CONFIG.VAGABOND.homebrew?.skills ?? []).map(s => [s.key, s.label])),
           })
         ),
         { initial: [] }
@@ -300,11 +268,7 @@ export default class VagabondPerk extends VagabondItemBase {
     if (this.prerequisites.trainedSkills.length > 0) {
       const skillNames = this.prerequisites.trainedSkills.map(skill => {
         const skillKey = skill.charAt(0).toUpperCase() + skill.slice(1);
-        // Try WeaponSkills first, then Skills
-        const skillLabel = CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
-                          CONFIG.VAGABOND.skills?.[skillKey] ||
-                          skill;
-        return game.i18n.localize(skillLabel);
+        return game.i18n.localize(`VAGABOND.Skills.${skillKey}`);
       });
       parts.push(`Trained: ${skillNames.join(', ')}`);
     }
@@ -314,10 +278,7 @@ export default class VagabondPerk extends VagabondItemBase {
       const orGroupStrings = this.prerequisites.trainedSkillOrGroups.map(orGroup => {
         const skillNames = orGroup.map(skill => {
           const skillKey = skill.charAt(0).toUpperCase() + skill.slice(1);
-          const skillLabel = CONFIG.VAGABOND.weaponSkills?.[skillKey] ||
-                            CONFIG.VAGABOND.skills?.[skillKey] ||
-                            skill;
-          return game.i18n.localize(skillLabel);
+          return game.i18n.localize(`VAGABOND.Skills.${skillKey}`);
         });
         return `(${skillNames.join(' or ')})`;
       });

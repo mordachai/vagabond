@@ -9,14 +9,17 @@ export class VagabondRollBuilder {
    * @param {string} baseFormula - Base formula (default 'd20')
    * @returns {string} Complete roll formula
    */
-  static buildD20Formula(actor, favorHinder, baseFormula = 'd20') {
-    let formula = baseFormula;
+  static buildD20Formula(actor, favorHinder, baseFormula = null) {
+    const dice = CONFIG.VAGABOND?.homebrew?.dice;
+    let formula = baseFormula ?? dice?.baseCheck ?? '1d20';
 
-    // Add favor/hinder dice
+    // Add favor/hinder dice from homebrew config
     if (favorHinder === 'favor') {
-      formula += ' + 1d6[favored]';
+      const favDice = dice?.favorBonus ?? '1d6[favored]';
+      formula += ` + ${favDice}`;
     } else if (favorHinder === 'hinder') {
-      formula += ' - 1d6[hindered]';
+      const hindDice = dice?.hinderPenalty ?? '1d6[hindered]';
+      formula += ` - ${hindDice}`;
     }
 
     // Add universal check bonus
@@ -49,7 +52,7 @@ export class VagabondRollBuilder {
    * @param {string} baseFormula - Base formula (default 'd20')
    * @returns {Promise<Roll>} Evaluated roll
    */
-  static async buildAndEvaluateD20(actor, favorHinder, baseFormula = 'd20') {
+  static async buildAndEvaluateD20(actor, favorHinder, baseFormula = null) {
     const formula = this.buildD20Formula(actor, favorHinder, baseFormula);
     return this.evaluateRoll(formula, actor, favorHinder);
   }
@@ -62,14 +65,15 @@ export class VagabondRollBuilder {
    * @param {string} baseFormula - Base formula (default 'd20')
    * @returns {Promise<Roll>} Evaluated roll
    */
-  static async buildAndEvaluateD20WithRollData(rollData, favorHinder, baseFormula = 'd20') {
-    let formula = baseFormula;
+  static async buildAndEvaluateD20WithRollData(rollData, favorHinder, baseFormula = null) {
+    const dice = CONFIG.VAGABOND?.homebrew?.dice;
+    let formula = baseFormula ?? dice?.baseCheck ?? '1d20';
 
     // Add favor/hinder dice
     if (favorHinder === 'favor') {
-      formula += ' + 1d6[favored]';
+      formula += ` + ${dice?.favorBonus ?? '1d6[favored]'}`;
     } else if (favorHinder === 'hinder') {
-      formula += ' - 1d6[hindered]';
+      formula += ` - ${dice?.hinderPenalty ?? '1d6[hindered]'}`;
     }
 
     // Add universal check bonus from rollData
@@ -157,7 +161,7 @@ export class VagabondRollBuilder {
     actor,
     effectiveFavorHinder,
     isConditionallyHindered,
-    baseFormula = 'd20'
+    baseFormula = null
   ) {
     // Apply conditional hinder to determine final state
     const finalFavorHinder = this.applyConditionalHinder(effectiveFavorHinder, isConditionallyHindered);

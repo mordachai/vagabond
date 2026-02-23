@@ -82,7 +82,7 @@ export class RollHandler {
       // For skills and saves, use the formatted chat cards
       if (rollType === 'skill' && rollKey) {
         // Check both regular skills and weapon skills
-        const skillData = this.actor.system.skills?.[rollKey] || this.actor.system.weaponSkills?.[rollKey];
+        const skillData = this.actor.system.skills?.[rollKey];
         const difficulty = skillData?.difficulty || 10;
         const isSuccess = roll.total >= difficulty;
         await VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess);

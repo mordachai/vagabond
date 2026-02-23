@@ -268,60 +268,28 @@ export class VagabondActiveEffect extends ActiveEffect {
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',
 
-      // ===== STATS =====
-      'system.stats.might.value': 'Stat: Might',
-      'system.stats.might.bonus': 'Stat: Might Bonus',
-      'system.stats.dexterity.value': 'Stat: Dexterity',
-      'system.stats.dexterity.bonus': 'Stat: Dexterity Bonus',
-      'system.stats.awareness.value': 'Stat: Awareness',
-      'system.stats.awareness.bonus': 'Stat: Awareness Bonus',
-      'system.stats.reason.value': 'Stat: Reason',
-      'system.stats.reason.bonus': 'Stat: Reason Bonus',
-      'system.stats.presence.value': 'Stat: Presence',
-      'system.stats.presence.bonus': 'Stat: Presence Bonus',
-      'system.stats.luck.value': 'Stat: Luck',
-      'system.stats.luck.bonus': 'Stat: Luck Bonus',
+      // ===== STATS (dynamic from homebrew config) =====
+      ...Object.fromEntries(
+        (CONFIG.VAGABOND.homebrew?.stats ?? []).flatMap(s => [
+          [`system.stats.${s.key}.value`, `Stat: ${s.label}`],
+          [`system.stats.${s.key}.bonus`, `Stat: ${s.label} Bonus`],
+        ])
+      ),
 
-      // ===== SAVES =====
-      'system.saves.reflex.bonus': 'Save: Reflex Bonus',
-      'system.saves.endure.bonus': 'Save: Endure Bonus',
-      'system.saves.will.bonus': 'Save: Will Bonus',
+      // ===== SAVES (dynamic from homebrew config) =====
+      ...Object.fromEntries(
+        (CONFIG.VAGABOND.homebrew?.saves ?? []).map(s => [
+          `system.saves.${s.key}.bonus`, `Save: ${s.label} Bonus`,
+        ])
+      ),
 
-      // ===== SKILLS =====
-      'system.skills.arcana.trained': 'Skill: Arcana (Trained)',
-      'system.skills.arcana.bonus': 'Skill: Arcana Bonus',
-      'system.skills.craft.trained': 'Skill: Craft (Trained)',
-      'system.skills.craft.bonus': 'Skill: Craft Bonus',
-      'system.skills.medicine.trained': 'Skill: Medicine (Trained)',
-      'system.skills.medicine.bonus': 'Skill: Medicine Bonus',
-      'system.skills.brawl.trained': 'Skill: Brawl (Trained)',
-      'system.skills.brawl.bonus': 'Skill: Brawl Bonus',
-      'system.skills.finesse.trained': 'Skill: Finesse (Trained)',
-      'system.skills.finesse.bonus': 'Skill: Finesse Bonus',
-      'system.skills.sneak.trained': 'Skill: Sneak (Trained)',
-      'system.skills.sneak.bonus': 'Skill: Sneak Bonus',
-      'system.skills.detect.trained': 'Skill: Detect (Trained)',
-      'system.skills.detect.bonus': 'Skill: Detect Bonus',
-      'system.skills.mysticism.trained': 'Skill: Mysticism (Trained)',
-      'system.skills.mysticism.bonus': 'Skill: Mysticism Bonus',
-      'system.skills.survival.trained': 'Skill: Survival (Trained)',
-      'system.skills.survival.bonus': 'Skill: Survival Bonus',
-      'system.skills.influence.trained': 'Skill: Influence (Trained)',
-      'system.skills.influence.bonus': 'Skill: Influence Bonus',
-      'system.skills.leadership.trained': 'Skill: Leadership (Trained)',
-      'system.skills.leadership.bonus': 'Skill: Leadership Bonus',
-      'system.skills.performance.trained': 'Skill: Performance (Trained)',
-      'system.skills.performance.bonus': 'Skill: Performance Bonus',
-
-      // ===== WEAPON SKILLS =====
-      'system.weaponSkills.melee.trained': 'Weapon Skill: Melee (Trained)',
-      'system.weaponSkills.melee.bonus': 'Weapon Skill: Melee Bonus',
-      'system.weaponSkills.brawl.trained': 'Weapon Skill: Brawl (Trained)',
-      'system.weaponSkills.brawl.bonus': 'Weapon Skill: Brawl Bonus',
-      'system.weaponSkills.finesse.trained': 'Weapon Skill: Finesse (Trained)',
-      'system.weaponSkills.finesse.bonus': 'Weapon Skill: Finesse Bonus',
-      'system.weaponSkills.ranged.trained': 'Weapon Skill: Ranged (Trained)',
-      'system.weaponSkills.ranged.bonus': 'Weapon Skill: Ranged Bonus',
+      // ===== SKILLS (dynamic from homebrew config, includes weapon skills) =====
+      ...Object.fromEntries(
+        (CONFIG.VAGABOND.homebrew?.skills ?? []).flatMap(s => [
+          [`system.skills.${s.key}.trained`, `Skill: ${s.label} (Trained)`],
+          [`system.skills.${s.key}.bonus`, `Skill: ${s.label} Bonus`],
+        ])
+      ),
 
       // ===== DAMAGE IMMUNITIES & WEAKNESSES =====
       'system.immunities': 'Damage Immunities (Array)',

@@ -332,7 +332,7 @@ export default class VagabondCharacter extends VagabondActorBase {
             integer: true,
             initial: null,  // No initial value - field is empty
             min: 0,
-            max: 12,
+            max: CONFIG.VAGABOND.homebrew?.statCap ?? 7,
           }),
           // Bonus field for Active Effects to modify stats
           bonus: new fields.ArrayField(
@@ -348,248 +348,32 @@ export default class VagabondCharacter extends VagabondActorBase {
       }, {})
     );
 
-    // Saving Throws system
-    schema.saves = new fields.SchemaField({
-      reflex: new fields.SchemaField({
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Reflex Save Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      endure: new fields.SchemaField({
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Endure Save Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      will: new fields.SchemaField({
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Will Save Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      })
-    });
+    // Saving Throws system (dynamically defined from homebrew config)
+    schema.saves = new fields.SchemaField(
+      (CONFIG.VAGABOND.homebrew?.saves ?? []).reduce((obj, save) => {
+        obj[save.key] = new fields.SchemaField({
+          bonus: new fields.ArrayField(
+            new fields.StringField({ blank: true }),
+            { initial: [] }
+          ),
+        });
+        return obj;
+      }, {})
+    );
 
-    // Skills system
-    schema.skills = new fields.SchemaField({
-      // Reason-based skills
-      arcana: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Arcana Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      craft: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Craft Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      medicine: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'reason', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Medicine Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-
-      // Might-based skills
-      brawl: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Brawl Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-
-      // Dexterity-based skills
-      finesse: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Finesse Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      sneak: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Sneak Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-
-      // Awareness-based skills
-      detect: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Detect Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      mysticism: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Mysticism Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      survival: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Survival Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-
-      // Presence-based skills
-      influence: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Influence Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      leadership: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Leadership Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      performance: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'presence', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Performance Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      })
-    });
-
-    // Weapon Skills system
-    schema.weaponSkills = new fields.SchemaField({
-      melee: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Melee Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      brawl: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'might', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Brawl Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      finesse: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'dexterity', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Finesse Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      }),
-      ranged: new fields.SchemaField({
-        trained: new fields.BooleanField({ initial: false }),
-        stat: new fields.StringField({ initial: 'awareness', readonly: true }),
-        bonus: new fields.ArrayField(
-          new fields.StringField({ blank: true }),
-          {
-            initial: [],
-            label: "Ranged Bonus",
-            hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
-          }
-        )
-      })
-    });
+    // Skills system (dynamically defined from homebrew config)
+    schema.skills = new fields.SchemaField(
+      (CONFIG.VAGABOND.homebrew?.skills ?? []).reduce((obj, skill) => {
+        obj[skill.key] = new fields.SchemaField({
+          trained: new fields.BooleanField({ initial: false }),
+          bonus: new fields.ArrayField(
+            new fields.StringField({ blank: true }),
+            { initial: [] }
+          ),
+        });
+        return obj;
+      }, {})
+    );
 
     // Damage immunities and weaknesses
     schema.immunities = new fields.ArrayField(
@@ -753,7 +537,6 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // --- 4. Loop: Reset All Skill Bonuses ---
     for (let s of Object.values(this.skills)) { s.bonus = []; }
-    for (let s of Object.values(this.weaponSkills)) { s.bonus = []; }
 
     // 5. Reset Defaults
     this.attributes.isSpellcaster = false;
@@ -929,25 +712,28 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Ensure it's always a boolean
     this.attributes.isSpellcaster = Boolean(this.attributes.isSpellcaster);
 
-    // Calculate final spell damage die size
-    this.spellDamageDieSize = 6 + (this.spellDamageDieSizeBonus || 0);
+    // Calculate final spell damage die size (base from homebrew config, e.g. 'd6' → 6)
+    const spellBaseDieStr = CONFIG.VAGABOND?.homebrew?.dice?.spellBaseDamage ?? 'd6';
+    const spellBaseDieNum = parseInt(spellBaseDieStr.replace(/\D/g, '')) || 6;
+    this.spellDamageDieSize = spellBaseDieNum + (this.spellDamageDieSizeBonus || 0);
 
     // ------------------------------------------------------------------
     // Calculate Max HP
-    // Formula: (Might × Level) + (hpPerLevel Bonus × Level) + Flat HP Bonus
-    // Base HP = Might × Level
+    // Formula: (hpPerLevelBase × Level) + (hpPerLevel Bonus × Level) + Flat HP Bonus
+    // hpPerLevelBase comes from the configurable derivation formula (default: @might.total)
     // Tough Perk adds +1 hpPerLevel per stack, giving +Level HP per stack
     // Flat bonus (system.health.bonus) adds a fixed amount regardless of level
     // We do this BEFORE other combat values in case they depend on Max HP
     // ------------------------------------------------------------------
-    const mightTotal = this.stats.might?.total || 0;
     const levelValue = this.attributes.level?.value || 1; // Ensure minimum level 1
+    const hpFormula = CONFIG.VAGABOND?.homebrew?.derivations?.hp ?? '@might.total';
+    const hpPerLevelBase = this._evaluateSingleFormula(hpFormula, rollData);
     // Evaluate HP bonuses inline (StringFields coerce numbers back to strings)
     const hpPerLevelBonus = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
     const flatHpBonus = this._evaluateFormulaField(this.health.bonus, rollData);
 
     // Calculate base derived Max HP with active effects integration
-    const baseMaxHP = (mightTotal * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
+    const baseMaxHP = (hpPerLevelBase * levelValue) + (hpPerLevelBonus * levelValue) + flatHpBonus;
     
     // Add to existing value (which includes Active Effects modifications)
     // Ensure minimum HP of 1 regardless of negative modifiers
@@ -982,64 +768,36 @@ export default class VagabondCharacter extends VagabondActorBase {
     this._prepareClassDisplayData();
     this._calculateXPRequirements();
 
-    // Process Saves
-    // Use total stat values (which include bonuses from Active Effects)
-    const dexTotal = this.stats.dexterity?.total || 0;
-    const awrTotal = this.stats.awareness?.total || 0;
-    const mitTotal = this.stats.might?.total || 0;
-    const rsnTotal = this.stats.reason?.total || 0;
-    const presTotal = this.stats.presence?.total || 0;
-
-    // Evaluate save bonuses inline (StringFields coerce numbers back to strings)
-    const reflexBonus = this._evaluateFormulaField(this.saves.reflex?.bonus, rollData);
-    const endureBonus = this._evaluateFormulaField(this.saves.endure?.bonus, rollData);
-    const willBonus = this._evaluateFormulaField(this.saves.will?.bonus, rollData);
-
-    this.saves.reflex.difficulty = 20 - (dexTotal + awrTotal) - reflexBonus;
-    this.saves.endure.difficulty = 20 - (mitTotal + mitTotal) - endureBonus;
-    this.saves.will.difficulty = 20 - (rsnTotal + presTotal) - willBonus;
-
-    // Get localized stat abbreviations
-    const dexAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.dexterity) || 'DEX';
-    const awrAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.awareness) || 'AWR';
-    const mitAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.might) || 'MIG';
-    const rsnAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.reason) || 'RSN';
-    const preAbbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations.presence) || 'PRE';
-
-    this.saves.reflex.label = game.i18n.localize('VAGABOND.Saves.Reflex.name') ?? 'Reflex';
-    this.saves.reflex.description = game.i18n.localize('VAGABOND.Saves.Reflex.description') ?? 'Avoid area effects and attacks';
-    this.saves.reflex.statAbbr = `${dexAbbr}+${awrAbbr}`;
-
-    this.saves.endure.label = game.i18n.localize('VAGABOND.Saves.Endure.name') ?? 'Endure';
-    this.saves.endure.description = game.i18n.localize('VAGABOND.Saves.Endure.description') ?? 'Withstand poison and death';
-    this.saves.endure.statAbbr = `${mitAbbr}+${mitAbbr}`;
-
-    this.saves.will.label = game.i18n.localize('VAGABOND.Saves.Will.name') ?? 'Will';
-    this.saves.will.description = game.i18n.localize('VAGABOND.Saves.Will.description') ?? 'Resist curses and enthrallment';
-    this.saves.will.statAbbr = `${rsnAbbr}+${preAbbr}`;
-
-    // Process Skills
-    for (const key in this.skills) {
-      const skill = this.skills[key];
-      const associatedStat = this.stats[skill.stat];
-      const statValue = associatedStat?.total || 0; // Use total (includes bonuses), not value
-      // Evaluate skill bonus inline (StringFields coerce numbers back to strings)
-      const skillBonus = this._evaluateFormulaField(skill.bonus, rollData);
-
-      skill.difficulty = 20 - (skill.trained ? statValue * 2 : statValue) - skillBonus;
-      skill.label = game.i18n.localize(`VAGABOND.Skills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
+    // Process Saves (dynamically from homebrew config)
+    for (const saveDef of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      const save = this.saves[saveDef.key];
+      if (!save) continue;
+      const bonus = this._evaluateFormulaField(save.bonus, rollData);
+      const stat1Total = this.stats[saveDef.stat1]?.total || 0;
+      const stat2Total = this.stats[saveDef.stat2]?.total || 0;
+      save.difficulty = saveDef.baseValue - stat1Total - stat2Total - bonus;
+      save.label = saveDef.label;
+      save.description = saveDef.description;
+      const abbr1 = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[saveDef.stat1] ?? '') || saveDef.stat1.toUpperCase().slice(0, 3);
+      const abbr2 = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[saveDef.stat2] ?? '') || saveDef.stat2.toUpperCase().slice(0, 3);
+      save.statAbbr = `${abbr1}+${abbr2}`;
     }
 
-    // Process Weapon Skills
-    for (const key in this.weaponSkills) {
-      const weaponSkill = this.weaponSkills[key];
-      const associatedStat = this.stats[weaponSkill.stat];
-      const statValue = associatedStat?.total || 0; // Use total (includes bonuses), not value
-      // Evaluate weapon skill bonus inline (StringFields coerce numbers back to strings)
-      const weaponSkillBonus = this._evaluateFormulaField(weaponSkill.bonus, rollData);
+    // Process Skills (includes all weapon skills; stat association comes from homebrew config)
+    const trainedMult   = CONFIG.VAGABOND?.homebrew?.multipliers?.trained   ?? 2;
+    const untrainedMult = CONFIG.VAGABOND?.homebrew?.multipliers?.untrained ?? 1;
+    for (const key in this.skills) {
+      const skill = this.skills[key];
+      const configSkill = CONFIG.VAGABOND?.homebrew?.skills?.find(s => s.key === key);
+      // Stat association lives in config, not in schema (stat field removed from schema)
+      skill.stat = configSkill?.stat ?? '';
+      const statValue = this.stats[skill.stat]?.total || 0;
+      const skillBonus = this._evaluateFormulaField(skill.bonus, rollData);
 
-      weaponSkill.difficulty = 20 - (weaponSkill.trained ? statValue * 2 : statValue) - weaponSkillBonus;
-      weaponSkill.label = game.i18n.localize(`VAGABOND.WeaponSkills.${key.charAt(0).toUpperCase() + key.slice(1)}`) ?? key;
+      skill.difficulty = 20 - (skill.trained ? statValue * trainedMult : statValue * untrainedMult) - skillBonus;
+      skill.label = configSkill?.label ?? key;
+      skill.isWeaponSkill    = configSkill?.isWeaponSkill    ?? false;
+      skill.showInSkillsList = configSkill?.showInSkillsList ?? false;
     }
   }
 
@@ -1090,6 +848,32 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Future implementation
   }
 
+  /**
+   * Migrate legacy system.weaponSkills data into system.skills.
+   * Called automatically by Foundry before the DataModel is constructed.
+   * @param {object} data - The raw source data
+   * @returns {object} The (potentially mutated) source data
+   */
+  static migrateData(data) {
+    if (data.weaponSkills) {
+      data.skills ??= {};
+      // melee/ranged only ever lived in weaponSkills — migrate them to skills
+      for (const key of ['melee', 'ranged']) {
+        if (data.weaponSkills[key] && !data.skills[key]) {
+          data.skills[key] = foundry.utils.deepClone(data.weaponSkills[key]);
+        }
+      }
+      // brawl/finesse were duplicated — only copy trained if the skills entry is missing it
+      for (const key of ['brawl', 'finesse']) {
+        if (data.weaponSkills[key]?.trained && !data.skills[key]?.trained) {
+          data.skills[key] ??= {};
+          data.skills[key].trained = data.weaponSkills[key].trained;
+        }
+      }
+    }
+    return super.migrateData(data);
+  }
+
   getRollData() {
     const data = {};
     if (this.stats) {
@@ -1103,14 +887,6 @@ export default class VagabondCharacter extends VagabondActorBase {
         data.skills[k] = foundry.utils.deepClone(v);
         // Ensure stat field is included (it's readonly so might not clone)
         if (v.stat) data.skills[k].stat = v.stat;
-      }
-    }
-    if (this.weaponSkills) {
-      data.weaponSkills = {};
-      for (let [k, v] of Object.entries(this.weaponSkills)) {
-        data.weaponSkills[k] = foundry.utils.deepClone(v);
-        // Ensure stat field is included (it's readonly so might not clone)
-        if (v.stat) data.weaponSkills[k].stat = v.stat;
       }
     }
     if (this.saves) {
@@ -1209,11 +985,12 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateInventorySlots(rollData) {
-    // Base slots: Might + 8 + Bonus
-    const mightTotal = this.stats.might?.total || 0;
+    // Base slots come from the configurable derivation formula (default: 8 + @might.total)
+    const invFormula = CONFIG.VAGABOND?.homebrew?.derivations?.inventory ?? '8 + @might.total';
+    const invBase = this._evaluateSingleFormula(invFormula, rollData);
     // Evaluate inventory bonus slots inline (StringFields coerce numbers back to strings)
     const bonusSlots = this._evaluateFormulaField(this.inventory.bonusSlots, rollData);
-    const baseMaxSlots = 8 + mightTotal + bonusSlots;
+    const baseMaxSlots = invBase + bonusSlots;
 
     // Get current fatigue (0-5)
     const currentFatigue = this.fatigue || 0;
@@ -1306,25 +1083,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     const nextLevel = currentLevel + 1;
     const currentXP = this.attributes.xp || 0;
 
-    const pacing = game.settings?.get('vagabond', 'levelPacing') || 'normal';
-
-    let xpRequired;
-    switch (pacing) {
-      case 'quick':
-        xpRequired = 5;
-        break;
-      case 'normal':
-        xpRequired = 5 * nextLevel;
-        break;
-      case 'epic':
-        xpRequired = 7 * nextLevel;
-        break;
-      case 'saga':
-        xpRequired = 10 * nextLevel;
-        break;
-      default:
-        xpRequired = 5 * nextLevel;
-    }
+    // Read XP table from homebrew config; fall back to default 'normal' pacing formula
+    const xpTable = CONFIG.VAGABOND?.homebrew?.leveling?.xpTable ?? [];
+    const entry = xpTable.find(t => t.level === nextLevel);
+    const xpRequired = entry ? (entry.xp || 0) : 5 * nextLevel;
 
     this.attributes.xpRequired = xpRequired;
     this.attributes.xpProgress = currentXP;

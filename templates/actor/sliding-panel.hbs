@@ -277,7 +277,7 @@
       <section class='skills-section grid-span-1'>
         <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
         <div class='skills-list'>
-          {{#each system.skills as |skill key|}}
+          {{#each regularSkills as |skill key|}}
             <div class='skill flexrow'>
               <label class='skill-checkbox-label'>
                 <input
@@ -312,28 +312,37 @@
         <div class='weapon-skills flexcol mt-10'>
           <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Attacks"}}</h4>
           <div class='skills-list'>
-            {{#each system.weaponSkills as |weaponSkill key|}}
+            {{#each attackSkills as |skill key|}}
               <div class='skill flexrow'>
-                <label class='skill-checkbox-label'>
-                  <input
-                    type='checkbox'
-                    name='system.weaponSkills.{{key}}.trained'
-                    {{#if weaponSkill.trained}}checked{{/if}}
-                    class='skill-checkbox-hidden'
-                  />
-                  <span class='skill-checkbox-icon {{#if weaponSkill.trained}}trained{{else}}untrained{{/if}}'></span>
-                </label>
+                {{!-- Skills with showInSkillsList (brawl, finesse) already have a checkbox
+                     in the regularSkills column above. Render a read-only indicator here
+                     to avoid duplicate form inputs with the same name on the same form. --}}
+                {{#if skill.showInSkillsList}}
+                  <span class='skill-checkbox-label'>
+                    <span class='skill-checkbox-icon {{#if skill.trained}}trained{{else}}untrained{{/if}}'></span>
+                  </span>
+                {{else}}
+                  <label class='skill-checkbox-label'>
+                    <input
+                      type='checkbox'
+                      name='system.skills.{{key}}.trained'
+                      {{#if skill.trained}}checked{{/if}}
+                      class='skill-checkbox-hidden'
+                    />
+                    <span class='skill-checkbox-icon {{#if skill.trained}}trained{{else}}untrained{{/if}}'></span>
+                  </label>
+                {{/if}}
                 <label
                   class='skill-label rollable'
                   data-action='roll'
                   data-roll='d20'
                   data-type='skill'
                   data-key='{{key}}'
-                  data-difficulty='{{weaponSkill.difficulty}}'
-                  data-trained='{{weaponSkill.trained}}'
-                  data-label='{{weaponSkill.label}} (Difficulty {{weaponSkill.difficulty}})'
-                >{{weaponSkill.label}}</label>
-                <span class='skill-difficulty'>{{weaponSkill.difficulty}}</span>
+                  data-difficulty='{{skill.difficulty}}'
+                  data-trained='{{skill.trained}}'
+                  data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
+                >{{skill.label}}</label>
+                <span class='skill-difficulty'>{{skill.difficulty}}</span>
               </div>
             {{/each}}
           </div>

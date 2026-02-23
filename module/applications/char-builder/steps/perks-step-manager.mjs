@@ -498,7 +498,7 @@ export class PerksStepManager extends BaseStepManager {
       };
     }
 
-    // Build skills object with proper structure
+    // Build skills object with proper structure (all skills including weapon skills)
     // Skill-to-stat mapping from actor-character.mjs schema
     const skillStats = {
       arcana: 'reason',
@@ -506,6 +506,8 @@ export class PerksStepManager extends BaseStepManager {
       medicine: 'reason',
       brawl: 'might',
       finesse: 'dexterity',
+      melee: 'might',
+      ranged: 'awareness',
       sneak: 'dexterity',
       detect: 'awareness',
       mysticism: 'awareness',
@@ -523,27 +525,6 @@ export class PerksStepManager extends BaseStepManager {
       skills[skillKey] = {
         trained: isTrained,
         stat: skillStat,
-        bonus: '',
-        difficulty: 20 - (isTrained ? statTotal * 2 : statTotal)
-      };
-    }
-
-    // Build weapon skills object with proper structure
-    // Weapon skill-to-stat mapping from actor-character.mjs schema
-    const weaponSkillStats = {
-      melee: 'might',
-      brawl: 'might',
-      finesse: 'dexterity',
-      ranged: 'awareness'
-    };
-
-    const weaponSkills = {};
-    for (const [weaponSkillKey, weaponSkillStat] of Object.entries(weaponSkillStats)) {
-      const isTrained = trainedSkills.includes(weaponSkillKey);
-      const statTotal = stats[weaponSkillStat]?.total || 0;
-      weaponSkills[weaponSkillKey] = {
-        trained: isTrained,
-        stat: weaponSkillStat,
         bonus: '',
         difficulty: 20 - (isTrained ? statTotal * 2 : statTotal)
       };
@@ -588,7 +569,6 @@ export class PerksStepManager extends BaseStepManager {
     const systemData = {
       stats: stats,
       skills: skills,
-      weaponSkills: weaponSkills,
       spells: allKnownSpells,
       perks: state.perks || [],
       classPerks: state.classPerks || [],
@@ -671,15 +651,11 @@ export class PerksStepManager extends BaseStepManager {
     // Check skill prerequisites (AND)
     if (prereqs.trainedSkills?.length > 0) {
       const actorSkills = actor.system.skills || {};
-      const weaponSkills = actor.system.weaponSkills || {};
       for (const skill of prereqs.trainedSkills) {
-        // Check both regular skills and weapon skills
-        const isTrained = actorSkills[skill]?.trained || weaponSkills[skill]?.trained;
+        const isTrained = actorSkills[skill]?.trained;
         if (!isTrained) {
           const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
-          const skillLabel = CONFIG.VAGABOND.weaponSkills?.[capitalizedSkill] ||
-                            CONFIG.VAGABOND.skills?.[capitalizedSkill] ||
-                            skill;
+          const skillLabel = `VAGABOND.Skills.${capitalizedSkill}`;
           missing.push(`Trained: ${game.i18n.localize(skillLabel)}`);
         }
       }
@@ -688,21 +664,17 @@ export class PerksStepManager extends BaseStepManager {
     // Check skill OR groups
     if (prereqs.trainedSkillOrGroups?.length > 0) {
       const actorSkills = actor.system.skills || {};
-      const weaponSkills = actor.system.weaponSkills || {};
       for (const group of prereqs.trainedSkillOrGroups) {
         let groupMet = false;
         const groupLabels = [];
         for (const skill of group) {
-           const isTrained = actorSkills[skill]?.trained || weaponSkills[skill]?.trained;
+           const isTrained = actorSkills[skill]?.trained;
            if (isTrained) {
              groupMet = true;
              break;
            }
            const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
-           const skillLabel = CONFIG.VAGABOND.weaponSkills?.[capitalizedSkill] ||
-                             CONFIG.VAGABOND.skills?.[capitalizedSkill] ||
-                             skill;
-           groupLabels.push(game.i18n.localize(skillLabel));
+           groupLabels.push(game.i18n.localize(`VAGABOND.Skills.${capitalizedSkill}`));
         }
         if (!groupMet) {
           missing.push(`Trained: (${groupLabels.join(' or ')})`);
@@ -783,9 +755,8 @@ export class PerksStepManager extends BaseStepManager {
     // Skill prerequisites
     if (prereqs.trainedSkills?.length > 0) {
       const actorSkills = actor.system.skills || {};
-      const weaponSkills = actor.system.weaponSkills || {};
       const skillParts = prereqs.trainedSkills.map(skill => {
-        const isMet = actorSkills[skill]?.trained || weaponSkills[skill]?.trained;
+        const isMet = actorSkills[skill]?.trained;
         // Capitalize first letter to match en.json keys (e.g., "athletics" -> "Athletics")
         const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
         const skillName = game.i18n.localize(`VAGABOND.Skills.${capitalizedSkill}`);
@@ -1063,7 +1034,7 @@ export class PerksStepManager extends BaseStepManager {
         return game.i18n.localize(CONFIG.VAGABOND.skills[choice] || choice);
 
       case 'weaponSkill':
-        return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[choice.charAt(0).toUpperCase() + choice.slice(1)] || choice);
+        return game.i18n.localize(`VAGABOND.Skills.${choice.charAt(0).toUpperCase() + choice.slice(1)}`);
 
       case 'stat':
         return game.i18n.localize(CONFIG.VAGABOND.stats[choice] || choice);

@@ -476,7 +476,7 @@ export class VagabondChatCard {
         break;
 
       case 'skill':
-        entity = actor.system.skills?.[key] || actor.system.weaponSkills?.[key];
+        entity = actor.system.skills?.[key];
         entityLabel = entity?.label || key;
         title = `${entityLabel} Check`;
         tags = [
@@ -568,7 +568,7 @@ export class VagabondChatCard {
         break;
 
       case 'skill':
-        const entity = actor.system.skills?.[keyOrLabel] || actor.system.weaponSkills?.[keyOrLabel];
+        const entity = actor.system.skills?.[keyOrLabel];
         const entityLabel = entity?.label || keyOrLabel;
         title = `${entityLabel} Check`;
         tags = [{ label: entityLabel, cssClass: 'tag-skill' }];

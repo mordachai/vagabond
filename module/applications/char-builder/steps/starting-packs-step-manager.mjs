@@ -424,13 +424,15 @@ export class StartingPacksStepManager extends BaseStepManager {
       const trainedSkills = state.skills || [];
       const assignedStats = state.assignedStats || {};
 
-      // Build skills object
+      // Build skills object (includes weapon skills)
       const skillsDefinition = {
         arcana: { stat: 'reason' },
         craft: { stat: 'reason' },
         medicine: { stat: 'reason' },
         brawl: { stat: 'might' },
         finesse: { stat: 'dexterity' },
+        melee: { stat: 'might' },
+        ranged: { stat: 'awareness' },
         sneak: { stat: 'dexterity' },
         detect: { stat: 'awareness' },
         mysticism: { stat: 'awareness' },
@@ -449,13 +451,6 @@ export class StartingPacksStepManager extends BaseStepManager {
         };
       }
 
-      const weaponSkills = {
-        melee: { trained: trainedSkills.includes('melee'), stat: 'might', bonus: 0 },
-        brawl: { trained: trainedSkills.includes('brawl'), stat: 'might', bonus: 0 },
-        finesse: { trained: trainedSkills.includes('finesse'), stat: 'dexterity', bonus: 0 },
-        ranged: { trained: trainedSkills.includes('ranged'), stat: 'dexterity', bonus: 0 }
-      };
-
       const actorData = {
         name: 'Preview Character',
         type: 'character',
@@ -469,7 +464,6 @@ export class StartingPacksStepManager extends BaseStepManager {
             luck: { value: assignedStats.luck || 0 }
           },
           skills: skills,
-          weaponSkills: weaponSkills
         },
         items: []
       };

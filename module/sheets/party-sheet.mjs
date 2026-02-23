@@ -829,8 +829,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
         const sys = a.system;
         const diffs = {};
         for (const skillKey of Object.keys(CONFIG.VAGABOND.weaponSkills)) {
-          const sk = sys.weaponSkills?.[skillKey]
-                  ?? sys.skills?.[skillKey]
+          const sk = sys.skills?.[skillKey]
                   ?? sys.saves?.[skillKey];
           if (sk?.difficulty !== undefined) diffs[skillKey] = sk.difficulty;
         }
@@ -1035,8 +1034,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     // config.weaponSkills covers weapon skills (melee/brawl/finesse/ranged)
     // AND regular skills (influence, arcana, etc.) — check all three namespaces.
     const sys = crewActor.system;
-    const skill = sys.weaponSkills?.[skillKey]
-               ?? sys.skills?.[skillKey]
+    const skill = sys.skills?.[skillKey]
                ?? sys.saves?.[skillKey];
     if (!skill) {
       ui.notifications.warn(`${crewActor.name} has no "${skillKey}" skill data.`);

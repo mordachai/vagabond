@@ -594,9 +594,7 @@ export class ValidationEngine {
    * @private
    */
   _getAllSkillsWithWeaponSkills() {
-    const regularSkills = Object.keys(CONFIG.VAGABOND?.skills || {});
-    const weaponSkills = ['melee', 'ranged']; // Add weapon skills at the end
-    return [...regularSkills, ...weaponSkills];
+    return Object.keys(CONFIG.VAGABOND?.skills || {});
   }
 
   _validateRequired(rule, state, category) {

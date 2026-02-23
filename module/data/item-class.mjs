@@ -34,20 +34,7 @@ export default class VagabondClass extends VagabondItemBase {
       initial: null,
       required: false,
       nullable: true,
-      choices: {
-        arcana: 'VAGABOND.Skills.Arcana',
-        craft: 'VAGABOND.Skills.Craft',
-        medicine: 'VAGABOND.Skills.Medicine',
-        brawl: 'VAGABOND.Skills.Brawl',
-        finesse: 'VAGABOND.Skills.Finesse',
-        sneak: 'VAGABOND.Skills.Sneak',
-        detect: 'VAGABOND.Skills.Detect',
-        mysticism: 'VAGABOND.Skills.Mysticism',
-        survival: 'VAGABOND.Skills.Survival',
-        influence: 'VAGABOND.Skills.Influence',
-        leadership: 'VAGABOND.Skills.Leadership',
-        performance: 'VAGABOND.Skills.Performance'
-      },
+      choices: Object.fromEntries((CONFIG.VAGABOND.homebrew?.skills ?? []).map(s => [s.key, s.label])),
       label: 'VAGABOND.Item.Class.FIELDS.manaSkill.label',
       hint: 'VAGABOND.Item.Class.FIELDS.manaSkill.hint'
     });
@@ -57,14 +44,7 @@ export default class VagabondClass extends VagabondItemBase {
       initial: null,
       required: false,
       nullable: true,
-      choices: {
-        might: 'VAGABOND.Ability.Might.long',
-        dexterity: 'VAGABOND.Ability.Dexterity.long',
-        reason: 'VAGABOND.Ability.Reason.long',
-        awareness: 'VAGABOND.Ability.Awareness.long',
-        presence: 'VAGABOND.Ability.Presence.long',
-        luck: 'VAGABOND.Ability.Luck.long'
-      },
+      choices: { ...CONFIG.VAGABOND.stats },
       label: 'VAGABOND.Item.Class.FIELDS.castingStat.label',
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
@@ -72,14 +52,7 @@ export default class VagabondClass extends VagabondItemBase {
     // Key stats - the primary stats for this class (can be multiple)
     schema.keyStats = new fields.ArrayField(
       new fields.StringField({
-        choices: {
-          might: 'VAGABOND.Ability.Might.long',
-          dexterity: 'VAGABOND.Ability.Dexterity.long',
-          reason: 'VAGABOND.Ability.Reason.long',
-          awareness: 'VAGABOND.Ability.Awareness.long',
-          presence: 'VAGABOND.Ability.Presence.long',
-          luck: 'VAGABOND.Ability.Luck.long'
-        }
+        choices: { ...CONFIG.VAGABOND.stats },
       }),
       {
         initial: [],
@@ -111,7 +84,7 @@ export default class VagabondClass extends VagabondItemBase {
           required: true,
           initial: 1,
           min: 1,
-          max: 10,
+          max: CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10,
           integer: true
         }),
         name: new fields.StringField({ ...requiredString, initial: '' }),
@@ -148,7 +121,7 @@ export default class VagabondClass extends VagabondItemBase {
           required: true,
           initial: 1,
           min: 1,
-          max: 10,
+          max: CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10,
           integer: true
         }),
         spells: new fields.NumberField({

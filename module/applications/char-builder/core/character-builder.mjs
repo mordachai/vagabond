@@ -873,15 +873,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // Train skills — system.skills holds most skills; system.weaponSkills holds
-    // melee/ranged (exclusively) plus brawl/finesse (duplicated). Apply to both
-    // so nothing is missed regardless of which namespace a key belongs to.
+    // Train skills — all skills (including melee/ranged/brawl/finesse) are in system.skills
     for (const skill of skillsToTrain) {
       if (actorData.system.skills[skill]) {
         actorData.system.skills[skill].trained = true;
-      }
-      if (actorData.system.weaponSkills[skill]) {
-        actorData.system.weaponSkills[skill].trained = true;
       }
     }
 
@@ -1185,9 +1180,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       case 'skill':
         return game.i18n.localize(CONFIG.VAGABOND.skills[choice] || choice);
       case 'weaponSkill':
-        // Capitalize first letter for config lookup (e.g., 'melee' → 'Melee')
-        const capitalizedChoice = choice.charAt(0).toUpperCase() + choice.slice(1);
-        return game.i18n.localize(CONFIG.VAGABOND.weaponSkills[capitalizedChoice] || choice);
+        return game.i18n.localize(`VAGABOND.Skills.${choice.charAt(0).toUpperCase() + choice.slice(1)}`);
       case 'stat':
         return game.i18n.localize(CONFIG.VAGABOND.stats[choice] || choice);
       case 'spell':

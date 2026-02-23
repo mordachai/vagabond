@@ -118,7 +118,7 @@ export default class PerkChoiceDialog extends foundry.applications.api.DialogV2 
 
       case 'weaponSkill':
         return Object.entries(CONFIG.VAGABOND.weaponSkills).map(([key, label]) => {
-          const weaponSkill = actor?.system.weaponSkills?.[key.toLowerCase()];
+          const weaponSkill = actor?.system.skills?.[key];
           const isTrained = weaponSkill?.trained || false;
 
           // Get difficulty - use calculated value or compute it

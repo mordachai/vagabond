@@ -58,6 +58,8 @@ VAGABOND.skills = {
   medicine: "VAGABOND.Skills.Medicine",
   brawl: "VAGABOND.Skills.Brawl",
   finesse: "VAGABOND.Skills.Finesse",
+  melee: "VAGABOND.Skills.Melee",
+  ranged: "VAGABOND.Skills.Ranged",
   sneak: "VAGABOND.Skills.Sneak",
   detect: "VAGABOND.Skills.Detect",
   mysticism: "VAGABOND.Skills.Mysticism",
@@ -750,10 +752,10 @@ VAGABOND.deliveryIncrement = {
  * @type {Object}
  */
 VAGABOND.weaponSkills = {
-'melee': 'VAGABOND.WeaponSkills.Melee',
-'brawl': 'VAGABOND.WeaponSkills.Brawl',
-'finesse': 'VAGABOND.WeaponSkills.Finesse',
-'ranged': 'VAGABOND.WeaponSkills.Ranged',
+'melee': 'VAGABOND.Skills.Melee',
+'brawl': 'VAGABOND.Skills.Brawl',
+'finesse': 'VAGABOND.Skills.Finesse',
+'ranged': 'VAGABOND.Skills.Ranged',
 'arcana': 'VAGABOND.Skills.Arcana',
 'craft': 'VAGABOND.Skills.Craft',
 'medicine': 'VAGABOND.Skills.Medicine',

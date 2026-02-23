@@ -513,13 +513,12 @@ export class VagabondItem extends Item {
     const rollData = actor.getRollDataWithItemEffects(this);
 
     // Get the weapon skill and difficulty
-    // The weaponSkill field can now be:
-    // 1. A weapon skill (melee, brawl, finesse, ranged) - from actor.system.weaponSkills
+    // The weaponSkill field can be:
+    // 1. A weapon skill (melee, brawl, finesse, ranged) - now in actor.system.skills
     // 2. A regular skill (arcana, craft, etc.) - from actor.system.skills
     // 3. A save (reflex, endure, will) - from actor.system.saves
     const weaponSkillKey = this.system.weaponSkill;
-    let weaponSkill = rollData.weaponSkills?.[weaponSkillKey] ||
-                      rollData.skills?.[weaponSkillKey] ||
+    let weaponSkill = rollData.skills?.[weaponSkillKey] ||
                       rollData.saves?.[weaponSkillKey];
     const difficulty = weaponSkill?.difficulty || 10;
 
