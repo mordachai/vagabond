@@ -34,7 +34,6 @@ export default class VagabondClass extends VagabondItemBase {
       initial: null,
       required: false,
       nullable: true,
-      choices: Object.fromEntries((CONFIG.VAGABOND.homebrew?.skills ?? []).map(s => [s.key, s.label])),
       label: 'VAGABOND.Item.Class.FIELDS.manaSkill.label',
       hint: 'VAGABOND.Item.Class.FIELDS.manaSkill.hint'
     });
@@ -44,16 +43,13 @@ export default class VagabondClass extends VagabondItemBase {
       initial: null,
       required: false,
       nullable: true,
-      choices: { ...CONFIG.VAGABOND.stats },
       label: 'VAGABOND.Item.Class.FIELDS.castingStat.label',
       hint: 'VAGABOND.Item.Class.FIELDS.castingStat.hint'
     });
 
     // Key stats - the primary stats for this class (can be multiple)
     schema.keyStats = new fields.ArrayField(
-      new fields.StringField({
-        choices: { ...CONFIG.VAGABOND.stats },
-      }),
+      new fields.StringField(),
       {
         initial: [],
         label: 'VAGABOND.Item.Class.FIELDS.keyStats.label',

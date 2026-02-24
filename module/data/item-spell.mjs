@@ -18,24 +18,6 @@ export default class VagabondSpell extends VagabondItemBase {
     schema.damageType = new fields.StringField({
       ...requiredString,
       initial: '-',
-      choices: CONFIG.VAGABOND?.damageTypes || {
-        '-': 'VAGABOND.DamageTypes.None',
-        'acid': 'VAGABOND.DamageTypes.Acid',
-        'fire': 'VAGABOND.DamageTypes.Fire',
-        'shock': 'VAGABOND.DamageTypes.Shock',
-        'poison': 'VAGABOND.DamageTypes.Poison',
-        'cold': 'VAGABOND.DamageTypes.Cold',
-        'blunt': 'VAGABOND.DamageTypes.Blunt',
-        'piercing': 'VAGABOND.DamageTypes.Piercing',
-        'slashing': 'VAGABOND.DamageTypes.Slashing',
-        'physical': 'VAGABOND.DamageTypes.Physical',
-        'necrotic': 'VAGABOND.DamageTypes.Necrotic',
-        'psychic': 'VAGABOND.DamageTypes.Psychic',
-        'magical': 'VAGABOND.DamageTypes.Magical',
-        'healing': 'VAGABOND.DamageTypes.Healing',
-        'recover': 'VAGABOND.DamageTypes.Recover',
-        'recharge': 'VAGABOND.DamageTypes.Recharge'
-      }
     });
 
     // Duration - how long the spell lasts

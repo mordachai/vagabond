@@ -133,7 +133,7 @@
           {{! Stats Column - 3 rows: Stats Grid, Fatigue, HP }}
           <div class='stats-column'>
                       {{! Row 1: Stats Grid - 3x2 grid of stats }}
-                      <div class='stats-grid'>
+                      <div class='stats-grid {{statsGridClass}}'>
                         {{#each system.stats as |stat key|}}
                           <div class='stat-item'>
                             <input
@@ -152,7 +152,8 @@
                           </div>
                         {{/each}}
 
-                        {{!-- LUCK POOL SECTION --}}
+                        {{!-- LUCK POOL SECTION — hidden when luckStat is 'none' --}}
+                        {{#if system.hasLuckPool}}
                         <div class='stat-item luck-item'>
                           <div class="luck-label rollable" data-action='spendLuck'>{{localize "VAGABOND.UI.Sections.luckTerm"}}</div>
                           <div class='luck-display'>
@@ -168,6 +169,7 @@
                           </div>
                           <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend Luck | Shift+Click to add +1'>{{localize "VAGABOND.UI.Sections.poolTerm"}}</label>
                         </div>
+                        {{/if}}
                       </div>
             {{! Row 2: Fatigue Bar }}
             <div class='fatigue-row'>

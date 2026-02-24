@@ -323,6 +323,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
       context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
 
+      // Stats layout class for the stats-grid element
+      context.statsGridClass = (CONFIG.VAGABOND.homebrew?.derivations?.statsLayout ?? 'progression') === 'centered'
+        ? 'stats-grid--centered'
+        : 'stats-grid--progression';
+
       // Prepare fatigue boxes (dynamic max from setting + bonus)
       const fatigue = this.actor.system.fatigue || 0;
       const fatigueMax = this.actor.system.fatigueMax || 5;

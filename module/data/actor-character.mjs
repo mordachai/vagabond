@@ -695,8 +695,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     const rollData = this.getRollData();
     this._evaluateNonStatBonusFields(rollData);
 
-    // Calculate fatigueMax from game setting + bonus
-    this.fatigueMax = (game.settings?.get('vagabond', 'pcFatigueMax') ?? 5) + (this.fatigueBonus || 0);
+    // Calculate fatigueMax from homebrew config + bonus
+    this.fatigueMax = (CONFIG.VAGABOND?.homebrew?.derivations?.fatiguePCMax ?? 5) + (this.fatigueBonus || 0);
     // Clamp current fatigue to fatigueMax
     if (this.fatigue > this.fatigueMax) this.fatigue = this.fatigueMax;
 
@@ -928,12 +928,13 @@ export default class VagabondCharacter extends VagabondActorBase {
   _calculateCombatValues(rollData) {
     const mightTotal = this.stats.might?.total || 0;
     const dexTotal = this.stats.dexterity?.total || 0;
-    const luckTotal = this.stats.luck?.total || 0;
     const level = this.attributes.level.value || 1;
 
-    // Luck Pool Max = Luck Stat Total (no additional bonusLuck)
-    // The luck stat total already includes any bonuses from Active Effects
-    this.maxLuck = luckTotal;
+    // Luck Pool — driven by configurable stat; 'none' disables the pool entirely
+    const luckStatKey = CONFIG.VAGABOND?.homebrew?.derivations?.luckStat ?? 'luck';
+    const hasLuckPool = luckStatKey && luckStatKey !== 'none';
+    this.hasLuckPool = hasLuckPool;
+    this.maxLuck = hasLuckPool ? (this.stats[luckStatKey]?.total || 0) : 0;
 
     if (this.currentLuck === undefined || this.currentLuck === null) {
       this.currentLuck = this.maxLuck;
@@ -944,28 +945,23 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Speed Calculation
     // 1. Get speed bonus from Active Effects (stored in system.speed.bonus)
-    // Evaluate speed bonus inline (StringFields coerce numbers back to strings)
     const speedBonus = this._evaluateFormulaField(this.speed.bonus, rollData);
 
-    // 2. Lookup base speed values from config table
-    // We iterate to find the matching tier for current Dex (use total which includes bonus)
-    let speedTier = CONFIG.VAGABOND.speedTable[0]; // Default fallback
-    const dexKeys = Object.keys(CONFIG.VAGABOND.speedTable).map(Number).sort((a, b) => a - b);
+    // 2. Evaluate base speed from homebrew derivation formula
+    const speedFormula = CONFIG.VAGABOND?.homebrew?.derivations?.speed
+      ?? '25 + floor(max(0, @dexterity.total - 2) / 2) * 5';
+    const baseSpeed = Math.max(0, this._evaluateSingleFormula(speedFormula, rollData) + speedBonus);
 
-    for (const key of dexKeys) {
-      if (dexTotal >= key) {
-        speedTier = CONFIG.VAGABOND.speedTable[key];
-      }
-    }
+    // 3. Evaluate crawl/travel formulas — @speed.base is available via augmented rollData
+    const speedRollData = { ...rollData, speed: { base: baseSpeed } };
+    const crawlFormula  = CONFIG.VAGABOND?.homebrew?.derivations?.crawl  ?? '@speed.base * 3';
+    const travelFormula = CONFIG.VAGABOND?.homebrew?.derivations?.travel ?? 'floor(@speed.base / 5)';
 
-    // 3. Apply bonus and set final values
-    // Note: We only add bonus to base speed unless otherwise specified
-    // Clamp all speed values to minimum 0 (prevents negative display from status effects)
     this.speed = {
-      base: Math.max(0, speedTier.base + speedBonus),
-      crawl: Math.max(0, speedTier.crawl),
-      travel: Math.max(0, speedTier.travel),
-      bonus: speedBonus // Preserve the bonus value
+      base:   baseSpeed,
+      crawl:  Math.max(0, this._evaluateSingleFormula(crawlFormula,  speedRollData)),
+      travel: Math.max(0, this._evaluateSingleFormula(travelFormula, speedRollData)),
+      bonus:  speedBonus,
     };
 
     // Armor Calculation

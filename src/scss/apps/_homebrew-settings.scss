@@ -24,6 +24,41 @@
     padding: 0.5rem 0;
     gap: 2px;
     overflow-y: auto;
+
+    .reload-notice {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.72rem;
+      opacity: 0.65;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+      border-top: 1px solid var(--vagabond-c-faint);
+      line-height: 1.3;
+    }
+  }
+
+  .hb-reset-all-btn {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-top: 1px solid var(--vagabond-c-faint);
+    background: transparent;
+    color: var(--vagabond-c-muted);
+    font-size: 0.76rem;
+    cursor: pointer;
+    text-align: left;
+    opacity: 0.6;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
+
+    &:hover {
+      opacity: 1;
+      color: var(--vagabond-c-red, #c0392b);
+      background: rgba(192, 57, 43, 0.07);
+    }
   }
 
   .homebrew-tab-button {
@@ -63,9 +98,9 @@
     }
 
     &.active {
-      border-left-color: var(--vagabond-c-dark-bluey);
+      border-left-color: $c-text-2;
       background: rgba(44, 62, 80, 0.1);
-      color: var(--vagabond-c-dark-bluey);
+      color: $c-text-2;
       font-weight: bold;
     }
   }
@@ -188,18 +223,21 @@
     input[type="number"],
     input[type="text"] {
       flex: 1;
-      max-width: 120px;
     }
   }
 
   .hb-hint {
+    display: block;
     width: 100%;
     font-size: 0.78rem;
     opacity: 0.65;
     margin: 0.25rem 0 0;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+    line-height: 1.4;
+
+    &--warning {
+      opacity: 1;
+      color: var(--vagabond-c-damage-orange);
+    }
   }
 
   .hb-add-btn {
@@ -234,6 +272,8 @@
       padding: 0.18rem 0.4rem;
       vertical-align: middle;
     }
+
+    tbody tr:nth-child(even) { background: $c-inset-2; }
 
     .hb-stat-key-input {
       width: 110px;
@@ -285,10 +325,14 @@
       vertical-align: middle;
     }
 
+    tbody tr:nth-child(even) { background: $c-inset-2; }
+
     input[type="text"]   { width: 88px; }
     input[type="number"] { width: 52px; }
     select               { width: 88px; font-size: 0.8rem; }
     input[type="checkbox"] { width: auto; }
+
+    .hb-sv-die { width: 56px; }
 
     .hb-sk-remove-btn,
     .hb-sv-remove-btn {
@@ -296,6 +340,19 @@
       font-size: 0.75rem;
       opacity: 0.45;
       &:hover { opacity: 1; color: var(--vagabond-c-red); }
+    }
+
+    .hb-subrow td {
+      padding-top: 0;
+      padding-bottom: 0.35rem;
+    }
+
+    .hb-subrow-input {
+      width: 100% !important;
+      font-size: 0.76rem;
+      opacity: 0.8;
+      font-style: italic;
+      box-sizing: border-box;
     }
   }
 
@@ -405,11 +462,48 @@
     flex-direction: column;
   }
 
+  .hb-radio-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: normal;
+    min-width: auto;
+
+    input[type="radio"] {
+      flex: none;
+      width: auto;
+    }
+
+    .hb-radio-hint {
+      font-size: 0.72rem;
+      opacity: 0.6;
+      font-style: italic;
+    }
+
+    &:has(input:checked) {
+      border-color: var(--vagabond-c-dark-bluey);
+      background: rgba(44, 62, 80, 0.1);
+    }
+  }
+
   .hb-deriv-input {
     flex: 1;
-    max-width: 240px;
+    width: 100%;
     font-family: monospace;
     font-size: 0.85rem;
+  }
+
+  .hb-deriv-number {
+    width: 72px;
+  }
+
+  .hb-deriv-select {
+    flex: 1;
   }
 
   // ─── Tab 6: Damage Types ──────────────────────────────────────────────
@@ -439,6 +533,8 @@
       padding: 0.18rem 0.4rem;
       vertical-align: middle;
     }
+
+    tbody tr:nth-child(even) { background: $c-inset-2; }
 
     .hb-dt-th-icon {
       width: 2rem;
@@ -486,27 +582,281 @@
     flex-direction: column;
   }
 
+  // ─── Tab 9: Terms ─────────────────────────────────────────────────────
+
+  .tab-terms {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-terms-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+    }
+
+    td {
+      padding: 0.22rem 0.4rem;
+      vertical-align: middle;
+    }
+
+    .hb-terms-default-col {
+      width: 6rem;
+      color: var(--vagabond-c-muted);
+      font-size: 0.78rem;
+    }
+
+    input[type="text"] {
+      width: 160px;
+    }
+  }
+
+  // ─── Tab 10: Library ──────────────────────────────────────────────────
+
+  .tab-library {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-library-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+    }
+
+    td {
+      padding: 0.25rem 0.4rem;
+      vertical-align: middle;
+    }
+
+    .hb-lib-status-cell {
+      width: 1.4rem;
+      text-align: center;
+    }
+
+    .hb-lib-name-cell {
+      font-weight: 500;
+    }
+
+    .hb-lib-date-cell {
+      font-size: 0.78rem;
+      opacity: 0.6;
+      white-space: nowrap;
+    }
+
+    .hb-lib-actions-cell {
+      white-space: nowrap;
+      text-align: right;
+    }
+  }
+
+  .hb-library-row--active {
+    background: rgba(44, 62, 80, 0.06);
+
+    .hb-lib-name-cell { color: $c-text-2; }
+  }
+
+  .hb-active-icon {
+    color: $c-text-2;
+    font-size: 0.85rem;
+  }
+
+  .hb-modified-badge {
+    display: inline-block;
+    margin-left: 0.4rem;
+    font-size: 0.68rem;
+    font-style: italic;
+    opacity: 0.65;
+    vertical-align: middle;
+  }
+
+  .hb-lib-path {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    opacity: 0.65;
+    margin-bottom: 0.6rem;
+
+    code {
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 3px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.78rem;
+    }
+
+    .hb-lib-path-note {
+      opacity: 0.7;
+      font-style: italic;
+    }
+  }
+
+  .hb-lib-activate-btn,
+  .hb-lib-update-btn,
+  .hb-lib-export-btn,
+  .hb-lib-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .hb-lib-activate-btn {
+    font-size: 0.78rem;
+    padding: 0.15rem 0.4rem;
+    margin-right: 0.2rem;
+
+    &--active,
+    &:disabled {
+      opacity: 0.25;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  .hb-lib-update-btn {
+    font-size: 0.78rem;
+    padding: 0.15rem 0.4rem;
+    margin-right: 0.2rem;
+    color: var(--vagabond-c-gold, goldenrod);
+    &:hover { opacity: 0.8; }
+  }
+
+  .hb-lib-export-btn {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.35rem;
+    opacity: 0.45;
+    margin-right: 0.2rem;
+    &:hover { opacity: 1; }
+  }
+
+  .hb-lib-delete-btn {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.35rem;
+    opacity: 0.45;
+    &:hover { opacity: 1; color: var(--vagabond-c-red); }
+  }
+
+  .hb-lib-empty {
+    padding: 0.5rem 0;
+  }
+
+  .hb-lib-add-btn {
+    margin-top: 0.35rem;
+  }
+
+  .hb-save-form {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+
+    .hb-lib-name-input {
+      flex: 1;
+      font-size: 0.88rem;
+    }
+
+    .hb-lib-save-confirm-btn {
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .hb-lib-cancel-btn {
+      font-size: 0.82rem;
+      opacity: 0.6;
+      &:hover { opacity: 1; }
+    }
+  }
+
+  .hb-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.88rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
   // Footer
   .homebrew-footer {
     flex: 0 0 auto;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
     padding: 0.6rem 1rem;
     border-top: 1px solid var(--vagabond-c-faint);
     background: rgba(0, 0, 0, 0.04);
 
-    .reload-notice {
-      flex: 1;
-      font-size: 0.78rem;
-      opacity: 0.7;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .reset-btn {
+    button[type="submit"] {
       margin-left: auto;
     }
+  }
+
+  // ─── Validation / error states ────────────────────────────────────────
+
+  .homebrew-tab-button {
+    &.has-errors {
+      .hb-error-badge {
+        color: var(--vagabond-c-red, #c0392b) !important;
+        font-size: 0.65rem;
+        flex-shrink: 0;
+      }
+
+      &:not(.active) {
+        border-left-color: var(--vagabond-c-red, #c0392b);
+        color: var(--vagabond-c-red, #c0392b);
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .hb-row-error td {
+    background: rgba(192, 57, 43, 0.06);
+  }
+
+  .hb-input-error {
+    border-color: var(--vagabond-c-red, #c0392b) !important;
+    color: var(--vagabond-c-red, #c0392b);
+  }
+
+  .hb-label-error {
+    color: var(--vagabond-c-red, #c0392b) !important;
+  }
+
+  .hb-broken-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--vagabond-c-red, #c0392b);
+    white-space: nowrap;
+    width: 100%;
+
+    i { flex-shrink: 0; }
   }
 }

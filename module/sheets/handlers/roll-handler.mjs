@@ -75,8 +75,8 @@ export class RollHandler {
 
       const roll = await VagabondRollBuilder.buildAndEvaluateD20(
         this.actor,
-        favorHinder,
-        dataset.roll // Base formula (usually 'd20')
+        favorHinder
+        // baseFormula intentionally omitted — uses homebrew dice.baseCheck config
       );
 
       // For skills and saves, use the formatted chat cards

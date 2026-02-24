@@ -348,14 +348,6 @@
         "name": "Initiative Formula (NPCs)",
         "hint": "Custom formula for rolling initiative for NPCs. Only used when initiative rolls are enabled. Use @ to reference actor data (e.g., @speed)."
       },
-      "pcFatigueMax": {
-        "name": "PC Fatigue Max",
-        "hint": "Maximum fatigue level for player characters. Each fatigue occupies an inventory slot. Default is 5."
-      },
-      "npcFatigueMax": {
-        "name": "NPC Fatigue Max",
-        "hint": "Maximum fatigue level for NPCs. Default is 5."
-      },
       "homebrewSettings": {
         "name": "Homebrew Configuration",
         "label": "Configure Homebrew",
@@ -367,7 +359,11 @@
       "Saved": "Homebrew configuration saved.",
       "RequiresReload": "Changes to this tab require a world reload to take effect.",
       "ResetTab": "Reset Tab to Defaults",
-      "Save": "Save & Close",
+      "Save": "Save",
+      "ReloadTitle": "Reload World?",
+      "ReloadBody": "Some changes (stats, skills, saves, stat cap, or max level) require a world reload to take effect. Reload now?",
+      "UnsavedTitle": "Unsaved Changes",
+      "UnsavedBody": "You have unsaved changes. Close without saving?",
       "Tabs": {
         "Stats": "Stats",
         "Skills": "Skills & Saves",
@@ -376,7 +372,9 @@
         "Derivations": "Derivations",
         "DamageTypes": "Damage Types",
         "StatCap": "Stat Cap",
-        "Advanced": "Advanced"
+        "Advanced": "Advanced",
+        "Terms": "Terms",
+        "Library": "Library"
       }
     },
     "Actor": {

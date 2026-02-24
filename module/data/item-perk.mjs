@@ -19,7 +19,6 @@ export default class VagabondPerk extends VagabondItemBase {
           stat: new fields.StringField({
             ...requiredString,
             initial: 'might',
-            choices: ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck']
           }),
           value: new fields.NumberField({
             required: true,
@@ -39,7 +38,6 @@ export default class VagabondPerk extends VagabondItemBase {
             stat: new fields.StringField({
               ...requiredString,
               initial: 'might',
-              choices: ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck']
             }),
             value: new fields.NumberField({
               required: true,
@@ -55,20 +53,14 @@ export default class VagabondPerk extends VagabondItemBase {
 
       // Trained skill prerequisites - e.g., "Trained: Ranged"
       trainedSkills: new fields.ArrayField(
-        new fields.StringField({
-          required: true,
-          choices: Object.fromEntries((CONFIG.VAGABOND.homebrew?.skills ?? []).map(s => [s.key, s.label])),
-        }),
+        new fields.StringField({ required: true }),
         { initial: [] }
       ),
 
       // Trained skill OR groups - e.g., [["melee", "ranged"]] means "Melee OR Ranged"
       trainedSkillOrGroups: new fields.ArrayField(
         new fields.ArrayField(
-          new fields.StringField({
-            required: true,
-            choices: Object.fromEntries((CONFIG.VAGABOND.homebrew?.skills ?? []).map(s => [s.key, s.label])),
-          })
+          new fields.StringField({ required: true })
         ),
         { initial: [] }
       ),

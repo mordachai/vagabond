@@ -288,21 +288,6 @@ export default class VagabondNPC extends VagabondActorBase {
           required: false,
           nullable: false,
           initial: '-',
-          choices: CONFIG.VAGABOND?.damageTypes || {
-            '-': 'VAGABOND.DamageTypes.None',
-            'acid': 'VAGABOND.DamageTypes.Acid',
-            'fire': 'VAGABOND.DamageTypes.Fire',
-            'shock': 'VAGABOND.DamageTypes.Shock',
-            'poison': 'VAGABOND.DamageTypes.Poison',
-            'cold': 'VAGABOND.DamageTypes.Cold',
-            'blunt': 'VAGABOND.DamageTypes.Blunt',
-            'piercing': 'VAGABOND.DamageTypes.Piercing',
-            'slashing': 'VAGABOND.DamageTypes.Slashing',
-            'physical': 'VAGABOND.DamageTypes.Physical',
-            'necrotic': 'VAGABOND.DamageTypes.Necrotic',
-            'psychic': 'VAGABOND.DamageTypes.Psychic',
-            'healing': 'VAGABOND.DamageTypes.Healing'
-          }
         }),
         attackType: new fields.StringField({
           required: false,
@@ -452,8 +437,8 @@ export default class VagabondNPC extends VagabondActorBase {
 
     this._evaluateAllBonusFields(rollData);
 
-    // Calculate fatigueMax from game setting + bonus
-    this.fatigueMax = (game.settings?.get('vagabond', 'npcFatigueMax') ?? 5) + (this.fatigueBonus || 0);
+    // Calculate fatigueMax from homebrew config + bonus
+    this.fatigueMax = (CONFIG.VAGABOND?.homebrew?.derivations?.fatigueNPCMax ?? 5) + (this.fatigueBonus || 0);
     // Clamp current fatigue to fatigueMax
     if (this.fatigue > this.fatigueMax) this.fatigue = this.fatigueMax;
 

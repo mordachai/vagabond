@@ -5,7 +5,7 @@
     {{#each tabs}}
     <button
       type="button"
-      class="homebrew-tab-button {{#if active}}active{{/if}}"
+      class="homebrew-tab-button {{#if active}}active{{/if}}{{#if hasErrors}} has-errors{{/if}}"
       data-action="switchTab"
       data-tab="{{id}}"
       role="tab"
@@ -17,8 +17,26 @@
       {{#if requiresReload}}
       <i class="fa-solid fa-rotate reload-badge" title="Requires World Reload"></i>
       {{/if}}
+      {{#if hasErrors}}
+      <i class="fa-solid fa-triangle-exclamation hb-error-badge" title="This tab has broken settings"></i>
+      {{/if}}
     </button>
     {{/each}}
+    {{#if activeTabRequiresReload}}
+    <span class="reload-notice">
+      <i class="fa-solid fa-rotate"></i>
+      {{localize "VAGABOND.HomebrewSettings.RequiresReload"}}
+    </span>
+    {{/if}}
+    <button
+      type="button"
+      class="hb-reset-all-btn"
+      data-action="resetAll"
+      title="Reset all tabs to factory defaults"
+    >
+      <i class="fa-solid fa-arrow-rotate-left"></i>
+      Reset All to Defaults
+    </button>
   </nav>
 
   {{!-- Right: content + footer --}}
@@ -36,6 +54,10 @@
             <i class="fa-solid fa-circle-info fa-xs"></i>
             Define the core stats used in your game. Each stat needs a unique key (used internally), a display label, and a 3-letter abbreviation. Requires world reload.
           </p>
+          <p class="hb-hint hb-hint--warning" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-triangle-exclamation fa-xs"></i>
+            Renaming or removing stat <strong>keys</strong> will not update existing documents (classes, perks, characters) that reference the old keys. Those will silently retain stale values until manually corrected.
+          </p>
           <table class="hb-stat-table">
             <thead>
               <tr>
@@ -46,16 +68,17 @@
               </tr>
             </thead>
             <tbody>
-              {{#each config.stats}}
-              <tr>
+              {{#each statsRows}}
+              <tr class="{{#if hasError}}hb-row-error{{/if}}">
                 <td>
                   <input
                     type="text"
-                    class="hb-stat-key-input"
+                    class="hb-stat-key-input{{#if hasError}} hb-input-error{{/if}}"
                     data-stat-index="{{@index}}"
                     data-stat-field="key"
                     value="{{key}}"
                     placeholder="statKey"
+                    title="{{#if hasError}}Duplicate key — each stat must have a unique key{{/if}}"
                   >
                 </td>
                 <td>
@@ -110,6 +133,10 @@
             <i class="fa-solid fa-circle-info fa-xs"></i>
             Each skill needs a unique key, label, hint, associated stat, and trained multiplier. Requires world reload.
           </p>
+          <p class="hb-hint hb-hint--warning" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-triangle-exclamation fa-xs"></i>
+            Renaming or removing skill <strong>keys</strong> will not update existing documents (perks, classes) that reference the old keys. Those will silently retain stale values until manually corrected.
+          </p>
           <table class="hb-skills-table">
             <thead>
               <tr>
@@ -124,11 +151,14 @@
             </thead>
             <tbody>
               {{#each skillRows}}
-              <tr>
+              <tr class="{{#if hasError}}hb-row-error{{/if}}">
                 <td><input type="text" class="hb-sk-key" data-skill-index="{{index}}" data-skill-field="key" value="{{key}}" placeholder="key"></td>
                 <td><input type="text" class="hb-sk-label" data-skill-index="{{index}}" data-skill-field="label" value="{{label}}" placeholder="Label"></td>
                 <td>
-                  <select class="hb-sk-stat" data-skill-index="{{index}}" data-skill-field="stat">
+                  <select class="hb-sk-stat{{#if hasError}} hb-input-error{{/if}}" data-skill-index="{{index}}" data-skill-field="stat">
+                    {{#if hasError}}
+                    <option value="{{stat}}" selected disabled>⚠ {{stat}} (missing)</option>
+                    {{/if}}
                     {{#each statOptions}}
                     <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
                     {{/each}}
@@ -141,6 +171,11 @@
                   <button type="button" class="hb-sk-remove-btn" data-action="removeSkill" data-index="{{index}}" title="Remove">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
+                </td>
+              </tr>
+              <tr class="hb-subrow">
+                <td colspan="7">
+                  <input type="text" class="hb-subrow-input" data-skill-index="{{index}}" data-skill-field="hint" value="{{hint}}" placeholder="Tooltip hint (e.g. Exerting physical force…)">
                 </td>
               </tr>
               {{/each}}
@@ -166,33 +201,46 @@
                 <th>Stat 1</th>
                 <th>Stat 2</th>
                 <th>Base</th>
+                <th>Check Die</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {{#each saveRows}}
-              <tr>
+              <tr class="{{#if hasError}}hb-row-error{{/if}}">
                 <td><input type="text" class="hb-sv-key" data-save-index="{{index}}" data-save-field="key" value="{{key}}" placeholder="key"></td>
                 <td><input type="text" class="hb-sv-label" data-save-index="{{index}}" data-save-field="label" value="{{label}}" placeholder="Label"></td>
                 <td>
-                  <select class="hb-sv-stat" data-save-index="{{index}}" data-save-field="stat1">
+                  <select class="hb-sv-stat{{#if stat1Missing}} hb-input-error{{/if}}" data-save-index="{{index}}" data-save-field="stat1">
+                    {{#if stat1Missing}}
+                    <option value="{{stat1}}" selected disabled>⚠ {{stat1}} (missing)</option>
+                    {{/if}}
                     {{#each stat1Options}}
                     <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
                     {{/each}}
                   </select>
                 </td>
                 <td>
-                  <select class="hb-sv-stat" data-save-index="{{index}}" data-save-field="stat2">
+                  <select class="hb-sv-stat{{#if stat2Missing}} hb-input-error{{/if}}" data-save-index="{{index}}" data-save-field="stat2">
+                    {{#if stat2Missing}}
+                    <option value="{{stat2}}" selected disabled>⚠ {{stat2}} (missing)</option>
+                    {{/if}}
                     {{#each stat2Options}}
                     <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
                     {{/each}}
                   </select>
                 </td>
                 <td><input type="number" class="hb-sv-base" data-save-index="{{index}}" data-save-field="baseValue" value="{{baseValue}}" min="1" max="40" step="1"></td>
+                <td><input type="text" class="hb-sv-die" data-save-index="{{index}}" data-save-field="checkDie" value="{{checkDie}}" placeholder="1d20"></td>
                 <td>
                   <button type="button" class="hb-sv-remove-btn" data-action="removeSave" data-index="{{index}}" title="Remove">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
+                </td>
+              </tr>
+              <tr class="hb-subrow">
+                <td colspan="7">
+                  <input type="text" class="hb-subrow-input" data-save-index="{{index}}" data-save-field="description" value="{{description}}" placeholder="Tooltip description (e.g. Evade physical harm…)">
                 </td>
               </tr>
               {{/each}}
@@ -240,7 +288,7 @@
 
         <fieldset class="hb-fieldset">
           <legend>Check Probability</legend>
-          <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> Probability of rolling <strong>at or above</strong> the target number.</p>
+          <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> Frequency distribution of possible roll results (Bell Curve).</p>
           <div class="hb-dice-chart" id="hb-dice-chart"></div>
         </fieldset>
 
@@ -345,35 +393,142 @@
       {{#if showDerivations}}
       <div class="tab-derivations">
 
+        <p class="hb-hint" style="margin-bottom: 0.75rem;">
+          <i class="fa-solid fa-circle-info fa-xs"></i>
+          Formulas use roll data keys: <code>@might.total</code>, <code>@dexterity.total</code>, <code>@attributes.level.value</code>, etc. Changes take effect on save — no reload needed.
+        </p>
+
         <fieldset class="hb-fieldset">
-          <legend>Derived Statistics</legend>
-          <p class="hb-hint" style="margin-bottom: 0.75rem;">
-            <i class="fa-solid fa-circle-info fa-xs"></i>
-            Formulas use roll data keys: <code>@might.total</code>, <code>@dexterity.total</code>, <code>@attributes.level.value</code>, etc. Changes take effect on save — no reload needed.
-          </p>
+          <legend>Health &amp; Inventory</legend>
           <div class="hb-form-group">
-            <label for="hb-deriv-hp">HP per Level</label>
+            <label for="hb-deriv-hp" class="{{#if derivErrors.hp}}hb-label-error{{/if}}">Max Health</label>
             <input
               id="hb-deriv-hp"
               type="text"
-              class="hb-deriv-input"
+              class="hb-deriv-input{{#if derivErrors.hp}} hb-input-error{{/if}}"
               data-field="derivations.hp"
               value="{{config.derivations.hp}}"
               placeholder="@might.total"
             >
-            <p class="hb-hint">Evaluated × level = total base HP. Default: <code>@might.total</code></p>
+            <p class="hb-hint">Formula result × level = base max health. Default: <code>@might.total</code></p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-deriv-inv">Inventory Slots</label>
+            <label for="hb-deriv-inv" class="{{#if derivErrors.inventory}}hb-label-error{{/if}}">Inventory Slots</label>
             <input
               id="hb-deriv-inv"
               type="text"
-              class="hb-deriv-input"
+              class="hb-deriv-input{{#if derivErrors.inventory}} hb-input-error{{/if}}"
               data-field="derivations.inventory"
               value="{{config.derivations.inventory}}"
               placeholder="8 + @might.total"
             >
             <p class="hb-hint">Total base inventory slots. Default: <code>8 + @might.total</code></p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Speed</legend>
+          <div class="hb-form-group">
+            <label for="hb-deriv-speed" class="{{#if derivErrors.speed}}hb-label-error{{/if}}">Speed</label>
+            <input
+              id="hb-deriv-speed"
+              type="text"
+              class="hb-deriv-input{{#if derivErrors.speed}} hb-input-error{{/if}}"
+              data-field="derivations.speed"
+              value="{{config.derivations.speed}}"
+              placeholder="25 + floor(max(0, @dexterity.total - 2) / 2) * 5"
+            >
+            <p class="hb-hint">Base movement speed. Default scales with Dexterity.</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-deriv-crawl" class="{{#if derivErrors.crawl}}hb-label-error{{/if}}">Crawl Speed</label>
+            <input
+              id="hb-deriv-crawl"
+              type="text"
+              class="hb-deriv-input{{#if derivErrors.crawl}} hb-input-error{{/if}}"
+              data-field="derivations.crawl"
+              value="{{config.derivations.crawl}}"
+              placeholder="@speed.base * 3"
+            >
+            <p class="hb-hint">May reference <code>@speed.base</code> (computed first). Default: <code>@speed.base * 3</code></p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-deriv-travel" class="{{#if derivErrors.travel}}hb-label-error{{/if}}">Travel Speed</label>
+            <input
+              id="hb-deriv-travel"
+              type="text"
+              class="hb-deriv-input{{#if derivErrors.travel}} hb-input-error{{/if}}"
+              data-field="derivations.travel"
+              value="{{config.derivations.travel}}"
+              placeholder="floor(@speed.base / 5)"
+            >
+            <p class="hb-hint">May reference <code>@speed.base</code>. Default: <code>floor(@speed.base / 5)</code></p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Fatigue</legend>
+          <div class="hb-form-group">
+            <label for="hb-deriv-fatigue-pc">PC Max Fatigue</label>
+            <input
+              id="hb-deriv-fatigue-pc"
+              type="number"
+              class="hb-deriv-number"
+              data-field="derivations.fatiguePCMax"
+              value="{{config.derivations.fatiguePCMax}}"
+              min="1"
+              max="20"
+              step="1"
+            >
+            <p class="hb-hint">Maximum fatigue for player characters. Each fatigue costs one inventory slot.</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-deriv-fatigue-npc">NPC Max Fatigue</label>
+            <input
+              id="hb-deriv-fatigue-npc"
+              type="number"
+              class="hb-deriv-number"
+              data-field="derivations.fatigueNPCMax"
+              value="{{config.derivations.fatigueNPCMax}}"
+              min="1"
+              max="20"
+              step="1"
+            >
+            <p class="hb-hint">Maximum fatigue for NPCs.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Stats Display</legend>
+          <div class="hb-form-group">
+            <label>Layout</label>
+            <label class="hb-radio-option">
+              <input type="radio" name="statsLayout" value="progression"
+                data-field="derivations.statsLayout"
+                {{#if (eq config.derivations.statsLayout "progression")}}checked{{/if}}>
+              <span>Progression</span>
+              <small class="hb-radio-hint">Top row is indented, forming a cascade</small>
+            </label>
+            <label class="hb-radio-option">
+              <input type="radio" name="statsLayout" value="centered"
+                data-field="derivations.statsLayout"
+                {{#if (eq config.derivations.statsLayout "centered")}}checked{{/if}}>
+              <span>Centered</span>
+              <small class="hb-radio-hint">Both rows evenly centered, no offset</small>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Luck Pool</legend>
+          <div class="hb-form-group">
+            <label for="hb-deriv-luck" class="{{#if derivErrors.luckStat}}hb-label-error{{/if}}">Luck Pool Stat</label>
+            <select id="hb-deriv-luck" class="hb-deriv-select{{#if derivErrors.luckStat}} hb-input-error{{/if}}" data-field="derivations.luckStat">
+              {{#each luckStatOptions}}
+              <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+            <p class="hb-hint">Stat that sets the size of the Luck pool. <em>None</em> hides the pool from the character sheet.</p>
           </div>
         </fieldset>
 
@@ -389,6 +544,7 @@
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
             Add, remove, or rename damage types. Changes take effect on save — no reload needed.
+            Icon classes use <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" rel="noopener">Font Awesome Free</a> — e.g. <code>fa-solid fa-fire</code>.
           </p>
           <table class="hb-dt-table">
             <thead>
@@ -526,13 +682,210 @@
       </div>
       {{/if}}
 
+      {{!-- Tab 9: Terms --}}
+      {{#if showTerms}}
+      <div class="tab-terms">
+
+        <fieldset class="hb-fieldset">
+          <legend>General</legend>
+          <table class="hb-terms-table">
+            <thead>
+              <tr><th>Field</th><th>Label</th><th class="hb-terms-default-col">Default</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Inventory (tab &amp; section)</td>
+                <td><input type="text" data-term-key="inventory" value="{{config.terms.inventory}}" placeholder="Inventory" /></td>
+                <td class="hb-hint">Inventory</td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Spellcasting</legend>
+          <table class="hb-terms-table">
+            <thead>
+              <tr><th>Field</th><th>Label</th><th class="hb-terms-default-col">Default</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Magic (tab name)</td>
+                <td><input type="text" data-term-key="magic" value="{{config.terms.magic}}" placeholder="Magic" /></td>
+                <td class="hb-hint">Magic</td>
+              </tr>
+              <tr>
+                <td>Spells (tab &amp; section)</td>
+                <td><input type="text" data-term-key="spells" value="{{config.terms.spells}}" placeholder="Spells" /></td>
+                <td class="hb-hint">Spells</td>
+              </tr>
+              <tr>
+                <td>Mana (current value)</td>
+                <td><input type="text" data-term-key="mana" value="{{config.terms.mana}}" placeholder="Mana" /></td>
+                <td class="hb-hint">Mana</td>
+              </tr>
+              <tr>
+                <td>Max Mana</td>
+                <td><input type="text" data-term-key="maxMana" value="{{config.terms.maxMana}}" placeholder="Max Mana" /></td>
+                <td class="hb-hint">Max Mana</td>
+              </tr>
+              <tr>
+                <td>Mana / Cast</td>
+                <td><input type="text" data-term-key="manaPerCast" value="{{config.terms.manaPerCast}}" placeholder="Mana/Cast" /></td>
+                <td class="hb-hint">Mana/Cast</td>
+              </tr>
+              <tr>
+                <td>Casting Skill</td>
+                <td><input type="text" data-term-key="castingSkill" value="{{config.terms.castingSkill}}" placeholder="Mana Skill" /></td>
+                <td class="hb-hint">Mana Skill</td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Currency</legend>
+          <table class="hb-terms-table">
+            <thead>
+              <tr><th>Field</th><th>Label</th><th class="hb-terms-default-col">Default</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Wealth (section)</td>
+                <td><input type="text" data-term-key="wealth" value="{{config.terms.wealth}}" placeholder="Wealth" /></td>
+                <td class="hb-hint">Wealth</td>
+              </tr>
+              <tr>
+                <td>Gold</td>
+                <td><input type="text" data-term-key="gold" value="{{config.terms.gold}}" placeholder="Gold" /></td>
+                <td class="hb-hint">Gold</td>
+              </tr>
+              <tr>
+                <td>Silver</td>
+                <td><input type="text" data-term-key="silver" value="{{config.terms.silver}}" placeholder="Silver" /></td>
+                <td class="hb-hint">Silver</td>
+              </tr>
+              <tr>
+                <td>Copper</td>
+                <td><input type="text" data-term-key="copper" value="{{config.terms.copper}}" placeholder="Copper" /></td>
+                <td class="hb-hint">Copper</td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 10: Library --}}
+      {{#if showLibrary}}
+      <div class="tab-library">
+
+        {{!-- Library list --}}
+        <fieldset class="hb-fieldset">
+          <legend>Homebrew Library</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Save named configurations for quick switching. Activating a library entry applies it immediately.
+          </p>
+          <p class="hb-lib-path">
+            <i class="fa-solid fa-folder fa-xs"></i>
+            <code>{{library.filePath}}</code>
+            <span class="hb-lib-path-note">(inside your Foundry data folder)</span>
+          </p>
+
+          {{#if library.hasEntries}}
+          <table class="hb-library-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Saved</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each library.entries}}
+              <tr class="hb-library-row {{#if isActive}}hb-library-row--active{{/if}}">
+                <td class="hb-lib-status-cell">
+                  {{#if isActive}}
+                  <i class="fa-solid fa-circle-check hb-active-icon" title="{{#if isModified}}Active (modified since activation){{else}}Active{{/if}}"></i>
+                  {{/if}}
+                </td>
+                <td class="hb-lib-name-cell">
+                  {{name}}
+                  {{#if isModified}}<span class="hb-modified-badge">modified</span>{{/if}}
+                </td>
+                <td class="hb-lib-date-cell">{{savedAtDisplay}}</td>
+                <td class="hb-lib-actions-cell">
+                  {{#if isModified}}
+                  <button type="button" class="hb-lib-update-btn" data-action="updateHomebrew" title="Save current changes back to this entry">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                  </button>
+                  {{else}}
+                  <button type="button" class="hb-lib-activate-btn{{#if isActive}} hb-lib-activate-btn--active{{/if}}" data-action="activateHomebrew" data-id="{{id}}" title="{{#if isActive}}Already active{{else}}Load and apply this homebrew{{/if}}" {{#if isActive}}disabled{{/if}}>
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                  {{/if}}
+                  <button type="button" class="hb-lib-export-btn" data-action="exportConfig" data-id="{{id}}" title="Export as JSON">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                  </button>
+                  <button type="button" class="hb-lib-delete-btn" data-action="deleteHomebrew" data-id="{{id}}" title="Remove from library">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <p class="hb-hint hb-lib-empty">No saved homebrews yet. Use the button below to save the current configuration.</p>
+          {{/if}}
+
+          {{#if library.showSaveForm}}
+          <div class="hb-save-form">
+            <input
+              type="text"
+              id="hb-lib-name-input"
+              class="hb-lib-name-input"
+              value="{{library.importedName}}"
+              placeholder="Configuration name…"
+              autofocus
+            >
+            <button type="button" class="hb-lib-save-confirm-btn" data-action="saveToLibrary">
+              <i class="fa-solid fa-floppy-disk"></i> Save
+            </button>
+            <button type="button" class="hb-lib-cancel-btn" data-action="toggleSaveForm">
+              Cancel
+            </button>
+          </div>
+          {{else}}
+          <button type="button" class="hb-add-btn hb-lib-add-btn" data-action="toggleSaveForm">
+            <i class="fa-solid fa-plus"></i> Save Current Config to Library…
+          </button>
+          {{/if}}
+        </fieldset>
+
+        {{!-- Import --}}
+        <fieldset class="hb-fieldset">
+          <legend>Import</legend>
+          <p class="hb-hint" style="margin-bottom: 0.5rem;">Load a <code>.json</code> file exported from another world. The config will be merged into the current session — review each tab then save.</p>
+          <button type="button" class="hb-share-btn" data-action="importConfig">
+            <i class="fa-solid fa-file-arrow-up"></i>
+            Import Homebrew…
+          </button>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
     </div>{{!-- .homebrew-tab-content --}}
 
     <footer class="form-footer homebrew-footer">
-      {{#if activeTabRequiresReload}}
-      <span class="reload-notice">
-        <i class="fa-solid fa-rotate"></i>
-        {{localize "VAGABOND.HomebrewSettings.RequiresReload"}}
+      {{#if hasAnyErrors}}
+      <span class="hb-broken-notice" title="Some settings reference stats or skills that no longer exist.">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        There are broken settings — check highlighted tabs.
       </span>
       {{/if}}
       <button type="button" class="reset-btn" data-action="resetDefaults" data-tab="{{activeTab}}">
@@ -542,6 +895,10 @@
       <button type="submit">
         <i class="fa-solid fa-floppy-disk"></i>
         {{localize "VAGABOND.HomebrewSettings.Save"}}
+      </button>
+      <button type="button" data-action="saveAndClose">
+        <i class="fa-solid fa-floppy-disk"></i>
+        Save &amp; Close
       </button>
       <button type="button" data-action="close">
         {{localize "Cancel"}}

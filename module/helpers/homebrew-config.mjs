@@ -85,12 +85,18 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
   },
 
   // --- Tab 5: Derivations (runtime) ---
-  // hp: formula for HP gained per level (evaluated × level = total base HP)
-  // inventory: formula for total base inventory slots
-  // Both use rollData keys: @might.total, @dexterity.total, @attributes.level.value, etc.
+  // Formulas use rollData keys: @might.total, @dexterity.total, @attributes.level.value, etc.
+  // speed/crawl/travel: crawl and travel may reference @speed.base which is resolved first.
   derivations: {
     hp: '@might.total',
     inventory: '8 + @might.total',
+    speed: '25 + floor(max(0, @dexterity.total - 2) / 2) * 5',
+    crawl: '@speed.base * 3',
+    travel: 'floor(@speed.base / 5)',
+    fatiguePCMax: 5,
+    fatigueNPCMax: 5,
+    luckStat: 'luck',
+    statsLayout: 'progression',
   },
 
   // --- Tab 6: Damage Types (runtime) ---
@@ -121,6 +127,23 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     trained: 2,
     untrained: 1,
   },
+
+  // --- Tab 9: Terms (runtime) ---
+  // Customise the display labels used throughout the sheets.
+  // Leave a field as the default string to keep the original label.
+  terms: {
+    inventory:    'Inventory',
+    magic:        'Magic',
+    mana:         'Mana',
+    maxMana:      'Max Mana',
+    manaPerCast:  'Mana/Cast',
+    castingSkill: 'Mana Skill',
+    spells:       'Spells',
+    wealth:       'Wealth',
+    gold:         'Gold',
+    silver:       'Silver',
+    copper:       'Copper',
+  },
 };
 
 /**
@@ -140,6 +163,12 @@ export function applyRuntimeHomebrewOverrides(config) {
   CONFIG.VAGABOND.skills = Object.fromEntries(config.skills.map(s => [s.key, s.label]));
   CONFIG.VAGABOND.saves  = Object.fromEntries(config.saves.map(s => [s.key, s.label]));
 
+  // --- Weapon Skills dropdown = all skills + all saves (runtime, no reload needed) ---
+  CONFIG.VAGABOND.weaponSkills = {
+    ...CONFIG.VAGABOND.skills,
+    ...CONFIG.VAGABOND.saves,
+  };
+
   // --- Damage Types (runtime, no reload needed) ---
   const dtList = config.damageTypes;
   CONFIG.VAGABOND.damageTypes = Object.fromEntries(dtList.map(dt => [dt.key, dt.label]));
@@ -153,6 +182,79 @@ export function applyRuntimeHomebrewOverrides(config) {
     ...CONFIG.VAGABOND.damageTypes,
     ...CONFIG.VAGABOND.materialWeaknesses,
   };
+}
+
+/**
+ * Patch game.i18n.translations with any custom terms from homebrew config.
+ * Must be called AFTER i18n is loaded (i18nInit hook or later).
+ * Safe to call multiple times — only overrides keys whose term is non-empty.
+ * @param {object} config - Fully-merged homebrew config object
+ */
+export function applyTermOverrides(config) {
+  const terms = config?.terms;
+  if (!terms || !game?.i18n?.translations) return;
+
+  // Traverse nested translations and set a value by dot-path.
+  const set = (path, value) => {
+    const parts = path.split('.');
+    let cur = game.i18n.translations;
+    for (let i = 0; i < parts.length - 1; i++) {
+      cur = cur?.[parts[i]];
+      if (!cur) return;
+    }
+    cur[parts[parts.length - 1]] = value;
+  };
+
+  if (terms.inventory) {
+    set('VAGABOND.Actor.Tabs.Inventory',          terms.inventory);
+    set('VAGABOND.UI.Sections.Inventory',         terms.inventory);
+    set('VAGABOND.ResourceTypes.InventorySlots',  `${terms.inventory} Slots`);
+    set('VAGABOND.Actor.Party.Card.Slots',        `${terms.inventory} Slots`);
+  }
+  if (terms.magic) {
+    set('VAGABOND.Actor.Tabs.Magic',    terms.magic);
+    set('VAGABOND.UI.Sections.Magic',   terms.magic);
+  }
+  if (terms.mana) {
+    set('VAGABOND.Actor.Character.FIELDS.mana.current.label', terms.mana);
+    set('VAGABOND.Actor.Party.Card.Mana',                     terms.mana);
+  }
+  if (terms.maxMana) {
+    set('VAGABOND.Actor.Character.FIELDS.mana.max.label', terms.maxMana);
+    set('VAGABOND.ResourceTypes.MaxMana',                 terms.maxMana);
+  }
+  if (terms.manaPerCast) {
+    set('VAGABOND.Actor.Character.FIELDS.mana.castingMax.label', terms.manaPerCast);
+    set('VAGABOND.ResourceTypes.ManaPerCast',                    terms.manaPerCast);
+    set('VAGABOND.Actor.Party.Card.ManaCast',                    terms.manaPerCast);
+  }
+  if (terms.castingSkill) {
+    set('VAGABOND.UI.Labels.ManaSkill',                           terms.castingSkill);
+    set('VAGABOND.Actor.Character.FIELDS.manaSkill.label',        `${terms.castingSkill}:`);
+  }
+  if (terms.spells) {
+    set('VAGABOND.Actor.Tabs.Spells',         terms.spells);
+    set('VAGABOND.UI.Sections.Spells',        terms.spells);
+    set('VAGABOND.Actor.Party.Card.Spells',   terms.spells);
+  }
+  if (terms.wealth) {
+    set('VAGABOND.UI.Sections.Wealth',              terms.wealth);
+    set('VAGABOND.ResourceTypes.Wealth',            `${terms.wealth} (in silver)`);
+    set('VAGABOND.Actor.Party.Card.Wealth',         terms.wealth);
+    set('VAGABOND.Actor.Party.Card.TotalWealth',    `Party Total ${terms.wealth}`);
+  }
+  if (terms.gold) {
+    set('VAGABOND.Wealth.Gold',          terms.gold);
+    set('VAGABOND.Currency.Gold.long',   terms.gold);
+  }
+  if (terms.silver) {
+    set('VAGABOND.Wealth.Silver',          terms.silver);
+    set('VAGABOND.Currency.Silver.long',   terms.silver);
+  }
+  if (terms.copper) {
+    set('VAGABOND.Wealth.Copper',          terms.copper);
+    set('VAGABOND.Currency.Copper.long',   terms.copper);
+  }
 }
 
 /**

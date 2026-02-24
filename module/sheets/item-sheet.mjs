@@ -99,6 +99,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeKeyStat: this._onRemoveKeyStat,
       addSkillChoiceGroup: this._onAddSkillChoiceGroup,
       removeSkillChoiceGroup: this._onRemoveSkillChoiceGroup,
+      addPoolSkill: this._onAddPoolSkill,
+      removePoolSkill: this._onRemovePoolSkill,
       updateChoicePool: this._onUpdatePool,
       updateChoiceCount: this._onUpdateCount,
       saveChoices: this._onSaveChoices,
@@ -360,24 +362,25 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             relativeTo: this.item,
           }
         );
-        // Prepare level groups (1-10) with their features
+        // Prepare level groups (1–maxLevel) with their features
         context.levelGroups = [];
+        const maxLevel = CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10;
         const manaMultiplier = this.item.system.manaMultiplier || 2;
-        // Create a working copy with all 10 levels initialized
+        // Create a working copy with all levels initialized
         const levelSpellsMap = new Map();
         (this.item.system.levelSpells || []).forEach(ls => {
           levelSpellsMap.set(ls.level, ls.spells || 0);
         });
 
         const workingLevelSpells = [];
-        for (let lvl = 1; lvl <= 10; lvl++) {
+        for (let lvl = 1; lvl <= maxLevel; lvl++) {
           workingLevelSpells.push({
             level: lvl,
             spells: levelSpellsMap.get(lvl) || 0
           });
         }
 
-        for (let level = 1; level <= 10; level++) {
+        for (let level = 1; level <= maxLevel; level++) {
           const features = this.item.system.levelFeatures
             .map((f, index) => ({ ...f, index }))
             .filter(f => f.level === level);
@@ -989,6 +992,20 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     // Fix inline roll dice icons to match actual die type
     EnrichmentHelper.fixInlineRollIcons(this.element);
 
+    // Keep mana-related fields in sync with the isSpellcaster checkbox without
+    // a full re-render (auto-save uses render:false so the DOM isn't updated).
+    if (this.item.type === 'class') {
+      const spellcasterCheckbox = this.element.querySelector('input[name="system.isSpellcaster"]');
+      if (spellcasterCheckbox) {
+        const spellcasterFields = this.element.querySelectorAll(
+          'input[name="system.manaMultiplier"], select[name="system.manaSkill"], select[name="system.castingStat"]'
+        );
+        spellcasterCheckbox.addEventListener('change', (e) => {
+          spellcasterFields.forEach(f => { f.disabled = !e.target.checked; });
+        });
+      }
+    }
+
     // Auto-save select, number input, and checkbox changes immediately.
     // With submitOnChange: false, form field changes are only saved on close.
     // This means any handler that triggers a re-render (e.g., adding a prerequisite)
@@ -1136,6 +1153,35 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const newGuaranteed = current.filter((_, i) => i !== index);
 
     await this.item.update({ "system.skillGrant.guaranteed": newGuaranteed });
+  }
+
+  static async _onAddPoolSkill(event, target) {
+    const choiceIndex = parseInt(target.dataset.choiceIndex);
+    const select = this.element.querySelector(`.pool-skill-select[data-choice-index="${choiceIndex}"]`);
+    if (!select || !select.value) return;
+
+    const skill = select.value;
+    const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices || []);
+    const choice = choices[choiceIndex];
+    if (!choice) return;
+
+    choice.pool = choice.pool || [];
+    if (choice.pool.includes(skill)) return;
+    choice.pool.push(skill);
+
+    await this.item.update({ "system.skillGrant.choices": choices });
+  }
+
+  static async _onRemovePoolSkill(event, target) {
+    const choiceIndex = parseInt(target.dataset.choiceIndex);
+    const poolIndex = parseInt(target.dataset.poolIndex);
+
+    const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices || []);
+    const choice = choices[choiceIndex];
+    if (!choice?.pool) return;
+
+    choice.pool.splice(poolIndex, 1);
+    await this.item.update({ "system.skillGrant.choices": choices });
   }
 
   /**

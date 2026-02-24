@@ -16,7 +16,7 @@ import {
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
-import { loadHomebrewConfig } from './helpers/homebrew-config.mjs';
+import { loadHomebrewConfig, applyTermOverrides } from './helpers/homebrew-config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
 import { EquipmentHelper } from './helpers/equipment-helper.mjs';
@@ -302,6 +302,16 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 18b: ID of the currently active library entry (empty string = none / custom)
+  // The library itself lives in assets/vagabond/homebrew/library.json (shared across worlds)
+  game.settings.register('vagabond', 'activeHomebrewId', {
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '',
+    requiresReload: false,
+  });
+
   // Setting 19: Homebrew Settings Menu button
   game.settings.registerMenu('vagabond', 'homebrewSettingsMenu', {
     name: 'VAGABOND.Settings.homebrewSettings.name',
@@ -312,53 +322,6 @@ function registerGameSettings() {
     restricted: true,
   });
 
-  // Setting 16: PC Fatigue Max
-  game.settings.register('vagabond', 'pcFatigueMax', {
-    name: 'VAGABOND.Settings.pcFatigueMax.name',
-    hint: 'VAGABOND.Settings.pcFatigueMax.hint',
-    scope: 'world',
-    config: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      max: 20,
-      step: 1
-    },
-    requiresReload: false,
-    onChange: () => {
-      for (let actor of game.actors) {
-        if (actor.type === 'character') {
-          actor.prepareData();
-          actor.sheet?.render(false);
-        }
-      }
-    }
-  });
-
-  // Setting 17: NPC Fatigue Max
-  game.settings.register('vagabond', 'npcFatigueMax', {
-    name: 'VAGABOND.Settings.npcFatigueMax.name',
-    hint: 'VAGABOND.Settings.npcFatigueMax.hint',
-    scope: 'world',
-    config: true,
-    type: Number,
-    default: 5,
-    range: {
-      min: 1,
-      max: 20,
-      step: 1
-    },
-    requiresReload: false,
-    onChange: () => {
-      for (let actor of game.actors) {
-        if (actor.type === 'npc') {
-          actor.prepareData();
-          actor.sheet?.render(false);
-        }
-      }
-    }
-  });
 }
 
 /* -------------------------------------------- */
@@ -675,6 +638,15 @@ Handlebars.registerHelper('json', function(context) {
     return '';
   }
 });
+/* -------------------------------------------- */
+/*  i18nInit Hook                               */
+/* -------------------------------------------- */
+
+// Apply custom term overrides after translations are loaded.
+Hooks.once('i18nInit', function () {
+  applyTermOverrides(CONFIG.VAGABOND.homebrew);
+});
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */

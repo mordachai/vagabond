@@ -267,10 +267,9 @@
   gap: 4px;
 }
 
-// Stats Grid - 12-column grid to support pyramid layout (Top 3, Base 4)
+// Stats Grid — base styles shared by all layout modes
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
   flex: 1;
   gap: 0;
 
@@ -278,22 +277,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    // Bottom row: 4 items, span 2 cols each
-    &:nth-child(n+4) {
-      grid-column: span 2;
-    }
-
-    // Top row: 3 items, span 2 cols each
-    &:nth-child(-n+3) {
-      grid-column: span 2;
-    }
-
-    // Offset first item to center top row
-    &:nth-child(1) {
-      grid-column: 2 / span 2; // Start at column 2
-    }
   }
+
+// Progression layout: top row indented to create a cascade/pyramid feel.
+// Uses an 8-column grid: top 3 stats are centered (col 2–7), bottom row fills all 8.
+&.stats-grid--progression {
+  grid-template-columns: repeat(8, 1fr);
+
+  .stat-item {
+    // All items span 2 columns
+    &:nth-child(-n+3) { grid-column: span 2; }
+    &:nth-child(n+4)  { grid-column: span 2; }
+
+    // Indent first item so top row reads as 3 centered in 8 cols
+    &:nth-child(1) { grid-column: 2 / span 2; }
+  }
+}
+
+// Centered layout: both rows are evenly distributed and centered, no offset.
+// Uses a 6-column grid: each stat takes 2 cols, both rows perfectly aligned.
+&.stats-grid--centered {
+  grid-template-columns: repeat(6, 1fr);
+
+  .stat-item {
+    grid-column: span 2;
+  }
+}
 
   .stat-score {
     display: flex;

@@ -103,23 +103,6 @@ export default class VagabondEquipment extends VagabondItemBase {
       nullable: false,
       blank: false,
       initial: '-',
-      choices: CONFIG.VAGABOND?.damageTypes || {
-        '-': 'None',
-        'acid': 'Acid',
-        'fire': 'Fire',
-        'shock': 'Shock',
-        'poison': 'Poison',
-        'cold': 'Cold',
-        'blunt': 'Blunt',
-        'piercing': 'Piercing', 
-        'slashing': 'Slashing',
-        'physical': 'Physical',
-        'necrotic': 'Necrotic',
-        'psychic': 'Psychic',
-        'healing': 'Healing',
-        'recover': 'Recover',
-        'recharge': 'Recharge'
-      }
     });
 
     // Damage Amount - damage formula (e.g., "2d6", "1d8+2", "d10")
@@ -153,30 +136,11 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== WEAPON-SPECIFIC FIELDS =====
 
-    // Weapon skill used to attack (weapon skills, skills, or saves)
+    // Weapon skill used to attack (any skill or save — fully homebrew-configurable)
     schema.weaponSkill = new fields.StringField({
       required: false,
       blank: true,
       initial: 'melee',
-      choices: CONFIG.VAGABOND?.weaponSkills || {
-        'melee': 'Melee',
-        'brawl': 'Brawl',
-        'finesse': 'Finesse',
-        'ranged': 'Ranged',
-        'arcana': 'Arcana',
-        'craft': 'Craft',
-        'medicine': 'Medicine',
-        'sneak': 'Sneak',
-        'detect': 'Detect',
-        'mysticism': 'Mysticism',
-        'survival': 'Survival',
-        'influence': 'Influence',
-        'leadership': 'Leadership',
-        'performance': 'Performance',
-        'reflex': 'Reflex',
-        'endure': 'Endure',
-        'will': 'Will'
-      }
     });
 
     // Range (close, near, far)
@@ -207,23 +171,6 @@ export default class VagabondEquipment extends VagabondItemBase {
       required: false,
       blank: true,
       initial: '-',
-      choices: CONFIG.VAGABOND?.damageTypes || {
-        '-': 'None',
-        'acid': 'Acid',
-        'fire': 'Fire',
-        'shock': 'Shock',
-        'poison': 'Poison',
-        'cold': 'Cold',
-        'blunt': 'Blunt',
-        'piercing': 'Piercing',
-        'slashing': 'Slashing',
-        'physical': 'Physical',
-        'necrotic': 'Necrotic',
-        'psychic': 'Psychic',
-        'healing': 'Healing',
-        'recover': 'Recover',
-        'recharge': 'Recharge'
-      }
     });
 
     // Damage two-handed (for versatile weapons)
@@ -238,23 +185,6 @@ export default class VagabondEquipment extends VagabondItemBase {
       required: false,
       blank: true,
       initial: '-',
-      choices: CONFIG.VAGABOND?.damageTypes || {
-        '-': 'None',
-        'acid': 'Acid',
-        'fire': 'Fire',
-        'shock': 'Shock',
-        'poison': 'Poison',
-        'cold': 'Cold',
-        'blunt': 'Blunt',
-        'piercing': 'Piercing',
-        'slashing': 'Slashing',
-        'physical': 'Physical',
-        'necrotic': 'Necrotic',
-        'psychic': 'Psychic',
-        'healing': 'Healing',
-        'recover': 'Recover',
-        'recharge': 'Recharge'
-      }
     });
 
     // Equipment state for weapons (unequipped, oneHand, twoHands)
