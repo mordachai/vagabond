@@ -1284,19 +1284,21 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    */
   static async luckSpend(actor, newLuck, maxLuck) {
+    const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
+    const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
-      .setTitle('Luck Spent')
+      .setTitle(`${luckTerm} Spent`)
       .setSubtitle(actor.name)
       .setDescription(`
-        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a Luck point.</p>
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a ${luckTerm} point.</p>
         <p><strong>Advantage:</strong> Grant Favor on a d20 roll.</p>
         <p><strong>Fluke:</strong> Reroll an unresolved die you rolled.</p>
       `);
 
     card.data.metadata = [{
-      label: 'Remaining Luck',
+      label: `Remaining ${luckTerm}`,
       value: `${newLuck} / ${maxLuck}`
     }];
 
@@ -1308,7 +1310,7 @@ export class VagabondChatCard {
           <i class="fas fa-chevron-down expand-icon"></i>
         </div>
         <div class="defend-content">
-          <p>Once per Round, if you are reduced to <strong>0 HP</strong>, you can spend <strong>1 Luck</strong> to regain <strong>d6 HP</strong>.</p>
+          <p>Once per Round, if you are reduced to <strong>0 HP</strong>, you can spend <strong>1 ${luckTerm}</strong> to regain <strong>d6 HP</strong>.</p>
         </div>
       </div>
     `);
@@ -1323,14 +1325,16 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    */
   static async luckRecharge(actor, maxLuck) {
+    const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
+    const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
-      .setTitle('Luck Recharged')
+      .setTitle(`${luckTerm} Recharged`)
       .setSubtitle(actor.name)
       .setDescription(`
-        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> recharges their Luck.</p>
-        <p><strong>Luck Pool:</strong> ${maxLuck} / ${maxLuck}</p>
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> recharges their ${luckTerm}.</p>
+        <p><strong>${luckTerm} ${poolTerm}:</strong> ${maxLuck} / ${maxLuck}</p>
       `);
 
     return await card.send();
@@ -1345,15 +1349,17 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    */
   static async luckGain(actor, newLuck, maxLuck, reason = '') {
+    const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
+    const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const reasonText = reason ? ` from <strong>${reason}</strong>` : '';
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
-      .setTitle('Luck Gained')
+      .setTitle(`${luckTerm} Gained`)
       .setSubtitle(actor.name)
       .setDescription(`
-        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> gains 1 Luck${reasonText}.</p>
-        <p><strong>Luck Pool:</strong> ${newLuck} / ${maxLuck}</p>
+        <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> gains 1 ${luckTerm}${reasonText}.</p>
+        <p><strong>${luckTerm} ${poolTerm}:</strong> ${newLuck} / ${maxLuck}</p>
       `);
 
     return await card.send();

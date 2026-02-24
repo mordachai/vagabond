@@ -930,7 +930,9 @@ const FLUKE_REROLL_ENTRY = {
     const currentLuck = actor.system.currentLuck || 0;
     const maxLuck = actor.system.maxLuck || 0;
     const flukeLabel = game.i18n.localize('VAGABOND.UI.Chat.FlukeReroll');
-    const luckLabel = game.i18n.localize('VAGABOND.UI.Sections.LuckPool');
+    const lt = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
+    const pt = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
+    const luckLabel = `${lt} ${pt}`;
     if (currentLuck > 0) {
       this.name = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
       this.classes = '';
@@ -952,9 +954,11 @@ const FLUKE_REROLL_ENTRY = {
     // Deduct luck
     const currentLuck = actor.system.currentLuck || 0;
     if (currentLuck <= 0) {
-      ui.notifications.warn(`${actor.name} has no Luck points remaining.`);
+      const luckTermWarn = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
+      ui.notifications.warn(`${actor.name} has no ${luckTermWarn} points remaining.`);
       return;
     }
+    const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
     const maxLuck = actor.system.maxLuck || 0;
     const newLuck = currentLuck - 1;
     await actor.update({ 'system.currentLuck': newLuck });
@@ -965,8 +969,8 @@ const FLUKE_REROLL_ENTRY = {
       .setActor(actor)
       .setTitle('Fluke!')
       .setSubtitle(actor.name)
-      .setDescription(`<p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a Luck point to reroll.</p>`);
-    notifCard.data.metadata = [{ label: 'Remaining Luck', value: `${newLuck} / ${maxLuck}` }];
+      .setDescription(`<p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a ${luckTerm} point to reroll.</p>`);
+    notifCard.data.metadata = [{ label: `Remaining ${luckTerm}`, value: `${newLuck} / ${maxLuck}` }];
     await notifCard.send();
 
     // Detect favor/hinder from the stored formula
