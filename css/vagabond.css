@@ -5874,6 +5874,55 @@ ol#combat-tracker.directory-list {
   max-width: 100%;
   height: auto;
 }
+#homebrew-settings.homebrew-settings-form .tab-magic {
+  display: flex;
+  flex-direction: column;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table th {
+  text-align: left;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+  white-space: nowrap;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table td {
+  padding: 0.18rem 0.3rem;
+  vertical-align: middle;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table tbody tr:nth-child(even) {
+  background: var(--vagabond-c-inset-2);
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table .hb-mdt-key {
+  width: 68px;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table .hb-mdt-label {
+  width: 88px;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table .hb-mdt-num {
+  width: 50px;
+  text-align: center;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table td:nth-child(n+3):nth-child(-n+6) {
+  text-align: center;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table .hb-mdt-remove-btn {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.45;
+}
+#homebrew-settings.homebrew-settings-form .hb-magic-dt-table .hb-mdt-remove-btn:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red);
+}
 #homebrew-settings.homebrew-settings-form .tab-leveling {
   display: flex;
   flex-direction: column;

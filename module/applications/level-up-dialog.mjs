@@ -694,7 +694,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
             enrichedDescription: enrichedDesc,
             manaCost: item.system.manaCost || 0,
             delivery: deliveryKey || null,
-            deliveryLabel: deliveryKey ? (game.i18n.localize(`VAGABOND.Spell.Delivery.${deliveryKey}`) || deliveryKey) : null,
+            deliveryLabel: deliveryKey ? (CONFIG.VAGABOND.deliveryTypes[deliveryKey] ?? game.i18n.localize(`VAGABOND.Spell.Delivery.${deliveryKey}`) ?? deliveryKey) : null,
             damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[item.system.damageType] || null,
             damageType: item.system.damageType !== '-' ? item.system.damageType : null,
             baseDamage: item.system.baseDamage || null,

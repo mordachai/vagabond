@@ -374,7 +374,52 @@
     }
   }
 
-  // ─── Tab 4: Leveling ──────────────────────────────────────────────────
+  // ─── Tab 4: Magic ─────────────────────────────────────────────────────
+
+  .tab-magic {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hb-magic-dt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.18rem 0.3rem;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) { background: $c-inset-2; }
+
+    .hb-mdt-key   { width: 68px; }
+    .hb-mdt-label { width: 88px; }
+    .hb-mdt-num   { width: 50px; text-align: center; }
+
+    td:nth-child(n+3):nth-child(-n+6) { text-align: center; }
+
+    .hb-mdt-remove-btn {
+      padding: 0.15rem 0.35rem;
+      font-size: 0.75rem;
+      opacity: 0.45;
+      &:hover { opacity: 1; color: var(--vagabond-c-red); }
+    }
+  }
+
+  // ─── Tab 5: Leveling ──────────────────────────────────────────────────
 
   .tab-leveling {
     display: flex;

@@ -139,6 +139,21 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     [7, 6, 4, 2, 2, 2],
   ],
 
+  // --- Tab 4: Magic (runtime) ---
+  magic: {
+    deliveryTypes: [
+      { key: 'aura',   label: 'Aura',   baseCost: 2, increaseCost: 1, baseRange: 10, increment: 5  },
+      { key: 'cone',   label: 'Cone',   baseCost: 2, increaseCost: 2, baseRange: 15, increment: 5  },
+      { key: 'cube',   label: 'Cube',   baseCost: 1, increaseCost: 1, baseRange: 5,  increment: 5  },
+      { key: 'imbue',  label: 'Imbue',  baseCost: 0, increaseCost: 2, baseRange: 1,  increment: 1  },
+      { key: 'glyph',  label: 'Glyph',  baseCost: 2, increaseCost: 0, baseRange: 5,  increment: 0  },
+      { key: 'line',   label: 'Line',   baseCost: 2, increaseCost: 1, baseRange: 30, increment: 10 },
+      { key: 'remote', label: 'Remote', baseCost: 0, increaseCost: 1, baseRange: 1,  increment: 1  },
+      { key: 'sphere', label: 'Sphere', baseCost: 2, increaseCost: 1, baseRange: 5,  increment: 5  },
+      { key: 'touch',  label: 'Touch',  baseCost: 0, increaseCost: 0, baseRange: 0,  increment: 0  },
+    ],
+  },
+
   // --- Tab 8: Advanced (runtime) ---
   multipliers: {
     trained: 2,
@@ -156,6 +171,8 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     manaPerCast:  'Mana/Cast',
     castingSkill: 'Mana Skill',
     spells:       'Spells',
+    luckTerm:     'Luck',
+    poolTerm:     'Pool',
     wealth:       'Wealth',
     gold:         'Gold',
     silver:       'Silver',
@@ -199,6 +216,31 @@ export function applyRuntimeHomebrewOverrides(config) {
     ...CONFIG.VAGABOND.damageTypes,
     ...CONFIG.VAGABOND.materialWeaknesses,
   };
+
+  // --- Magic: Delivery Types (runtime) ---
+  if (config.magic?.deliveryTypes?.length) {
+    // Preserve geometry metadata (unit/type) from static defaults — not user-configurable
+    const DELIVERY_META = {
+      aura:   { unit: 'foot',   type: 'radius' },
+      cone:   { unit: 'foot',   type: 'length' },
+      cube:   { unit: 'foot',   type: 'cube'   },
+      imbue:  { unit: 'target', type: 'count'  },
+      glyph:  { unit: 'foot',   type: 'square' },
+      line:   { unit: 'foot',   type: 'length' },
+      remote: { unit: 'target', type: 'count'  },
+      sphere: { unit: 'foot',   type: 'radius' },
+      touch:  { unit: null,     type: null      },
+    };
+    const dt = config.magic.deliveryTypes;
+    CONFIG.VAGABOND.deliveryTypes        = Object.fromEntries(dt.map(d => [d.key, d.label]));
+    CONFIG.VAGABOND.deliveryDefaults     = Object.fromEntries(dt.map(d => [d.key, { cost: d.baseCost }]));
+    CONFIG.VAGABOND.deliveryIncreaseCost = Object.fromEntries(dt.map(d => [d.key, d.increaseCost]));
+    CONFIG.VAGABOND.deliveryBaseRanges   = Object.fromEntries(dt.map(d => {
+      const meta = DELIVERY_META[d.key] ?? { unit: 'foot', type: 'radius' };
+      return [d.key, { value: d.baseRange || null, ...meta }];
+    }));
+    CONFIG.VAGABOND.deliveryIncrement    = Object.fromEntries(dt.map(d => [d.key, d.increment]));
+  }
 }
 
 /**
@@ -271,6 +313,17 @@ export function applyTermOverrides(config) {
   if (terms.copper) {
     set('VAGABOND.Wealth.Copper',          terms.copper);
     set('VAGABOND.Currency.Copper.long',   terms.copper);
+  }
+  const luckTerm = terms.luckTerm || 'Luck';
+  const poolTerm = terms.poolTerm || 'Pool';
+  if (terms.luckTerm || terms.poolTerm) {
+    set('VAGABOND.UI.Sections.luckTerm',    luckTerm);
+    set('VAGABOND.UI.Sections.poolTerm',    poolTerm);
+    set('VAGABOND.UI.Sections.LuckPool',    `${luckTerm} ${poolTerm}`);
+    set('VAGABOND.UI.Sections.CurrentLuck', `${luckTerm} ${poolTerm}`);
+    set('VAGABOND.ResourceTypes.CurrentLuck', `${luckTerm} ${poolTerm}`);
+    set('VAGABOND.Hints.LuckPool',          `Total ${luckTerm} points. Spend to gain Favor, reroll dice, or use Plot Armor.`);
+    set('VAGABOND.Actor.Character.UI.LuckPool', `${luckTerm} ${poolTerm}`);
   }
 }
 

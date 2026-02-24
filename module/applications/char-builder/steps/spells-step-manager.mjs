@@ -228,7 +228,7 @@ export class SpellsStepManager extends BaseStepManager {
       damageTypeLabel: sys.damageType !== '-' ? sys.damageType : null,
       crit: sys.crit || null,
       delivery: sys.delivery || null,
-      deliveryLabel: sys.delivery ? game.i18n.localize(`VAGABOND.Spell.Delivery.${sys.delivery}`) : null,
+      deliveryLabel: sys.delivery ? (CONFIG.VAGABOND.deliveryTypes[sys.delivery] ?? game.i18n.localize(`VAGABOND.Spell.Delivery.${sys.delivery}`) ?? sys.delivery) : null,
       manaCost: sys.manaCost || 0,
       range: sys.range || null,
       duration: sys.duration || null,

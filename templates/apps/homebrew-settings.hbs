@@ -278,15 +278,6 @@
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Spell Damage</legend>
-          <div class="hb-form-group">
-            <label for="hb-spellDmg">Base Damage Die</label>
-            <input id="hb-spellDmg" type="text" data-field="dice.spellBaseDamage" value="{{config.dice.spellBaseDamage}}" placeholder="d6">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Default spell damage die (e.g. d6, d8). Actor bonuses stack on top.</p>
-          </div>
-        </fieldset>
-
-        <fieldset class="hb-fieldset">
           <legend>Check Probability</legend>
           <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> Frequency distribution of possible roll results (Bell Curve).</p>
           <div class="hb-dice-chart" id="hb-dice-chart"></div>
@@ -295,7 +286,64 @@
       </div>
       {{/if}}
 
-      {{!-- Tab 4: Leveling --}}
+      {{!-- Tab 4: Magic --}}
+      {{#if showMagic}}
+      <div class="tab-magic">
+
+        <fieldset class="hb-fieldset">
+          <legend>Spell Damage</legend>
+          <div class="hb-form-group">
+            <label for="hb-spellDmg">Base Damage Die</label>
+            <input id="hb-spellDmg" type="text" data-field="dice.spellBaseDamage" value="{{config.dice.spellBaseDamage}}" placeholder="d6">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Default spell damage die (e.g. d6, d8). Actor bonuses stack on top. Changes take effect on save — no reload needed.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
+          <legend>Delivery Types</legend>
+          <p class="hb-hint" style="margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-circle-info fa-xs"></i>
+            Configure how spells are delivered. <strong>Base Cost</strong> is mana spent to cast; <strong>+Cost</strong> is extra mana per size/count increase; <strong>Range</strong> is the starting area in feet (or targets for Imbue/Remote); <strong>Increment</strong> is the step size per increase. Changes take effect on save — no reload needed.
+          </p>
+          <table class="hb-magic-dt-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Label</th>
+                <th style="text-align:center" title="Mana cost to cast">Base Cost</th>
+                <th style="text-align:center" title="Starting range in feet (or targets)">Range</th>
+                <th style="text-align:center" title="Step size per increase">Increment</th>
+                <th style="text-align:center" title="Mana cost per size increase">+Cost</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each deliveryTypeRows}}
+              <tr>
+                <td><input type="text" class="hb-mdt-key" data-mdt-index="{{index}}" data-mdt-field="key" value="{{key}}" placeholder="key"></td>
+                <td><input type="text" class="hb-mdt-label" data-mdt-index="{{index}}" data-mdt-field="label" value="{{label}}" placeholder="Label"></td>
+                <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="baseCost" value="{{baseCost}}" min="0" max="20" step="1"></td>
+                <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="baseRange" value="{{baseRange}}" min="0" max="9999" step="1"></td>
+                <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="increment" value="{{increment}}" min="0" max="999" step="1"></td>
+                <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="increaseCost" value="{{increaseCost}}" min="0" max="20" step="1"></td>
+                <td>
+                  <button type="button" class="hb-mdt-remove-btn" data-action="removeDeliveryType" data-index="{{index}}" title="Remove">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <button type="button" class="hb-add-btn" data-action="addDeliveryType">
+            <i class="fa-solid fa-plus"></i> Add Delivery Type
+          </button>
+        </fieldset>
+
+      </div>
+      {{/if}}
+
+      {{!-- Tab 5: Leveling --}}
       {{#if showLeveling}}
       <div class="tab-leveling">
 
@@ -389,7 +437,7 @@
       </div>
       {{/if}}
 
-      {{!-- Tab 5: Derivations --}}
+      {{!-- Tab 6: Derivations --}}
       {{#if showDerivations}}
       <div class="tab-derivations">
 
@@ -530,12 +578,22 @@
             </select>
             <p class="hb-hint">Stat that sets the size of the Luck pool. <em>None</em> hides the pool from the character sheet.</p>
           </div>
+          <div class="hb-form-group" style="margin-top: 0.5rem;">
+            <label for="hb-term-luckTerm">First Word</label>
+            <input id="hb-term-luckTerm" type="text" data-term-key="luckTerm" value="{{config.terms.luckTerm}}" placeholder="Luck">
+            <p class="hb-hint">Top label on the pool widget (e.g. "Luck", "Fate", "Fortune").</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-term-poolTerm">Second Word</label>
+            <input id="hb-term-poolTerm" type="text" data-term-key="poolTerm" value="{{config.terms.poolTerm}}" placeholder="Pool">
+            <p class="hb-hint">Bottom label on the pool widget (e.g. "Pool", "Points", "Tokens"). Together they form <em>"{{config.terms.luckTerm}} {{config.terms.poolTerm}}"</em>.</p>
+          </div>
         </fieldset>
 
       </div>
       {{/if}}
 
-      {{!-- Tab 6: Damage Types --}}
+      {{!-- Tab 7: Damage Types --}}
       {{#if showDamageTypes}}
       <div class="tab-damage-types">
 
@@ -613,7 +671,7 @@
       </div>
       {{/if}}
 
-      {{!-- Tab 7: Stat Cap --}}
+      {{!-- Tab 8: Stat Cap --}}
       {{#if showStatCap}}
       <div class="tab-stat-cap">
 
@@ -649,7 +707,7 @@
               <tr>
                 <th class="hb-sa-roll-col">#</th>
                 {{#each config.stats}}
-                <th>{{abbreviation}}</th>
+                <th title="{{label}}">{{abbreviation}}</th>
                 {{/each}}
                 <th></th>
               </tr>
@@ -678,7 +736,7 @@
       </div>
       {{/if}}
 
-      {{!-- Tab 8: Advanced --}}
+      {{!-- Tab 9: Advanced --}}
       {{#if showAdvanced}}
       <div class="tab-advanced">
 
@@ -719,7 +777,7 @@
       </div>
       {{/if}}
 
-      {{!-- Tab 9: Terms --}}
+      {{!-- Tab 10: Terms --}}
       {{#if showTerms}}
       <div class="tab-terms">
 
@@ -814,7 +872,7 @@
       </div>
       {{/if}}
 
-      {{!-- Tab 10: Library --}}
+      {{!-- Tab 11: Library --}}
       {{#if showLibrary}}
       <div class="tab-library">
 

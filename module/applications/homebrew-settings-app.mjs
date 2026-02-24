@@ -42,6 +42,8 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
       updateHomebrew:    HomebrewSettingsApp.#onUpdateHomebrew,
       deleteHomebrew:    HomebrewSettingsApp.#onDeleteHomebrew,
       toggleSaveForm:    HomebrewSettingsApp.#onToggleSaveForm,
+      addDeliveryType:   HomebrewSettingsApp.#onAddDeliveryType,
+      removeDeliveryType: HomebrewSettingsApp.#onRemoveDeliveryType,
       addStatArray:      HomebrewSettingsApp.#onAddStatArray,
       removeStatArray:   HomebrewSettingsApp.#onRemoveStatArray,
       resetAll:          HomebrewSettingsApp.#onResetAll,
@@ -66,6 +68,7 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
     { id: 'stats',       label: 'VAGABOND.HomebrewSettings.Tabs.Stats',       icon: 'fa-solid fa-chart-bar',         requiresReload: true },
     { id: 'skills',      label: 'VAGABOND.HomebrewSettings.Tabs.Skills',      icon: 'fa-solid fa-graduation-cap',    requiresReload: true },
     { id: 'dice',        label: 'VAGABOND.HomebrewSettings.Tabs.Dice',        icon: 'fa-solid fa-dice-d20',          requiresReload: false },
+    { id: 'magic',       label: 'VAGABOND.HomebrewSettings.Tabs.Magic',       icon: 'fa-solid fa-wand-magic-sparkles', requiresReload: false },
     { id: 'leveling',    label: 'VAGABOND.HomebrewSettings.Tabs.Leveling',    icon: 'fa-solid fa-arrow-up',          requiresReload: false },
     { id: 'derivations', label: 'VAGABOND.HomebrewSettings.Tabs.Derivations', icon: 'fa-solid fa-function',          requiresReload: false },
     { id: 'damageTypes', label: 'VAGABOND.HomebrewSettings.Tabs.DamageTypes', icon: 'fa-solid fa-burst',             requiresReload: false },
@@ -170,6 +173,8 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
       showStats:       this.#activeTab === 'stats',
       showSkills:      this.#activeTab === 'skills',
       showDice:        this.#activeTab === 'dice',
+      showMagic:       this.#activeTab === 'magic',
+      deliveryTypeRows: (this.#config.magic?.deliveryTypes ?? []).map((dt, i) => ({ ...dt, index: i })),
       showLeveling:    this.#activeTab === 'leveling',
       showDerivations: this.#activeTab === 'derivations',
       showDamageTypes: this.#activeTab === 'damageTypes',
@@ -217,10 +222,13 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
     } else if (this.#activeTab === 'dice') {
       this.#setupDiceListeners();
       this.#renderDiceChart();
+    } else if (this.#activeTab === 'magic') {
+      this.#setupMagicListeners();
     } else if (this.#activeTab === 'damageTypes') {
       this.#setupDamageTypeListeners();
     } else if (this.#activeTab === 'derivations') {
       this.#setupDerivationsListeners();
+      this.#setupTermsListeners();
     } else if (this.#activeTab === 'statCap') {
       this.#setupStatCapListeners();
     } else if (this.#activeTab === 'advanced') {
@@ -329,6 +337,31 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
         const field = input.dataset.field.replace('dice.', '');
         this.#config.dice[field] = e.target.value;
         this.#renderDiceChart();
+      });
+    });
+  }
+
+  /** Attach input listeners for the Magic tab fields. Updates #config in real time. */
+  #setupMagicListeners() {
+    const el = this.element;
+    // Spell base damage die (still stored under dice.spellBaseDamage for compatibility)
+    el.querySelector('[data-field="dice.spellBaseDamage"]')?.addEventListener('input', (e) => {
+      if (!this.#config.dice) this.#config.dice = {};
+      this.#config.dice.spellBaseDamage = e.target.value;
+    });
+    // Delivery type rows
+    el.querySelectorAll('[data-mdt-index]').forEach(input => {
+      if (input.tagName !== 'INPUT') return;
+      const eventType = input.type === 'number' ? 'change' : 'input';
+      input.addEventListener(eventType, (e) => {
+        const i = parseInt(input.dataset.mdtIndex);
+        const field = input.dataset.mdtField;
+        if (!this.#config.magic?.deliveryTypes?.[i]) return;
+        if (['baseCost', 'increaseCost', 'baseRange', 'increment'].includes(field)) {
+          this.#config.magic.deliveryTypes[i][field] = parseInt(e.target.value) || 0;
+        } else {
+          this.#config.magic.deliveryTypes[i][field] = e.target.value;
+        }
       });
     });
   }
@@ -730,6 +763,23 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
     }
   }
 
+  /** Add a blank delivery type entry. */
+  static #onAddDeliveryType() {
+    if (!this.#config.magic) this.#config.magic = { deliveryTypes: [] };
+    if (!this.#config.magic.deliveryTypes) this.#config.magic.deliveryTypes = [];
+    this.#config.magic.deliveryTypes.push({ key: 'new', label: 'New Delivery', baseCost: 1, increaseCost: 1, baseRange: 5, increment: 5 });
+    this.render();
+  }
+
+  /** Remove a delivery type by index. */
+  static #onRemoveDeliveryType(event, target) {
+    const index = parseInt(target.dataset.index);
+    if (!isNaN(index) && this.#config.magic?.deliveryTypes) {
+      this.#config.magic.deliveryTypes.splice(index, 1);
+      this.render();
+    }
+  }
+
   /** Export a library entry as a downloadable JSON file. */
   static #onExportConfig(event, target) {
     const id = target.dataset.id;
@@ -846,8 +896,14 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
       case 'skills':       this.#config.skills        = foundry.utils.deepClone(d.skills);
                            this.#config.saves         = foundry.utils.deepClone(d.saves);        break;
       case 'dice':         this.#config.dice          = foundry.utils.deepClone(d.dice);         break;
+      case 'magic':        this.#config.magic         = foundry.utils.deepClone(d.magic);        break;
       case 'leveling':     this.#config.leveling      = foundry.utils.deepClone(d.leveling);     break;
-      case 'derivations':  this.#config.derivations   = foundry.utils.deepClone(d.derivations);  break;
+      case 'derivations':  this.#config.derivations   = foundry.utils.deepClone(d.derivations);
+                           if (this.#config.terms) {
+                             this.#config.terms.luckTerm = d.terms.luckTerm;
+                             this.#config.terms.poolTerm = d.terms.poolTerm;
+                           }
+                           break;
       case 'damageTypes':  this.#config.damageTypes   = foundry.utils.deepClone(d.damageTypes);  break;
       case 'statCap':      this.#config.statCap       = d.statCap;                               break;
       case 'advanced':     this.#config.multipliers   = foundry.utils.deepClone(d.multipliers);  break;
