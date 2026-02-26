@@ -76,6 +76,15 @@ export default class VagabondSpell extends VagabondItemBase {
       initial: false
     });
 
+    // FX School - explicit Sequencer animation school override
+    // Empty string = auto-derive from damage type
+    schema.fxSchool = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: "",
+      label: "VAGABOND.Spell.FxSchool.Label",
+    });
+
     return schema;
   }
 

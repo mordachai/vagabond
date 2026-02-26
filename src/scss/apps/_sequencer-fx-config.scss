@@ -1,0 +1,143 @@
+#sequencer-fx-config.sequencer-fx-config-form {
+  .window-content { padding: 0; overflow: hidden; }
+
+  .sfx-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .sfx-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  // Left school nav
+  .sfx-school-nav {
+    display: flex;
+    flex-direction: column;
+    width: 110px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--vagabond-c-faint);
+    overflow-y: auto;
+    padding: 0.25rem 0;
+  }
+
+  .sfx-school-btn {
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--vagabond-c-text-dim);
+    border-left: 3px solid transparent;
+
+    &:hover { color: var(--color-text-light-highlight); }
+    &.active {
+      color: var(--color-text-light-highlight);
+      border-left-color: var(--vagabond-c-primary);
+      font-weight: bold;
+    }
+  }
+
+  // Right panels
+  .sfx-panels { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+  .sfx-panel {
+    display: none;
+    flex: 1;
+    overflow: hidden;
+    &.active { display: flex; flex-direction: column; }
+  }
+  .sfx-panel-scroll { flex: 1; overflow-y: auto; padding: 0.75rem 1rem; }
+
+  // Sections
+  .sfx-section {
+    margin-bottom: 1rem;
+    h3 {
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--vagabond-c-text-dim);
+      border-bottom: 1px solid var(--vagabond-c-faint);
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.2rem;
+    }
+  }
+
+  // Cast / Sound rows
+  .sfx-cast-row, .sfx-sound-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .sfx-file-group { flex: 1 1 200px; }
+  .sfx-num-group  { flex: 0 0 100px; }
+
+  // File input with browse button
+  .sfx-file-input {
+    display: flex;
+    gap: 0.25rem;
+    input { flex: 1; min-width: 0; }
+  }
+  .sfx-browse-btn {
+    padding: 0.2rem 0.5rem;
+    flex-shrink: 0;
+  }
+
+  // Area anims table
+  .sfx-area-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+
+    th {
+      text-align: left;
+      padding: 0.2rem 0.4rem;
+      border-bottom: 1px solid var(--vagabond-c-faint);
+      font-weight: bold;
+      color: var(--vagabond-c-text-dim);
+    }
+    td {
+      padding: 0.2rem 0.4rem;
+      vertical-align: middle;
+    }
+    tr:nth-child(even) td { background: var(--vagabond-c-surface-alt, rgba(0,0,0,0.04)); }
+  }
+
+  .sfx-delivery-label { font-weight: 600; white-space: nowrap; }
+  .sfx-num-input { width: 70px; }
+
+  // Nav separator
+  .sfx-nav-sep {
+    border: none;
+    border-top: 1px solid var(--vagabond-c-faint);
+    margin: 0.4rem 0.4rem;
+  }
+
+  // Export / Import panel
+  .sfx-io-hint {
+    font-size: 0.82rem;
+    color: var(--vagabond-c-text-dim);
+    margin: 0 0 0.6rem;
+  }
+  .sfx-io-btn {
+    gap: 0.4rem;
+    i { pointer-events: none; }
+  }
+
+  // Footer
+  .sfx-footer {
+    flex: 0 0 auto;
+    border-top: 1px solid var(--vagabond-c-faint);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    .sfx-reset-btn { margin-right: auto; }
+  }
+}

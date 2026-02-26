@@ -1,3 +1,5 @@
+import { VagabondSpellSequencer } from '../../helpers/spell-sequencer.mjs';
+
 /**
  * Handler for spell-related functionality in the character sheet.
  * Manages spell state persistence, mana cost calculations, delivery mechanics, and spell casting.
@@ -544,6 +546,13 @@ export class SpellHandler {
       isCritical,
       targetsAtRollTime
     );
+
+    // ── Sequencer FX ──────────────────────────────────────────────────────────
+    // actor.token returns a TokenDocument; Sequencer needs the Token placeable (.object).
+    const casterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
+    const liveTargets = Array.from(game.user.targets);
+    VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets);
+    // ── End Sequencer FX ──────────────────────────────────────────────────────
 
     // Reset spell state (keep deliveryType, reset useFx to default)
     const defaultUseFx = spell?.system?.damageType === '-';

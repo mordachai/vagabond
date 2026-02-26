@@ -116,6 +116,18 @@
         </label>
         <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
       </div>
+
+      {{! FX School (Sequencer) }}
+      <div class='form-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FxSchool.Label"}}</label>
+        <select name='system.fxSchool' data-dtype='String'>
+          {{#each config.fxSchools as |label key|}}
+            <option value='{{key}}' {{#if (eq key ../system.fxSchool)}}selected{{/if}}>
+              {{localize label}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
     </div>
   {{/if}}
 </section>

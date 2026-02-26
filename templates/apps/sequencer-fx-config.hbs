@@ -1,0 +1,209 @@
+<div class="sfx-wrapper">
+<div class="sfx-layout">
+
+  {{! Left: school list }}
+  <nav class="sfx-school-nav">
+    {{#each schools}}
+    <button type="button"
+      class="sfx-school-btn {{#if active}}active{{/if}}"
+      data-action="switchSchool"
+      data-school="{{key}}">
+      {{label}}
+    </button>
+    {{/each}}
+    <hr class="sfx-nav-sep">
+    <button type="button"
+      class="sfx-school-btn {{#if exportImportActive}}active{{/if}}"
+      data-action="switchSchool"
+      data-school="exportImport">
+      <i class="fas fa-file-export"></i> Export / Import
+    </button>
+  </nav>
+
+  {{! Right: panels — only active one visible via CSS }}
+  <div class="sfx-panels">
+    {{#each schools}}
+    <div class="sfx-panel {{#if active}}active{{/if}}" data-school="{{key}}">
+      <div class="sfx-panel-scroll">
+
+        {{! Cast Animation }}
+        <section class="sfx-section">
+          <h3>Cast Animation</h3>
+          <div class="sfx-cast-row">
+            <div class="form-group sfx-file-group">
+              <label>File</label>
+              <div class="sfx-file-input">
+                <input type="text" name="castAnims.{{key}}.file"
+                  value="{{castAnim.file}}" placeholder="path/to/cast.webm"/>
+                <button type="button" class="sfx-browse-btn"
+                  data-action="browseVideo"
+                  data-field="castAnims.{{key}}.file"
+                  title="Browse">
+                  <i class="fas fa-film"></i>
+                </button>
+                <button type="button" class="sfx-preview-btn"
+                  data-action="previewCast"
+                  data-school="{{key}}"
+                  title="Preview on canvas token">
+                  <i class="fas fa-play"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-group sfx-num-group">
+              <label>Scale</label>
+              <input type="number" name="castAnims.{{key}}.scale"
+                value="{{castAnim.scale}}" step="0.1" min="0.1" max="10"/>
+            </div>
+            <div class="form-group sfx-num-group">
+              <label>Duration (ms)</label>
+              <input type="number" name="castAnims.{{key}}.duration"
+                value="{{castAnim.duration}}" step="50" min="100" max="10000"/>
+            </div>
+          </div>
+        </section>
+
+        {{! Sound }}
+        <section class="sfx-section">
+          <h3>Sound</h3>
+          <div class="sfx-sound-row">
+            <div class="form-group sfx-file-group">
+              <label>Cast Sound</label>
+              <div class="sfx-file-input">
+                <input type="text" name="sounds.{{key}}.cast"
+                  value="{{sound.cast}}" placeholder="path/to/cast.ogg"/>
+                <button type="button" class="sfx-browse-btn"
+                  data-action="browseAudio" data-field="sounds.{{key}}.cast"
+                  title="Browse"><i class="fas fa-music"></i></button>
+                <button type="button" class="sfx-preview-btn"
+                  data-action="previewSound" data-field="sounds.{{key}}.cast"
+                  title="Preview sound"><i class="fas fa-play"></i></button>
+              </div>
+            </div>
+            <div class="form-group sfx-file-group">
+              <label>Impact Sound</label>
+              <div class="sfx-file-input">
+                <input type="text" name="sounds.{{key}}.impact"
+                  value="{{sound.impact}}" placeholder="path/to/impact.ogg"/>
+                <button type="button" class="sfx-browse-btn"
+                  data-action="browseAudio" data-field="sounds.{{key}}.impact"
+                  title="Browse"><i class="fas fa-music"></i></button>
+                <button type="button" class="sfx-preview-btn"
+                  data-action="previewSound" data-field="sounds.{{key}}.impact"
+                  title="Preview sound"><i class="fas fa-play"></i></button>
+              </div>
+            </div>
+            <div class="form-group sfx-num-group">
+              <label>Volume</label>
+              <input type="number" name="sounds.{{key}}.volume"
+                value="{{sound.volume}}" step="0.05" min="0" max="1"/>
+            </div>
+          </div>
+        </section>
+
+        {{! Area Animations }}
+        <section class="sfx-section">
+          <h3>Area Animations</h3>
+          <table class="sfx-area-table">
+            <thead>
+              <tr>
+                <th>Delivery</th>
+                <th>File</th>
+                <th>Native Px</th>
+                <th>Scale Mode</th>
+                <th>Duration (ms)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each areaAnims}}
+              <tr>
+                <td class="sfx-delivery-label">{{deliveryLabel}}</td>
+                <td>
+                  <div class="sfx-file-input">
+                    <input type="text"
+                      name="areaAnims.{{../key}}.{{deliveryKey}}.file"
+                      value="{{file}}" placeholder="path/to/area.webm"/>
+                    <button type="button" class="sfx-browse-btn"
+                      data-action="browseVideo"
+                      data-field="areaAnims.{{../key}}.{{deliveryKey}}.file"
+                      title="Browse"><i class="fas fa-film"></i></button>
+                    <button type="button" class="sfx-preview-btn"
+                      data-action="previewArea"
+                      data-school="{{../key}}"
+                      data-delivery="{{deliveryKey}}"
+                      title="Preview on canvas token"><i class="fas fa-play"></i></button>
+                  </div>
+                </td>
+                <td>
+                  <input type="number"
+                    name="areaAnims.{{../key}}.{{deliveryKey}}.nativePx"
+                    value="{{nativePx}}" step="10" min="10" max="2000"
+                    class="sfx-num-input"/>
+                </td>
+                <td>
+                  <select name="areaAnims.{{../key}}.{{deliveryKey}}.scaleMode">
+                    {{#each ../../scaleModes}}
+                    <option value="{{value}}" {{#if (eq value ../scaleMode)}}selected{{/if}}>
+                      {{label}}
+                    </option>
+                    {{/each}}
+                  </select>
+                </td>
+                <td>
+                  <input type="number"
+                    name="areaAnims.{{../key}}.{{deliveryKey}}.duration"
+                    value="{{duration}}" step="50" min="100" max="10000"
+                    class="sfx-num-input"/>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </section>
+
+      </div>{{! end sfx-panel-scroll }}
+    </div>{{! end sfx-panel }}
+    {{/each}}
+    {{! Export / Import panel }}
+    {{#if exportImportActive}}
+    <div class="sfx-panel active" data-school="exportImport">
+      <div class="sfx-panel-scroll">
+
+        <section class="sfx-section">
+          <h3>Export Configuration</h3>
+          <p class="sfx-io-hint">Download the current animation configuration as a JSON file. The exported file includes all schools, delivery types, and sound paths.</p>
+          <button type="button" class="sfx-io-btn" data-action="exportConfig">
+            <i class="fas fa-download"></i> Download Config
+          </button>
+        </section>
+
+        <section class="sfx-section">
+          <h3>Import Configuration</h3>
+          <p class="sfx-io-hint">Load a previously exported JSON config file. This will overwrite all current animation settings.</p>
+          <input type="file" id="sfx-import-file" accept=".json" style="display:none">
+          <button type="button" class="sfx-io-btn" data-action="importConfig">
+            <i class="fas fa-upload"></i> Import Config
+          </button>
+        </section>
+
+      </div>
+    </div>
+    {{/if}}
+  </div>{{! end sfx-panels }}
+
+</div>{{! end sfx-layout }}
+
+<footer class="form-footer sfx-footer">
+  <button type="button" class="sfx-reset-btn" data-action="resetDefaults">
+    <i class="fas fa-arrow-rotate-left"></i> Reset to Defaults
+  </button>
+  <button type="submit">
+    <i class="fas fa-save"></i> Save
+  </button>
+  <button type="button" data-action="saveAndClose">
+    <i class="fas fa-save"></i> Save &amp; Close
+  </button>
+  <button type="button" data-action="close">
+    <i class="fas fa-times"></i> Cancel
+  </button>
+</footer>
+</div>{{! end sfx-wrapper }}

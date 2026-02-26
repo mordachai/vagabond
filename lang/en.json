@@ -171,6 +171,24 @@
       "ColdIron": "Cold Iron",
       "Silver": "Silver"
     },
+    "FxSchool": {
+      "Auto":     "Auto (from damage type)",
+      "Fire":     "Fire",
+      "Cold":     "Cold",
+      "Shock":    "Shock",
+      "Acid":     "Acid",
+      "Poison":   "Poison",
+      "Blunt":    "Blunt",
+      "Lava":     "Lava",
+      "Wind":     "Wind",
+      "Nature":   "Nature",
+      "Healing":  "Healing",
+      "Necrotic": "Necrotic",
+      "Psychic":  "Psychic",
+      "Arcane":   "Arcane",
+      "Shadow":   "Shadow",
+      "Radiant":  "Radiant"
+    },
     "StatusConditions": {
       "Berserk": "Berserk",
       "Blinded": "Blinded",
@@ -353,7 +371,27 @@
         "name": "Homebrew Configuration",
         "label": "Configure Homebrew",
         "hint": "Customize stats, skills, saves, dice, leveling, derivations, damage types, and more."
+      },
+      "useSequencerFX": {
+        "name": "Spell Visual Effects (Sequencer)",
+        "hint": "Play Sequencer animations when casting spells. Requires the Sequencer module. Disable for better performance on weaker hardware."
+      },
+      "sequencerFxConfig": {
+        "name": "Spell FX Animations",
+        "label": "Configure Animations",
+        "hint": "Set Sequencer animation file paths for each FX school and delivery type."
       }
+    },
+    "SequencerFX": {
+      "Title": "Spell FX Configuration",
+      "Saved": "Spell FX configuration saved.",
+      "Reset": "Spell FX configuration reset to defaults.",
+      "NoFile": "No file path set — enter a path first.",
+      "NoToken": "No token on the canvas to preview on.",
+      "Unavailable": "Sequencer module is not active.",
+      "Imported": "Spell FX configuration imported successfully.",
+      "ImportInvalid": "Invalid Spell FX config file — missing castAnims or areaAnims.",
+      "ImportFailed": "Import failed"
     },
     "HomebrewSettings": {
       "Title": "Homebrew Configuration",
@@ -710,7 +748,10 @@
             "hint": "Effect on a critical success"
           }
         },
-        "AddSpell": "Add Spell"
+        "AddSpell": "Add Spell",
+        "FxSchool": {
+          "Label": "FX School"
+        }
       },
       "Ancestry": {
         "FIELDS": {

@@ -39,10 +39,12 @@ import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
+import { SequencerFxConfig } from './applications/sequencer-fx-config.mjs';
 import { CompendiumSettings } from './applications/compendium-settings.mjs';
 import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 import { PartyCompactView } from './applications/party-compact-view.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
+import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -311,6 +313,36 @@ function registerGameSettings() {
     type: String,
     default: '',
     requiresReload: false,
+  });
+
+  // Setting 20: Sequencer spell FX (client-side toggle)
+  game.settings.register('vagabond', 'useSequencerFX', {
+    name: 'VAGABOND.Settings.useSequencerFX.name',
+    hint: 'VAGABOND.Settings.useSequencerFX.hint',
+    scope: 'client',
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+  });
+
+  // Setting 21: Sequencer FX animation config (hidden data store)
+  game.settings.register('vagabond', 'sequencerFxConfig', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    requiresReload: false,
+  });
+
+  // Setting 21b: Sequencer FX Config menu button
+  game.settings.registerMenu('vagabond', 'sequencerFxConfigMenu', {
+    name: 'VAGABOND.Settings.sequencerFxConfig.name',
+    label: 'VAGABOND.Settings.sequencerFxConfig.label',
+    hint: 'VAGABOND.Settings.sequencerFxConfig.hint',
+    icon: 'fas fa-wand-magic-sparkles',
+    type: SequencerFxConfig,
+    restricted: true,
   });
 
   // Setting 19: Homebrew Settings Menu button

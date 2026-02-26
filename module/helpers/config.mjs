@@ -1128,3 +1128,27 @@ VAGABOND.favHindMarker = {
   'favored': 'systems/vagabond/assets/ui/dice/favor-mark.webp',
   'hindered': 'systems/vagabond/assets/ui/dice/hinder-mark.webp'
 }
+
+/**
+ * FX school options for the spell item sheet dropdown.
+ * Empty string = auto-derive from the spell's damage type.
+ * @type {Object}
+ */
+VAGABOND.fxSchools = {
+  '':         'VAGABOND.FxSchool.Auto',
+  'fire':     'VAGABOND.FxSchool.Fire',
+  'cold':     'VAGABOND.FxSchool.Cold',
+  'shock':    'VAGABOND.FxSchool.Shock',
+  'acid':     'VAGABOND.FxSchool.Acid',
+  'poison':   'VAGABOND.FxSchool.Poison',
+  'blunt':    'VAGABOND.FxSchool.Blunt',
+  'lava':     'VAGABOND.FxSchool.Lava',
+  'wind':     'VAGABOND.FxSchool.Wind',
+  'nature':   'VAGABOND.FxSchool.Nature',
+  'healing':  'VAGABOND.FxSchool.Healing',
+  'necrotic': 'VAGABOND.FxSchool.Necrotic',
+  'psychic':  'VAGABOND.FxSchool.Psychic',
+  'arcane':   'VAGABOND.FxSchool.Arcane',
+  'shadow':   'VAGABOND.FxSchool.Shadow',
+  'radiant':  'VAGABOND.FxSchool.Radiant',
+};

@@ -6373,6 +6373,159 @@ ol#combat-tracker.directory-list {
   flex-shrink: 0;
 }
 
+#sequencer-fx-config.sequencer-fx-config-form .window-content {
+  padding: 0;
+  overflow: hidden;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-school-nav {
+  display: flex;
+  flex-direction: column;
+  width: 110px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--vagabond-c-faint);
+  overflow-y: auto;
+  padding: 0.25rem 0;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-school-btn {
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-text-dim);
+  border-left: 3px solid transparent;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-school-btn:hover {
+  color: var(--color-text-light-highlight);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-school-btn.active {
+  color: var(--color-text-light-highlight);
+  border-left-color: var(--vagabond-c-primary);
+  font-weight: bold;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-panels {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-panel {
+  display: none;
+  flex: 1;
+  overflow: hidden;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-panel.active {
+  display: flex;
+  flex-direction: column;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-section {
+  margin-bottom: 1rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-section h3 {
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vagabond-c-text-dim);
+  border-bottom: 1px solid var(--vagabond-c-faint);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.2rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-cast-row, #sequencer-fx-config.sequencer-fx-config-form .sfx-sound-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-file-group {
+  flex: 1 1 200px;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-num-group {
+  flex: 0 0 100px;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-file-input {
+  display: flex;
+  gap: 0.25rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-file-input input {
+  flex: 1;
+  min-width: 0;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-browse-btn {
+  padding: 0.2rem 0.5rem;
+  flex-shrink: 0;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table th {
+  text-align: left;
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+  font-weight: bold;
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table td {
+  padding: 0.2rem 0.4rem;
+  vertical-align: middle;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table tr:nth-child(even) td {
+  background: var(--vagabond-c-surface-alt, rgba(0, 0, 0, 0.04));
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-num-input {
+  width: 70px;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-nav-sep {
+  border: none;
+  border-top: 1px solid var(--vagabond-c-faint);
+  margin: 0.4rem 0.4rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-io-hint {
+  font-size: 0.82rem;
+  color: var(--vagabond-c-text-dim);
+  margin: 0 0 0.6rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-io-btn {
+  gap: 0.4rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-io-btn i {
+  pointer-events: none;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--vagabond-c-faint);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-footer .sfx-reset-btn {
+  margin-right: auto;
+}
+
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .inventory-context-menu,
