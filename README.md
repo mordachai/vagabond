@@ -13,7 +13,23 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ---
 
-## Key Features
+
+## Features
+
+### **New feature:** Sequencer Animations Panel (YouTube video below):
+
+[![Vagabond for Foundry VTT - Sequencer Panel](https://img.youtube.com/vi/jNJQ5M6nDSc/0.jpg)](https://youtu.be/jNJQ5M6nDSc)
+
+### **New feature:** Full Homebrew:
+Always wanted a system to call it yours? now you have it. With the new homebrew panel you have the freedom to edit almost everything in the system from names to formulas, dice rolls and limits. And after that export and import other homebrews to play in your tables.
+
+<img width="1581" height="856" alt="image" src="https://github.com/user-attachments/assets/9a551711-ccec-44cf-93b2-6d508a980f13" />
+
+Remember that when you change a key you effectively break the use of that particular element in the system, so if ypu want to change more than labels go for it, but go full: create new items, classes, perks, ancestries and so on, after you have set your system. Save it, name it, share it!
+
+You can always reset to the default table, so mod to your heart content. 
+
+---
 
 ### **New feature:** Party Sheet and Vehicles (YouTube video below):
 
