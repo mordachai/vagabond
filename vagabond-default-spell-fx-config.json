@@ -1,0 +1,1263 @@
+{
+  "castAnims": {
+    "fire": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastFire01_01_Regular_Orange_600x600.webm",
+      "scale": 0.6,
+      "duration": 2000
+    },
+    "cold": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastWater02_01_Regular_Blue_400x400.webm",
+      "scale": 0.8,
+      "duration": 4500
+    },
+    "shock": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/GenericCast02_01_Regular_Blue_400x400.webm",
+      "scale": 0.8,
+      "duration": 500
+    },
+    "acid": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastEarth01_01_Regular_BrownGreen_600x600.webm",
+      "scale": 0.6,
+      "duration": 2000
+    },
+    "poison": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastEarth01_01_Regular_BrownGreen_600x600.webm",
+      "scale": 0.6,
+      "duration": 2000
+    },
+    "blunt": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastShapeCircle01_01_Regular_Blue_600x600.webm",
+      "scale": 0.6,
+      "duration": 2500
+    },
+    "lava": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastSideFire01_01_Regular_Orange_800x600.webm",
+      "scale": 0.5,
+      "duration": 2000
+    },
+    "wind": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastWater02_01_Regular_Blue_400x400.webm",
+      "scale": 0.8,
+      "duration": 4500
+    },
+    "nature": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastEarth01_01_Regular_BrownGreen_600x600.webm",
+      "scale": 0.6,
+      "duration": 2000
+    },
+    "healing": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/GenericCast01_01_Regular_Yellow_400x400.webm",
+      "scale": 0.8,
+      "duration": 500
+    },
+    "necrotic": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/GenericCast03_01_Blue_600x600.webm",
+      "scale": 0.6,
+      "duration": 2500
+    },
+    "psychic": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastSound01_01_Regular_PinkTeal_600x600.webm",
+      "scale": 0.6,
+      "duration": 2000
+    },
+    "arcane": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastShapeCircle01_01_Regular_Blue_600x600.webm",
+      "scale": 0.6,
+      "duration": 2500
+    },
+    "shadow": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/GenericCast03_01_Blue_600x600.webm",
+      "scale": 0.6,
+      "duration": 2500
+    },
+    "radiant": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/GenericCast01_01_Regular_Yellow_400x400.webm",
+      "scale": 0.8,
+      "duration": 500
+    },
+    "earth": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Cast/CastEarth01_01_Regular_BrownGreen_600x600.webm",
+      "scale": 0.6,
+      "duration": 2000
+    },
+    "defense": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/AbjurationCircleComplete_02_Regular_Blue_800x800.webm",
+      "scale": 0.4,
+      "duration": 5500
+    },
+    "genericlight": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/Runes/ConjurationRuneIntro_01_Regular_Yellow_400x400.webm",
+      "scale": 0.8,
+      "duration": 2000
+    },
+    "genericdark": {
+      "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/Runes/IllusionRuneComplete_01_Regular_Purple_400x400.webm",
+      "scale": 0.8,
+      "duration": 5500
+    }
+  },
+  "areaAnims": {
+    "fire": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Fire/ShieldFireAbove01_01_Regular_Orange_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Burning_Hands/BurningHands_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/3rd_Level/Fireball/FireballLoop_01_Orange_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Fire/FireJet_01_Orange_15ft_600x200.webm",
+        "nativePx": 200,
+        "scaleMode": "length",
+        "duration": 4000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/Explosion_01_Orange_400x400.webm",
+        "nativePx": 100,
+        "scaleMode": "diameter",
+        "duration": 1500
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/IcosahedronRuneBelow_01_Regular_BlueYellow_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/ImpactFire01_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Scorching_Ray/ScorchingRay_01_Regular_Orange_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/ImpactFire01_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2500
+      }
+    },
+    "cold": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Ice/ShieldIceAbove01_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/5th_Level/Cone_Of_Cold/ConeOfCold_01_Regular_Blue_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 4500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/3rd_Level/Sleet_Storm/SleetStorm_01_Blue_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Ice/TemplateLineIce01_01_Regular_Blue_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 5000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateSnowflakeSquare_01_Regular_Blue_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Ice/SnowflakeBurst_01_Regular_BlueWhite_Loop_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/FrostImpact_01_Regular_White_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Ray_Of_Frost/RayOfFrost_01_Regular_Blue_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2500
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/ImpactIceShard01_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 2000
+      }
+    },
+    "shock": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Lightning/TemplateCircleLightning01_01_Regular_BluePurple_Loop_700x700.webm",
+        "nativePx": 700,
+        "scaleMode": "radius",
+        "duration": 3000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Lightning/TemplateCone5eLightning01_01_Regular_BluePurple_30ft_Loop_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 3000
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/3rd_Level/Call_Lightning/CallLightning_01_Blue_1000x1000.webm",
+        "nativePx": 1000,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/3rd_Level/Lightning_Bolt/LightningBolt_01_Regular_Blue_4000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 5000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/Explosion_04_Regular_Blue_400x400.webm",
+        "nativePx": 100,
+        "scaleMode": "diameter",
+        "duration": 1000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Lightning/LightningOrb01_01_BluePurple_Loop_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Lightning/LightningStrike01_01_Regular_Blue_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 2000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Witch_Bolt/WitchBolt_01_Regular_Blue_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Lightning/LightningStrike01_02_Regular_Blue_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 2000
+      }
+    },
+    "acid": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplatePoisonCircle_01_Dark_Green_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Poison01_Regular_Green_30ft_Cone_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Liquid/Bubble/BubbleLoop001_001_Blue_2x2_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 2000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Breath_Weapon/BreathWeapon_Acid01_Regular_Green_30ft_Line_Burst_1200x200.webm",
+        "nativePx": 200,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplatePoisonSquare_01_Dark_Green_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateRunesCircle_01_Regular_Orange_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/TopFractureFlask01_01_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/6th_Level/Disintegrate/Disintegrate_01_Regular_Green01_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/ImpactWater02_01_Regular_Blue_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 3500
+      }
+    },
+    "poison": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplatePoisonCircle_01_Dark_Green_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Poison01_Regular_Green_30ft_Cone_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplatePoisonCircle_01_Dark_Green_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Smoke/SmokeLine_01_Regular_LightBlue_15x05ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 5000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplatePoisonSquare_01_Dark_Green_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateSkullCircle_01_Regular_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Toll_The_Dead/TollTheDead_01_Regular_Green_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Sneak_Attack/Sneak_Attack_Dark_Green_300x300.webm",
+        "nativePx": 300,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Toll_The_Dead/TollTheDeadShockwave_01_Regular_Green_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 1500
+      }
+    },
+    "blunt": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Aura/AuraComplete01_01_Regular_BluePurple_900x900.webm",
+        "nativePx": 900,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/001/TemplateCone5e001_001_PurpleRed_30ft_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 2500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Shatter/Shatter_01_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 3000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Generic/Piercing_Generic01_01_Regular_Orange_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 500
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Blue_Center_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 1000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/IcosahedronStarBelow_01_Regular_BlueYellow_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Thunderwave/Thunderwave_01_Bright_Blue_BMid_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 1000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Shatter/Shatter_01_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/Explosion_03_Regular_BlueYellow_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 2000
+      }
+    },
+    "lava": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Fire/ShieldMoltenEarthAbove01_01_Regular_Orange_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/Breathweapon02_Fire02_Regular_Orange_Cone_Burst_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Fire/Eruption_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Lava/Spout001/TemplateLineLavaSpoutLoop001_001_OrangeYellow_15ft_1000x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 3000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/Explosion_05_Regular_Orange_400x400.webm",
+        "nativePx": 100,
+        "scaleMode": "diameter",
+        "duration": 3000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Fire/GroundCrackLoop_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Lava/Spout001/LavaSpoutComplete001_001_OrangeYellow_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 6500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Scorching_Ray/ScorchingRay_01_Regular_Orange_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/GroundCrackImpact_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 5000
+      }
+    },
+    "wind": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Wind/WindStreams_01_White_20OPA_1200x1200.webm",
+        "nativePx": 1200,
+        "scaleMode": "radius",
+        "duration": 4000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Gust_Of_Wind/GustOfWind_01_White_1200x200.webm",
+        "nativePx": 200,
+        "scaleMode": "length",
+        "duration": 4000
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/7th_Level/Whirlwind/Whirlwind_01_BlueGrey_01_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Gust_Of_Wind/GustOfWind_01_White_VeryFast_1200x200.webm",
+        "nativePx": 200,
+        "scaleMode": "length",
+        "duration": 1000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Wind/WindLines01_01_Regular_White_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "diameter",
+        "duration": 5000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Wind/WindLines01_02_Regular_White_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Smoke/SmokePuffSide01_01_Regular_Grey_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 1000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Wind/WindLinesLeaves01_01_Regular_Green_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Smoke/SmokePuff01_01_Regular_Grey_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 2500
+      }
+    },
+    "nature": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Aura/AuraThemedOutwardLoopNature01_01_Regular_Green_700x700.webm",
+        "nativePx": 700,
+        "scaleMode": "radius",
+        "duration": 4000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Poison01_Regular_Green_30ft_Cone_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Entangle/Entangle02_02_Regular_Green_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Nature/SwirlingLeaves01_01_Regular_GreenOrange_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 5000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Nature/PlantGrowthSquare03_01_Regular_GreenYellow_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "diameter",
+        "duration": 5500
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Nature/PlantGrowthRing03_01_Regular_GreenYellow_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Nature/VineNature01_01_Regular_Green_300x300.webm",
+        "nativePx": 300,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Hunters_Mark/HuntersMark_01_Regular_Green_Loop_200x200.webm",
+        "nativePx": 200,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Nature/VineNatureLoop01_01_Regular_Green_300x300.webm",
+        "nativePx": 300,
+        "scaleMode": "fixed",
+        "duration": 4000
+      }
+    },
+    "healing": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Healing/HealingAbility_03_Regular_BlueGreen_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 2000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Healing/HealingAbility_02_Regular_GreenOrange_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 2500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/3rd_Level/Spirit_Guardians/SpiritGuardians_01_Light_BlueYellow_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyBeam_01_Regular_Blue_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 4000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Healing/HealingAbility_02_Regular_GreenOrange_Loop_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 2500
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Bless/Bless_01_Regular_Yellow_Loop_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Cure_Wounds/CureWounds_01_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Divine_Smite/DivineSmite_01_Regular_BlueYellow_Caster_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Healing/HealingAbility_01_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 1500
+      }
+    },
+    "necrotic": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Arms_Of_Hadar/ArmsOfHadar_01_Dark_Purple_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/001/TemplateCone5e001_001_PurpleRed_30ft_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 2500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/4th_Level/Black_Tentacles/BlackTentacles_01_Dark_Purple_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyStrand_01_Regular_Purple_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 2000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateSkullSquare_01_Regular_Purple_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateSkullCircle_01_Regular_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Toll_The_Dead/TollTheDeadSkullSmoke_01_Regular_Green_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 2000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Purple_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 4500
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Toll_The_Dead/TollTheDeadShockwave_01_Regular_Green_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 1500
+      }
+    },
+    "psychic": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Aura/AuraComplete02_01_Regular_BluePink_900x900.webm",
+        "nativePx": 900,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/001/TemplateCone5e001_001_PurpleRed_30ft_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 2500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/Soundwave01_01_Regular_Blue_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 2500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyBeam_02_Regular_BluePink_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 3000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateStunSquare_01_Regular_Purple_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateStunCircle_01_Regular_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Sleep/SleepSymbol01_01_Regular_Pink_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 2500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/Soundwave01_02_Regular_Blue_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2500
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/Impact_02_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 500
+      }
+    },
+    "arcane": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Aura/AuraLoop01_01_Regular_BluePurple_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "radius",
+        "duration": 3500
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Detect_Magic/DetectMagicCone_01_Regular_Blue_30ft_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 4000
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyField_01_Regular_Blue_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyBeam_01_Regular_Blue_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 4000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateRunesSquare_01_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateRunesCircle_01_Regular_Orange_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Magic_Missile/MagicMissile_01_Regular_Purple_05ft_01_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 1500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyConduitCircle_01_Regular_BluePurple_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/Impact_04_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 1000
+      }
+    },
+    "shadow": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/ShieldEldritchWebAbove01_01_Dark_Purple_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/001/TemplateCone5e001_001_PurpleRed_30ft_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 2500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Darkness/Darkness_01_Black_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Purple_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 4500
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateFearSquare_01_Dark_Purple_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateFearCircle_01_Dark_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 6000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/DropShadow_01_Dark_Black_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Eldritch_Blast/EldritchBlast_01_Regular_Purple_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 4500
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Arms_Of_Hadar/ArmsOfHadar_01_Dark_Purple_500x500.webm",
+        "nativePx": 500,
+        "scaleMode": "fixed",
+        "duration": 5000
+      }
+    },
+    "radiant": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/3rd_Level/Spirit_Guardians/SpiritGuardians_01_Light_BlueYellow_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/Breathweapon02_Fire01_Regular_Orange_Cone_Burst_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Moonbeam/MoonbeamComplete_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Guiding_Bolt/GuidingBolt_01_Regular_BlueYellow_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Bless/Bless_01_Regular_Yellow_Loop_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Bless/Bless_01_Regular_Yellow_Intro_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Cantrip/Sacred_Flame/SacredFlameTarget_01_Regular_Yellow_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/2nd_Level/Divine_Smite/DivineSmite_01_Regular_BlueYellow_Caster_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/1st_Level/Guiding_Bolt/GuidingBolt_01_Regular_BlueYellow_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 5500
+      }
+    },
+    "earth": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Aura/AuraThemedOrbitLoopMetal01_01_Regular_Grey_700x700.webm",
+        "nativePx": 700,
+        "scaleMode": "radius",
+        "duration": 4000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Poison01_Regular_Green_30ft_Cone_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Celestial_Bodies/AsteroidDiskIron01_01_Regular_Red_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Celestial_Bodies/AsteroidLineIron01_01_Regular_Red_05x15_600x200.webm",
+        "nativePx": 200,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/SideExplosion01_01_Regular_Orange_600x600.webm",
+        "nativePx": 100,
+        "scaleMode": "diameter",
+        "duration": 5000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/Runes/NecromancyRuneComplete_01_Regular_Green_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/GroundCrackImpact_02_Regular_Orange_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 5000
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/RangedSpell/01/RangedInstant01_01_Dark_Orange_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 1000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/Impact_07_Regular_Orange_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 500
+      }
+    },
+    "defense": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/Aura/AuraThemedOrbitCompleteMetal01_01_Regular_Grey_700x700.webm",
+        "nativePx": 700,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Cold01_Regular_Blue_30ft_Cone_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/5th_Level/Wall_Of_Force/WallOfForce_01_Grey_Sphere_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "radius",
+        "duration": 4000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/4th_Level/Wall_Of_Fire/WallOfFire_01_Blue_500x100.webm",
+        "nativePx": 100,
+        "scaleMode": "length",
+        "duration": 5000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateShieldSquare_01_Regular_Green_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/Runes/AbjurationRuneComplete_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/Shimmer01_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/Runes/AbjurationRuneIntro_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 2000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyFieldTop_02_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5000
+      }
+    },
+    "genericlight": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/ConjurationCircleLoop_02_Regular_Yellow_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Fire01_Regular_Orange_30ft_Cone_Burst_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "length",
+        "duration": 5500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Celestial_Bodies/PlanetAtmo_06_Regular_Yellow_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 5500
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/4th_Level/Wall_Of_Fire/WallOfFire_01_Yellow_500x100.webm",
+        "nativePx": 100,
+        "scaleMode": "length",
+        "duration": 5000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/Explosion_02_Blue_400x400.webm",
+        "nativePx": 100,
+        "scaleMode": "diameter",
+        "duration": 1500
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/Runes/ConjurationRuneComplete_01_Regular_Yellow_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/Impact_06_Regular_Yellow_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/SwirlingSparkles_01_Regular_Blue_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 3500
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Impact/Impact_07_Regular_Yellow_400x400.webm",
+        "nativePx": 400,
+        "scaleMode": "fixed",
+        "duration": 500
+      }
+    },
+    "genericdark": {
+      "aura": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/IllusionCircleLoop_02_Dark_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 5000
+      },
+      "cone": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/001/TemplateCone5e001_001_PurpleRed_30ft_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "length",
+        "duration": 2500
+      },
+      "sphere": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Circle/TemplateHorrorCircle_01_Regular_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "radius",
+        "duration": 6000
+      },
+      "line": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyStrand_02_Regular_Purple_15ft_1000x400.webm",
+        "nativePx": 400,
+        "scaleMode": "length",
+        "duration": 2000
+      },
+      "cube": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Template/Square/TemplateHorrorSquare_01_Regular_Purple_600x600.webm",
+        "nativePx": 600,
+        "scaleMode": "diameter",
+        "duration": 6000
+      },
+      "glyph": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Magic_Signs/IllusionCircleComplete_02_Dark_Purple_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 5500
+      },
+      "touch": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Explosion/ShrapnelBomb01_01_Regular_Black_800x800.webm",
+        "nativePx": 800,
+        "scaleMode": "fixed",
+        "duration": 500
+      },
+      "imbue": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/Energy/EnergyStrand_04_Regular_Purple_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 2000
+      },
+      "remote": {
+        "file": "modules/JB2A_DnD5e/Library/Generic/RangedSpell/OverchargedSphere01_01_Dark_Purple_05ft_600x400.webm",
+        "nativePx": 600,
+        "scaleMode": "fixed",
+        "duration": 1000
+      }
+    }
+  },
+  "sounds": {
+    "fire": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "cold": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "shock": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "acid": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "poison": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "blunt": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "lava": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "wind": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "nature": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "healing": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "necrotic": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "psychic": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "arcane": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "shadow": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "radiant": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "earth": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "defense": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "genericlight": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    },
+    "genericdark": {
+      "cast": "",
+      "impact": "",
+      "volume": 0.6
+    }
+  }
+
+}
