@@ -106,6 +106,19 @@ export default class VagabondClass extends VagabondItemBase {
 
         // Perk amount - number of perks granted by this feature
         perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Spell amount - number of spells player can choose from the requiredSpells pool
+        spellAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Skill choice groups - restricted skill training choices (same as ancestry traits)
+        skillChoices: new fields.ArrayField(
+          new fields.SchemaField({
+            count: new fields.NumberField({ initial: 1, integer: true, min: 1 }),
+            pool: new fields.ArrayField(new fields.StringField(), { initial: [] }),
+            label: new fields.StringField({ initial: '' })
+          }),
+          { initial: [] }
+        ),
       }),
       { initial: [] }
     );

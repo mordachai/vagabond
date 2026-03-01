@@ -376,9 +376,13 @@
         "label": "Configure Homebrew",
         "hint": "Customize stats, skills, saves, dice, leveling, derivations, damage types, and more."
       },
+      "useAnimations": {
+        "name": "Use Spell Animations",
+        "hint": "Master switch for spell visual effects. When disabled, no animations play regardless of other settings. Requires the Sequencer and JB2A modules to be installed."
+      },
       "useSequencerFX": {
-        "name": "Spell Visual Effects (Sequencer)",
-        "hint": "Play Sequencer animations when casting spells. Requires the Sequencer module. Disable for better performance on weaker hardware."
+        "name": "Spell Visual Effects (my device)",
+        "hint": "Enable Sequencer animations on this device. Disable for better performance on weaker hardware. The world-level 'Use Spell Animations' setting must also be enabled."
       },
       "sequencerFxConfig": {
         "name": "Spell FX Animations",
@@ -395,7 +399,10 @@
       "Unavailable": "Sequencer module is not active.",
       "Imported": "Spell FX configuration imported successfully.",
       "ImportInvalid": "Invalid Spell FX config file — missing castAnims or areaAnims.",
-      "ImportFailed": "Import failed"
+      "ImportFailed": "Import failed",
+      "JB2ALoaded": "JB2A animation defaults loaded successfully.",
+      "JB2AUnavailable": "JB2A module is not installed or not active.",
+      "JB2ALoadFailed": "Failed to load JB2A defaults — check the browser console for details."
     },
     "HomebrewSettings": {
       "Title": "Homebrew Configuration",
@@ -1097,6 +1104,7 @@
     },
     "UI": {
       "Sections": {
+        "Stats": "Stats",
         "Magic": "Magic",
         "Spells": "Spells",
         "spellsPlaceholder": "No spells loaded. Favorite your spells in the Spells tab.",
@@ -1206,7 +1214,14 @@
         "DamageTwoHandColon": "Damage (2H):",
         "CanExplodeColon": "Can Explode:",
         "GuaranteedSkills": "Trained Skills:",
+        "StatBonusPoints": "Stat Bonus Points",
+        "SpellAmount": "Spell Amount",
+        "PerkAmount": "Perk Amount",
+        "SpellPool": "Spell Pool",
+        "PerkPool": "Perk Pool",
+        "ExtraTraining": "Extra Training",
         "SkillChoices": "Grouped Choices:",
+        "Label": "Label",
         "Group": "Choose from Group",
         "Count": "Select:",
         "RestrictedPool": "Among these:",
@@ -1231,7 +1246,11 @@
         "AddStat": "Add Key Stat"
       },
       "Hints": {
-        "EmptyForAny": "Let Empty fo ANY skills"
+        "EmptyForAny": "Leave empty for ANY skills",
+        "ExtraTrainingHint": "Unrestricted skill training choices (any skill)",
+        "StatBonusHint": "Each point grants +1 to any stat below cap",
+        "AmountHint": "How many the player picks from the pool",
+        "LabelPlaceholder": "e.g. Ascendancy"
       },
       "Chat": {
         "FlukeReroll": "Luck Reroll — Fluke"

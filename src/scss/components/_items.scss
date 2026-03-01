@@ -151,22 +151,84 @@
   .trait-description {
     width: 100%;
     margin-top: 5px;
-    
+    line-height: 1.5;
+    font-size: 0.95em;
+    font-family: $font-text;
+    min-height: 60px;
+    padding: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.3);
+
     input {
       width: 100%;
+      font-family: inherit;
+    }
+
+    // Textarea in edit mode
+    textarea.trait-desc-textarea {
+      width: 100%;
+      min-height: 60px;
+      font-family: $font-text;
+      font-size: 0.95em;
+      line-height: 1.5;
+      resize: none;
+      box-sizing: border-box;
+      padding: 4px 6px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.5);
+      overflow: hidden;
+    }
+
+    // Content in non-edit mode
+    > div {
+      font-family: $font-text;
+
+      p {
+        margin: 0 0 8px 0;
+        padding: 0;
+        font-family: $font-text;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      ul, ol {
+        margin: 8px 0;
+        padding-left: 24px;
+
+        li {
+          margin: 4px 0;
+        }
+      }
+
+      blockquote {
+        margin: 8px 0;
+        padding-left: 12px;
+        border-left: 3px solid rgba(0, 0, 0, 0.2);
+        font-style: italic;
+      }
+
+      a {
+        color: var(--vagabond-c-yellow);
+        text-decoration: underline;
+      }
     }
   }
 }
 
+// Save button for traits
 // Unified item content containers
-.ancestry-item-content,
-.class-item-content {
+// Tab content styling for ancestry and class details
+.tab.details {
   min-height: 400px;
   max-height: calc(100vh - 300px);
   overflow-y: auto;
   padding: 10px;
   transition: max-height 0.3s ease;
-  
+
   // Expand when any editor is active
   &:has(.tox-tinymce) {
     max-height: calc(100vh - 150px);
@@ -247,25 +309,19 @@
 }
 
 .traits-section {
-  .scrollable {
-    width: 100%;
-    min-height: 100px;
-    max-height: none; // Remove height constraint  
-    overflow-y: visible; // Remove individual scrolling
+  .items-list {
     border: 1px solid var(--vagabond-c-faint);
     border-radius: 4px;
     padding: 8px;
-    
-    .items-list {
-      margin: 0;
-      
-      .item {
-        display: block; // Override any flex for vertical layout
-        
-        .flexrow {
-          display: flex; // Only the name + delete row should be flex
-          align-items: center;
-        }
+    margin: 0;
+    overflow-y: visible;
+
+    .item {
+      display: block; // Override any flex for vertical layout
+
+      .flexrow {
+        display: flex; // Only the name + delete row should be flex
+        align-items: center;
       }
     }
   }
@@ -812,5 +868,377 @@
     font-size: 0.85em;
     color: $c-muted;
     font-style: italic;
+  }
+}
+
+// Trait Grants Accordions (ancestry trait configuration)
+.trait-grants-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trait-accordion {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  overflow: visible;
+
+  &[open] {
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.accordion-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  strong {
+    font-size: 0.95em;
+  }
+}
+
+.accordion-icon {
+  display: inline-block;
+  width: 16px;
+  transition: transform 0.2s ease;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.85em;
+}
+
+.trait-accordion[open] .accordion-icon {
+  transform: rotate(90deg);
+}
+
+.accordion-content {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: visible;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 100%;
+  }
+}
+
+// Grid layouts
+.grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Skill choice cards
+.skill-choice-card {
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+// Skill pool checkboxes (ancestry trait skill choice groups)
+.skill-pool-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 8px 0;
+
+  .skill-checkbox-label {
+    margin: 0;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+
+    input[type="checkbox"] {
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    span {
+      cursor: pointer;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+// ── Class item level-features list ───────────────────────────────────────────
+// Uses a non-conflicting class name so the actor-sheet .features-list rules
+// (diamond markers, display:none collapse, etc.) never touch this list.
+.class-level-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  > li {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// ── Grants Configuration UI ──────────────────────────────────────────────────
+
+// Container for the 4 grant accordions (stats/skills/spells/perks)
+.grants-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+// Override .accordion-body grid for the grants body — needs flow layout
+.grants-accordion-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+
+  // Ensure inputs look consistent regardless of surrounding context
+  input[type="number"],
+  input[type="text"],
+  select {
+    padding: 3px 6px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: var(--vagabond-c-yellow, #c9a227);
+    }
+  }
+}
+
+// Single row: [label] [compact number input] [hint]
+.grants-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+
+  label {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-weight: 500;
+    font-size: 0.85em;
+    margin-bottom: 0;
+  }
+}
+
+// Compact number input for grant amounts
+.grants-num-input {
+  width: 46px !important;
+  flex: 0 0 46px;
+  text-align: center;
+  padding: 2px 4px !important;
+  font-size: 0.9em;
+}
+
+// Inline hint text after the number
+.grants-hint {
+  flex: 1;
+  font-size: 0.75em;
+  color: var(--color-text-light-6, #888);
+  font-style: italic;
+}
+
+// Optional label text input (for skill choice groups)
+.grants-label-input {
+  flex: 1;
+  font-size: 0.85em;
+  min-width: 0;
+}
+
+// Skill choice groups section
+.grants-choice-groups {
+  margin-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 6px;
+
+  .grants-choice-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+
+    label {
+      font-weight: 500;
+      font-size: 0.85em;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Individual choice group card
+.choice-group-card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 5px;
+  background: rgba(255, 255, 255, 0.35);
+
+  .choice-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    strong { font-size: 0.85em; }
+  }
+}
+
+// Spell/perk pool section within an accordion
+.grants-list-section {
+  margin-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 6px;
+
+  > label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.85em;
+    margin-bottom: 4px;
+  }
+}
+
+// Row containing the dropdown + add button
+.grants-add-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+
+  .grants-select {
+    flex: 1;
+    font-size: 0.85em;
+    min-width: 0;
+  }
+}
+
+// Accordion styling for trait grants
+.accordion-item {
+  margin-bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+
+  &.expanded {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    strong {
+      margin: 0;
+      font-size: 0.95em;
+    }
+  }
+
+  .accordion-icon {
+    display: inline-block;
+    width: 16px;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  &.expanded .accordion-icon {
+    transform: rotate(90deg);
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    &.open {
+      max-height: 2000px; // Fallback for tall content
+    }
+  }
+
+  .accordion-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    align-items: start;
+
+    > .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 4px;
+      font-size: 0.9em;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+      padding: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      font-size: 0.9em;
+
+      &:focus {
+        outline: none;
+        border-color: var(--vagabond-c-yellow);
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      }
+    }
   }
 }

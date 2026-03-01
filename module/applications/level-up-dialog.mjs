@@ -185,8 +185,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       tabs.push('perks');
     }
 
-    // Spells: if spellcaster gains new spells, or level features grant spells
-    const hasSpellGrants = this.newLevelFeatures.some(f => (f.requiredSpells?.length || 0) > 0);
+    // Spells: if spellcaster gains new spells, or level features auto-grant or allow choosing spells
+    const hasSpellGrants = this.newLevelFeatures.some(f =>
+      (f.requiredSpells?.length || 0) > 0 || (f.spellAmount || 0) > 0
+    );
     if ((this.isSpellcaster && this.newSpellSlots > 0) || hasSpellGrants || this.gmOverride) {
       tabs.push('spells');
     }
@@ -634,13 +636,23 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       ownedSpellItems.map(i => i.name.toLowerCase())
     );
 
-    // Required spells from level features
+    // Separate auto-granted spells (spellAmount=0) from selection pools (spellAmount>0)
     const requiredSpellUuids = [];
+    let grantSlots = 0;
+    const grantPoolUuids = new Set(); // spells eligible for grant selection
+
     for (const feature of this.newLevelFeatures) {
-      if (feature.requiredSpells?.length) {
+      if ((feature.spellAmount || 0) > 0) {
+        // Selection grant: player picks N from pool (or any if pool empty)
+        grantSlots += feature.spellAmount;
+        (feature.requiredSpells || []).filter(u => u).forEach(u => grantPoolUuids.add(u));
+      } else if (feature.requiredSpells?.length) {
+        // Auto-granted: add directly
         requiredSpellUuids.push(...feature.requiredSpells.filter(u => u));
       }
     }
+
+    const totalMaxSpells = maxNewSpells + grantSlots;
 
     // Build spell list
     const spellList = [];
@@ -660,6 +672,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         }
       } catch { /* ignore */ }
 
+      // If there's a restricted grant pool, filter to only those spells
+      const hasRestrictedPool = grantPoolUuids.size > 0;
+      if (hasRestrictedPool && !grantPoolUuids.has(spell.uuid) && !isOwned && !isChosen && !isRequired) continue;
+
       spellList.push({
         uuid: spell.uuid,
         name: spell.name,
@@ -667,6 +683,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         isOwned,
         isChosen,
         isRequired,
+        isGrantEligible: grantPoolUuids.has(spell.uuid),
         isPreviewing: spell.uuid === this.selectedSpellUuid,
         damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[spell.damageType] || null,
         damageType: spell.damageType !== '-' ? spell.damageType : null,
@@ -731,10 +748,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       availableSpells: spellList,
       previewItem,
       chosenSpells: chosenSpellItems,
-      maxNewSpells,
+      maxNewSpells: totalMaxSpells,
       currentCount: this.chosenSpells.length,
-      canAddMore: this.chosenSpells.length < maxNewSpells,
+      canAddMore: this.chosenSpells.length < totalMaxSpells,
       requiredSpells: requiredSpellUuids,
+      grantSlots,
     };
   }
 

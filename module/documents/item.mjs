@@ -397,11 +397,69 @@ export class VagabondItem extends Item {
   }
 
   /**
+   * Override updateSource to handle partial ancestry trait updates from prose-mirror collaborate.
+   * When collaborate autosaves a trait description it sends a sparse key like
+   * { 'system.traits.0.description': '...' }. Foundry's ArrayField can't validate a sparse
+   * object — it would reconstruct the array with only that one field, losing everything else.
+   * We intercept here, merge the partial update into the full current traits array, and pass
+   * the complete array to the parent so validation succeeds.
+   * @override
+   */
+  updateSource(changes, options = {}) {
+    // Prose-mirror collaborate autosave sends sparse dot-notation keys like
+    // { 'system.traits.0.description': '...' } or { 'system.levelFeatures.0.description': '...' }.
+    // Foundry's ArrayField validation fails on sparse objects, so we intercept here,
+    // merge the partial update into the current complete array, and pass the full array instead.
+    const arrayFields = {
+      ancestry: { pattern: /^system\.traits\.(\d+)\./, field: 'system.traits', current: () => this.system?.traits ?? [] },
+      class:    { pattern: /^system\.levelFeatures\.(\d+)\./, field: 'system.levelFeatures', current: () => this.system?.levelFeatures ?? [] },
+    };
+
+    const cfg = arrayFields[this.type];
+    if (cfg) {
+      const hasSparse = Object.keys(changes).some(k => cfg.pattern.test(k));
+      if (hasSparse) {
+        const expanded = foundry.utils.expandObject(changes);
+        const fieldKey = cfg.field.split('.')[1]; // 'traits' or 'levelFeatures'
+        const sparseArray = expanded?.system?.[fieldKey];
+
+        if (sparseArray && !Array.isArray(sparseArray)) {
+          const merged = foundry.utils.deepClone(cfg.current());
+          for (const [idx, update] of Object.entries(sparseArray)) {
+            const i = parseInt(idx);
+            if (!isNaN(i) && merged[i]) {
+              foundry.utils.mergeObject(merged[i], update, { inplace: true });
+            }
+          }
+          const newChanges = Object.fromEntries(
+            Object.entries(changes).filter(([k]) => !cfg.pattern.test(k))
+          );
+          newChanges[cfg.field] = merged;
+          return super.updateSource(newChanges, options);
+        }
+      }
+    }
+
+    return super.updateSource(changes, options);
+  }
+
+  /**
    * This function runs AUTOMATICALLY whenever an item is updated.
    */
   async _preUpdate(changed, options, user) {
-    // 1. Run standard Foundry checks first
     await super._preUpdate(changed, options, user);
+
+    // Suppress re-renders triggered by collaborate description autosaves.
+    // These fire periodically while the user is typing and cause the sheet to re-render
+    // with an intermediate snapshot, making the preview show a "distorted" in-progress version.
+    // Form submission on close (which includes ALL fields) is not description-only and
+    // will still trigger a proper re-render with the final content.
+    const flat = foundry.utils.flattenObject(changed);
+    const keys = Object.keys(flat);
+    const isDescriptionOnly = keys.length > 0 && keys.every(k =>
+      k === 'system.description' || /^system\.(traits|levelFeatures)\.\d+\.description$/.test(k)
+    );
+    if (isDescriptionOnly) options.render = false;
 
     // 2. Check: "Is the user changing the Grip?"
     if (foundry.utils.hasProperty(changed, "system.grip")) {

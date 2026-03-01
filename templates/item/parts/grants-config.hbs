@@ -1,0 +1,222 @@
+{{! Unified grants configuration — shared by ancestry traits and class features.
+    Named params: grant, arrayPath, itemIndex, enrichedGrant, config, editable }}
+<div class='grants-accordions'>
+
+  {{! ── STATS ─────────────────────────────────────────────────────────── }}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-stats'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.UI.Sections.Stats"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.StatBonusPoints"}}</label>
+          <input type='number'
+            name='{{arrayPath}}.{{itemIndex}}.statBonusPoints'
+            value='{{grant.statBonusPoints}}'
+            min='0' max='10'
+            class='grants-num-input' />
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.StatBonusHint"}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{! ── SKILLS ─────────────────────────────────────────────────────────── }}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-skills'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.UI.Sections.Skills"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.ExtraTraining"}}</label>
+          <input type='number'
+            name='{{arrayPath}}.{{itemIndex}}.extraTraining'
+            value='{{grant.extraTraining}}'
+            min='0' max='10'
+            class='grants-num-input' />
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.ExtraTrainingHint"}}</span>
+        </div>
+
+        <div class='grants-choice-groups'>
+          <div class='grants-choice-header'>
+            <label>{{localize "VAGABOND.UI.Labels.SkillChoices"}}</label>
+            {{#if editable}}
+              <button type='button' class='btn-sm'
+                data-action='addGrantSkillChoiceGroup'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'>
+                <i class='fas fa-plus'></i> {{localize "VAGABOND.UI.Buttons.AddChoiceGroup"}}
+              </button>
+            {{/if}}
+          </div>
+
+          {{#each grant.skillChoices as |choice choiceIndex|}}
+            <div class='choice-group-card'>
+              <div class='choice-group-header'>
+                <strong>{{localize "VAGABOND.UI.Labels.Group"}} {{add choiceIndex 1}}</strong>
+                {{#if ../editable}}
+                  <a data-action='removeGrantSkillChoiceGroup'
+                    data-array-path='{{../arrayPath}}'
+                    data-item-index='{{../itemIndex}}'
+                    data-choice-index='{{choiceIndex}}'
+                    class='text-danger'>
+                    <i class='fas fa-trash'></i>
+                  </a>
+                {{/if}}
+              </div>
+              <div class='grants-row'>
+                <label>{{localize "VAGABOND.UI.Labels.Count"}}</label>
+                <input type='number'
+                  name='{{../arrayPath}}.{{../itemIndex}}.skillChoices.{{choiceIndex}}.count'
+                  value='{{choice.count}}'
+                  min='1' max='10'
+                  class='grants-num-input' />
+                <input type='text'
+                  name='{{../arrayPath}}.{{../itemIndex}}.skillChoices.{{choiceIndex}}.label'
+                  value='{{choice.label}}'
+                  placeholder='{{localize "VAGABOND.UI.Hints.LabelPlaceholder"}}'
+                  class='grants-label-input' />
+              </div>
+              <div class='skill-pool-checkboxes'>
+                {{#each ../config.skills as |skillLabel skillKey|}}
+                  <label class='skill-checkbox-label'>
+                    <input type='checkbox'
+                      name='{{../../arrayPath}}.{{../../itemIndex}}.skillChoices.{{choiceIndex}}.pool'
+                      value='{{skillKey}}'
+                      {{#if (contains choice.pool skillKey)}}checked{{/if}}
+                      {{#unless ../../editable}}disabled{{/unless}} />
+                    <span>{{skillLabel}}</span>
+                  </label>
+                {{/each}}
+              </div>
+              {{#unless choice.pool.length}}
+                <small class='text-muted'>{{localize "VAGABOND.UI.Hints.EmptyForAny"}}</small>
+              {{/unless}}
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{! ── SPELLS ──────────────────────────────────────────────────────────── }}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-spells'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.UI.Sections.Spells"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.SpellAmount"}}</label>
+          <input type='number'
+            name='{{arrayPath}}.{{itemIndex}}.spellAmount'
+            value='{{grant.spellAmount}}'
+            min='0' max='10'
+            class='grants-num-input' />
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.AmountHint"}}</span>
+        </div>
+        <div class='grants-list-section'>
+          <label>{{localize "VAGABOND.UI.Labels.SpellPool"}} <span class='text-muted text-sm'>({{localize "VAGABOND.UI.Hints.EmptyForAny"}})</span></label>
+          {{#if enrichedGrant.enrichedSpells.length}}
+            <ul class='grants-list'>
+              {{#each enrichedGrant.enrichedSpells as |spell spellIndex|}}
+                <li class='grant-tag'>
+                  <img src='{{spell.img}}' alt='{{spell.name}}' class='grant-tag-icon' />
+                  <span class='grant-tag-label'>{{spell.name}}</span>
+                  <a class='grant-tag-remove'
+                    data-action='removeGrantSpell'
+                    data-array-path='{{../arrayPath}}'
+                    data-item-index='{{../itemIndex}}'
+                    data-spell-index='{{spellIndex}}'>
+                    <i class='fas fa-times'></i>
+                  </a>
+                </li>
+              {{/each}}
+            </ul>
+          {{/if}}
+          {{#if editable}}
+            <div class='grants-add-row'>
+              <select class='grants-select'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'
+                data-grant-type='spell'>
+                <option value=''>— Select Spell —</option>
+              </select>
+              <button type='button' class='btn-sm'
+                data-action='addGrantSpell'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'>
+                <i class='fas fa-plus'></i>
+              </button>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{! ── PERKS ───────────────────────────────────────────────────────────── }}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-perks'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.UI.Sections.Perks"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.PerkAmount"}}</label>
+          <input type='number'
+            name='{{arrayPath}}.{{itemIndex}}.perkAmount'
+            value='{{grant.perkAmount}}'
+            min='0' max='10'
+            class='grants-num-input' />
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.AmountHint"}}</span>
+        </div>
+        <div class='grants-list-section'>
+          <label>{{localize "VAGABOND.UI.Labels.PerkPool"}} <span class='text-muted text-sm'>({{localize "VAGABOND.UI.Hints.EmptyForAny"}})</span></label>
+          {{#if enrichedGrant.enrichedPerks.length}}
+            <ul class='grants-list'>
+              {{#each enrichedGrant.enrichedPerks as |perk perkIndex|}}
+                <li class='grant-tag'>
+                  <img src='{{perk.img}}' alt='{{perk.name}}' class='grant-tag-icon' />
+                  <span class='grant-tag-label'>{{perk.name}}</span>
+                  <a class='grant-tag-remove'
+                    data-action='removeGrantPerk'
+                    data-array-path='{{../arrayPath}}'
+                    data-item-index='{{../itemIndex}}'
+                    data-perk-index='{{perkIndex}}'>
+                    <i class='fas fa-times'></i>
+                  </a>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class='text-info text-sm'><i class='fas fa-info-circle'></i> Any perk allowed</p>
+          {{/if}}
+          {{#if editable}}
+            <div class='grants-add-row'>
+              <select class='grants-select'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'
+                data-grant-type='perk'>
+                <option value=''>— Select Perk —</option>
+              </select>
+              <button type='button' class='btn-sm'
+                data-action='addGrantPerk'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'>
+                <i class='fas fa-plus'></i>
+              </button>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

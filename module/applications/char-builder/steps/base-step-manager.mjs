@@ -277,6 +277,9 @@ export class BaseStepManager {
 
           for (const trait of traits) {
 
+            // If spellAmount > 0, requiredSpells is a selection pool — not auto-granted
+            if (trait.spellAmount > 0) continue;
+
             (trait.requiredSpells || []).forEach(uuid => {
 
               if (uuid) requiredSpells.add(uuid);
@@ -308,6 +311,9 @@ export class BaseStepManager {
           const level1Features = levelFeatures.filter(f => f.level === 1);
 
           for (const feature of level1Features) {
+
+            // If spellAmount > 0, requiredSpells is a selection pool — not auto-granted
+            if (feature.spellAmount > 0) continue;
 
             (feature.requiredSpells || []).forEach(uuid => {
 

@@ -14,10 +14,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 ) {
   constructor(options = {}) {
     super(options);
-    /** @type {Map<string, number>} Saved scroll positions by CSS selector for state preservation */
     this._savedScrollPositions = new Map();
-    /** @type {Set<string>} Saved open <details> identifiers for state preservation */
     this._savedOpenDetails = new Set();
+    this._savedOpenAccordions = new Set();
+    this._updateQueue = Promise.resolve();
   }
 
   /**
@@ -25,16 +25,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @override
    */
   async close(options = {}) {
-    // Submit the form BEFORE calling super.close() which removes it from DOM
-    if (this.element && this.element.tagName === 'FORM') {
-      try {
-        await this.submit();
-      } catch (err) {
-        console.error('Vagabond | Error submitting item sheet:', err);
-      }
+    if (this.element && this.isEditable) {
+      try { await this.submit(); } catch(e) {}
     }
-
-    // Now proceed with normal close process
     return super.close(options);
   }
 
@@ -105,19 +98,18 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       updateChoiceCount: this._onUpdateCount,
       saveChoices: this._onSaveChoices,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from spell description
-      addTraitSpell: this._onAddTraitSpell,
-      addTraitPerk: this._onAddTraitPerk,
-      addFeatureSpell: this._onAddFeatureSpell,
-      addFeaturePerk: this._onAddFeaturePerk,
-      removeTraitSpell: this._onRemoveTraitSpell,
-      removeTraitPerk: this._onRemoveTraitPerk,
-      removeFeatureSpell: this._onRemoveFeatureSpell,
-      removeFeaturePerk: this._onRemoveFeaturePerk,
+      addGrantSpell: this._onAddGrantSpell,
+      removeGrantSpell: this._onRemoveGrantSpell,
+      addGrantPerk: this._onAddGrantPerk,
+      removeGrantPerk: this._onRemoveGrantPerk,
+      addGrantSkillChoiceGroup: this._onAddGrantSkillChoiceGroup,
+      removeGrantSkillChoiceGroup: this._onRemoveGrantSkillChoiceGroup,
       toggleBound: this._onToggleBound,
+      toggleAccordion: this._onToggleAccordion,
     },
     form: {
-      submitOnChange: false,   // Disabled to prevent constant redraws on every keystroke
-      submitOnClose: true,     // Auto-save when closing the sheet
+      submitOnChange: false,
+      submitOnClose: true,
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -312,6 +304,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         context.enrichedTraits = [];
         for (const trait of this.item.system.traits || []) {
           const enrichedTrait = { ...trait };
+
+          // Enrich each trait's description for proper display (like class features)
+          enrichedTrait.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+            trait.description || '',
+            {
+              secrets: this.document.isOwner,
+              rollData: this.item.getRollData(),
+              relativeTo: this.item,
+            }
+          );
 
           // Resolve spell UUIDs to names
           enrichedTrait.enrichedSpells = [];
@@ -812,9 +814,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const scrollSelectors = [
       '.window-content',
       '.tab.active',
-      '.class-item-content',
       '.perk-details-wrapper',
-      '.ancestry-details-wrapper',
+      '.traits-section',
     ];
     for (const selector of scrollSelectors) {
       const el = this.element.querySelector(selector);
@@ -830,6 +831,18 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       if (el.open) {
         const id = el.dataset.detailsId || `details-${i}`;
         this._savedOpenDetails.add(id);
+      }
+    });
+
+    // Save open accordion items by their stable ID
+    this._savedOpenAccordions.clear();
+    const allAccordions = this.element.querySelectorAll('.accordion-item');
+    allAccordions.forEach((el) => {
+      if (el.classList.contains('expanded')) {
+        const id = el.dataset.accordionId;
+        if (id) {
+          this._savedOpenAccordions.add(id);
+        }
       }
     });
   }
@@ -855,6 +868,22 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       });
     }
 
+    // Restore accordion open state
+    if (this._savedOpenAccordions.size > 0) {
+      const allAccordions = this.element.querySelectorAll('.accordion-item');
+      allAccordions.forEach((el) => {
+        const id = el.dataset.accordionId;
+        if (id && this._savedOpenAccordions.has(id)) {
+          el.classList.remove('collapsed');
+          el.classList.add('expanded');
+          const content = el.querySelector('.accordion-content');
+          if (content) {
+            content.classList.add('open');
+          }
+        }
+      });
+    }
+
     // Restore scroll positions for all captured containers
     for (const [selector, scrollTop] of this._savedScrollPositions) {
       const el = this.element.querySelector(selector);
@@ -862,6 +891,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         el.scrollTop = scrollTop;
       }
     }
+
+    // Auto-resize trait description textareas to fit their content
+    this.element.querySelectorAll('textarea.trait-desc-textarea').forEach(ta => {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+      ta.addEventListener('input', () => {
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
+      });
+    });
 
     // Set up drag and drop for the entire sheet
     const dragDrop = new DragDrop.implementation({
@@ -1006,30 +1045,44 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
-    // Auto-save select, number input, and checkbox changes immediately.
-    // With submitOnChange: false, form field changes are only saved on close.
-    // This means any handler that triggers a re-render (e.g., adding a prerequisite)
-    // would lose unsaved dropdown/input changes. These listeners save field values
-    // immediately on change so they persist through re-renders.
-    // Text/string inputs are excluded to avoid saving on every keystroke.
+    // Auto-save all named form fields immediately on change.
+    // IMPORTANT: For array element fields (system.traits.N.* or system.levelFeatures.N.*),
+    // saving just one dot-notation path replaces the entire element in Foundry's DataModel.
+    // We must collect the complete element from the DOM and save it as a unit.
+    // Pool checkboxes are now included — _collectArrayFromDOM handles them correctly.
     const autoSaveFields = this.element.querySelectorAll(
-      'select[name], input[type="number"][name], input[type="checkbox"][name]'
+      'select[name], input[type="number"][name], input[type="checkbox"][name], input[type="text"][name], textarea[name], prose-mirror[name]'
     );
     autoSaveFields.forEach(field => {
       field.addEventListener('change', async (e) => {
         const name = e.target.name;
         if (!name) return;
+
+        // Check if this field belongs to a traits or levelFeatures array element
+        const arrayMatch = name.match(/^(system\.(traits|levelFeatures))\.(\d+)\./);
+        if (arrayMatch) {
+          const arrayPath = arrayMatch[1]; // e.g. "system.traits"
+          const arrayProp = arrayMatch[2]; // e.g. "traits"
+          const idx = parseInt(arrayMatch[3]);
+          await this._saveArrayElement(arrayPath, arrayProp, idx);
+          return;
+        }
+
+        // Normal auto-save for non-array-element fields
         let value;
         if (e.target.type === 'checkbox') value = e.target.checked;
         else if (e.target.type === 'number') value = Number(e.target.value) || 0;
         else value = e.target.value;
         try {
-          await this.document.update({ [name]: value }, { render: false });
+          // Allow a render for top-level 'name' so the Items sidebar listing updates immediately.
+          const options = name === 'name' ? {} : { render: false };
+          await this.document.update({ [name]: value }, options);
         } catch (err) {
-          // Silently ignore - field may have been removed during re-render
+          // Silently ignore
         }
       });
     });
+
   }
 
   /**************
@@ -1064,9 +1117,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onAddTrait(event, target) {
-    const traits = this.item.system.traits || [];
-    const newTraits = [...traits, { name: 'New Trait', description: '' }];
-    await this.item.update({ 'system.traits': newTraits });
+    const traits = this._collectArrayFromDOM('system.traits', 'traits');
+    traits.push({ name: 'New Trait', description: '' });
+    await this._safeUpdate({ 'system.traits': traits });
   }
 
   /**
@@ -1081,9 +1134,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const index = parseInt(target.dataset.traitIndex);
     if (isNaN(index)) return;
 
-    const traits = this.item.system.traits || [];
+    const traits = this._collectArrayFromDOM('system.traits', 'traits');
     const newTraits = traits.filter((_, i) => i !== index);
-    await this.item.update({ 'system.traits': newTraits });
+    await this._safeUpdate({ 'system.traits': newTraits });
   }
 
   /**
@@ -1098,9 +1151,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const level = parseInt(target.dataset.level);
     if (isNaN(level)) return;
 
-    const levelFeatures = this.item.system.levelFeatures || [];
-    const newFeatures = [...levelFeatures, { level, name: 'New Feature', description: '' }];
-    await this.item.update({ 'system.levelFeatures': newFeatures });
+    const features = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
+    features.push({ level, name: 'New Feature', description: '' });
+    await this._safeUpdate({ 'system.levelFeatures': features });
   }
 
   /**
@@ -1115,9 +1168,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const index = parseInt(target.dataset.featureIndex);
     if (isNaN(index)) return;
 
-    const levelFeatures = this.item.system.levelFeatures || [];
-    const newFeatures = levelFeatures.filter((_, i) => i !== index);
-    await this.item.update({ 'system.levelFeatures': newFeatures });
+    const features = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
+    const newFeatures = features.filter((_, i) => i !== index);
+    await this._safeUpdate({ 'system.levelFeatures': newFeatures });
   }
 
   /* -------------------------------------------- */
@@ -1262,85 +1315,51 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Refined data processing for skill pools.
-   * Since the pool is a comma-separated string in the UI but an Array in the DataModel,
-   * we handle the conversion here.
-   * Also ensures grant arrays (requiredSpells, allowedPerks) are preserved during form submission.
+   * Handles both checkbox-based pools (Traits/Features) via DOM scraping
+   * and action-based pools (Class Grants) by preserving existing data.
    * @override
    */
   async _processFormData(event, form, formData) {
+    // 1. Capture prose-mirror values for top-level fields (description, etc.)
+    // Array fields are handled by _collectArrayFromDOM below.
+    form.querySelectorAll('prose-mirror[name]').forEach(pm => {
+      const name = pm.getAttribute('name');
+      if (!name || name.includes('.traits.') || name.includes('.levelFeatures.')) return;
+      const val = pm.value ?? '';
+      if (val || !formData.object[name]) formData.object[name] = val;
+    });
+
     const data = foundry.utils.expandObject(formData.object);
 
-    // Logic to convert comma-separated strings back to arrays for the DataModel
-    if (data.system?.skillGrant?.choices) {
-        for (let key in data.system.skillGrant.choices) {
-            let choice = data.system.skillGrant.choices[key];
-            if (typeof choice.pool === "string") {
-                choice.pool = choice.pool.split(',')
-                    .map(s => s.trim().toLowerCase())
-                    .filter(s => s !== "");
-            }
-        }
+    // 2. Class Top-Level Skill Grants (Action-based, no inputs for pool)
+    // We must merge the form's count/label with the existing pool from the item.
+    if (this.item.type === 'class' && data.system?.skillGrant?.choices) {
+      const originalChoices = this.item.system.skillGrant.choices || [];
+      const formChoices = data.system.skillGrant.choices; 
+      
+      data.system.skillGrant.choices = originalChoices.map((orig, i) => {
+        const f = (Array.isArray(formChoices) ? formChoices[i] : formChoices[String(i)]) ?? {};
+        return {
+          count: Number(f.count ?? orig.count ?? 0),
+          label: f.label ?? orig.label ?? '',
+          pool: orig.pool ?? [] // PRESERVE EXISTING POOL
+        };
+      });
     }
 
-    // Preserve grants for Ancestry traits
-    if (this.item.type === 'ancestry' && data.system?.traits) {
-      // Handle both object-based (sparse) and array-based updates
-      const entries = Array.isArray(data.system.traits) 
-        ? data.system.traits.map((v, i) => [i, v]) 
-        : Object.entries(data.system.traits);
-
-      for (const [key, traitData] of entries) {
-        const index = parseInt(key);
-        if (isNaN(index)) continue;
-        
-        const originalTrait = this.item.system.traits[index];
-        if (originalTrait) {
-          // If requiredSpells is missing in update but exists in original, preserve it
-          if (!traitData.requiredSpells && originalTrait.requiredSpells?.length) {
-            traitData.requiredSpells = originalTrait.requiredSpells;
-          }
-          // If allowedPerks is missing in update but exists in original, preserve it
-          if (!traitData.allowedPerks && originalTrait.allowedPerks?.length) {
-            traitData.allowedPerks = originalTrait.allowedPerks;
-          }
-          // Ensure perkAmount is handled (if it's undefined in update, keep original)
-          if (traitData.perkAmount === undefined && originalTrait.perkAmount !== undefined) {
-            traitData.perkAmount = originalTrait.perkAmount;
-          }
-        }
-      }
+    // 3. Ancestry Traits (Checkbox-based pools + ProseMirror)
+    // Use _collectArrayFromDOM to reliably scrape current DOM state, including checked boxes.
+    if (this.item.type === 'ancestry') {
+      data.system.traits = this._collectArrayFromDOM('system.traits', 'traits');
     }
 
-    // Preserve grants for Class level features
-    if (this.item.type === 'class' && data.system?.levelFeatures) {
-       // Handle both object-based (sparse) and array-based updates
-       const entries = Array.isArray(data.system.levelFeatures) 
-         ? data.system.levelFeatures.map((v, i) => [i, v]) 
-         : Object.entries(data.system.levelFeatures);
-
-       for (const [key, featureData] of entries) {
-         const index = parseInt(key);
-         if (isNaN(index)) continue;
-         
-         const originalFeature = this.item.system.levelFeatures[index];
-         if (originalFeature) {
-           // If requiredSpells is missing in update but exists in original, preserve it
-           if (!featureData.requiredSpells && originalFeature.requiredSpells?.length) {
-             featureData.requiredSpells = originalFeature.requiredSpells;
-           }
-           // If allowedPerks is missing in update but exists in original, preserve it
-           if (!featureData.allowedPerks && originalFeature.allowedPerks?.length) {
-             featureData.allowedPerks = originalFeature.allowedPerks;
-           }
-           // Ensure perkAmount is handled
-           if (featureData.perkAmount === undefined && originalFeature.perkAmount !== undefined) {
-             featureData.perkAmount = originalFeature.perkAmount;
-           }
-         }
-       }
+    // 4. Class Level Features (Checkbox-based pools + ProseMirror)
+    // Use _collectArrayFromDOM to reliably scrape current DOM state.
+    if (this.item.type === 'class') {
+      data.system.levelFeatures = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
     }
 
-    return this.document.update(data);
+    return this._safeUpdate(data);
   }
 
     /**
@@ -2431,42 +2450,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         const traitIndex = parseInt(dropZone.dataset.traitIndex);
         if (isNaN(traitIndex)) return false;
 
-        // Clone entire array (same approach as remove functions)
-        const traits = foundry.utils.deepClone(this.item.system.traits);
+        const traits = this._collectArrayFromDOM('system.traits', 'traits');
         if (!traits[traitIndex]) return false;
 
         if (isSpellZone) {
-          // Add spell UUID to requiredSpells array
           const currentSpells = traits[traitIndex].requiredSpells || [];
-          console.log('Current spells before add:', currentSpells);
-          console.log('Dropped spell UUID:', droppedItem.uuid);
-
           if (!currentSpells.includes(droppedItem.uuid)) {
-            // Modify the cloned array
             traits[traitIndex].requiredSpells = [...currentSpells, droppedItem.uuid];
-
-            console.log('Updating entire traits array');
-            console.log('Modified trait:', traits[traitIndex]);
-
-            // Update the entire traits array (matches remove function approach)
-            // render: false prevents automatic re-render and scroll jump
-            const result = await this.item.update({ 'system.traits': traits }, { render: false });
-            console.log('Update result:', result);
-
-            // Verify the update persisted
-            const updatedTrait = this.item.system.traits[traitIndex];
-            console.log('Spells after update:', updatedTrait.requiredSpells);
-
+            await this.item.update({ 'system.traits': traits });
             ui.notifications.info(`Added ${droppedItem.name} to trait`);
           } else {
             ui.notifications.warn('Spell already added to this trait');
           }
         } else if (isPerkZone) {
-          // Add perk UUID to allowedPerks array
           const currentPerks = traits[traitIndex].allowedPerks || [];
           if (!currentPerks.includes(droppedItem.uuid)) {
             traits[traitIndex].allowedPerks = [...currentPerks, droppedItem.uuid];
-            await this.item.update({ 'system.traits': traits }, { render: false });
+            await this.item.update({ 'system.traits': traits });
             ui.notifications.info(`Added ${droppedItem.name} to trait`);
           } else {
             ui.notifications.warn('Perk already added to this trait');
@@ -2480,42 +2480,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         const featureIndex = parseInt(dropZone.dataset.featureIndex);
         if (isNaN(featureIndex)) return false;
 
-        // Clone entire array (same approach as remove functions)
-        const levelFeatures = foundry.utils.deepClone(this.item.system.levelFeatures);
+        const levelFeatures = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
         if (!levelFeatures[featureIndex]) return false;
 
         if (isSpellZone) {
-          // Add spell UUID to requiredSpells array
           const currentSpells = levelFeatures[featureIndex].requiredSpells || [];
-          console.log('Current spells before add:', currentSpells);
-          console.log('Dropped spell UUID:', droppedItem.uuid);
-
           if (!currentSpells.includes(droppedItem.uuid)) {
-            // Modify the cloned array
             levelFeatures[featureIndex].requiredSpells = [...currentSpells, droppedItem.uuid];
-
-            console.log('Updating entire levelFeatures array');
-            console.log('Modified feature:', levelFeatures[featureIndex]);
-
-            // Update the entire levelFeatures array (matches remove function approach)
-            // render: false prevents automatic re-render and scroll jump
-            const result = await this.item.update({ 'system.levelFeatures': levelFeatures }, { render: false });
-            console.log('Update result:', result);
-
-            // Verify the update persisted
-            const updatedFeature = this.item.system.levelFeatures[featureIndex];
-            console.log('Spells after update:', updatedFeature.requiredSpells);
-
+            await this.item.update({ 'system.levelFeatures': levelFeatures });
             ui.notifications.info(`Added ${droppedItem.name} to feature`);
           } else {
             ui.notifications.warn('Spell already added to this feature');
           }
         } else if (isPerkZone) {
-          // Add perk UUID to allowedPerks array
           const currentPerks = levelFeatures[featureIndex].allowedPerks || [];
           if (!currentPerks.includes(droppedItem.uuid)) {
             levelFeatures[featureIndex].allowedPerks = [...currentPerks, droppedItem.uuid];
-            await this.item.update({ 'system.levelFeatures': levelFeatures }, { render: false });
+            await this.item.update({ 'system.levelFeatures': levelFeatures });
             ui.notifications.info(`Added ${droppedItem.name} to feature`);
           } else {
             ui.notifications.warn('Perk already added to this feature');
@@ -2769,62 +2750,155 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle removing a spell from an ancestry trait
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
+   * Generic grant handlers — delegate to GrantsHandlers using data-array-path / data-item-index.
    */
-  static async _onRemoveTraitSpell(event, target) {
-    return GrantsHandlers.removeTraitSpell(this, event, target);
+  static async _onAddGrantSpell(event, target) {
+    return GrantsHandlers.addGrantSpell(this, event, target);
+  }
+  static async _onRemoveGrantSpell(event, target) {
+    return GrantsHandlers.removeGrantSpell(this, event, target);
+  }
+  static async _onAddGrantPerk(event, target) {
+    return GrantsHandlers.addGrantPerk(this, event, target);
+  }
+  static async _onRemoveGrantPerk(event, target) {
+    return GrantsHandlers.removeGrantPerk(this, event, target);
   }
 
   /**
-   * Handle removing a perk from an ancestry trait
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
+   * Add a new skill choice group to a trait or feature.
    */
-  static async _onRemoveTraitPerk(event, target) {
-    return GrantsHandlers.removeTraitPerk(this, event, target);
+  static async _onAddGrantSkillChoiceGroup(event, target) {
+    const arrayPath = target.dataset.arrayPath;
+    const itemIndex = parseInt(target.dataset.itemIndex);
+    if (!arrayPath || isNaN(itemIndex)) return;
+
+    const prop = arrayPath.replace(/^system\./, '');
+    // Start from DOM state so unsaved text values aren't lost on re-render
+    const items = this._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]) return;
+    items[itemIndex].skillChoices = items[itemIndex].skillChoices || [];
+    items[itemIndex].skillChoices.push({ count: 1, pool: [], label: '' });
+    await this._safeUpdate({ [arrayPath]: items });
   }
 
   /**
-   * Handle removing a spell from a class level feature
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
+   * Remove a skill choice group from a trait or feature.
    */
-  static async _onRemoveFeatureSpell(event, target) {
-    return GrantsHandlers.removeFeatureSpell(this, event, target);
+  static async _onRemoveGrantSkillChoiceGroup(event, target) {
+    const arrayPath = target.dataset.arrayPath;
+    const itemIndex = parseInt(target.dataset.itemIndex);
+    const choiceIndex = parseInt(target.dataset.choiceIndex);
+    if (!arrayPath || isNaN(itemIndex) || isNaN(choiceIndex)) return;
+
+    const prop = arrayPath.replace(/^system\./, '');
+    // Start from DOM state so unsaved text values aren't lost on re-render
+    const items = this._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]?.skillChoices) return;
+    items[itemIndex].skillChoices.splice(choiceIndex, 1);
+    await this._safeUpdate({ [arrayPath]: items });
   }
 
   /**
-   * Handle removing a perk from a class level feature
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The clicked element
-   * @private
+   * Toggle accordion item open/closed state.
+   * Always syncs both 'expanded'/'collapsed' classes so any parent CSS that
+   * matches .collapsed (e.g. actor-sheet .features-list rules) stays correct.
+   * Within a .grants-accordions container, opening one closes all siblings.
    */
-  static async _onRemoveFeaturePerk(event, target) {
-    return GrantsHandlers.removeFeaturePerk(this, event, target);
+  static _onToggleAccordion(event, target) {
+    const accordionItem = target.closest('.accordion-item');
+    if (!accordionItem) return;
+
+    const isExpanded = accordionItem.classList.contains('expanded');
+    const grantsContainer = accordionItem.closest('.grants-accordions');
+
+    // Close all siblings in the same grants block when opening one
+    if (grantsContainer && !isExpanded) {
+      grantsContainer.querySelectorAll('.accordion-item.expanded').forEach(other => {
+        if (other === accordionItem) return;
+        other.classList.remove('expanded');
+        other.classList.add('collapsed');
+        other.querySelector('.accordion-content')?.classList.remove('open');
+      });
+    }
+
+    // Toggle this item — keep collapsed/expanded in sync
+    accordionItem.classList.toggle('expanded', !isExpanded);
+    accordionItem.classList.toggle('collapsed', isExpanded);
+    accordionItem.querySelector('.accordion-content')?.classList.toggle('open', !isExpanded);
   }
 
   /**
-   * Add handlers delegate to GrantsHandlers
+   * Build the current state of a system array by starting from the database copy
+   * and overlaying all current DOM input values on top.
+   *
+   * @param {string} arrayPath - full path, e.g. "system.traits"
+   * @param {string} arrayProp - property key on system, e.g. "traits"
+   * @returns {Array} deep-cloned array with DOM overrides applied
    */
-  static async _onAddTraitSpell(event, target) {
-    return GrantsHandlers.addTraitSpell(this, event, target);
+  _collectArrayFromDOM(arrayPath, arrayProp) {
+    const items = foundry.utils.deepClone(this.item.system[arrayProp] || []);
+    for (let idx = 0; idx < items.length; idx++) {
+      const prefix = `${arrayPath}.${idx}.`;
+      const handledPools = new Set();
+
+      // Find all inputs, selects, textareas, and prose-mirrors within this array element
+      this.element?.querySelectorAll(`[name^="${prefix}"]`).forEach(el => {
+        const name = el.getAttribute('name');
+        const subPath = name.slice(prefix.length);
+
+        if (subPath.endsWith('.pool')) {
+          // Pool checkboxes: group by full name, collect all checked values as array.
+          if (handledPools.has(name)) return;
+          handledPools.add(name);
+          const checked = Array.from(
+            this.element.querySelectorAll(`input[name="${name}"]:checked`)
+          ).map(cb => cb.value);
+          foundry.utils.setProperty(items[idx], subPath, checked);
+        } else {
+          let value;
+          if (el.type === 'checkbox') value = el.checked;
+          else if (el.type === 'number') value = Number(el.value) || 0;
+          else value = el.value;
+          foundry.utils.setProperty(items[idx], subPath, value);
+        }
+      });
+    }
+    return items;
   }
 
-  static async _onAddTraitPerk(event, target) {
-    return GrantsHandlers.addTraitPerk(this, event, target);
+  /**
+   * Collect all DOM values for a single array element N and save the whole array.
+   * Used by the auto-save change handler so that updating one field doesn't
+   * overwrite sibling fields in the same array element.
+   *
+   * @param {string} arrayPath - e.g. "system.traits"
+   * @param {string} arrayProp - e.g. "traits"
+   * @param {number} idx       - element index
+   */
+  async _saveArrayElement(arrayPath, arrayProp, idx) {
+    const items = this._collectArrayFromDOM(arrayPath, arrayProp);
+    if (!items[idx]) return;
+    return this._safeUpdate({ [arrayPath]: items }, { render: false });
   }
 
-  static async _onAddFeatureSpell(event, target) {
-    return GrantsHandlers.addFeatureSpell(this, event, target);
+  /**
+   * Sequential update queue wrapper to prevent race conditions when multiple
+   * async updates (auto-saves and actions) are triggered in rapid succession.
+   * Especially critical for array fields where each update sends the whole array.
+   * 
+   * @param {object} data - The update data
+   * @param {object} options - Update options
+   * @returns {Promise} The resulting document update
+   */
+  async _safeUpdate(data, options = {}) {
+    this._updateQueue = this._updateQueue.then(async () => {
+      try {
+        await this.document.update(data, options);
+      } catch (err) {
+        console.error("Vagabond | Sequential update failed:", err);
+      }
+    });
+    return this._updateQueue;
   }
-
-  static async _onAddFeaturePerk(event, target) {
-    return GrantsHandlers.addFeaturePerk(this, event, target);
-  }
-
 }

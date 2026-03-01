@@ -204,9 +204,9 @@
           {{/if}}
 
           {{#if group.features.length}}
-            <ol class='features-list m-0 pl-20'>
+            <ol class='class-level-features'>
               {{#each group.features as |feature|}}
-                <li class='feature-item mb-10' data-feature-index='{{feature.index}}'>
+                <li data-feature-index='{{feature.index}}'>
                   <div class='feature-content'>
                     {{#if @root.editable}}
                       <div class='flex-center-gap-10 mb-5'>
@@ -244,95 +244,14 @@
                         value='{{feature.level}}'
                       />
 
-                      {{! Configuration fields for grants }}
-                      <details class='feature-grants mt-10' data-details-id='feature-grants-{{feature.index}}'>
-                        <summary><small>⚙️ Configure Grants</small></summary>
-                        <div class='grants-content p-5'>
-
-                          {{! Stat Bonus Points }}
-                          <div class='form-group'>
-                            <label>Stat Bonus Points:</label>
-                            <input type='number' name='system.levelFeatures.{{feature.index}}.statBonusPoints' value='{{feature.statBonusPoints}}' min='0' max='10' style='width: 60px;' />
-                            <small class='hint'>Each point gives +1 to any stat &lt;7 (player chooses)</small>
-                          </div>
-
-                          {{! Extra Training }}
-                          <div class='form-group mt-10'>
-                            <label>Extra Training:</label>
-                            <input type='number' name='system.levelFeatures.{{feature.index}}.extraTraining' value='{{feature.extraTraining}}' min='0' max='10' style='width: 60px;' />
-                            <small class='hint'>Additional skill training choices (any skill)</small>
-                          </div>
-
-                          {{! Required Spells }}
-                          <div class='form-group mt-10'>
-                            <label>Required Spells:</label>
-                            <div class='grants-list-container'>
-                              {{#if feature.enrichedSpells.length}}
-                                <ul class='grants-list'>
-                                  {{#each feature.enrichedSpells as |spell spellIndex|}}
-                                    <li class='grant-tag'>
-                                      <img src='{{spell.img}}' alt='{{spell.name}}' class='grant-tag-icon' />
-                                      <span class='grant-tag-label'>{{spell.name}}</span>
-                                      <a class='grant-tag-remove' data-action='removeFeatureSpell' data-feature-index='{{../index}}' data-spell-index='{{spellIndex}}'>
-                                        <i class='fas fa-times'></i>
-                                      </a>
-                                    </li>
-                                  {{/each}}
-                                </ul>
-                              {{/if}}
-                              <div class='grants-add-controls'>
-                                <select class='grants-select' data-feature-index='{{feature.index}}' data-grant-type='spell'>
-                                  <option value=''>-- Select Spell --</option>
-                                  {{!-- Options will be populated via JS --}}
-                                </select>
-                                <button type='button' class='btn-sm' data-action='addFeatureSpell' data-feature-index='{{feature.index}}'>
-                                  <i class='fas fa-plus'></i> Add Spell
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-
-                          {{! Perk Amount }}
-                          <div class='form-group mt-10'>
-                            <label>Perks Amount:</label>
-                            <input type='number' name='system.levelFeatures.{{feature.index}}.perkAmount' value='{{feature.perkAmount}}' min='0' max='10' style='width: 60px;' />
-                            <small class='hint'>Number of perks this feature allows choosing</small>
-                          </div>
-
-                          {{! Allowed Perks }}
-                          <div class='form-group mt-10'>
-                            <label>Allowed Perks:</label>
-                            <small class='hint'>Empty list = Any perk allowed</small>
-                            <div class='grants-list-container'>
-                              {{#if feature.enrichedPerks.length}}
-                                <ul class='grants-list'>
-                                  {{#each feature.enrichedPerks as |perk perkIndex|}}
-                                    <li class='grant-tag'>
-                                      <img src='{{perk.img}}' alt='{{perk.name}}' class='grant-tag-icon' />
-                                      <span class='grant-tag-label'>{{perk.name}}</span>
-                                      <a class='grant-tag-remove' data-action='removeFeaturePerk' data-feature-index='{{../index}}' data-perk-index='{{perkIndex}}'>
-                                        <i class='fas fa-times'></i>
-                                      </a>
-                                    </li>
-                                  {{/each}}
-                                </ul>
-                              {{else}}
-                                <p class='text-info'><small><i class='fas fa-info-circle'></i> Any perk can be selected</small></p>
-                              {{/if}}
-                              <div class='grants-add-controls'>
-                                <select class='grants-select' data-feature-index='{{feature.index}}' data-grant-type='perk'>
-                                  <option value=''>-- Select Perk --</option>
-                                  {{!-- Options will be populated via JS --}}
-                                </select>
-                                <button type='button' class='btn-sm' data-action='addFeaturePerk' data-feature-index='{{feature.index}}'>
-                                  <i class='fas fa-plus'></i> Add Perk
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-                      </details>
+                      {{! Grants configuration }}
+                      {{> "systems/vagabond/templates/item/parts/grants-config.hbs"
+                        grant=feature
+                        arrayPath="system.levelFeatures"
+                        itemIndex=feature.index
+                        enrichedGrant=feature
+                        config=@root.config
+                        editable=@root.editable}}
                     {{else}}
                       <strong class='feature-title'>{{feature.name}}</strong>
                       {{#if feature.enrichedDescription}}

@@ -139,5 +139,41 @@
     gap: 0.5rem;
     justify-content: flex-end;
     .sfx-reset-btn { margin-right: auto; }
+    .sfx-jb2a-btn  { margin-right: 0.25rem; }
+  }
+
+  // Module status bar
+  .sfx-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--vagabond-c-faint);
+    background: rgba(0, 0, 0, 0.04);
+    flex-shrink: 0;
+    font-size: 0.8rem;
+  }
+
+  .sfx-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    padding: 0.15em 0.55em;
+    border-radius: 999px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &.sfx-chip-on      { background: rgba(34, 197, 94, 0.15); color: #166534; }
+    &.sfx-chip-off     { background: rgba(100, 116, 139, 0.15); color: var(--vagabond-c-text-dim); }
+    &.sfx-chip-ok      { background: rgba(34, 197, 94, 0.12); color: #166534; }
+    &.sfx-chip-missing { background: rgba(239, 68, 68, 0.12); color: #991b1b; }
+  }
+
+  .sfx-status-hint {
+    font-size: 0.78rem;
+    color: var(--vagabond-c-text-dim);
+    font-style: italic;
+    margin-left: auto;
   }
 }

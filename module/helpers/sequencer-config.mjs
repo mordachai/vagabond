@@ -276,3 +276,30 @@ export const SPELL_FX = {
     genericdark:  { cast: "", impact: "", volume: 0.6 },
   },
 };
+
+// ── JB2A defaults ─────────────────────────────────────────────────────────────
+// Loaded once at ready time when both Sequencer + JB2A are present.
+// Access via getJB2ADefaults(); mutate via loadJB2ADefaults().
+
+let _jb2aDefaults = null;
+
+/** Return the cached JB2A defaults, or null if not yet loaded. */
+export function getJB2ADefaults() {
+  return _jb2aDefaults;
+}
+
+/**
+ * Fetch JB2A defaults from the bundled JSON config file and cache them.
+ * Safe to call multiple times — subsequent calls are no-ops once loaded.
+ */
+export async function loadJB2ADefaults() {
+  if (_jb2aDefaults) return; // already loaded
+  try {
+    const resp = await fetch('systems/vagabond/assets/config/vagabond-default-spell-fx-config.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    _jb2aDefaults = await resp.json();
+  } catch (err) {
+    console.warn('Vagabond | Failed to load JB2A spell FX defaults:', err);
+    _jb2aDefaults = null;
+  }
+}

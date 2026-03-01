@@ -1,4 +1,4 @@
-import { SPELL_FX } from '../helpers/sequencer-config.mjs';
+import { SPELL_FX, getJB2ADefaults, loadJB2ADefaults } from '../helpers/sequencer-config.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 
 const { api } = foundry.applications;
@@ -27,10 +27,11 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
       previewCast:   SequencerFxConfig.#onPreviewCast,
       previewArea:   SequencerFxConfig.#onPreviewArea,
       previewSound:  SequencerFxConfig.#onPreviewSound,
-      exportConfig:  SequencerFxConfig.#onExportConfig,
-      importConfig:  SequencerFxConfig.#onImportConfig,
-      resetDefaults: SequencerFxConfig.#onResetDefaults,
-      saveAndClose:  SequencerFxConfig.#onSaveAndClose,
+      exportConfig:    SequencerFxConfig.#onExportConfig,
+      importConfig:    SequencerFxConfig.#onImportConfig,
+      resetDefaults:   SequencerFxConfig.#onResetDefaults,
+      loadJB2ADefaults: SequencerFxConfig.#onLoadJB2ADefaults,
+      saveAndClose:    SequencerFxConfig.#onSaveAndClose,
       close: function() { this.close(); },
     },
     form: {
@@ -87,7 +88,19 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
         }),
       }));
 
-    return { schools, scaleModes, exportImportActive: this.#activeSchool === 'exportImport' };
+    const sequencerAvailable = VagabondSpellSequencer.isAvailable();
+    const jb2aAvailable      = VagabondSpellSequencer.isJB2AAvailable();
+    const animationsEnabled  = !!game.settings.get('vagabond', 'useAnimations');
+
+    return {
+      schools,
+      scaleModes,
+      exportImportActive: this.#activeSchool === 'exportImport',
+      sequencerAvailable,
+      jb2aAvailable,
+      animationsEnabled,
+      jb2aDefaultsLoaded: !!getJB2ADefaults(),
+    };
   }
 
   async _onRender(context, options) {
@@ -245,6 +258,31 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     } catch(e) {
       ui.notifications.error(`${game.i18n.localize('VAGABOND.SequencerFX.ImportFailed')}: ${e.message}`);
     }
+  }
+
+  static async #onLoadJB2ADefaults() {
+    if (!VagabondSpellSequencer.isJB2AAvailable()) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.JB2AUnavailable'));
+      return;
+    }
+    // Ensure defaults are fetched (in case ready hook hasn't fired yet)
+    await loadJB2ADefaults();
+    const defaults = getJB2ADefaults();
+    if (!defaults) {
+      ui.notifications.error(game.i18n.localize('VAGABOND.SequencerFX.JB2ALoadFailed'));
+      return;
+    }
+    // Only overwrite animation paths, not sounds (preserve any existing sound config)
+    const raw     = game.settings.get('vagabond', 'sequencerFxConfig') ?? {};
+    const current = foundry.utils.expandObject(raw);
+    const merged  = foundry.utils.mergeObject(
+      foundry.utils.deepClone(defaults),
+      { sounds: current.sounds ?? defaults.sounds },
+      { inplace: false }
+    );
+    await game.settings.set('vagabond', 'sequencerFxConfig', merged);
+    ui.notifications.info(game.i18n.localize('VAGABOND.SequencerFX.JB2ALoaded'));
+    this.render();
   }
 
   static async #onResetDefaults() {

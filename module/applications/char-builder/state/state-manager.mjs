@@ -41,7 +41,8 @@ export class CharacterBuilderStateManager {
 
       // Skills
       skills: [],
-      
+      extraTrainingGroups: [],  // Ancestry restricted skill choice groups
+
       // Collections
       spells: [],
       perks: [],

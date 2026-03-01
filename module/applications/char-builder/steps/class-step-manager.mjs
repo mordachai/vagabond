@@ -153,6 +153,7 @@ export class ClassStepManager extends BaseStepManager {
   async _collectExtraTraining(state) {
     const sources = [];
     let total = 0;
+    const restrictedGroups = [];
 
     // From ancestry traits
     if (state.selectedAncestry) {
@@ -169,6 +170,17 @@ export class ClassStepManager extends BaseStepManager {
                 type: 'Ancestry'
               });
               total += amount;
+            }
+
+            // Collect skill choice groups from this trait
+            if (trait.skillChoices && Array.isArray(trait.skillChoices)) {
+              for (const group of trait.skillChoices) {
+                restrictedGroups.push({
+                  count: group.count || 1,
+                  pool: group.pool || [],
+                  label: group.label || ''
+                });
+              }
             }
           }
         }
@@ -194,6 +206,17 @@ export class ClassStepManager extends BaseStepManager {
               });
               total += amount;
             }
+
+            // Collect skill choice groups from class features (same as ancestry traits)
+            if (feature.skillChoices && Array.isArray(feature.skillChoices)) {
+              for (const group of feature.skillChoices) {
+                restrictedGroups.push({
+                  count: group.count || 1,
+                  pool: group.pool || [],
+                  label: group.label || ''
+                });
+              }
+            }
           }
         }
       } catch (error) {
@@ -201,7 +224,7 @@ export class ClassStepManager extends BaseStepManager {
       }
     }
 
-    return { total, sources };
+    return { total, sources, restrictedGroups };
   }
 
   /**
@@ -261,10 +284,50 @@ export class ClassStepManager extends BaseStepManager {
       };
     });
 
-    // Add extra training choice group if available
+    // Add ancestry restricted skill choice groups
+    const allSkills = this._getAllSkillsWithWeaponSkills();
+    for (const rg of extraTrainingData.restrictedGroups) {
+      const idx = skillChoices.length;
+      const selections = skillSelections[idx] || [];
+      const pool = rg.pool.length > 0 ? rg.pool : allSkills;
+
+      const skillsData = pool.map(skillKey => {
+        const isGuaranteed = skillGrant.guaranteed.includes(skillKey);
+        const isSelectedInThisGroup = selections.includes(skillKey);
+        const isSelectedInOtherGroup = !isSelectedInThisGroup && currentSkills.includes(skillKey) && !isGuaranteed;
+
+        const isDisabled = isGuaranteed || isSelectedInOtherGroup;
+        const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
+
+        const label = CONFIG.VAGABOND.skills[skillKey] ?? skillKey;
+
+        return {
+          key: skillKey,
+          label: label,
+          isChecked: isChecked,
+          isDisabled: isDisabled,
+          isGuaranteed: isGuaranteed,
+          groupIndex: idx
+        };
+      });
+
+      skillChoices.push({
+        count: rg.count,
+        pool: pool,
+        skills: skillsData,
+        selected: selections.length,
+        groupIndex: idx,
+        isAncestryRestricted: true,
+        label: rg.label || ''
+      });
+    }
+
+    // Store ancestry restricted groups in state
+    this.stateManager.updateState('extraTrainingGroups', extraTrainingData.restrictedGroups, { skipValidation: true });
+
+    // Add unrestricted extra training choice group if available
     if (extraTraining > 0) {
       const extraTrainingGroupIndex = skillChoices.length; // Next available index
-      const allSkills = this._getAllSkillsWithWeaponSkills();
       const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
 
       const extraTrainingSkillsData = allSkills.map(skillKey => {
@@ -571,12 +634,11 @@ export class ClassStepManager extends BaseStepManager {
         // Check if we can add more skills to this group
         let maxCount;
 
-        // Check if this is an extra training group (beyond normal class choices)
-        if (groupIndex >= skillGrant.choices.length) {
-          // This is the extra training group - get count from extra training
-          const extraTrainingData = await this._collectExtraTraining(state);
-          maxCount = extraTrainingData.total;
-        } else {
+        const extraTrainingData = await this._collectExtraTraining(state);
+        const classGroupCount = skillGrant.choices.length;
+        const ancestryGroups = state.extraTrainingGroups || [];
+
+        if (groupIndex < classGroupCount) {
           // Normal class choice group
           const choice = skillGrant.choices[groupIndex];
           if (!choice) {
@@ -584,6 +646,12 @@ export class ClassStepManager extends BaseStepManager {
             return;
           }
           maxCount = choice.count;
+        } else if (groupIndex < classGroupCount + ancestryGroups.length) {
+          // Ancestry restricted skill choice group
+          maxCount = ancestryGroups[groupIndex - classGroupCount].count;
+        } else {
+          // Unrestricted extra training group
+          maxCount = extraTrainingData.total;
         }
 
         if (skillsInThisGroup.length >= maxCount) {

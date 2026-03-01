@@ -3,7 +3,7 @@
  * Pure logic for Sequencer-driven spell animations.
  * This file never needs editing when adding new animations — edit sequencer-config.mjs instead.
  */
-import { SPELL_FX } from './sequencer-config.mjs';
+import { SPELL_FX, getJB2ADefaults } from './sequencer-config.mjs';
 
 // Maps damage types (from CONFIG) to FX schools.
 // Unmapped types fall back to 'arcane'.
@@ -22,7 +22,8 @@ const AUTO_SCHOOL = {
 export class VagabondSpellSequencer {
 
   /**
-   * Return the active FX config: world setting if saved, otherwise static SPELL_FX defaults.
+   * Return the active FX config: world setting if saved, JB2A defaults if both
+   * modules are present, otherwise empty SPELL_FX structure.
    * @returns {object}
    * @private
    */
@@ -33,6 +34,11 @@ export class VagabondSpellSequencer {
         return foundry.utils.expandObject(stored);
       }
     } catch { /* setting not ready yet */ }
+    // Fall back to JB2A defaults when both modules are present
+    if (this.isJB2AAvailable()) {
+      const jb2a = getJB2ADefaults();
+      if (jb2a) return jb2a;
+    }
     return SPELL_FX;
   }
 
@@ -42,6 +48,22 @@ export class VagabondSpellSequencer {
    */
   static isAvailable() {
     return !!game.modules.get('sequencer')?.active && typeof Sequence !== 'undefined';
+  }
+
+  /**
+   * Whether the JB2A module (free or Patreon) is installed and active.
+   * @returns {boolean}
+   */
+  static isJB2AAvailable() {
+    return !!(game.modules.get('JB2A_DnD5e')?.active || game.modules.get('jb2a_patreon')?.active);
+  }
+
+  /**
+   * Whether animations are globally enabled for this world (GM setting).
+   * @returns {boolean}
+   */
+  static isEnabledForWorld() {
+    try { return !!game.settings.get('vagabond', 'useAnimations'); } catch { return false; }
   }
 
   /**
@@ -308,7 +330,7 @@ export class VagabondSpellSequencer {
    * @param {Token[]} targetTokens - Array of targeted Token objects
    */
   static play(spellItem, deliveryType, increaseCount, casterToken, targetTokens) {
-    if (!this.isAvailable() || !this.isEnabledForUser()) return;
+    if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
     if (!casterToken) return;
 
     const school = this._resolveSchool(spellItem);

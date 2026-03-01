@@ -1,263 +1,145 @@
 /**
- * Grants system handlers for item sheets (spells and perks)
- * Separated for clarity - imported by item-sheet.mjs
+ * Unified grants system handlers for item sheets (ancestry traits and class features).
+ * All handlers use data-array-path and data-item-index to work generically for both types.
  */
 
 export class GrantsHandlers {
   /**
-   * Add spell to trait (ancestry)
+   * Add a spell to a trait or feature.
    */
-  static async addTraitSpell(itemSheet, event, target) {
-    const traitIndex = parseInt(target.dataset.traitIndex);
-    if (isNaN(traitIndex)) return;
+  static async addGrantSpell(sheet, event, target) {
+    const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
+    if (!arrayPath || itemIndex === null) return;
 
-    const select = itemSheet.element.querySelector(`select[data-trait-index="${traitIndex}"][data-grant-type="spell"]`);
-    const spellUuid = select?.value;
+    const select = sheet.element.querySelector(
+      `select[data-array-path="${arrayPath}"][data-item-index="${itemIndex}"][data-grant-type="spell"]`
+    );
+    const uuid = select?.value;
+    if (!uuid) { ui.notifications.warn('Please select a spell first'); return; }
 
-    if (!spellUuid) {
-      ui.notifications.warn('Please select a spell first');
-      return;
-    }
+    const prop = arrayPath.replace(/^system\./, '');
+    // Use DOM state as base so unsaved text values survive the re-render
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    const current = items[itemIndex]?.requiredSpells || [];
+    if (current.includes(uuid)) { ui.notifications.warn('Spell already added'); return; }
 
-    const traits = foundry.utils.deepClone(itemSheet.item.system.traits);
-    const currentSpells = traits[traitIndex].requiredSpells || [];
-
-    if (currentSpells.includes(spellUuid)) {
-      ui.notifications.warn('Spell already added');
-      return;
-    }
-
-    traits[traitIndex].requiredSpells = [...currentSpells, spellUuid];
-
-    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
-    itemSheet.render();
+    items[itemIndex].requiredSpells = [...current, uuid];
+    await sheet.item.update({ [arrayPath]: items });
   }
 
   /**
-   * Add perk to trait (ancestry)
+   * Remove a spell from a trait or feature by index.
    */
-  static async addTraitPerk(itemSheet, event, target) {
-    const traitIndex = parseInt(target.dataset.traitIndex);
-    if (isNaN(traitIndex)) return;
+  static async removeGrantSpell(sheet, event, target) {
+    const { arrayPath, itemIndex, spellIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'spellIndex']);
+    if (!arrayPath || itemIndex === null || spellIndex === null) return;
 
-    const select = itemSheet.element.querySelector(`select[data-trait-index="${traitIndex}"][data-grant-type="perk"]`);
-    const perkUuid = select?.value;
-
-    if (!perkUuid) {
-      ui.notifications.warn('Please select a perk first');
-      return;
-    }
-
-    const traits = foundry.utils.deepClone(itemSheet.item.system.traits);
-    const currentPerks = traits[traitIndex].allowedPerks || [];
-
-    if (currentPerks.includes(perkUuid)) {
-      ui.notifications.warn('Perk already added');
-      return;
-    }
-
-    traits[traitIndex].allowedPerks = [...currentPerks, perkUuid];
-
-    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
-    itemSheet.render();
-  }
-
-  /**
-   * Add spell to feature (class)
-   */
-  static async addFeatureSpell(itemSheet, event, target) {
-    const featureIndex = parseInt(target.dataset.featureIndex);
-    if (isNaN(featureIndex)) return;
-
-    const select = itemSheet.element.querySelector(`select[data-feature-index="${featureIndex}"][data-grant-type="spell"]`);
-    const spellUuid = select?.value;
-
-    if (!spellUuid) {
-      ui.notifications.warn('Please select a spell first');
-      return;
-    }
-
-    const features = foundry.utils.deepClone(itemSheet.item.system.levelFeatures);
-    const currentSpells = features[featureIndex].requiredSpells || [];
-
-    if (currentSpells.includes(spellUuid)) {
-      ui.notifications.warn('Spell already added');
-      return;
-    }
-
-    features[featureIndex].requiredSpells = [...currentSpells, spellUuid];
-
-    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
-    itemSheet.render();
-  }
-
-  /**
-   * Add perk to feature (class)
-   */
-  static async addFeaturePerk(itemSheet, event, target) {
-    const featureIndex = parseInt(target.dataset.featureIndex);
-    if (isNaN(featureIndex)) return;
-
-    const select = itemSheet.element.querySelector(`select[data-feature-index="${featureIndex}"][data-grant-type="perk"]`);
-    const perkUuid = select?.value;
-
-    if (!perkUuid) {
-      ui.notifications.warn('Please select a perk first');
-      return;
-    }
-
-    const features = foundry.utils.deepClone(itemSheet.item.system.levelFeatures);
-    const currentPerks = features[featureIndex].allowedPerks || [];
-
-    if (currentPerks.includes(perkUuid)) {
-      ui.notifications.warn('Perk already added');
-      return;
-    }
-
-    features[featureIndex].allowedPerks = [...currentPerks, perkUuid];
-
-    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
-    itemSheet.render();
-  }
-
-  /**
-   * Remove spell from trait by index
-   */
-  static async removeTraitSpell(itemSheet, event, target) {
-    const traitIndex = parseInt(target.dataset.traitIndex);
-    const spellIndex = parseInt(target.dataset.spellIndex);
-
-    if (isNaN(traitIndex) || isNaN(spellIndex)) return;
-
-    const traits = foundry.utils.deepClone(itemSheet.item.system.traits);
-    const spells = traits[traitIndex].requiredSpells || [];
-
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    const spells = items[itemIndex]?.requiredSpells || [];
     spells.splice(spellIndex, 1);
-    traits[traitIndex].requiredSpells = spells;
-
-    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
-    itemSheet.render();
+    items[itemIndex].requiredSpells = spells;
+    await sheet.item.update({ [arrayPath]: items });
   }
 
   /**
-   * Remove perk from trait by index
+   * Add a perk to a trait or feature.
    */
-  static async removeTraitPerk(itemSheet, event, target) {
-    const traitIndex = parseInt(target.dataset.traitIndex);
-    const perkIndex = parseInt(target.dataset.perkIndex);
+  static async addGrantPerk(sheet, event, target) {
+    const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
+    if (!arrayPath || itemIndex === null) return;
 
-    if (isNaN(traitIndex) || isNaN(perkIndex)) return;
+    const select = sheet.element.querySelector(
+      `select[data-array-path="${arrayPath}"][data-item-index="${itemIndex}"][data-grant-type="perk"]`
+    );
+    const uuid = select?.value;
+    if (!uuid) { ui.notifications.warn('Please select a perk first'); return; }
 
-    const traits = foundry.utils.deepClone(itemSheet.item.system.traits);
-    const perks = traits[traitIndex].allowedPerks || [];
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    const current = items[itemIndex]?.allowedPerks || [];
+    if (current.includes(uuid)) { ui.notifications.warn('Perk already added'); return; }
 
+    items[itemIndex].allowedPerks = [...current, uuid];
+    await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /**
+   * Remove a perk from a trait or feature by index.
+   */
+  static async removeGrantPerk(sheet, event, target) {
+    const { arrayPath, itemIndex, perkIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'perkIndex']);
+    if (!arrayPath || itemIndex === null || perkIndex === null) return;
+
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    const perks = items[itemIndex]?.allowedPerks || [];
     perks.splice(perkIndex, 1);
-    traits[traitIndex].allowedPerks = perks;
-
-    await itemSheet.item.update({ 'system.traits': traits }, { render: false });
-    itemSheet.render();
+    items[itemIndex].allowedPerks = perks;
+    await sheet.item.update({ [arrayPath]: items });
   }
 
   /**
-   * Remove spell from feature by index
+   * Populate spell and perk dropdowns from compendiums.
    */
-  static async removeFeatureSpell(itemSheet, event, target) {
-    const featureIndex = parseInt(target.dataset.featureIndex);
-    const spellIndex = parseInt(target.dataset.spellIndex);
+  static async populateGrantsDropdowns(sheet) {
+    const html = sheet.element;
 
-    if (isNaN(featureIndex) || isNaN(spellIndex)) return;
-
-    const features = foundry.utils.deepClone(itemSheet.item.system.levelFeatures);
-    const spells = features[featureIndex].requiredSpells || [];
-
-    spells.splice(spellIndex, 1);
-    features[featureIndex].requiredSpells = spells;
-
-    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
-    itemSheet.render();
-  }
-
-  /**
-   * Remove perk from feature by index
-   */
-  static async removeFeaturePerk(itemSheet, event, target) {
-    const featureIndex = parseInt(target.dataset.featureIndex);
-    const perkIndex = parseInt(target.dataset.perkIndex);
-
-    if (isNaN(featureIndex) || isNaN(perkIndex)) return;
-
-    const features = foundry.utils.deepClone(itemSheet.item.system.levelFeatures);
-    const perks = features[featureIndex].allowedPerks || [];
-
-    perks.splice(perkIndex, 1);
-    features[featureIndex].allowedPerks = perks;
-
-    await itemSheet.item.update({ 'system.levelFeatures': features }, { render: false });
-    itemSheet.render();
-  }
-
-  /**
-   * Populate dropdowns with spells and perks from compendiums
-   */
-  static async populateGrantsDropdowns(itemSheet) {
-    const html = itemSheet.element;
-
-    // Get all spells from compendiums
-    const spellPacks = game.packs.filter(p => p.documentName === 'Item' &&
-      p.index.some(i => i.type === 'spell'));
+    const spellPacks = game.packs.filter(p => p.documentName === 'Item' && p.index.some(i => i.type === 'spell'));
     const spells = [];
-
     for (const pack of spellPacks) {
       const content = await pack.getDocuments();
       spells.push(...content.filter(i => i.type === 'spell'));
     }
-
     spells.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Get all perks from compendiums
-    const perkPacks = game.packs.filter(p => p.documentName === 'Item' &&
-      p.index.some(i => i.type === 'perk'));
+    const perkPacks = game.packs.filter(p => p.documentName === 'Item' && p.index.some(i => i.type === 'perk'));
     const perks = [];
-
     for (const pack of perkPacks) {
       const content = await pack.getDocuments();
       perks.push(...content.filter(i => i.type === 'perk'));
     }
-
     perks.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Populate spell dropdowns
-    const spellSelects = html.querySelectorAll('select[data-grant-type="spell"]');
-    spellSelects.forEach(select => {
-      // Clear existing options except first
-      while (select.options.length > 1) {
-        select.remove(1);
-      }
-
-      // Add spell options
+    html.querySelectorAll('select[data-grant-type="spell"]').forEach(select => {
+      while (select.options.length > 1) select.remove(1);
       spells.forEach(spell => {
-        const option = document.createElement('option');
-        option.value = spell.uuid;
-        option.textContent = spell.name;
-        select.appendChild(option);
+        const opt = document.createElement('option');
+        opt.value = spell.uuid;
+        opt.textContent = spell.name;
+        select.appendChild(opt);
       });
     });
 
-    // Populate perk dropdowns
-    const perkSelects = html.querySelectorAll('select[data-grant-type="perk"]');
-    perkSelects.forEach(select => {
-      // Clear existing options except first
-      while (select.options.length > 1) {
-        select.remove(1);
-      }
-
-      // Add perk options
+    html.querySelectorAll('select[data-grant-type="perk"]').forEach(select => {
+      while (select.options.length > 1) select.remove(1);
       perks.forEach(perk => {
-        const option = document.createElement('option');
-        option.value = perk.uuid;
-        option.textContent = perk.name;
-        select.appendChild(option);
+        const opt = document.createElement('option');
+        opt.value = perk.uuid;
+        opt.textContent = perk.name;
+        select.appendChild(opt);
       });
     });
+  }
+
+  // ── Private helpers ────────────────────────────────────────────────────
+
+  /**
+   * Extract and parse named dataset attributes from a target element.
+   * Returns each as a number if it looks like an integer, otherwise as a string or null.
+   */
+  static #attrs(target, keys) {
+    const result = {};
+    for (const key of keys) {
+      const raw = target.dataset[key];
+      if (raw === undefined || raw === null || raw === '') {
+        result[key] = null;
+      } else if (/^\d+$/.test(raw)) {
+        result[key] = parseInt(raw, 10);
+      } else {
+        result[key] = raw;
+      }
+    }
+    return result;
   }
 }

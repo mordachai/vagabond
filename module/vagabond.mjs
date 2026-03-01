@@ -18,6 +18,7 @@ import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
 import { loadHomebrewConfig, applyTermOverrides } from './helpers/homebrew-config.mjs';
+import { loadJB2ADefaults } from './helpers/sequencer-config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
 import { EquipmentHelper } from './helpers/equipment-helper.mjs';
@@ -315,6 +316,17 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 20a: Use Animations — world-level master switch (GM)
+  game.settings.register('vagabond', 'useAnimations', {
+    name: 'VAGABOND.Settings.useAnimations.name',
+    hint: 'VAGABOND.Settings.useAnimations.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 20: Sequencer spell FX (client-side toggle)
   game.settings.register('vagabond', 'useSequencerFX', {
     name: 'VAGABOND.Settings.useSequencerFX.name',
@@ -375,6 +387,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/being-type-select.hbs',
     'systems/vagabond/templates/shared/weapon-skill-select.hbs',
     'systems/vagabond/templates/shared/bonus-stats-selector.hbs',
+    // Item partials
+    'systems/vagabond/templates/item/parts/grants-config.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     // Party sheet partials
@@ -701,6 +715,14 @@ Hooks.once('i18nInit', function () {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+});
+
+// Pre-load JB2A animation defaults when both Sequencer and JB2A are installed.
+// Runs silently — no errors if modules are absent.
+Hooks.once('ready', function () {
+  if (VagabondSpellSequencer.isAvailable() && VagabondSpellSequencer.isJB2AAvailable()) {
+    loadJB2ADefaults();
+  }
 });
 
 // Register Dice So Nice colorsets when Dice So Nice is ready

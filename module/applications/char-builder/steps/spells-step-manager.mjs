@@ -32,7 +32,7 @@ export class SpellsStepManager extends BaseStepManager {
    * @protected
    */
   _getStatePaths() {
-    return ['spells', 'previewUuid'];
+    return ['spells', 'previewUuid', 'spellGrants'];
   }
 
   /**
@@ -40,7 +40,7 @@ export class SpellsStepManager extends BaseStepManager {
    * @protected
    */
   async _prepareStepSpecificContext(state) {
-    // Collect required spells from ancestry, class, and perks
+    // Collect required spells from ancestry, class, and perks (auto-granted)
     const requiredSpellUuids = await this._collectRequiredSpells(state);
 
     // Auto-add required spells to state if not already there
@@ -51,7 +51,34 @@ export class SpellsStepManager extends BaseStepManager {
       this.updateState('spells', updatedSpells);
     }
 
-    const availableSpells = await this._loadSpellOptions(requiredSpellUuids);
+    // Initialize spell grant tracking (mirrors perks grant system)
+    const collectedGrants = await this._collectSpellGrants(state);
+    let grants = state.spellGrants || [];
+
+    if (grants.length === 0 || grants.length !== collectedGrants.length) {
+      grants = collectedGrants;
+      this.updateState('spellGrants', grants);
+    } else {
+      grants = collectedGrants.map((collected, i) => ({
+        ...collected,
+        fulfilled: grants[i]?.fulfilled ?? collected.fulfilled
+      }));
+      this.updateState('spellGrants', grants);
+    }
+
+    // Match existing selected spells to unfulfilled grants (legacy data recovery)
+    const allSelected = [...updatedSpells];
+    for (const uuid of allSelected) {
+      if (requiredSpellUuids.includes(uuid)) continue; // skip auto-granted
+      const unfulfilled = grants.find(g => !g.fulfilled && this._spellMatchesGrant(uuid, g));
+      if (unfulfilled) unfulfilled.fulfilled = uuid;
+    }
+
+    // Find the active grant (first unfulfilled)
+    const activeGrant = grants.find(g => !g.fulfilled) || null;
+    const grantDisplay = this._prepareSpellGrantDisplay(grants, activeGrant);
+
+    const availableSpells = await this._loadSpellOptions(requiredSpellUuids, activeGrant);
     const selectedSpells = updatedSpells;
     const previewUuid = state.previewUuid;
     const spellLimit = await this._getSpellLimit(state);
@@ -101,12 +128,15 @@ export class SpellsStepManager extends BaseStepManager {
     // Prepare class preview data for reference column
     const classPreviewData = await this._prepareClassPreviewData(state);
 
+    const fulfilledGrantUuids = grants.filter(g => g.fulfilled).map(g => g.fulfilled);
+    const totalSelectableSlots = spellLimit + grants.length;
+
     return {
       availableOptions: markedSpells,
       selectedSpells: selectedSpells,
       selectedItem: previewItem,
       previewItem: previewItem,
-      spellLimit: spellLimit,
+      spellLimit: totalSelectableSlots,
       currentSpellCount: selectedSpells.length,
       hasSelection: selectedSpells.length > 0,
       showRandomButton: true,
@@ -115,6 +145,9 @@ export class SpellsStepManager extends BaseStepManager {
       useTripleColumn: true,
       requiredSpellCount: requiredSpellUuids.length,
       requiredSpells: requiredSpellUuids,
+      grants: grantDisplay,
+      activeGrant: activeGrant,
+      hasActiveGrant: !!activeGrant,
       instruction: (selectedSpells.length === 0 && !previewUuid) ?
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Spells') : null,
       manaStats: manaStats,
@@ -124,55 +157,56 @@ export class SpellsStepManager extends BaseStepManager {
   }
 
   /**
-   * Load available spell options
+   * Load available spell options, filtered by active grant restrictions
    * @private
    */
-  async _loadSpellOptions(requiredSpellUuids = []) {
+  async _loadSpellOptions(requiredSpellUuids = [], activeGrant = null) {
     await this.dataService.ensureDataLoaded(['spells']);
 
     const spells = this.dataService.getFilteredItems('spells', {});
     const state = this.getCurrentState();
     const selectedSpells = state.spells || [];
 
+    const shouldFilter = activeGrant && activeGrant.allowedSpells.length > 0;
+    const allowedSet = shouldFilter ? new Set(activeGrant.allowedSpells) : null;
+
     // Sort spells alphabetically and mark selected ones
     const sortedSpells = spells.sort((a, b) => a.name.localeCompare(b.name));
 
-    return sortedSpells.map(spell => ({
-      ...spell,
-      uuid: spell.uuid,
-      name: spell.name,
-      img: spell.img,
-      type: 'spell',
-      selected: selectedSpells.includes(spell.uuid),
-      isRequired: requiredSpellUuids.includes(spell.uuid),
-      damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[spell.damageType] || null,
-      damageTypeLabel: spell.damageType !== '-' ? spell.damageType : null
-    }));
+    return sortedSpells
+      .filter(spell => !shouldFilter || allowedSet.has(spell.uuid))
+      .map(spell => ({
+        ...spell,
+        uuid: spell.uuid,
+        name: spell.name,
+        img: spell.img,
+        type: 'spell',
+        selected: selectedSpells.includes(spell.uuid),
+        isRequired: requiredSpellUuids.includes(spell.uuid),
+        isGranted: (state.spellGrants || []).some(g => g.fulfilled === spell.uuid),
+        damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[spell.damageType] || null,
+        damageTypeLabel: spell.damageType !== '-' ? spell.damageType : null
+      }));
   }
 
   /**
-   * Get spell limit from selected class
+   * Get spell limit from selected class (class slots only; grants are added separately)
    * @private
    */
   async _getSpellLimit(state) {
-    if (!state.selectedClass) return 0;
-
-    try {
-      const classItem = await fromUuid(state.selectedClass);
-      if (!classItem) return 0;
-
-      // Check if class is a spellcaster
-      if (!classItem.system.isSpellcaster) return 0;
-
-      // Get level 1 spells from levelSpells array
-      const levelSpells = classItem.system.levelSpells || [];
-      const level1Data = levelSpells.find(ls => ls.level === 1);
-
-      return level1Data?.spells || 0;
-    } catch (error) {
-      console.error('Failed to get spell limit:', error);
-      return 0;
+    let classSlots = 0;
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        if (classItem?.system.isSpellcaster) {
+          const level1Data = (classItem.system.levelSpells || []).find(ls => ls.level === 1);
+          classSlots = level1Data?.spells || 0;
+        }
+      } catch (error) {
+        console.error('Failed to get spell limit:', error);
+      }
     }
+    return classSlots;
   }
 
   /**
@@ -450,7 +484,8 @@ export class SpellsStepManager extends BaseStepManager {
 
     const state = this.getCurrentState();
     const currentSpells = state.spells || [];
-    const spellLimit = await this._getSpellLimit(state);
+    const grants = state.spellGrants || [];
+    const classSpellLimit = await this._getSpellLimit(state);
 
     // Check if already selected
     if (currentSpells.includes(uuid)) {
@@ -458,26 +493,38 @@ export class SpellsStepManager extends BaseStepManager {
       return;
     }
 
-    // Check spell limit
-    if (spellLimit > 0 && currentSpells.length >= spellLimit) {
-      ui.notifications.warn(`You can only select ${spellLimit} spells`);
-      return;
+    // Find the active (first unfulfilled) grant
+    const activeGrant = grants.find(g => !g.fulfilled) || null;
+
+    // If there's an active grant, enforce its restrictions
+    if (activeGrant) {
+      if (!this._spellMatchesGrant(uuid, activeGrant)) {
+        ui.notifications.warn(`This spell is not allowed by the current grant (${activeGrant.featureName})`);
+        return;
+      }
+      // Fulfill the grant
+      const updatedGrants = grants.map(g => g.id === activeGrant.id ? { ...g, fulfilled: uuid } : g);
+      this.updateState('spellGrants', updatedGrants);
+    } else {
+      // No active grant — check class spell limit
+      const requiredSpells = await this._collectRequiredSpells(state);
+      const nonGrantSpells = currentSpells.filter(u => !grants.some(g => g.fulfilled === u));
+      if (classSpellLimit > 0 && nonGrantSpells.length >= classSpellLimit) {
+        ui.notifications.warn(`You can only select ${classSpellLimit} class spells`);
+        return;
+      }
     }
 
     try {
-      // Validate the spell exists
       const item = await fromUuid(uuid);
       if (!item || item.type !== 'spell') {
         ui.notifications.error('Invalid spell selection');
         return;
       }
 
-      // Add to selected spells
       const newSpells = [...currentSpells, uuid];
       this.updateState('spells', newSpells);
       this.updateState('previewUuid', uuid);
-      
-      
     } catch (error) {
       console.error('Failed to add spell:', error);
       ui.notifications.error('Failed to add spell');
@@ -500,7 +547,7 @@ export class SpellsStepManager extends BaseStepManager {
       return;
     }
 
-    // Check if spell is required
+    // Check if spell is auto-required (cannot remove)
     const requiredSpells = await this._collectRequiredSpells(state);
     if (requiredSpells.includes(uuid)) {
       ui.notifications.warn('Cannot remove required spell');
@@ -508,17 +555,20 @@ export class SpellsStepManager extends BaseStepManager {
     }
 
     try {
-      const item = await fromUuid(uuid);
-      const newSpells = currentSpells.filter(spellUuid => spellUuid !== uuid);
-
+      const newSpells = currentSpells.filter(u => u !== uuid);
       this.updateState('spells', newSpells);
 
-      // Clear preview if removing the previewed item
+      // Un-fulfill any grant that this spell was satisfying
+      const grants = state.spellGrants || [];
+      const fulfilledGrant = grants.find(g => g.fulfilled === uuid);
+      if (fulfilledGrant) {
+        const updatedGrants = grants.map(g => g.id === fulfilledGrant.id ? { ...g, fulfilled: null } : g);
+        this.updateState('spellGrants', updatedGrants);
+      }
+
       if (state.previewUuid === uuid) {
         this.updateState('previewUuid', null);
       }
-
-
     } catch (error) {
       console.error('Failed to remove spell:', error);
       ui.notifications.error('Failed to remove spell');
@@ -537,11 +587,18 @@ export class SpellsStepManager extends BaseStepManager {
       return;
     }
 
-    // Keep required spells, remove all others
+    // Keep only auto-required spells, remove all others
     const requiredSpells = await this._collectRequiredSpells(state);
     this.updateState('spells', requiredSpells);
     this.updateState('previewUuid', null);
 
+    // Reset all grant fulfillments (except guaranteed ones)
+    const grants = state.spellGrants || [];
+    const resetGrants = grants.map(g => {
+      const isGuaranteed = g.allowedSpells.length > 0 && g.allowedSpells.includes(g.fulfilled);
+      return isGuaranteed ? g : { ...g, fulfilled: null };
+    });
+    this.updateState('spellGrants', resetGrants);
   }
 
   /**
@@ -553,54 +610,52 @@ export class SpellsStepManager extends BaseStepManager {
   }
 
   /**
-   * Randomize spell selection
+   * Randomize spell selection (fills both grant slots and class slots)
    */
   async randomize() {
     const state = this.getCurrentState();
-    const spellLimit = await this._getSpellLimit(state);
-
-    if (spellLimit === 0) {
-      ui.notifications.warn('Your class does not grant spells at level 1');
-      return;
-    }
-
-    // Get required spells
+    const classSpellLimit = await this._getSpellLimit(state);
+    const grants = (state.spellGrants || []);
     const requiredSpells = await this._collectRequiredSpells(state);
-    const availableSlots = spellLimit - requiredSpells.length;
 
-    if (availableSlots <= 0) {
-      ui.notifications.info('All spell slots are filled with required spells');
-      return;
+    let selectedUuids = [...requiredSpells];
+    let updatedGrants = grants.map(g => ({ ...g }));
+
+    // Fill unfulfilled grants first
+    for (const grant of updatedGrants) {
+      if (grant.fulfilled) continue;
+      const pool = grant.allowedSpells.length > 0
+        ? await this._loadSpellOptions(requiredSpells, grant)
+        : await this._loadSpellOptions(requiredSpells, null);
+      const available = pool.filter(s => !selectedUuids.includes(s.uuid));
+      if (available.length > 0) {
+        const pick = available[Math.floor(Math.random() * available.length)];
+        grant.fulfilled = pick.uuid;
+        selectedUuids.push(pick.uuid);
+      }
+    }
+    this.updateState('spellGrants', updatedGrants);
+
+    // Fill remaining class slots
+    if (classSpellLimit > 0) {
+      const options = await this._loadSpellOptions(requiredSpells, null);
+      const available = options.filter(s => !selectedUuids.includes(s.uuid));
+      const needed = classSpellLimit - (selectedUuids.length - requiredSpells.length - updatedGrants.filter(g => g.fulfilled).length);
+      const shuffled = available.sort(() => Math.random() - 0.5);
+      selectedUuids.push(...shuffled.slice(0, Math.max(0, needed)).map(s => s.uuid));
     }
 
-    const options = await this._loadSpellOptions();
-    // Filter out already required spells
-    const nonRequiredOptions = options.filter(opt => !requiredSpells.includes(opt.uuid));
-
-    if (nonRequiredOptions.length === 0) {
-      ui.notifications.warn('No additional spells available for randomization');
-      return;
-    }
-
-    // Randomly select spells
-    const shuffled = nonRequiredOptions.sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, availableSlots);
-    const selectedUuids = [...requiredSpells, ...selected.map(s => s.uuid)];
-
-    this.updateState('spells', selectedUuids);
-
-    if (selectedUuids.length > 0) {
-      this.updateState('previewUuid', selectedUuids[0]);
-    }
-
+    this.updateState('spells', [...new Set(selectedUuids)]);
+    if (selectedUuids.length > 0) this.updateState('previewUuid', selectedUuids[0]);
   }
 
   /**
-   * Check if step is complete (optional step)
+   * Check if step is complete — all spell grants must be fulfilled
    */
   isComplete() {
-    // Spells step is always considered complete (optional)
-    return true;
+    const state = this.getCurrentState();
+    const grants = state.spellGrants || [];
+    return grants.every(g => !!g.fulfilled);
   }
 
   /**
@@ -609,27 +664,116 @@ export class SpellsStepManager extends BaseStepManager {
    */
   async _onReset() {
     const state = this.getCurrentState();
-    // Keep required spells when resetting
     const requiredSpells = await this._collectRequiredSpells(state);
     this.updateState('spells', requiredSpells, { skipValidation: true });
+    this.updateState('spellGrants', [], { skipValidation: true });
   }
 
     /**
-
      * Step-specific activation logic
-
      * @protected
-
      */
-
     async _onActivate() {
-
-      // Ensure spell data is loaded and ready
-
       await this.dataService.ensureDataLoaded(['spells']);
-
     }
 
+  /**
+   * Collect all spell grants from ancestry traits and class level 1 features.
+   * Mirrors _collectPerkGrants from PerksStepManager.
+   * @private
+   */
+  async _collectSpellGrants(state) {
+    const grants = [];
+
+    // From ancestry traits (spellAmount > 0, requiredSpells = allowed pool)
+    if (state.selectedAncestry) {
+      try {
+        const ancestry = await fromUuid(state.selectedAncestry);
+        const traits = ancestry.system.traits || [];
+        for (const trait of traits) {
+          const amount = trait.spellAmount || 0;
+          const allowedSpells = (trait.requiredSpells || []).filter(u => u);
+          if (amount > 0) {
+            const isGuaranteed = allowedSpells.length > 0 && amount >= allowedSpells.length;
+            for (let i = 0; i < amount; i++) {
+              grants.push({
+                id: `ancestry-${trait.name}-spell-${i}`,
+                source: 'ancestry',
+                sourceName: ancestry.name,
+                featureName: trait.name,
+                allowedSpells,
+                fulfilled: isGuaranteed ? (allowedSpells[i] || allowedSpells[0]) : null
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to collect ancestry spell grants:', e);
+      }
+    }
+
+    // From class level 1 features
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        const level1Features = (classItem.system.levelFeatures || []).filter(f => f.level === 1);
+        for (const feature of level1Features) {
+          const amount = feature.spellAmount || 0;
+          const allowedSpells = (feature.requiredSpells || []).filter(u => u);
+          if (amount > 0) {
+            const isGuaranteed = allowedSpells.length > 0 && amount >= allowedSpells.length;
+            for (let i = 0; i < amount; i++) {
+              grants.push({
+                id: `class-${feature.name}-spell-${i}`,
+                source: 'class',
+                sourceName: classItem.name,
+                featureName: feature.name,
+                allowedSpells,
+                fulfilled: isGuaranteed ? (allowedSpells[i] || allowedSpells[0]) : null
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to collect class spell grants:', e);
+      }
+    }
+
+    // Most restrictive (smallest pool) first; unrestricted last
+    grants.sort((a, b) => {
+      const aR = a.allowedSpells.length > 0;
+      const bR = b.allowedSpells.length > 0;
+      if (aR && !bR) return -1;
+      if (!aR && bR) return 1;
+      if (aR && bR) return a.allowedSpells.length - b.allowedSpells.length;
+      return 0;
+    });
+
+    return grants;
   }
+
+  /**
+   * Whether a spell UUID satisfies a grant's restrictions.
+   * @private
+   */
+  _spellMatchesGrant(spellUuid, grant) {
+    if (!grant.allowedSpells || grant.allowedSpells.length === 0) return true;
+    return grant.allowedSpells.includes(spellUuid);
+  }
+
+  /**
+   * Build display data for grant badges shown in the UI.
+   * @private
+   */
+  _prepareSpellGrantDisplay(grants, activeGrant) {
+    return grants.map(grant => ({
+      id: grant.id,
+      label: `${grant.sourceName} – ${grant.featureName}: ×1`,
+      isActive: activeGrant && grant.id === activeGrant.id,
+      isFulfilled: !!grant.fulfilled,
+      isRestricted: grant.allowedSpells.length > 0
+    }));
+  }
+}
 
   

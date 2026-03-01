@@ -756,15 +756,26 @@ export class ValidationEngine {
         // Get all skills including weapon skills (melee, ranged)
         const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
 
-        // Build choices array (may include extra training group)
+        // Build choices array (class groups + ancestry restricted + unrestricted extra training)
         let allChoices = [...skillGrant.choices];
+
+        // Add ancestry restricted skill choice groups
+        const ancestryGroups = state.extraTrainingGroups || [];
+        for (const rg of ancestryGroups) {
+          const idx = allChoices.length;
+          allChoices.push({
+            count: rg.count || 1,
+            pool: (rg.pool && rg.pool.length > 0) ? rg.pool : allSkillsWithWeaponSkills,
+            originalIndex: idx
+          });
+        }
 
         // Check if there's extra training from ancestry/class grants
         const extraTrainingCount = state.extraTrainingCount || 0;
 
         if (extraTrainingCount > 0) {
           // Add extra training group dynamically (matches UI preparation logic)
-          const extraTrainingGroupIndex = skillGrant.choices.length;
+          const extraTrainingGroupIndex = allChoices.length;
 
           // Extra training group always uses all skills and requires the exact count
           allChoices.push({
@@ -896,15 +907,26 @@ export class ValidationEngine {
     // Get all skills including weapon skills (melee, ranged)
     const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
 
-    // Build choices array (may include extra training group)
+    // Build choices array (class groups + ancestry restricted + unrestricted extra training)
     let allChoices = [...skillGrant.choices];
+
+    // Add ancestry restricted skill choice groups
+    const ancestryGroups = state.extraTrainingGroups || [];
+    for (const rg of ancestryGroups) {
+      const idx = allChoices.length;
+      allChoices.push({
+        count: rg.count || 1,
+        pool: (rg.pool && rg.pool.length > 0) ? rg.pool : allSkillsWithWeaponSkills,
+        originalIndex: idx
+      });
+    }
 
     // Check if there's extra training from ancestry/class grants
     const extraTrainingCount = state.extraTrainingCount || 0;
 
     if (extraTrainingCount > 0) {
       // Add extra training group dynamically (matches UI preparation logic)
-      const extraTrainingGroupIndex = skillGrant.choices.length;
+      const extraTrainingGroupIndex = allChoices.length;
 
       // Extra training group always uses all skills and requires the exact count
       allChoices.push({
