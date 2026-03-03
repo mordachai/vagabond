@@ -16,6 +16,16 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
+### **New feature:** Item FX — Per-Item Animations:
+Weapons, alchemicals, and relics can now have their own Sequencer animations configured directly on the item sheet. Set different files and sounds for hits and misses, choose between melee (impact at target) and ranged (beam to target) styles. For weapons the animation type is derived automatically from the weapon skill. Requires the Sequencer module.
+
+---
+
+### **New feature:** Focused Spells:
+Spellcasters now have a **Focus** track visible in the Spells panel. The Mana icon in Combat encounter also highlights if any spell is marked as Focused.
+
+---
+
 ### **New feature:** Sequencer Animations Panel (YouTube video below):
 
 [![Vagabond for Foundry VTT - Sequencer Panel](https://img.youtube.com/vi/jNJQ5M6nDSc/0.jpg)](https://youtu.be/jNJQ5M6nDSc)
