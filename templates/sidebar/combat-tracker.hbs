@@ -105,7 +105,7 @@
                         <span class="val">{{turn.fatigue}}</span>
                     </div>
                     {{#if turn.mana}}
-                    <div class="res-row mana flexrow" title="Mana">
+                    <div class="res-row mana flexrow {{#if turn.isFocusing}}is-focusing{{/if}}" title="Mana">
                         <i class="fas fa-star-christmas"></i>
                         <span class="val">{{turn.mana.current}}</span>
                     </div>

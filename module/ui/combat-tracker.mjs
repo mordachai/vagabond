@@ -71,6 +71,7 @@ export class VagabondCombatTracker {
         turn.fatigue = actor.system.fatigue || 0;
         if (actor.system.mana) {
           turn.mana = { current: actor.system.mana.current || 0 };
+          turn.isFocusing = (actor.system.focus?.current ?? 0) > 0;
         }
 
         // Gather temporary active effects only

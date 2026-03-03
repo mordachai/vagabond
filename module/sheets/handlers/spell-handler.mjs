@@ -670,6 +670,29 @@ export class SpellHandler {
   }
 
   /**
+   * Toggle Focus state for a spell (sustaining it)
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  async toggleSpellFocus(event, target) {
+    event.preventDefault();
+    const spellId = target.dataset.spellId;
+    const current = this.actor.system.focus?.spellIds || [];
+    const focusMax = this.actor.system.focus?.max ?? 5;
+
+    let next;
+    if (current.includes(spellId)) {
+      next = current.filter(id => id !== spellId);
+    } else {
+      if (current.length >= focusMax) return;
+      next = [...current, spellId];
+    }
+
+    await this.actor.update({ 'system.focus.spellIds': next });
+    ui.combat?.render(false);
+  }
+
+  /**
    * Toggle Fx (Effect) checkbox for a spell
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element

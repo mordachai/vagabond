@@ -503,7 +503,7 @@ body[data-theme=dark] #sidebar {
 .grid-skills-2col {
   display: grid;
   grid-column: span 2/span 2;
-  grid-template-columns: 40% 1fr;
+  grid-template-columns: 36% 1fr;
   gap: 15px;
   margin: 10px 0;
   padding: 0;
@@ -4500,6 +4500,11 @@ ol#combat-tracker.directory-list {
 #combat-tracker .combatant .col-3.stats-column .res-row.mana {
   color: var(--color-text-primary);
 }
+#combat-tracker .combatant .col-3.stats-column .res-row.mana.is-focusing i {
+  color: #2ac4ff;
+  filter: drop-shadow(0 0 4px rgba(42, 196, 255, 0.7));
+  transition: color 0.3s, filter 0.3s;
+}
 #combat-tracker .combatant .col-4.center-content {
   height: 100%;
   display: flex;
@@ -7790,16 +7795,20 @@ ol#combat-tracker.directory-list {
 .vagabond .perks-list .accordion-item {
   padding: 2px;
   border-radius: 2px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   overflow: hidden;
+  border: none;
 }
 .vagabond .features-list .accordion-item .accordion-header,
 .vagabond .traits-list .accordion-item .accordion-header,
 .vagabond .perks-list .accordion-item .accordion-header {
+  margin: 0;
+  padding: 2px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
+  background: none;
   transition: background 0.2s ease;
   padding-left: 2px;
   color: var(--vagabond-c-text-primary);
@@ -7808,10 +7817,10 @@ ol#combat-tracker.directory-list {
 .vagabond .traits-list .accordion-item .accordion-header::before,
 .vagabond .perks-list .accordion-item .accordion-header::before {
   font-family: var(--font-awesome);
-  content: "\f219";
-  margin-right: 4px;
+  content: "\f666";
+  margin-right: 2px;
   font-weight: 900;
-  font-size: 0.6em;
+  font-size: 0.7em;
   line-height: 1;
   flex-shrink: 0;
 }
@@ -7824,7 +7833,7 @@ ol#combat-tracker.directory-list {
 .vagabond .traits-list .accordion-item .accordion-header [class$=-name],
 .vagabond .perks-list .accordion-item .accordion-header [class$=-name] {
   margin: 0;
-  font-size: 16px;
+  font-size: 1.1em;
   font-weight: bold;
 }
 .vagabond .features-list .accordion-item .accordion-content,
@@ -7866,6 +7875,40 @@ ol#combat-tracker.directory-list {
   font-size: 14px;
   margin-bottom: 8px;
   font-style: italic;
+}
+.vagabond .focus-pips {
+  position: absolute;
+  left: 4px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.vagabond .focus-pips .focus-pip {
+  font-size: 11px;
+  transition: color 0.2s, filter 0.2s;
+}
+.vagabond .focus-pips .focus-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  filter: drop-shadow(0 0 3px var(--vagabond-dark-yellow));
+}
+.vagabond .focus-pips .focus-pip.empty {
+  color: var(--vagabond-dark-yellow);
+  opacity: 0.2;
+}
+@keyframes focus-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 0;
+  }
+}
+.vagabond .favorited-spell.focused {
+  background: repeating-linear-gradient(-45deg, rgba(222, 214, 86, 0.3), rgba(222, 214, 86, 0.3) 5px, rgba(147, 201, 85, 0.5) 5px, rgba(147, 201, 85, 0.5) 10px);
+  background-size: 40px 40px;
+  animation: focus-stripes 3.2s linear infinite;
+  border-radius: 5px;
+  font-weight: 600;
 }
 .vagabond .inventory h3 {
   font-size: 18px;
@@ -8817,14 +8860,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .accordion-item {
   margin-bottom: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.3);
   transition: all 0.2s ease;
-}
-.vagabond .accordion-item.expanded {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 .vagabond .accordion-item .accordion-header {
   display: flex;
@@ -14939,7 +14977,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   margin-left: 19px;
   margin-right: 5px;
   display: grid;
-  grid-template-columns: 3fr 1fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
   gap: 4px;
   align-items: baseline;
   padding: 0 8px 0 4px;
@@ -14990,18 +15028,22 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-red);
   text-shadow: 0 0 2px var(--vagabond-c-red);
 }
+.vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-focus-icon,
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-fx-icon {
   display: flex;
   justify-content: center;
   cursor: pointer;
 }
+.vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-focus-icon.fx-active,
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-fx-icon.fx-active {
   color: var(--vagabond-c-chat-yellow);
   font-weight: 600;
 }
+.vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-focus-icon.fx-inactive,
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-fx-icon.fx-inactive {
   opacity: 0.4;
 }
+.vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-focus-icon:hover,
 .vagabond .favorited-spell .spell-accordion-content .accordion-inner-grid .spell-fx-icon:hover {
   opacity: 1;
 }

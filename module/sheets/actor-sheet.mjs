@@ -50,6 +50,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       castSpell: this._onCastSpell,
       toggleFx: this._onToggleFx,
       toggleSpellFavorite: this._onToggleSpellFavorite,
+      toggleSpellFocus: this._onToggleSpellFocus,
       toggleSpellPreview: this._onToggleSpellPreview,
       toggleSpellAccordion: this._onToggleSpellAccordion,
       // Character-specific UI actions (handled in base class)
@@ -314,6 +315,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         (context.armor && context.armor.some(i => i.system.worn));
 
       context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
+
+      // Focus pips for the Spells section header in the sliding panel
+      const focusedSpellIds = this.actor.system.focus?.spellIds || [];
+      context.focusedSpellIds = focusedSpellIds;
+      const focusMax = this.actor.system.focus?.max ?? 5;
+      context.focusPips = Array.from({ length: focusMax }, (_, i) => ({
+        filled: i < focusedSpellIds.length
+      }));
 
       // Prepare equipped armor type for header display
       const equippedArmor = this.actor.items.find(item => {
@@ -790,6 +799,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onToggleSpellAccordion(event, target) {
     return this.spellHandler?.toggleSpellAccordion(event, target);
+  }
+
+  static async _onToggleSpellFocus(event, target) {
+    return this.spellHandler?.toggleSpellFocus(event, target);
   }
 
   // --- NPC IMMUNITY HANDLERS ---

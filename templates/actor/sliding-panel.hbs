@@ -508,6 +508,12 @@
           {{#if hasFavoritedSpells}}
             <div class='weapon-skills flexcol mt-10'>
               <div class="title-container">
+                {{! Focus Pips — left of title }}
+                <div class="focus-pips">
+                  {{#each focusPips as |pip|}}
+                    <i class="fas fa-star-christmas focus-pip {{#if pip.filled}}filled{{else}}empty{{/if}}"></i>
+                  {{/each}}
+                </div>
                 <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
                 <div class="title-right-group">
                   <i class='fas fa-star-christmas mana-icon' title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
@@ -518,9 +524,9 @@
               <div class="favorited-spells-list">
                 {{#each spells as |spell|}}
                   {{#if spell.system.favorite}}
-                    <div class='favorited-spell accordion-item collapsed' data-spell-id='{{spell._id}}' data-accordion-id='fav-spell-{{spell._id}}'>
+                    <div class='favorited-spell accordion-item collapsed {{#if (contains @root.focusedSpellIds spell._id)}}focused{{/if}}' data-spell-id='{{spell._id}}' data-accordion-id='fav-spell-{{spell._id}}'>
                       {{!-- Trigger Row: 4 Column Grid --}}
-                      <div class="spell-trigger grid-4col">
+                      <div class="spell-trigger">
                         {{!-- Col 1: Spell Icon (Rolls Spell) --}}
                         <div class="spell-icon-trigger clickable rollable" data-action="castSpell" data-spell-id='{{spell._id}}'>
                            <img src="{{spell.img}}" alt="{{spell.name}}" />
@@ -574,7 +580,15 @@
                               title='Draw template'>—
                             </div>
 
-                            {{!-- Col 4: Effect Toggle --}}
+                            {{!-- Col 4: Focus Toggle --}}
+                            <div class='spell-focus-icon {{#if (contains @root.focusedSpellIds spell._id)}}fx-active{{else}}fx-inactive{{/if}}'
+                                 data-action="toggleSpellFocus"
+                                 data-spell-id='{{spell._id}}'
+                                 title='{{#if (contains @root.focusedSpellIds spell._id)}}Focusing — click to release{{else}}Focus this spell{{/if}}'>
+                              <i class="fas fa-star-christmas"></i>
+                            </div>
+
+                            {{!-- Col 5: Effect Toggle --}}
                             <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='Toggle spell effect (adds +1 mana when combined with damage)'>
                               {{#if (eq @root.config.fxIcon.type "txt")}}<span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
                               {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />

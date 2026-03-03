@@ -214,8 +214,8 @@
       margin-right: 5px;
       
       display: grid;
-      // 4 columns: 2fr, 1fr, 30px, 1fr
-      grid-template-columns: 3fr 1fr 1fr 1fr;
+      // 5 columns: delivery | cost | range | focus | fx
+      grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
       gap: 4px;
       align-items: baseline;
       padding: 0  8px 0 4px;
@@ -276,15 +276,16 @@
           }
       }
       
-      // Col 4: Fx Toggle
+      // Col 4: Focus Toggle / Col 5: Fx Toggle (same visual style, separate classes)
+      .spell-focus-icon,
       .spell-fx-icon {
           display: flex;
           justify-content: center;
           cursor: pointer;
-          
+
           &.fx-active { color: $c-yellow; font-weight: 600; }
           &.fx-inactive { opacity: 0.4; }
-          
+
           &:hover { opacity: 1; }
       }
     }

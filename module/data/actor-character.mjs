@@ -67,6 +67,25 @@ export default class VagabondCharacter extends VagabondActorBase {
       )
     });
 
+    // Focus system — tracks sustained spell concentration (spellcasters only)
+    schema.focus = new fields.SchemaField({
+      spellIds: new fields.ArrayField(
+        new fields.StringField(),
+        { initial: [] }
+      ),
+      maxBonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: 'Focus Max Bonus',
+          hint: 'Can be a number (e.g., 1) or formula (e.g., @attributes.level.value)'
+        }
+      ),
+      // Derived values — written back in prepareDerivedData()
+      max: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),
+      current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+    });
+
     // Mana system for spellcasters
     schema.mana = new fields.SchemaField({
       current: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
@@ -493,6 +512,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.boundsBonus = [];
     this.mana.bonus = [];
     this.mana.castingMaxBonus = [];
+    this.focus.maxBonus = [];
     this.speed.bonus = [];
     this.armorBonus = [];
     this.bonusLuck = [];
@@ -1072,6 +1092,11 @@ export default class VagabondCharacter extends VagabondActorBase {
       this.mana.max = 0;
       this.mana.castingMax = 0;
     }
+
+    // Focus system — always derived regardless of spellcaster status
+    const focusBonus = this._evaluateFormulaField(this.focus.maxBonus, rollData);
+    this.focus.max = 5 + focusBonus;
+    this.focus.current = (this.focus.spellIds || []).length;
   }
 
   _calculateXPRequirements() {
