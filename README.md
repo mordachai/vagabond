@@ -19,10 +19,14 @@ _You need the book (digital or paperback) to have access to the compendia contai
 ### **New feature:** Item FX — Per-Item Animations:
 Weapons, alchemicals, and relics can now have their own Sequencer animations configured directly on the item sheet. Set different files and sounds for hits and misses, choose between melee (impact at target) and ranged (beam to target) styles. For weapons the animation type is derived automatically from the weapon skill. Requires the Sequencer module.
 
+<img width="498" height="905" alt="image" src="https://github.com/user-attachments/assets/15c8ba80-a0d2-4343-b6c3-5221cf7f096d" />
+
 ---
 
 ### **New feature:** Focused Spells:
 Spellcasters now have a **Focus** track visible in the Spells panel. The Mana icon in Combat encounter also highlights if any spell is marked as Focused.
+
+<img width="902" height="872" alt="image" src="https://github.com/user-attachments/assets/44f8742b-3f5a-42bf-afee-3f8c1f34c667" />
 
 ---
 
