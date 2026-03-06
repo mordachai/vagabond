@@ -68,6 +68,8 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     favorBonus: '1d6[favored]',
     hinderPenalty: '1d6[hindered]',
     spellBaseDamage: 'd6',
+    skillDifficultyBase: 20,
+    skillFormula: '@base - @stat * @mult - @bonus',
   },
 
   // --- Tab 4: Leveling (XP / questions: runtime; maxLevel: requires reload) ---

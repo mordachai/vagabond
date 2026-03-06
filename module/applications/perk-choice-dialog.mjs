@@ -98,7 +98,17 @@ export default class PerkChoiceDialog extends foundry.applications.api.DialogV2 
             if (statKey && actor?.system.stats?.[statKey]) {
               const statTotal = actor.system.stats[statKey].total || actor.system.stats[statKey].value || 0;
               const skillBonus = 0; // Skills in dialog don't show bonuses
-              difficulty = 20 - (isTrained ? statTotal * 2 : statTotal) - skillBonus;
+              const diffBase    = CONFIG.VAGABOND?.homebrew?.dice?.skillDifficultyBase ?? 20;
+              const trainedMult = CONFIG.VAGABOND?.homebrew?.multipliers?.trained      ?? 2;
+              const untrMult    = CONFIG.VAGABOND?.homebrew?.multipliers?.untrained    ?? 1;
+              const formula     = CONFIG.VAGABOND?.homebrew?.dice?.skillFormula        ?? '@base - @stat * @mult - @bonus';
+              const mult        = isTrained ? trainedMult : untrMult;
+              const resolved    = formula
+                .replace(/@base/g, diffBase)
+                .replace(/@stat/g, statTotal)
+                .replace(/@mult/g, mult)
+                .replace(/@bonus/g, skillBonus);
+              difficulty = Roll.safeEval(resolved);
             } else {
               difficulty = 10; // Ultimate fallback
             }

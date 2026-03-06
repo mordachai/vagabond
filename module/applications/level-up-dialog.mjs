@@ -413,7 +413,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     });
 
     // Skills: split into regular and weapon groups
-    // difficulty = 20 - (trained ? stat*2 : stat) - bonus
+    // difficulty = base - (trained ? stat*2 : stat) - bonus  (base configured in homebrew dice tab)
     const _mapSkill = ([key, skill]) => {
       let previewValue = skill.difficulty;
       if (selected && skill.stat === selected) {

@@ -804,8 +804,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
 
     // Process Skills (includes all weapon skills; stat association comes from homebrew config)
-    const trainedMult   = CONFIG.VAGABOND?.homebrew?.multipliers?.trained   ?? 2;
-    const untrainedMult = CONFIG.VAGABOND?.homebrew?.multipliers?.untrained ?? 1;
+    const trainedMult         = CONFIG.VAGABOND?.homebrew?.multipliers?.trained         ?? 2;
+    const untrainedMult       = CONFIG.VAGABOND?.homebrew?.multipliers?.untrained       ?? 1;
+    const skillDifficultyBase = CONFIG.VAGABOND?.homebrew?.dice?.skillDifficultyBase    ?? 20;
+    const skillFormula        = CONFIG.VAGABOND?.homebrew?.dice?.skillFormula           ?? '@base - @stat * @mult - @bonus';
     for (const key in this.skills) {
       const skill = this.skills[key];
       const configSkill = CONFIG.VAGABOND?.homebrew?.skills?.find(s => s.key === key);
@@ -814,7 +816,13 @@ export default class VagabondCharacter extends VagabondActorBase {
       const statValue = this.stats[skill.stat]?.total || 0;
       const skillBonus = this._evaluateFormulaField(skill.bonus, rollData);
 
-      skill.difficulty = 20 - (skill.trained ? statValue * trainedMult : statValue * untrainedMult) - skillBonus;
+      const mult = skill.trained ? trainedMult : untrainedMult;
+      const resolved = skillFormula
+        .replace(/@base/g, skillDifficultyBase)
+        .replace(/@stat/g, statValue)
+        .replace(/@mult/g, mult)
+        .replace(/@bonus/g, skillBonus);
+      skill.difficulty = Roll.safeEval(resolved);
       skill.label = configSkill?.label ?? key;
       skill.isWeaponSkill    = configSkill?.isWeaponSkill    ?? false;
       skill.showInSkillsList = configSkill?.showInSkillsList ?? false;

@@ -5551,7 +5551,7 @@ ol#combat-tracker.directory-list {
   min-width: 150px;
   border-right: 1px solid var(--vagabond-c-faint);
   background: rgba(0, 0, 0, 0.05);
-  padding: 0.5rem 0;
+  padding: 0.5rem 3px;
   gap: 2px;
   overflow-y: auto;
 }
@@ -5594,7 +5594,7 @@ ol#combat-tracker.directory-list {
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: none;
-  border-left: 3px solid transparent;
+  border-left: 4px solid transparent;
   background: transparent;
   color: var(--vagabond-c-muted);
   cursor: pointer;

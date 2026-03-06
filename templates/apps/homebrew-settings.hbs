@@ -278,6 +278,20 @@
         </fieldset>
 
         <fieldset class="hb-fieldset">
+          <legend>Skill Difficulty</legend>
+          <div class="hb-form-group">
+            <label for="hb-skillDiffBase">Difficulty Base</label>
+            <input id="hb-skillDiffBase" type="number" data-field="dice.skillDifficultyBase" value="{{config.dice.skillDifficultyBase}}" min="1" max="99" step="1">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> The <code>@base</code> variable in the formula below. Default: 20.</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-skillFormula">Difficulty Formula</label>
+            <input id="hb-skillFormula" type="text" data-field="dice.skillFormula" value="{{config.dice.skillFormula}}" placeholder="@base - @stat * @mult - @bonus">
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Variables: <code>@base</code> (above), <code>@stat</code> (stat total), <code>@mult</code> (trained/untrained multiplier from Advanced tab), <code>@bonus</code> (skill bonus). Supports <code>floor()</code>, <code>ceil()</code>, <code>max()</code>, <code>min()</code>.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
           <legend>Check Probability</legend>
           <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> Frequency distribution of possible roll results (Bell Curve).</p>
           <div class="hb-dice-chart" id="hb-dice-chart"></div>
@@ -744,7 +758,7 @@
           <legend>Skill Multipliers</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Difficulty formula: <code>20 − (stat × mult) − bonus</code>. Changes take effect on save — no reload needed.
+            Difficulty formula: <code>base − (stat × mult) − bonus</code>. The base value is set in the Dice tab. Changes take effect on save — no reload needed.
           </p>
           <div class="hb-form-group">
             <label for="hb-mult-trained">Trained</label>
