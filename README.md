@@ -13,7 +13,6 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ---
 
-
 ## Features
 
 ### **New feature:** Item FX — Per-Item Animations:
@@ -85,6 +84,8 @@ Dedicated combat encounters with per factions separation: Heroes, NPCs, Neutrals
 
 <img width="308" height="730" alt="image" src="https://github.com/user-attachments/assets/965d02e5-13bd-456b-b2ec-33f154b5d356" />
 
+---
+
 ### Clocks & Countdown Dice
 Track tension and time directly on the canvas without needing external modules.
 - **Progress Clocks**: Create clocks with 4, 6, 8, 10, or 12 segments. Position them anywhere to track long-term goals or impending doom.
@@ -110,6 +111,7 @@ Easy and fast to use character builder, with option to generate full random char
 
 <img width="1112" height="863" alt="image" src="https://github.com/user-attachments/assets/08d9dc73-8da5-48ad-8cac-d6a5f7f165dc" />
 
+---
 
 ### Awesome Freeform Spellcasting
 Magic in Vagabond is flexible and unique. The system includes a dynamic **Mana Calculator**:
