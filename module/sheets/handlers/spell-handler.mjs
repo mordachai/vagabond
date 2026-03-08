@@ -491,8 +491,8 @@ export class SpellHandler {
     let isSuccess = false;
     let isCritical = false;
 
-    if (spell.system.noRollRequired) {
-      // BYPASS PATH: No roll needed, always succeeds, no criticals
+    if (spell.system.noRollRequired || event.altKey) {
+      // BYPASS PATH: No roll needed (noRollRequired flag or Alt+Click), always succeeds, no criticals
       isSuccess = true;
       isCritical = false;
       roll = null; // No roll object created
