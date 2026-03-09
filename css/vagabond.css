@@ -14424,7 +14424,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .construct-parts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 10px;
   padding: 10px;
 }
@@ -14432,7 +14432,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   background: var(--vagabond-bg-paper);
   background-repeat: var(--vagabond-bg-repeat);
   background-size: var(--vagabond-bg-size);
-  border: 1px solid var(--vagabond-c-tan-lite);
+  border: 3px solid var(--vagabond-c-text-secondary);
   border-radius: 6px;
   overflow: hidden;
   display: flex;
@@ -14465,11 +14465,12 @@ details[open] .vagabond .npc-immunity-toggle i {
   flex: 1;
   font-family: "Germania", serif;
   font-size: 1.2em;
-  color: var(--vagabond-c-text-primary);
+  color: var(--vagabond-c-text-secondary);
   margin: 0;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
+  text-transform: uppercase;
   text-overflow: ellipsis;
 }
 .vagabond .construct-part-card .part-name:hover {
@@ -14602,7 +14603,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .construct-part-card .part-stat-input {
   width: 38px;
   font-family: "Germania", serif;
-  font-size: 1.2em;
+  font-size: 1em;
   text-align: center;
 }
 .vagabond .construct-part-card .part-formula-stat {
@@ -14613,11 +14614,11 @@ details[open] .vagabond .npc-immunity-toggle i {
   flex: 1;
   min-width: 50px;
   font-family: "Germania", serif;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 .vagabond .construct-part-card .part-damage-type {
   font-family: "Germania", serif;
-  font-size: 1.2em;
+  font-size: 1em;
   border: none;
   border-bottom: 1px solid var(--vagabond-c-tan-lite);
   background: transparent;
@@ -14631,7 +14632,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
-  color: var(--vagabond-c-text-secondary);
+  color: var(--vagabond-c-text-primary);
   border-radius: 0;
   transition: border-color 0.15s;
 }

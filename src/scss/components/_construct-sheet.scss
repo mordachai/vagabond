@@ -170,7 +170,7 @@
 // ── Parts grid ─────────────────────────────────────────────────────────
 .construct-parts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 10px;
   padding: 10px;
 }
@@ -181,7 +181,7 @@
   background: $bg-paper;
   background-repeat: $bg-repeat;
   background-size: $bg-size;
-  border: 1px solid $c-tan-lite;
+  border: 3px solid $c-text-2;
   border-radius: 6px;
   overflow: hidden;
   display: flex;
@@ -214,11 +214,12 @@
     flex: 1;
     font-family: $font-title;
     font-size: 1.2em;
-    color: $c-text-1;
+    color: $c-text-2;
     margin: 0;
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
+    text-transform: uppercase;
     text-overflow: ellipsis;
     &:hover { text-decoration: underline; }
   }
@@ -345,7 +346,7 @@
   .part-stat-input {
     width: 38px;
     font-family: $font-title;
-    font-size: 1.2em;
+    font-size: 1.0em;
     text-align: center;
   }
 
@@ -358,12 +359,12 @@
     flex: 1;
     min-width: 50px;
     font-family: $font-title;
-    font-size: 1.2em;
+    font-size: 1.0em;
   }
 
   .part-damage-type {
     font-family: $font-title;
-    font-size: 1.2em;
+    font-size: 1.0em;
     border: none;
     border-bottom: 1px solid $c-tan-lite;
     background: transparent;
@@ -379,7 +380,7 @@
     border: none;
     border-bottom: 1px solid transparent;
     background: transparent;
-    color: $c-text-2;
+    color: $c-text-1;
     border-radius: 0;
     transition: border-color 0.15s;
 
