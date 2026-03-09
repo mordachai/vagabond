@@ -90,6 +90,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       deleteFromContainer: this._onDeleteFromContainer,
       addGuaranteedSkill: this._onAddGuaranteedSkill,
       removeGuaranteedSkill: this._onRemoveGuaranteedSkill,
+      removeSuggestedStartingPack: this._onRemoveSuggestedStartingPack,
       addKeyStat: this._onAddKeyStat,
       removeKeyStat: this._onRemoveKeyStat,
       addSkillChoiceGroup: this._onAddSkillChoiceGroup,
@@ -456,6 +457,22 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             spellsIndex,
             maxMana
           });
+        }
+
+        // Resolve suggested starting pack UUIDs to display data
+        context.enrichedSuggestedPacks = [];
+        for (const uuid of (this.item.system.suggestedStartingPacks || [])) {
+          if (!uuid) continue;
+          try {
+            const pack = await fromUuid(uuid);
+            context.enrichedSuggestedPacks.push({
+              uuid,
+              name: pack?.name || uuid,
+              img: pack?.img || 'icons/svg/item-bag.svg'
+            });
+          } catch (e) {
+            context.enrichedSuggestedPacks.push({ uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
+          }
         }
         break;
 
@@ -2591,6 +2608,18 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
+    // 1a. Handle dropping starter packs onto class items (suggested packs)
+    if (this.item.type === 'class') {
+      const droppedItem = await Item.implementation.fromDropData(data);
+      if (droppedItem?.type === 'starterPack') {
+        const current = this.item.system.suggestedStartingPacks || [];
+        if (!current.includes(droppedItem.uuid)) {
+          await this.item.update({ 'system.suggestedStartingPacks': [...current, droppedItem.uuid] });
+        }
+        return true;
+      }
+    }
+
     // 1. Handle dropping items onto starter packs
     if (this.item.type === 'starterPack') {
       const droppedItem = await Item.implementation.fromDropData(data);
@@ -2675,6 +2704,19 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   async _onDropFolder(event, data) {
     if (!this.item.isOwner) return [];
+  }
+
+  /**
+   * Handle removing a suggested starting pack from a class item
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @private
+   */
+  static async _onRemoveSuggestedStartingPack(event, target) {
+    const uuid = target.dataset.uuid;
+    if (!uuid) return;
+    const current = this.item.system.suggestedStartingPacks || [];
+    await this.item.update({ 'system.suggestedStartingPacks': current.filter(u => u !== uuid) });
   }
 
   /**

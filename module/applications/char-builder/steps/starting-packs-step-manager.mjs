@@ -43,11 +43,25 @@ export class StartingPacksStepManager extends BaseStepManager {
     const selectedPack = state.selectedStartingPack;
     const previewUuid = state.previewUuid;
 
+    // Get suggested pack UUIDs from the selected class
+    const suggestedUuids = new Set();
+    if (state.selectedClass) {
+      try {
+        const classItem = await fromUuid(state.selectedClass);
+        for (const uuid of classItem?.system?.suggestedStartingPacks ?? []) {
+          if (uuid) suggestedUuids.add(uuid);
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
     // Mark items as selected/previewing for template
     const markedPacks = availablePacks.map(pack => ({
       ...pack,
       selected: pack.uuid === selectedPack,
-      previewing: pack.uuid === previewUuid
+      previewing: pack.uuid === previewUuid,
+      isSuggested: suggestedUuids.has(pack.uuid)
     }));
 
     // Get selected item details if available

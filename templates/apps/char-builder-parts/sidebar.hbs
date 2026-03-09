@@ -79,7 +79,7 @@
                 {{/if}}
             {{else}}
                 {{!-- Non-perk items (spells, ancestry, class, starting packs) --}}
-                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#if opt.isSuggested}}suggested{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
                     <img src="{{opt.img}}" width="32" height="32">
                     <div class="item-info">
                         <div class="name">{{opt.name}}</div>

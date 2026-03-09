@@ -123,6 +123,16 @@ export default class VagabondClass extends VagabondItemBase {
       { initial: [] }
     );
 
+    // Suggested starting packs - UUIDs of starter packs recommended for this class
+    schema.suggestedStartingPacks = new fields.ArrayField(
+      new fields.StringField({ initial: '', blank: true }),
+      {
+        initial: [],
+        label: 'VAGABOND.Item.Class.FIELDS.suggestedStartingPacks.label',
+        hint: 'VAGABOND.Item.Class.FIELDS.suggestedStartingPacks.hint'
+      }
+    );
+
     // Spells gained per level - separate from features
     schema.levelSpells = new fields.ArrayField(
       new fields.SchemaField({

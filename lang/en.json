@@ -1149,7 +1149,8 @@
         "luckTerm": "Luck",
         "poolTerm": "Pool",
         "StudiedDie": "Study Dice",
-        "SkillTraining": "Trained Skills"
+        "SkillTraining": "Trained Skills",
+        "SuggestedStartingPacks":"Suggested Packs"
       },
       "Labels": {
         "UnknownAncestry": "Unknown Ancestry",
@@ -1258,7 +1259,8 @@
         "ExtraTrainingHint": "Unrestricted skill training choices (any skill)",
         "StatBonusHint": "Each point grants +1 to any stat below cap",
         "AmountHint": "How many the player picks from the pool",
-        "LabelPlaceholder": "e.g. Ascendancy"
+        "LabelPlaceholder": "e.g. Ascendancy",
+        "DropStarterPack": "Drop starter pack here"
       },
       "Chat": {
         "FlukeReroll": "Luck Reroll — Fluke"

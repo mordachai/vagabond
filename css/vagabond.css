@@ -2786,6 +2786,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column .directory-item.in-tray.previewing {
   background: var(--vagabond-c-chat-yellow);
 }
+.vagabond-builder .builder-body .selection-list-column .directory-item.suggested {
+  background: rgba(11, 141, 26, 0.2);
+  border-left: 3px solid var(--vagabond-c-green);
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.suggested.in-tray {
+  background: var(--vagabond-c-chat-yellow);
+  border-left: 3px solid var(--vagabond-c-green);
+}
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified {
   opacity: 0.7;
   filter: grayscale(50%);
@@ -8657,6 +8665,54 @@ ol#combat-tracker.directory-list {
   font-style: italic;
   font-size: 12px;
   margin: 0;
+}
+.vagabond .suggested-packs-drop-zone {
+  min-height: 40px;
+  padding: 8px;
+  border: 2px dashed var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.vagabond .suggested-packs-drop-zone .drop-hint {
+  font-size: 12px;
+  margin: 0;
+}
+.vagabond .suggested-packs-drop-zone .suggested-packs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.vagabond .suggested-packs-drop-zone .suggested-pack-entry {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  gap: 4px;
+  padding: 0 6px 0 3px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 12px;
+  background: var(--vagabond-c-tan-lite);
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .suggested-packs-drop-zone .suggested-pack-entry img {
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+.vagabond .suggested-packs-drop-zone .suggested-pack-entry .suggested-pack-name {
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--vagabond-c-text-primary);
+  line-height: 1;
+}
+.vagabond .suggested-packs-drop-zone .suggested-pack-entry a {
+  flex-shrink: 0;
+  font-size: 10px;
+  line-height: 1;
 }
 .vagabond .grant-tag {
   display: inline-flex;

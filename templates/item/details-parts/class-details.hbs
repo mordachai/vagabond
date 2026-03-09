@@ -156,6 +156,32 @@
       </div>
     </div>
 
+    {{! Suggested Starting Packs Section }}
+    {{#if (or editable enrichedSuggestedPacks.length)}}
+    <div class='suggested-packs-section mt-20'>
+      <h3>{{localize "VAGABOND.UI.Sections.SuggestedStartingPacks"}}</h3>
+      <div class='suggested-packs-drop-zone drop-zone' data-drop-target='suggestedStartingPack'>
+        {{#if enrichedSuggestedPacks.length}}
+          <ul class='suggested-packs-list'>
+            {{#each enrichedSuggestedPacks as |pack|}}
+              <li class='suggested-pack-entry flexrow'>
+                <img src='{{pack.img}}' width='24' height='24'>
+                <span class='suggested-pack-name'>{{pack.name}}</span>
+                {{#if @root.editable}}
+                  <a data-action='removeSuggestedStartingPack' data-uuid='{{pack.uuid}}' class='item-control text-danger'>
+                    <i class='fas fa-times'></i>
+                  </a>
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class='drop-hint text-muted italic'>{{localize "VAGABOND.UI.Hints.DropStarterPack"}}</p>
+        {{/if}}
+      </div>
+    </div>
+    {{/if}}
+
     {{! Level Features Section }}
     <div class='level-features-section mt-20'>
       <h3>{{localize "VAGABOND.UI.Sections.LevelFeatures"}}</h3>
