@@ -762,7 +762,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* MODIFIER BADGE */
   /* ROLL STRIP */
   /*CARD DESCRIPTION*/
-  /* SAVE CRIT RULE */
+  /* ================================================
+   * CRIT BENEFIT TOGGLE (Save Cards)
+   * ================================================ */
+  /* SAVE CRIT RULE — clickable pill */
+  /* ================================================
+   * CRIT BENEFIT TOGGLE (Attack/Cast Cards)
+   * ================================================ */
   /* ==================================================
    * AUTO-FAIL BANNER (for Dead status, etc.)
    * ================================================== */
@@ -845,6 +851,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   max-width: 100%;
   /* Standard Tag */
   /* Feature and Trait Info Tags */
+  /* Source Label Tag (applied damage cards: "Greataxe Attack", "Fire Spell") */
   /* Perk Prerequisite Tags */
   /* The Slash Separator // */
   /* Active property tag — highlights when the property is in effect (e.g. Cleave splitting) */
@@ -872,6 +879,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-trait-info {
   color: var(--c-dark-blue);
   font-style: italic;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-source {
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.75;
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-prerequisite {
   color: var(--c-dark-blue);
@@ -1109,12 +1121,69 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 18px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2705882353);
 }
+.vagabond-chat-card-v2 .save-crit-toggle {
+  /* Both states rendered — CSS shows/hides based on data-crit-active */
+  /* Crit benefit active (default): show crit state, hide normal, hide Apply button */
+  /* Luck kept (toggled off): show normal state, show Apply button, dim crit rule */
+}
+.vagabond-chat-card-v2 .save-crit-toggle .crit-state-on,
+.vagabond-chat-card-v2 .save-crit-toggle .crit-state-off {
+  display: block;
+}
+.vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=true] .crit-state-off {
+  display: none;
+}
+.vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=true] .crit-save-apply-wrapper {
+  display: none;
+}
+.vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=true] .save-crit-rule {
+  opacity: 1;
+  border-left-color: var(--vagabond-c-damage-orange);
+  background: rgba(231, 87, 10, 0.15);
+}
+.vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=true] .save-crit-rule i {
+  opacity: 1;
+}
+.vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=false] .crit-state-on {
+  display: none;
+}
+.vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=false] .save-crit-rule {
+  opacity: 0.4;
+  border-left-color: rgba(231, 87, 10, 0.4);
+  background: rgba(231, 87, 10, 0.04);
+}
 .vagabond-chat-card-v2 .save-crit-rule {
-  background: rgba(231, 87, 10, 0.1); /* Light orange background */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(231, 87, 10, 0.1);
   border-left: 3px solid var(--vagabond-c-damage-orange);
   margin: 8px 16px;
   padding: 8px 12px;
   border-radius: 3px;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  user-select: none;
+  /* Non-toggle version (non-crit saves, reminder results) */
+}
+.vagabond-chat-card-v2 .save-crit-rule:hover {
+  background: rgba(231, 87, 10, 0.2);
+}
+.vagabond-chat-card-v2 .save-crit-rule i {
+  color: var(--vagabond-c-damage-orange);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.vagabond-chat-card-v2 .save-crit-rule span {
+  margin: 0;
+  font-family: "Paradigma", serif;
+  font-size: 15px;
+  color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .save-crit-rule span strong {
+  color: var(--vagabond-c-damage-orange);
+  text-transform: uppercase;
+  font-size: 13px;
 }
 .vagabond-chat-card-v2 .save-crit-rule p {
   margin: 0;
@@ -1126,6 +1195,43 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-damage-orange);
   text-transform: uppercase;
   font-size: 13px;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle {
+  /* Both states rendered — CSS shows/hides based on data-crit-active */
+  /* Crit benefit active (default): show crit total, hide base total */
+  /* Luck kept (toggled off): show base total, dim crit pill */
+  /* Crit pill becomes a clickable toggle button */
+  /* Cross out the flat roll modifier (+stat) in the dice list when crit is off */
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle .crit-state-on,
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle .crit-state-off {
+  display: contents;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=true] .crit-state-off {
+  display: none;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=true] .attack-crit-toggle-btn {
+  opacity: 1;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=false] .crit-state-on {
+  display: none;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=false] .attack-crit-toggle-btn {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle .attack-crit-toggle-btn {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  user-select: none;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle .attack-crit-toggle-btn:hover {
+  opacity: 0.7 !important;
+  text-decoration: none !important;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=false] .damage-dice-list .roll-modifier {
+  text-decoration: line-through;
+  opacity: 0.4;
 }
 .vagabond-chat-card-v2 .auto-fail-banner {
   width: 100%;

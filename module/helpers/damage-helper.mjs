@@ -242,11 +242,10 @@ export class VagabondDamageHelper {
       }
     }
 
-    // Brutal: add extra damage dice on crit, matching the weapon's die size
-    if (context.isCritical && item?.system?.properties?.includes('Brutal')) {
-      const brutalMaxDice = actor.system.brutalMaxDice ?? 1;
-      const dieMatch = finalFormula.match(/d(\d+)/);
-      if (dieMatch) finalFormula += ` + ${brutalMaxDice}d${dieMatch[1]}`;
+    // Always-on crit bonuses (e.g. Brutal) — fire regardless of Luck/benefit toggle
+    if (context.isCritical) {
+      const alwaysOnBonuses = this._collectCritAlwaysOnBonuses(item, actor, finalFormula);
+      for (const bonus of alwaysOnBonuses) finalFormula += ` + ${bonus.formula}`;
     }
 
     // Determine item type and apply appropriate separated bonuses
@@ -352,16 +351,20 @@ export class VagabondDamageHelper {
     // Get attack type from context (defaults to 'melee' if not provided)
     const attackType = context.attackType || 'melee';
 
+    // Recover critStatBonus: prefer stored value, fall back to reading stat from rollData
+    const critStatBonus = context.critStatBonus
+      || (context.isCritical && context.statKey ? rollData.stats?.[context.statKey]?.value || 0 : 0);
+
     // Post a SEPARATE damage message instead of updating the attack card
     // This prevents double-rolling issues and matches the save result flow
-    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType);
+    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus);
   }
 
   /**
    * Post a separate damage result message with save buttons
    * Uses existing createActionCard() to avoid code duplication
    */
-  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee') {
+  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0) {
     const { VagabondChatCard } = await import('./chat-card.mjs');
 
     return await VagabondChatCard.createActionCard({
@@ -372,7 +375,7 @@ export class VagabondDamageHelper {
       damageType: damageTypeKey || damageType,
       hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
       attackType,
-      rollData: isCritical ? { isCritical: true } : null
+      rollData: isCritical ? { isCritical: true, critStatBonus } : null
     });
   }
 
@@ -968,7 +971,7 @@ export class VagabondDamageHelper {
    * @param {string} damageType - Type of damage
    * @returns {string} HTML button string
    */
-  static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType, statusContext = null) {
+  static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType, statusContext = null, critNormalDamage = null) {
     // statusContext carries everything needed to process on-hit statuses at apply-time
     // { sourceActorId, sourceItemId, sourceActionIndex, saveType, saveSuccess, saveDifficulty, saveTotal, attackWasCrit }
     const sc = statusContext;
@@ -981,14 +984,19 @@ export class VagabondDamageHelper {
           data-save-difficulty="${sc.saveDifficulty}"
           data-save-total="${sc.saveTotal}"
           data-attack-was-crit="${sc.attackWasCrit}"` : '';
+    // critNormalDamage: when set, this is a crit save apply button.
+    // data-damage-crit = 0 (benefit claimed), data-damage-normal = save-reduced value (Luck kept)
+    const critAttrs = critNormalDamage !== null
+      ? ` data-damage-crit="0" data-damage-normal="${critNormalDamage}"`
+      : '';
     return `
-      <div class="save-apply-button-container">
+      <div class="save-apply-button-container${critNormalDamage !== null ? ' crit-save-apply-wrapper' : ''}">
         <button
           class="vagabond-apply-save-damage-button"
           data-actor-id="${actorId}"
           data-actor-name="${actorName}"
           data-damage-amount="${finalDamage}"
-          data-damage-type="${damageType}"${statusAttrs}
+          data-damage-type="${damageType}"${statusAttrs}${critAttrs}
         >
           <i class="fas fa-burst"></i> Apply ${finalDamage} to ${actorName}
         </button>
@@ -1073,6 +1081,55 @@ export class VagabondDamageHelper {
     finalDamage = Math.max(0, finalDamage - armorRating);
 
     return finalDamage;
+  }
+
+  /**
+   * Extract the die size from a damage formula string (e.g. "2d8+1" → 8, "3d6" → 6).
+   * @param {string} formula
+   * @returns {number}
+   */
+  static _extractDieSize(formula) {
+    const match = /\d*d(\d+)/i.exec(String(formula || ''));
+    return match ? parseInt(match[1]) : 6;
+  }
+
+  /**
+   * Determine the base damage die size used by the attacker (for the weakness extra die roll).
+   * @param {Item|null} sourceItem
+   * @param {number|null} actionIdx  NPC action index (used when sourceItem is null)
+   * @param {Actor|null} sourceActor
+   * @returns {number}
+   */
+  static _getDamageSourceDieSize(sourceItem, actionIdx, sourceActor) {
+    if (sourceItem) {
+      if (sourceItem.type === 'spell') {
+        const base = sourceItem.system.damageDieSize || 6;
+        const bonus = sourceActor?.system?.spellDamageDieSizeBonus || 0;
+        return base + bonus;
+      }
+      const formula = sourceItem.system.currentDamage || sourceItem.system.damageAmount || '';
+      return this._extractDieSize(formula);
+    }
+    if (actionIdx !== null && actionIdx !== undefined && !isNaN(actionIdx) && sourceActor) {
+      const action = sourceActor.system.actions?.[actionIdx];
+      if (action?.rollDamage) return this._extractDieSize(action.rollDamage);
+    }
+    return 6;
+  }
+
+  /**
+   * Check whether a target actor is weak to a given damage type (including material weakness).
+   * @param {Actor} targetActor
+   * @param {string} damageType
+   * @param {Item|null} attackingWeapon
+   * @returns {boolean}
+   */
+  static _isWeakTo(targetActor, damageType, attackingWeapon = null) {
+    const normalizedType = damageType.toLowerCase();
+    if (normalizedType === '-') return false;
+    const weaknesses = targetActor.system.weaknesses || [];
+    if (attackingWeapon?.system?.metal && weaknesses.includes(attackingWeapon.system.metal)) return true;
+    return weaknesses.includes(normalizedType);
   }
 
 
@@ -1163,7 +1220,7 @@ export class VagabondDamageHelper {
   /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
    */
-  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = [], actionIndex = null, attackWasCrit = false, statusSaveTypes = new Set()) {
+  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = [], actionIndex = null, attackWasCrit = false, statusSaveTypes = new Set(), critStatBonus = 0) {
     // Encode the damage roll terms
     const rollTermsData = JSON.stringify({
       terms: damageRoll.terms.map(t => {
@@ -1196,6 +1253,12 @@ export class VagabondDamageHelper {
     const endureClass = statusSaveTypes.has('endure') ? ' save-has-status' : '';
     const willClass   = statusSaveTypes.has('will')   ? ' save-has-status' : '';
 
+    // Crit toggle attrs: when a crit stat bonus is included in damageAmount, store both values
+    // so the attack-crit-toggle JS handler can swap data-damage-amount when toggled
+    const critAttrs = (critStatBonus > 0 && attackWasCrit)
+      ? ` data-damage-crit="${damageAmount}" data-damage-normal="${damageAmount - critStatBonus}"`
+      : '';
+
     // LAYOUT FIX: Two rows. Top: Apply Direct. Bottom: Saves.
     return `
       <div class="vagabond-save-buttons-container">
@@ -1207,7 +1270,7 @@ export class VagabondDamageHelper {
               data-item-id="${itemId || ''}"
               data-action-index="${actionIndex ?? ''}"
               data-is-critical="${attackWasCrit}"
-              data-targets="${targetsJson}">
+              data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-burst"></i> ${applyDirectLabel}
             </button>
         </div>
@@ -1223,7 +1286,7 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
               data-attack-was-crit="${attackWasCrit}"
-              data-targets="${targetsJson}">
+              data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-running"></i> ${reflexLabel}
             </button>
             <button class="vagabond-save-button save-endure${endureClass}"
@@ -1236,7 +1299,7 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
               data-attack-was-crit="${attackWasCrit}"
-              data-targets="${targetsJson}">
+              data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-shield-alt"></i> ${endureLabel}
             </button>
             <button class="vagabond-save-button save-will${willClass}"
@@ -1249,7 +1312,7 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
               data-attack-was-crit="${attackWasCrit}"
-              data-targets="${targetsJson}">
+              data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-brain"></i> ${willLabel}
             </button>
         </div>
@@ -1386,7 +1449,7 @@ export class VagabondDamageHelper {
       const isSuccess = saveRoll.total >= difficulty;
       const { VagabondChatCard } = await import('./chat-card.mjs');
       const { VagabondRollBuilder } = await import('./roll-builder.mjs');
-      const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData());
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData(), saveType);
       const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
       // Calculate damage breakdown for display
@@ -1406,11 +1469,20 @@ export class VagabondDamageHelper {
       // Apply armor/immune/weak modifiers and track armor reduction
       // sourceActor already declared above for outgoingSavesModifier check
       const sourceItem = sourceActor?.items.get(itemId);
-      const finalDamage = this.calculateFinalDamage(targetActor, damageAfterSave, damageType, sourceItem);
-      const armorReduction = damageAfterSave - finalDamage;
+      const baseAfterFinal = this.calculateFinalDamage(targetActor, damageAfterSave, damageType, sourceItem);
+      const armorReduction = damageAfterSave - baseAfterFinal;
+      // RAW: Weak — bypass Armor/Immune + deal an extra damage die
+      let finalDamage = baseAfterFinal;
+      if (this._isWeakTo(targetActor, damageType, sourceItem)) {
+        const dieSize = this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
+        const weakRoll = new Roll(`1d${dieSize}`);
+        await weakRoll.evaluate();
+        finalDamage += weakRoll.total;
+      }
 
-      // Auto-apply damage if setting enabled
-      const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage');
+      // Auto-apply damage if setting enabled.
+      // Crit saves always skip auto-apply so the player can choose the Luck/benefit toggle first.
+      const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage') && !isCritical;
       if (autoApply) {
         const currentHP = targetActor.system.health?.value || 0;
         const newHP = Math.max(0, currentHP - finalDamage);
@@ -1472,7 +1544,7 @@ export class VagabondDamageHelper {
         autoApply,
         autoApply ? null : statusContext  // embed context only for manual-apply cards
       );
-      if (isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, saveMessage, 'Critical Save');
+      // Luck is managed by the save-crit-toggle — do not auto-grant here
 
       // autoApply ON → damage was already applied; process statuses now.
       // autoApply OFF → defer status processing to handleApplySaveDamage (apply button click).
@@ -1615,7 +1687,7 @@ export class VagabondDamageHelper {
       const isSuccess = saveRoll.total >= difficulty;
       const { VagabondChatCard } = await import('./chat-card.mjs');
       const { VagabondRollBuilder } = await import('./roll-builder.mjs');
-      const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData());
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData(), saveType);
       const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
       // Post simplified save result to chat (no damage calculations)
@@ -1628,7 +1700,7 @@ export class VagabondDamageHelper {
         isCritical,
         isHindered
       );
-      if (isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, saveMessage, 'Critical Save');
+      // Luck is managed by the save-crit-toggle — do not auto-grant here
 
       // Process on-hit status effects using the save roll already made above
       // sourceActor is already declared above for outgoingSavesModifier
@@ -1784,6 +1856,27 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Collect all always-on crit bonuses for an item from the registry.
+   * These bonuses fire on every crit regardless of the Luck/benefit toggle.
+   *
+   * @param {VagabondItem} item - The item being used
+   * @param {VagabondActor} actor - The attacking actor
+   * @param {string} currentFormula - The damage formula built so far (needed for die-size inspection)
+   * @returns {Array<{formula: string, label: string}>}
+   */
+  static _collectCritAlwaysOnBonuses(item, actor, currentFormula) {
+    const bonuses = [];
+    const registry = CONFIG.VAGABOND.critAlwaysOnProperties ?? {};
+    for (const [propKey, handler] of Object.entries(registry)) {
+      if (item?.system?.properties?.includes(propKey)) {
+        const bonus = handler.apply(item, actor, currentFormula);
+        if (bonus) bonuses.push(bonus);
+      }
+    }
+    return bonuses;
+  }
+
+  /**
    * Remove the highest rolled damage die from the damage roll
    * @param {Object} rollTermsData - Encoded roll terms data
    * @returns {number} New damage total with highest die removed
@@ -1847,40 +1940,48 @@ export class VagabondDamageHelper {
       .addRoll(roll, difficulty)
       .setOutcome(isSuccess ? 'PASS' : 'FAIL', isCritical);
 
-    // Build visual damage calculation display
-    const damageCalculationHTML = this._buildDamageCalculation(
-      originalDamage,
-      saveReduction,
-      armorReduction,
-      finalDamage,
-      damageType,
-      saveType,
-      actor,
-      autoApplied,
-      isHindered
-    );
+    let cardDescription = card.data.description || '';
 
-    // Add crit rule text if critical save
-    let critRuleHTML = '';
     if (isCritical) {
-      critRuleHTML = `
-        <div class="save-crit-rule">
-          <p>
-            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
-            ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
-          </p>
+      // Pre-render both damage states for the toggle:
+      // Crit state: benefit claimed → 0 damage (not affected)
+      // Normal state: Luck kept → save-reduced damage
+      const critCalcHTML = this._buildDamageCalculation(
+        originalDamage, originalDamage, 0, 0,
+        damageType, saveType, actor, false, isHindered
+      );
+      const normalCalcHTML = this._buildDamageCalculation(
+        originalDamage, saveReduction, armorReduction, finalDamage,
+        damageType, saveType, actor, false, isHindered
+      );
+
+      cardDescription += `
+        <div class="save-crit-toggle" data-crit-active="true" data-actor-id="${actor.id}">
+          <div class="crit-state-on">${critCalcHTML}</div>
+          <div class="crit-state-off">${normalCalcHTML}</div>
+          <div class="save-crit-rule" data-action="toggleCritBenefit" title="${game.i18n.localize('VAGABOND.DefendMechanics.CritToggleHint')}">
+            <i class="fa-solid fa-star-of-life"></i>
+            <span>
+              <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
+              ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
+            </span>
+          </div>
+          ${this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType, statusContext, finalDamage)}
         </div>
       `;
+    } else {
+      // Normal (non-crit) path
+      const damageCalculationHTML = this._buildDamageCalculation(
+        originalDamage, saveReduction, armorReduction, finalDamage,
+        damageType, saveType, actor, autoApplied, isHindered
+      );
+      cardDescription += damageCalculationHTML;
+      if (!autoApplied && finalDamage > 0) {
+        cardDescription += this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType, statusContext);
+      }
     }
 
-    card.setDescription((card.data.description || '') + damageCalculationHTML + critRuleHTML);
-
-    // Add "Apply to Target" button if damage was not auto-applied
-    // statusContext is embedded so handleApplySaveDamage can process statuses at apply-time
-    if (!autoApplied && finalDamage > 0) {
-      const applyButton = this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType, statusContext);
-      card.setDescription((card.data.description || '') + applyButton);
-    }
+    card.setDescription(cardDescription);
 
     return await card.send();
   }
@@ -2169,6 +2270,17 @@ export class VagabondDamageHelper {
     const sourceActor = game.actors.get(actorId);
     const sourceItem = sourceActor?.items.get(itemId);
 
+    // Build source label: weapon → "[Name] Attack", spell/alchemical/NPC action → "[Name]"
+    const isWeaponDirect = sourceItem?.type === 'equipment' && sourceItem?.system?.equipmentType === 'weapon';
+    const directActionIdxStr = button.dataset.actionIndex;
+    const directActionIdx = (directActionIdxStr !== '' && directActionIdxStr != null) ? parseInt(directActionIdxStr) : null;
+    const directSourceLabel = sourceItem
+      ? (isWeaponDirect ? `${sourceItem.name} Attack` : sourceItem.name)
+      : (directActionIdx !== null && !isNaN(directActionIdx) && sourceActor?.system?.actions?.[directActionIdx]?.name)
+        ? sourceActor.system.actions[directActionIdx].name
+        : '';
+    const directSourceIcon = sourceItem?.img ?? sourceActor?.img ?? null;
+
     // Get targets with fallback system
     const storedTargets = this._getTargetsFromButton(button);
 
@@ -2209,7 +2321,15 @@ export class VagabondDamageHelper {
       }
 
       // Calculate final damage (armor/immune/weak)
-      const finalDamage = this.calculateFinalDamage(targetActor, effectiveDamage, damageType, sourceItem);
+      const baseAfterFinalDirect = this.calculateFinalDamage(targetActor, effectiveDamage, damageType, sourceItem);
+      // RAW: Weak — bypass Armor/Immune + deal an extra damage die
+      let finalDamage = baseAfterFinalDirect;
+      if (this._isWeakTo(targetActor, damageType, sourceItem)) {
+        const dieSize = this._getDamageSourceDieSize(sourceItem, directActionIdx, sourceActor);
+        const weakRoll = new Roll(`1d${dieSize}`);
+        await weakRoll.evaluate();
+        finalDamage += weakRoll.total;
+      }
 
       const currentHP = targetActor.system.health?.value || 0;
       const newHP = Math.max(0, currentHP - finalDamage);
@@ -2222,11 +2342,13 @@ export class VagabondDamageHelper {
       await VCCDirect.applyResult(targetActor, {
         type: 'damage',
         rawAmount: effectiveDamage,
-        armorReduction: effectiveDamage - finalDamage,
+        armorReduction: effectiveDamage - baseAfterFinalDirect,
         finalAmount: finalDamage,
         damageType,
         previousValue: currentHP,
         newValue: newHP,
+        sourceName: directSourceLabel,
+        sourceIcon: directSourceIcon,
       });
 
       // Process on-hit status effects
@@ -2320,6 +2442,15 @@ export class VagabondDamageHelper {
 
     ui.notifications.info(`Applied ${finalDamage} damage to ${actorName} (${currentHP} → ${newHP} HP)`);
 
+    // Build source label from stored source attrs (set when statusContext was provided)
+    const saveSourceActor = game.actors.get(button.dataset.sourceActorId);
+    const saveSourceItem = saveSourceActor?.items.get(button.dataset.sourceItemId);
+    const isSaveWeapon = saveSourceItem?.type === 'equipment' && saveSourceItem?.system?.equipmentType === 'weapon';
+    const saveSourceLabel = saveSourceItem
+      ? (isSaveWeapon ? `${saveSourceItem.name} Attack` : saveSourceItem.name)
+      : '';
+    const saveSourceIcon = saveSourceItem?.img ?? saveSourceActor?.img ?? null;
+
     // Post damage result to chat
     const { VagabondChatCard: VCCSave } = await import('./chat-card.mjs');
     await VCCSave.applyResult(actor, {
@@ -2329,6 +2460,8 @@ export class VagabondDamageHelper {
       damageType,
       previousValue: currentHP,
       newValue: newHP,
+      sourceName: saveSourceLabel,
+      sourceIcon: saveSourceIcon,
     });
 
     // Process on-hit statuses deferred from handleSaveRoll (autoApply was OFF)

@@ -81,7 +81,7 @@ export class VagabondChatCard {
       return this;
   }
   
-  addDamage(damageRoll, damageType = 'Physical', isCritical = false, damageTypeKey = null) {
+  addDamage(damageRoll, damageType = 'Physical', isCritical = false, damageTypeKey = null, critStatBonus = 0) {
     let damageIconClass = null;
 
     // FIX: Normalize the key to lowercase to match CONFIG.VAGABOND.damageTypeIcons keys
@@ -97,14 +97,18 @@ export class VagabondChatCard {
       damageIconClass = CONFIG.VAGABOND?.damageTypeIcons?.['physical'] || 'fas fa-burst';
     }
 
+    const total = typeof damageRoll === 'number' ? damageRoll : damageRoll.total;
     this.data.damage = {
-      total: typeof damageRoll === 'number' ? damageRoll : damageRoll.total,
+      total,
       formula: typeof damageRoll === 'number' ? null : damageRoll.formula,
       type: damageType, // Keep the readable label (e.g. "Piercing")
       typeKey: key,     // Keep the normalized key (e.g. "piercing")
       iconClass: damageIconClass,
       isCritical: isCritical,
-      roll: typeof damageRoll === 'number' ? null : damageRoll
+      roll: typeof damageRoll === 'number' ? null : damageRoll,
+      // Crit stat bonus toggle: when > 0, enables the two-state toggle in damage-display.hbs
+      critStatBonus: (isCritical && critStatBonus !== 0) ? critStatBonus : 0,
+      baseTotal: (isCritical && critStatBonus !== 0) ? total - critStatBonus : total,
     };
     return this;
   }
@@ -411,14 +415,15 @@ export class VagabondChatCard {
           const key = rawKey.toLowerCase();
           const dLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[key]) || damageType;
           const isCrit = rollData?.isCritical || false;
+          const critStatBonus = rollData?.critStatBonus || 0;
 
-          card.addDamage(damageRoll, dLabel, isCrit, key);
+          card.addDamage(damageRoll, dLabel, isCrit, key, critStatBonus);
 
           const isHealing = damageType.toLowerCase() === 'healing';
 
           let btns = isHealing
             ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id, targetsAtRollTime, actionIndex)
-            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes);
+            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus);
 
           card.addFooterAction(btns);
 
@@ -445,7 +450,8 @@ export class VagabondChatCard {
                isCritical: rollData.isCritical,
                damageType,
                attackType,
-               statKey  // ✅ FIX: Pass statKey for critical damage bonus
+               statKey,
+               critStatBonus: rollData?.critStatBonus || 0
            }, targetsAtRollTime);
            card.addFooterAction(btn);
       }
@@ -786,7 +792,8 @@ export class VagabondChatCard {
             difficulty: attackResult.difficulty
           }
       });
-      if (isCritical) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Hit');
+      // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)
+      if (isCritical && !attackResult.critStatBonus) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Hit');
       return result;
   }
 
@@ -848,9 +855,14 @@ export class VagabondChatCard {
           critText = spell.system.formatDescription(spell.system.crit);  // Format for countdown dice triggers
       }
 
+      // Crit stat bonus for spells: mana skill's governing stat value
+      const spellCritStatBonus = (isCritical && manaSkill?.stat)
+        ? actor.getRollData().stats?.[manaSkill.stat]?.value || 0
+        : 0;
+
       const result = await this.createActionCard({
           actor, item: spell, title: spell.name,
-          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill },  // ✅ FIX: Include manaSkill for statKey lookup
+          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
           tags,
           damageRoll,
           damageType: spell.system.damageType,
@@ -868,7 +880,8 @@ export class VagabondChatCard {
             difficulty: difficulty
           }
       });
-      if (isCritical) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Cast');
+      // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)
+      if (isCritical && !spellCritStatBonus) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Cast');
       return result;
   }
   
@@ -1572,15 +1585,22 @@ export class VagabondChatCard {
     });
   }
 
+  static async _removeLuckForCritBenefit(actor) {
+    if (actor?.system?.currentLuck === undefined) return;
+    const currentLuck = actor.system.currentLuck ?? 0;
+    if (currentLuck <= 0) return;
+    await actor.update({ 'system.currentLuck': currentLuck - 1 });
+  }
+
   static async _grantLuckOnCrit(actor, rollMessage = null, reason = 'Critical') {
-    if (actor.system.currentLuck === undefined) return;
+    if (actor.system.currentLuck === undefined) return null;
     await VagabondChatCard._waitForDiceAnimation(rollMessage);
     const currentLuck = actor.system.currentLuck ?? 0;
     const maxLuck = actor.system.maxLuck ?? 0;
-    if (currentLuck >= maxLuck) return;
+    if (currentLuck >= maxLuck) return null;
     const newLuck = currentLuck + 1;
     await actor.update({ 'system.currentLuck': newLuck });
-    await VagabondChatCard.luckGain(actor, newLuck, maxLuck, reason);
+    return await VagabondChatCard.luckGain(actor, newLuck, maxLuck, reason);
   }
 
   /**
@@ -1727,10 +1747,10 @@ export class VagabondChatCard {
       .setType('apply-result')
       .setActor(actor)
       .setTitle(title)
-      .setSubtitle(sourceName || actor.name)
       .setDescription(descriptionHTML);
 
     if (sourceIcon) card.data.icon = sourceIcon;
+    if (sourceName) card.data.standardTags = [{ label: sourceName, cssClass: 'tag-source' }];
 
     return card.send();
   }

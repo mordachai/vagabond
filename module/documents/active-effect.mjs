@@ -235,6 +235,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.brawlCritBonus': 'Crit: Brawl Threshold Bonus (-1 for 19-20)',
       'system.finesseCritBonus': 'Crit: Finesse Threshold Bonus (-1 for 19-20)',
       'system.spellCritBonus': 'Crit: Spell Threshold Bonus (-1 for 19-20)',
+      'system.reflexCritBonus': 'Crit: Reflex Save Threshold Bonus (-1 for 19-20)',
+      'system.endureCritBonus': 'Crit: Endure Save Threshold Bonus (-1 for 19-20)',
 
       'system.bonusLuck': 'Bonus Luck',
       'system.currentLuck': 'Current Luck Pool',

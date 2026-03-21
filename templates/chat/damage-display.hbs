@@ -1,5 +1,5 @@
 {{! damage-display.hbs }}
-<div class="damage-section">
+<div class="damage-section{{#if damage.critStatBonus}} attack-crit-toggle{{/if}}"{{#if damage.critStatBonus}} data-crit-active="true" data-actor-id="{{actor.id}}"{{/if}}>
     {{!-- 1. Black Arrow Header --}}
     <div class="damage-header-container">
         <div class="damage-header-arrow" title="{{damage.formula}}">
@@ -16,7 +16,10 @@
             </span>
         </div>
         {{#if damage.isCritical}}
-        <div class="crit-label">{{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!</div>
+        <div class="crit-label{{#if damage.critStatBonus}} attack-crit-toggle-btn{{/if}}"
+            {{#if damage.critStatBonus}}data-action="toggleAttackCritBenefit" title="{{localize 'VAGABOND.CritToggleHint'}}"{{/if}}>
+            {{localize "VAGABOND.Item.Spell.FIELDS.crit.label"}}!
+        </div>
         {{/if}}
     </div>
 
@@ -24,10 +27,19 @@
     <div class="damage-row">
         {{!-- Total Amount with Type Icon Background --}}
         <div class="damage-total-display">
-            
+
             {{!-- FIX: Use dynamic icon class, fallback to burst if missing --}}
             <i class="{{#if damage.iconClass}}{{damage.iconClass}}{{else}}fas fa-burst{{/if}} damage-bg-icon"></i>
+            {{#if damage.critStatBonus}}
+            <div class="crit-state-on">
+                <div class="damage-value">{{damage.total}}</div>
+            </div>
+            <div class="crit-state-off">
+                <div class="damage-value">{{damage.baseTotal}}</div>
+            </div>
+            {{else}}
             <div class="damage-value">{{damage.total}}</div>
+            {{/if}}
         </div>
 
         {{!-- Dice Icons --}}

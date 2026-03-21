@@ -281,6 +281,11 @@ export class RollHandler {
       const attackResult = await item.rollAttack(this.actor, favorHinder);
       if (!attackResult) return;
 
+      // Stash the crit stat bonus so the damage card can render the two-state toggle
+      if (attackResult.isCritical && attackResult.weaponSkill?.stat) {
+        attackResult.critStatBonus = this.actor.getRollData().stats?.[attackResult.weaponSkill.stat]?.value || 0;
+      }
+
       // Reset check bonus to 0 after any attack roll
       if (this.actor.system.manualCheckBonus !== 0) {
         await this.actor.update({ 'system.manualCheckBonus': 0 });

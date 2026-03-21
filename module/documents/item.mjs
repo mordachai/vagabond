@@ -699,11 +699,10 @@ export class VagabondItem extends Item {
       }
     }
 
-    // Brutal: add extra damage dice on crit, matching the weapon's die size
-    if (isCritical && this.system.properties?.includes('Brutal')) {
-      const brutalMaxDice = actor.system.brutalMaxDice ?? 1;
-      const dieMatch = damageFormula.match(/d(\d+)/);
-      if (dieMatch) damageFormula += ` + ${brutalMaxDice}d${dieMatch[1]}`;
+    // Always-on crit bonuses (e.g. Brutal) — fire regardless of Luck/benefit toggle
+    if (isCritical) {
+      const alwaysOnBonuses = VagabondDamageHelper._collectCritAlwaysOnBonuses(this, actor, damageFormula);
+      for (const bonus of alwaysOnBonuses) damageFormula += ` + ${bonus.formula}`;
     }
 
     // Add weapon-specific universal damage bonuses

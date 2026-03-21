@@ -304,6 +304,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Finesse Crit Bonus" }
     );
+    schema.reflexCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Reflex Save Crit Bonus" }
+    );
+    schema.endureCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Endure Save Crit Bonus" }
+    );
 
     // ---------------------
 
@@ -573,6 +581,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.rangedCritBonus = [];
     this.brawlCritBonus = [];
     this.finesseCritBonus = [];
+    this.reflexCritBonus = [];
+    this.endureCritBonus = [];
 
     // Reset weapon property bonus fields
     this.cleaveTargets = [];
@@ -720,6 +730,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.rangedCritBonus = this._evaluateFormulaField(this.rangedCritBonus, rollData);
     this.brawlCritBonus = this._evaluateFormulaField(this.brawlCritBonus, rollData);
     this.finesseCritBonus = this._evaluateFormulaField(this.finesseCritBonus, rollData);
+    this.reflexCritBonus = this._evaluateFormulaField(this.reflexCritBonus, rollData);
+    this.endureCritBonus = this._evaluateFormulaField(this.endureCritBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
     // are NOT evaluated here - they're done inline in prepareDerivedData
@@ -989,6 +1001,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     data.brawlCritBonus = this.brawlCritBonus || 0;
     data.finesseCritBonus = this.finesseCritBonus || 0;
     data.spellCritBonus = this.spellCritBonus || 0;
+    data.reflexCritBonus = this.reflexCritBonus || 0;
+    data.endureCritBonus = this.endureCritBonus || 0;
 
     return data;
   }

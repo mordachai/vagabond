@@ -1727,6 +1727,100 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
+  // 10b. Crit Benefit Toggle Handler (Save Cards)
+  // Toggles between claiming crit benefit (0 damage) and keeping Luck (save-reduced damage)
+  // ---------------------------------------------------------
+  const critToggles = html.querySelectorAll('[data-action="toggleCritBenefit"]');
+  critToggles.forEach(toggle => {
+    toggle.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const container = toggle.closest('.save-crit-toggle');
+      if (!container) return;
+      const wasActive = container.dataset.critActive === 'true';
+      container.dataset.critActive = wasActive ? 'false' : 'true';
+      const isNowActive = container.dataset.critActive === 'true';
+
+      // Sync the Apply button's damage amount
+      const applyBtn = container.querySelector('.vagabond-apply-save-damage-button[data-damage-crit]');
+      if (applyBtn) {
+        const newAmount = isNowActive
+          ? parseInt(applyBtn.dataset.damageCrit ?? 0)
+          : parseInt(applyBtn.dataset.damageNormal ?? 0);
+        applyBtn.dataset.damageAmount = newAmount;
+        applyBtn.innerHTML = `<i class="fas fa-burst"></i> Apply ${newAmount} to ${applyBtn.dataset.actorName}`;
+      }
+
+      // Manage luck: benefit claimed (active) → remove luck + delete luck card; luck kept → grant luck
+      const actorId = container.dataset.actorId;
+      const actor = actorId ? game.actors.get(actorId) : null;
+      if (actor) {
+        import('./helpers/chat-card.mjs').then(async ({ VagabondChatCard }) => {
+          if (isNowActive) {
+            // Delete the luck gain card that was posted when toggling to luck-kept
+            const luckMsgId = container.dataset.luckMessageId;
+            if (luckMsgId) {
+              const luckMsg = game.messages.get(luckMsgId);
+              if (luckMsg) await luckMsg.delete();
+              delete container.dataset.luckMessageId;
+            }
+            VagabondChatCard._removeLuckForCritBenefit(actor);
+          } else {
+            const luckMsg = await VagabondChatCard._grantLuckOnCrit(actor, null, 'Critical Save');
+            if (luckMsg?.id) container.dataset.luckMessageId = luckMsg.id;
+          }
+        });
+      }
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 10c. Attack Crit Benefit Toggle Handler (Attack/Cast Cards)
+  // Toggles between claiming crit benefit (stat bonus damage) and keeping Luck (base damage)
+  // ---------------------------------------------------------
+  const attackCritToggles = html.querySelectorAll('[data-action="toggleAttackCritBenefit"]');
+  attackCritToggles.forEach(toggle => {
+    toggle.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const container = toggle.closest('.attack-crit-toggle');
+      if (!container) return;
+      const wasActive = container.dataset.critActive === 'true';
+      container.dataset.critActive = wasActive ? 'false' : 'true';
+      const isNowActive = container.dataset.critActive === 'true';
+
+      // Update data-damage-amount on all save/apply buttons that carry the crit attrs
+      const contentBody = container.closest('.content-body');
+      if (contentBody) {
+        const buttons = contentBody.querySelectorAll('[data-damage-crit][data-damage-normal]');
+        buttons.forEach(btn => {
+          btn.dataset.damageAmount = isNowActive
+            ? parseInt(btn.dataset.damageCrit ?? 0)
+            : parseInt(btn.dataset.damageNormal ?? 0);
+        });
+      }
+
+      // Manage luck: benefit claimed (active) → remove luck + delete luck card; luck kept → grant luck
+      const actorId = container.dataset.actorId;
+      const actor = actorId ? game.actors.get(actorId) : null;
+      if (actor) {
+        import('./helpers/chat-card.mjs').then(async ({ VagabondChatCard }) => {
+          if (isNowActive) {
+            const luckMsgId = container.dataset.luckMessageId;
+            if (luckMsgId) {
+              const luckMsg = game.messages.get(luckMsgId);
+              if (luckMsg) await luckMsg.delete();
+              delete container.dataset.luckMessageId;
+            }
+            VagabondChatCard._removeLuckForCritBenefit(actor);
+          } else {
+            const luckMsg = await VagabondChatCard._grantLuckOnCrit(actor, null, 'Critical Hit');
+            if (luckMsg?.id) container.dataset.luckMessageId = luckMsg.id;
+          }
+        });
+      }
+    });
+  });
+
+  // ---------------------------------------------------------
   // 10. Template Trigger Handler
   // ---------------------------------------------------------
   const templateTriggers = html.querySelectorAll('.template-trigger');

@@ -1166,3 +1166,25 @@ VAGABOND.fxSchools = {
   'genericlight': 'VAGABOND.FxSchool.GenericLight',
   'genericdark':  'VAGABOND.FxSchool.GenericDark',
 };
+
+/**
+ * Always-on crit bonus registry.
+ * Each entry fires on any crit where the item has the matching property.
+ * The bonus is always included in the damage roll regardless of the Luck/benefit toggle.
+ *
+ * Entry shape:
+ *   apply(item, actor, currentFormula) → { formula: string, label: string } | null
+ *
+ * To add a new always-on crit effect: add one entry here. Nothing else to change.
+ */
+VAGABOND.critAlwaysOnProperties = {
+  'Brutal': {
+    label: 'Brutal',
+    apply: (item, actor, currentFormula) => {
+      const dieMatch = currentFormula.match(/d(\d+)/);
+      if (!dieMatch) return null;
+      const count = actor.system.brutalMaxDice ?? 1;
+      return { formula: `${count}d${dieMatch[1]}`, label: `Brutal (+${count}d${dieMatch[1]})` };
+    }
+  },
+};
