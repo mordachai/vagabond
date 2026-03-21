@@ -219,6 +219,155 @@
   }
 }
 
+// =============================================================================
+// Item Section — fieldset/legend-style bordered boxes
+// Used on spell-details, equipment-details, and any other detail tab sections
+// =============================================================================
+
+.item-section-details {
+  position: relative;
+  border: 1px solid $c-faint;
+  border-radius: 5px;
+  margin: 1.1em 0 6px;
+  padding: 6px 10px 10px;
+
+  // The <summary> floats on the top border, legend-style
+  > .item-section-summary {
+    position: absolute;
+    top: -0.65em;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 1px 8px;
+
+    // Tile the same paper texture as the window so the label blends into the background
+    background-image: var(--vagabond-bg-paper);
+    background-repeat: var(--vagabond-bg-repeat);
+    background-size: var(--vagabond-bg-size);
+
+    border-radius: 3px;
+    list-style: none;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    font-family: $font-title;
+    font-size: 0.78em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $c-text-1;
+
+    &::-webkit-details-marker,
+    &::marker { display: none; }
+
+    .accordion-icon {
+      font-size: 0.75em;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &[open] > .item-section-summary .accordion-icon {
+    transform: rotate(90deg);
+  }
+
+  // When closed — keep a thin visible box so the label sits on something
+  &:not([open]) {
+    padding-bottom: 6px;
+  }
+}
+
+// Static variant (no open/close toggle) — same fieldset/legend look
+.item-section-box {
+  position: relative;
+  border: 1px solid $c-faint;
+  border-radius: 5px;
+  margin: 1.1em 0 6px;
+  padding: 12px 10px;
+
+  > .item-section-label {
+    position: absolute;
+    top: -0.65em;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 1px 8px;
+    background-image: var(--vagabond-bg-paper);
+    background-repeat: var(--vagabond-bg-repeat);
+    background-size: var(--vagabond-bg-size);
+    border-radius: 3px;
+    white-space: nowrap;
+    font-family: $font-title;
+    font-size: 0.78em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $c-text-1;
+  }
+}
+
+// Equipment Details — consolidated cost/slots/metal/calculated row layout
+.equip-cost-slots-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-end;
+
+  .currency-field, .slots-field, .quantity-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1 1 60px;
+    min-width: 52px;
+
+    input { width: 100%; }
+  }
+}
+
+.consumable-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  align-items: center;
+
+  .linked-consumable-field {
+    select { width: 100%; }
+  }
+}
+
+.damage-immunity-body {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px 8px;
+  padding: 6px 0 2px;
+}
+
+.metal-effect-text {
+  width: 100%;
+  margin-top: 3px;
+  font-size: 0.8em;
+  color: $c-text-2;
+  font-style: italic;
+}
+
+.equip-metal-calc-row {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+
+  .metal-field {
+    flex: 1 1 120px;
+    select { width: 100%; }
+  }
+
+  .calculated-properties {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    white-space: nowrap;
+  }
+}
+
 // Save button for traits
 // Unified item content containers
 // Tab content styling for ancestry and class details

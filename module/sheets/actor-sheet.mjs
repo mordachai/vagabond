@@ -96,6 +96,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickActionDamageRoll: this._onClickActionDamageRoll,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
       toggleDescription: this._onToggleDescription,
+      addNpcActionStatus: this._onAddNpcActionStatus,
+      removeNpcActionStatus: this._onRemoveNpcActionStatus,
+      addNpcActionCritStatus: this._onAddNpcActionCritStatus,
+      removeNpcActionCritStatus: this._onRemoveNpcActionCritStatus,
     },
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
     form: {
@@ -873,6 +877,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onCreateCountdownFromRecharge(event, target) {
     return this.actionHandler?.createCountdownFromRecharge(event, target);
+  }
+
+  static async _onAddNpcActionStatus(event, target) {
+    return this.actionHandler?.addNpcActionStatus(event, target);
+  }
+
+  static async _onRemoveNpcActionStatus(event, target) {
+    return this.actionHandler?.removeNpcActionStatus(event, target);
+  }
+
+  static async _onAddNpcActionCritStatus(event, target) {
+    return this.actionHandler?.addNpcActionCritStatus(event, target);
+  }
+
+  static async _onRemoveNpcActionCritStatus(event, target) {
+    return this.actionHandler?.removeNpcActionCritStatus(event, target);
   }
 
   /**

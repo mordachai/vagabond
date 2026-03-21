@@ -36,7 +36,7 @@
                     {{#if propertyTags.length}}
                         <div class="meta-tag tag-property-group" data-action="toggleProperties" title="{{localize 'VAGABOND.Weapon.Property.ViewPropertiesLabel'}}">
                             {{#each propertyTags}}
-                                <span>{{this.label}}</span>{{#unless @last}},{{/unless}}
+                                <span {{#if this.active}}class="tag-property--active"{{/if}}>{{this.label}}</span>{{#unless @last}},{{/unless}}
                             {{/each}}
                         </div>
                     {{/if}}

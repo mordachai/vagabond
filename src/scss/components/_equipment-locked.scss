@@ -171,6 +171,43 @@
   }
 }
 
+// On-hit / crit effects list in locked view
+.locked-effects-list {
+  list-style: none;
+  margin: 2px 0 6px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.locked-effect-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.85em;
+
+  .locked-effect-name {
+    font-weight: bold;
+  }
+
+  .locked-effect-detail {
+    color: $c-text-2;
+    font-size: 0.9em;
+    &::before { content: '·'; margin-right: 3px; }
+  }
+}
+
+.locked-effects-sublabel {
+  font-size: 0.78em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $c-text-2;
+  margin: 4px 0 2px;
+}
+
 // FX indicator row — flat rule so it isn't buried under nesting specificity
 .locked-stat--row {
   flex-direction: row !important;

@@ -109,6 +109,15 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeGrantSkillChoiceGroup: this._onRemoveGrantSkillChoiceGroup,
       toggleBound: this._onToggleBound,
       toggleAccordion: this._onToggleAccordion,
+      addCausedStatus: this._onAddCausedStatus,
+      removeCausedStatus: this._onRemoveCausedStatus,
+      addPassiveCausedStatus: this._onAddPassiveCausedStatus,
+      removePassiveCausedStatus: this._onRemovePassiveCausedStatus,
+      addCritCausedStatus: this._onAddCritCausedStatus,
+      removeCritCausedStatus: this._onRemoveCritCausedStatus,
+      toggleBlockedStatus: this._onToggleBlockedStatus,
+      toggleResistedStatus: this._onToggleResistedStatus,
+      applyCoating: this._onApplyCoating,
     },
     form: {
       submitOnChange: false,
@@ -1084,12 +1093,28 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         const name = e.target.name;
         if (!name) return;
 
-        // Check if this field belongs to a traits or levelFeatures array element
-        const arrayMatch = name.match(/^(system\.(traits|levelFeatures))\.(\d+)\./);
+        // Check if this field belongs to an array element
+        const arrayMatch = name.match(/^(system\.(traits|levelFeatures|causedStatuses|critCausedStatuses))\.(\d+)\./);
         if (arrayMatch) {
-          const arrayPath = arrayMatch[1]; // e.g. "system.traits"
-          const arrayProp = arrayMatch[2]; // e.g. "traits"
+          const arrayPath = arrayMatch[1];
+          const arrayProp = arrayMatch[2];
           const idx = parseInt(arrayMatch[3]);
+
+          // causedStatuses / critCausedStatuses: save directly from document state (no DOM reading).
+          // tickDamageEnabled triggers a re-render so the conditional damage fields appear/disappear.
+          if (arrayProp === 'causedStatuses' || arrayProp === 'critCausedStatuses') {
+            const fieldName = name.slice(`${arrayPath}.${idx}.`.length);
+            const value = e.target.type === 'checkbox' ? e.target.checked
+                        : e.target.type === 'number'   ? (Number(e.target.value) || 0)
+                        : e.target.value;
+            const current = foundry.utils.deepClone(this.document.system[arrayProp] ?? []);
+            if (!current[idx]) return;
+            current[idx][fieldName] = value;
+            const renderOptions = fieldName === 'tickDamageEnabled' ? {} : { render: false };
+            await this._safeUpdate({ [`system.${arrayProp}`]: current }, renderOptions);
+            return;
+          }
+
           await this._saveArrayElement(arrayPath, arrayProp, idx);
           return;
         }
@@ -1100,8 +1125,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         else if (e.target.type === 'number') value = Number(e.target.value) || 0;
         else value = e.target.value;
         try {
-          // Allow a render for top-level 'name' so the Items sidebar listing updates immediately.
-          const options = name === 'name' ? {} : { render: false };
+          // Allow a render for fields whose changes affect calculated display values.
+          const needsRender = name === 'name' || name === 'system.metal';
+          const options = needsRender ? {} : { render: false };
           await this.document.update({ [name]: value }, options);
         } catch (err) {
           // Silently ignore
@@ -3027,5 +3053,194 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     });
     return this._updateQueue;
+  }
+
+  // ---------------------------------------------------------------------------
+  // On-Hit Status Effects handlers
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Add a blank caused-status entry to the item's causedStatuses array.
+   */
+  static async _onAddCausedStatus(event, target) {
+    const current = foundry.utils.deepClone(this.document.system.causedStatuses ?? []);
+    current.push({
+      statusId: '',
+      requiresDamage: true,
+      saveType: 'none',
+      duration: '',
+      tickDamageEnabled: false,
+      damageOnTick: '',
+      damageType: '-',
+      // TODO: fatigueOnTick: 0, — restore when re-enabling the fatigueOnTick feature
+    });
+    await this._safeUpdate({ 'system.causedStatuses': current });
+  }
+
+  /**
+   * Remove a caused-status entry by index.
+   */
+  static async _onRemoveCausedStatus(event, target) {
+    const idx = parseInt(target.dataset.index);
+    if (isNaN(idx)) return;
+    const current = foundry.utils.deepClone(this.document.system.causedStatuses ?? []);
+    current.splice(idx, 1);
+    await this._safeUpdate({ 'system.causedStatuses': current });
+  }
+
+  /**
+   * Add a blank passiveCausedStatuses entry.
+   */
+  static async _onAddPassiveCausedStatus(event, target) {
+    const current = foundry.utils.deepClone(this.document.system.passiveCausedStatuses ?? []);
+    current.push({
+      statusId: '',
+      requiresDamage: true,
+      saveType: 'none',
+      duration: '',
+      tickDamageEnabled: false,
+      damageOnTick: '',
+      damageType: '-',
+    });
+    await this._safeUpdate({ 'system.passiveCausedStatuses': current });
+  }
+
+  /**
+   * Remove a passiveCausedStatuses entry by index.
+   */
+  static async _onRemovePassiveCausedStatus(event, target) {
+    const idx = parseInt(target.dataset.index);
+    if (isNaN(idx)) return;
+    const current = foundry.utils.deepClone(this.document.system.passiveCausedStatuses ?? []);
+    current.splice(idx, 1);
+    await this._safeUpdate({ 'system.passiveCausedStatuses': current });
+  }
+
+  /**
+   * Add a blank critCausedStatuses entry.
+   */
+  static async _onAddCritCausedStatus(event, target) {
+    const current = foundry.utils.deepClone(this.document.system.critCausedStatuses ?? []);
+    current.push({
+      statusId: '',
+      requiresDamage: true,
+      saveType: 'none',
+      duration: '',
+      tickDamageEnabled: false,
+      damageOnTick: '',
+      damageType: '-',
+      // TODO: fatigueOnTick: 0, — restore when re-enabling the fatigueOnTick feature
+    });
+    await this._safeUpdate({ 'system.critCausedStatuses': current });
+  }
+
+  /**
+   * Remove a critCausedStatuses entry by index.
+   */
+  static async _onRemoveCritCausedStatus(event, target) {
+    const idx = parseInt(target.dataset.index);
+    if (isNaN(idx)) return;
+    const current = foundry.utils.deepClone(this.document.system.critCausedStatuses ?? []);
+    current.splice(idx, 1);
+    await this._safeUpdate({ 'system.critCausedStatuses': current });
+  }
+
+  /**
+   * Toggle a status in the armor's blockedStatuses array (full immunity).
+   */
+  static async _onToggleBlockedStatus(event, target) {
+    const statusId = target.dataset.statusId;
+    if (!statusId) return;
+    const current = foundry.utils.deepClone(this.document.system.blockedStatuses ?? []);
+    const idx = current.indexOf(statusId);
+    if (idx >= 0) current.splice(idx, 1);
+    else current.push(statusId);
+    await this._safeUpdate({ 'system.blockedStatuses': current }, { render: false });
+  }
+
+  /**
+   * Toggle a status in the armor's resistedStatuses array (favored save).
+   */
+  static async _onToggleResistedStatus(event, target) {
+    const statusId = target.dataset.statusId;
+    if (!statusId) return;
+    const current = foundry.utils.deepClone(this.document.system.resistedStatuses ?? []);
+    const idx = current.indexOf(statusId);
+    if (idx >= 0) current.splice(idx, 1);
+    else current.push(statusId);
+    await this._safeUpdate({ 'system.resistedStatuses': current }, { render: false });
+  }
+
+  /**
+   * Apply this alchemical item as a coating to a weapon in the actor's inventory.
+   * Opens a dialog listing owned weapons, then writes system.coating to the chosen weapon.
+   */
+  static async _onApplyCoating(event, target) {
+    const actor = this.document.parent;
+    if (!actor) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Status.Coating.NoActor'));
+      return;
+    }
+
+    // Gather weapons in inventory
+    const weapons = actor.items.filter(i =>
+      i.type === 'equipment' && i.system.equipmentType === 'weapon'
+    );
+    if (!weapons.length) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Status.Coating.NoWeapons'));
+      return;
+    }
+
+    // Build dialog content
+    const options = weapons.map(w =>
+      `<option value="${w.id}">${w.name}</option>`
+    ).join('');
+
+    const content = `
+      <form>
+        <div class="form-group">
+          <label>${game.i18n.localize('VAGABOND.Status.Coating.SelectWeapon')}</label>
+          <select name="weaponId">${options}</select>
+        </div>
+      </form>`;
+
+    new Dialog({
+      title: game.i18n.format('VAGABOND.Status.Coating.DialogTitle', { item: this.document.name }),
+      content,
+      buttons: {
+        apply: {
+          icon: '<i class="fas fa-flask"></i>',
+          label: game.i18n.localize('VAGABOND.Status.Coating.Apply'),
+          callback: async (html) => {
+            const weaponId = html.find('[name="weaponId"]').val();
+            const weapon = actor.items.get(weaponId);
+            if (!weapon) return;
+
+            const causedStatuses = foundry.utils.deepClone(
+              this.document.system.causedStatuses ?? []
+            );
+
+            await weapon.update({
+              'system.coating': {
+                sourceName: this.document.name,
+                charges: 1,
+                causedStatuses,
+              },
+            });
+
+            ui.notifications.info(
+              game.i18n.format('VAGABOND.Status.Coating.Applied', {
+                item: this.document.name,
+                weapon: weapon.name,
+              })
+            );
+          },
+        },
+        cancel: {
+          label: game.i18n.localize('Cancel'),
+        },
+      },
+      default: 'apply',
+    }).render(true);
   }
 }

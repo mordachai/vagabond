@@ -259,6 +259,27 @@ export class VagabondNPCSheet extends VagabondActorSheet {
         }
       }, { signal });
     });
+
+    // tickDamageEnabled checkboxes: immediate save + re-render so the damage fields appear/disappear
+    const tickDmgCheckboxes = this.element.querySelectorAll('.npc-status-tick-dmg');
+    tickDmgCheckboxes.forEach(cb => {
+      cb.addEventListener('change', async () => {
+        this._isDirty = true;
+        await this._saveChanges(true);
+        this._isDirty = false;
+      }, { signal });
+    });
+
+    // All other selects in action/status editors: immediate save on change
+    // (selects fire 'change' more reliably than 'input'; debounce risks losing value on fast close/re-render)
+    const actionSelects = this.element.querySelectorAll('.npc-action-edit select[data-field]:not(.npc-status-tick-dmg)');
+    actionSelects.forEach(sel => {
+      sel.addEventListener('change', async () => {
+        this._isDirty = true;
+        await this._saveChanges(false);
+        this._isDirty = false;
+      }, { signal });
+    });
   }
 
   /**
@@ -281,14 +302,15 @@ export class VagabondNPCSheet extends VagabondActorSheet {
         const actionData = {};
         inputs.forEach(input => {
           const field = input.dataset.field;
-          let value = input.value;
+          let value = input.type === 'checkbox' ? input.checked : input.value;
 
-          // Apply validation for damage type fields
+          // Apply validation for top-level damage type field
           if (field === 'damageType' && this.actionHandler) {
             value = this.actionHandler.validateDamageType(value);
           }
 
-          actionData[field] = value;
+          // Support nested dot-notation paths (e.g. causedStatuses.0.statusId)
+          foundry.utils.setProperty(actionData, field, value);
         });
 
         actions[actionIndex] = actionData;

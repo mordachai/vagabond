@@ -126,6 +126,92 @@ export class NPCActionHandler {
   }
 
   /**
+   * Add a blank causedStatuses entry to an NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  async addNpcActionStatus(event, target) {
+    event.preventDefault();
+    const actionIndex = parseInt(target.dataset.actionIndex);
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+    if (!actions[actionIndex]) return;
+    if (!Array.isArray(actions[actionIndex].causedStatuses)) {
+      actions[actionIndex].causedStatuses = [];
+    }
+    actions[actionIndex].causedStatuses.push({
+      statusId: '',
+      requiresDamage: true,
+      saveType: 'any',
+      duration: '',
+      tickDamageEnabled: false,
+      damageOnTick: '',
+      damageType: '-',
+      // TODO: fatigueOnTick: 0, — restore when re-enabling the fatigueOnTick feature
+    });
+    await this.actor.update({ 'system.actions': actions });
+  }
+
+  /**
+   * Remove a causedStatuses entry from an NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  async removeNpcActionStatus(event, target) {
+    event.preventDefault();
+    const actionIndex = parseInt(target.closest('.npc-caused-statuses')?.dataset.actionIndex);
+    const statusIndex = parseInt(target.dataset.statusIndex);
+    if (isNaN(actionIndex) || isNaN(statusIndex)) return;
+    this.sheet._isDirty = false;
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+    if (!actions[actionIndex]?.causedStatuses) return;
+    actions[actionIndex].causedStatuses.splice(statusIndex, 1);
+    await this.actor.update({ 'system.actions': actions });
+  }
+
+  /**
+   * Add a blank critCausedStatuses entry to an NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  async addNpcActionCritStatus(event, target) {
+    event.preventDefault();
+    const actionIndex = parseInt(target.dataset.actionIndex);
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+    if (!actions[actionIndex]) return;
+    if (!Array.isArray(actions[actionIndex].critCausedStatuses)) {
+      actions[actionIndex].critCausedStatuses = [];
+    }
+    actions[actionIndex].critCausedStatuses.push({
+      statusId: '',
+      requiresDamage: true,
+      saveType: 'any',
+      duration: '',
+      tickDamageEnabled: false,
+      damageOnTick: '',
+      damageType: '-',
+      // TODO: fatigueOnTick: 0, — restore when re-enabling the fatigueOnTick feature
+    });
+    await this.actor.update({ 'system.actions': actions });
+  }
+
+  /**
+   * Remove a critCausedStatuses entry from an NPC action
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  async removeNpcActionCritStatus(event, target) {
+    event.preventDefault();
+    const actionIndex = parseInt(target.closest('.npc-caused-statuses')?.dataset.actionIndex);
+    const statusIndex = parseInt(target.dataset.statusIndex);
+    if (isNaN(actionIndex) || isNaN(statusIndex)) return;
+    this.sheet._isDirty = false;
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+    if (!actions[actionIndex]?.critCausedStatuses) return;
+    actions[actionIndex].critCausedStatuses.splice(statusIndex, 1);
+    await this.actor.update({ 'system.actions': actions });
+  }
+
+  /**
    * Create countdown dice from recharge action
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element

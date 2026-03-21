@@ -181,10 +181,28 @@ export class RollHandler {
           return;
         }
 
-        // Otherwise, proceed with the Roll logic
+        // Otherwise, proceed with the Roll logic — apply universal alchemical bonuses
+        // matching what rollDamageFromButton does for the same item type.
+        const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
+
         let damageFormula = item.system.damageAmount;
-        const roll = new Roll(damageFormula);
+        const alcFlat = this.actor.system.universalAlchemicalDamageBonus || 0;
+        let alcDice = this.actor.system.universalAlchemicalDamageDice || '';
+        if (Array.isArray(alcDice)) alcDice = alcDice.filter(d => !!d).join(' + ');
+        const univFlat = this.actor.system.universalDamageBonus || 0;
+        let univDice = this.actor.system.universalDamageDice || '';
+        if (Array.isArray(univDice)) univDice = univDice.filter(d => !!d).join(' + ');
+        if (alcFlat !== 0) damageFormula += ` + ${alcFlat}`;
+        if (typeof alcDice === 'string' && alcDice.trim()) damageFormula += ` + ${alcDice}`;
+        if (univFlat !== 0) damageFormula += ` + ${univFlat}`;
+        if (typeof univDice === 'string' && univDice.trim()) damageFormula += ` + ${univDice}`;
+
+        const roll = new Roll(damageFormula, this.actor.getRollData());
         await roll.evaluate();
+
+        // Apply dice explosion if the item or actor has it enabled
+        const explodeValues = VagabondDamageHelper._getExplodeValues(item, this.actor);
+        if (explodeValues) await VagabondDamageHelper._manuallyExplodeDice(roll, explodeValues);
 
         const damageTypeKey = item.system.damageType || 'physical';
         const isRestorative = ['healing', 'recover', 'recharge'].includes(damageTypeKey);
@@ -225,6 +243,17 @@ export class RollHandler {
       }
 
       /* PATH B: WEAPONS */
+      // Enforce target limits based on Cleave property
+      {
+        const hasCleave = item.system.properties?.includes('Cleave');
+        if (hasCleave) {
+          const max = this.actor.system.cleaveMaxTargets ?? 2;
+          if (targetsAtRollTime.length > max) targetsAtRollTime.splice(max);
+        } else if (targetsAtRollTime.length > 1) {
+          targetsAtRollTime.splice(1);
+        }
+      }
+
       // Check for auto-fail conditions before rolling weapon attack
       const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
       if (autoFailAllRolls) {

@@ -460,13 +460,61 @@ export class CountdownDiceOverlay {
 
     const rollResult = roll.total;
 
+    // Compute tick damage inline (GM only) before posting the card.
+    // Fires when tickDamageEnabled is true — uses die roll as damage unless formula is set.
+    let tickData = null;
+    if (game.user.isGM && flags.linkedActorUuid && flags.tickDamageEnabled) {
+      try {
+        const actor = await fromUuid(flags.linkedActorUuid);
+        if (actor) {
+          const { StatusHelper } = await import('../helpers/status-helper.mjs');
+          tickData = await StatusHelper.dealTickDamage(
+            actor,
+            flags.tickDamageFormula ?? '',
+            flags.tickDamageType ?? '-',
+            flags.linkedStatusId ?? '',
+            rollResult                // die roll result used as damage when formula is blank
+          );
+          if (tickData) {
+            const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage');
+            if (autoApply && tickData.finalDamage > 0) {
+              const currentHP = actor.system.health?.value ?? 0;
+              const newHP = Math.max(0, currentHP - tickData.finalDamage);
+              await actor.update({ 'system.health.value': newHP });
+              const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+              await VagabondChatCard.applyResult(actor, {
+                type: 'damage',
+                rawAmount: tickData.rawDamage,
+                finalAmount: tickData.finalDamage,
+                damageType: tickData.damageTypeKey,
+                previousValue: currentHP,
+                newValue: newHP,
+                sourceName: tickData.statusLabel,
+              });
+            }
+            // TODO: fatigueOnTick — restore this block when re-enabling the feature:
+            // const fatigueOnTick = flags.fatigueOnTick ?? 0;
+            // if (autoApply && fatigueOnTick > 0) {
+            //   const currentFatigue = actor.system.fatigue ?? 0;
+            //   const maxFatigue = actor.system.fatigueMax ?? 5;
+            //   await actor.update({ 'system.fatigue': Math.min(maxFatigue, currentFatigue + fatigueOnTick) });
+            //   tickData.fatigueApplied = fatigueOnTick;
+            // }
+            tickData.autoApplied = autoApply;
+          }
+        }
+      } catch (err) {
+        console.warn('Vagabond | Could not deal status tick damage:', err);
+      }
+    }
+
     // Determine outcome
     if (rollResult === 1) {
       const smallerDice = CountdownDice.getSmallerDice(diceType);
 
       if (smallerDice === null) {
         // d4 rolled 1 - countdown ends
-        await this._postChatMessage(dice, roll, rollResult, 'ended');
+        await this._postChatMessage(dice, roll, rollResult, 'ended', null, tickData);
         // Wait for dice animation to complete before deleting (Dice So Nice takes ~2 seconds)
         const timeoutId = setTimeout(async () => {
           this.pendingDeletions.delete(dice.id);
@@ -476,20 +524,24 @@ export class CountdownDiceOverlay {
         this.pendingDeletions.set(dice.id, timeoutId);
       } else {
         // Shrink dice
-        await this._postChatMessage(dice, roll, rollResult, 'reduced', smallerDice);
+        await this._postChatMessage(dice, roll, rollResult, 'reduced', smallerDice, tickData);
         // Wait for dice animation before updating
         const timeoutId = setTimeout(async () => {
           this.pendingDeletions.delete(dice.id);
           await dice.update({
             'flags.vagabond.countdownDice.diceType': smallerDice,
           });
+          // Explicitly refresh the overlay element after the update.
+          // The updateJournalEntry hook may use stale flag data or miss the
+          // diceElements map entry; fetching fresh here guarantees the visual syncs.
+          await this.refreshDice(dice.id);
         }, 2500);
         // Store timeout so we can cancel it if needed
         this.pendingDeletions.set(dice.id, timeoutId);
       }
     } else {
       // Countdown continues
-      await this._postChatMessage(dice, roll, rollResult, 'continues');
+      await this._postChatMessage(dice, roll, rollResult, 'continues', null, tickData);
     }
   }
 
@@ -501,7 +553,7 @@ export class CountdownDiceOverlay {
    * @param {string} status - Status: 'continues', 'reduced', or 'ended'
    * @param {string} newDiceType - New dice type (for 'reduced' status)
    */
-  async _postChatMessage(dice, roll, rollResult, status, newDiceType = null) {
+  async _postChatMessage(dice, roll, rollResult, status, newDiceType = null, tickData = null) {
     const flags = dice.flags.vagabond.countdownDice;
     const currentDiceType = flags.diceType;
 
@@ -513,7 +565,8 @@ export class CountdownDiceOverlay {
       rollResult,
       status,
       currentDiceType,
-      newDiceType
+      newDiceType,
+      tickData
     );
   }
 

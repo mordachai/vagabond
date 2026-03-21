@@ -1,0 +1,190 @@
+// =============================================================================
+// Status Effects — On-Hit editor (item sheet) and chat card output
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+// Item sheet — caused-status-row (equipment, spell, NPC action editor)
+// ---------------------------------------------------------------------------
+
+.on-hit-effects-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 0 4px;
+}
+
+.caused-status-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid $c-faint;
+  border-radius: 3px;
+
+  .caused-status-top,
+  .caused-status-bot {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .caused-status-select  { flex: 2 1 120px; min-width: 90px; }
+  .caused-status-save    { flex: 1 1 90px;  min-width: 70px; }
+  .caused-status-duration { flex: 0 0 72px; }
+  .caused-status-tick    { flex: 1 1 90px;  min-width: 70px; }
+  .caused-status-dtype   { flex: 1 1 90px;  min-width: 70px; }
+
+  .caused-status-req {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.75em;
+    white-space: nowrap;
+    cursor: help;
+    margin-left: auto;
+  }
+
+  .caused-status-remove {
+    flex: 0 0 auto;
+    padding: 2px 5px;
+    background: transparent;
+    border: 1px solid $c-faint;
+    border-radius: 3px;
+    color: $c-text-2;
+    cursor: pointer;
+    &:hover { color: #c33; border-color: #c33; }
+  }
+}
+
+.caused-status-row--npc {
+  // Slightly more compact inside NPC action editor
+  font-size: 0.85em;
+}
+
+.caused-status-add,
+.caused-status-coat {
+  align-self: flex-start;
+  margin-top: 2px;
+  font-size: 0.8em;
+}
+
+// NPC action "on hit effects" container
+.npc-caused-statuses {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.action-edit-row--full {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  > label { font-size: 0.8em; color: $c-text-2; }
+}
+
+// ---------------------------------------------------------------------------
+// Item sheet — status protections (armor blocked/resisted)
+// ---------------------------------------------------------------------------
+
+.status-protections-body {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.status-protect-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.status-protect-heading {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $c-text-2;
+  margin: 0 0 4px 0;
+}
+
+// ---------------------------------------------------------------------------
+// Chat card — on-hit preview (shown in attack card footer)
+// ---------------------------------------------------------------------------
+
+.on-hit-preview {
+  padding: 4px 6px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.04);
+  margin-top: 4px;
+  font-size: 0.82em;
+}
+
+.on-hit-label {
+  margin: 0 0 3px 0;
+  font-weight: bold;
+  font-size: 0.85em;
+  color: $c-text-2;
+  i { margin-right: 4px; }
+}
+
+.on-hit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.on-hit-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1.4;
+
+  .on-hit-save     { color: $c-text-2; font-size: 0.9em; }
+  .on-hit-duration { color: $c-text-2; font-size: 0.9em; font-style: italic; }
+  .on-hit-req-dmg  { color: $c-text-2; cursor: help; }
+}
+
+// ---------------------------------------------------------------------------
+// Chat card — status result lines (applied/immune/resisted/etc.)
+// ---------------------------------------------------------------------------
+
+.status-results {
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.status-result {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  margin: 0;
+
+  i { width: 14px; text-align: center; flex-shrink: 0; }
+}
+
+.status-applied    { background: rgba(40, 160, 40,  0.12); color: #1a6e1a; }
+.status-immune     { background: rgba(80, 80, 200,  0.10); color: #33399a; }
+.status-resisted   { background: rgba(200, 150, 20, 0.12); color: #7a5a00; }
+.status-already-active { background: rgba(0, 0, 0, 0.06); color: $c-text-2; }
+.status-skipped    { background: rgba(0, 0, 0, 0.04); color: $c-text-2; font-style: italic; }
+
+// Tick target note in countdown dice card (above the damage section)
+.tick-target-note {
+  margin: 4px 0 0;
+  font-size: 0.82em;
+  color: $c-text-2;
+  i { margin-right: 4px; }
+}

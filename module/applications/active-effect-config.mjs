@@ -93,30 +93,58 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
    * @private
    */
   _addFormulaAutocomplete() {
+    const STATUS_ARRAY_FIELDS = new Set([
+      'system.statusResistances',
+      'system.statusImmunities',
+    ]);
+
     const valueInputs = this.element.querySelectorAll('input[name^="changes"][name$=".value"]');
 
     valueInputs.forEach(input => {
-      // Create datalist for this input
       const datalistId = `formula-suggestions-${foundry.utils.randomID()}`;
       const datalist = document.createElement('datalist');
       datalist.id = datalistId;
-
-      // Add all formula variables to datalist
-      const suggestions = this._getFormulaSuggestions();
-      suggestions.forEach(suggestion => {
-        const option = document.createElement('option');
-        option.value = suggestion.value;
-        option.textContent = suggestion.label;
-        datalist.appendChild(option);
-      });
-
-      // Append datalist and link to input
       input.setAttribute('list', datalistId);
       input.setAttribute('autocomplete', 'off');
-      input.setAttribute('placeholder', 'Number or formula (e.g., @attributes.level.value)');
       input.parentElement.appendChild(datalist);
 
-      // Add custom autocomplete behavior for @ symbol
+      // Derive the key input name from the value input name (e.g. "changes.0.value" → "changes.0.key")
+      const keyName = input.getAttribute('name').replace(/\.value$/, '.key');
+      const keyInput = this.element.querySelector(`input[name="${keyName}"]`);
+
+      const populateDatalist = (keyValue) => {
+        datalist.innerHTML = '';
+        if (STATUS_ARRAY_FIELDS.has(keyValue)) {
+          // Show status condition IDs
+          input.setAttribute('placeholder', 'Status ID (e.g., burning, poisoned)');
+          Object.keys(CONFIG.VAGABOND.statusConditions ?? {}).forEach(statusId => {
+            const label = game.i18n.localize(CONFIG.VAGABOND.statusConditions[statusId]);
+            const option = document.createElement('option');
+            option.value = statusId;
+            option.textContent = label;
+            datalist.appendChild(option);
+          });
+        } else {
+          // Default: formula suggestions
+          input.setAttribute('placeholder', 'Number or formula (e.g., @attributes.level.value)');
+          this._getFormulaSuggestions().forEach(suggestion => {
+            const option = document.createElement('option');
+            option.value = suggestion.value;
+            option.textContent = suggestion.label;
+            datalist.appendChild(option);
+          });
+        }
+      };
+
+      // Populate on render based on current key value
+      populateDatalist(keyInput?.value ?? '');
+
+      // Re-populate when key changes
+      if (keyInput) {
+        keyInput.addEventListener('change', () => populateDatalist(keyInput.value));
+        keyInput.addEventListener('input', () => populateDatalist(keyInput.value));
+      }
+
       input.addEventListener('input', (event) => this._handleFormulaInput(event, datalist));
     });
   }

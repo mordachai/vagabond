@@ -97,17 +97,31 @@
               <span class='stat-label'>Might Req:</span>
               <span class='stat-value'>{{system.might}}</span>
             </div>
-            {{! Damage Immunities (Read-Only) }}
+          </div>
+        </div>
+        {{#if (or system.immunities.length system.blockedStatuses.length system.resistedStatuses.length)}}
+          <div class='locked-section'>
+            <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.ArmorEffects"}}</h3>
             {{#if system.immunities.length}}
               <div class='locked-stat'>
-                <span class='stat-label'>Immunities:</span>
-                <span class='stat-value'>
-                  {{#each system.immunities as |immunity index|}}{{immunity}}{{#unless @last}}, {{/unless}}{{/each}}
-                </span>
+                <span class='stat-label'>{{localize 'VAGABOND.Status.DamageImmunities'}}:</span>
+                <span class='stat-value'>{{#each system.immunities as |immunity|}}{{localize (lookup @root.config.damageTypes immunity)}}{{#unless @last}}, {{/unless}}{{/each}}</span>
+              </div>
+            {{/if}}
+            {{#if system.blockedStatuses.length}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize 'VAGABOND.Status.Blocks'}}:</span>
+                <span class='stat-value'>{{#each system.blockedStatuses as |statusId|}}{{localize (lookup @root.config.statusConditions statusId)}}{{#unless @last}}, {{/unless}}{{/each}}</span>
+              </div>
+            {{/if}}
+            {{#if system.resistedStatuses.length}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize 'VAGABOND.Status.Resists'}}:</span>
+                <span class='stat-value'>{{#each system.resistedStatuses as |statusId|}}{{localize (lookup @root.config.statusConditions statusId)}}{{#unless @last}}, {{/unless}}{{/each}}</span>
               </div>
             {{/if}}
           </div>
-        </div>
+        {{/if}}
       {{/if}}
 
       {{! ===== GEAR-SPECIFIC DISPLAY ===== }}
@@ -167,6 +181,57 @@
               <span class='stat-value'>{{system.costDisplay}}</span>
             </div>
           </div>
+        </div>
+      {{/if}}
+
+      {{! ===== WEAPON/ITEM EFFECTS (on-hit statuses — locked display) ===== }}
+      {{#if (or (eq system.equipmentType 'weapon') (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+        {{#if (or system.causedStatuses.length system.critCausedStatuses.length)}}
+          <div class='locked-section'>
+            <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.WeaponEffects"}}</h3>
+            {{#if system.causedStatuses.length}}
+              <ul class='locked-effects-list'>
+                {{#each system.causedStatuses as |entry|}}
+                  <li class='locked-effect-entry'>
+                    <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
+                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{entry.saveType}} save</span>{{/unless}}
+                    {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
+                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}die roll{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} tick</span>{{/if}}
+                  </li>
+                {{/each}}
+              </ul>
+            {{/if}}
+            {{#if system.critCausedStatuses.length}}
+              <p class='locked-effects-sublabel'>{{localize 'VAGABOND.Status.CritOnHitEffects'}}:</p>
+              <ul class='locked-effects-list'>
+                {{#each system.critCausedStatuses as |entry|}}
+                  <li class='locked-effect-entry'>
+                    <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
+                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{entry.saveType}} save</span>{{/unless}}
+                    {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
+                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}die roll{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} tick</span>{{/if}}
+                  </li>
+                {{/each}}
+              </ul>
+            {{/if}}
+          </div>
+        {{/if}}
+      {{/if}}
+
+      {{! ===== PASSIVE ON-HIT EFFECTS (locked display — all equipment types) ===== }}
+      {{#if system.passiveCausedStatuses.length}}
+        <div class='locked-section'>
+          <h3 class='section-header'>{{localize "VAGABOND.Status.PassiveOnHitEffects"}}</h3>
+          <ul class='locked-effects-list'>
+            {{#each system.passiveCausedStatuses as |entry|}}
+              <li class='locked-effect-entry'>
+                <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
+                {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{entry.saveType}} save</span>{{/unless}}
+                {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
+                {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}die roll{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} tick</span>{{/if}}
+              </li>
+            {{/each}}
+          </ul>
         </div>
       {{/if}}
 
@@ -257,24 +322,27 @@
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
     <div class='equipment-item-content'>
       {{! Description Section - Universal }}
-      <div class='form-group'>
-        <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
-        <div class='equipment-description'>
-          {{#if editable}}
-            <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
-              {{{enriched.description}}}
-            </prose-mirror>
-          {{else}}
-            <div>{{{enriched.description}}}</div>
-          {{/if}}
+      <div class="item-section-box">
+        <div class="item-section-label">{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</div>
+        <div class='form-group'>
+          <div class='equipment-description'>
+            {{#if editable}}
+              <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+                {{{enriched.description}}}
+              </prose-mirror>
+            {{else}}
+              <div>{{{enriched.description}}}</div>
+            {{/if}}
+          </div>
         </div>
       </div>
 
       {{! ===== WEAPON-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'weapon')}}
+        <div class="item-section-box">
+          <div class="item-section-label">{{localize "VAGABOND.UI.Sections.WeaponConfig"}}</div>
         {{! Weapon Skill and Damage Row }}
         <div class='form-group'>
-          <label class='resource-label'>Weapon Configuration</label>
           <div class='grid grid-3col gap-8'>
             <div class='weapon-skill-field'>
               <label class='resource-label'>Skill</label>
@@ -415,260 +483,491 @@
             </div>
           </div>
         </div>
+        </div>{{! /item-section-box WeaponConfig }}
       {{/if}}
+
+      {{! ===== STATUS & EFFECTS CONFIGURATION (weapons, relics, alchemicals) ===== }}
+      {{#if (or (eq system.equipmentType 'weapon') (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
+        <div class="item-section-box">
+          <div class="item-section-label">{{localize 'VAGABOND.Status.StatusesEffectsTitle'}}</div>
+        <details class='item-section-details' data-details-id='on-hit-effects'>
+          <summary class='item-section-summary'>
+            <i class='fas fa-chevron-right accordion-icon'></i>
+            <span>{{localize 'VAGABOND.Status.OnHitEffects'}}</span>
+          </summary>
+          <div class='on-hit-effects-body'>
+            {{#each system.causedStatuses as |entry index|}}
+              <div class='caused-status-row' data-index='{{index}}'>
+                <div class='caused-status-top'>
+                  <select name='system.causedStatuses.{{index}}.statusId' class='caused-status-select'>
+                    <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                    {{#each @root.config.statusConditions as |label key|}}
+                      <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+                  <select name='system.causedStatuses.{{index}}.saveType' class='caused-status-save'>
+                    <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                    <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                    {{#each @root.config.homebrew.saves as |save|}}
+                      <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                    {{/each}}
+                  </select>
+                  <select name='system.causedStatuses.{{index}}.duration' class='caused-status-duration'>
+                    <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                    <option value='focusing' {{#if (eq entry.duration 'focusing')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Focusing'}}</option>
+                    {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                      <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class='caused-status-bot'>
+                  <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                    <input type='checkbox' name='system.causedStatuses.{{index}}.tickDamageEnabled'
+                      {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                    {{localize 'VAGABOND.Status.CausesDamage'}}
+                  </label>
+                  {{#if entry.tickDamageEnabled}}
+                  <select name='system.causedStatuses.{{index}}.damageType' class='caused-status-dtype'>
+                    {{#each @root.config.damageTypes as |label key|}}
+                      <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+                  <input type='text' name='system.causedStatuses.{{index}}.damageOnTick'
+                    value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'
+                    class='caused-status-tick'>
+                  {{!-- TODO: fatigueOnTick input — restore when re-enabling the feature (also restore schema field, push objects, flags, overlay logic)
+                  <input type='number' name='system.causedStatuses.{{index}}.fatigueOnTick'
+                    value='{{entry.fatigueOnTick}}' min='0' title='{{localize "VAGABOND.Status.FatigueOnTick"}}'
+                    class='caused-status-fatigue-tick'>
+                  --}}
+                  {{/if}}
+                  <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                    <input type='checkbox' name='system.causedStatuses.{{index}}.requiresDamage'
+                      {{#if entry.requiresDamage}}checked{{/if}}>
+                    {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                  </label>
+                  <button type='button' class='caused-status-remove' data-action='removeCausedStatus' data-index='{{index}}'>
+                    <i class='fas fa-times'></i>
+                  </button>
+                </div>
+              </div>
+            {{/each}}
+            <button type='button' class='caused-status-add' data-action='addCausedStatus'>
+              <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddEffect'}}
+            </button>
+            {{! Apply coating button for alchemical items }}
+            {{#if (eq system.equipmentType 'alchemical')}}
+              <button type='button' class='caused-status-coat' data-action='applyCoating'>
+                <i class='fas fa-flask'></i> {{localize 'VAGABOND.Status.Coating.Apply'}}
+              </button>
+            {{/if}}
+          </div>
+        </details>
+
+        {{! ===== CRIT ON-HIT STATUS EFFECTS ===== }}
+        <details class='item-section-details' data-details-id='crit-on-hit-effects'>
+          <summary class='item-section-summary'>
+            <i class='fas fa-chevron-right accordion-icon'></i>
+            <span>{{localize 'VAGABOND.Status.CritOnHitEffects'}}</span>
+          </summary>
+          <div class='on-hit-effects-body'>
+            {{#each system.critCausedStatuses as |entry index|}}
+              <div class='caused-status-row' data-index='{{index}}'>
+                <div class='caused-status-top'>
+                  <select name='system.critCausedStatuses.{{index}}.statusId' class='caused-status-select'>
+                    <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                    {{#each @root.config.statusConditions as |label key|}}
+                      <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+                  <select name='system.critCausedStatuses.{{index}}.saveType' class='caused-status-save'>
+                    <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                    <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                    {{#each @root.config.homebrew.saves as |save|}}
+                      <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                    {{/each}}
+                  </select>
+                  <select name='system.critCausedStatuses.{{index}}.duration' class='caused-status-duration'>
+                    <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                    <option value='focusing' {{#if (eq entry.duration 'focusing')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Focusing'}}</option>
+                    {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                      <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class='caused-status-bot'>
+                  <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                    <input type='checkbox' name='system.critCausedStatuses.{{index}}.tickDamageEnabled'
+                      {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                    {{localize 'VAGABOND.Status.CausesDamage'}}
+                  </label>
+                  {{#if entry.tickDamageEnabled}}
+                  <select name='system.critCausedStatuses.{{index}}.damageType' class='caused-status-dtype'>
+                    {{#each @root.config.damageTypes as |label key|}}
+                      <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+                  <input type='text' name='system.critCausedStatuses.{{index}}.damageOnTick'
+                    value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'
+                    class='caused-status-tick'>
+                  {{!-- TODO: fatigueOnTick input — restore when re-enabling (see causedStatuses block above for checklist)
+                  <input type='number' name='system.critCausedStatuses.{{index}}.fatigueOnTick'
+                    value='{{entry.fatigueOnTick}}' min='0' title='{{localize "VAGABOND.Status.FatigueOnTick"}}'
+                    class='caused-status-fatigue-tick'>
+                  --}}
+                  {{/if}}
+                  <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                    <input type='checkbox' name='system.critCausedStatuses.{{index}}.requiresDamage'
+                      {{#if entry.requiresDamage}}checked{{/if}}>
+                    {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                  </label>
+                  <button type='button' class='caused-status-remove' data-action='removeCritCausedStatus' data-index='{{index}}'>
+                    <i class='fas fa-times'></i>
+                  </button>
+                </div>
+              </div>
+            {{/each}}
+            <button type='button' class='caused-status-add' data-action='addCritCausedStatus'>
+              <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddCritEffect'}}
+            </button>
+          </div>
+        </details>
+        </div>{{! /item-section-box Status & Effects }}
+      {{/if}}
+
+      {{! ===== PASSIVE ON-HIT EFFECTS (editable — all equipment types) ===== }}
+      <div class='item-section-box'>
+        <div class='item-section-label'>{{localize "VAGABOND.Status.PassiveOnHitEffects"}}</div>
+        <p class='item-section-hint'>{{localize "VAGABOND.Status.PassiveOnHitEffectsHint"}}</p>
+        <details class='item-section-details' data-details-id='passive-on-hit-effects'>
+          <summary class='item-section-summary'>
+            <i class='fas fa-chevron-right accordion-icon'></i>
+            <span>{{localize 'VAGABOND.Status.PassiveOnHitEffects'}}</span>
+          </summary>
+          <div class='on-hit-effects-body'>
+            {{#each system.passiveCausedStatuses as |entry index|}}
+              <div class='caused-status-row' data-index='{{index}}'>
+                <div class='caused-status-top'>
+                  <select name='system.passiveCausedStatuses.{{index}}.statusId' class='caused-status-select'>
+                    <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                    {{#each @root.config.statusConditions as |label key|}}
+                      <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+                  <select name='system.passiveCausedStatuses.{{index}}.saveType' class='caused-status-save'>
+                    <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                    <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                    {{#each @root.config.homebrew.saves as |save|}}
+                      <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                    {{/each}}
+                  </select>
+                  <select name='system.passiveCausedStatuses.{{index}}.duration' class='caused-status-duration'>
+                    <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                    {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                      <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class='caused-status-bot'>
+                  <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                    <input type='checkbox' name='system.passiveCausedStatuses.{{index}}.tickDamageEnabled'
+                      {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                    {{localize 'VAGABOND.Status.CausesDamage'}}
+                  </label>
+                  {{#if entry.tickDamageEnabled}}
+                  <select name='system.passiveCausedStatuses.{{index}}.damageType' class='caused-status-dtype'>
+                    {{#each @root.config.damageTypes as |label key|}}
+                      <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                  </select>
+                  <input type='text' name='system.passiveCausedStatuses.{{index}}.damageOnTick'
+                    value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'
+                    class='caused-status-tick'>
+                  {{/if}}
+                  <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                    <input type='checkbox' name='system.passiveCausedStatuses.{{index}}.requiresDamage'
+                      {{#if entry.requiresDamage}}checked{{/if}}>
+                    {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                  </label>
+                  <button type='button' class='caused-status-remove' data-action='removePassiveCausedStatus' data-index='{{index}}'>
+                    <i class='fas fa-times'></i>
+                  </button>
+                </div>
+              </div>
+            {{/each}}
+            <button type='button' class='caused-status-add' data-action='addPassiveCausedStatus'>
+              <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddPassiveEffect'}}
+            </button>
+          </div>
+        </details>
+      </div>
 
       {{! ===== ARMOR-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'armor')}}
-        {{! Armor Type }}
-        <div class='form-group'>
-          <label class='resource-label'>Armor Configuration</label>
-          <div class='grid grid-1col'>
-            <div class='armor-type-field'>
-              <label class='resource-label'>Armor Type</label>
-              <select name='system.armorType' data-dtype='String'>
-                  {{selectOptions config.armorTypeDescriptions selected=system.armorType}}
-              </select>
+        <div class="item-section-box">
+          <div class="item-section-label">{{localize "VAGABOND.UI.Sections.ArmorConfig"}}</div>
+          {{! Armor Type }}
+          <div class='form-group'>
+            <div class='grid grid-1col'>
+              <div class='armor-type-field'>
+                <label class='resource-label'>Armor Type</label>
+                <select name='system.armorType' data-dtype='String'>
+                    {{selectOptions config.armorTypeDescriptions selected=system.armorType}}
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        {{! Calculated Armor Properties }}
-        <div class='form-group'>
-          <label class='resource-label'>Armor Properties</label>
-          <div class='calculated-properties'>
-            <div class='calculated-item'>
-              <span class='calc-label'>Rating:</span>
-              <span class='calc-value'>{{system.finalRating}}</span>
-            </div>
-            <div class='calculated-item'>
-              <span class='calc-label'>Might Requirement:</span>
-              <span class='calc-value'>{{system.might}}</span>
+          {{! Calculated Armor Properties }}
+          <div class='form-group'>
+            <label class='resource-label'>Armor Properties</label>
+            <div class='calculated-properties'>
+              <div class='calculated-item'>
+                <span class='calc-label'>Rating:</span>
+                <span class='calc-value'>{{system.finalRating}}</span>
+              </div>
+              <div class='calculated-item'>
+                <span class='calc-label'>Might Requirement:</span>
+                <span class='calc-value'>{{system.might}}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {{! Damage Immunities }}
-        <div class='form-group'>
-          <details class='npc-immunity-dropdown' data-details-id='npc-immunity-dropdown'>
-            <summary class='npc-immunity-toggle'>
-              <i class='fas fa-chevron-down'></i>
-              <span>Damage Immunities</span>
-            </summary>
-            <div class='npc-immunity-checkboxes'>
-              {{#each config.damageTypes as |label key|}}
-                {{#unless (eq key '-')}}
-                  <label class='npc-immunity-checkbox-item'>
-                    <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
-                    <span>{{localize label}}</span>
-                  </label>
-                {{/unless}}
-              {{/each}}
-            </div>
-          </details>
-          <div class='npc-immunity-tags'>
-            {{#each system.immunities as |immunity index|}}
-              <span class='npc-immunity-tag'>
-                {{immunity}}
-                <i class='fas fa-times' data-action='removeImmunity' data-immunity='{{immunity}}'></i>
-              </span>
+        </div>{{! /item-section-box ArmorConfig }}
+        <details class='item-section-details' data-details-id='damage-immunities'>
+          <summary class='item-section-summary'>
+            <i class='fas fa-chevron-right accordion-icon'></i>
+            <span>{{localize 'VAGABOND.Status.DamageImmunities'}}</span>
+          </summary>
+          <div class='damage-immunity-body'>
+            {{#each config.damageTypes as |label key|}}
+              {{#unless (eq key '-')}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.immunities key)}}checked{{/if}} data-action='toggleImmunity' data-immunity='{{key}}'>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/unless}}
             {{/each}}
           </div>
-        </div>
+        </details>
       {{/if}}
 
       {{! ===== GEAR-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'gear')}}
-        {{! Gear Category }}
-        <div class='form-group'>
-          <label class='resource-label'>Gear Category</label>
-          <input
-            type='text'
-            name='system.gearCategory'
-            value='{{system.gearCategory}}'
-            data-dtype='String'
-            placeholder='e.g., Alchemy & Medicine'
-          />
-        </div>
+        <div class="item-section-box">
+          <div class="item-section-label">Gear</div>
+          {{! Gear Category }}
+          <div class='form-group'>
+            <label class='resource-label'>Gear Category</label>
+            <input
+              type='text'
+              name='system.gearCategory'
+              value='{{system.gearCategory}}'
+              data-dtype='String'
+              placeholder='e.g., Alchemy & Medicine'
+            />
+          </div>
+        </div>{{! /item-section-box Gear }}
       {{/if}}
 
       {{! ===== ALCHEMICAL-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'alchemical')}}
-        {{! Alchemical Type }}
-        <div class='form-group'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.alchemicalType.label'}}</label>
-          <select name='system.alchemicalType' data-dtype='String'>
-            
-            {{#each config.alchemicalTypes as |label key|}}
-              <option 
-                value="{{key}}" 
-                {{#if (eq ../system.alchemicalType key)}}selected{{/if}}
-                title="{{localize (lookup ../config.alchemicalTypeHints key)}}"
-              >
-                {{localize label}}
-              </option>
-            {{/each}}
+        <div class="item-section-box">
+          <div class="item-section-label">Alchemical</div>
+          {{! Alchemical Type }}
+          <div class='form-group'>
+            <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.alchemicalType.label'}}</label>
+            <select name='system.alchemicalType' data-dtype='String'>
 
-          </select>
-        </div>
+              {{#each config.alchemicalTypes as |label key|}}
+                <option
+                  value="{{key}}"
+                  {{#if (eq ../system.alchemicalType key)}}selected{{/if}}
+                  title="{{localize (lookup ../config.alchemicalTypeHints key)}}"
+                >
+                  {{localize label}}
+                </option>
+              {{/each}}
 
-        {{! Damage Type and Amount }}
-        <div class='form-group'>
-          <label class='resource-label'>Damage</label>
-          <div class='grid grid-2col gap-8'>
-            <div class='damage-type-field'>
-              <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageType.label'}}</label>
-              {{> "systems/vagabond/templates/shared/damage-type-select.hbs" 
-                  name="system.damageType" 
-                  selected=system.damageType 
-                  includeNone=true 
-                  config=config}}
-            </div>
-            <div class='damage-amount-field'>
-              <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageAmount.label'}}</label>
-              <input
-                type='text'
-                name='system.damageAmount'
-                value='{{system.damageAmount}}'
-                data-dtype='String'
-                placeholder='e.g., 2d6'
-              />
-            </div>
+            </select>
           </div>
-        </div>
 
-        {{! Exploding Dice Configuration }}
-        <div class='form-group'>
-          <label class='resource-label'>Exploding Dice</label>
-          <div class='grid grid-2col gap-8'>
-            <div class='explode-checkbox-field'>
-              <label class='checkbox-label'>
+          {{! Damage Type and Amount }}
+          <div class='form-group'>
+            <label class='resource-label'>Damage</label>
+            <div class='grid grid-2col gap-8'>
+              <div class='damage-type-field'>
+                <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageType.label'}}</label>
+                {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+                    name="system.damageType"
+                    selected=system.damageType
+                    includeNone=true
+                    config=config}}
+              </div>
+              <div class='damage-amount-field'>
+                <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageAmount.label'}}</label>
                 <input
-                  type='checkbox'
-                  name='system.canExplode'
-                  {{#if system.canExplode}}checked{{/if}}
-                  data-dtype='Boolean'
+                  type='text'
+                  name='system.damageAmount'
+                  value='{{system.damageAmount}}'
+                  data-dtype='String'
+                  placeholder='e.g., 2d6'
                 />
-                <span>Can Explode</span>
-              </label>
-            </div>
-            <div class='explode-values-field'>
-              <label class='resource-label'>Explode On (comma-separated)</label>
-              <input
-                type='text'
-                name='system.explodeValues'
-                value='{{system.explodeValues}}'
-                data-dtype='String'
-                placeholder='e.g., 1,4'
-                {{#unless system.canExplode}}disabled{{/unless}}
-              />
+              </div>
             </div>
           </div>
-        </div>
 
-        {{! Cost }}
-        <div class='form-group'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.baseCost.label'}}</label>
-          <div class='grid grid-3col gap-8'>
-            <div class='cost-field'>
-              <label class='resource-label'>Gold</label>
-              <input
-                type='number'
-                name='system.baseCost.gold'
-                value='{{system.baseCost.gold}}'
-                step="1"
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='cost-field'>
-              <label class='resource-label'>Silver</label>
-              <input
-                type='number'
-                name='system.baseCost.silver'
-                value='{{system.baseCost.silver}}'
-                step="1"
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='cost-field'>
-              <label class='resource-label'>Copper</label>
-              <input
-                type='number'
-                name='system.baseCost.copper'
-                value='{{system.baseCost.copper}}'
-                step="1"
-                min='0'
-                data-dtype='Number'
-              />
+          {{! Exploding Dice Configuration }}
+          <div class='form-group'>
+            <label class='resource-label'>Exploding Dice</label>
+            <div class='grid grid-2col gap-8'>
+              <div class='explode-checkbox-field'>
+                <label class='checkbox-label'>
+                  <input
+                    type='checkbox'
+                    name='system.canExplode'
+                    {{#if system.canExplode}}checked{{/if}}
+                    data-dtype='Boolean'
+                  />
+                  <span>Can Explode</span>
+                </label>
+              </div>
+              <div class='explode-values-field'>
+                <label class='resource-label'>Explode On (comma-separated)</label>
+                <input
+                  type='text'
+                  name='system.explodeValues'
+                  value='{{system.explodeValues}}'
+                  data-dtype='String'
+                  placeholder='e.g., 1,4'
+                  {{#unless system.canExplode}}disabled{{/unless}}
+                />
+              </div>
             </div>
           </div>
-        </div>
+
+          {{! Cost }}
+          <div class='form-group'>
+            <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.baseCost.label'}}</label>
+            <div class='grid grid-3col gap-8'>
+              <div class='cost-field'>
+                <label class='resource-label'>Gold</label>
+                <input
+                  type='number'
+                  name='system.baseCost.gold'
+                  value='{{system.baseCost.gold}}'
+                  step="1"
+                  min='0'
+                  data-dtype='Number'
+                />
+              </div>
+              <div class='cost-field'>
+                <label class='resource-label'>Silver</label>
+                <input
+                  type='number'
+                  name='system.baseCost.silver'
+                  value='{{system.baseCost.silver}}'
+                  step="1"
+                  min='0'
+                  data-dtype='Number'
+                />
+              </div>
+              <div class='cost-field'>
+                <label class='resource-label'>Copper</label>
+                <input
+                  type='number'
+                  name='system.baseCost.copper'
+                  value='{{system.baseCost.copper}}'
+                  step="1"
+                  min='0'
+                  data-dtype='Number'
+                />
+              </div>
+            </div>
+          </div>
+        </div>{{! /item-section-box Alchemical }}
       {{/if}}
 
       {{! ===== RELIC-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'relic')}}
-        {{! Lore }}
-        <div class='form-group'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}</label>
-          <input
-            type='text'
-            name='system.lore'
-            value='{{system.lore}}'
-            data-dtype='String'
-            placeholder='Enter the relic lore and history...'
-          />
-        </div>
+        <div class="item-section-box">
+          <div class="item-section-label">Relic</div>
+          {{! Lore }}
+          <div class='form-group'>
+            <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}</label>
+            <input
+              type='text'
+              name='system.lore'
+              value='{{system.lore}}'
+              data-dtype='String'
+              placeholder='Enter the relic lore and history...'
+            />
+          </div>
 
-        {{! Value (Cost) }}
-        <div class='form-group'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}</label>
-          <div class='grid grid-3col gap-8'>
-            <div class='cost-field'>
-              <label class='resource-label'>Gold</label>
-              <input
-                type='number'
-                name='system.baseCost.gold'
-                value='{{system.baseCost.gold}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='cost-field'>
-              <label class='resource-label'>Silver</label>
-              <input
-                type='number'
-                name='system.baseCost.silver'
-                value='{{system.baseCost.silver}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='cost-field'>
-              <label class='resource-label'>Copper</label>
-              <input
-                type='number'
-                name='system.baseCost.copper'
-                value='{{system.baseCost.copper}}'
-                min='0'
-                data-dtype='Number'
-              />
+          {{! Value (Cost) }}
+          <div class='form-group'>
+            <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}</label>
+            <div class='grid grid-3col gap-8'>
+              <div class='cost-field'>
+                <label class='resource-label'>Gold</label>
+                <input
+                  type='number'
+                  name='system.baseCost.gold'
+                  value='{{system.baseCost.gold}}'
+                  min='0'
+                  data-dtype='Number'
+                />
+              </div>
+              <div class='cost-field'>
+                <label class='resource-label'>Silver</label>
+                <input
+                  type='number'
+                  name='system.baseCost.silver'
+                  value='{{system.baseCost.silver}}'
+                  min='0'
+                  data-dtype='Number'
+                />
+              </div>
+              <div class='cost-field'>
+                <label class='resource-label'>Copper</label>
+                <input
+                  type='number'
+                  name='system.baseCost.copper'
+                  value='{{system.baseCost.copper}}'
+                  min='0'
+                  data-dtype='Number'
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {{! Requires Bound (Relic) }}
-        <div class='form-group'>
-          <label class='checkbox-label'>
-            <input
-              type='checkbox'
-              name='system.requiresBound'
-              {{#if system.requiresBound}}checked{{/if}}
-              data-dtype='Boolean'
-            />
-            <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
-          </label>
-        </div>
+          {{! Slots and Quantity }}
+          <div class='form-group'>
+            <div class='grid grid-2col gap-8'>
+              <div class='slots-field'>
+                <label class='resource-label'>Base Slots</label>
+                <input type='number' name='system.baseSlots' value='{{system.baseSlots}}' data-dtype='Number'/>
+              </div>
+              <div class='quantity-field'>
+                <label class='resource-label'>Quantity</label>
+                <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number'/>
+              </div>
+            </div>
+          </div>
+
+          {{! Requires Bound (Relic) }}
+          <div class='form-group'>
+            <label class='checkbox-label'>
+              <input
+                type='checkbox'
+                name='system.requiresBound'
+                {{#if system.requiresBound}}checked{{/if}}
+                data-dtype='Boolean'
+              />
+              <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
+            </label>
+          </div>
+        </div>{{! /item-section-box Relic }}
       {{/if}}
 
       {{! ===== UNIVERSAL FIELDS (ALL EQUIPMENT) ===== }}
@@ -729,124 +1028,70 @@
         </div>
       {{/if}}
 
-      {{! Metal, Slots, and Quantity Row }}
+      {{! ===== EQUIPMENT DETAILS (cost, slots, metal, calculated — non-relic, non-alchemical) ===== }}
       {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
-        <div class='form-group'>
-          <label class='resource-label'>Equipment Details</label>
-          <div class='grid grid-3col gap-8'>
-            <div class='metal-field'>
-              <label class='resource-label'>Metal</label>
-              <select name='system.metal' data-dtype='String'>
-                {{!-- 1. Handle "None" explicitly if it's not in your main type list --}}
-                <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}}>None</option>
-                
-                {{!-- 2. Iterate dynamically over the config --}}
-                {{#each config.metalTypes as |label key|}}
-                  <option 
-                    value="{{key}}" 
-                    {{#if (eq ../system.metal key)}}selected{{/if}}
-                    {{!-- FIXED: Nested lookup to get .effect from the metalData object --}}
-                    title="{{localize (lookup (lookup ../config.metalData key) 'effect')}}"
-                  >
-                    {{localize label}}
-                  </option>
-                {{/each}}
-              </select>
-            </div>
-            <div class='slots-field'>
-              <label class='resource-label'>Base Slots</label>
-              <input
-                type='number'
-                name='system.baseSlots'
-                value='{{system.baseSlots}}'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='quantity-field'>
-              <label class='resource-label'>Quantity</label>
-              <input
-                type='number'
-                name='system.quantity'
-                value='{{system.quantity}}'
-                min='0'
-                data-dtype='Number'
-              />
+        <div class="item-section-box">
+          <div class="item-section-label">Equipment Details</div>
+          {{! Cost & Slots row }}
+          <div class='form-group'>
+            <label class='resource-label'>Cost &amp; Slots</label>
+            <div class='equip-cost-slots-row'>
+              <div class='currency-field'>
+                <label class='resource-label'>Gold</label>
+                <input type='number' name='system.baseCost.gold' value='{{system.baseCost.gold}}' min='0' data-dtype='Number'/>
+              </div>
+              <div class='currency-field'>
+                <label class='resource-label'>Silver</label>
+                <input type='number' name='system.baseCost.silver' value='{{system.baseCost.silver}}' min='0' data-dtype='Number'/>
+              </div>
+              <div class='currency-field'>
+                <label class='resource-label'>Copper</label>
+                <input type='number' name='system.baseCost.copper' value='{{system.baseCost.copper}}' min='0' data-dtype='Number'/>
+              </div>
+              <div class='slots-field'>
+                <label class='resource-label'>Slots</label>
+                <input type='number' name='system.baseSlots' value='{{system.baseSlots}}' data-dtype='Number'/>
+              </div>
+              <div class='quantity-field'>
+                <label class='resource-label'>Qty</label>
+                <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number'/>
+              </div>
             </div>
           </div>
-          <div class='metal-effect-text'>{{system.metalEffect}}</div>
-        </div>
-      {{/unless}}
-
-      {{! Slots and Quantity for Relics (no metal) }}
-      {{#if (eq system.equipmentType 'relic')}}
-        <div class='form-group'>
-          <label class='resource-label'>Equipment Details</label>
-          <div class='grid grid-2col gap-8'>
-            <div class='slots-field'>
-              <label class='resource-label'>Base Slots</label>
-              <input
-                type='number'
-                name='system.baseSlots'
-                value='{{system.baseSlots}}'
-                data-dtype='Number'
-              />
+          {{! Metal + Calculated row }}
+          <div class='form-group'>
+            <label class='resource-label'>Metal</label>
+            <div class='equip-metal-calc-row'>
+              <div class='metal-field'>
+                <select name='system.metal' data-dtype='String'>
+                  <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}}>None</option>
+                  {{#each config.metalTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq ../system.metal key)}}selected{{/if}} title="{{localize (lookup (lookup ../config.metalData key) 'effect')}}">
+                      {{localize label}}
+                    </option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class='calculated-properties'>
+                <div class='calculated-item'>
+                  <span class='calc-label'>Final Slots:</span>
+                  <span class='calc-value'>{{system.slots}}</span>
+                </div>
+                <div class='calculated-item'>
+                  <span class='calc-label'>Final Cost:</span>
+                  <span class='calc-value'>{{system.costDisplay}}</span>
+                </div>
+              </div>
             </div>
-            <div class='quantity-field'>
-              <label class='resource-label'>Quantity</label>
-              <input
-                type='number'
-                name='system.quantity'
-                value='{{system.quantity}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-          </div>
-        </div>
-      {{/if}}
-
-      {{! Cost Section (3 Columns) - not for relics or alchemicals, they have their own }}
-      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
-        <div class='form-group'>
-          <label class='resource-label'>Base Cost <small>(before metal multiplier)</small></label>
-          <div class='grid grid-3col gap-8'>
-            <div class='cost-field'>
-              <label class='resource-label'>Gold</label>
-              <input
-                type='number'
-                name='system.baseCost.gold'
-                value='{{system.baseCost.gold}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='cost-field'>
-              <label class='resource-label'>Silver</label>
-              <input
-                type='number'
-                name='system.baseCost.silver'
-                value='{{system.baseCost.silver}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='cost-field'>
-              <label class='resource-label'>Copper</label>
-              <input
-                type='number'
-                name='system.baseCost.copper'
-                value='{{system.baseCost.copper}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
+            <div class='metal-effect-text'>{{system.metalEffect}}</div>
           </div>
         </div>
       {{/unless}}
 
       {{! Requires Bound (non-relic, non-alchemical equipment) }}
       {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
-        <div class='form-group'>
+        <div class="item-section-box">
+          <div class="item-section-label">{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</div>
           <label class='checkbox-label'>
             <input
               type='checkbox'
@@ -860,73 +1105,65 @@
       {{/unless}}
 
       {{! Consumable Configuration }}
-      <div class='form-group'>
-        <label class='resource-label'>Consumable Configuration</label>
-        <div class='grid grid-1col gap-8'>
-          <div class='consumable-checkbox-field'>
-            <label class='checkbox-label'>
-              <input
-                type='checkbox'
-                name='system.isConsumable'
-                {{#if system.isConsumable}}checked{{/if}}
-                data-dtype='Boolean'
-              />
-              <span>Consumable (reduces quantity on use)</span>
-            </label>
-          </div>
-          <div class='consumable-checkbox-field'>
-            <label class='checkbox-label'>
-              <input
-                type='checkbox'
-                name='system.isSupply'
-                {{#if system.isSupply}}checked{{/if}}
-                data-dtype='Boolean'
-              />
-              <span>{{localize 'VAGABOND.Item.Equipment.IsSupply'}}</span>
-            </label>
-          </div>
-          <div class='consumable-checkbox-field'>
-            <label class='checkbox-label'>
-              <input
-                type='checkbox'
-                name='system.isBeverage'
-                {{#if system.isBeverage}}checked{{/if}}
-                data-dtype='Boolean'
-              />
-              <span>{{localize 'VAGABOND.Item.Equipment.IsBeverage'}}</span>
-            </label>
-          </div>
+      <div class="item-section-box">
+        <div class="item-section-label">Consumable Configuration</div>
+        <div class='consumable-grid'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.isSupply' {{#if system.isSupply}}checked{{/if}} data-dtype='Boolean'/>
+            <span>{{localize 'VAGABOND.Item.Equipment.IsSupply'}}</span>
+          </label>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.isConsumable' {{#if system.isConsumable}}checked{{/if}} data-dtype='Boolean'/>
+            <span>Consumable (reduces quantity on use)</span>
+          </label>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.isBeverage' {{#if system.isBeverage}}checked{{/if}} data-dtype='Boolean'/>
+            <span>{{localize 'VAGABOND.Item.Equipment.IsBeverage'}}</span>
+          </label>
           <div class='linked-consumable-field'>
-            <label class='resource-label'>Linked Consumable (optional)</label>
-            <select name='system.linkedConsumable' data-dtype='String'>
-              <option value=''>None</option>
+            <select name='system.linkedConsumable' data-dtype='String' data-tooltip='{{localize "VAGABOND.Item.Equipment.LinkedConsumableHint"}}'>
+              <option value=''>{{localize "VAGABOND.Item.Equipment.LinkedConsumableNone"}}</option>
               {{#each actorConsumableItems as |consumable|}}
                 <option value='{{consumable.id}}' {{#if (eq ../system.linkedConsumable consumable.id)}}selected{{/if}}>
                   {{consumable.name}} ({{consumable.system.quantity}} remaining)
                 </option>
               {{/each}}
             </select>
-            <small class='field-hint'>When this item is used, it will consume the linked item instead</small>
           </div>
         </div>
       </div>
 
-      {{! Calculated Properties Display - not needed for relics or alchemicals }}
-      {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
-        <div class='form-group'>
-          <label class='resource-label'>Calculated Properties</label>
-          <div class='calculated-properties'>
-            <div class='calculated-item'>
-              <span class='calc-label'>Final Slots:</span>
-              <span class='calc-value'>{{system.slots}}</span>
+      {{! ===== STATUS PROTECTIONS (armor only) ===== }}
+      {{#if (eq system.equipmentType 'armor')}}
+        <details class='item-section-details' data-details-id='status-protections'>
+          <summary class='item-section-summary'>
+            <i class='fas fa-chevron-right accordion-icon'></i>
+            <span>{{localize 'VAGABOND.Status.StatusProtections'}}</span>
+          </summary>
+          <div class='status-protections-body'>
+            <div class='status-protect-col'>
+              <p class='status-protect-heading'>{{localize 'VAGABOND.Status.Blocks'}}</p>
+              {{#each @root.config.statusConditions as |label key|}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' data-action='toggleBlockedStatus' data-status-id='{{key}}'
+                    {{#if (contains ../system.blockedStatuses key)}}checked{{/if}}>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/each}}
             </div>
-            <div class='calculated-item'>
-              <span class='calc-label'>Final Cost:</span>
-              <span class='calc-value'>{{system.costDisplay}}</span>
+            <div class='status-protect-col'>
+              <p class='status-protect-heading'>{{localize 'VAGABOND.Status.Resists'}}</p>
+              {{#each @root.config.statusConditions as |label key|}}
+                <label class='npc-immunity-checkbox-item'>
+                  <input type='checkbox' data-action='toggleResistedStatus' data-status-id='{{key}}'
+                    {{#if (contains ../system.resistedStatuses key)}}checked{{/if}}>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/each}}
             </div>
           </div>
-        </div>
-      {{/unless}}
+        </details>
+      {{/if}}
 
       {{! ===== SEQUENCER FX (weapons, alchemicals, relics only) ===== }}
       {{#if sequencerAvailable}}

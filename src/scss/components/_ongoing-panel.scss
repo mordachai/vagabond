@@ -1,0 +1,278 @@
+// =============================================================================
+// Ongoing Status Panel
+// ApplicationV2 panel listing scene actors with statuses, countdown dice,
+// health and fatigue. Scoped via &.ongoing-panel inside .vagabond {} in
+// vagabond.scss — all colors use CSS custom-property-backed SCSS variables
+// so light and dark mode both work without any hardcoded values.
+// =============================================================================
+
+&.ongoing-panel {
+
+  // ---------------------------------------------------------------------------
+  // Window sizing
+  // ---------------------------------------------------------------------------
+
+  .window-content {
+    padding:    0;
+    overflow:   hidden;
+    display:    flex;
+    flex-direction: column;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Scrollable body (single PARTS scrollable zone)
+  // ---------------------------------------------------------------------------
+
+  .osp-body {
+    padding:    6px 0 8px;
+    overflow-y: auto;
+    flex:       1 1 auto;
+    @include vagabond-scrollbar;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Empty state
+  // ---------------------------------------------------------------------------
+
+  .osp-empty {
+    padding:    24px 12px;
+    text-align: center;
+    font-size:  0.82em;
+    color:      $c-muted;
+    font-style: italic;
+    margin:     0;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Actor group (Heroes / Enemies)
+  // ---------------------------------------------------------------------------
+
+  .osp-group {
+    & + .osp-group {
+      border-top:  1px solid $c-faint;
+      margin-top:  6px;
+      padding-top: 4px;
+    }
+  }
+
+  .osp-divider {
+    border:     none;
+    height:     1px;
+    margin:     2px 10px;
+    background: linear-gradient(to right, transparent, $c-faint 30%, $c-faint 70%, transparent);
+  }
+
+  .osp-group-label {
+    padding:        2px 10px 4px;
+    font-size:      0.7em;
+    font-weight:    bold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color:          $c-muted;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Actor row
+  // ---------------------------------------------------------------------------
+
+  .osp-actor-row {
+    display:       flex;
+    gap:           8px;
+    padding:       5px 8px;
+    border-radius: 3px;
+    transition:    background 0.15s;
+
+    &:hover {
+      background: $c-tan-lite;
+    }
+  }
+
+  // Portrait — 48 px, click pans canvas to token
+  .osp-portrait {
+    width:         48px;
+    height:        48px;
+    flex-shrink:   0;
+    border-radius: 3px;
+    object-fit:    cover;
+    cursor:        pointer;
+    border:        1px solid $c-faint;
+    transition:    border-color 0.15s;
+
+    &:hover {
+      border-color: $c-muted;
+    }
+  }
+
+  // Info column — name row, statuses, ongoing
+  .osp-actor-info {
+    flex:           1 1 auto;
+    min-width:      0;         // allow text truncation
+    display:        flex;
+    flex-direction: column;
+    gap:            4px;
+  }
+
+  // Name + resources on one line
+  .osp-name-row {
+    display:     flex;
+    align-items: center;
+    gap:         6px;
+    min-width:   0;
+  }
+
+  .osp-actor-name {
+    flex:          1 1 auto;
+    font-family:   $font-title;
+    font-size:     1em;
+    color:         $c-text-1;
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    cursor:        pointer;
+    line-height:   1.2;
+
+    &:hover {
+      color: $c-muted;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Status icons row (24 px each)
+  // ---------------------------------------------------------------------------
+
+  .osp-statuses {
+    display:   flex;
+    flex-wrap: wrap;
+    gap:       3px;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  // Status icon — left-click sends to chat, right-click removes status
+  .osp-status-icon {
+    width:         24px;
+    height:        24px;
+    border-radius: 3px;
+    object-fit:    contain;
+    cursor:        pointer;
+    border:        1px solid transparent;
+    transition:    border-color 0.15s, filter 0.15s;
+
+    &:hover {
+      border-color: $c-faint;
+      filter:       brightness(1.15);
+    }
+
+    &:active {
+      filter: brightness(0.9);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Ongoing effects (linked countdown dice)
+  // ---------------------------------------------------------------------------
+
+  .osp-ongoing {
+    display:        flex;
+    flex-direction: column;
+    gap:            3px;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .osp-effect-row {
+    display:     flex;
+    align-items: center;
+    gap:         5px;
+  }
+
+  // Effect name — truncated, italic, muted
+  .osp-effect-name {
+    flex:          1 1 auto;
+    font-size:     0.78em;
+    color:         $c-muted;
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    font-style:    italic;
+    line-height:   1.3;
+  }
+
+  // Countdown die roll button — bare image, no button chrome
+  .osp-die-btn {
+    flex-shrink: 0;
+    padding:     0;
+    background:  none;
+    border:      none;
+    cursor:      pointer;
+    display:     flex;
+    line-height: 0;
+
+    img {
+      width:   28px;
+      height:  28px;
+      display: block;
+    }
+
+    &:hover img {
+      filter: brightness(1.2);
+    }
+
+    &:active img {
+      transform: scale(0.9);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Resources (inline in name row)
+  // ---------------------------------------------------------------------------
+
+  .osp-resources {
+    display:     flex;
+    gap:         6px;
+    flex-shrink: 0;
+  }
+
+  // Shared resource pill — click handlers on specific subclasses
+  .osp-resource {
+    display:     flex;
+    align-items: center;
+    gap:         4px;
+    cursor:      pointer;
+    font-size:   0.8em;
+    color:       $c-muted;
+    user-select: none;
+    padding:     1px 4px;
+    border-radius: 3px;
+    transition:  background 0.12s, color 0.12s;
+
+    i {
+      font-size: 0.9em;
+    }
+
+    span {
+      font-variant-numeric: tabular-nums;
+      white-space:          nowrap;
+    }
+
+    &:hover {
+      background: $c-tan-lite;
+      color:      $c-text-1;
+    }
+  }
+
+  // HP heart — red adapts per theme (dark red in light, soft pink in dark)
+  .osp-resource-hp i {
+    color: $c-red;
+  }
+
+  // Fatigue skull — muted neutral in both themes
+  .osp-resource-fatigue i {
+    color: $c-muted;
+  }
+
+} // end &.ongoing-panel

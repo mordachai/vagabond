@@ -262,6 +262,90 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: ''
     });
 
+    // ===== ON-HIT STATUS EFFECTS =====
+
+    // Status effects inflicted on EVERY hit while this item is equipped (passive — fires regardless of which weapon/spell is used)
+    schema.passiveCausedStatuses = new fields.ArrayField(
+      new fields.SchemaField({
+        statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+        saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+        duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+        damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+        damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+      }),
+      { required: true, initial: [] }
+    );
+
+    // Status effects this item can inflict on hit (weapons, relics, alchemical, spells)
+    schema.causedStatuses = new fields.ArrayField(
+      new fields.SchemaField({
+        statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+        saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+        duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+        damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+        damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+        // TODO: fatigueOnTick — flat fatigue added per tick alongside HP damage.
+        // Uncomment to re-enable. Also restore in: critCausedStatuses below, coating.causedStatuses below,
+        // item-spell.mjs, actor-npc.mjs, npc-action-handler.mjs, item-sheet.mjs push objects,
+        // countdown-dice.mjs flags, status-helper._createStatusCountdown, countdown-dice-overlay._onRollDice,
+        // templates (equipment-details, spell-details, npc-content), lang/en.json "FatigueOnTick".
+        // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+      }),
+      { required: true, initial: [] }
+    );
+
+    // Status effects inflicted only on a critical hit
+    schema.critCausedStatuses = new fields.ArrayField(
+      new fields.SchemaField({
+        statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+        saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+        duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+        damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+        damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+        // TODO: fatigueOnTick — see causedStatuses above for full re-enable checklist.
+        // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+      }),
+      { required: true, initial: [] }
+    );
+
+    // Status immunities granted by this armor (armor only — UI gated by equipmentType)
+    schema.blockedStatuses = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    // Status resistances granted by this armor — save rolled with Favor (armor only)
+    schema.resistedStatuses = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    // Temporary weapon coating applied from an alchemical item (weapon only — UI gated)
+    schema.coating = new fields.SchemaField({
+      sourceName:     new fields.StringField({ required: false, blank: true, initial: '' }),
+      charges:        new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      causedStatuses: new fields.ArrayField(
+        new fields.SchemaField({
+          statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+          requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+          saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+          duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+          tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+          damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+          damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+          // TODO: fatigueOnTick — see causedStatuses above for full re-enable checklist.
+          // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+        }),
+        { required: true, initial: [] }
+      ),
+    });
+
     // ===== SEQUENCER FX FIELDS =====
 
     // Per-item animation config (requires Sequencer module)

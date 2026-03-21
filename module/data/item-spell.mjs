@@ -85,6 +85,38 @@ export default class VagabondSpell extends VagabondItemBase {
       label: "VAGABOND.Spell.FxSchool.Label",
     });
 
+    // Status effects this spell can inflict on hit
+    schema.causedStatuses = new fields.ArrayField(
+      new fields.SchemaField({
+        statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+        saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+        duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+        damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+        damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+        // TODO: fatigueOnTick — see base-equipment.mjs causedStatuses for full re-enable checklist.
+        // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+      }),
+      { required: true, initial: [] }
+    );
+
+    // Status effects this spell inflicts only on a critical hit
+    schema.critCausedStatuses = new fields.ArrayField(
+      new fields.SchemaField({
+        statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+        saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+        duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+        tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+        damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+        damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+        // TODO: fatigueOnTick — see base-equipment.mjs causedStatuses for full re-enable checklist.
+        // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+      }),
+      { required: true, initial: [] }
+    );
+
     return schema;
   }
 

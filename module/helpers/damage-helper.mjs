@@ -242,6 +242,13 @@ export class VagabondDamageHelper {
       }
     }
 
+    // Brutal: add extra damage dice on crit, matching the weapon's die size
+    if (context.isCritical && item?.system?.properties?.includes('Brutal')) {
+      const brutalMaxDice = actor.system.brutalMaxDice ?? 1;
+      const dieMatch = finalFormula.match(/d(\d+)/);
+      if (dieMatch) finalFormula += ` + ${brutalMaxDice}d${dieMatch[1]}`;
+    }
+
     // Determine item type and apply appropriate separated bonuses
     let equipmentType = null;
     if (item) {
@@ -776,7 +783,7 @@ export class VagabondDamageHelper {
       return;
     }
 
-    const action = actor.system.actions[actionIndex];
+    const action = actor.system.actions[actionIndex] ?? actor.system.abilities?.[actionIndex];
     if (!action) {
       ui.notifications.error('Action not found!');
       return;
@@ -808,7 +815,8 @@ export class VagabondDamageHelper {
       action,
       damageType,
       attackType,
-      targetsAtRollTime
+      targetsAtRollTime,
+      actionIndex
     );
   }
 
@@ -823,7 +831,7 @@ export class VagabondDamageHelper {
    * @param {string} attackType - The attack type ('melee', 'ranged', 'cast')
    */
 
-    static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee', targetsAtRollTime = []) {
+    static async postNPCActionDamage(damageRoll, finalDamage, damageTypeLabel, actor, action, damageTypeKey = null, attackType = 'melee', targetsAtRollTime = [], actionIndex = null) {
       // 1. Dynamic Import to avoid circular dependency issues
       const { VagabondChatCard } = await import('./chat-card.mjs');
 
@@ -842,23 +850,13 @@ export class VagabondDamageHelper {
       await VagabondChatCard.createActionCard({
           actor: actor,
           title: `${action.name} Damage`,
-          // Passing the subtitle explicitly ensures it doesn't default to something generic
           subtitle: actor.name,
-
-          // Passing the roll triggers the "Damage Section" (Big Orange Number)
           damageRoll: rollObj,
-
-          // Pass the key (e.g., 'physical') so the builder can look up the correct Icon/Label config
           damageType: damageTypeKey || 'physical',
-
-          // Pass context for the Save Buttons
           attackType: attackType,
-
-          // Ensure Defenses (Block/Dodge accordion) appear unless it's a restorative type
           hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical'),
-
-          // Pass targets captured at action roll time
-          targetsAtRollTime
+          targetsAtRollTime,
+          actionIndex,
       });
     }
 
@@ -922,7 +920,7 @@ export class VagabondDamageHelper {
    * @param {string} itemId - Item ID (optional)
    * @returns {string} HTML button string
    */
-  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null, targetsAtRollTime = []) {
+  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null, targetsAtRollTime = [], actionIndex = null) {
     // Check damage type and set appropriate button style
     const normalizedType = damageType.toLowerCase();
     let icon, text, buttonClass;
@@ -954,6 +952,7 @@ export class VagabondDamageHelper {
         data-damage-type="${damageType}"
         data-actor-id="${actorId}"
         data-item-id="${itemId || ''}"
+        data-action-index="${actionIndex ?? ''}"
         data-targets="${targetsJson}"
       >
         <i class="fas ${icon}"></i> ${text}
@@ -969,7 +968,19 @@ export class VagabondDamageHelper {
    * @param {string} damageType - Type of damage
    * @returns {string} HTML button string
    */
-  static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType) {
+  static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType, statusContext = null) {
+    // statusContext carries everything needed to process on-hit statuses at apply-time
+    // { sourceActorId, sourceItemId, sourceActionIndex, saveType, saveSuccess, saveDifficulty, saveTotal, attackWasCrit }
+    const sc = statusContext;
+    const statusAttrs = sc ? `
+          data-source-actor-id="${sc.sourceActorId || ''}"
+          data-source-item-id="${sc.sourceItemId || ''}"
+          data-source-action-index="${sc.sourceActionIndex ?? ''}"
+          data-save-type="${sc.saveType}"
+          data-save-success="${sc.saveSuccess}"
+          data-save-difficulty="${sc.saveDifficulty}"
+          data-save-total="${sc.saveTotal}"
+          data-attack-was-crit="${sc.attackWasCrit}"` : '';
     return `
       <div class="save-apply-button-container">
         <button
@@ -977,7 +988,7 @@ export class VagabondDamageHelper {
           data-actor-id="${actorId}"
           data-actor-name="${actorName}"
           data-damage-amount="${finalDamage}"
-          data-damage-type="${damageType}"
+          data-damage-type="${damageType}"${statusAttrs}
         >
           <i class="fas fa-burst"></i> Apply ${finalDamage} to ${actorName}
         </button>
@@ -1101,7 +1112,7 @@ export class VagabondDamageHelper {
    * @param {Array} targetsAtRollTime - Targets captured at roll time
    * @returns {string} HTML string
    */
-  static createSaveReminderButtons(attackType = 'melee', targetsAtRollTime = []) {
+  static createSaveReminderButtons(attackType = 'melee', targetsAtRollTime = [], actorId = '', itemId = '', actionIndex = null, statusSaveTypes = new Set()) {
     // Localize Labels
     const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
     const endureLabel = game.i18n.localize('VAGABOND.Saves.Endure.name');
@@ -1109,24 +1120,38 @@ export class VagabondDamageHelper {
 
     const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
+    // Red tint classes for buttons required to resist an on-hit status
+    const reflexClass = statusSaveTypes.has('reflex') ? ' save-has-status' : '';
+    const endureClass = statusSaveTypes.has('endure') ? ' save-has-status' : '';
+    const willClass   = statusSaveTypes.has('will')   ? ' save-has-status' : '';
+
     return `
       <div class="vagabond-save-buttons-container">
         <div class="save-buttons-row">
-            <button class="vagabond-save-reminder-button save-reflex"
+            <button class="vagabond-save-reminder-button save-reflex${reflexClass}"
               data-save-type="reflex"
               data-attack-type="${attackType}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
               data-targets="${targetsJson}">
               <i class="fas fa-running"></i> ${reflexLabel}
             </button>
-            <button class="vagabond-save-reminder-button save-endure"
+            <button class="vagabond-save-reminder-button save-endure${endureClass}"
               data-save-type="endure"
               data-attack-type="${attackType}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
               data-targets="${targetsJson}">
               <i class="fas fa-shield-alt"></i> ${endureLabel}
             </button>
-            <button class="vagabond-save-reminder-button save-will"
+            <button class="vagabond-save-reminder-button save-will${willClass}"
               data-save-type="will"
               data-attack-type="${attackType}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
               data-targets="${targetsJson}">
               <i class="fas fa-brain"></i> ${willLabel}
             </button>
@@ -1138,7 +1163,7 @@ export class VagabondDamageHelper {
   /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
    */
-  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = []) {
+  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = [], actionIndex = null, attackWasCrit = false, statusSaveTypes = new Set()) {
     // Encode the damage roll terms
     const rollTermsData = JSON.stringify({
       terms: damageRoll.terms.map(t => {
@@ -1160,11 +1185,16 @@ export class VagabondDamageHelper {
     const reflexLabel = game.i18n.localize('VAGABOND.Saves.Reflex.name');
     const endureLabel = game.i18n.localize('VAGABOND.Saves.Endure.name');
     const willLabel = game.i18n.localize('VAGABOND.Saves.Will.name');
-    
+
     // FIX: Ensure Apply Direct key exists or fallback to English
     const applyKey = 'VAGABOND.Chat.ApplyDirect';
     let applyDirectLabel = game.i18n.localize(applyKey);
     if (applyDirectLabel === applyKey) applyDirectLabel = "Apply Direct";
+
+    // Red tint classes for buttons that are required to resist an on-hit status
+    const reflexClass = statusSaveTypes.has('reflex') ? ' save-has-status' : '';
+    const endureClass = statusSaveTypes.has('endure') ? ' save-has-status' : '';
+    const willClass   = statusSaveTypes.has('will')   ? ' save-has-status' : '';
 
     // LAYOUT FIX: Two rows. Top: Apply Direct. Bottom: Saves.
     return `
@@ -1175,42 +1205,50 @@ export class VagabondDamageHelper {
               data-damage-type="${damageType}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
+              data-is-critical="${attackWasCrit}"
               data-targets="${targetsJson}">
               <i class="fas fa-burst"></i> ${applyDirectLabel}
             </button>
         </div>
 
         <div class="save-buttons-row">
-            <button class="vagabond-save-button save-reflex"
+            <button class="vagabond-save-button save-reflex${reflexClass}"
               data-save-type="reflex"
               data-damage-amount="${damageAmount}"
               data-damage-type="${damageType}"
               data-roll-terms="${rollTermsData}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
+              data-attack-was-crit="${attackWasCrit}"
               data-targets="${targetsJson}">
               <i class="fas fa-running"></i> ${reflexLabel}
             </button>
-            <button class="vagabond-save-button save-endure"
+            <button class="vagabond-save-button save-endure${endureClass}"
               data-save-type="endure"
               data-damage-amount="${damageAmount}"
               data-damage-type="${damageType}"
               data-roll-terms="${rollTermsData}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
+              data-attack-was-crit="${attackWasCrit}"
               data-targets="${targetsJson}">
               <i class="fas fa-shield-alt"></i> ${endureLabel}
             </button>
-            <button class="vagabond-save-button save-will"
+            <button class="vagabond-save-button save-will${willClass}"
               data-save-type="will"
               data-damage-amount="${damageAmount}"
               data-damage-type="${damageType}"
               data-roll-terms="${rollTermsData}"
               data-actor-id="${actorId}"
               data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
+              data-attack-was-crit="${attackWasCrit}"
               data-targets="${targetsJson}">
               <i class="fas fa-brain"></i> ${willLabel}
             </button>
@@ -1232,6 +1270,9 @@ export class VagabondDamageHelper {
     const attackType = button.dataset.attackType; // 'melee' or 'ranged' or 'cast'
     const actorId = button.dataset.actorId;
     const itemId = button.dataset.itemId;
+    const attackWasCrit = button.dataset.attackWasCrit === 'true';
+    const actionIndexRaw = button.dataset.actionIndex;
+    const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
 
     // Get targets with fallback
     const storedTargets = this._getTargetsFromButton(button);
@@ -1272,8 +1313,15 @@ export class VagabondDamageHelper {
       actorsToRoll = targetTokens.map(t => t.actor).filter(a => a);
     }
 
+    // Determine Cleave split before iterating
+    const _saveSourceActor = actorId ? game.actors.get(actorId) : null;
+    const _saveSourceItem = _saveSourceActor?.items.get(itemId);
+    const _hasCleave = _saveSourceItem?.system?.properties?.includes('Cleave') ?? false;
+    const _saveTargetCount = actorsToRoll.length;
+
     // Roll save for each actor
-    for (const targetActor of actorsToRoll) {
+    for (let _saveIdx = 0; _saveIdx < actorsToRoll.length; _saveIdx++) {
+      const targetActor = actorsToRoll[_saveIdx];
       if (!targetActor) continue;
 
       // Check permissions
@@ -1288,19 +1336,47 @@ export class VagabondDamageHelper {
         continue;
       }
 
+      // Cleave splits the incoming damage across all targets
+      let effectiveDamageAmount = damageAmount;
+      if (_hasCleave && _saveTargetCount > 1) {
+        const base = Math.floor(damageAmount / _saveTargetCount);
+        effectiveDamageAmount = base + (_saveIdx < (damageAmount % _saveTargetCount) ? 1 : 0);
+      }
+
       // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
       const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
 
       // Check if attacker has outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
       const sourceActor = actorId ? game.actors.get(actorId) : null;
-      const attackerModifier = sourceActor?.system?.outgoingSavesModifier || 'none';
+      let effectiveAttackerModifier = sourceActor?.system?.outgoingSavesModifier || 'none';
+
+      // Check if target has status resistance granting Favor on this save type
+      {
+        const { StatusHelper } = await import('./status-helper.mjs');
+        const sourceItem = sourceActor?.items.get(itemId);
+        const itemEntries = sourceItem?.system?.causedStatuses ?? [];
+        const actionEntries = (!sourceItem && actionIdx !== null && !isNaN(actionIdx))
+          ? (sourceActor?.system?.actions?.[actionIdx]?.causedStatuses ?? [])
+          : [];
+        const passiveEntries = sourceActor
+          ? sourceActor.items.filter(i => i.system?.equipped && i.system?.passiveCausedStatuses?.length).flatMap(i => i.system.passiveCausedStatuses)
+          : [];
+        const allIncomingEntries = [...itemEntries, ...actionEntries, ...passiveEntries];
+        const hasResistance = allIncomingEntries.some(e =>
+          (e.saveType === saveType || e.saveType === 'any') && StatusHelper.isStatusResisted(targetActor, e.statusId)
+        );
+        if (hasResistance) {
+          if (effectiveAttackerModifier === 'hinder') effectiveAttackerModifier = 'none';
+          else if (effectiveAttackerModifier === 'none') effectiveAttackerModifier = 'favor';
+        }
+      }
 
       // Extract keyboard modifiers from event
       const shiftKey = event?.shiftKey || false;
       const ctrlKey = event?.ctrlKey || false;
 
       // Roll the save with keyboard modifiers and attacker's outgoing modifier
-      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, attackerModifier);
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, effectiveAttackerModifier);
 
       // Dice So Nice animation is handled automatically by roll.evaluate() in Foundry v13
       // No need to manually call showForRoll here
@@ -1314,12 +1390,17 @@ export class VagabondDamageHelper {
       const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
       // Calculate damage breakdown for display
-      let damageAfterSave = damageAmount;
+      let damageAfterSave = effectiveDamageAmount;
       let saveReduction = 0;
       if (isSuccess) {
-        // Remove highest damage die from original roll
-        damageAfterSave = this._removeHighestDie(rollTermsData);
-        saveReduction = damageAmount - damageAfterSave;
+        if (_hasCleave && _saveTargetCount > 1 && damageAmount > 0) {
+          // Proportionally scale the save reduction to match the Cleave split
+          const fullAfterSave = this._removeHighestDie(rollTermsData);
+          damageAfterSave = Math.floor(effectiveDamageAmount * (fullAfterSave / damageAmount));
+        } else {
+          damageAfterSave = this._removeHighestDie(rollTermsData);
+        }
+        saveReduction = effectiveDamageAmount - damageAfterSave;
       }
 
       // Apply armor/immune/weak modifiers and track armor reduction
@@ -1336,6 +1417,44 @@ export class VagabondDamageHelper {
         await targetActor.update({ 'system.health.value': newHP });
       }
 
+      // Collect on-hit status entries (item.causedStatuses with fallback to actor action)
+      const { StatusHelper } = await import('./status-helper.mjs');
+      const coatingEntries = (sourceItem?.system?.coating?.charges > 0)
+        ? (sourceItem.system.coating.causedStatuses ?? [])
+        : [];
+      const normalEntries = sourceItem?.system?.causedStatuses?.length
+        ? sourceItem.system.causedStatuses
+        : (actionIdx !== null && !isNaN(actionIdx) && sourceActor?.system?.actions?.[actionIdx]?.causedStatuses?.length)
+          ? sourceActor.system.actions[actionIdx].causedStatuses
+          : [];
+      const critEntries = attackWasCrit
+        ? (sourceItem?.system?.critCausedStatuses?.length
+            ? sourceItem.system.critCausedStatuses
+            : (actionIdx !== null && !isNaN(actionIdx) && sourceActor?.system?.actions?.[actionIdx]?.critCausedStatuses?.length)
+              ? sourceActor.system.actions[actionIdx].critCausedStatuses
+              : [])
+        : [];
+      const mergedEntries = attackWasCrit
+        ? [...critEntries, ...normalEntries.filter(e => !critEntries.some(c => c.statusId === e.statusId))]
+        : normalEntries;
+      const passiveEntries = sourceActor
+        ? sourceActor.items.filter(i => i.system?.equipped && i.system?.passiveCausedStatuses?.length).flatMap(i => i.system.passiveCausedStatuses)
+        : [];
+      const allStatusEntries = [...mergedEntries, ...coatingEntries, ...passiveEntries];
+
+      // statusContext is embedded in the Apply button so handleApplySaveDamage can process
+      // statuses at apply-time when autoApply is OFF.
+      const statusContext = allStatusEntries.length > 0 ? {
+        sourceActorId:    actorId,
+        sourceItemId:     itemId,
+        sourceActionIndex: actionIdx,
+        saveType,
+        saveSuccess:      isSuccess,
+        saveDifficulty:   difficulty,
+        saveTotal:        saveRoll.total,
+        attackWasCrit,
+      } : null;
+
       // Post save result to chat
       const saveMessage = await this._postSaveResult(
         targetActor,
@@ -1345,14 +1464,40 @@ export class VagabondDamageHelper {
         isSuccess,
         isCritical,
         isHindered,
-        damageAmount,
+        effectiveDamageAmount,
         saveReduction,
         armorReduction,
         finalDamage,
         damageType,
-        autoApply
+        autoApply,
+        autoApply ? null : statusContext  // embed context only for manual-apply cards
       );
       if (isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, saveMessage, 'Critical Save');
+
+      // autoApply ON → damage was already applied; process statuses now.
+      // autoApply OFF → defer status processing to handleApplySaveDamage (apply button click).
+      if (autoApply && allStatusEntries.length > 0) {
+        const damageWasBlocked = finalDamage === 0;
+        const preRolledSave = {
+          saveType,
+          roll:       saveRoll,
+          total:      saveRoll.total,
+          success:    isSuccess,
+          difficulty,
+        };
+        const sourceActorTokenName1 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
+        const statusResults = await StatusHelper.processCausedStatuses(
+          targetActor, allStatusEntries, damageWasBlocked, sourceItem?.name ?? '', { preRolledSave, sourceActorName: sourceActorTokenName1 }
+        );
+        if (coatingEntries.length > 0) {
+          await sourceItem.update({
+            'system.coating.charges': 0,
+            'system.coating.sourceName': '',
+            'system.coating.causedStatuses': [],
+          });
+        }
+        await VagabondChatCard.statusResults(statusResults, targetActor, sourceItem?.name ?? '', sourceItem?.img ?? null);
+      }
     }
 
     // Button remains active so multiple players can roll saves
@@ -1367,6 +1512,10 @@ export class VagabondDamageHelper {
   static async handleSaveReminderRoll(button, event = null) {
     const saveType = button.dataset.saveType; // 'reflex', 'endure', 'will'
     const attackType = button.dataset.attackType; // 'melee', 'ranged', or 'cast'
+    const actorId = button.dataset.actorId;
+    const itemId = button.dataset.itemId;
+    const actionIndexRaw = button.dataset.actionIndex;
+    const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
 
     // Get targets with fallback
     const storedTargets = this._getTargetsFromButton(button);
@@ -1428,14 +1577,35 @@ export class VagabondDamageHelper {
 
       // Check if attacker has outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
       const sourceActor = actorId ? game.actors.get(actorId) : null;
-      const attackerModifier = sourceActor?.system?.outgoingSavesModifier || 'none';
+      let effectiveAttackerModifier2 = sourceActor?.system?.outgoingSavesModifier || 'none';
+
+      // Check if target has status resistance granting Favor on this save type
+      {
+        const { StatusHelper } = await import('./status-helper.mjs');
+        const sourceItem = sourceActor?.items.get(itemId);
+        const itemEntries = sourceItem?.system?.causedStatuses ?? [];
+        const actionEntries = (!sourceItem && actionIdx !== null && !isNaN(actionIdx))
+          ? (sourceActor?.system?.actions?.[actionIdx]?.causedStatuses ?? [])
+          : [];
+        const passiveEntries = sourceActor
+          ? sourceActor.items.filter(i => i.system?.equipped && i.system?.passiveCausedStatuses?.length).flatMap(i => i.system.passiveCausedStatuses)
+          : [];
+        const allIncomingEntries = [...itemEntries, ...actionEntries, ...passiveEntries];
+        const hasResistance = allIncomingEntries.some(e =>
+          (e.saveType === saveType || e.saveType === 'any') && StatusHelper.isStatusResisted(targetActor, e.statusId)
+        );
+        if (hasResistance) {
+          if (effectiveAttackerModifier2 === 'hinder') effectiveAttackerModifier2 = 'none';
+          else if (effectiveAttackerModifier2 === 'none') effectiveAttackerModifier2 = 'favor';
+        }
+      }
 
       // Extract keyboard modifiers from event
       const shiftKey = event?.shiftKey || false;
       const ctrlKey = event?.ctrlKey || false;
 
       // Roll the save with keyboard modifiers and attacker's outgoing modifier
-      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, attackerModifier);
+      const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, effectiveAttackerModifier2);
 
       // Dice So Nice animation is handled automatically by roll.evaluate() in Foundry v13
       // No need to manually call showForRoll here
@@ -1459,6 +1629,44 @@ export class VagabondDamageHelper {
         isHindered
       );
       if (isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, saveMessage, 'Critical Save');
+
+      // Process on-hit status effects using the save roll already made above
+      // sourceActor is already declared above for outgoingSavesModifier
+      const sourceItem = sourceActor?.items.get(itemId);
+      const coatingEntries = (sourceItem?.system?.coating?.charges > 0)
+        ? (sourceItem.system.coating.causedStatuses ?? [])
+        : [];
+      const itemNormalEntries = sourceItem?.system?.causedStatuses ?? [];
+      const actionCausedStatuses = (!sourceItem && actionIdx !== null && !isNaN(actionIdx))
+        ? (sourceActor?.system?.actions?.[actionIdx]?.causedStatuses ?? [])
+        : [];
+      const passiveEntries2 = sourceActor
+        ? sourceActor.items.filter(i => i.system?.equipped && i.system?.passiveCausedStatuses?.length).flatMap(i => i.system.passiveCausedStatuses)
+        : [];
+      const allStatusEntries = [...itemNormalEntries, ...coatingEntries, ...actionCausedStatuses, ...passiveEntries2];
+      if (allStatusEntries.length > 0) {
+        const { StatusHelper } = await import('./status-helper.mjs');
+        const preRolledSave = {
+          saveType,
+          roll:       saveRoll,
+          total:      saveRoll.total,
+          success:    isSuccess,
+          difficulty,
+        };
+        const sourceName = sourceItem?.name ?? (actionIdx !== null ? sourceActor?.system?.actions?.[actionIdx]?.name : '') ?? '';
+        const sourceActorTokenName2 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
+        const statusResults = await StatusHelper.processCausedStatuses(
+          targetActor, allStatusEntries, false, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName2 }
+        );
+        if (coatingEntries.length > 0) {
+          await sourceItem.update({
+            'system.coating.charges': 0,
+            'system.coating.sourceName': '',
+            'system.coating.causedStatuses': [],
+          });
+        }
+        await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
+      }
     }
 
     // Button remains active so multiple players can roll saves
@@ -1625,7 +1833,7 @@ export class VagabondDamageHelper {
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied) {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null) {
     const saveLabel = game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
     // Import VagabondChatCard
@@ -1668,8 +1876,9 @@ export class VagabondDamageHelper {
     card.setDescription((card.data.description || '') + damageCalculationHTML + critRuleHTML);
 
     // Add "Apply to Target" button if damage was not auto-applied
+    // statusContext is embedded so handleApplySaveDamage can process statuses at apply-time
     if (!autoApplied && finalDamage > 0) {
-      const applyButton = this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType);
+      const applyButton = this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType, statusContext);
       card.setDescription((card.data.description || '') + applyButton);
     }
 
@@ -1900,6 +2109,15 @@ export class VagabondDamageHelper {
         // Show modifier in notification if present
         const modifierText = healingModifier !== 0 ? ` (${amount} ${healingModifier >= 0 ? '+' : ''}${healingModifier})` : '';
         ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP${modifierText}`);
+
+        const { VagabondChatCard: VCCHeal } = await import('./chat-card.mjs');
+        await VCCHeal.applyResult(targetActor, {
+          type: 'heal',
+          rawAmount: amount,
+          finalAmount: actualHealing,
+          previousValue: currentHP,
+          newValue: newHP,
+        });
       } else if (damageType === 'recover') {
         // Recover: Decrease Fatigue (down to 0)
         const currentFatigue = targetActor.system.fatigue || 0;
@@ -1907,6 +2125,14 @@ export class VagabondDamageHelper {
         const actualRecovery = currentFatigue - newFatigue;
         await targetActor.update({ 'system.fatigue': newFatigue });
         ui.notifications.info(`${targetActor.name} recovered ${actualRecovery} fatigue`);
+
+        const { VagabondChatCard: VCCRecover } = await import('./chat-card.mjs');
+        await VCCRecover.applyResult(targetActor, {
+          type: 'recover',
+          finalAmount: actualRecovery,
+          previousValue: currentFatigue,
+          newValue: newFatigue,
+        });
       } else if (damageType === 'recharge') {
         // Recharge: Increase Mana (up to max)
         const currentMana = targetActor.system.mana?.value || 0;
@@ -1915,6 +2141,14 @@ export class VagabondDamageHelper {
         const actualRecharge = newMana - currentMana;
         await targetActor.update({ 'system.mana.value': newMana });
         ui.notifications.info(`${targetActor.name} recharged ${actualRecharge} mana`);
+
+        const { VagabondChatCard: VCCRecharge } = await import('./chat-card.mjs');
+        await VCCRecharge.applyResult(targetActor, {
+          type: 'recharge',
+          finalAmount: actualRecharge,
+          previousValue: currentMana,
+          newValue: newMana,
+        });
       }
     }
 
@@ -1951,8 +2185,13 @@ export class VagabondDamageHelper {
       return;
     }
 
+    // Cleave splits damage across targets (ceil/floor, first targets get the remainder)
+    const hasCleave = sourceItem?.system?.properties?.includes('Cleave');
+    const targetCount = targetedTokens.length;
+
     // Apply damage to each resolved target
-    for (const target of targetedTokens) {
+    for (let i = 0; i < targetedTokens.length; i++) {
+      const target = targetedTokens[i];
       const targetActor = target.actor;
       if (!targetActor) continue;
 
@@ -1962,14 +2201,83 @@ export class VagabondDamageHelper {
         continue;
       }
 
+      // Split damage for Cleave: floor(total/count), first targets absorb remainder
+      let effectiveDamage = damageAmount;
+      if (hasCleave && targetCount > 1) {
+        const base = Math.floor(damageAmount / targetCount);
+        effectiveDamage = base + (i < (damageAmount % targetCount) ? 1 : 0);
+      }
+
       // Calculate final damage (armor/immune/weak)
-      const finalDamage = this.calculateFinalDamage(targetActor, damageAmount, damageType, sourceItem);
+      const finalDamage = this.calculateFinalDamage(targetActor, effectiveDamage, damageType, sourceItem);
 
       const currentHP = targetActor.system.health?.value || 0;
       const newHP = Math.max(0, currentHP - finalDamage);
       await targetActor.update({ 'system.health.value': newHP });
 
       ui.notifications.info(`Applied ${finalDamage} damage to ${targetActor.name}`);
+
+      // Post damage result to chat
+      const { VagabondChatCard: VCCDirect } = await import('./chat-card.mjs');
+      await VCCDirect.applyResult(targetActor, {
+        type: 'damage',
+        rawAmount: effectiveDamage,
+        armorReduction: effectiveDamage - finalDamage,
+        finalAmount: finalDamage,
+        damageType,
+        previousValue: currentHP,
+        newValue: newHP,
+      });
+
+      // Process on-hit status effects
+      const { StatusHelper } = await import('./status-helper.mjs');
+      const actionIndexRaw = button.dataset.actionIndex;
+      const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
+      const isCritical = button.dataset.isCritical === 'true';
+      // NPC actions store causedStatuses on the action, not on an item
+      const actionCausedStatuses = (!sourceItem && actionIdx !== null && !isNaN(actionIdx))
+        ? (sourceActor?.system?.actions?.[actionIdx]?.causedStatuses ?? [])
+        : [];
+      const actionCritStatuses = (isCritical && !sourceItem && actionIdx !== null && !isNaN(actionIdx))
+        ? (sourceActor?.system?.actions?.[actionIdx]?.critCausedStatuses ?? [])
+        : [];
+      const coatingEntries = (sourceItem?.system?.coating?.charges > 0)
+        ? (sourceItem.system.coating.causedStatuses ?? [])
+        : [];
+      const itemNormalEntries = sourceItem?.system?.causedStatuses ?? [];
+      const itemCritEntries = isCritical ? (sourceItem?.system?.critCausedStatuses ?? []) : [];
+      // On a crit: crit entries replace same-statusId normal entries; unique normals still apply
+      const mergedItemEntries = isCritical
+        ? [...itemCritEntries, ...itemNormalEntries.filter(e => !itemCritEntries.some(c => c.statusId === e.statusId))]
+        : itemNormalEntries;
+      const passiveEntries3 = sourceActor
+        ? sourceActor.items.filter(i => i.system?.equipped && i.system?.passiveCausedStatuses?.length).flatMap(i => i.system.passiveCausedStatuses)
+        : [];
+      const allStatusEntries = [
+        ...mergedItemEntries,
+        ...coatingEntries,
+        ...actionCausedStatuses,
+        ...actionCritStatuses,
+        ...passiveEntries3,
+      ];
+      if (allStatusEntries.length > 0) {
+        const sourceName = sourceItem?.name ?? (actionIdx !== null ? sourceActor?.system?.actions?.[actionIdx]?.name : '') ?? '';
+        const damageWasBlocked = finalDamage === 0;
+        const sourceActorTokenName3 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
+        // Apply Direct bypasses all saves — statuses are applied unconditionally
+        const statusResults = await StatusHelper.processCausedStatuses(
+          targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName3 }
+        );
+        if (coatingEntries.length > 0) {
+          await sourceItem.update({
+            'system.coating.charges': 0,
+            'system.coating.sourceName': '',
+            'system.coating.causedStatuses': [],
+          });
+        }
+        const { VagabondChatCard } = await import('./chat-card.mjs');
+        await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
+      }
     }
 
     // Button remains active so damage can be applied to different tokens
@@ -2011,5 +2319,75 @@ export class VagabondDamageHelper {
     button.disabled = true;
 
     ui.notifications.info(`Applied ${finalDamage} damage to ${actorName} (${currentHP} → ${newHP} HP)`);
+
+    // Post damage result to chat
+    const { VagabondChatCard: VCCSave } = await import('./chat-card.mjs');
+    await VCCSave.applyResult(actor, {
+      type: 'damage',
+      rawAmount: finalDamage,
+      finalAmount: finalDamage,
+      damageType,
+      previousValue: currentHP,
+      newValue: newHP,
+    });
+
+    // Process on-hit statuses deferred from handleSaveRoll (autoApply was OFF)
+    const sourceActorId = button.dataset.sourceActorId;
+    if (sourceActorId) {
+      const saveType       = button.dataset.saveType;
+      const saveSuccess    = button.dataset.saveSuccess === 'true';
+      const saveDifficulty = parseInt(button.dataset.saveDifficulty);
+      const saveTotal      = parseInt(button.dataset.saveTotal);
+      const sourceItemId   = button.dataset.sourceItemId;
+      const sourceActionIndexRaw = button.dataset.sourceActionIndex;
+      const sourceActionIdx = (sourceActionIndexRaw !== '' && sourceActionIndexRaw != null) ? parseInt(sourceActionIndexRaw) : null;
+      const attackWasCrit  = button.dataset.attackWasCrit === 'true';
+
+      const sourceActor = game.actors.get(sourceActorId);
+      const sourceItem  = sourceActor?.items.get(sourceItemId);
+
+      const coatingEntries = (sourceItem?.system?.coating?.charges > 0)
+        ? (sourceItem.system.coating.causedStatuses ?? [])
+        : [];
+      const normalEntries = sourceItem?.system?.causedStatuses?.length
+        ? sourceItem.system.causedStatuses
+        : (sourceActionIdx !== null && !isNaN(sourceActionIdx) && sourceActor?.system?.actions?.[sourceActionIdx]?.causedStatuses?.length)
+          ? sourceActor.system.actions[sourceActionIdx].causedStatuses
+          : [];
+      const critEntries = attackWasCrit
+        ? (sourceItem?.system?.critCausedStatuses?.length
+            ? sourceItem.system.critCausedStatuses
+            : (sourceActionIdx !== null && !isNaN(sourceActionIdx) && sourceActor?.system?.actions?.[sourceActionIdx]?.critCausedStatuses?.length)
+              ? sourceActor.system.actions[sourceActionIdx].critCausedStatuses
+              : [])
+        : [];
+      const mergedEntries = attackWasCrit
+        ? [...critEntries, ...normalEntries.filter(e => !critEntries.some(c => c.statusId === e.statusId))]
+        : normalEntries;
+      const passiveEntries4 = sourceActor
+        ? sourceActor.items.filter(i => i.system?.equipped && i.system?.passiveCausedStatuses?.length).flatMap(i => i.system.passiveCausedStatuses)
+        : [];
+      const allStatusEntries = [...mergedEntries, ...coatingEntries, ...passiveEntries4];
+
+      if (allStatusEntries.length > 0) {
+        const { StatusHelper } = await import('./status-helper.mjs');
+        const { VagabondChatCard } = await import('./chat-card.mjs');
+        const damageWasBlocked = finalDamage === 0;
+        const preRolledSave = { saveType, success: saveSuccess, total: saveTotal, difficulty: saveDifficulty, roll: null };
+        const sourceName = sourceItem?.name ?? (sourceActionIdx !== null ? sourceActor?.system?.actions?.[sourceActionIdx]?.name : '') ?? '';
+        const sourceActorTokenName4 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
+        const statusResults = await StatusHelper.processCausedStatuses(
+          actor, allStatusEntries, damageWasBlocked, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName4 }
+        );
+        if (coatingEntries.length > 0) {
+          await sourceItem.update({
+            'system.coating.charges': 0,
+            'system.coating.sourceName': '',
+            'system.coating.causedStatuses': [],
+          });
+        }
+        await VagabondChatCard.statusResults(statusResults, actor, sourceName, sourceItem?.img ?? null);
+      }
+    }
   }
 }

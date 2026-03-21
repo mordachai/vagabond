@@ -322,6 +322,10 @@
         "name": "Always Roll Damage",
         "hint": "When rolling damage with checks, roll damage even on misses (to show the intensity of the miss). Only applies when 'Roll Damage With Check' is enabled."
       },
+      "npcUseFlatDamage": {
+        "name": "NPC: Use Flat Damage",
+        "hint": "When enabled, NPC actions use flat damage instead of rolling dice. When 'Roll Damage With Check' is also active, NPC damage is resolved automatically with no button required — this setting determines whether it uses the flat value or rolls the formula."
+      },
       "autoApplySaveDamage": {
         "name": "Auto-Apply Save Damage",
         "hint": "When enabled, damage is automatically applied to HP after save rolls. When disabled, damage amounts are shown in chat but must be applied manually."
@@ -724,7 +728,7 @@
         "FIELDS": {
           "damageOneHand": {"label": "Damage (1H)"},
           "damageTwoHands": {"label": "Damage (2H)"},
-          "properties": {"label": "Properties"},
+          "properties": {"label": "Weapon Properties"},
           "weaponSkill": {"label": "Weapon Skill"},
           "range": {"label": "Range"},
           "grip": {"label": "Grip"},
@@ -881,7 +885,9 @@
           "bound": {"label": "Bound"}
         },
         "IsSupply": "Counts as rations (tracked in party sheet)",
-        "IsBeverage": "Counts as water/beverage (tracked in party sheet)"
+        "IsBeverage": "Counts as water/beverage (tracked in party sheet)",
+        "LinkedConsumableNone": "No linked consumable",
+        "LinkedConsumableHint": "When this item is used, it consumes the linked item instead"
       },
       "Relic": {
         "FIELDS": {
@@ -1085,6 +1091,21 @@
         "DeleteTool": "Delete Progress Clock"
       }
     },
+    "OngoingPanel": {
+      "Title":        "Ongoing Effects",
+      "SceneControl": "Toggle Ongoing Effects Panel",
+      "Empty":        "No actors in scene",
+      "PanToToken":    "Pan to token",
+      "StatusHint":    "Left click: post to chat · Right click: remove",
+      "OpenSheet":    "Open Sheet",
+      "RollDie":      "Left click: roll · Right click: remove",
+      "HPHint":       "Left click −1 · Right click +1",
+      "FatigueHint":  "Left click +1 · Right click −1",
+      "Groups": {
+        "Heroes":  "Heroes",
+        "Enemies": "Enemies"
+      }
+    },
     "CountdownDice": {
       "Name": "Dice Name",
       "DefaultName": "Countdown",
@@ -1131,7 +1152,11 @@
         "LevelFeatures": "Level Features",
         "Level": "Level",
         "WeaponStats": "Weapon Stats",
+        "WeaponConfig": "Weapon Configuration",
+        "WeaponEffects": "Weapon Effects",
         "ArmorStats": "Armor Stats",
+        "ArmorConfig": "Armor Configuration",
+        "ArmorEffects": "Armor Effects",
         "Alchemical": "Alchemical",
         "Relic": "Relic",
         "Healing": "Healing",
@@ -1409,7 +1434,56 @@
       "NotificationFeatures": " Gained {featureCount} new feature{plural}.",
       "ErrorLevelUpFailed": "Level up failed: {error}",
       "ErrorConsoleMessage": "Vagabond | Level up failed:"
-    }
+    },
+    "Status": {
+      "StatusesEffectsTitle": "Status & Effects Configuration",
+      "DamageImmunities": "Damage Immunities",
+      "OnHitEffects": "On-Hit Effects",
+      "CritOnHitEffects": "Crit On-Hit Effects",
+      "PassiveOnHitEffects": "Passive On-Hit Effects",
+      "PassiveOnHitEffectsHint": "These statuses fire on every hit while this item is equipped, regardless of what weapon or spell is used.",
+      "AddPassiveEffect": "Add Passive Effect",
+      "StatusProtections": "Status Protections",
+      "Blocks": "Blocks",
+      "Resists": "Resists (save with Favor)",
+      "SelectStatus": "— Select Status —",
+      "AddEffect": "Add Effect",
+      "AddCritEffect": "Add Crit Effect",
+      "RequiresDamageShort": "If Hit",
+      "RequiresDamageHint": "Status only applies if damage is not fully blocked",
+      "Save": {
+        "None": "No Save",
+        "Any": "Any Save",
+        "Diff": "Difficulty",
+        "Label": "Save"
+      },
+      "Duration": {
+        "Permanent": "Permanent",
+        "Focusing": "Focusing"
+      },
+      "CausesDamage": "Dmg",
+      "CausesDamageHint": "Die roll is dealt as damage each tick. Leave formula blank to use die roll.",
+      "TickFormula": "Override Formula",
+      "FatigueOnTick": "Fatigue per tick (0 = none) — currently unused, restore with fatigueOnTick feature",
+      "Coating": {
+        "Apply": "Apply Coating to Weapon",
+        "Applied": "{sourceName} coating applied to {weaponName}",
+        "Consumed": "{sourceName} coating consumed",
+        "SelectWeapon": "Select Weapon",
+        "NoWeapons": "No equipped weapons found"
+      },
+      "Applied": "{actor} is now {status}.",
+      "Immune": "{actor} is immune to {status}.",
+      "Resisted": "{actor} resisted {status} ({saveType}: {total} vs {difficulty}).",
+      "AlreadyActive": "{actor} already has {status}.",
+      "RequiresDamage": "{status} was not applied to {actor} (no damage went through).",
+      "OngoingDamage": "Ongoing Damage",
+      "ApplyTickDamage": "Apply {amount} damage to {actor}",
+      "TickDamageTitle": "Ongoing Damage",
+      "TickDamage": "{actor} takes {damage} {damageType} damage from {status}.",
+      "CountdownExpired": "{actor}'s {status} has ended."
+    },
+    "Favor": "Favor"
   },
   "TYPES": {
     "Actor": {

@@ -53,81 +53,225 @@
   {{else}}
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
     <div class='spell-item-content'>
-      {{! Damage Base and Duration - Same Line }}
-      <div class='flexrow gap-8'>
-        <div class='form-group flex-1'>
-          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</label>
-          {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
-              name="system.damageType"
-              selected=system.damageType
-              includeNone=true
-              config=config}}
-        </div>
-        <div class='form-group flex-2'>
-          <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
-          <input
-            type='text'
-            name='system.duration'
-            value='{{system.duration}}'
-            placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
-          />
-        </div>
-      </div>
-
-      {{! Exploding Dice Configuration }}
-      <div class='form-group'>
-        <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
-        <div class='grid grid-2col gap-8'>
-          <div class='explode-checkbox-field'>
-            <label class='checkbox-label'>
-              <input
-                type='checkbox'
-                name='system.canExplode'
-                {{#if system.canExplode}}checked{{/if}}
-                data-dtype='Boolean'
-              />
-              <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
-            </label>
+      <div class="item-section-box">
+        <div class="item-section-label">Spell Configuration</div>
+        {{! Damage Base and Duration - Same Line }}
+        <div class='flexrow gap-8'>
+          <div class='form-group flex-1'>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</label>
+            {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
+                name="system.damageType"
+                selected=system.damageType
+                includeNone=true
+                config=config}}
           </div>
-          <div class='explode-values-field'>
-            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
+          <div class='form-group flex-2'>
+            <label class='resource-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}</label>
             <input
               type='text'
-              name='system.explodeValues'
-              value='{{system.explodeValues}}'
-              data-dtype='String'
-              placeholder='e.g., 1,4'
-              {{#unless system.canExplode}}disabled{{/unless}}
+              name='system.duration'
+              value='{{system.duration}}'
+              placeholder='{{localize "VAGABOND.Item.Spell.FIELDS.duration.hint"}}'
             />
           </div>
         </div>
-      </div>
 
-      {{! No Roll Required Checkbox }}
-      <div class='form-group'>
-        <label class='checkbox-label'>
-          <input
-            type='checkbox'
-            name='system.noRollRequired'
-            {{#if system.noRollRequired}}checked{{/if}}
-            data-dtype='Boolean'
-          />
-          <span>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}</span>
-        </label>
-        <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
-      </div>
+        {{! Exploding Dice Configuration }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
+          <div class='grid grid-2col gap-8'>
+            <div class='explode-checkbox-field'>
+              <label class='checkbox-label'>
+                <input
+                  type='checkbox'
+                  name='system.canExplode'
+                  {{#if system.canExplode}}checked{{/if}}
+                  data-dtype='Boolean'
+                />
+                <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
+              </label>
+            </div>
+            <div class='explode-values-field'>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
+              <input
+                type='text'
+                name='system.explodeValues'
+                value='{{system.explodeValues}}'
+                data-dtype='String'
+                placeholder='e.g., 1,4'
+                {{#unless system.canExplode}}disabled{{/unless}}
+              />
+            </div>
+          </div>
+        </div>
 
-      {{! FX School (Sequencer) }}
-      <div class='form-group'>
-        <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FxSchool.Label"}}</label>
-        <select name='system.fxSchool' data-dtype='String'>
-          {{#each config.fxSchools as |label key|}}
-            <option value='{{key}}' {{#if (eq key ../system.fxSchool)}}selected{{/if}}>
-              {{localize label}}
-            </option>
+        {{! No Roll Required Checkbox }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.noRollRequired'
+              {{#if system.noRollRequired}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}</span>
+          </label>
+          <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
+        </div>
+
+        {{! FX School (Sequencer) }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FxSchool.Label"}}</label>
+          <select name='system.fxSchool' data-dtype='String'>
+            {{#each config.fxSchools as |label key|}}
+              <option value='{{key}}' {{#if (eq key ../system.fxSchool)}}selected{{/if}}>
+                {{localize label}}
+              </option>
+            {{/each}}
+          </select>
+        </div>
+      </div>{{! /item-section-box Spell Configuration }}
+
+      {{! ===== STATUS & EFFECTS CONFIGURATION ===== }}
+      <div class="item-section-box">
+        <div class="item-section-label">{{localize 'VAGABOND.Status.StatusesEffectsTitle'}}</div>
+      <details class='item-section-details' data-details-id='on-hit-effects'>
+        <summary class='item-section-summary'>
+          <i class='fas fa-chevron-right accordion-icon'></i>
+          <span>{{localize 'VAGABOND.Status.OnHitEffects'}}</span>
+        </summary>
+        <div class='on-hit-effects-body'>
+          {{#each system.causedStatuses as |entry index|}}
+            <div class='caused-status-row' data-index='{{index}}'>
+              <div class='caused-status-top'>
+                <select name='system.causedStatuses.{{index}}.statusId' class='caused-status-select'>
+                  <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                  {{#each @root.config.statusConditions as |label key|}}
+                    <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                  {{/each}}
+                </select>
+                <select name='system.causedStatuses.{{index}}.saveType' class='caused-status-save'>
+                  <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                  <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                  {{#each @root.config.homebrew.saves as |save|}}
+                    <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                  {{/each}}
+                </select>
+                <select name='system.causedStatuses.{{index}}.duration' class='caused-status-duration'>
+                  <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                  <option value='focusing' {{#if (eq entry.duration 'focusing')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Focusing'}}</option>
+                  {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                    <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class='caused-status-bot'>
+                <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                  <input type='checkbox' name='system.causedStatuses.{{index}}.tickDamageEnabled'
+                    {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                  {{localize 'VAGABOND.Status.CausesDamage'}}
+                </label>
+                {{#if entry.tickDamageEnabled}}
+                <select name='system.causedStatuses.{{index}}.damageType' class='caused-status-dtype'>
+                  {{#each @root.config.damageTypes as |label key|}}
+                    <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                  {{/each}}
+                </select>
+                <input type='text' name='system.causedStatuses.{{index}}.damageOnTick'
+                  value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'
+                  class='caused-status-tick'>
+                {{!-- TODO: fatigueOnTick input — restore when re-enabling (see base-equipment.mjs for full checklist)
+                <input type='number' name='system.causedStatuses.{{index}}.fatigueOnTick'
+                  value='{{entry.fatigueOnTick}}' min='0' title='{{localize "VAGABOND.Status.FatigueOnTick"}}'
+                  class='caused-status-fatigue-tick'>
+                --}}
+                {{/if}}
+                <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                  <input type='checkbox' name='system.causedStatuses.{{index}}.requiresDamage'
+                    {{#if entry.requiresDamage}}checked{{/if}}>
+                  {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                </label>
+                <button type='button' class='caused-status-remove' data-action='removeCausedStatus' data-index='{{index}}'>
+                  <i class='fas fa-times'></i>
+                </button>
+              </div>
+            </div>
           {{/each}}
-        </select>
-      </div>
+          <button type='button' class='caused-status-add' data-action='addCausedStatus'>
+            <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddEffect'}}
+          </button>
+        </div>
+      </details>
+
+      {{! ===== CRIT ON-HIT STATUS EFFECTS ===== }}
+      <details class='item-section-details' data-details-id='crit-on-hit-effects'>
+        <summary class='item-section-summary'>
+          <i class='fas fa-chevron-right accordion-icon'></i>
+          <span>{{localize 'VAGABOND.Status.CritOnHitEffects'}}</span>
+        </summary>
+        <div class='on-hit-effects-body'>
+          {{#each system.critCausedStatuses as |entry index|}}
+            <div class='caused-status-row' data-index='{{index}}'>
+              <div class='caused-status-top'>
+                <select name='system.critCausedStatuses.{{index}}.statusId' class='caused-status-select'>
+                  <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                  {{#each @root.config.statusConditions as |label key|}}
+                    <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                  {{/each}}
+                </select>
+                <select name='system.critCausedStatuses.{{index}}.saveType' class='caused-status-save'>
+                  <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                  <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                  {{#each @root.config.homebrew.saves as |save|}}
+                    <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                  {{/each}}
+                </select>
+                <select name='system.critCausedStatuses.{{index}}.duration' class='caused-status-duration'>
+                  <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                  <option value='focusing' {{#if (eq entry.duration 'focusing')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Focusing'}}</option>
+                  {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                    <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class='caused-status-bot'>
+                <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                  <input type='checkbox' name='system.critCausedStatuses.{{index}}.tickDamageEnabled'
+                    {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                  {{localize 'VAGABOND.Status.CausesDamage'}}
+                </label>
+                {{#if entry.tickDamageEnabled}}
+                <select name='system.critCausedStatuses.{{index}}.damageType' class='caused-status-dtype'>
+                  {{#each @root.config.damageTypes as |label key|}}
+                    <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                  {{/each}}
+                </select>
+                <input type='text' name='system.critCausedStatuses.{{index}}.damageOnTick'
+                  value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'
+                  class='caused-status-tick'>
+                {{!-- TODO: fatigueOnTick input — restore when re-enabling (see base-equipment.mjs for full checklist)
+                <input type='number' name='system.critCausedStatuses.{{index}}.fatigueOnTick'
+                  value='{{entry.fatigueOnTick}}' min='0' title='{{localize "VAGABOND.Status.FatigueOnTick"}}'
+                  class='caused-status-fatigue-tick'>
+                --}}
+                {{/if}}
+                <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                  <input type='checkbox' name='system.critCausedStatuses.{{index}}.requiresDamage'
+                    {{#if entry.requiresDamage}}checked{{/if}}>
+                  {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                </label>
+                <button type='button' class='caused-status-remove' data-action='removeCritCausedStatus' data-index='{{index}}'>
+                  <i class='fas fa-times'></i>
+                </button>
+              </div>
+            </div>
+          {{/each}}
+          <button type='button' class='caused-status-add' data-action='addCritCausedStatus'>
+            <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddCritEffect'}}
+          </button>
+        </div>
+      </details>
+      </div>{{! /item-section-box Status & Effects }}
     </div>
   {{/if}}
 </section>

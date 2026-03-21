@@ -270,6 +270,134 @@
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}:</label>
                     <textarea data-field='extraInfo' rows='2' placeholder='Extra information...' class='npc-field-input'>{{action.extraInfo}}</textarea>
                   </div>
+                  {{! On-Hit Status Effects }}
+                  <div class='action-edit-row action-edit-row--full'>
+                    <label>{{localize 'VAGABOND.Status.OnHitEffects'}}:</label>
+                    <div class='npc-caused-statuses' data-action-index='{{index}}'>
+                      {{#each action.causedStatuses as |entry si|}}
+                        <div class='caused-status-row caused-status-row--npc' data-index='{{si}}'>
+                          <div class='caused-status-top'>
+                            <select class='caused-status-select' data-field='causedStatuses.{{si}}.statusId'>
+                              <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                              {{#each @root.config.statusConditions as |label key|}}
+                                <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                              {{/each}}
+                            </select>
+                            <select class='caused-status-save' data-field='causedStatuses.{{si}}.saveType'>
+                              <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                              <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                              {{#each @root.config.homebrew.saves as |save|}}
+                                <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                              {{/each}}
+                            </select>
+                            <select class='caused-status-duration' data-field='causedStatuses.{{si}}.duration'>
+                              <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                              <option value='focusing' {{#if (eq entry.duration 'focusing')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Focusing'}}</option>
+                              {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                                <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                              {{/each}}
+                            </select>
+                          </div>
+                          <div class='caused-status-bot'>
+                            <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                              <input type='checkbox' class='npc-status-tick-dmg' data-field='causedStatuses.{{si}}.tickDamageEnabled'
+                                {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                              {{localize 'VAGABOND.Status.CausesDamage'}}
+                            </label>
+                            {{#if entry.tickDamageEnabled}}
+                            <select class='caused-status-dtype' data-field='causedStatuses.{{si}}.damageType'>
+                              {{#each @root.config.damageTypes as |label key|}}
+                                <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                              {{/each}}
+                            </select>
+                            <input type='text' class='caused-status-tick' data-field='causedStatuses.{{si}}.damageOnTick'
+                              value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'>
+                            {{!-- TODO: fatigueOnTick input — restore when re-enabling (see base-equipment.mjs for full checklist)
+                            <input type='number' class='caused-status-fatigue-tick' data-field='causedStatuses.{{si}}.fatigueOnTick'
+                              value='{{entry.fatigueOnTick}}' min='0' title='{{localize "VAGABOND.Status.FatigueOnTick"}}'>
+                            --}}
+                            {{/if}}
+                            <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                              <input type='checkbox' class='npc-status-req-dmg' data-field='causedStatuses.{{si}}.requiresDamage'
+                                {{#if entry.requiresDamage}}checked{{/if}}>
+                              {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                            </label>
+                            <button type='button' class='caused-status-remove' data-action='removeNpcActionStatus'
+                              data-action-index='{{../index}}' data-status-index='{{si}}'>
+                              <i class='fas fa-times'></i>
+                            </button>
+                          </div>
+                        </div>
+                      {{/each}}
+                      <button type='button' class='caused-status-add' data-action='addNpcActionStatus' data-action-index='{{index}}'>
+                        <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddEffect'}}
+                      </button>
+                    </div>
+                  </div>
+                  {{! Crit On-Hit Status Effects }}
+                  <div class='action-edit-row action-edit-row--full'>
+                    <label>{{localize 'VAGABOND.Status.CritOnHitEffects'}}:</label>
+                    <div class='npc-caused-statuses' data-action-index='{{index}}'>
+                      {{#each action.critCausedStatuses as |entry si|}}
+                        <div class='caused-status-row caused-status-row--npc' data-index='{{si}}'>
+                          <div class='caused-status-top'>
+                            <select class='caused-status-select' data-field='critCausedStatuses.{{si}}.statusId'>
+                              <option value=''>{{localize 'VAGABOND.Status.SelectStatus'}}</option>
+                              {{#each @root.config.statusConditions as |label key|}}
+                                <option value='{{key}}' {{#if (eq ../statusId key)}}selected{{/if}}>{{localize label}}</option>
+                              {{/each}}
+                            </select>
+                            <select class='caused-status-save' data-field='critCausedStatuses.{{si}}.saveType'>
+                              <option value='any' {{#if (eq entry.saveType 'any')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.Any'}}</option>
+                              <option value='none' {{#if (eq entry.saveType 'none')}}selected{{/if}}>{{localize 'VAGABOND.Status.Save.None'}}</option>
+                              {{#each @root.config.homebrew.saves as |save|}}
+                                <option value='{{save.key}}' {{#if (eq ../saveType save.key)}}selected{{/if}}>{{localize save.label}}</option>
+                              {{/each}}
+                            </select>
+                            <select class='caused-status-duration' data-field='critCausedStatuses.{{si}}.duration'>
+                              <option value='' {{#if (eq entry.duration '')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Permanent'}}</option>
+                              <option value='focusing' {{#if (eq entry.duration 'focusing')}}selected{{/if}}>{{localize 'VAGABOND.Status.Duration.Focusing'}}</option>
+                              {{#each @root.config.countdownDiceTypes as |diceKey|}}
+                                <option value='{{diceKey}}' {{#if (eq ../duration diceKey)}}selected{{/if}}>C{{diceKey}}</option>
+                              {{/each}}
+                            </select>
+                          </div>
+                          <div class='caused-status-bot'>
+                            <label class='caused-status-dmg-toggle' title='{{localize "VAGABOND.Status.CausesDamageHint"}}'>
+                              <input type='checkbox' class='npc-status-tick-dmg' data-field='critCausedStatuses.{{si}}.tickDamageEnabled'
+                                {{#if entry.tickDamageEnabled}}checked{{/if}}>
+                              {{localize 'VAGABOND.Status.CausesDamage'}}
+                            </label>
+                            {{#if entry.tickDamageEnabled}}
+                            <select class='caused-status-dtype' data-field='critCausedStatuses.{{si}}.damageType'>
+                              {{#each @root.config.damageTypes as |label key|}}
+                                <option value='{{key}}' {{#if (eq ../damageType key)}}selected{{/if}}>{{localize label}}</option>
+                              {{/each}}
+                            </select>
+                            <input type='text' class='caused-status-tick' data-field='critCausedStatuses.{{si}}.damageOnTick'
+                              value='{{entry.damageOnTick}}' placeholder='{{localize "VAGABOND.Status.TickFormula"}}'>
+                            {{!-- TODO: fatigueOnTick input — restore when re-enabling (see base-equipment.mjs for full checklist)
+                            <input type='number' class='caused-status-fatigue-tick' data-field='critCausedStatuses.{{si}}.fatigueOnTick'
+                              value='{{entry.fatigueOnTick}}' min='0' title='{{localize "VAGABOND.Status.FatigueOnTick"}}'>
+                            --}}
+                            {{/if}}
+                            <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                              <input type='checkbox' class='npc-status-req-dmg' data-field='critCausedStatuses.{{si}}.requiresDamage'
+                                {{#if entry.requiresDamage}}checked{{/if}}>
+                              {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                            </label>
+                            <button type='button' class='caused-status-remove' data-action='removeNpcActionCritStatus'
+                              data-action-index='{{../index}}' data-status-index='{{si}}'>
+                              <i class='fas fa-times'></i>
+                            </button>
+                          </div>
+                        </div>
+                      {{/each}}
+                      <button type='button' class='caused-status-add' data-action='addNpcActionCritStatus' data-action-index='{{index}}'>
+                        <i class='fas fa-plus'></i> {{localize 'VAGABOND.Status.AddCritEffect'}}
+                      </button>
+                    </div>
+                  </div>
                   {{/if}}
                 </div>
               </div>

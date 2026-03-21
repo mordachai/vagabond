@@ -699,6 +699,13 @@ export class VagabondItem extends Item {
       }
     }
 
+    // Brutal: add extra damage dice on crit, matching the weapon's die size
+    if (isCritical && this.system.properties?.includes('Brutal')) {
+      const brutalMaxDice = actor.system.brutalMaxDice ?? 1;
+      const dieMatch = damageFormula.match(/d(\d+)/);
+      if (dieMatch) damageFormula += ` + ${brutalMaxDice}d${dieMatch[1]}`;
+    }
+
     // Add weapon-specific universal damage bonuses
     const weaponFlatBonus = actor.system.universalWeaponDamageBonus || 0;
     const weaponDiceBonus = actor.system.universalWeaponDamageDice || '';

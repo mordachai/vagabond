@@ -218,6 +218,16 @@ export default class VagabondNPC extends VagabondActorBase {
       }
     );
 
+    // Weapon property bonus fields (AE-extensible via ADD mode)
+    schema.cleaveTargets = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Cleave Extra Targets", hint: "Adds extra targets to Cleave beyond the base 2. ADD mode." }
+    );
+    schema.brutalDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Brutal Extra Crit Dice", hint: "Adds extra damage dice to Brutal crits beyond the base 1. ADD mode." }
+    );
+
     // Locked/unlocked mode toggle
     schema.locked = new fields.BooleanField({
       required: true,
@@ -300,6 +310,34 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
+        causedStatuses: new fields.ArrayField(
+          new fields.SchemaField({
+            statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+            requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+            saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+            duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+            tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+            damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+            damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+            // TODO: fatigueOnTick — see base-equipment.mjs causedStatuses for full re-enable checklist.
+            // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+          }),
+          { required: true, initial: [] }
+        ),
+        critCausedStatuses: new fields.ArrayField(
+          new fields.SchemaField({
+            statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),
+            requiresDamage:     new fields.BooleanField({ required: true, initial: true }),
+            saveType:           new fields.StringField({ required: false, blank: true, initial: 'any' }),
+            duration:           new fields.StringField({ required: false, blank: true, initial: '' }),
+            tickDamageEnabled:  new fields.BooleanField({ required: true, initial: false }),
+            damageOnTick:       new fields.StringField({ required: false, blank: true, initial: '' }),
+            damageType:         new fields.StringField({ required: false, blank: true, initial: '-' }),
+            // TODO: fatigueOnTick — see base-equipment.mjs causedStatuses for full re-enable checklist.
+            // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
+          }),
+          { required: true, initial: [] }
+        ),
       }),
       { required: true, initial: [] }
     );
@@ -338,6 +376,10 @@ export default class VagabondNPC extends VagabondActorBase {
     this.universalWeaponDamageBonus = [];
     this.universalSpellDamageBonus = [];
     this.universalAlchemicalDamageBonus = [];
+
+    // Reset weapon property bonus fields
+    this.cleaveTargets = [];
+    this.brutalDice = [];
 
     // Reset dice bonuses
     this.universalDamageDice = [];
@@ -416,6 +458,10 @@ export default class VagabondNPC extends VagabondActorBase {
     this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
     this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
+
+    // Weapon property derived totals
+    this.cleaveMaxTargets = 2 + this._evaluateFormulaField(this.cleaveTargets, rollData);
+    this.brutalMaxDice = 1 + this._evaluateFormulaField(this.brutalDice, rollData);
 
     // Fatigue bonus
     this.fatigueBonus = this._evaluateFormulaField(this.fatigueBonus, rollData);

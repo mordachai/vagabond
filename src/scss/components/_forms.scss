@@ -536,6 +536,7 @@ prose-mirror .editor-content {
     gap: 8px;
     font-size: 13px;
     transition: background 0.2s ease;
+    white-space: nowrap;
 
     &:hover {
       background: rgba(0, 0, 0, 0.05);

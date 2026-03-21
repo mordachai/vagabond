@@ -264,6 +264,16 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
+    // Weapon property bonus fields (AE-extensible via ADD mode)
+    schema.cleaveTargets = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Cleave Extra Targets", hint: "Adds extra targets to Cleave beyond the base 2. ADD mode." }
+    );
+    schema.brutalDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Brutal Extra Crit Dice", hint: "Adds extra damage dice to Brutal crits beyond the base 1. ADD mode." }
+    );
+
     // Spell Damage Die Size - derived value
     schema.spellDamageDieSize = new fields.NumberField({
       ...requiredInteger,
@@ -401,6 +411,19 @@ export default class VagabondCharacter extends VagabondActorBase {
     );
 
     schema.weaknesses = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    // Status condition immunities — managed via Active Effects (ADD mode appends to array)
+    schema.statusImmunities = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    // Status condition resistances — save rolled with Favor when resisting these statuses
+    // Managed via Active Effects (ADD mode appends to array)
+    schema.statusResistances = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [] }
     );
@@ -551,6 +574,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.brawlCritBonus = [];
     this.finesseCritBonus = [];
 
+    // Reset weapon property bonus fields
+    this.cleaveTargets = [];
+    this.brutalDice = [];
+
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
     for (let s of Object.values(this.stats)) { s.bonus = []; }
     for (let s of Object.values(this.saves)) { s.bonus = []; }
@@ -613,8 +640,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     if (formulaStr === '') return 0;
 
     try {
+      // Strip outer parentheses that Foundry sometimes wraps around formulas
+      const cleaned = formulaStr.replace(/^\((.+)\)$/, '$1');
+
       // Replace @variables with their values from rollData
-      const replaced = Roll.replaceFormulaData(formulaStr, rollData);
+      const replaced = Roll.replaceFormulaData(cleaned, rollData);
+
+      // If the result is pure dice notation (e.g. "1d8") safeEval cannot handle it.
+      // Dice expressions are invalid for synchronous derived-value bonus fields — skip silently.
+      if (/^\d*d\d+$/.test(replaced.trim())) return 0;
 
       // Safely evaluate the expression
       const result = Roll.safeEval(replaced);
@@ -648,6 +682,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
     this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
+
+    // Weapon property derived totals
+    this.cleaveMaxTargets = 2 + this._evaluateFormulaField(this.cleaveTargets, rollData);
+    this.brutalMaxDice = 1 + this._evaluateFormulaField(this.brutalDice, rollData);
 
     // Evaluate dice bonuses (join arrays into formula strings)
     this.universalDamageDice = this.universalDamageDice.filter(d => !!d).join(' + ');

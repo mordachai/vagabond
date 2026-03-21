@@ -1,0 +1,66 @@
+<div class="osp-body">
+  {{#if isEmpty}}
+    <p class="osp-empty">{{localize 'VAGABOND.OngoingPanel.Empty'}}</p>
+  {{else}}
+    {{#each groups as |group|}}
+      <div class="osp-group" data-group="{{group.key}}">
+        <div class="osp-group-label">{{group.label}}</div>
+        {{#each group.rows as |row|}}
+          {{#unless @first}}<hr class="osp-divider">{{/unless}}
+          <div class="osp-actor-row" data-actor-uuid="{{row.actorUuid}}" data-token-id="{{row.tokenId}}">
+            <img class="osp-portrait" src="{{row.img}}" alt="{{row.name}}"
+              title="{{localize 'VAGABOND.OngoingPanel.PanToToken'}}">
+            <div class="osp-actor-info">
+
+              <div class="osp-name-row">
+                <div class="osp-actor-name" title="{{localize 'VAGABOND.OngoingPanel.OpenSheet'}}">{{row.name}}</div>
+                <div class="osp-resources">
+                  <div class="osp-resource osp-resource-hp"
+                    title="{{localize 'VAGABOND.OngoingPanel.HPHint'}}">
+                    <i class="fas fa-heart"></i>
+                    <span>{{row.hp.value}}/{{row.hp.max}}</span>
+                  </div>
+                  <div class="osp-resource osp-resource-fatigue"
+                    title="{{localize 'VAGABOND.OngoingPanel.FatigueHint'}}">
+                    <i class="fas fa-skull"></i>
+                    <span>{{row.fatigue.value}}/{{row.fatigue.max}}</span>
+                  </div>
+                </div>
+              </div>
+
+              {{#if row.statuses.length}}
+                <div class="osp-statuses">
+                  {{#each row.statuses as |s|}}
+                    <img class="osp-status-icon"
+                      src="{{s.img}}"
+                      alt="{{s.name}}"
+                      title="{{s.name}} · {{localize 'VAGABOND.OngoingPanel.StatusHint'}}"
+                      data-effect-uuid="{{s.effectUuid}}"
+                      data-actor-uuid="{{../actorUuid}}"
+                      data-status-id="{{s.statusId}}">
+                  {{/each}}
+                </div>
+              {{/if}}
+
+              {{#if row.linkedDice.length}}
+                <div class="osp-ongoing">
+                  {{#each row.linkedDice as |die|}}
+                    <div class="osp-effect-row">
+                      <span class="osp-effect-name" title="{{die.displayName}}">{{die.displayName}}</span>
+                      <button class="osp-die-btn"
+                        data-die-id="{{die.dieId}}"
+                        title="{{localize 'VAGABOND.OngoingPanel.RollDie'}}">
+                        <img src="{{die.img}}" alt="{{die.diceType}}">
+                      </button>
+                    </div>
+                  {{/each}}
+                </div>
+              {{/if}}
+
+            </div>{{!-- .osp-actor-info --}}
+          </div>{{!-- .osp-actor-row --}}
+        {{/each}}
+      </div>{{!-- .osp-group --}}
+    {{/each}}
+  {{/if}}
+</div>{{!-- .osp-body --}}

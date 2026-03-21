@@ -181,6 +181,12 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     i {font-size: 14px;}
                 }
 
+                /* Active property tag — highlights when the property is in effect (e.g. Cleave splitting) */
+                .tag-property--active {
+                    color: $c-red;
+                    font-weight: bold;
+                }
+
                 /* The Properties Group (Clickable) */
                 .tag-property-group {
                     cursor: pointer;
@@ -191,10 +197,10 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     color: var(--c-dark-blue);
 
                     /* ELLIPSIS MAGIC */
-                    white-space: nowrap;
-                    overflow: hidden;
+                    //white-space: nowrap;
+                    //overflow: hidden;
                     text-overflow: ellipsis;
-                    min-width: 0; /* Flexbox hack for truncation */
+                    //min-width: 0; /* Flexbox hack for truncation */
                     flex: 1;      /* Fill remaining space but truncate if too small */
 
                     &:hover {
@@ -727,7 +733,8 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         button.vagabond-apply-healing-button,
         button.vagabond-apply-recover-button,
         button.vagabond-apply-recharge-button,
-        button.vagabond-apply-damage-button {
+        button.vagabond-apply-damage-button,
+        button.vagabond-tick-damage-button {
             width: 100%;
             background: transparent !important;
             background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
@@ -785,6 +792,22 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     filter: brightness(1.1);
                     background: url('../assets/ui/chat/yellow-button.webp');
                     color: $c-dark;
+                }
+
+                // Red tint: this save is required to resist an on-hit status effect
+                &.save-has-status {
+                    background:
+                        linear-gradient(rgba(180, 30, 20, 0.55), rgba(180, 30, 20, 0.55)),
+                        url('../assets/ui/chat/yellow-button.webp');
+                    color: #fff;
+
+                    &:hover {
+                        filter: brightness(1.15);
+                        background:
+                            linear-gradient(rgba(180, 30, 20, 0.65), rgba(180, 30, 20, 0.65)),
+                            url('../assets/ui/chat/yellow-button.webp');
+                        color: #fff;
+                    }
                 }
             }
         }

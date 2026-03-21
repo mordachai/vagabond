@@ -243,6 +243,18 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.bonuses.spellManaCostReduction': 'Bonus: Spell Mana Cost Reduction',
       'system.bonuses.deliveryManaCostReduction': 'Bonus: Delivery Mana Cost Reduction',
 
+      // -- Focus (Character spellcasters) --
+      'system.focus.maxBonus': 'Focus: Max Bonus (ADD)',
+
+      // -- Combat Modifiers (applied by status conditions, usable in AEs) --
+      'system.incomingHealingModifier': 'Incoming Healing Modifier (number, e.g. -1 to block healing)',
+      'system.incomingAttacksModifier': 'Incoming Attacks Modifier (none / favor / hinder)',
+      'system.outgoingSavesModifier': 'Outgoing Saves Modifier (none / favor / hinder)',
+      'system.autoFailAllRolls': 'Auto-Fail All Rolls (true/false)',
+      'system.autoFailStats': 'Auto-Fail Specific Stats (ADD stat key, e.g. might)',
+      'system.defenderStatusModifiers.attackersAreBlinded': 'Defender: Attackers Are Blinded (true/false)',
+      'system.defenderStatusModifiers.closeAttacksAutoCrit': 'Defender: Close Attacks Auto-Crit (true/false)',
+
       // -- Universal Bonuses --
       'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
       'system.universalDamageBonus': 'Universal: All Damage Rolls (Flat Bonus)',
@@ -262,6 +274,10 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.brawlDamageDieSizeBonus': 'Brawl: Damage Die Size Bonus (+2 for d8)',
       'system.finesseDamageDieSizeBonus': 'Finesse: Damage Die Size Bonus (+2 for d8)',
       'system.spellDamageDieSizeBonus': 'Spell: Damage Die Size Bonus (Adds to d6)',
+
+      // -- Weapon Property Bonuses --
+      'system.cleaveTargets': 'Cleave: Extra Targets (ADD bonus, base 2)',
+      'system.brutalDice': 'Brutal: Extra Crit Dice (ADD bonus, base 1)',
 
       'system.spellDamageDieSize': 'Spell: Final Damage Die Size (Derived)',
 
@@ -294,6 +310,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       // ===== DAMAGE IMMUNITIES & WEAKNESSES =====
       'system.immunities': 'Damage Immunities (Array)',
       'system.weaknesses': 'Damage Weaknesses (Array)',
+      'system.statusImmunities': 'Status Immunities (Array — both Character and NPC)',
+      'system.statusResistances': 'Status Resistances — save with Favor (Array, Character only)',
 
       // ===== NPC-SPECIFIC VARIABLES =====
       'system.cr': 'NPC: Challenge Rating',
@@ -302,26 +320,18 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.morale': 'NPC: Morale',
       'system.appearing': 'NPC: Number Appearing',
       'system.speed': 'NPC: Speed (Flat)',
+      'system.speedValues.climb': 'NPC: Climb Speed',
+      'system.speedValues.cling': 'NPC: Cling Speed',
+      'system.speedValues.fly': 'NPC: Fly Speed',
+      'system.speedValues.phase': 'NPC: Phase Speed',
+      'system.speedValues.swim': 'NPC: Swim Speed',
       'system.senses': 'NPC: Senses',
       'system.armor': 'NPC: Armor Value',
       'system.armorBonus': 'Armor: Global Bonus (Flat Add)',
       'system.armorDescription': 'NPC: Armor Description',
-      'system.locked': 'NPC: Locked Mode',
-      'system.statusImmunities': 'NPC: Status Immunities (Array)',
       'system.zone': 'NPC: Combat Zone',
 
-      // ===== DERIVED VALUES (Generally not recommended to modify directly) =====
-      // These are included for advanced use cases
-      // 'system.armor': 'Armor (Calculated)', // Duplicate
-      'system.speed.base': 'Speed: Base (Calculated)',
-      'system.speed.crawl': 'Speed: Crawl (Calculated)',
-      'system.speed.travel': 'Speed: Travel (Calculated)',
-      'system.maxLuck': 'Max Luck (Calculated)',
-      'system.inventory.maxSlots': 'Inventory: Max Slots (Calculated)',
-      'system.mana.max': 'Mana: Max Total (Class + Bonus)',
-      'system.mana.castingMax': 'Mana: Casting Max (Calculated)',
-      
-      // ===== ITEM / GLOBAL BONUSES  =====
+      // ===== ITEM / GLOBAL BONUSES =====
       'system.canExplode': 'Item: Can Explode (Direct)',
       'system.explodeValues': 'Item: Explode Values (Direct)',
       'system.bonuses.globalExplode': 'Global: Enable Exploding Dice (All Items)',

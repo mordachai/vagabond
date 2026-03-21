@@ -74,7 +74,14 @@ export class CountdownDice {
             size: size,
             faded: false,
             defaultPosition: 'middle-right',
-            positions: positions
+            positions: positions,
+            // Optional linking for status automation (set by StatusHelper)
+            linkedActorUuid:   data.linkedActorUuid   ?? null,
+            linkedStatusId:    data.linkedStatusId    ?? null,
+            tickDamageEnabled: data.tickDamageEnabled ?? false,
+            tickDamageFormula: data.tickDamageFormula ?? '',
+            tickDamageType:    data.tickDamageType    ?? '-',
+            // TODO: fatigueOnTick: data.fatigueOnTick ?? 0, — restore when re-enabling the fatigueOnTick feature
           }
         }
       }

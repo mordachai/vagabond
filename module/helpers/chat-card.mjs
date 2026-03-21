@@ -286,7 +286,8 @@ export class VagabondChatCard {
     hasDefenses = false, attackType = 'melee', footerActions = [],
     propertyDetails = null, damageFormula = null,
     targetsAtRollTime = [], metadata = [],
-    rerollData = null
+    rerollData = null,
+    actionIndex = null
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -378,23 +379,46 @@ export class VagabondChatCard {
         card.data.metadata = metadata;
       }
 
+      // Collect on-hit status entries early — needed for save button tinting
+      const previewEntries = item?.system?.causedStatuses?.length
+        ? item.system.causedStatuses
+        : (actionIndex !== null && actor?.system?.actions?.[actionIndex]?.causedStatuses?.length)
+          ? actor.system.actions[actionIndex].causedStatuses
+          : null;
+      const critPreviewEntries = item?.system?.critCausedStatuses?.length
+        ? item.system.critCausedStatuses
+        : (actionIndex !== null && actor?.system?.actions?.[actionIndex]?.critCausedStatuses?.length)
+          ? actor.system.actions[actionIndex].critCausedStatuses
+          : null;
+      // Set of save types required to resist on-hit statuses (both normal and crit)
+      const allPreviewEntries = [...(previewEntries ?? []), ...(critPreviewEntries ?? [])];
+      const statusSaveTypes = new Set(
+        allPreviewEntries.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType)
+      );
+      // 'any' save means the player can use any save — tint all three buttons
+      if (statusSaveTypes.has('any')) {
+        statusSaveTypes.add('reflex');
+        statusSaveTypes.add('endure');
+        statusSaveTypes.add('will');
+      }
+
       // 3. Handle Damage & Buttons
       if (damageRoll) {
           const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-          
+
           // Fix: Normalize key for icon lookup
           const rawKey = damageType || 'physical';
           const key = rawKey.toLowerCase();
           const dLabel = game.i18n.localize(CONFIG.VAGABOND.damageTypes[key]) || damageType;
           const isCrit = rollData?.isCritical || false;
-          
+
           card.addDamage(damageRoll, dLabel, isCrit, key);
 
           const isHealing = damageType.toLowerCase() === 'healing';
 
           let btns = isHealing
-            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id, targetsAtRollTime)
-            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime);
+            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id, targetsAtRollTime, actionIndex)
+            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes);
 
           card.addFooterAction(btns);
 
@@ -442,7 +466,54 @@ export class VagabondChatCard {
         card.data.rerollData = rerollData;
       }
 
+      // Show on-hit status previews (entries were computed earlier for button tinting)
+      if (previewEntries?.length) {
+        card.addFooterAction(VagabondChatCard._buildOnHitPreview(previewEntries));
+      }
+      if (critPreviewEntries?.length) {
+        card.addFooterAction(VagabondChatCard._buildOnHitPreview(critPreviewEntries, true));
+      }
+
       return await card.send();
+  }
+
+  /**
+   * Build an HTML preview listing the on-hit statuses an item/action can cause.
+   * Shown in the attack card before any button is clicked.
+   * @param {Array} causedStatuses
+   * @param {boolean} isCrit - Whether these are crit-only effects
+   * @returns {string}
+   */
+  static _buildOnHitPreview(causedStatuses, isCrit = false) {
+    const lines = causedStatuses
+      .filter(e => e.statusId)
+      .map(e => {
+        const statusLabel = game.i18n.localize(
+          CONFIG.VAGABOND?.statusConditions?.[e.statusId] ?? e.statusId
+        );
+        const parts = [statusLabel];
+        if (e.saveType && e.saveType !== 'none') {
+          const saveLabel = e.saveType === 'any'
+            ? game.i18n.localize('VAGABOND.Status.Save.Any')
+            : game.i18n.localize(`VAGABOND.Saves.${e.saveType.charAt(0).toUpperCase()}${e.saveType.slice(1)}.name`) || e.saveType;
+          parts.push(`<span class="on-hit-save">${saveLabel}</span>`);
+        }
+        if (e.duration) {
+          parts.push(`<span class="on-hit-duration">C${e.duration}</span>`);
+        }
+        if (e.requiresDamage) {
+          parts.push(`<span class="on-hit-req-dmg" title="${game.i18n.localize('VAGABOND.Status.RequiresDamageHint')}">*</span>`);
+        }
+        return `<li class="on-hit-entry">${parts.join(' ')}</li>`;
+      });
+
+    if (!lines.length) return '';
+
+    const header = isCrit
+      ? `<p class="on-hit-label on-hit-crit-label"><i class="fas fa-burst"></i> <strong>${game.i18n.localize('VAGABOND.Status.CritOnHitEffects')}</strong></p>`
+      : `<p class="on-hit-label"><i class="fas fa-biohazard"></i> ${game.i18n.localize('VAGABOND.Status.OnHitEffects')}</p>`;
+
+    return `<div class="on-hit-preview">${header}<ul class="on-hit-list">${lines.join('')}</ul></div>`;
   }
   
   /* -------------------------------------------- */
@@ -656,14 +727,16 @@ export class VagabondChatCard {
       let propertyDetails = null;
       if (weapon.system.properties?.length > 0) {
           const propList = [];
+          const isCleaveSplit = weapon.system.properties.includes('Cleave') && targetsAtRollTime.length >= 2;
           weapon.system.properties.forEach(prop => {
               const configKeys = Object.keys(CONFIG.VAGABOND.weaponProperties);
               const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
               const label = game.i18n.localize(CONFIG.VAGABOND.weaponProperties[realKey] || `VAGABOND.Weapon.Property.${realKey}`);
-              const hintKey = `VAGABOND.Weapon.PropertyHints.${realKey}`; 
+              const hintKey = `VAGABOND.Weapon.PropertyHints.${realKey}`;
               const hint = game.i18n.localize(hintKey);
 
-              tags.push({ label: label, cssClass: 'tag-property' });
+              const isActive = isCleaveSplit && realKey === 'Cleave';
+              tags.push({ label: label, cssClass: 'tag-property', active: isActive });
               propList.push({ name: label, hint: (hint !== hintKey) ? hint : '' });
           });
           propertyDetails = propList;
@@ -679,6 +752,18 @@ export class VagabondChatCard {
       // Determine attack type from weapon skill (ranged vs melee)
       const attackType = weaponSkillKey === 'ranged' ? 'ranged' : 'melee';
 
+      // Compute die-size-adjusted formula for the manual "Roll Damage" button.
+      // item.rollDamage() applies this when damage is auto-rolled, but when the
+      // "Roll damage with check" setting is OFF the button stores the raw formula
+      // from item.system.currentDamage — bypassing the bonus entirely.
+      const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
+      let adjustedDamageFormula = weapon.system.currentDamage;
+      if (dieSizeBonus !== 0 && adjustedDamageFormula?.includes('d')) {
+          adjustedDamageFormula = adjustedDamageFormula.replace(/(\d*)d(\d+)/, (match, count, size) => {
+              return `${count}d${parseInt(size) + dieSizeBonus}`;
+          });
+      }
+
       const result = await this.createActionCard({
           actor,
           item: weapon,
@@ -687,6 +772,7 @@ export class VagabondChatCard {
           tags,
           propertyDetails,
           damageRoll, // Now correctly populated for hits/crits
+          damageFormula: adjustedDamageFormula, // Die-size-adjusted formula for manual roll button
           damageType: weapon.system.currentDamageType || 'physical',
           description,
           hasDefenses: true,
@@ -849,40 +935,87 @@ export class VagabondChatCard {
     if (attackType === 'castClose') attackType = 'melee';
     else if (attackType === 'castRanged') attackType = 'ranged';
 
-    // Show damage buttons even for "-" (typeless damage)
-    if (action.flatDamage || action.rollDamage) {
-        const rawType = action.damageType || 'physical';
-        // For "-" damage type, use empty string as label (will be handled as typeless)
-        const dTypeLabel = rawType === '-' ? '' : (game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType);
-
-        if (action.flatDamage) {
-            footerActions.push(VagabondDamageHelper.createNPCDamageButton(
-                actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType, targetsAtRollTime
-            ));
-        }
-        if (action.rollDamage) {
-            footerActions.push(VagabondDamageHelper.createNPCDamageButton(
-                actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType, targetsAtRollTime
-            ));
-        }
-    } else {
-        // No damage: Add save reminder buttons for effects that require saves
-        footerActions.push(VagabondDamageHelper.createSaveReminderButtons(attackType, targetsAtRollTime));
+    // Pre-compute save types required by on-hit statuses (used in both branches below)
+    const allActionStatuses = [...(action.causedStatuses ?? []), ...(action.critCausedStatuses ?? [])];
+    const reminderStatusSaveTypes = new Set(
+      allActionStatuses.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType)
+    );
+    if (reminderStatusSaveTypes.has('any')) {
+      reminderStatusSaveTypes.add('reflex');
+      reminderStatusSaveTypes.add('endure');
+      reminderStatusSaveTypes.add('will');
     }
 
-    // 9. Create the Card (always include defend options)
-    return this.createActionCard({
+    const preferFlat     = game.settings.get('vagabond', 'npcUseFlatDamage');
+    const rollWithCheck  = game.settings.get('vagabond', 'rollDamageWithCheck');
+    const hasDamage      = !!(action.flatDamage || action.rollDamage);
+
+    // Show damage buttons even for "-" (typeless damage)
+    if (hasDamage) {
+        const rawType   = action.damageType || 'physical';
+        const dTypeLabel = rawType === '-' ? '' : (game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType);
+
+        if (!rollWithCheck) {
+            // Manual mode — show whichever button(s) the setting allows.
+            const showFlat = action.flatDamage && (preferFlat || !action.rollDamage);
+            const showRoll = action.rollDamage && (!preferFlat || !action.flatDamage);
+
+            if (showFlat) {
+                footerActions.push(VagabondDamageHelper.createNPCDamageButton(
+                    actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType, targetsAtRollTime
+                ));
+            }
+            if (showRoll) {
+                footerActions.push(VagabondDamageHelper.createNPCDamageButton(
+                    actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType, targetsAtRollTime
+                ));
+            }
+        }
+        // rollWithCheck ON → no buttons; damage fires automatically below.
+        // Saves and defending options appear on the damage card (postNPCActionDamage), not here.
+    } else {
+        // No damage — this card IS the only card, so save reminder buttons must live here.
+        footerActions.push(VagabondDamageHelper.createSaveReminderButtons(
+          attackType, targetsAtRollTime, actor.id, null, actionIndex, reminderStatusSaveTypes
+        ));
+    }
+
+    // 9. Create the initial action card — damage-only buttons, no saves or defending.
+    // Saves and defending options are shown on the damage card posted by postNPCActionDamage.
+    await this.createActionCard({
         actor,
         title: action.name || 'NPC Action',
-        subtitle,    // <--- Now correctly passes the Actor Name
-        tags,        // <--- Now includes Traits, Range, Note, and Recharge
+        subtitle,
+        tags,
         description,
         footerActions,
-        hasDefenses: true,  // Always show defend options for NPC actions
+        hasDefenses: false,
         targetsAtRollTime
-        // If you want the ability image to be the icon, pass 'item' if available,
-        // otherwise it defaults to actor image in createActionCard logic.
     });
+
+    // 10. Auto-roll damage when "Roll Damage With Check" is ON.
+    // NPC actions have no attack check, so damage fires immediately after the action card.
+    if (hasDamage && rollWithCheck) {
+        const rawType    = action.damageType || 'physical';
+        const dTypeLabel = rawType === '-' ? '' : (game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType);
+
+        let damageRoll = null;
+        let finalDamage;
+
+        if (preferFlat && action.flatDamage) {
+            finalDamage = parseInt(action.flatDamage);
+        } else if (action.rollDamage) {
+            damageRoll = new Roll(action.rollDamage, actor.getRollData());
+            await damageRoll.evaluate();
+            finalDamage = damageRoll.total;
+        } else {
+            finalDamage = parseInt(action.flatDamage);
+        }
+
+        await VagabondDamageHelper.postNPCActionDamage(
+            damageRoll, finalDamage, dTypeLabel, actor, action, rawType, attackType, targetsAtRollTime, actionIndex
+        );
+    }
   }
 
   static async _onClickAbilityName(event, target) {
@@ -1165,7 +1298,7 @@ export class VagabondChatCard {
    * @param {string} newDiceType - New dice type (for 'reduced' status)
    * @returns {Promise<ChatMessage>}
    */
-  static async countdownDiceRoll(dice, roll, rollResult, status, currentDiceType, newDiceType = null) {
+  static async countdownDiceRoll(dice, roll, rollResult, status, currentDiceType, newDiceType = null, tickData = null) {
     const flags = dice.flags.vagabond.countdownDice;
 
     // Determine status message and state
@@ -1187,11 +1320,15 @@ export class VagabondChatCard {
       stateMessage = `${currentDiceType} countdown complete`;
     }
 
-    // Build description with state and status
-    const description = `
+    // Build description: countdown state + status + optional tick target note
+    let description = `
       <p><strong>${game.i18n.localize('VAGABOND.CountdownDice.Chat.CurrentState')}:</strong> ${stateMessage}</p>
       <p class="status-message ${statusClass}">${statusMessage}</p>
     `;
+
+    if (tickData) {
+      description += `<p class="tick-target-note"><i class="fas fa-circle-dot"></i> ${tickData.statusLabel} — ${tickData.actorName}</p>`;
+    }
 
     // Get dice image path for icon
     const CountdownDiceClass = (await import('../documents/countdown-dice.mjs')).CountdownDice;
@@ -1213,9 +1350,25 @@ export class VagabondChatCard {
     card.data.roll = roll;
     card.data.hasRoll = false; // Don't show roll header section
     card.data.type = 'countdown-dice';
-
-    // Add custom alias for speaker
     card.data.alias = game.user.name;
+
+    // Use the standard damage section for tick damage
+    if (tickData) {
+      card.addDamage(tickData.roll, tickData.damageTypeLabel, false, tickData.damageTypeKey);
+      // Override total with post-resistance finalDamage (may differ from roll.total)
+      card.data.damage.total = tickData.finalDamage;
+
+      // If auto-apply is off, show an apply button so the GM can manually apply
+      if (!tickData.autoApplied && tickData.finalDamage > 0) {
+        card.addFooterAction(`
+          <button class="vagabond-tick-damage-button"
+            data-actor-uuid="${tickData.actorUuid}"
+            data-damage-amount="${tickData.finalDamage}">
+            <i class="fas fa-heart-crack"></i>
+            ${game.i18n.format('VAGABOND.Status.ApplyTickDamage', { amount: tickData.finalDamage, actor: tickData.actorName })}
+          </button>`);
+      }
+    }
 
     return await card.send();
   }
@@ -1223,6 +1376,32 @@ export class VagabondChatCard {
   // 9. GEAR USE ADAPTER
   static async gearUse(actor, item, targetsAtRollTime = []) {
     return this.itemUse(actor, item, targetsAtRollTime);
+  }
+
+  // 11. STATUS RESULTS ADAPTER
+  /**
+   * Post a chat card showing on-hit status effect outcomes.
+   * @param {Array}  results     - Array from StatusHelper.processCausedStatuses
+   * @param {Actor}  targetActor - The actor the statuses were applied to
+   * @param {string} sourceName  - Name of the source item/action
+   * @returns {Promise<ChatMessage|null>}
+   */
+  static async statusResults(results, targetActor, sourceName = '', sourceIcon = null) {
+    const { StatusHelper } = await import('./status-helper.mjs');
+    const statusHtml = StatusHelper.buildStatusResultsHtml(results, targetActor.name);
+    if (!statusHtml) return null;
+
+    const card = new VagabondChatCard();
+    card.data.title = sourceName || game.i18n.localize('VAGABOND.Status.OnHitEffects');
+    card.data.subtitle = targetActor.name;
+    card.data.description = statusHtml;
+    card.data.type = 'status-results';
+    card.data.alias = targetActor.name;
+    const firstStatusId = results.find(r => r.statusId)?.statusId;
+    const statusIcon = firstStatusId ? CONFIG.VAGABOND?.statusConditionIcons?.[firstStatusId] : null;
+    card.data.icon = sourceIcon || statusIcon || targetActor.img;
+    if (card.data.icon?.endsWith('.svg')) card.data.iconBackground = '#000000';
+    return await card.send();
   }
 
   // 10. FEATURE DATA USE ADAPTER
@@ -1444,6 +1623,116 @@ export class VagabondChatCard {
       `);
 
     return await card.send();
+  }
+
+  /**
+   * Create a chat card showing a direct damage/healing application result.
+   * Used by Apply Direct, Apply Save Damage, Apply Restorative, and tick damage.
+   * @param {VagabondActor} actor
+   * @param {Object} opts
+   * @param {'damage'|'heal'|'recover'|'recharge'} [opts.type='damage']
+   * @param {number} [opts.rawAmount]        Raw amount before armor reduction (damage only)
+   * @param {number} [opts.armorReduction=0] Amount blocked by armor (damage only)
+   * @param {number}  opts.finalAmount       Final effective amount applied
+   * @param {string}  [opts.damageType]      Damage type key e.g. 'fire', 'physical'
+   * @param {number}  opts.previousValue     Resource value before application
+   * @param {number}  opts.newValue          Resource value after application
+   * @param {string}  [opts.sourceIcon]      Icon URL override for the card
+   * @param {string}  [opts.sourceName]      Source name shown as subtitle (item/action/status)
+   * @returns {Promise<ChatMessage>}
+   */
+  static async applyResult(actor, {
+    type = 'damage',
+    rawAmount,
+    armorReduction = 0,
+    finalAmount = 0,
+    damageType = null,
+    previousValue = 0,
+    newValue = 0,
+    sourceIcon = null,
+    sourceName = '',
+  } = {}) {
+    const effective = finalAmount;
+    const raw = rawAmount ?? effective;
+
+    let title, descriptionHTML;
+
+    if (type === 'damage') {
+      // Resolve damage type display
+      let damageTypeLabel = '';
+      let damageTypeIconHTML = '';
+      if (damageType && damageType !== '-') {
+        damageTypeLabel = game.i18n.localize(CONFIG.VAGABOND?.damageTypes?.[damageType] ?? damageType);
+        const iconClass = CONFIG.VAGABOND?.damageTypeIcons?.[damageType.toLowerCase()] || 'fa-solid fa-burst';
+        damageTypeIconHTML = `<i class="${iconClass} damage-type-icon-large"></i>`;
+      }
+
+      title = `${effective} ${damageTypeLabel || 'Damage'}`;
+
+      let calcHTML = `<div class="save-damage-calculation">
+        <div class="damage-formula-line">
+          <span class="damage-component" title="Damage"><i class="fa-solid fa-dice"></i> ${raw}</span>`;
+
+      if (armorReduction > 0) {
+        calcHTML += `
+          <span class="damage-operator">-</span>
+          <span class="damage-component" title="Armor"><i class="fa-sharp fa-regular fa-shield"></i> ${armorReduction}</span>`;
+      }
+
+      calcHTML += `
+          <span class="damage-operator">=</span>
+          <span class="damage-final">${effective} ${damageTypeIconHTML}</span>
+        </div>`;
+
+      if (effective > 0) {
+        calcHTML += `<div class="damage-application-note">damage applied — HP: ${previousValue} → ${newValue}</div>`;
+      } else {
+        calcHTML += `<div class="damage-application-note">no damage applied (immune or blocked)</div>`;
+      }
+
+      calcHTML += `</div>`;
+      descriptionHTML = calcHTML;
+
+    } else if (type === 'heal') {
+      title = `${effective} Healed`;
+      descriptionHTML = `<div class="save-damage-calculation">
+        <div class="damage-formula-line">
+          <span class="damage-final"><i class="fa-solid fa-heart"></i> +${effective}</span>
+        </div>
+        <div class="damage-application-note">HP restored — ${previousValue} → ${newValue}</div>
+      </div>`;
+
+    } else if (type === 'recover') {
+      const fatigueTerm = CONFIG.VAGABOND.homebrew?.terms?.fatigueTerm || 'Fatigue';
+      title = `${effective} ${fatigueTerm} Recovered`;
+      descriptionHTML = `<div class="save-damage-calculation">
+        <div class="damage-formula-line">
+          <span class="damage-final"><i class="fa-solid fa-person-running"></i> -${effective}</span>
+        </div>
+        <div class="damage-application-note">${fatigueTerm}: ${previousValue} → ${newValue}</div>
+      </div>`;
+
+    } else if (type === 'recharge') {
+      const manaTerm = CONFIG.VAGABOND.homebrew?.terms?.manaTerm || 'Mana';
+      title = `${effective} ${manaTerm} Recharged`;
+      descriptionHTML = `<div class="save-damage-calculation">
+        <div class="damage-formula-line">
+          <span class="damage-final"><i class="fa-solid fa-sparkles"></i> +${effective}</span>
+        </div>
+        <div class="damage-application-note">${manaTerm}: ${previousValue} → ${newValue}</div>
+      </div>`;
+    }
+
+    const card = new VagabondChatCard()
+      .setType('apply-result')
+      .setActor(actor)
+      .setTitle(title)
+      .setSubtitle(sourceName || actor.name)
+      .setDescription(descriptionHTML);
+
+    if (sourceIcon) card.data.icon = sourceIcon;
+
+    return card.send();
   }
 
   /**
