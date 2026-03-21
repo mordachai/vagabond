@@ -996,6 +996,51 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
 });
 
 /**
+ * Bidirectional grapple cleanup:
+ * - Removing Grappling from the source → removes the linked Restrained from all targets
+ * - Removing Restrained (from-grapple) from a target → removes Grappling from the source
+ */
+Hooks.on('deleteActiveEffect', async (effect, options, userId) => {
+  if (game.userId !== userId) return;
+
+  // Grappling removed from source → clean up linked Restrained on targets
+  if (effect.statuses?.has('grappling')) {
+    const targetUuids = effect.flags?.vagabond?.grappling?.targetUuids ?? [];
+    for (const uuid of targetUuids) {
+      try {
+        const target = await fromUuid(uuid);
+        if (!target) continue;
+        const linkedAE = target.effects?.find(e =>
+          e.statuses?.has('restrained') &&
+          e.flags?.vagabond?.fromGrapple &&
+          e.flags.vagabond.grappleSourceUuid === effect.parent?.uuid
+        );
+        if (linkedAE) await linkedAE.delete();
+      } catch(err) {
+        console.warn('Vagabond | Could not remove Restrained on grapple end:', err);
+      }
+    }
+  }
+
+  // Restrained (from grapple) removed from target → remove Grappling from source
+  if (effect.statuses?.has('restrained') && effect.flags?.vagabond?.fromGrapple) {
+    const sourceUuid = effect.flags.vagabond.grappleSourceUuid;
+    if (!sourceUuid) return;
+    try {
+      const source = await fromUuid(sourceUuid);
+      if (!source) return;
+      const grapplingAE = source.effects?.find(e =>
+        e.statuses?.has('grappling') &&
+        e.flags?.vagabond?.grappling?.targetUuids?.includes(effect.parent?.uuid)
+      );
+      if (grapplingAE) await grapplingAE.delete();
+    } catch(err) {
+      console.warn('Vagabond | Could not remove Grappling on restrained end:', err);
+    }
+  }
+});
+
+/**
  * Redraw clocks when a journal is created
  */
 Hooks.on('createJournalEntry', async (journal, options, userId) => {
@@ -1662,7 +1707,6 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
         const currentHP = actor.system.health?.value ?? 0;
         const newHP = Math.max(0, currentHP - amount);
         await actor.update({ 'system.health.value': newHP });
-        ui.notifications.info(`Applied ${amount} damage to ${actor.name}.`);
         const { VagabondChatCard } = await import('./helpers/chat-card.mjs');
         await VagabondChatCard.applyResult(actor, {
           type: 'damage',
@@ -1844,7 +1888,21 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 11. Target Token Click Handler (Ping & Pan)
+  // 11. Grapple Button Handler
+  // ---------------------------------------------------------
+  const grappleButtons = html.querySelectorAll('.vagabond-grapple-button');
+  grappleButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      button.disabled = true;
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleGrapple(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 12. Target Token Click Handler (Ping & Pan)
   // ---------------------------------------------------------
   const targetTokens = html.querySelectorAll('.target-token');
 

@@ -406,7 +406,10 @@ export class VagabondChatCard {
         statusSaveTypes.add('will');
       }
 
-      // 3. Handle Damage & Buttons
+      // 3. Leading footer actions (e.g. Grapple button — appears above damage buttons)
+      if (footerActions.length) footerActions.forEach(a => card.addFooterAction(a));
+
+      // 4. Handle Damage & Buttons
       if (damageRoll) {
           const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
@@ -455,8 +458,6 @@ export class VagabondChatCard {
            }, targetsAtRollTime);
            card.addFooterAction(btn);
       }
-
-      if (footerActions.length) footerActions.forEach(a => card.addFooterAction(a));
 
       // Add defend options if requested (independent of damage)
       if (hasDefenses) {
@@ -770,6 +771,21 @@ export class VagabondChatCard {
           });
       }
 
+      // Entangle property: show Grapple button on hit
+      const footerActions = [];
+      const hasEntangle = weapon.system.properties?.some(p => p.toLowerCase() === 'entangle');
+      if (attackResult.isHit && hasEntangle) {
+          const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
+          footerActions.push(
+              `<button class="vagabond-grapple-button"
+                  data-actor-id="${actor.id}"
+                  data-item-id="${weapon.id}"
+                  data-targets="${targetsJson}">
+                  <i class="fa-solid fa-hand-holding-hand"></i> ${game.i18n.localize('VAGABOND.Grapple.Button')}
+              </button>`
+          );
+      }
+
       const result = await this.createActionCard({
           actor,
           item: weapon,
@@ -784,6 +800,7 @@ export class VagabondChatCard {
           hasDefenses: true,
           attackType,  // ✅ FIX: Pass attackType for save hinder logic
           targetsAtRollTime,
+          footerActions,
           rerollData: {
             type: 'attack',
             itemId: weapon.id,

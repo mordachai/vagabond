@@ -221,6 +221,7 @@ VAGABOND.statusConditions = {
   'paralyzed': 'VAGABOND.StatusConditions.Paralyzed',
   'prone': 'VAGABOND.StatusConditions.Prone',
   'restrained': 'VAGABOND.StatusConditions.Restrained',
+  'grappling': 'VAGABOND.StatusConditions.Grappling',
   'sickened': 'VAGABOND.StatusConditions.Sickened',
   'suffocating': 'VAGABOND.StatusConditions.Suffocating',
   'unconscious': 'VAGABOND.StatusConditions.Unconscious',
@@ -446,7 +447,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'restrained',
     name: 'VAGABOND.StatusConditions.Restrained',
-    img: 'icons/svg/net.svg',
+    img: 'icons/svg/teleport.svg',
     statuses: ['restrained'],
     description: 'Vulnerable + Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -472,6 +473,14 @@ VAGABOND.statusEffectDefinitions = [
         value: 'favor'
       }
     ]
+  },
+  {
+    id: 'grappling',
+    name: 'VAGABOND.StatusConditions.Grappling',
+    img: 'icons/svg/net.svg',
+    statuses: ['grappling'],
+    description: 'Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED — speed penalty applied at grapple time]'
+    // No static changes — speed penalty is computed dynamically in handleGrapple based on current speed and size comparison
   },
   {
     id: 'incapacitated',

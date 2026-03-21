@@ -678,6 +678,9 @@ export class VagabondItem extends Item {
 
     let damageFormula = this.system.currentDamage;
 
+    // No damage formula — weapon has no damage (e.g. Grapple, Net)
+    if (!damageFormula?.trim()) return null;
+
     // Apply specific die size bonus
     const weaponSkillKey = this.system.weaponSkill;
     const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;

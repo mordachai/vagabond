@@ -2207,9 +2207,6 @@ export class VagabondDamageHelper {
         const actualHealing = newHP - currentHP;
         await targetActor.update({ 'system.health.value': newHP });
 
-        // Show modifier in notification if present
-        const modifierText = healingModifier !== 0 ? ` (${amount} ${healingModifier >= 0 ? '+' : ''}${healingModifier})` : '';
-        ui.notifications.info(`${targetActor.name} healed ${actualHealing} HP${modifierText}`);
 
         const { VagabondChatCard: VCCHeal } = await import('./chat-card.mjs');
         await VCCHeal.applyResult(targetActor, {
@@ -2225,7 +2222,6 @@ export class VagabondDamageHelper {
         const newFatigue = Math.max(0, currentFatigue - amount);
         const actualRecovery = currentFatigue - newFatigue;
         await targetActor.update({ 'system.fatigue': newFatigue });
-        ui.notifications.info(`${targetActor.name} recovered ${actualRecovery} fatigue`);
 
         const { VagabondChatCard: VCCRecover } = await import('./chat-card.mjs');
         await VCCRecover.applyResult(targetActor, {
@@ -2241,7 +2237,6 @@ export class VagabondDamageHelper {
         const newMana = Math.min(maxMana, currentMana + amount);
         const actualRecharge = newMana - currentMana;
         await targetActor.update({ 'system.mana.value': newMana });
-        ui.notifications.info(`${targetActor.name} recharged ${actualRecharge} mana`);
 
         const { VagabondChatCard: VCCRecharge } = await import('./chat-card.mjs');
         await VCCRecharge.applyResult(targetActor, {
@@ -2335,7 +2330,6 @@ export class VagabondDamageHelper {
       const newHP = Math.max(0, currentHP - finalDamage);
       await targetActor.update({ 'system.health.value': newHP });
 
-      ui.notifications.info(`Applied ${finalDamage} damage to ${targetActor.name}`);
 
       // Post damage result to chat
       const { VagabondChatCard: VCCDirect } = await import('./chat-card.mjs');
@@ -2440,7 +2434,6 @@ export class VagabondDamageHelper {
     if (icon) button.prepend(icon); // Keep the icon
     button.disabled = true;
 
-    ui.notifications.info(`Applied ${finalDamage} damage to ${actorName} (${currentHP} → ${newHP} HP)`);
 
     // Build source label from stored source attrs (set when statusContext was provided)
     const saveSourceActor = game.actors.get(button.dataset.sourceActorId);
@@ -2522,5 +2515,100 @@ export class VagabondDamageHelper {
         await VagabondChatCard.statusResults(statusResults, actor, sourceName, sourceItem?.img ?? null);
       }
     }
+  }
+
+  /**
+   * Handle "Grapple" button — apply Restrained to targets and Grappling (with speed penalty) to source.
+   * @param {HTMLElement} button
+   */
+  static async handleGrapple(button) {
+    const actorId = button.dataset.actorId;
+    const sourceActor = game.actors.get(actorId);
+    if (!sourceActor) return;
+
+    if (!sourceActor.isOwner && !game.user.isGM) {
+      ui.notifications.warn("You don't have permission to use this action.");
+      return;
+    }
+
+    const storedTargets = this._getTargetsFromButton(button);
+    const targetedTokens = this._resolveStoredTargets(storedTargets);
+
+    if (!targetedTokens.length) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Grapple.NoTargets'));
+      return;
+    }
+
+    const SIZE_ORDER = { small: 0, medium: 1, large: 2, huge: 3, giant: 4, colossal: 5 };
+    const getSize = a => SIZE_ORDER[a.type === 'npc' ? (a.system.size || 'medium') : (a.system.attributes?.size || 'medium')] ?? 1;
+    const sourceSize = getSize(sourceActor);
+
+    // Find the Restrained status definition to clone its changes
+    const restrainedDef = CONFIG.statusEffects.find(e => e.id === 'restrained');
+
+    const targetUuids = [];
+    for (const token of targetedTokens) {
+      const targetActor = token.actor;
+      if (!targetActor) continue;
+
+      if (!targetActor.isOwner && !game.user.isGM) {
+        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
+        continue;
+      }
+
+      if (targetActor.statuses?.has('restrained')) {
+        continue;
+      }
+
+      // Apply Restrained to target with grapple-link flags (bypasses the normal toggleStatusEffect
+      // so we can attach metadata needed for bidirectional cleanup)
+      await targetActor.createEmbeddedDocuments('ActiveEffect', [{
+        name: game.i18n.localize(restrainedDef?.name ?? 'VAGABOND.StatusConditions.Restrained'),
+        img: restrainedDef?.img ?? 'icons/svg/teleport.svg',
+        statuses: ['restrained'],
+        changes: restrainedDef?.changes ?? [],
+        flags: { vagabond: { fromGrapple: true, grappleSourceUuid: sourceActor.uuid } }
+      }]);
+
+      targetUuids.push(targetActor.uuid);
+    }
+
+    if (!targetUuids.length) return;
+
+    // Determine speed penalty — halved unless the first target is smaller than the source
+    const firstTargetActor = targetedTokens[0]?.actor;
+    const targetSize = firstTargetActor ? getSize(firstTargetActor) : 1;
+    const applySpeedPenalty = targetSize >= sourceSize;
+
+    // Compute the speed penalty as a static AE change (based on current speed at grapple time)
+    const speedChanges = [];
+    if (applySpeedPenalty) {
+      if (sourceActor.type === 'character') {
+        const currentSpeed = sourceActor.system.speed?.base || 25;
+        speedChanges.push({
+          key: 'system.speed.bonus',
+          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+          value: String(-Math.floor(currentSpeed / 2))
+        });
+      } else {
+        const currentSpeed = sourceActor.system.speed || 0;
+        speedChanges.push({
+          key: 'system.speed',
+          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+          value: String(-Math.floor(currentSpeed / 2))
+        });
+      }
+    }
+
+    // Apply Grappling to source — stores target UUIDs for cleanup
+    await sourceActor.createEmbeddedDocuments('ActiveEffect', [{
+      name: game.i18n.localize('VAGABOND.StatusConditions.Grappling'),
+      img: 'icons/svg/net.svg',
+      statuses: ['grappling'],
+      changes: speedChanges,
+      flags: { vagabond: { grappling: { targetUuids } } }
+    }]);
+
+    button.disabled = true;
   }
 }

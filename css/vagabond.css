@@ -1476,6 +1476,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Defend Options Accordion */
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-damage-button,
@@ -1510,6 +1511,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   line-height: 1.2;
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-damage-button:hover,
@@ -1522,6 +1524,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   filter: brightness(1.6);
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-damage-button:disabled,
@@ -1536,6 +1539,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   filter: grayscale(1);
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-damage-button i,

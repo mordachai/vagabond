@@ -210,6 +210,7 @@
       "Paralyzed": "Paralyzed",
       "Prone": "Prone",
       "Restrained": "Restrained",
+      "Grappling": "Grappling",
       "Sickened": "Sickened",
       "Suffocating": "Suffocating",
       "Unconscious": "Unconscious",
@@ -225,6 +226,7 @@
       "Sickened": "-2 penalty to healing received [AUTOMATED]",
       "Vulnerable": "Its attacks and its Saves against attacks have Hinder. Attacks targeting it and Saves against its attacks have Favor [AUTOMATED]",
       "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
+      "Grappling": "Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED]",
       "Blinded": "Can't see. Vulnerable [AUTOMATED]",
       "Incapacitated": "Can't Focus/Actions/Move. Auto-fail Might/Dex. Vulnerable. Speed = 0 [AUTOMATED]",
       "Paralyzed": "Incapacitated + Speed = 0 [AUTOMATED]",
@@ -243,6 +245,14 @@
       "DefenderStatusModifiers": "Defender Status Modifiers",
       "AttackersAreBlinded": "Attackers Are Blinded",
       "CloseAttacksAutoCrit": "Close Attacks Auto-Crit"
+    },
+    "Grapple": {
+      "Button": "Grapple",
+      "SpeedPenaltyLabel": "Grappling — Speed Halved",
+      "AppliedRestrained": "is now Restrained (Grappled).",
+      "AppliedGrappling": "is now Grappling.",
+      "AlreadyRestrained": "is already Restrained.",
+      "NoTargets": "No tokens targeted. Please target at least one token."
     },
     "CombatZones": {
       "Frontline": "Frontline",
