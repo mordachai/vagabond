@@ -223,13 +223,93 @@ export class VagabondNPCSheet extends VagabondActorSheet {
   // and will delegate to the appropriate handler
 
   /**
+   * Setup custom weapon picker dropdowns with inline search.
+   * Each picker: trigger button opens a panel with a search input + filtered list.
+   * Selecting an option calls applyWeaponToAction() and prevents the debounced
+   * save from overwriting the updated name/damage fields.
+   * @param {AbortSignal} signal
+   * @private
+   */
+  _setupWeaponPickers(signal) {
+    const pickers = this.element.querySelectorAll('.weapon-picker');
+
+    pickers.forEach(picker => {
+      const trigger  = picker.querySelector('.weapon-picker-trigger');
+      const panel    = picker.querySelector('.weapon-picker-panel');
+      const search   = picker.querySelector('.weapon-picker-search');
+      const list     = picker.querySelector('.weapon-picker-list');
+      const hidden   = picker.querySelector('input[type="hidden"][data-field="weaponId"]');
+      const current  = picker.querySelector('.weapon-picker-current');
+
+      // Toggle panel open/closed
+      trigger?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const opening = panel.hidden;
+        // Close all other open panels first
+        this.element.querySelectorAll('.weapon-picker-panel:not([hidden])').forEach(p => { p.hidden = true; });
+        panel.hidden = !opening;
+        if (!panel.hidden) {
+          search.value = '';
+          list.querySelectorAll('.weapon-picker-option').forEach(o => { o.hidden = false; });
+          search.focus();
+        }
+      }, { signal });
+
+      // Filter list while typing in search
+      search?.addEventListener('input', () => {
+        const filter = search.value.toLowerCase();
+        list.querySelectorAll('.weapon-picker-option').forEach(opt => {
+          if (!opt.dataset.uuid) { opt.hidden = false; return; } // keep "no weapon"
+          opt.hidden = filter.length > 0 && !opt.textContent.toLowerCase().includes(filter);
+        });
+      }, { signal });
+
+      // Select an option
+      list?.addEventListener('click', async (e) => {
+        const opt = e.target.closest('.weapon-picker-option');
+        if (!opt || opt.hidden) return;
+        e.stopPropagation();
+
+        const uuid  = opt.dataset.uuid;
+        const label = opt.textContent.trim();
+
+        // Update hidden input and display label synchronously
+        if (hidden)  hidden.value = uuid;
+        if (current) current.textContent = label;
+
+        // Mark selected
+        list.querySelectorAll('.weapon-picker-option').forEach(o => o.classList.toggle('selected', o === opt));
+
+        panel.hidden = true;
+
+        // Apply weapon — cancel any pending debounced save so it doesn't overwrite
+        this._isDirty = false;
+        const actionEdit  = picker.closest('.npc-action-edit');
+        const actionIndex = parseInt(actionEdit?.dataset.actionIndex);
+        if (!isNaN(actionIndex)) {
+          await this.actionHandler.applyWeaponToAction(actionIndex, uuid);
+        }
+      }, { signal });
+    });
+
+    // Close any open picker when clicking outside the sheet
+    document.addEventListener('click', () => {
+      this.element?.querySelectorAll('.weapon-picker-panel:not([hidden])').forEach(p => { p.hidden = true; });
+    }, { signal });
+  }
+
+  /**
    * Setup debounced input listeners to prevent accordion closing on every keystroke
    * @param {AbortSignal} signal - Signal for listener cleanup
    * @private
    */
   _setupDebouncedInputListeners(signal) {
-    // Action inputs
-    const actionInputs = this.element.querySelectorAll('.npc-action-edit input, .npc-action-edit textarea, .npc-action-edit select');
+    // Custom weapon pickers
+    this._setupWeaponPickers(signal);
+
+    // Action inputs — exclude hidden inputs (weapon picker's hidden field) and picker internals
+    const actionInputs = this.element.querySelectorAll('.npc-action-edit input:not([type="hidden"]):not(.weapon-picker-search), .npc-action-edit textarea, .npc-action-edit select');
     actionInputs.forEach(input => {
       input.addEventListener('input', () => {
         this._isDirty = true;

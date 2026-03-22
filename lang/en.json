@@ -690,6 +690,9 @@
           "RollDamage": "Roll Damage",
           "DamageType": "Damage Type",
           "ExtraInfo": "Extra Info (after damage)",
+          "Weapon": "Weapon",
+          "NoWeapon": "No weapon",
+          "WeaponFilter": "Filter weapons...",
           "Add": "Add Action"
         },
         "Ability": {

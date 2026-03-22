@@ -1208,6 +1208,88 @@
   }
 }
 
+.weapon-picker {
+  position: relative;
+  width: 100%;
+
+  .weapon-picker-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: pointer;
+    text-align: left;
+    padding: 2px 4px;
+
+    .weapon-picker-current {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .weapon-picker-arrow {
+      font-size: 12px;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+  }
+
+  .weapon-picker-panel {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: var(--vagabond-c-lightgrey, #f4f0e8);
+    border: 1px solid $c-dark;
+    border-radius: 2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    .weapon-picker-search {
+      width: 100%;
+      padding: 4px 8px;
+      border: none;
+      border-bottom: 1px solid $c-dark;
+      background: transparent;
+      font-size: 14px;
+      color: $c-dark;
+      box-shadow: none;
+      outline: none;
+
+      &::placeholder { opacity: 0.5; }
+    }
+
+    .weapon-picker-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 180px;
+      overflow-y: auto;
+
+      .weapon-picker-option {
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 14px;
+        color: $c-dark;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.08);
+        }
+
+        &.selected {
+          font-weight: bold;
+        }
+
+        &[hidden] {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .npc-add-row,
 .action-add-row,
 .ability-add-row {

@@ -449,10 +449,39 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         } catch (error) {
           console.error("Vagabond | Error enriching NPC actions/abilities:", error);
         }
+
+        // Load available weapons from compendiums for the weapon selector
+        const availableWeapons = await this._loadAvailableWeapons();
+        partContext.availableWeapons = availableWeapons;
+        partContext.weaponDisplayNames = Object.fromEntries(availableWeapons.map(w => [w.uuid, w.name]));
         break;
     }
 
     return partContext;
+  }
+
+  /**
+   * Load all weapon items from compendiums for the NPC action weapon selector.
+   * @returns {Promise<Array<{uuid: string, name: string}>>}
+   * @private
+   */
+  async _loadAvailableWeapons() {
+    const weapons = [];
+    for (const pack of game.packs) {
+      if (pack.documentName !== 'Item') continue;
+      try {
+        const index = await pack.getIndex({ fields: ['name', 'type', 'system.equipmentType'] });
+        for (const entry of index) {
+          if (entry.type === 'equipment' && entry.system?.equipmentType === 'weapon') {
+            weapons.push({ uuid: entry.uuid, name: entry.name });
+          }
+        }
+      } catch (e) {
+        console.warn('Vagabond | Failed to index pack for weapons:', pack.collection, e);
+      }
+    }
+    weapons.sort((a, b) => a.name.localeCompare(b.name));
+    return weapons;
   }
 
   /**

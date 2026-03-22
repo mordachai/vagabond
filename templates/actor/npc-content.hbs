@@ -210,7 +210,7 @@
                           <i class='fas fa-check'></i>
                         </button>
                       {{/unless}}
-                      <button type='button' class='action-remove-btn' data-action='removeAction' data-index='{{index}}' title='Remove Action'>
+                      <button type='button' class='action-remove-btn' data-action='removeAction' data-action-index='{{index}}' title='Remove Action'>
                         <i class='fas fa-trash'></i>
                       </button>
                     </div>
@@ -233,6 +233,25 @@
                         <option value='castClose' {{#if (eq action.attackType 'castClose')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.CastClose"}}</option>
                         <option value='castRanged' {{#if (eq action.attackType 'castRanged')}}selected{{/if}}>{{localize "VAGABOND.AttackTypes.CastRanged"}}</option>
                       </select>
+                    </div>
+                  </div>
+                  <div class='action-edit-row'>
+                    <label>{{localize "VAGABOND.Actor.NPC.Action.Weapon"}}:</label>
+                    <div class='weapon-picker'>
+                      <button type='button' class='weapon-picker-trigger npc-field-input'>
+                        <span class='weapon-picker-current'>{{#if action.weaponId}}{{lookup @root.weaponDisplayNames action.weaponId}}{{else}}— {{localize "VAGABOND.Actor.NPC.Action.NoWeapon"}} —{{/if}}</span>
+                        <i class='fas fa-chevron-down weapon-picker-arrow'></i>
+                      </button>
+                      <div class='weapon-picker-panel' hidden>
+                        <input type='text' class='weapon-picker-search' placeholder='{{localize "VAGABOND.Actor.NPC.Action.WeaponFilter"}}' autocomplete='off'>
+                        <ul class='weapon-picker-list'>
+                          <li class='weapon-picker-option' data-uuid=''>— {{localize "VAGABOND.Actor.NPC.Action.NoWeapon"}} —</li>
+                          {{#each @root.availableWeapons as |weapon|}}
+                            <li class='weapon-picker-option{{#if (eq ../weaponId weapon.uuid)}} selected{{/if}}' data-uuid='{{weapon.uuid}}'>{{weapon.name}}</li>
+                          {{/each}}
+                        </ul>
+                      </div>
+                      <input type='hidden' data-field='weaponId' value='{{action.weaponId}}'>
                     </div>
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
@@ -451,7 +470,7 @@
                           <i class='fas fa-check'></i>
                         </button>
                       {{/unless}}
-                      <button type='button' class='ability-remove-btn' data-action='removeAbility' data-index='{{index}}' title='Remove Ability'>
+                      <button type='button' class='ability-remove-btn' data-action='removeAbility' data-ability-index='{{index}}' title='Remove Ability'>
                         <i class='fas fa-trash'></i>
                       </button>
                     </div>

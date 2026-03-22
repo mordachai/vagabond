@@ -323,6 +323,26 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
+        weaponId: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        weaponPrevName: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        weaponPrevFlatDamage: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
+        weaponPrevRollDamage: new fields.StringField({
+          required: false,
+          nullable: false,
+          initial: '',
+        }),
         causedStatuses: new fields.ArrayField(
           new fields.SchemaField({
             statusId:           new fields.StringField({ required: false, blank: true, initial: '' }),

@@ -275,6 +275,103 @@ export class NPCActionHandler {
   }
 
   /**
+   * Apply weapon data to an NPC action when a weapon is selected from the dropdown.
+   * Sets the action name, rollDamage, flatDamage, and damageType from the weapon item.
+   * @param {number} actionIndex - Index of the action to update
+   * @param {string} weaponUuid - UUID of the selected weapon, or '' to deselect
+   */
+  async applyWeaponToAction(actionIndex, weaponUuid) {
+    const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+    const action = actions[actionIndex];
+    if (!action) return;
+
+    if (!weaponUuid) {
+      // Weapon deselected — restore pre-weapon values and clear stored data
+      const baseName = (action.name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+      action.name          = action.weaponPrevName ?? baseName;
+      action.flatDamage    = action.weaponPrevFlatDamage ?? action.flatDamage;
+      action.rollDamage    = action.weaponPrevRollDamage ?? action.rollDamage;
+      action.weaponId              = '';
+      action.weaponPrevName        = '';
+      action.weaponPrevFlatDamage  = '';
+      action.weaponPrevRollDamage  = '';
+      await this.actor.update({ 'system.actions': actions });
+      return;
+    }
+
+    // Load full weapon document from UUID
+    let weapon;
+    try {
+      weapon = await fromUuid(weaponUuid);
+    } catch (e) {
+      console.error('NPCActionHandler: Failed to load weapon from UUID:', weaponUuid, e);
+      return;
+    }
+    if (!weapon) {
+      console.warn('NPCActionHandler: Weapon not found for UUID:', weaponUuid);
+      return;
+    }
+
+    // Choose damage fields based on grip ('2H' uses two-hand values; everything else uses one-hand)
+    const grip = weapon.system.grip || '1H';
+    let damageFormula, damageType;
+    if (grip === '2H') {
+      damageFormula = weapon.system.damageTwoHands || weapon.system.damageOneHand || '';
+      damageType    = weapon.system.damageTypeTwoHands || weapon.system.damageTypeOneHand || '-';
+    } else {
+      damageFormula = weapon.system.damageOneHand || '';
+      damageType    = weapon.system.damageTypeOneHand || '-';
+    }
+    // Fallback to generic damageAmount
+    if (!damageFormula) damageFormula = weapon.system.damageAmount || '';
+    if (!damageType || damageType === '-') damageType = weapon.system.damageType || '-';
+
+    // Strip any previously appended weapon "(…)" to get the base name
+    const baseName = (action.name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+
+    // Only save pre-weapon values if no weapon was previously set (first application)
+    if (!action.weaponId) {
+      action.weaponPrevName        = baseName;
+      action.weaponPrevFlatDamage  = action.flatDamage;
+      action.weaponPrevRollDamage  = action.rollDamage;
+    }
+
+    action.name        = baseName ? `${baseName} (${weapon.name})` : weapon.name;
+    action.weaponId    = weaponUuid;
+    action.rollDamage  = damageFormula;
+    action.damageType  = this.validateDamageType(damageType);
+    action.flatDamage  = NPCActionHandler._computeHalfMax(damageFormula);
+
+    await this.actor.update({ 'system.actions': actions });
+  }
+
+  /**
+   * Compute half of the maximum possible result for a dice formula string.
+   * e.g. "2d6" → max 12 → "6"; "d8+2" → max 10 → "5"; "2d6+1d4" → max 16 → "8"
+   * @param {string} formula
+   * @returns {string} Floor of (max / 2), or '' for empty input
+   */
+  static _computeHalfMax(formula) {
+    if (!formula) return '';
+    let maxTotal = 0;
+    // Replace every dice group (e.g. "2d6", "d8") with 0, accumulating the max value
+    const cleaned = formula.replace(/(\d*)d(\d+)/gi, (match, count, sides) => {
+      const n = parseInt(count || '1') || 1;
+      const s = parseInt(sides);
+      maxTotal += n * s;
+      return '0';
+    });
+    // Evaluate any remaining flat modifiers (e.g. "+2", "-1")
+    if (cleaned.replace(/\s/g, '') !== '0' && cleaned.replace(/\s/g, '') !== '') {
+      try {
+        const flat = Roll.safeEval(cleaned);
+        if (Number.isFinite(flat)) maxTotal += flat;
+      } catch (e) { /* ignore unparseable modifier */ }
+    }
+    return String(Math.floor(maxTotal / 2));
+  }
+
+  /**
    * Update accordion state for persistence and accessibility
    * @param {HTMLElement} header - The accordion header element
    * @param {HTMLElement} content - The accordion content element
