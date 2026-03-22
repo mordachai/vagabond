@@ -966,6 +966,23 @@
     &:hover {
       color: $c-red;
     }
+
+    &.action-recharging {
+      text-decoration: line-through;
+      opacity: 0.75;
+    }
+  }
+
+  .action-recharge-icon {
+    margin-right: 4px;
+    font-size: 0.85em;
+    color: $c-red;
+    cursor: pointer;
+    opacity: 0.85;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .action-meta {

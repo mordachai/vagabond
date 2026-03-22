@@ -229,12 +229,17 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.favorHinder': 'Favor/Hinder State',
       'system.critNumber': 'Critical Hit Threshold (Global)',
       
+      // -- Incoming Damage Reduction --
+      'system.incomingDamageReductionPerDie': 'Incoming Damage Reduction Per Die (Berserk)',
+
+      // -- Universal Crit Bonuses (stack on top of per-type bonuses) --
+      'system.attackCritBonus': 'Crit: All Weapon Attacks (melee/ranged/brawl/finesse)',
+      'system.castCritBonus': 'Crit: All Spell Casts',
       // -- Specific Crit Bonuses (Lower is better, e.g. -1 for 19-20) --
       'system.meleeCritBonus': 'Crit: Melee Threshold Bonus (-1 for 19-20)',
       'system.rangedCritBonus': 'Crit: Ranged Threshold Bonus (-1 for 19-20)',
       'system.brawlCritBonus': 'Crit: Brawl Threshold Bonus (-1 for 19-20)',
       'system.finesseCritBonus': 'Crit: Finesse Threshold Bonus (-1 for 19-20)',
-      'system.spellCritBonus': 'Crit: Spell Threshold Bonus (-1 for 19-20)',
       'system.reflexCritBonus': 'Crit: Reflex Save Threshold Bonus (-1 for 19-20)',
       'system.endureCritBonus': 'Crit: Endure Save Threshold Bonus (-1 for 19-20)',
 
@@ -280,8 +285,6 @@ export class VagabondActiveEffect extends ActiveEffect {
       // -- Weapon Property Bonuses --
       'system.cleaveTargets': 'Cleave: Extra Targets (ADD bonus, base 2)',
       'system.brutalDice': 'Brutal: Extra Crit Dice (ADD bonus, base 1)',
-
-      'system.spellDamageDieSize': 'Spell: Final Damage Die Size (Derived)',
 
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',
@@ -370,5 +373,27 @@ export class VagabondActiveEffect extends ActiveEffect {
       case 'toggle':
         return effect.update({ disabled: !effect.disabled });
     }
+  }
+
+  /**
+   * Override apply to fix system.speed.bonus on NPC actors.
+   *
+   * The 'dead' status (and any custom AE) uses system.speed.bonus, which is valid for
+   * character actors (SchemaField with an ArrayField bonus). NPC actors store speed as a
+   * plain NumberField at system.speed with no bonus sub-field. Foundry's setProperty
+   * would replace the number with {} when traversing "speed.bonus", corrupting the field
+   * and causing [object Object] to appear in the speed input.
+   *
+   * Fix: redirect system.speed.bonus → system.speed for NPC actors.
+   */
+  apply(actor, change) {
+    if (actor.type === 'npc' && change.key === 'system.speed.bonus') {
+      const npcChange = foundry.utils.deepClone(change);
+      npcChange.key = 'system.speed';
+      npcChange.mode = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
+      npcChange.value = '0';
+      return super.apply(actor, npcChange);
+    }
+    return super.apply(actor, change);
   }
 }

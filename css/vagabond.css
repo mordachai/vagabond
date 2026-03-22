@@ -1777,6 +1777,24 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-shadow: 1px 1px 0 #ffecea, -1px 1px 0 #ffecea, -1px -1px 0 #ffecea, 1px -1px 0 #ffecea;
 }
 
+.vb-die-wrapper .vb-die-weakness {
+  position: absolute !important;
+  bottom: -2px;
+  right: -2px;
+  z-index: 1;
+  color: var(--vagabond-c-damage-orange);
+  /* Layout Reset */
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+  /* Center the Icon inside the Circle */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  /* Visuals */
+  font-size: 13px;
+}
+
 /* SAVE DAMAGE CALCULATION (New Section) */
 .save-damage-calculation {
   background: rgba(255, 255, 255, 0.5); /* Subtle background container */
@@ -12520,6 +12538,20 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .action-name-line .action-name:hover {
   color: var(--vagabond-c-red);
+}
+.vagabond .action-name-line .action-name.action-recharging {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+.vagabond .action-name-line .action-recharge-icon {
+  margin-right: 4px;
+  font-size: 0.85em;
+  color: var(--vagabond-c-red);
+  cursor: pointer;
+  opacity: 0.85;
+}
+.vagabond .action-name-line .action-recharge-icon:hover {
+  opacity: 1;
 }
 .vagabond .action-name-line .action-meta {
   font-weight: bold;

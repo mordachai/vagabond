@@ -86,6 +86,39 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Mark the last DiceTerm in a roll as the weakness bonus die.
+   * Called after rolling when the weakness die was appended to the formula.
+   * @param {Roll} roll
+   * @private
+   */
+  static _markWeaknessDie(roll) {
+    for (let i = roll.terms.length - 1; i >= 0; i--) {
+      const term = roll.terms[i];
+      if (term.constructor.name === 'Die') {
+        for (const result of term.results) {
+          result.weakness = true;
+        }
+        break;
+      }
+    }
+  }
+
+  /**
+   * Resolve stored target objects to Actor instances.
+   * @param {Array} storedTargets - Array of {tokenId, sceneId} objects
+   * @returns {Actor[]}
+   * @private
+   */
+  static _getTargetActorsFromStored(storedTargets) {
+    if (!storedTargets || storedTargets.length === 0) return [];
+    return storedTargets.map(t => {
+      const scene = game.scenes.get(t.sceneId);
+      const token = scene?.tokens?.get(t.tokenId);
+      return token?.actor;
+    }).filter(Boolean);
+  }
+
+  /**
    * Get targets from button dataset with multi-tier fallback
    * @param {HTMLElement} button - The button element
    * @param {ChatMessage} message - The chat message (optional)
@@ -307,9 +340,26 @@ export class VagabondDamageHelper {
       finalFormula += ` + ${universalDiceBonus}`;
     }
 
+    // Check if all stored targets are weak — if so, include weakness die in formula
+    const storedTargetsForWeak = this._getTargetsFromButton(button);
+    const finalDamageTypeKey = context.damageType || null;
+    let weaknessPreRolled = false;
+    if (finalDamageTypeKey && finalDamageTypeKey !== '-' && storedTargetsForWeak.length > 0) {
+      const targetActors = this._getTargetActorsFromStored(storedTargetsForWeak);
+      if (targetActors.length > 0 && targetActors.every(a => this._isWeakTo(a, finalDamageTypeKey, item))) {
+        // Die size matches what the apply-time code would use
+        const weakDieSize = item ? this._getDamageSourceDieSize(item, null, actor) : 6;
+        finalFormula += ` + 1d${weakDieSize}`;
+        weaknessPreRolled = true;
+      }
+    }
+
     // Roll damage (without explosion modifiers in formula)
     const damageRoll = new Roll(finalFormula, actor.getRollData());
     await damageRoll.evaluate();
+
+    // Mark the weakness die in the roll so it shows the type icon overlay
+    if (weaknessPreRolled) this._markWeaknessDie(damageRoll);
 
     // Apply manual explosions if item supports it
     if (item) {
@@ -318,6 +368,8 @@ export class VagabondDamageHelper {
         await this._manuallyExplodeDice(damageRoll, explodeValues);
       }
     }
+
+    damageRoll._weaknessPreRolled = weaknessPreRolled;
 
     // Determine damage type
     let damageTypeLabel = 'Physical';
@@ -345,9 +397,6 @@ export class VagabondDamageHelper {
       }
     }
 
-    // Get the damage type key for icon lookup (from context, which stores the key)
-    const finalDamageTypeKey = context.damageType || null;
-
     // Get attack type from context (defaults to 'melee' if not provided)
     const attackType = context.attackType || 'melee';
 
@@ -357,14 +406,14 @@ export class VagabondDamageHelper {
 
     // Post a SEPARATE damage message instead of updating the attack card
     // This prevents double-rolling issues and matches the save result flow
-    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus);
+    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false);
   }
 
   /**
    * Post a separate damage result message with save buttons
    * Uses existing createActionCard() to avoid code duplication
    */
-  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0) {
+  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false) {
     const { VagabondChatCard } = await import('./chat-card.mjs');
 
     return await VagabondChatCard.createActionCard({
@@ -375,7 +424,8 @@ export class VagabondDamageHelper {
       damageType: damageTypeKey || damageType,
       hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
       attackType,
-      rollData: isCritical ? { isCritical: true, critStatBonus } : null
+      rollData: isCritical ? { isCritical: true, critStatBonus } : null,
+      weaknessPreRolled,
     });
   }
 
@@ -473,7 +523,7 @@ export class VagabondDamageHelper {
    * @param {string} statKey - The stat used for the cast (for crit bonus)
    * @returns {Roll} The damage roll (or null if no damage dice)
    */
-  static async rollSpellDamage(actor, spell, spellState, isCritical = false, statKey = null) {
+  static async rollSpellDamage(actor, spell, spellState, isCritical = false, statKey = null, targetsAtRollTime = []) {
     // Allow typeless damage ("-") - only skip if there are no damage dice at all
     if (!spellState.damageDice || spellState.damageDice <= 0) return null;
 
@@ -522,9 +572,23 @@ export class VagabondDamageHelper {
       damageFormula += ` + ${universalDiceBonus}`;
     }
 
+    // Check if all targets are weak — if so, include the weakness die in the formula
+    const damageType = spell.system.damageType;
+    let weaknessPreRolled = false;
+    if (damageType && damageType !== '-' && targetsAtRollTime.length > 0) {
+      const targetActors = this._getTargetActorsFromStored(targetsAtRollTime);
+      if (targetActors.length > 0 && targetActors.every(a => this._isWeakTo(a, damageType, null))) {
+        damageFormula += ` + 1d${dieSize}`;
+        weaknessPreRolled = true;
+      }
+    }
+
     // Roll damage (without explosion modifiers in formula)
     const roll = new Roll(damageFormula, actor.getRollData());
     await roll.evaluate();
+
+    // Mark the weakness die in the roll so it displays with the type icon overlay
+    if (weaknessPreRolled) this._markWeaknessDie(roll);
 
     // Apply manual explosions if enabled
     const explodeValues = this._getExplodeValues(spell, actor);
@@ -532,6 +596,7 @@ export class VagabondDamageHelper {
       await this._manuallyExplodeDice(roll, explodeValues);
     }
 
+    roll._weaknessPreRolled = weaknessPreRolled;
     return roll;
   }
 
@@ -1019,6 +1084,36 @@ export class VagabondDamageHelper {
    * @param {Item} attackingWeapon - The weapon used (optional, for material weakness checks)
    * @returns {number} Final damage amount
    */
+  /**
+   * Returns true if the actor has no equipped armor or only light armor.
+   * Used for the Berserk damage-reduction condition.
+   * @param {Actor} actor
+   * @returns {boolean}
+   */
+  static _isLightOrNoArmor(actor) {
+    const equipped = actor.items?.find(i => {
+      const isArmor = i.type === 'armor' || (i.type === 'equipment' && i.system.equipmentType === 'armor');
+      return isArmor && i.system.equipped;
+    });
+    if (!equipped) return true;
+    return equipped.system.armorType === 'light';
+  }
+
+  /**
+   * Count the total number of dice in a formula string (e.g. "2d8 + 1d4" → 3).
+   * @param {string} formula
+   * @returns {number}
+   */
+  static _countDiceInFormula(formula) {
+    let total = 0;
+    const regex = /(\d*)d\d+/gi;
+    let match;
+    while ((match = regex.exec(String(formula || ''))) !== null) {
+      total += match[1] ? parseInt(match[1]) : 1;
+    }
+    return total;
+  }
+
   static calculateFinalDamage(actor, damage, damageType, attackingWeapon = null) {
     // Normalize damage type for lookup
     const normalizedType = damageType.toLowerCase();
@@ -1079,6 +1174,13 @@ export class VagabondDamageHelper {
     // Armor always reduces damage unless target is immune or weak
     const armorRating = actor.system.armor || 0;
     finalDamage = Math.max(0, finalDamage - armorRating);
+
+    // Berserk — reduce by 1 per die while berserk with light or no armor
+    const reductionPerDie = actor.system.incomingDamageReductionPerDie || 0;
+    if (reductionPerDie > 0 && actor.statuses?.has('berserk') && VagabondDamageHelper._isLightOrNoArmor(actor)) {
+      const numDice = VagabondDamageHelper._countDiceInFormula(attackingWeapon?.system?.damageAmount ?? '');
+      if (numDice > 0) finalDamage = Math.max(0, finalDamage - reductionPerDie * numDice);
+    }
 
     return finalDamage;
   }
@@ -1220,7 +1322,7 @@ export class VagabondDamageHelper {
   /**
    * Create save buttons (Reflex, Endure, Will, Apply Direct)
    */
-  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = [], actionIndex = null, attackWasCrit = false, statusSaveTypes = new Set(), critStatBonus = 0) {
+  static createSaveButtons(damageAmount, damageType, damageRoll, actorId, itemId, attackType, targetsAtRollTime = [], actionIndex = null, attackWasCrit = false, statusSaveTypes = new Set(), critStatBonus = 0, weaknessPreRolled = false) {
     // Encode the damage roll terms
     const rollTermsData = JSON.stringify({
       terms: damageRoll.terms.map(t => {
@@ -1270,6 +1372,7 @@ export class VagabondDamageHelper {
               data-item-id="${itemId || ''}"
               data-action-index="${actionIndex ?? ''}"
               data-is-critical="${attackWasCrit}"
+              data-weakness-pre-rolled="${weaknessPreRolled}"
               data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-burst"></i> ${applyDirectLabel}
             </button>
@@ -1286,6 +1389,7 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
               data-attack-was-crit="${attackWasCrit}"
+              data-weakness-pre-rolled="${weaknessPreRolled}"
               data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-running"></i> ${reflexLabel}
             </button>
@@ -1299,6 +1403,7 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
               data-attack-was-crit="${attackWasCrit}"
+              data-weakness-pre-rolled="${weaknessPreRolled}"
               data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-shield-alt"></i> ${endureLabel}
             </button>
@@ -1312,6 +1417,7 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-type="${attackType}"
               data-attack-was-crit="${attackWasCrit}"
+              data-weakness-pre-rolled="${weaknessPreRolled}"
               data-targets="${targetsJson}"${critAttrs}>
               <i class="fas fa-brain"></i> ${willLabel}
             </button>
@@ -1473,7 +1579,8 @@ export class VagabondDamageHelper {
       const armorReduction = damageAfterSave - baseAfterFinal;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinal;
-      if (this._isWeakTo(targetActor, damageType, sourceItem)) {
+      const weaknessPreRolledSave = button.dataset.weaknessPreRolled === 'true';
+      if (!weaknessPreRolledSave && this._isWeakTo(targetActor, damageType, sourceItem)) {
         const dieSize = this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();
@@ -2319,7 +2426,8 @@ export class VagabondDamageHelper {
       const baseAfterFinalDirect = this.calculateFinalDamage(targetActor, effectiveDamage, damageType, sourceItem);
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;
-      if (this._isWeakTo(targetActor, damageType, sourceItem)) {
+      const weaknessPreRolledDirect = button.dataset.weaknessPreRolled === 'true';
+      if (!weaknessPreRolledDirect && this._isWeakTo(targetActor, damageType, sourceItem)) {
         const dieSize = this._getDamageSourceDieSize(sourceItem, directActionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();

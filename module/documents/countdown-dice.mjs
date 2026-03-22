@@ -81,6 +81,9 @@ export class CountdownDice {
             tickDamageEnabled: data.tickDamageEnabled ?? false,
             tickDamageFormula: data.tickDamageFormula ?? '',
             tickDamageType:    data.tickDamageType    ?? '-',
+            // Optional linking for NPC action recharge automation
+            linkedRechargeActorUuid:    data.linkedRechargeActorUuid    ?? null,
+            linkedRechargeActionIndex:  data.linkedRechargeActionIndex  ?? null,
             // TODO: fatigueOnTick: data.fatigueOnTick ?? 0, — restore when re-enabling the fatigueOnTick feature
           }
         }
@@ -106,7 +109,9 @@ export class CountdownDice {
    * @returns {JournalEntry[]}
    */
   static getForCurrentUser() {
-    const allDice = this.getAll();
+    const allDice = this.getAll().filter(d =>
+      !d.flags?.vagabond?.countdownDice?.linkedRechargeActorUuid
+    );
 
     // GM can see all dice
     if (game.user.isGM) {

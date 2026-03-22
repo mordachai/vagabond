@@ -1137,6 +1137,27 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
 }
 
+.vb-die-wrapper .vb-die-weakness {
+    position: absolute !important;
+    bottom: -2px;
+    right: -2px;
+    z-index: 1;
+    color: $c-damage;
+
+    /* Layout Reset */
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 !important;
+
+    /* Center the Icon inside the Circle */
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    /* Visuals */
+    font-size: 13px;
+}
+
 /* SAVE DAMAGE CALCULATION (New Section) */
 .save-damage-calculation {
     background: rgba(255, 255, 255, 0.5); /* Subtle background container */

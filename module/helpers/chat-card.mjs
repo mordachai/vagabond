@@ -126,7 +126,7 @@ export class VagabondChatCard {
   } 
 
 
-  static formatRollWithDice(roll, isDamage = false) {
+  static formatRollWithDice(roll, isDamage = false, weaknessDamageTypeKey = null) {
     if (!roll) return '';
 
     const parts = [];
@@ -201,12 +201,17 @@ export class VagabondChatCard {
           }
 
           const isExploded = result.exploded;
-          
+          const isWeakness = result.weakness;
+          const weaknessIconClass = isWeakness && weaknessDamageTypeKey
+            ? (CONFIG.VAGABOND?.damageTypeIcons?.[weaknessDamageTypeKey] || 'fa-solid fa-burst')
+            : null;
+
           parts.push(`
             <div class="vb-die-wrapper ${sizeClass}" data-faces="${dieType}">
               <div class="vb-die-bg dmg-pool" style="background-image: url('${dieIcon}')"></div>
               <span class="vb-die-val">${result.result}</span>
               ${isExploded ? '<i class="fas fa-burst vb-die-explode" title="Exploded!"></i>' : ''}
+              ${weaknessIconClass ? `<i class="${weaknessIconClass} vb-die-weakness" title="Weakness bonus die"></i>` : ''}
             </div>
           `);
           
@@ -247,7 +252,8 @@ export class VagabondChatCard {
       // 2. Damage Rolls (isDamage = true)
       if (this.data.damage?.roll) {
            // Pass TRUE so it ignores Fav/Hind images and adds 'die-type-damage' class
-           this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll, true);
+           // Pass the damage type key so weakness dice show the type icon overlay
+           this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll, true, this.data.damage.typeKey || null);
       }
 
       this.data.config = CONFIG.VAGABOND;
@@ -264,6 +270,10 @@ export class VagabondChatCard {
           rolls: this.data.roll ? [this.data.roll] : []
       };
       if (this.data.damage?.roll) msgData.rolls.push(this.data.damage.roll);
+
+      if (this.data.whisper) {
+        msgData.whisper = this.data.whisper;
+      }
 
       if (this.data.actor) {
         msgData.flags = {
@@ -291,7 +301,8 @@ export class VagabondChatCard {
     propertyDetails = null, damageFormula = null,
     targetsAtRollTime = [], metadata = [],
     rerollData = null,
-    actionIndex = null
+    actionIndex = null,
+    weaknessPreRolled = false,
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -424,9 +435,10 @@ export class VagabondChatCard {
 
           const isHealing = damageType.toLowerCase() === 'healing';
 
+          const effectiveWeaknessPreRolled = weaknessPreRolled || (damageRoll?._weaknessPreRolled ?? false);
           let btns = isHealing
             ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id, targetsAtRollTime, actionIndex)
-            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus);
+            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus, effectiveWeaknessPreRolled);
 
           card.addFooterAction(btns);
 
@@ -471,14 +483,6 @@ export class VagabondChatCard {
       // Store reroll data in flags for Luck Reroll (Fluke)
       if (rerollData) {
         card.data.rerollData = rerollData;
-      }
-
-      // Show on-hit status previews (entries were computed earlier for button tinting)
-      if (previewEntries?.length) {
-        card.addFooterAction(VagabondChatCard._buildOnHitPreview(previewEntries));
-      }
-      if (critPreviewEntries?.length) {
-        card.addFooterAction(VagabondChatCard._buildOnHitPreview(critPreviewEntries, true));
       }
 
       return await card.send();
@@ -553,6 +557,7 @@ export class VagabondChatCard {
         ];
         break;
 
+      case 'cast':
       case 'skill':
         entity = actor.system.skills?.[key];
         entityLabel = entity?.label || key;
@@ -583,8 +588,13 @@ export class VagabondChatCard {
     }
 
     // Check if critical
-    // For skills, check if it's a weapon skill key to apply type-specific crit bonus
-    const critType = type === 'skill' && ['melee', 'ranged', 'brawl', 'finesse'].includes(key) ? key : null;
+    // For weapon skills, pass the key for per-weapon crit bonuses
+    // For saves, pass the save key ('reflex', 'endure', 'will') so save crit bonuses apply
+    // For spell cast rerolls, pass 'spell' so castCritBonus applies
+    const critType = (type === 'cast') ? 'spell'
+      : (type === 'skill' && ['melee', 'ranged', 'brawl', 'finesse'].includes(key)) ? key
+      : (type === 'save') ? key
+      : null;
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
     const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
@@ -1360,6 +1370,17 @@ export class VagabondChatCard {
       description += `<p class="tick-target-note"><i class="fas fa-circle-dot"></i> ${tickData.statusLabel} — ${tickData.actorName}</p>`;
     }
 
+    // If this countdown ending recharges an NPC action, append the recharge note inline
+    if (status === 'ended' && flags.linkedRechargeActorUuid) {
+      try {
+        const actor = await fromUuid(flags.linkedRechargeActorUuid);
+        const action = actor?.system?.actions?.[flags.linkedRechargeActionIndex];
+        if (action?.name) {
+          description += `<p><i class="fas fa-sync-alt"></i> <strong>${action.name}</strong> has recharged!</p>`;
+        }
+      } catch(e) { /* actor may be unavailable */ }
+    }
+
     // Get dice image path for icon
     const CountdownDiceClass = (await import('../documents/countdown-dice.mjs')).CountdownDice;
     const diceImagePath = CountdownDiceClass.getDiceImagePath(currentDiceType);
@@ -1381,6 +1402,14 @@ export class VagabondChatCard {
     card.data.hasRoll = false; // Don't show roll header section
     card.data.type = 'countdown-dice';
     card.data.alias = game.user.name;
+
+    // Recharge dice: whisper to GM and suppress the roll display (clean notification style)
+    if (flags.linkedRechargeActorUuid) {
+      card.data.roll = null;
+      card.data.hasRoll = false;
+      const revealRecharge = game.settings.get('vagabond', 'revealNpcRecharge');
+      if (!revealRecharge) card.data.whisper = game.users.filter(u => u.isGM).map(u => u.id);
+    }
 
     // Use the standard damage section for tick damage
     if (tickData) {

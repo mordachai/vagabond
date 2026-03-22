@@ -182,15 +182,19 @@ export class VagabondRollBuilder {
 
     // Apply specific bonus if type provided
     if (type === 'spell') {
-      critThreshold += (rollData.spellCritBonus || 0);
+      critThreshold += (rollData.castCritBonus || 0);
     } else if (type === 'melee') {
       critThreshold += (rollData.meleeCritBonus || 0);
+      critThreshold += (rollData.attackCritBonus || 0);
     } else if (type === 'ranged') {
       critThreshold += (rollData.rangedCritBonus || 0);
+      critThreshold += (rollData.attackCritBonus || 0);
     } else if (type === 'brawl') {
       critThreshold += (rollData.brawlCritBonus || 0);
+      critThreshold += (rollData.attackCritBonus || 0);
     } else if (type === 'finesse') {
       critThreshold += (rollData.finesseCritBonus || 0);
+      critThreshold += (rollData.attackCritBonus || 0);
     } else if (type === 'reflex') {
       critThreshold += (rollData.reflexCritBonus || 0);
     } else if (type === 'endure') {

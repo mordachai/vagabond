@@ -370,6 +370,17 @@ function registerGameSettings() {
     restricted: true,
   });
 
+  // Setting 23: Reveal NPC Action Recharge
+  game.settings.register('vagabond', 'revealNpcRecharge', {
+    name: 'VAGABOND.Settings.revealNpcRecharge.name',
+    hint: 'VAGABOND.Settings.revealNpcRecharge.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 22: Use Item Animations — world-level master switch for weapon/alchemical/relic FX
   game.settings.register('vagabond', 'useItemAnimations', {
     name: 'VAGABOND.Settings.useItemAnimations.name',
@@ -963,35 +974,56 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
   // Auto-remove linked status when its countdown die expires (GM only)
   if (!game.user.isGM) return;
   const cdFlags = journal.flags?.vagabond?.countdownDice;
-  if (!cdFlags?.linkedActorUuid || !cdFlags?.linkedStatusId) return;
+  if (!cdFlags) return;
 
-  try {
-    const actor = await fromUuid(cdFlags.linkedActorUuid);
-    if (!actor) return;
+  // Status cleanup
+  if (cdFlags.linkedActorUuid && cdFlags.linkedStatusId) {
+    try {
+      const actor = await fromUuid(cdFlags.linkedActorUuid);
+      if (actor) {
+        await actor.toggleStatusEffect(cdFlags.linkedStatusId, { active: false });
 
-    await actor.toggleStatusEffect(cdFlags.linkedStatusId, { active: false });
-
-    const statusLabel = game.i18n.localize(
-      CONFIG.VAGABOND?.statusConditions?.[cdFlags.linkedStatusId] ?? cdFlags.linkedStatusId
-    );
-    const { VagabondChatCard } = await import('./helpers/chat-card.mjs');
-    const card = new VagabondChatCard();
-    card.data.title = journal.name;
-    card.data.subtitle = statusLabel;
-    card.data.description = `<p><i class="fas fa-hourglass-end"></i> ${game.i18n.format('VAGABOND.Status.CountdownExpired', {
-      actor: actor.name,
-      status: statusLabel,
-    })}</p>`;
-    card.data.type = 'countdown-dice';
-    card.data.alias = actor.name;
-    const statusIcon = CONFIG.VAGABOND?.statusConditionIcons?.[cdFlags.linkedStatusId];
-    if (statusIcon) {
-      card.data.icon = statusIcon;
-      if (statusIcon.endsWith('.svg')) card.data.iconBackground = '#000000';
+        const statusLabel = game.i18n.localize(
+          CONFIG.VAGABOND?.statusConditions?.[cdFlags.linkedStatusId] ?? cdFlags.linkedStatusId
+        );
+        const { VagabondChatCard } = await import('./helpers/chat-card.mjs');
+        const card = new VagabondChatCard();
+        card.data.title = journal.name;
+        card.data.subtitle = statusLabel;
+        card.data.description = `<p><i class="fas fa-hourglass-end"></i> ${game.i18n.format('VAGABOND.Status.CountdownExpired', {
+          actor: actor.name,
+          status: statusLabel,
+        })}</p>`;
+        card.data.type = 'countdown-dice';
+        card.data.alias = actor.name;
+        const statusIcon = CONFIG.VAGABOND?.statusConditionIcons?.[cdFlags.linkedStatusId];
+        if (statusIcon) {
+          card.data.icon = statusIcon;
+          if (statusIcon.endsWith('.svg')) card.data.iconBackground = '#000000';
+        }
+        await card.send();
+      }
+    } catch(err) {
+      console.warn('Vagabond | Could not remove linked status on countdown expiry:', err);
     }
-    await card.send();
-  } catch(err) {
-    console.warn('Vagabond | Could not remove linked status on countdown expiry:', err);
+  }
+
+  // NPC recharge action unlock
+  if (cdFlags.linkedRechargeActorUuid && cdFlags.linkedRechargeActionIndex !== null && cdFlags.linkedRechargeActionIndex !== undefined) {
+    try {
+      const actor = await fromUuid(cdFlags.linkedRechargeActorUuid);
+      if (actor) {
+        const actionIndex = cdFlags.linkedRechargeActionIndex;
+        const action = actor.system.actions?.[actionIndex];
+        if (action) {
+          const actions = foundry.utils.deepClone(actor.system.actions || []);
+          actions[actionIndex].rechargeCountdownId = null;
+          await actor.update({ 'system.actions': actions });
+        }
+      }
+    } catch(err) {
+      console.warn('Vagabond | Could not unlock recharge action on countdown expiry:', err);
+    }
   }
 });
 
@@ -1072,6 +1104,26 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
 Hooks.on('preCreateActor', (actor, _data, _options, _userId) => {
   if (actor.type === 'party' || actor.type === 'construct') {
     actor.updateSource({ 'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL });
+  }
+});
+
+/* -------------------------------------------- */
+/*  Actor Update Hooks                          */
+/* -------------------------------------------- */
+
+// Auto-toggle the Dead status effect when HP reaches 0 or recovers above 0.
+// Only the GM runs this to avoid duplicate calls from all connected clients.
+Hooks.on('updateActor', async (actor, changes, _options, _userId) => {
+  if (!game.user.isGM) return;
+  if (!foundry.utils.hasProperty(changes, 'system.health.value')) return;
+
+  const isZero = actor.system.health.value === 0;
+  const hasDead = actor.statuses?.has('dead') ?? actor.effects.some(e => e.statuses?.has('dead'));
+
+  if (isZero && !hasDead) {
+    await actor.toggleStatusEffect('dead', { active: true });
+  } else if (!isZero && hasDead) {
+    await actor.toggleStatusEffect('dead', { active: false });
   }
 });
 
@@ -1220,7 +1272,7 @@ const FLUKE_REROLL_ENTRY = {
     } else if (rerollData.type === 'cast') {
       // Spell cast reroll - show as a skill check with the mana skill
       const key = rerollData.manaSkillKey || 'magic';
-      await VagabondChatCard._checkRoll(actor, 'skill', key, roll, rerollData.difficulty, isSuccess);
+      await VagabondChatCard._checkRoll(actor, 'cast', key, roll, rerollData.difficulty, isSuccess);
 
     } else {
       // Skill or save reroll

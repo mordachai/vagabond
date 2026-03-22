@@ -408,6 +408,10 @@
       "useItemAnimations": {
         "name": "Use Item Animations",
         "hint": "Master switch for weapon, alchemical, and relic visual effects. When disabled, no item animations play. Animation files are configured per-item on each item's Details tab. Requires the Sequencer module."
+      },
+      "revealNpcRecharge": {
+        "name": "Reveal NPC Action Recharge",
+        "hint": "When enabled, recharge countdown results are posted publicly. When disabled, they are only visible to the GM."
       }
     },
     "SequencerFX": {

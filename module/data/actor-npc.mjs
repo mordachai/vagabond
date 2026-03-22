@@ -292,6 +292,11 @@ export default class VagabondNPC extends VagabondActorBase {
           nullable: false,
           initial: '',
         }),
+        rechargeCountdownId: new fields.StringField({
+          required: false,
+          nullable: true,
+          initial: null,
+        }),
         flatDamage: new fields.StringField({
           required: false,
           nullable: false,

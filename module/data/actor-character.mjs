@@ -284,10 +284,6 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // --- Specific Critical Hit Threshold Bonuses ---
     // These REDUCE the critNumber (e.g. -1 means crit on 19)
-    schema.spellCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Spell Crit Bonus" }
-    );
     schema.meleeCritBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
       { initial: [], label: "Melee Crit Bonus" }
@@ -311,6 +307,18 @@ export default class VagabondCharacter extends VagabondActorBase {
     schema.endureCritBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
       { initial: [], label: "Endure Save Crit Bonus" }
+    );
+    schema.attackCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Attack Crit Bonus (All Weapon Types)" }
+    );
+    schema.castCritBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Cast Crit Bonus (Spells)" }
+    );
+    schema.incomingDamageReductionPerDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Incoming Damage Reduction Per Die" }
     );
 
     // ---------------------
@@ -340,7 +348,16 @@ export default class VagabondCharacter extends VagabondActorBase {
           label: "Delivery Mana Cost Reduction",
           hint: "Reduces the delivery portion of spell mana cost. Can be a number or formula."
         }
-      )
+      ),
+      globalExplode: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Global Explode (Enable Exploding Dice)" }
+      ),
+      globalExplodeValues: new fields.StringField({
+        initial: '',
+        label: "Global Explode Values",
+        hint: "Comma-separated die values that trigger explosions (e.g. '6' or '8,6'). Only used when globalExplode is active."
+      })
     });
 
     // Favor/Hinder system - toggle for roll modifiers
@@ -576,13 +593,16 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.spellDamageDieSizeBonus = [];
 
     // Reset specific crit bonuses
-    this.spellCritBonus = [];
     this.meleeCritBonus = [];
     this.rangedCritBonus = [];
     this.brawlCritBonus = [];
     this.finesseCritBonus = [];
     this.reflexCritBonus = [];
     this.endureCritBonus = [];
+    this.attackCritBonus = [];
+    this.castCritBonus = [];
+    this.incomingDamageReductionPerDie = [];
+    this.bonuses.globalExplode = [];
 
     // Reset weapon property bonus fields
     this.cleaveTargets = [];
@@ -716,6 +736,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
     this.bonuses.spellManaCostReduction = this._evaluateFormulaField(this.bonuses.spellManaCostReduction, rollData);
     this.bonuses.deliveryManaCostReduction = this._evaluateFormulaField(this.bonuses.deliveryManaCostReduction, rollData);
+    this.bonuses.globalExplode = this._evaluateFormulaField(this.bonuses.globalExplode, rollData) > 0;
     
     // Evaluate specific die size bonuses
     this.meleeDamageDieSizeBonus = this._evaluateFormulaField(this.meleeDamageDieSizeBonus, rollData);
@@ -725,13 +746,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.spellDamageDieSizeBonus = this._evaluateFormulaField(this.spellDamageDieSizeBonus, rollData);
 
     // Evaluate specific crit bonuses
-    this.spellCritBonus = this._evaluateFormulaField(this.spellCritBonus, rollData);
     this.meleeCritBonus = this._evaluateFormulaField(this.meleeCritBonus, rollData);
     this.rangedCritBonus = this._evaluateFormulaField(this.rangedCritBonus, rollData);
     this.brawlCritBonus = this._evaluateFormulaField(this.brawlCritBonus, rollData);
     this.finesseCritBonus = this._evaluateFormulaField(this.finesseCritBonus, rollData);
     this.reflexCritBonus = this._evaluateFormulaField(this.reflexCritBonus, rollData);
     this.endureCritBonus = this._evaluateFormulaField(this.endureCritBonus, rollData);
+    this.attackCritBonus = this._evaluateFormulaField(this.attackCritBonus, rollData);
+    this.castCritBonus = this._evaluateFormulaField(this.castCritBonus, rollData);
+    this.incomingDamageReductionPerDie = this._evaluateFormulaField(this.incomingDamageReductionPerDie, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
     // are NOT evaluated here - they're done inline in prepareDerivedData
@@ -979,6 +1002,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
     data.lvl = this.attributes.level.value;
 
+    // Expose active status conditions so formulas can reference them
+    // e.g. (@statuses.berserk) ? 2 : 0
+    data.statuses = {};
+    if (this.parent?.statuses) {
+      for (const statusId of this.parent.statuses) {
+        data.statuses[statusId] = 1;
+      }
+    }
+
     // Add attributes for formula usage (enables @attributes.level.value, etc.)
     if (this.attributes) {
       data.attributes = foundry.utils.deepClone(this.attributes);
@@ -1000,9 +1032,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     data.rangedCritBonus = this.rangedCritBonus || 0;
     data.brawlCritBonus = this.brawlCritBonus || 0;
     data.finesseCritBonus = this.finesseCritBonus || 0;
-    data.spellCritBonus = this.spellCritBonus || 0;
     data.reflexCritBonus = this.reflexCritBonus || 0;
     data.endureCritBonus = this.endureCritBonus || 0;
+    data.attackCritBonus = this.attackCritBonus || 0;
+    data.castCritBonus = this.castCritBonus || 0;
+    data.incomingDamageReductionPerDie = this.incomingDamageReductionPerDie || 0;
 
     return data;
   }

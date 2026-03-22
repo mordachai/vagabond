@@ -95,6 +95,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       clickActionName: this._onClickActionName,
       clickActionDamageRoll: this._onClickActionDamageRoll,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
+      rollRechargeCountdown: this._onRollRechargeCountdown,
       toggleDescription: this._onToggleDescription,
       addNpcActionStatus: this._onAddNpcActionStatus,
       removeNpcActionStatus: this._onRemoveNpcActionStatus,
@@ -879,6 +880,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return this.actionHandler?.createCountdownFromRecharge(event, target);
   }
 
+  static async _onRollRechargeCountdown(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const countdownId = target.dataset.countdownId;
+    if (!countdownId) return;
+    const journal = game.journal.get(countdownId);
+    if (!journal) return;
+    const diceOverlay = globalThis.vagabond?.ui?.countdownDiceOverlay;
+    if (diceOverlay) {
+      await diceOverlay._onRollDice(journal);
+    }
+  }
+
   static async _onAddNpcActionStatus(event, target) {
     return this.actionHandler?.addNpcActionStatus(event, target);
   }
@@ -907,6 +921,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const action = this.actor.system.actions[index];
 
     if (!action || !action.name) return;
+
+    // If recharge is a standalone Cdx countdown dice and not yet on cooldown, auto-create one
+    const cdRechargePattern = /^Cd\d+$/i;
+    if (cdRechargePattern.test(action.recharge?.trim() ?? '') && !action.rechargeCountdownId) {
+      const { CountdownDice } = globalThis.vagabond.documents;
+      const diceType = action.recharge.trim().replace(/^C/i, '').toLowerCase(); // "Cd6" → "d6"
+      const journal = await CountdownDice.create({
+        name: `${this.actor.name}: ${action.name}`,
+        diceType,
+        linkedRechargeActorUuid: this.actor.uuid,
+        linkedRechargeActionIndex: index,
+      });
+      const actions = foundry.utils.deepClone(this.actor.system.actions || []);
+      actions[index].rechargeCountdownId = journal.id;
+      await this.actor.update({ 'system.actions': actions });
+    }
 
     // Capture targeted tokens for NPC action
     const targetsAtRollTime = Array.from(game.user.targets).map(token => ({

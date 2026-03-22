@@ -610,7 +610,8 @@ export class SpellHandler {
           spell,
           state,
           isCritical,
-          manaSkillStat
+          manaSkillStat,
+          targetsAtRollTime
         );
       }
     }

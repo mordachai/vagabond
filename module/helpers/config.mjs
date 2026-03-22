@@ -250,13 +250,13 @@ VAGABOND.statusEffectDefinitions = [
     description: 'Currently sustaining one or more spells through Focus.'
   },
 
-  // MANUAL TRACKING (Phase 3 - Future)
+  // MANUAL TRACKING
   {
     id: 'berserk',
     name: 'VAGABOND.StatusConditions.Berserk',
     img: 'icons/svg/terror.svg',
     statuses: ['berserk'],
-    description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. [MANUAL TRACKING]'
+    description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. Class-specific bonuses (e.g. Barbarian Valor) are applied via the class item\'s Active Effects using @statuses.berserk formulas.'
   },
   {
     id: 'burning',

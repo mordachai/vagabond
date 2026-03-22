@@ -166,23 +166,43 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@attributes.size', label: 'Size Category' },
       { value: '@attributes.beingType', label: 'Being Type' },
 
-      // Bonuses
+      // Universal Bonuses
+      { value: '@universalCheckBonus', label: 'Universal Check Bonus' },
+      { value: '@universalDamageBonus', label: 'Universal Damage Bonus' },
+      { value: '@universalDamageDice', label: 'Universal Damage Dice' },
+
+      // Mana Bonuses
       { value: '@bonuses.spellManaCostReduction', label: 'Spell Mana Cost Reduction' },
       { value: '@bonuses.deliveryManaCostReduction', label: 'Delivery Mana Cost Reduction' },
-      
-      { value: '@meleeDamageDieSizeBonus', label: 'Melee Die Size Bonus' },
-      { value: '@rangedDamageDieSizeBonus', label: 'Ranged Die Size Bonus' },
-      { value: '@brawlDamageDieSizeBonus', label: 'Brawl Die Size Bonus' },
-      { value: '@finesseDamageDieSizeBonus', label: 'Finesse Die Size Bonus' },
-      { value: '@spellDamageDieSizeBonus', label: 'Spell Die Size Bonus' },
 
+      // Damage Die Size Bonuses
+      { value: '@meleeDamageDieSizeBonus', label: 'Melee Damage Die Size Bonus' },
+      { value: '@rangedDamageDieSizeBonus', label: 'Ranged Damage Die Size Bonus' },
+      { value: '@brawlDamageDieSizeBonus', label: 'Brawl Damage Die Size Bonus' },
+      { value: '@finesseDamageDieSizeBonus', label: 'Finesse Damage Die Size Bonus' },
+      { value: '@spellDamageDieSizeBonus', label: 'Spell Damage Die Size Bonus' },
+
+      // Status Conditions (for conditional class AEs)
+      { value: '@statuses.berserk', label: 'Status: Berserk (1 if active, 0 if not)' },
+      { value: '@statuses.blinded', label: 'Status: Blinded' },
+      { value: '@statuses.burning', label: 'Status: Burning' },
+      { value: '@statuses.frightened', label: 'Status: Frightened' },
+      { value: '@statuses.prone', label: 'Status: Prone' },
+      { value: '@statuses.dazed', label: 'Status: Dazed' },
+
+      // Incoming Damage Reduction
+      { value: '@incomingDamageReductionPerDie', label: 'Incoming Damage Reduction Per Die' },
+
+      // Crit Bonuses (universal)
+      { value: '@attackCritBonus', label: 'Attack Crit Bonus (All Weapon Types)' },
+      { value: '@castCritBonus', label: 'Cast Crit Bonus (Spells)' },
+      // Crit Bonuses (per type)
       { value: '@meleeCritBonus', label: 'Melee Crit Bonus' },
       { value: '@rangedCritBonus', label: 'Ranged Crit Bonus' },
       { value: '@brawlCritBonus', label: 'Brawl Crit Bonus' },
       { value: '@finesseCritBonus', label: 'Finesse Crit Bonus' },
-      { value: '@spellCritBonus', label: 'Spell Crit Bonus' },
-
-      { value: '@spellDamageDieSize', label: 'Final Spell Damage Die Size' },
+      { value: '@reflexCritBonus', label: 'Reflex Save Crit Bonus' },
+      { value: '@endureCritBonus', label: 'Endure Save Crit Bonus' },
 
       // Stats (6 Core Stats) - Base Values
       { value: '@might.value', label: 'Might (Base Value)' },
@@ -219,6 +239,8 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@skills.medicine.trained', label: 'Medicine Trained' },
       { value: '@skills.brawl.trained', label: 'Brawl Trained' },
       { value: '@skills.finesse.trained', label: 'Finesse Trained' },
+      { value: '@skills.melee.trained', label: 'Melee Trained' },
+      { value: '@skills.ranged.trained', label: 'Ranged Trained' },
       { value: '@skills.sneak.trained', label: 'Sneak Trained' },
       { value: '@skills.detect.trained', label: 'Detect Trained' },
       { value: '@skills.mysticism.trained', label: 'Mysticism Trained' },
@@ -226,12 +248,6 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@skills.influence.trained', label: 'Influence Trained' },
       { value: '@skills.leadership.trained', label: 'Leadership Trained' },
       { value: '@skills.performance.trained', label: 'Performance Trained' },
-
-      // Weapon Skills
-      { value: '@weaponSkills.melee.trained', label: 'Melee Trained' },
-      { value: '@weaponSkills.brawl.trained', label: 'Brawl Trained' },
-      { value: '@weaponSkills.finesse.trained', label: 'Finesse Trained' },
-      { value: '@weaponSkills.ranged.trained', label: 'Ranged Trained' },
 
       // Saves
       { value: '@saves.reflex.difficulty', label: 'Reflex Save Difficulty' },
