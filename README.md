@@ -15,6 +15,19 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
+### **New feature:** Automations (YouTube video below):
+
+[![Vagabond for Foundry VTT - V5 Automations](https://img.youtube.com/vi/DtV1JWSCz90/0.jpg)](https://youtu.be/DtV1JWSCz90)
+
+- Weapon properties automation: Brutal, Entangle and Cleave.
+- On Hit Effects: items, spells and npcs actions can deal statuses and generate Cdx properly. And the Cdx dice will deal damage when rolled.
+- Crit evaluation: If you Crit on combat, you can toggle: Receive the Luck point or deal more damage (default is Damage, click the Crit badge to toggle). Note: Crit on spells in general changes the die size of countdown effects, so you need to manually change those back for now.
+- NPC Action Recharge: if the Action has a Recharge field (works for Cdx only) the action is marked as spent and an hourglass icon appear. Click the hourglass to roll. The recharges cards in chat are GM only, but you can make them public in Game Settings.
+- Classes Features: Barbarian - Rage: Automated with active effects, but you need to set the exploding dice in the weapon manually.
+- Classes Features: Fighter - Valor: Automated with active effects.
+
+---
+
 ### **New feature:** Item FX — Per-Item Animations:
 Weapons, alchemicals, and relics can now have their own Sequencer animations configured directly on the item sheet. Set different files and sounds for hits and misses, choose between melee (impact at target) and ranged (beam to target) styles. For weapons the animation type is derived automatically from the weapon skill. Requires the Sequencer module.
 
