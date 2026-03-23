@@ -139,7 +139,7 @@ Magic in Vagabond is flexible and unique. The system includes a dynamic **Mana C
 ---
 
 ### Got the book? You're in for a treat!
-Inside the book there is the keys to unlock all the content for your Foundry table. No need to purchase a premium module:
+Inside the book you will find the one word password to unlock all content for your Foundry table. No need to purchase a premium module:
 
 <img width="1862" height="879" alt="image" src="https://github.com/user-attachments/assets/f5b9a0bb-7913-4993-97a9-a333f265cde7" />
 
