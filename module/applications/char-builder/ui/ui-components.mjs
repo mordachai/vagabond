@@ -45,7 +45,8 @@ export class CharacterBuilderUIComponents {
         'previewUuid',  // CRITICAL: Track preview changes for UI updates
         'selectedArrayId',
         'unassignedValues',
-        'showAllPerks'
+        'showAllPerks',
+        'ignorePrereqTypes'
       ]
     };
   }

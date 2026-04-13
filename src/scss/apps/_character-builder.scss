@@ -210,6 +210,55 @@
           }
         }
 
+        .ignore-prereqs-row {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          margin-top: 2px;
+
+          .ignore-prereqs-label {
+            font-size: 11px;
+            color: #888;
+          }
+
+          .ignore-prereqs-checkboxes {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 6px;
+          }
+
+          .ignore-prereq-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 1px 7px;
+            border-radius: 10px;
+            font-size: 11px;
+            border: 1px solid #bbb;
+            color: #555;
+            background: transparent;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+            input[type="checkbox"] {
+              display: none;
+            }
+
+            &:has(input:checked) {
+              background: $c-red;
+              border-color: $c-red;
+              color: #fff;
+            }
+
+            &:hover:not(:has(input:checked)) {
+              border-color: #888;
+              color: #222;
+            }
+          }
+        }
+
         .perk-grants-list {
           display: flex;
           flex-direction: column;
@@ -326,6 +375,15 @@
 
           &:hover {
             opacity: 0.7;
+          }
+        }
+
+        &.ignored-prereq {
+          background: rgba(255, 37, 37, 0.200);
+          border-left: 3px solid $c-red;
+
+          .name {
+            color: $c-red;
           }
         }
 

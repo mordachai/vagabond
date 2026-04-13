@@ -20,6 +20,27 @@
             <input type="checkbox" data-action="toggleShowAllPerks" {{checked showAllPerks}}>
             {{localize 'VAGABOND.CharBuilder.ShowAll'}}
         </label>
+        <div class="ignore-prereqs-row">
+            <span class="ignore-prereqs-label">{{localize 'VAGABOND.CharBuilder.IgnorePrerequisites'}}:</span>
+            <div class="ignore-prereqs-checkboxes">
+                <label class="ignore-prereq-pill">
+                    <input type="checkbox" data-action="toggleIgnorePrereqType" data-prereq-type="stats" {{checked ignorePrereqTypes.stats}}>
+                    {{localize 'VAGABOND.CharBuilder.IgnorePrereqStats'}}
+                </label>
+                <label class="ignore-prereq-pill">
+                    <input type="checkbox" data-action="toggleIgnorePrereqType" data-prereq-type="skills" {{checked ignorePrereqTypes.skills}}>
+                    {{localize 'VAGABOND.CharBuilder.IgnorePrereqSkills'}}
+                </label>
+                <label class="ignore-prereq-pill">
+                    <input type="checkbox" data-action="toggleIgnorePrereqType" data-prereq-type="spells" {{checked ignorePrereqTypes.spells}}>
+                    {{localize 'VAGABOND.CharBuilder.IgnorePrereqSpells'}}
+                </label>
+                <label class="ignore-prereq-pill">
+                    <input type="checkbox" data-action="toggleIgnorePrereqType" data-prereq-type="resources" {{checked ignorePrereqTypes.resources}}>
+                    {{localize 'VAGABOND.CharBuilder.IgnorePrereqResources'}}
+                </label>
+            </div>
+        </div>
         {{/if}}
     </div>
     <div class="directory-list custom-scroll">
@@ -62,7 +83,7 @@
             {{#if (eq @root.step 'perks')}}
                 {{!-- Filter perks based on prerequisites unless showAllPerks is enabled --}}
                 {{#if (or @root.showAllPerks opt.prerequisitesMet opt.isGrantAllowed)}}
-                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#unless opt.prerequisitesMet}}{{#unless opt.isGrantAllowed}}not-qualified{{/unless}}{{/unless}} {{#if opt.isGhosted}}ghosted{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
+                <li class="directory-item flexrow {{#if opt.selected}}in-tray{{/if}} {{#if opt.previewing}}previewing{{/if}} {{#unless opt.prerequisitesMet}}{{#unless opt.isGrantAllowed}}not-qualified{{/unless}}{{/unless}} {{#if opt.isGhosted}}ghosted{{/if}} {{#if opt.isIgnoredPrereq}}ignored-prereq{{/if}}" data-uuid="{{opt.uuid}}" data-action="selectOption">
                     <img src="{{opt.img}}" width="32" height="32">
                     <div class="item-info">
                         <div class="name">{{opt.name}}</div>

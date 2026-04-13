@@ -157,11 +157,10 @@ export default class VagabondClass extends VagabondItemBase {
   }
 
   static migrateData(source) {
-    if (Array.isArray(source.levelFeatures)) {
-      source.levelFeatures = source.levelFeatures.filter(f => f != null);
-    }
-    if (Array.isArray(source.levelSpells)) {
-      source.levelSpells = source.levelSpells.filter(f => f != null);
+    for (const key of ['levelFeatures', 'levelSpells']) {
+      if (source[key] == null) continue;
+      if (!Array.isArray(source[key])) source[key] = Object.values(source[key]);
+      source[key] = source[key].filter(f => f != null);
     }
     return super.migrateData(source);
   }

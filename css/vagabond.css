@@ -2855,6 +2855,48 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .builder-body .selection-list-column .search-sticky .show-all-checkbox:hover {
   color: var(--vagabond-c-red);
 }
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereqs-label {
+  font-size: 11px;
+  color: #888;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereqs-checkboxes {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereq-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  border: 1px solid #bbb;
+  color: #555;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereq-pill input[type=checkbox] {
+  display: none;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereq-pill:has(input:checked) {
+  background: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+  color: #fff;
+}
+.vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereq-pill:hover:not(:has(input:checked)) {
+  border-color: #888;
+  color: #222;
+}
 .vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list {
   display: flex;
   flex-direction: column;
@@ -2948,6 +2990,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.not-qualified:hover {
   opacity: 0.7;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.ignored-prereq {
+  background: rgba(255, 37, 37, 0.2);
+  border-left: 3px solid var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item.ignored-prereq .name {
+  color: var(--vagabond-c-red);
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item.ghosted {
   opacity: 0.6;
@@ -12757,6 +12806,78 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+.vagabond .weapon-picker {
+  position: relative;
+  width: 100%;
+}
+.vagabond .weapon-picker .weapon-picker-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  text-align: left;
+  padding: 2px 4px;
+}
+.vagabond .weapon-picker .weapon-picker-trigger .weapon-picker-current {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond .weapon-picker .weapon-picker-trigger .weapon-picker-arrow {
+  font-size: 12px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.vagabond .weapon-picker .weapon-picker-panel {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: var(--vagabond-c-lightgrey, #f4f0e8);
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-search {
+  width: 100%;
+  padding: 4px 8px;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-dark);
+  background: transparent;
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+  box-shadow: none;
+  outline: none;
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-search::placeholder {
+  opacity: 0.5;
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-list .weapon-picker-option {
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--vagabond-c-dark);
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-list .weapon-picker-option:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-list .weapon-picker-option.selected {
+  font-weight: bold;
+}
+.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-list .weapon-picker-option[hidden] {
+  display: none;
 }
 .vagabond .npc-add-row,
 .vagabond .action-add-row,

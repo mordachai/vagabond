@@ -1416,6 +1416,11 @@
         "RemovePack": "Remove Starting Pack"
       },
       "ShowAll": "Show All",
+      "IgnorePrerequisites": "Ignore prerequisites",
+      "IgnorePrereqStats": "Stats",
+      "IgnorePrereqSkills": "Skills",
+      "IgnorePrereqSpells": "Spells",
+      "IgnorePrereqResources": "Resources",
       "PrerequisitesNotMet": "You don't have the prerequisites",
       "PrerequisitesMet": "Prerequisites Met",
       "TrayTitle": "Your Selections",

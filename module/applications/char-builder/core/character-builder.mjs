@@ -376,6 +376,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       finish: VagabondCharBuilder.prototype._onFinish,
       dismissBuilder: VagabondCharBuilder.prototype._onDismissBuilder,
       toggleShowAllPerks: VagabondCharBuilder.prototype._delegateToStepManager,
+      toggleIgnorePrereqType: VagabondCharBuilder.prototype._delegateToStepManager,
       applyStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       unassignStat: VagabondCharBuilder.prototype._delegateToStepManager

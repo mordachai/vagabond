@@ -13,14 +13,18 @@ export class PerksStepManager extends BaseStepManager {
       'addToTray': this._onAddToTray.bind(this),
       'removeFromTray': this._onRemoveFromTray.bind(this),
       'clearTray': this._onClearTray.bind(this),
-      'toggleShowAllPerks': this._onToggleShowAllPerks.bind(this)
+      'toggleShowAllPerks': this._onToggleShowAllPerks.bind(this),
+      'toggleIgnorePrereqType': this._onToggleIgnorePrereqType.bind(this)
     };
-    
+
     // Required data for perks step
     this.requiredData = ['perks'];
-    
+
     // Show all perks toggle
     this.showAllPerks = false;
+
+    // Granular prerequisite ignore flags
+    this.ignorePrereqTypes = { stats: false, skills: false, spells: false, resources: false };
   }
 
   /**
@@ -95,7 +99,7 @@ export class PerksStepManager extends BaseStepManager {
     const grantDisplay = this._prepareGrantDisplay(grants, activeGrant);
 
     // Load available perks with active grant filtering
-    const availablePerks = await this._loadPerkOptions(state, allKnownSpells, activeGrant);
+    const availablePerks = await this._loadPerkOptions(state, allKnownSpells, activeGrant, this.ignorePrereqTypes);
 
     // Get preview item details with prerequisite checking
     let previewItem = null;
@@ -165,6 +169,7 @@ export class PerksStepManager extends BaseStepManager {
       trayData: trayData,
       useTripleColumn: true,
       showAllPerks: this.showAllPerks,
+      ignorePrereqTypes: { ...this.ignorePrereqTypes },
       originReferences: originReferences,
       grants: grantDisplay,
       activeGrant: activeGrant,
@@ -235,7 +240,7 @@ export class PerksStepManager extends BaseStepManager {
                 sourceName: ancestry.name,
                 featureName: trait.name,
                 allowedPerks: allowedPerks,
-                // Auto-fulfill guaranteed perks with their UUID
+                isGuaranteed,
                 fulfilled: isGuaranteed ? allowedPerks[i] || allowedPerks[0] : null
               });
             }
@@ -268,7 +273,7 @@ export class PerksStepManager extends BaseStepManager {
                 sourceName: classItem.name,
                 featureName: feature.name,
                 allowedPerks: allowedPerks,
-                // Auto-fulfill guaranteed perks with their UUID
+                isGuaranteed,
                 fulfilled: isGuaranteed ? allowedPerks[i] || allowedPerks[0] : null
               });
             }
@@ -393,7 +398,7 @@ export class PerksStepManager extends BaseStepManager {
    * Filters based on active grant if present
    * @private
    */
-  async _loadPerkOptions(state, allKnownSpells = [], activeGrant = null) {
+  async _loadPerkOptions(state, allKnownSpells = [], activeGrant = null, ignorePrereqTypes = {}) {
     await this.dataService.ensureDataLoaded(['perks']);
 
     const perks = this.dataService.getFilteredItems('perks', {});
@@ -418,19 +423,22 @@ export class PerksStepManager extends BaseStepManager {
         const perkItem = await fromUuid(perk.uuid);
         if (!perkItem) continue;
 
-        const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, allKnownSpells);
+        const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, allKnownSpells, ignorePrereqTypes);
         const isSelected = selectedPerks.includes(perk.uuid) || classPerks.includes(perk.uuid);
 
         // Check if explicitly allowed by grant (by direct UUID or compendium source)
-        const isGrantAllowed = allowedPerkUuids.has(perk.uuid) || 
+        const isGrantAllowed = allowedPerkUuids.has(perk.uuid) ||
                               (perkItem._stats?.compendiumSource && allowedPerkUuids.has(perkItem._stats.compendiumSource));
+
+        // Guaranteed grants (auto-fulfilled) bypass prerequisites — the feature overrides requirements.
+        // Choice-pool grants (player picks from a list) still require prerequisites to be met.
+        const isGuaranteedAllowed = isGrantAllowed && activeGrant?.isGuaranteed;
 
         // Determine if perk is allowed by active grant
         const isAllowedByActiveGrant = !shouldFilter || isGrantAllowed || isSelected;
 
-        // If "Show All" is disabled, filter by prerequisites
-        // EXCEPTION: If the perk is explicitly allowed by the active grant, show it even if prerequisites aren't met
-        if (!this.showAllPerks && !prereqCheck.met && !isSelected && !isGrantAllowed) {
+        // Filter by prerequisites unless bypassed by a guaranteed grant or Show All
+        if (!this.showAllPerks && !prereqCheck.met && !isSelected && !isGuaranteedAllowed) {
           continue;
         }
 
@@ -452,7 +460,8 @@ export class PerksStepManager extends BaseStepManager {
           prerequisitesMet: prereqCheck.met,
           isGrantAllowed: isGrantAllowed,
           isClassPerk: classPerks.includes(perk.uuid),
-          isGhosted: isGhosted
+          isGhosted: isGhosted,
+          isIgnoredPrereq: prereqCheck.hasIgnoredFailures && !isSelected
         });
       } catch (error) {
         console.warn(`Failed to process perk ${perk.uuid}:`, error);
@@ -595,7 +604,7 @@ export class PerksStepManager extends BaseStepManager {
    * Check perk prerequisites
    * @private
    */
-  async _checkPerkPrerequisites(perkItem, actor, knownSpellUuids = []) {
+  async _checkPerkPrerequisites(perkItem, actor, knownSpellUuids = [], ignoreTypes = {}) {
     const prereqs = perkItem.system.prerequisites || {};
     const missing = [];
 
@@ -612,122 +621,122 @@ export class PerksStepManager extends BaseStepManager {
       (prereqs.resourceOrGroups?.length > 0);
 
     if (!hasAnyPrereqs) {
-      return { met: true, missing: [] };
+      return { met: true, missing: [], hasIgnoredFailures: false };
     }
 
-    // Check stat prerequisites (AND)
-    if (prereqs.stats?.length > 0) {
-      for (const statReq of prereqs.stats) {
-        // Fix: Use total value (base + bonus) instead of just base value
+    // ignoredMissing tracks failures in sections that are being skipped,
+    // so callers can detect "visible only due to ignore flags".
+    const ignoredMissing = [];
+
+    // ── Stats ────────────────────────────────────────────────────────────────
+    const _checkStatFails = () => {
+      const fails = [];
+      for (const statReq of prereqs.stats ?? []) {
+        const statValue = actor.system.stats?.[statReq.stat]?.total || 0;
+        if (statValue < statReq.value) fails.push(true);
+      }
+      for (const group of prereqs.statOrGroups ?? []) {
+        const groupMet = group.some(s => (actor.system.stats?.[s.stat]?.total || 0) >= s.value);
+        if (!groupMet) fails.push(true);
+      }
+      return fails.length > 0;
+    };
+
+    if (!ignoreTypes.stats) {
+      // Check stat prerequisites (AND)
+      for (const statReq of prereqs.stats ?? []) {
         const statValue = actor.system.stats?.[statReq.stat]?.total || 0;
         if (statValue < statReq.value) {
-           const abbr = CONFIG.VAGABOND.statAbbreviations[statReq.stat];
-           const localizedAbbr = game.i18n.localize(abbr);
-           missing.push(`${localizedAbbr} ${statReq.value}+`);
+          const abbr = CONFIG.VAGABOND.statAbbreviations[statReq.stat];
+          missing.push(`${game.i18n.localize(abbr)} ${statReq.value}+`);
         }
       }
-    }
-
-    // Check stat OR groups
-    if (prereqs.statOrGroups?.length > 0) {
-      for (const group of prereqs.statOrGroups) {
+      // Check stat OR groups
+      for (const group of prereqs.statOrGroups ?? []) {
         let groupMet = false;
         const groupLabels = [];
         for (const statReq of group) {
-           const statValue = actor.system.stats?.[statReq.stat]?.total || 0;
-           if (statValue >= statReq.value) {
-             groupMet = true;
-             break;
-           }
-           const abbr = CONFIG.VAGABOND.statAbbreviations[statReq.stat];
-           groupLabels.push(`${game.i18n.localize(abbr)} ${statReq.value}+`);
+          const statValue = actor.system.stats?.[statReq.stat]?.total || 0;
+          if (statValue >= statReq.value) { groupMet = true; break; }
+          const abbr = CONFIG.VAGABOND.statAbbreviations[statReq.stat];
+          groupLabels.push(`${game.i18n.localize(abbr)} ${statReq.value}+`);
         }
-        if (!groupMet) {
-          missing.push(`(${groupLabels.join(' or ')})`);
-        }
+        if (!groupMet) missing.push(`(${groupLabels.join(' or ')})`);
       }
+    } else if (_checkStatFails()) {
+      ignoredMissing.push('stats');
     }
 
-    // Check skill prerequisites (AND)
-    if (prereqs.trainedSkills?.length > 0) {
+    // ── Skills ───────────────────────────────────────────────────────────────
+    const _checkSkillFails = () => {
       const actorSkills = actor.system.skills || {};
-      for (const skill of prereqs.trainedSkills) {
-        const isTrained = actorSkills[skill]?.trained;
-        if (!isTrained) {
-          const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
-          const skillLabel = `VAGABOND.Skills.${capitalizedSkill}`;
-          missing.push(`Trained: ${game.i18n.localize(skillLabel)}`);
+      for (const skill of prereqs.trainedSkills ?? []) {
+        if (!actorSkills[skill]?.trained) return true;
+      }
+      for (const group of prereqs.trainedSkillOrGroups ?? []) {
+        if (!group.some(s => actorSkills[s]?.trained)) return true;
+      }
+      return false;
+    };
+
+    if (!ignoreTypes.skills) {
+      const actorSkills = actor.system.skills || {};
+      for (const skill of prereqs.trainedSkills ?? []) {
+        if (!actorSkills[skill]?.trained) {
+          const cap = skill.charAt(0).toUpperCase() + skill.slice(1);
+          missing.push(`Trained: ${game.i18n.localize(`VAGABOND.Skills.${cap}`)}`);
         }
       }
-    }
-
-    // Check skill OR groups
-    if (prereqs.trainedSkillOrGroups?.length > 0) {
-      const actorSkills = actor.system.skills || {};
-      for (const group of prereqs.trainedSkillOrGroups) {
+      for (const group of prereqs.trainedSkillOrGroups ?? []) {
         let groupMet = false;
         const groupLabels = [];
         for (const skill of group) {
-           const isTrained = actorSkills[skill]?.trained;
-           if (isTrained) {
-             groupMet = true;
-             break;
-           }
-           const capitalizedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
-           groupLabels.push(game.i18n.localize(`VAGABOND.Skills.${capitalizedSkill}`));
+          if (actorSkills[skill]?.trained) { groupMet = true; break; }
+          const cap = skill.charAt(0).toUpperCase() + skill.slice(1);
+          groupLabels.push(game.i18n.localize(`VAGABOND.Skills.${cap}`));
         }
-        if (!groupMet) {
-          missing.push(`Trained: (${groupLabels.join(' or ')})`);
-        }
+        if (!groupMet) missing.push(`Trained: (${groupLabels.join(' or ')})`);
       }
+    } else if (_checkSkillFails()) {
+      ignoredMissing.push('skills');
     }
 
-    // Check "has any spell" prerequisite
-    if (prereqs.hasAnySpell && knownSpellUuids.length === 0) {
-      missing.push(game.i18n.localize('VAGABOND.Item.Perk.HasAnySpell'));
-    }
-
-    // Check specific spell prerequisites (AND)
-    if (prereqs.spells?.length > 0) {
-      for (const spellUuid of prereqs.spells) {
-        if (!spellUuid) continue;
-        if (!knownSpellUuids.includes(spellUuid)) {
+    // ── Spells ───────────────────────────────────────────────────────────────
+    if (!ignoreTypes.spells) {
+      if (prereqs.hasAnySpell && knownSpellUuids.length === 0) {
+        missing.push(game.i18n.localize('VAGABOND.Item.Perk.HasAnySpell'));
+      }
+      for (const spellUuid of prereqs.spells ?? []) {
+        if (!spellUuid || knownSpellUuids.includes(spellUuid)) continue;
+        try {
+          const spell = await fromUuid(spellUuid);
+          missing.push(`Spell: ${spell?.name || 'Unknown'}`);
+        } catch { missing.push('Spell: Unknown'); }
+      }
+      for (const group of prereqs.spellOrGroups ?? []) {
+        let groupMet = false;
+        const groupLabels = [];
+        for (const spellUuid of group) {
+          if (knownSpellUuids.includes(spellUuid)) { groupMet = true; break; }
           try {
             const spell = await fromUuid(spellUuid);
-            missing.push(`Spell: ${spell?.name || 'Unknown'}`);
-          } catch (error) {
-            missing.push('Spell: Unknown');
-          }
+            groupLabels.push(spell?.name || 'Unknown');
+          } catch { groupLabels.push('Unknown Spell'); }
         }
+        if (!groupMet) missing.push(`Spell: (${groupLabels.join(' or ')})`);
       }
-    }
-
-    // Check spell OR groups
-    if (prereqs.spellOrGroups?.length > 0) {
-       for (const group of prereqs.spellOrGroups) {
-         let groupMet = false;
-         const groupLabels = [];
-         for (const spellUuid of group) {
-           if (knownSpellUuids.includes(spellUuid)) {
-             groupMet = true;
-             break;
-           }
-           try {
-             const spell = await fromUuid(spellUuid);
-             groupLabels.push(spell?.name || 'Unknown');
-           } catch (error) {
-             groupLabels.push('Unknown Spell');
-           }
-         }
-         if (!groupMet) {
-           missing.push(`Spell: (${groupLabels.join(' or ')})`);
-         }
-       }
+    } else {
+      const spellFails =
+        (prereqs.hasAnySpell && knownSpellUuids.length === 0) ||
+        (prereqs.spells ?? []).some(u => u && !knownSpellUuids.includes(u)) ||
+        (prereqs.spellOrGroups ?? []).some(g => !g.some(u => knownSpellUuids.includes(u)));
+      if (spellFails) ignoredMissing.push('spells');
     }
 
     return {
       met: missing.length === 0,
-      missing: missing
+      missing,
+      hasIgnoredFailures: ignoredMissing.length > 0
     };
   }
 
@@ -1175,6 +1184,14 @@ export class PerksStepManager extends BaseStepManager {
    * Handle toggling show all perks
    * @private
    */
+  _onToggleIgnorePrereqType(event, target) {
+    const type = target.dataset.prereqType;
+    if (!(type in this.ignorePrereqTypes)) return;
+    this.ignorePrereqTypes[type] = !this.ignorePrereqTypes[type];
+    this.updateState('ignorePrereqTypes', { ...this.ignorePrereqTypes });
+    if (this.render) this.render();
+  }
+
   _onToggleShowAllPerks(event, target) {
     this.showAllPerks = !this.showAllPerks;
 
@@ -1220,6 +1237,9 @@ export class PerksStepManager extends BaseStepManager {
     const state = this.getCurrentState();
     if (state.showAllPerks !== undefined) {
       this.showAllPerks = state.showAllPerks;
+    }
+    if (state.ignorePrereqTypes) {
+      this.ignorePrereqTypes = { ...this.ignorePrereqTypes, ...state.ignorePrereqTypes };
     }
 
   }
