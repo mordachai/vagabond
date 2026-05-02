@@ -167,6 +167,17 @@ export default class VagabondCharacter extends VagabondActorBase {
       hint: "Player-set bonus to all d20 rolls. Resets after each roll."
     });
 
+    // Universal Difficulty Bonus - AE-driven modifier to all skill/save difficulty thresholds
+    // Negative = easier (difficulty decreases), Positive = harder (difficulty increases)
+    schema.universalDifficultyBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Universal Difficulty Bonus",
+        hint: "Added to all skill and save difficulty thresholds. Negative = easier rolls, positive = harder."
+      }
+    );
+
     schema.universalDamageBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
       {
@@ -572,6 +583,7 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // --- 2. Reset Universal Bonuses (from Active Effects) ---
     this.universalCheckBonus = [];
+    this.universalDifficultyBonus = [];
     this.universalDamageBonus = [];
     this.universalWeaponDamageBonus = [];
     this.universalSpellDamageBonus = [];
@@ -708,6 +720,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
     // Combine Active Effect check bonus + player-controlled manual bonus
     this.universalCheckBonus = this._evaluateFormulaField(this.universalCheckBonus, rollData) + (this.manualCheckBonus || 0);
+    this.universalDifficultyBonus = this._evaluateFormulaField(this.universalDifficultyBonus, rollData);
     this.universalDamageBonus = this._evaluateFormulaField(this.universalDamageBonus, rollData);
     this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
@@ -868,7 +881,7 @@ export default class VagabondCharacter extends VagabondActorBase {
       const bonus = this._evaluateFormulaField(save.bonus, rollData);
       const stat1Total = this.stats[saveDef.stat1]?.total || 0;
       const stat2Total = this.stats[saveDef.stat2]?.total || 0;
-      save.difficulty = saveDef.baseValue - stat1Total - stat2Total - bonus;
+      save.difficulty = saveDef.baseValue - stat1Total - stat2Total - bonus + (this.universalDifficultyBonus || 0);
       save.label = saveDef.label;
       save.description = saveDef.description;
       const abbr1 = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[saveDef.stat1] ?? '') || saveDef.stat1.toUpperCase().slice(0, 3);
@@ -895,7 +908,7 @@ export default class VagabondCharacter extends VagabondActorBase {
         .replace(/@stat/g, statValue)
         .replace(/@mult/g, mult)
         .replace(/@bonus/g, skillBonus);
-      skill.difficulty = Roll.safeEval(resolved);
+      skill.difficulty = Roll.safeEval(resolved) - (this.universalDifficultyBonus || 0);
       skill.label = configSkill?.label ?? key;
       skill.isWeaponSkill    = configSkill?.isWeaponSkill    ?? false;
       skill.showInSkillsList = configSkill?.showInSkillsList ?? false;
@@ -1018,6 +1031,7 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Add universal bonuses for formula usage
     data.universalCheckBonus = this.universalCheckBonus || 0;
+    data.universalDifficultyBonus = this.universalDifficultyBonus || 0;
     data.universalDamageBonus = this.universalDamageBonus || 0;
     data.universalDamageDice = this.universalDamageDice || '';
 

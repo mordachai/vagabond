@@ -48,6 +48,10 @@ import { OngoingPanel } from './applications/ongoing-panel.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
+import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
+import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
+import { StatusHelper } from './helpers/status-helper.mjs';
+import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.appv1.sheets;
@@ -753,6 +757,55 @@ Hooks.once('i18nInit', function () {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+});
+
+/* -------------------------------------------- */
+/*  Socket Relay                                */
+/* -------------------------------------------- */
+
+Hooks.once('ready', function () {
+  registerSocket();
+
+  // Built-in socket actions — executed on GM client only
+  registerSocketAction('applyDamage', async ({ actorUuid, newHp }) => {
+    const actor = await fromUuid(actorUuid);
+    if (!actor) return;
+    await actor.update({ 'system.health.value': newHp });
+  });
+
+  registerSocketAction('applyStatus', async ({ actorUuid, statusId, active }) => {
+    const actor = await fromUuid(actorUuid);
+    if (!actor) return;
+    await actor.toggleStatusEffect(statusId, { active });
+  });
+
+  registerSocketAction('createCountdownDie', async (data) => {
+    await CountdownDice.create(data);
+  });
+
+  registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
+    const actor = await fromUuid(actorUuid);
+    if (!actor) return;
+    const currentLuck = actor.system.currentLuck ?? 0;
+    const maxLuck = actor.system.maxLuck ?? 0;
+    const newLuck = Math.min(maxLuck, currentLuck + amount);
+    await actor.update({ 'system.currentLuck': newLuck });
+  });
+
+  // Public API for external modules
+  game.vagabond = {
+    version: game.system.version,
+    api: {
+      VagabondChatCard,
+      VagabondDamageHelper,
+      StatusHelper,
+      VagabondRollBuilder,
+    },
+    socket: {
+      emit: emitSocket,
+      register: registerSocketAction,
+    },
+  };
 });
 
 // Pre-load JB2A animation defaults when both Sequencer and JB2A are installed.

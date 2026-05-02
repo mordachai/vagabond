@@ -140,7 +140,18 @@ export class StatusHelper {
     }
 
     // 5. Apply the status to the token
-    await actor.toggleStatusEffect(entry.statusId, { active: true });
+    const _statusPreCtx = { actor, statusId: entry.statusId, sourceName, saveType: entry.saveType || 'none', damageWasBlocked };
+    if (Hooks.call('vagabond.preStatusApply', _statusPreCtx) === false) {
+      return { outcome: 'cancelled' };
+    }
+
+    if (actor.isOwner || game.user.isGM) {
+      await actor.toggleStatusEffect(entry.statusId, { active: true });
+    } else {
+      const { emitSocket } = await import('./socket-helper.mjs');
+      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true });
+    }
+    Hooks.callAll('vagabond.postStatusApply', { actor, statusId: entry.statusId, sourceName, saveType: entry.saveType || 'none', damageWasBlocked });
 
     // 6. Create a linked countdown die if a duration is set
     if (entry.duration) {
@@ -234,7 +245,7 @@ export class StatusHelper {
       name = statusLabel;
     }
 
-    await CountdownDice.create({
+    const countdownData = {
       name,
       diceType,
       size: 'M',
@@ -244,7 +255,13 @@ export class StatusHelper {
       tickDamageFormula:  entry.damageOnTick  ?? '',
       tickDamageType:     entry.damageType    ?? '-',
       // TODO: fatigueOnTick: entry.fatigueOnTick ?? 0, — restore when re-enabling the fatigueOnTick feature
-    });
+    };
+    if (game.user.isGM) {
+      await CountdownDice.create(countdownData);
+    } else {
+      const { emitSocket } = await import('./socket-helper.mjs');
+      emitSocket('createCountdownDie', countdownData);
+    }
   }
 
   // ---------------------------------------------------------------------------

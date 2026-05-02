@@ -1591,9 +1591,14 @@ export class VagabondDamageHelper {
       // Crit saves always skip auto-apply so the player can choose the Luck/benefit toggle first.
       const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage') && !isCritical;
       if (autoApply) {
-        const currentHP = targetActor.system.health?.value || 0;
-        const newHP = Math.max(0, currentHP - finalDamage);
-        await targetActor.update({ 'system.health.value': newHP });
+        const _autoPreCtx = { actor: targetActor, amount: finalDamage, damageType, sourceItem };
+        if (Hooks.call('vagabond.preDamageApply', _autoPreCtx) !== false) {
+          const _autoFinal = Math.max(0, _autoPreCtx.amount);
+          const currentHP = targetActor.system.health?.value || 0;
+          const newHP = Math.max(0, currentHP - _autoFinal);
+          await targetActor.update({ 'system.health.value': newHP });
+          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, damageType, sourceItem, oldHp: currentHP, newHp: newHP });
+        }
       }
 
       // Collect on-hit status entries (item.causedStatuses with fallback to actor action)
@@ -2409,12 +2414,6 @@ export class VagabondDamageHelper {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
-      // Check permissions
-      if (!targetActor.isOwner && !game.user.isGM) {
-        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
-        continue;
-      }
-
       // Split damage for Cleave: floor(total/count), first targets absorb remainder
       let effectiveDamage = damageAmount;
       if (hasCleave && targetCount > 1) {
@@ -2434,10 +2433,18 @@ export class VagabondDamageHelper {
         finalDamage += weakRoll.total;
       }
 
+      const _directPreCtx = { actor: targetActor, amount: finalDamage, damageType, sourceItem };
+      if (Hooks.call('vagabond.preDamageApply', _directPreCtx) === false) continue;
+      const _directFinal = Math.max(0, _directPreCtx.amount);
       const currentHP = targetActor.system.health?.value || 0;
-      const newHP = Math.max(0, currentHP - finalDamage);
-      await targetActor.update({ 'system.health.value': newHP });
-
+      const newHP = Math.max(0, currentHP - _directFinal);
+      if (targetActor.isOwner || game.user.isGM) {
+        await targetActor.update({ 'system.health.value': newHP });
+      } else {
+        const { emitSocket } = await import('./socket-helper.mjs');
+        emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
+      }
+      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, damageType, sourceItem, oldHp: currentHP, newHp: newHP });
 
       // Post damage result to chat
       const { VagabondChatCard: VCCDirect } = await import('./chat-card.mjs');
@@ -2445,7 +2452,7 @@ export class VagabondDamageHelper {
         type: 'damage',
         rawAmount: effectiveDamage,
         armorReduction: effectiveDamage - baseAfterFinalDirect,
-        finalAmount: finalDamage,
+        finalAmount: _directFinal,
         damageType,
         previousValue: currentHP,
         newValue: newHP,
@@ -2525,16 +2532,19 @@ export class VagabondDamageHelper {
       return;
     }
 
-    // Check permissions - must own the character or be GM
-    if (!actor.isOwner && !game.user.isGM) {
-      ui.notifications.warn(`You don't have permission to modify ${actor.name}.`);
-      return;
-    }
-
     // Apply the pre-calculated damage to this specific character
+    const _savePreCtx = { actor, amount: finalDamage, damageType, sourceItem: null };
+    if (Hooks.call('vagabond.preDamageApply', _savePreCtx) === false) return;
+    const _saveFinal = Math.max(0, _savePreCtx.amount);
     const currentHP = actor.system.health?.value || 0;
-    const newHP = Math.max(0, currentHP - finalDamage);
-    await actor.update({ 'system.health.value': newHP });
+    const newHP = Math.max(0, currentHP - _saveFinal);
+    if (actor.isOwner || game.user.isGM) {
+      await actor.update({ 'system.health.value': newHP });
+    } else {
+      const { emitSocket } = await import('./socket-helper.mjs');
+      emitSocket('applyDamage', { actorUuid: actor.uuid, newHp: newHP });
+    }
+    Hooks.callAll('vagabond.postDamageApply', { actor, amount: _saveFinal, damageType, sourceItem: null, oldHp: currentHP, newHp: newHP });
 
     // Update button text and disable
     const icon = button.querySelector('i');

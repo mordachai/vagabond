@@ -490,6 +490,9 @@ export class SpellHandler {
     let roll = null;
     let isSuccess = false;
     let isCritical = false;
+    let _spellExtraMetadata = [];
+    let _spellExtraTags = [];
+    let _spellDifficulty = difficulty;
 
     if (spell.system.noRollRequired || event.altKey) {
       // BYPASS PATH: No roll needed (noRollRequired flag or Alt+Click), always succeeds, no criticals
@@ -514,9 +517,15 @@ export class SpellHandler {
         event.ctrlKey
       );
 
-      roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, favorHinder);
+      // Pre-roll hook for spell cast — cancellable; modules may mutate ctx.difficulty / ctx.favorHinder
+      const _spellPreCtx = { actor: this.actor, item: spell, rollKey: manaSkill, rollType: 'spell', difficulty, favorHinder, rollData };
+      if (Hooks.call('vagabond.preD20Roll', _spellPreCtx) === false) return;
+      const _spellEffectiveFavorHinder = _spellPreCtx.favorHinder ?? favorHinder;
+      _spellDifficulty = _spellPreCtx.difficulty ?? difficulty;
 
-      isSuccess = roll.total >= difficulty;
+      roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, _spellEffectiveFavorHinder);
+
+      isSuccess = roll.total >= _spellDifficulty;
 
       // ✅ CRITICAL: Use type-specific crit threshold from rollData
       const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, 'spell');
@@ -525,6 +534,12 @@ export class SpellHandler {
       );
       const d20Result = d20Term?.results?.[0]?.result || 0;
       isCritical = d20Result >= critNumber;
+
+      // Post-roll hook for spell cast
+      const _spellPostCtx = { actor: this.actor, item: spell, rollKey: manaSkill, rollType: 'spell', roll, difficulty: _spellDifficulty, isSuccess, isCritical, extraMetadata: [], extraTags: [] };
+      Hooks.callAll('vagabond.postD20Roll', _spellPostCtx);
+      _spellExtraMetadata = _spellPostCtx.extraMetadata;
+      _spellExtraTags = _spellPostCtx.extraTags;
     }
 
     // Deduct mana on success (whether from successful roll or bypass)
@@ -541,10 +556,12 @@ export class SpellHandler {
       state,
       costs,
       roll,
-      difficulty,
+      _spellDifficulty,
       isSuccess,
       isCritical,
-      targetsAtRollTime
+      targetsAtRollTime,
+      _spellExtraMetadata,
+      _spellExtraTags
     );
 
     // ── Sequencer FX ──────────────────────────────────────────────────────────
@@ -586,7 +603,9 @@ export class SpellHandler {
     difficulty,
     isSuccess,
     isCritical,
-    targetsAtRollTime = []
+    targetsAtRollTime = [],
+    extraMetadata = [],
+    extraTags = []
   ) {
     // Import damage helper
     const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
@@ -636,7 +655,9 @@ export class SpellHandler {
       spell,
       spellCastResult,
       damageRoll,
-      targetsAtRollTime
+      targetsAtRollTime,
+      extraMetadata,
+      extraTags
     );
   }
 

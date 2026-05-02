@@ -563,7 +563,7 @@ export class VagabondItem extends Item {
    * @param {VagabondActor} actor - The actor making the attack
    * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill
    */
-  async rollAttack(actor, favorHinder = 'none') {
+  async rollAttack(actor, favorHinder = 'none', difficultyOverride = null) {
     this.validateCanAttack();
 
     // Get roll data WITH this item's "on-use" effects applied
@@ -578,7 +578,7 @@ export class VagabondItem extends Item {
     const weaponSkillKey = this.system.weaponSkill;
     let weaponSkill = rollData.skills?.[weaponSkillKey] ||
                       rollData.saves?.[weaponSkillKey];
-    const difficulty = weaponSkill?.difficulty || 10;
+    const difficulty = difficultyOverride ?? (weaponSkill?.difficulty || 10);
 
     // Check target's incomingAttacksModifier (e.g., Vulnerable: incoming attacks Favored)
     // Also check for Invisible (attackersAreBlinded: attackers act as Blinded = Hindered)

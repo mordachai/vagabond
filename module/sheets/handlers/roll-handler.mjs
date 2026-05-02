@@ -74,40 +74,60 @@ export class RollHandler {
         event.ctrlKey
       );
 
+      // Compute difficulty upfront so pre-hook can see (and modify) it
+      let _rollDifficulty;
+      if (rollType === 'skill' && rollKey) _rollDifficulty = this.actor.system.skills?.[rollKey]?.difficulty ?? 10;
+      else if (rollType === 'save' && rollKey) _rollDifficulty = this.actor.system.saves?.[rollKey]?.difficulty ?? 10;
+
+      // Pre-roll hook — cancellable; modules may mutate ctx.difficulty / ctx.favorHinder
+      const _preCtx = { actor: this.actor, item: null, rollKey, rollType, difficulty: _rollDifficulty, favorHinder, rollData: this.actor.getRollData() };
+      if (Hooks.call('vagabond.preD20Roll', _preCtx) === false) return;
+      _rollDifficulty = _preCtx.difficulty;
+      const _effectiveFavorHinder = _preCtx.favorHinder ?? favorHinder;
+
       const roll = await VagabondRollBuilder.buildAndEvaluateD20(
         this.actor,
-        favorHinder
+        _effectiveFavorHinder
         // baseFormula intentionally omitted — uses homebrew dice.baseCheck config
       );
 
+      // Compute crit for post-hook (mirrors _checkRoll logic)
+      const _critType = (rollType === 'save') ? rollKey
+        : (rollType === 'skill' && ['melee', 'ranged', 'brawl', 'finesse'].includes(rollKey)) ? rollKey
+        : null;
+      const _critNumber = VagabondRollBuilder.calculateCritThreshold(this.actor.getRollData(), _critType);
+      const _isCritical = VagabondChatCard.isRollCritical(roll, _critNumber);
+
       // For skills and saves, use the formatted chat cards
       if (rollType === 'skill' && rollKey) {
-        // Check both regular skills and weapon skills
-        const skillData = this.actor.system.skills?.[rollKey];
-        const difficulty = skillData?.difficulty || 10;
+        const difficulty = _rollDifficulty ?? this.actor.system.skills?.[rollKey]?.difficulty ?? 10;
         const isSuccess = roll.total >= difficulty;
-        await VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+        const _postCtx = { actor: this.actor, item: null, rollKey, rollType, roll, difficulty, isSuccess, isCritical: _isCritical, extraMetadata: [], extraTags: [] };
+        Hooks.callAll('vagabond.postD20Roll', _postCtx);
+        await VagabondChatCard.skillRoll(this.actor, rollKey, roll, difficulty, isSuccess, _postCtx.extraMetadata, _postCtx.extraTags);
 
         // Reset check bonus to 0 after any roll
-        if (this.actor.system.manualCheckBonus !== 0) {
-          await this.actor.update({ 'system.manualCheckBonus': 0 });
+        if (this.actor.system.manualCheckBonus !== 0 || this.actor.system.manualDifficultyBonus !== 0) {
+          await this.actor.update({ 'system.manualCheckBonus': 0, 'system.manualDifficultyBonus': 0 });
         }
         return roll;
       } else if (rollType === 'save' && rollKey) {
-        const saveData = this.actor.system.saves?.[rollKey];
-        const difficulty = saveData?.difficulty || 10;
+        const difficulty = _rollDifficulty ?? this.actor.system.saves?.[rollKey]?.difficulty ?? 10;
         const isSuccess = roll.total >= difficulty;
-        await VagabondChatCard.saveRoll(this.actor, rollKey, roll, difficulty, isSuccess);
+        const _postCtx = { actor: this.actor, item: null, rollKey, rollType, roll, difficulty, isSuccess, isCritical: _isCritical, extraMetadata: [], extraTags: [] };
+        Hooks.callAll('vagabond.postD20Roll', _postCtx);
+        await VagabondChatCard.saveRoll(this.actor, rollKey, roll, difficulty, isSuccess, _postCtx.extraMetadata, _postCtx.extraTags);
 
         // Reset check bonus to 0 after any roll
-        if (this.actor.system.manualCheckBonus !== 0) {
-          await this.actor.update({ 'system.manualCheckBonus': 0 });
+        if (this.actor.system.manualCheckBonus !== 0 || this.actor.system.manualDifficultyBonus !== 0) {
+          await this.actor.update({ 'system.manualCheckBonus': 0, 'system.manualDifficultyBonus': 0 });
         }
         return roll;
       }
 
       // Fallback for generic rolls (stats, etc.)
       const label = dataset.label ? `${dataset.label}` : '';
+      Hooks.callAll('vagabond.postD20Roll', { actor: this.actor, item: null, rollKey, rollType, roll, difficulty: null, isSuccess: null, isCritical: _isCritical, extraMetadata: [], extraTags: [] });
       await roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,
@@ -278,8 +298,22 @@ export class RollHandler {
         event.ctrlKey
       );
 
-      const attackResult = await item.rollAttack(this.actor, favorHinder);
+      // Pre-roll hook for weapon attack
+      const _wpnRollKey = item.system.weaponSkill;
+      const _wpnRollData = this.actor.getRollData();
+      const _wpnSkillData = _wpnRollData.skills?.[_wpnRollKey] || _wpnRollData.saves?.[_wpnRollKey];
+      const _wpnBaseDifficulty = _wpnSkillData?.difficulty ?? 10;
+      const _wpnPreCtx = { actor: this.actor, item, rollKey: _wpnRollKey, rollType: 'weapon', difficulty: _wpnBaseDifficulty, favorHinder, rollData: _wpnRollData };
+      if (Hooks.call('vagabond.preD20Roll', _wpnPreCtx) === false) return;
+      const _wpnEffectiveFavorHinder = _wpnPreCtx.favorHinder ?? favorHinder;
+      const _wpnDifficultyOverride = _wpnPreCtx.difficulty !== _wpnBaseDifficulty ? _wpnPreCtx.difficulty : null;
+
+      const attackResult = await item.rollAttack(this.actor, _wpnEffectiveFavorHinder, _wpnDifficultyOverride);
       if (!attackResult) return;
+
+      // Post-roll hook for weapon attack
+      const _wpnPostCtx = { actor: this.actor, item, rollKey: attackResult.weaponSkillKey, rollType: 'weapon', roll: attackResult.roll, difficulty: attackResult.difficulty, isSuccess: attackResult.isHit, isCritical: attackResult.isCritical, extraMetadata: [], extraTags: [] };
+      Hooks.callAll('vagabond.postD20Roll', _wpnPostCtx);
 
       // Stash the crit stat bonus so the damage card can render the two-state toggle
       if (attackResult.isCritical && attackResult.weaponSkill?.stat) {
@@ -308,7 +342,9 @@ export class RollHandler {
         item,
         attackResult,
         damageRoll,
-        targetsAtRollTime
+        targetsAtRollTime,
+        _wpnPostCtx.extraMetadata,
+        _wpnPostCtx.extraTags
       );
       // Handle consumption after successful attack (regardless of hit/miss)
       await item.handleConsumption();

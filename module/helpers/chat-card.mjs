@@ -542,7 +542,7 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _checkRoll(actor, type, key, roll, difficulty, isSuccess) {
+  static async _checkRoll(actor, type, key, roll, difficulty, isSuccess, extraMetadata = [], extraTags = []) {
     // Get entity data based on type
     let entity, entityLabel, title, tags;
 
@@ -612,7 +612,8 @@ export class VagabondChatCard {
       actor: actor,
       title: title,
       rollData: rollData,
-      tags: tags,
+      tags: [...tags, ...extraTags],
+      metadata: extraMetadata,
       rerollData: {
         type: type,
         key: key,
@@ -624,8 +625,8 @@ export class VagabondChatCard {
     return result;
   }
 
-  static async skillRoll(actor, skillKey, roll, difficulty, isSuccess) {
-    return this._checkRoll(actor, 'skill', skillKey, roll, difficulty, isSuccess);
+  static async skillRoll(actor, skillKey, roll, difficulty, isSuccess, extraMetadata = [], extraTags = []) {
+    return this._checkRoll(actor, 'skill', skillKey, roll, difficulty, isSuccess, extraMetadata, extraTags);
   }
 
   //@deprecated
@@ -634,8 +635,8 @@ export class VagabondChatCard {
   //}
   //
 
-  static async saveRoll(actor, saveKey, roll, difficulty, isSuccess) {
-    return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess);
+  static async saveRoll(actor, saveKey, roll, difficulty, isSuccess, extraMetadata = [], extraTags = []) {
+    return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess, extraMetadata, extraTags);
   }
 
   /**
@@ -708,7 +709,7 @@ export class VagabondChatCard {
     });
   }
 
-  static async weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime = []) {
+  static async weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime = [], extraMetadata = [], extraTags = []) {
       const { weaponSkill, weaponSkillKey, isHit, isCritical } = attackResult;
 
       // FIX: Auto-roll damage if settings allow or if it's a critical hit
@@ -801,7 +802,8 @@ export class VagabondChatCard {
           item: weapon,
           title: `${weapon.name} Attack`,
           rollData: attackResult,
-          tags,
+          tags: [...tags, ...extraTags],
+          metadata: extraMetadata,
           propertyDetails,
           damageRoll, // Now correctly populated for hits/crits
           damageFormula: adjustedDamageFormula, // Die-size-adjusted formula for manual roll button
@@ -824,7 +826,7 @@ export class VagabondChatCard {
       return result;
   }
 
-  static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = []) {
+  static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = [], extraMetadata = [], extraTags = []) {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState } = spellCastResult;
 
       const tags = [];
@@ -890,7 +892,8 @@ export class VagabondChatCard {
       const result = await this.createActionCard({
           actor, item: spell, title: spell.name,
           rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
-          tags,
+          tags: [...tags, ...extraTags],
+          metadata: extraMetadata,
           damageRoll,
           damageType: spell.system.damageType,
           description: spell.system.formatDescription(spell.system.description),  // Format for countdown dice triggers
