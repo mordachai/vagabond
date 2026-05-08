@@ -539,7 +539,7 @@
     font-size: 0.95rem;
 
     strong {
-      color: $c-dark;
+      color: $c-text-1;
       font-weight: 700;
     }
 
@@ -558,7 +558,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: $c-red;
-  border: 1px solid #ccc;
+  border: 1px solid var(--vagabond-c-faint);
   border-radius: 3px;
   text-align: center;
 
@@ -952,6 +952,17 @@
   }
 }
 
+// Dark-mode-safe selects within the class item content
+.class-item-content {
+  select {
+    background: var(--vagabond-c-input-bg);
+    color: var(--vagabond-c-text-primary);
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 3px;
+    padding: 2px 4px;
+  }
+}
+
 // Grant Tag (for ancestry/class config)
 .grant-tag {
   display: inline-flex;
@@ -979,7 +990,7 @@
   
   .grant-tag-label {
     margin-right: 4px;
-    color: $c-dark;
+    color: $c-text-1;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -1071,12 +1082,8 @@
 .trait-accordion {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--vagabond-c-surface);
   overflow: visible;
-
-  &[open] {
-    background: rgba(255, 255, 255, 0.8);
-  }
 }
 
 .accordion-summary {
@@ -1229,7 +1236,8 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 3px;
     font-size: 0.9em;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--vagabond-c-input-bg);
+    color: var(--vagabond-c-text-primary);
     box-sizing: border-box;
 
     &:focus {
@@ -1305,7 +1313,7 @@
   border-radius: 4px;
   padding: 6px 8px;
   margin-bottom: 5px;
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--vagabond-c-surface);
 
   .choice-group-header {
     display: flex;
@@ -1417,6 +1425,8 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
       border-radius: 3px;
       font-size: 0.9em;
+      background: var(--vagabond-c-input-bg);
+      color: var(--vagabond-c-text-primary);
 
       &:focus {
         outline: none;

@@ -42,6 +42,8 @@
   --vagabond-img-trained: url('../assets/images/sheets/trained.svg');
   --vagabond-img-untrained: url('../assets/images/sheets/untrained.svg');
   --vagabond-inventory-blend-hover: multiply;
+  --vagabond-c-input-bg: rgba(255, 255, 255, 0.8);
+  --vagabond-c-surface: rgba(255, 255, 255, 0.35);
 }
 
 // Target both application and interface themes (Foundry v13)
@@ -92,6 +94,8 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-title1: rgb(0,0,0);
   --vagabond-c-title2: rgb(255,255,255);
   --vagabond-inventory-blend-hover: normal;
+  --vagabond-c-input-bg: rgba(15, 20, 28, 0.85);
+  --vagabond-c-surface: rgba(255, 255, 255, 0.05);
 }
 
 $c-title-1: var(--vagabond-c-title1);

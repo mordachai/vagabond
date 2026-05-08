@@ -290,7 +290,7 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       }
     ]
@@ -312,22 +312,22 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       },
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -343,7 +343,7 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.universalDamageBonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-2'
       }
     ]
@@ -357,7 +357,7 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.incomingHealingModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-2'
       }
     ]
@@ -371,12 +371,12 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -390,17 +390,17 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -415,17 +415,17 @@ VAGABOND.statusEffectDefinitions = [
       // Same as Vulnerable
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -439,7 +439,7 @@ VAGABOND.statusEffectDefinitions = [
     changes: [
       {
         key: 'system.defenderStatusModifiers.attackersAreBlinded',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'true' // Note: Must be string for Active Effects
       }
     ]
@@ -454,22 +454,22 @@ VAGABOND.statusEffectDefinitions = [
       // Vulnerable + Speed = 0
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       },
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -492,34 +492,34 @@ VAGABOND.statusEffectDefinitions = [
       // Auto-fail Might/Dex
       {
         key: 'system.autoFailStats',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: 'might'
       },
       {
         key: 'system.autoFailStats',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: 'dexterity'
       },
       // Speed = 0
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       },
       // Vulnerable effects
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -534,32 +534,32 @@ VAGABOND.statusEffectDefinitions = [
       // Same as Incapacitated (already includes Speed = 0)
       {
         key: 'system.autoFailStats',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: 'might'
       },
       {
         key: 'system.autoFailStats',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: 'dexterity'
       },
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       },
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]
@@ -574,38 +574,38 @@ VAGABOND.statusEffectDefinitions = [
       // All Incapacitated effects
       {
         key: 'system.autoFailStats',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: 'might'
       },
       {
         key: 'system.autoFailStats',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: 'dexterity'
       },
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       },
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       // Plus: Close attacks auto-crit
       {
         key: 'system.defenderStatusModifiers.closeAttacksAutoCrit',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'true' // Note: Must be string for Active Effects
       }
     ]
@@ -620,29 +620,29 @@ VAGABOND.statusEffectDefinitions = [
       // Auto-fail ALL rolls (new field)
       {
         key: 'system.autoFailAllRolls',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'true'
       },
       // Speed = 0
       {
         key: 'system.speed.bonus',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+        type: "add",
         value: '-999'
       },
       // Vulnerable effects
       {
         key: 'system.favorHinder',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'hinder'
       },
       {
         key: 'system.incomingAttacksModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       },
       {
         key: 'system.outgoingSavesModifier',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
+        type: "override",
         value: 'favor'
       }
     ]

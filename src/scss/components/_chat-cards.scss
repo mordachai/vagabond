@@ -167,10 +167,15 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
                 .template-trigger {
                     cursor: pointer;
-                    text-decoration: underline dotted; /* Optional visual cue */
+                    text-decoration: underline dotted;
                 }
                 .template-trigger:hover {
-                    color: $c-damage; /* Or your highlight color */
+                    color: $c-damage;
+                }
+                .template-trigger.active {
+                    color: $c-damage;
+                    text-decoration: underline solid;
+                    font-weight: bold;
                 }
 
                 /* The Slash Separator // */

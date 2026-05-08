@@ -1361,11 +1361,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
                 name: `${createdPerk.name}`,
                 icon: createdPerk.img,
                 origin: createdPerk.uuid,
-                changes: [{
+                system: { changes: [{
                   key: targetField,
-                  mode: config.effectMode || CONST.ACTIVE_EFFECT_MODES.ADD,
+                  type: config.effectType ?? config.effectMode ?? "add",
                   value: config.effectValue || '1',
-                }],
+                }] },
                 flags: { vagabond: { applicationMode: 'permanent' } },
               }]);
             }

@@ -1,10 +1,13 @@
 /**
- * Manages creation and previewing of measured templates for Vagabond.
+ * Manages creation and previewing of spell area regions for Vagabond.
+ * Uses Scene Regions (v14) instead of MeasuredTemplates (removed in v14).
  */
 export class VagabondMeasureTemplates {
   constructor() {
-    // Stores active preview template IDs keyed by "${actorId}-${itemId}"
+    // Stores active preview Region IDs keyed by "${actorId}-${itemId}"
     this.activePreviews = new Map();
+    // Stores chat-card Region IDs keyed by message ID
+    this.chatRegions = new Map();
   }
 
   /* -------------------------------------------- */
@@ -12,88 +15,61 @@ export class VagabondMeasureTemplates {
   /* -------------------------------------------- */
 
   /**
-   * Updates (or creates) a preview template for a specific spell/item.
+   * Updates (or creates) a preview region for a specific spell/item.
    * @param {Actor} actor - The actor casting the spell.
    * @param {string} itemId - The item ID.
    * @param {string} deliveryType - The delivery type (e.g. 'cone', 'aura').
    * @param {number} distance - The distance in feet.
    */
   async updatePreview(actor, itemId, deliveryType, distance) {
-    // 1. Cleanup existing preview for this item
     await this.clearPreview(actor.id, itemId);
 
     if (!deliveryType || !distance) return;
 
-    // 2. Get the token (Caster)
     const token = actor.token?.object || actor.getActiveTokens()[0];
     if (!token) {
       ui.notifications.warn("No token found for this actor on the current scene.");
       return;
     }
 
-    // 3. Calculate centroid from current targets
     const targetArray = Array.from(game.user.targets);
-    let centroid = null;
-    if (targetArray.length > 0) {
-      centroid = this._calculateTargetCentroid(targetArray);
-    }
+    const centroid = targetArray.length > 0 ? this._calculateTargetCentroid(targetArray) : null;
 
-    // 4. Construct Data
-    const templateData = this._constructTemplateData({
-      type: deliveryType,
-      distance: distance,
-      token: token,
-      targets: game.user.targets,
-      centroid: centroid
-    });
+    const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid });
+    if (!regionData) return;
 
-    if (!templateData) return;
+    regionData.flags = { vagabond: { isPreview: true, actorId: actor.id, itemId } };
 
-    // 5. Create the Template
-    // Flag it so we know it's a Vagabond preview
-    templateData.flags = { 
-      vagabond: { 
-        isPreview: true, 
-        actorId: actor.id, 
-        itemId: itemId 
-      } 
-    };
-
-    const doc = await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateData]);
-
-    // 6. Track the ID
-    if (doc && doc[0]) {
-      this.activePreviews.set(`${actor.id}-${itemId}`, doc[0].id);
+    const docs = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
+    if (docs?.[0]) {
+      this.activePreviews.set(`${actor.id}-${itemId}`, docs[0].id);
     }
   }
 
   /**
-   * Removes the preview template for a specific item.
-   * @param {string} actorId 
-   * @param {string} itemId 
+   * Removes the preview region for a specific item.
+   * @param {string} actorId
+   * @param {string} itemId
    */
   async clearPreview(actorId, itemId) {
     const key = `${actorId}-${itemId}`;
-    const templateId = this.activePreviews.get(key);
-    
-    if (templateId) {
-      const template = canvas.scene.templates.get(templateId);
-      if (template) {
-        await template.delete();
-      }
+    const regionId = this.activePreviews.get(key);
+    if (regionId) {
+      const region = canvas.scene?.regions?.get(regionId);
+      if (region) await region.delete();
       this.activePreviews.delete(key);
     }
   }
 
   /**
    * Clears all active previews for a specific actor (used when closing sheet).
-   * @param {string} actorId 
+   * @param {string} actorId
    */
   async clearActorPreviews(actorId) {
-    for (const [key, templateId] of this.activePreviews.entries()) {
+    for (const [key, regionId] of this.activePreviews.entries()) {
       if (key.startsWith(`${actorId}-`)) {
-        const template = canvas.scene.templates.get(templateId);
-        if (template) await template.delete();
+        const region = canvas.scene?.regions?.get(regionId);
+        if (region) await region.delete();
         this.activePreviews.delete(key);
       }
     }
@@ -104,69 +80,71 @@ export class VagabondMeasureTemplates {
   /* -------------------------------------------- */
 
   /**
-   * Creates a template from Chat Card metadata.
+   * Toggles a region from Chat Card metadata.
+   * If a region already exists for this message, it is deleted; otherwise one is created.
    * @param {string} deliveryType
    * @param {string} deliveryText
    * @param {ChatMessage} message
+   * @returns {Promise<boolean>} true if a region was created, false if one was removed
    */
   async fromChat(deliveryType, deliveryText, message) {
-    // 1. Parse Distance
+    const messageId = message.id;
+
+    // Toggle off: remove existing region for this message
+    if (this.chatRegions.has(messageId)) {
+      const regionId = this.chatRegions.get(messageId);
+      const region = canvas.scene?.regions?.get(regionId);
+      if (region) await region.delete();
+      this.chatRegions.delete(messageId);
+      return false;
+    }
+
     const distanceMatch = deliveryText.match(/(\d+)'/);
     if (!distanceMatch) {
       ui.notifications.warn('Could not parse template distance from delivery text.');
-      return;
+      return false;
     }
     const distance = parseInt(distanceMatch[1], 10);
 
-    // 2. Get Caster Token
     const speaker = message.speaker;
     let casterToken = null;
     if (speaker?.token) casterToken = canvas.tokens.get(speaker.token);
     if (!casterToken && speaker?.actor) {
-        const actor = game.actors.get(speaker.actor);
-        casterToken = actor?.getActiveTokens()[0];
+      const actor = game.actors.get(speaker.actor);
+      casterToken = actor?.getActiveTokens()[0];
     }
 
-    // 3. Get stored targets from message flags and resolve to tokens
     const storedTargets = message.flags?.vagabond?.targetsAtRollTime || [];
     const resolvedTargets = [];
-
     for (const targetData of storedTargets) {
-      // Check if target is on current scene
       if (targetData.sceneId !== canvas.scene?.id) continue;
-
-      // Get token from current scene
       const token = canvas.tokens.get(targetData.tokenId);
-      if (token) {
-        resolvedTargets.push(token);
-      }
+      if (token) resolvedTargets.push(token);
     }
 
-    // 4. Calculate centroid if we have multiple targets
-    let centroid = null;
-    if (resolvedTargets.length > 0) {
-      centroid = this._calculateTargetCentroid(resolvedTargets);
-    }
+    const centroid = resolvedTargets.length > 0 ? this._calculateTargetCentroid(resolvedTargets) : null;
 
-    // 5. Construct Data with centroid
-    const templateData = this._constructTemplateData({
+    const regionData = this._constructRegionData({
       type: deliveryType,
-      distance: distance,
+      distance,
       token: casterToken,
-      targets: game.user.targets, // Still pass for fallback
-      centroid: centroid
+      targets: game.user.targets,
+      centroid
     });
 
-    if (templateData) {
-      templateData.flags = {
+    if (regionData) {
+      regionData.flags = {
         vagabond: {
-          deliveryType: deliveryType,
-          deliveryText: deliveryText,
-          targetsAtRollTime: storedTargets // Preserve stored targets
+          deliveryType,
+          deliveryText,
+          targetsAtRollTime: storedTargets
         }
       };
-      await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateData]);
+      const docs = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
+      if (docs?.[0]) this.chatRegions.set(messageId, docs[0].id);
+      return true;
     }
+    return false;
   }
 
   /* -------------------------------------------- */
@@ -174,134 +152,127 @@ export class VagabondMeasureTemplates {
   /* -------------------------------------------- */
 
   /**
-   * Calculate the geometric centroid (midpoint) of multiple targets
-   * @param {Array} targets - Array of Token objects
-   * @returns {Object|null} {x, y} coordinates of centroid, or null if no targets
+   * Calculate the geometric centroid of multiple targets.
+   * @param {Token[]} targets
+   * @returns {{x: number, y: number}|null}
    */
   _calculateTargetCentroid(targets) {
-    if (!targets || targets.length === 0) return null;
-
-    // Sum all x and y coordinates
+    if (!targets?.length) return null;
     const sum = targets.reduce((acc, token) => {
       acc.x += token.center.x;
       acc.y += token.center.y;
       return acc;
     }, { x: 0, y: 0 });
-
-    // Return average (centroid)
-    return {
-      x: sum.x / targets.length,
-      y: sum.y / targets.length
-    };
+    return { x: sum.x / targets.length, y: sum.y / targets.length };
   }
 
   /**
-   * Generates the MeasuredTemplateDocument data.
-   * @param {Object} params
-   * @param {string} params.type - Delivery type (cone, line, etc.)
-   * @param {number} params.distance - Distance in feet
-   * @param {Token} params.token - The caster token
-   * @param {UserTargets} params.targets - The user's targets
-   * @param {Object} params.centroid - Optional precalculated centroid {x, y}
-   * @returns {Object|null} Template data
+   * Builds Region document data for the given spell area type.
+   * Shape field names follow the v14 RegionDocument schema (circle, cone, line, rectangle).
+   * @param {object} params
+   * @param {string} params.type       - Delivery type (aura, cone, line, cube, sphere)
+   * @param {number} params.distance   - Distance in feet
+   * @param {Token}  params.token      - The caster token
+   * @param {*}      params.targets    - The user's current targets (UserTargets or array)
+   * @param {{x,y}}  params.centroid   - Optional precalculated centroid
+   * @returns {object|null}            - Region creation data, or null on failure
    */
-  _constructTemplateData({ type, distance, token, targets, centroid = null }) {
-    if (!token && ['cone','line','aura'].includes(type)) {
-       ui.notifications.warn('Could not determine origin point (Caster Token) for template.');
-       return null;
+  _constructRegionData({ type, distance, token, targets, centroid = null }) {
+    if (!token && ['cone', 'line', 'aura'].includes(type)) {
+      ui.notifications.warn('Could not determine origin point (caster token) for area.');
+      return null;
     }
 
-    const targetToken = targets?.first();
+    // pixel-per-foot conversion
+    const distancePixels = canvas.grid.size / canvas.scene.grid.distance;
+    const radiusPixels = distance * distancePixels;
 
-    const templateData = {
-      t: '',
-      distance: distance,
-      fillColor: game.user.color || '#FF0000',
-      direction: 0,
-      x: 0,
-      y: 0
-    };
-
-    // Use centroid for positioning if available, otherwise fall back to first target
+    const targetToken = targets?.first?.() ?? null;
     const destinationPoint = centroid || (targetToken ? targetToken.center : null);
+
+    let shape;
+    let name;
 
     switch (type.toLowerCase()) {
       case 'aura':
-        // Aura remains centered on caster (unchanged)
-        templateData.t = 'circle';
-        templateData.x = token.center.x;
-        templateData.y = token.center.y;
+        name = 'Aura';
+        shape = { type: 'circle', x: token.center.x, y: token.center.y, radius: radiusPixels };
         break;
 
-      case 'cone':
-        templateData.t = 'cone';
-        templateData.angle = 90;
-        templateData.x = token.center.x;
-        templateData.y = token.center.y;
-
-        // Use centroid or first target for direction
+      case 'cone': {
+        let rotation = token.document.rotation || 0;
         if (destinationPoint) {
           const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
-          templateData.direction = Math.toDegrees(ray.angle);
-        } else {
-          templateData.direction = token.document.rotation || 0;
+          rotation = Math.toDegrees(ray.angle);
         }
+        name = 'Cone';
+        shape = { type: 'cone', x: token.center.x, y: token.center.y, radius: radiusPixels, angle: 90, rotation, curvature: 'round' };
         break;
+      }
 
-      case 'line':
-        templateData.t = 'ray';
-        templateData.width = canvas.scene.grid.distance; // usually 5ft width
-        templateData.x = token.center.x;
-        templateData.y = token.center.y;
-
-        // Use centroid or first target for direction
-        if (destinationPoint) {
-          const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
-          templateData.direction = Math.toDegrees(ray.angle);
-        } else {
-          templateData.direction = token.document.rotation || 0;
-        }
-        break;
-
-      case 'cube':
-        // Require either centroid or target for positioning
+      case 'line': {
         if (!destinationPoint) {
-          ui.notifications.warn(`Please target a token to place the ${type}.`);
+          ui.notifications.warn('Please target a token to place the line.');
           return null;
         }
-        templateData.t = 'rect';
-
-        // Cube logic: position so centroid is at the center of the rectangle
-        const sideLength = distance;
-        templateData.distance = sideLength * Math.sqrt(2); // Hypotenuse
-        templateData.direction = 45;
-
-        const gridPixels = canvas.grid.size;
-        const sceneGridDist = canvas.scene.grid.distance;
-        const sideLengthPixels = (sideLength / sceneGridDist) * gridPixels;
-
-        // Center the cube on the destination point (centroid or target)
-        templateData.x = destinationPoint.x - (sideLengthPixels / 2);
-        templateData.y = destinationPoint.y - (sideLengthPixels / 2);
+        const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
+        const rotation = Math.toDegrees(ray.angle);
+        const widthPixels = canvas.scene.grid.distance * distancePixels;
+        name = 'Line';
+        // v14 Region shape type for rays is "line" (not "ray")
+        shape = { type: 'line', x: token.center.x, y: token.center.y, length: radiusPixels, width: widthPixels, rotation };
         break;
+      }
 
-      case 'sphere':
-        // Require either centroid or target for positioning
+      case 'cube': {
         if (!destinationPoint) {
-          ui.notifications.warn(`Please target a token to place the ${type}.`);
+          ui.notifications.warn('Please target a token to place the cube.');
           return null;
         }
-        templateData.t = 'circle';
-        // Center on destination point (centroid or target)
-        templateData.x = destinationPoint.x;
-        templateData.y = destinationPoint.y;
+        const sidePixels = (distance / canvas.scene.grid.distance) * canvas.grid.size;
+        name = 'Cube';
+        shape = {
+          type: 'rectangle',
+          x: destinationPoint.x - sidePixels / 2,
+          y: destinationPoint.y - sidePixels / 2,
+          width: sidePixels,
+          height: sidePixels,
+          anchorX: 0,
+          anchorY: 0,
+          rotation: 0
+        };
         break;
+      }
+
+      case 'sphere': {
+        if (!destinationPoint) {
+          ui.notifications.warn('Please target a token to place the sphere.');
+          return null;
+        }
+        name = 'Sphere';
+        shape = { type: 'circle', x: destinationPoint.x, y: destinationPoint.y, radius: radiusPixels };
+        break;
+      }
 
       default:
-        ui.notifications.warn(`Template creation not supported: ${type}`);
+        ui.notifications.warn(`Area creation not supported: ${type}`);
         return null;
     }
 
-    return templateData;
+    return {
+      name,
+      color: game.user.color?.toString() ?? '#FF0000',
+      shapes: [shape],
+      elevation: { bottom: null, top: null },
+      levels: [],
+      restriction: { enabled: false, type: 'move', priority: 0 },
+      attachment: { token: null },
+      behaviors: [],
+      visibility: CONST.REGION_VISIBILITY.ALWAYS,
+      highlightMode: 'coverage',
+      displayMeasurements: true,
+      hidden: false,
+      locked: false,
+    };
   }
 }
