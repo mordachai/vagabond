@@ -1,0 +1,27 @@
+{
+  "name": "✨ Relic Powers",
+  "_id": "vacatrelic00fold",
+  "type": "ActiveEffect",
+  "sorting": "a",
+  "sort": 700,
+  "flags": {
+    "vagabond": {
+      "category": "relic"
+    }
+  },
+  "folder": null,
+  "color": null,
+  "description": "",
+  "_key": "!folders!vacatrelic00fold",
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "name": "Paralyzed",
+  "_id": "paralyzed04ba6s1",
+  "img": "icons/svg/paralysis.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.autoFailStats",
+        "type": "add",
+        "value": "might",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.autoFailStats",
+        "type": "add",
+        "value": "dexterity",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.speed.bonus",
+        "type": "add",
+        "value": "-999",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.favorHinder",
+        "type": "override",
+        "value": "hinder",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.incomingAttacksModifier",
+        "type": "override",
+        "value": "favor",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.outgoingSavesModifier",
+        "type": "override",
+        "value": "favor",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>Incapacitated + Speed = 0.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [
+    "paralyzed"
+  ],
+  "showIcon": 2,
+  "folder": "vacatconditifold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "paralyzed",
+      "automation": "fully_automated"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!paralyzed04ba6s1"
+}

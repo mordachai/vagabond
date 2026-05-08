@@ -1,0 +1,51 @@
+{
+  "name": "+1 Weapon Damage",
+  "_id": "weapon1weax0qg4u",
+  "img": "icons/svg/sword.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.universalWeaponDamageBonus",
+        "type": "add",
+        "value": "1",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>+1 flat damage bonus to weapon attacks.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 0,
+  "folder": "vacatweapon0fold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "plus-1-weapon-damage"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!weapon1weax0qg4u"
+}

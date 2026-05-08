@@ -1,0 +1,27 @@
+{
+  "name": "🛡️ Armor Properties",
+  "_id": "vacatarmor00fold",
+  "type": "ActiveEffect",
+  "sorting": "a",
+  "sort": 500,
+  "flags": {
+    "vagabond": {
+      "category": "armor"
+    }
+  },
+  "folder": null,
+  "color": null,
+  "description": "",
+  "_key": "!folders!vacatarmor00fold",
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  }
+}

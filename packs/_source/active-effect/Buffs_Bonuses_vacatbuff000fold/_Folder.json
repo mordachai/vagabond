@@ -1,0 +1,27 @@
+{
+  "name": "🟢 Buffs & Bonuses",
+  "_id": "vacatbuff000fold",
+  "type": "ActiveEffect",
+  "sorting": "a",
+  "sort": 200,
+  "flags": {
+    "vagabond": {
+      "category": "buff"
+    }
+  },
+  "folder": null,
+  "color": null,
+  "description": "",
+  "_key": "!folders!vacatbuff000fold",
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  }
+}

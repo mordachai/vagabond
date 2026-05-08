@@ -1,0 +1,51 @@
+{
+  "name": "Reason -1",
+  "_id": "reason1000esxiaz",
+  "img": "icons/svg/downgrade.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.stats.reason.bonus",
+        "type": "add",
+        "value": "-1",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>-1 penalty to Reason.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 0,
+  "folder": "vacatdebuff0fold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "reason-minus-1"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!reason1000esxiaz"
+}

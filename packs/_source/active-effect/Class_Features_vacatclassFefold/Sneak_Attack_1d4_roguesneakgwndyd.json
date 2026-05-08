@@ -1,0 +1,51 @@
+{
+  "name": "Sneak Attack (1d4)",
+  "_id": "roguesneakgwndyd",
+  "img": "icons/svg/mystery-man.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.sneakAttackDice",
+        "type": "override",
+        "value": "1",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>Deal +1d4 damage on Favored weapon attacks.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 0,
+  "folder": "vacatclassFefold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "sneak-attack-1d4"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!roguesneakgwndyd"
+}

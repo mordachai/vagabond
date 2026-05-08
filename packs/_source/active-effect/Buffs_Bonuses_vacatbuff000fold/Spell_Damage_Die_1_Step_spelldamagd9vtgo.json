@@ -1,0 +1,51 @@
+{
+  "name": "Spell Damage Die +1 Step",
+  "_id": "spelldamagd9vtgo",
+  "img": "icons/svg/fire.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.spellDamageDieSizeBonus",
+        "type": "add",
+        "value": "1",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>Spell damage die increases by one step.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 0,
+  "folder": "vacatbuff000fold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "spell-damage-die-plus-1-step"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!spelldamagd9vtgo"
+}

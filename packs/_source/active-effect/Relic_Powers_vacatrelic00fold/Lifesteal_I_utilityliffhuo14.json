@@ -1,0 +1,51 @@
+{
+  "name": "Lifesteal I",
+  "_id": "utilityliffhuo14",
+  "img": "icons/svg/blood.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.onKillHealDice",
+        "type": "add",
+        "value": "1d8",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>On kill: wielder heals for 1d8 HP. Automated — heals attacker when target reaches 0 HP.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 2,
+  "folder": "vacatrelic00fold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "lifesteal-i"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!utilityliffhuo14"
+}
