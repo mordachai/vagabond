@@ -494,7 +494,7 @@ export class SpellHandler {
     let _spellExtraTags = [];
     let _spellDifficulty = difficulty;
 
-    if (spell.system.noRollRequired || event.altKey) {
+    if (spell.system.noRollRequired || state.deliveryType.toUpperCase() === 'GLYPH' || state.deliveryType.toUpperCase() === 'IMBUE' || event.altKey) {
       // BYPASS PATH: No roll needed (noRollRequired flag or Alt+Click), always succeeds, no criticals
       isSuccess = true;
       isCritical = false;
@@ -622,7 +622,7 @@ export class SpellHandler {
 
     // Determine if we should auto-roll damage (skip if 0 dice = effect-only cast)
     let damageRoll = null;
-    if (spell.system.damageType !== '-' && state.damageDice > 0) {
+    if (spell.system.damageType !== '-' && state.damageDice > 0 && state.deliveryType.toUpperCase() !== 'GLYPH' && state.deliveryType.toUpperCase() !== 'IMBUE') {
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         damageRoll = await VagabondDamageHelper.rollSpellDamage(
           this.actor,
