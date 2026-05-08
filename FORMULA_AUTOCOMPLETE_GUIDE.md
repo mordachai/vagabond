@@ -270,28 +270,53 @@ Result: −1 at L1, −2 at L4, −3 at L8.
 
 ### Barbarian — Berserk Bonuses
 
-While Berserk with Light or No Armor: attack dice one size larger, dice can explode, reduce incoming damage by 1 per die.
+While Berserk with Light or No Armor: attack dice one size larger, dice explode on max, +1 flat per die rolled, reduce incoming damage by 1 per die.
 
 These AEs live on the **Barbarian class item** (permanent mode). They use `@statuses.berserk` so they only activate while the character has the Berserk status — non-Barbarians never get these bonuses even if they also go Berserk.
 
-All with Change Mode **Add**:
+| Attribute Key | Mode | Effect Value | Result |
+| --- | --- | --- | --- |
+| `system.meleeDamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` | Melee die one size larger (d6→d8) |
+| `system.brawlDamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` | Brawl die one size larger |
+| `system.finesseDamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` | Finesse die one size larger |
+| `system.bonuses.globalExplode` | Add | `(@statuses.berserk) ? 1 : 0` | Enables exploding dice on all attacks |
+| `system.bonuses.globalExplodeValues` | Override | `max` | Dice explode on their max face (d6 on 6, d8 on 8, etc.) |
+| `system.bonusPerDamageDie` | Add | `(@statuses.berserk) ? 1 : 0` | +1 flat damage per die rolled (including explosions) |
+| `system.incomingDamageReductionPerDie` | Add | `(@statuses.berserk) ? 1 : 0` | −1 per incoming die (light/no armor enforced in code) |
 
-| Attribute Key | Effect Value | Result |
-|---|---|---|
-| `system.meleeDamageDieSizeBonus` | `(@statuses.berserk) ? 2 : 0` | Melee die one size larger |
-| `system.rangedDamageDieSizeBonus` | `(@statuses.berserk) ? 2 : 0` | Ranged die one size larger |
-| `system.brawlDamageDieSizeBonus` | `(@statuses.berserk) ? 2 : 0` | Brawl die one size larger |
-| `system.finesseDamageDieSizeBonus` | `(@statuses.berserk) ? 2 : 0` | Finesse die one size larger |
-| `system.bonuses.globalExplode` | `(@statuses.berserk) ? 1 : 0` | All attack dice can explode |
-| `system.incomingDamageReductionPerDie` | `(@statuses.berserk) ? 1 : 0` | −1 per incoming die (light/no armor enforced in code) |
+> **`globalExplodeValues = max`** is a special keyword — it resolves to the die's own max face at roll time, so it works correctly regardless of weapon die size.
+> The Override on `globalExplodeValues` is permanent but harmless — it has no effect while `globalExplode` is 0.
 
-For exploding dice to work you also need to set the explode trigger values. Add one more change:
+### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
-| Attribute Key                        | Mode     | Effect Value                          |
-| ------------------------------------ | -------- | ------------------------------------- |
-| `system.bonuses.globalExplodeValues` | Override | `6` (or whatever the max die face is) |
+Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.
 
-This Override is permanent but harmless — it only has any effect when `globalExplode` is true.
+| Attribute Key | Mode | Effect Value | Result |
+| --- | --- | --- | --- |
+| `system.bonusPerDamageDie` | Add | `1` | +1 per die on all damage rolls |
+| `system.bonusPerDamageDieDoubleVsBeingTypes` | Add | `Undead` | Doubles the per-die bonus vs Undead targets |
+| `system.bonusPerDamageDieDoubleVsBeingTypes` | Add | `Hellspawn` | Also doubles vs Hellspawn (add one entry per type) |
+
+> Each `bonusPerDamageDieDoubleVsBeingTypes` entry is an exact being type name (must match config). Add multiple entries with separate ADD changes — one type per line.
+> Doubling is checked against the **target's** being type when the attack is made.
+
+### Save vs Status Bonus
+
+Grants a bonus to saves against specific conditions. Each entry is a string in the format `statusId:saveKey:value`.
+
+| Attribute Key | Mode | Effect Value | Result |
+| --- | --- | --- | --- |
+| `system.saveVsStatusBonuses` | Add | `frightened:will:2` | +2 to Will saves to resist/end Frightened |
+| `system.saveVsStatusBonuses` | Add | `poisoned:any:1` | +1 to all saves vs Poisoned |
+| `system.saveVsStatusBonuses` | Add | `frightened:any:@lvl` | +Level to all saves vs Frightened |
+
+> **Format:** `statusId:saveKey:value`
+>
+> - `statusId` — any status ID (e.g. `frightened`, `poisoned`, `burning`, `dazed`)
+> - `saveKey` — `will`, `reflex`, `endure`, or `any` (matches all save types)
+> - `value` — a number or a formula using `@` variables (e.g. `@lvl`, `floor(@lvl / 2)`)
+>
+> Add multiple entries with separate ADD changes. Each entry is evaluated independently at roll time.
 
 ---
 
