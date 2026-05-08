@@ -369,6 +369,21 @@ export class VagabondDamageHelper {
       }
     }
 
+    // Apply flat bonus per damage die (counted post-explosion)
+    const typePerDieBonus = equipmentType === 'weapon' ? (actor.system.weaponBonusPerDamageDie || 0)
+      : equipmentType === 'spell' ? (actor.system.spellBonusPerDamageDie || 0)
+      : equipmentType === 'alchemical' ? (actor.system.alchemicalBonusPerDamageDie || 0)
+      : 0;
+    const universalPerDieBonus = actor.system.bonusPerDamageDie || 0;
+    const totalPerDieBonus = typePerDieBonus + universalPerDieBonus;
+    if (totalPerDieBonus !== 0) {
+      const diceCount = this._countRolledDice(damageRoll);
+      damageRoll._perDieBonusPerDie = totalPerDieBonus;
+      damageRoll._perDieBonusDiceCount = diceCount;
+      damageRoll._perDieBonusTotal = totalPerDieBonus * diceCount;
+      damageRoll._total += damageRoll._perDieBonusTotal;
+    }
+
     damageRoll._weaknessPreRolled = weaknessPreRolled;
 
     // Determine damage type
@@ -594,6 +609,16 @@ export class VagabondDamageHelper {
     const explodeValues = this._getExplodeValues(spell, actor);
     if (explodeValues) {
       await this._manuallyExplodeDice(roll, explodeValues);
+    }
+
+    // Apply flat bonus per damage die (counted post-explosion)
+    const spellPerDieBonus = (actor.system.spellBonusPerDamageDie || 0) + (actor.system.bonusPerDamageDie || 0);
+    if (spellPerDieBonus !== 0) {
+      const diceCount = this._countRolledDice(roll);
+      roll._perDieBonusPerDie = spellPerDieBonus;
+      roll._perDieBonusDiceCount = diceCount;
+      roll._perDieBonusTotal = spellPerDieBonus * diceCount;
+      roll._total += roll._perDieBonusTotal;
     }
 
     roll._weaknessPreRolled = weaknessPreRolled;
@@ -1112,6 +1137,22 @@ export class VagabondDamageHelper {
       total += match[1] ? parseInt(match[1]) : 1;
     }
     return total;
+  }
+
+  /**
+   * Count the total number of active die results in an evaluated roll, including explosion dice.
+   * @param {Roll} roll - An already-evaluated roll
+   * @returns {number}
+   */
+  static _countRolledDice(roll) {
+    let count = 0;
+    for (const term of roll.terms) {
+      if (term.constructor.name !== 'Die') continue;
+      for (const result of (term.results ?? [])) {
+        if (result.active !== false) count++;
+      }
+    }
+    return count;
   }
 
   static calculateFinalDamage(actor, damage, damageType, attackingWeapon = null) {

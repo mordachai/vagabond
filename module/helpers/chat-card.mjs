@@ -231,6 +231,18 @@ export class VagabondChatCard {
         previousOperator = '';
       }
     }
+
+    // Per-die bonus badge (flat total applied after rolling, including explosions)
+    if (isDamage && roll._perDieBonusTotal) {
+      const total = roll._perDieBonusTotal;
+      const perDie = roll._perDieBonusPerDie;
+      const count = roll._perDieBonusDiceCount;
+      const sign = total >= 0 ? '+' : '';
+      const perDieSign = perDie >= 0 ? '+' : '';
+      const dieWord = count === 1 ? 'die' : 'dice';
+      parts.push(`<span class="roll-modifier per-die-bonus" title="${perDieSign}${perDie} per ${dieWord} × ${count} ${dieWord}"><i class="fas fa-dice-d6"></i>${sign}${total}</span>`);
+    }
+
     return parts.join(' ');
   }
 

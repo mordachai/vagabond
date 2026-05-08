@@ -247,6 +247,24 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
+    // Per-die flat bonuses (applied after rolling, scales with dice count including explosions)
+    schema.bonusPerDamageDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Bonus Per Damage Die (All)", hint: "Flat bonus added per damage die rolled (including explosions). Formula-capable." }
+    );
+    schema.weaponBonusPerDamageDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Bonus Per Damage Die (Weapon)", hint: "Flat bonus per weapon damage die (including explosions). Formula-capable." }
+    );
+    schema.spellBonusPerDamageDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Bonus Per Damage Die (Spell)", hint: "Flat bonus per spell damage die (including explosions). Formula-capable." }
+    );
+    schema.alchemicalBonusPerDamageDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Bonus Per Damage Die (Alchemical)", hint: "Flat bonus per alchemical damage die (including explosions). Formula-capable." }
+    );
+
     // --- Specific Damage Die Size Bonuses ---
     schema.meleeDamageDieSizeBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -595,6 +613,12 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalSpellDamageDice = [];
     this.universalAlchemicalDamageDice = [];
 
+    // Reset per-die bonuses
+    this.bonusPerDamageDie = [];
+    this.weaponBonusPerDamageDie = [];
+    this.spellBonusPerDamageDie = [];
+    this.alchemicalBonusPerDamageDie = [];
+
     // Reset specific die size bonuses
     this.meleeDamageDieSizeBonus = [];
     this.rangedDamageDieSizeBonus = [];
@@ -725,6 +749,11 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalWeaponDamageBonus = this._evaluateFormulaField(this.universalWeaponDamageBonus, rollData);
     this.universalSpellDamageBonus = this._evaluateFormulaField(this.universalSpellDamageBonus, rollData);
     this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
+
+    this.bonusPerDamageDie = this._evaluateFormulaField(this.bonusPerDamageDie, rollData);
+    this.weaponBonusPerDamageDie = this._evaluateFormulaField(this.weaponBonusPerDamageDie, rollData);
+    this.spellBonusPerDamageDie = this._evaluateFormulaField(this.spellBonusPerDamageDie, rollData);
+    this.alchemicalBonusPerDamageDie = this._evaluateFormulaField(this.alchemicalBonusPerDamageDie, rollData);
 
     // Weapon property derived totals
     this.cleaveMaxTargets = 2 + this._evaluateFormulaField(this.cleaveTargets, rollData);

@@ -2,6 +2,12 @@
   font-family: $font-primary;
 }
 
+// Firefox clips select values in flex containers; min-width: fit-content prevents this
+.window-app select,
+.application select {
+  min-width: fit-content;
+}
+
 // Make application and header backgrounds transparent for Vagabond sheets
 .vagabond.application {
   background: transparent !important;

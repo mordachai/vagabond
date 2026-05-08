@@ -367,6 +367,11 @@ body[data-theme=dark] #sidebar {
   font-family: "Eskapade", serif;
 }
 
+.window-app select,
+.application select {
+  min-width: fit-content;
+}
+
 .vagabond.application {
   background: transparent !important;
   border: none !important;
@@ -1788,6 +1793,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .damage-dice-list .roll-operator {
   font-size: large;
   color: #fff;
+}
+.damage-dice-list .roll-modifier.per-die-bonus {
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;
+  font-size: 20px;
+  cursor: help;
+}
+.damage-dice-list .roll-modifier.per-die-bonus i {
+  font-size: 12px;
+  margin-right: 2px;
+  vertical-align: middle;
+  opacity: 0.8;
 }
 
 /* Default Wrapper (Base Styles) */
@@ -4415,27 +4432,32 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .tray-zone .tray-item-compact .btn-remove i {
   font-size: 1.1rem;
 }
-.tray-zone .spell-slot.empty {
+.tray-zone .spell-slot.empty,
+.tray-zone .perk-slot.empty {
   background: rgba(200, 200, 200, 0.3);
   border: 2px dashed rgba(0, 0, 0, 0.3);
   justify-content: center;
   cursor: default;
 }
-.tray-zone .spell-slot.empty:hover {
+.tray-zone .spell-slot.empty:hover,
+.tray-zone .perk-slot.empty:hover {
   background: rgba(200, 200, 200, 0.4);
   box-shadow: none;
 }
-.tray-zone .spell-slot.empty .empty-slot-placeholder {
+.tray-zone .spell-slot.empty .empty-slot-placeholder,
+.tray-zone .perk-slot.empty .empty-slot-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
   color: rgba(0, 0, 0, 0.4);
 }
-.tray-zone .spell-slot.empty .empty-slot-placeholder i {
+.tray-zone .spell-slot.empty .empty-slot-placeholder i,
+.tray-zone .perk-slot.empty .empty-slot-placeholder i {
   font-size: 1.2rem;
 }
-.tray-zone .spell-slot.empty .empty-slot-placeholder .empty-slot-text {
+.tray-zone .spell-slot.empty .empty-slot-placeholder .empty-slot-text,
+.tray-zone .perk-slot.empty .empty-slot-placeholder .empty-slot-text {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;

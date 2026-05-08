@@ -265,7 +265,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       // -- Universal Bonuses --
       'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
       'system.universalDamageBonus': 'Universal: All Damage Rolls (Flat Bonus)',
-      'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus)',
+      'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus. e.g. d6, d8, 3d6...)',
 
       // -- Separated Universal Damage Bonuses --
       'system.universalWeaponDamageBonus': 'Universal: Weapon Damage (Flat Bonus)',
@@ -274,6 +274,12 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.universalSpellDamageDice': 'Universal: Spell Damage (Dice Bonus)',
       'system.universalAlchemicalDamageBonus': 'Universal: Alchemical Damage (Flat Bonus)',
       'system.universalAlchemicalDamageDice': 'Universal: Alchemical Damage (Dice Bonus)',
+
+      // -- Per-Die Damage Bonuses (flat bonus × number of dice rolled, including explosions) --
+      'system.bonusPerDamageDie': 'Per-Die: All Damage Rolls (Flat Bonus Per Die Rolled)',
+      'system.weaponBonusPerDamageDie': 'Per-Die: Weapon Damage (Flat Bonus Per Die Rolled)',
+      'system.spellBonusPerDamageDie': 'Per-Die: Spell Damage (Flat Bonus Per Die Rolled)',
+      'system.alchemicalBonusPerDamageDie': 'Per-Die: Alchemical Damage (Flat Bonus Per Die Rolled)',
       
       // -- Specific Die Size Bonuses --
       'system.meleeDamageDieSizeBonus': 'Melee: Damage Die Size Bonus (+2 for d8)',

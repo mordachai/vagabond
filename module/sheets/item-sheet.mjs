@@ -1411,7 +1411,17 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       data.system.levelFeatures = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
     }
 
-    return this._safeUpdate(data);
+    // Return the plain data object — _processSubmitData handles the actual update.
+    return data;
+  }
+
+  /**
+   * Perform the document update with the validated submit data.
+   * Uses the sequential _safeUpdate queue to prevent concurrent write races.
+   * @override
+   */
+  async _processSubmitData(event, form, submitData, options={}) {
+    return this._safeUpdate(submitData, options);
   }
 
     /**
