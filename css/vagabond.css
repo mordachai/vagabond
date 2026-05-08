@@ -2894,10 +2894,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   position: relative;
   z-index: 5;
   background: white;
+  border-radius: 4px;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 4px;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .search-input {
   width: 100%;
@@ -2966,7 +2968,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 6px;
+  justify-content: space-around;
+  gap: 4px;
+  padding: 5px;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .ignore-prereqs-row .ignore-prereq-pill {
   display: inline-flex;

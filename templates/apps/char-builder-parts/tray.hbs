@@ -47,12 +47,7 @@
         {{!-- Items grid (4 columns) --}}
         <div class="tray-items-grid">
             {{#if (eq step 'perks')}}
-                {{#if trayData.isEmpty}}
-                    <div class="tray-empty-message">
-                        <i class="fas fa-arrow-left"></i>
-                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
-                    </div>
-                {{else}}
+                {{#if trayData.perks.length}}
                     {{#each trayData.perks as |item|}}
                         <div class="tray-item-compact {{#if item.isClassPerk}}from-class{{/if}}" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
@@ -69,6 +64,21 @@
                             {{else}}
                                 <i class="fas fa-lock class-perk-lock" title="Granted by class"></i>
                             {{/if}}
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <div class="tray-empty-message">
+                        <i class="fas fa-arrow-left"></i>
+                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                    </div>
+                {{/if}}
+                {{#if (and perkLimit trayData.emptySlots.length)}}
+                    {{#each trayData.emptySlots as |slot|}}
+                        <div class="tray-item-compact perk-slot empty">
+                            <div class="empty-slot-placeholder">
+                                <i class="fas fa-plus-circle"></i>
+                                <span class="empty-slot-text">Empty</span>
+                            </div>
                         </div>
                     {{/each}}
                 {{/if}}
