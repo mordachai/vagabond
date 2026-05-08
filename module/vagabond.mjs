@@ -1596,6 +1596,11 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     return;
   }
 
+  // Hide resource value notes (e.g. "HP: 18 → 16") from non-GM players
+  if (!game.user.isGM) {
+    html.querySelectorAll('.gm-only').forEach(el => el.remove());
+  }
+
   // ---------------------------------------------------------
   // 1. Accordion Toggle Handler (Properties)
   // ---------------------------------------------------------

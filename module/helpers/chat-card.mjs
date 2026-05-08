@@ -1754,7 +1754,7 @@ export class VagabondChatCard {
         </div>`;
 
       if (effective > 0) {
-        calcHTML += `<div class="damage-application-note">damage applied — HP: ${previousValue} → ${newValue}</div>`;
+        calcHTML += `<div class="damage-application-note gm-only">damage applied — HP: ${previousValue} → ${newValue}</div>`;
       } else {
         calcHTML += `<div class="damage-application-note">no damage applied (immune or blocked)</div>`;
       }
