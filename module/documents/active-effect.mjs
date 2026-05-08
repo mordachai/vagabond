@@ -390,7 +390,7 @@ export class VagabondActiveEffect extends ActiveEffect {
     if (actor.type === 'npc' && change.key === 'system.speed.bonus') {
       const npcChange = foundry.utils.deepClone(change);
       npcChange.key = 'system.speed';
-      npcChange.mode = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
+      npcChange.type = "override";
       npcChange.value = '0';
       return super.apply(actor, npcChange);
     }

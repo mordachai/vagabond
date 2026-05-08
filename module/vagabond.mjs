@@ -54,7 +54,7 @@ import { StatusHelper } from './helpers/status-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 
 const collections = foundry.documents.collections;
-const sheets = foundry.appv1.sheets;
+const sheets = foundry.applications.sheets;
 
 /* -------------------------------------------- */
 /*  Game Settings                               */
@@ -651,11 +651,6 @@ Hooks.once('init', function () {
     label: 'VAGABOND.Effect.ConfigSheet'
   });
 
-  // Active Effects are never copied to the Actor,
-  // but will still apply to the Actor from within the Item
-  // if the transfer property on the Active Effect is true.
-  CONFIG.ActiveEffect.legacyTransferral = false;
-
   // Register sheet application classes
   collections.Actors.unregisterSheet('core', sheets.ActorSheet);
 
@@ -1222,7 +1217,7 @@ const FLUKE_REROLL_ENTRY = {
   name: 'Luck Reroll (Fluke)',
   icon: '<i class="fas fa-clover"></i>',
   classes: '',
-  condition: function (li) {
+  visible: function (li) {
     const messageId = li.dataset.messageId;
     const message = game.messages.get(messageId);
     if (!message?.flags?.vagabond?.rerollData) return false;
@@ -1236,11 +1231,11 @@ const FLUKE_REROLL_ENTRY = {
     const pt = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const luckLabel = `${lt} ${pt}`;
     if (currentLuck > 0) {
-      this.name = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
-      this.classes = '';
+      FLUKE_REROLL_ENTRY.name = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
+      FLUKE_REROLL_ENTRY.classes = '';
     } else {
-      this.name = `${flukeLabel} (${luckLabel}: 0/${maxLuck})`;
-      this.classes = 'vagabond-disabled';
+      FLUKE_REROLL_ENTRY.name = `${flukeLabel} (${luckLabel}: 0/${maxLuck})`;
+      FLUKE_REROLL_ENTRY.classes = 'vagabond-disabled';
     }
     return true;
   },
@@ -1345,7 +1340,7 @@ const FLUKE_REROLL_ENTRY = {
 const FORCE_CRIT_ENTRY = {
   name: 'Force Critical',
   icon: '<i class="fas fa-star"></i>',
-  condition: (li) => {
+  visible: (li) => {
     if (!game.user.isGM) return false;
     const message = game.messages.get(li.dataset.messageId);
     return !!message?.flags?.vagabond?.rerollData;
@@ -1988,9 +1983,9 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       if (!deliveryType) return;
 
-      // Call the template manager to create the template from chat
       if (globalThis.vagabond?.managers?.templates) {
-        await globalThis.vagabond.managers.templates.fromChat(deliveryType, deliveryText, message);
+        const created = await globalThis.vagabond.managers.templates.fromChat(deliveryType, deliveryText, message);
+        trigger.classList.toggle('active', created);
       } else {
         console.warn("VagabondSystem | Template manager not found.");
       }

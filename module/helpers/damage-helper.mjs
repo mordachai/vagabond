@@ -2684,7 +2684,7 @@ export class VagabondDamageHelper {
         name: game.i18n.localize(restrainedDef?.name ?? 'VAGABOND.StatusConditions.Restrained'),
         img: restrainedDef?.img ?? 'icons/svg/teleport.svg',
         statuses: ['restrained'],
-        changes: restrainedDef?.changes ?? [],
+        system: { changes: restrainedDef?.changes ?? [] },
         flags: { vagabond: { fromGrapple: true, grappleSourceUuid: sourceActor.uuid } }
       }]);
 
@@ -2705,14 +2705,14 @@ export class VagabondDamageHelper {
         const currentSpeed = sourceActor.system.speed?.base || 25;
         speedChanges.push({
           key: 'system.speed.bonus',
-          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+          type: "add",
           value: String(-Math.floor(currentSpeed / 2))
         });
       } else {
         const currentSpeed = sourceActor.system.speed || 0;
         speedChanges.push({
           key: 'system.speed',
-          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
+          type: "add",
           value: String(-Math.floor(currentSpeed / 2))
         });
       }

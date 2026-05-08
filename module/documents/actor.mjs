@@ -93,8 +93,7 @@ export class VagabondActor extends Actor {
 
   /** @override */
   prepareBaseData() {
-    // Data modifications in this step occur before processing embedded
-    // documents or derived data.
+    super.prepareBaseData(); // resets _completedActiveEffectPhases via Actor._clearData()
   }
 
   /**
@@ -156,8 +155,8 @@ export class VagabondActor extends Actor {
 
     // Apply each effect's changes
     for (const effect of itemEffects) {
-      for (const change of effect.changes) {
-        let { key, mode, value } = change;
+      for (const change of (effect.system?.changes ?? [])) {
+        let { key, type: mode, value } = change;
 
         // IMPORTANT: Active Effect keys are document paths (e.g., "system.critNumber")
         // But rollData is flattened (e.g., "critNumber" at top level)
@@ -183,19 +182,19 @@ export class VagabondActor extends Actor {
 
         // Apply the change based on mode
         switch (mode) {
-          case CONST.ACTIVE_EFFECT_MODES.ADD:
+          case "add":
             target[finalKey] = currentValue + Number(value);
             break;
-          case CONST.ACTIVE_EFFECT_MODES.MULTIPLY:
+          case "multiply":
             target[finalKey] = currentValue * Number(value);
             break;
-          case CONST.ACTIVE_EFFECT_MODES.OVERRIDE:
+          case "override":
             target[finalKey] = Number(value);
             break;
-          case CONST.ACTIVE_EFFECT_MODES.DOWNGRADE:
+          case "downgrade":
             target[finalKey] = Math.min(currentValue, Number(value));
             break;
-          case CONST.ACTIVE_EFFECT_MODES.UPGRADE:
+          case "upgrade":
             target[finalKey] = Math.max(currentValue, Number(value));
             break;
         }

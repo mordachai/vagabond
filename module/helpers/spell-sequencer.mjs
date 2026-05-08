@@ -139,18 +139,19 @@ export class VagabondSpellSequencer {
 
   /**
    * Get the cone direction angle (radians).
-   * Reads from the active MeasuredTemplate if present, otherwise angles toward target centroid.
+   * Reads from the active Region preview if present, otherwise angles toward target centroid.
    * @param {Token} casterToken
    * @param {Token[]} targetTokens
    * @returns {number} angle in degrees (Sequencer uses degrees)
    * @private
    */
   static _getConeDirection(casterToken, targetTokens) {
-    // Try to read from active preview/placed template
-    const template = canvas.templates?.placeables?.find(t =>
-      t.document.getFlag?.('vagabond', 'actorId') === casterToken.actor?.id
+    // Try to read rotation from active preview Region (cone shape stores direction as shape.rotation)
+    const region = canvas.regions?.placeables?.find(r =>
+      r.document.getFlag?.('vagabond', 'actorId') === casterToken.actor?.id
     );
-    if (template?.document?.direction != null) return template.document.direction;
+    const regionRotation = region?.document?.shapes?.[0]?.rotation;
+    if (regionRotation != null) return regionRotation;
 
     // Fall back: angle toward target centroid
     const centroid = this._centroid(targetTokens);

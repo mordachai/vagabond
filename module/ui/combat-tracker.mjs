@@ -183,7 +183,7 @@ export class VagabondCombatTracker {
       {
         name: "VAGABOND.Combat.Context.AddActivation",
         icon: '<i class="fas fa-plus"></i>',
-        condition: game.user.isGM,
+        visible: game.user.isGM,
         callback: li => {
           const element = li instanceof jQuery ? li[0] : li;
           const combatantId = element.dataset.combatantId;
@@ -194,7 +194,7 @@ export class VagabondCombatTracker {
       {
         name: "VAGABOND.Combat.Context.RemoveActivation",
         icon: '<i class="fas fa-minus"></i>',
-        condition: game.user.isGM,
+        visible: game.user.isGM,
         callback: li => {
           const element = li instanceof jQuery ? li[0] : li;
           const combatantId = element.dataset.combatantId;
@@ -205,7 +205,7 @@ export class VagabondCombatTracker {
       {
         name: "VAGABOND.Combat.Context.UndoUse",
         icon: '<i class="fas fa-undo"></i>',
-        condition: game.user.isGM,
+        visible: game.user.isGM,
         callback: li => {
           const element = li instanceof jQuery ? li[0] : li;
           const combatantId = element.dataset.combatantId;
