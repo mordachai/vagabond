@@ -100,7 +100,7 @@
       "BlockDescription": "Roll Endure save. Success ignores one highest damage die. Hindered if Ranged attack.",
       "DodgeDescription": "Roll Reflex save. Success ignores one highest damage die. Hindered if Heavy Armor.",
       "CritDescription": "You aren't affected by what provoked the Save, and can use an Action.",
-      "CritToggleHint": "Click to toggle: Claim Crit Benefit (not affected) vs Keep Luck"
+      "CritToggleHint": "Click to toggle: Extra Damage or Gain Luck Point"
     },
     "AttackTypes": {
       "Melee": "Melee",
@@ -139,7 +139,8 @@
       "Beasts": "Beasts",
       "Outers": "Outers",
       "Primordials": "Primordials",
-      "Undead": "Undead"
+      "Undead": "Undead",
+      "Hellspawn": "Hellspawn"
     },
     "ResourceTypes": {
       "MaxMana": "Max Mana",

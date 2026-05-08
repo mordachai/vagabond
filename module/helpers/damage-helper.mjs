@@ -21,8 +21,8 @@ export class VagabondDamageHelper {
       return roll;
     }
 
-    // Convert explode values to numbers
-    const explodeSet = new Set(explodeValues.map(v => parseInt(v)));
+    const hasMax = explodeValues.includes('max');
+    const numericExplodeValues = explodeValues.filter(v => v !== 'max').map(v => parseInt(v));
     let explosionCount = 0;
 
     // Find all Die terms in the roll
@@ -33,6 +33,9 @@ export class VagabondDamageHelper {
       if (term.constructor.name !== 'Die') continue;
 
       const faces = term.faces;
+      // Build per-term explode set; 'max' resolves to this die's max face
+      const explodeSet = new Set(numericExplodeValues);
+      if (hasMax) explodeSet.add(faces);
       const results = term.results || [];
 
       // Process each result in this die term
@@ -48,7 +51,6 @@ export class VagabondDamageHelper {
           result.exploded = true;
 
           // Roll new dice recursively
-          let previousResult = result;
           let newRoll = result.result;
 
           while (explodeSet.has(newRoll) && explosionCount < maxExplosions) {
@@ -57,19 +59,13 @@ export class VagabondDamageHelper {
             // Roll another die of the same size
             const explosionRoll = Math.floor(Math.random() * faces) + 1;
 
-            // Check if this new roll will also explode
-            const willExplode = explodeSet.has(explosionRoll);
-
             // Add the explosion as a new result
-            const newResult = {
+            results.push({
               result: explosionRoll,
               active: true,
-              exploded: willExplode  // Only mark as exploded if it will cause another explosion
-            };
-            results.push(newResult);
+              exploded: explodeSet.has(explosionRoll)
+            });
 
-            // Update for next iteration
-            previousResult = newResult;
             newRoll = explosionRoll;
           }
         }
@@ -375,7 +371,10 @@ export class VagabondDamageHelper {
       : equipmentType === 'alchemical' ? (actor.system.alchemicalBonusPerDamageDie || 0)
       : 0;
     const universalPerDieBonus = actor.system.bonusPerDamageDie || 0;
-    const totalPerDieBonus = typePerDieBonus + universalPerDieBonus;
+    let totalPerDieBonus = typePerDieBonus + universalPerDieBonus;
+    if (totalPerDieBonus !== 0 && this._shouldDoublePerDieBonus(actor, storedTargetsForWeak)) {
+      totalPerDieBonus *= 2;
+    }
     if (totalPerDieBonus !== 0) {
       const diceCount = this._countRolledDice(damageRoll);
       damageRoll._perDieBonusPerDie = totalPerDieBonus;
@@ -519,12 +518,12 @@ export class VagabondDamageHelper {
       return null;
     }
 
-    // Parse explode values (comma-separated)
+    // Parse explode values (comma-separated); 'max' is a special sentinel meaning the die's max face
     const explodeValues = explodeValuesStr
       .split(',')
-      .map(v => v.trim())
-      .filter(v => v && !isNaN(v))
-      .map(v => parseInt(v));
+      .map(v => v.trim().toLowerCase())
+      .filter(v => v && (v === 'max' || !isNaN(v)))
+      .map(v => v === 'max' ? 'max' : parseInt(v));
 
     return explodeValues.length > 0 ? explodeValues : null;
   }
@@ -612,7 +611,10 @@ export class VagabondDamageHelper {
     }
 
     // Apply flat bonus per damage die (counted post-explosion)
-    const spellPerDieBonus = (actor.system.spellBonusPerDamageDie || 0) + (actor.system.bonusPerDamageDie || 0);
+    let spellPerDieBonus = (actor.system.spellBonusPerDamageDie || 0) + (actor.system.bonusPerDamageDie || 0);
+    if (spellPerDieBonus !== 0 && this._shouldDoublePerDieBonus(actor, targetsAtRollTime)) {
+      spellPerDieBonus *= 2;
+    }
     if (spellPerDieBonus !== 0) {
       const diceCount = this._countRolledDice(roll);
       roll._perDieBonusPerDie = spellPerDieBonus;
@@ -1137,6 +1139,33 @@ export class VagabondDamageHelper {
       total += match[1] ? parseInt(match[1]) : 1;
     }
     return total;
+  }
+
+  /**
+   * Return the beingType string for an actor, normalizing the path difference
+   * between character (system.attributes.beingType) and NPC (system.beingType).
+   * @param {Actor} actor
+   * @returns {string|null}
+   */
+  static _getActorBeingType(actor) {
+    if (!actor) return null;
+    if (actor.type === 'character') return actor.system.attributes?.beingType ?? null;
+    return actor.system.beingType ?? null;
+  }
+
+  /**
+   * Check whether the per-die bonus should be doubled for this roll.
+   * Returns true if any target's beingType is listed in the attacker's
+   * bonusPerDamageDieDoubleVsBeingTypes array.
+   * @param {Actor} attackingActor
+   * @param {Array} storedTargets
+   * @returns {boolean}
+   */
+  static _shouldDoublePerDieBonus(attackingActor, storedTargets) {
+    const doubleVsTypes = attackingActor.system.bonusPerDamageDieDoubleVsBeingTypes;
+    if (!doubleVsTypes || doubleVsTypes.length === 0) return false;
+    const targetActors = this._getTargetActorsFromStored(storedTargets);
+    return targetActors.some(a => doubleVsTypes.includes(this._getActorBeingType(a)));
   }
 
   /**

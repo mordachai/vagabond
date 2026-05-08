@@ -191,7 +191,9 @@ export class StatusHelper {
       // Already favored → stays favored
     }
 
-    const formula = VagabondRollBuilder.buildD20Formula(actor, effectiveFavorHinder);
+    let formula = VagabondRollBuilder.buildD20Formula(actor, effectiveFavorHinder);
+    const statusSaveBonus = VagabondRollBuilder.getSaveVsStatusBonus(actor, entry.statusId, entry.saveType);
+    if (statusSaveBonus !== 0) formula += ` + ${statusSaveBonus}`;
     const roll = await VagabondRollBuilder.evaluateRoll(formula, actor, effectiveFavorHinder);
 
     const difficulty = actor.system.saves?.[entry.saveType]?.difficulty ?? 10;

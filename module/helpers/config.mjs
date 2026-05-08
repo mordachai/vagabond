@@ -109,7 +109,8 @@ VAGABOND.beingTypes = {
   'Beasts': 'VAGABOND.BeingTypes.Beasts',
   'Outers': 'VAGABOND.BeingTypes.Outers',
   'Primordials': 'VAGABOND.BeingTypes.Primordials',
-  'Undead': 'VAGABOND.BeingTypes.Undead'
+  'Undead': 'VAGABOND.BeingTypes.Undead',
+  'Hellspawn': 'VAGABOND.BeingTypes.Hellspawn'
 };
 
 /**

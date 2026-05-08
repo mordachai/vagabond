@@ -218,6 +218,18 @@ export default class VagabondNPC extends VagabondActorBase {
       }
     );
 
+    // Per-die doubling: being types whose presence among targets doubles bonusPerDamageDie
+    schema.bonusPerDamageDieDoubleVsBeingTypes = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Per-Die Bonus: Double vs Being Types" }
+    );
+
+    // Save vs status bonuses — format: 'statusId:saveKey:value', saveKey can be 'any'
+    schema.saveVsStatusBonuses = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Save vs Status Bonuses" }
+    );
+
     // Per-die flat bonuses (applied after rolling, scales with dice count including explosions)
     schema.bonusPerDamageDie = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -439,6 +451,10 @@ export default class VagabondNPC extends VagabondActorBase {
     this.universalWeaponDamageDice = [];
     this.universalSpellDamageDice = [];
     this.universalAlchemicalDamageDice = [];
+
+    // Reset per-die doubling and save-vs-status bonuses (raw string arrays — parsed at roll time)
+    this.bonusPerDamageDieDoubleVsBeingTypes = [];
+    this.saveVsStatusBonuses = [];
 
     // Reset per-die bonuses
     this.bonusPerDamageDie = [];

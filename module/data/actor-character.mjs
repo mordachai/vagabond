@@ -247,6 +247,19 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
+    // Per-die doubling: being types whose presence among targets doubles bonusPerDamageDie
+    schema.bonusPerDamageDieDoubleVsBeingTypes = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Per-Die Bonus: Double vs Being Types", hint: "Each entry is a being type (e.g. Undead, Hellspawn). If any target matches, the per-die bonus is doubled." }
+    );
+
+    // Save vs status bonuses — format: 'statusId:saveKey:value', saveKey can be 'any'
+    // Example: 'frightened:will:1' adds +1 to Will saves against Frightened
+    schema.saveVsStatusBonuses = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Save vs Status Bonuses", hint: "Format: 'statusId:saveKey:value'. Use 'any' as saveKey to apply to all saves vs that status. Value supports formulas." }
+    );
+
     // Per-die flat bonuses (applied after rolling, scales with dice count including explosions)
     schema.bonusPerDamageDie = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -612,6 +625,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalWeaponDamageDice = [];
     this.universalSpellDamageDice = [];
     this.universalAlchemicalDamageDice = [];
+
+    // Reset per-die doubling and save-vs-status bonuses (raw string arrays — parsed at roll time)
+    this.bonusPerDamageDieDoubleVsBeingTypes = [];
+    this.saveVsStatusBonuses = [];
 
     // Reset per-die bonuses
     this.bonusPerDamageDie = [];

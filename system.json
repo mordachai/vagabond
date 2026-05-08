@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.4.1",
+  "version": "5.5.0",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -240,6 +240,19 @@
         },
         "private": false,
         "flags": {}
+    },
+    {
+        "name": "active-effects",
+        "label": "Active Effects",
+        "system": "vagabond",
+        "path": "packs/characters/active-effect.db",
+        "type": "ActiveEffect",
+        "ownership": {
+          "PLAYER": "OBSERVER",
+          "ASSISTANT": "OWNER"
+        },
+        "private": false,
+        "flags": {}
     }
   ],
   "packFolders": [
@@ -282,6 +295,14 @@
                   "packs": [
                       "bestiary",
                       "humanlike"
+                  ]
+              },
+              {
+                  "name": "Active Effects",
+                  "sorting": "m",
+                  "color": "#000000",
+                  "packs": [
+                      "active-effects"
                   ]
               }
           ]

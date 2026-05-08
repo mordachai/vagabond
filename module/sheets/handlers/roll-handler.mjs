@@ -85,10 +85,22 @@ export class RollHandler {
       _rollDifficulty = _preCtx.difficulty;
       const _effectiveFavorHinder = _preCtx.favorHinder ?? favorHinder;
 
+      // For saves: apply per-status bonuses for every status currently active on the actor
+      let saveVsStatusBonus = 0;
+      if (rollType === 'save' && rollKey) {
+        for (const statusId of (this.actor.statuses ?? [])) {
+          saveVsStatusBonus += VagabondRollBuilder.getSaveVsStatusBonus(this.actor, statusId, rollKey);
+        }
+      }
+      const _extraFormula = saveVsStatusBonus !== 0 ? ` + ${saveVsStatusBonus}` : '';
+      const _baseFormula = saveVsStatusBonus !== 0
+        ? (CONFIG.VAGABOND?.homebrew?.dice?.baseCheck ?? '1d20') + _extraFormula
+        : null;
+
       const roll = await VagabondRollBuilder.buildAndEvaluateD20(
         this.actor,
-        _effectiveFavorHinder
-        // baseFormula intentionally omitted — uses homebrew dice.baseCheck config
+        _effectiveFavorHinder,
+        _baseFormula ?? undefined
       );
 
       // Compute crit for post-hook (mirrors _checkRoll logic)

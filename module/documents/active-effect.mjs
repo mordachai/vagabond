@@ -280,6 +280,16 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.weaponBonusPerDamageDie': 'Per-Die: Weapon Damage (Flat Bonus Per Die Rolled)',
       'system.spellBonusPerDamageDie': 'Per-Die: Spell Damage (Flat Bonus Per Die Rolled)',
       'system.alchemicalBonusPerDamageDie': 'Per-Die: Alchemical Damage (Flat Bonus Per Die Rolled)',
+
+      // -- Per-Die Doubling vs Being Types --
+      // Each ADD entry is a being type name (e.g. "Undead", "Hellspawn").
+      // If any current target matches, the per-die bonus is doubled.
+      'system.bonusPerDamageDieDoubleVsBeingTypes': 'Per-Die: Double Bonus vs Being Type (ADD one type per entry, e.g. Undead)',
+
+      // -- Save vs Status Bonuses --
+      // Each ADD entry uses format "statusId:saveKey:value", e.g. "frightened:will:1"
+      // Use "any" as saveKey to apply to all save types against that status.
+      'system.saveVsStatusBonuses': 'Save vs Status Bonus (ADD entry: "statusId:saveKey:value", e.g. frightened:will:1)',
       
       // -- Specific Die Size Bonuses --
       'system.meleeDamageDieSizeBonus': 'Melee: Damage Die Size Bonus (+2 for d8)',

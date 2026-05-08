@@ -9,6 +9,45 @@ export class VagabondRollBuilder {
    * @param {string} baseFormula - Base formula (default 'd20')
    * @returns {string} Complete roll formula
    */
+  /**
+   * Sum all saveVsStatusBonuses entries on an actor that match the given status + save type.
+   *
+   * Entry format: "statusId:saveKey:formula"
+   *   - statusId  — e.g. "frightened", "poisoned"
+   *   - saveKey   — e.g. "will", "reflex", or "any" (matches every save type)
+   *   - formula   — a number or @-reference expression, e.g. "1" or "@attributes.level.value"
+   *
+   * @param {Actor}  actor
+   * @param {string} statusId  The status being saved against
+   * @param {string} saveKey   The save type being rolled
+   * @returns {number}
+   */
+  static getSaveVsStatusBonus(actor, statusId, saveKey) {
+    const entries = actor.system?.saveVsStatusBonuses;
+    if (!entries || entries.length === 0) return 0;
+    const rollData = actor.getRollData();
+    let total = 0;
+    for (const entry of entries) {
+      const first = entry.indexOf(':');
+      if (first === -1) continue;
+      const second = entry.indexOf(':', first + 1);
+      if (second === -1) continue;
+      const entryStatus  = entry.slice(0, first);
+      const entrySaveKey = entry.slice(first + 1, second);
+      const formula      = entry.slice(second + 1).trim();
+      if (entryStatus !== statusId) continue;
+      if (entrySaveKey !== 'any' && entrySaveKey !== saveKey) continue;
+      try {
+        const subbed = formula.replace(/@([A-Za-z0-9._]+)/g,
+          (_, path) => foundry.utils.getProperty(rollData, path) ?? 0);
+        total += Roll.safeEval(subbed) || 0;
+      } catch {
+        total += Number(formula) || 0;
+      }
+    }
+    return total;
+  }
+
   static buildD20Formula(actor, favorHinder, baseFormula = null) {
     const dice = CONFIG.VAGABOND?.homebrew?.dice;
     let formula = baseFormula ?? dice?.baseCheck ?? '1d20';
