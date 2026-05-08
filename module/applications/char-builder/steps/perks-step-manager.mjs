@@ -228,20 +228,18 @@ export class PerksStepManager extends BaseStepManager {
           const amount = trait.perkAmount || 0;
           const allowedPerks = trait.allowedPerks || [];
 
-          // Check if this is a guaranteed perk (auto-granted)
-          const isGuaranteed = amount > 0 && allowedPerks.length > 0 && amount >= allowedPerks.length;
-
           if (amount > 0) {
             // Create one grant entry per amount
             for (let i = 0; i < amount; i++) {
+              const slotIsPredetermined = allowedPerks.length > 0 && i < allowedPerks.length;
               grants.push({
                 id: `ancestry-${trait.name}-${i}`,
                 source: 'ancestry',
                 sourceName: ancestry.name,
                 featureName: trait.name,
-                allowedPerks: allowedPerks,
-                isGuaranteed,
-                fulfilled: isGuaranteed ? allowedPerks[i] || allowedPerks[0] : null
+                allowedPerks: slotIsPredetermined ? allowedPerks : [],
+                isGuaranteed: slotIsPredetermined,
+                fulfilled: slotIsPredetermined ? allowedPerks[i] : null
               });
             }
           }
@@ -261,20 +259,18 @@ export class PerksStepManager extends BaseStepManager {
           const amount = feature.perkAmount || 0;
           const allowedPerks = feature.allowedPerks || [];
 
-          // Check if this is a guaranteed perk (auto-granted)
-          const isGuaranteed = amount > 0 && allowedPerks.length > 0 && amount >= allowedPerks.length;
-
           if (amount > 0) {
             // Create one grant entry per amount
             for (let i = 0; i < amount; i++) {
+              const slotIsPredetermined = allowedPerks.length > 0 && i < allowedPerks.length;
               grants.push({
                 id: `class-${feature.name}-${i}`,
                 source: 'class',
                 sourceName: classItem.name,
                 featureName: feature.name,
-                allowedPerks: allowedPerks,
-                isGuaranteed,
-                fulfilled: isGuaranteed ? allowedPerks[i] || allowedPerks[0] : null
+                allowedPerks: slotIsPredetermined ? allowedPerks : [],
+                isGuaranteed: slotIsPredetermined,
+                fulfilled: slotIsPredetermined ? allowedPerks[i] : null
               });
             }
           }
@@ -845,8 +841,11 @@ export class PerksStepManager extends BaseStepManager {
       }
     }
 
+    const emptySlotCount = grants.filter(g => !g.fulfilled).length;
+
     return {
       perks: trayItems,
+      emptySlots: Array(emptySlotCount).fill({}),
       isEmpty: trayItems.length === 0
     };
   }

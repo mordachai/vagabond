@@ -144,10 +144,12 @@
         position: relative;
         z-index: 5;
         background: white;
+        border-radius: 4px;
         margin-bottom: 10px;
         display: flex;
         flex-direction: column;
         gap: 8px;
+        padding: 4px;
 
         .search-input {
           width: 100%;
@@ -225,7 +227,9 @@
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            gap: 6px;
+            justify-content: space-around;
+            gap: 4px;
+            padding: 5px;
           }
 
           .ignore-prereq-pill {
@@ -1952,8 +1956,9 @@
     }
   }
 
-  // Empty spell slots
-  .spell-slot.empty {
+  // Empty spell/perk slots
+  .spell-slot.empty,
+  .perk-slot.empty {
     background: rgba(200, 200, 200, 0.3);
     border: 2px dashed rgba(0, 0, 0, 0.3);
     justify-content: center;
