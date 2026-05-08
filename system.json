@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.3.2",
+  "version": "5.4.0",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -59,7 +59,7 @@
   ],
   "compatibility": {
     "minimum": "13",
-    "verified": "13.351"
+    "verified": "14"
   },
   "esmodules": ["module/vagabond.mjs"],
   "styles": ["css/vagabond.css"],
