@@ -1,0 +1,58 @@
+{
+  "name": "lv2 - Spell-Slinger",
+  "_id": "sorcerersppyd0tm",
+  "img": "icons/svg/fire.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.spellCritBonus",
+        "type": "add",
+        "value": "(@lvl >= 2) ? -1 : 0",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.spellDamageDieSizeBonus",
+        "type": "add",
+        "value": "(@lvl >= 2) ? 2 : 0",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>Sorcerer Lv2: -1 spell crit threshold and +2 spell damage die size steps.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 0,
+  "folder": "vacatclassFefold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "lv2-spell-slinger"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!sorcerersppyd0tm"
+}

@@ -1,0 +1,51 @@
+{
+  "name": "+3 Attack Dmg",
+  "_id": "bonusweapo6cqbi9",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.universalWeaponDamageBonus",
+        "type": "add",
+        "value": "3",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>Enchanted weapon: +3 damage to weapon attacks.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 2,
+  "folder": "vacatrelic00fold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "plus-3-attack-dmg"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!bonusweapo6cqbi9"
+}

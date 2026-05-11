@@ -1,0 +1,61 @@
+{
+  "name": "Confused",
+  "_id": "confused00fgtfks",
+  "img": "icons/svg/daze.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.favorHinder",
+        "type": "override",
+        "value": "hinder",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.outgoingSavesModifier",
+        "type": "override",
+        "value": "favor",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>Checks and Saves have Hinder. Saves against its Actions have Favor.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [
+    "confused"
+  ],
+  "showIcon": 2,
+  "folder": "vacatconditifold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "confused",
+      "automation": "fully_automated"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!confused00fgtfks"
+}
