@@ -104,22 +104,68 @@ export class VagabondSpellSequencer {
   }
 
   /**
-   * Calculate the display scale for an area animation.
-   * @param {number} distanceFt
-   * @param {number} nativePx
-   * @param {string} scaleMode - 'radius' | 'length' | 'diameter' | 'fixed'
-   * @returns {number} scale multiplier
+   * Token center coords. Uses Token.center (canonical since v10);
+   * falls back to document size × grid size for v14 compatibility when
+   * the placeable getter is missing or returns undefined.
+   * @param {Token} t
+   * @returns {{x:number, y:number}}
    * @private
    */
-  static _calcScale(distanceFt, nativePx, scaleMode) {
-    if (scaleMode === 'fixed' || !distanceFt || !nativePx) return 1.0;
-    const pxPerFt = canvas.grid.size / (canvas.grid.distance || 5);
-    switch (scaleMode) {
-      case 'radius':   return (distanceFt * 2 * pxPerFt) / nativePx;
-      case 'length':
-      case 'diameter': return (distanceFt * pxPerFt) / nativePx;
-      default:         return 1.0;
+  static _center(t) {
+    const c = t?.center;
+    if (c && Number.isFinite(c.x) && Number.isFinite(c.y)) return { x: c.x, y: c.y };
+    const gs = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
+    const w = (t?.document?.width ?? 1) * gs;
+    const h = (t?.document?.height ?? 1) * gs;
+    return { x: (t?.x ?? 0) + w / 2, y: (t?.y ?? 0) + h / 2 };
+  }
+
+  /**
+   * Apply size or scale to an area effect. Computes display dimensions in
+   * raw pixels (distanceFt × pxPerFt × cfg.scale multiplier) and calls
+   * .size({width, height}). Avoids Sequencer's .size({gridUnits:true}) form,
+   * which is broken in v14 for radius/diameter/length effects. 'fixed' mode
+   * keeps cfg.scale via .scale().
+   * @param {EffectSection} fx
+   * @param {number} distanceFt
+   * @param {object} cfg
+   * @returns {EffectSection}
+   * @private
+   */
+  static _applyAreaSize(fx, distanceFt, cfg) {
+    const mode = cfg.scaleMode;
+    if (mode === 'fixed' || !distanceFt) return fx.scale(cfg.scale ?? 1);
+    const gridPx = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
+    const gridDist = canvas.dimensions?.distance || canvas.scene?.grid?.distance || 5;
+    const pxPerFt = gridPx / gridDist;
+    const mult = cfg.scale ?? 1; // per-effect tweak multiplier (texture padding etc.)
+    if (mode === 'radius') {
+      const diameterPx = distanceFt * 2 * pxPerFt * mult;
+      return fx.size({ width: diameterPx, height: diameterPx });
     }
+    if (mode === 'diameter') {
+      const sidePx = distanceFt * pxPerFt * mult;
+      return fx.size({ width: sidePx, height: sidePx });
+    }
+    if (mode === 'length') {
+      const lenPx = distanceFt * pxPerFt * mult;
+      return fx.size({ width: lenPx });
+    }
+    return fx.scale(mult);
+  }
+
+  /**
+   * Apply optional opacity from cfg. PIXI v8 in Foundry v14 made ADD/SCREEN
+   * blend modes noticeably brighter; per-effect cfg.opacity dampens this
+   * without touching blend modes.
+   * @param {EffectSection} fx
+   * @param {object} cfg
+   * @returns {EffectSection}
+   * @private
+   */
+  static _applyOpacity(fx, cfg) {
+    if (cfg?.opacity != null) return fx.opacity(cfg.opacity);
+    return fx;
   }
 
   /**
@@ -131,10 +177,12 @@ export class VagabondSpellSequencer {
   static _centroid(tokens) {
     const n = tokens.length;
     if (!n) return null;
-    return {
-      x: tokens.reduce((s, t) => s + t.x + (t.w ?? 0) / 2, 0) / n,
-      y: tokens.reduce((s, t) => s + t.y + (t.h ?? 0) / 2, 0) / n,
-    };
+    let sx = 0, sy = 0;
+    for (const t of tokens) {
+      const c = this._center(t);
+      sx += c.x; sy += c.y;
+    }
+    return { x: sx / n, y: sy / n };
   }
 
   /**
@@ -156,10 +204,7 @@ export class VagabondSpellSequencer {
     // Fall back: angle toward target centroid
     const centroid = this._centroid(targetTokens);
     if (!centroid) return 0;
-    const casterCenter = {
-      x: casterToken.x + (casterToken.w ?? 0) / 2,
-      y: casterToken.y + (casterToken.h ?? 0) / 2,
-    };
+    const casterCenter = this._center(casterToken);
     return Math.toDegrees(Math.atan2(centroid.y - casterCenter.y, centroid.x - casterCenter.x));
   }
 
@@ -173,12 +218,13 @@ export class VagabondSpellSequencer {
   static _addCastAnim(seq, school, casterToken) {
     const cfg = this._getConfig().castAnims?.[school];
     if (!cfg?.file) return;
-    seq.effect()
+    let fx = seq.effect()
       .file(cfg.file)
       .atLocation(casterToken)
       .scale(cfg.scale ?? 1.0)
       .duration(cfg.duration ?? 600)
       .waitUntilFinished(-200); // slight overlap into area anim
+    this._applyOpacity(fx, cfg);
   }
 
   /**
@@ -201,7 +247,8 @@ export class VagabondSpellSequencer {
     // Y shrinks with distance^0.73, independent of nativePx (which only affects X via stretchTo).
     // Floor at 3 grids so very short beams don't appear oversized.
     // At 3 grids: ~46% of cfg.scale.  At 20 grids: ~11%.
-    const gridsAway = Math.max(3, dist / canvas.grid.size);
+    const gridPx = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
+    const gridsAway = Math.max(3, dist / gridPx);
     const scaleY = (cfg.scale ?? 1) / Math.pow(gridsAway, 0.73);
 
     let fx = seq.effect()
@@ -212,6 +259,7 @@ export class VagabondSpellSequencer {
       .duration(cfg.duration);
 
     if (cfg.template) fx = fx.template(cfg.template);
+    this._applyOpacity(fx, cfg);
     return fx;
   }
 
@@ -231,141 +279,151 @@ export class VagabondSpellSequencer {
     const cfg = schoolAnims[deliveryType];
     if (!cfg?.file) return;
 
-    const scale = this._calcScale(distanceFt, cfg.nativePx, cfg.scaleMode);
-
-    // Sequencer's stretchTo rejects Token placeables in Foundry v13 —
-    // always use explicit {x, y} center coordinates for both ends.
-    const center = t => ({ x: t.x + (t.w ?? 0) / 2, y: t.y + (t.h ?? 0) / 2 });
-
     // ── Beam-mode patterns: fixed Y-scale, X scales with distance ────────────
     if (cfg.scaleMode === 'chain') {
       const nodes = [casterToken, ...targetTokens];
       for (let i = 0; i < nodes.length - 1; i++) {
-        this._beamEffect(seq, cfg, center(nodes[i]), center(nodes[i + 1]))
+        this._beamEffect(seq, cfg, this._center(nodes[i]), this._center(nodes[i + 1]))
           .waitUntilFinished(-100);
       }
       return;
     }
     if (cfg.scaleMode === 'multiray') {
       for (const target of targetTokens) {
-        this._beamEffect(seq, cfg, center(casterToken), center(target));
+        this._beamEffect(seq, cfg, this._center(casterToken), this._center(target));
       }
       return;
     }
 
     switch (deliveryType) {
-      case 'aura':
-        seq.effect()
+      case 'aura': {
+        // attachTo: effect follows caster during duration; centers on token
+        // regardless of token size. atLocation(tokenPlaceable) + .size(gridUnits)
+        // misbehaves in Sequencer v14 (size collapses to token bounds).
+        let fx = seq.effect()
           .file(cfg.file)
-          .atLocation(casterToken)
-          .scale(scale)
+          .attachTo(casterToken, { align: 'center', edge: 'on' })
           .duration(cfg.duration);
+        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyOpacity(fx, cfg);
         break;
+      }
 
-      case 'cone':
-        seq.effect()
+      case 'cone': {
+        let fx = seq.effect()
           .file(cfg.file)
           .atLocation(casterToken)
           .rotate(-this._getConeDirection(casterToken, targetTokens))
-          .scale(scale)
           .anchor({ x: 0, y: 0.5 })
           .duration(cfg.duration);
+        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyOpacity(fx, cfg);
         break;
+      }
 
       case 'sphere': {
-        const centroid = this._centroid(targetTokens) ?? center(casterToken);
-        seq.effect()
+        const centroid = this._centroid(targetTokens) ?? this._center(casterToken);
+        let fx = seq.effect()
           .file(cfg.file)
           .atLocation(centroid)
-          .scale(scale)
           .duration(cfg.duration);
+        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyOpacity(fx, cfg);
         break;
       }
 
       case 'line': {
-        const cCx = casterToken.x + (casterToken.w ?? 0) / 2;
-        const cCy = casterToken.y + (casterToken.h ?? 0) / 2;
+        const srcCenter = this._center(casterToken);
         let lineAngle = 0;
-        // Fire toward centroid of all targets (matches how templates are aimed)
         const lineCentroid = this._centroid(targetTokens);
         if (lineCentroid) {
-          lineAngle = Math.atan2(lineCentroid.y - cCy, lineCentroid.x - cCx);
+          lineAngle = Math.atan2(lineCentroid.y - srcCenter.y, lineCentroid.x - srcCenter.x);
         }
-        const pxPerFt = canvas.grid.size / (canvas.grid.distance || 5);
+        const gridPx = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
+        const gridDist = canvas.dimensions?.distance || canvas.scene?.grid?.distance || 5;
+        const pxPerFt = gridPx / gridDist;
         const endpoint = {
-          x: cCx + Math.cos(lineAngle) * distanceFt * pxPerFt,
-          y: cCy + Math.sin(lineAngle) * distanceFt * pxPerFt,
+          x: srcCenter.x + Math.cos(lineAngle) * distanceFt * pxPerFt,
+          y: srcCenter.y + Math.sin(lineAngle) * distanceFt * pxPerFt,
         };
-        this._beamEffect(seq, cfg, { x: cCx, y: cCy }, endpoint);
+        this._beamEffect(seq, cfg, srcCenter, endpoint);
         break;
       }
 
       case 'cube': {
-        const cubeCentroid = this._centroid(targetTokens) ?? center(casterToken);
-        seq.effect()
+        const cubeCentroid = this._centroid(targetTokens) ?? this._center(casterToken);
+        let fx = seq.effect()
           .file(cfg.file)
           .atLocation(cubeCentroid)
-          .scale(scale)
           .duration(cfg.duration);
+        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyOpacity(fx, cfg);
         break;
       }
 
       case 'glyph': {
-        const glyphCenter = this._centroid(targetTokens) ?? center(casterToken);
-        seq.effect()
+        const glyphCenter = this._centroid(targetTokens) ?? this._center(casterToken);
+        let fx = seq.effect()
           .file(cfg.file)
           .atLocation(glyphCenter)
-          .scale(scale)
           .duration(cfg.duration);
+        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyOpacity(fx, cfg);
         break;
       }
 
       case 'touch':
         // Beam from caster to each target, then impact at each target
         for (const target of targetTokens) {
-          seq.effect()
+          let beam = seq.effect()
             .file(cfg.file)
-            .atLocation(center(casterToken))
-            .stretchTo(center(target))
+            .atLocation(this._center(casterToken))
+            .stretchTo(this._center(target))
             .duration(cfg.duration);
-          seq.effect()
+          this._applyOpacity(beam, cfg);
+          let impact = seq.effect()
             .file(cfg.file)
-            .atLocation(center(target))
-            .scale(scale)
+            .atLocation(this._center(target))
             .duration(cfg.duration);
+          this._applyAreaSize(impact, distanceFt, cfg);
+          this._applyOpacity(impact, cfg);
         }
         break;
 
       case 'imbue':
         // Glow/fixed on each target (use scaleMode 'chain' or 'multiray' for beam behavior)
         for (const target of targetTokens) {
-          seq.effect()
+          let fx = seq.effect()
             .file(cfg.file)
             .atLocation(target)
-            .scale(scale)
             .duration(cfg.duration);
+          this._applyAreaSize(fx, distanceFt, cfg);
+          this._applyOpacity(fx, cfg);
         }
         break;
 
       case 'remote':
         // Impact on each target
         for (const target of targetTokens) {
-          seq.effect()
+          let fx = seq.effect()
             .file(cfg.file)
             .atLocation(target)
-            .scale(scale)
             .duration(cfg.duration);
+          this._applyAreaSize(fx, distanceFt, cfg);
+          this._applyOpacity(fx, cfg);
         }
         break;
 
-      default:
+      default: {
         // Unknown delivery type — play at caster location as fallback
-        seq.effect()
+        let fx = seq.effect()
           .file(cfg.file)
           .atLocation(casterToken)
-          .scale(scale)
           .duration(cfg.duration);
+        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyOpacity(fx, cfg);
         break;
+      }
     }
   }
 
