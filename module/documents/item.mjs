@@ -1,5 +1,6 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
+import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -732,6 +733,8 @@ export class VagabondItem extends Item {
 
     // Roll damage (without explosion modifiers in formula)
     const roll = new Roll(damageFormula, actor.getRollData());
+    const weaponDamageType = this.system.currentDamageType || this.system.damageType;
+    VagabondDiceAppearance.applyDamageColorset(roll, weaponDamageType);
     await roll.evaluate();
 
     // Apply manual explosions if enabled

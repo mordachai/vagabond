@@ -155,8 +155,8 @@ export class VagabondActor extends Actor {
 
     // Apply each effect's changes
     for (const effect of itemEffects) {
-      for (const change of (effect.system?.changes ?? [])) {
-        let { key, type: mode, value } = change;
+      for (const change of effect.changes) {
+        let { key, mode, value } = change;
 
         // IMPORTANT: Active Effect keys are document paths (e.g., "system.critNumber")
         // But rollData is flattened (e.g., "critNumber" at top level)
@@ -182,19 +182,19 @@ export class VagabondActor extends Actor {
 
         // Apply the change based on mode
         switch (mode) {
-          case "add":
+          case CONST.ACTIVE_EFFECT_MODES.ADD:
             target[finalKey] = currentValue + Number(value);
             break;
-          case "multiply":
+          case CONST.ACTIVE_EFFECT_MODES.MULTIPLY:
             target[finalKey] = currentValue * Number(value);
             break;
-          case "override":
+          case CONST.ACTIVE_EFFECT_MODES.OVERRIDE:
             target[finalKey] = Number(value);
             break;
-          case "downgrade":
+          case CONST.ACTIVE_EFFECT_MODES.DOWNGRADE:
             target[finalKey] = Math.min(currentValue, Number(value));
             break;
-          case "upgrade":
+          case CONST.ACTIVE_EFFECT_MODES.UPGRADE:
             target[finalKey] = Math.max(currentValue, Number(value));
             break;
         }

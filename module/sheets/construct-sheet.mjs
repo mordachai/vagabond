@@ -2,6 +2,7 @@ import { VagabondActorSheet } from './actor-sheet.mjs';
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
+import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 
 /**
  * Construct actor sheet.
@@ -518,6 +519,7 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       const { VagabondChatCard } = globalThis.vagabond.utils;
       const base = part.system.damageFormula || '1d6';
       const damageRoll = new Roll(base);
+      VagabondDiceAppearance.applyDamageColorset(damageRoll, part.system.damageType);
       await damageRoll.evaluate();
 
       const targetsAtRollTime = TargetHelper.captureCurrentTargets();
@@ -553,6 +555,7 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       const { VagabondChatCard } = globalThis.vagabond.utils;
       const base = part.system.damageFormula || '1d6';
       const damageRoll = new Roll(base);
+      VagabondDiceAppearance.applyDamageColorset(damageRoll, part.system.damageType);
       await damageRoll.evaluate();
 
       const targetsAtRollTime = TargetHelper.captureCurrentTargets();
@@ -612,6 +615,7 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       const base = part.system.damageFormula || '1d6';
       const damageFormula = isCritical ? `(${base}) + (${base})` : base;
       damageRoll = new Roll(damageFormula);
+      VagabondDiceAppearance.applyDamageColorset(damageRoll, part.system.damageType);
       await damageRoll.evaluate();
     }
 

@@ -994,6 +994,42 @@ VAGABOND.damageTypeIcons = {
 };
 
 /**
+ * Dice So Nice per-damage-type appearance overrides.
+ * Applied to every DiceTerm in a damage roll via VagabondDiceAppearance.applyDamageColorset().
+ *
+ * - colorset : DSN colorset name (built-in or registered)
+ * - texture  : DSN texture name (optional)
+ * - material : DSN material name (optional)
+ *
+ * Elemental types reuse DSN's built-in damage-type colorsets which already ship
+ * with coordinated texture/material. Non-elemental types combine a color theme
+ * with explicit texture + material.
+ * @type {Object}
+ */
+VAGABOND.damageTypeDsnAppearance = {
+  // Elemental — reuse DSN built-in colorsets (each ships its own texture/material)
+  acid:     { custom: true, foreground: '#fcfed7', background: '#026c1e', outline: '#00ce18', edge: '#16c606', texture: 'watercolor', material: 'glass' },
+  fire:     { custom: true, foreground: '#ffffff', background: '#ff3313', outline: '#b21504', edge: '#7d0606', texture: 'watercolor', material: 'glass' },
+  shock:    { custom: true, foreground: '#ffffff', background: '#5a3be7', outline: '#0438b2', edge: '#061e7d', texture: 'watercolor', material: 'glass' },
+  poison:   { custom: true, foreground: '#c1f8ff', background: '#d6fa0b', outline: '#04b20a', edge: '#107d06', texture: 'watercolor', material: 'glass' },
+  cold:     { colorset: 'cold' },
+  necrotic: { colorset: 'necrotic' },
+  psychic:  { colorset: 'psychic' },
+  // Non-elemental — `custom` flag triggers VagabondDiceAppearance to register a
+  // bundled colorset (vagabond_dmg_<key>) at diceSoNiceReady. Per-term colorset
+  // alone does NOT honor texture/material — they must be baked into the
+  // colorset definition itself.
+  blunt:    { custom: true, foreground: '#ffffff', background: '#6b7280', outline: '#4b5563', edge: '#4b5563', texture: 'watercolor', material: 'glass' },
+  piercing: { custom: true, foreground: '#ffffff', background: '#ef4444', outline: '#b91c1c', edge: '#b91c1c', texture: 'watercolor', material: 'glass' },
+  slashing: { custom: true, foreground: '#ffffff', background: '#ec4899', outline: '#9d174d', edge: '#9d174d', texture: 'lava',       material: 'glass' },
+  physical: { custom: true, foreground: '#ffffff', background: '#6b7280', outline: '#1f2937', edge: '#1f2937', texture: 'stars',      material: 'stone' },
+  magical:  { custom: true, foreground: '#ffffff', background: '#ec4899', outline: '#9d174d', edge: '#9d174d', texture: 'watercolor', material: 'glass' },
+  healing:  { custom: true, foreground: '#ffffff', background: '#22c55e', outline: '#15803d', edge: '#15803d', texture: 'watercolor', material: 'glass' },
+  recover:  { custom: true, foreground: '#ffffff', background: '#3b82f6', outline: '#1d4ed8', edge: '#1d4ed8', texture: 'watercolor', material: 'glass' },
+  recharge: { custom: true, foreground: '#1c1917', background: '#fbbf24', outline: '#b45309', edge: '#b45309', texture: 'watercolor', material: 'glass' }
+};
+
+/**
  * Fx (Effect) Icon Configuration
  * You can use either a Font Awesome icon class OR an image path
  *

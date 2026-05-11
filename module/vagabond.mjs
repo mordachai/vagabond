@@ -41,6 +41,7 @@ import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
 import { SequencerFxConfig } from './applications/sequencer-fx-config.mjs';
+import { DsnDamageAppearanceConfig } from './applications/dsn-damage-appearance-config.mjs';
 import { CompendiumSettings } from './applications/compendium-settings.mjs';
 import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 import { PartyCompactView } from './applications/party-compact-view.mjs';
@@ -394,6 +395,25 @@ function registerGameSettings() {
     type: Boolean,
     default: false,
     requiresReload: false,
+  });
+
+  // Setting 21c: DSN Damage Appearance config (hidden data store)
+  game.settings.register('vagabond', 'dsnDamageAppearance', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    requiresReload: false,
+  });
+
+  // Setting 21d: DSN Damage Appearance menu button
+  game.settings.registerMenu('vagabond', 'dsnDamageAppearanceMenu', {
+    name: 'VAGABOND.Settings.dsnDamageAppearance.name',
+    label: 'VAGABOND.Settings.dsnDamageAppearance.label',
+    hint: 'VAGABOND.Settings.dsnDamageAppearance.hint',
+    icon: 'fas fa-dice-d20',
+    type: DsnDamageAppearanceConfig,
+    restricted: true,
   });
 
   // Setting 19: Homebrew Settings Menu button
@@ -814,6 +834,7 @@ Hooks.once('ready', function () {
 // Register Dice So Nice colorsets when Dice So Nice is ready
 Hooks.once('diceSoNiceReady', (dice3d) => {
   VagabondDiceAppearance.registerColorsets();
+  VagabondDiceAppearance.registerDamageColorsets();
 });
 
 /* -------------------------------------------- */

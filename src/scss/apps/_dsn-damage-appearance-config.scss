@@ -1,0 +1,181 @@
+#dsn-damage-appearance-config.dsn-damage-appearance-form {
+  .window-content { padding: 0; overflow: hidden; }
+
+  .dsn-dmg-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 0.5rem;
+    overflow: hidden;
+    padding: 0.5rem;
+  }
+
+  .dsn-dmg-header {
+    flex: 0 0 auto;
+    padding: 0 0.25rem;
+
+    .dsn-dmg-hint {
+      margin: 0 0 0.25rem 0;
+      font-size: 0.9em;
+      opacity: 0.85;
+    }
+
+    .dsn-dmg-warning {
+      margin: 0.25rem 0;
+      padding: 0.4rem 0.6rem;
+      background: rgba(220, 60, 60, 0.15);
+      border-left: 3px solid #dc2626;
+      font-size: 0.85em;
+    }
+  }
+
+  .dsn-dmg-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 0.25rem;
+  }
+
+  .dsn-dmg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      text-align: left;
+      padding: 0.4rem 0.5rem;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    td {
+      padding: 0.35rem 0.5rem;
+      vertical-align: middle;
+    }
+
+    .dsn-dmg-label {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .dsn-dmg-mode {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .dsn-dmg-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        cursor: pointer;
+        font-size: 0.85em;
+
+        input[type="checkbox"] { margin: 0; }
+      }
+
+      .dsn-dmg-colorset {
+        max-width: 140px;
+        font-size: 0.85em;
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    // When stock mode active, dim the custom-only color/texture/material cells
+    .dsn-dmg-row.mode-stock {
+      .dsn-dmg-colors,
+      td:has(select[name$=".texture"]),
+      td:has(select[name$=".material"]) {
+        opacity: 0.35;
+        pointer-events: none;
+      }
+    }
+
+    .dsn-dmg-colors {
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.15rem;
+        margin-right: 0.25rem;
+      }
+
+      .dsn-dmg-color-label {
+        font-size: 0.75em;
+        opacity: 0.7;
+        min-width: 1.5em;
+      }
+
+      input[type="color"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 22px;
+        height: 22px;
+        min-width: 22px;
+        min-height: 22px;
+        padding: 0;
+        margin: 0;
+        background: none;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        border-radius: 3px;
+        box-sizing: border-box;
+        cursor: pointer;
+        flex: 0 0 auto;
+        display: inline-block;
+
+        &::-webkit-color-swatch-wrapper { padding: 0; border: none; }
+        &::-webkit-color-swatch         { border: none; border-radius: 2px; }
+        &::-moz-color-swatch            { border: none; border-radius: 2px; }
+      }
+    }
+
+    select {
+      max-width: 140px;
+      font-size: 0.85em;
+    }
+
+    .dsn-dmg-actions {
+      white-space: nowrap;
+
+      button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        margin-left: 0.15rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .dsn-dmg-footer {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+    .dsn-dmg-footer-right {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .dsn-dmg-save {
+      background: #2563eb;
+      color: #fff;
+      border-color: #1d4ed8;
+    }
+  }
+}

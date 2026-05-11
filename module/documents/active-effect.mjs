@@ -265,7 +265,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       // -- Universal Bonuses --
       'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
       'system.universalDamageBonus': 'Universal: All Damage Rolls (Flat Bonus)',
-      'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus. e.g. d6, d8, 3d6...)',
+      'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus)',
 
       // -- Separated Universal Damage Bonuses --
       'system.universalWeaponDamageBonus': 'Universal: Weapon Damage (Flat Bonus)',
@@ -274,22 +274,6 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.universalSpellDamageDice': 'Universal: Spell Damage (Dice Bonus)',
       'system.universalAlchemicalDamageBonus': 'Universal: Alchemical Damage (Flat Bonus)',
       'system.universalAlchemicalDamageDice': 'Universal: Alchemical Damage (Dice Bonus)',
-
-      // -- Per-Die Damage Bonuses (flat bonus × number of dice rolled, including explosions) --
-      'system.bonusPerDamageDie': 'Per-Die: All Damage Rolls (Flat Bonus Per Die Rolled)',
-      'system.weaponBonusPerDamageDie': 'Per-Die: Weapon Damage (Flat Bonus Per Die Rolled)',
-      'system.spellBonusPerDamageDie': 'Per-Die: Spell Damage (Flat Bonus Per Die Rolled)',
-      'system.alchemicalBonusPerDamageDie': 'Per-Die: Alchemical Damage (Flat Bonus Per Die Rolled)',
-
-      // -- Per-Die Doubling vs Being Types --
-      // Each ADD entry is a being type name (e.g. "Undead", "Hellspawn").
-      // If any current target matches, the per-die bonus is doubled.
-      'system.bonusPerDamageDieDoubleVsBeingTypes': 'Per-Die: Double Bonus vs Being Type (ADD one type per entry, e.g. Undead)',
-
-      // -- Save vs Status Bonuses --
-      // Each ADD entry uses format "statusId:saveKey:value", e.g. "frightened:will:1"
-      // Use "any" as saveKey to apply to all save types against that status.
-      'system.saveVsStatusBonuses': 'Save vs Status Bonus (ADD entry: "statusId:saveKey:value", e.g. frightened:will:1)',
       
       // -- Specific Die Size Bonuses --
       'system.meleeDamageDieSizeBonus': 'Melee: Damage Die Size Bonus (+2 for d8)',
@@ -406,7 +390,7 @@ export class VagabondActiveEffect extends ActiveEffect {
     if (actor.type === 'npc' && change.key === 'system.speed.bonus') {
       const npcChange = foundry.utils.deepClone(change);
       npcChange.key = 'system.speed';
-      npcChange.type = "override";
+      npcChange.mode = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
       npcChange.value = '0';
       return super.apply(actor, npcChange);
     }

@@ -1,4 +1,5 @@
 import { VagabondTextParser } from './text-parser.mjs';
+import { VagabondDiceAppearance } from './dice-appearance.mjs';
 
 /**
  * Universal chat card builder for Vagabond system
@@ -1061,6 +1062,7 @@ export class VagabondChatCard {
             finalDamage = parseInt(action.flatDamage);
         } else if (action.rollDamage) {
             damageRoll = new Roll(action.rollDamage, actor.getRollData());
+            VagabondDiceAppearance.applyDamageColorset(damageRoll, rawType);
             await damageRoll.evaluate();
             finalDamage = damageRoll.total;
         } else {

@@ -1,6 +1,7 @@
 import { TargetHelper } from '../../helpers/target-helper.mjs';
 import { VagabondTextParser } from '../../helpers/text-parser.mjs';
 import { VagabondItemSequencer } from '../../helpers/item-sequencer.mjs';
+import { VagabondDiceAppearance } from '../../helpers/dice-appearance.mjs';
 
 /**
  * Handler for roll-related functionality.
@@ -230,6 +231,7 @@ export class RollHandler {
         if (typeof univDice === 'string' && univDice.trim()) damageFormula += ` + ${univDice}`;
 
         const roll = new Roll(damageFormula, this.actor.getRollData());
+        VagabondDiceAppearance.applyDamageColorset(roll, item.system.damageType);
         await roll.evaluate();
 
         // Apply dice explosion if the item or actor has it enabled

@@ -1,3 +1,5 @@
+import { VagabondDiceAppearance } from './dice-appearance.mjs';
+
 /**
  * Universal Damage Helper
  * Handles damage rolling for weapons, spells, and any other damage sources
@@ -352,6 +354,7 @@ export class VagabondDamageHelper {
 
     // Roll damage (without explosion modifiers in formula)
     const damageRoll = new Roll(finalFormula, actor.getRollData());
+    VagabondDiceAppearance.applyDamageColorset(damageRoll, finalDamageTypeKey);
     await damageRoll.evaluate();
 
     // Mark the weakness die in the roll so it shows the type icon overlay
@@ -599,6 +602,7 @@ export class VagabondDamageHelper {
 
     // Roll damage (without explosion modifiers in formula)
     const roll = new Roll(damageFormula, actor.getRollData());
+    VagabondDiceAppearance.applyDamageColorset(roll, damageType);
     await roll.evaluate();
 
     // Mark the weakness die in the roll so it displays with the type icon overlay
@@ -750,6 +754,7 @@ export class VagabondDamageHelper {
     if (isFormula) {
       // Roll damage
       damageRoll = new Roll(damageAmount, actor.getRollData());
+      VagabondDiceAppearance.applyDamageColorset(damageRoll, damageType);
       await damageRoll.evaluate();
       finalDamage = damageRoll.total;
     } else {
@@ -897,6 +902,7 @@ export class VagabondDamageHelper {
     } else {
       // Roll damage
       damageRoll = new Roll(damageValue, actor.getRollData());
+      VagabondDiceAppearance.applyDamageColorset(damageRoll, damageType);
       await damageRoll.evaluate();
       finalDamage = damageRoll.total;
     }

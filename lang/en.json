@@ -406,6 +406,11 @@
         "label": "Configure Animations",
         "hint": "Set Sequencer animation file paths for each FX school and delivery type."
       },
+      "dsnDamageAppearance": {
+        "name": "Damage Dice Appearance (DSN)",
+        "label": "Configure Damage Dice",
+        "hint": "Customize Dice So Nice colors, textures, and materials per damage type."
+      },
       "useItemAnimations": {
         "name": "Use Item Animations",
         "hint": "Master switch for weapon, alchemical, and relic visual effects. When disabled, no item animations play. Animation files are configured per-item on each item's Details tab. Requires the Sequencer module."
@@ -428,6 +433,31 @@
       "JB2ALoaded": "JB2A animation defaults loaded successfully.",
       "JB2AUnavailable": "JB2A module is not installed or not active.",
       "JB2ALoadFailed": "Failed to load JB2A defaults — check the browser console for details."
+    },
+    "DsnDamage": {
+      "Title": "Damage Dice Appearance",
+      "Hint": "Each damage type can use either a custom color/texture/material combo or a Dice So Nice stock colorset. Preview rolls 2d6 with the current (unsaved) settings.",
+      "NoDsn": "Dice So Nice is not active. Install or enable the module to see these effects.",
+      "Type": "Damage Type",
+      "Mode": "Mode",
+      "Custom": "Custom",
+      "PickStock": "— stock colorset —",
+      "Colors": "Colors (Fg / Bg / Outline / Edge)",
+      "Foreground": "Foreground (number/face color)",
+      "Background": "Background (die body color)",
+      "Outline": "Outline",
+      "Edge": "Edge",
+      "Texture": "Texture",
+      "Material": "Material",
+      "Preview": "Preview roll",
+      "ResetType": "Reset this type to default",
+      "ResetAll": "Reset All to Defaults",
+      "ResetAllTitle": "Reset All Damage Dice?",
+      "ResetAllConfirm": "Clear all custom damage dice settings and revert to system defaults?",
+      "ResetDone": "Damage dice appearance reset to defaults.",
+      "Saved": "Damage dice appearance saved.",
+      "Cancel": "Cancel",
+      "Save": "Save"
     },
     "HomebrewSettings": {
       "Title": "Homebrew Configuration",

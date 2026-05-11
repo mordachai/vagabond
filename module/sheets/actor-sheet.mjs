@@ -1,6 +1,7 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 import { VagabondCharBuilder } from '../applications/char-builder/index.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
@@ -995,6 +996,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Roll the damage dice
     const roll = new Roll(action.rollDamage, this.actor.getRollData());
+    VagabondDiceAppearance.applyDamageColorset(roll, action.damageType);
     await roll.evaluate();
     await VagabondChatHelper.postRoll(
       this.actor,

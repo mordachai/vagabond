@@ -1,0 +1,101 @@
+<div class="dsn-dmg-wrapper">
+  <header class="dsn-dmg-header">
+    <p class="dsn-dmg-hint">
+      {{localize "VAGABOND.DsnDamage.Hint"}}
+    </p>
+    {{#unless dsnAvailable}}
+      <p class="dsn-dmg-warning">{{localize "VAGABOND.DsnDamage.NoDsn"}}</p>
+    {{/unless}}
+  </header>
+
+  <div class="dsn-dmg-scroll">
+    <table class="dsn-dmg-table">
+      <thead>
+        <tr>
+          <th>{{localize "VAGABOND.DsnDamage.Type"}}</th>
+          <th>{{localize "VAGABOND.DsnDamage.Mode"}}</th>
+          <th>{{localize "VAGABOND.DsnDamage.Colors"}}</th>
+          <th>{{localize "VAGABOND.DsnDamage.Texture"}}</th>
+          <th>{{localize "VAGABOND.DsnDamage.Material"}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each types}}
+          <tr class="dsn-dmg-row" data-type-key="{{this.key}}">
+            <td class="dsn-dmg-label">{{this.label}}</td>
+
+            <td class="dsn-dmg-mode">
+              <label class="dsn-dmg-toggle">
+                <input type="checkbox" name="{{this.key}}.custom" {{#if this.custom}}checked{{/if}} />
+                <span>{{localize "VAGABOND.DsnDamage.Custom"}}</span>
+              </label>
+              <select name="{{this.key}}.colorset" class="dsn-dmg-colorset" {{#if this.custom}}disabled{{/if}}>
+                <option value="">{{localize "VAGABOND.DsnDamage.PickStock"}}</option>
+                {{#each @root.stockColorsets}}
+                  <option value="{{this}}" {{#if (eq this ../this.colorset)}}selected{{/if}}>{{this}}</option>
+                {{/each}}
+              </select>
+            </td>
+
+            <td class="dsn-dmg-colors">
+              <label title="{{localize 'VAGABOND.DsnDamage.Foreground'}}">
+                <span class="dsn-dmg-color-label">Fg</span>
+                <input type="color" name="{{this.key}}.foreground" value="{{this.foreground}}" />
+              </label>
+              <label title="{{localize 'VAGABOND.DsnDamage.Background'}}">
+                <span class="dsn-dmg-color-label">Bg</span>
+                <input type="color" name="{{this.key}}.background" value="{{this.background}}" />
+              </label>
+              <label title="{{localize 'VAGABOND.DsnDamage.Outline'}}">
+                <span class="dsn-dmg-color-label">Ol</span>
+                <input type="color" name="{{this.key}}.outline" value="{{this.outline}}" />
+              </label>
+              <label title="{{localize 'VAGABOND.DsnDamage.Edge'}}">
+                <span class="dsn-dmg-color-label">Ed</span>
+                <input type="color" name="{{this.key}}.edge" value="{{this.edge}}" />
+              </label>
+            </td>
+
+            <td>
+              <select name="{{this.key}}.texture">
+                {{#each @root.textures}}
+                  <option value="{{this}}" {{#if (eq this ../this.texture)}}selected{{/if}}>{{this}}</option>
+                {{/each}}
+              </select>
+            </td>
+
+            <td>
+              <select name="{{this.key}}.material">
+                {{#each @root.materials}}
+                  <option value="{{this}}" {{#if (eq this ../this.material)}}selected{{/if}}>{{this}}</option>
+                {{/each}}
+              </select>
+            </td>
+
+            <td class="dsn-dmg-actions">
+              <button type="button" data-action="previewType" data-key="{{this.key}}" title="{{localize 'VAGABOND.DsnDamage.Preview'}}">
+                <i class="fas fa-dice"></i>
+              </button>
+              <button type="button" data-action="resetType" data-key="{{this.key}}" title="{{localize 'VAGABOND.DsnDamage.ResetType'}}">
+                <i class="fas fa-rotate-left"></i>
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="dsn-dmg-footer">
+    <button type="button" data-action="resetAll">
+      <i class="fas fa-trash"></i> {{localize "VAGABOND.DsnDamage.ResetAll"}}
+    </button>
+    <div class="dsn-dmg-footer-right">
+      <button type="button" data-action="close">{{localize "VAGABOND.DsnDamage.Cancel"}}</button>
+      <button type="button" data-action="saveAndClose" class="dsn-dmg-save">
+        <i class="fas fa-save"></i> {{localize "VAGABOND.DsnDamage.Save"}}
+      </button>
+    </div>
+  </footer>
+</div>
