@@ -321,6 +321,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         (context.armor && context.armor.some(i => i.system.worn));
 
       context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
+      context.useSpellDialog = game.settings.get('vagabond', 'useSpellCastDialog');
 
       // Focus pips for the Spells section header in the sliding panel
       const focusedSpellIds = this.actor.system.focus?.spellIds || [];

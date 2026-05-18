@@ -65,16 +65,32 @@ const sheets = foundry.applications.sheets;
  * Register game settings for the Vagabond system
  */
 function registerGameSettings() {
-  // Setting 1: Roll damage with check
-  // Spell Cast Dialog — blur radius behind dialog (0 = no blur)
-  game.settings.register('vagabond', 'spellCastDialogBlur', {
-    name: 'VAGABOND.Settings.spellCastDialogBlur.name',
-    hint: 'VAGABOND.Settings.spellCastDialogBlur.hint',
+  // Spell Cast Dialog — when true, clicking a favorited spell opens the cast
+  // Re-render every open ApplicationV2 instance (actor sheets, open spell cast
+  // dialogs, etc). Used as the onChange handler for client display settings
+  // that affect what's drawn, so users see changes immediately without reload.
+  const reRenderAllApps = () => {
+    try {
+      const insts = foundry.applications?.instances;
+      if (insts?.values) {
+        for (const app of insts.values()) {
+          if (app?.rendered) app.render();
+        }
+      }
+    } catch (e) {
+      console.warn('VagabondSystem | onChange re-render failed', e);
+    }
+  };
+
+  // dialog (grid layout); when false, clicking casts directly (list layout)
+  game.settings.register('vagabond', 'useSpellCastDialog', {
+    name: 'VAGABOND.Settings.useSpellCastDialog.name',
+    hint: 'VAGABOND.Settings.useSpellCastDialog.hint',
     scope: 'client',
     config: true,
-    type: Number,
-    range: { min: 0, max: 5, step: 0.5 },
-    default: 1.0,
+    type: Boolean,
+    default: true,
+    onChange: reRenderAllApps,
   });
 
   // Spell Cast Dialog — dark backdrop opacity (0–100%, increments of 5)
@@ -86,8 +102,35 @@ function registerGameSettings() {
     type: Number,
     range: { min: 0, max: 100, step: 5 },
     default: 0,
+    onChange: reRenderAllApps,
   });
 
+  // Spell Cast Dialog — blur radius behind dialog (0 = no blur)
+  game.settings.register('vagabond', 'spellCastDialogBlur', {
+    name: 'VAGABOND.Settings.spellCastDialogBlur.name',
+    hint: 'VAGABOND.Settings.spellCastDialogBlur.hint',
+    scope: 'client',
+    config: true,
+    type: Number,
+    range: { min: 0, max: 5, step: 0.5 },
+    default: 1.0,
+    onChange: reRenderAllApps,
+  });
+
+  // Spell Cast Dialog — hide outer rune rings + middle divider for a compact dialog
+  game.settings.register('vagabond', 'hideCastRings', {
+    name: 'VAGABOND.Settings.hideCastRings.name',
+    hint: 'VAGABOND.Settings.hideCastRings.hint',
+    scope: 'client',
+    config: true,
+    type: Boolean,
+    default: false,
+    onChange: reRenderAllApps,
+  });
+
+  
+
+  // Setting 1: Roll damage with check
   game.settings.register('vagabond', 'rollDamageWithCheck', {
     name: 'VAGABOND.Settings.rollDamageWithCheck.name',
     hint: 'VAGABOND.Settings.rollDamageWithCheck.hint',
@@ -95,6 +138,7 @@ function registerGameSettings() {
     config: true,
     type: Boolean,
     default: false,
+    requiresReload: true,
   });
 
   // Setting 2: Always roll damage (even on miss)

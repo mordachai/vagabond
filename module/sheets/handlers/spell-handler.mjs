@@ -423,6 +423,14 @@ export class SpellHandler {
       return;
     }
 
+    // Setting-driven path: when the dialog is disabled, cast directly from the
+    // saved spell state (legacy flow). manaOverrideDelta = 0 (no override).
+    const useDialog = game.settings.get('vagabond', 'useSpellCastDialog');
+    if (!useDialog) {
+      const state = foundry.utils.deepClone(this._getSpellState(spellId));
+      return this._executeCast(event, spellId, state, 0);
+    }
+
     const initialState = foundry.utils.deepClone(this._getSpellState(spellId));
     const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
 

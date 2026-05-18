@@ -330,6 +330,14 @@
         "name": "Spell Cast Dialog Blur",
         "hint": "Backdrop blur radius (in pixels) behind the spell cast dialog. 0 disables the effect."
       },
+      "useSpellCastDialog": {
+        "name": "Use Spell Cast Dialog",
+        "hint": "When enabled, favorited spells render as a compact grid and clicking a spell's image opens the cast dialog. When disabled, the legacy list is shown and clicking casts directly."
+      },
+      "hideCastRings": {
+        "name": "Hide Cast Dialog Rings",
+        "hint": "Hide the outer rune ring, middle divider, and inner rune ring on the spell cast dialog. The dialog renders smaller in this mode."
+      },
       "spellCastDialogDarkness": {
         "name": "Spell Cast Dialog Darkness",
         "hint": "Dark gray backdrop opacity (0–100%) behind the spell cast dialog. 0 disables the effect."

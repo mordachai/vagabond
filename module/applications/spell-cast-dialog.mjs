@@ -215,14 +215,22 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   setPosition(pos = {}) {
     const el = this.element;
     if (!el) return pos;
-    const w = 350;
-    const h = el.offsetHeight || 460;
+    // Compact mode renders a narrower root (matches .vsc-root.no-rings width)
+    const hideRings = game.settings.get('vagabond', 'hideCastRings');
+    const w = hideRings ? 260 : 350;
+    // Measure the inner root (the actual painted dialog) — el is the
+    // V2 wrapper and can report 0 or a very large value before layout.
+    const inner = el.querySelector('.vsc-root');
+    const measured = inner?.offsetHeight || el.offsetHeight || 0;
+    const h = (measured > 100 && measured < window.innerHeight)
+      ? measured
+      : 600; // fallback approx — circle + header + button
     let left, top;
     if (this.#pos) {
       left = this.#pos.left;
       top = this.#pos.top;
     } else if (this.#anchorEl && document.body.contains(this.#anchorEl)) {
-      // Dock beside the anchor (typically the actor sheet)
+      // Dock beside the anchor horizontally; vertical center on screen
       const r = this.#anchorEl.getBoundingClientRect();
       const gap = 12;
       const spaceRight = window.innerWidth - r.right;
@@ -234,13 +242,14 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       } else {
         left = Math.max(0, window.innerWidth - w - gap);
       }
-      top = Math.max(0, Math.round(r.top + (r.height - h) / 2));
-      top = Math.min(top, window.innerHeight - h - 8);
-      this.#pos = { left, top };
+      top = Math.max(0, Math.round((window.innerHeight - h) / 2));
+      // Only latch after real measurement — first render usually returns the
+      // fallback height. Recompute on the next frame once layout settles.
+      if (measured > 100) this.#pos = { left, top };
     } else {
       left = Math.max(0, Math.round((window.innerWidth - w) / 2));
       top = Math.max(0, Math.round((window.innerHeight - h) / 2));
-      this.#pos = { left, top };
+      if (measured > 100) this.#pos = { left, top };
     }
     el.style.position = 'fixed';
     el.style.left = `${left}px`;
@@ -284,6 +293,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   _onRender(context, options) {
     super._onRender?.(context, options);
     this.setPosition();
+    // Re-measure after layout/font/svg paint so the centering uses the real
+    // height. The first call inside _onRender often sees offsetHeight=0.
+    requestAnimationFrame(() => this.setPosition());
 
     // Inline accent triplet + backdrop blur on root for CSS rgb(var(--ac))
     const root = this.element.querySelector('.vsc-root');
@@ -293,6 +305,15 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       root.style.setProperty('--vsc-blur', `${blur}px`);
       const darkPct = Number(game.settings.get('vagabond', 'spellCastDialogDarkness')) || 0;
       root.style.setProperty('--vsc-dark', String(darkPct / 100));
+      const hideRings = game.settings.get('vagabond', 'hideCastRings');
+      root.classList.toggle('no-rings', !!hideRings);
+      // Crop the SVG viewBox in compact mode so inner content (triangle, nodes)
+      // stays the same pixel size while the dialog footprint shrinks.
+      // Inner ring is at r=124 from center (180,180) → trim to 248x248 box.
+      const svg = root.querySelector('.vsc-circle');
+      if (svg) {
+        svg.setAttribute('viewBox', hideRings ? '56 56 248 248' : '0 0 360 360');
+      }
     }
 
     // Animation continuity across re-renders: rewind animation-delay so CSS keyframes

@@ -7003,6 +7003,7 @@ ol#combat-tracker.directory-list {
   box-shadow: none;
   border: none;
   overflow: visible;
+  z-index: 1100 !important;
 }
 .application.spell-cast-dialog > .window-content {
   background: transparent;
@@ -7057,6 +7058,26 @@ ol#combat-tracker.directory-list {
 .vsc-root.minimized .vsc-cast,
 .vsc-root.minimized .vsc-error {
   display: none !important;
+}
+.vsc-root.no-rings {
+  width: 260px;
+}
+.vsc-root.no-rings .vsc-circle .outer-ring,
+.vsc-root.no-rings .vsc-circle .middle-ring,
+.vsc-root.no-rings .vsc-circle .vsc-runes {
+  display: none;
+}
+.vsc-root.no-rings .vsc-side {
+  display: none;
+}
+.vsc-root.no-rings .vsc-eye {
+  top: calc(23.4% + 8px);
+}
+.vsc-root.no-rings .vsc-delivery-list {
+  top: calc(81.5% + 10px);
+}
+.vsc-root.no-rings .vsc-mana-info {
+  top: calc(89.1% - 4px);
 }
 .vsc-root:active {
   cursor: grabbing;
@@ -7160,16 +7181,12 @@ ol#combat-tracker.directory-list {
   font-size: 22px;
   font-weight: normal;
   pointer-events: none;
-  paint-order: stroke fill;
-  stroke: rgb(var(--ac));
-  stroke-width: 2.6px;
-  stroke-linejoin: round;
-  opacity: 0.75;
+  opacity: 1;
+  filter: drop-shadow(0 0 5px rgba(var(--ac), 0.65));
 }
 .vsc-root .vsc-circle .vsc-rune.small {
   fill: rgb(var(--ac));
   font-size: 14px;
-  stroke-width: 2.2px;
 }
 .vsc-root .vsc-circle .vsc-runes.outer {
   transform-origin: 180px 180px;
@@ -16343,6 +16360,73 @@ details[open] .vagabond .npc-immunity-toggle i {
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 2px;
+}
+.vagabond .favorited-spells-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 8px;
+  padding: 8px 4px;
+}
+.vagabond .favorited-spells-grid .spell-grid-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.vagabond .favorited-spells-grid .spell-grid-frame {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 3px;
+  overflow: hidden;
+  transform: rotate(45deg) scale(1.2);
+  transform-origin: center;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 6px var(--vagabond-c-chat-yellow);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, filter 0.15s;
+  margin: 6px 0;
+  filter: brightness(0.95);
+}
+.vagabond .favorited-spells-grid .spell-grid-frame:hover {
+  transform: rotate(45deg) scale(1.35);
+  box-shadow: 0 0 10px var(--vagabond-c-chat-yellow);
+  filter: brightness(1.2);
+}
+.vagabond .favorited-spells-grid .spell-grid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  transform: rotate(-45deg) scale(1.4);
+}
+.vagabond .favorited-spells-grid .spell-name-container {
+  width: 100%;
+  text-align: center;
+  cursor: context-menu;
+}
+.vagabond .favorited-spells-grid .spell-name {
+  font-family: "Germania", serif;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  color: var(--vagabond-c-lite);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
+}
+.vagabond .favorited-spells-grid .favorited-spell.focused .spell-grid-frame {
+  box-shadow: 0 0 12px var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+  filter: brightness(1.15);
 }
 @keyframes fadein {
   from {

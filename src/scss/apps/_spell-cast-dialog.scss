@@ -8,6 +8,7 @@
   box-shadow: none;
   border: none;
   overflow: visible;
+  z-index: 1100 !important; // Above sliding panel (1000)
 
   > .window-content {
     background: transparent;
@@ -35,6 +36,31 @@
     .vsc-circle-wrap,
     .vsc-cast,
     .vsc-error { display: none !important; }
+  }
+
+  // Compact mode (setting `hideCastRings`): hide outer ring, middle divider,
+  // and both rune ring groups. SVG viewBox is cropped via JS so the inner
+  // boundary + triangle + nodes stay the SAME pixel size; the dialog
+  // container shrinks because the trimmed SVG occupies less width.
+  &.no-rings {
+    width: 260px; // narrower footprint; SVG fills 100% of this
+    .vsc-circle {
+      .outer-ring,
+      .middle-ring,
+      .vsc-runes { display: none; }
+    }
+    // Side toggles (focus + fx) live at corners of the full 360 viewBox.
+    // After cropping the viewBox they would clip — hide in compact mode.
+    .vsc-side { display: none; }
+
+    // HTML overlays positioned by % relative to .vsc-circle-wrap height.
+    // viewBox cropped to 56..304 (248 units), so percentages shift.
+    // node y=114 → (114-56)/248 ≈ 23.4%
+    .vsc-eye          { top: calc(23.4% + 8px); }
+    // bottom-edge "Delivery" label y=258 → (258-56)/248 ≈ 81.5%
+    .vsc-delivery-list { top: calc(81.5% + 10px); }
+    // mana info y≈277 → (277-56)/248 ≈ 89.1%
+    .vsc-mana-info    { top: calc(89.1% - 4px); }
   }
   color: rgb(var(--ac));
   font-family: $font-text;
@@ -150,23 +176,16 @@
     .vsc-stroke.static { stroke-opacity: 1; stroke-width: 3.4; }
 
     .vsc-rune {
-      // Dark fill against bright ring glow — accent now used as outline only
       fill: rgb(var(--ac));
       font-family: $font-text;
       font-size: 22px;
       font-weight: normal;
       pointer-events: none;
-      paint-order: stroke fill;
-      stroke: rgb(var(--ac));
-      stroke-width: 2.6px;
-      stroke-linejoin: round;
-      opacity: 0.75;
-      //filter: drop-shadow(0 0 4px rgba(var(--ac), 0.55));
+      opacity: 1;
+      filter: drop-shadow(0 0 5px rgba(var(--ac), 0.65));
       &.small {
-        // Inner ring runes — slightly lighter so the two rings read distinct
         fill: rgb(var(--ac));
         font-size: 14px;
-        stroke-width: 2.2px;
       }
     }
 
