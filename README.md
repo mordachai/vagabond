@@ -15,6 +15,13 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
+### **New feature:** Casting HUD [YouTube video below](https://youtu.be/r31Fz8pPLgg)
+
+New Casting dialog to help the player better understand how magic flows in game, mana consumption and all. 
+
+[![Magic Casting HUD](https://img.youtube.com/vi/r31Fz8pPLgg/0.jpg)](https://youtu.be/r31Fz8pPLgg)
+
+
 ### **New feature:** Automations (YouTube video below):
 
 [![Vagabond for Foundry VTT - V5 Automations](https://img.youtube.com/vi/DtV1JWSCz90/0.jpg)](https://youtu.be/DtV1JWSCz90)
