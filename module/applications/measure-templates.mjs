@@ -23,6 +23,7 @@ export class VagabondMeasureTemplates {
    */
   async updatePreview(actor, itemId, deliveryType, distance) {
     await this.clearPreview(actor.id, itemId);
+    await this.cleanupOrphanedSpellRegions();
 
     if (!deliveryType || !distance) return;
 
@@ -75,6 +76,51 @@ export class VagabondMeasureTemplates {
     }
   }
 
+  /**
+   * Delete every spell-created region on the current scene that is not tracked
+   * in `activePreviews` or `chatRegions`. Spell regions are identified by
+   * `flags.vagabond.isPreview` (sheet preview) or `flags.vagabond.deliveryType`
+   * (chat-placed). Only touches our own regions — never user/world regions.
+   */
+  async cleanupOrphanedSpellRegions() {
+    const scene = canvas.scene;
+    if (!scene) return;
+    const tracked = new Set([
+      ...this.activePreviews.values(),
+      ...this.chatRegions.values(),
+    ]);
+    const toDelete = [];
+    for (const region of scene.regions) {
+      const flags = region.flags?.vagabond;
+      if (!flags) continue;
+      if (!flags.isPreview && !flags.deliveryType) continue;
+      if (!tracked.has(region.id)) toDelete.push(region.id);
+    }
+    if (toDelete.length > 0) {
+      await scene.deleteEmbeddedDocuments('Region', toDelete);
+    }
+  }
+
+  /**
+   * Delete every spell-created region on the current scene, tracked or not.
+   * Used on `canvasReady` so stale regions from a prior session don't linger.
+   */
+  async cleanupAllSpellRegions() {
+    const scene = canvas.scene;
+    if (!scene) return;
+    const toDelete = [];
+    for (const region of scene.regions) {
+      const flags = region.flags?.vagabond;
+      if (!flags) continue;
+      if (flags.isPreview || flags.deliveryType) toDelete.push(region.id);
+    }
+    if (toDelete.length > 0) {
+      await scene.deleteEmbeddedDocuments('Region', toDelete);
+    }
+    this.activePreviews.clear();
+    this.chatRegions.clear();
+  }
+
   /* -------------------------------------------- */
   /* Chat Card API                               */
   /* -------------------------------------------- */
@@ -98,6 +144,9 @@ export class VagabondMeasureTemplates {
       this.chatRegions.delete(messageId);
       return false;
     }
+
+    // Sweep orphans from prior sessions before placing a new template
+    await this.cleanupOrphanedSpellRegions();
 
     const distanceMatch = deliveryText.match(/(\d+)'/);
     if (!distanceMatch) {

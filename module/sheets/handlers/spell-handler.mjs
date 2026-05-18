@@ -408,7 +408,8 @@ export class SpellHandler {
   // ===========================
 
   /**
-   * Cast a spell
+   * Open the spell cast dialog. The dialog mutates a local state copy and
+   * calls back into _executeCast on confirm. Replaces the old direct-cast flow.
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element
    */
@@ -416,13 +417,59 @@ export class SpellHandler {
     event.preventDefault();
     const spellId = target.dataset.spellId;
     const spell = this.actor.items.get(spellId);
-    const state = this._getSpellState(spellId);
-    const costs = this._calculateSpellCost(spellId);
 
     if (!spell || spell.type !== 'spell') {
       ui.notifications.error('Spell not found!');
       return;
     }
+
+    const initialState = foundry.utils.deepClone(this._getSpellState(spellId));
+    const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
+
+    const dialog = new SpellCastDialog({
+      actor: this.actor,
+      spell,
+      initialState,
+      anchorEl: this.sheet?.element ?? null,
+      onCast: (castEvent, finalState, manaOverrideDelta) =>
+        this._executeCast(castEvent, spellId, finalState, manaOverrideDelta),
+      // Mirror dialog state into the favorited spell row in real-time
+      onChange: (state) => {
+        const current = this._getSpellState(spellId);
+        current.damageDice = state.damageDice;
+        current.deliveryType = state.deliveryType;
+        current.deliveryIncrease = state.deliveryIncrease;
+        current.useFx = state.useFx;
+        // No _saveSpellStates() — persistence happens on cast
+        this._updateSpellDisplay(spellId);
+      },
+    });
+    dialog.render({ force: true });
+  }
+
+  /**
+   * Execute the actual cast given a finalised state from the dialog.
+   * @param {Event} event - Click event from the Cast button (carries modifiers)
+   * @param {string} spellId
+   * @param {Object} finalState - { damageDice, deliveryType, deliveryIncrease, useFx }
+   * @param {number} manaOverrideDelta - Player's delta on top of computed cost
+   * @private
+   */
+  async _executeCast(event, spellId, finalState, manaOverrideDelta = 0) {
+    const spell = this.actor.items.get(spellId);
+    if (!spell || spell.type !== 'spell') {
+      ui.notifications.error('Spell not found!');
+      return;
+    }
+
+    // Use the dialog-provided state for this cast
+    const state = finalState;
+
+    // Recompute costs from the explicit state (do not read this.spellStates)
+    const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
+    const baseCosts = SpellCastDialog.calculateCosts(spell, this.actor, state);
+    const finalTotal = Math.max(0, baseCosts.totalCost + manaOverrideDelta);
+    const costs = { ...baseCosts, totalCost: finalTotal };
 
     // Validation: Must select delivery
     if (!state.deliveryType) {

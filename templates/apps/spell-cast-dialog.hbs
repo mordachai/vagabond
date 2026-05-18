@@ -1,0 +1,138 @@
+{{!-- Spell Cast Dialog. Single root element. --}}
+<div class="vsc-root" style="--ac: {{accentRGB}};">
+
+  <button type="button" class="vsc-close" data-action="vscClose" aria-label="Close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <header class="vsc-header">
+    <div class="vsc-portrait-frame">
+      <img class="vsc-portrait" src="{{spell.img}}" alt="{{spell.name}}" />
+    </div>
+    <h2 class="vsc-name">{{spell.name}}</h2>
+  </header>
+
+  <div class="vsc-circle-wrap">
+    <svg class="vsc-circle" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+
+      {{!-- Outer ring boundary --}}
+      <circle class="vsc-stroke static" cx="180" cy="180" r="170" fill="none"/>
+
+      {{!-- Outer rune ring (rotates clockwise) --}}
+      <g class="vsc-runes outer">
+        {{#each runesOuter as |r|}}
+          <text class="vsc-rune" x="180" y="30" text-anchor="middle"
+                transform="rotate({{r.angle}} 180 180)">{{r.glyph}}</text>
+        {{/each}}
+      </g>
+
+      {{!-- Middle divider between outer and inner rune rings --}}
+      <circle class="vsc-stroke" cx="180" cy="180" r="145" fill="none"/>
+
+      {{!-- Inner rune ring (rotates counter-clockwise) --}}
+      <g class="vsc-runes inner">
+        {{#each runesInner as |r|}}
+          <text class="vsc-rune small" x="180" y="50" text-anchor="middle"
+                transform="rotate({{r.angle}} 180 180)">{{r.glyph}}</text>
+        {{/each}}
+      </g>
+
+      {{!-- Inner ring boundary --}}
+      <circle class="vsc-stroke static" cx="180" cy="180" r="124" fill="none"/>
+
+      {{!-- Triangle (main) --}}
+      <polygon class="vsc-tri" points="180,80 94,230 266,230" fill="none"/>
+      {{!-- Triangle (inner decorative) --}}
+      <polygon class="vsc-tri inner" points="180,98 110,222 250,222" fill="none"/>
+
+      {{!-- Edge labels (clickable — same actions as their paired vertex node) --}}
+      <text class="vsc-edge-label left {{#unless rangeInactive}}clickable{{/unless}}"
+            text-anchor="middle"
+            data-action="vscBumpRange"
+            transform="rotate(-60 107 138)" x="107" y="141">{{localize "VAGABOND.SpellCast.Increase"}}</text>
+      <text class="vsc-edge-label bottom clickable"
+            text-anchor="middle"
+            data-action="vscOpenDelivery"
+            x="180" y="258">{{deliveryLabel}}</text>
+      <text class="vsc-edge-label right {{#if hasDamage}}clickable{{/if}}"
+            text-anchor="middle"
+            data-action="vscBumpDice"
+            transform="rotate(60 253 138)" x="253" y="141">{{damageTypeLabel}}</text>
+
+      {{!-- Center mana node --}}
+      <g class="vsc-node center clickable {{#if manaOverrideActive}}override{{/if}}"
+         data-action="vscBumpMana">
+        <circle cx="180" cy="180" r="34"/>
+        <text class="vsc-num big" x="180" y="190" text-anchor="middle">{{totalMana}}</text>
+      </g>
+
+      {{!-- Top node — Range --}}
+      <g class="vsc-node top {{#if rangeInactive}}inactive{{else}}clickable{{/if}}"
+         data-action="vscBumpRange">
+        <circle cx="180" cy="80" r="24"/>
+        <text class="vsc-num" x="180" y="84" text-anchor="middle">{{rangeValue}}</text>
+        <text class="vsc-sub" x="180" y="95" text-anchor="middle">{{rangeUnit}}</text>
+      </g>
+
+      {{!-- Bottom-left node — Delivery cost (opens selector) --}}
+      <g class="vsc-node bl clickable" data-action="vscOpenDelivery">
+        <circle cx="94" cy="230" r="24"/>
+        <text class="vsc-num" x="94" y="237" text-anchor="middle">{{deliveryCost}}</text>
+      </g>
+
+      {{!-- Bottom-right node — Damage dice (square = d6) --}}
+      <g class="vsc-node br {{#if hasDamage}}clickable{{else}}inactive{{/if}}"
+         data-action="vscBumpDice">
+        <rect x="249" y="213" width="34" height="34" rx="3"/>
+        <text class="vsc-num" x="266" y="237" text-anchor="middle">{{dice}}</text>
+      </g>
+
+      {{!-- Focus side-toggle (top-left, outside circle) --}}
+      <g class="vsc-side {{#if focusOn}}on{{else}}off{{/if}}"
+         data-action="vscToggleFocus">
+        <circle cx="28" cy="40" r="18"/>
+        <text class="vsc-glyph" x="28" y="40" text-anchor="middle" dominant-baseline="central">✦</text>
+        <text class="vsc-side-label" x="28" y="16" text-anchor="middle">{{localize "VAGABOND.SpellCast.Focus"}}</text>
+      </g>
+
+      {{!-- Fx side-toggle (top-right, outside circle) --}}
+      <g class="vsc-side {{#if fxOn}}on{{else}}off{{/if}}"
+         data-action="vscToggleFx">
+        <circle cx="338" cy="40" r="18"/>
+        <text class="vsc-glyph" x="338" y="40" text-anchor="middle" dominant-baseline="central">✸</text>
+        <text class="vsc-side-label" x="338" y="16" text-anchor="middle">{{localize "VAGABOND.SpellCast.Fx"}}</text>
+      </g>
+    </svg>
+
+    {{!-- Template-preview eye toggle (absolutely positioned button over SVG) --}}
+    <button type="button" class="vsc-eye {{#if previewOn}}on{{else}}off{{/if}}"
+            data-action="vscToggleTemplate"
+            title="{{localize 'VAGABOND.SpellCast.TogglePreview'}}">
+      <i class="fa-solid {{#if previewOn}}fa-eye{{else}}fa-eye-closed{{/if}}"></i>
+    </button>
+
+    {{!-- Mana info — below the delivery title --}}
+    <div class="vsc-mana-info">
+      <i class="fas fa-star-christmas vsc-mana-icon"
+         title="{{localize 'VAGABOND.Actor.Character.FIELDS.mana.castingMax.label'}}: {{castingMax}}"></i>
+      <span class="vsc-mana-numbers clickable"
+            data-action="vscModifyMana"
+            title="Left click to spend mana, right click to restore">{{manaCurrent}}/{{manaMax}}</span>
+    </div>
+
+    {{!-- Delivery selector overlay --}}
+    <div class="vsc-delivery-list hidden">
+      {{#each deliveryOptions as |opt|}}
+        <button type="button" data-action="vscPickDelivery" data-key="{{opt.key}}"
+                class="{{#if opt.selected}}selected{{/if}}">{{opt.label}}</button>
+      {{/each}}
+    </div>
+  </div>
+
+  <button type="button" class="vsc-cast" data-action="vscCast">
+    {{localize "VAGABOND.SpellCast.Cast"}}
+  </button>
+
+  <div class="vsc-error {{#unless errorMessage}}hidden{{/unless}}">{{errorMessage}}</div>
+
+</div>

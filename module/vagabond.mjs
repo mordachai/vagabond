@@ -66,6 +66,28 @@ const sheets = foundry.applications.sheets;
  */
 function registerGameSettings() {
   // Setting 1: Roll damage with check
+  // Spell Cast Dialog — blur radius behind dialog (0 = no blur)
+  game.settings.register('vagabond', 'spellCastDialogBlur', {
+    name: 'VAGABOND.Settings.spellCastDialogBlur.name',
+    hint: 'VAGABOND.Settings.spellCastDialogBlur.hint',
+    scope: 'client',
+    config: true,
+    type: Number,
+    range: { min: 0, max: 5, step: 0.5 },
+    default: 1.0,
+  });
+
+  // Spell Cast Dialog — dark backdrop opacity (0–100%, increments of 5)
+  game.settings.register('vagabond', 'spellCastDialogDarkness', {
+    name: 'VAGABOND.Settings.spellCastDialogDarkness.name',
+    hint: 'VAGABOND.Settings.spellCastDialogDarkness.hint',
+    scope: 'client',
+    config: true,
+    type: Number,
+    range: { min: 0, max: 100, step: 5 },
+    default: 0,
+  });
+
   game.settings.register('vagabond', 'rollDamageWithCheck', {
     name: 'VAGABOND.Settings.rollDamageWithCheck.name',
     hint: 'VAGABOND.Settings.rollDamageWithCheck.hint',
@@ -464,6 +486,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/chat/damage-display.hbs',
     // Ongoing panel
     'systems/vagabond/templates/apps/ongoing-panel.hbs',
+    // Spell cast dialog
+    'systems/vagabond/templates/apps/spell-cast-dialog.hbs',
   ];
 
   // Load standard partials
@@ -853,6 +877,20 @@ Hooks.once('ready', () => {
 
   // Store in global for easy access
   globalThis.vagabond.ui.clockOverlay = clockOverlay;
+});
+
+/**
+ * Sweep stale spell template regions left over from prior sessions.
+ * Runs on every scene load — tracking maps in the manager are empty
+ * at this point, so any vagabond-tagged region is by definition an orphan.
+ */
+Hooks.on('canvasReady', async () => {
+  if (!game.user?.isGM) return; // Only GM can delete scene Region documents
+  try {
+    await globalThis.vagabond?.managers?.templates?.cleanupAllSpellRegions();
+  } catch (e) {
+    console.warn('VagabondSystem | Failed to clean stale spell regions', e);
+  }
 });
 
 /**

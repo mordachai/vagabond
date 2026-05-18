@@ -1,0 +1,512 @@
+/* Spell Cast Dialog
+  Frameless transparent ApplicationV2. Hand-crafted SVG magic circle.
+  --ac is set inline per-instance (RGB triplet, no rgb() wrapper).
+ */
+
+.application.spell-cast-dialog {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  overflow: visible;
+
+  > .window-content {
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+@keyframes vsc-spin-cw  { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
+@keyframes vsc-spin-ccw { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
+@keyframes vsc-pulse {
+  0%, 100% { stroke-opacity: 0.45; }
+  50%      { stroke-opacity: 1.0;  }
+}
+
+.vsc-root {
+  position: relative;
+  width: 350px;
+  padding: 0 0.5rem 1rem;
+
+  // Minimized: hide body, keep header only. Toggled via dblclick on header.
+  &.minimized {
+    padding-bottom: 0;
+    .vsc-header { margin-bottom: 0; }
+    .vsc-circle-wrap,
+    .vsc-cast,
+    .vsc-error { display: none !important; }
+  }
+  color: rgb(var(--ac));
+  font-family: $font-text;
+  border-radius: 10px;
+  user-select: none;
+  cursor: grab;
+  // Backdrop blur driven by client game setting `spellCastDialogBlur`
+  backdrop-filter: blur(var(--vsc-blur, 0));
+  -webkit-backdrop-filter: blur(var(--vsc-blur, 0));
+  // Dark backdrop opacity driven by client game setting `spellCastDialogDarkness` (0–1)
+  background-color: rgba(10, 10, 10, var(--vsc-dark, 0));
+
+  &:active { cursor: grabbing; }
+
+  // ── Close (sits at the right end of the header banner, no circle) ───
+  .vsc-close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    color: rgb(var(--ac));
+    cursor: pointer;
+    padding: 0 !important;
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.15s, filter 0.15s;
+    z-index: 10;
+
+    i { color: rgb(var(--ac)); text-shadow: none; }
+
+    &:hover {
+      background: transparent !important;
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 4px rgba(var(--ac), 0.8));
+    }
+  }
+
+  // ── Header (banner background + rotated portrait frame) ─────────────
+  .vsc-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0;
+    margin: 0 -0.5rem 14px;
+    background-image: url('../assets/images/sheets/titleBG.svg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 36px;
+
+    // Rotated diamond frame around portrait — mirrors favorite spells open state
+    .vsc-portrait-frame {
+      width: 36px;
+      height: 36px;
+      border: 2px solid rgb(var(--ac));
+      border-radius: 2px;
+      margin-left: -17px;
+      overflow: hidden;
+      transform: rotate(45deg) scale(1.4);
+      transform-origin: center;
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 6px rgba(var(--ac), 0.5);
+    }
+
+    .vsc-portrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: none;
+      transform: rotate(-45deg) scale(1.4);
+      filter: sepia(0.1);
+    }
+
+    .vsc-name {
+      margin: 0;
+      flex: 1;
+      font-family: $font-title;
+      font-size: 1.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgb(var(--ac));
+      text-shadow: 0 0 6px rgba(var(--ac), 0.5);
+      border: none;
+    }
+  }
+
+  // ── Circle ──────────────────────────────────────────────────────────
+  .vsc-circle-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .vsc-circle {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+
+    .vsc-stroke {
+      stroke: rgb(var(--ac));
+      stroke-width: 3.2;
+      stroke-opacity: 1;
+      filter: drop-shadow(0 0 6px rgba(var(--ac), 0.7));
+    }
+    .vsc-stroke.static { stroke-opacity: 1; stroke-width: 3.4; }
+
+    .vsc-rune {
+      // Dark fill against bright ring glow — accent now used as outline only
+      fill: rgb(var(--ac));
+      font-family: $font-text;
+      font-size: 22px;
+      font-weight: normal;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: rgb(var(--ac));
+      stroke-width: 2.6px;
+      stroke-linejoin: round;
+      opacity: 0.75;
+      //filter: drop-shadow(0 0 4px rgba(var(--ac), 0.55));
+      &.small {
+        // Inner ring runes — slightly lighter so the two rings read distinct
+        fill: rgb(var(--ac));
+        font-size: 14px;
+        stroke-width: 2.2px;
+      }
+    }
+
+    .vsc-runes.outer {
+      transform-origin: 180px 180px;
+      animation: vsc-spin-ccw 42s linear infinite;
+    }
+    .vsc-runes.inner {
+      transform-origin: 180px 180px;
+      animation: vsc-spin-cw 24s linear infinite;
+    }
+
+    .vsc-tri {
+      stroke: rgb(var(--ac));
+      stroke-width: 3.4;
+      stroke-opacity: 1;
+      filter: drop-shadow(0 0 6px rgba(var(--ac), 0.7));
+      &.inner { stroke-opacity: 0.9; stroke-width: 2; filter: none; }
+    }
+
+    .vsc-edge-label {
+      fill: rgb(var(--ac));
+      font-family: $font-title;
+      font-size: 20px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: #000;
+      stroke-width: 4.5px;
+      stroke-linejoin: round;
+      filter:
+        drop-shadow(0 0 3px rgba(0, 0, 0, 0.95))
+        drop-shadow(0 0 7px rgba(var(--ac), 0.65));
+      transition: fill 0.15s, filter 0.15s;
+
+      &.clickable {
+        pointer-events: auto;
+        cursor: pointer;
+
+        &:hover {
+          filter: drop-shadow(0 0 4px rgba(var(--ac), 0.8));
+          font-weight: bold;
+        }
+      }
+    }
+
+    .vsc-num {
+      fill: rgb(var(--ac));
+      font-family: $font-number;
+      font-size: 26px;
+      &.big { font-size: 28px; }
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: #000;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+      filter:
+        drop-shadow(0 0 2px rgba(0, 0, 0, 0.95))
+        drop-shadow(0 0 6px rgba(var(--ac), 0.6));
+    }
+    .vsc-sub {
+      fill: rgb(var(--ac));
+      font-family: $font-text;
+      font-size: 14px;
+      opacity: 1;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: #000;
+      stroke-width: 3px;
+      stroke-linejoin: round;
+    }
+
+    // ── Nodes ─────────────────────────────────────────────────────────
+    .vsc-node {
+      circle, rect {
+        fill: rgba(0, 0, 0, 0.55);
+        stroke: rgb(var(--ac));
+        stroke-width: 2.4;
+        transition: filter 0.15s, fill 0.15s, stroke-width 0.15s;
+      }
+
+      &.clickable {
+        cursor: pointer;
+        &:hover circle,
+        &:hover rect {
+          fill: rgba(var(--ac), 0.18);
+          filter: drop-shadow(0 0 6px rgba(var(--ac), 0.6));
+        }
+      }
+
+      &.inactive {
+        opacity: 0.85;
+        cursor: default;
+        pointer-events: none;
+      }
+
+      &.center.override {
+        circle { stroke-width: 2.4; }
+        .vsc-num { fill: rgb(var(--ac)); text-shadow: 0 0 4px rgb(var(--ac)); }
+      }
+    }
+
+    // ── Side toggles (focus + fx) ─────────────────────────────────────
+    .vsc-side {
+      cursor: pointer;
+      circle {
+        fill: rgba(0, 0, 0, 0.5);
+        stroke: rgb(var(--ac));
+        stroke-width: 2.2;
+        transition: stroke-opacity 0.15s;
+      }
+      .vsc-glyph {
+        fill: rgb(var(--ac));
+        font-family: Georgia, serif; // glyph fallback — Unicode symbol
+        font-size: 30px;
+        pointer-events: none;
+        paint-order: stroke fill;
+        stroke: #000;
+        stroke-width: 3.5px;
+        stroke-linejoin: round;
+        filter:
+          drop-shadow(0 0 3px rgba(0, 0, 0, 0.9))
+          drop-shadow(0 0 6px rgba(var(--ac), 0.6));
+      }
+      .vsc-side-label {
+        fill: rgb(var(--ac));
+        font-family: $font-title;
+        font-size: 14px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        pointer-events: none;
+        paint-order: stroke fill;
+        stroke: #000;
+        stroke-width: 2.5px;
+        stroke-linejoin: round;
+        filter:
+          drop-shadow(0 0 2px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 0 5px rgba(var(--ac), 0.6));
+      }
+      &.off {
+        opacity: 0.7;
+      }
+      &.on {
+        circle {
+          fill: rgb(var(--ac));
+          stroke: rgb(var(--ac));
+          animation: vsc-pulse 2s ease-in-out infinite;
+        }
+        .vsc-glyph {
+          fill: #111;
+          stroke: none;
+          filter: none;
+        }
+      }
+      &:hover circle {
+        filter: drop-shadow(0 0 5px rgba(var(--ac), 0.7));
+      }
+    }
+  }
+
+  // ── Eye toggle (absolutely positioned over SVG) ─────────────────────
+  .vsc-eye {
+    position: absolute;
+    // Node sits at SVG (180, 114). Within 360-wide viewBox at full width:
+    // x% = 180/360 = 50%, y% = 114/360 ≈ 31.7% measured from SVG top.
+    left: 50%;
+    top: calc(31.7% + 8px);
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    // border-radius: 50%;
+    // background: rgba(0, 0, 0, 0.55);
+    // border: 1px solid rgb(var(--ac));
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    outline: none !important;
+    appearance: none;
+    color: rgb(var(--ac));
+    cursor: pointer;
+    padding: 0 !important;
+    font-size: 22px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, filter 0.15s;
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.8));
+
+    &:hover {
+      background: transparent !important;
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: drop-shadow(0 0 6px rgba(var(--ac), 0.8));
+    }
+    // &.on    { box-shadow: 0 0 6px rgba(var(--ac), 0.6); }
+  }
+
+  // ── Mana info row (below delivery title) ────────────────────────────
+  .vsc-mana-info {
+    position: absolute;
+    left: 50%;
+    top: calc(77% - 8px);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgb(var(--ac));
+    background-color: #0000002d;
+    border: 1px solid rgb(var(--ac));
+    border-radius: 10px;
+    padding: 1px 2px;
+    font-family: $font-number;
+    font-size: 16px;
+    pointer-events: auto;
+    z-index: 5;
+
+    .vsc-mana-icon {
+      color: rgb(var(--ac));
+      font-size: 14px;
+      cursor: help;
+    }
+
+    .vsc-mana-numbers {
+      letter-spacing: 0.05em;
+
+      &.clickable {
+        cursor: pointer;
+        padding: 0 4px;
+        border-radius: 3px;
+        transition: background 0.15s, text-shadow 0.15s;
+
+        &:hover {
+          background: rgba(var(--ac), 0.18);
+          text-shadow: 0 0 6px rgba(var(--ac), 0.8);
+        }
+      }
+    }
+  }
+
+  // ── Delivery selector overlay ───────────────────────────────────────
+  .vsc-delivery-list {
+    position: absolute;
+    // Below the bottom edge label "Delivery" — label at SVG (180, 258)
+    // → 180/360 = 50%, 258/360 ≈ 71.7%
+    left: 50%;
+    top: calc(71.7% + 10px);
+    transform: translateX(-50%);
+    width: 150px;
+    background: rgba(0, 0, 0, 0.92);
+    border: 1px solid rgb(var(--ac));
+    border-radius: 4px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 0 0 12px rgba(var(--ac), 0.4);
+    z-index: 10;
+
+    &.hidden { display: none; }
+
+    button {
+      background: transparent;
+      border: none;
+      color: rgb(var(--ac));
+      font-family: $font-text;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-align: left;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 2px;
+
+      &:hover { background: rgba(var(--ac), 0.18); }
+      &.selected { background: rgba(var(--ac), 0.28); font-weight: bold; }
+    }
+  }
+
+  // ── Cast button (styling copied from chat .vagabond-apply-direct-button) ─
+  // Standalone copy — do not consolidate with chat selectors.
+  .vsc-cast {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 45%;
+    margin: 12px auto 0;
+    padding: 16px !important;
+    background: transparent !important;
+    background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    color: #fff !important;
+    text-transform: uppercase;
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    border: none !important;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+
+    &:hover { filter: brightness(1.6); }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    i {
+      color: var(--c-yellow-text) !important;
+      flex-shrink: 0;
+    }
+  }
+
+  // ── Error message pill ──────────────────────────────────────────────
+  .vsc-error {
+    display: block;
+    width: fit-content;
+    max-width: 90%;
+    margin: 10px auto 0;
+    padding: 4px 14px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgb(var(--ac));
+    border-radius: 999px;
+    color: rgb(var(--ac));
+    font-family: $font-text;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-align: center;
+    box-shadow: 0 0 6px rgba(var(--ac), 0.4);
+
+    &.hidden { visibility: hidden; }
+  }
+}

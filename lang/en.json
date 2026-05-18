@@ -326,6 +326,14 @@
       "Item": "Vagabond Item Sheet"
     },
     "Settings": {
+      "spellCastDialogBlur": {
+        "name": "Spell Cast Dialog Blur",
+        "hint": "Backdrop blur radius (in pixels) behind the spell cast dialog. 0 disables the effect."
+      },
+      "spellCastDialogDarkness": {
+        "name": "Spell Cast Dialog Darkness",
+        "hint": "Dark gray backdrop opacity (0–100%) behind the spell cast dialog. 0 disables the effect."
+      },
       "rollDamageWithCheck": {
         "name": "Roll Damage With Check",
         "hint": "Roll damage together with attack/spell checks instead of waiting for confirmation. When disabled, a manual damage button will appear in chat."
@@ -1179,6 +1187,15 @@
       "Title": "Downtime Activities",
       "ButtonLabel": "Downtime",
       "OpenTooltip": "Open Downtime Activities"
+    },
+    "SpellCast": {
+      "Cast": "Cast !",
+      "Increase": "Increase",
+      "NoDelivery": "Select a delivery type.",
+      "TogglePreview": "Toggle template preview",
+      "Damage": "Damage",
+      "Focus": "Focus",
+      "Fx": "FX"
     },
     "UI": {
       "Sections": {
