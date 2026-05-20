@@ -7056,6 +7056,7 @@ ol#combat-tracker.directory-list {
 }
 .vsc-root.minimized .vsc-circle-wrap,
 .vsc-root.minimized .vsc-cast,
+.vsc-root.minimized .vsc-messages,
 .vsc-root.minimized .vsc-error {
   display: none !important;
 }
@@ -7472,11 +7473,21 @@ ol#combat-tracker.directory-list {
   color: var(--c-yellow-text) !important;
   flex-shrink: 0;
 }
+.vsc-root .vsc-messages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.vsc-root .vsc-messages.hidden {
+  display: none;
+}
 .vsc-root .vsc-error {
   display: block;
   width: fit-content;
   max-width: 90%;
-  margin: 10px auto 0;
+  margin: 0 auto;
   padding: 4px 14px;
   background: rgba(0, 0, 0, 0.85);
   border: 1px solid rgb(var(--ac));
@@ -7490,6 +7501,16 @@ ol#combat-tracker.directory-list {
 }
 .vsc-root .vsc-error.hidden {
   visibility: hidden;
+}
+.vsc-root .vsc-error.vsc-message--warning {
+  border-color: rgb(255, 196, 90);
+  color: rgb(255, 210, 130);
+  box-shadow: 0 0 6px rgba(255, 196, 90, 0.4);
+}
+.vsc-root .vsc-error.vsc-message--info {
+  border-color: rgb(150, 215, 255);
+  color: rgb(190, 230, 255);
+  box-shadow: 0 0 6px rgba(150, 215, 255, 0.35);
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */

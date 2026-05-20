@@ -133,6 +133,13 @@
     {{localize "VAGABOND.SpellCast.Cast"}}
   </button>
 
-  <div class="vsc-error {{#unless errorMessage}}hidden{{/unless}}">{{errorMessage}}</div>
+  {{!-- Message area below the Cast button. Holds the built-in validation message
+        plus anything contributed by modules via the `vagabond.spellCastMessages`
+        hook. See docs/spell-cast-dialog-messages.md. --}}
+  <div class="vsc-messages {{#unless messages.length}}hidden{{/unless}}">
+    {{#each messages as |m|}}
+      <div class="vsc-error vsc-message--{{#if m.type}}{{m.type}}{{else}}error{{/if}}">{{m.text}}</div>
+    {{/each}}
+  </div>
 
 </div>

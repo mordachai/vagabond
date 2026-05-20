@@ -93,6 +93,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #openedAt = performance.now();
   #pos = null;        // null = anchored/centered; once dragged, holds { left, top }
   #minimized = false; // collapsed-to-header state, toggled by dblclick on header
+  #messages = [];     // last-computed message list (validation + module-contributed)
 
   /** Singleton — at most one spell cast dialog open at a time. */
   static #current = null;
@@ -180,6 +181,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     const mana = actor.system.mana ?? {};
 
+    const messages = this._buildMessages(state, finalMana, costs);
+
     return foundry.utils.mergeObject(ctx, {
       spell: { id: spell.id, name: spell.name, img: spell.img },
       accentRGB: accent,
@@ -203,8 +206,48 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       manaCurrent: mana.current ?? 0,
       manaMax: mana.max ?? 0,
       castingMax: mana.castingMax ?? 0,
-      errorMessage: this._validate(state, finalMana),
+      messages,
     });
+  }
+
+  /**
+   * Build the message list shown below the Cast button.
+   *
+   * Order: the built-in validation message first (if any), then anything that
+   * modules contribute via the `vagabond.spellCastMessages` hook. The hook
+   * receives a mutable array and a read-only context snapshot:
+   *
+   *   Hooks.on('vagabond.spellCastMessages', (dialog, messages, context) => {
+   *     messages.push({ text: 'Imbue requires Focus.', type: 'warning', blocking: true });
+   *   });
+   *
+   * Each message: `{ text: string, type?: 'error'|'warning'|'info', blocking?: boolean }`.
+   * A `blocking: true` message prevents casting (see `_onCast`).
+   * See docs/spell-cast-dialog-messages.md for the full contract.
+   *
+   * The result is cached on `#messages` so `_onCast` can re-check blocking
+   * without re-firing the hook.
+   */
+  _buildMessages(state, finalMana, costs) {
+    const messages = [];
+    const validationError = this._validate(state, finalMana);
+    if (validationError) messages.push({ text: validationError, type: 'error', blocking: true });
+
+    try {
+      Hooks.callAll('vagabond.spellCastMessages', this, messages, {
+        actor: this.#actor,
+        spell: this.#spell,
+        state: { ...state },
+        finalMana,
+        costs,
+      });
+    } catch (e) {
+      console.error('Vagabond | spellCastMessages hook failed', e);
+    }
+
+    // Defensive: drop malformed entries so a bad module can't break render.
+    this.#messages = messages.filter(m => m && typeof m.text === 'string' && m.text.length);
+    return this.#messages;
   }
 
   // ── Render ───────────────────────────────────────────────────────────────
@@ -522,8 +565,11 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const costs = SpellCastDialog.calculateCosts(this.#spell, this.#actor, state);
     const finalMana = Math.max(0, costs.totalCost + state.manaOverrideDelta);
     const err = this._validate(state, finalMana);
-    if (err) {
-      // Re-render so error panel shows. Don't notify.
+    // Recompute messages so module-contributed blocking entries are current,
+    // then refuse to cast if anything blocks.
+    const blocked = (this._buildMessages(state, finalMana, costs) ?? []).some(m => m.blocking);
+    if (err || blocked) {
+      // Re-render so the message panel shows. Don't notify.
       return this.render();
     }
     // Commit focus state to actor if changed

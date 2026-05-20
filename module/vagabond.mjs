@@ -610,7 +610,6 @@ globalThis.vagabond = {
 };
 
 Hooks.once('init', function () {
-  console.log("Vagabond | Initializing System...");
   // Register game settings first to avoid preparation errors
   registerGameSettings();
 
@@ -631,7 +630,6 @@ Hooks.once('init', function () {
       return nameA.localeCompare(nameB);
     });
     CONFIG.statusEffects = sortedEffects;
-    console.log('Vagabond | Using custom Vagabond status conditions (sorted alphabetically)');
   }
   // If 'foundry', do nothing - Foundry's defaults will remain active
 
@@ -656,12 +654,10 @@ Hooks.once('init', function () {
   CONFIG.Actor.documentClass = VagabondActor;
 
   // Define custom Combat classes
-  console.log("Vagabond | Registering Combat classes...");
   CONFIG.Combat.documentClass = VagabondCombat;
   CONFIG.Combatant.documentClass = VagabondCombatant;
 
   // Modify CombatTracker in place (Lancer Initiative pattern)
-  console.log("Vagabond | Modifying CombatTracker in place...");
   const CombatTracker = foundry.applications.sidebar.tabs.CombatTracker;
 
   // Store original methods we'll wrap
@@ -670,11 +666,9 @@ Hooks.once('init', function () {
   const originalActivateListeners = CombatTracker.prototype.activateListeners;
 
   // Replace template
-  console.log("Vagabond | Setting custom combat tracker template");
   CombatTracker.PARTS.tracker.template = "systems/vagabond/templates/sidebar/combat-tracker.hbs";
 
   // Add custom actions
-  console.log("Vagabond | Adding custom combat tracker actions");
   Object.assign(CombatTracker.DEFAULT_OPTIONS.actions, {
     activate: VagabondCombatTracker.onActivate,
     deactivate: VagabondCombatTracker.onDeactivate,
@@ -682,28 +676,20 @@ Hooks.once('init', function () {
   });
 
   // Wrap _prepareTrackerContext (NOT _prepareContext!)
-  console.log("Vagabond | Wrapping _prepareTrackerContext method");
   CombatTracker.prototype._prepareTrackerContext = async function(context, options) {
     return VagabondCombatTracker.prepareTrackerContext.call(this, originalPrepareTrackerContext, context, options);
   };
 
   // Wrap _getEntryContextOptions
-  console.log("Vagabond | Wrapping _getEntryContextOptions method");
   CombatTracker.prototype._getEntryContextOptions = function() {
     return VagabondCombatTracker.getEntryContextOptions.call(this, originalGetEntryContextOptions);
   };
 
   // Wrap activateListeners
-  console.log("Vagabond | Wrapping activateListeners method");
   CombatTracker.prototype.activateListeners = function(html) {
     const jQueryHtml = html instanceof HTMLElement ? $(html) : html;
     return VagabondCombatTracker.activateListeners.call(this, originalActivateListeners, jQueryHtml);
   };
-
-  console.log("Vagabond | Combat document class:", CONFIG.Combat.documentClass.name);
-  console.log("Vagabond | Combatant document class:", CONFIG.Combatant.documentClass.name);
-  console.log("Vagabond | Combat Tracker template:", CombatTracker.PARTS.tracker.template);
-  console.log("Vagabond | Combat Tracker actions:", Object.keys(CombatTracker.DEFAULT_OPTIONS.actions));
 
   // Note that you don't need to declare a DataModel
   // for the base actor/item classes - they are included
@@ -970,22 +956,11 @@ Hooks.once('ready', () => {
   // Store in global for easy access
   globalThis.vagabond.ui.countdownDiceOverlay = diceOverlay;
 
-  // Verify Combat system registration
-  console.log("Vagabond | System Ready - Verifying Combat registration:");
-  console.log("  - CONFIG.Combat.documentClass:", CONFIG.Combat.documentClass?.name);
-  console.log("  - CONFIG.Combatant.documentClass:", CONFIG.Combatant.documentClass?.name);
-  console.log("  - ui.combat instance:", ui.combat?.constructor?.name);
-  console.log("  - CombatTracker template:", foundry.applications.sidebar.tabs.CombatTracker.PARTS.tracker.template);
-
-  // Check if methods are wrapped
+  // Verify Combat system registration — warn only if something failed
   const hasCustomActions = 'activate' in foundry.applications.sidebar.tabs.CombatTracker.DEFAULT_OPTIONS.actions;
-  console.log("  - Custom actions registered:", hasCustomActions);
-
-  if (CONFIG.Combat.documentClass?.name === "VagabondCombat" &&
-      CONFIG.Combatant.documentClass?.name === "VagabondCombatant" &&
-      hasCustomActions) {
-    console.log("Vagabond | Combat system successfully registered!");
-  } else {
+  if (CONFIG.Combat.documentClass?.name !== "VagabondCombat" ||
+      CONFIG.Combatant.documentClass?.name !== "VagabondCombatant" ||
+      !hasCustomActions) {
     console.warn("Vagabond | WARNING: Combat system not fully registered!");
   }
 });

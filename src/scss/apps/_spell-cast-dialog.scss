@@ -35,6 +35,7 @@
     .vsc-header { margin-bottom: 0; }
     .vsc-circle-wrap,
     .vsc-cast,
+    .vsc-messages,
     .vsc-error { display: none !important; }
   }
 
@@ -509,12 +510,27 @@
     }
   }
 
-  // ── Error message pill ──────────────────────────────────────────────
+  // ── Message area (validation + module-contributed) ──────────────────
+  // Stacked pills below the Cast button. Populated from the `messages`
+  // context array (built in _buildMessages, fed by the
+  // `vagabond.spellCastMessages` hook).
+  .vsc-messages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+
+    &.hidden { display: none; }
+  }
+
+  // Base pill. `.vsc-message--{type}` modifiers recolour it; `--error`
+  // (and the default) keep the damage-type accent.
   .vsc-error {
     display: block;
     width: fit-content;
     max-width: 90%;
-    margin: 10px auto 0;
+    margin: 0 auto;
     padding: 4px 14px;
     background: rgba(0, 0, 0, 0.85);
     border: 1px solid rgb(var(--ac));
@@ -527,5 +543,19 @@
     box-shadow: 0 0 6px rgba(var(--ac), 0.4);
 
     &.hidden { visibility: hidden; }
+
+    // Warning — amber. Used for soft rule reminders.
+    &.vsc-message--warning {
+      border-color: rgb(255, 196, 90);
+      color: rgb(255, 210, 130);
+      box-shadow: 0 0 6px rgba(255, 196, 90, 0.4);
+    }
+
+    // Info — neutral cyan. Used for non-blocking notices.
+    &.vsc-message--info {
+      border-color: rgb(150, 215, 255);
+      color: rgb(190, 230, 255);
+      box-shadow: 0 0 6px rgba(150, 215, 255, 0.35);
+    }
   }
 }
