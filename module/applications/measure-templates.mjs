@@ -220,6 +220,33 @@ export class VagabondMeasureTemplates {
   /** Delivery types that need a caster-token origin point to place. */
   static AREA_NEEDS_ORIGIN = ['cone', 'line', 'aura'];
 
+  /** Delivery types that attach the region to the caster token (origin-anchored). */
+  static ATTACH_TO_ORIGIN = ['aura', 'cone', 'line'];
+  /** Delivery types that attach the region to the target token (target-anchored). */
+  static ATTACH_TO_TARGET = ['cube', 'sphere'];
+
+  /**
+   * Resolve the token id this delivery type should attach to (v14 `attachment.token`),
+   * so the region follows that token when it moves. Returns null for static placement.
+   * Origin types attach to the caster; target types attach to a single target token
+   * (multi-target centroid placements stay static — no single token to follow).
+   * @param {string} type           Delivery type key
+   * @param {Token} casterToken     The caster token placeable
+   * @param {Token} targetToken     The first target token placeable
+   * @param {number} targetCount    How many tokens are targeted
+   * @returns {string|null}
+   */
+  _resolveAttachmentTokenId(type, casterToken, targetToken, targetCount) {
+    const lc = (type || '').toLowerCase();
+    if (VagabondMeasureTemplates.ATTACH_TO_ORIGIN.includes(lc)) {
+      return casterToken?.document?.id ?? null;
+    }
+    if (VagabondMeasureTemplates.ATTACH_TO_TARGET.includes(lc)) {
+      if (targetToken && targetCount <= 1) return targetToken.document?.id ?? null;
+    }
+    return null;
+  }
+
   /**
    * Pure pre-flight check for area placement. Returns a user-facing error
    * string if the area can't be placed with the given inputs, else null.
@@ -334,6 +361,16 @@ export class VagabondMeasureTemplates {
         return null;
     }
 
+    // Resolve token attachment so the region follows the caster (origin types) or
+    // the target (target types) when that token moves. Multi-target placements stay static.
+    const targetCount = targets?.size ?? targets?.length ?? (centroid ? 1 : 0);
+    const attachTokenId = this._resolveAttachmentTokenId(type, token, targetToken, targetCount);
+
+    // True Shape ('shapes') vs Covered Grid Spaces ('coverage') — GM-configurable, default True Shape.
+    let highlightMode = 'shapes';
+    try { highlightMode = game.settings.get('vagabond', 'regionHighlightMode') || 'shapes'; }
+    catch (_e) { /* setting not registered yet — fall back to True Shape */ }
+
     return {
       name,
       color: game.user.color?.toString() ?? '#FF0000',
@@ -341,10 +378,10 @@ export class VagabondMeasureTemplates {
       elevation: { bottom: null, top: null },
       levels: [],
       restriction: { enabled: false, type: 'move', priority: 0 },
-      attachment: { token: null },
+      attachment: { token: attachTokenId },
       behaviors: [],
       visibility: CONST.REGION_VISIBILITY.ALWAYS,
-      highlightMode: 'coverage',
+      highlightMode,
       displayMeasurements: true,
       hidden: false,
       locked: false,

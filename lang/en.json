@@ -338,6 +338,12 @@
         "name": "Hide Cast Dialog Rings",
         "hint": "Hide the outer rune ring, middle divider, and inner rune ring on the spell cast dialog. The dialog renders smaller in this mode."
       },
+      "regionHighlightMode": {
+        "name": "Spell Area Drawing Style",
+        "hint": "How spell area regions are drawn on the canvas. True Shape draws the exact geometric shape (prettier). Covered Grid Spaces highlights every grid cell the shape touches.",
+        "shapes": "True Shape",
+        "coverage": "Covered Grid Spaces"
+      },
       "spellCastDialogDarkness": {
         "name": "Spell Cast Dialog Darkness",
         "hint": "Dark gray backdrop opacity (0–100%) behind the spell cast dialog. 0 disables the effect."

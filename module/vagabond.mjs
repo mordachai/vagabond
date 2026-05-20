@@ -128,7 +128,20 @@ function registerGameSettings() {
     onChange: reRenderAllApps,
   });
 
-  
+  // Spell area regions — drawing style: true geometric shape vs covered grid spaces
+  game.settings.register('vagabond', 'regionHighlightMode', {
+    name: 'VAGABOND.Settings.regionHighlightMode.name',
+    hint: 'VAGABOND.Settings.regionHighlightMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      'shapes': 'VAGABOND.Settings.regionHighlightMode.shapes',
+      'coverage': 'VAGABOND.Settings.regionHighlightMode.coverage'
+    },
+    default: 'shapes',
+    requiresReload: false,
+  });
 
   // Setting 1: Roll damage with check
   game.settings.register('vagabond', 'rollDamageWithCheck', {
