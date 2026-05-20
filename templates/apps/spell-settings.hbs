@@ -1,0 +1,170 @@
+<div class="flexcol standard-form">
+  <section class="scrollable">
+    <p class="notes">{{localize 'VAGABOND.SpellSettings.Description'}}</p>
+
+    {{!-- ── Per-player: Spell Cast Dialog ──────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.SpellSettings.Section.CastDialog'}}</legend>
+
+      <div class="form-group">
+        <label for="useSpellCastDialog">
+          <input type="checkbox" name="useSpellCastDialog" id="useSpellCastDialog" {{checked useSpellCastDialog}}>
+          {{localize 'VAGABOND.Settings.useSpellCastDialog.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.useSpellCastDialog.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="spellCastDialogDarkness">{{localize 'VAGABOND.Settings.spellCastDialogDarkness.name'}}</label>
+        <input type="range" name="spellCastDialogDarkness" id="spellCastDialogDarkness" value="{{spellCastDialogDarkness}}" min="0" max="100" step="5">
+        <p class="hint">{{localize 'VAGABOND.Settings.spellCastDialogDarkness.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="spellCastDialogBlur">{{localize 'VAGABOND.Settings.spellCastDialogBlur.name'}}</label>
+        <input type="range" name="spellCastDialogBlur" id="spellCastDialogBlur" value="{{spellCastDialogBlur}}" min="0" max="5" step="0.5">
+        <p class="hint">{{localize 'VAGABOND.Settings.spellCastDialogBlur.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="hideCastRings">
+          <input type="checkbox" name="hideCastRings" id="hideCastRings" {{checked hideCastRings}}>
+          {{localize 'VAGABOND.Settings.hideCastRings.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.hideCastRings.hint'}}</p>
+      </div>
+    </fieldset>
+
+    {{!-- ── Per-player: Your Area Display ──────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.SpellSettings.Section.YourDisplay'}}</legend>
+
+      <div class="form-group">
+        <label for="regionBorderModeUser">{{localize 'VAGABOND.Settings.regionBorderMode.name'}}</label>
+        <select name="regionBorderModeUser" id="regionBorderModeUser">
+          {{#each borderModesUser}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.Settings.regionBorderMode.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="regionTextureAlphaUseGM">
+          <input type="checkbox" name="regionTextureAlphaUseGM" id="regionTextureAlphaUseGM" {{checked regionTextureAlphaUseGM}}>
+          {{localize 'VAGABOND.Settings.regionTextureAlphaUseGM.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.regionTextureAlphaUseGM.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="regionTextureAlphaUser">{{localize 'VAGABOND.Settings.regionTextureAlpha.name'}}</label>
+        <input type="range" name="regionTextureAlphaUser" id="regionTextureAlphaUser" value="{{regionTextureAlphaUser}}" min="0" max="1" step="0.05">
+        <p class="hint">{{localize 'VAGABOND.Settings.regionTextureAlpha.hint'}}</p>
+      </div>
+    </fieldset>
+
+    {{#if isGM}}
+    {{!-- ── World (GM only): Spell area shapes ─────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.SpellSettings.Section.AreaShapes'}}</legend>
+
+      <div class="form-group">
+        <label for="regionHighlightMode">{{localize 'VAGABOND.Settings.regionHighlightMode.name'}}</label>
+        <select name="regionHighlightMode" id="regionHighlightMode">
+          {{#each highlightModes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.Settings.regionHighlightMode.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="regionUseTextures">
+          <input type="checkbox" name="regionUseTextures" id="regionUseTextures" {{checked regionUseTextures}}>
+          {{localize 'VAGABOND.Settings.regionUseTextures.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.regionUseTextures.hint'}}</p>
+      </div>
+    </fieldset>
+
+    {{!-- ── World (GM only): Area artwork ──────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.SpellSettings.Section.Artwork'}}</legend>
+
+      <div class="form-group">
+        <label for="regionTextureHideFill">
+          <input type="checkbox" name="regionTextureHideFill" id="regionTextureHideFill" {{checked regionTextureHideFill}}>
+          {{localize 'VAGABOND.SpellSettings.HideFill.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.HideFill.hint'}}</p>
+      </div>
+
+      {{!-- Blend mode hidden for now (kept in code / NORMAL default). Re-enable to expose.
+      <div class="form-group">
+        <label for="regionTextureBlendMode">{{localize 'VAGABOND.SpellSettings.BlendMode.name'}}</label>
+        <select name="regionTextureBlendMode" id="regionTextureBlendMode">
+          {{#each blendModes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.BlendMode.hint'}}</p>
+      </div>
+      --}}
+
+      <div class="form-group">
+        <label for="regionTextureAnimate">
+          <input type="checkbox" name="regionTextureAnimate" id="regionTextureAnimate" {{checked regionTextureAnimate}}>
+          {{localize 'VAGABOND.SpellSettings.Animate.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.Animate.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="regionTextureSpinSpeed">{{localize 'VAGABOND.SpellSettings.SpinSpeed.name'}}</label>
+        <input type="range" name="regionTextureSpinSpeed" id="regionTextureSpinSpeed" value="{{regionTextureSpinSpeed}}" min="0" max="0.05" step="0.001">
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.SpinSpeed.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="regionTextureScrollSpeed">{{localize 'VAGABOND.SpellSettings.ScrollSpeed.name'}}</label>
+        <input type="range" name="regionTextureScrollSpeed" id="regionTextureScrollSpeed" value="{{regionTextureScrollSpeed}}" min="-5" max="5" step="0.5">
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.ScrollSpeed.hint'}}</p>
+      </div>
+    </fieldset>
+
+    {{!-- ── World (GM only): Player defaults ───────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.SpellSettings.Section.PlayerDefaults'}}</legend>
+      <p class="notes">{{localize 'VAGABOND.SpellSettings.PlayerDefaults.Description'}}</p>
+
+      <div class="form-group">
+        <label for="regionBorderMode">{{localize 'VAGABOND.SpellSettings.DefaultBorder.name'}}</label>
+        <select name="regionBorderMode" id="regionBorderMode">
+          {{#each borderModes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.DefaultBorder.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="regionTextureAlpha">{{localize 'VAGABOND.SpellSettings.DefaultAlpha.name'}}</label>
+        <input type="range" name="regionTextureAlpha" id="regionTextureAlpha" value="{{regionTextureAlpha}}" min="0" max="1" step="0.05">
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.DefaultAlpha.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <button type="button" class="dialog-button" data-action="forceOnPlayers">
+          <i class="fas fa-users-gear"></i>
+          {{localize 'VAGABOND.SpellSettings.ForceButton'}}
+        </button>
+        <p class="hint">{{localize 'VAGABOND.SpellSettings.ForceHint'}}</p>
+      </div>
+    </fieldset>
+    {{/if}}
+  </section>
+
+  <footer class="form-footer flexrow">
+    <button type="submit" class="dialog-button default">
+      <i class="fas fa-save"></i>
+      {{localize 'VAGABOND.SpellSettings.Save'}}
+    </button>
+    <button type="button" class="dialog-button" data-action="close">
+      <i class="fas fa-times"></i>
+      {{localize 'VAGABOND.SpellSettings.Cancel'}}
+    </button>
+  </footer>
+</div>

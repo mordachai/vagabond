@@ -994,6 +994,95 @@ VAGABOND.damageTypeIcons = {
 };
 
 /**
+ * Spell-area region artwork. Seamless textures painted over spell regions on the
+ * canvas, chosen by the spell's damage type. Files live at `{damageArtBasePath}/{key}.webp`
+ * and are auto-discovered at runtime by RegionTextureOverlay — drop in a new
+ * `{newDamageType}.webp` and it works without code changes. Use `damageArtAliases`
+ * only when the image basename differs from the damage-type key.
+ * @type {string}
+ */
+VAGABOND.damageArtBasePath = 'systems/vagabond/assets/ui/damage_arts';
+
+/**
+ * Overrides for damage types whose art filename does not match the type key.
+ * @type {Object<string,string>}
+ */
+VAGABOND.damageArtAliases = {
+  recover: 'recovery'
+};
+
+/**
+ * Spell-area region artwork keyed by FX school (see `VAGABOND.fxSchools`). When a
+ * spell carries an explicit `fxSchool`, the region texture is chosen from this map
+ * instead of the damage type — so no-damage spells still get a fitting template.
+ * Convention is `{damageArtBasePath}/{school}.webp`; list only the schools whose
+ * art basename differs from the school key.
+ * @type {Object<string,string>}
+ */
+VAGABOND.fxSchoolArt = {
+  arcane:       'magical',
+  genericlight: 'radiant',
+  genericdark:  'darkness',
+  shadow:       'darkness',
+  lava:         'fire',
+};
+
+/**
+ * Hide the solid color fill (the core region highlight) on textured regions so
+ * only the artwork shows. Live-testable: `vagabond.ui.regionTexture.setHideFill(false)`.
+ * @type {boolean}
+ */
+VAGABOND.regionTextureHideFill = true;
+
+/**
+ * Border (outline) treatment on textured regions:
+ *  - 'player'  : tint the outline to the caster/player color
+ *  - 'hide'    : no outline
+ *  - 'default' : leave Foundry's default disposition-colored outline
+ * Live-testable: `vagabond.ui.regionTexture.setBorderMode('hide')`.
+ * @type {string}
+ */
+VAGABOND.regionBorderMode = 'hide';
+
+/**
+ * Blend mode for spell-area region artwork against the canvas/background.
+ * A PIXI.BLEND_MODES key (e.g. 'NORMAL', 'ADD', 'SCREEN', 'MULTIPLY', 'OVERLAY').
+ * Live-testable: `vagabond.ui.regionTexture.setBlendMode('ADD')`.
+ * @type {string}
+ */
+VAGABOND.regionTextureBlendMode = 'NORMAL';
+
+/**
+ * Opacity of spell-area region artwork (0–1).
+ * Live-testable: `vagabond.ui.regionTexture.setAlpha(1)`.
+ * @type {number}
+ */
+VAGABOND.regionTextureAlpha = 0.65;
+
+/**
+ * Animate spell-area region artwork. Circle/rectangle areas (aura, sphere, cube)
+ * spin; cone/line areas scroll their texture along the aim direction.
+ * Live-testable: `vagabond.ui.regionTexture.setAnimate(false)`.
+ * @type {boolean}
+ */
+VAGABOND.regionTextureAnimate = true;
+
+/**
+ * Spin speed in radians per frame for circle/rectangle areas (~60fps).
+ * Live-testable: `vagabond.ui.regionTexture.setSpinSpeed(0.02)`.
+ * @type {number}
+ */
+VAGABOND.regionTextureSpinSpeed = 0.005;
+
+/**
+ * Scroll speed in pixels per frame for cone/line areas (~60fps).
+ * Negative reverses the flow direction.
+ * Live-testable: `vagabond.ui.regionTexture.setScrollSpeed(2)`.
+ * @type {number}
+ */
+VAGABOND.regionTextureScrollSpeed = 1.5;
+
+/**
  * Dice So Nice per-damage-type appearance overrides.
  * Applied to every DiceTerm in a damage roll via VagabondDiceAppearance.applyDamageColorset().
  *

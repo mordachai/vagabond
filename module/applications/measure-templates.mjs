@@ -1,3 +1,5 @@
+import { RegionTextureOverlay } from '../ui/region-texture-overlay.mjs';
+
 /**
  * Manages creation and previewing of spell area regions for Vagabond.
  * Uses Scene Regions (v14) instead of MeasuredTemplates (removed in v14).
@@ -8,6 +10,28 @@ export class VagabondMeasureTemplates {
     this.activePreviews = new Map();
     // Stores chat-card Region IDs keyed by message ID
     this.chatRegions = new Map();
+    // Serializes preview mutations. Rapid `targetToken` events fire overlapping
+    // updatePreview calls; without this they race on region delete/create and
+    // throw "Region <id> does not exist!" when two calls delete the same region.
+    this._previewChain = Promise.resolve();
+  }
+
+  /**
+   * Deletes regions by id, skipping any that no longer exist and swallowing
+   * the not-found rejection that races produce. Returns nothing.
+   * @param {Scene} scene
+   * @param {string[]} ids
+   */
+  async _safeDeleteRegions(scene, ids) {
+    if (!scene || !ids?.length) return;
+    const existing = ids.filter(id => scene.regions?.get(id));
+    if (!existing.length) return;
+    try {
+      await scene.deleteEmbeddedDocuments('Region', existing);
+    } catch (err) {
+      // A concurrent sweep may have removed these between filter and delete.
+      console.debug('Vagabond | region delete race ignored:', err?.message ?? err);
+    }
   }
 
   /* -------------------------------------------- */
@@ -21,7 +45,18 @@ export class VagabondMeasureTemplates {
    * @param {string} deliveryType - The delivery type (e.g. 'cone', 'aura').
    * @param {number} distance - The distance in feet.
    */
-  async updatePreview(actor, itemId, deliveryType, distance, { notify = true } = {}) {
+  async updatePreview(actor, itemId, deliveryType, distance, opts = {}) {
+    // Chain onto the previous call so mutations never overlap. The .catch keeps
+    // one failed link from poisoning the chain for subsequent calls.
+    const run = this._previewChain.then(
+      () => this._updatePreview(actor, itemId, deliveryType, distance, opts),
+      () => this._updatePreview(actor, itemId, deliveryType, distance, opts),
+    );
+    this._previewChain = run.catch(() => {});
+    return run;
+  }
+
+  async _updatePreview(actor, itemId, deliveryType, distance, { notify = true, damageType = null, fxSchool = null } = {}) {
     await this.clearPreview(actor.id, itemId);
     await this.cleanupOrphanedSpellRegions();
 
@@ -39,7 +74,7 @@ export class VagabondMeasureTemplates {
     const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid, notify });
     if (!regionData) return;
 
-    regionData.flags = { vagabond: { isPreview: true, actorId: actor.id, itemId } };
+    regionData.flags = { vagabond: { isPreview: true, actorId: actor.id, itemId, texture: this._resolveTexture(damageType, fxSchool) } };
 
     const docs = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
     if (docs?.[0]) {
@@ -56,9 +91,8 @@ export class VagabondMeasureTemplates {
     const key = `${actorId}-${itemId}`;
     const regionId = this.activePreviews.get(key);
     if (regionId) {
-      const region = canvas.scene?.regions?.get(regionId);
-      if (region) await region.delete();
       this.activePreviews.delete(key);
+      await this._safeDeleteRegions(canvas.scene, [regionId]);
     }
   }
 
@@ -67,13 +101,14 @@ export class VagabondMeasureTemplates {
    * @param {string} actorId
    */
   async clearActorPreviews(actorId) {
+    const ids = [];
     for (const [key, regionId] of this.activePreviews.entries()) {
       if (key.startsWith(`${actorId}-`)) {
-        const region = canvas.scene?.regions?.get(regionId);
-        if (region) await region.delete();
+        ids.push(regionId);
         this.activePreviews.delete(key);
       }
     }
+    await this._safeDeleteRegions(canvas.scene, ids);
   }
 
   /**
@@ -96,9 +131,7 @@ export class VagabondMeasureTemplates {
       if (!flags.isPreview && !flags.deliveryType) continue;
       if (!tracked.has(region.id)) toDelete.push(region.id);
     }
-    if (toDelete.length > 0) {
-      await scene.deleteEmbeddedDocuments('Region', toDelete);
-    }
+    await this._safeDeleteRegions(scene, toDelete);
   }
 
   /**
@@ -114,9 +147,7 @@ export class VagabondMeasureTemplates {
       if (!flags) continue;
       if (flags.isPreview || flags.deliveryType) toDelete.push(region.id);
     }
-    if (toDelete.length > 0) {
-      await scene.deleteEmbeddedDocuments('Region', toDelete);
-    }
+    await this._safeDeleteRegions(scene, toDelete);
     this.activePreviews.clear();
     this.chatRegions.clear();
   }
@@ -133,15 +164,14 @@ export class VagabondMeasureTemplates {
    * @param {ChatMessage} message
    * @returns {Promise<boolean>} true if a region was created, false if one was removed
    */
-  async fromChat(deliveryType, deliveryText, message) {
+  async fromChat(deliveryType, deliveryText, message, damageType = null, fxSchool = null) {
     const messageId = message.id;
 
     // Toggle off: remove existing region for this message
     if (this.chatRegions.has(messageId)) {
       const regionId = this.chatRegions.get(messageId);
-      const region = canvas.scene?.regions?.get(regionId);
-      if (region) await region.delete();
       this.chatRegions.delete(messageId);
+      await this._safeDeleteRegions(canvas.scene, [regionId]);
       return false;
     }
 
@@ -186,7 +216,8 @@ export class VagabondMeasureTemplates {
         vagabond: {
           deliveryType,
           deliveryText,
-          targetsAtRollTime: storedTargets
+          targetsAtRollTime: storedTargets,
+          texture: this._resolveTexture(damageType, fxSchool)
         }
       };
       const docs = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
@@ -245,6 +276,30 @@ export class VagabondMeasureTemplates {
       if (targetToken && targetCount <= 1) return targetToken.document?.id ?? null;
     }
     return null;
+  }
+
+  /**
+   * Resolve the seamless art texture path for a spell, honoring the
+   * `regionUseTextures` GM toggle. Stored in the region's `flags.vagabond.texture`
+   * and painted by RegionTextureOverlay. Returns null when textures are off or
+   * no matching art exists.
+   *
+   * An explicit `fxSchool` wins — it picks school art so no-damage spells still
+   * get a fitting template; otherwise we fall back to the damage-type art.
+   * @param {string|null} damageType
+   * @param {string|null} [fxSchool]
+   * @returns {string|null}
+   */
+  _resolveTexture(damageType, fxSchool = null) {
+    let useTextures = true;
+    try { useTextures = game.settings.get('vagabond', 'regionUseTextures'); }
+    catch (_e) { /* setting not registered yet */ }
+    if (!useTextures) return null;
+    if (fxSchool) {
+      const path = RegionTextureOverlay.texturePathForSchool(fxSchool);
+      if (path) return path;
+    }
+    return RegionTextureOverlay.texturePathForType(damageType);
   }
 
   /**

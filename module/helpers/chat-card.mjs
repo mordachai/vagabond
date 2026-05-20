@@ -869,8 +869,9 @@ export class VagabondChatCard {
           tags.push({ 
               label: deliveryText, 
               cssClass: 'tag-delivery template-trigger', // Adds class for listener
-              // Pre-format the attributes as a safe string
-              extraAttributes: `data-delivery-type="${spellState.deliveryType}" data-delivery-text="${deliveryText}"`
+              // Pre-format the attributes as a safe string. data-fx-school (when set) wins over
+              // data-damage-type for picking the region art texture.
+              extraAttributes: `data-delivery-type="${spellState.deliveryType}" data-delivery-text="${deliveryText}" data-damage-type="${spell.system.damageType ?? '-'}" data-fx-school="${spell.system.fxSchool ?? ''}"`
           });
       } else {
           tags.push({ label: deliveryText, cssClass: 'tag-delivery' });

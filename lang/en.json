@@ -344,6 +344,18 @@
         "shapes": "True Shape",
         "coverage": "Covered Grid Spaces"
       },
+      "regionUseTextures": {
+        "name": "Spell Area Artwork",
+        "hint": "Paint seamless artwork over spell area regions based on the spell's damage type (e.g. fire, cold). When disabled, areas use a plain color fill."
+      },
+      "regionBorderMode": {
+        "name": "Spell Area Outline",
+        "hint": "How the outline around a spell area is drawn for you: your player color, hidden, or Foundry's default."
+      },
+      "regionTextureAlpha": {
+        "name": "Spell Area Artwork Opacity",
+        "hint": "How opaque spell area artwork appears for you (0 = invisible, 1 = solid)."
+      },
       "spellCastDialogDarkness": {
         "name": "Spell Cast Dialog Darkness",
         "hint": "Dark gray backdrop opacity (0–100%) behind the spell cast dialog. 0 disables the effect."
@@ -440,6 +452,10 @@
       "revealNpcRecharge": {
         "name": "Reveal NPC Action Recharge",
         "hint": "When enabled, recharge countdown results are posted publicly. When disabled, they are only visible to the GM."
+      },
+      "regionTextureAlphaUseGM": {
+        "name": "Use GM Spell Area Opacity",
+        "hint": "When on, spell area artwork uses the opacity the GM set for the table. Turn off to use your own opacity below."
       }
     },
     "SequencerFX": {
@@ -1397,6 +1413,71 @@
         "PingCombatant": "Ping Combatant",
         "DetectRoll": "Roll Detect Skill",
         "InitiativeRoll": "Roll Initiative"
+      }
+    },
+    "SpellSettings": {
+      "Title": "Spell Settings",
+      "MenuName": "Spell Settings",
+      "MenuLabel": "Configure Spells",
+      "MenuHint": "Spell cast dialog, spell area shapes, and area artwork appearance.",
+      "Description": "Your personal cast dialog and spell-area display preferences. GMs also see the world-wide spell area sections below.",
+      "Save": "Save Changes",
+      "Cancel": "Cancel",
+      "SaveSuccess": "Spell settings saved.",
+      "Section": {
+        "CastDialog": "Spell Cast Dialog",
+        "YourDisplay": "Your Area Display",
+        "AreaShapes": "Spell Area Shapes",
+        "Artwork": "Area Artwork",
+        "PlayerDefaults": "Player Defaults"
+      },
+      "PlayerDefaults": {
+        "Description": "These are the table defaults each player gets unless they change their own outline/opacity in the main settings. Use the button to reset every player back to these."
+      },
+      "DefaultBorder": {
+        "name": "Default Area Outline",
+        "hint": "The outline players see by default for spell areas."
+      },
+      "DefaultAlpha": {
+        "name": "Default Area Opacity",
+        "hint": "The artwork opacity players see by default (0 = invisible, 1 = solid)."
+      },
+      "ForceButton": "Apply Defaults to All Players",
+      "ForceHint": "Saves these settings and resets every player's personal outline/opacity so they use the defaults above.",
+      "ForceTitle": "Apply to All Players",
+      "ForceConfirm": "Reset every player's spell-area outline and opacity to the table defaults? Players can change them again afterward.",
+      "ForceApplied": "Spell area display defaults applied to all players.",
+      "BorderMode": {
+        "name": "Area Outline",
+        "hint": "How the outline around a spell area is drawn.",
+        "inherit": "Use GM Default",
+        "player": "Player Color",
+        "hide": "Hidden",
+        "default": "Foundry Default"
+      },
+      "HideFill": {
+        "name": "Hide Color Fill",
+        "hint": "Hide the solid color fill on textured areas so only the artwork shows."
+      },
+      "BlendMode": {
+        "name": "Artwork Blend Mode",
+        "hint": "How the artwork blends with the map below it (NORMAL, ADD, SCREEN, MULTIPLY, OVERLAY)."
+      },
+      "Alpha": {
+        "name": "Artwork Opacity",
+        "hint": "Opacity of the area artwork (0 = invisible, 1 = solid)."
+      },
+      "Animate": {
+        "name": "Animate Artwork",
+        "hint": "Spin circle/rectangle areas (aura, sphere, cube); scroll cone/line areas along their aim."
+      },
+      "SpinSpeed": {
+        "name": "Spin Speed",
+        "hint": "Rotation speed for spinning areas. 0 stops spinning."
+      },
+      "ScrollSpeed": {
+        "name": "Scroll Speed",
+        "hint": "Texture flow speed for cone/line areas. Negative reverses the direction; 0 stops."
       }
     },
     "EncounterSettings": {

@@ -318,8 +318,8 @@
   padding-right: 2px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px 8px;
-  padding: 8px 4px;
+  gap: 6px 3px;
+  padding: 6px 3px;
 
   .spell-grid-card {
     display: flex;
@@ -331,23 +331,23 @@
 
   // Rotated 45° diamond frame mirroring the dialog header portrait
   .spell-grid-frame {
-    width: 24px;
-    height: 24px;
+    width: 60px;
+    height: 28px;
     border: 1px solid $c-yellow;
     border-radius: 3px;
     overflow: hidden;
-    transform: rotate(45deg) scale(1.2);
+    //transform: rotate(45deg) scale(1.2);
     transform-origin: center;
     background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 6px $c-yellow;
+    box-shadow: 0 0 2px $c-yellow;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, filter 0.15s;
-    margin: 6px 0;
+    margin: 2px 0;
     filter: brightness(0.95);
 
     &:hover {
-      transform: rotate(45deg) scale(1.35);
-      box-shadow: 0 0 10px $c-yellow;
+      transform: scale(1.15);
+      box-shadow: 0 0 8px $c-yellow;
       filter: brightness(1.2);
     }
   }

@@ -7003,7 +7003,7 @@ ol#combat-tracker.directory-list {
   box-shadow: none;
   border: none;
   overflow: visible;
-  z-index: 1100 !important;
+  z-index: 1100;
 }
 .application.spell-cast-dialog > .window-content {
   background: transparent;
@@ -7068,7 +7068,19 @@ ol#combat-tracker.directory-list {
 .vsc-root.no-rings .vsc-circle .vsc-runes {
   display: none;
 }
-.vsc-root.no-rings .vsc-side {
+.vsc-root.no-rings .vsc-side-focus {
+  transform: translate(43px, 34px);
+}
+.vsc-root.no-rings .vsc-side-fx {
+  transform: translate(-50px, 34px);
+}
+.vsc-root.no-rings .vsc-side circle {
+  r: 13px;
+}
+.vsc-root.no-rings .vsc-side .vsc-glyph {
+  font-size: 20px;
+}
+.vsc-root.no-rings .vsc-side .vsc-side-label {
   display: none;
 }
 .vsc-root.no-rings .vsc-eye {
@@ -7511,6 +7523,41 @@ ol#combat-tracker.directory-list {
   border-color: rgb(150, 215, 255);
   color: rgb(190, 230, 255);
   box-shadow: 0 0 6px rgba(150, 215, 255, 0.35);
+}
+
+/* Spell Settings Dialog (ApplicationV2) */
+#spell-settings.spell-settings-form .window-content {
+  overflow-y: auto !important;
+}
+#spell-settings.spell-settings-form section.scrollable {
+  padding: 1rem;
+}
+#spell-settings.spell-settings-form footer.form-footer {
+  flex: 0 0 auto;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+#spell-settings.spell-settings-form fieldset {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 1rem;
+}
+#spell-settings.spell-settings-form fieldset legend {
+  font-weight: bold;
+  padding: 0 0.5rem;
+  font-family: Manofa, sans-serif;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  width: auto;
+  border: none;
+}
+#spell-settings.spell-settings-form fieldset legend::before, #spell-settings.spell-settings-form fieldset legend::after {
+  display: none !important;
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
@@ -16390,8 +16437,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding-right: 2px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px 8px;
-  padding: 8px 4px;
+  gap: 6px 3px;
+  padding: 6px 3px;
 }
 .vagabond .favorited-spells-grid .spell-grid-card {
   display: flex;
@@ -16401,23 +16448,22 @@ details[open] .vagabond .npc-immunity-toggle i {
   width: 100%;
 }
 .vagabond .favorited-spells-grid .spell-grid-frame {
-  width: 24px;
-  height: 24px;
+  width: 60px;
+  height: 28px;
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 3px;
   overflow: hidden;
-  transform: rotate(45deg) scale(1.2);
   transform-origin: center;
   background: rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 6px var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 2px var(--vagabond-c-chat-yellow);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, filter 0.15s;
-  margin: 6px 0;
+  margin: 2px 0;
   filter: brightness(0.95);
 }
 .vagabond .favorited-spells-grid .spell-grid-frame:hover {
-  transform: rotate(45deg) scale(1.35);
-  box-shadow: 0 0 10px var(--vagabond-c-chat-yellow);
+  transform: scale(1.15);
+  box-shadow: 0 0 8px var(--vagabond-c-chat-yellow);
   filter: brightness(1.2);
 }
 .vagabond .favorited-spells-grid .spell-grid-img {

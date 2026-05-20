@@ -94,10 +94,12 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #ctrl = null;
   #openedAt = performance.now();
   #pos = null;        // null = anchored/centered; once dragged, holds { left, top }
+  #dragged = false;   // true once the user has manually dragged — suppresses re-anchoring
   #minimized = false; // collapsed-to-header state, toggled by dblclick on header
   #messages = [];     // last-computed message list (validation + module-contributed)
   #targetHookId = null; // Foundry 'targetToken' hook — keeps area-requirement message live
   #renderDebounce = foundry.utils.debounce(() => { if (this.rendered) this.render(); }, 50);
+  #previewDebounce = foundry.utils.debounce(() => this._refreshPreview(), 80);
 
   /** Singleton — at most one spell cast dialog open at a time. */
   static #current = null;
@@ -275,6 +277,43 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   // ── Render ───────────────────────────────────────────────────────────────
 
+  /** Bounding box of the docking anchor, expanded to include the sliding panel
+   *  when it is open. The panel is an absolutely-positioned child of the sheet,
+   *  so it overflows the sheet's own border box and would otherwise be ignored
+   *  by getBoundingClientRect — leaving the dialog docked on top of it. */
+  _anchorRect() {
+    const el = this.#anchorEl;
+    const r = el.getBoundingClientRect();
+    let { left, right, top, bottom } = r;
+    const panel = el.querySelector?.('.sliding-panel.panel-open');
+    if (panel) {
+      const pr = panel.getBoundingClientRect(); // accounts for the 2deg rotate
+      left = Math.min(left, pr.left);
+      right = Math.max(right, pr.right);
+      top = Math.min(top, pr.top);
+      bottom = Math.max(bottom, pr.bottom);
+    }
+    return { left, right, top, bottom, width: right - left, height: bottom - top };
+  }
+
+  /** Raise the dialog above every other open window. Frameless dialogs are not
+   *  z-managed by Foundry's window manager, so a static CSS z-index loses the
+   *  moment the actor sheet is brought to front (its inline z-index floats
+   *  upward on every click — e.g. when opening the sliding panel). We compute
+   *  the current top z ourselves and sit one above it. Re-invoked on any
+   *  outside pointerdown so we reclaim the top after the sheet re-raises. */
+  _raiseToTop() {
+    const el = this.element;
+    if (!el) return;
+    let max = 0;
+    for (const node of document.querySelectorAll('.application, .app')) {
+      if (node === el) continue;
+      const z = parseInt(node.style.zIndex || window.getComputedStyle(node).zIndex, 10);
+      if (Number.isFinite(z) && z > max) max = z;
+    }
+    el.style.zIndex = String(Math.max(max + 1, 1100));
+  }
+
   /** Override V2 setPosition — frameless dialog must be force-positioned via fixed.
    *  After the first compute the position is latched into #pos so re-renders
    *  don't re-anchor and teleport the dialog. Drag overwrites #pos directly. */
@@ -296,8 +335,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       left = this.#pos.left;
       top = this.#pos.top;
     } else if (this.#anchorEl && document.body.contains(this.#anchorEl)) {
-      // Dock beside the anchor horizontally; vertical center on screen
-      const r = this.#anchorEl.getBoundingClientRect();
+      // Dock beside the anchor horizontally; vertical center on screen.
+      // _anchorRect() folds in the sliding panel when it is open so we dock
+      // beyond it rather than landing inside the expanded sheet footprint.
+      const r = this._anchorRect();
       const gap = 12;
       const spaceRight = window.innerWidth - r.right;
       const spaceLeft = r.left;
@@ -346,6 +387,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     document.addEventListener('mousemove', (ev) => {
       if (!dragging) return;
+      this.#dragged = true; // suppress automatic re-anchoring once moved by hand
       this.#pos = {
         left: Math.round(startLeft + (ev.clientX - startX)),
         top: Math.round(startTop + (ev.clientY - startY)),
@@ -359,9 +401,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   _onRender(context, options) {
     super._onRender?.(context, options);
     this.setPosition();
+    this._raiseToTop();
     // Re-measure after layout/font/svg paint so the centering uses the real
     // height. The first call inside _onRender often sees offsetHeight=0.
-    requestAnimationFrame(() => this.setPosition());
+    requestAnimationFrame(() => { this.setPosition(); this._raiseToTop(); });
 
     // Inline accent triplet + backdrop blur on root for CSS rgb(var(--ac))
     const root = this.element.querySelector('.vsc-root');
@@ -399,13 +442,35 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     this._attachDrag(signal);
 
+    // Stay above the actor sheet at all times. Any click outside the dialog
+    // may have raised another window (notably the sheet, when the user opens
+    // the sliding panel). Re-raise on the next frame — after the window
+    // manager has assigned the new z — so we never end up behind it. Capture
+    // phase + rAF guarantees we run last; rAF fires before paint, so no flicker.
+    document.addEventListener('pointerdown', (ev) => {
+      if (this.element?.contains(ev.target)) return;
+      requestAnimationFrame(() => this._raiseToTop());
+    }, { signal, capture: true });
+
+    // Re-dock when the sliding panel finishes opening/closing so the dialog
+    // never overlaps it. Skipped once the user has dragged the dialog by hand.
+    const panel = this.#anchorEl?.querySelector?.('.sliding-panel');
+    if (panel) {
+      panel.addEventListener('transitionend', (ev) => {
+        if (ev.propertyName !== 'transform' || this.#dragged) return;
+        this.#pos = null; // unlatch so setPosition re-anchors to the new footprint
+        this.setPosition();
+        requestAnimationFrame(() => { this.setPosition(); this._raiseToTop(); });
+      }, { signal });
+    }
+
     // Keep the area-requirement message (and template preview) live as the
     // player targets/untargets tokens on the canvas. Registered once; removed
     // in close(). Debounced so rapid target changes don't thrash render.
     if (this.#targetHookId == null) {
       this.#targetHookId = Hooks.on('targetToken', () => {
         this.#renderDebounce();
-        this._refreshPreview();
+        this.#previewDebounce();
       });
     }
 
@@ -569,7 +634,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // notify:false — the dialog already shows any placement issue inline via
     // _areaRequirementMessage; suppress the duplicate toast.
     await globalThis.vagabond?.managers?.templates?.updatePreview(
-      this.#actor, this.#spell.id, t, distance, { notify: false }
+      this.#actor, this.#spell.id, t, distance,
+      { notify: false, damageType: this.#spell.system.damageType, fxSchool: this.#spell.system.fxSchool }
     );
   }
 

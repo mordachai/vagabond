@@ -8,7 +8,9 @@
   box-shadow: none;
   border: none;
   overflow: visible;
-  z-index: 1100 !important; // Above sliding panel (1000)
+  // Baseline only — JS (_raiseToTop) raises this inline above the actor sheet's
+  // floating window-manager z-index. No !important, so the inline value wins.
+  z-index: 1100;
 
   > .window-content {
     background: transparent;
@@ -51,8 +53,17 @@
       .vsc-runes { display: none; }
     }
     // Side toggles (focus + fx) live at corners of the full 360 viewBox.
-    // After cropping the viewBox they would clip — hide in compact mode.
-    .vsc-side { display: none; }
+    // After cropping the viewBox they fall outside it — relocate them into
+    // the cropped upper corners (user units) so they stay visible.
+    // Shrink them + drop labels (kept as a hover <title> tooltip) so they
+    // clear the inner ring boundary in the tighter compact footprint.
+    .vsc-side-focus { transform: translate(43px, 34px); }
+    .vsc-side-fx    { transform: translate(-50px, 34px); }
+    .vsc-side {
+      circle { r: 13px; }
+      .vsc-glyph { font-size: 20px; }
+      .vsc-side-label { display: none; }
+    }
 
     // HTML overlays positioned by % relative to .vsc-circle-wrap height.
     // viewBox cropped to 56..304 (248 units), so percentages shift.

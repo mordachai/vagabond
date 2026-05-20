@@ -37,6 +37,8 @@ import { CountdownDiceConfig } from './applications/countdown-dice-config.mjs';
 import { DowntimeApp } from './applications/downtime-app.mjs';
 import { HomebrewSettingsApp } from './applications/homebrew-settings-app.mjs';
 import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
+import { RegionTextureOverlay } from './ui/region-texture-overlay.mjs';
+import { SpellSettings } from './applications/spell-settings.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
@@ -87,7 +89,7 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.useSpellCastDialog.name',
     hint: 'VAGABOND.Settings.useSpellCastDialog.hint',
     scope: 'client',
-    config: true,
+    config: false, // surfaced in the Spell Settings menu
     type: Boolean,
     default: true,
     onChange: reRenderAllApps,
@@ -98,7 +100,7 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.spellCastDialogDarkness.name',
     hint: 'VAGABOND.Settings.spellCastDialogDarkness.hint',
     scope: 'client',
-    config: true,
+    config: false, // surfaced in the Spell Settings menu
     type: Number,
     range: { min: 0, max: 100, step: 5 },
     default: 0,
@@ -110,7 +112,7 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.spellCastDialogBlur.name',
     hint: 'VAGABOND.Settings.spellCastDialogBlur.hint',
     scope: 'client',
-    config: true,
+    config: false, // surfaced in the Spell Settings menu
     type: Number,
     range: { min: 0, max: 5, step: 0.5 },
     default: 1.0,
@@ -122,18 +124,19 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.hideCastRings.name',
     hint: 'VAGABOND.Settings.hideCastRings.hint',
     scope: 'client',
-    config: true,
+    config: false, // surfaced in the Spell Settings menu
     type: Boolean,
     default: false,
     onChange: reRenderAllApps,
   });
 
-  // Spell area regions — drawing style: true geometric shape vs covered grid spaces
+  // ── Spell area region settings (surfaced in the Spell Settings menu) ──────
+  // Drawing style: true geometric shape vs covered grid spaces
   game.settings.register('vagabond', 'regionHighlightMode', {
     name: 'VAGABOND.Settings.regionHighlightMode.name',
     hint: 'VAGABOND.Settings.regionHighlightMode.hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: String,
     choices: {
       'shapes': 'VAGABOND.Settings.regionHighlightMode.shapes',
@@ -141,6 +144,117 @@ function registerGameSettings() {
     },
     default: 'shapes',
     requiresReload: false,
+  });
+
+  // Paint seamless damage-type artwork over the area
+  game.settings.register('vagabond', 'regionUseTextures', {
+    name: 'VAGABOND.Settings.regionUseTextures.name',
+    hint: 'VAGABOND.Settings.regionUseTextures.hint',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+  });
+
+  // Outline treatment — GM table DEFAULT (players inherit unless they override). In the menu.
+  game.settings.register('vagabond', 'regionBorderMode', {
+    scope: 'world',
+    config: false,
+    type: String,
+    choices: {
+      player: 'VAGABOND.SpellSettings.BorderMode.player',
+      hide: 'VAGABOND.SpellSettings.BorderMode.hide',
+      default: 'VAGABOND.SpellSettings.BorderMode.default'
+    },
+    default: 'hide',
+    requiresReload: false,
+    onChange: () => RegionTextureOverlay.applyPreferences(),
+  });
+
+  // Per-player outline override. 'inherit' = use the GM table default.
+  game.settings.register('vagabond', 'regionBorderModeUser', {
+    name: 'VAGABOND.Settings.regionBorderMode.name',
+    hint: 'VAGABOND.Settings.regionBorderMode.hint',
+    scope: 'client',
+    config: false, // surfaced in the Spell Settings menu
+    type: String,
+    choices: {
+      inherit: 'VAGABOND.SpellSettings.BorderMode.inherit',
+      player: 'VAGABOND.SpellSettings.BorderMode.player',
+      hide: 'VAGABOND.SpellSettings.BorderMode.hide',
+      default: 'VAGABOND.SpellSettings.BorderMode.default'
+    },
+    default: 'inherit',
+    requiresReload: false,
+    onChange: () => RegionTextureOverlay.applyPreferences(),
+  });
+
+  // ── Area artwork appearance (mirror CONFIG.VAGABOND.* runtime knobs) ──────
+  game.settings.register('vagabond', 'regionTextureHideFill', {
+    scope: 'world', config: false, type: Boolean, default: true, requiresReload: false,
+    onChange: value => RegionTextureOverlay.setHideFill(value),
+  });
+  game.settings.register('vagabond', 'regionTextureBlendMode', {
+    scope: 'world', config: false, type: String, default: 'NORMAL', requiresReload: false,
+    onChange: value => RegionTextureOverlay.setBlendMode(value),
+  });
+  // Opacity — GM table DEFAULT (players inherit unless they opt out). In the menu.
+  game.settings.register('vagabond', 'regionTextureAlpha', {
+    scope: 'world', config: false, type: Number, range: { min: 0, max: 1, step: 0.05 },
+    default: 0.65, requiresReload: false,
+    onChange: () => RegionTextureOverlay.applyPreferences(),
+  });
+  // Per-player opacity override toggle: when true, use the GM table default.
+  game.settings.register('vagabond', 'regionTextureAlphaUseGM', {
+    name: 'VAGABOND.Settings.regionTextureAlphaUseGM.name',
+    hint: 'VAGABOND.Settings.regionTextureAlphaUseGM.hint',
+    scope: 'client', config: false, type: Boolean, default: true, requiresReload: false, // surfaced in the Spell Settings menu
+    onChange: () => RegionTextureOverlay.applyPreferences(),
+  });
+  // Per-player opacity value (used only when the "use GM opacity" toggle is off).
+  game.settings.register('vagabond', 'regionTextureAlphaUser', {
+    name: 'VAGABOND.Settings.regionTextureAlpha.name',
+    hint: 'VAGABOND.Settings.regionTextureAlpha.hint',
+    scope: 'client', config: false, type: Number, range: { min: 0, max: 1, step: 0.05 }, // surfaced in the Spell Settings menu
+    default: 0.65, requiresReload: false,
+    onChange: () => RegionTextureOverlay.applyPreferences(),
+  });
+  game.settings.register('vagabond', 'regionTextureAnimate', {
+    scope: 'world', config: false, type: Boolean, default: true, requiresReload: false,
+    onChange: value => RegionTextureOverlay.setAnimate(value),
+  });
+  game.settings.register('vagabond', 'regionTextureSpinSpeed', {
+    scope: 'world', config: false, type: Number, default: 0.005, requiresReload: false,
+    onChange: value => RegionTextureOverlay.setSpinSpeed(value),
+  });
+  game.settings.register('vagabond', 'regionTextureScrollSpeed', {
+    scope: 'world', config: false, type: Number, default: 1.5, requiresReload: false,
+    onChange: value => RegionTextureOverlay.setScrollSpeed(value),
+  });
+
+  // Force counter: when the GM bumps this (world setting), the onChange fires on every
+  // connected client, which clears that client's personal overrides so they adopt the
+  // GM table defaults. No custom socket needed — world settings broadcast to all clients.
+  game.settings.register('vagabond', 'regionForcePush', {
+    scope: 'world', config: false, type: Number, default: 0, requiresReload: false,
+    onChange: () => {
+      game.settings.set('vagabond', 'regionBorderModeUser', 'inherit');
+      game.settings.set('vagabond', 'regionTextureAlphaUseGM', true);
+      RegionTextureOverlay.applyPreferences();
+      ui.notifications?.info(game.i18n.localize('VAGABOND.SpellSettings.ForceApplied'));
+    },
+  });
+
+  // Spell Settings menu button. Open to everyone: players configure their own cast
+  // dialog + area-display prefs; GMs additionally get the world spell-area sections.
+  game.settings.registerMenu('vagabond', 'spellSettingsMenu', {
+    name: 'VAGABOND.SpellSettings.MenuName',
+    label: 'VAGABOND.SpellSettings.MenuLabel',
+    hint: 'VAGABOND.SpellSettings.MenuHint',
+    icon: 'fas fa-wand-magic-sparkles',
+    type: SpellSettings,
+    restricted: false,
   });
 
   // Setting 1: Roll damage with check
@@ -629,6 +743,15 @@ Hooks.once('init', function () {
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
 
+  // Sync stored spell-region settings into CONFIG.VAGABOND so the texture overlay
+  // (CONFIG-driven) reflects them. Must run after CONFIG.VAGABOND is assigned.
+  for (const key of ['regionTextureHideFill', 'regionTextureBlendMode',
+    'regionTextureAnimate', 'regionTextureSpinSpeed', 'regionTextureScrollSpeed']) {
+    CONFIG.VAGABOND[key] = game.settings.get('vagabond', key);
+  }
+  // Border + alpha are GM-default-with-player-override: resolve the effective values.
+  RegionTextureOverlay.applyPreferences();
+
   // Load homebrew config and store at CONFIG.VAGABOND.homebrew.
   // Must run before DataModel registration so schemas can read homebrew values.
   loadHomebrewConfig();
@@ -920,6 +1043,9 @@ Hooks.once('ready', () => {
 
   // Store in global for easy access
   globalThis.vagabond.ui.clockOverlay = clockOverlay;
+
+  // Register spell-area region texture overlay (paints damage-type art on regions)
+  RegionTextureOverlay.register();
 });
 
 /**
@@ -2071,11 +2197,13 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       const deliveryType = trigger.dataset.deliveryType;
       const deliveryText = trigger.dataset.deliveryText;
+      const damageType = trigger.dataset.damageType ?? null;
+      const fxSchool = trigger.dataset.fxSchool || null;
 
       if (!deliveryType) return;
 
       if (globalThis.vagabond?.managers?.templates) {
-        const created = await globalThis.vagabond.managers.templates.fromChat(deliveryType, deliveryText, message);
+        const created = await globalThis.vagabond.managers.templates.fromChat(deliveryType, deliveryText, message, damageType, fxSchool);
         trigger.classList.toggle('active', created);
       } else {
         console.warn("VagabondSystem | Template manager not found.");
