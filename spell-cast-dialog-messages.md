@@ -4,6 +4,9 @@ The Vagabond spell cast dialog (`SpellCastDialog`, the SVG magic-circle overlay)
 message area directly below the **Cast** button. Any module can push messages into it —
 soft reminders, warnings, or hard blocks that stop the cast.
 
+<img width="501" height="615" alt="image" src="https://github.com/user-attachments/assets/f4b69b94-0d31-49e7-aa03-4d3a187e7c60" />
+
+
 This is the supported integration point. Do **not** monkey-patch `_validate` or
 `_prepareContext` — use the hook described here.
 
