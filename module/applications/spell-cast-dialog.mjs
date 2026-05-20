@@ -1,3 +1,5 @@
+import { VagabondMeasureTemplates } from './measure-templates.mjs';
+
 const { api } = foundry.applications;
 
 /**
@@ -94,6 +96,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #pos = null;        // null = anchored/centered; once dragged, holds { left, top }
   #minimized = false; // collapsed-to-header state, toggled by dblclick on header
   #messages = [];     // last-computed message list (validation + module-contributed)
+  #targetHookId = null; // Foundry 'targetToken' hook — keeps area-requirement message live
+  #renderDebounce = foundry.utils.debounce(() => { if (this.rendered) this.render(); }, 50);
 
   /** Singleton — at most one spell cast dialog open at a time. */
   static #current = null;
@@ -213,7 +217,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   /**
    * Build the message list shown below the Cast button.
    *
-   * Order: the built-in validation message first (if any), then anything that
+   * Order: first-party messages first — capability gates, then cost/delivery
+   * validation, then the area-placement requirement — followed by anything
    * modules contribute via the `vagabond.spellCastMessages` hook. The hook
    * receives a mutable array and a read-only context snapshot:
    *
@@ -230,9 +235,27 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
    */
   _buildMessages(state, finalMana, costs) {
     const messages = [];
+
+    // 1. Capability gates — mirror the hard checks in SpellHandler._executeCast.
+    //    These truly prevent a cast, so they are blocking errors.
+    const classData = this.#actor.system.classData ?? {};
+    if (!classData.isSpellcaster) {
+      messages.push({ text: 'Your class cannot cast spells!', type: 'error', blocking: true });
+    } else if (!classData.manaSkill) {
+      messages.push({ text: 'No mana skill configured for this class!', type: 'error', blocking: true });
+    }
+
+    // 2. Built-in cost/delivery validation (delivery selected, mana, casting max).
     const validationError = this._validate(state, finalMana);
     if (validationError) messages.push({ text: validationError, type: 'error', blocking: true });
 
+    // 3. Area placement requirement for the chosen delivery (e.g. cube/sphere/line
+    //    need a target). Non-blocking: matches legacy behaviour where the cast
+    //    proceeds and only the template draw waits for a target.
+    const areaError = this._areaRequirementMessage(state);
+    if (areaError) messages.push(areaError);
+
+    // 4. Module-contributed messages.
     try {
       Hooks.callAll('vagabond.spellCastMessages', this, messages, {
         actor: this.#actor,
@@ -376,6 +399,16 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     this._attachDrag(signal);
 
+    // Keep the area-requirement message (and template preview) live as the
+    // player targets/untargets tokens on the canvas. Registered once; removed
+    // in close(). Debounced so rapid target changes don't thrash render.
+    if (this.#targetHookId == null) {
+      this.#targetHookId = Hooks.on('targetToken', () => {
+        this.#renderDebounce();
+        this._refreshPreview();
+      });
+    }
+
     // Restore minimized state across re-renders
     const rootEl = this.element.querySelector('.vsc-root');
     if (rootEl && this.#minimized) rootEl.classList.add('minimized');
@@ -433,6 +466,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   async close(options = {}) {
     this.#ctrl?.abort();
+    if (this.#targetHookId != null) {
+      Hooks.off('targetToken', this.#targetHookId);
+      this.#targetHookId = null;
+    }
     if (this.#state.previewActive) {
       await globalThis.vagabond?.managers?.templates?.clearPreview(this.#actor.id, this.#spell.id);
     }
@@ -506,6 +543,22 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     return '';
   }
 
+  /**
+   * Area-placement requirement message for the current delivery type, or null.
+   * Delegates the rules to VagabondMeasureTemplates so the wording matches the
+   * actual draw step exactly. Non-blocking — the cast may proceed; the template
+   * simply won't draw until a target exists.
+   */
+  _areaRequirementMessage(state) {
+    if (!state.deliveryType) return null;
+    const casterToken = this.#actor.token?.object ?? this.#actor.getActiveTokens(true)[0];
+    const err = VagabondMeasureTemplates.areaRequirementError(state.deliveryType, {
+      hasTarget: game.user.targets.size > 0,
+      hasOrigin: !!casterToken,
+    });
+    return err ? { text: err, type: 'warning', blocking: false } : null;
+  }
+
   async _refreshPreview() {
     if (!this.#state.previewActive) return;
     const t = this.#state.deliveryType;
@@ -513,8 +566,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const base = CONFIG.VAGABOND.deliveryBaseRanges[t];
     const inc = CONFIG.VAGABOND.deliveryIncrement[t] ?? 0;
     const distance = (base?.value ?? 0) + inc * this.#state.deliveryIncrease;
+    // notify:false — the dialog already shows any placement issue inline via
+    // _areaRequirementMessage; suppress the duplicate toast.
     await globalThis.vagabond?.managers?.templates?.updatePreview(
-      this.#actor, this.#spell.id, t, distance
+      this.#actor, this.#spell.id, t, distance, { notify: false }
     );
   }
 

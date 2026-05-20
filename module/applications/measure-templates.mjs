@@ -21,7 +21,7 @@ export class VagabondMeasureTemplates {
    * @param {string} deliveryType - The delivery type (e.g. 'cone', 'aura').
    * @param {number} distance - The distance in feet.
    */
-  async updatePreview(actor, itemId, deliveryType, distance) {
+  async updatePreview(actor, itemId, deliveryType, distance, { notify = true } = {}) {
     await this.clearPreview(actor.id, itemId);
     await this.cleanupOrphanedSpellRegions();
 
@@ -29,14 +29,14 @@ export class VagabondMeasureTemplates {
 
     const token = actor.token?.object || actor.getActiveTokens()[0];
     if (!token) {
-      ui.notifications.warn("No token found for this actor on the current scene.");
+      if (notify) ui.notifications.warn("No token found for this actor on the current scene.");
       return;
     }
 
     const targetArray = Array.from(game.user.targets);
     const centroid = targetArray.length > 0 ? this._calculateTargetCentroid(targetArray) : null;
 
-    const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid });
+    const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid, notify });
     if (!regionData) return;
 
     regionData.flags = { vagabond: { isPreview: true, actorId: actor.id, itemId } };
@@ -215,6 +215,36 @@ export class VagabondMeasureTemplates {
     return { x: sum.x / targets.length, y: sum.y / targets.length };
   }
 
+  /** Delivery types that need a destination (a target token / centroid) to place. */
+  static AREA_NEEDS_TARGET = ['cube', 'sphere', 'line'];
+  /** Delivery types that need a caster-token origin point to place. */
+  static AREA_NEEDS_ORIGIN = ['cone', 'line', 'aura'];
+
+  /**
+   * Pure pre-flight check for area placement. Returns a user-facing error
+   * string if the area can't be placed with the given inputs, else null.
+   *
+   * Single source of truth for placement requirements — both
+   * `_constructRegionData` (drawing) and `SpellCastDialog` (showing the message
+   * inline) call this so the wording and rules never drift apart.
+   *
+   * @param {string} type                  Delivery type key
+   * @param {object} opts
+   * @param {boolean} opts.hasTarget       A target token / centroid is available
+   * @param {boolean} opts.hasOrigin       A caster token is available
+   * @returns {string|null}
+   */
+  static areaRequirementError(type, { hasTarget, hasOrigin } = {}) {
+    const t = (type || '').toLowerCase();
+    if (this.AREA_NEEDS_ORIGIN.includes(t) && !hasOrigin) {
+      return 'Could not determine origin point (caster token) for area.';
+    }
+    if (this.AREA_NEEDS_TARGET.includes(t) && !hasTarget) {
+      return `Please target a token to place the ${t}.`;
+    }
+    return null;
+  }
+
   /**
    * Builds Region document data for the given spell area type.
    * Shape field names follow the v14 RegionDocument schema (circle, cone, line, rectangle).
@@ -224,20 +254,27 @@ export class VagabondMeasureTemplates {
    * @param {Token}  params.token      - The caster token
    * @param {*}      params.targets    - The user's current targets (UserTargets or array)
    * @param {{x,y}}  params.centroid   - Optional precalculated centroid
+   * @param {boolean} params.notify    - Whether to surface failures via ui.notifications (default true)
    * @returns {object|null}            - Region creation data, or null on failure
    */
-  _constructRegionData({ type, distance, token, targets, centroid = null }) {
-    if (!token && ['cone', 'line', 'aura'].includes(type)) {
-      ui.notifications.warn('Could not determine origin point (caster token) for area.');
-      return null;
-    }
-
+  _constructRegionData({ type, distance, token, targets, centroid = null, notify = true }) {
     // pixel-per-foot conversion
     const distancePixels = canvas.grid.size / canvas.scene.grid.distance;
     const radiusPixels = distance * distancePixels;
 
     const targetToken = targets?.first?.() ?? null;
     const destinationPoint = centroid || (targetToken ? targetToken.center : null);
+
+    // Single pre-flight requirement check (origin + target) — same rules the
+    // cast dialog uses to show the message inline.
+    const reqErr = VagabondMeasureTemplates.areaRequirementError(type, {
+      hasTarget: !!destinationPoint,
+      hasOrigin: !!token,
+    });
+    if (reqErr) {
+      if (notify) ui.notifications.warn(reqErr);
+      return null;
+    }
 
     let shape;
     let name;
@@ -260,10 +297,7 @@ export class VagabondMeasureTemplates {
       }
 
       case 'line': {
-        if (!destinationPoint) {
-          ui.notifications.warn('Please target a token to place the line.');
-          return null;
-        }
+        // Origin + target presence already guaranteed by areaRequirementError above.
         const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
         const rotation = Math.toDegrees(ray.angle);
         const widthPixels = canvas.scene.grid.distance * distancePixels;
@@ -274,10 +308,6 @@ export class VagabondMeasureTemplates {
       }
 
       case 'cube': {
-        if (!destinationPoint) {
-          ui.notifications.warn('Please target a token to place the cube.');
-          return null;
-        }
         const sidePixels = (distance / canvas.scene.grid.distance) * canvas.grid.size;
         name = 'Cube';
         shape = {
@@ -294,17 +324,13 @@ export class VagabondMeasureTemplates {
       }
 
       case 'sphere': {
-        if (!destinationPoint) {
-          ui.notifications.warn('Please target a token to place the sphere.');
-          return null;
-        }
         name = 'Sphere';
         shape = { type: 'circle', x: destinationPoint.x, y: destinationPoint.y, radius: radiusPixels };
         break;
       }
 
       default:
-        ui.notifications.warn(`Area creation not supported: ${type}`);
+        if (notify) ui.notifications.warn(`Area creation not supported: ${type}`);
         return null;
     }
 
