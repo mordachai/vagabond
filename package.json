@@ -1,6 +1,6 @@
 {
   "name": "vagabond",
-  "version": "3.0.0",
+  "version": "5.9.0",
   "description": "CSS compiler for the Vagabond system",
   "scripts": {
     "build": "sass src/scss/vagabond.scss css/vagabond.css --style=expanded --no-source-map",
