@@ -291,7 +291,10 @@ export class SpellHandler {
     const costs = this._calculateSpellCost(spellId);
     const spell = this.actor.items.get(spellId);
 
-    const container = this.sheet.element.querySelector(`[data-spell-id="${spellId}"]`);
+    const root = this.sheet?.element;
+    if (!root) return;
+
+    const container = root.querySelector(`[data-spell-id="${spellId}"]`);
     if (!container) return;
 
     // Update damage dice display and color
