@@ -38,6 +38,21 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     }
   });
 
+  /**
+   * @override
+   * Add the "Become the HUD" entry to the window header controls menu
+   * (moved here from the sliding panel). Uses the existing `becomeHud` action.
+   */
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+    controls.unshift({
+      action: 'becomeHud',
+      icon: 'fas fa-id-badge',
+      label: 'VAGABOND.Hud.Become',
+    });
+    return controls;
+  }
+
   // ===========================
   // Handler Delegation Methods
   // ===========================

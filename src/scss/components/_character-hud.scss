@@ -22,11 +22,11 @@
   --vh-armor-top: 90px; --vh-armor-right: 46px;
 
   // Per-weapon stacking order (higher = on top, image included).
-  --vh-wpn0-z: 2;  --vh-wpn1-z: 1;
+  --vh-wpn0-z: 1;  --vh-wpn1-z: 2;
 
   // Per-weapon versatile grip-badge offset (relative to its own circle).
-  --vh-badge0-top: -7px;  --vh-badge0-left: -7px;
-  --vh-badge1-top: -7px;  --vh-badge1-left: -7px;
+  --vh-badge0-top: 15px;  --vh-badge0-left: -14px;
+  --vh-badge1-top: 15px;  --vh-badge1-left: 40px;
 
   // Frameless ApplicationV2 elements get no positioning shell — own it here.
   position: fixed;
@@ -234,7 +234,7 @@
     margin-left: -4px;
     font-family: $font-number;
     font-size: 1.4rem;
-    color: $c-stat;
+    color: $c-yellow;
     text-shadow: var(--vh-outline-2);
     cursor: pointer;
     i { color: $c-yellow; }
@@ -548,7 +548,7 @@
     &:hover { color: $c-yellow; background: rgba(0, 0, 0, 0.3); }
   }
   .vh-spell-use:hover .vh-spell-name,
-  .vh-inv-use:hover .vh-inv-name { color: $c-yellow; }
+  .vh-inv-use:hover .vh-inv-name { color: $c-yellow;}
 
   // accordions (features / traits / perks)
   .accordion-item {

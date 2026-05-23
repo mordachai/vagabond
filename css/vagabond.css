@@ -2714,12 +2714,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-wpn1-right: 10px;
   --vh-armor-top: 90px;
   --vh-armor-right: 46px;
-  --vh-wpn0-z: 2;
-  --vh-wpn1-z: 1;
-  --vh-badge0-top: -7px;
-  --vh-badge0-left: -7px;
-  --vh-badge1-top: -7px;
-  --vh-badge1-left: -7px;
+  --vh-wpn0-z: 1;
+  --vh-wpn1-z: 2;
+  --vh-badge0-top: 15px;
+  --vh-badge0-left: -14px;
+  --vh-badge1-top: 15px;
+  --vh-badge1-left: 40px;
   position: fixed;
   z-index: 70;
   width: auto;
@@ -2933,7 +2933,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-left: -4px;
   font-family: "Ludlow", serif;
   font-size: 1.4rem;
-  color: var(--vagabond-c-stat);
+  color: var(--vagabond-c-chat-yellow);
   text-shadow: var(--vh-outline-2);
   cursor: pointer;
 }

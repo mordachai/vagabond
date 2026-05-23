@@ -648,7 +648,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       VagabondCharacterHud.#autoOpenedActorId = null;
     }
     VagabondCharacterHud.#instances.delete(this.actor.id);
-    return super.close(options);
+    // Skip ApplicationV2's built-in close fade — the HUD should vanish instantly.
+    return super.close({ animate: false, ...options });
   }
 
   /* -------------------------------------------- */
