@@ -15,6 +15,41 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
+### **New feature:** Character HUD
+
+You know what's even better than a small stylized character sheet? No sheet at all! Now the same info you have on the char sheet you have it available at a small HUD that you can place anywhere on the screen.
+
+<img width="1288" height="819" alt="image" src="https://github.com/user-attachments/assets/4c07efbf-6e83-405a-8ca3-89bb96bf9140" />
+
+#### Using it:
+- open the menu tabs in the bottom of the HUD, drag and drop gears and spells on the slots
+- drag and drop weapons in the two circular weapon slots. Vesatile weapond will dispplay an  icon indicating if they are being used as One or Two Hands, click the icon or the context menu to change (right click)
+- Spells are mean to work with the new Spell HUD released earlier
+
+---
+
+Multiple ways to open: 
+
+Select your character token, that's it. You can turn this of in the **Vagabond Tools**, on the scene controls. But even with the automatic opening turned off you can still call it using the Open Selected Token HUD button in Token Controls (select your token first):
+
+
+<img width="290" height="213" alt="image" src="https://github.com/user-attachments/assets/dda3b812-6819-4312-bf85-84ae5722c6d5" />
+
+---
+
+In the character sheet, in the **header controls**:
+
+
+<img width="544" height="483" alt="image" src="https://github.com/user-attachments/assets/812ae3c7-b2a3-49dc-b2a8-2aa274d9823a" />
+
+---
+
+**Right click on the portrait** will give you more options:
+
+
+<img width="516" height="263" alt="image" src="https://github.com/user-attachments/assets/bdd42738-4d78-4199-8a49-1de9e6d92a09" />
+
+
 ### **New feature:** Casting HUD [YouTube video below](https://youtu.be/r31Fz8pPLgg)
 
 New Casting dialog to help the player better understand how magic flows in game, mana consumption and all. 
