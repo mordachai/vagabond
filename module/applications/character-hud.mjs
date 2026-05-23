@@ -258,6 +258,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       castingMax: sys.mana?.castingMax ?? 0,
     };
 
+    // --- Stats (abbreviated, display-only — not rollable, like the sheet) ---
+    context.stats = (CONFIG.VAGABOND.homebrew?.stats ?? []).map((s) => ({
+      key: s.key,
+      abbr: s.abbreviation || s.label,
+      value: sys.stats?.[s.key]?.total ?? 0,
+    }));
+
     // --- Skills / saves (same split the sheet uses) ---
     if (sys.skills) {
       const allSkills = Object.entries(sys.skills);
@@ -818,6 +825,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const { ContextMenuHelper } = globalThis.vagabond.utils;
     const L = (k) => game.i18n.localize(k);
 
+    // XP entry mirrors the sheet: "XP {current}/{next}" with the level-up
+    // chevron shown only when the actor has banked enough XP to level.
+    const attr = this.actor.system.attributes ?? {};
+    const canLevelUp = !!attr.canLevelUp;
+    const xpLabel = `${L('VAGABOND.Hud.Menu.XP')} ${attr.xp ?? 0}/${attr.xpRequired ?? 0}`;
+
     ContextMenuHelper.create({
       position: { x: event.clientX, y: event.clientY },
       className: 'inventory-context-menu',
@@ -826,6 +839,16 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
           label: L('VAGABOND.Hud.OpenSheet'),
           icon: 'fas fa-up-right-from-square',
           action: () => this.actor.sheet.render(true),
+        },
+        {
+          label: L('VAGABOND.Hud.Menu.Downtime'),
+          icon: 'fas fa-hourglass-half',
+          action: () => new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true),
+        },
+        {
+          label: xpLabel,
+          icon: canLevelUp ? 'fas fa-chevron-double-up' : 'fas fa-star',
+          action: () => new globalThis.vagabond.applications.LevelUpDialog(this.actor).render(true),
         },
         {
           label: L('VAGABOND.Hud.Menu.Ping'),

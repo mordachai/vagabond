@@ -42,6 +42,17 @@
 
     {{!-- Skills --}}
     <div class="vh-panel-content {{#unless (eq activeTab 'skills')}}hidden{{/unless}}" data-tab="skills">
+      {{#if stats.length}}
+        <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Stats"}}</h4>
+        <div class="vh-stat-row">
+          {{#each stats}}
+            <div class="vh-stat" data-key="{{key}}">
+              <span class="vh-stat-abbr">{{abbr}}</span>
+              <span class="vh-stat-val">{{value}}</span>
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
       <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
       <div class="vh-skill-grid">
         {{#each regularSkills}}
@@ -112,7 +123,7 @@
                 <span class="vh-inv-name">{{name}}</span>
               </span>
               {{#if isWeapon}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-inv-dmg"></i><span class="vh-inv-val">{{damage}}</span>{{/if}}
-              {{#if equipped}}<i class="fas fa-circle-check vh-inv-eq" data-tooltip="{{localize 'VAGABOND.Hud.Equipped'}}"></i>{{/if}}
+              {{#if equipped}}<i class="fa-regular fa-check vh-inv-eq" data-tooltip="{{localize 'VAGABOND.Hud.Equipped'}}"></i>{{/if}}
               <button type="button" class="vh-inv-menu" data-action="itemMenu" data-item-id="{{_id}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
             </div>
           {{/each}}
@@ -165,7 +176,7 @@
         <div class="vh-name">{{name}}</div>
 
         <div class="vh-controls">
-          <span class="vh-ctl rollable" data-action="spendStudiedDie" data-tooltip="{{localize 'VAGABOND.Hud.StudiedTooltip'}}"><i class="fas fa-dice-d6"></i>{{studiedDice}}</span>
+          <span class="vh-ctl rollable" data-action="spendStudiedDie" data-tooltip="{{localize 'VAGABOND.Hud.StudiedTooltip'}}"><i class="fas fa-book-open"></i>{{studiedDice}}</span>
           <span class="vh-ctl rollable" data-action="modifyCheckBonus" data-tooltip="{{localize 'VAGABOND.Hud.CheckModTooltip'}}"><i class="fas fa-plus-minus"></i>{{checkBonus}}</span>
           <span class="vh-fh favor-hinder-toggle {{favorHinder}}" data-action="toggleFavorHinder"
                 data-tooltip="{{#if (eq favorHinder 'favor')}}{{localize 'VAGABOND.FavorHinder.Tooltips.favor'}}{{else if (eq favorHinder 'hinder')}}{{localize 'VAGABOND.FavorHinder.Tooltips.hinder'}}{{else}}{{localize 'VAGABOND.FavorHinder.Tooltips.none'}}{{/if}}">
@@ -181,7 +192,7 @@
           {{/each}}
           {{#if hasMana}}
             <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-tooltip="{{localize 'VAGABOND.Hud.ManaTooltip'}}">
-              <i class="fas fa-sparkles"></i><span>{{mana.current}}/{{mana.max}}</span>
+              <i class="fas fa-star-christmas"></i><span>{{mana.current}}</span>
             </div>
           {{/if}}
         </div>

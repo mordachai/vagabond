@@ -12,7 +12,21 @@
   --vh-portrait-w: 95px;
   --vh-portrait-h: 95px;
   --vh-float-w: 84px; // right gutter reserved for weapon circles + shield
+  --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+
+  // Independent placement for each floating piece (anchored to .vh-body, top/right).
+  // Tune freely — each circle + the armor shield positions itself.
+  --vh-wpn0-top: 0px;   --vh-wpn0-right: 30px;
+  --vh-wpn1-top: 30px;   --vh-wpn1-right: 10px;
+  --vh-armor-top: 90px; --vh-armor-right: 46px;
+
+  // Per-weapon stacking order (higher = on top, image included).
+  --vh-wpn0-z: 2;  --vh-wpn1-z: 1;
+
+  // Per-weapon versatile grip-badge offset (relative to its own circle).
+  --vh-badge0-top: -7px;  --vh-badge0-left: -7px;
+  --vh-badge1-top: -7px;  --vh-badge1-left: -7px;
 
   // Frameless ApplicationV2 elements get no positioning shell — own it here.
   position: fixed;
@@ -47,10 +61,10 @@
     gap: 4px;
     min-width: 425px;
     padding: 7px var(--vh-float-w) 4px 8px; // right pad clears the floating cluster
-    //background: $c-transparent;
-    //border: 1px solid $c-dark-yellow;
-    border-radius: var(--vh-radius);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    //background: rgba(0, 0, 0, 0.2);
+    //backdrop-filter: blur(2px);
+    //-webkit-backdrop-filter: blur(2px);
+    //border-radius: var(--vh-radius);
 
     &.drag-over { border-color: $c-yellow; box-shadow: inset 0 0 12px $c-yellow; }
   }
@@ -79,7 +93,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    filter: drop-shadow(1px 1px 2px $c-inset-1);
+    filter: drop-shadow(1px 1px 1px black);
 
     img {
       display: flex;
@@ -90,6 +104,7 @@
       object-position: top center;
       align-self: center;
       mix-blend-mode: normal;
+      text-shadow: var(--vh-outline-2);
       background: $c-dark;
       -webkit-mask-image: url('../assets/images/sheets/portraitMask.webp');
       mask-image: url('../assets/images/sheets/portraitMask.webp');
@@ -113,6 +128,7 @@
     justify-content: space-around;
     gap: 3px;
     color: $c-yellow;
+    text-shadow: var(--vh-outline-1);
   }
 
   .vh-vital {
@@ -142,7 +158,7 @@
   .vh-name {
     font-family: $font-title;
     font-size: 1.6rem;
-    line-height: 1;
+    line-height: 1.05;
     color: $c-yellow;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -156,30 +172,34 @@
     gap: 10px;
     height: 24px;
     padding: 1px 8px;
-    border: 1px solid $c-dark-yellow;
+    border: 1px solid $c-yellow;
     border-radius: 6px;
+    background: linear-gradient(#152644, #12543b, #4b6d3a);
 
     .vh-ctl {
       display: inline-flex;
       align-items: center;
       gap: 4px;
       font-family: $font-number;
-      font-size: 0.9rem;
-      color: $c-lite;
+      font-size: 1.2rem;
+      color: $c-yellow;
       cursor: pointer;
-      i { color: $c-tan; font-size: 0.85rem; }
-      &:hover { color: $c-yellow; i { color: $c-yellow; } }
+      i { color: $c-yellow; font-size: 0.85rem; opacity: 0.9; }
+      &:hover { color: $c-yellow;
+        opacity: 1;
+      i { opacity: 1;}
+      }
     }
 
     .vh-fh {
       margin-left: auto;
       font-family: $font-title;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       letter-spacing: 0.5px;
       cursor: pointer;
       &.favor  { color: $c-green; }
       &.hinder { color: $c-red; }
-      &.none   { color: $c-muted; }
+      &.none   { color: $c-yellow; }
     }
   }
 
@@ -195,9 +215,9 @@
   .vh-slot {
     width: 32px;
     height: 32px;
-    border: 1px solid $c-dark-yellow;
+    border: 1px solid $c-yellow;
     border-radius: 5px;
-    background: $c-inset-1;
+    background: $c-transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -210,11 +230,12 @@
   .vh-mana {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
-    margin-left: 6px;
+    gap: 2px;
+    margin-left: -4px;
     font-family: $font-number;
-    font-size: 1rem;
+    font-size: 1.4rem;
     color: $c-stat;
+    text-shadow: var(--vh-outline-2);
     cursor: pointer;
     i { color: $c-yellow; }
     &:hover { color: $c-yellow; }
@@ -223,22 +244,16 @@
   // ---------------------------------------------------------
   //  Floating cluster (weapon circles + armor shield)
   // ---------------------------------------------------------
-  .vh-floating {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-  }
+  // Wrappers collapse (display: contents) so each weapon + the armor anchors
+  // directly to .vh-body and is positioned independently via the vars above.
+  .vh-floating { display: contents; }
 
-  .vh-pc-weapons { display: flex; }
+  .vh-pc-weapons { display: contents; }
 
   .vh-pc-weapon {
-    position: relative; // anchor the grip badge
-    width: 44px;
-    height: 44px;
+    position: absolute; // anchored to .vh-body; also anchors the grip badge
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     border: 2px solid $c-yellow;
     background: $c-inset-1;
@@ -248,12 +263,23 @@
     // Clip the image (not the whole circle) so the grip badge can overflow.
     img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .vh-slot-empty { color: $c-muted; font-size: 0.8rem; }
-    & + & { margin-left: -14px; } // overlap, matches mockup
+    &[data-slot-index="0"] {
+      top: var(--vh-wpn0-top); right: var(--vh-wpn0-right);
+      z-index: var(--vh-wpn0-z);
+      .vh-grip-badge { top: var(--vh-badge0-top); left: var(--vh-badge0-left); }
+    }
+    &[data-slot-index="1"] {
+      top: var(--vh-wpn1-top); right: var(--vh-wpn1-right);
+      z-index: var(--vh-wpn1-z);
+      .vh-grip-badge { top: var(--vh-badge1-top); left: var(--vh-badge1-left); }
+    }
     &.filled { cursor: pointer; }
-    &.filled:hover { border-color: $c-stat; box-shadow: 0 0 6px $c-yellow; z-index: 1; }
+    // Hover always wins so an overlapped circle is reachable; doesn't disturb base order.
+    &.filled:hover { border-color: $c-stat; box-shadow: 0 0 6px $c-yellow; z-index: 10; }
 
     // Versatile-weapon grip toggle — child of the circle (2 o'clock), so it
     // travels with the circle when it repositions. Click toggles 1H ⇄ 2H.
+    // Default offset; per-weapon overrides come from the slot-index blocks above.
     .vh-grip-badge {
       position: absolute;
       top: -7px;
@@ -266,6 +292,7 @@
       justify-content: center;
       font-size: 0.85rem;
       color: $c-yellow;
+      text-shadow: var(--vh-outline-2);
       //background: $c-inset-1;
       //border: 1px solid $c-yellow;
       //border-radius: 50%;
@@ -276,48 +303,86 @@
   }
 
   .vh-armor {
-    position: relative;
+    position: absolute; // anchored to .vh-body, placed via --vh-armor-* vars
+    top: var(--vh-armor-top);
+    right: var(--vh-armor-right);
     width: 34px;
     height: 34px;
     display: grid;
     place-items: center;
     justify-content: center;
-    i { font-size: 32px; color: $c-tan; }
+    i {
+      font-size: 32px;
+      color: $c-black;
+      
+      // Yellow glyph outline (text-shadow, 4 directions — `outline` can't trace a glyph).
+
+      text-shadow:
+        -2px -2px 0 $c-yellow,
+        2px -2px 0 $c-yellow,
+        -2px 2px 0 $c-yellow,
+        2px 2px 0 $c-yellow;
+    }
+
     .vh-armor-val {
       position: absolute;
       top: 48%;
       transform: translateY(-50%);
       font-family: $font-number;
-      font-size: 0.85rem;
-      color: $c-white;
+      font-size: 1.4rem;
+      color: $c-yellow;
     }
   }
 
   // ---------------------------------------------------------
   //  Tab bar (names, not buttons)
   // ---------------------------------------------------------
+  // Single golden bar; tab labels sit directly on it (no per-tab buttons).
   .vh-tabs {
     display: flex;
     justify-content: space-between;
-    gap: 4px;
-    border-top: 1px solid $c-dark-yellow;
+    align-items: stretch;
+    gap: 0;
     margin-top: 2px;
-    padding-top: 3px;
+    padding: 0 6px;
+    background: linear-gradient(180deg, $c-yellow, #8a6a1c);
+    border: 1px solid #6e5314;
+    border-radius: 5px;
+    height: 25px;
   }
 
   .vh-tab {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+    // Kill Foundry's global <button> box: it forces min-height/line-height that
+    // overflow the 25px bar. Collapse to the bar height.
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
     background: none;
     border: none;
-    padding: 1px 4px;
+    outline: none;
+    padding: 0;
     font-family: $font-title;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
+    line-height: 1;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: $c-lite;
+    text-align: center;
+
+    // Inset / engraved letters: dark glyph + light highlight below = carved into gold.
+    color: $c-dark;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
     cursor: pointer;
-    &:hover { color: $c-yellow; }
-    &.active { color: $c-yellow; text-decoration: underline; }
+    &:hover { filter: brightness(1.15); }
+    &.active {
+      // Pressed-in look on the active label only.
+      text-shadow: 0 -1px 0 rgba(58, 30, 10, 0.45);
+      font-weight: 600;
+      outline: none;
+    }
   }
 
   // ---------------------------------------------------------
@@ -332,7 +397,7 @@
     background: $c-transparent;
     border: 1px solid $c-dark-yellow;
     border-radius: var(--vh-radius);
-    max-height: 320px;
+    max-height: 380px;
     overflow-y: auto;
     overflow-x: hidden;
     overflow-wrap: anywhere;
@@ -350,7 +415,7 @@
 
   .vh-section-title {
     font-family: $font-title;
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     color: $c-yellow;
     border-bottom: 1px solid $c-dark-yellow;
     margin: 6px 0 4px;
@@ -376,6 +441,39 @@
     &:hover { background: rgba(0, 0, 0, 0.3); }
   }
 
+  // Stats row: abbreviated label over value, display-only (no hover/cursor).
+  .vh-stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .vh-stat {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 0;
+    border: 1px solid $c-dark-yellow;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    gap: 8px;
+    .vh-stat-abbr {
+      font-family: $font-title;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: $c-tan;
+    }
+    .vh-stat-val {
+      font-family: $font-number;
+      font-size: 1.2rem;
+      line-height: 1;
+      color: $c-stat;
+    }
+  }
+
   .vh-skill-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -383,8 +481,8 @@
   }
   .vh-skill {
     justify-content: space-between;
-    .vh-skill-name { color: $c-lite; font-size: 0.85rem; }
-    .vh-skill-diff { font-family: $font-number; color: $c-stat; }
+    .vh-skill-name { color: $c-lite; font-size: 1.0rem; }
+    .vh-skill-diff { font-family: $font-number; color: $c-stat; font-size: 1.2rem; }
     &:hover .vh-skill-name { color: $c-yellow; }
   }
 
@@ -396,13 +494,13 @@
     align-items: center;
     gap: 1px;
     padding: 5px 4px;
-    background: $c-inset-1;
+    //background: $c-inset-1;
     border-radius: 5px;
     cursor: pointer;
-    .vh-save-icon i { color: $c-tan; }
-    .vh-save-name { font-size: 0.75rem; color: $c-lite; }
-    .vh-save-diff { font-family: $font-number; font-size: 1.05rem; color: $c-stat; }
-    &:hover { background: rgba(0, 0, 0, 0.3); .vh-save-name { color: $c-yellow; } }
+    .vh-save-icon i { color: $c-yellow; }
+    .vh-save-name { font-size: 1.2rem; color: $c-lite; }
+    .vh-save-diff { font-family: $font-number; font-size: 1.5rem; color: $c-stat; }
+    &:hover { background: rgba(0, 0, 0, 0.6); .vh-save-name { color: $c-yellow; } }
   }
 
   .vh-spell-img,
@@ -418,13 +516,13 @@
     flex: 1;
     min-width: 0;
     color: $c-lite;
-    font-size: 0.85rem;
+    font-size: 1.1rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .vh-inv-val { font-family: $font-number; color: $c-stat; flex: 0 0 auto; }
-  .vh-inv-eq { color: $c-green; font-size: 0.75rem; flex: 0 0 auto; }
+  .vh-inv-eq { color: $c-white; font-size: 0.75rem; flex: 0 0 auto; }
   .vh-inv:not(.is-equipped) .vh-inv-img { opacity: 0.55; }
   .vh-inv-use,
   .vh-spell-use {
@@ -445,7 +543,7 @@
     background: none;
     border: none;
     border-radius: 4px;
-    color: $c-tan;
+    color: $c-white;
     cursor: pointer;
     &:hover { color: $c-yellow; background: rgba(0, 0, 0, 0.3); }
   }
@@ -458,10 +556,10 @@
     .accordion-header {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 2px;
+      gap: 2px;
+      padding: 2px;
       cursor: pointer;
-      .vh-acc-name { font-family: $font-title; font-size: 0.85rem; color: $c-lite; }
+      .vh-acc-name { font-family: $font-title; font-size: 1.1rem; color: $c-lite; }
       &:hover .vh-acc-name { color: $c-yellow; }
     }
     .accordion-icon { transition: transform 0.15s ease; color: $c-tan; font-size: 0.7rem; }
@@ -472,9 +570,9 @@
     }
     .vh-acc-body {
       font-family: $font-text;
-      font-size: 0.82rem;
+      font-size: 1rem;
       color: $c-lite;
-      padding: 2px 4px 8px;
+      padding: 2px 4px 8px 12px;
       p { margin: 0 0 4px; }
     }
   }

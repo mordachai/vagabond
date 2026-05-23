@@ -1224,7 +1224,9 @@
         "RemoveFromHud": "Remove from HUD",
         "Ping":          "Ping Character",
         "Close":         "Close HUD",
-        "Actions":       "Actions"
+        "Actions":       "Actions",
+        "Downtime":      "Downtime",
+        "XP":            "XP"
       },
       "InvGroups": {
         "weapon":     "Weapons",
