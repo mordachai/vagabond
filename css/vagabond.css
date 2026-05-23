@@ -2699,6 +2699,558 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-shadow: 0 0 5px white;
 }
 
+/* Character HUD - imported at top level because the frameless overlay renders outside sheets */
+.vbd-hud {
+  --vh-gap: 6px;
+  --vh-radius: 10px;
+  --vh-portrait-w: 95px;
+  --vh-portrait-h: 95px;
+  --vh-float-w: 84px;
+  --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  position: fixed;
+  z-index: 70;
+  width: auto;
+  height: auto;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-white);
+  user-select: none;
+  pointer-events: auto;
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
+}
+.vbd-hud * {
+  box-sizing: border-box;
+}
+.vbd-hud::-webkit-scrollbar {
+  width: 6px;
+}
+.vbd-hud::-webkit-scrollbar-track {
+  background: var(--vagabond-scrollbar-bg);
+  border-radius: 4px;
+}
+.vbd-hud::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--vagabond-scrollbar-thumb1) 0%, var(--vagabond-scrollbar-thumb2) 100%);
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-black);
+}
+.vbd-hud .vh-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+.vbd-hud .vh-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 425px;
+  padding: 7px var(--vh-float-w) 4px 8px;
+  border-radius: var(--vh-radius);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+.vbd-hud .vh-body.drag-over {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 12px var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-main-grid {
+  display: grid;
+  grid-template-columns: var(--vh-portrait-w) auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.vbd-hud .vh-drag {
+  cursor: grab;
+}
+.vbd-hud .vh-drag:active {
+  cursor: grabbing;
+}
+.vbd-hud .vh-portrait {
+  position: relative;
+  width: var(--vh-portrait-w);
+  height: var(--vh-portrait-h);
+  flex-shrink: 0;
+  background-image: url("../assets/images/sheets/portraitFrame.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-inset-1));
+}
+.vbd-hud .vh-portrait img {
+  display: flex;
+  width: var(--vh-portrait-w);
+  height: var(--vh-portrait-h);
+  border: none;
+  object-fit: cover;
+  object-position: top center;
+  align-self: center;
+  mix-blend-mode: normal;
+  background: var(--vagabond-c-dark);
+  -webkit-mask-image: url("../assets/images/sheets/portraitMask.webp");
+  mask-image: url("../assets/images/sheets/portraitMask.webp");
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-mode: luminance;
+  mask-mode: luminance;
+}
+.vbd-hud .vh-vitals {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 3px;
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-vital {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Ludlow", serif;
+  font-size: 1.05rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.vbd-hud .vh-vital i {
+  width: 15px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.vbd-hud .vh-vital span {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-center {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.vbd-hud .vh-name {
+  font-family: "Germania", serif;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--vagabond-c-chat-yellow);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: var(--vh-outline-2);
+}
+.vbd-hud .vh-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 24px;
+  padding: 1px 8px;
+  border: 1px solid var(--vagabond-dark-yellow);
+  border-radius: 6px;
+}
+.vbd-hud .vh-controls .vh-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Ludlow", serif;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-lite);
+  cursor: pointer;
+}
+.vbd-hud .vh-controls .vh-ctl i {
+  color: var(--vagabond-c-tan);
+  font-size: 0.85rem;
+}
+.vbd-hud .vh-controls .vh-ctl:hover {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-controls .vh-ctl:hover i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-controls .vh-fh {
+  margin-left: auto;
+  font-family: "Germania", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.vbd-hud .vh-controls .vh-fh.favor {
+  color: var(--vagabond-c-green);
+}
+.vbd-hud .vh-controls .vh-fh.hinder {
+  color: var(--vagabond-c-red);
+}
+.vbd-hud .vh-controls .vh-fh.none {
+  color: var(--vagabond-c-muted);
+}
+.vbd-hud .vh-slots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.vbd-hud .vh-slot {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--vagabond-dark-yellow);
+  border-radius: 5px;
+  background: var(--vagabond-c-inset-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.vbd-hud .vh-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.vbd-hud .vh-slot.filled {
+  cursor: pointer;
+}
+.vbd-hud .vh-slot.filled:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 5px var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-mana {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  font-family: "Ludlow", serif;
+  font-size: 1rem;
+  color: var(--vagabond-c-stat);
+  cursor: pointer;
+}
+.vbd-hud .vh-mana i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-mana:hover {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-floating {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.vbd-hud .vh-pc-weapons {
+  display: flex;
+}
+.vbd-hud .vh-pc-weapon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-c-inset-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vbd-hud .vh-pc-weapon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.vbd-hud .vh-pc-weapon .vh-slot-empty {
+  color: var(--vagabond-c-muted);
+  font-size: 0.8rem;
+}
+.vbd-hud .vh-pc-weapon + .vbd-hud .vh-pc-weapon {
+  margin-left: -14px;
+}
+.vbd-hud .vh-pc-weapon.filled {
+  cursor: pointer;
+}
+.vbd-hud .vh-pc-weapon.filled:hover {
+  border-color: var(--vagabond-c-stat);
+  box-shadow: 0 0 6px var(--vagabond-c-chat-yellow);
+  z-index: 1;
+}
+.vbd-hud .vh-pc-weapon .vh-grip-badge {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-chat-yellow);
+  cursor: pointer;
+}
+.vbd-hud .vh-pc-weapon .vh-grip-badge:hover {
+  color: var(--vagabond-c-red);
+}
+.vbd-hud .vh-armor {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+}
+.vbd-hud .vh-armor i {
+  font-size: 32px;
+  color: var(--vagabond-c-tan);
+}
+.vbd-hud .vh-armor .vh-armor-val {
+  position: absolute;
+  top: 48%;
+  transform: translateY(-50%);
+  font-family: "Ludlow", serif;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-white);
+}
+.vbd-hud .vh-tabs {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  border-top: 1px solid var(--vagabond-dark-yellow);
+  margin-top: 2px;
+  padding-top: 3px;
+}
+.vbd-hud .vh-tab {
+  flex: 0 1 auto;
+  background: none;
+  border: none;
+  padding: 1px 4px;
+  font-family: "Germania", serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--vagabond-c-lite);
+  cursor: pointer;
+}
+.vbd-hud .vh-tab:hover {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-tab.active {
+  color: var(--vagabond-c-chat-yellow);
+  text-decoration: underline;
+}
+.vbd-hud .vh-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--vagabond-c-transparent);
+  border: 1px solid var(--vagabond-dark-yellow);
+  border-radius: var(--vh-radius);
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  padding: var(--vh-gap);
+  margin: 0;
+  z-index: 1;
+}
+.vbd-hud .vh-panel--closed, .vbd-hud .vh-panel.vh-panel--closed {
+  display: none;
+}
+.vbd-hud .vh-panel--above {
+  bottom: calc(100% + 4px);
+}
+.vbd-hud .vh-panel--below {
+  top: calc(100% + 4px);
+}
+.vbd-hud .vh-panel-content.hidden {
+  display: none;
+}
+.vbd-hud .vh-section-title {
+  font-family: "Germania", serif;
+  font-size: 0.8rem;
+  color: var(--vagabond-c-chat-yellow);
+  border-bottom: 1px solid var(--vagabond-dark-yellow);
+  margin: 6px 0 4px;
+  padding-bottom: 2px;
+}
+.vbd-hud .vh-section-title:first-child {
+  margin-top: 0;
+}
+.vbd-hud .vh-empty {
+  color: var(--vagabond-c-muted);
+  font-style: italic;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 8px 0;
+}
+.vbd-hud .vh-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.vbd-hud .vh-row:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+.vbd-hud .vh-skill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px 8px;
+}
+.vbd-hud .vh-skill {
+  justify-content: space-between;
+}
+.vbd-hud .vh-skill .vh-skill-name {
+  color: var(--vagabond-c-lite);
+  font-size: 0.85rem;
+}
+.vbd-hud .vh-skill .vh-skill-diff {
+  font-family: "Ludlow", serif;
+  color: var(--vagabond-c-stat);
+}
+.vbd-hud .vh-skill:hover .vh-skill-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-saves {
+  display: flex;
+  gap: 6px;
+}
+.vbd-hud .vh-save {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 5px 4px;
+  background: var(--vagabond-c-inset-1);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.vbd-hud .vh-save .vh-save-icon i {
+  color: var(--vagabond-c-tan);
+}
+.vbd-hud .vh-save .vh-save-name {
+  font-size: 0.75rem;
+  color: var(--vagabond-c-lite);
+}
+.vbd-hud .vh-save .vh-save-diff {
+  font-family: "Ludlow", serif;
+  font-size: 1.05rem;
+  color: var(--vagabond-c-stat);
+}
+.vbd-hud .vh-save:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+.vbd-hud .vh-save:hover .vh-save-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-spell-img,
+.vbd-hud .vh-inv-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.vbd-hud .vh-spell-name,
+.vbd-hud .vh-inv-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--vagabond-c-lite);
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vbd-hud .vh-inv-val {
+  font-family: "Ludlow", serif;
+  color: var(--vagabond-c-stat);
+  flex: 0 0 auto;
+}
+.vbd-hud .vh-inv-eq {
+  color: var(--vagabond-c-green);
+  font-size: 0.75rem;
+  flex: 0 0 auto;
+}
+.vbd-hud .vh-inv:not(.is-equipped) .vh-inv-img {
+  opacity: 0.55;
+}
+.vbd-hud .vh-inv-use,
+.vbd-hud .vh-spell-use {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.vbd-hud .vh-spell-fav {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.7rem;
+  flex: 0 0 auto;
+}
+.vbd-hud .vh-spell-dmg {
+  flex: 0 0 auto;
+}
+.vbd-hud .vh-inv-menu {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: var(--vagabond-c-tan);
+  cursor: pointer;
+}
+.vbd-hud .vh-inv-menu:hover {
+  color: var(--vagabond-c-chat-yellow);
+  background: rgba(0, 0, 0, 0.3);
+}
+.vbd-hud .vh-spell-use:hover .vh-spell-name,
+.vbd-hud .vh-inv-use:hover .vh-inv-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .accordion-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+.vbd-hud .accordion-item .accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 2px;
+  cursor: pointer;
+}
+.vbd-hud .accordion-item .accordion-header .vh-acc-name {
+  font-family: "Germania", serif;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-lite);
+}
+.vbd-hud .accordion-item .accordion-header:hover .vh-acc-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .accordion-item .accordion-icon {
+  transition: transform 0.15s ease;
+  color: var(--vagabond-c-tan);
+  font-size: 0.7rem;
+}
+.vbd-hud .accordion-item.expanded .accordion-icon {
+  transform: rotate(90deg);
+}
+.vbd-hud .accordion-item .accordion-content.collapsed {
+  display: none;
+}
+.vbd-hud .accordion-item .accordion-content.open {
+  display: block;
+}
+.vbd-hud .accordion-item .vh-acc-body {
+  font-family: "Paradigm", serif;
+  font-size: 0.82rem;
+  color: var(--vagabond-c-lite);
+  padding: 2px 4px 8px;
+}
+.vbd-hud .accordion-item .vh-acc-body p {
+  margin: 0 0 4px;
+}
+
 #vagabond-char-builder .window-content {
   background: black;
   color: var(--vagabond-c-text-primary);

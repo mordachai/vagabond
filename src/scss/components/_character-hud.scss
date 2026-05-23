@@ -1,0 +1,481 @@
+// =============================================================
+//  Character HUD — floating, frameless player overlay
+//  Shared base `.vbd-hud` + type modifier `.vbd-hud--pc`.
+//  Renders outside sheets, imported at top level. All colours/
+//  fonts come from src/scss/utils tokens (theme-aware).
+//  Target footprint ~425 x 120 (width not strictly enforced).
+// =============================================================
+
+.vbd-hud {
+  --vh-gap: 6px;
+  --vh-radius: 10px;
+  --vh-portrait-w: 95px;
+  --vh-portrait-h: 95px;
+  --vh-float-w: 84px; // right gutter reserved for weapon circles + shield
+  --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+
+  // Frameless ApplicationV2 elements get no positioning shell — own it here.
+  position: fixed;
+  z-index: 70;
+  width: auto;
+  height: auto;
+  font-family: $font-primary;
+  color: $c-white;
+  user-select: none;
+  pointer-events: auto;
+
+  * { box-sizing: border-box; }
+  @include vagabond-scrollbar;
+
+  // Inner template root: the body is the only flow child and defines the
+  // element footprint; the panel is absolutely positioned against this box so
+  // it overlays above/below WITHOUT displacing the anchored body.
+  .vh-root {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+  }
+
+  // ---------------------------------------------------------
+  //  Body bar
+  // ---------------------------------------------------------
+  .vh-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 425px;
+    padding: 7px var(--vh-float-w) 4px 8px; // right pad clears the floating cluster
+    //background: $c-transparent;
+    //border: 1px solid $c-dark-yellow;
+    border-radius: var(--vh-radius);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+
+    &.drag-over { border-color: $c-yellow; box-shadow: inset 0 0 12px $c-yellow; }
+  }
+
+  .vh-main-grid {
+    display: grid;
+    grid-template-columns: var(--vh-portrait-w) auto 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  // ---------------------------------------------------------
+  //  Portrait (drag handle + dbl-click to open sheet)
+  // ---------------------------------------------------------
+  .vh-drag {
+    cursor: grab;
+    &:active { cursor: grabbing; }
+  }
+
+  .vh-portrait {
+    position: relative;
+    width: var(--vh-portrait-w);
+    height: var(--vh-portrait-h);
+    flex-shrink: 0;
+    background-image: url('../assets/images/sheets/portraitFrame.webp');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: drop-shadow(1px 1px 2px $c-inset-1);
+
+    img {
+      display: flex;
+      width: var(--vh-portrait-w);
+      height: var(--vh-portrait-h);
+      border: none;
+      object-fit: cover;
+      object-position: top center;
+      align-self: center;
+      mix-blend-mode: normal;
+      background: $c-dark;
+      -webkit-mask-image: url('../assets/images/sheets/portraitMask.webp');
+      mask-image: url('../assets/images/sheets/portraitMask.webp');
+      -webkit-mask-size: cover;
+      mask-size: cover;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-mode: luminance;
+      mask-mode: luminance;
+    }
+  }
+
+  // ---------------------------------------------------------
+  //  Vitals column
+  // ---------------------------------------------------------
+  .vh-vitals {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 3px;
+    color: $c-yellow;
+  }
+
+  .vh-vital {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font-number;
+    font-size: 1.05rem;
+    line-height: 1.15;
+    white-space: nowrap;
+    cursor: pointer;
+    i { width: 15px; text-align: center; font-size: 0.9rem; }
+    span { color: $c-yellow; }
+
+  }
+
+  // ---------------------------------------------------------
+  //  Center column: name, controls, slots
+  // ---------------------------------------------------------
+  .vh-center {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .vh-name {
+    font-family: $font-title;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: $c-yellow;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: var(--vh-outline-2);
+  }
+
+  .vh-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 24px;
+    padding: 1px 8px;
+    border: 1px solid $c-dark-yellow;
+    border-radius: 6px;
+
+    .vh-ctl {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: $font-number;
+      font-size: 0.9rem;
+      color: $c-lite;
+      cursor: pointer;
+      i { color: $c-tan; font-size: 0.85rem; }
+      &:hover { color: $c-yellow; i { color: $c-yellow; } }
+    }
+
+    .vh-fh {
+      margin-left: auto;
+      font-family: $font-title;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      &.favor  { color: $c-green; }
+      &.hinder { color: $c-red; }
+      &.none   { color: $c-muted; }
+    }
+  }
+
+  // ---------------------------------------------------------
+  //  Item slots + mana
+  // ---------------------------------------------------------
+  .vh-slots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .vh-slot {
+    width: 32px;
+    height: 32px;
+    border: 1px solid $c-dark-yellow;
+    border-radius: 5px;
+    background: $c-inset-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    img { width: 100%; height: 100%; object-fit: cover; }
+    &.filled { cursor: pointer; }
+    &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
+  }
+
+  .vh-mana {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 6px;
+    font-family: $font-number;
+    font-size: 1rem;
+    color: $c-stat;
+    cursor: pointer;
+    i { color: $c-yellow; }
+    &:hover { color: $c-yellow; }
+  }
+
+  // ---------------------------------------------------------
+  //  Floating cluster (weapon circles + armor shield)
+  // ---------------------------------------------------------
+  .vh-floating {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .vh-pc-weapons { display: flex; }
+
+  .vh-pc-weapon {
+    position: relative; // anchor the grip badge
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid $c-yellow;
+    background: $c-inset-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Clip the image (not the whole circle) so the grip badge can overflow.
+    img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .vh-slot-empty { color: $c-muted; font-size: 0.8rem; }
+    & + & { margin-left: -14px; } // overlap, matches mockup
+    &.filled { cursor: pointer; }
+    &.filled:hover { border-color: $c-stat; box-shadow: 0 0 6px $c-yellow; z-index: 1; }
+
+    // Versatile-weapon grip toggle — child of the circle (2 o'clock), so it
+    // travels with the circle when it repositions. Click toggles 1H ⇄ 2H.
+    .vh-grip-badge {
+      position: absolute;
+      top: -7px;
+      left: -7px;
+      z-index: 3;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: $c-yellow;
+      //background: $c-inset-1;
+      //border: 1px solid $c-yellow;
+      //border-radius: 50%;
+      cursor: pointer;
+      &:hover { color: $c-red; }
+
+    }
+  }
+
+  .vh-armor {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    justify-content: center;
+    i { font-size: 32px; color: $c-tan; }
+    .vh-armor-val {
+      position: absolute;
+      top: 48%;
+      transform: translateY(-50%);
+      font-family: $font-number;
+      font-size: 0.85rem;
+      color: $c-white;
+    }
+  }
+
+  // ---------------------------------------------------------
+  //  Tab bar (names, not buttons)
+  // ---------------------------------------------------------
+  .vh-tabs {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    border-top: 1px solid $c-dark-yellow;
+    margin-top: 2px;
+    padding-top: 3px;
+  }
+
+  .vh-tab {
+    flex: 0 1 auto;
+    background: none;
+    border: none;
+    padding: 1px 4px;
+    font-family: $font-title;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: $c-lite;
+    cursor: pointer;
+    &:hover { color: $c-yellow; }
+    &.active { color: $c-yellow; text-decoration: underline; }
+  }
+
+  // ---------------------------------------------------------
+  //  Panel (tab content) — above or below the body
+  // ---------------------------------------------------------
+  // Absolutely anchored to the body box so the body never moves when the panel
+  // opens. Width is pinned (left:0/right:0) so content cannot widen the HUD.
+  .vh-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: $c-transparent;
+    border: 1px solid $c-dark-yellow;
+    border-radius: var(--vh-radius);
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+    padding: var(--vh-gap);
+    margin: 0;
+    z-index: 1;
+
+    &--closed,
+    &.vh-panel--closed { display: none; }
+    &--above { bottom: calc(100% + 4px); }
+    &--below { top: calc(100% + 4px); }
+  }
+
+  .vh-panel-content.hidden { display: none; }
+
+  .vh-section-title {
+    font-family: $font-title;
+    font-size: 0.8rem;
+    color: $c-yellow;
+    border-bottom: 1px solid $c-dark-yellow;
+    margin: 6px 0 4px;
+    padding-bottom: 2px;
+    &:first-child { margin-top: 0; }
+  }
+
+  .vh-empty {
+    color: $c-muted;
+    font-style: italic;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  .vh-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover { background: rgba(0, 0, 0, 0.3); }
+  }
+
+  .vh-skill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px 8px;
+  }
+  .vh-skill {
+    justify-content: space-between;
+    .vh-skill-name { color: $c-lite; font-size: 0.85rem; }
+    .vh-skill-diff { font-family: $font-number; color: $c-stat; }
+    &:hover .vh-skill-name { color: $c-yellow; }
+  }
+
+  .vh-saves { display: flex; gap: 6px; }
+  .vh-save {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 5px 4px;
+    background: $c-inset-1;
+    border-radius: 5px;
+    cursor: pointer;
+    .vh-save-icon i { color: $c-tan; }
+    .vh-save-name { font-size: 0.75rem; color: $c-lite; }
+    .vh-save-diff { font-family: $font-number; font-size: 1.05rem; color: $c-stat; }
+    &:hover { background: rgba(0, 0, 0, 0.3); .vh-save-name { color: $c-yellow; } }
+  }
+
+  .vh-spell-img,
+  .vh-inv-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+  .vh-spell-name,
+  .vh-inv-name {
+    flex: 1;
+    min-width: 0;
+    color: $c-lite;
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vh-inv-val { font-family: $font-number; color: $c-stat; flex: 0 0 auto; }
+  .vh-inv-eq { color: $c-green; font-size: 0.75rem; flex: 0 0 auto; }
+  .vh-inv:not(.is-equipped) .vh-inv-img { opacity: 0.55; }
+  .vh-inv-use,
+  .vh-spell-use {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+  .vh-spell-fav { color: $c-yellow; font-size: 0.7rem; flex: 0 0 auto; }
+  .vh-spell-dmg { flex: 0 0 auto; }
+  .vh-inv-menu {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: $c-tan;
+    cursor: pointer;
+    &:hover { color: $c-yellow; background: rgba(0, 0, 0, 0.3); }
+  }
+  .vh-spell-use:hover .vh-spell-name,
+  .vh-inv-use:hover .vh-inv-name { color: $c-yellow; }
+
+  // accordions (features / traits / perks)
+  .accordion-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 2px;
+      cursor: pointer;
+      .vh-acc-name { font-family: $font-title; font-size: 0.85rem; color: $c-lite; }
+      &:hover .vh-acc-name { color: $c-yellow; }
+    }
+    .accordion-icon { transition: transform 0.15s ease; color: $c-tan; font-size: 0.7rem; }
+    &.expanded .accordion-icon { transform: rotate(90deg); }
+    .accordion-content {
+      &.collapsed { display: none; }
+      &.open { display: block; }
+    }
+    .vh-acc-body {
+      font-family: $font-text;
+      font-size: 0.82rem;
+      color: $c-lite;
+      padding: 2px 4px 8px;
+      p { margin: 0 0 4px; }
+    }
+  }
+}

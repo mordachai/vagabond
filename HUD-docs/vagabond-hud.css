@@ -1,0 +1,652 @@
+/*
+  vagabond-hud.css — Reference stylesheet for the Vagabond Character HUD
+  Foundry VTT v14
+
+  FONT SCALE:
+    0.85rem  — secondary values (mana, study die, armor, slot costs)
+    1.00rem  — default text, tab labels
+    1.20rem  — highlighted vitals (HP, Fatigue, Speed, Luck)
+    1.80rem  — character name
+
+  DIMENSIONS:
+    Portrait:       95 × 95px
+    Spell/item slot: 28 × 28px
+    Weapon circle:  54px diameter
+    Col 1 (portrait): 95px fixed
+    Col 2 (vitals):   52px fixed
+    Col 3 (main):     1fr (fills remaining space)
+*/
+
+/* ─────────────────────────────────────────────
+   ROOT CONTAINER
+───────────────────────────────────────────── */
+.vagabond-hud {
+  font-family: var(--font-primary, sans-serif);
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: 480px;
+  user-select: none;
+  position: relative; /* anchor for .hud-floating */
+}
+
+/* ─────────────────────────────────────────────
+   TAB PANEL (opens above or below hud-body)
+   CLAUDE CODE: toggle .hud-panel--above / --below
+   and .hud-panel--open via JS based on screen position
+───────────────────────────────────────────── */
+.hud-panel {
+  background: rgba(8, 6, 4, 0.85);
+  border: 1px solid rgba(180, 150, 80, 0.25);
+  border-radius: 4px;
+  display: none;
+  backdrop-filter: blur(4px);
+}
+
+.hud-panel--open {
+  display: block;
+}
+
+.hud-panel--above {
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  order: -1; /* flex order: renders above hud-body */
+}
+
+.hud-panel--below {
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
+
+/* panel content: only the active tab is shown */
+.hud-panel-content {
+  display: none;
+  padding: 10px 12px 8px;
+}
+
+.hud-panel-content.active {
+  display: block;
+}
+
+/* traits panel layout */
+.traits-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1px;
+}
+
+.traits-col {
+  padding: 0 8px;
+}
+
+/* section heading with decorative lines */
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 6px;
+}
+
+.section-heading::before,
+.section-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(180, 150, 80, 0.5));
+}
+
+.section-heading::after {
+  background: linear-gradient(to left, transparent, rgba(180, 150, 80, 0.5));
+}
+
+.section-heading span {
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  color: rgba(220, 190, 100, 0.9);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* trait accordion item */
+.trait-item {
+  margin-bottom: 2px;
+}
+
+.trait-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.12s;
+}
+
+.trait-trigger:hover {
+  background: rgba(180, 150, 80, 0.08);
+}
+
+.trait-trigger i:first-child {
+  font-size: 0.85rem;
+  color: rgba(220, 190, 100, 0.5);
+  flex-shrink: 0;
+  width: 14px;
+}
+
+.trait-name {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  flex: 1;
+}
+
+.trait-chevron {
+  font-size: 0.85rem;
+  color: rgba(180, 150, 80, 0.4);
+  transition: transform 0.2s;
+}
+
+.trait-chevron--open {
+  transform: rotate(180deg);
+}
+
+.trait-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.22s ease;
+}
+
+.trait-body--open {
+  max-height: 200px;
+}
+
+.trait-body p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.55;
+  padding: 4px 4px 4px 20px;
+}
+
+/* generic panel grid (skills, inventory) */
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 16px;
+}
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.panel-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.pr-name {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.pr-val {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* saves panel */
+.saves-row {
+  display: flex;
+  gap: 12px;
+}
+
+.save-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.save-cell:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.save-cell i {
+  font-size: 1.2rem;
+}
+
+.sv-val {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.sv-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
+}
+
+/* spells panel */
+.spell-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.spell-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.spell-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.spell-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spell-name {
+  flex: 1;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.spell-dmg {
+  font-size: 0.85rem;
+  color: rgba(100, 180, 232, 0.9);
+  min-width: 32px;
+  text-align: right;
+}
+
+.spell-cost {
+  font-size: 0.85rem;
+  color: rgba(232, 200, 74, 0.8);
+  min-width: 16px;
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────
+   HUD BODY
+───────────────────────────────────────────── */
+.hud-body {
+  background: rgba(8, 6, 4, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─────────────────────────────────────────────
+   ROW 1 — portrait · vitals · main
+───────────────────────────────────────────── */
+.hud-row1 {
+  display: grid;
+  grid-template-columns: 95px 52px 1fr;
+  min-height: 95px;
+  position: relative; /* anchor for .hud-floating */
+}
+
+/* ── COL 1 · Portrait · 95×95px ── */
+.col-portrait {
+  width: 95px;
+  height: 95px;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.col-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── COL 2 · Vitals ── */
+.col-vitals {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 5px;
+}
+
+.vital-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.vital-row i {
+  font-size: 1rem;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.vital-val {
+  font-size: 1.2rem; /* highlighted */
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+}
+
+/* per-vital icon colors */
+.vital-hp    i { color: #e05050; }
+.vital-fatigue i { color: #e08040; }
+.vital-speed   i { color: rgba(255, 255, 255, 0.4); }
+.vital-luck    i { color: #60c870; }
+
+/* ── COL 3 · Name + Controls + Slots ── */
+.col-main {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+}
+
+.row-name {
+  padding: 6px 10px 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.char-name {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.row-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.study-die {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+
+.study-die:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.check-mod {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+}
+
+.check-mod span {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 3-state toggle — CLAUDE CODE: sync class with actor.system.hindered value */
+.hinder-toggle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+
+.hinder-toggle[data-state="normal"],
+.hinder-toggle[data-state=""] {
+  color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: transparent;
+}
+
+.hinder-toggle[data-state="hindered"] {
+  color: #e05050;
+  border-color: rgba(224, 80, 80, 0.4);
+  background: rgba(224, 80, 80, 0.07);
+}
+
+.hinder-toggle[data-state="favored"] {
+  color: #60c870;
+  border-color: rgba(96, 200, 112, 0.4);
+  background: rgba(96, 200, 112, 0.07);
+}
+
+/* 5 spell/item quick slots */
+.row-slots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+}
+
+.slot {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.slot:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.slot.filled {
+  border-color: rgba(232, 200, 74, 0.4);
+}
+
+.slot.filled:hover {
+  border-color: rgba(232, 200, 74, 0.8);
+}
+
+.slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slot i {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.slot-cost {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  font-size: 0.6rem;
+  color: rgba(232, 200, 74, 0.75);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────
+   FLOATING ELEMENTS
+   position:absolute relative to .hud-row1
+   CLAUDE CODE: these sit outside the grid flow.
+   Adjust right/top offsets to match final HUD width.
+───────────────────────────────────────────── */
+.hud-floating {
+  position: absolute;
+  right: -70px; /* outside the HUD body — adjust to taste */
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.weapon-circles {
+  position: relative;
+  width: 54px;
+  height: 80px; /* enough for two overlapping circles */
+}
+
+/* weapon circle — 54px diameter */
+.weapon-circle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  background: rgba(8, 6, 4, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  overflow: hidden;
+  pointer-events: all;
+  position: absolute;
+}
+
+.weapon-circle:first-child {
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.weapon-circle:last-child {
+  top: 20px; /* overlap effect */
+  left: 8px;
+  z-index: 1;
+}
+
+.weapon-circle:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.weapon-circle.filled {
+  border-color: rgba(232, 200, 74, 0.4);
+}
+
+.weapon-circle.filled:hover {
+  border-color: rgba(232, 200, 74, 0.8);
+}
+
+.weapon-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.weapon-circle i {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+/* mana display */
+.mana-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: all;
+  margin-top: 28px; /* clear the weapon-circles height */
+}
+
+.mana-badge i {
+  color: #a070e8;
+  font-size: 0.85rem;
+}
+
+/* armor value */
+.armor-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 3px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(8, 6, 4, 0.9);
+  pointer-events: all;
+}
+
+/* ─────────────────────────────────────────────
+   ROW 2 — tab menu
+───────────────────────────────────────────── */
+.hud-row2 {
+  display: flex;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 5px 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab-btn:last-child {
+  border-right: none;
+}
+
+.tab-btn:hover {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tab-btn.active {
+  color: #e8c84a;
+  background: rgba(232, 200, 74, 0.07);
+}

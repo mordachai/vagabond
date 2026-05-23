@@ -69,6 +69,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
       modifyMana: this._onModifyMana,
       openDowntime: this._onOpenDowntime,
+      becomeHud: this._onBecomeHud,
       openCharBuilder: this._onOpenCharBuilder,
       dismissCharBuilder: this._onDismissCharBuilder,
       // NPC-specific UI actions (handled in base class)
@@ -1572,6 +1573,20 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onOpenDowntime(event, target) {
     new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true);
+  }
+
+  /**
+   * Close this sheet and open the floating Character HUD for the same actor.
+   * Uses the global registry (not a static import) to avoid a circular import
+   * between the sheet and the HUD.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static async _onBecomeHud(event, target) {
+    const actor = this.actor;
+    await this.close();
+    globalThis.vagabond.applications.VagabondCharacterHud?.open(actor);
   }
 
   /**

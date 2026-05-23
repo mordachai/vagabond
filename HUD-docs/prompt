@@ -1,0 +1,71 @@
+We are building a floating character HUD for a Foundry VTT v14 module for the Vagabond RPG system.
+
+## Context
+
+The module already has a working full character sheet and uses SCSS compiled via `npm run watch`.
+The HUD is a new draggable floating overlay for use during play.
+
+Attach and read before starting:
+- vagabond-character-hud-spec.md  ← full design spec
+- vagabond-hud.hbs                ← reference HBS (study only, do not copy)
+- vagabond-hud.css                ← reference CSS (study only, do not copy)
+
+The reference files show the intended layout, dimensions, and design intent. They are NOT the
+implementation files. You will write your own HBS and SCSS following the module's existing
+patterns and naming conventions.
+
+## Before writing any code, do the following:
+
+1. Read all three attached files completely.
+
+2. Search the module source for:
+   - Existing ApplicationV2 class structure, naming conventions, and how apps are registered
+   - The SCSS file structure and naming conventions (class prefixes used to avoid conflicts)
+   - How `npm run watch` compiles SCSS — confirm the entry point and output path
+   - How the Spell Cast Dialog is opened — the HUD spells panel must be able to trigger it
+   - Any existing drag/drop or floating window patterns already in use
+
+3. Search the Vagabond system source (`systems/vagabond/`) for:
+   - Every data field path listed in spec section 12 — confirm each one
+   - The existing Hindered/Favored toggle — find its `data-action` and reuse it exactly
+   - How the system rolls saves — exact method signature
+   - How the system rolls skills — exact method signature  
+   - How weapon attacks are rolled — exact method signature
+   - How spells are cast — exact method signature (connects to Spell Cast Dialog)
+   - FA icon classes used for HP, Fatigue, Speed, Luck, and the three saves — find them in
+     the system's HBS templates, do not assume
+   - Where the character sheet persists hotbar/slot assignments (actor flags or system field)
+   - Whether the system has any existing compact HUD we should be aware of
+
+4. Search the Foundry V14 API for:
+   - How to make an ApplicationV2 draggable and persist its position per user
+   - The correct hook to re-render the HUD when actor data changes
+   - The DragDrop API for accepting item drops onto slots
+
+5. Produce a planning document before writing any code. It must include:
+   - File list: every new file and every existing file to modify
+   - SCSS class naming strategy (prefix or namespace to avoid conflicts)
+   - ApplicationV2 class structure (name, mixins, options, lifecycle methods)
+   - HBS template outline (structure only, not full code)
+   - Data flow: how actor data enters the HUD and stays reactive
+   - Drag position persistence strategy
+   - All system API calls with exact signatures from source
+   - All Foundry hooks with exact names from V14 API
+   - Open questions before implementation can proceed
+
+6. Present the plan and wait for approval before writing any code.
+
+## Constraints
+
+- Foundry VTT v14
+- ApplicationV2 + HandlebarsApplicationMixin
+- SCSS via existing `npm run watch` pipeline — no new build config
+- No jQuery, no external CDN dependencies at runtime
+- Class names must be namespaced to avoid conflicts with the Vagabond system and other modules
+- FA Pro icons: verify all class names from system source before using
+- The reference HBS and CSS are for inspiration only — write fresh files in module structure
+- "Click = roll" everywhere: no confirmation dialogs except the Spell Cast Dialog
+- HUD floats freely — player drags it, position persists per user in Foundry flags
+- Panel (tab content) opens above or below HUD depending on available screen space
+- Nothing writes to actor/item until an action is explicitly confirmed
+```

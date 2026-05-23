@@ -48,6 +48,7 @@ import { CompendiumSettings } from './applications/compendium-settings.mjs';
 import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 import { PartyCompactView } from './applications/party-compact-view.mjs';
 import { OngoingPanel } from './applications/ongoing-panel.mjs';
+import { VagabondCharacterHud } from './applications/character-hud.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
@@ -549,6 +550,15 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Auto-open the Character HUD when a token is selected. State lives behind
+  // the "Auto-open HUD" scene-control toggle (Vagabond group), not the menu.
+  game.settings.register('vagabond', 'hudAutoOpenOnSelect', {
+    scope: 'client',
+    config: false,
+    type: Boolean,
+    default: true,
+  });
+
   // Setting 21: Sequencer FX animation config (hidden data store)
   game.settings.register('vagabond', 'sequencerFxConfig', {
     scope: 'world',
@@ -657,6 +667,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/chat/damage-display.hbs',
     // Ongoing panel
     'systems/vagabond/templates/apps/ongoing-panel.hbs',
+    // Character HUD
+    'systems/vagabond/templates/apps/character-hud.hbs',
     // Spell cast dialog
     'systems/vagabond/templates/apps/spell-cast-dialog.hbs',
   ];
@@ -719,6 +731,7 @@ globalThis.vagabond = {
     LevelUpDialog,
     PartyCompactView,
     OngoingPanel,
+    VagabondCharacterHud,
   },
   ui: {
     ProgressClockOverlay,
@@ -1175,13 +1188,63 @@ Hooks.on('getSceneControlButtons', (controls) => {
         button:  true,
         onClick: () => Hooks.callAll('vagabond.toggleOngoingPanel'),
       },
+      // Stateful toggle (default ON): when active, selecting a token auto-opens
+      // its Character HUD and deselecting/switching closes it (follow-selection).
+      hudAutoOpen: {
+        name:    'hudAutoOpen',
+        title:   game.i18n.localize('VAGABOND.Hud.AutoOpenToggle'),
+        icon:    game.settings.get('vagabond', 'hudAutoOpenOnSelect')
+          ? 'fa-solid fa-circle-user'
+          : 'fa-regular fa-circle-user',
+        toggle:  true,
+        active:  game.settings.get('vagabond', 'hudAutoOpenOnSelect'),
+        onChange: (event, active) => {
+          game.settings.set('vagabond', 'hudAutoOpenOnSelect', active).then(() => {
+            VagabondCharacterHud.syncToSelection(); // ON: open current selection; OFF: close
+            ui.controls.render();                   // swap solid/regular icon
+          });
+        },
+      },
     }
   };
+
+  // Momentary "open the selected token's HUD" button. Lives in the native
+  // Token Controls group (not the Vagabond group) so players reach it alongside
+  // the other token tools. Independent of the auto-open toggle above.
+  if (controls.tokens?.tools) {
+    controls.tokens.tools.characterHudOpen = {
+      name:    'characterHudOpen',
+      title:   game.i18n.localize('VAGABOND.Hud.OpenSceneControl'),
+      icon:    'fa-solid fa-square-user',
+      button:  true,
+      onClick: () => {
+        const actor = canvas.tokens?.controlled?.[0]?.actor
+          ?? VagabondCharacterHud.resolveActor();
+        Hooks.callAll('vagabond.openCharacterHud', actor);
+      },
+    };
+  }
 });
 
 Hooks.on('vagabond.toggleOngoingPanel', () => {
   OngoingPanel.toggle();
 });
+
+Hooks.on('vagabond.toggleCharacterHud', (actor = null) => {
+  VagabondCharacterHud.toggle(actor);
+});
+
+Hooks.on('vagabond.openCharacterHud', (actor = null) => {
+  VagabondCharacterHud.open(actor);
+});
+
+// Follow-selection: open/close the auto HUD as token selection changes.
+// Debounced — multi-select fires `controlToken` once per token.
+const _hudSyncSelection = foundry.utils.debounce(
+  () => VagabondCharacterHud.syncToSelection(),
+  50,
+);
+Hooks.on('controlToken', () => _hudSyncSelection());
 
 /**
  * Refresh clock when journals are updated

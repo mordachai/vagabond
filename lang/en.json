@@ -1193,6 +1193,57 @@
         "Enemies": "Enemies"
       }
     },
+    "Hud": {
+      "SceneControl":    "Toggle Character HUD",
+      "AutoOpenToggle":  "Auto-open HUD on token select",
+      "OpenSceneControl": "Open selected token's HUD",
+      "OpenSheet":       "Open full character sheet",
+      "PortraitTooltip": "Drag to move · Double-click to open sheet",
+      "Become":          "Become the HUD",
+      "BecomeTooltip":   "Close this sheet and open the floating HUD",
+      "NoActor":         "No character assigned and no token selected.",
+      "NotCharacter":    "The Character HUD only supports player characters.",
+      "HPHint":          "Left click −1 · Right click +1",
+      "FatigueHint":     "Left click +1 · Right click −1",
+      "LuckTooltip":     "Click to spend · Shift+Click to add",
+      "StudiedTooltip":  "Click to spend a Studied Die · Shift+Click to add",
+      "CheckModTooltip": "Left click +1 · Right click −1 · Resets after any roll",
+      "ManaTooltip":     "Left click to spend mana · Right click to restore",
+      "SlotForeignItem": "That item does not belong to this character.",
+      "SlotNotWeapon":   "Only weapons can go in a weapon slot.",
+      "NoTokenToPing":   "This character has no token on the current scene.",
+      "Equipped": "Equipped",
+      "Favorited": "Favorited",
+      "Menu": {
+        "Use":           "Use",
+        "Open":          "Open",
+        "SendToChat":    "Send to Chat",
+        "Unequip":       "Unequip",
+        "UseOneHand":    "Use One-Handed",
+        "UseTwoHands":   "Use Two-Handed",
+        "RemoveFromHud": "Remove from HUD",
+        "Ping":          "Ping Character",
+        "Close":         "Close HUD",
+        "Actions":       "Actions"
+      },
+      "InvGroups": {
+        "weapon":     "Weapons",
+        "armor":      "Armors",
+        "gear":       "Gear",
+        "relic":      "Relics",
+        "alchemical": "Alchemicals"
+      },
+      "FH": {
+        "favor":  "Favored",
+        "hinder": "Hindered",
+        "none":   "Steady"
+      },
+      "Empty": {
+        "Features":  "No features, traits, or perks.",
+        "Spells":    "No spells known.",
+        "Inventory": "Inventory is empty."
+      }
+    },
     "CountdownDice": {
       "Name": "Dice Name",
       "DefaultName": "Countdown",

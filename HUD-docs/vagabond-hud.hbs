@@ -1,0 +1,309 @@
+{{!--
+  vagabond-hud.hbs — Reference template for the Vagabond Character HUD
+  Foundry VTT v14 · ApplicationV2 + HandlebarsApplicationMixin
+
+  CLAUDE CODE NOTES:
+  - All {{actor.*}} paths must be verified against the Vagabond system data model
+  - All data-action values must match handlers registered in your ApplicationV2 _onClickAction()
+  - FA icon classes (fa-*) must be verified against the FA Pro version loaded by Foundry
+  - Draggable slots use Foundry's native DragDrop interface — wire up _onDragOver/_onDrop
+  - The floating .hud-floating wrapper uses position:absolute — anchor point is .hud-row1
+--}}
+
+<div class="vagabond-hud" id="vagabond-hud-{{actor.id}}">
+
+  {{!-- ═══════════════════════════════════════════════
+    TAB PANEL — renders above or below depending on
+    screen position (toggled via JS in your AppV2).
+    Only one panel is rendered at a time.
+    CLAUDE CODE: implement panel switching in
+    _onClickAction() for data-action="openTab"
+  ═══════════════════════════════════════════════ --}}
+  <div class="hud-panel" data-panel-state="closed">
+
+    {{!-- TRAITS panel --}}
+    <div class="hud-panel-content" data-tab="traits">
+      <div class="traits-columns">
+
+        <div class="traits-col">
+          <div class="section-heading"><span>{{localize "VAGABOND.Features"}}</span></div>
+          {{!-- CLAUDE CODE: iterate actor.items filtered by type="feature" --}}
+          {{#each features}}
+          <div class="trait-item">
+            <div class="trait-trigger" data-action="toggleTrait" data-item-id="{{this.id}}">
+              <i class="fa-regular fa-sun" aria-hidden="true"></i>
+              <span class="trait-name">{{this.name}}</span>
+              <i class="fa-solid fa-chevron-down trait-chevron" aria-hidden="true"></i>
+            </div>
+            <div class="trait-body">
+              <p>{{this.system.description}}</p>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+
+        <div class="traits-col">
+          <div class="section-heading"><span>{{localize "VAGABOND.Traits"}}</span></div>
+          {{!-- CLAUDE CODE: iterate actor.items filtered by type="trait" --}}
+          {{#each traits}}
+          <div class="trait-item">
+            <div class="trait-trigger" data-action="toggleTrait" data-item-id="{{this.id}}">
+              <i class="fa-regular fa-sun" aria-hidden="true"></i>
+              <span class="trait-name">{{this.name}}</span>
+              <i class="fa-solid fa-chevron-down trait-chevron" aria-hidden="true"></i>
+            </div>
+            <div class="trait-body">
+              <p>{{this.system.description}}</p>
+            </div>
+          </div>
+          {{/each}}
+
+          <div class="section-heading"><span>{{localize "VAGABOND.Perks"}}</span></div>
+          {{!-- CLAUDE CODE: iterate actor.items filtered by type="perk" --}}
+          {{#each perks}}
+          <div class="trait-item">
+            <div class="trait-trigger" data-action="toggleTrait" data-item-id="{{this.id}}">
+              <i class="fa-regular fa-sun" aria-hidden="true"></i>
+              <span class="trait-name">{{this.name}}</span>
+              <i class="fa-solid fa-chevron-down trait-chevron" aria-hidden="true"></i>
+            </div>
+            <div class="trait-body">
+              <p>{{this.system.description}}</p>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+
+      </div>
+    </div>{{!-- /traits --}}
+
+    {{!-- SKILLS panel --}}
+    <div class="hud-panel-content" data-tab="skills">
+      <div class="panel-grid">
+        {{!-- CLAUDE CODE: iterate actor.system.skills — confirm field structure --}}
+        {{#each skills}}
+        <div class="panel-row" data-action="rollSkill" data-skill="{{@key}}">
+          <span class="pr-name">{{this.label}}</span>
+          <span class="pr-val">{{this.value}}</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{!-- SAVES panel --}}
+    <div class="hud-panel-content" data-tab="saves">
+      <div class="saves-row">
+        {{!-- CLAUDE CODE: confirm save field paths and FA icon classes from system DOM --}}
+        <div class="save-cell" data-action="rollSave" data-save="reflex">
+          <i class="fa-solid fa-person-running" aria-hidden="true"></i>
+          <div>
+            <div class="sv-val">{{actor.system.saves.reflex}}</div>
+            <div class="sv-label">{{localize "VAGABOND.Reflex"}}</div>
+          </div>
+        </div>
+        <div class="save-cell" data-action="rollSave" data-save="endure">
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          <div>
+            <div class="sv-val">{{actor.system.saves.endure}}</div>
+            <div class="sv-label">{{localize "VAGABOND.Endure"}}</div>
+          </div>
+        </div>
+        <div class="save-cell" data-action="rollSave" data-save="will">
+          <i class="fa-solid fa-brain" aria-hidden="true"></i>
+          <div>
+            <div class="sv-val">{{actor.system.saves.will}}</div>
+            <div class="sv-label">{{localize "VAGABOND.Will"}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{!-- SPELLS panel --}}
+    <div class="hud-panel-content" data-tab="spells">
+      {{!-- CLAUDE CODE: iterate actor.items filtered by type="spell" --}}
+      {{#each spells}}
+      <div class="spell-row">
+        <div class="spell-icon" data-action="castSpell" data-item-id="{{this.id}}">
+          <img src="{{this.img}}" alt="{{this.name}}">
+        </div>
+        <span class="spell-name" data-action="castSpell" data-item-id="{{this.id}}">{{this.name}}</span>
+        <span class="spell-dmg">{{this.system.damage}}</span>
+        <span class="spell-cost">{{this.system.manaCost}}</span>
+      </div>
+      {{/each}}
+    </div>
+
+    {{!-- INVENTORY panel --}}
+    <div class="hud-panel-content" data-tab="inventory">
+      <div class="panel-grid">
+        {{!-- CLAUDE CODE: iterate equipped items — confirm equipped filter logic --}}
+        {{#each inventory}}
+        <div class="panel-row" data-action="useItem" data-item-id="{{this.id}}">
+          <span class="pr-name">{{this.name}}</span>
+          <span class="pr-val">{{this.system.quantity}}</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+  </div>{{!-- /hud-panel --}}
+
+
+  {{!-- ═══════════════════════════════════════════════
+    HUD BODY
+  ═══════════════════════════════════════════════ --}}
+  <div class="hud-body">
+
+    {{!-- ROW 1: portrait · vitals · main --}}
+    <div class="hud-row1">
+
+      {{!-- COL 1 · Portrait · 95×95px --}}
+      <div class="col-portrait">
+        {{!-- CLAUDE CODE: actor.img or token.texture.src depending on context --}}
+        <img src="{{actor.img}}" alt="{{actor.name}}">
+      </div>
+
+      {{!-- COL 2 · Vitals --}}
+      <div class="col-vitals">
+        {{!-- CLAUDE CODE: confirm HP field — likely actor.system.health.value / .max --}}
+        <div class="vital-row vital-hp" data-action="rollRecovery" title="{{localize 'VAGABOND.Health'}}">
+          <i class="fa-solid fa-heart" aria-hidden="true"></i>
+          <span class="vital-val">{{actor.system.health.value}}</span>
+        </div>
+        {{!-- CLAUDE CODE: confirm fatigue field --}}
+        <div class="vital-row vital-fatigue" title="{{localize 'VAGABOND.Fatigue'}}">
+          <i class="fa-solid fa-skull" aria-hidden="true"></i>
+          <span class="vital-val">{{actor.system.fatigue.value}}</span>
+        </div>
+        {{!-- CLAUDE CODE: confirm speed field --}}
+        <div class="vital-row vital-speed" title="{{localize 'VAGABOND.Speed'}}">
+          <i class="fa-solid fa-boot" aria-hidden="true"></i>
+          <span class="vital-val">{{actor.system.speed}}'</span>
+        </div>
+        {{!-- CLAUDE CODE: confirm luck field --}}
+        <div class="vital-row vital-luck" title="{{localize 'VAGABOND.Luck'}}">
+          <i class="fa-solid fa-clover" aria-hidden="true"></i>
+          <span class="vital-val">{{actor.system.luck.pool}}</span>
+        </div>
+      </div>
+
+      {{!-- COL 3 · Name + Controls + Slots --}}
+      <div class="col-main">
+
+        {{!-- Row: character name --}}
+        <div class="row-name">
+          <span class="char-name">{{actor.name}}</span>
+        </div>
+
+        {{!-- Row: study die · check mod · favor/hindered --}}
+        <div class="row-controls">
+          {{!-- CLAUDE CODE: confirm studyDie field and click action --}}
+          <div class="study-die" data-action="rollStudyDie" title="{{localize 'VAGABOND.StudyDie'}}">
+            {{actor.system.studyDie}}
+          </div>
+          {{!-- CLAUDE CODE: confirm checkMod field --}}
+          <span class="check-mod" title="{{localize 'VAGABOND.CheckMod'}}">
+            +/<span>{{actor.system.checkMod}}</span>
+          </span>
+          {{!-- CLAUDE CODE: confirm the 3-state favor/hindered field and cycle action.
+               The system already implements this toggle — find the existing data-action
+               in the character sheet and reuse it here. --}}
+          <div class="hinder-toggle" data-action="cycleHindered"
+               data-state="{{actor.system.hindered}}"
+               title="{{localize 'VAGABOND.CycleHindered'}}">
+            {{!-- CLAUDE CODE: render label from hindered state value --}}
+            {{actor.system.hindered}}
+          </div>
+        </div>
+
+        {{!-- Row: 5 spell/item quick slots --}}
+        <div class="row-slots">
+          {{!-- CLAUDE CODE: these slots are stored in actor flags or a dedicated field.
+               Find where the sheet persists hotbar slot assignments and read from there.
+               Each slot holds an item id. Empty = no item assigned.
+               data-action="useSlot" fires cast or attack depending on item type.
+               data-action="clearSlot" on right-click context menu.
+               Slots accept drop events via Foundry DragDrop — wire _onDrop. --}}
+          {{#each hudSlots}}
+          <div class="slot {{#if this.item}}filled{{/if}}"
+               data-action="useSlot"
+               data-slot-index="{{@index}}"
+               data-item-id="{{this.item.id}}"
+               title="{{#if this.item}}{{this.item.name}}{{else}}{{localize 'VAGABOND.EmptySlot'}}{{/if}}">
+            {{#if this.item}}
+              <img src="{{this.item.img}}" alt="{{this.item.name}}">
+              {{#if this.item.system.manaCost}}
+              <span class="slot-cost">{{this.item.system.manaCost}}</span>
+              {{/if}}
+            {{else}}
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+
+      </div>{{!-- /col-main --}}
+
+      {{!-- FLOATING ELEMENTS
+           position:absolute relative to .hud-row1
+           CLAUDE CODE: weapon slots work like hotbar slots above —
+           stored in actor flags, accept drops, click = rollAttack.
+           Mana and armor are read-only displays. --}}
+      <div class="hud-floating">
+
+        <div class="weapon-circles">
+          {{!-- CLAUDE CODE: 2 weapon slots stored in actor flags.
+               data-action="rollAttack" fires the system's weapon attack roll.
+               Find existing rollAttack / weapon roll handler in the system. --}}
+          {{#each weaponSlots}}
+          <div class="weapon-circle {{#if this.item}}filled{{/if}}"
+               data-action="rollAttack"
+               data-slot-index="{{@index}}"
+               data-item-id="{{this.item.id}}"
+               title="{{#if this.item}}{{this.item.name}}{{else}}{{localize 'VAGABOND.EmptyWeaponSlot'}}{{/if}}">
+            {{#if this.item}}
+              <img src="{{this.item.img}}" alt="{{this.item.name}}">
+            {{else}}
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+
+        {{!-- CLAUDE CODE: confirm mana field path --}}
+        <div class="mana-badge" title="{{localize 'VAGABOND.Mana'}}">
+          <i class="fa-solid fa-droplet" aria-hidden="true"></i>
+          <span>{{actor.system.mana.value}}</span>
+        </div>
+
+        {{!-- CLAUDE CODE: confirm armor field path --}}
+        <div class="armor-badge" title="{{localize 'VAGABOND.Armor'}}">
+          {{actor.system.armor.value}}
+        </div>
+
+      </div>{{!-- /hud-floating --}}
+
+    </div>{{!-- /hud-row1 --}}
+
+    {{!-- ROW 2: tab menu --}}
+    <div class="hud-row2">
+      <button class="tab-btn" data-action="openTab" data-tab="traits">
+        {{localize "VAGABOND.Traits"}}
+      </button>
+      <button class="tab-btn" data-action="openTab" data-tab="skills">
+        {{localize "VAGABOND.Skills"}}
+      </button>
+      <button class="tab-btn" data-action="openTab" data-tab="saves">
+        {{localize "VAGABOND.Saves"}}
+      </button>
+      <button class="tab-btn" data-action="openTab" data-tab="spells">
+        {{localize "VAGABOND.Spells"}}
+      </button>
+      <button class="tab-btn" data-action="openTab" data-tab="inventory">
+        {{localize "VAGABOND.Inventory"}}
+      </button>
+    </div>
+
+  </div>{{!-- /hud-body --}}
+
+</div>{{!-- /vagabond-hud --}}

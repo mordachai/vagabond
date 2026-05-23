@@ -28,6 +28,9 @@
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 @import 'components/downtime';
 
+/* Character HUD - imported at top level because the frameless overlay renders outside sheets */
+@import 'components/character-hud';
+
 @import 'apps/character-builder';
 @import 'apps/combat-tracker';
 @import 'apps/encounter-settings';
