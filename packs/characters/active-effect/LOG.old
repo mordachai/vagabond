@@ -1,5 +1,3 @@
-2026/05/08-17:30:29.793 9c78 Delete type=3 #1
-2026/05/08-17:30:29.797 4c38 Level-0 table #5: started
-2026/05/08-17:30:29.798 4c38 Level-0 table #5: 36407 bytes OK
-2026/05/08-17:30:29.800 4c38 Delete type=0 #3
-2026/05/08-17:30:29.800 4c38 Manual compaction at level-0 from '!effects!CeoreuhLLhpCECDp' @ 72057594037927935 : 1 .. '!folders!vacatweapon0fold' @ 0 : 0; will stop at (end)
+2026/05/24-03:24:03.626 48cc Recovering log #13
+2026/05/24-03:24:03.630 48cc Delete type=0 #13
+2026/05/24-03:24:03.630 48cc Delete type=3 #12
