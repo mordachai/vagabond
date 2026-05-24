@@ -10,8 +10,8 @@
   --vh-gap: 6px;
   --vh-radius: 10px;
   --vh-font-scale: 1; // per-user accessibility font multiplier (HUD Display settings)
-  --vh-portrait-w: 95px;
-  --vh-portrait-h: 95px;
+  --vh-portrait-w: 100px;
+  --vh-portrait-h: 100px;
   --vh-float-w: 84px; // right gutter reserved for weapon circles + shield
   --vh-status-w: 18px; // left gutter + floating status icon size
   --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -201,7 +201,7 @@
     align-items: center;
     gap: 6px;
     font-family: $font-number;
-    font-size: calc(1.05rem * var(--vh-font-scale));
+    font-size: calc(1.25rem * var(--vh-font-scale));
     line-height: 1.15;
     white-space: nowrap;
     cursor: pointer;

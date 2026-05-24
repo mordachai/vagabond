@@ -71,7 +71,7 @@
 
       <div class="vh-vitals">
         <div class="vh-vital vh-vital--hd" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.hd.label'}}"><i class="fas fa-dice-d6"></i><span>{{hd}}</span></div>
-        <div class="vh-vital vh-vital--hp rollable" data-tooltip="{{localize 'VAGABOND.Hud.HPHint'}} - Max HP:{{hp.max}}"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
+        <div class="vh-vital vh-vital--hp rollable" data-tooltip="{{localize 'VAGABOND.Hud.HPHint'}} | Max HP:{{hp.max}}"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
         <div class="vh-vital vh-vital--fatigue rollable" data-tooltip="{{localize 'VAGABOND.Hud.FatigueHint'}}"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
         <div class="vh-vital vh-vital--morale rollable" data-action="rollMorale" data-tooltip="{{localize 'VAGABOND.Actor.NPC.MoraleCheck.tooltip'}}"><i class="fas fa-flag"></i><span>{{#if morale}}{{morale}}{{else}}–{{/if}}</span></div>
       </div>
@@ -110,10 +110,10 @@
     {{!-- Always-on info strip: senses + resistances --}}
     {{#if hasInfoStrip}}
       <div class="vh-npc-info">
-        {{#if senses}}<span class="vh-info-group vh-info-senses"><i class="fas fa-eye"></i>{{senses}}</span>{{/if}}
-        {{#if immunities.length}}<span class="vh-info-group">{{#each immunities}}<i class="{{icon}} vh-info-immune" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.label'}}: {{label}}"></i>{{/each}}</span>{{/if}}
-        {{#if weaknesses.length}}<span class="vh-info-group">{{#each weaknesses}}<i class="{{icon}} vh-info-weak" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.label'}}: {{label}}"></i>{{/each}}</span>{{/if}}
-        {{#if statusImmunities.length}}<span class="vh-info-group">{{#each statusImmunities}}<img class="status-condition-icon vh-info-status" src="{{icon}}" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.label'}}: {{label}}" />{{/each}}</span>{{/if}}
+        {{#if senses}}<fieldset class="vh-info-group vh-info-senses"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.senses.short'}}</legend><div class="vh-info-body">{{senses}}</div></fieldset>{{/if}}
+        {{#if immunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.short'}}</legend><div class="vh-info-body">{{#each immunities}}<i class="{{icon}} vh-info-immune" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
+        {{#if weaknesses.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.short'}}</legend><div class="vh-info-body">{{#each weaknesses}}<i class="{{icon}} vh-info-weak" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
+        {{#if statusImmunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.short'}}</legend><div class="vh-info-body">{{#each statusImmunities}}<img class="status-condition-icon vh-info-status" src="{{icon}}" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.label'}}: {{label}}" />{{/each}}</div></fieldset>{{/if}}
       </div>
     {{/if}}
 

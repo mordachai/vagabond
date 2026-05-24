@@ -154,7 +154,7 @@
           </div>
         {{/each}}
       </div>
-      <div class="vh-armor" data-tooltip="{{localize 'VAGABOND.Armor.Label'}}">
+      <div class="vh-armor" data-tooltip="{{#if armorName}}{{armorName}}{{else}}{{localize 'VAGABOND.Armor.Label'}}{{/if}}">
         <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
       </div>
     </div>
@@ -174,7 +174,7 @@
       </div>
 
       <div class="vh-vitals">
-        <div class="vh-vital vh-vital--hp rollable" data-tooltip="{{localize 'VAGABOND.Hud.HPHint'}}"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
+        <div class="vh-vital vh-vital--hp rollable" data-tooltip="{{localize 'VAGABOND.Hud.HPHint'}} | Max HP:{{hp.max}}"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
         <div class="vh-vital vh-vital--fatigue rollable" data-tooltip="{{localize 'VAGABOND.Hud.FatigueHint'}}"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
         <div class="vh-vital vh-vital--speed"><i class="fas fa-shoe-prints"></i><span>{{speed}}'</span></div>
         {{#if hasLuckPool}}
@@ -201,7 +201,7 @@
             </div>
           {{/each}}
           {{#if hasMana}}
-            <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-tooltip="{{localize 'VAGABOND.Hud.ManaTooltip'}}">
+            <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-tooltip="{{localize 'VAGABOND.Hud.ManaTooltip'}} | Max Mana: {{mana.max}} | Per Cast: {{mana.castingMax}}">
               <i class="fas fa-star-christmas"></i><span>{{mana.current}}</span>
             </div>
           {{/if}}

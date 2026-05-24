@@ -158,45 +158,63 @@
   }
 
   // --- Always-on info strip: senses + resistance icons ---
+  // Each section is its own boxed <fieldset> with the section name riding the
+  // top border (native <legend> cut — no background fill, works on any HUD bg).
   .vh-npc-info {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    padding: 3px 4px;
-    border-top: 1px solid rgba(36, 36, 36, 0.3);
-    border-bottom: 1px solid rgba(36, 36, 36, 0.3);
+    align-items: stretch;       // equal-height boxes across the row
+    justify-content: flex-start; // boxes hug the left; missing sections simply don't render
+    gap: 10px;
     font-size: calc(1.2rem * var(--vh-font-scale));
     text-shadow: var(--vh-outline-1);
 
     // Each section (senses / immunities / weaknesses / status immunities) is a
-    // group; a pipe divider is inserted before every group after the first.
+    // bordered box with a centered legend label sitting on the top border.
     .vh-info-group {
-      display: inline-flex;
+      min-inline-size: 0;          // kill fieldset's default min-content width
+      margin: 0;
+      padding: 3px 8px 4px;
+      border: 1px solid $c-yellow;
+      background: $c-transparent;
+      border-radius: 5px;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      &:not(:first-child)::before {
-        content: "||";
-        color: $c-yellow;
-        font-weight: 700;
-        margin-right: 2px;
+      justify-content: center;     // center the content inside the box
+
+      legend {
+        float: none;               // override Foundry's fieldset legend reset
+        width: auto;
+        margin: 0 auto;            // center the label over the top border
+        padding: 0;
+        font-family: $font-title;
+        font-size: calc(0.65rem * var(--vh-font-scale));
+        letter-spacing: 0.5px;
+        line-height: 1;
+        text-transform: uppercase;
+        color: $c-white;
+        text-shadow: var(--vh-outline-1);
+      }
+
+      .vh-info-body {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
       }
     }
 
     .vh-info-senses {
-      gap: 4px;
-      color: $c-lite;
-      font-family: $font-text;
-      i { color: $c-yellow; font-size: calc(0.85rem * var(--vh-font-scale)); }
+      .vh-info-body { gap: 4px; color: $c-lite; font-family: $font-text; font-size: calc(1rem * var(--vh-font-scale)); }
     }
     .vh-info-immune { color: $c-stat; }
-    .vh-info-weak   { color: $c-red-flat; text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff; }
+    .vh-info-weak   { color: $c-red-flat; text-shadow: -1px -1px 0 $c-yellow, 1px -1px 0 $c-yellow, -1px 1px 0 $c-yellow, 1px 1px 0 $c-yellow; }
     // Status icons are <img>, so px would ignore the strip's font-size. Size in
     // em so they scale with .vh-npc-info's font-size like the FA glyphs do.
     .status-condition-icon,
     .vh-info-status {
-      width: 1em;
-      height: 1em;
+      width: 1.2em;
+      height: 1.2em;
       object-fit: contain;
       vertical-align: middle;
     }

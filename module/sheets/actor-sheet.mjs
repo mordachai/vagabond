@@ -339,6 +339,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         return isArmor && item.system.equipped;
       });
       context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
+      context.equippedArmorName = equippedArmor ? equippedArmor.name : '';
 
       // Stats layout class for the stats-grid element
       context.statsGridClass = (CONFIG.VAGABOND.homebrew?.derivations?.statsLayout ?? 'progression') === 'centered'
