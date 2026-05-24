@@ -31,6 +31,9 @@
 /* Character HUD - imported at top level because the frameless overlay renders outside sheets */
 @import 'components/character-hud';
 
+/* NPC HUD - layers on the shared `.vbd-hud` base; also renders outside sheets */
+@import 'components/npc-hud';
+
 @import 'apps/character-builder';
 @import 'apps/combat-tracker';
 @import 'apps/encounter-settings';

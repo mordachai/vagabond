@@ -411,16 +411,17 @@ export class RollHandler {
     await roll.evaluate();
 
     const morale = this.actor.system.morale || 7;
-    const success = roll.total <= morale;
+    const success = roll.total <= morale; // morale check is roll-under
 
-    const flavor = success
-      ? `<strong>Morale Check: PASS</strong> (rolled ${roll.total} vs ${morale})`
-      : `<strong>Morale Check: FAIL</strong> (rolled ${roll.total} vs ${morale})`;
-
-    roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      flavor: flavor,
-      rollMode: game.settings.get('core', 'rollMode'),
+    const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
+    await VagabondChatCard.createActionCard({
+      actor: this.actor,
+      title: 'Morale Check',
+      rollData: { roll, difficulty: morale, isSuccess: success },
+      tags: [
+        { label: 'Morale', cssClass: 'tag-skill' },
+        { label: `${morale}`, icon: 'fas fa-hashtag' },
+      ],
     });
   }
 }

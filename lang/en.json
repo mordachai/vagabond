@@ -1197,6 +1197,8 @@
       "SceneControl":    "Toggle Character HUD",
       "AutoOpenToggle":  "Auto-open HUD on token select",
       "OpenSceneControl": "Open selected token's HUD",
+      "OpenNPCSceneControl": "Open selected NPC's HUD",
+      "NotNPC":          "The NPC HUD only supports NPC actors.",
       "OpenSheet":       "Open full character sheet",
       "PortraitTooltip": "Drag to move · Double-click to open sheet",
       "Become":          "Become the HUD",
@@ -1218,12 +1220,15 @@
         "Use":           "Use",
         "Open":          "Open",
         "SendToChat":    "Send to Chat",
+        "Read":          "Read",
+        "RollDamage":    "Roll Damage",
         "Unequip":       "Unequip",
         "UseOneHand":    "Use One-Handed",
         "UseTwoHands":   "Use Two-Handed",
         "RemoveFromHud": "Remove from HUD",
         "Ping":          "Ping Character",
         "Close":         "Close HUD",
+        "ClosePanel":    "Close Panel",
         "Actions":       "Actions",
         "Downtime":      "Downtime",
         "XP":            "XP"
@@ -1238,7 +1243,7 @@
       "FH": {
         "favor":  "Favored",
         "hinder": "Hindered",
-        "none":   "Steady"
+        "none":   "Fav/Hind"
       },
       "Empty": {
         "Features":  "No features, traits, or perks.",

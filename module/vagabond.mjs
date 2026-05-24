@@ -49,6 +49,7 @@ import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 import { PartyCompactView } from './applications/party-compact-view.mjs';
 import { OngoingPanel } from './applications/ongoing-panel.mjs';
 import { VagabondCharacterHud } from './applications/character-hud.mjs';
+import { VagabondNPCHud } from './applications/npc-hud.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
@@ -669,6 +670,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/apps/ongoing-panel.hbs',
     // Character HUD
     'systems/vagabond/templates/apps/character-hud.hbs',
+    // NPC HUD
+    'systems/vagabond/templates/apps/npc-hud.hbs',
     // Spell cast dialog
     'systems/vagabond/templates/apps/spell-cast-dialog.hbs',
   ];
@@ -732,6 +735,7 @@ globalThis.vagabond = {
     PartyCompactView,
     OngoingPanel,
     VagabondCharacterHud,
+    VagabondNPCHud,
   },
   ui: {
     ProgressClockOverlay,
@@ -1223,6 +1227,19 @@ Hooks.on('getSceneControlButtons', (controls) => {
         Hooks.callAll('vagabond.openCharacterHud', actor);
       },
     };
+
+    // Momentary "open the selected NPC's HUD" button (sibling of the PC one).
+    controls.tokens.tools.npcHudOpen = {
+      name:    'npcHudOpen',
+      title:   game.i18n.localize('VAGABOND.Hud.OpenNPCSceneControl'),
+      icon:    'fa-solid fa-dragon',
+      button:  true,
+      onClick: () => {
+        const actor = canvas.tokens?.controlled?.[0]?.actor
+          ?? VagabondNPCHud.resolveActor();
+        Hooks.callAll('vagabond.openNPCHud', actor);
+      },
+    };
   }
 });
 
@@ -1238,10 +1255,23 @@ Hooks.on('vagabond.openCharacterHud', (actor = null) => {
   VagabondCharacterHud.open(actor);
 });
 
+Hooks.on('vagabond.toggleNPCHud', (actor = null) => {
+  VagabondNPCHud.toggle(actor);
+});
+
+Hooks.on('vagabond.openNPCHud', (actor = null) => {
+  VagabondNPCHud.open(actor);
+});
+
 // Follow-selection: open/close the auto HUD as token selection changes.
-// Debounced — multi-select fires `controlToken` once per token.
+// Debounced — multi-select fires `controlToken` once per token. Both HUD types
+// sync from the same event; each filters by actor type (character vs npc) so
+// only one ever matches the single controlled token.
 const _hudSyncSelection = foundry.utils.debounce(
-  () => VagabondCharacterHud.syncToSelection(),
+  () => {
+    VagabondCharacterHud.syncToSelection();
+    VagabondNPCHud.syncToSelection();
+  },
   50,
 );
 Hooks.on('controlToken', () => _hudSyncSelection());

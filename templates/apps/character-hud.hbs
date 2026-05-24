@@ -6,6 +6,11 @@
   {{!-- ============ TAB PANEL (above / below, toggled) ============ --}}
   <div class="vh-panel {{#unless panelOpen}}vh-panel--closed{{/unless}}" data-state="{{#if panelOpen}}open{{else}}closed{{/if}}">
 
+    {{!-- Close button floats onto the active tab's first header line (no extra row) --}}
+    <button type="button" class="vh-panel-close vh-panel-close--float" data-action="closePanel" data-tooltip="{{localize 'VAGABOND.Hud.Menu.ClosePanel'}}">
+      <i class="fas fa-xmark"></i>
+    </button>
+
     {{!-- Features / Traits / Perks --}}
     <div class="vh-panel-content {{#unless (eq activeTab 'traits')}}hidden{{/unless}}" data-tab="traits">
       {{#if features.length}}
@@ -122,7 +127,7 @@
                 <img class="vh-inv-img" src="{{img}}" alt="{{name}}" />
                 <span class="vh-inv-name">{{name}}</span>
               </span>
-              {{#if isWeapon}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-inv-dmg"></i><span class="vh-inv-val">{{damage}}</span>{{/if}}
+              {{#if isWeapon}}{{#unless (eq damageType '-')}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-inv-dmg" data-tooltip="{{damageTypeLabel}}"></i>{{/unless}}{{#if damage}}<span class="vh-inv-val">{{damage}}</span>{{/if}}{{#if range}}<span class="vh-inv-range" data-tooltip="{{rangeLabel}}">{{range}}</span>{{/if}}{{#if properties}}<span class="vh-inv-props" data-tooltip="{{properties}}">{{properties}}</span>{{/if}}{{/if}}
               {{#if equipped}}<i class="fa-regular fa-check vh-inv-eq" data-tooltip="{{localize 'VAGABOND.Hud.Equipped'}}"></i>{{/if}}
               <button type="button" class="vh-inv-menu" data-action="itemMenu" data-item-id="{{_id}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
             </div>
@@ -153,6 +158,11 @@
         <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
       </div>
     </div>
+
+    {{!-- Ongoing status icons — floating vertical strip in the left gutter.
+         Same .status-icon markup + menu as the sheet: left-click = chat,
+         right-click = Send to Chat / Remove. --}}
+    <div class="vh-hud-statuses">{{~#each statusEffects as |effect|}}<div class="status-icon" data-effect-id="{{effect.id}}" data-effect-uuid="{{effect.uuid}}" data-tooltip="{{effect.name}}" data-action="statusClick"><img src="{{effect.icon}}" alt="{{effect.name}}" /></div>{{/each~}}</div>
 
     {{!-- Main row: portrait | vitals | center --}}
     <div class="vh-main-grid">

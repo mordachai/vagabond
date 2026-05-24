@@ -96,12 +96,14 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       castSpell: this._onCastSpell,
       // Delegated resource clicks (reuse VagabondActorSheet statics)
       toggleFavorHinder: this._onToggleFavorHinder,
+      statusClick: this._onStatusClick,
       spendLuck: this._onSpendLuck,
       spendStudiedDie: this._onSpendStudiedDie,
       modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
       modifyMana: this._onModifyMana,
       // HUD-local UI
       openTab: this._onOpenTab,
+      closePanel: this._onClosePanel,
       toggleTrait: this._onToggleAccordion,
       toggleFeature: this._onToggleAccordion,
       togglePerk: this._onToggleAccordion,
@@ -277,6 +279,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     }
     context.saves = Object.entries(sys.saves ?? {}).map(([key, s]) => ({ key, ...s }));
 
+    // --- Status condition icons (left-of-portrait column) ---
+    // Reuse the sheet's exact prep so the icon set matches the character sheet
+    // (only CONFIG.statusEffects conditions, not item-granted effects).
+    context.statusEffects = VagabondActorSheet.prototype._prepareStatusEffects.call(this);
+
     // --- Items, slots, panels ---
     this._categorizeItems(context);
 
@@ -428,15 +435,27 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const equipped = isWeapon
       ? VagabondCharacterHud._isWeaponEquipped(item)
       : (item.system?.equipped ?? item.system?.worn ?? false);
-    return {
+    const row = {
       _id: item.id,
       name: item.name,
       img: item.img,
       isWeapon,
       equipped,
-      damageType: item.system?.damageType,
+      // Weapons expose the grip-derived type/damage; the universal `damageType`
+      // stays at '-' for them, so prefer `currentDamageType`/`currentDamage`.
+      damageType: isWeapon ? (item.system?.currentDamageType ?? '-') : (item.system?.damageType ?? '-'),
       damage: item.system?.currentDamage ?? item.system?.damageAmount ?? '',
     };
+    if (isWeapon) {
+      const cfg = CONFIG.VAGABOND;
+      row.damageTypeLabel = game.i18n.localize(cfg.damageTypes?.[row.damageType] ?? '');
+      row.range = item.system?.rangeAbbrev || '';      // C / N / F
+      row.rangeLabel = item.system?.rangeDisplay || ''; // Close / Near / Far (tooltip)
+      row.properties = (item.system?.properties ?? [])
+        .map(k => game.i18n.localize(cfg.weaponProperties?.[k] ?? k))
+        .join(', ');
+    }
+    return row;
   }
 
   /* -------------------------------------------- */
@@ -467,6 +486,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // Right-click the portrait region → HUD context menu (sheet / ping / close).
     if (handle) handle.addEventListener('contextmenu', (e) => this._openHudMenu(e), { signal });
+
+    // Status icons (left of portrait): right-click → Send to Chat / Remove Status.
+    // Reuse the sheet's exact menu — left-click chat is handled by the statusClick action.
+    VagabondActorSheet.prototype._setupStatusIconListeners.call(this);
 
     // HP — left −1 / right +1 (matches the sheet & ongoing panel).
     const hpEl = this.element.querySelector('.vh-vital--hp');
@@ -673,6 +696,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   /* --- delegated resource clicks (reuse sheet statics verbatim) --- */
   static _onToggleFavorHinder(event, target) { return VagabondActorSheet._onToggleFavorHinder.call(this, event, target); }
+  static _onStatusClick(event, target) { return VagabondActorSheet._onStatusClick.call(this, event, target); }
   static _onSpendLuck(event, target) { return VagabondActorSheet._onSpendLuck.call(this, event, target); }
   static _onSpendStudiedDie(event, target) { return VagabondActorSheet._onSpendStudiedDie.call(this, event, target); }
   static _onModifyCheckBonus(event, target) { return VagabondActorSheet._onModifyCheckBonus.call(this, event, target); }
@@ -686,6 +710,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static _onOpenTab(event, target) {
     const tab = target.dataset.tab;
     this._activeTab = (this._activeTab === tab) ? null : tab;
+    this.render();
+  }
+
+  /** Close button in the panel header → close the tab panel. */
+  static _onClosePanel() {
+    this._activeTab = null;
     this.render();
   }
 

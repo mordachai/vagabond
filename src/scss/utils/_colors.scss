@@ -24,10 +24,11 @@
   --vagabond-scrollbar-thumb2:#93CA55;
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-dark-bluey: #2c3e50;
-  --vagabond-c-transparent: #ffffffc0;
+  --vagabond-c-transparent: #000000c0;
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
+  --vagabond-c-red-flat: #b60606;
   --vagabond-c-white: #ececec;
   --vagabond-c-black: #000000;
   --vagabond-c-title1: white;
@@ -61,7 +62,6 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
   --vagabond-c-green: #26cb0c;
-  --vagabond-c-transparent: #000000c0;
   --vagabond-c-darkgray: #999999;
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-red: #ff8b9f;
@@ -75,6 +75,7 @@ body[data-theme="dark"] #sidebar {
   --vagabond-dark-yellow: #536c97;
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-c-yellow-2: #d5bc2f;
   --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
   --vagabond-inventory-hover: #61abce71;
   --vagabond-inventory-lines: #ffffff55;
@@ -106,7 +107,9 @@ $c-text-3: var(--vagabond-c-text-3);
 $c-white: var(--vagabond-c-white);
 $c-black: var(--vagabond-c-black);
 $c-red: var(--vagabond-c-red);
+$c-red-flat: var(--vagabond-c-red-flat);
 $c-yellow: var(--vagabond-c-chat-yellow);
+$c-yellow-2: var(--vagabond-c-yellow-2);
 $c-green: var(--vagabond-c-green);
 $c-bg1: var(--vagabond-c-bg1);
 $c-bg2: var(--vagabond-c-bg2);
