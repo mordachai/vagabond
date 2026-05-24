@@ -12,10 +12,88 @@
   --vh-armor-top: 6px;
   --vh-armor-right: 6px;
 
-  .vh-body { min-width: 360px; }
+  .vh-body { min-width: 360px; max-width: 800px; }
 
   // --- Vitals: HD is display-only (no pointer), others rollable/clickable ---
   .vh-vital--hd { cursor: default; }
+
+  // --- Portrait: NPC decoration (fully independent of the PC portrait) ---
+  // Self-contained: the hbs element carries ONLY `.vh-npc-portrait` and the JS
+  // dbl-click hook targets it (npc-hud.mjs). Edit art/finishing freely here
+  // without touching the PC `.vh-portrait`. Swap the frame + mask assets below
+  // for the NPC look you want.
+  .vh-npc-portrait {
+    position: relative;
+    width: var(--vh-portrait-w);
+    height: var(--vh-portrait-h);
+    flex-shrink: 0;
+    // background-image: url('../assets/images/sheets/portraitNPCFrame.webp');
+    // background-repeat: no-repeat;
+    // background-position: center;
+    // background-size: contain;
+    //filter: drop-shadow(1px 1px 1px black);
+
+    img {
+      display: flex;
+      width: var(--vh-portrait-w);
+      height: var(--vh-portrait-h);
+      border: none;
+      object-fit: cover;
+      object-position: top center;
+      align-self: center;
+      mix-blend-mode: normal;
+      //text-shadow: var(--vh-outline-2);
+      //background: $c-dark;
+      // -webkit-mask-image: url('../assets/images/sheets/portraitMask.webp');
+      // mask-image: url('../assets/images/sheets/portraitMask.webp');
+      // -webkit-mask-size: cover;
+      // mask-size: cover;
+      // -webkit-mask-repeat: no-repeat;
+      // mask-repeat: no-repeat;
+      // -webkit-mask-position: center;
+      // mask-position: center;
+      // -webkit-mask-mode: luminance;
+      // mask-mode: luminance;
+    }
+  }
+
+  // --- Name row: name + book-open description toggle ---
+  // Mirrors the sheet header's description button; opens system.description in
+  // the shared detail panel (same surface as actions/abilities).
+  .vh-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    .vh-name { min-width: 0; } // allow ellipsis inside the flex row
+  }
+
+  .vh-name-desc {
+    flex: 0 0 auto;
+    margin-left: auto; // push to the far end of the row, opposite the name
+    width: 22px;
+    height: 22px;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: $c-tan;
+    cursor: pointer;
+    background: none;
+    border: 1px solid $c-dark-yellow;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: none;
+    appearance: none;
+    i { font-size: calc(0.8rem * var(--vh-font-scale)); }
+    &:hover { color: $c-yellow; background: rgba(255, 255, 255, 0.08); }
+    &.is-open { color: $c-yellow; background: rgba(255, 255, 255, 0.12); }
+    &:focus, &:focus-visible { outline: none; box-shadow: none; }
+  }
 
   // --- Speed control bar (reuses .vh-controls) ---
   .vh-npc-speed {
@@ -102,7 +180,7 @@
       i { color: $c-yellow; font-size: calc(0.85rem * var(--vh-font-scale)); }
     }
     .vh-info-immune { color: $c-stat; }
-    .vh-info-weak   { color: $c-red; text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff; }
+    .vh-info-weak   { color: $c-red-flat; text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff; }
     // Status icons are <img>, so px would ignore the strip's font-size. Size in
     // em so they scale with .vh-npc-info's font-size like the FA glyphs do.
     .status-condition-icon,

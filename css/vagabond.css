@@ -3456,9 +3456,72 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud--npc .vh-body {
   min-width: 360px;
+  max-width: 800px;
 }
 .vbd-hud--npc .vh-vital--hd {
   cursor: default;
+}
+.vbd-hud--npc .vh-npc-portrait {
+  position: relative;
+  width: var(--vh-portrait-w);
+  height: var(--vh-portrait-h);
+  flex-shrink: 0;
+}
+.vbd-hud--npc .vh-npc-portrait img {
+  display: flex;
+  width: var(--vh-portrait-w);
+  height: var(--vh-portrait-h);
+  border: none;
+  object-fit: cover;
+  object-position: top center;
+  align-self: center;
+  mix-blend-mode: normal;
+}
+.vbd-hud--npc .vh-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.vbd-hud--npc .vh-name-row .vh-name {
+  min-width: 0;
+}
+.vbd-hud--npc .vh-name-desc {
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vagabond-c-tan);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--vagabond-dark-yellow);
+  border-radius: 4px;
+  box-shadow: none;
+  outline: none;
+  appearance: none;
+}
+.vbd-hud--npc .vh-name-desc i {
+  font-size: calc(0.8rem * var(--vh-font-scale));
+}
+.vbd-hud--npc .vh-name-desc:hover {
+  color: var(--vagabond-c-chat-yellow);
+  background: rgba(255, 255, 255, 0.08);
+}
+.vbd-hud--npc .vh-name-desc.is-open {
+  color: var(--vagabond-c-chat-yellow);
+  background: rgba(255, 255, 255, 0.12);
+}
+.vbd-hud--npc .vh-name-desc:focus, .vbd-hud--npc .vh-name-desc:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 .vbd-hud--npc .vh-npc-speed {
   flex-wrap: wrap;
@@ -3551,7 +3614,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-stat);
 }
 .vbd-hud--npc .vh-npc-info .vh-info-weak {
-  color: var(--vagabond-c-red);
+  color: var(--vagabond-c-red-flat);
   text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;
 }
 .vbd-hud--npc .vh-npc-info .status-condition-icon,

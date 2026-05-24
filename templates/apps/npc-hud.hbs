@@ -64,7 +64,7 @@
     <div class="vh-main-grid">
 
       <div class="vh-drag">
-        <div class="vh-portrait">
+        <div class="vh-npc-portrait">
           <img src="{{img}}" alt="{{name}}" />
         </div>
       </div>
@@ -77,12 +77,24 @@
       </div>
 
       <div class="vh-center">
-        <div class="vh-name">{{name}}</div>
+        {{!-- Name row: name + book-open toggle (mirrors the sheet header's
+              description button) — opens system.description in the detail panel. --}}
+        <div class="vh-name-row">
+          <div class="vh-name">{{name}}</div>
+          {{#if hasDescription}}
+            <button type="button"
+                    class="vh-name-desc {{#if (and detail (eq detail.type 'description'))}}is-open{{/if}}"
+                    data-action="openDetail" data-detail-type="description" data-index="0"
+                    data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.description.label'}}">
+              <i class="fas fa-book-open"></i>
+            </button>
+          {{/if}}
+        </div>
 
         <div class="vh-controls vh-npc-speed">
           <span class="vh-ctl" data-tooltip="{{localize 'VAGABOND.UI.Sections.Speed'}}"><i class="fas fa-shoe-prints"></i>{{speed}}'</span>
           {{#each speedTypes}}
-            <span class="vh-ctl" data-tooltip="{{label}}"><i class="fas fa-wind"></i>{{label}}{{#if value}} {{value}}'{{/if}}</span>
+            <span class="vh-ctl" data-tooltip="{{label}}">   {{label}}{{#if value}} {{value}}'{{/if}}</span>
           {{/each}}
         </div>
 

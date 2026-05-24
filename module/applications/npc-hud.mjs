@@ -63,6 +63,8 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   constructor(actor, options = {}) {
     super(foundry.utils.mergeObject({ id: `vbd-npc-hud-${actor.id}` }, options));
     this.actor = actor;
+    /** Token placeable this HUD was opened for; drives the portrait image. */
+    this.token = options.token ?? null;
     // Reuse the same handlers the NPC sheet uses. They only read .actor / .element.
     this.rollHandler = new RollHandler(this, { npcMode: true });
     this.actionHandler = new NPCActionHandler(this);
@@ -116,7 +118,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
    * @param {object}  [opts]
    * @param {boolean} [opts.auto]  Mark this as the selection-driven HUD.
    */
-  static open(actor = null, { auto = false } = {}) {
+  static open(actor = null, { auto = false, token = null } = {}) {
     actor ??= this.resolveActor();
     if (!actor) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NoActor'));
@@ -126,10 +128,16 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NotNPC'));
       return null;
     }
+    // Resolve the token whose image drives the portrait: explicit > controlled-of-this-actor > first active.
+    token ??= canvas.tokens?.controlled?.find(t => t.actor === actor)
+      ?? actor.getActiveTokens(true)[0]
+      ?? null;
     let hud = this.#instances.get(actor.id);
     if (!hud) {
-      hud = new this(actor);
+      hud = new this(actor, { token });
       this.#instances.set(actor.id, hud);
+    } else if (token) {
+      hud.token = token; // follow the newly-selected token of the same actor
     }
     if (auto) this.#autoOpenedActorId = actor.id;
     hud.render({ force: true });
@@ -164,16 +172,25 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     }
 
     const controlled = canvas.tokens?.controlled ?? [];
-    const actor = (controlled.length === 1) ? controlled[0]?.actor : null;
+    const token = (controlled.length === 1) ? controlled[0] : null;
+    const actor = token?.actor ?? null;
     const eligible = !!actor
       && actor.type === 'npc'
       && actor.testUserPermission(game.user, this.AUTO_OPEN_MIN_OWNERSHIP);
 
     if (!eligible) { this.#closeAuto(); return; }
-    if (actor.id === this.#autoOpenedActorId) return; // already showing it
+    if (actor.id === this.#autoOpenedActorId) {
+      // Same actor already showing — but a different token of it may be selected; follow it.
+      const hud = this.#instances.get(actor.id);
+      if (hud?.rendered && token && hud.token !== token) {
+        hud.token = token;
+        hud.render();
+      }
+      return;
+    }
 
     this.#closeAuto();
-    this.open(actor, { auto: true });
+    this.open(actor, { auto: true, token });
   }
 
   /** Close the current selection-driven HUD, if any. */
@@ -195,12 +212,17 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     const config = CONFIG.VAGABOND;
     const L = (k) => (k ? game.i18n.localize(k) : '');
 
+    // Portrait uses the token image (so multiple tokens of one NPC each show their own art).
+    // Fall back to the prototype token, then the actor portrait.
+    const tokenForImg = (this.token?.actor === actor) ? this.token : actor.getActiveTokens(true)[0];
+    const tokenImg = tokenForImg?.document?.texture?.src ?? actor.prototypeToken?.texture?.src;
+
     const context = {
       actor,
       system: sys,
       config,
       name: actor.name,
-      img: actor.img,
+      img: tokenImg || actor.img,
     };
 
     // --- Vitals ---
@@ -270,6 +292,23 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       .map((a, index) => ({ index, name: a.name, enrichedDescription: a.enrichedDescription || '', hasDetail: !!a.description }))
       .filter(a => a.name);
 
+    // --- Description (book-open toggle by the name → opens in the detail panel) ---
+    const rawDesc = sys.description || '';
+    context.hasDescription = !!rawDesc;
+    if (rawDesc) {
+      try {
+        const parsed = VagabondTextParser.parseAll(rawDesc);
+        context.descriptionEnriched = await foundry.applications.ux.TextEditor.implementation.enrichHTML(parsed, {
+          secrets: actor.isOwner,
+          rollData: actor.getRollData(),
+          relativeTo: actor,
+        });
+      } catch (e) {
+        console.error('Vagabond | NPC HUD: error enriching description:', e);
+        context.descriptionEnriched = rawDesc;
+      }
+    }
+
     // --- Active detail (panel content) ---
     context.detail = this._resolveDetail(context);
     context.panelOpen = !!context.detail;
@@ -314,6 +353,11 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       const a = context.actions.find(x => x.index === d.index);
       return a ? { type: 'action', ...a } : null;
     }
+    if (d.type === 'description') {
+      return context.hasDescription
+        ? { type: 'description', name: context.name, enrichedDescription: context.descriptionEnriched }
+        : null;
+    }
     const b = context.abilities.find(x => x.index === d.index);
     return b ? { type: 'ability', ...b } : null;
   }
@@ -341,7 +385,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     if (handle) handle.addEventListener('pointerdown', (e) => this._onDragStart(e), { signal });
 
     // Double-click portrait → open the actor sheet (HUD stays open).
-    const portrait = this.element.querySelector('.vh-portrait');
+    const portrait = this.element.querySelector('.vh-npc-portrait');
     if (portrait) portrait.addEventListener('dblclick', () => this.actor.sheet.render(true), { signal });
 
     // Right-click portrait → HUD context menu (sheet / ping / close).
