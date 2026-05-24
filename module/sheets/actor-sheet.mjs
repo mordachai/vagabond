@@ -1810,18 +1810,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         // If clicking on an inactive skull, increase fatigue to index + 1
         const newFatigue = Math.min((index + 1 === currentFatigue) ? index : index + 1, fatigueMax);
 
+        // Fatigued status auto-toggle handled centrally by the updateActor hook in vagabond.mjs
         await this.actor.update({ 'system.fatigue': newFatigue });
-
-        // Auto-apply/remove Fatigued status effect based on fatigue value
-        const hasFatiguedStatus = this.actor.effects.some(e => e.statuses.has('fatigued'));
-
-        if (newFatigue > 0 && !hasFatiguedStatus) {
-          // Apply Fatigued status when fatigue > 0
-          await this.actor.toggleStatusEffect('fatigued', { active: true });
-        } else if (newFatigue === 0 && hasFatiguedStatus) {
-          // Remove Fatigued status when fatigue = 0
-          await this.actor.toggleStatusEffect('fatigued', { active: false });
-        }
       });
     });
 

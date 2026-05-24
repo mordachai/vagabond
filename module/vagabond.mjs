@@ -1488,19 +1488,32 @@ Hooks.on('preCreateActor', (actor, _data, _options, _userId) => {
 /*  Actor Update Hooks                          */
 /* -------------------------------------------- */
 
-// Auto-toggle the Dead status effect when HP reaches 0 or recovers above 0.
+// Auto-toggle the Dead status effect when HP reaches 0 or recovers above 0,
+// and the Fatigued status effect when fatigue rises above 0 or returns to 0.
 // Only the GM runs this to avoid duplicate calls from all connected clients.
+// Centralizing here means every fatigue/HP writer (sheets, HUDs, party views,
+// ongoing panel, downtime, on-hit damage) gets the status toggle for free.
 Hooks.on('updateActor', async (actor, changes, _options, _userId) => {
   if (!game.user.isGM) return;
-  if (!foundry.utils.hasProperty(changes, 'system.health.value')) return;
 
-  const isZero = actor.system.health.value === 0;
-  const hasDead = actor.statuses?.has('dead') ?? actor.effects.some(e => e.statuses?.has('dead'));
+  if (foundry.utils.hasProperty(changes, 'system.health.value')) {
+    const isZero = actor.system.health.value === 0;
+    const hasDead = actor.statuses?.has('dead') ?? actor.effects.some(e => e.statuses?.has('dead'));
+    if (isZero && !hasDead) {
+      await actor.toggleStatusEffect('dead', { active: true });
+    } else if (!isZero && hasDead) {
+      await actor.toggleStatusEffect('dead', { active: false });
+    }
+  }
 
-  if (isZero && !hasDead) {
-    await actor.toggleStatusEffect('dead', { active: true });
-  } else if (!isZero && hasDead) {
-    await actor.toggleStatusEffect('dead', { active: false });
+  if (foundry.utils.hasProperty(changes, 'system.fatigue')) {
+    const fatigued = (actor.system.fatigue ?? 0) > 0;
+    const hasFatigued = actor.statuses?.has('fatigued') ?? actor.effects.some(e => e.statuses?.has('fatigued'));
+    if (fatigued && !hasFatigued) {
+      await actor.toggleStatusEffect('fatigued', { active: true });
+    } else if (!fatigued && hasFatigued) {
+      await actor.toggleStatusEffect('fatigued', { active: false });
+    }
   }
 });
 

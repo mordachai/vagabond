@@ -427,6 +427,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   _changeFatigue(delta) {
     const max = this.actor.system.fatigueMax ?? 5;
     const val = Math.clamp((this.actor.system.fatigue ?? 0) + delta, 0, max);
+    // Fatigued status auto-toggle handled centrally by the updateActor hook in vagabond.mjs
     this.actor.update({ 'system.fatigue': val });
   }
 
