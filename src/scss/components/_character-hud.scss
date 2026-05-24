@@ -239,7 +239,9 @@
     padding: 1px 8px;
     border: 1px solid $c-yellow;
     border-radius: 6px;
-    background: linear-gradient(#152644, #115671, #4b6d3a);
+    ///background: linear-gradient(#152644, #115671, #4b6d3a);
+    background:  #1d3312;
+
     text-shadow: var(--vh-outline-1);
 
     .vh-ctl {

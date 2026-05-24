@@ -96,13 +96,23 @@
   }
 
   // --- Speed control bar (reuses .vh-controls) ---
+  .vh-controls {
+    background: $c-yellow;
+    border: 2px solid rgb(0, 0, 0);
+  }
+
   .vh-npc-speed {
     flex-wrap: wrap;
     height: auto;
     gap: 8px;
     .vh-ctl {
+      color: $c-dark;
+      text-shadow: none;
       font-size: calc(1.05rem * var(--vh-font-scale));
-      i { font-size: calc(0.8rem * var(--vh-font-scale)); margin-right: 2px; }
+      i {
+        font-size: calc(0.8rem * var(--vh-font-scale));
+        margin-right: 2px;
+        color: $c-dark }
     }
   }
 

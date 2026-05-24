@@ -2906,7 +2906,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding: 1px 8px;
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 6px;
-  background: linear-gradient(#152644, #115671, #4b6d3a);
+  background: #1d3312;
   text-shadow: var(--vh-outline-1);
 }
 .vbd-hud .vh-controls .vh-ctl {
@@ -3523,17 +3523,24 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   outline: none;
   box-shadow: none;
 }
+.vbd-hud--npc .vh-controls {
+  background: var(--vagabond-c-chat-yellow);
+  border: 2px solid rgb(0, 0, 0);
+}
 .vbd-hud--npc .vh-npc-speed {
   flex-wrap: wrap;
   height: auto;
   gap: 8px;
 }
 .vbd-hud--npc .vh-npc-speed .vh-ctl {
+  color: var(--vagabond-c-dark);
+  text-shadow: none;
   font-size: calc(1.05rem * var(--vh-font-scale));
 }
 .vbd-hud--npc .vh-npc-speed .vh-ctl i {
   font-size: calc(0.8rem * var(--vh-font-scale));
   margin-right: 2px;
+  color: var(--vagabond-c-dark);
 }
 .vbd-hud--npc .vh-npc-meta {
   display: flex;
