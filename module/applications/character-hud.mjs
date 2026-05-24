@@ -4,6 +4,7 @@ import { InventoryHandler } from '../sheets/handlers/inventory-handler.mjs';
 import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
+import { applyHudDisplayPrefs } from '../helpers/hud-display.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -46,6 +47,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   static ITEM_SLOTS = 5;
   static WEAPON_SLOTS = 2;
+
+  /** Re-apply per-user display prefs to every open PC HUD (no reopen). */
+  static refreshDisplayPrefs() {
+    for (const hud of VagabondCharacterHud.#instances.values()) {
+      if (hud.rendered && hud.element) applyHudDisplayPrefs(hud.element);
+    }
+  }
 
   #hookIds = [];
   #ctrl = null;
@@ -470,6 +478,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // Register reactivity FIRST so a later DOM-wiring error can never leave the
     // HUD without live hooks (was the cause of slots not auto-updating).
     this._registerHooks();
+
+    // Per-user accessibility prefs (dark bg / blur / font scale).
+    applyHudDisplayPrefs(this.element);
 
     this.setPosition();
     this._applyPanelPlacement();

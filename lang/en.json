@@ -456,6 +456,23 @@
       "regionTextureAlphaUseGM": {
         "name": "Use GM Spell Area Opacity",
         "hint": "When on, spell area artwork uses the opacity the GM set for the table. Turn off to use your own opacity below."
+      },
+      "hudDisplayConfig": {
+        "name": "HUD Display",
+        "label": "Configure HUD Display",
+        "hint": "Adjust how the floating HUDs look on your screen: dark background, blur, and text size. These settings affect only your view.",
+        "title": "HUD Display Settings",
+        "intro": "Tune the floating HUDs for your own screen. These are saved per-player — they only change how the HUDs look for you.",
+        "sectionBackground": "Background",
+        "sectionText": "Text Size",
+        "darkBg": "Dark background behind the HUD",
+        "darkBgHint": "Adds a dark panel behind the HUD so text is easier to read over the canvas.",
+        "blur": "Blur the background behind the HUD",
+        "blurHint": "Blurs whatever is behind the HUD. Looks best combined with the dark background.",
+        "fontScale": "HUD text size",
+        "fontScaleHint": "Scales the HUD text from 80% to 160%. The portrait and layout stay the same size.",
+        "reset": "Reset to Default",
+        "save": "Save"
       }
     },
     "SequencerFX": {

@@ -1,0 +1,51 @@
+<div class="flexcol standard-form">
+  <section class="scrollable">
+    <p class="notes">{{localize 'VAGABOND.Settings.hudDisplayConfig.intro'}}</p>
+
+    {{!-- ── Background ──────────────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.Settings.hudDisplayConfig.sectionBackground'}}</legend>
+
+      <div class="form-group">
+        <label for="darkBg">
+          <input type="checkbox" name="darkBg" id="darkBg" {{checked prefs.darkBg}}>
+          {{localize 'VAGABOND.Settings.hudDisplayConfig.darkBg'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.darkBgHint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="blur">
+          <input type="checkbox" name="blur" id="blur" {{checked prefs.blur}}>
+          {{localize 'VAGABOND.Settings.hudDisplayConfig.blur'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.blurHint'}}</p>
+      </div>
+    </fieldset>
+
+    {{!-- ── Text size ──────────────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.Settings.hudDisplayConfig.sectionText'}}</legend>
+
+      <div class="form-group">
+        <label for="fontScale">{{localize 'VAGABOND.Settings.hudDisplayConfig.fontScale'}}</label>
+        <div class="vbd-hdc-scale-row">
+          <input type="range" name="fontScale" id="fontScale" value="{{prefs.fontScale}}" min="0.8" max="1.6" step="0.1">
+          <span class="vbd-hdc-scale-val">{{fontScalePct}}</span>
+        </div>
+        <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.fontScaleHint'}}</p>
+      </div>
+    </fieldset>
+  </section>
+
+  <footer class="form-footer flexrow">
+    <button type="submit" class="dialog-button default">
+      <i class="fas fa-save"></i>
+      {{localize 'VAGABOND.Settings.hudDisplayConfig.save'}}
+    </button>
+    <button type="button" class="dialog-button" data-action="reset">
+      <i class="fas fa-rotate-left"></i>
+      {{localize 'VAGABOND.Settings.hudDisplayConfig.reset'}}
+    </button>
+  </footer>
+</div>

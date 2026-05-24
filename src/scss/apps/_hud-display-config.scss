@@ -1,0 +1,75 @@
+/* HUD Display Config Dialog (ApplicationV2) — mirrors the Spell Settings theme. */
+
+#vbd-hud-display-config.vbd-hud-display-config {
+
+  // Solid dark frame so the dialog matches the Spell Settings window. The
+  // default ApplicationV2 frame is translucent + blurred, which lets the bright
+  // canvas bleed through on a short window and makes the BG/header look lighter.
+  background: #1e1e21;
+  backdrop-filter: none;
+  border: 1px solid #000;
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+
+  .window-header {
+    background: #141416;
+    border-bottom: 1px solid #000;
+    .window-title { color: #f0efe9; }
+  }
+
+  .window-content {
+    background: #1e1e21;
+    color: #e8e6e2;
+    overflow-y: auto !important;
+  }
+
+  section.scrollable {
+    padding: 1rem;
+  }
+
+  footer.form-footer {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--vagabond-c-faint);
+    background: rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  fieldset {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--vagabond-c-faint);
+    border-radius: 4px;
+    padding: 1rem;
+
+    legend {
+      font-weight: bold;
+      padding: 0 0.5rem;
+      font-family: Manofa, sans-serif;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      width: auto;
+      border: none;
+
+      &::before, &::after { display: none !important; }
+    }
+  }
+
+  // Keep the font-size slider and its % readout on one line.
+  .vbd-hdc-scale-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    input[type="range"] { flex: 1; }
+
+    .vbd-hdc-scale-val {
+      flex: 0 0 auto;
+      min-width: 46px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: bold;
+    }
+  }
+}

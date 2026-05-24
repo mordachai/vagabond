@@ -2,6 +2,7 @@ import { RollHandler, NPCActionHandler } from '../sheets/handlers/_module.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
+import { applyHudDisplayPrefs } from '../helpers/hud-display.mjs';
 
 const { api } = foundry.applications;
 
@@ -33,6 +34,13 @@ const { api } = foundry.applications;
 export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
   /** @type {Map<string, VagabondNPCHud>} */
   static #instances = new Map();
+
+  /** Re-apply per-user display prefs to every open NPC HUD (no reopen). */
+  static refreshDisplayPrefs() {
+    for (const hud of VagabondNPCHud.#instances.values()) {
+      if (hud.rendered && hud.element) applyHudDisplayPrefs(hud.element);
+    }
+  }
 
   /** Actor id of the single selection-driven (auto-opened) HUD, or null. */
   static #autoOpenedActorId = null;
@@ -320,6 +328,9 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     const { signal } = this.#ctrl;
 
     this._registerHooks();
+
+    // Per-user accessibility prefs (dark bg / blur / font scale).
+    applyHudDisplayPrefs(this.element);
 
     this.setPosition();
     this._applyPanelPlacement();

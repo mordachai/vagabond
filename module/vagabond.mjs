@@ -50,6 +50,7 @@ import { PartyCompactView } from './applications/party-compact-view.mjs';
 import { OngoingPanel } from './applications/ongoing-panel.mjs';
 import { VagabondCharacterHud } from './applications/character-hud.mjs';
 import { VagabondNPCHud } from './applications/npc-hud.mjs';
+import { HudDisplayConfig } from './applications/hud-display-config.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
@@ -85,6 +86,24 @@ function registerGameSettings() {
       console.warn('VagabondSystem | onChange re-render failed', e);
     }
   };
+
+  // HUD Display — per-user accessibility prefs (dark bg / blur / font scale).
+  // Registered FIRST so its menu button sits at the top of the system settings.
+  game.settings.register('vagabond', 'hudDisplayPrefs', {
+    scope: 'client',
+    config: false,
+    type: Object,
+    default: { darkBg: false, blur: false, fontScale: 1 },
+    requiresReload: false,
+  });
+  game.settings.registerMenu('vagabond', 'hudDisplayConfigMenu', {
+    name: 'VAGABOND.Settings.hudDisplayConfig.name',
+    label: 'VAGABOND.Settings.hudDisplayConfig.label',
+    hint: 'VAGABOND.Settings.hudDisplayConfig.hint',
+    icon: 'fas fa-universal-access',
+    type: HudDisplayConfig,
+    restricted: false,
+  });
 
   // dialog (grid layout); when false, clicking casts directly (list layout)
   game.settings.register('vagabond', 'useSpellCastDialog', {
