@@ -15,11 +15,11 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
-### **New feature:** Character HUD
+### **New feature:** Characters and NPCs HUD
 
 You know what's even better than a small stylized character sheet? No sheet at all! Now the same info you have on the char sheet you have it available at a small HUD that you can place anywhere on the screen.
 
-<img width="1288" height="819" alt="image" src="https://github.com/user-attachments/assets/4c07efbf-6e83-405a-8ca3-89bb96bf9140" />
+[<img width="950" height="534" alt="HUDS-play" src="https://github.com/user-attachments/assets/8f3f9aad-080e-4e97-b156-49bac0b7af5c" />](https://youtu.be/S4fXJPoM0oA)
 
 #### Using it:
 - open the menu tabs in the bottom of the HUD, drag and drop gears and spells on the slots
@@ -32,8 +32,6 @@ Multiple ways to open:
 
 Select your character token, that's it. You can turn this of in the **Vagabond Tools**, on the scene controls. But even with the automatic opening turned off you can still call it using the Open Selected Token HUD button in Token Controls (select your token first):
 
-
-<img width="290" height="213" alt="image" src="https://github.com/user-attachments/assets/dda3b812-6819-4312-bf85-84ae5722c6d5" />
 
 ---
 
