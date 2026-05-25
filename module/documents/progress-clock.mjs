@@ -48,7 +48,8 @@ export class ProgressClock {
           progressClock: {
             type: "progressClock",
             segments: data.segments || 4,
-            filled: 0,
+            // Clocks start full — GMs mostly tick down (subtract)
+            filled: data.filled ?? (data.segments || 4),
             defaultPosition: data.defaultPosition || defaultPosition,
             size: data.size || "M",
             faded: data.faded || false,

@@ -171,7 +171,7 @@ export class ProgressClockOverlay {
       }
 
       // Create elements for each clock
-      for (const [position, posClocks] of clocksByPosition.entries()) {
+      for (const posClocks of clocksByPosition.values()) {
         // Sort by order
         posClocks.sort((a, b) => {
           const sceneId = canvas.scene.id;
@@ -264,13 +264,12 @@ export class ProgressClockOverlay {
       left: ${position.x}px;
       top: ${position.y}px;
       width: ${size}px;
-      height: ${size + 40}px;
       pointer-events: auto;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       opacity: ${baseOpacity};
       transition: opacity 0.2s ease;
     `;
@@ -285,30 +284,83 @@ export class ProgressClockOverlay {
       });
     }
 
-    // Create image element
+    // ---- Tunable layout constants (test these to taste) ----
+    const BTN_HEIGHT_RATIO = 0.45;        // side button height relative to clock size
+    const BTN_ASPECT = 80.26 / 151.78;    // arrow SVG width / height (~0.529)
+    const BTN_OVERLAP = 0.25;              // fraction of button tucked behind the clock (higher = more interior)
+    const NUMBER_RATIO = 0.4;            // center number font-size relative to clock size
+    const btnH = size * BTN_HEIGHT_RATIO;
+    const btnW = btnH * BTN_ASPECT;
+    const btnPeek = btnW * (1 - BTN_OVERLAP); // px sticking out past the clock edge
+
+    const canOperate = clock.testUserPermission(game.user, 'OWNER');
+
+    // Stage: holds the layered buttons + clock image + center number
+    const stage = document.createElement('div');
+    stage.className = 'pc-stage';
+    stage.style.cssText = `
+      position: relative;
+      width: ${size}px;
+      height: ${size}px;
+    `;
+
+    // Side buttons (behind the clock — only for owners who can operate)
+    if (canOperate) {
+      const makeBtn = (side, delta, src) => {
+        const btn = document.createElement('img');
+        btn.className = `pc-btn-${side}`;
+        btn.src = `systems/vagabond/assets/ui/clocks/${src}`;
+        btn.dataset.delta = String(delta);
+        // Cosmetic styles live in _progress-clock.scss; only dynamic geometry is inline
+        btn.style.cssText = `
+          top: 50%;
+          ${side === 'left' ? 'left' : 'right'}: ${-btnPeek}px;
+          transform: translateY(-50%);
+          width: ${btnW}px;
+          height: ${btnH}px;
+        `;
+        btn.addEventListener('mousedown', (e) => e.stopPropagation());
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this._onButtonClick(clock.id, delta);
+        });
+        return btn;
+      };
+      stage.appendChild(makeBtn('left', -1, 'clock_left_bt.svg'));
+      stage.appendChild(makeBtn('right', +1, 'clock_right_bt.svg'));
+    }
+
+    // Clock image (in front of the buttons)
     const svgPath = ProgressClock.getSVGPath(data.segments, data.filled);
     const img = document.createElement('img');
+    img.className = 'pc-clock-img';
     img.src = svgPath;
     img.style.cssText = `
+      position: relative;
       width: ${size}px;
       height: ${size}px;
       display: block;
+      z-index: 2;
     `;
+
+    // Center number — current filled value
+    const numberEl = document.createElement('div');
+    numberEl.className = 'pc-number';
+    numberEl.textContent = data.filled;
+    // Cosmetic styles live in _progress-clock.scss; only dynamic font-size is inline
+    numberEl.style.cssText = `font-size: ${Math.round(size * NUMBER_RATIO)}px;`;
+
+    stage.appendChild(img);
+    stage.appendChild(numberEl);
 
     // Create name text
     const nameEl = document.createElement('div');
+    nameEl.className = 'pc-name';
     nameEl.textContent = clock.name;
-    nameEl.style.cssText = `
-      color: white;
-      font-family: Signika, sans-serif;
-      font-size: 16px;
-      text-align: center;
-      text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
-      user-select: none;
-    `;
+    // Cosmetic styles live in _progress-clock.scss (.progress-clock .pc-name)
 
-    clockEl.appendChild(img);
     clockEl.appendChild(nameEl);
+    clockEl.appendChild(stage);
 
     // Add event listeners
     this._attachEventListeners(clockEl, clock);
@@ -368,7 +420,7 @@ export class ProgressClockOverlay {
     };
 
     // Mouse up: end drag or handle click
-    const onMouseUp = async (e) => {
+    const onMouseUp = async () => {
       if (dragStartX === 0) return;
 
       const clock = game.journal.get(clockId);
@@ -388,34 +440,13 @@ export class ProgressClockOverlay {
           }
         });
       } else {
-        // Handle click
+        // Single click no longer operates the clock — use the side buttons.
+        // Double click still opens the config dialog.
         clickCount++;
 
         if (clickCount === 1) {
-          // Wait to see if it's a double click
-          clickTimeout = setTimeout(async () => {
-            // Single click: increment (or decrement if shift held)
-            const clock = game.journal.get(clockId);
-            if (!clock || !clock.testUserPermission(game.user, 'OWNER')) {
-              if (clock) ui.notifications.warn(game.i18n.localize('VAGABOND.ProgressClock.NoPermission'));
-              clickCount = 0;
-              return;
-            }
-
-            const data = clock.flags.vagabond.progressClock;
-            let filled;
-            if (e.shiftKey) {
-              // Shift + left click: decrement
-              filled = Math.max(data.filled - 1, 0);
-            } else {
-              // Left click: increment
-              filled = Math.min(data.filled + 1, data.segments);
-            }
-            await clock.update({ 'flags.vagabond.progressClock.filled': filled });
-            clickCount = 0;
-          }, 300);
+          clickTimeout = setTimeout(() => { clickCount = 0; }, 300);
         } else if (clickCount === 2) {
-          // Double click: configure
           clearTimeout(clickTimeout);
           clickCount = 0;
           const clock = game.journal.get(clockId);
@@ -443,7 +474,7 @@ export class ProgressClockOverlay {
         return;
       }
 
-      this._showContextMenu(e, clock, element);
+      this._showContextMenu(e, clock);
     });
 
     // Store cleanup function
@@ -455,9 +486,29 @@ export class ProgressClockOverlay {
   }
 
   /**
+   * Handle a side-button click: change filled by delta (left = -1, right = +1)
+   * @param {string} clockId - The clock journal ID
+   * @param {number} delta - Amount to change filled by
+   */
+  async _onButtonClick(clockId, delta) {
+    const clock = game.journal.get(clockId);
+    if (!clock) return;
+    if (!clock.testUserPermission(game.user, 'OWNER')) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.ProgressClock.NoPermission'));
+      return;
+    }
+
+    const data = clock.flags.vagabond.progressClock;
+    const filled = Math.clamp(data.filled + delta, 0, data.segments);
+    if (filled === data.filled) return; // already at bound
+
+    await clock.update({ 'flags.vagabond.progressClock.filled': filled });
+  }
+
+  /**
    * Show context menu for a clock
    */
-  _showContextMenu(event, clock, element) {
+  _showContextMenu(event, clock) {
     if (!clock.testUserPermission(game.user, 'OWNER')) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.ProgressClock.NoPermission'));
       return;
@@ -585,16 +636,22 @@ export class ProgressClockOverlay {
 
     const data = clock.flags.vagabond.progressClock;
 
-    // Update the image with cache busting
+    // Update the clock image with cache busting
     const svgPath = ProgressClock.getSVGPath(data.segments, data.filled);
-    const img = element.querySelector('img');
+    const img = element.querySelector('.pc-clock-img');
     if (img) {
       // Add timestamp to force reload and avoid caching issues
       img.src = `${svgPath}?t=${Date.now()}`;
     }
 
+    // Update the center number
+    const numberEl = element.querySelector('.pc-number');
+    if (numberEl) {
+      numberEl.textContent = data.filled;
+    }
+
     // Update the name
-    const nameEl = element.querySelector('div');
+    const nameEl = element.querySelector('.pc-name');
     if (nameEl) {
       nameEl.textContent = clock.name;
     }
@@ -638,7 +695,7 @@ export class ProgressClockOverlay {
    */
   clear() {
     // Properly clean up all clock elements
-    for (const [clockId, element] of this.clockElements.entries()) {
+    for (const element of this.clockElements.values()) {
       if (element._cleanup) {
         element._cleanup();
       }

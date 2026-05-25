@@ -200,10 +200,14 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         });
       } else {
         // Update the journal
+        const newSegments = parseInt(expandedData.segments);
+        const currentFilled = this.#clockJournal.flags.vagabond.progressClock.filled ?? 0;
+        const clampedFilled = Math.clamp(currentFilled, 0, newSegments);
         await this.#clockJournal.update({
           name: expandedData.name,
           ownership: ownership,
-          "flags.vagabond.progressClock.segments": parseInt(expandedData.segments),
+          "flags.vagabond.progressClock.segments": newSegments,
+          "flags.vagabond.progressClock.filled": clampedFilled,
           "flags.vagabond.progressClock.size": finalSize,
           "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition
         });
