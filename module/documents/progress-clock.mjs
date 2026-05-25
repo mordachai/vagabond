@@ -53,6 +53,9 @@ export class ProgressClock {
             defaultPosition: data.defaultPosition || defaultPosition,
             size: data.size || "M",
             faded: data.faded || false,
+            // Scene attachment: null = global (all scenes), else only that scene
+            sceneId: data.sceneId || null,
+            hidden: false,
             positions: {}
           }
         }
@@ -88,9 +91,17 @@ export class ProgressClock {
     if (!sceneId) return [];
 
     return this.getAll().filter(clock => {
+      const data = clock.flags.vagabond.progressClock;
+
       // Check permissions - user must have at least LIMITED (can view) permission
       // This replaces the old "visible" flag - if user has permission, they can see it
       if (!clock.testUserPermission(game.user, 'LIMITED')) return false;
+
+      // Hidden clocks are removed from view but remain in the Journal sidebar
+      if (data.hidden) return false;
+
+      // Scene attachment: blank/null = global (all scenes); otherwise show only on its scene
+      if (data.sceneId && data.sceneId !== sceneId) return false;
 
       return true;
     });

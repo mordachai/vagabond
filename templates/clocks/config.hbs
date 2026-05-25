@@ -50,6 +50,19 @@
     </div>
   </div>
 
+  {{! Scene attachment - global or a single scene }}
+  <div class="form-group">
+    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Scene"}}</label>
+    <select name="sceneId" data-dtype="String">
+      <option value="" {{#unless clock.sceneId}}selected{{/unless}}>
+        {{localize "VAGABOND.ProgressClock.SceneGlobal"}}
+      </option>
+      {{#each sceneOptions}}
+      <option value="{{this.id}}" {{#if (eq this.id ../clock.sceneId)}}selected{{/if}}>{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+
   {{! Default Position and Player Permissions - Same Row }}
   <div class="form-group form-row">
     <div class="form-field">

@@ -1468,6 +1468,45 @@ Hooks.on('createJournalEntry', async (journal, options, userId) => {
   }
 });
 
+/**
+ * Restore a hidden progress clock by dragging its journal entry from the
+ * sidebar onto the canvas. The clock reappears at the drop point.
+ * Must stay synchronous — Foundry does not await hook callbacks.
+ */
+Hooks.on('dropCanvasData', (canvas, data) => {
+  if (data.type !== 'JournalEntry') return true;
+
+  const journal = data.uuid ? fromUuidSync(data.uuid) : game.journal.get(data.id);
+  if (journal?.flags?.vagabond?.progressClock?.type !== 'progressClock') return true; // not a clock — let default run
+
+  if (!journal.testUserPermission(game.user, 'OWNER')) {
+    ui.notifications.warn(game.i18n.localize('VAGABOND.ProgressClock.NoPermission'));
+    return false;
+  }
+
+  const pcData = journal.flags.vagabond.progressClock;
+  const sceneId = canvas.scene?.id;
+  const update = { 'flags.vagabond.progressClock.hidden': false };
+
+  if (sceneId) {
+    // Convert world coords → screen px (overlay is position:fixed full-window)
+    const p = canvas.stage.worldTransform.apply({ x: data.x, y: data.y });
+    const order = pcData.positions?.[sceneId]?.order ?? 0;
+    update[`flags.vagabond.progressClock.positions.${sceneId}`] = {
+      x: Math.round(p.x),
+      y: Math.round(p.y),
+      order
+    };
+    // If bound to a different scene, follow the drop; global clocks stay global
+    if (pcData.sceneId && pcData.sceneId !== sceneId) {
+      update['flags.vagabond.progressClock.sceneId'] = sceneId;
+    }
+  }
+
+  journal.update(update); // fire-and-forget; updateJournalEntry hook redraws
+  return false; // block default map-Note creation
+});
+
 
 /* -------------------------------------------- */
 /* Chat Message Hooks                           */

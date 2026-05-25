@@ -125,8 +125,17 @@
     {{!-- Delivery selector overlay --}}
     <div class="vsc-delivery-list hidden">
       {{#each deliveryOptions as |opt|}}
-        <button type="button" data-action="vscPickDelivery" data-key="{{opt.key}}"
-                class="{{#if opt.selected}}selected{{/if}}">{{opt.label}}</button>
+        <div class="vsc-delivery-row {{#if opt.selected}}selected{{/if}}">
+          <button type="button" class="vsc-del-pick" data-action="vscPickDelivery" data-key="{{opt.key}}">
+            {{opt.label}}
+          </button>
+          {{#if opt.hasImg}}
+            <span class="vsc-del-help" data-img="{{opt.img}}" data-name="{{opt.name}}"
+                  data-hint="{{opt.hint}}" data-desc="{{opt.description}}">
+              <i class="fa-solid fa-circle-question"></i>
+            </span>
+          {{/if}}
+        </div>
       {{/each}}
     </div>
   </div>

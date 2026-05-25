@@ -1264,12 +1264,12 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
     /* Footer Note */
     .damage-application-note {
-        font-size: 11px;
+        font-size: 0.8rem;
         font-style: italic;
-        color: #4a5e66;
+        color: #192226;
         margin-top: 4px;
         padding-top: 4px;
-        border-top: 1px dashed rgba(0,0,0,0.1);
+        border-top: 1px dashed rgba(0,0,0,0.4);
     }
 }
 

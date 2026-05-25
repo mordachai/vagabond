@@ -87,7 +87,8 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         segments: 4,
         size: 'M',
         customSize: '',
-        defaultPosition: defaultPosition
+        defaultPosition: defaultPosition,
+        sceneId: ''
       };
       context.isNew = true;
     } else {
@@ -99,7 +100,8 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         segments: data.segments,
         size: data.size,
         customSize: typeof data.size === 'number' ? data.size : '',
-        defaultPosition: data.defaultPosition
+        defaultPosition: data.defaultPosition,
+        sceneId: data.sceneId ?? ''
       };
       context.isNew = false;
     }
@@ -107,6 +109,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
     context.segmentOptions = [4, 6, 8, 10, 12];
     context.sizeOptions = CONFIG.VAGABOND.clockSizes;
     context.positionOptions = CONFIG.VAGABOND.clockPositions;
+    context.sceneOptions = game.scenes.map(s => ({ id: s.id, name: s.name }));
 
     // Ownership configuration
     if (!this.#clockJournal) {
@@ -196,6 +199,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           segments: parseInt(expandedData.segments),
           size: finalSize,
           defaultPosition: expandedData.defaultPosition,
+          sceneId: expandedData.sceneId || null,
           ownership: ownership
         });
       } else {
@@ -209,7 +213,8 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           "flags.vagabond.progressClock.segments": newSegments,
           "flags.vagabond.progressClock.filled": clampedFilled,
           "flags.vagabond.progressClock.size": finalSize,
-          "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition
+          "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
+          "flags.vagabond.progressClock.sceneId": expandedData.sceneId || null
         });
       }
 

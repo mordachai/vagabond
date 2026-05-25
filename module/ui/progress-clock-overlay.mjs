@@ -556,6 +556,13 @@ export class ProgressClockOverlay {
       menu.remove();
     });
 
+    // Hide option — removes from view but keeps the journal in the sidebar
+    const hideOption = this._createMenuOption('Hide', 'fas fa-box-archive', async () => {
+      await clock.update({ 'flags.vagabond.progressClock.hidden': true });
+      ui.notifications.info(game.i18n.localize('VAGABOND.ProgressClock.HiddenHint'));
+      menu.remove();
+    });
+
     // Delete option
     const deleteOption = this._createMenuOption('Delete', 'fas fa-trash', async () => {
       const confirm = await foundry.applications.api.DialogV2.confirm({
@@ -573,6 +580,7 @@ export class ProgressClockOverlay {
 
     menu.appendChild(fadeOption);
     menu.appendChild(configOption);
+    menu.appendChild(hideOption);
     menu.appendChild(deleteOption);
     document.body.appendChild(menu);
 

@@ -686,6 +686,24 @@ VAGABOND.deliveryTypes = {
 };
 
 /**
+ * Explainer images per delivery type, shown on hover in the spell cast dialog.
+ * Keyed by delivery type key; file lives in assets/ui/deliveries/{key}.webp.
+ * Keys without an entry simply show no preview.
+ * @type {Object<string,string>}
+ */
+VAGABOND.deliveryImages = {
+  'aura': 'systems/vagabond/assets/ui/deliveries/aura.webp',
+  'cone': 'systems/vagabond/assets/ui/deliveries/cone.webp',
+  'cube': 'systems/vagabond/assets/ui/deliveries/cube.webp',
+  'imbue': 'systems/vagabond/assets/ui/deliveries/imbue.webp',
+  'glyph': 'systems/vagabond/assets/ui/deliveries/glyph.webp',
+  'line': 'systems/vagabond/assets/ui/deliveries/line.webp',
+  'remote': 'systems/vagabond/assets/ui/deliveries/remote.webp',
+  'sphere': 'systems/vagabond/assets/ui/deliveries/sphere.webp',
+  'touch': 'systems/vagabond/assets/ui/deliveries/touch.webp'
+};
+
+/**
  * Spell delivery type hints (increase descriptions)
  * @type {Object}
  */

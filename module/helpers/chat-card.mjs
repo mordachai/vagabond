@@ -1769,9 +1769,9 @@ export class VagabondChatCard {
         </div>`;
 
       if (effective > 0) {
-        calcHTML += `<div class="damage-application-note gm-only">damage applied — HP: ${previousValue} → ${newValue}</div>`;
+        calcHTML += `<div class="damage-application-note gm-only">damage applied — HP: <strong>${previousValue}</strong> → <strong>${newValue}</strong></div>`;
       } else {
-        calcHTML += `<div class="damage-application-note">no damage applied (immune or blocked)</div>`;
+        calcHTML += `<div class="damage-application-note gm-only">no damage applied (immune or blocked)</div>`;
       }
 
       calcHTML += `</div>`;
@@ -1783,7 +1783,7 @@ export class VagabondChatCard {
         <div class="damage-formula-line">
           <span class="damage-final"><i class="fa-solid fa-heart"></i> +${effective}</span>
         </div>
-        <div class="damage-application-note">HP restored — ${previousValue} → ${newValue}</div>
+        <div class="damage-application-note">HP restored —<strong> ${previousValue}</strong> →<strong> ${newValue}</strong></div>
       </div>`;
 
     } else if (type === 'recover') {
@@ -1793,7 +1793,7 @@ export class VagabondChatCard {
         <div class="damage-formula-line">
           <span class="damage-final"><i class="fa-solid fa-person-running"></i> -${effective}</span>
         </div>
-        <div class="damage-application-note">${fatigueTerm}: ${previousValue} → ${newValue}</div>
+        <div class="damage-application-note"><strong>${fatigueTerm}</strong>: <strong>${previousValue} → ${newValue}</strong></div>
       </div>`;
 
     } else if (type === 'recharge') {
@@ -1803,7 +1803,7 @@ export class VagabondChatCard {
         <div class="damage-formula-line">
           <span class="damage-final"><i class="fa-solid fa-sparkles"></i> +${effective}</span>
         </div>
-        <div class="damage-application-note">${manaTerm}: ${previousValue} → ${newValue}</div>
+        <div class="damage-application-note">${manaTerm}: <strong>${previousValue} → ${newValue}</strong></div>
       </div>`;
     }
 

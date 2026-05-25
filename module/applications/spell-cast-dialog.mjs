@@ -96,6 +96,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #pos = null;        // null = anchored/centered; once dragged, holds { left, top }
   #dragged = false;   // true once the user has manually dragged — suppresses re-anchoring
   #minimized = false; // collapsed-to-header state, toggled by dblclick on header
+  #previewEl = null;  // body-level floating delivery-image preview (anchored to the ? icon)
   #messages = [];     // last-computed message list (validation + module-contributed)
   #targetHookId = null; // Foundry 'targetToken' hook — keeps area-requirement message live
   #renderDebounce = foundry.utils.debounce(() => { if (this.rendered) this.render(); }, 50);
@@ -178,10 +179,17 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     const deliveryOptions = Object.entries(CONFIG.VAGABOND.deliveryTypes).map(([key, lbl]) => {
       const cost = CONFIG.VAGABOND.deliveryDefaults[key]?.cost ?? 0;
+      const img = CONFIG.VAGABOND.deliveryImages?.[key] ?? null;
+      const Cap = key.charAt(0).toUpperCase() + key.slice(1);
       return {
         key,
         label: `${game.i18n.localize(lbl)} (${cost})`,
         selected: state.deliveryType === key,
+        hasImg: !!img,
+        img,
+        name: game.i18n.localize(lbl),
+        hint: game.i18n.localize(`VAGABOND.DeliveryTypes.${Cap}.hint`),
+        description: game.i18n.localize(`VAGABOND.DeliveryTypes.${Cap}.description`),
       };
     });
 
@@ -527,10 +535,73 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
         list.classList.add('hidden');
       }
     }, { signal });
+
+    this._bindDeliveryPreviews(signal);
+  }
+
+  /**
+   * Hover preview for delivery-type explainer images. The preview is a single
+   * `position: fixed` <img> appended to <body> — so it can never be clipped or
+   * stacked behind the dialog's SVG/overlays — anchored to the hovered "?" icon
+   * via getBoundingClientRect (NOT to the dialog/HUD position).
+   * @param {AbortSignal} signal
+   */
+  _bindDeliveryPreviews(signal) {
+    // The "?" help is a standalone sibling of the pick button (not a child), so
+    // it receives its own pointer events — the preview shows ONLY on its hover.
+    const helps = this.element.querySelectorAll('.vsc-del-help[data-img]');
+    if (!helps.length) return;
+
+    const accent = this.element.querySelector('.vsc-root')?.style.getPropertyValue('--ac') || '';
+
+    // Panel = hint title (top) + image + description (bottom). Built once,
+    // re-used; appended to <body> so it can't be clipped by the dialog.
+    const ensureEl = () => {
+      if (this.#previewEl) return this.#previewEl;
+      const panel = document.createElement('div');
+      panel.className = 'vsc-delivery-preview-float';
+      if (accent) panel.style.setProperty('--ac', accent);
+      panel.innerHTML = `
+        <div class="vsc-dp-name"></div>
+        <div class="vsc-dp-hint"></div>
+        <img class="vsc-dp-img" />
+        <div class="vsc-dp-desc"></div>`;
+      document.body.appendChild(panel);
+      this.#previewEl = panel;
+      return panel;
+    };
+
+    const show = (el) => {
+      const src = el.dataset.img;
+      if (!src) return;
+      const panel = ensureEl();
+      const img = panel.querySelector('.vsc-dp-img');
+      if (img.dataset.src !== src) { img.src = src; img.dataset.src = src; }
+      panel.querySelector('.vsc-dp-name').textContent = el.dataset.name || '';
+      panel.querySelector('.vsc-dp-hint').textContent = el.dataset.hint || '';
+      panel.querySelector('.vsc-dp-desc').textContent = el.dataset.desc || '';
+      const r = el.getBoundingClientRect();
+      const W = 240;
+      // Open to the RIGHT of the icon; flip left if it would clip the viewport.
+      let left = r.right + 12;
+      if (left + W > window.innerWidth - 8) left = r.left - 12 - W;
+      panel.style.left = `${Math.max(8, left)}px`;
+      panel.style.top = `${r.top + r.height / 2}px`;
+      panel.classList.add('visible');
+    };
+
+    const hide = () => this.#previewEl?.classList.remove('visible');
+
+    helps.forEach((el) => {
+      el.addEventListener('mouseenter', () => show(el), { signal });
+      el.addEventListener('mouseleave', hide, { signal });
+    });
   }
 
   async close(options = {}) {
     this.#ctrl?.abort();
+    this.#previewEl?.remove();
+    this.#previewEl = null;
     if (this.#targetHookId != null) {
       Hooks.off('targetToken', this.#targetHookId);
       this.#targetHookId = null;

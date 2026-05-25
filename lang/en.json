@@ -282,39 +282,48 @@
     "DeliveryTypes": {
       "Aura": {
         "label": "Aura",
+        "description":"10' radius from you, affecting Targets of your choice within.",
         "hint": "+1 per +5 feet to the radius"
       },
       "Cone": {
         "label": "Cone",
+        "description":"15' cone Area in front of you.",
         "hint": "+2 per additional 5-feet of length"
       },
       "Cube": {
         "label": "Cube",
+        "description":"5' cube Area you can see.",
         "hint": "+1 per additional 5-foot-cube"
       },
       "Imbue": {
         "label": "Imbue",
+        "description":"Targets a Weapon equipped by a willing Being within Far, which can then deliver the Spell as if by Touch if you spend 1 Mana to do so when the attack hits. The Attack Check is used for the Cast Check.",            
         "hint": "+2 per additional Target"
       },
       "Glyph": {
         "label": "Glyph",
-        "hint": "—"
+        "description":"Creates a 5’ square glyph on a Target you can see, where no other glyph is within Close. The Spell is Cast in a 5’ cube from the glyph when you choose, then the glyph disappears.",
+        "hint": "No increase"
       },
       "Line": {
         "label": "Line",
+        "description":"5' wide, 30' long, 10' tall Area. Expanding the width by 5' or height by up to 10' doubles the Cost.",
         "hint": "+1 per 10 feet of extra length"
       },
       "Remote": {
         "label": "Remote",
+        "description":"An ambience or bolt on a Target.",
         "hint": "+1 per additional Target"
       },
       "Sphere": {
         "label": "Sphere",
+        "description":"5' radius sphere in sight.",
         "hint": "+1 per additional 5-feet to the radius"
       },
       "Touch": {
         "label": "Touch",
-        "hint": "—"
+        "description":" A Close Target, or yourself",
+        "hint": "No increase"
       }
     },
     "SheetLabels": {
@@ -1168,6 +1177,10 @@
         "BottomRight": "Bottom Right",
         "BottomLeft": "Bottom Left"
       },
+      "Scene": "Scene",
+      "SceneGlobal": "Global (all scenes)",
+      "Hide": "Hide",
+      "HiddenHint": "Clock hidden. Drag it from the Journal sidebar onto the scene to bring it back.",
       "PlayerPermissions": "Player Permissions",
       "PermissionNoneDesc": "Hidden from players",
       "PermissionObserverDesc": "Players can see only",
