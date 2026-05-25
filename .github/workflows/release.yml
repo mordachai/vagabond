@@ -35,10 +35,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. Create the Zip file (Only if tag doesn't exist)
+      # 3. Pin the download URL to THIS release's zip (not "latest")
+      # ------------------------------------------------------------------
+      # The download field must point at the version-specific asset so that
+      # installing an older release (e.g. the latest V13-compatible one) pulls
+      # that release's zip, not whatever GitHub currently marks as "latest".
+      # manifest stays on "latest" so Foundry's update notifier keeps working.
+      # ------------------------------------------------------------------
+      - name: Pin download URL to this release
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          DOWNLOAD="https://github.com/${{ github.repository }}/releases/download/v${VERSION}/system.zip"
+          MANIFEST="https://github.com/${{ github.repository }}/releases/latest/download/system.json"
+          tmp=$(mktemp)
+          jq --arg dl "$DOWNLOAD" --arg mf "$MANIFEST" '.download = $dl | .manifest = $mf' system.json > "$tmp"
+          mv "$tmp" system.json
+          echo "Pinned download to: $DOWNLOAD"
+
+      # 4. Create the Zip file (Only if tag doesn't exist)
       # ------------------------------------------------------------------
       # UPDATED: Zips only the folders shown in your image, ignoring dev files
-      # Renamed to system.zip
+      # Renamed to system.zip — includes the patched system.json above
       # ------------------------------------------------------------------
       - name: Zip Files
         if: steps.check_tag.outputs.exists == 'false'
