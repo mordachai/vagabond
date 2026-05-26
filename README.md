@@ -139,12 +139,19 @@ Dedicated combat encounters with per factions separation: Heroes, NPCs, Neutrals
 
 ---
 
-### Clocks & Countdown Dice
+### Clocks, Trackers & Countdown Dice
 Track tension and time directly on the canvas without needing external modules.
-- **Progress Clocks**: Create clocks with 4, 6, 8, 10, or 12 segments. Position them anywhere to track long-term goals or impending doom.
-- **Countdown Dice**: Create the countdice and never forget to roll when the time comes!
+- **Progress Clocks:** Create clocks with 4, 6, 8, 10, or 12 segments. Position them anywhere to track long-term goals or impending doom.
+- **Trackers:** Simple counters that can take positive or negative numbers. Use it to track resources, effects, time, anything you need.
+- **Countdown Dice:** Create the countdice and never forget to roll when the time comes!
 
-<img width="1000" height="800" alt="image" src="https://github.com/user-attachments/assets/fdfb6b16-97bf-44a9-8733-7cf8de17ac38" />
+
+<img width="911" height="626" alt="image" src="https://github.com/user-attachments/assets/58152fab-6d5d-4c08-a13a-e44756384f86" />
+
+
+<img width="975" height="257" alt="image" src="https://github.com/user-attachments/assets/3dbbc78c-059c-4852-a4b1-faae85d29e38" />
+
+
 
 ---
 
