@@ -232,6 +232,8 @@ export class ProgressClockOverlay {
 
     const data = clock.flags.vagabond.progressClock;
     const size = ProgressClock.getClockSize(data.size);
+    // Trackers use a static background + pip ring; clocks swap segmented art
+    const isTracker = data.kind === 'tracker';
 
     // Get position
     const sceneId = canvas.scene?.id;
@@ -288,7 +290,7 @@ export class ProgressClockOverlay {
     const BTN_HEIGHT_RATIO = 0.45;        // side button height relative to clock size
     const BTN_ASPECT = 80.26 / 151.78;    // arrow SVG width / height (~0.529)
     const BTN_OVERLAP = 0.25;              // fraction of button tucked behind the clock (higher = more interior)
-    const NUMBER_RATIO = 0.4;            // center number font-size relative to clock size
+    const NUMBER_RATIO = isTracker ? 0.35 : 0.4; // center number font-size relative to clock size
     const btnH = size * BTN_HEIGHT_RATIO;
     const btnW = btnH * BTN_ASPECT;
     const btnPeek = btnW * (1 - BTN_OVERLAP); // px sticking out past the clock edge
@@ -331,7 +333,10 @@ export class ProgressClockOverlay {
     }
 
     // Clock image (in front of the buttons)
-    const svgPath = ProgressClock.getSVGPath(data.segments, data.filled);
+    // Trackers use a static background; clocks swap art per filled value
+    const svgPath = isTracker
+      ? ProgressClock.getTrackerSVGPath()
+      : ProgressClock.getSVGPath(data.segments, data.filled);
     const img = document.createElement('img');
     img.className = 'pc-clock-img';
     img.src = svgPath;
@@ -352,6 +357,9 @@ export class ProgressClockOverlay {
 
     stage.appendChild(img);
     stage.appendChild(numberEl);
+
+    // Tracker pip ring (green = positive clockwise, red = negative CCW)
+    if (isTracker) this._renderTrackerPips(stage, size, data.filled);
 
     // Create name text
     const nameEl = document.createElement('div');
@@ -499,10 +507,81 @@ export class ProgressClockOverlay {
     }
 
     const data = clock.flags.vagabond.progressClock;
-    const filled = Math.clamp(data.filled + delta, 0, data.segments);
+    // Trackers are unbounded (negatives allowed); clocks clamp to [0, segments]
+    const filled = data.kind === 'tracker'
+      ? data.filled + delta
+      : Math.clamp(data.filled + delta, 0, data.segments);
     if (filled === data.filled) return; // already at bound
 
     await clock.update({ 'flags.vagabond.progressClock.filled': filled });
+  }
+
+  /**
+   * Render the tracker pip ring into a stage element as radial tick traces.
+   * Green traces fan clockwise from top (12 o'clock) for positive values; red
+   * traces fan counter-clockwise for negatives. Only one side is ever populated
+   * (value is a single number), so each may use the full 360°.
+   *
+   * Dynamic: trace count = |value|. Up to THRESHOLD (30) traces march around from
+   * the top at a fixed spacing; beyond that they distribute evenly over the full
+   * ring and shrink to keep fitting. Only lit traces are drawn.
+   * @param {HTMLElement} stage - The .pc-stage element
+   * @param {number} size - Clock pixel size
+   * @param {number} value - Current tracker value (may be negative)
+   */
+  _renderTrackerPips(stage, size, value) {
+    // Clear any existing pip layer
+    const old = stage.querySelector('.pc-pips');
+    if (old) old.remove();
+
+    const layer = document.createElement('div');
+    layer.className = 'pc-pips';
+    stage.appendChild(layer);
+
+    const positive = Math.max(0, value);
+    const negative = Math.max(0, -value);
+    if (!positive && !negative) return; // zero — empty ring
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const R = size * 0.4;                       // trace ring radius (white band)
+    const BASE_W = Math.max(2, size * 0.045);   // tangential width of a trace (~4.5px at M)
+    const TICK_LEN = size * 0.1;                // radial length of a trace (constant)
+    const TOP = -Math.PI / 2;                   // 12 o'clock
+    const FULL = Math.PI * 2;                    // whole ring available per side
+    const THRESHOLD = 36;                        // stay full-size until this many traces
+
+    // Below threshold: march around from the top at fixed spacing.
+    // At/after threshold (or once a full ring would fill): even distribution + shrink.
+    const layout = (count) => {
+      const desiredStep = (BASE_W * 1.5) / R;   // trace width + gap, in radians
+      if (count <= THRESHOLD && count * desiredStep <= FULL) {
+        return { step: desiredStep, w: BASE_W };
+      }
+      const step = FULL / count;
+      const w = Math.max(1.2, Math.min(BASE_W, (step * R) / 1.2));
+      return { step, w };
+    };
+
+    const addSide = (count, dir, cls) => {
+      if (count <= 0) return;
+      const { step, w } = layout(count);
+      for (let i = 1; i <= count; i++) {
+        const theta = TOP + dir * i * step;
+        const x = cx + R * Math.cos(theta);
+        const y = cy + R * Math.sin(theta);
+        const deg = (theta * 180) / Math.PI - 90; // align long axis radially
+        const tick = document.createElement('div');
+        tick.className = `pc-pip ${cls}`;
+        tick.style.cssText =
+          `width:${w}px;height:${TICK_LEN}px;left:${x}px;top:${y}px;` +
+          `transform:translate(-50%,-50%) rotate(${deg}deg);`;
+        layer.appendChild(tick);
+      }
+    };
+
+    addSide(positive, +1, 'positive'); // clockwise → right side
+    addSide(negative, -1, 'negative'); // counter-clockwise → left side
   }
 
   /**
@@ -644,8 +723,11 @@ export class ProgressClockOverlay {
 
     const data = clock.flags.vagabond.progressClock;
 
-    // Update the clock image with cache busting
-    const svgPath = ProgressClock.getSVGPath(data.segments, data.filled);
+    // Update the clock image with cache busting.
+    // Trackers keep a static background; only clocks swap art per filled value.
+    const svgPath = data.kind === 'tracker'
+      ? ProgressClock.getTrackerSVGPath()
+      : ProgressClock.getSVGPath(data.segments, data.filled);
     const img = element.querySelector('.pc-clock-img');
     if (img) {
       // Add timestamp to force reload and avoid caching issues
@@ -656,6 +738,12 @@ export class ProgressClockOverlay {
     const numberEl = element.querySelector('.pc-number');
     if (numberEl) {
       numberEl.textContent = data.filled;
+    }
+
+    // Rebuild the tracker pip ring for the new value
+    if (data.kind === 'tracker') {
+      const stage = element.querySelector('.pc-stage');
+      if (stage) this._renderTrackerPips(stage, ProgressClock.getClockSize(data.size), data.filled);
     }
 
     // Update the name

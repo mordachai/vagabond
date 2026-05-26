@@ -60,6 +60,17 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       form.addEventListener('submit', this._onFormSubmit.bind(this));
     }
 
+    // Type selector: hide the segments field for trackers (no segmented pie)
+    const kindSelect = this.element.querySelector('select[name="kind"]');
+    const segmentsField = this.element.querySelector('.pc-segments-field');
+    if (kindSelect && segmentsField) {
+      const syncKind = () => {
+        segmentsField.style.display = kindSelect.value === 'tracker' ? 'none' : '';
+      };
+      kindSelect.addEventListener('change', syncKind);
+      syncKind();
+    }
+
     // Sync individual permissions when default permission changes
     const defaultPermissionSelect = this.element.querySelector('select[name="ownership.default"]');
     if (defaultPermissionSelect) {
@@ -84,6 +95,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       context.clock = {
         id: null,
         name: 'New Clock',
+        kind: 'clock',
         segments: 4,
         size: 'M',
         customSize: '',
@@ -97,6 +109,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       context.clock = {
         id: this.#clockJournal.id,
         name: this.#clockJournal.name,
+        kind: data.kind || 'clock',
         segments: data.segments,
         size: data.size,
         customSize: typeof data.size === 'number' ? data.size : '',
@@ -106,6 +119,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       context.isNew = false;
     }
 
+    context.isTracker = context.clock.kind === 'tracker';
     context.segmentOptions = [4, 6, 8, 10, 12];
     context.sizeOptions = CONFIG.VAGABOND.clockSizes;
     context.positionOptions = CONFIG.VAGABOND.clockPositions;
@@ -191,11 +205,14 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         ownership[game.user.id] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
       }
 
+      const kind = expandedData.kind === 'tracker' ? 'tracker' : 'clock';
+
       // Check if creating new clock or updating existing
       if (!this.#clockJournal) {
-        // Create new clock
+        // Create new clock/tracker
         await ProgressClock.create({
           name: expandedData.name,
+          kind: kind,
           segments: parseInt(expandedData.segments),
           size: finalSize,
           defaultPosition: expandedData.defaultPosition,
@@ -206,12 +223,16 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         // Update the journal
         const newSegments = parseInt(expandedData.segments);
         const currentFilled = this.#clockJournal.flags.vagabond.progressClock.filled ?? 0;
-        const clampedFilled = Math.clamp(currentFilled, 0, newSegments);
+        // Trackers are unbounded (negatives allowed); clocks clamp to [0, segments]
+        const newFilled = kind === 'tracker'
+          ? currentFilled
+          : Math.clamp(currentFilled, 0, newSegments);
         await this.#clockJournal.update({
           name: expandedData.name,
           ownership: ownership,
+          "flags.vagabond.progressClock.kind": kind,
           "flags.vagabond.progressClock.segments": newSegments,
-          "flags.vagabond.progressClock.filled": clampedFilled,
+          "flags.vagabond.progressClock.filled": newFilled,
           "flags.vagabond.progressClock.size": finalSize,
           "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
           "flags.vagabond.progressClock.sceneId": expandedData.sceneId || null

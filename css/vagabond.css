@@ -2257,6 +2257,25 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   pointer-events: none;
   user-select: none;
 }
+.progress-clock .pc-pips {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.progress-clock .pc-pip {
+  position: absolute;
+  border-radius: 1px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+}
+.progress-clock .pc-pip.positive {
+  background: #3fcf5a;
+  box-shadow: 0 0 3px rgba(63, 207, 90, 0.9), 0 0 1px #000;
+}
+.progress-clock .pc-pip.negative {
+  background: #e0443a;
+  box-shadow: 0 0 3px rgba(224, 68, 58, 0.9), 0 0 1px #000;
+}
 .progress-clock .pc-name {
   display: inline-block;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp");

@@ -7,9 +7,22 @@
     <input type="text" name="name" value="{{clock.name}}" placeholder="{{localize 'VAGABOND.UI.Labels.ClockName'}}" required />
   </div>
 
+  {{! Type - Clock (segmented pie) or Tracker (free counter) }}
+  <div class="form-group">
+    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Type"}}</label>
+    <select name="kind" data-dtype="String">
+      <option value="clock" {{#unless isTracker}}selected{{/unless}}>
+        {{localize "VAGABOND.ProgressClock.TypeClock"}}
+      </option>
+      <option value="tracker" {{#if isTracker}}selected{{/if}}>
+        {{localize "VAGABOND.ProgressClock.TypeTracker"}}
+      </option>
+    </select>
+  </div>
+
   {{! Segments and Size - Same Row }}
   <div class="form-group form-row">
-    <div class="form-field">
+    <div class="form-field pc-segments-field">
       <label class="resource-label">{{localize "VAGABOND.ProgressClock.Segments"}}</label>
       <select name="segments" data-dtype="Number">
         {{#each segmentOptions}}

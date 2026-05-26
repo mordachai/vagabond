@@ -47,9 +47,13 @@ export class ProgressClock {
         vagabond: {
           progressClock: {
             type: "progressClock",
+            // kind: "clock" (segmented pie) or "tracker" (static bg, free counter)
+            kind: data.kind || "clock",
             segments: data.segments || 4,
-            // Clocks start full — GMs mostly tick down (subtract)
-            filled: data.filled ?? (data.segments || 4),
+            // Clocks start full (GMs mostly tick down); trackers start at zero
+            filled: data.kind === "tracker"
+              ? (data.filled ?? 0)
+              : (data.filled ?? (data.segments || 4)),
             defaultPosition: data.defaultPosition || defaultPosition,
             size: data.size || "M",
             faded: data.faded || false,
@@ -115,6 +119,14 @@ export class ProgressClock {
    */
   static getSVGPath(segments, filled) {
     return `systems/vagabond/assets/ui/clocks/${segments}clock_${filled}.svg`;
+  }
+
+  /**
+   * Get the SVG path for a tracker (static background, value-independent)
+   * @returns {string} Path to the tracker SVG file
+   */
+  static getTrackerSVGPath() {
+    return `systems/vagabond/assets/ui/clocks/tracker.svg`;
   }
 
   /**

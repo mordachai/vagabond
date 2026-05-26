@@ -1162,6 +1162,9 @@
     },
     "ProgressClock": {
       "Name": "Progress Clock",
+      "Type": "Type",
+      "TypeClock": "Clock (segmented)",
+      "TypeTracker": "Tracker (counter)",
       "Segments": "Segments",
       "SegmentsLabel": "segments",
       "Size": "Size",

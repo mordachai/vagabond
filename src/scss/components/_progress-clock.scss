@@ -32,6 +32,32 @@
     user-select: none;
   }
 
+  // Tracker pip ring — radial tick traces laid around the white band.
+  // Geometry (size + left/top + rotation) is set inline in the overlay (scales
+  // with value/size); only color + glow live here.
+  .pc-pips {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .pc-pip {
+    position: absolute;
+    border-radius: 1px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+
+    &.positive {
+      background: #3fcf5a;
+      box-shadow: 0 0 3px rgba(63, 207, 90, 0.9), 0 0 1px #000;
+    }
+
+    &.negative {
+      background: #e0443a;
+      box-shadow: 0 0 3px rgba(224, 68, 58, 0.9), 0 0 1px #000;
+    }
+  }
+
   // Clock name plaque (same decoration as the chat apply-direct button)
   .pc-name {
     display: inline-block;
