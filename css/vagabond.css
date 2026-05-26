@@ -2269,12 +2269,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
 }
 .progress-clock .pc-pip.positive {
-  background: #3fcf5a;
-  box-shadow: 0 0 3px rgba(63, 207, 90, 0.9), 0 0 1px #000;
+  background: #88c655;
+  box-shadow: 0 0 2px rgba(2, 95, 19, 0.9), 0 0 1px #000;
 }
 .progress-clock .pc-pip.negative {
-  background: #e0443a;
-  box-shadow: 0 0 3px rgba(224, 68, 58, 0.9), 0 0 1px #000;
+  background: #f3922f;
+  box-shadow: 0 0 2px rgba(150, 14, 4, 0.9), 0 0 1px #000;
 }
 .progress-clock .pc-name {
   display: inline-block;
@@ -2960,6 +2960,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   white-space: nowrap;
   text-shadow: var(--vh-outline-2);
 }
+.vbd-hud .vh-hp-bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+.vbd-hud .vh-hp-bar .vh-hp-bar-fill {
+  display: block;
+  height: 100%;
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
 .vbd-hud .vh-controls {
   display: flex;
   align-items: center;
@@ -3547,6 +3558,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud--npc .vh-name-row .vh-name {
   min-width: 0;
+}
+.vbd-hud--npc .vh-hp-bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+.vbd-hud--npc .vh-hp-bar .vh-hp-bar-fill {
+  display: block;
+  height: 100%;
+  transition: width 0.2s ease, background-color 0.2s ease;
 }
 .vbd-hud--npc .vh-name-desc {
   flex: 0 0 auto;

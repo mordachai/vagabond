@@ -184,6 +184,7 @@
 
       <div class="vh-center">
         <div class="vh-name">{{name}}</div>
+        <div class="vh-hp-bar" data-tooltip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
 
         <div class="vh-controls">
           <span class="vh-ctl rollable" data-action="spendStudiedDie" data-tooltip="{{localize 'VAGABOND.Hud.StudiedTooltip'}}"><i class="fas fa-book-open"></i>{{studiedDice}}</span>

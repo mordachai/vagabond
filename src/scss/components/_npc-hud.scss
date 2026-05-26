@@ -68,6 +68,21 @@
     .vh-name { min-width: 0; } // allow ellipsis inside the flex row
   }
 
+  // Slim health bar under the name — 2px sleeve, no margins/padding so it
+  // never adds vertical bulk. Fill width + colour come from `hpBar` context.
+  .vh-hp-bar {
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+
+    .vh-hp-bar-fill {
+      display: block;
+      height: 100%;
+      transition: width 0.2s ease, background-color 0.2s ease;
+    }
+  }
+
   .vh-name-desc {
     flex: 0 0 auto;
     margin-left: auto; // push to the far end of the row, opposite the name

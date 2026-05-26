@@ -231,6 +231,21 @@
     text-shadow: var(--vh-outline-2);
   }
 
+  // Slim health bar under the name — 2px sleeve, no margins/padding so it
+  // never adds vertical bulk. Fill width + colour come from `hpBar` context.
+  .vh-hp-bar {
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+
+    .vh-hp-bar-fill {
+      display: block;
+      height: 100%;
+      transition: width 0.2s ease, background-color 0.2s ease;
+    }
+  }
+
   .vh-controls {
     display: flex;
     align-items: center;

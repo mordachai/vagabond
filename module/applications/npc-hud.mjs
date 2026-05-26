@@ -2,7 +2,7 @@ import { RollHandler, NPCActionHandler } from '../sheets/handlers/_module.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
-import { applyHudDisplayPrefs } from '../helpers/hud-display.mjs';
+import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
 
 const { api } = foundry.applications;
 
@@ -228,6 +228,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     // --- Vitals ---
     context.hd = sys.hd ?? 0;
     context.hp = { value: sys.health?.value ?? 0, max: sys.health?.max ?? 0 };
+    context.hpBar = getHudHealthBar(context.hp.value, context.hp.max);
     context.fatigue = { value: sys.fatigue ?? 0, max: sys.fatigueMax ?? 5 };
     context.morale = sys.morale ?? null;
     context.armor = sys.armor ?? 0;

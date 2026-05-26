@@ -48,13 +48,13 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
 
     &.positive {
-      background: #3fcf5a;
-      box-shadow: 0 0 3px rgba(63, 207, 90, 0.9), 0 0 1px #000;
+      background: #88c655;
+      box-shadow: 0 0 2px rgba(2, 95, 19, 0.9), 0 0 1px #000;
     }
 
     &.negative {
-      background: #e0443a;
-      box-shadow: 0 0 3px rgba(224, 68, 58, 0.9), 0 0 1px #000;
+      background: #f3922f;
+      box-shadow: 0 0 2px rgba(150, 14, 4, 0.9), 0 0 1px #000;
     }
   }
 

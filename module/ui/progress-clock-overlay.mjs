@@ -544,7 +544,7 @@ export class ProgressClockOverlay {
 
     const cx = size / 2;
     const cy = size / 2;
-    const R = size * 0.4;                       // trace ring radius (white band)
+    const R = size * 0.38;                       // trace ring radius (white band)
     const BASE_W = Math.max(2, size * 0.045);   // tangential width of a trace (~4.5px at M)
     const TICK_LEN = size * 0.1;                // radial length of a trace (constant)
     const TOP = -Math.PI / 2;                   // 12 o'clock

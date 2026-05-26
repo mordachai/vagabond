@@ -4,7 +4,7 @@ import { InventoryHandler } from '../sheets/handlers/inventory-handler.mjs';
 import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
-import { applyHudDisplayPrefs } from '../helpers/hud-display.mjs';
+import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -251,6 +251,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // --- Vitals & controls (already-derived values; no recompute) ---
     context.hp = { value: sys.health?.value ?? 0, max: sys.health?.max ?? 0 };
+    context.hpBar = getHudHealthBar(context.hp.value, context.hp.max);
     context.fatigue = { value: sys.fatigue ?? 0, max: sys.fatigueMax ?? 5 };
     context.speed = sys.speed?.base ?? 0;
     context.armor = sys.armor ?? 0;
