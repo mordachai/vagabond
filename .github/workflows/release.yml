@@ -7,6 +7,8 @@ on:
     # Only run this workflow if system.json is modified
     paths:
       - 'system.json'
+  # Manual trigger — re-fire a release if GitHub drops the push trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
