@@ -565,6 +565,15 @@ export default class VagabondNPC extends VagabondActorBase {
 
     this._evaluateAllBonusFields(rollData);
 
+    // Heal speed corrupted by speed-zeroing status effects.
+    // The shared status AEs (dazed, prone, restrained, incapacitated, paralyzed,
+    // unconscious, dead) target `system.speed.bonus`. Characters have a `bonus`
+    // subfield there, but NPC `system.speed` is a plain NumberField — so Foundry's
+    // change pipeline merges the dotted key and replaces the number with
+    // `{ bonus: '-999' }`, which renders as "[object Object]". All of those statuses
+    // mean "speed reduced to 0", so coercing the object back to 0 is the correct value.
+    if (typeof this.speed !== 'number') this.speed = Number(this.speed?.base ?? 0) || 0;
+
     // Calculate fatigueMax from homebrew config + bonus
     this.fatigueMax = (CONFIG.VAGABOND?.homebrew?.derivations?.fatigueNPCMax ?? 5) + (this.fatigueBonus || 0);
     // Clamp current fatigue to fatigueMax

@@ -234,7 +234,8 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     context.armor = sys.armor ?? 0;
 
     // --- Speed (base + extra movement types) ---
-    context.speed = sys.speed ?? 0;
+    // Speed is normally a plain number; guard in case a speed.bonus AE corrupted it to an object.
+    context.speed = (typeof sys.speed === 'number' ? sys.speed : (sys.speed?.base ?? 0)) || 0;
     context.speedTypes = (sys.speedTypes ?? []).map((type) => ({
       label: L(config.speedTypes?.[type]),
       value: sys.speedValues?.[type] || 0,

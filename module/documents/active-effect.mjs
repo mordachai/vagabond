@@ -374,26 +374,4 @@ export class VagabondActiveEffect extends ActiveEffect {
         return effect.update({ disabled: !effect.disabled });
     }
   }
-
-  /**
-   * Override apply to fix system.speed.bonus on NPC actors.
-   *
-   * The 'dead' status (and any custom AE) uses system.speed.bonus, which is valid for
-   * character actors (SchemaField with an ArrayField bonus). NPC actors store speed as a
-   * plain NumberField at system.speed with no bonus sub-field. Foundry's setProperty
-   * would replace the number with {} when traversing "speed.bonus", corrupting the field
-   * and causing [object Object] to appear in the speed input.
-   *
-   * Fix: redirect system.speed.bonus → system.speed for NPC actors.
-   */
-  apply(actor, change) {
-    if (actor.type === 'npc' && change.key === 'system.speed.bonus') {
-      const npcChange = foundry.utils.deepClone(change);
-      npcChange.key = 'system.speed';
-      npcChange.mode = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
-      npcChange.value = '0';
-      return super.apply(actor, npcChange);
-    }
-    return super.apply(actor, change);
-  }
 }
