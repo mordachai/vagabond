@@ -170,7 +170,6 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
       : canvas.tokens.placeables;
     const caster   = pool[0];
     const dirToken = pool[1] ?? caster;
-    const scale    = VagabondSpellSequencer._calcScale(20, nativePx, scaleMode);
 
     // stretchTo rejects Token placeables in Foundry v13 — always use explicit {x,y}.
     const center = t => ({ x: t.x + (t.w ?? 0) / 2, y: t.y + (t.h ?? 0) / 2 });
@@ -182,6 +181,7 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     const beamCfg = {
       file,
       nativePx,
+      scaleMode,
       scale: parseFloat(this.element.querySelector(`input[name="${prefix}.scale"]`)?.value) || 1,
       duration,
       ...(tplGridSize || tplStartPoint || tplEndPoint
@@ -202,9 +202,10 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
         const endpoint = { x: cCx + Math.cos(angle) * 20 * pxPerFt, y: cCy + Math.sin(angle) * 20 * pxPerFt };
         VagabondSpellSequencer._beamEffect(seq, beamCfg, { x: cCx, y: cCy }, endpoint);
       } else if (delivery === 'cone') {
-        seq.effect().file(file).atLocation(caster)
+        const fx = seq.effect().file(file).atLocation(caster)
           .rotate(-VagabondSpellSequencer._getConeDirection(caster, [dirToken]))
-          .scale(scale).anchor({ x: 0, y: 0.5 }).duration(duration);
+          .anchor({ x: 0, y: 0.5 }).duration(duration);
+        VagabondSpellSequencer._applyAreaSize(fx, 20, beamCfg);
       } else if (scaleMode === 'chain') {
         const nodes = pool.slice(0, 3);
         for (let i = 0; i < nodes.length - 1; i++) {
@@ -216,7 +217,8 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
           VagabondSpellSequencer._beamEffect(seq, beamCfg, center(caster), center(t));
         }
       } else {
-        seq.effect().file(file).atLocation(caster).scale(scale).duration(duration);
+        const fx = seq.effect().file(file).atLocation(caster).duration(duration);
+        VagabondSpellSequencer._applyAreaSize(fx, 20, beamCfg);
       }
       seq.play();
     } catch(err) { ui.notifications.error(err.message); }
