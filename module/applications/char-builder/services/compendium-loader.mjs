@@ -30,12 +30,6 @@ export class CompendiumLoader {
       classFeatures: 'feature',
       startingPacks: 'starterPack'
     };
-
-    this.retryConfig = {
-      maxRetries: 3,
-      baseDelay: 1000,
-      maxDelay: 5000
-    };
   }
 
   /**
@@ -121,36 +115,6 @@ export class CompendiumLoader {
     }
 
     return allDocuments;
-  }
-
-  /**
-   * Load compendium data with retry logic
-   * @param {string} compendiumId - Compendium identifier
-   * @param {string} dataType - Data type for error reporting
-   * @returns {Promise<array>} Array of compendium documents
-   */
-  async _loadWithRetry(compendiumId, dataType) {
-    let lastError;
-    
-    for (let attempt = 0; attempt <= this.retryConfig.maxRetries; attempt++) {
-      try {
-        return await this._loadCompendium(compendiumId);
-      } catch (error) {
-        lastError = error;
-        
-        if (attempt < this.retryConfig.maxRetries) {
-          const delay = Math.min(
-            this.retryConfig.baseDelay * Math.pow(2, attempt),
-            this.retryConfig.maxDelay
-          );
-          
-          console.warn(`Failed to load ${dataType} (attempt ${attempt + 1}), retrying in ${delay}ms:`, error);
-          await this._delay(delay);
-        }
-      }
-    }
-
-    throw new Error(`Failed to load ${dataType} after ${this.retryConfig.maxRetries + 1} attempts: ${lastError.message}`);
   }
 
   /**
@@ -314,15 +278,6 @@ export class CompendiumLoader {
     }
 
     return stats;
-  }
-
-  /**
-   * Utility method to create a delay
-   * @param {number} ms - Milliseconds to delay
-   * @returns {Promise<void>}
-   */
-  _delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**

@@ -353,43 +353,6 @@ export class PerksStepManager extends BaseStepManager {
   }
 
   /**
-   * Get total perk limit from selected ancestry and class
-   * @private
-   */
-  async _getPerkLimit(state) {
-    let limit = 0;
-
-    // From ancestry traits
-    if (state.selectedAncestry) {
-      try {
-        const ancestry = await fromUuid(state.selectedAncestry);
-        const traits = ancestry.system.traits || [];
-        for (const trait of traits) {
-          limit += (trait.perkAmount || 0);
-        }
-      } catch (error) {
-        console.warn('Failed to get perk limit from ancestry:', error);
-      }
-    }
-
-    // From class level 1 features
-    if (state.selectedClass) {
-      try {
-        const classItem = await fromUuid(state.selectedClass);
-        const levelFeatures = classItem.system.levelFeatures || [];
-        const level1Features = levelFeatures.filter(f => f.level === 1);
-        for (const feature of level1Features) {
-          limit += (feature.perkAmount || 0);
-        }
-      } catch (error) {
-        console.warn('Failed to get perk limit from class:', error);
-      }
-    }
-
-    return limit;
-  }
-
-  /**
    * Load available perk options with prerequisite checking
    * Filters based on active grant if present
    * @private

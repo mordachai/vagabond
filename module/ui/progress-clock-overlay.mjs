@@ -107,31 +107,6 @@ export class ProgressClockOverlay {
   }
 
   /**
-   * Get the order/index of a clock in its position group
-   */
-  _getClockOrder(clock) {
-    const clocks = ProgressClock.getForScene();
-    const data = clock.flags.vagabond.progressClock;
-    const position = data.defaultPosition || 'top-right';
-
-    // Get all clocks in same position
-    const clocksInPosition = clocks.filter(c => {
-      const cData = c.flags.vagabond.progressClock;
-      return (cData.defaultPosition || 'top-right') === position;
-    });
-
-    // Sort by order
-    clocksInPosition.sort((a, b) => {
-      const sceneId = canvas.scene.id;
-      const orderA = a.flags.vagabond.progressClock.positions?.[sceneId]?.order ?? 0;
-      const orderB = b.flags.vagabond.progressClock.positions?.[sceneId]?.order ?? 0;
-      return orderA - orderB;
-    });
-
-    return clocksInPosition.findIndex(c => c.id === clock.id);
-  }
-
-  /**
    * Draw all clocks for the current scene
    */
   async draw() {

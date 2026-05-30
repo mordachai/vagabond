@@ -1004,10 +1004,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     }
   }
 
-  _loadAncestryTraits() {
-    // Future implementation
-  }
-
   /**
    * Migrate legacy system.weaponSkills data into system.skills.
    * Called automatically by Foundry before the DataModel is constructed.

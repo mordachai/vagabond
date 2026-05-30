@@ -372,18 +372,6 @@ export class NPCActionHandler {
   }
 
   /**
-   * Update accordion state for persistence and accessibility
-   * @param {HTMLElement} header - The accordion header element
-   * @param {HTMLElement} content - The accordion content element
-   * @private
-   */
-  _updateAccordionState(header, content) {
-    // Track accordion state for persistence
-    const isExpanded = content.classList.contains('open');
-    header.setAttribute('aria-expanded', isExpanded.toString());
-  }
-
-  /**
    * Capture accordion state before re-render
    */
   captureAccordionState() {

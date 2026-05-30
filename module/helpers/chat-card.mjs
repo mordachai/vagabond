@@ -501,45 +501,6 @@ export class VagabondChatCard {
       return await card.send();
   }
 
-  /**
-   * Build an HTML preview listing the on-hit statuses an item/action can cause.
-   * Shown in the attack card before any button is clicked.
-   * @param {Array} causedStatuses
-   * @param {boolean} isCrit - Whether these are crit-only effects
-   * @returns {string}
-   */
-  static _buildOnHitPreview(causedStatuses, isCrit = false) {
-    const lines = causedStatuses
-      .filter(e => e.statusId)
-      .map(e => {
-        const statusLabel = game.i18n.localize(
-          CONFIG.VAGABOND?.statusConditions?.[e.statusId] ?? e.statusId
-        );
-        const parts = [statusLabel];
-        if (e.saveType && e.saveType !== 'none') {
-          const saveLabel = e.saveType === 'any'
-            ? game.i18n.localize('VAGABOND.Status.Save.Any')
-            : game.i18n.localize(`VAGABOND.Saves.${e.saveType.charAt(0).toUpperCase()}${e.saveType.slice(1)}.name`) || e.saveType;
-          parts.push(`<span class="on-hit-save">${saveLabel}</span>`);
-        }
-        if (e.duration) {
-          parts.push(`<span class="on-hit-duration">C${e.duration}</span>`);
-        }
-        if (e.requiresDamage) {
-          parts.push(`<span class="on-hit-req-dmg" title="${game.i18n.localize('VAGABOND.Status.RequiresDamageHint')}">*</span>`);
-        }
-        return `<li class="on-hit-entry">${parts.join(' ')}</li>`;
-      });
-
-    if (!lines.length) return '';
-
-    const header = isCrit
-      ? `<p class="on-hit-label on-hit-crit-label"><i class="fas fa-burst"></i> <strong>${game.i18n.localize('VAGABOND.Status.CritOnHitEffects')}</strong></p>`
-      : `<p class="on-hit-label"><i class="fas fa-biohazard"></i> ${game.i18n.localize('VAGABOND.Status.OnHitEffects')}</p>`;
-
-    return `<div class="on-hit-preview">${header}<ul class="on-hit-list">${lines.join('')}</ul></div>`;
-  }
-  
   /* -------------------------------------------- */
   /* ADAPTER METHODS                             */
   /* -------------------------------------------- */

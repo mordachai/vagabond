@@ -447,47 +447,6 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Render the Block/Dodge info section as an accordion
-   * @param {string} attackType - 'melee' or 'ranged' or 'cast'
-   * @returns {string} HTML string
-   * @private
-   */
-  static _renderDefendInfoSection(attackType) {
-    const isRanged = (attackType === 'ranged' || attackType === 'cast');
-    const hinderedTag = isRanged ? '<span class="hindered-tag"><i class="fas fa-exclamation-triangle"></i> Hindered</span>' : '';
-
-    return `
-      <div class='card-defend-info'>
-        <div class='defend-info-header' data-action='toggleDefendInfo'>
-          <i class='fas fa-shield-alt'></i>
-          <strong>Defending Options</strong>
-          <i class='fas fa-chevron-right expand-icon'></i>
-        </div>
-        <div class='defend-info-details'>
-          <div class='defend-info-row'>
-            <div class='defend-option defend-dodge'>
-              <div class='defend-title'>
-                <i class='fas fa-running'></i>
-                <strong>Dodge (Reflex):</strong>
-                <span class='armor-hinder-note'>(Hindered if Heavy Armor)</span>
-              </div>
-              <p>Roll Reflex save. Success ignores one highest damage die.</p>
-            </div>
-            <div class='defend-option defend-block'>
-              <div class='defend-title'>
-                <i class='fas fa-shield-alt'></i>
-                <strong>Block (Endure):</strong>
-                ${hinderedTag}
-              </div>
-              <p>Roll Endure save. Success ignores one highest damage die.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
    * Get explosion values from an item if enabled
    * Checks both item properties AND actor global explode bonuses
    *
@@ -960,48 +919,6 @@ export class VagabondDamageHelper {
           actionIndex,
       });
     }
-
-  /**
-   * Render damage HTML using the template partial
-   * @param {Roll} damageRoll - The damage roll (or null for flat damage)
-   * @param {string} damageType - Type of damage (localized label)
-   * @param {boolean} isCritical - Whether this is critical damage
-   * @param {string} damageTypeKey - The damage type key for icon lookup (optional)
-   * @param {number} flatDamage - Flat damage amount (for NPC actions, when damageRoll is null)
-   * @returns {Promise<string>} Rendered HTML
-   * @private
-   */
-  static async _renderDamagePartial(damageRoll, damageType, isCritical = false, damageTypeKey = null, flatDamage = null) {
-    // Import VagabondChatCard for dice formatting
-    const { VagabondChatCard } = await import('./chat-card.mjs');
-
-    // Prepare damage data for template
-    const damageData = {
-      damage: {
-        total: damageRoll ? damageRoll.total : flatDamage,
-        type: damageType,
-        typeKey: damageTypeKey,
-        iconClass: null,
-        isCritical: isCritical,
-        diceDisplay: null,
-        formula: damageRoll ? damageRoll.formula : null
-      }
-    };
-
-    // Look up the damage type icon (skip for typeless "-" damage)
-    if (damageTypeKey && damageTypeKey !== '-' && CONFIG.VAGABOND?.damageTypeIcons?.[damageTypeKey]) {
-      damageData.damage.iconClass = CONFIG.VAGABOND.damageTypeIcons[damageTypeKey];
-    }
-
-    // Format dice display if rolling
-    if (damageRoll) {
-      damageData.damage.diceDisplay = VagabondChatCard.formatRollWithDice(damageRoll);
-    }
-
-    // Render the damage partial template
-    const templatePath = 'systems/vagabond/templates/chat/damage-display.hbs';
-    return await foundry.applications.handlebars.renderTemplate(templatePath, damageData);
-  }
 
   /**
    * Check if a damage type is restorative (healing, recover, recharge)

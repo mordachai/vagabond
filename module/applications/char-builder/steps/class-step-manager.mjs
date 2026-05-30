@@ -232,7 +232,7 @@ export class ClassStepManager extends BaseStepManager {
    * @private
    */
   _getAllSkillsWithWeaponSkills() {
-    return Object.keys(CONFIG.VAGABOND.skills);
+    return Object.keys(CONFIG.VAGABOND?.skills || {});
   }
 
   /**
