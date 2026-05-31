@@ -24,6 +24,12 @@ export class VagabondItem extends Item {
     // Starts off by populating the roll data with a shallow copy of `this.system`
     const rollData = { ...this.system };
 
+    // Progress clocks: expose @clocks.<handle>.value in item formulas too.
+    // (Embedded items already inherit these via rollData.actor below; this also
+    // covers standalone item rolls that have no parent actor.)
+    const PC = globalThis.vagabond?.documents?.ProgressClock;
+    if (PC) rollData.clocks = PC.rollDataMap();
+
     // Quit early if there's no parent actor
     if (!this.actor) return rollData;
 

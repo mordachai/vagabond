@@ -1174,6 +1174,8 @@
       "SizeCustom": "Custom",
       "CustomSizePlaceholder": "Pixels",
       "DefaultPosition": "Default Position",
+      "Handle": "Clock ID",
+      "HandleHint": "Use in macros and formulas (@clocks.<id>.value). Blank = auto from name.",
       "Position": {
         "TopRight": "Top Right",
         "TopLeft": "Top Left",

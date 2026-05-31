@@ -47,6 +47,8 @@ export class ProgressClock {
         vagabond: {
           progressClock: {
             type: "progressClock",
+            // Stable cross-reference key for macros, formulas (@clocks.<handle>.value), and sheets
+            handle: data.handle || this.slugify(data.name || "New Clock"),
             // kind: "clock" (segmented pie) or "tracker" (static bg, free counter)
             kind: data.kind || "clock",
             segments: data.segments || 4,
@@ -214,5 +216,199 @@ export class ProgressClock {
     }, -1);
 
     return maxOrder + 1;
+  }
+
+  /* -------------------------------------------- */
+  /*  Cross-Reference: Handles, Read & Write API  */
+  /* -------------------------------------------- */
+
+  /**
+   * Convert a name into a stable slug handle (lowercase, dash-separated).
+   * @param {string} name - Source string
+   * @returns {string} Slugified handle (e.g. "The Doom Clock" → "the-doom-clock")
+   */
+  static slugify(name) {
+    // Underscores (not hyphens): handles are used in roll formulas as
+    // @clocks.<handle>.value, and "-" would be parsed as subtraction.
+    return String(name ?? "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "") || "clock";
+  }
+
+  /**
+   * Read the progressClock flag block from a journal.
+   * @param {JournalEntry} journal
+   * @returns {Object|null}
+   * @private
+   */
+  static _flags(journal) {
+    return journal?.flags?.vagabond?.progressClock ?? null;
+  }
+
+  /**
+   * Resolve a clock reference to its JournalEntry.
+   * Resolution order: explicit handle → journal id → exact name → name-slug fallback.
+   * The name-slug fallback lets legacy clocks (created before handles existed) resolve too.
+   * @param {string|JournalEntry} ref - Handle, journal id, name, or the JournalEntry itself
+   * @returns {JournalEntry|null}
+   */
+  static get(ref) {
+    if (!ref) return null;
+    if (ref instanceof JournalEntry) return ref;
+    const clocks = this.getAll();
+
+    // 1. explicit handle
+    let hit = clocks.find(c => this._flags(c)?.handle === ref);
+    if (hit) return hit;
+
+    // 2. journal id
+    hit = clocks.find(c => c.id === ref);
+    if (hit) return hit;
+
+    // 3. exact name
+    hit = clocks.find(c => c.name === ref);
+    if (hit) return hit;
+
+    // 4. name-slug fallback (legacy clocks without a handle)
+    const slug = this.slugify(ref);
+    return clocks.find(c => this.slugify(c.name) === slug) ?? null;
+  }
+
+  /**
+   * Read a clock's current data snapshot.
+   * @param {string|JournalEntry} ref
+   * @returns {{name:string, handle:string, kind:string, value:number, filled:number, max:number, segments:number, pct:number}|null}
+   */
+  static read(ref) {
+    const journal = this.get(ref);
+    const data = this._flags(journal);
+    if (!data) return null;
+    const segments = data.segments ?? 0;
+    const filled = data.filled ?? 0;
+    return {
+      name: journal.name,
+      handle: data.handle ?? this.slugify(journal.name),
+      kind: data.kind ?? "clock",
+      value: filled,
+      filled,
+      max: segments,
+      segments,
+      pct: segments > 0 ? filled / segments : 0
+    };
+  }
+
+  /**
+   * Convenience: read only the current value (filled segments).
+   * @param {string|JournalEntry} ref
+   * @returns {number|null}
+   */
+  static value(ref) {
+    return this.read(ref)?.value ?? null;
+  }
+
+  /**
+   * Build a map of every clock keyed by handle, for injection into roll data.
+   * Enables @clocks.<handle>.value in bonus formulas and roll-builder.
+   * @returns {Object<string, {value:number, filled:number, max:number, segments:number, pct:number}>}
+   */
+  static rollDataMap() {
+    const map = {};
+    // getRollData() can run during early data prep, before game.journal exists
+    if (!game?.journal) return map;
+    for (const journal of this.getAll()) {
+      const data = this._flags(journal);
+      if (!data) continue;
+      const handle = data.handle ?? this.slugify(journal.name);
+      const segments = data.segments ?? 0;
+      const filled = data.filled ?? 0;
+      map[handle] = {
+        value: filled,
+        filled,
+        max: segments,
+        segments,
+        pct: segments > 0 ? filled / segments : 0
+      };
+    }
+    return map;
+  }
+
+  /**
+   * Guard write operations to GMs only.
+   * @returns {boolean} true if the current user may write
+   * @private
+   */
+  static _assertGM() {
+    if (game.user?.isGM) return true;
+    ui.notifications?.warn("Only the GM can modify progress clocks.");
+    return false;
+  }
+
+  /**
+   * Set a clock's filled value (GM only). Clamped to 0..segments.
+   * @param {string|JournalEntry} ref
+   * @param {number} n
+   * @returns {Promise<JournalEntry|null>}
+   */
+  static async set(ref, n) {
+    if (!this._assertGM()) return null;
+    const journal = this.get(ref);
+    const data = this._flags(journal);
+    if (!data) {
+      ui.notifications?.warn(`No progress clock found for "${ref}".`);
+      return null;
+    }
+    const n2 = Math.round(Number(n) || 0);
+    // Trackers are unbounded (free counter); clocks clamp to [0, segments]
+    const value = data.kind === "tracker" ? n2 : Math.clamp(n2, 0, data.segments ?? 0);
+    await journal.update({ "flags.vagabond.progressClock.filled": value });
+    return journal;
+  }
+
+  /**
+   * Add (or subtract, with negative delta) segments to a clock (GM only).
+   * @param {string|JournalEntry} ref
+   * @param {number} [delta=1]
+   * @returns {Promise<JournalEntry|null>}
+   */
+  static async tick(ref, delta = 1) {
+    const current = this.value(ref);
+    if (current === null) {
+      ui.notifications?.warn(`No progress clock found for "${ref}".`);
+      return null;
+    }
+    return this.set(ref, current + delta);
+  }
+
+  /**
+   * Fill a clock completely (GM only).
+   * @param {string|JournalEntry} ref
+   * @returns {Promise<JournalEntry|null>}
+   */
+  static async fill(ref) {
+    const data = this._flags(this.get(ref));
+    if (!data) return null;
+    return this.set(ref, data.segments ?? 0);
+  }
+
+  /**
+   * Empty a clock to zero (GM only).
+   * @param {string|JournalEntry} ref
+   * @returns {Promise<JournalEntry|null>}
+   */
+  static async empty(ref) {
+    return this.set(ref, 0);
+  }
+
+  /**
+   * Reset a clock to its kind default: trackers → 0, clocks → full (GM only).
+   * @param {string|JournalEntry} ref
+   * @returns {Promise<JournalEntry|null>}
+   */
+  static async reset(ref) {
+    const data = this._flags(this.get(ref));
+    if (!data) return null;
+    return this.set(ref, data.kind === "tracker" ? 0 : (data.segments ?? 0));
   }
 }

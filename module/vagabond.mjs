@@ -957,6 +957,14 @@ Handlebars.registerHelper('contains', function (array, value) {
 
 Handlebars.registerHelper('add', (a, b) => a + b);
 
+// Read a progress clock value in any template: {{clockValue "doom"}} or
+// {{clockValue "doom" "pct"}} (prop: value|filled|max|segments|pct|name|handle|kind)
+Handlebars.registerHelper('clockValue', (ref, prop) => {
+  const data = ProgressClock.read(ref);
+  if (!data) return 0;
+  return data[typeof prop === 'string' ? prop : 'value'];
+});
+
 Handlebars.registerHelper('gte', (a, b) => a >= b);
 
 Handlebars.registerHelper('and', function () {
@@ -1036,6 +1044,9 @@ Hooks.once('ready', function () {
   // Public API for external modules
   game.vagabond = {
     version: game.system.version,
+    // Progress clock cross-reference API: game.vagabond.clocks.value('doom'),
+    // .set/.tick/.fill/.empty/.reset (GM only), .read(), .get(), .getAll()
+    clocks: ProgressClock,
     api: {
       VagabondChatCard,
       VagabondDamageHelper,
@@ -1061,6 +1072,32 @@ Hooks.once('ready', function () {
 Hooks.once('diceSoNiceReady', (dice3d) => {
   VagabondDiceAppearance.registerColorsets();
   VagabondDiceAppearance.registerDamageColorsets();
+});
+
+/* -------------------------------------------- */
+/*  Progress Clock → Actor Reactivity           */
+/* -------------------------------------------- */
+
+// When a clock's value/segments/handle change, re-prepare actors so @clocks.*
+// formula bonuses recompute, then refresh any open actor sheets. Debounced to
+// coalesce bursts (e.g. a tick that fires multiple updates in one frame).
+const _refreshClockDependents = foundry.utils.debounce(() => {
+  for (const actor of game.actors) {
+    try {
+      actor.reset();
+      for (const app of Object.values(actor.apps ?? {})) app.render(false);
+    } catch (e) {
+      console.warn('VagabondSystem | Clock-dependent actor refresh failed', e);
+    }
+  }
+}, 150);
+
+Hooks.on('updateJournalEntry', (journal, changes) => {
+  const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');
+  if (!pc) return;
+  // Only refresh when a value that formulas can read actually changed
+  if (!('filled' in pc) && !('segments' in pc) && !('handle' in pc)) return;
+  _refreshClockDependents();
 });
 
 /* -------------------------------------------- */

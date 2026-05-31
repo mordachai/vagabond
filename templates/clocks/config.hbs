@@ -7,6 +7,13 @@
     <input type="text" name="name" value="{{clock.name}}" placeholder="{{localize 'VAGABOND.UI.Labels.ClockName'}}" required />
   </div>
 
+  {{! Reference Handle - stable key for macros / formulas (@clocks.<handle>.value) }}
+  <div class="form-group">
+    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Handle"}}</label>
+    <input type="text" name="handle" value="{{clock.handle}}" placeholder="{{localize 'VAGABOND.ProgressClock.HandlePlaceholder'}}" />
+    <p class="hint">{{localize "VAGABOND.ProgressClock.HandleHint"}}</p>
+  </div>
+
   {{! Type - Clock (segmented pie) or Tracker (free counter) }}
   <div class="form-group">
     <label class="resource-label">{{localize "VAGABOND.ProgressClock.Type"}}</label>

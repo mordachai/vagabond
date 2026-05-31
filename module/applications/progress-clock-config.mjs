@@ -60,6 +60,17 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       form.addEventListener('submit', this._onFormSubmit.bind(this));
     }
 
+    // Auto-fill the handle from the name until the GM manually edits the handle
+    const nameInput = this.element.querySelector('input[name="name"]');
+    const handleInput = this.element.querySelector('input[name="handle"]');
+    if (nameInput && handleInput) {
+      let handleTouched = !!handleInput.value;
+      handleInput.addEventListener('input', () => { handleTouched = true; });
+      nameInput.addEventListener('input', () => {
+        if (!handleTouched) handleInput.value = ProgressClock.slugify(nameInput.value);
+      });
+    }
+
     // Type selector: hide the segments field for trackers (no segmented pie)
     const kindSelect = this.element.querySelector('select[name="kind"]');
     const segmentsField = this.element.querySelector('.pc-segments-field');
@@ -95,6 +106,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       context.clock = {
         id: null,
         name: 'New Clock',
+        handle: '',
         kind: 'clock',
         segments: 4,
         size: 'M',
@@ -109,6 +121,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       context.clock = {
         id: this.#clockJournal.id,
         name: this.#clockJournal.name,
+        handle: data.handle ?? ProgressClock.slugify(this.#clockJournal.name),
         kind: data.kind || 'clock',
         segments: data.segments,
         size: data.size,
@@ -212,6 +225,8 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         // Create new clock/tracker
         await ProgressClock.create({
           name: expandedData.name,
+          // Falsy handle → create() auto-derives a slug from the name
+          handle: (expandedData.handle || '').trim() || undefined,
           kind: kind,
           segments: parseInt(expandedData.segments),
           size: finalSize,
@@ -230,6 +245,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         await this.#clockJournal.update({
           name: expandedData.name,
           ownership: ownership,
+          "flags.vagabond.progressClock.handle": (expandedData.handle || '').trim() || ProgressClock.slugify(expandedData.name),
           "flags.vagabond.progressClock.kind": kind,
           "flags.vagabond.progressClock.segments": newSegments,
           "flags.vagabond.progressClock.filled": newFilled,
