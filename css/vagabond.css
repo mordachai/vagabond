@@ -2340,6 +2340,39 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex: 0 0 auto;
   min-width: 100px;
 }
+.progress-clock-config-form .pc-source-section {
+  border: 1px solid var(--color-border-light-tertiary, rgba(0, 0, 0, 0.3));
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-top: 8px;
+}
+.progress-clock-config-form .pc-source-section legend {
+  font-weight: bold;
+  padding: 0 6px;
+}
+.progress-clock-config-form .pc-source-drop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px dashed var(--color-border-dark-tertiary, rgba(0, 0, 0, 0.4));
+  border-radius: 4px;
+  padding: 6px 8px;
+  min-height: 30px;
+}
+.progress-clock-config-form .pc-source-drop.drop-hover {
+  border-color: var(--color-text-hyperlink, #6a8cff);
+  background: rgba(106, 140, 255, 0.08);
+}
+.progress-clock-config-form .pc-source-drop .pc-source-refname {
+  flex: 1;
+  opacity: 0.9;
+}
+.progress-clock-config-form .pc-source-drop .pc-source-clear {
+  flex: 0 0 auto;
+  width: 24px;
+  padding: 0;
+  line-height: 1;
+}
 
 /* Countdown dice - imported at top level because overlay and config are outside sheets */
 .countdown-dice-trigger {
@@ -2779,8 +2812,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-wpn1-right: 10px;
   --vh-armor-top: 90px;
   --vh-armor-right: 46px;
-  --vh-wpn0-z: 1;
-  --vh-wpn1-z: 2;
+  --vh-wpn0-z: 2;
+  --vh-wpn1-z: 1;
   --vh-badge0-top: 15px;
   --vh-badge0-left: -14px;
   --vh-badge1-top: 15px;
@@ -3089,7 +3122,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud .vh-pc-weapon .vh-slot-empty {
   color: var(--vagabond-c-muted);
-  font-size: calc(0.8rem * var(--vh-font-scale));
+  font-size: calc(1.2rem * var(--vh-font-scale));
 }
 .vbd-hud .vh-pc-weapon[data-slot-index="0"] {
   top: var(--vh-wpn0-top);

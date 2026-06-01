@@ -1,3 +1,5 @@
+import { VAGABOND_HOMEBREW_DEFAULTS } from './homebrew-config.mjs';
+
 export const VAGABOND = {};
 
 /**
@@ -987,28 +989,30 @@ VAGABOND.metalColors = {
 };
 
 /**
- * Font Awesome icon classes for damage types
+ * Font Awesome icon classes for material weaknesses (special metals).
+ * These are NOT damage types, so they are not part of the homebrew damage-type
+ * config. Shared single source — reused by `damageTypeIcons` below and by
+ * `applyRuntimeHomebrewOverrides()` when it rebuilds the runtime icon map.
+ * @type {Object}
+ */
+VAGABOND.materialWeaknessIcons = {
+  'coldIron': 'fa-solid fa-square-i',
+  'silver': 'fa-solid fa-square-s'
+};
+
+/**
+ * Font Awesome icon classes for damage types.
+ *
+ * SINGLE SOURCE OF TRUTH = `VAGABOND_HOMEBREW_DEFAULTS.damageTypes[].icon`
+ * (editable per-type in the homebrew settings UI). This map is derived from it
+ * so the two can never drift. At runtime `applyRuntimeHomebrewOverrides()`
+ * rebuilds `CONFIG.VAGABOND.damageTypeIcons` from the live homebrew config the
+ * same way — do NOT add hand-kept icon literals here.
  * @type {Object}
  */
 VAGABOND.damageTypeIcons = {
-  '-': 'fa-solid fa-dot',
-  'acid': 'fa-solid fa-chart-scatter-bubble',
-  'fire': 'fa-solid fa-fire',
-  'shock': 'fa-solid fa-bolt',
-  'poison': 'fa-solid fa-flask-round-poison',
-  'cold': 'fa-solid fa-snowflake',
-  'blunt': 'fa-solid fa-hammer',
-  'piercing': 'fa-solid fa-bow-arrow',
-  'slashing': 'fa-regular fa-claw-marks',
-  'physical': 'fa-solid fa-hand-back-fist',
-  'necrotic': 'fa-solid fa-skull',
-  'psychic': 'fa-solid fa-brain',
-  'magical': 'fa-solid fa-stars',
-  'healing': 'fa-solid fa-heart',
-  'recover': 'fa-solid fa-arrows-rotate',
-  'recharge': 'fa-solid fa-hourglass-half',
-  'coldIron': 'fa-solid fa-square-i',
-  'silver': 'fa-solid fa-square-s'
+  ...Object.fromEntries(VAGABOND_HOMEBREW_DEFAULTS.damageTypes.map(dt => [dt.key, dt.icon])),
+  ...VAGABOND.materialWeaknessIcons
 };
 
 /**

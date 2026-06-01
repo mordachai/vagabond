@@ -58,6 +58,7 @@ import { registerSocket, emitSocket, registerSocketAction } from './helpers/sock
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
+import { VagabondTokenRingShader, installStatusRingEffects, STATUS_RING_EFFECTS } from './ui/effects/index.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.applications.sheets;
@@ -276,6 +277,19 @@ function registerGameSettings() {
     icon: 'fas fa-wand-magic-sparkles',
     type: SpellSettings,
     restricted: false,
+  });
+
+  // Status-driven dynamic token ring effects (Focusing arcs, Burning flames, etc.).
+  // When off, the rings still work but our custom shader/effects are never applied —
+  // leaving tokens free for other animation modules. Requires reload (rebuilds ring config).
+  game.settings.register('vagabond', 'statusRingEffects', {
+    name: 'VAGABOND.Settings.statusRingEffects.name',
+    hint: 'VAGABOND.Settings.statusRingEffects.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: true,
   });
 
   // Setting 1: Roll damage with check
@@ -778,6 +792,10 @@ Hooks.once('init', function () {
 
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;
+
+  // Wire the custom status-driven dynamic-ring effects (Focusing, Burning, Sickened, Charmed),
+  // unless the GM disabled them to leave rings free for other animation modules.
+  if ( game.settings.get('vagabond', 'statusRingEffects') ) installStatusRingEffects();
 
   // Sync stored spell-region settings into CONFIG.VAGABOND so the texture overlay
   // (CONFIG-driven) reflects them. Must run after CONFIG.VAGABOND is assigned.
@@ -1394,7 +1412,9 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
   if (cdFlags.linkedActorUuid && cdFlags.linkedStatusId) {
     try {
       const actor = await fromUuid(cdFlags.linkedActorUuid);
-      if (actor) {
+      // Only toggle off if the status is still present — guards against a double-delete
+      // race when the status was already removed manually or by another cleanup path.
+      if (actor && actor.statuses?.has(cdFlags.linkedStatusId)) {
         await actor.toggleStatusEffect(cdFlags.linkedStatusId, { active: false });
 
         const statusLabel = game.i18n.localize(
@@ -1461,7 +1481,7 @@ Hooks.on('deleteActiveEffect', async (effect, options, userId) => {
           e.flags?.vagabond?.fromGrapple &&
           e.flags.vagabond.grappleSourceUuid === effect.parent?.uuid
         );
-        if (linkedAE) await linkedAE.delete();
+        if (linkedAE && target.effects?.get(linkedAE.id)) await linkedAE.delete();
       } catch(err) {
         console.warn('Vagabond | Could not remove Restrained on grapple end:', err);
       }
@@ -1479,7 +1499,7 @@ Hooks.on('deleteActiveEffect', async (effect, options, userId) => {
         e.statuses?.has('grappling') &&
         e.flags?.vagabond?.grappling?.targetUuids?.includes(effect.parent?.uuid)
       );
-      if (grapplingAE) await grapplingAE.delete();
+      if (grapplingAE && source.effects?.get(grapplingAE.id)) await grapplingAE.delete();
     } catch(err) {
       console.warn('Vagabond | Could not remove Grappling on restrained end:', err);
     }
@@ -2705,6 +2725,53 @@ Hooks.once('init', () => {
     type: Boolean,
     default: false
   });
+});
+
+/* -------------------------------------------- */
+/* Dynamic Token Rings                          */
+/* -------------------------------------------- */
+
+// Registers custom dynamic token ring styles. Foundry exposes them automatically
+// in the core "Dynamic Token Ring" world setting dropdown (Settings → Token).
+// Must run in this hook — addConfig() throws outside the registration window.
+Hooks.on('initializeDynamicTokenRingConfig', (ringConfig) => {
+  const effectsEnabled = game.settings.get('vagabond', 'statusRingEffects');
+
+  // Custom status-driven effect labels (FOCUSING, BURNING, …) — only when effects are enabled.
+  const statusEffectLabels = effectsEnabled
+    ? Object.fromEntries(Object.entries(STATUS_RING_EFFECTS).map(([status, def]) => [status.toUpperCase(), def.label]))
+    : {};
+
+  const gritMetal = new foundry.canvas.placeables.tokens.DynamicRingData({
+    id: 'vagabondGritMetal',
+    label: 'Vagabond: Grit Metal',
+    spritesheet: 'systems/vagabond/assets/rings/grit-metal.json',
+    // 5 core effects + (optionally) custom status-driven effects (auto-applied via their statuses).
+    effects: {
+      RING_PULSE: 'TOKEN.RING.EFFECTS.RING_PULSE',
+      RING_GRADIENT: 'TOKEN.RING.EFFECTS.RING_GRADIENT',
+      BKG_WAVE: 'TOKEN.RING.EFFECTS.BKG_WAVE',
+      INVISIBILITY: 'TOKEN.RING.EFFECTS.INVISIBILITY',
+      COLOR_OVER_SUBJECT: 'TOKEN.RING.EFFECTS.COLOR_OVER_SUBJECT',
+      ...statusEffectLabels
+    },
+    // ringClass stays the core TokenRing (subclassing it breaks its private statics).
+    // When effects are disabled, omit the custom shader entirely so other animation
+    // modules see a vanilla dynamic ring.
+    framework: effectsEnabled ? { shaderClass: VagabondTokenRingShader } : {}
+  });
+  ringConfig.addConfig(gritMetal.id, gritMetal);
+
+  if ( !effectsEnabled ) return;
+
+  // Give the custom shader to the core circular rings too, so the effects work on whatever
+  // ring style the GM picks (gated by their radial colorBand instead of a mask).
+  for ( const id of ['coreSteel', 'coreBronze'] ) {
+    const cfg = ringConfig.getConfig(id);
+    if ( !cfg ) continue;
+    cfg.framework.shaderClass = VagabondTokenRingShader;
+    cfg.effects = { ...cfg.effects, ...statusEffectLabels };
+  }
 });
 
 /* -------------------------------------------- */

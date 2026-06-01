@@ -368,6 +368,35 @@ export default class VagabondEquipment extends VagabondItemBase {
     return schema;
   }
 
+  /**
+   * Strip null/undefined elements from every ArrayField before validation.
+   * Corrupt compendium/world data can leave a hole in one of these arrays
+   * (e.g. causedStatuses), which makes Foundry's cleanData throw
+   * "must be constructed with a DataModel or Object" on any item.update()
+   * (notably the lock-toggle submit). Mirrors item-class.mjs's migrateData.
+   * @param {object} source
+   * @returns {object}
+   */
+  static migrateData(source) {
+    const arrayKeys = [
+      'properties', 'immunities',
+      'passiveCausedStatuses', 'causedStatuses', 'critCausedStatuses',
+      'blockedStatuses', 'resistedStatuses',
+    ];
+    for (const key of arrayKeys) {
+      if (source[key] == null) continue;
+      if (!Array.isArray(source[key])) source[key] = Object.values(source[key]);
+      source[key] = source[key].filter(e => e != null);
+    }
+    // Nested: coating.causedStatuses
+    const coating = source.coating;
+    if (coating?.causedStatuses != null) {
+      if (!Array.isArray(coating.causedStatuses)) coating.causedStatuses = Object.values(coating.causedStatuses);
+      coating.causedStatuses = coating.causedStatuses.filter(e => e != null);
+    }
+    return super.migrateData(source);
+  }
+
   prepareDerivedData() {
     // Relics don't use metal - skip metal calculations
     const isRelic = this.equipmentType === 'relic';

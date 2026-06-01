@@ -110,7 +110,7 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     { key: 'poison',   label: 'Poison',   icon: 'fa-solid fa-flask-round-poison' },
     { key: 'cold',     label: 'Cold',     icon: 'fa-solid fa-snowflake' },
     { key: 'blunt',    label: 'Blunt',    icon: 'fa-solid fa-hammer' },
-    { key: 'piercing', label: 'Piercing', icon: 'fa-solid fa-bow-arrow' },
+    { key: 'piercing', label: 'Piercing', icon: 'fa-solid fa-arrow-archery' },
     { key: 'slashing', label: 'Slashing', icon: 'fa-regular fa-claw-marks' },
     { key: 'physical', label: 'Physical', icon: 'fa-solid fa-hand-back-fist' },
     { key: 'necrotic', label: 'Necrotic', icon: 'fa-solid fa-skull' },
@@ -210,9 +210,9 @@ export function applyRuntimeHomebrewOverrides(config) {
   CONFIG.VAGABOND.damageTypes = Object.fromEntries(dtList.map(dt => [dt.key, dt.label]));
   CONFIG.VAGABOND.damageTypeIcons = {
     ...Object.fromEntries(dtList.map(dt => [dt.key, dt.icon])),
-    // Material weakness icons are not part of the damage types homebrew config
-    coldIron: 'fa-solid fa-square-i',
-    silver: 'fa-solid fa-square-s',
+    // Material weakness icons are not part of the damage types homebrew config —
+    // single source lives in config.mjs (VAGABOND.materialWeaknessIcons).
+    ...CONFIG.VAGABOND.materialWeaknessIcons,
   };
   CONFIG.VAGABOND.allWeaknessTypes = {
     ...CONFIG.VAGABOND.damageTypes,

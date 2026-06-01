@@ -137,4 +137,44 @@
     flex: 0 0 auto;
     min-width: 100px;
   }
+
+  // Linked Value (generic data binding) section
+  .pc-source-section {
+    border: 1px solid var(--color-border-light-tertiary, rgba(0, 0, 0, 0.3));
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-top: 8px;
+
+    legend {
+      font-weight: bold;
+      padding: 0 6px;
+    }
+  }
+
+  .pc-source-drop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px dashed var(--color-border-dark-tertiary, rgba(0, 0, 0, 0.4));
+    border-radius: 4px;
+    padding: 6px 8px;
+    min-height: 30px;
+
+    &.drop-hover {
+      border-color: var(--color-text-hyperlink, #6a8cff);
+      background: rgba(106, 140, 255, 0.08);
+    }
+
+    .pc-source-refname {
+      flex: 1;
+      opacity: 0.9;
+    }
+
+    .pc-source-clear {
+      flex: 0 0 auto;
+      width: 24px;
+      padding: 0;
+      line-height: 1;
+    }
+  }
 }

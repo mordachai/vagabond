@@ -144,6 +144,54 @@
   </details>
   {{/if}}
 
+  {{! Linked Value - generic data binding (source → clock) }}
+  <fieldset class="form-group pc-source-section">
+    <legend>Linked Value</legend>
+    <div class="form-group">
+      <label class="resource-label">Update from</label>
+      <select name="source.mode" data-dtype="String" class="pc-source-mode">
+        <option value="manual" {{#if (eq clock.source.mode "manual")}}selected{{/if}}>Manual (no link)</option>
+        <option value="path" {{#if (eq clock.source.mode "path")}}selected{{/if}}>Linked document field</option>
+        <option value="expr" {{#if (eq clock.source.mode "expr")}}selected{{/if}}>Formula</option>
+      </select>
+      <p class="hint">Manual: set by hand / macros. Linked: mirror a field of a document. Formula: compute from @clocks.</p>
+    </div>
+
+    {{! Path mode }}
+    <div class="pc-source-path" {{#unless sourceIsPath}}style="display:none"{{/unless}}>
+      <div class="form-group">
+        <label class="resource-label">Linked document</label>
+        <div class="pc-source-drop" title="Drag a token, actor or item here">
+          <input type="hidden" name="source.ref" value="{{clock.source.ref}}" />
+          <span class="pc-source-refname">{{#if clock.source.refName}}{{clock.source.refName}}{{else}}Drag a token / actor / item here…{{/if}}</span>
+          <button type="button" class="pc-source-clear" title="Clear"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+      <div class="form-group form-row">
+        <div class="form-field">
+          <label class="resource-label">Value path</label>
+          <input type="text" name="source.valuePath" value="{{clock.source.valuePath}}" placeholder="system.health.value" />
+        </div>
+        <div class="form-field">
+          <label class="resource-label">Max path (optional)</label>
+          <input type="text" name="source.maxPath" value="{{clock.source.maxPath}}" placeholder="system.health.max" />
+        </div>
+      </div>
+      <label class="checkbox">
+        <input type="checkbox" name="source.syncMax" {{#if clock.source.syncMax}}checked{{/if}} /> Resize segments to match max path
+      </label>
+    </div>
+
+    {{! Formula mode }}
+    <div class="pc-source-expr" {{#unless sourceIsExpr}}style="display:none"{{/unless}}>
+      <div class="form-group">
+        <label class="resource-label">Formula</label>
+        <input type="text" name="source.expr" value="{{clock.source.expr}}" placeholder="@clocks.ritual.value * 2" />
+        <p class="hint">Evaluated as a roll formula; may reference @clocks.&lt;handle&gt;.value.</p>
+      </div>
+    </div>
+  </fieldset>
+
   {{! Save Button }}
   <div class="form-group">
     <button type="submit">

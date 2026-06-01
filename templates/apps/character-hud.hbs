@@ -149,7 +149,7 @@
       <div class="vh-pc-weapons">
         {{#each weaponSlots}}
           <div class="vh-pc-weapon {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="weapon" data-item-id="{{id}}" title="{{name}}"{{/if}}>
-            {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{else}}<i class="fas fa-khanda vh-slot-empty"></i>{{/if}}
+            {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{else}}<i class="fas fa-swords vh-slot-empty"></i>{{/if}}
             {{#if versatile}}<i class="vh-grip-badge fas {{#if twoHanded}}fa-hands{{else}}fa-hand-fist{{/if}} clickable" data-action="toggleWeaponGrip" data-item-id="{{id}}" data-tooltip="{{#if twoHanded}}{{localize 'VAGABOND.Hud.Menu.UseOneHand'}}{{else}}{{localize 'VAGABOND.Hud.Menu.UseTwoHands'}}{{/if}}"></i>{{/if}}
           </div>
         {{/each}}

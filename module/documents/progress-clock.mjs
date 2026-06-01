@@ -62,6 +62,8 @@ export class ProgressClock {
             // Scene attachment: null = global (all scenes), else only that scene
             sceneId: data.sceneId || null,
             hidden: false,
+            // Optional generic data binding (see resolveSource/syncBound). Absent ⇒ manual.
+            source: data.source || { mode: "manual", ref: "", valuePath: "", maxPath: "", expr: "", syncMax: true },
             positions: {}
           }
         }
@@ -411,4 +413,110 @@ export class ProgressClock {
     if (!data) return null;
     return this.set(ref, data.kind === "tracker" ? 0 : (data.segments ?? 0));
   }
+
+  /* -------------------------------------------- */
+  /*  Generic Data Binding (source → clock)       */
+  /* -------------------------------------------- */
+
+  /**
+   * Resolve a clock's bound source to a current { value, max } snapshot.
+   * Modes: "manual" (no binding), "path" (read a dot-path off a linked document),
+   * "expr" (evaluate a roll formula that may reference @clocks.<handle>.value).
+   * Returns null when there is no usable binding (manual, dangling ref, missing path…),
+   * which simply means "leave this clock alone".
+   * @param {JournalEntry} journal
+   * @returns {{value:number, max:number}|null}
+   */
+  static resolveSource(journal) {
+    const pc = this._flags(journal);
+    const src = pc?.source;
+    if (!src || !src.mode || src.mode === "manual") return null;
+
+    // Formula mode: evaluate with the clocks roll-data map injected.
+    if (src.mode === "expr") {
+      if (!src.expr) return null;
+      try {
+        const formula = Roll.replaceFormulaData(src.expr, { clocks: this.rollDataMap() });
+        const total = Roll.safeEval(formula);
+        return Number.isFinite(total) ? { value: Number(total), max: pc.segments ?? 0 } : null;
+      } catch {
+        return null;
+      }
+    }
+
+    // Path mode: read a dot-path off any linked document.
+    if (src.mode === "path") {
+      if (!src.ref || !src.valuePath) return null;
+      const doc = fromUuidSync(src.ref);
+      if (!doc) return null;
+      // A TokenDocument binds to its (delta-applied) actor so "system.*" works for
+      // unlinked tokens too. Everything else (Actor, Item, JournalEntry) reads itself.
+      const target = doc.documentName === "Token" ? doc.actor : doc;
+      if (!target) return null;
+
+      const value = foundry.utils.getProperty(target, src.valuePath);
+      if (value === undefined || value === null) return null;
+      const max = src.maxPath
+        ? Number(foundry.utils.getProperty(target, src.maxPath))
+        : (pc.segments ?? 0);
+
+      return { value: Number(value), max };
+    }
+
+    return null;
+  }
+
+  /**
+   * Sync every bound clock from its source (GM-only, primary GM only to avoid
+   * duplicate writes when several GMs are connected). Idempotent: skips writes
+   * when nothing changed. Triggered by the binding hooks below.
+   * @returns {Promise<void>}
+   */
+  static async syncBound() {
+    if (!game?.ready) return;
+    // Only the primary active GM performs writes; others just redraw from the update.
+    if (game.user !== game.users?.activeGM) return;
+
+    for (const journal of this.getAll()) {
+      const resolved = this.resolveSource(journal);
+      if (!resolved) continue;
+      const pc = this._flags(journal);
+
+      // Resize segments to match the source max when syncMax is enabled.
+      if (pc.source?.syncMax && Number.isFinite(resolved.max) && resolved.max > 0
+          && resolved.max !== pc.segments) {
+        await journal.update({ "flags.vagabond.progressClock.segments": resolved.max });
+      }
+
+      // Only write when the value actually changed (set() clamps + redraws via hook).
+      if (Number.isFinite(resolved.value) && resolved.value !== pc.filled) {
+        await this.set(pc.handle, resolved.value);
+      }
+    }
+  }
+
+  /**
+   * Register the reactive binding hooks once. Called at module load. A single
+   * debounced fan-in covers every bound clock because bindings are just property
+   * reads — no per-source-type wiring. set()/journal.update fire updateJournalEntry
+   * (handled in vagabond.mjs to redraw the overlay), never updateActor/updateItem,
+   * so syncing can't feed back into these hooks.
+   */
+  static registerBindingHooks() {
+    if (this.#hooksRegistered) return;
+    this.#hooksRegistered = true;
+    const sync = foundry.utils.debounce(() => this.syncBound(), 100);
+    Hooks.on("updateActor", sync);   // actor system.* paths, token-bound actor delta
+    Hooks.on("updateToken", sync);   // token swap / actorLink change
+    Hooks.on("updateItem", sync);    // item-bound paths, quantity edits
+    Hooks.on("createItem", sync);
+    Hooks.on("deleteItem", sync);
+    Hooks.on("canvasReady", sync);   // resync on scene load
+    Hooks.on("ready", sync);         // initial sync on world load
+  }
+
+  static #hooksRegistered = false;
 }
+
+// Self-register binding hooks at import time (vagabond.mjs imports this module).
+ProgressClock.registerBindingHooks();

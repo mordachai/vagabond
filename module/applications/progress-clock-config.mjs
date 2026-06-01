@@ -95,6 +95,47 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         });
       });
     }
+
+    // Linked Value: show/hide mode-specific fields without a re-render
+    const sourceMode = this.element.querySelector('select[name="source.mode"]');
+    if (sourceMode) {
+      const pathBox = this.element.querySelector('.pc-source-path');
+      const exprBox = this.element.querySelector('.pc-source-expr');
+      const syncSrc = () => {
+        if (pathBox) pathBox.style.display = sourceMode.value === 'path' ? '' : 'none';
+        if (exprBox) exprBox.style.display = sourceMode.value === 'expr' ? '' : 'none';
+      };
+      sourceMode.addEventListener('change', syncSrc);
+      syncSrc();
+    }
+
+    // Linked Value: drop target sets the bound document ref (token / actor / item)
+    const dropZone = this.element.querySelector('.pc-source-drop');
+    if (dropZone) {
+      const refInput = dropZone.querySelector('input[name="source.ref"]');
+      const refLabel = dropZone.querySelector('.pc-source-refname');
+      const placeholder = 'Drag a token / actor / item here…';
+      dropZone.addEventListener('dragover', (ev) => { ev.preventDefault(); dropZone.classList.add('drop-hover'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drop-hover'));
+      dropZone.addEventListener('drop', (ev) => {
+        ev.preventDefault();
+        dropZone.classList.remove('drop-hover');
+        let data;
+        try {
+          const TE = foundry.applications?.ux?.TextEditor?.implementation ?? globalThis.TextEditor;
+          data = TE?.getDragEventData ? TE.getDragEventData(ev) : JSON.parse(ev.dataTransfer.getData('text/plain'));
+        } catch { return; }
+        if (!data?.uuid) { ui.notifications.warn('Drop a Token, Actor or Item.'); return; }
+        const doc = fromUuidSync(data.uuid);
+        refInput.value = data.uuid;
+        if (refLabel) refLabel.textContent = doc?.name || data.uuid;
+      });
+      const clearBtn = dropZone.querySelector('.pc-source-clear');
+      if (clearBtn) clearBtn.addEventListener('click', () => {
+        refInput.value = '';
+        if (refLabel) refLabel.textContent = placeholder;
+      });
+    }
   }
 
   async _prepareContext(options) {
@@ -133,6 +174,24 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
     }
 
     context.isTracker = context.clock.kind === 'tracker';
+
+    // Generic data binding (source → clock)
+    const src = this.#clockJournal
+      ? (this.#clockJournal.flags.vagabond.progressClock.source ?? {})
+      : {};
+    context.clock.source = {
+      mode: src.mode || 'manual',
+      ref: src.ref || '',
+      valuePath: src.valuePath || '',
+      maxPath: src.maxPath || '',
+      expr: src.expr || '',
+      syncMax: src.syncMax !== false
+    };
+    const refDoc = context.clock.source.ref ? fromUuidSync(context.clock.source.ref) : null;
+    context.clock.source.refName = refDoc?.name || '';
+    context.sourceIsPath = context.clock.source.mode === 'path';
+    context.sourceIsExpr = context.clock.source.mode === 'expr';
+
     context.segmentOptions = [4, 6, 8, 10, 12];
     context.sizeOptions = CONFIG.VAGABOND.clockSizes;
     context.positionOptions = CONFIG.VAGABOND.clockPositions;
@@ -220,6 +279,18 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
 
       const kind = expandedData.kind === 'tracker' ? 'tracker' : 'clock';
 
+      // Generic data binding (source → clock). Build a complete source object.
+      const rawSource = expandedData.source || {};
+      const source = {
+        mode: ['manual', 'path', 'expr'].includes(rawSource.mode) ? rawSource.mode : 'manual',
+        ref: (rawSource.ref || '').trim(),
+        valuePath: (rawSource.valuePath || '').trim(),
+        maxPath: (rawSource.maxPath || '').trim(),
+        expr: (rawSource.expr || '').trim(),
+        // Native FormData omits unchecked checkboxes; checked yields 'on'
+        syncMax: rawSource.syncMax === 'on' || rawSource.syncMax === true
+      };
+
       // Check if creating new clock or updating existing
       if (!this.#clockJournal) {
         // Create new clock/tracker
@@ -232,7 +303,8 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           size: finalSize,
           defaultPosition: expandedData.defaultPosition,
           sceneId: expandedData.sceneId || null,
-          ownership: ownership
+          ownership: ownership,
+          source: source
         });
       } else {
         // Update the journal
@@ -251,9 +323,13 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           "flags.vagabond.progressClock.filled": newFilled,
           "flags.vagabond.progressClock.size": finalSize,
           "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
-          "flags.vagabond.progressClock.sceneId": expandedData.sceneId || null
+          "flags.vagabond.progressClock.sceneId": expandedData.sceneId || null,
+          "flags.vagabond.progressClock.source": source
         });
       }
+
+      // Push an initial value immediately when bound (no waiting for a hook tick).
+      if (source.mode !== 'manual') ProgressClock.syncBound();
 
       // Close the dialog
       await this.close();

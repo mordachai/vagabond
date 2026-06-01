@@ -131,6 +131,14 @@
       "giant": "Giant",
       "colossal": "Colossal"
     },
+    "Ring": {
+      "Effects": {
+        "Focusing": "Focusing (Electric Arc)",
+        "Burning": "Burning (Flames)",
+        "Sickened": "Sickened (Green Bubbles)",
+        "Charmed": "Charmed (Pink Hearts)"
+      }
+    },
     "BeingTypes": {
       "Humanlike": "Humanlike",
       "Fae": "Fae",
@@ -368,6 +376,10 @@
       "spellCastDialogDarkness": {
         "name": "Spell Cast Dialog Darkness",
         "hint": "Dark gray backdrop opacity (0–100%) behind the spell cast dialog. 0 disables the effect."
+      },
+      "statusRingEffects": {
+        "name": "Statuses Token Ring Effects",
+        "hint": "Animate token effects for certain condition statuses. Requires reload."
       },
       "rollDamageWithCheck": {
         "name": "Roll Damage With Check",

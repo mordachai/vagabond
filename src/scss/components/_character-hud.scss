@@ -24,7 +24,7 @@
   --vh-armor-top: 90px; --vh-armor-right: 46px;
 
   // Per-weapon stacking order (higher = on top, image included).
-  --vh-wpn0-z: 1;  --vh-wpn1-z: 2;
+  --vh-wpn0-z: 2;  --vh-wpn1-z: 1;
 
   // Per-weapon versatile grip-badge offset (relative to its own circle).
   --vh-badge0-top: 15px;  --vh-badge0-left: -14px;
@@ -345,7 +345,7 @@
     justify-content: center;
     // Clip the image (not the whole circle) so the grip badge can overflow.
     img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .vh-slot-empty { color: $c-muted; font-size: calc(0.8rem * var(--vh-font-scale)); }
+    .vh-slot-empty { color: $c-muted; font-size: calc(1.2rem * var(--vh-font-scale)); }
     &[data-slot-index="0"] {
       top: var(--vh-wpn0-top); right: var(--vh-wpn0-right);
       z-index: var(--vh-wpn0-z);
