@@ -106,8 +106,9 @@ export class CountdownDiceOverlay {
         element.style.top = currentTop + 'px';
       } else if (!isSidebarExpanded && flags.positions?.[sceneId]) {
         // Sidebar collapsed - restore saved position if it exists
-        element.style.left = flags.positions[sceneId].x + 'px';
-        element.style.top = flags.positions[sceneId].y + 'px';
+        const saved = flags.positions[sceneId];
+        element.style.left = (saved.xRatio !== undefined ? Math.round(saved.xRatio * window.innerWidth) : saved.x) + 'px';
+        element.style.top = (saved.yRatio !== undefined ? Math.round(saved.yRatio * window.innerHeight) : saved.y) + 'px';
       }
       // Otherwise, don't move the dice at all
     });
@@ -186,23 +187,29 @@ export class CountdownDiceOverlay {
     // Get position
     let position;
     if (sceneId && flags.positions && flags.positions[sceneId]) {
-      // Use saved position for this scene
-      position = flags.positions[sceneId];
+      // Use saved position for this scene, resolving ratios to this client's screen size
+      const saved = flags.positions[sceneId];
+      position = {
+        x: saved.xRatio !== undefined ? Math.round(saved.xRatio * window.innerWidth) : saved.x,
+        y: saved.yRatio !== undefined ? Math.round(saved.yRatio * window.innerHeight) : saved.y,
+      };
     } else {
       // Check if dice is already on screen (during redraw)
       const existingElement = this.container?.querySelector(`[data-dice-id="${dice.id}"]`);
       if (existingElement) {
         // Preserve current screen position during redraw
-        position = {
-          x: parseInt(existingElement.style.left) || 0,
-          y: parseInt(existingElement.style.top) || 0,
-          order: flags.positions?.[sceneId]?.order || order
-        };
+        const px = parseInt(existingElement.style.left) || 0;
+        const py = parseInt(existingElement.style.top) || 0;
+        position = { x: px, y: py };
 
-        // Save this position to avoid recalculating next time
+        // Save as ratios to avoid recalculating next time
         if (sceneId) {
           await dice.update({
-            [`flags.vagabond.countdownDice.positions.${sceneId}`]: position
+            [`flags.vagabond.countdownDice.positions.${sceneId}`]: {
+              xRatio: px / window.innerWidth,
+              yRatio: py / window.innerHeight,
+              order: flags.positions?.[sceneId]?.order || order
+            }
           });
         }
       } else {
@@ -392,8 +399,8 @@ export class CountdownDiceOverlay {
 
           await dice.update({
             [`flags.vagabond.countdownDice.positions.${sceneId}`]: {
-              x: container.offsetLeft,
-              y: container.offsetTop,
+              xRatio: container.offsetLeft / window.innerWidth,
+              yRatio: container.offsetTop / window.innerHeight,
               order: order
             }
           });

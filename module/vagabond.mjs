@@ -299,7 +299,7 @@ function registerGameSettings() {
     scope: 'world',
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
     requiresReload: true,
   });
 
@@ -310,7 +310,7 @@ function registerGameSettings() {
     scope: 'world',
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
     requiresReload: false,
   });
 
@@ -340,7 +340,7 @@ function registerGameSettings() {
   game.settings.register('vagabond', 'defaultClockPosition', {
     name: 'VAGABOND.Settings.defaultClockPosition.name',
     hint: 'VAGABOND.Settings.defaultClockPosition.hint',
-    scope: 'world',
+    scope: 'client',
     config: true,
     type: String,
     choices: {

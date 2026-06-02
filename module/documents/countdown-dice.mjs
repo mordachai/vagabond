@@ -52,8 +52,8 @@ export class CountdownDice {
     const positions = {};
     if (sceneId) {
       positions[sceneId] = {
-        x: initialPosition.x,
-        y: initialPosition.y,
+        xRatio: initialPosition.x / window.innerWidth,
+        yRatio: initialPosition.y / window.innerHeight,
         order: order
       };
     }

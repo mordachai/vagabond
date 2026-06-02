@@ -99,8 +99,9 @@ export class ProgressClockOverlay {
         element.style.top = currentTop + 'px';
       } else if (!isSidebarExpanded && data.positions?.[sceneId]) {
         // Sidebar collapsed - restore saved position if it exists
-        element.style.left = data.positions[sceneId].x + 'px';
-        element.style.top = data.positions[sceneId].y + 'px';
+        const saved = data.positions[sceneId];
+        element.style.left = (saved.xRatio !== undefined ? Math.round(saved.xRatio * window.innerWidth) : saved.x) + 'px';
+        element.style.top = (saved.yRatio !== undefined ? Math.round(saved.yRatio * window.innerHeight) : saved.y) + 'px';
       }
       // Otherwise, don't move the clock at all
     }
@@ -215,8 +216,12 @@ export class ProgressClockOverlay {
     let position;
 
     if (sceneId && data.positions?.[sceneId]) {
-      // Use scene-specific position
-      position = data.positions[sceneId];
+      // Use scene-specific position, resolving ratios to this client's screen size
+      const saved = data.positions[sceneId];
+      position = {
+        x: saved.xRatio !== undefined ? Math.round(saved.xRatio * window.innerWidth) : saved.x,
+        y: saved.yRatio !== undefined ? Math.round(saved.yRatio * window.innerHeight) : saved.y,
+      };
     } else {
       // Calculate default position
       position = ProgressClock.defaultPositionCoords(
@@ -417,8 +422,8 @@ export class ProgressClockOverlay {
 
         await clock.update({
           [`flags.vagabond.progressClock.positions.${sceneId}`]: {
-            x: element.offsetLeft,
-            y: element.offsetTop,
+            xRatio: element.offsetLeft / window.innerWidth,
+            yRatio: element.offsetTop / window.innerHeight,
             order: order
           }
         });

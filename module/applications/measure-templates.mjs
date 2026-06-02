@@ -340,8 +340,11 @@ export class VagabondMeasureTemplates {
    * @returns {object|null}            - Region creation data, or null on failure
    */
   _constructRegionData({ type, distance, token, targets, centroid = null, notify = true }) {
-    // pixel-per-foot conversion
-    const distancePixels = canvas.grid.size / canvas.scene.grid.distance;
+    // Use the system's canonical feet-per-square (from system.json), NOT canvas.scene.grid.distance.
+    // Scene grid.distance can be 1 on gridless scenes or misconfigured scenes, which makes all
+    // templates 5× too large. The system constant (5ft/sq) is the authoritative reference.
+    const FEET_PER_SQUARE = game.system.grid?.distance ?? 5;
+    const distancePixels = canvas.grid.size / FEET_PER_SQUARE;
     const radiusPixels = distance * distancePixels;
 
     const targetToken = targets?.first?.() ?? null;
@@ -382,7 +385,7 @@ export class VagabondMeasureTemplates {
         // Origin + target presence already guaranteed by areaRequirementError above.
         const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
         const rotation = Math.toDegrees(ray.angle);
-        const widthPixels = canvas.scene.grid.distance * distancePixels;
+        const widthPixels = FEET_PER_SQUARE * distancePixels;
         name = 'Line';
         // v14 Region shape type for rays is "line" (not "ray")
         shape = { type: 'line', x: token.center.x, y: token.center.y, length: radiusPixels, width: widthPixels, rotation };
@@ -390,7 +393,7 @@ export class VagabondMeasureTemplates {
       }
 
       case 'cube': {
-        const sidePixels = (distance / canvas.scene.grid.distance) * canvas.grid.size;
+        const sidePixels = (distance / FEET_PER_SQUARE) * canvas.grid.size;
         name = 'Cube';
         shape = {
           type: 'rectangle',
