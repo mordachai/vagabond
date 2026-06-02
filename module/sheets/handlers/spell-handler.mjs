@@ -626,7 +626,7 @@ export class SpellHandler {
     // actor.token returns a TokenDocument; Sequencer needs the Token placeable (.object).
     const casterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
     const liveTargets = Array.from(game.user.targets);
-    VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets);
+    VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
     // ── End Sequencer FX ──────────────────────────────────────────────────────
 
     // Reset spell state (keep deliveryType, reset useFx to default)

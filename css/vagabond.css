@@ -8076,61 +8076,90 @@ ol#combat-tracker.directory-list {
   padding: 0.2rem 0.5rem;
   flex-shrink: 0;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.8rem;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-list {
+  display: flex;
+  flex-direction: column;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table th {
-  text-align: left;
-  padding: 0.2rem 0.4rem;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-block {
+  padding: 0.35rem 0;
   border-bottom: 1px solid var(--vagabond-c-faint);
-  font-weight: bold;
-  color: var(--vagabond-c-text-dim);
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table td {
-  padding: 0.2rem 0.4rem;
-  vertical-align: middle;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-block:last-child {
+  border-bottom: none;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-area-table tr:nth-child(even) td {
-  background: var(--vagabond-c-surface-alt, rgba(0, 0, 0, 0.04));
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-files {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-label {
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-name {
+  width: 52px;
+  flex-shrink: 0;
   font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--vagabond-c-text-dim);
   white-space: nowrap;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-num-input {
-  width: 70px;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-video {
+  flex: 3 1 0;
+  min-width: 0;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-template-row td {
-  padding: 2px 4px 6px 4px;
-  border-top: none;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-audio {
+  flex: 2 1 0;
+  min-width: 0;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-template-inner {
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--vagabond-c-faint);
+  flex-shrink: 0;
+  margin: 0 0.15rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-params {
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 0.35rem;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  padding-left: calc(52px + 0.3rem);
+  margin-top: 0.2rem;
   font-size: 0.78rem;
-  color: var(--vagabond-c-muted, #888);
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-template-label {
-  font-weight: 600;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-template-field {
+#sequencer-fx-config.sequencer-fx-config-form .sfx-param {
   display: inline-flex;
   align-items: center;
   gap: 3px;
+  color: var(--vagabond-c-text-dim);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-scale-select {
+  font-size: 0.78rem;
+  height: 22px;
+  padding: 0 0.25rem;
+  width: 160px;
+  flex-shrink: 0;
 }
 #sequencer-fx-config.sequencer-fx-config-form .sfx-tiny-input {
   width: 52px;
   font-size: 0.78rem;
   padding: 1px 3px;
+  flex-shrink: 0;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-template-hint {
-  font-style: italic;
-  opacity: 0.7;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-dur-input {
+  width: 64px;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-beam-trim {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-beam-trim .sfx-trim-sep {
+  color: var(--vagabond-c-faint);
+  margin: 0 0.1rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-hidden {
+  display: none !important;
 }
 #sequencer-fx-config.sequencer-fx-config-form .sfx-nav-sep {
   border: none;
@@ -8203,6 +8232,44 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-dim);
   font-style: italic;
   margin-left: auto;
+}
+
+.vagabond-video-preview .window-content {
+  padding: 0;
+}
+.vagabond-video-preview .vpd-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.vagabond-video-preview .vpd-video-container {
+  background: #c8c8c8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  overflow: hidden;
+}
+.vagabond-video-preview .vpd-video {
+  max-width: 100%;
+  max-height: 480px;
+  display: block;
+}
+.vagabond-video-preview .vpd-footer {
+  display: flex;
+  justify-content: center;
+  padding: 0.35rem 0.5rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.04);
+}
+.vagabond-video-preview .vpd-loop-btn {
+  font-size: 0.82rem;
+  gap: 0.3rem;
+  padding: 0.2rem 0.7rem;
+}
+.vagabond-video-preview .vpd-loop-btn.active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #166534;
+  border-color: rgba(34, 197, 94, 0.4);
 }
 
 #dsn-damage-appearance-config.dsn-damage-appearance-form .window-content {
@@ -18560,5 +18627,3 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
-
-/*# sourceMappingURL=vagabond.css.map */

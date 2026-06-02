@@ -367,7 +367,7 @@ export class VagabondMeasureTemplates {
     switch (type.toLowerCase()) {
       case 'aura':
         name = 'Aura';
-        shape = { type: 'circle', x: token.center.x, y: token.center.y, radius: radiusPixels };
+        shape = { type: 'circle', x: token.center.x, y: token.center.y, radius: (distance + FEET_PER_SQUARE / 2) * distancePixels };
         break;
 
       case 'cone': {

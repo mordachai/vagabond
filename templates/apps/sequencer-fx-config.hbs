@@ -40,7 +40,7 @@
     </button>
   </nav>
 
-  {{! Right: panels — only active one visible via CSS }}
+  {{! Right: panels }}
   <div class="sfx-panels">
     {{#each schools}}
     <div class="sfx-panel {{#if active}}active{{/if}}" data-school="{{key}}">
@@ -58,15 +58,11 @@
                 <button type="button" class="sfx-browse-btn"
                   data-action="browseVideo"
                   data-field="castAnims.{{key}}.file"
-                  title="Browse">
-                  <i class="fas fa-film"></i>
-                </button>
+                  title="Browse"><i class="fas fa-film"></i></button>
                 <button type="button" class="sfx-preview-btn"
                   data-action="previewCast"
                   data-school="{{key}}"
-                  title="Preview on canvas token">
-                  <i class="fas fa-play"></i>
-                </button>
+                  title="Preview in window"><i class="fas fa-play"></i></button>
               </div>
             </div>
             <div class="form-group sfx-num-group">
@@ -77,9 +73,11 @@
             <div class="form-group sfx-num-group">
               <label>Duration (ms)</label>
               <input type="number" name="castAnims.{{key}}.duration"
-                value="{{castAnim.duration}}" step="50" min="100" max="10000"/>
+                value="{{castAnim.duration}}" step="1" min="1"/>
             </div>
           </div>
+          <input type="hidden" name="castAnims.{{key}}.nativeW" value="{{castAnim.nativeW}}"/>
+          <input type="hidden" name="castAnims.{{key}}.nativeH" value="{{castAnim.nativeH}}"/>
         </section>
 
         {{! Sound }}
@@ -123,96 +121,72 @@
         {{! Area Animations }}
         <section class="sfx-section">
           <h3>Area Animations</h3>
-          <table class="sfx-area-table">
-            <thead>
-              <tr>
-                <th>Delivery</th>
-                <th>File</th>
-                <th>Native Px</th>
-                <th>Scale Mode</th>
-                <th>Duration (ms)</th>
-                <th title="Base Y thickness multiplier for beam modes (chain/multiray/line). Default 1.0.">Y Scale</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each areaAnims}}
-              <tr>
-                <td class="sfx-delivery-label">{{deliveryLabel}}</td>
-                <td>
-                  <div class="sfx-file-input">
-                    <input type="text"
-                      name="areaAnims.{{../key}}.{{deliveryKey}}.file"
-                      value="{{file}}" placeholder="path/to/area.webm"/>
-                    <button type="button" class="sfx-browse-btn"
-                      data-action="browseVideo"
-                      data-field="areaAnims.{{../key}}.{{deliveryKey}}.file"
-                      title="Browse"><i class="fas fa-film"></i></button>
-                    <button type="button" class="sfx-preview-btn"
-                      data-action="previewArea"
-                      data-school="{{../key}}"
-                      data-delivery="{{deliveryKey}}"
-                      title="Preview on canvas token"><i class="fas fa-play"></i></button>
-                  </div>
-                </td>
-                <td>
-                  <input type="number"
-                    name="areaAnims.{{../key}}.{{deliveryKey}}.nativePx"
-                    value="{{nativePx}}" step="10" min="10" max="2000"
-                    class="sfx-num-input"/>
-                </td>
-                <td>
-                  <select name="areaAnims.{{../key}}.{{deliveryKey}}.scaleMode">
-                    {{#each ../../scaleModes}}
-                    <option value="{{value}}" {{#if (eq value ../scaleMode)}}selected{{/if}}>
-                      {{label}}
-                    </option>
-                    {{/each}}
-                  </select>
-                </td>
-                <td>
+          <div class="sfx-delivery-list">
+            {{#each areaAnims}}
+            <div class="sfx-delivery-block">
+
+              {{! Row 1: delivery name + video + audio }}
+              <div class="sfx-delivery-files">
+                <span class="sfx-delivery-name">{{deliveryLabel}}</span>
+                <div class="sfx-file-input sfx-delivery-video">
+                  <input type="text"
+                    name="areaAnims.{{../key}}.{{deliveryKey}}.file"
+                    value="{{file}}" placeholder="video…"/>
+                  <button type="button" class="sfx-browse-btn"
+                    data-action="browseVideo"
+                    data-field="areaAnims.{{../key}}.{{deliveryKey}}.file"
+                    title="Browse video"><i class="fas fa-film"></i></button>
+                  <button type="button" class="sfx-preview-btn"
+                    data-action="previewArea"
+                    data-school="{{../key}}"
+                    data-delivery="{{deliveryKey}}"
+                    title="Preview in window"><i class="fas fa-play"></i></button>
+                </div>
+                <div class="sfx-delivery-divider"></div>
+                <div class="sfx-file-input sfx-delivery-audio">
+                  <input type="text"
+                    name="deliverySounds.{{../key}}.{{deliveryKey}}.file"
+                    value="{{deliverySound}}" placeholder="sound…"/>
+                  <button type="button" class="sfx-browse-btn"
+                    data-action="browseAudio"
+                    data-field="deliverySounds.{{../key}}.{{deliveryKey}}.file"
+                    title="Browse audio"><i class="fas fa-music"></i></button>
+                  <button type="button" class="sfx-preview-btn"
+                    data-action="previewSound"
+                    data-field="deliverySounds.{{../key}}.{{deliveryKey}}.file"
+                    title="Preview sound"><i class="fas fa-play"></i></button>
+                </div>
+              </div>
+
+              {{! Row 2: scale mode + duration (dimensions auto-detected from video) }}
+              <div class="sfx-delivery-params">
+                <select name="areaAnims.{{../key}}.{{deliveryKey}}.scaleMode"
+                  class="sfx-scale-select">
+                  {{#each ../../scaleModes}}
+                  <option value="{{value}}" {{#if (eq value ../scaleMode)}}selected{{/if}}>
+                    {{label}}
+                  </option>
+                  {{/each}}
+                </select>
+                <label class="sfx-param">ms
                   <input type="number"
                     name="areaAnims.{{../key}}.{{deliveryKey}}.duration"
-                    value="{{duration}}" step="50" min="100" max="10000"
-                    class="sfx-num-input"/>
-                </td>
-                <td>
-                  <input type="number"
-                    name="areaAnims.{{../key}}.{{deliveryKey}}.scale"
-                    value="{{scale}}" step="0.05" min="0.05" max="10"
-                    placeholder="1" class="sfx-num-input"/>
-                </td>
-              </tr>
-              <tr class="sfx-template-row">
-                <td colspan="6">
-                  <div class="sfx-template-inner">
-                    <span class="sfx-template-label">Beam trim:</span>
-                    <label class="sfx-template-field">Grid
-                      <input type="number"
-                        name="areaAnims.{{../key}}.{{deliveryKey}}.template.gridSize"
-                        value="{{template.gridSize}}" class="sfx-tiny-input" placeholder="–" min="0"/>
-                    </label>
-                    <label class="sfx-template-field">Start
-                      <input type="number"
-                        name="areaAnims.{{../key}}.{{deliveryKey}}.template.startPoint"
-                        value="{{template.startPoint}}" class="sfx-tiny-input" placeholder="–" min="0"/>
-                    </label>
-                    <label class="sfx-template-field">End
-                      <input type="number"
-                        name="areaAnims.{{../key}}.{{deliveryKey}}.template.endPoint"
-                        value="{{template.endPoint}}" class="sfx-tiny-input" placeholder="–" min="0"/>
-                    </label>
-                    <span class="sfx-template-hint">px to trim from beam start/end (0 = disabled)</span>
-                  </div>
-                </td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
+                    value="{{duration}}" step="1" min="1"
+                    class="sfx-tiny-input sfx-dur-input"/>
+                </label>
+                <input type="hidden" name="areaAnims.{{../key}}.{{deliveryKey}}.nativeW" value="{{nativeW}}"/>
+                <input type="hidden" name="areaAnims.{{../key}}.{{deliveryKey}}.nativeH" value="{{nativeH}}"/>
+              </div>
+
+            </div>
+            {{/each}}
+          </div>
         </section>
 
       </div>{{! end sfx-panel-scroll }}
     </div>{{! end sfx-panel }}
     {{/each}}
+
     {{! Export / Import panel }}
     {{#if exportImportActive}}
     <div class="sfx-panel active" data-school="exportImport">

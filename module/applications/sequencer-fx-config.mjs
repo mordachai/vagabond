@@ -1,5 +1,6 @@
 import { SPELL_FX, getJB2ADefaults, loadJB2ADefaults } from '../helpers/sequencer-config.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
+import { VideoPreviewDialog } from './video-preview-dialog.mjs';
 
 const { api } = foundry.applications;
 
@@ -76,16 +77,18 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
         key,
         label: game.i18n.localize(labelKey),
         active: key === this.#activeSchool,
-        castAnim: merged.castAnims?.[key] ?? { file: '', scale: 1.5, duration: 600 },
+        castAnim: merged.castAnims?.[key] ?? { file: '', scale: 1.5, duration: 600, nativeW: 0, nativeH: 0 },
         sound: merged.sounds?.[key] ?? { cast: '', impact: '', volume: 0.6 },
         areaAnims: deliveryKeys.map(dk => {
-          const dtLabel = CONFIG.VAGABOND.deliveryTypes?.[dk] ?? dk;
+          const dtLabel  = CONFIG.VAGABOND.deliveryTypes?.[dk] ?? dk;
+          const animCfg  = merged.areaAnims?.[key]?.[dk] ?? { file: '', nativeW: 0, nativeH: 0, scaleMode: 'fixed', duration: 800 };
           return {
             deliveryKey: dk,
             deliveryLabel: typeof dtLabel === 'string' && dtLabel.startsWith('VAGABOND.')
               ? game.i18n.localize(dtLabel)
               : dtLabel,
-            ...(merged.areaAnims?.[key]?.[dk] ?? { file: '', nativePx: 200, scaleMode: 'fixed', duration: 800 }),
+            ...animCfg,
+            deliverySound: merged.deliverySounds?.[key]?.[dk]?.file ?? '',
           };
         }),
       }));
@@ -109,6 +112,23 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     await super._onRender(context, options);
     this.element.querySelector('#sfx-import-file')
       ?.addEventListener('change', e => SequencerFxConfig.#onImportFileSelected.call(this, e));
+
+    // Auto-populate duration + native dimensions when a video path is typed manually
+    this.element.querySelectorAll('input[name$=".file"]').forEach(input => {
+      input.addEventListener('change', async e => {
+        const path = e.target.value?.trim();
+        if (!path) return;
+        const meta = await SequencerFxConfig.#getVideoMetadata(path);
+        if (!meta) return;
+        const base = input.name.replace(/\.file$/, '');
+        const durInput = this.element.querySelector(`input[name="${base}.duration"]`);
+        const wInput   = this.element.querySelector(`input[name="${base}.nativeW"]`);
+        const hInput   = this.element.querySelector(`input[name="${base}.nativeH"]`);
+        if (durInput && meta.duration) durInput.value = meta.duration;
+        if (wInput) wInput.value = meta.nativeW;
+        if (hInput) hInput.value = meta.nativeH;
+      });
+    });
   }
 
   // ── Private actions ────────────────────────────────────────────────────────
@@ -126,7 +146,19 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     new FP({
       type: 'video',
       current: input?.value || '',
-      callback: path => { if (input) input.value = path; },
+      callback: async path => {
+        if (!input) return;
+        input.value = path;
+        const meta = await SequencerFxConfig.#getVideoMetadata(path);
+        if (!meta) return;
+        const base = fieldName.replace(/\.file$/, '');
+        const durInput = this.element.querySelector(`input[name="${base}.duration"]`);
+        const wInput   = this.element.querySelector(`input[name="${base}.nativeW"]`);
+        const hInput   = this.element.querySelector(`input[name="${base}.nativeH"]`);
+        if (durInput && meta.duration) durInput.value = meta.duration;
+        if (wInput) wInput.value = meta.nativeW;
+        if (hInput) hInput.value = meta.nativeH;
+      },
     }).browse();
   }
 
@@ -144,84 +176,17 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
 
   static #onPreviewCast(event, target) {
     const school = target.dataset.school;
-    const file     = this.element.querySelector(`input[name="castAnims.${school}.file"]`)?.value;
-    const scale    = parseFloat(this.element.querySelector(`input[name="castAnims.${school}.scale"]`)?.value) || 1.0;
-    const duration = parseInt(this.element.querySelector(`input[name="castAnims.${school}.duration"]`)?.value) || 600;
-    if (!SequencerFxConfig.#previewGuard(file)) return;
-    try {
-      new Sequence().effect().file(file).atLocation(SequencerFxConfig.#previewToken()).scale(scale).duration(duration).play();
-    } catch(err) { ui.notifications.error(err.message); }
+    const file   = this.element.querySelector(`input[name="castAnims.${school}.file"]`)?.value;
+    if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
+    VideoPreviewDialog.open(file);
   }
 
   static #onPreviewArea(event, target) {
-    const school    = target.dataset.school;
-    const delivery  = target.dataset.delivery;
-    const prefix    = `areaAnims.${school}.${delivery}`;
-    const file      = this.element.querySelector(`input[name="${prefix}.file"]`)?.value;
-    const nativePx  = parseFloat(this.element.querySelector(`input[name="${prefix}.nativePx"]`)?.value) || 200;
-    const scaleMode = this.element.querySelector(`select[name="${prefix}.scaleMode"]`)?.value || 'fixed';
-    const duration  = parseInt(this.element.querySelector(`input[name="${prefix}.duration"]`)?.value) || 800;
-    if (!SequencerFxConfig.#previewGuard(file)) return;
-
-    // For directional deliveries, use two controlled tokens (caster → direction target).
-    // Fall back to placeables if fewer than two are controlled.
-    const pool     = canvas.tokens.controlled.length >= 2
-      ? canvas.tokens.controlled
-      : canvas.tokens.placeables;
-    const caster   = pool[0];
-    const dirToken = pool[1] ?? caster;
-
-    // stretchTo rejects Token placeables in Foundry v13 — always use explicit {x,y}.
-    const center = t => ({ x: t.x + (t.w ?? 0) / 2, y: t.y + (t.h ?? 0) / 2 });
-
-    // Pseudo-cfg for _beamEffect (reads values from live form)
-    const tplGridSize   = parseInt(this.element.querySelector(`input[name="${prefix}.template.gridSize"]`)?.value)   || 0;
-    const tplStartPoint = parseInt(this.element.querySelector(`input[name="${prefix}.template.startPoint"]`)?.value) || 0;
-    const tplEndPoint   = parseInt(this.element.querySelector(`input[name="${prefix}.template.endPoint"]`)?.value)   || 0;
-    const beamCfg = {
-      file,
-      nativePx,
-      scaleMode,
-      scale: parseFloat(this.element.querySelector(`input[name="${prefix}.scale"]`)?.value) || 1,
-      duration,
-      ...(tplGridSize || tplStartPoint || tplEndPoint
-        ? { template: { gridSize: tplGridSize, startPoint: tplStartPoint, endPoint: tplEndPoint } }
-        : {}),
-    };
-
-    try {
-      const seq = new Sequence();
-      if (delivery === 'line') {
-        // Preview uses 20ft; direction toward dirToken (or east if same token).
-        const cCx = caster.x + (caster.w ?? 0) / 2;
-        const cCy = caster.y + (caster.h ?? 0) / 2;
-        const tCx = dirToken.x + (dirToken.w ?? 0) / 2;
-        const tCy = dirToken.y + (dirToken.h ?? 0) / 2;
-        const angle = (dirToken !== caster) ? Math.atan2(tCy - cCy, tCx - cCx) : 0;
-        const pxPerFt = canvas.grid.size / (canvas.grid.distance || 5);
-        const endpoint = { x: cCx + Math.cos(angle) * 20 * pxPerFt, y: cCy + Math.sin(angle) * 20 * pxPerFt };
-        VagabondSpellSequencer._beamEffect(seq, beamCfg, { x: cCx, y: cCy }, endpoint);
-      } else if (delivery === 'cone') {
-        const fx = seq.effect().file(file).atLocation(caster)
-          .rotate(-VagabondSpellSequencer._getConeDirection(caster, [dirToken]))
-          .anchor({ x: 0, y: 0.5 }).duration(duration);
-        VagabondSpellSequencer._applyAreaSize(fx, 20, beamCfg);
-      } else if (scaleMode === 'chain') {
-        const nodes = pool.slice(0, 3);
-        for (let i = 0; i < nodes.length - 1; i++) {
-          VagabondSpellSequencer._beamEffect(seq, beamCfg, center(nodes[i]), center(nodes[i + 1]))
-            .waitUntilFinished(-100);
-        }
-      } else if (scaleMode === 'multiray') {
-        for (const t of pool.slice(1)) {
-          VagabondSpellSequencer._beamEffect(seq, beamCfg, center(caster), center(t));
-        }
-      } else {
-        const fx = seq.effect().file(file).atLocation(caster).duration(duration);
-        VagabondSpellSequencer._applyAreaSize(fx, 20, beamCfg);
-      }
-      seq.play();
-    } catch(err) { ui.notifications.error(err.message); }
+    const school   = target.dataset.school;
+    const delivery = target.dataset.delivery;
+    const file     = this.element.querySelector(`input[name="areaAnims.${school}.${delivery}.file"]`)?.value;
+    if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
+    VideoPreviewDialog.open(file);
   }
 
   static #onPreviewSound(event, target) {
@@ -240,17 +205,9 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     }
   }
 
-  /** Returns the token to use for previews, or null with a warning. */
+  /** Returns the token to use for sound previews, or null. */
   static #previewToken() {
     return canvas.tokens.controlled[0] ?? canvas.tokens.placeables[0] ?? null;
-  }
-
-  /** Guards preview actions: checks file, Sequencer, and token. Returns true if OK. */
-  static #previewGuard(file) {
-    if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return false; }
-    if (!VagabondSpellSequencer.isAvailable()) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.Unavailable')); return false; }
-    if (!SequencerFxConfig.#previewToken()) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoToken')); return false; }
-    return true;
   }
 
   static #onExportConfig() {
@@ -339,16 +296,20 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
       : new foundry.applications.ux.FormDataExtended(this.element).object;
     const data = foundry.utils.expandObject(raw);
 
-    // Remove template objects where all fields are 0/empty (disabled)
-    for (const school of Object.values(data.areaAnims ?? {})) {
-      for (const entry of Object.values(school)) {
-        if (entry.template && !entry.template.gridSize && !entry.template.startPoint && !entry.template.endPoint) {
-          delete entry.template;
-        }
-      }
-    }
-
     await game.settings.set('vagabond', 'sequencerFxConfig', data);
     ui.notifications.info(game.i18n.localize('VAGABOND.SequencerFX.Saved'));
+  }
+
+  static #getVideoMetadata(src) {
+    return new Promise(resolve => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.onloadedmetadata = () => {
+        resolve({ duration: Math.round(video.duration * 1000), nativeW: video.videoWidth, nativeH: video.videoHeight });
+        video.src = '';
+      };
+      video.onerror = () => resolve(null);
+      video.src = src;
+    });
   }
 }

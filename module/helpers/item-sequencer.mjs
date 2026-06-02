@@ -123,7 +123,7 @@ export class VagabondItemSequencer {
     if (!file || (Array.isArray(file) && !file.length)) return;
 
     const animType = this._resolveAnimType(item);
-    const center  = t => ({ x: t.x + (t.w ?? 0) / 2, y: t.y + (t.h ?? 0) / 2 });
+    const center  = t => t.center ?? { x: t.x, y: t.y };
     const hitPos  = t => ({ x: center(t).x + offsetX,  y: center(t).y });
 
     try {

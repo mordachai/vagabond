@@ -121,11 +121,11 @@ export class VagabondSpellSequencer {
   }
 
   /**
-   * Apply size or scale to an area effect. Computes display dimensions in
-   * raw pixels (distanceFt × pxPerFt × cfg.scale multiplier) and calls
-   * .size({width, height}). Avoids Sequencer's .size({gridUnits:true}) form,
-   * which is broken in v14 for radius/diameter/length effects. 'fixed' mode
-   * keeps cfg.scale via .scale().
+   * Apply aspect-ratio-correct scale to an area effect.
+   * Computes a uniform scale factor so the animation fills the target footprint
+   * while preserving the asset's native ratio.
+   * 'fixed' mode plays at native size (no scale applied).
+   * Falls back to no-op when dimensions are not yet configured.
    * @param {EffectSection} fx
    * @param {number} distanceFt
    * @param {object} cfg
@@ -134,24 +134,28 @@ export class VagabondSpellSequencer {
    */
   static _applyAreaSize(fx, distanceFt, cfg) {
     const mode = cfg.scaleMode;
-    if (mode === 'fixed' || !distanceFt) return fx.scale(cfg.scale ?? 1);
-    const gridPx = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
-    const gridDist = canvas.dimensions?.distance || canvas.scene?.grid?.distance || 5;
-    const pxPerFt = gridPx / gridDist;
-    const mult = cfg.scale ?? 1; // per-effect tweak multiplier (texture padding etc.)
+    if (mode === 'fixed' || !distanceFt) return fx;
+
+    const nativeW = cfg.nativeW ?? 0;
+    const nativeH = cfg.nativeH ?? 0;
+    if (!nativeW || !nativeH) return fx;
+
+    // Sequencer's non-stretchTo path multiplies our scale by gridSizeDifference
+    // (canvas.grid.size / 100). Use the normalized density (100px default grid /
+    // system feet-per-square) so the multiplication cancels out correctly on any
+    // scene grid size.
+    const normPxPerFt = 100 / (game.system.grid?.distance ?? 5);
+
     if (mode === 'radius') {
-      const diameterPx = distanceFt * 2 * pxPerFt * mult;
-      return fx.size({ width: diameterPx, height: diameterPx });
+      return fx.scale((distanceFt * 2 * normPxPerFt) / Math.max(nativeW, nativeH));
     }
     if (mode === 'diameter') {
-      const sidePx = distanceFt * pxPerFt * mult;
-      return fx.size({ width: sidePx, height: sidePx });
+      return fx.scale((distanceFt * normPxPerFt) / Math.max(nativeW, nativeH));
     }
     if (mode === 'length') {
-      const lenPx = distanceFt * pxPerFt * mult;
-      return fx.size({ width: lenPx });
+      return fx.scale((distanceFt * normPxPerFt) / nativeW);
     }
-    return fx.scale(mult);
+    return fx;
   }
 
   /**
@@ -228,37 +232,26 @@ export class VagabondSpellSequencer {
   }
 
   /**
-   * Draw a fixed-thickness beam from srcPos to dstPos.
-   * Uses anchor+rotate+scale instead of stretchTo so Y (thickness) stays constant
-   * regardless of beam length. Falls back to stretchTo if nativePx is not set.
+   * Draw a beam from srcPos to dstPos using Sequencer's native stretchTo.
+   * stretchTo handles rotation, positioning, and aspect-ratio-correct scaling
+   * (scaleX = scaleY = dist / texture.width) without any manual intervention.
    * @param {Sequence} seq
-   * @param {object} cfg   - { file, nativePx, scale, duration }
+   * @param {object} cfg   - { file, duration }
    * @param {{x,y}} srcPos
    * @param {{x,y}} dstPos
    * @returns {EffectSection}
    * @private
    */
   static _beamEffect(seq, cfg, srcPos, dstPos) {
-    const dx = dstPos.x - srcPos.x;
-    const dy = dstPos.y - srcPos.y;
-    const dist = Math.hypot(dx, dy);
+    const dist = Math.hypot(dstPos.x - srcPos.x, dstPos.y - srcPos.y);
     if (!dist) return seq.effect().file(cfg.file).atLocation(srcPos).duration(cfg.duration);
 
-    // Y shrinks with distance^0.73, independent of nativePx (which only affects X via stretchTo).
-    // Floor at 3 grids so very short beams don't appear oversized.
-    // At 3 grids: ~46% of cfg.scale.  At 20 grids: ~11%.
-    const gridPx = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
-    const gridsAway = Math.max(3, dist / gridPx);
-    const scaleY = (cfg.scale ?? 1) / Math.pow(gridsAway, 0.73);
-
-    let fx = seq.effect()
+    const fx = seq.effect()
       .file(cfg.file)
       .atLocation(srcPos)
       .stretchTo(dstPos)
-      .scale({ y: scaleY })
       .duration(cfg.duration);
 
-    if (cfg.template) fx = fx.template(cfg.template);
     this._applyOpacity(fx, cfg);
     return fx;
   }
@@ -282,16 +275,32 @@ export class VagabondSpellSequencer {
     // ── Beam-mode patterns: fixed Y-scale, X scales with distance ────────────
     if (cfg.scaleMode === 'chain') {
       const nodes = [casterToken, ...targetTokens];
+      const chainSeq = new Sequence();
       for (let i = 0; i < nodes.length - 1; i++) {
-        this._beamEffect(seq, cfg, this._center(nodes[i]), this._center(nodes[i + 1]))
+        let fx = chainSeq.effect()
+          .file(cfg.file)
+          .attachTo(nodes[i])
+          .stretchTo(nodes[i + 1], { attachTo: true })
+          .duration(cfg.duration)
           .waitUntilFinished(-100);
+        this._applyOpacity(fx, cfg);
       }
+      chainSeq.play();
       return;
     }
     if (cfg.scaleMode === 'multiray') {
+      // Fresh sequence per the working Sequencer macro pattern — attachTo + stretchTo
+      // misbehaves when added to a sequence that already has waitUntilFinished effects.
+      const beamSeq = new Sequence();
       for (const target of targetTokens) {
-        this._beamEffect(seq, cfg, this._center(casterToken), this._center(target));
+        let fx = beamSeq.effect()
+          .file(cfg.file)
+          .attachTo(casterToken)
+          .stretchTo(target, { attachTo: true })
+          .duration(cfg.duration);
+        this._applyOpacity(fx, cfg);
       }
+      beamSeq.play();
       return;
     }
 
@@ -300,11 +309,14 @@ export class VagabondSpellSequencer {
         // attachTo: effect follows caster during duration; centers on token
         // regardless of token size. atLocation(tokenPlaceable) + .size(gridUnits)
         // misbehaves in Sequencer v14 (size collapses to token bounds).
+        // Aura radius is measured from the token border (adjacent square), so add
+        // 1 grid square so the animation covers the token itself + the N-foot extent.
+        const auraGridSizeFt = game.system.grid?.distance ?? 5;
         let fx = seq.effect()
           .file(cfg.file)
           .attachTo(casterToken, { align: 'center', edge: 'on' })
           .duration(cfg.duration);
-        this._applyAreaSize(fx, distanceFt, cfg);
+        this._applyAreaSize(fx, distanceFt + auraGridSizeFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
       }
@@ -339,9 +351,7 @@ export class VagabondSpellSequencer {
         if (lineCentroid) {
           lineAngle = Math.atan2(lineCentroid.y - srcCenter.y, lineCentroid.x - srcCenter.x);
         }
-        const gridPx = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
-        const gridDist = canvas.dimensions?.distance || canvas.scene?.grid?.distance || 5;
-        const pxPerFt = gridPx / gridDist;
+        const pxPerFt = canvas.grid.size / (game.system.grid?.distance ?? 5);
         const endpoint = {
           x: srcCenter.x + Math.cos(lineAngle) * distanceFt * pxPerFt,
           y: srcCenter.y + Math.sin(lineAngle) * distanceFt * pxPerFt,
@@ -375,17 +385,11 @@ export class VagabondSpellSequencer {
       case 'touch':
         // Beam from caster to each target, then impact at each target
         for (const target of targetTokens) {
-          let beam = seq.effect()
-            .file(cfg.file)
-            .atLocation(this._center(casterToken))
-            .stretchTo(this._center(target))
-            .duration(cfg.duration);
-          this._applyOpacity(beam, cfg);
+          this._beamEffect(seq, cfg, this._center(casterToken), this._center(target));
           let impact = seq.effect()
             .file(cfg.file)
             .atLocation(this._center(target))
             .duration(cfg.duration);
-          this._applyAreaSize(impact, distanceFt, cfg);
           this._applyOpacity(impact, cfg);
         }
         break;
@@ -435,11 +439,15 @@ export class VagabondSpellSequencer {
    * @param {number} increaseCount - Number of delivery increases
    * @param {Token|null} casterToken - The caster's token on the canvas
    * @param {Token[]} targetTokens - Array of targeted Token objects
+   * @param {object} [options]
+   * @param {boolean} [options.deliveryEnabled=true] - Whether to play the area anim and delivery
+   *   sound. Pass false on a failed spell roll; cast anim and cast sound always play regardless.
    */
-  static play(spellItem, deliveryType, increaseCount, casterToken, targetTokens) {
+  static play(spellItem, deliveryType, increaseCount, casterToken, targetTokens, options = {}) {
     if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
     if (!casterToken) return;
 
+    const { deliveryEnabled = true } = options;
     const school = this._resolveSchool(spellItem);
     const distanceFt = this._getTotalDistanceFt(deliveryType, increaseCount);
 
@@ -447,26 +455,35 @@ export class VagabondSpellSequencer {
       const cfg      = this._getConfig();
       const soundCfg = cfg.sounds?.[school];
       const castCfg  = cfg.castAnims?.[school];
-
-      // Cast sound plays immediately at cast time
-      if (soundCfg?.cast) {
-        foundry.audio.AudioHelper.play({ src: soundCfg.cast, volume: soundCfg.volume ?? 0.6, autoplay: true, loop: false });
-      }
+      const vol      = soundCfg?.volume ?? 0.6;
 
       const seq = new Sequence();
+
+      // Cast sound: plays immediately via Sequencer (respects Foundry's volume mixer).
+      if (soundCfg?.cast) {
+        seq.sound().file(soundCfg.cast).volume(vol).atLocation(casterToken);
+      }
+
+      // Delivery/impact sound: added with .delay() so it fires when the area anim starts.
+      // Per-delivery file overrides the school-wide impact sound for the active delivery.
+      if (deliveryType && deliveryEnabled) {
+        const deliveryFile = cfg.deliverySounds?.[school]?.[deliveryType]?.file || soundCfg?.impact;
+        if (deliveryFile) {
+          const castDelay = castCfg?.file ? Math.max(0, (castCfg.duration ?? 600) - 200) : 0;
+          const soundLoc  = this._centroid(targetTokens) ?? casterToken;
+          seq.sound().file(deliveryFile).volume(vol).atLocation(soundLoc).delay(castDelay);
+        }
+      }
+
+      // Cast animation (always plays; blocks next section via .waitUntilFinished(-200)).
       this._addCastAnim(seq, school, casterToken);
-      if (deliveryType) {
+
+      // Area animation (only on success).
+      if (deliveryType && deliveryEnabled) {
         this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens);
       }
-      seq.play();
 
-      // Impact sound plays after the cast anim phase ends (mirrors the -200ms waitUntilFinished offset)
-      if (deliveryType && soundCfg?.impact) {
-        const castDelay = castCfg?.file ? Math.max(0, (castCfg.duration ?? 600) - 200) : 0;
-        setTimeout(() => {
-          foundry.audio.AudioHelper.play({ src: soundCfg.impact, volume: soundCfg.volume ?? 0.6, autoplay: true, loop: false });
-        }, castDelay);
-      }
+      seq.play();
     } catch (err) {
       // Never crash the spell cast due to FX errors
       console.warn('Vagabond | SpellSequencer error (non-fatal):', err);

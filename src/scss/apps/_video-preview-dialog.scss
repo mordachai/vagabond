@@ -1,0 +1,43 @@
+.vagabond-video-preview {
+  .window-content { padding: 0; }
+
+  .vpd-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vpd-video-container {
+    background: #c8c8c8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    overflow: hidden;
+  }
+
+  .vpd-video {
+    max-width: 100%;
+    max-height: 480px;
+    display: block;
+  }
+
+  .vpd-footer {
+    display: flex;
+    justify-content: center;
+    padding: 0.35rem 0.5rem;
+    border-top: 1px solid var(--vagabond-c-faint);
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .vpd-loop-btn {
+    font-size: 0.82rem;
+    gap: 0.3rem;
+    padding: 0.2rem 0.7rem;
+
+    &.active {
+      background: rgba(34, 197, 94, 0.15);
+      color: #166534;
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+  }
+}

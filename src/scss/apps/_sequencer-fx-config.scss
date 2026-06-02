@@ -89,44 +89,89 @@
     flex-shrink: 0;
   }
 
-  // Area anims table
-  .sfx-area-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.8rem;
-
-    th {
-      text-align: left;
-      padding: 0.2rem 0.4rem;
-      border-bottom: 1px solid var(--vagabond-c-faint);
-      font-weight: bold;
-      color: var(--vagabond-c-text-dim);
-    }
-    td {
-      padding: 0.2rem 0.4rem;
-      vertical-align: middle;
-    }
-    tr:nth-child(even) td { background: var(--vagabond-c-surface-alt, rgba(0,0,0,0.04)); }
+  // Area animations — delivery block layout
+  .sfx-delivery-list {
+    display: flex;
+    flex-direction: column;
   }
 
-  .sfx-delivery-label { font-weight: 600; white-space: nowrap; }
-  .sfx-num-input { width: 70px; }
+  .sfx-delivery-block {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--vagabond-c-faint);
+    &:last-child { border-bottom: none; }
+  }
 
-  // Beam trim (template) sub-row
-  .sfx-template-row td { padding: 2px 4px 6px 4px; border-top: none; }
-  .sfx-template-inner {
+  // Row 1: name + video + divider + audio
+  .sfx-delivery-files {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .sfx-delivery-name {
+    width: 52px;
+    flex-shrink: 0;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--vagabond-c-text-dim);
+    white-space: nowrap;
+  }
+
+  .sfx-delivery-video { flex: 3 1 0; min-width: 0; }
+  .sfx-delivery-audio { flex: 2 1 0; min-width: 0; }
+
+  .sfx-delivery-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--vagabond-c-faint);
+    flex-shrink: 0;
+    margin: 0 0.15rem;
+  }
+
+  // Row 2: numeric params + inline beam trim
+  .sfx-delivery-params {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 0.35rem;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    padding-left: calc(52px + 0.3rem);
+    margin-top: 0.2rem;
     font-size: 0.78rem;
-    color: var(--vagabond-c-muted, #888);
   }
-  .sfx-template-label { font-weight: 600; }
-  .sfx-template-field { display: inline-flex; align-items: center; gap: 3px; }
-  .sfx-tiny-input { width: 52px; font-size: 0.78rem; padding: 1px 3px; }
-  .sfx-template-hint { font-style: italic; opacity: 0.7; }
+
+  .sfx-param {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--vagabond-c-text-dim);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .sfx-scale-select {
+    font-size: 0.78rem;
+    height: 22px;
+    padding: 0 0.25rem;
+    width: 160px;        // override Foundry's select { width: 100% }
+    flex-shrink: 0;
+  }
+
+  .sfx-tiny-input { width: 52px; font-size: 0.78rem; padding: 1px 3px; flex-shrink: 0; }
+  .sfx-dur-input  { width: 64px; }
+
+  .sfx-beam-trim {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    .sfx-trim-sep {
+      color: var(--vagabond-c-faint);
+      margin: 0 0.1rem;
+    }
+  }
+
+  .sfx-hidden { display: none !important; }
 
   // Nav separator
   .sfx-nav-sep {
