@@ -77,18 +77,16 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
         key,
         label: game.i18n.localize(labelKey),
         active: key === this.#activeSchool,
-        castAnim: merged.castAnims?.[key] ?? { file: '', scale: 1.5, duration: 600, nativeW: 0, nativeH: 0 },
-        sound: merged.sounds?.[key] ?? { cast: '', impact: '', volume: 0.6 },
+        castAnim: merged.castAnims?.[key] ?? { file: '', scale: 1.5, sound: '', volume: 0.6 },
         areaAnims: deliveryKeys.map(dk => {
           const dtLabel  = CONFIG.VAGABOND.deliveryTypes?.[dk] ?? dk;
-          const animCfg  = merged.areaAnims?.[key]?.[dk] ?? { file: '', nativeW: 0, nativeH: 0, scaleMode: 'fixed', duration: 800 };
+          const animCfg  = merged.areaAnims?.[key]?.[dk] ?? { file: '', scaleMode: 'fixed', sound: '' };
           return {
             deliveryKey: dk,
             deliveryLabel: typeof dtLabel === 'string' && dtLabel.startsWith('VAGABOND.')
               ? game.i18n.localize(dtLabel)
               : dtLabel,
             ...animCfg,
-            deliverySound: merged.deliverySounds?.[key]?.[dk]?.file ?? '',
           };
         }),
       }));
@@ -113,22 +111,6 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     this.element.querySelector('#sfx-import-file')
       ?.addEventListener('change', e => SequencerFxConfig.#onImportFileSelected.call(this, e));
 
-    // Auto-populate duration + native dimensions when a video path is typed manually
-    this.element.querySelectorAll('input[name$=".file"]').forEach(input => {
-      input.addEventListener('change', async e => {
-        const path = e.target.value?.trim();
-        if (!path) return;
-        const meta = await SequencerFxConfig.#getVideoMetadata(path);
-        if (!meta) return;
-        const base = input.name.replace(/\.file$/, '');
-        const durInput = this.element.querySelector(`input[name="${base}.duration"]`);
-        const wInput   = this.element.querySelector(`input[name="${base}.nativeW"]`);
-        const hInput   = this.element.querySelector(`input[name="${base}.nativeH"]`);
-        if (durInput && meta.duration) durInput.value = meta.duration;
-        if (wInput) wInput.value = meta.nativeW;
-        if (hInput) hInput.value = meta.nativeH;
-      });
-    });
   }
 
   // ── Private actions ────────────────────────────────────────────────────────
@@ -146,18 +128,9 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     new FP({
       type: 'video',
       current: input?.value || '',
-      callback: async path => {
+      callback: path => {
         if (!input) return;
         input.value = path;
-        const meta = await SequencerFxConfig.#getVideoMetadata(path);
-        if (!meta) return;
-        const base = fieldName.replace(/\.file$/, '');
-        const durInput = this.element.querySelector(`input[name="${base}.duration"]`);
-        const wInput   = this.element.querySelector(`input[name="${base}.nativeW"]`);
-        const hInput   = this.element.querySelector(`input[name="${base}.nativeH"]`);
-        if (durInput && meta.duration) durInput.value = meta.duration;
-        if (wInput) wInput.value = meta.nativeW;
-        if (hInput) hInput.value = meta.nativeH;
       },
     }).browse();
   }
@@ -191,23 +164,11 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
 
   static #onPreviewSound(event, target) {
     const fieldName = target.dataset.field;
-    const school    = fieldName.split('.')[1];
     const file      = this.element.querySelector(`input[name="${fieldName}"]`)?.value;
-    const volume    = parseFloat(this.element.querySelector(`input[name="sounds.${school}.volume"]`)?.value) || 0.6;
     if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
-    const token = SequencerFxConfig.#previewToken();
-    if (VagabondSpellSequencer.isAvailable() && token) {
-      try {
-        new Sequence().sound().file(file).volume(volume).atLocation(token).play();
-      } catch(err) { ui.notifications.error(err.message); }
-    } else {
-      foundry.audio.AudioHelper.play({ src: file, volume, autoplay: true, loop: false });
-    }
-  }
-
-  /** Returns the token to use for sound previews, or null. */
-  static #previewToken() {
-    return canvas.tokens.controlled[0] ?? canvas.tokens.placeables[0] ?? null;
+    const school = fieldName.split('.')[1];
+    const volume = parseFloat(this.element.querySelector(`input[name="castAnims.${school}.volume"]`)?.value) || 0.6;
+    foundry.audio.AudioHelper.play({ src: file, volume, loop: false });
   }
 
   static #onExportConfig() {
@@ -300,16 +261,4 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     ui.notifications.info(game.i18n.localize('VAGABOND.SequencerFX.Saved'));
   }
 
-  static #getVideoMetadata(src) {
-    return new Promise(resolve => {
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-      video.onloadedmetadata = () => {
-        resolve({ duration: Math.round(video.duration * 1000), nativeW: video.videoWidth, nativeH: video.videoHeight });
-        video.src = '';
-      };
-      video.onerror = () => resolve(null);
-      video.src = src;
-    });
-  }
 }

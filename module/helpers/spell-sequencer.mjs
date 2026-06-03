@@ -5,6 +5,9 @@
  */
 import { SPELL_FX, getJB2ADefaults } from './sequencer-config.mjs';
 
+// Video metadata cache — keyed by file path. Populated in play() before building the sequence.
+const _metaCache = new Map();
+
 // Maps damage types (from CONFIG) to FX schools.
 // Unmapped types fall back to 'arcane'.
 const AUTO_SCHOOL = {
@@ -136,8 +139,9 @@ export class VagabondSpellSequencer {
     const mode = cfg.scaleMode;
     if (mode === 'fixed' || !distanceFt) return fx;
 
-    const nativeW = cfg.nativeW ?? 0;
-    const nativeH = cfg.nativeH ?? 0;
+    const meta = this._getMeta(cfg.file);
+    const nativeW = meta?.w ?? cfg.nativeW ?? 0;
+    const nativeH = meta?.h ?? cfg.nativeH ?? 0;
     if (!nativeW || !nativeH) return fx;
 
     // Sequencer's non-stretchTo path multiplies our scale by gridSizeDifference
@@ -170,6 +174,66 @@ export class VagabondSpellSequencer {
   static _applyOpacity(fx, cfg) {
     if (cfg?.opacity != null) return fx.opacity(cfg.opacity);
     return fx;
+  }
+
+  /**
+   * Load and cache video metadata (dimensions + duration) for a real file path.
+   * Skips Sequencer database paths (no file extension) silently.
+   * @param {string} file
+   * @returns {Promise<void>}
+   * @private
+   */
+  static _warmMeta(file) {
+    if (!file || _metaCache.has(file)) return Promise.resolve();
+    if (!/\.\w{2,5}$/.test(file)) return Promise.resolve(); // Sequencer DB path, skip
+    return new Promise(resolve => {
+      const v = document.createElement('video');
+      v.addEventListener('loadedmetadata', () => {
+        _metaCache.set(file, { w: v.videoWidth, h: v.videoHeight, duration: Math.round(v.duration * 1000) });
+        v.src = '';
+        resolve();
+      }, { once: true });
+      v.addEventListener('error', () => resolve(), { once: true });
+      v.src = file;
+    });
+  }
+
+  /**
+   * Return cached video metadata for a file, or null if not yet loaded / unavailable.
+   * @param {string} file
+   * @returns {{ w: number, h: number, duration: number }|null}
+   * @private
+   */
+  static _getMeta(file) {
+    return _metaCache.get(file) ?? null;
+  }
+
+  /**
+   * Return the play duration (ms) for a cfg entry.
+   * Prefers video metadata; falls back to cfg.duration; falls back to 0 (natural length).
+   * @param {object} cfg
+   * @returns {number}
+   * @private
+   */
+  static _getDuration(cfg) {
+    const meta = this._getMeta(cfg.file);
+    if (meta?.duration) return meta.duration;
+    return cfg.duration ?? 0;
+  }
+
+  /**
+   * Pre-warm video metadata for every file currently configured.
+   * Called at ready time and whenever the sequencerFxConfig setting changes,
+   * so play() never needs to wait for metadata at cast time.
+   */
+  static warmConfigFiles() {
+    if (!this.isAvailable()) return;
+    const cfg = this._getConfig();
+    const files = new Set();
+    for (const entry of Object.values(cfg.castAnims ?? {})) if (entry.file) files.add(entry.file);
+    for (const school of Object.values(cfg.areaAnims ?? {}))
+      for (const entry of Object.values(school)) if (entry.file) files.add(entry.file);
+    for (const f of files) this._warmMeta(f);
   }
 
   /**
@@ -226,7 +290,7 @@ export class VagabondSpellSequencer {
       .file(cfg.file)
       .atLocation(casterToken)
       .scale(cfg.scale ?? 1.0)
-      .duration(cfg.duration ?? 600)
+      .duration(this._getDuration(cfg))
       .waitUntilFinished(-200); // slight overlap into area anim
     this._applyOpacity(fx, cfg);
   }
@@ -244,13 +308,13 @@ export class VagabondSpellSequencer {
    */
   static _beamEffect(seq, cfg, srcPos, dstPos) {
     const dist = Math.hypot(dstPos.x - srcPos.x, dstPos.y - srcPos.y);
-    if (!dist) return seq.effect().file(cfg.file).atLocation(srcPos).duration(cfg.duration);
+    if (!dist) return seq.effect().file(cfg.file).atLocation(srcPos).duration(this._getDuration(cfg));
 
     const fx = seq.effect()
       .file(cfg.file)
       .atLocation(srcPos)
       .stretchTo(dstPos)
-      .duration(cfg.duration);
+      .duration(this._getDuration(cfg));
 
     this._applyOpacity(fx, cfg);
     return fx;
@@ -281,7 +345,7 @@ export class VagabondSpellSequencer {
           .file(cfg.file)
           .attachTo(nodes[i])
           .stretchTo(nodes[i + 1], { attachTo: true })
-          .duration(cfg.duration)
+          .duration(this._getDuration(cfg))
           .waitUntilFinished(-100);
         this._applyOpacity(fx, cfg);
       }
@@ -297,7 +361,7 @@ export class VagabondSpellSequencer {
           .file(cfg.file)
           .attachTo(casterToken)
           .stretchTo(target, { attachTo: true })
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyOpacity(fx, cfg);
       }
       beamSeq.play();
@@ -315,7 +379,7 @@ export class VagabondSpellSequencer {
         let fx = seq.effect()
           .file(cfg.file)
           .attachTo(casterToken, { align: 'center', edge: 'on' })
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt + auraGridSizeFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
@@ -327,7 +391,7 @@ export class VagabondSpellSequencer {
           .atLocation(casterToken)
           .rotate(-this._getConeDirection(casterToken, targetTokens))
           .anchor({ x: 0, y: 0.5 })
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
@@ -338,7 +402,7 @@ export class VagabondSpellSequencer {
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(centroid)
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
@@ -365,7 +429,7 @@ export class VagabondSpellSequencer {
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(cubeCentroid)
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
@@ -376,7 +440,7 @@ export class VagabondSpellSequencer {
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(glyphCenter)
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
@@ -389,7 +453,7 @@ export class VagabondSpellSequencer {
           let impact = seq.effect()
             .file(cfg.file)
             .atLocation(this._center(target))
-            .duration(cfg.duration);
+            .duration(this._getDuration(cfg));
           this._applyOpacity(impact, cfg);
         }
         break;
@@ -400,7 +464,7 @@ export class VagabondSpellSequencer {
           let fx = seq.effect()
             .file(cfg.file)
             .atLocation(target)
-            .duration(cfg.duration);
+            .duration(this._getDuration(cfg));
           this._applyAreaSize(fx, distanceFt, cfg);
           this._applyOpacity(fx, cfg);
         }
@@ -412,7 +476,7 @@ export class VagabondSpellSequencer {
           let fx = seq.effect()
             .file(cfg.file)
             .atLocation(target)
-            .duration(cfg.duration);
+            .duration(this._getDuration(cfg));
           this._applyAreaSize(fx, distanceFt, cfg);
           this._applyOpacity(fx, cfg);
         }
@@ -423,7 +487,7 @@ export class VagabondSpellSequencer {
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(casterToken)
-          .duration(cfg.duration);
+          .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt, cfg);
         this._applyOpacity(fx, cfg);
         break;
@@ -452,26 +516,25 @@ export class VagabondSpellSequencer {
     const distanceFt = this._getTotalDistanceFt(deliveryType, increaseCount);
 
     try {
-      const cfg      = this._getConfig();
-      const soundCfg = cfg.sounds?.[school];
-      const castCfg  = cfg.castAnims?.[school];
-      const vol      = soundCfg?.volume ?? 0.6;
+      const cfg     = this._getConfig();
+      const castCfg = cfg.castAnims?.[school];
+      const areaCfg = cfg.areaAnims?.[school]?.[deliveryType];
+      const vol     = castCfg?.volume ?? 0.6;
 
       const seq = new Sequence();
 
-      // Cast sound: plays immediately via Sequencer (respects Foundry's volume mixer).
-      if (soundCfg?.cast) {
-        seq.sound().file(soundCfg.cast).volume(vol).atLocation(casterToken);
+      // Cast sound: plays immediately via AudioHelper.
+      if (castCfg?.sound) {
+        foundry.audio.AudioHelper.play({ src: castCfg.sound, volume: vol, loop: false });
       }
 
-      // Delivery/impact sound: added with .delay() so it fires when the area anim starts.
-      // Per-delivery file overrides the school-wide impact sound for the active delivery.
-      if (deliveryType && deliveryEnabled) {
-        const deliveryFile = cfg.deliverySounds?.[school]?.[deliveryType]?.file || soundCfg?.impact;
-        if (deliveryFile) {
-          const castDelay = castCfg?.file ? Math.max(0, (castCfg.duration ?? 600) - 200) : 0;
-          const soundLoc  = this._centroid(targetTokens) ?? casterToken;
-          seq.sound().file(deliveryFile).volume(vol).atLocation(soundLoc).delay(castDelay);
+      // Delivery sound: fires after the cast animation finishes.
+      if (deliveryType && deliveryEnabled && areaCfg?.sound) {
+        const castDelay = castCfg?.file ? Math.max(0, this._getDuration(castCfg) - 200) : 0;
+        if (castDelay > 0) {
+          setTimeout(() => foundry.audio.AudioHelper.play({ src: areaCfg.sound, volume: vol, loop: false }), castDelay);
+        } else {
+          foundry.audio.AudioHelper.play({ src: areaCfg.sound, volume: vol, loop: false });
         }
       }
 

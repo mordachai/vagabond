@@ -51,7 +51,7 @@
           <h3>Cast Animation</h3>
           <div class="sfx-cast-row">
             <div class="form-group sfx-file-group">
-              <label>File</label>
+              <label>Video</label>
               <div class="sfx-file-input">
                 <input type="text" name="castAnims.{{key}}.file"
                   value="{{castAnim.file}}" placeholder="path/to/cast.webm"/>
@@ -65,55 +65,28 @@
                   title="Preview in window"><i class="fas fa-play"></i></button>
               </div>
             </div>
+            <div class="form-group sfx-file-group">
+              <label>Sound</label>
+              <div class="sfx-file-input">
+                <input type="text" name="castAnims.{{key}}.sound"
+                  value="{{castAnim.sound}}" placeholder="path/to/cast.ogg"/>
+                <button type="button" class="sfx-browse-btn"
+                  data-action="browseAudio" data-field="castAnims.{{key}}.sound"
+                  title="Browse"><i class="fas fa-music"></i></button>
+                <button type="button" class="sfx-preview-btn"
+                  data-action="previewSound" data-field="castAnims.{{key}}.sound"
+                  title="Preview sound"><i class="fas fa-play"></i></button>
+              </div>
+            </div>
             <div class="form-group sfx-num-group">
               <label>Scale</label>
               <input type="number" name="castAnims.{{key}}.scale"
                 value="{{castAnim.scale}}" step="0.1" min="0.1" max="10"/>
             </div>
             <div class="form-group sfx-num-group">
-              <label>Duration (ms)</label>
-              <input type="number" name="castAnims.{{key}}.duration"
-                value="{{castAnim.duration}}" step="1" min="1"/>
-            </div>
-          </div>
-          <input type="hidden" name="castAnims.{{key}}.nativeW" value="{{castAnim.nativeW}}"/>
-          <input type="hidden" name="castAnims.{{key}}.nativeH" value="{{castAnim.nativeH}}"/>
-        </section>
-
-        {{! Sound }}
-        <section class="sfx-section">
-          <h3>Sound</h3>
-          <div class="sfx-sound-row">
-            <div class="form-group sfx-file-group">
-              <label>Cast Sound</label>
-              <div class="sfx-file-input">
-                <input type="text" name="sounds.{{key}}.cast"
-                  value="{{sound.cast}}" placeholder="path/to/cast.ogg"/>
-                <button type="button" class="sfx-browse-btn"
-                  data-action="browseAudio" data-field="sounds.{{key}}.cast"
-                  title="Browse"><i class="fas fa-music"></i></button>
-                <button type="button" class="sfx-preview-btn"
-                  data-action="previewSound" data-field="sounds.{{key}}.cast"
-                  title="Preview sound"><i class="fas fa-play"></i></button>
-              </div>
-            </div>
-            <div class="form-group sfx-file-group">
-              <label>Impact Sound</label>
-              <div class="sfx-file-input">
-                <input type="text" name="sounds.{{key}}.impact"
-                  value="{{sound.impact}}" placeholder="path/to/impact.ogg"/>
-                <button type="button" class="sfx-browse-btn"
-                  data-action="browseAudio" data-field="sounds.{{key}}.impact"
-                  title="Browse"><i class="fas fa-music"></i></button>
-                <button type="button" class="sfx-preview-btn"
-                  data-action="previewSound" data-field="sounds.{{key}}.impact"
-                  title="Preview sound"><i class="fas fa-play"></i></button>
-              </div>
-            </div>
-            <div class="form-group sfx-num-group">
               <label>Volume</label>
-              <input type="number" name="sounds.{{key}}.volume"
-                value="{{sound.volume}}" step="0.05" min="0" max="1"/>
+              <input type="number" name="castAnims.{{key}}.volume"
+                value="{{castAnim.volume}}" step="0.05" min="0" max="1"/>
             </div>
           </div>
         </section>
@@ -145,20 +118,20 @@
                 <div class="sfx-delivery-divider"></div>
                 <div class="sfx-file-input sfx-delivery-audio">
                   <input type="text"
-                    name="deliverySounds.{{../key}}.{{deliveryKey}}.file"
-                    value="{{deliverySound}}" placeholder="sound…"/>
+                    name="areaAnims.{{../key}}.{{deliveryKey}}.sound"
+                    value="{{sound}}" placeholder="sound…"/>
                   <button type="button" class="sfx-browse-btn"
                     data-action="browseAudio"
-                    data-field="deliverySounds.{{../key}}.{{deliveryKey}}.file"
+                    data-field="areaAnims.{{../key}}.{{deliveryKey}}.sound"
                     title="Browse audio"><i class="fas fa-music"></i></button>
                   <button type="button" class="sfx-preview-btn"
                     data-action="previewSound"
-                    data-field="deliverySounds.{{../key}}.{{deliveryKey}}.file"
+                    data-field="areaAnims.{{../key}}.{{deliveryKey}}.sound"
                     title="Preview sound"><i class="fas fa-play"></i></button>
                 </div>
               </div>
 
-              {{! Row 2: scale mode + duration (dimensions auto-detected from video) }}
+              {{! Row 2: scale mode }}
               <div class="sfx-delivery-params">
                 <select name="areaAnims.{{../key}}.{{deliveryKey}}.scaleMode"
                   class="sfx-scale-select">
@@ -168,14 +141,6 @@
                   </option>
                   {{/each}}
                 </select>
-                <label class="sfx-param">ms
-                  <input type="number"
-                    name="areaAnims.{{../key}}.{{deliveryKey}}.duration"
-                    value="{{duration}}" step="1" min="1"
-                    class="sfx-tiny-input sfx-dur-input"/>
-                </label>
-                <input type="hidden" name="areaAnims.{{../key}}.{{deliveryKey}}.nativeW" value="{{nativeW}}"/>
-                <input type="hidden" name="areaAnims.{{../key}}.{{deliveryKey}}.nativeH" value="{{nativeH}}"/>
               </div>
 
             </div>

@@ -600,6 +600,7 @@ function registerGameSettings() {
     type: Object,
     default: {},
     requiresReload: false,
+    onChange: () => VagabondSpellSequencer.warmConfigFiles(),
   });
 
   // Setting 21b: Sequencer FX Config menu button
@@ -1084,6 +1085,7 @@ Hooks.once('ready', function () {
   if (VagabondSpellSequencer.isAvailable() && VagabondSpellSequencer.isJB2AAvailable()) {
     loadJB2ADefaults();
   }
+  VagabondSpellSequencer.warmConfigFiles();
 });
 
 // Register Dice So Nice colorsets when Dice So Nice is ready
