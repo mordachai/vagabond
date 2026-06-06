@@ -229,17 +229,20 @@ export class PerksStepManager extends BaseStepManager {
           const allowedPerks = trait.allowedPerks || [];
 
           if (amount > 0) {
+            // Guaranteed only when the feature grants at least as many perks
+            // as the pool has options. A choice pool (amount < pool size) stays
+            // restricted to the pool but unfulfilled so the player picks.
+            const isGuaranteed = allowedPerks.length > 0 && amount >= allowedPerks.length;
             // Create one grant entry per amount
             for (let i = 0; i < amount; i++) {
-              const slotIsPredetermined = allowedPerks.length > 0 && i < allowedPerks.length;
               grants.push({
                 id: `ancestry-${trait.name}-${i}`,
                 source: 'ancestry',
                 sourceName: ancestry.name,
                 featureName: trait.name,
-                allowedPerks: slotIsPredetermined ? allowedPerks : [],
-                isGuaranteed: slotIsPredetermined,
-                fulfilled: slotIsPredetermined ? allowedPerks[i] : null
+                allowedPerks: allowedPerks,
+                isGuaranteed: isGuaranteed,
+                fulfilled: isGuaranteed ? (allowedPerks[i] ?? null) : null
               });
             }
           }
@@ -260,17 +263,20 @@ export class PerksStepManager extends BaseStepManager {
           const allowedPerks = feature.allowedPerks || [];
 
           if (amount > 0) {
+            // Guaranteed only when the feature grants at least as many perks
+            // as the pool has options. A choice pool (amount < pool size) stays
+            // restricted to the pool but unfulfilled so the player picks.
+            const isGuaranteed = allowedPerks.length > 0 && amount >= allowedPerks.length;
             // Create one grant entry per amount
             for (let i = 0; i < amount; i++) {
-              const slotIsPredetermined = allowedPerks.length > 0 && i < allowedPerks.length;
               grants.push({
                 id: `class-${feature.name}-${i}`,
                 source: 'class',
                 sourceName: classItem.name,
                 featureName: feature.name,
-                allowedPerks: slotIsPredetermined ? allowedPerks : [],
-                isGuaranteed: slotIsPredetermined,
-                fulfilled: slotIsPredetermined ? allowedPerks[i] : null
+                allowedPerks: allowedPerks,
+                isGuaranteed: isGuaranteed,
+                fulfilled: isGuaranteed ? (allowedPerks[i] ?? null) : null
               });
             }
           }
