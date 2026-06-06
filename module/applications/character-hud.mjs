@@ -926,10 +926,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   /*  Persistent quick-slot storage (per user)    */
   /* -------------------------------------------- */
 
-  /** Saved slot map for this actor, or null when never initialized. */
+  /**
+   * Saved slot map for this actor, or null when never initialized.
+   * Stored on the ACTOR (not the user) so the quick slots are shared — the GM
+   * and the player who owns the character see the exact same layout.
+   */
   _getSlots() {
-    const all = game.user.getFlag('vagabond', 'hudSlots') ?? {};
-    return all[this.actor.id] ?? null;
+    return this.actor.getFlag('vagabond', 'hudSlots') ?? null;
   }
 
   /** Normalized slot map (never null; both arrays padded to their counts). */
@@ -942,9 +945,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   async _saveSlots(slots) {
-    const all = foundry.utils.deepClone(game.user.getFlag('vagabond', 'hudSlots') ?? {});
-    all[this.actor.id] = slots;
-    await game.user.setFlag('vagabond', 'hudSlots', all);
+    // Shared layout: persist on the actor, not the user. Only owners (GM + the
+    // assigned player) can write, which matches who can open this HUD anyway.
+    if (!this.actor.isOwner) return;
+    await this.actor.setFlag('vagabond', 'hudSlots', slots);
   }
 
   /** "Remove from HUD": drop an item id out of every slot, leaving it empty. */
