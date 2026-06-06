@@ -39,6 +39,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   /** Actor id of the single selection-driven (auto-opened) HUD, or null. */
   static #autoOpenedActorId = null;
 
+  /** Actor id of the pinned (always-on) main-character HUD, or null. */
+  static #pinnedActorId = null;
+
   /**
    * Minimum ownership a user needs over a token for it to auto-open its HUD.
    * Flip to `OBSERVER` to let observers (e.g. GM-shared tokens) auto-open too.
@@ -55,9 +58,18 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     }
   }
 
+  /** Re-evaluate idle-fade wiring on every open PC HUD (settings changed). */
+  static refreshIdleFade() {
+    for (const hud of VagabondCharacterHud.#instances.values()) {
+      if (hud.rendered) hud._applyIdleFade();
+    }
+  }
+
   #hookIds = [];
   #ctrl = null;
   #redrawTimer = null;
+  #idleTimer = null;
+  #idleCtrl = null;
   /**
    * Currently open panel tab, or null when the panel is closed.
    * Not a `#private` field: it's mutated by the `static _onOpenTab` action
@@ -203,10 +215,36 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       && actor.testUserPermission(game.user, this.AUTO_OPEN_MIN_OWNERSHIP);
 
     if (!eligible) { this.#closeAuto(); return; }
+    // The pinned (always-on) HUD is already open and must never be tagged as the
+    // auto HUD — otherwise deselecting its token would close it.
+    if (actor.id === this.#pinnedActorId) { this.#closeAuto(); return; }
     if (actor.id === this.#autoOpenedActorId) return; // already showing it
 
     this.#closeAuto();                // drop the previous selection HUD
     this.open(actor, { auto: true }); // open the new one
+  }
+
+  /**
+   * Open/close the pinned "always on screen" HUD for the user's assigned main
+   * character. No-op (and closes any prior pinned HUD) when the setting is off
+   * or the user has no main character. Called on `ready`, on the setting's
+   * `onChange`, and whenever the user's assigned character changes.
+   */
+  static syncAlwaysOn() {
+    const on = game.settings.get('vagabond', 'hudAlwaysOnForMainChar');
+    const actor = game.user.character;
+    const eligible = on && actor && actor.type === 'character';
+
+    // Tear down a stale pin (setting toggled off, or character reassigned).
+    if (this.#pinnedActorId && (!eligible || actor.id !== this.#pinnedActorId)) {
+      const prev = this.#instances.get(this.#pinnedActorId);
+      this.#pinnedActorId = null;
+      if (prev?.rendered) prev.close();
+    }
+
+    if (!eligible) return;
+    this.#pinnedActorId = actor.id;
+    this.open(actor); // not { auto } — selection changes must not close it
   }
 
   /** Close the current selection-driven HUD, if any. */
@@ -547,6 +585,67 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       body.addEventListener('dragleave', (e) => { if (e.target === body) body.classList.remove('drag-over'); }, { signal });
       body.addEventListener('drop', (e) => this._onHudDrop(e, body), { signal });
     }
+
+    // Idle fade (wires its own AbortController so it can be re-evaluated live
+    // when the setting changes without a full re-render).
+    this._applyIdleFade();
+  }
+
+  /* -------------------------------------------- */
+  /*  Idle fade (dim after mouse leaves)          */
+  /* -------------------------------------------- */
+
+  /** Current idle-fade prefs, normalized. */
+  _idlePrefs() {
+    const p = game.settings.get('vagabond', 'hudIdleFadePrefs') ?? {};
+    return {
+      enabled: !!p.enabled,
+      delayMs: Math.max(1, Number(p.delay) || 10) * 1000,
+      opacity: Math.min(0.95, Math.max(0.05, Number(p.opacity) || 0.2)),
+    };
+  }
+
+  /**
+   * (Re)wire idle-fade listeners from the current setting. Tears down any prior
+   * wiring first, so it is safe to call on every render and on live setting
+   * changes. When disabled, restores full opacity and stops.
+   */
+  _applyIdleFade() {
+    this.#idleCtrl?.abort();
+    this.#idleCtrl = null;
+    clearTimeout(this.#idleTimer);
+    if (!this.element) return;
+
+    const { enabled } = this._idlePrefs();
+    if (!enabled) { this.element.style.opacity = ''; return; }
+
+    this.#idleCtrl = new AbortController();
+    const { signal } = this.#idleCtrl;
+    this.element.addEventListener('mouseenter', () => this._wakeHud(), { signal });
+    this.element.addEventListener('mouseleave', () => this._scheduleIdleFade(), { signal });
+
+    // Start in the awake state, then arm the timer so it fades if the pointer
+    // is not over the HUD. If the pointer is already inside, the browser fires
+    // no mouseenter; the timer simply expires and re-fades — harmless, the next
+    // move/enter wakes it.
+    this._wakeHud();
+    this._scheduleIdleFade();
+  }
+
+  /** Full opacity now; cancel any pending fade. */
+  _wakeHud() {
+    clearTimeout(this.#idleTimer);
+    if (this.element) this.element.style.opacity = '1';
+  }
+
+  /** Arm the fade timer. Suspended while a tab panel is open (actively in use). */
+  _scheduleIdleFade() {
+    clearTimeout(this.#idleTimer);
+    if (this._activeTab) return; // reading an in-HUD menu — never fade
+    const { delayMs, opacity } = this._idlePrefs();
+    this.#idleTimer = setTimeout(() => {
+      if (this.element) this.element.style.opacity = String(opacity);
+    }, delayMs);
   }
 
   /* -------------------------------------------- */
@@ -681,10 +780,18 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   async close(options = {}) {
     this.#ctrl?.abort();
     this.#ctrl = null;
+    this.#idleCtrl?.abort();
+    this.#idleCtrl = null;
     clearTimeout(this.#redrawTimer);
+    clearTimeout(this.#idleTimer);
     this._clearHooks();
     if (VagabondCharacterHud.#autoOpenedActorId === this.actor.id) {
       VagabondCharacterHud.#autoOpenedActorId = null;
+    }
+    // Manual close of a pinned HUD honors the user's intent — drop the pin so it
+    // does not immediately reopen (re-enable via the setting toggle / reload).
+    if (VagabondCharacterHud.#pinnedActorId === this.actor.id) {
+      VagabondCharacterHud.#pinnedActorId = null;
     }
     VagabondCharacterHud.#instances.delete(this.actor.id);
     // Skip ApplicationV2's built-in close fade — the HUD should vanish instantly.

@@ -2,6 +2,47 @@
   <section class="scrollable">
     <p class="notes">{{localize 'VAGABOND.Settings.hudDisplayConfig.intro'}}</p>
 
+    {{!-- ── Always on screen ───────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.Settings.hudDisplayConfig.sectionAlwaysOn'}}</legend>
+
+      <div class="form-group">
+        <label for="alwaysOn">
+          <input type="checkbox" name="alwaysOn" id="alwaysOn" {{checked alwaysOn}} {{#unless hasMainChar}}disabled{{/unless}}>
+          {{localize 'VAGABOND.Settings.hudDisplayConfig.alwaysOn'}}
+        </label>
+        {{#if hasMainChar}}
+          <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.alwaysOnHint'}} <strong>{{mainCharName}}</strong>.</p>
+        {{else}}
+          <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.alwaysOnNoChar'}}</p>
+        {{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="idleEnabled">
+          <input type="checkbox" name="idleEnabled" id="idleEnabled" {{checked idleFade.enabled}}>
+          {{localize 'VAGABOND.Settings.hudDisplayConfig.idleFade'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.idleFadeHint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="idleDelay">{{localize 'VAGABOND.Settings.hudDisplayConfig.idleDelay'}}</label>
+        <div class="vbd-hdc-scale-row">
+          <input type="range" name="idleDelay" id="idleDelay" value="{{idleFade.delay}}" min="2" max="60" step="1">
+          <span class="vbd-hdc-idle-delay-val">{{idleFade.delay}}s</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="idleOpacity">{{localize 'VAGABOND.Settings.hudDisplayConfig.idleOpacity'}}</label>
+        <div class="vbd-hdc-scale-row">
+          <input type="range" name="idleOpacity" id="idleOpacity" value="{{idleFade.opacity}}" min="0.05" max="0.9" step="0.05">
+          <span class="vbd-hdc-idle-opacity-val">{{idleOpacityPct}}</span>
+        </div>
+      </div>
+    </fieldset>
+
     {{!-- ── Background ──────────────────────────────────────────────────────── --}}
     <fieldset>
       <legend>{{localize 'VAGABOND.Settings.hudDisplayConfig.sectionBackground'}}</legend>

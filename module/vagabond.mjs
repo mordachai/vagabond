@@ -593,6 +593,30 @@ function registerGameSettings() {
     default: true,
   });
 
+  // Keep the Character HUD permanently on screen for the user's assigned main
+  // character (User Configuration → "Selected Character"). No-op when the user
+  // has no main character set. The pinned HUD ignores token selection.
+  game.settings.register('vagabond', 'hudAlwaysOnForMainChar', {
+    scope: 'client',
+    config: false, // surfaced inside the HUD Display config dialog, not the core list
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+    onChange: () => VagabondCharacterHud.syncAlwaysOn(),
+  });
+
+  // Idle fade: dim the Character HUD after the mouse leaves it for `delay`
+  // seconds, restoring full opacity on re-entry. Surfaced in the HUD Display
+  // config dialog (Always On Screen section), not the core list.
+  game.settings.register('vagabond', 'hudIdleFadePrefs', {
+    scope: 'client',
+    config: false,
+    type: Object,
+    default: { enabled: false, delay: 10, opacity: 0.2 },
+    requiresReload: false,
+    onChange: () => VagabondCharacterHud.refreshIdleFade(),
+  });
+
   // Setting 21: Sequencer FX animation config (hidden data store)
   game.settings.register('vagabond', 'sequencerFxConfig', {
     scope: 'world',
@@ -1351,6 +1375,14 @@ const _hudSyncSelection = foundry.utils.debounce(
   50,
 );
 Hooks.on('controlToken', () => _hudSyncSelection());
+
+// Pinned HUD: keep the main character's HUD on screen for the whole session
+// when the per-user "always on" setting is enabled.
+Hooks.once('ready', () => VagabondCharacterHud.syncAlwaysOn());
+// Re-evaluate if the user's assigned character changes mid-session.
+Hooks.on('updateUser', (user) => {
+  if (user.id === game.user.id) VagabondCharacterHud.syncAlwaysOn();
+});
 
 /**
  * Refresh clock when journals are updated
