@@ -1,0 +1,55 @@
+{
+  "name": "Voidedge",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Haste:</span><span class=\"fontstyle0\"> (1/Day) For 1 minute, the Wielder's Speed is doubled, they gain Favor on Reflex Saves, and can take a second Action each Round.</span></li><li><span class=\"fontstyle2\">Lifesteal:</span><span class=\"fontstyle0\"> Killing a foe with it heals the Wielder for 4 (d8) HP. If the slain foe is an Artificial or Undead Being, it instead deals 4 (d8) damage to the Wielder.</span></li><li><span class=\"fontstyle2\">Resolve:</span><span class=\"fontstyle0\"> The Wielder is Immune to Charmed and Frightened.</span></li><li><span class=\"fontstyle2\">Sense Life:</span><span class=\"fontstyle0\"> Detects Small and larger living Beings within Far.</span></li><li><span class=\"fontstyle2\">Soul Eater:</span><span class=\"fontstyle0\"> It devours the soul of foes it slays. Those who have their soul eaten can't be resurrected unless a wish is granted to do so.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Relic Greatsword (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087603283,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "GIAEgPK6cZ78NpGj",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 1000000,
+  "_key": "!items!GIAEgPK6cZ78NpGj"
+}

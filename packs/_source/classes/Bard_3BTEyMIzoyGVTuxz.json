@@ -1,0 +1,186 @@
+{
+  "name": "Bard",
+  "type": "class",
+  "img": "icons/tools/instruments/harp-yellow-teal.webp",
+  "system": {
+    "description": "<p><strong>Bards were terrible at keeping secrets. They insisted on putting them to music.</strong></p><p><em>– Tanya Huff, Sing the Four Quarters</em></p><p>Heralds of the awe-inspiring beauty of creation. While the painter and sculptor decorate space, a Bard decorates time.</p><h3>Iconic Bards</h3><ul><li><strong>Edward Chris von Muir</strong>, <em>Final Fantasy IV</em></li><li><strong>Jaskier</strong>, <em>The Witcher series</em></li><li><strong>Kvothe</strong>, <em>The Kingkiller Chronicles</em></li><li><strong>Sylvando</strong>, <em>Dragon Quest 11</em></li></ul><h3>Playing Bards</h3><p>The bard is a low/mid-defense, high support class with a focus on optimizing your Group's d20 rolls. It's recommended that you avoid melee on most Bard builds.</p><p><strong>Action:</strong> Virtuoso<br /><strong>Move:</strong> Midline/Backline<br /><strong>Starting Pack:</strong> Musician<br /><strong>Key Stat:</strong> Presence<br /><strong>Complexity:</strong> ★★☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Performance and 4 others</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Virtuoso, Well-Versed</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Song of Rest</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Starstruck</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Bravado</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Climax</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Starstruck Enhancement</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Virtuoso",
+        "description": "<p>You can use your Action or skip your Move to make a Performance Check. If you pass, your Group gains one of the following benefits of your choice for that Round:</p><ul><li><p><strong>Inspiration:</strong> d6 bonus to Healing rolls</p></li><li><p><strong>Resolve:</strong> Favor on Saves</p></li><li><p><strong>Valor:</strong> Favor on Attack and Cast Checks</p></li></ul>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 1,
+        "name": "Well-Versed",
+        "description": "<p><span class=\"fontstyle0\">You ignore Prerequisites for Perks, and gain a Perk of your choice.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 2,
+        "name": "Song of Rest",
+        "description": "<p><span class=\"fontstyle0\">During a Breather while you aren't Incapacitated, you and your Allies gain a Studied die and regain additional HP equal to (your Presence + your Bard Level) .</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 4,
+        "name": "Starstruck",
+        "description": "<p><span class=\"fontstyle0\">When you perform Virtuoso, you can choose a Near Enemy who hears the performance and make a Performance Check. If you pass, you can choose one of the following Statuses that affects it for Cd4 Rounds: Berserk, Charmed, Confused, Frightened.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Bravado",
+        "description": "<p><span class=\"fontstyle0\">Your Will Saves can't be Hindered while you aren't Incapacitated, and you can ignore effects that rely on you hearing them to be affected (such as a banshee's scream).</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 8,
+        "name": "Climax",
+        "description": "<p><span class=\"fontstyle0\">Favor and bonus dice you grant can Explode.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Starstruck Enhancement",
+        "description": "<p><span class=\"fontstyle0\">Your Starstruck Feature can now affect all Near Enemies.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "choices": [
+        {
+          "count": 4,
+          "pool": [],
+          "label": ""
+        }
+      ],
+      "guaranteed": [
+        "performance"
+      ]
+    },
+    "levelSpells": [],
+    "keyStats": [
+      "presence"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.2nNcbg2WCi5XPKUC"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "5.1.0",
+    "createdTime": 1774207549093,
+    "modifiedTime": 1774207549093,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "3BTEyMIzoyGVTuxz",
+  "sort": 0,
+  "_key": "!items!3BTEyMIzoyGVTuxz"
+}

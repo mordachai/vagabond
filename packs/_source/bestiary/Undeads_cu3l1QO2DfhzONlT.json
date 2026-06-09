@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Undeads",
+  "color": null,
+  "sorting": "a",
+  "_id": "cu3l1QO2DfhzONlT",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.15",
+    "createdTime": 1765452190503,
+    "modifiedTime": 1765458773725,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!folders!cu3l1QO2DfhzONlT"
+}

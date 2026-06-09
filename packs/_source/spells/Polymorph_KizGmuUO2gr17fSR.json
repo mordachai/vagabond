@@ -1,0 +1,35 @@
+{
+  "name": "Polymorph",
+  "type": "spell",
+  "img": "icons/magic/unholy/hand-fire-skeleton-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target becomes a Beast of your choice with HD no higher than your Level for the duration. If the Target is unwilling and its HD are higher than your Level, the Spell fails. During this time, the Target uses:</span></p><ul><li><span class=\"fontstyle0\">The Beast's Speed, Passives, Senses, Armor, Immune, Weak, Actions, and Abilities.</span></li><li><span class=\"fontstyle0\">The Target's HP and, if possible, its Actions and Abilities.</span></li></ul><p><span class=\"fontstyle0\">You must spend 1 Mana on your Turns to Focus on this Spell, even for willing Targets.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "arcane",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "KizGmuUO2gr17fSR",
+  "sort": 1900000,
+  "_key": "!items!KizGmuUO2gr17fSR"
+}

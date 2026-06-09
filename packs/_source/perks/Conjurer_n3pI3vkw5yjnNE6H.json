@@ -1,0 +1,46 @@
+{
+  "name": "Conjurer",
+  "type": "perk",
+  "_id": "n3pI3vkw5yjnNE6H",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>You can take the Cast Action to conjure a Summon, which is a non-Humanlike Being you have previously defeated with HD equal to or lower than your Level, spending Mana to do so equal to the Summon’s HD. You must conduct a 10-minute Ritual to choose which Being is your Summon before taking this Action.</p><p>The following rules apply to your Summon:</p><ul><li><p>It is an Ally that obeys your commands, which you issue as an Action or by skipping your Move.</p></li><li><p>It uses your Cast Skill for Checks and Saves.</p></li><li><p>You must Focus on the Summon, spending 1 Mana per Turn while it is conjured. Otherwise, the Summon is banished. When it is reduced to 0 HP or if you conjure another Summon, it is banished.</p></li><li><p>Whenever it is banished, any Abilities that would end on its death end.</p></li></ul>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "arcana",
+          "influence",
+          "mysticism"
+        ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1769599853517,
+    "modifiedTime": 1769600004597,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!items!n3pI3vkw5yjnNE6H"
+}

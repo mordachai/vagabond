@@ -1,0 +1,172 @@
+{
+  "name": "Rogue",
+  "type": "class",
+  "img": "icons/weapons/daggers/dagger-ritual-crooked-crystal.webp",
+  "system": {
+    "description": "<p><strong>I may be a burglar... but I’m an honest one, I hope, more or less.</strong></p>\n<p><em>– J.R.R. Tolkien, The Hobbit</em></p>\n<p>Back-alley urchins, gutterborn scum, shadowborn assassins. To hammers, every problem looks like a nail. Rogues are blades, and every problem is a throat.</p>\n\n<h3>Iconic Rogues</h3>\n<ul>\n<li><strong>Locke Lamora</strong>, <em>Gentleman Bastard Sequence</em></li>\n<li><strong>Nona Grey</strong>, <em>The Book of the Ancestor</em></li>\n<li><strong>Vin</strong>, <em>Mistborn</em></li>\n</ul>\n\n<h3>Playing Rogue</h3>\n<p>Rogues are low defense, midline harassers that focus on one single, deadly shot. They are given Features that reinforce attempting to gain Favor on their Attacks.</p>\n<p><strong>Action:</strong> Attack<br />\n<strong>Move:</strong> Midline<br />\n<strong>Starting Pack:</strong> Assassin, Conman, Investigator, or Scout<br />\n<strong>Key Stat:</strong> Dexterity or Awareness, Luck<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> Ranged<br />\n<strong>Skills:</strong> Finesse and Sneak, and 3 others</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Sneak Attack</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Sneak Attack, Infiltrator</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">1d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Unflinching Luck (d12)</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">1d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">1d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Evasive</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">2d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">2d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Lethal Weapon</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">2d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">3d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Unflinching Luck (d10)</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">3d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">3d4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Waylay</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">4d4</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "name": "Sneak Attack",
+        "description": "<p><span class=\"fontstyle0\">If your first attack on a Turn is Favored, it deals an extra d4 damage and ignores an amount of Armor equal to this number of extra dice.</span></p>\n<p><span class=\"fontstyle0\">The number of extra d4s increases by 1 every 3 Rogue Levels hereafter.</span></p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Infiltrator",
+        "description": "<p><span class=\"fontstyle0\">You gain the Resourceful Perk (p. 71), and you have Favor on Checks and Saves made to ambush and against traps that you are aware of.</span></p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.Pwvw4buZkkB6eqKN"
+        ],
+        "requiredSpells": []
+      },
+      {
+        "name": "Unflinching Luck (d12)",
+        "description": "<p><span class=\"fontstyle0\">When you spend Luck to gain Favor on a Check, roll a d12. If the result is lower than your remaining Luck, the Luck is not spent. When you become an 8th Level Rogue, the d12 is a d10.</span></p>",
+        "level": 2,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 3,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Evasive",
+        "description": "<p><span class=\"fontstyle0\">Your Reflex Saves can't be Hindered while you aren't Incapacitated, and you ignore two of a Dodged attack's damage dice on a passed Save, rather than one.</span></p>",
+        "level": 4,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 5,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Lethal Weapon",
+        "description": "<p><span class=\"fontstyle0\">Your Sneak Attack applies to any Favored attacks you make on a Turn, not just the first.</span></p>",
+        "level": 6,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 7,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Unflinching Luck (d10)",
+        "description": "<p><span class=\"fontstyle0\">This feature modifies the effect of Unflinching Luck. When you spend Luck to gain Favor on a Check, roll a d10. If the result is lower than your remaining Luck, the Luck is not spent.</span></p>",
+        "level": 8,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 9,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Waylay",
+        "description": "<p><span class=\"fontstyle0\">Once per Round, if you kill an Enemy during a Turn, you can immediately take one Action.</span></p>",
+        "level": 10,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "guaranteed": [
+        "ranged",
+        "finesse",
+        "sneak"
+      ],
+      "choices": [
+        {
+          "count": 3,
+          "pool": [],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [],
+    "keyStats": [
+      "dexterity",
+      "awareness",
+      "luck"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.JXGh2kMRaR4Wyh5w",
+      "Compendium.vagabond.starting-packs.Item.GjPcdjZKPh8PBfMj",
+      "Compendium.vagabond.starting-packs.Item.pxZec7iLwT00gl0P",
+      "Compendium.vagabond.starting-packs.Item.u632eTgHBKam3ZBc"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1773096855275,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "gwlbYvDMyO0cPA4U",
+  "sort": 1300000,
+  "_key": "!items!gwlbYvDMyO0cPA4U"
+}

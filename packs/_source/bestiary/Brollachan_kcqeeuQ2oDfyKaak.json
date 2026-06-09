@@ -1,0 +1,208 @@
+{
+  "name": "Brollachan",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 27,
+      "max": 27
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 6,
+    "threatLevel": 2.2,
+    "size": "large",
+    "beingType": "Fae",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 6,
+    "morale": 10,
+    "appearing": "1",
+    "speed": 20,
+    "senses": "",
+    "armor": 4,
+    "armorDescription": "as Plate plus Shield",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "coldIron"
+    ],
+    "statusImmunities": [
+      "berserk",
+      "frightened",
+      "confused",
+      "prone",
+      "blinded",
+      "charmed"
+    ],
+    "zone": "frontline",
+    "description": "A formless, writhing mass of dark black smoke. Its only distinguishing characteristic is a pair of bright red eyes in the center of the mass.",
+    "actions": [
+      {
+        "name": "Tendril",
+        "note": "Melee Attack, Near",
+        "attackType": "melee",
+        "flatDamage": "9",
+        "rollDamage": "2d8",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Engulfer",
+        "description": "Other Beings in its space are Burning (2d6)."
+      },
+      {
+        "name": "Formless",
+        "description": "It can Move into space occupied by Beings."
+      },
+      {
+        "name": "Maddening I",
+        "description": "Enemies that can hear it for the first time and at the start of their Turns must pass a [Will] Save or be Confused (until they pass this Check on a subsequent Turn, or for Cd4 Rounds afterwards)."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Brollachan",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "KpWVcGQZm5hzong1",
+  "flags": {},
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.1",
+    "createdTime": 1765548611231,
+    "modifiedTime": 1765548630844,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "kcqeeuQ2oDfyKaak",
+  "sort": 1300000,
+  "_key": "!actors!kcqeeuQ2oDfyKaak"
+}

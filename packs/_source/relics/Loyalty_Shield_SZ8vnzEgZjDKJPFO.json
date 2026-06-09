@@ -1,0 +1,55 @@
+{
+  "name": "Loyalty Shield",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Standard Shield that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+1) Shield:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Relic Standard Shield (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087664601,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "SZ8vnzEgZjDKJPFO",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 2300000,
+  "_key": "!items!SZ8vnzEgZjDKJPFO"
+}

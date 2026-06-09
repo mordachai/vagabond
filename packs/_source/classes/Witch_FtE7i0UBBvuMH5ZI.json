@@ -1,0 +1,222 @@
+{
+  "name": "Witch",
+  "type": "class",
+  "img": "icons/equipment/head/hat-pointed-buckle-leather-purple.webp",
+  "system": {
+    "description": "<p><strong>Wouldst thou like to live deliciously?</strong></p>\n<p><em>– Robert Eggers, The VVitch</em></p>\n<p>Mediaries of magical secrets. One may become a witch through the whispers of a familiar or the favor of a being from beyond.</p>\n\n<h3>Iconic Witches</h3>\n<ul>\n<li><strong>Dr. Facilier</strong>, <em>Princess and the Frog</em></li>\n<li><strong>Morgan le Fay</strong>, <em>Arthurian legend</em></li>\n<li><strong>Yennefer</strong>, <em>The Witcher series</em></li>\n</ul>\n\n<h3>Playing Witch</h3>\n<p>The witch is a debuffer focused on Casting Spells to stack detriments. Stick to the shadows and pile on Statuses through Hex.</p>\n<p><strong>Action:</strong> Cast<br />\n<strong>Move:</strong> Backline<br />\n<strong>Starting Pack:</strong> Fortune Teller or Mage<br />\n<strong>Key Stat:</strong> Awareness<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> –<br />\n<strong>Skills:</strong> Mysticism, and 3 from either Arcana, Craft, Medicine, or Survival</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td>\n  <td><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Occultist, Hex</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Ritualism</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td>\n  <td><p><span class=\"fontstyle2\">5</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Things Betwixt</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td>\n  <td><p><span class=\"fontstyle2\">5</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td>\n  <td><p><span class=\"fontstyle2\">6</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Coventry</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">24</span></p></td>\n  <td><p><span class=\"fontstyle2\">6</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">28</span></p></td>\n  <td><p><span class=\"fontstyle2\">7</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Widdershins</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">32</span></p></td>\n  <td><p><span class=\"fontstyle2\">7</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">36</span></p></td>\n  <td><p><span class=\"fontstyle2\">8</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Ritualism (2 uses)</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">40</span></p></td>\n  <td><p><span class=\"fontstyle2\">8</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": true,
+    "levelFeatures": [
+      {
+        "name": "Occultist",
+        "description": "<p><span class=\"fontstyle0\">You gain a Perk with a prerequisite of being Trained with Mysticism, and you can Cast Spells using Mysticism.</span></p><p><strong>Spells:</strong> You learn 4 Spells. You learn 1 other Spell every 2 Witch Levels hereafter.</p><p><strong>Mana:</strong> Your Maximum Mana is equal to (4 × your Witch Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Awareness + half your Witch Level, round up). You regain spent Mana when you Rest.</p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.ZpxPOAaeveIIQUpU",
+          "Compendium.vagabond.perks.Item.n3pI3vkw5yjnNE6H",
+          "Compendium.vagabond.perks.Item.O2z8sxDuwIm56HqO",
+          "Compendium.vagabond.perks.Item.b5Asi0XnmAWm2lTH",
+          "Compendium.vagabond.perks.Item.ORTWxP4kkcmn2Etv",
+          "Compendium.vagabond.perks.Item.AjP1wBwolTK06wBs",
+          "Compendium.vagabond.perks.Item.Bg61LXm2yYZAD1EC",
+          "Compendium.vagabond.perks.Item.0RhDUoeDs8XiEHxk",
+          "Compendium.vagabond.perks.Item.6CgNXM9yYbHeOntN",
+          "Compendium.vagabond.perks.Item.MMFem3lhaPwAUnrj"
+        ],
+        "requiredSpells": []
+      },
+      {
+        "name": "Hex",
+        "description": "<p><span class=\"fontstyle0\">You can choose for the effects of a Spell you Cast (not the damage) to become continual (p. 90) for one of the Targets until you use this Feature on a different Target. This does not require your Focus. The number of Spells you can have as continual this way at the same time is equal to (half your Witch Level, round up).</span></p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Ritualism",
+        "description": "<p><span class=\"fontstyle0\">Once per Shift, you can conduct a 10-minute Ritual as an Action. When you become a 10th Level Witch, you can do so twice per Shift.</span></p>",
+        "level": 2,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 3,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Things Betwixt",
+        "description": "<p><span class=\"fontstyle0\">Once per Scene, you can use your Action or skip your Move to become invisible until your next Turn. This requires your Focus.</span></p>",
+        "level": 4,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 5,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Coventry",
+        "description": "<p><span class=\"fontstyle0\">You can Cast Spells that Near Allies can Cast.</span></p>",
+        "level": 6,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 7,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Widdershins",
+        "description": "<p><span class=\"fontstyle0\">The Target of your Hex is Weak to damage you deal. This does not ignore Immunity. Further, your Spells ignore Status Immunities of the Target of your Hex.</span></p>",
+        "level": 8,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 9,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Ritualism (2 uses)",
+        "description": "<p><span class=\"fontstyle0\">This feature modifies the Ritualism feature. When you become a 10th Level Witch, you can finish a Ritual that requires a Scene as an Action twice per Shift.</span></p>",
+        "level": 10,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      }
+    ],
+    "manaSkill": "mysticism",
+    "castingStat": "awareness",
+    "manaMultiplier": 4,
+    "skillGrant": {
+      "guaranteed": [
+        "mysticism"
+      ],
+      "choices": [
+        {
+          "count": 3,
+          "pool": [
+            "arcana",
+            "craft",
+            "medicine",
+            "survival"
+          ],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [
+      {
+        "spells": 4,
+        "level": 1
+      },
+      {
+        "spells": 4,
+        "level": 2
+      },
+      {
+        "spells": 5,
+        "level": 3
+      },
+      {
+        "spells": 5,
+        "level": 4
+      },
+      {
+        "spells": 6,
+        "level": 5
+      },
+      {
+        "spells": 6,
+        "level": 6
+      },
+      {
+        "spells": 7,
+        "level": 7
+      },
+      {
+        "spells": 7,
+        "level": 8
+      },
+      {
+        "spells": 8,
+        "level": 9
+      },
+      {
+        "spells": 8,
+        "level": 10
+      }
+    ],
+    "keyStats": [
+      "awareness"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.y1dMToABIEv83o2C",
+      "Compendium.vagabond.starting-packs.Item.hje865DkzVVguhdT"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1770234164643,
+    "modifiedTime": 1773096950755,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "FtE7i0UBBvuMH5ZI",
+  "sort": 0,
+  "_key": "!items!FtE7i0UBBvuMH5ZI"
+}

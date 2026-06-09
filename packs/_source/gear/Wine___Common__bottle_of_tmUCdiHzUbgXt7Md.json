@@ -1,0 +1,59 @@
+{
+  "name": "Wine - Common, bottle of",
+  "type": "equipment",
+  "img": "icons/consumables/drinks/wine-bottle-glass-white.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 2,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Liquor & Spirits",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "isBeverage": true
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.mqpg4Hy8CgizZtmO",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.7.0",
+    "createdTime": 1765502288108,
+    "modifiedTime": 1771788179950,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "tmUCdiHzUbgXt7Md",
+  "folder": "KlLsMy7yqvvnIJRq",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!tmUCdiHzUbgXt7Md"
+}

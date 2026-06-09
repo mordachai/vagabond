@@ -1,0 +1,63 @@
+{
+  "name": "Crossbow",
+  "type": "equipment",
+  "img": "icons/weapons/crossbows/crossbow-purple.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 80,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Ranged"
+    ],
+    "weaponSkill": "ranged",
+    "range": "far",
+    "grip": "2H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d6",
+    "equipmentState": "twoHands",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bolt01_01_Regular_Orange_Physical_15ft_1000x400.webm",
+      "hitDuration": 1000
+    },
+    "damageTypeOneHand": "piercing",
+    "damageTypeTwoHands": "piercing"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1773713097390,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "hlrQAclnJuNQI0vO",
+  "sort": 3100000,
+  "_key": "!items!hlrQAclnJuNQI0vO"
+}

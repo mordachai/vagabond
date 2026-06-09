@@ -1,0 +1,55 @@
+{
+  "name": "Moonlit Blade",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Blasting:</span><span class=\"fontstyle0\"> Can make a Melee attack as an arc of moonlight energy at a Near Target. The Target is then illuminated with moonlight for the Round, can't benefit from being Invisible, and turns to its normal form if it was shapeshifted.</span></li><li><span class=\"fontstyle2\">Moonlit:</span><span class=\"fontstyle0\"> Sheds Moonlight out to Near.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 25000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Relic Greatsword (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087652480,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "qhUZvjK6L4600nPC",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3700000,
+  "_key": "!items!qhUZvjK6L4600nPC"
+}

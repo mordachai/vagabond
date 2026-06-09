@@ -1,0 +1,45 @@
+{
+  "name": "Reanimator",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can perform a 10-minute Ritual with the corpse of a Being that is not an Artificial or Undead, and that has HD no higher than your Level. Doing so raises it as an Undead as per the Raise Spell. It is under your control for one Shift, or until you perform this Ritual again. It uses either your Arcana, Craft, or Mysticism Skill for Checks and Saves.</span></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [
+        "craft"
+      ],
+      "spells": [],
+      "other": [
+        "Trained: Craft & either Arcana or Mysticism"
+      ],
+      "trainedSkillOrGroups": [
+        [
+          "arcana",
+          "mysticism"
+        ]
+      ]
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769602552810,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "Bg61LXm2yYZAD1EC",
+  "sort": 2500000,
+  "_key": "!items!Bg61LXm2yYZAD1EC"
+}

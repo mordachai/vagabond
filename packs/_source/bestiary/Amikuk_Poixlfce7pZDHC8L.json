@@ -1,0 +1,241 @@
+{
+  "name": "Amikuk",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 18,
+      "max": 18
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 4,
+    "threatLevel": 3.6,
+    "size": "large",
+    "beingType": "Cryptid",
+    "speedTypes": [
+      "climb"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 4,
+    "morale": 5,
+    "appearing": "1",
+    "speed": 30,
+    "senses": "",
+    "armor": 1,
+    "armorDescription": "as Leather",
+    "locked": true,
+    "immunities": [
+      "cold"
+    ],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "backline",
+    "description": "A pale, fleshy horror that lurks in the shallows of frozen waters. It hunts by wrapping around boats and dragging the passengers underwater.",
+    "actions": [
+      {
+        "name": "Drown",
+        "note": "Melee Attack, while submerged",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Restrained and pulled Close",
+        "causedStatuses": [
+          {
+            "statusId": "restrained",
+            "saveType": "none",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2xClaw and 1xBite",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack, Near",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "3",
+        "rollDamage": "1d6",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "9",
+        "rollDamage": "2d8",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Amphibious",
+        "description": "Breathes air and water."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Amikuk",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1773925098656,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Poixlfce7pZDHC8L",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 3400000,
+  "_key": "!actors!Poixlfce7pZDHC8L"
+}

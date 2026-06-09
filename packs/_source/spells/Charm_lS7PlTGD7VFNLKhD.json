@@ -1,0 +1,57 @@
+{
+  "name": "Charm",
+  "type": "spell",
+  "img": "icons/magic/control/debuff-energy-hold-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Enthrallment keeps the Target Charmed for the duration, ending early if it takes damage or if you Cast this Spell again.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "fxSchool": "psychic",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "charmed",
+        "requiresDamage": false,
+        "saveType": "will",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "charmed",
+        "requiresDamage": false,
+        "saveType": "will",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714152018,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "lS7PlTGD7VFNLKhD",
+  "sort": 3900000,
+  "_key": "!items!lS7PlTGD7VFNLKhD"
+}

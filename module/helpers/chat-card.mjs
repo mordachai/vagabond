@@ -38,7 +38,7 @@ export class VagabondChatCard {
   /* Fluent API Methods                          */
   /* -------------------------------------------- */
   setType(t) { this.data.type = t; return this; }
-  setActor(a) { this.data.actor = a; this.data.alias = a?.name; if(!this.data.icon) this.data.icon = a?.img; return this; }
+  setActor(a) { this.data.actor = a; this.data.alias = a?.name; this.data.actorUuid = a?.uuid ?? null; this.data.actorId = a?.id ?? null; if(!this.data.icon) this.data.icon = a?.img; return this; }
   setItem(i) { this.data.item = i; if(!this.data.icon) this.data.icon = i?.img; return this; }
   setTitle(t) { this.data.title = t; return this; }
   setSubtitle(s) { this.data.subtitle = s; return this; }

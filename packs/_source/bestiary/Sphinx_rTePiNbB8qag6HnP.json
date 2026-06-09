@@ -1,0 +1,274 @@
+{
+  "name": "Sphinx",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 54,
+      "max": 54,
+      "bonus": 0
+    },
+    "power": {
+      "value": 10,
+      "max": 10
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 5,
+    "threatLevel": 5.7,
+    "size": "large",
+    "beingType": "Outers",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 12,
+    "morale": 10,
+    "appearing": "1",
+    "speed": 60,
+    "speedValues": {
+      "climb": 0,
+      "cling": 0,
+      "fly": 120,
+      "phase": 0,
+      "swim": 0
+    },
+    "senses": "Allsight, Telepathy",
+    "armor": 4,
+    "armorDescription": "as (+1) Plate",
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "universalWeaponDamageBonus": 0,
+    "universalWeaponDamageDice": "",
+    "universalSpellDamageBonus": 0,
+    "universalSpellDamageDice": "",
+    "universalAlchemicalDamageBonus": 0,
+    "universalAlchemicalDamageDice": "",
+    "locked": true,
+    "immunities": [
+      "Physical from non-Relics"
+    ],
+    "weaknesses": [],
+    "statusImmunities": [
+      "Berserk",
+      "Charmed",
+      "Confused",
+      "Frightened",
+      "Suffocating"
+    ],
+    "zone": "frontline",
+    "description": "",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2×Claw and either 1×Roar or 1×Cast of its choice",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Roar",
+        "note": "Action, all Beings who hear it | Will",
+        "recharge": "2/Day",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Frightened (Cd4, and Dazed if within Near)",
+        "causedStatuses": [
+          {
+            "statusId": "frightened",
+            "saveType": "any",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          },
+          {
+            "statusId": "dazed",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "7",
+        "rollDamage": "2d6",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Dispel Magic",
+        "note": "Cast, Remote | Will",
+        "recharge": "2/Day",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "A magic effect of its choice is dispelled or suspended for 2d6 hours if it is a Curse or Relic Power",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Future Sight",
+        "description": "Hinders Saves against its Attacks."
+      },
+      {
+        "name": "Magic Ward II",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+      }
+    ]
+  },
+  "prototypeToken": {
+    "name": "Sphinx",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 20,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "7XRNmpvwuyjJWsiD",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1770078646903,
+    "modifiedTime": 1774042671246,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "rTePiNbB8qag6HnP",
+  "sort": 600000,
+  "_key": "!actors!rTePiNbB8qag6HnP"
+}

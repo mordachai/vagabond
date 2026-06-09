@@ -103,7 +103,7 @@
           {{#if size}}<span class="vh-badge">{{size}}</span>{{/if}}
           {{#if beingType}}<span class="vh-badge">{{beingType}}</span>{{/if}}
           {{#if zone}}<span class="vh-badge vh-badge--zone">{{zone}}</span>{{/if}}
-          {{#if appearingEnriched}}<span class="vh-badge vh-badge--app" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.appearing.label'}}"><i class="fas fa-users"></i>{{{appearingEnriched}}}</span>{{/if}}
+          {{#if appearing}}<button type="button" class="vh-badge vh-badge--app" data-action="rollAppearing" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.appearing.label'}}"><i class="fas fa-users"></i>{{appearing}}</button>{{/if}}
         </div>
       </div>
     </div>

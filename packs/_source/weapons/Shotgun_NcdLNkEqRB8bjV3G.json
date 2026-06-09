@@ -1,0 +1,65 @@
+{
+  "name": "Shotgun",
+  "type": "equipment",
+  "img": "icons/weapons/guns/gun-double-barrel.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 60,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Brutal",
+      "near",
+      "Ranged"
+    ],
+    "weaponSkill": "ranged",
+    "range": "near",
+    "grip": "2H",
+    "damageOneHand": "d10",
+    "damageTwoHands": "d10",
+    "equipmentState": "twoHands",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Snipe_01_Regular_Blue_15ft_1000x400.webm",
+      "hitDuration": 1000,
+      "enabled": true
+    },
+    "damageTypeOneHand": "piercing",
+    "damageTypeTwoHands": "piercing"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1773713209428,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "NcdLNkEqRB8bjV3G",
+  "sort": 1800000,
+  "_key": "!items!NcdLNkEqRB8bjV3G"
+}

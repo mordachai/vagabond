@@ -1,0 +1,220 @@
+{
+  "name": "Black Pudding",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 45,
+      "max": 45
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 10,
+    "threatLevel": 8.2,
+    "size": "large",
+    "beingType": "Primordials",
+    "speedTypes": [
+      "cling"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 10,
+    "morale": 12,
+    "appearing": "1",
+    "speed": 20,
+    "senses": "Blindsense",
+    "armor": 2,
+    "armorDescription": "as (+1) Leather",
+    "locked": true,
+    "immunities": [
+      "acid",
+      "blunt",
+      "shock",
+      "slashing",
+      "cold"
+    ],
+    "weaknesses": [
+      "fire"
+    ],
+    "statusImmunities": [
+      "charmed",
+      "frightened",
+      "prone",
+      "blinded"
+    ],
+    "zone": "frontline",
+    "description": "(Slime) This tar-like mass of ooze lurks in the darkness with a singular goal, consume.",
+    "actions": [
+      {
+        "name": "Pseudopod",
+        "note": "Melee Attack",
+        "attackType": "melee",
+        "flatDamage": "13",
+        "rollDamage": "3d8",
+        "extraInfo": "and Restrained",
+        "recharge": "",
+        "damageType": null
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Pudding Nature",
+        "description": "Is Dazed (1 Round) after being subjected to Cold."
+      },
+      {
+        "name": "Seep",
+        "description": "It can enter the space of other Beings and openings as small as 1 inch without squeezing."
+      },
+      {
+        "name": "Engulfer",
+        "description": "Beings that share a space with it are Burning 13 (3d8)."
+      },
+      {
+        "name": "Pudding Split",
+        "description": "If it is larger than Small when subjected to Shock or Slash, it splits into two Black Puddings with half its current HP, round up, and are one size smaller. These deal 1 less d8 with its Pseudopod Action and Engulfer Ability."
+      },
+      {
+        "name": "Sticky",
+        "description": "Hinders attempts to end being Restrained by it. Beings that make physical contact with it must pass [Endure] or be Restrained."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Black Pudding",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "CFWpUA4g8bejv3HV",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.15",
+    "createdTime": 1765458651305,
+    "modifiedTime": 1765458651305,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "RFENB7RObfPWSY34",
+  "sort": 0,
+  "_key": "!actors!RFENB7RObfPWSY34"
+}

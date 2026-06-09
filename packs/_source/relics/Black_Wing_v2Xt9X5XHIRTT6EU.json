@@ -1,0 +1,55 @@
+{
+  "name": "Black Wing",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Light Crossbow",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087697855,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "v2Xt9X5XHIRTT6EU",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3900000,
+  "_key": "!items!v2Xt9X5XHIRTT6EU"
+}

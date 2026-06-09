@@ -1,0 +1,42 @@
+{
+  "name": "Silver Tongued",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>The roll required for you to Crit on Influence Checks made to deceive, intimidate, or persuade others is reduced by 1. You can take this Perk up to 4 times.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "presence",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "influence"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.8.1",
+    "createdTime": 1766953333856,
+    "modifiedTime": 1766953333856,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "mQh322KcxDzKpyEh",
+  "sort": 0,
+  "_key": "!items!mQh322KcxDzKpyEh"
+}

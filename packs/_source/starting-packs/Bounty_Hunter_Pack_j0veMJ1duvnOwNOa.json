@@ -1,0 +1,84 @@
+{
+  "name": "Bounty Hunter Pack",
+  "type": "starterPack",
+  "img": "icons/skills/targeting/crosshair-pointed-orange.webp",
+  "system": {
+    "description": "",
+    "items": [
+      {
+        "uuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.YHXzL4H8Dhajk2hg",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.BhUNyj2nflyVUPIo",
+        "quantity": 5
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.sbHg7jCRQY8lIzY7",
+        "quantity": 2
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.jd6n1Zfo1tAWCCNe",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.ShVLwDMGm2m0D4eS",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.pVe3gBnfzcmqyMgM",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.420Ttee0UiWzStAC",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.st9B6ntyrE3oQYdk",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.ngP24RQI6IyKVciu",
+        "quantity": 3
+      },
+      {
+        "uuid": "Compendium.vagabond.armor.Item.K6gCgMFAMIPLJO0L",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.OduxMhFxzjd6tqa1",
+        "quantity": 1
+      }
+    ],
+    "currency": {
+      "gold": 0,
+      "silver": 15,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.5.2",
+    "createdTime": 1765640510531,
+    "modifiedTime": 1768654033884,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "j0veMJ1duvnOwNOa",
+  "sort": 500000,
+  "_key": "!items!j0veMJ1duvnOwNOa"
+}

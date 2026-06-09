@@ -1,0 +1,36 @@
+{
+  "name": "Aqua",
+  "type": "spell",
+  "img": "icons/magic/water/wave-water-blue.webp",
+  "system": {
+    "description": "<p>This Spell can create and destroy fresh water in the following ways:</p><p><strong>Area:</strong> The space within is emptied or filled with water. If the Area is occupied by a Being, this requires a Cast Check. You choose if this water remains or dries up after the duration.</p><p><strong>Target:</strong> This can push an Item that occupies 1 or less Slots, or a Being with Level or HD 1 or lower. You can increase this number by spending additional Mana on the Cast, increasing it by 1 per Mana spent to do so.</p><p><strong>Distance:</strong> This pushes the Target 5', and you can increase the distance pushed by spending Mana, increasing the distance by 5' per Mana spent to do so.</p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "cold",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "KjHS9r9cSkBhUc5R",
+  "sort": 2000000,
+  "_key": "!items!KjHS9r9cSkBhUc5R"
+}

@@ -1,0 +1,55 @@
+{
+  "name": "Magistaff",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A 10 minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 5000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Staff (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087658465,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "YyyuCEq9Jh38PPne",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 2700000,
+  "_key": "!items!YyyuCEq9Jh38PPne"
+}

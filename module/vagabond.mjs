@@ -2069,6 +2069,20 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   }
 
   // ---------------------------------------------------------
+  // 0. Actor portrait drag-to-canvas
+  // Portrait images inside .header-icon[data-actor-uuid] carry draggable="true".
+  // Wire the dragstart so dropping onto the canvas places a token for that actor.
+  // ---------------------------------------------------------
+  html.querySelectorAll('.header-icon[data-actor-uuid] img.vbd-actor-portrait-drag').forEach(img => {
+    img.addEventListener('dragstart', (ev) => {
+      const icon = img.closest('.header-icon');
+      const uuid = icon?.dataset.actorUuid;
+      if (!uuid) return;
+      ev.dataTransfer.setData('text/plain', JSON.stringify({ type: 'Actor', uuid }));
+    });
+  });
+
+  // ---------------------------------------------------------
   // 1. Accordion Toggle Handler (Properties)
   // ---------------------------------------------------------
   // 1. Accordion Toggle Handler (Properties)

@@ -1,0 +1,127 @@
+{
+  "name": "Elf",
+  "type": "ancestry",
+  "img": "systems/vagabond/assets/ui/compendiums/elf.webp",
+  "system": {
+    "description": "<p>Elves are known for their tall height, ethereal beauty, and inquisitive passion to witness awe. This passion embodies itself in their clothing, language, arts, and cuisine, as elves seek to make every moment one worth savoring. Of all the peoples that inhabit the world, it is likely no other lives as peacefully and permissively with the fae, fauna, and flora as elves.</p>",
+    "size": "medium",
+    "ancestryType": "Fae",
+    "traits": [
+      {
+        "name": "Ascendancy",
+        "description": "You are Trained in a Skill from either Arcana, Mysticism, Influence, or in Ranged Attacks.",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [
+          {
+            "count": 1,
+            "pool": [
+              "arcana",
+              "ranged",
+              "mysticism",
+              "influence"
+            ],
+            "label": "Ascendancy"
+          }
+        ]
+      },
+      {
+        "name": "Elven Eyes",
+        "description": "You have Favor on sight-based Detect Checks.",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "name": "Naturally Attuned",
+        "description": "You know a Spell and can Cast it with a Skill of your choice.",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 1,
+        "skillChoices": []
+      }
+    ]
+  },
+  "effects": [
+    {
+      "name": "Naturally Attuned (Elf Trait)",
+      "origin": "Compendium.vagabond.ancestries.Item.IF9AtzPvbTWx1jk1",
+      "img": "icons/svg/aura.svg",
+      "_id": "Bx67PMOTQ3Eyrfuj",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.isSpellcaster",
+            "value": true,
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "2.0.0",
+        "createdTime": 1766979796924,
+        "modifiedTime": 1772212866954,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!IF9AtzPvbTWx1jk1.Bx67PMOTQ3Eyrfuj"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.1.0",
+    "createdTime": 1764966621821,
+    "modifiedTime": 1772318452330,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "IF9AtzPvbTWx1jk1",
+  "sort": 0,
+  "_key": "!items!IF9AtzPvbTWx1jk1"
+}

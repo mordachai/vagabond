@@ -1,0 +1,58 @@
+{
+  "name": "Perfume, vial",
+  "type": "equipment",
+  "img": "icons/consumables/potions/bottle-ornate-bat-teal.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Alchemy & Medicine",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.juR1bl0bWgG98rV1",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.0",
+    "createdTime": 1765500895738,
+    "modifiedTime": 1765633031215,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "C8YAfd9S6CgEtghv",
+  "folder": "8BC7GVobqqAjnv8a",
+  "sort": 1100000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!C8YAfd9S6CgEtghv"
+}

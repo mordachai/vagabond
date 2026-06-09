@@ -1,0 +1,55 @@
+{
+  "name": "Standard of the Herald",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Spear with a banneret's standard capable of instilling bravery. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Warlord's Resolve:</span><span class=\"fontstyle0\"> While planted in the ground, Allies within Near have a +1 bonus to Armor, and Favor on Saves against Frightened.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Glamour:</span><span class=\"fontstyle0\"> The standard can change to a design of the Bound Being's choice. It never gets dirty.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Spear (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087629587,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "TYdCmq7MqhgtObbH",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 2400000,
+  "_key": "!items!TYdCmq7MqhgtObbH"
+}

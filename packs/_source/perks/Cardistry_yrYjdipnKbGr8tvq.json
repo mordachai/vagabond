@@ -1,0 +1,43 @@
+{
+  "name": "Cardistry",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can use a deck of cards as a Trinket and can make attacks with cards drawn from a deck using your Cast Skill. The Deck must be used as a 2H Grip Weapon to do so. It deals d4, and has the Finesse and Thrown properties. Cards used for an attack magically reappear in the deck.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "dexterity",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [],
+      "spells": [
+        ""
+      ],
+      "other": [],
+      "hasAnySpell": true
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769598444662,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "yrYjdipnKbGr8tvq",
+  "sort": 10300000,
+  "_key": "!items!yrYjdipnKbGr8tvq"
+}

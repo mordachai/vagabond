@@ -1,0 +1,40 @@
+{
+  "name": "Salbenist",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can perform a 10-minute Ritual with a Weapon and an oil. Upon concluding the Ritual, you gain the following benefits until you perform it again:</span></p><p><span class=\"fontstyle0\">• You can attack with it using Craft.</span></p><p><span class=\"fontstyle0\">• You can will the absorbed oil to coat it on your Turn (no Action). This doesn’t consume it, and it remains coated until you dismiss it, it leaves your hand, or until it is coated with another oil.</span></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [
+        "craft",
+        "mysticism"
+      ],
+      "spells": [],
+      "other": [
+        "Trained: Craft & Mysticism"
+      ]
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769602627385,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "0RhDUoeDs8XiEHxk",
+  "sort": 200000,
+  "_key": "!items!0RhDUoeDs8XiEHxk"
+}

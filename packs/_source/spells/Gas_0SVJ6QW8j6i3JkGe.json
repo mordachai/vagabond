@@ -1,0 +1,58 @@
+{
+  "name": "Gas",
+  "type": "spell",
+  "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You create a cloud of gas in an Area equal to the size of the delivery (minimum 5-foot cube). Targets act as Sickened (Vulnerable) while in the Area.</span></p>",
+    "damageType": "poison",
+    "duration": "Until your next turn",
+    "crit": "The effect lasts 1 Hour, but can be dispersed by strong winds.",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "poison",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "sickened",
+        "requiresDamage": true,
+        "saveType": "endure",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "sickened",
+        "requiresDamage": true,
+        "saveType": "endure",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714468765,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "0SVJ6QW8j6i3JkGe",
+  "sort": 100000,
+  "_key": "!items!0SVJ6QW8j6i3JkGe"
+}

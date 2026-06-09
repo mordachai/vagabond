@@ -1,0 +1,52 @@
+{
+  "name": "Tinker Pack",
+  "type": "starterPack",
+  "_id": "PnfmuSTuRLW0gjln",
+  "img": "icons/tools/smithing/pincers.webp",
+  "system": {
+    "description": "",
+    "items": [
+      {
+        "uuid": "Compendium.vagabond.gear.Item.UfSh0X0489Uby1ev",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.Dc1DdU5530PBjfrG",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.hlrQAclnJuNQI0vO",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.NKGgWqzRacaktjGK",
+        "quantity": 1
+      }
+    ],
+    "currency": {
+      "gold": 0,
+      "silver": 60,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1773095612320,
+    "modifiedTime": 1773096068882,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!items!PnfmuSTuRLW0gjln"
+}

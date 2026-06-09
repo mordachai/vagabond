@@ -88,6 +88,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       clickActionDamageRoll: this._onClickActionDamageRoll,
       clickAbilityName: this._onClickAbilityName,
       rollMorale: this._onRollMorale,
+      rollAppearing: this._onRollAppearing,
       statusClick: this._onStatusClick,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
       rollRechargeCountdown: this._onRollRechargeCountdown,
@@ -246,21 +247,8 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     context.size = L(config.sizes?.[sys.size]);
     context.beingType = L(config.beingTypes?.[sys.beingType]);
 
-    // --- # Appearing (clickable inline-roll when it's dice notation, e.g. 2d6+1) ---
+    // --- # Appearing (clickable button triggers rollAppearing) ---
     context.appearing = sys.appearing || '';
-    if (context.appearing) {
-      try {
-        const parsed = VagabondTextParser.parseAll(context.appearing);
-        context.appearingEnriched = await foundry.applications.ux.TextEditor.implementation.enrichHTML(parsed, {
-          secrets: actor.isOwner,
-          rollData: actor.getRollData(),
-          relativeTo: actor,
-        });
-      } catch (e) {
-        console.error('Vagabond | NPC HUD: error enriching appearing field:', e);
-        context.appearingEnriched = context.appearing;
-      }
-    }
 
     // --- Always-on info strip: senses + resistances ---
     context.senses = sys.senses || '';
@@ -563,6 +551,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   static _onClickActionDamageRoll(event, target) { return VagabondActorSheet._onClickActionDamageRoll.call(this, event, target); }
   static _onClickAbilityName(event, target) { return VagabondActorSheet._onClickAbilityName.call(this, event, target); }
   static _onRollMorale(event, target) { return VagabondActorSheet._onRollMorale.call(this, event, target); }
+  static _onRollAppearing(event, target) { return VagabondActorSheet._onRollAppearing.call(this, event, target); }
   static _onStatusClick(event, target) { return VagabondActorSheet._onStatusClick.call(this, event, target); }
   static _onCreateCountdownFromRecharge(event, target) { return VagabondActorSheet._onCreateCountdownFromRecharge.call(this, event, target); }
   static _onRollRechargeCountdown(event, target) { return VagabondActorSheet._onRollRechargeCountdown.call(this, event, target); }

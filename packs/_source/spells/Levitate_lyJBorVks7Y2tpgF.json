@@ -1,0 +1,35 @@
+{
+  "name": "Levitate",
+  "type": "spell",
+  "img": "icons/skills/movement/feet-winged-boots-glowing-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target flutters up to 1 foot in the air if they have solid ground below them for the duration. The Target can still Move in the air as if walking. If the Target is a secured Object or an Item that occupies more than 2 Slots, it is unaffected.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "genericlight",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "lyJBorVks7Y2tpgF",
+  "sort": 4100000,
+  "_key": "!items!lyJBorVks7Y2tpgF"
+}

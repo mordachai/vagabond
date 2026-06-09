@@ -1,0 +1,230 @@
+{
+  "name": "Kraken",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 90,
+      "max": 89
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 20,
+    "threatLevel": 22.3,
+    "size": "colossal",
+    "beingType": "Cryptid",
+    "speedTypes": [
+      "swim 60"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 20,
+    "morale": 11,
+    "appearing": "1",
+    "speed": 20,
+    "senses": "",
+    "armor": 4,
+    "armorDescription": "as (+1) Plate",
+    "locked": true,
+    "immunities": [
+      "shock",
+      "cold"
+    ],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "These oceanic horrors are their own force of nature. Krakens are capable of sinking ships in an instant, calling down storms, and impacting entire ecosystems of an ocean body.",
+    "actions": [
+      {
+        "name": "Lightning Bolt",
+        "note": "Cast, 2 (d4) 120' Lines | Reflex",
+        "recharge": "Cd4",
+        "attackType": "castRanged",
+        "flatDamage": "21",
+        "rollDamage": "6d6",
+        "damageType": "shock",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "1xTentacle per (Tentacles)",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Tentacle",
+        "note": "Grapple",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "13",
+        "rollDamage": "3d8",
+        "damageType": "-",
+        "extraInfo": "and Restrained if smaller",
+        "causedStatuses": [
+          {
+            "statusId": "restrained",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Tentacles",
+        "description": "Starts with 8. Targetting one causes a -4 penalty to the Check, but severs it if at least 16 damage is dealt."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Kraken",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 5,
+    "height": 5,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 5
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1774024539511,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "mzHfFclIaG0WIeUi",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 7500000,
+  "_key": "!actors!mzHfFclIaG0WIeUi"
+}

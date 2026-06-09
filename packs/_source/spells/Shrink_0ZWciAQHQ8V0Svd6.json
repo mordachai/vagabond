@@ -1,0 +1,35 @@
+{
+  "name": "Shrink",
+  "type": "spell",
+  "img": "icons/magic/time/arrows-circling-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target's size and damage dice are reduced by one size for the duration.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is 1 minute (no Focus required).",
+    "favorite": false,
+    "fxSchool": "genericdark",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "0ZWciAQHQ8V0Svd6",
+  "sort": 300000,
+  "_key": "!items!0ZWciAQHQ8V0Svd6"
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Deft Hands",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can skip your Move to take the Use Action.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "dexterity",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "finesse"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.1",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1766746832196,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "vtNfeEdWNUWvaeRM",
+  "sort": 9600000,
+  "_key": "!items!vtNfeEdWNUWvaeRM"
+}

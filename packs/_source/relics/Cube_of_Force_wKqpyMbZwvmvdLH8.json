@@ -1,0 +1,54 @@
+{
+  "name": "Cube of Force",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Handheld cube of various magical materials. The cube has 36 Charges, which are refreshed each Day.</span></p><p><span class=\"fontstyle0\">Each of the sides can be pressed to activate or deactivate a barrier out to Close from the holder, which has a function that moves with them. When activated, it spends a number of charges based on the side, as shown on the following table, which are also spent each Round while the barrier is active:</span></p><table class=\"NormalTable\"><tbody><tr><td><p><span class=\"fontstyle2\">Side</span></p></td><td><p><span class=\"fontstyle2\">Charges</span></p></td><td><p><span class=\"fontstyle2\">Barrier Function</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">1</span></p></td><td><p><span class=\"fontstyle3\">1</span></p></td><td><p><span class=\"fontstyle3\">Blocks gases and wind.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">2</span></p></td><td><p><span class=\"fontstyle3\">2</span></p></td><td><p><span class=\"fontstyle3\">Blocks nonliving matter.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">3</span></p></td><td><p><span class=\"fontstyle3\">3</span></p></td><td><p><span class=\"fontstyle3\">Blocks Beings.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">4</span></p></td><td><p><span class=\"fontstyle3\">4</span></p></td><td><p><span class=\"fontstyle3\">Blocks magic effects.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">5</span></p></td><td><p><span class=\"fontstyle3\">6</span></p></td><td><p><span class=\"fontstyle3\">Blocks everything.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">6</span></p></td><td><p><span class=\"fontstyle3\">0</span></p></td><td><p><span class=\"fontstyle3\">Deactivates the barrier.</span></p></td></tr></tbody></table><p><span class=\"fontstyle0\">The barrier can block other effects by spending 1 Charge per damage die of the effect.</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Trinket (Cube)"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "wKqpyMbZwvmvdLH8",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 4100000,
+  "_key": "!items!wKqpyMbZwvmvdLH8"
+}

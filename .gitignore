@@ -1,4 +1,7 @@
+# LevelDB compendium binaries (packs/_source/ is the editable source)
+packs/*
 !packs/_source/
+!packs/.gitattributes
 dist/
 
 CLAUDE.md

@@ -1,0 +1,276 @@
+{
+  "name": "Vampire",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 36,
+      "max": 36,
+      "bonus": 0
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 8,
+    "threatLevel": 6.7,
+    "size": "medium",
+    "beingType": "Undead",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 8,
+    "morale": 12,
+    "appearing": "d4",
+    "speed": 35,
+    "senses": "Darksight, Telepathy",
+    "armor": 4,
+    "armorDescription": "as (+1) Plate",
+    "locked": true,
+    "immunities": [
+      "cold",
+      "poison",
+      "physical"
+    ],
+    "weaknesses": [
+      "silver"
+    ],
+    "statusImmunities": [
+      "charmed",
+      "fatigued",
+      "paralyzed",
+      "sickened"
+    ],
+    "zone": "midline",
+    "description": "(Shapechanger) Blood-sucking, intelligent undead who bear the curse of vampirism.",
+    "actions": [
+      {
+        "name": "Enthrall",
+        "note": "Cast, all Beings that can see it | Will",
+        "recharge": "Cd6",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Target is Charmed (Cd6) and must do all it can to defend this Being. A Target that passes the Save is immune to this for 1 Day.",
+        "causedStatuses": [
+          {
+            "statusId": "charmed",
+            "saveType": "will",
+            "duration": "d6",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2xClaws and 1xBite",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "7",
+        "rollDamage": "2d6",
+        "damageType": "-",
+        "extraInfo": "and this Being is healed for the damage dealt. A Being that takes damage from this attack must pass [Endure] or be Cursed with Vampirism.",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "7",
+        "rollDamage": "3d4",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Magic Ward II",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+      },
+      {
+        "name": "Shapeshift",
+        "description": "It can use its Action to change into a bat, owl, rat, or wolf. It typically does so to retreat."
+      },
+      {
+        "name": "Sunlight Hypersensitivity",
+        "description": "It is Burning (d8) while illuminated by Sunlight."
+      },
+      {
+        "name": "Vampiric",
+        "description": "It regenerates 3 HP at the start of its Turn unless it is in Sunlight. If it is killed, it reforms in its resting place after 1 Day unless either: A wooden stake is stabbed through its heart; It dies in Sunlight or while doused in holy water; It consumes garlic."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "climb": 0,
+      "cling": 0,
+      "fly": 0,
+      "phase": 0,
+      "swim": 0
+    },
+    "universalWeaponDamageBonus": 0,
+    "universalWeaponDamageDice": "",
+    "universalSpellDamageBonus": 0,
+    "universalSpellDamageDice": "",
+    "universalAlchemicalDamageBonus": 0,
+    "universalAlchemicalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Vampire",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "cu3l1QO2DfhzONlT",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1770078751315,
+    "modifiedTime": 1774044199361,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "UGMhE8UODeuZf3Ms",
+  "sort": 0,
+  "_key": "!actors!UGMhE8UODeuZf3Ms"
+}

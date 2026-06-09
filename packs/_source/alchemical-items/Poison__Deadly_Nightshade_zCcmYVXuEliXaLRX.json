@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Poison, Deadly Nightshade",
+  "type": "equipment",
+  "img": "icons/consumables/potions/potion-jar-corked-labeled-poison-skull-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Sickened (Cd4 damage) and, if it is cursed with Lycanthropy, the curse is removed. In addition to the Material cost, this item requires 1g worth of wolfsbane to Craft.</span></p><p><span class=\"fontstyle2\"><strong>Consumed:</strong> </span><span class=\"fontstyle0\">Affects Targets who consume it.</span></p><p><span class=\"fontstyle2\"><strong>Injury:</strong> </span><span class=\"fontstyle0\">Affects Targets who are injured with weapons coated with it.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "poison",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "poison",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "zCcmYVXuEliXaLRX",
+  "sort": 0,
+  "_key": "!items!zCcmYVXuEliXaLRX"
+}

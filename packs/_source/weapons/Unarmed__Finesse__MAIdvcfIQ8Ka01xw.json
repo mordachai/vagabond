@@ -1,0 +1,93 @@
+{
+  "name": "Unarmed (Finesse)",
+  "type": "equipment",
+  "img": "icons/skills/melee/unarmed-punch-fist-yellow-red.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Brawl",
+      "Finesse"
+    ],
+    "weaponSkill": "finesse",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "1",
+    "damageTwoHands": "1",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "enabled": true,
+      "hitDuration": 1000,
+      "hitOffsetX": -100,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Unarmed_Attacks/Unarmed_Strike/UnarmedStrike_01_Regular_Blue_Physical*",
+      "animType": "auto",
+      "hitScale": 1,
+      "hitSound": "",
+      "missFile": "",
+      "missScale": 1,
+      "missDuration": 600,
+      "missSound": "",
+      "soundVolume": 0.6
+    },
+    "damageTypeOneHand": "blunt",
+    "requiresBound": false,
+    "bound": false,
+    "gridPosition": 0,
+    "containerId": null,
+    "canExplode": false,
+    "explodeValues": "",
+    "damageTypeTwoHands": "-",
+    "isSupply": false,
+    "isBeverage": false,
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "passiveCausedStatuses": [],
+    "causedStatuses": [],
+    "critCausedStatuses": [],
+    "blockedStatuses": [],
+    "resistedStatuses": [],
+    "coating": {
+      "sourceName": "",
+      "charges": 0,
+      "causedStatuses": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1774107057037,
+    "modifiedTime": 1774107057037,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "MAIdvcfIQ8Ka01xw",
+  "sort": 0,
+  "_key": "!items!MAIdvcfIQ8Ka01xw"
+}

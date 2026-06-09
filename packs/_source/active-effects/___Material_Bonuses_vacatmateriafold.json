@@ -1,0 +1,27 @@
+{
+  "name": "💎 Material Bonuses",
+  "_id": "vacatmateriafold",
+  "type": "ActiveEffect",
+  "sorting": "a",
+  "sort": 600,
+  "flags": {
+    "vagabond": {
+      "category": "material"
+    }
+  },
+  "folder": null,
+  "color": null,
+  "description": "",
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!vacatmateriafold"
+}

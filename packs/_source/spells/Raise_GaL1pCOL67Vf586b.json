@@ -1,0 +1,36 @@
+{
+  "name": "Raise",
+  "type": "spell",
+  "img": "icons/magic/death/skeleton-glow-yellow-black.webp",
+  "system": {
+    "description": "<p>Corpses in the Area of non-Artificial or Undead Beings with cumulative HD no higher than your Level rise as an Undead under your control for the duration. Afterward, any Undead you raised this way die and can’t be raised by this Spell again. You can command your raised Undead when you Focus on this Cast, using your Cast Skill for Checks they make. The Undead you raise this way use their original statblock with the following changes:</p><p>• It is an Undead</p><p>• It has Darksight, is Immune to Poison, Weak to Silvered Weapons, and can’t be Sickened.</p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "necrotic",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "GaL1pCOL67Vf586b",
+  "sort": 1300000,
+  "_key": "!items!GaL1pCOL67Vf586b"
+}

@@ -1,0 +1,217 @@
+{
+  "name": "Werewolf",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 18,
+      "max": 18
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 4,
+    "threatLevel": 2.9,
+    "size": "medium",
+    "beingType": "Cryptid",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 4,
+    "morale": 9,
+    "appearing": "1",
+    "speed": 40,
+    "senses": "Darksight",
+    "armor": 2,
+    "armorDescription": "as Chain",
+    "locked": true,
+    "immunities": [
+      "physical"
+    ],
+    "weaknesses": [
+      "fire"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Shapechanger) A half-wolf, half-humanlike monster with a taste for blood. They usually only transform under a full moon and return to their normal form in sunlight.",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "2xClaw and 1xBite"
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack, a Restrained Target",
+        "recharge": "",
+        "flatDamage": "3",
+        "rollDamage": "1d6",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "and pass [Will] or be cursed with Werewolf Lycanthropy."
+      },
+      {
+        "name": "Claws",
+        "note": "Melee Attack",
+        "recharge": "",
+        "flatDamage": "2",
+        "rollDamage": "1d4",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": ""
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Bloodthirst",
+        "description": "It is Berserk and Beings at or below half HP make Checks against it as if Vulnerable."
+      },
+      {
+        "name": "Shapechanger",
+        "description": "This is a form that a Humanlike cursed with lycanthropy can become when the curse takes hold. They revert automatically if they die."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Werewolf",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.3",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1770077638491,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "klRBWjiNUz7GlVAb",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 7000000,
+  "_key": "!actors!klRBWjiNUz7GlVAb"
+}

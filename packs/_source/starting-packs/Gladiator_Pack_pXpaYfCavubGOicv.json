@@ -1,0 +1,68 @@
+{
+  "name": "Gladiator Pack",
+  "type": "starterPack",
+  "img": "icons/weapons/polearms/glaive-hooked-steel.webp",
+  "system": {
+    "description": "",
+    "items": [
+      {
+        "uuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.YHXzL4H8Dhajk2hg",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.BhUNyj2nflyVUPIo",
+        "quantity": 5
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.sbHg7jCRQY8lIzY7",
+        "quantity": 2
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.jd6n1Zfo1tAWCCNe",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.0NA6IoKBoDOjQeEy",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.armor.Item.K6gCgMFAMIPLJO0L",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.mU85pKLCB76Tn12q",
+        "quantity": 1
+      }
+    ],
+    "currency": {
+      "gold": 1,
+      "silver": 65,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1765640510531,
+    "modifiedTime": 1769603232480,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "pXpaYfCavubGOicv",
+  "sort": 1400000,
+  "_key": "!items!pXpaYfCavubGOicv"
+}

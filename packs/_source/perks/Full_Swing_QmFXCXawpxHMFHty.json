@@ -1,0 +1,42 @@
+{
+  "name": "Full Swing",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">When you make a Melee Attack Check and roll 10 above your Melee Difficulty, you can choose to push the Target as if you had shoved them if they are no more than one size larger than you.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "melee"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.1",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1766746832196,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "QmFXCXawpxHMFHty",
+  "sort": 5400000,
+  "_key": "!items!QmFXCXawpxHMFHty"
+}

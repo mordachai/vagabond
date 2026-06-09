@@ -1,0 +1,67 @@
+{
+  "name": "Movement - Jumping I",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "system": {
+    "description": "<p>Wearer's horizontal jump distance is multiplied by 2.</p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 500,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "Enhances Move while equipped.",
+    "gridPosition": 0,
+    "containerId": null,
+    "damageTypeOneHand": "-",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": ""
+  },
+  "effects": [],
+  "folder": "o9iJqhb7zjYleADh",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "vagabond",
+      "uuid": "Item.uf0KB3M3jwmjKxEp",
+      "coreVersion": "13.351",
+      "systemId": "vagabond",
+      "systemVersion": "1.3.2"
+    },
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1765570895706,
+    "modifiedTime": 1769766913317,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "QI5S9bKJuEYlzg7O",
+  "sort": 3400000,
+  "_key": "!items!QI5S9bKJuEYlzg7O"
+}

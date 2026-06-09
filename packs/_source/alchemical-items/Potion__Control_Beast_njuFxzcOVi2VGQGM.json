@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Potion, Control Beast",
+  "type": "equipment",
+  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The consumer gains the ability to control a type of Being they can see for 1 Hour, which requires their Focus. Once a Being is chosen, the consumer must make a Will Save. On a pass, the Being is Charmed and under their control for the duration. A Being controlled this way will not obey commands that clearly cause harm to itself. After this time, the Being becomes Hostile. This potion affects Beasts.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 25,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "potion",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "njuFxzcOVi2VGQGM",
+  "sort": 0,
+  "_key": "!items!njuFxzcOVi2VGQGM"
+}

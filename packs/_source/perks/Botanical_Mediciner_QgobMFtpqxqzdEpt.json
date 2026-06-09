@@ -1,0 +1,40 @@
+{
+  "name": "Botanical Mediciner",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can restore d6 HP to a willing Being during a Breather if you have herbs. If you do, you can also remove a Status from the Ally from either Blinded, Paralyzed, or Sickened. That Being can't be affected by this Ability for the rest of the Shift.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [
+        "medicine",
+        "survival"
+      ],
+      "spells": [],
+      "other": [
+        "Trained: Medicine & Survival"
+      ]
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769596414432,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "QgobMFtpqxqzdEpt",
+  "sort": 5300000,
+  "_key": "!items!QgobMFtpqxqzdEpt"
+}

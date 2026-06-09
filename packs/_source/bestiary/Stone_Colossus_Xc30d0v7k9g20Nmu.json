@@ -1,0 +1,247 @@
+{
+  "name": "Stone Colossus",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 112,
+      "max": 112
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 25,
+    "threatLevel": 11.7,
+    "size": "colossal",
+    "beingType": "Artificials",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 25,
+    "morale": null,
+    "appearing": "1",
+    "speed": 50,
+    "senses": "",
+    "armor": 6,
+    "armorDescription": "as (+3) Plate",
+    "locked": true,
+    "immunities": [
+      "fire",
+      "poison"
+    ],
+    "weaknesses": [],
+    "statusImmunities": [
+      "paralyzed",
+      "confused",
+      "sickened",
+      "charmed",
+      "frightened",
+      "berserk"
+    ],
+    "zone": "frontline",
+    "description": "Runic titans created by ancient, shockingly advanced civilizations, colossus are golems that indicate a peoples’ arcane advancements far outpaced their desire for diplomacy.",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "1xLaser and 1xSlam, or 2xSlams",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Slam",
+        "note": "Melee Attack, Near",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "21",
+        "rollDamage": "6d6",
+        "damageType": "-",
+        "extraInfo": "and Prone",
+        "causedStatuses": [
+          {
+            "statusId": "prone",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Laser",
+        "note": "Ranged Attack",
+        "recharge": "Cd4",
+        "attackType": "ranged",
+        "flatDamage": "14",
+        "rollDamage": "4d6",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Besieger",
+        "description": "Deals double damage to Structures."
+      },
+      {
+        "name": "Immutable",
+        "description": "It can't be transformed."
+      },
+      {
+        "name": "Magic Ward IV",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 4 Mana to affect it."
+      },
+      {
+        "name": "Self-Destruct",
+        "description": "If it is at or below half its HP, its core begins self-destructing. This core goes off in 1 minute, and the sonic boom deals 200 damage to everything within 1 mile."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Stone Colossus",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 5,
+    "height": 5,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 5
+  },
+  "items": [],
+  "effects": [],
+  "folder": "0wzstbynbud43U8H",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.1.1",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1774208248045,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Xc30d0v7k9g20Nmu",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 0,
+  "_key": "!actors!Xc30d0v7k9g20Nmu"
+}

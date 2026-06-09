@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Oil, Vicious",
+  "type": "equipment",
+  "img": "icons/consumables/potions/potion-flask-stopped-labeled-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A thick blue oil that acts as a powerful anticoagulant. Acts as basic oil. However, while coated on a weapon that is then ignited, its damage from attacks that hit Beings with half their HP or less can explode and cause them to bleed profusely for the Shift, granting Favor on Survival Checks to track it for this time.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 5,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "fire",
+    "damageAmount": "d6",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "oil",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "e6MN0H8Lo8UBI3gB",
+  "sort": 0,
+  "_key": "!items!e6MN0H8Lo8UBI3gB"
+}

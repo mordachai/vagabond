@@ -295,7 +295,10 @@
           <div class='npc-app-field'>
             <label class='npc-field-label'>App</label>
             {{#if system.locked}}
-              <div class='npc-field-display'>{{{enrichedAppearing}}}</div>
+              <button type='button' class='npc-app-roll-btn rollable' data-action='rollAppearing'
+                      data-tooltip='{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}'>
+                {{system.appearing}}
+              </button>
             {{else}}
               <input
                 type='text'

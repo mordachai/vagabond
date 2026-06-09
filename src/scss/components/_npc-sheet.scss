@@ -552,12 +552,32 @@
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-      color: $c-black;
+  color: $c-black;
 
   input {
     width: 30px;
     text-align: center;
     color: $c-black;
+  }
+
+  // Locked-mode clickable formula button — matches the visual of the old inline roll.
+  .npc-app-roll-btn {
+    all: unset;
+    cursor: pointer;
+    font-family: $font-title;
+    font-size: 13px;
+    color: $c-black;
+    background: rgba(0, 0, 0, 0.06);
+    border: 2px solid $c-dark-yellow;
+    border-radius: 8px;
+    padding: 1px 6px;
+    line-height: 1.4;
+    white-space: nowrap;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.14);
+      border-color: rgba(0, 0, 0, 0.4);
+    }
   }
 }
 

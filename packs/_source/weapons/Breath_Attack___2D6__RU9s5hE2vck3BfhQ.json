@@ -1,0 +1,72 @@
+{
+  "name": "Breath Attack - 2D6!",
+  "type": "equipment",
+  "img": "icons/magic/fire/blast-jet-stream-embers-orange.webp",
+  "system": {
+    "description": "<p>You can make a 15-foot Cone breath attack. When you do, make an <strong>Endure</strong> or <strong>Will</strong> Save. On a pass, this attack deals 2d6!. Afterward, you can’t use this Ability until you Rest or take 1 Fatigue to do so again.</p>",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": true,
+    "explodeValues": "6",
+    "properties": [],
+    "weaponSkill": "ranged",
+    "range": "near",
+    "grip": "1H",
+    "damageOneHand": "2d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "damageTypeOneHand": "fire",
+    "requiresBound": false,
+    "bound": false,
+    "gridPosition": 0,
+    "containerId": null,
+    "damageTypeTwoHands": "-",
+    "isSupply": false,
+    "isBeverage": false,
+    "itemFx": {
+      "hitScale": 5,
+      "hitDuration": 9000,
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Fire01_Regular_Orange_30ft_Cone_Burst_600x600.webm"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1772319329516,
+    "modifiedTime": 1773713106549,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "RU9s5hE2vck3BfhQ",
+  "sort": 0,
+  "_key": "!items!RU9s5hE2vck3BfhQ"
+}

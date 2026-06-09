@@ -1,0 +1,35 @@
+{
+  "name": "Morph",
+  "type": "spell",
+  "img": "icons/magic/light/explosion-star-glow-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">For the duration, the Target’s body is altered in an illusionary manner. This magic is powerful enough to make them seem like a Being of the same Size and Being Type that has the same configuration of limbs and appendages (such as a Human appearing as a Dwarf, but not a horse).</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "nature",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "fz3TUK8XlrLpG4eo",
+  "sort": 3400000,
+  "_key": "!items!fz3TUK8XlrLpG4eo"
+}

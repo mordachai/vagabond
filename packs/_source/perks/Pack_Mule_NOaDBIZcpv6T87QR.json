@@ -1,0 +1,92 @@
+{
+  "name": "Pack Mule",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You gain +2 Item Slots. You can take this Perk multiple Times.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "brawl"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [
+    {
+      "name": "+2 Inv. Slots",
+      "origin": "Compendium.vagabond.perks.Item.NOaDBIZcpv6T87QR",
+      "img": "icons/svg/aura.svg",
+      "_id": "gD7of5SiofatX44x",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.inventory.bonusSlots",
+            "value": 2,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "2.8.0",
+        "createdTime": 1769600904125,
+        "modifiedTime": 1769600937087,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!NOaDBIZcpv6T87QR.gD7of5SiofatX44x"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1766746832196,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "NOaDBIZcpv6T87QR",
+  "sort": 4400000,
+  "_key": "!items!NOaDBIZcpv6T87QR"
+}

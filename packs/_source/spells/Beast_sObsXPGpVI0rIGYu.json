@@ -1,0 +1,36 @@
+{
+  "name": "Beast",
+  "type": "spell",
+  "img": "icons/creatures/mammals/wolf-shadow-black.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You call forth a Beast or Beasts that can fit in the Area or nearest open space to the Target. They remain for the duration and can have a cumulative HD total count no higher than half your Level (minimum 1).</span></p><p><span class=\"fontstyle0\">You must spend 1 Mana each Turn you Focus on this Spell after the Casting. You can choose to let the Beasts act independently, or to command them when you Focus. They use your Cast Skill for any Check they make.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "arcane",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "sObsXPGpVI0rIGYu",
+  "sort": 4800000,
+  "_key": "!items!sObsXPGpVI0rIGYu"
+}

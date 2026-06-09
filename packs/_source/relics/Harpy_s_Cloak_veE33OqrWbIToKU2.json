@@ -1,0 +1,54 @@
+{
+  "name": "Harpy’s Cloak",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A cloak of harpy's feathers. It acts as Light Armor and the feathers can be used as Daggers. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+1) Armor:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li><li><span class=\"fontstyle2\">Infinite ((+1) Dagger):</span><span class=\"fontstyle0\"> The feathers it creates attack as (+1) Daggers. They become mundane feathers after the attack is made, and the feather grows back instantly.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1150,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Light Armor"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "veE33OqrWbIToKU2",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 4000000,
+  "_key": "!items!veE33OqrWbIToKU2"
+}

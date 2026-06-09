@@ -254,3 +254,9 @@ A big thank-you as well to everyone on Indestructoboy’s Discord server for the
 
 “Vagabond for Foundry is an independent product published under the Land of the Blind Third-Party License and is not affiliated with Land of the Blind, LLC.
 Vagabond // Pulp Fantasy RPG © 2025 Land of theBlind, LLC.”
+
+---
+
+## Contributing / Development
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for the full development setup guide, including SCSS compilation, compendium pack editing, and IDE configuration.

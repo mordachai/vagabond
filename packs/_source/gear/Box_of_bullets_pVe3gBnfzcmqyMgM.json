@@ -1,0 +1,56 @@
+{
+  "name": "Box of bullets",
+  "type": "equipment",
+  "_id": "pVe3gBnfzcmqyMgM",
+  "img": "icons/weapons/ammunition/shot-round-lead.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 10,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Ammo",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "folder": "6JPogAYRpEgXnEuJ",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1765633237275,
+    "modifiedTime": 1773095827645,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!items!pVe3gBnfzcmqyMgM"
+}

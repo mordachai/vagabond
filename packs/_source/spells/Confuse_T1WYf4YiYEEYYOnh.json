@@ -1,0 +1,61 @@
+{
+  "name": "Confuse",
+  "type": "spell",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Confused for the duration.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "fxSchool": "psychic",
+    "locked": true,
+    "canExplode": false,
+    "explodeValues": "",
+    "damageDieSize": null,
+    "noRollRequired": false,
+    "critCausedStatuses": [
+      {
+        "statusId": "confused",
+        "requiresDamage": true,
+        "saveType": "will",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "causedStatuses": [
+      {
+        "statusId": "confused",
+        "requiresDamage": true,
+        "saveType": "will",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1772800138825,
+    "modifiedTime": 1773713842938,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "T1WYf4YiYEEYYOnh",
+  "sort": 5300000,
+  "_key": "!items!T1WYf4YiYEEYYOnh"
+}

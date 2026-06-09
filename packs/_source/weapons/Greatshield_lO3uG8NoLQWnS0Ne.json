@@ -1,0 +1,64 @@
+{
+  "name": "Greatshield",
+  "type": "equipment",
+  "img": "icons/equipment/shield/buckler-iron-cross-gray.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Shield"
+    ],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "2H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d6",
+    "equipmentState": "twoHands",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield*",
+      "hitDuration": 1000,
+      "enabled": true,
+      "hitOffsetX": -100
+    },
+    "damageTypeOneHand": "blunt",
+    "damageTypeTwoHands": "blunt"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1773713147397,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "lO3uG8NoLQWnS0Ne",
+  "sort": 3300000,
+  "_key": "!items!lO3uG8NoLQWnS0Ne"
+}

@@ -1,0 +1,57 @@
+{
+  "name": "Hold",
+  "type": "spell",
+  "img": "icons/magic/control/debuff-energy-hold-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Paralyzed for the duration if its HD or Level is equal to or lower than your Level. You can spend Mana to increase your Level for the purposes of this casting by 1 per Mana spent to do so.</span></p><p><span class=\"fontstyle0\">If the Target is an Object, it becomes secured and effectively locked if it is a door, chest, or other means of preventing entry. You must pass a Cast Check any time an attempt is made to manipulate the secured Object to maintain the Focus.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is 1 minute (no Focus required).",
+    "favorite": false,
+    "fxSchool": "shadow",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "paralyzed",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "paralyzed",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714712470,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "Hwmj6RwmUigPTFAv",
+  "sort": 1500000,
+  "_key": "!items!Hwmj6RwmUigPTFAv"
+}

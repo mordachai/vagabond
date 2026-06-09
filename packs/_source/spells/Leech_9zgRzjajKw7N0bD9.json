@@ -1,0 +1,46 @@
+{
+  "name": "Leech",
+  "type": "spell",
+  "img": "icons/magic/control/energy-stream-link-white.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Sickened for the duration. While Sickened this way, any healing that affects it instead heals you. Any subsequent Castings of this Spell that damage the Sickened Target also heals you for the damage dealt.</span></p>",
+    "damageType": "poison",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "necrotic",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "sickened",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714815757,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "9zgRzjajKw7N0bD9",
+  "sort": 700000,
+  "_key": "!items!9zgRzjajKw7N0bD9"
+}

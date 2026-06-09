@@ -1,0 +1,54 @@
+{
+  "name": "Ring of Fire Resistance",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">This red ruby ring has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Innured to Flame:</span><span class=\"fontstyle0\"> The wearer is unharmed by non-magical Fire.</span></li><li><span class=\"fontstyle2\">Fire Resistance:</span><span class=\"fontstyle0\"> The wearer has Favor on Saves against taking Fire-based damage, and reduces the Fire damage they take by 1 per damage die rolled (minimum 1 damage).</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2500,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Ring"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "ACP3ZBEfsH9yLiAJ",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 300000,
+  "_key": "!items!ACP3ZBEfsH9yLiAJ"
+}

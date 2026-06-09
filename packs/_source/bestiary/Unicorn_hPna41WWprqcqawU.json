@@ -1,0 +1,253 @@
+{
+  "name": "Unicorn",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 18,
+      "max": 18,
+      "bonus": 0
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 4,
+    "threatLevel": 4.2,
+    "size": "large",
+    "beingType": "Fae",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 4,
+    "morale": 7,
+    "appearing": "1",
+    "speed": 80,
+    "senses": "Allsight, Telepathy (Far)",
+    "armor": 3,
+    "armorDescription": "as (+1) Chain",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "coldIron"
+    ],
+    "statusImmunities": [
+      "confused",
+      "frightened",
+      "charmed"
+    ],
+    "zone": "midline",
+    "description": "(Divine)",
+    "actions": [
+      {
+        "name": "Heal",
+        "note": "Cast, Touch",
+        "recharge": "1/Day",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "castClose",
+        "extraInfo": "Regains 7 (2d6) HP and removes the Blinded, Confused, Paralyzed, or Sickened Status"
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "2xHoof and 1xHorn"
+      },
+      {
+        "name": "Hoof",
+        "note": "Melee Attack",
+        "recharge": "",
+        "flatDamage": "4",
+        "rollDamage": "1d8",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": ""
+      },
+      {
+        "name": "Horn",
+        "note": "Melee Attack",
+        "recharge": "",
+        "flatDamage": "4",
+        "rollDamage": "1d8",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": ""
+      },
+      {
+        "name": "Teleport",
+        "note": "Cast",
+        "recharge": "1/Day",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "castClose",
+        "extraInfo": "Teleports itself and any Being mounting it up to Far"
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Magic Ward III",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 3 Mana to affect it."
+      },
+      {
+        "name": "Regenerate I",
+        "description": "Regains 4 (d8) HP on each of its Turns."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "climb": 0,
+      "cling": 0,
+      "fly": 0,
+      "phase": 0,
+      "swim": 0
+    },
+    "universalWeaponDamageBonus": 0,
+    "universalWeaponDamageDice": "",
+    "universalSpellDamageBonus": 0,
+    "universalSpellDamageDice": "",
+    "universalAlchemicalDamageBonus": 0,
+    "universalAlchemicalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Unicorn",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "KpWVcGQZm5hzong1",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.1.1",
+    "createdTime": 1770078726455,
+    "modifiedTime": 1774213845329,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "hPna41WWprqcqawU",
+  "sort": 0,
+  "_key": "!actors!hPna41WWprqcqawU"
+}

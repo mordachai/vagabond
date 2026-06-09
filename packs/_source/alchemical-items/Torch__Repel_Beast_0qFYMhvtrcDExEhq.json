@@ -1,0 +1,57 @@
+{
+  "folder": null,
+  "name": "Torch, Repel Beast",
+  "type": "equipment",
+  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A torch that burns with an unnaturally crimson flame that unsettles Beasts. While burning, Beasts in the Light it sheds are Frightened until they take damage. Afterwards, it can’t be Frightened this way for 1 Day.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": false,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "fire",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "torch",
+    "lore": "",
+    "itemFx": {
+      "animType": "melee"
+    }
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1773699269977,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "0qFYMhvtrcDExEhq",
+  "sort": 0,
+  "_key": "!items!0qFYMhvtrcDExEhq"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Artificials",
+  "color": null,
+  "sorting": "a",
+  "_id": "0wzstbynbud43U8H",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.15",
+    "createdTime": 1765454176159,
+    "modifiedTime": 1765454176159,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!folders!0wzstbynbud43U8H"
+}

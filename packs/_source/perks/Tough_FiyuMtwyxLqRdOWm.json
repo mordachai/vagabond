@@ -1,0 +1,86 @@
+{
+  "name": "Tough",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Your Max HP increases by an amount equal to your current Level, and increases by 1 additional point each time you gain a Level. You can take this Perk multiple times.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 7
+        }
+      ],
+      "trainedSkills": [],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [
+    {
+      "name": "Max Health Increase",
+      "origin": "Compendium.vagabond.perks.Item.FiyuMtwyxLqRdOWm",
+      "img": "icons/svg/aura.svg",
+      "_id": "KkAfLga1fmCtZ4TG",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.hpPerLevel",
+            "value": 1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "1.5.0",
+        "createdTime": 1765911754601,
+        "modifiedTime": 1765913631658,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!FiyuMtwyxLqRdOWm.KkAfLga1fmCtZ4TG"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.5.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1766746832196,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "FiyuMtwyxLqRdOWm",
+  "sort": 3100000,
+  "_key": "!items!FiyuMtwyxLqRdOWm"
+}

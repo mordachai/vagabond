@@ -1,0 +1,206 @@
+{
+  "name": "Grim Reaper",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 4,
+      "max": 10
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 1,
+    "size": "medium",
+    "beingType": "Undead",
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 1,
+    "morale": 12,
+    "appearing": "",
+    "speed": 60,
+    "senses": "Allsight, Darksight",
+    "armor": 8,
+    "armorDescription": "as (+5) Heavy",
+    "locked": true,
+    "immunities": [
+      "cold",
+      "fire",
+      "poison",
+      "shock"
+    ],
+    "weaknesses": [
+      "silver"
+    ],
+    "statusImmunities": [
+      "charmed",
+      "confused",
+      "frightened",
+      "paralyzed",
+      "restrained",
+      "sickened"
+    ],
+    "zone": null,
+    "description": "HP: = 1/2 the summoner's",
+    "actions": [
+      {
+        "name": "Scythe",
+        "description": "",
+        "type": "Melee",
+        "range": "",
+        "note": "",
+        "recharge": "",
+        "flatDamage": "9",
+        "rollDamage": "2d8",
+        "damageType": "-",
+        "extraInfo": "",
+        "saves": null
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Inevitable",
+        "description": "Its attacks can't be Blocked or Dodged."
+      }
+    ],
+    "speedTypes": [
+      "fly",
+      "phase"
+    ]
+  },
+  "prototypeToken": {
+    "name": "Grim Reaper",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "icons/magic/death/skull-energy-light-purple.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": "power"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "GQx0P6FDyw1F2lqu",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.15",
+    "createdTime": 1764967117408,
+    "modifiedTime": 1765460017875,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "veGvTkYC104yHS0D",
+  "sort": 100000,
+  "_key": "!actors!veGvTkYC104yHS0D"
+}

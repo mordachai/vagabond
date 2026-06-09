@@ -1,0 +1,35 @@
+{
+  "name": "Mute",
+  "type": "spell",
+  "img": "icons/magic/control/mouth-smile-deception-purple.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Sound can't be heard from the Target for the duration, ending early if you Cast this again.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "fxSchool": "psychic",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "mikqIpdctGBlSh8X",
+  "sort": 4200000,
+  "_key": "!items!mikqIpdctGBlSh8X"
+}

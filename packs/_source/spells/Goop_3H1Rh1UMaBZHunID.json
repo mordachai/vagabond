@@ -1,0 +1,65 @@
+{
+  "name": "Goop",
+  "type": "spell",
+  "img": "icons/creatures/slimes/slime-movement-dripping-pseudopods-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A glob of sticky, acidic sludge coats the nearest surface to the Target (minimum 5-foot square) for the duration, causing it to be Difficult Terrain.</span></p><p><span class=\"fontstyle0\">If also Cast to deal damage, the caustic acid causes those in the Area to be Burning (d6).</span></p>",
+    "damageType": "acid",
+    "duration": "Until your next turn",
+    "crit": "Targets in the Area are also Restrained.",
+    "favorite": false,
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "burning",
+        "requiresDamage": true,
+        "saveType": "reflex",
+        "duration": "d6",
+        "tickDamageEnabled": true,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "burning",
+        "requiresDamage": true,
+        "saveType": "reflex",
+        "duration": "d6",
+        "tickDamageEnabled": true,
+        "damageOnTick": "",
+        "damageType": "-"
+      },
+      {
+        "statusId": "restrained",
+        "requiresDamage": true,
+        "saveType": "reflex",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714598408,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "3H1Rh1UMaBZHunID",
+  "sort": 400000,
+  "_key": "!items!3H1Rh1UMaBZHunID"
+}

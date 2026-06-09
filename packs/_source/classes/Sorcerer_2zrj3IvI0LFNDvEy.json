@@ -1,0 +1,339 @@
+{
+  "name": "Sorcerer",
+  "type": "class",
+  "img": "icons/magic/fire/flame-burning-hand-white.webp",
+  "system": {
+    "description": "<p><strong>She said sorcery is a sword without a hilt. There is no safe way to grasp it.</strong></p>\n<p><em>– George R.R. Martin, A Dance with Dragons</em></p>\n<p>Arcanists given a precious gift of magical prowess, sorcerers can tap into their own inner reserves to provide more Mana for casting.</p>\n\n<h3>Iconic Sorcerers</h3>\n<ul>\n<li><strong>Aang</strong>, <em>Avatar: The Last Airbender</em></li>\n<li><strong>Elsa</strong>, <em>Frozen</em></li>\n<li><strong>Ganondorf</strong>, <em>The Legend of Zelda</em></li>\n<li><strong>Storm</strong>, <em>X-Men</em></li>\n</ul>\n\n<h3>Playing Sorcerer</h3>\n<p>The sorcerer is a squishy blaster focused on Casting Spells for instant burst damage. You should stay in safety to Cast.</p>\n<p><strong>Action:</strong> Cast<br />\n<strong>Move:</strong> Backline<br />\n<strong>Starting Pack:</strong> Mage or Occultist<br />\n<strong>Key Stat:</strong> Presence<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> –<br />\n<strong>Skills:</strong> Influence, and 3 from either Arcana, Brawl, Mysticism, or Performance</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td>\n  <td><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Glamour, Tap</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spell-Slinger</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td>\n  <td><p><span class=\"fontstyle2\">5</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Quickening</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td>\n  <td><p><span class=\"fontstyle2\">5</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td>\n  <td><p><span class=\"fontstyle2\">6</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Arcane Anomaly</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">24</span></p></td>\n  <td><p><span class=\"fontstyle2\">6</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">28</span></p></td>\n  <td><p><span class=\"fontstyle2\">7</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spell Twinning</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">32</span></p></td>\n  <td><p><span class=\"fontstyle2\">7</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">36</span></p></td>\n  <td><p><span class=\"fontstyle2\">8</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Overpowered</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">40</span></p></td>\n  <td><p><span class=\"fontstyle2\">8</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": true,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Glamour",
+        "description": "<p><span class=\"fontstyle0\">You can Cast Spells using Influence.</span></p>\n<p><span class=\"fontstyle2\"><strong>Spells:</strong> </span><span class=\"fontstyle0\">You learn 4 Spells. You learn 1 other Spell every 2 Sorcerer Levels hereafter.</span></p>\n<p><span class=\"fontstyle2\"><strong>Mana:</strong> </span><span class=\"fontstyle0\">Your Maximum Mana is equal to (4 × your Sorcerer Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Presence + half your Sorcerer Level, round up). You regain spent Mana when you Rest.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 1,
+        "name": "Tap",
+        "description": "<p><span class=\"fontstyle0\">You gain the Metamagic Perk (p. 70). Further, when you Cast, you can reduce your Max HP to regain Mana equal to (2 × the reduction). This reduction ends when you Rest. If you die from this reduction, the Cast resolves before your death, and your body is vaporized.</span></p><p></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.WeJc28ayUfyamGiM"
+        ],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 2,
+        "name": "Spell-Slinger",
+        "description": "<p><span class=\"fontstyle0\">You Crit on Cast Checks on a roll of 19 to 20, and your Spells use a d8 damage die, rather than a d6.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 4,
+        "name": "Quickening",
+        "description": "<p><span class=\"fontstyle0\">You can skip your Move to Cast a Spell. No Mana can be spent on this Casting.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Arcane Anomaly",
+        "description": "<p><span class=\"fontstyle0\">You reduce Magic damage you take by half.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 8,
+        "name": "Spell Twinning",
+        "description": "<p><span class=\"fontstyle0\">If you Cast the same Spell twice on a Turn, the second Cast Check is Favored.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Overpowered",
+        "description": "<p><span class=\"fontstyle0\">You Crit on Cast Checks on a roll of 18 to 20. Further, when you Cast, you can choose to gain 2 Fatigue. If you do, you regain Cd6 Mana at the start of your Turns, and you can spend as much Mana as you like to Cast.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      }
+    ],
+    "manaSkill": "influence",
+    "castingStat": "presence",
+    "manaMultiplier": 4,
+    "skillGrant": {
+      "guaranteed": [
+        "influence"
+      ],
+      "choices": [
+        {
+          "count": 3,
+          "pool": [
+            "arcana",
+            "brawl",
+            "mysticism",
+            "performance"
+          ],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [
+      {
+        "spells": 4,
+        "level": 1
+      },
+      {
+        "spells": 4,
+        "level": 2
+      },
+      {
+        "spells": 5,
+        "level": 3
+      },
+      {
+        "spells": 5,
+        "level": 4
+      },
+      {
+        "spells": 6,
+        "level": 5
+      },
+      {
+        "spells": 6,
+        "level": 6
+      },
+      {
+        "spells": 7,
+        "level": 7
+      },
+      {
+        "spells": 7,
+        "level": 8
+      },
+      {
+        "spells": 8,
+        "level": 9
+      },
+      {
+        "spells": 8,
+        "level": 10
+      }
+    ],
+    "keyStats": [
+      "presence"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.hje865DkzVVguhdT",
+      "Compendium.vagabond.starting-packs.Item.NmrCbvZNNhHz1Nem"
+    ]
+  },
+  "effects": [
+    {
+      "name": "lv2 - Spell-Slinger",
+      "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+      "img": "icons/svg/aura.svg",
+      "_id": "jEOZFb4QCZn1OHMH",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.spellCritBonus",
+            "value": "(@lvl >= 2) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.spellDamageDieSizeBonus",
+            "value": "(@lvl >= 2) ? 2 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You Crit on Cast Checks on a roll of 19 to 20, and your Spells use a d8 damage die, rather than a d6.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "3.2.2",
+        "createdTime": 1770468473410,
+        "modifiedTime": 1770471820876,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!2zrj3IvI0LFNDvEy.jEOZFb4QCZn1OHMH"
+    },
+    {
+      "name": "lv10 - Spell-Slinger",
+      "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+      "img": "icons/svg/aura.svg",
+      "_id": "fTaCBQUAzhEkmTFl",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.spellCritBonus",
+            "value": "(@lvl >= 10) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You Crit on Cast Checks on a roll of 18 to 20. Further, when you Cast, you can choose to gain 2 Fatigue. If you do, you regain Cd6 Mana at the start of your Turns, and you can spend as much Mana as you like to Cast.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "3.2.2",
+        "createdTime": 1770472517933,
+        "modifiedTime": 1770472688671,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!2zrj3IvI0LFNDvEy.fTaCBQUAzhEkmTFl"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.3.2",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1778244156865,
+    "lastModifiedBy": "kfnQlbpJhBoW5amP"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "2zrj3IvI0LFNDvEy",
+  "sort": 200000,
+  "_key": "!items!2zrj3IvI0LFNDvEy"
+}

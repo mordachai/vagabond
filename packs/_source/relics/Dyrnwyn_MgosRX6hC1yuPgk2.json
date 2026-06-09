@@ -1,0 +1,54 @@
+{
+  "name": "Dyrnwyn",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Longsword with a pure white blade and jewel-studded hilt. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+2) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +2 damage.</span></li><li><span class=\"fontstyle2\">Evil's Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to Hellspawn and Undead.</span></li><li><span class=\"fontstyle2\">Silvering:</span><span class=\"fontstyle0\"> Attacks with it count as Silvered.</span></li><li><span class=\"fontstyle2\">Smite I:</span><span class=\"fontstyle0\"> Targets that take damage from it are also Burning (Cd4) with holy flame that ignores Immune.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 25000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Relic Longsword"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "MgosRX6hC1yuPgk2",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 1400000,
+  "_key": "!items!MgosRX6hC1yuPgk2"
+}

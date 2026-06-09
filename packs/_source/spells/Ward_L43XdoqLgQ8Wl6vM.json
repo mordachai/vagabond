@@ -1,0 +1,35 @@
+{
+  "name": "Ward",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">If the Target takes damage, make a Cast Check. On a pass, you reduce that damage by d6, and you can spend Mana to reduce it by an additional d6 per Mana spent to do so.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "The Target takes no damage.",
+    "favorite": false,
+    "fxSchool": "defense",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "L43XdoqLgQ8Wl6vM",
+  "sort": 2100000,
+  "_key": "!items!L43XdoqLgQ8Wl6vM"
+}

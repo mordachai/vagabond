@@ -1,0 +1,54 @@
+{
+  "name": "Apoplex",
+  "type": "spell",
+  "img": "icons/magic/control/fear-fright-monster-red.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Berserked for the duration.</span></p>",
+    "damageType": "fire",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "berserk",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      },
+      {
+        "statusId": "berserk",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773713535917,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "x2wHc3r9nD8Ubo1S",
+  "sort": 5700000,
+  "_key": "!items!x2wHc3r9nD8Ubo1S"
+}

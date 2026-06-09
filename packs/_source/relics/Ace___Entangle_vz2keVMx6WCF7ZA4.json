@@ -1,0 +1,67 @@
+{
+  "name": "Ace - Entangle",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "system": {
+    "description": "<p>Target is considered Vulnerable for ending the Restrained Status.</p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "Enhances a Weapon Property.",
+    "gridPosition": 0,
+    "containerId": null,
+    "damageTypeOneHand": "-",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": ""
+  },
+  "effects": [],
+  "folder": "o9iJqhb7zjYleADh",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "vagabond",
+      "uuid": "Item.wH0luld4M6ZJhlNL",
+      "coreVersion": "13.351",
+      "systemId": "vagabond",
+      "systemVersion": "1.3.2"
+    },
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1765570895706,
+    "modifiedTime": 1769766913317,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "vz2keVMx6WCF7ZA4",
+  "sort": 7100000,
+  "_key": "!items!vz2keVMx6WCF7ZA4"
+}

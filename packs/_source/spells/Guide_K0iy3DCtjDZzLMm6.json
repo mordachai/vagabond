@@ -1,0 +1,36 @@
+{
+  "name": "Guide",
+  "type": "spell",
+  "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Checks that rely on sight made against the Target have Favor for the duration.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is 1 minute (no Focus required).",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "radiant",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "K0iy3DCtjDZzLMm6",
+  "sort": 1800000,
+  "_key": "!items!K0iy3DCtjDZzLMm6"
+}

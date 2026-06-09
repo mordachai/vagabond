@@ -1,0 +1,36 @@
+{
+  "name": "Enflesh",
+  "type": "spell",
+  "img": "icons/magic/light/hand-sparks-smoke-teal.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Targeted, non-Relic fabric, stone, metal, or wood is turned to hair, tissue, and bone for the duration. Alternatively, if the Target is turned to stone through a curse or magic, the effect ends.</span></p>",
+    "damageType": "acid",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "necrotic",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "v1lykxYXBCYgDn68",
+  "sort": 5400000,
+  "_key": "!items!v1lykxYXBCYgDn68"
+}

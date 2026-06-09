@@ -1,0 +1,35 @@
+{
+  "name": "Mirage",
+  "type": "spell",
+  "img": "icons/magic/sonic/explosion-shock-wave-teal.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You create an illusionary Object or effect which fits either within the Area, or on the Target for the duration. The Object isn't tangible form and can't deal damage. However, its appearance, movement, and sound it produces are up to you. If any action is taken to investigate the Object, make a Cast Check to determine the outcome. When you Focus on it, you can change any of these aspects of the illusion.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "genericlight",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "ZOrZoNqGak1QmI5y",
+  "sort": 2900000,
+  "_key": "!items!ZOrZoNqGak1QmI5y"
+}

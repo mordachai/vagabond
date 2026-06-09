@@ -1,0 +1,55 @@
+{
+  "name": "Philosopher's Stone",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The philosopher's stone is a mystical object made from the essence of creation itself. It can form all materials when used by an alchemist.</span></p><p><span class=\"fontstyle0\">While within 1 mile of the stone, the bound Being does not age and can’t be Sickened.</span></p><p><span class=\"fontstyle0\">The stone is an alchemical item that can be used with the Use Action in the following ways, which consumes the Philosopher’s Stone in the process:</span></p><ul><li><span class=\"fontstyle0\">If it touches a corpse, it is revived, and heals, creates, or regenerates their body to its original form if the Fates allow.</span></li><li><span class=\"fontstyle0\">It provides up to 50g of raw materials suitable for making an alchemical item. These raw materials disappear after 1 week of their creation.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Relic Alchemical Item (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087637561,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Jzv8AARN0aDjDOwk",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 1200000,
+  "_key": "!items!Jzv8AARN0aDjDOwk"
+}

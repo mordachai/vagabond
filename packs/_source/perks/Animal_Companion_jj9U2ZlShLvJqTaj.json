@@ -1,0 +1,42 @@
+{
+  "name": "Animal Companion",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">If you spend a Shift taming and training a nonhostile Beast with a HD count no higher than half your Level, you can have it follow you as a companion. You control it by commanding it with your Action or by skipping your Move. Otherwise, it instinctually attacks your Enemies. It uses your Survival Difficulty for Checks. You can only have one such companion at a time.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "presence",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "survival"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1766746832196,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "jj9U2ZlShLvJqTaj",
+  "sort": 7900000,
+  "_key": "!items!jj9U2ZlShLvJqTaj"
+}

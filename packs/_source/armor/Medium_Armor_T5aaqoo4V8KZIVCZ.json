@@ -1,0 +1,54 @@
+{
+  "name": "Medium Armor",
+  "type": "equipment",
+  "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+  "system": {
+    "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+    "equipmentType": "armor",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "common",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "medium",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.6.1",
+    "createdTime": 1764967009530,
+    "modifiedTime": 1766063198621,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "T5aaqoo4V8KZIVCZ",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 0,
+  "_key": "!items!T5aaqoo4V8KZIVCZ"
+}

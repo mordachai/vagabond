@@ -1,0 +1,42 @@
+{
+  "name": "Vituperation",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can use your Action or skip your Move to rebuke an Enemy, and make an Influence Check with a penalty equal to the Target’s Morale. If you pass, that Enemy is Vulnerable until your next Turn or until it deals damage. Beings without Morale can’t be affected by this Ability.</span></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "presence",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "influence"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769603002589,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "npmCxChHHkkNJIvq",
+  "sort": 8500000,
+  "_key": "!items!npmCxChHHkkNJIvq"
+}

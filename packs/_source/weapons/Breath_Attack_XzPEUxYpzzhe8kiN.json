@@ -1,0 +1,65 @@
+{
+  "name": "Breath Attack",
+  "type": "equipment",
+  "_id": "XzPEUxYpzzhe8kiN",
+  "img": "icons/magic/fire/beam-jet-stream-trails-orange.webp",
+  "system": {
+    "description": "<p>You can make a 15-foot Cone breath attack. When you do, make an <strong>Endure</strong> or <strong>Will</strong> Save. On a pass, this attack deals 2d6!. Afterward, you can’t use this Ability until you Rest or take 1 Fatigue to do so again.</p>",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "ranged",
+    "range": "near",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "damageTypeOneHand": "fire",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Fire01_Regular_Orange_30ft_Cone_Burst_600x600.webm",
+      "hitDuration": 7000,
+      "hitScale": 3
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2700000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1766065460675,
+    "modifiedTime": 1773713108845,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!items!XzPEUxYpzzhe8kiN"
+}

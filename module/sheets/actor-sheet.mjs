@@ -40,6 +40,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       rollWeapon: this._onRollWeapon,
       useItem: this._onUseItem,
       rollMorale: this._onRollMorale,
+      rollAppearing: this._onRollAppearing,
       // Equipment actions - delegated to equipmentHandler
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleWeaponGrip: this._onToggleWeaponGrip,
@@ -774,6 +775,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onRollMorale(event, target) {
     return this.rollHandler?.rollMorale(event, target);
+  }
+
+  static async _onRollAppearing(event, target) {
+    return this.rollHandler?.rollAppearing(event);
   }
 
   // --- EQUIPMENT HANDLERS ---

@@ -1,0 +1,57 @@
+{
+  "folder": null,
+  "name": "Potion, ESP",
+  "type": "equipment",
+  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "system": {
+    "description": "<p>For 1 Hour, the consumer gains Telepathy (Far). Using this sense requires Focus, and it is obstructed by 1 inch of lead or more than 2' of stone.</p>",
+    "equipmentType": "alchemical",
+    "locked": false,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 250,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "potion",
+    "lore": "",
+    "itemFx": {
+      "animType": "melee"
+    }
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1773699166740,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "ZqO0vavKQtnvjVHF",
+  "sort": 0,
+  "_key": "!items!ZqO0vavKQtnvjVHF"
+}

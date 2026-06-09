@@ -1,0 +1,56 @@
+{
+  "name": "Cook Pack",
+  "type": "starterPack",
+  "_id": "TLrZRlyo8yuVb5it",
+  "img": "icons/tools/cooking/fork-steel-tan.webp",
+  "system": {
+    "description": "",
+    "items": [
+      {
+        "uuid": "Compendium.vagabond.gear.Item.PehvORieuUtMALxd",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.p1f0sgmgTGtJojAW",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.xaASk1oaUAvspnm9",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.RgdnvrUNbfzSEepg",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.j7gc80NDWmZtCTbk",
+        "quantity": 1
+      }
+    ],
+    "currency": {
+      "gold": 0,
+      "silver": 76,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1773096329923,
+    "modifiedTime": 1773096733283,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_key": "!items!TLrZRlyo8yuVb5it"
+}

@@ -5,7 +5,9 @@
   "scripts": {
     "build": "sass src/scss/vagabond.scss css/vagabond.css --style=expanded --no-source-map",
     "watch": "sass src/scss/vagabond.scss css/vagabond.css --style=expanded --source-map --watch",
-    "createSymlinks": "node src/create-symlinks.mjs"
+    "createSymlinks": "node src/create-symlinks.mjs",
+    "pack": "node src/packs.mjs pack",
+    "unpack": "node src/packs.mjs unpack"
   },
   "browserslist": [
     "last 3 versions"
@@ -14,7 +16,8 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "sass": "^1.53.0",
-    "js-yaml": "^4.1.0"
+    "@foundryvtt/foundryvtt-cli": "^3.0.3",
+    "js-yaml": "^4.1.0",
+    "sass": "^1.53.0"
   }
 }

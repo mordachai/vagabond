@@ -1,0 +1,63 @@
+{
+  "name": "Mysticism Perks",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "List of Perks w/ Mysticism Training",
+      "type": "text",
+      "_id": "u857UbflZBTDcDdD",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>@UUID[Compendium.vagabond.perks.Item.ZpxPOAaeveIIQUpU]{Athame}</p><p>@UUID[Compendium.vagabond.perks.Item.O2z8sxDuwIm56HqO]{Familiar}</p><p>@UUID[Compendium.vagabond.perks.Item.b5Asi0XnmAWm2lTH]{Mage Slayer}</p><p>@UUID[Compendium.vagabond.perks.Item.ORTWxP4kkcmn2Etv]{Magical Secret}</p><p>@UUID[Compendium.vagabond.perks.Item.AjP1wBwolTK06wBs]{Medium}</p><p>@UUID[Compendium.vagabond.perks.Item.yHCluTKBb55vwuf2]{Primordial Summoner}</p><p>@UUID[Compendium.vagabond.perks.Item.Bg61LXm2yYZAD1EC]{Re-Animator}</p><p>@UUID[Compendium.vagabond.perks.Item.0RhDUoeDs8XiEHxk]{Salbenist}</p><p>@UUID[Compendium.vagabond.perks.Item.6CgNXM9yYbHeOntN]{Storm Raiser}</p><p>@UUID[Compendium.vagabond.perks.Item.MMFem3lhaPwAUnrj]{Witchsight}</p><p></p><p></p><p></p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.8.1",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!OpBLPcGPpGYjNBR3.u857UbflZBTDcDdD"
+    }
+  ],
+  "folder": null,
+  "categories": [],
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.8.1",
+    "createdTime": 1766955465045,
+    "modifiedTime": 1766955465045,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "OpBLPcGPpGYjNBR3",
+  "sort": 0,
+  "_key": "!journal!OpBLPcGPpGYjNBR3"
+}
