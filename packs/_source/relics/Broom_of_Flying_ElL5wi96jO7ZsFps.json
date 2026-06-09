@@ -1,0 +1,55 @@
+{
+  "name": "Broom of Flying",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">An animated broom with a Fly Speed of 30'. Obeys the commands of the Being Bound to it.</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Broom (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087687167,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "ElL5wi96jO7ZsFps",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 800000,
+  "_key": "!items!ElL5wi96jO7ZsFps"
+}

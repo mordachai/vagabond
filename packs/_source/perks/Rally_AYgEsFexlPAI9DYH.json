@@ -1,0 +1,42 @@
+{
+  "name": "Rally",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Once per Shift, you can use an Action to boost the morale of your Allies, granting them 1 Luck and ending a Status affecting them from either Charmed or Frightened.</span><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "presence",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [
+        "leadership"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769602502994,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "AYgEsFexlPAI9DYH",
+  "sort": 2000000,
+  "_key": "!items!AYgEsFexlPAI9DYH"
+}

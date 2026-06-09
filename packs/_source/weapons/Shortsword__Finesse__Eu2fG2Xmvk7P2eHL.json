@@ -1,0 +1,144 @@
+{
+  "name": "Shortsword (Finesse)",
+  "type": "equipment",
+  "img": "icons/weapons/swords/scimitar-worn-blue.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 20,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Finesse",
+      "Keen"
+    ],
+    "weaponSkill": "finesse",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/MeleeAttack01_ShortSword01*",
+      "hitOffsetX": -100,
+      "hitDuration": 1000,
+      "animType": "auto",
+      "hitScale": 1,
+      "hitSound": "",
+      "missFile": "",
+      "missScale": 1,
+      "missDuration": 600,
+      "missSound": "",
+      "soundVolume": 0.6
+    },
+    "damageTypeOneHand": "slashing",
+    "requiresBound": false,
+    "bound": false,
+    "gridPosition": 0,
+    "containerId": null,
+    "canExplode": false,
+    "explodeValues": "",
+    "damageTypeTwoHands": "-",
+    "isSupply": false,
+    "isBeverage": false,
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "passiveCausedStatuses": [],
+    "causedStatuses": [],
+    "critCausedStatuses": [],
+    "blockedStatuses": [],
+    "resistedStatuses": [],
+    "coating": {
+      "sourceName": "",
+      "charges": 0,
+      "causedStatuses": []
+    }
+  },
+  "effects": [
+    {
+      "name": "Keen Property",
+      "origin": "Compendium.vagabond.weapons.Item.OxqGnjXxt9vRGVeZ",
+      "img": "icons/svg/aura.svg",
+      "_id": "aljUPbHNugJfH1g3",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critNumber",
+            "value": -1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "4.3.1",
+        "lastModifiedBy": null,
+        "createdTime": null,
+        "modifiedTime": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Eu2fG2Xmvk7P2eHL.aljUPbHNugJfH1g3"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1774137206665,
+    "modifiedTime": 1774137206665,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "Eu2fG2Xmvk7P2eHL",
+  "sort": 0,
+  "_key": "!items!Eu2fG2Xmvk7P2eHL"
+}

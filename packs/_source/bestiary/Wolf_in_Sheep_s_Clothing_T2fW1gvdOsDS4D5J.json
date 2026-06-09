@@ -1,0 +1,196 @@
+{
+  "name": "Wolf in Sheep's Clothing",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 40,
+      "max": 40
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 9,
+    "threatLevel": 2.4,
+    "size": "medium",
+    "beingType": "Outers",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 9,
+    "morale": 8,
+    "appearing": "1",
+    "speed": 5,
+    "senses": "",
+    "armor": 1,
+    "armorDescription": "as Leather",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "fire"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Beyonder) A predatory alien fungus that hunts by attracting prey with a small, furry growth that mimics a rabbit, squirrel, or similar small mammal. The creature itself resembles a tree stump with multiple root-like limbs and fungal eyestalks.",
+    "actions": [
+      {
+        "name": "Bite",
+        "note": "Melee Attack",
+        "attackType": "melee",
+        "flatDamage": "5",
+        "rollDamage": "2d4",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Tentacle",
+        "note": "Melee Attack, Near",
+        "attackType": "melee",
+        "flatDamage": "2",
+        "rollDamage": "1d4",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      }
+    ],
+    "abilities": [],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Wolf in Sheep's Clothing",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "7XRNmpvwuyjJWsiD",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.15",
+    "createdTime": 1765457210474,
+    "modifiedTime": 1770078912561,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "T2fW1gvdOsDS4D5J",
+  "sort": 2200000,
+  "_key": "!actors!T2fW1gvdOsDS4D5J"
+}

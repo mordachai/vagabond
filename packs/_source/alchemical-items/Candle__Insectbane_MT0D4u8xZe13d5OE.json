@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Candle, Insectbane",
+  "type": "equipment",
+  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Sheds light out to Close for up to 1 hour while burning. Insects act as Frightened while within the light it sheds.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 1,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "torch",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "MT0D4u8xZe13d5OE",
+  "sort": 0,
+  "_key": "!items!MT0D4u8xZe13d5OE"
+}

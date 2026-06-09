@@ -1,0 +1,93 @@
+{
+  "name": "Gish",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can use Weapons as Trinkets to Cast and, when you Cast with a Delivery of Imbue on a Weapon you have Equipped, you can make an attack with the weapon with the same Action.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [],
+      "spells": [
+        ""
+      ],
+      "other": [
+        "Trained: Melee or Ranged"
+      ],
+      "hasAnySpell": true,
+      "spellOrGroups": [],
+      "trainedSkillOrGroups": [
+        [
+          "melee",
+          "ranged"
+        ]
+      ]
+    }
+  },
+  "effects": [
+    {
+      "name": "Active Effect",
+      "origin": "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X",
+      "img": "icons/svg/aura.svg",
+      "_id": "imf2mRfowH7GpgJt",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.isSpellcaster",
+            "value": true,
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "1.8.1",
+        "createdTime": 1766747792063,
+        "modifiedTime": 1766747845898,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YVgf2kRWwn8JRq1X.imf2mRfowH7GpgJt"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1769602332125,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "YVgf2kRWwn8JRq1X",
+  "sort": 6500000,
+  "_key": "!items!YVgf2kRWwn8JRq1X"
+}

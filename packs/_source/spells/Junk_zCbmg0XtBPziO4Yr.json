@@ -1,0 +1,36 @@
+{
+  "name": "Junk",
+  "type": "spell",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange-purple.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You create an Item worth no more than 5s and of 1 Slot or less that fits in the Area of the delivery, in a willing Target's hand, or in the nearest open space to the Target. This Item lacks fine detail and specificity. For example, it could create a key but not the key for a jail cell you are in.</span></p><p><span class=\"fontstyle0\">This Spell does not require Focus to keep the Item materialized, but the Item disappears when you Cast this Spell again, or dismiss it (no Action required). You can spend additional Mana during the Cast to increase the number of Items created by one per additional Mana spent to do so.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "genericlight",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "zCbmg0XtBPziO4Yr",
+  "sort": 5800000,
+  "_key": "!items!zCbmg0XtBPziO4Yr"
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Kinesis",
+  "type": "spell",
+  "img": "icons/magic/earth/projectile-stone-boulder-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You shoot an unsecured Target of 1 or less HD or Slots at a Target you can see within Near. If it strikes a Target, it hits them harmlessly unless this is Cast to deal damage.</span></p><p><span class=\"fontstyle0\">You can spend Mana to increase the Targetable HD or Slots by 1 per Mana spent to do so for that Casting.</span></p>",
+    "damageType": "blunt",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "blunt",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "Z46O80kXCKWgshq2",
+  "sort": 2800000,
+  "_key": "!items!Z46O80kXCKWgshq2"
+}

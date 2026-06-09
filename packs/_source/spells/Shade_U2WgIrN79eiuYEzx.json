@@ -1,0 +1,36 @@
+{
+  "name": "Shade",
+  "type": "spell",
+  "img": "icons/creatures/magical/humanoid-silhouette-dashing-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is surrounded by magic darkness out to Close for the duration, which snuffs out nonmagic lights.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "shadow",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "U2WgIrN79eiuYEzx",
+  "sort": 2500000,
+  "_key": "!items!U2WgIrN79eiuYEzx"
+}

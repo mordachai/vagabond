@@ -1,0 +1,55 @@
+{
+  "name": "Orb of Many Energies",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Roll a d8 to determine its starting color. Each color corresponds to a Spell, which the Bound Being can Cast as long as the orb is that color by spending a Charge.</span></p><p><span class=\"fontstyle0\">Whenever you Cast a Spell that corresponds to the orb's current color, roll a d8 to determine its new color.</span></p><table class=\"NormalTable\"><tbody><tr><td><p><span class=\"fontstyle2\">d8</span></p></td><td><p><span class=\"fontstyle2\">Color</span></p></td><td><p><span class=\"fontstyle2\">Spell</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">1</span></p></td><td><p><span class=\"fontstyle3\">Red</span></p></td><td><p><span class=\"fontstyle3\">Burn</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">2</span></p></td><td><p><span class=\"fontstyle3\">Orange</span></p></td><td><p><span class=\"fontstyle3\">Amplify</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">3</span></p></td><td><p><span class=\"fontstyle3\">Yellow</span></p></td><td><p><span class=\"fontstyle3\">Zap</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">4</span></p></td><td><p><span class=\"fontstyle3\">Green</span></p></td><td><p><span class=\"fontstyle3\">Sprout</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">5</span></p></td><td><p><span class=\"fontstyle3\">Blue</span></p></td><td><p><span class=\"fontstyle3\">Freeze</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">6</span></p></td><td><p><span class=\"fontstyle3\">Indigo</span></p></td><td><p><span class=\"fontstyle3\">Ward</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">7</span></p></td><td><p><span class=\"fontstyle3\">Violet</span></p></td><td><p><span class=\"fontstyle3\">Color</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">8</span></p></td><td><p><span class=\"fontstyle3\">Special</span></p></td><td><p><span class=\"fontstyle3\">The orb becomes two colors at once. Roll twice, rerolling 8s. When you Cast a Spell corresponding to either of these colors, you may Cast the Spell corresponding to the other color as a part of the same Action.</span></p></td></tr></tbody></table><p><span class=\"fontstyle0\">The orb has Cd6 Charges. When it runs out of Charges, it dims to a grayish color and can't be used until the next dawn.</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2500,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Eccentric Trinket (Orb, Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087645578,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "hdNWqdliqkEzkO88",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3100000,
+  "_key": "!items!hdNWqdliqkEzkO88"
+}

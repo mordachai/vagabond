@@ -1,0 +1,54 @@
+{
+  "name": "Elven Chain",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Mithral Chain Armor that, while Equipped, grants the wearer the following Power:</span></p><ul><li><span class=\"fontstyle2\">(+1) Armor:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Medium Armor"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "BVY2dIGUFzOSEC7z",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 500000,
+  "_key": "!items!BVY2dIGUFzOSEC7z"
+}

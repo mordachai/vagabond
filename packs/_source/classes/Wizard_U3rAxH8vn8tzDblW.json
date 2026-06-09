@@ -1,0 +1,306 @@
+{
+  "name": "Wizard",
+  "type": "class",
+  "img": "icons/magic/symbols/star-rising-purple.webp",
+  "system": {
+    "description": "<p><strong>In a way, we are magicians. We are alchemists, sorcerers and wizards. We are a very strange bunch. But there is great fun in being a wizard.</strong></p><p><em>— Billy Joel</em></p><p>Students of the arcane arts, researchers and developers of spells as academic pursuit.</p><h3>Iconic Wizards</h3><ul><li><strong>Harry Dresden</strong>, <em>The Dresden Files</em></li><li><strong>Merlyn</strong>, <em>Arthurian legend</em></li><li><strong>Sparrow</strong>, <em>Earthsea series</em></li><li><strong>Sypha Belnades</strong>, <em>Castlevania</em></li></ul><h3>Playing Wizard</h3><p>The wizard is a squishy blaster focused on Casting Spells. Stay in safety to Cast your Spells and discover Enemy weaknesses.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Perk:</strong> Astronomer or Mage<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆</p><h3>Training</h3><p><strong>Weapons —</strong><br /><strong>Skills:</strong> Arcana, and 4 others</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spellcaster, Page Master</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Sculpt Spell</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Manifold Mind (2)</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">6</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Extracurricular</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">24</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">6</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">28</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">7</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Manifold Mind (3)</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">32</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">7</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">36</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">8</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Archwizard</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">40</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">8</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": true,
+    "levelFeatures": [
+      {
+        "name": "Spellcaster",
+        "description": "<p><span class=\"fontstyle0\">You can Cast Spells using Arcana.</span></p><p><span class=\"fontstyle2\"><strong>Spells:</strong> </span><span class=\"fontstyle0\">You learn 4 Spells. You learn 1 other Spell every 2 Wizard Levels hereafter.</span></p><p><span class=\"fontstyle2\"><strong>Mana:</strong> </span><span class=\"fontstyle0\">Your Maximum Mana is equal to (4 × your Wizard Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Reason + half your Wizard Level, round up). You regain spent Mana when you Rest or Study.</span> </p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Sculpt Spell",
+        "description": "<p><span class=\"fontstyle0\">You pay 1 less Mana for Spell delivery.</span> </p>",
+        "level": 2,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span> </p>",
+        "level": 3,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Page Master",
+        "description": "<p><span class=\"fontstyle0\">You gain the Bookworm Perk (p. 67). Additionally, when you successfully Cast a Spell, you can spend one of your Studied dice and add it to the damage or healing roll.</span></p><p></p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.lDzaNi9ay6p8y0Ay"
+        ],
+        "requiredSpells": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span> </p>",
+        "level": 9,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Manifold Mind II",
+        "description": "<p><span class=\"fontstyle0\">You can Focus on up to three Spells at the same time. </span><br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "level": 8,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span> </p>",
+        "level": 7,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Extracurricular",
+        "description": "<p><span class=\"fontstyle0\">When you Cast, you can spend a Studied die to cast any one Spell with that Casting, even if it isn’t a Spell you know.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "level": 6,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Manifold Mind",
+        "description": "<p><span class=\"fontstyle0\">You can Focus on up to two Spells at the same time. When you become an 8th Level Wizard, you can Focus on up to three Spells at the same time.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "level": 4,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span> </p>",
+        "level": 5,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Archwizard",
+        "description": "<p><span class=\"fontstyle0\">You pay 2 less Mana for Spell delivery</span>.</p>",
+        "level": 10,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      }
+    ],
+    "manaSkill": "arcana",
+    "castingStat": "reason",
+    "manaMultiplier": 4,
+    "skillGrant": {
+      "choices": [
+        {
+          "count": 4,
+          "pool": [],
+          "label": ""
+        }
+      ],
+      "guaranteed": [
+        "arcana"
+      ]
+    },
+    "levelSpells": [
+      {
+        "spells": 4,
+        "level": 1
+      },
+      {
+        "spells": 4,
+        "level": 2
+      },
+      {
+        "spells": 5,
+        "level": 3
+      },
+      {
+        "spells": 5,
+        "level": 4
+      },
+      {
+        "spells": 6,
+        "level": 5
+      },
+      {
+        "spells": 6,
+        "level": 6
+      },
+      {
+        "spells": 7,
+        "level": 7
+      },
+      {
+        "spells": 7,
+        "level": 8
+      },
+      {
+        "spells": 8,
+        "level": 9
+      },
+      {
+        "spells": 8,
+        "level": 10
+      }
+    ],
+    "keyStats": [
+      "reason"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.hje865DkzVVguhdT",
+      "Compendium.vagabond.starting-packs.Item.2G3GnGMuSzqQwaxo"
+    ]
+  },
+  "effects": [
+    {
+      "name": "lv2 - Sculpt Spell",
+      "origin": "Compendium.vagabond.classes.Item.U3rAxH8vn8tzDblW",
+      "img": "icons/svg/aura.svg",
+      "_id": "QiaBDly7znkQofrY",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.deliveryManaCostReduction",
+            "value": "(@attributes.level.value >= 2) ? 1 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You pay 1 less Mana for Spell delivery.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "3.2.2",
+        "createdTime": 1770464049314,
+        "modifiedTime": 1770471772942,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!U3rAxH8vn8tzDblW.QiaBDly7znkQofrY"
+    },
+    {
+      "name": "lv.10 - Sculpt-Spell",
+      "origin": "Compendium.vagabond.classes.Item.U3rAxH8vn8tzDblW",
+      "img": "icons/svg/aura.svg",
+      "_id": "bUeMPzes09myEhWl",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.deliveryManaCostReduction",
+            "value": "(@lvl >= 10) ? 1 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You pay 2 less Mana for Spell delivery.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "3.2.2",
+        "createdTime": 1770471902907,
+        "modifiedTime": 1770472033834,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!U3rAxH8vn8tzDblW.bUeMPzes09myEhWl"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1773097079850,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "U3rAxH8vn8tzDblW",
+  "sort": 1000000,
+  "_key": "!items!U3rAxH8vn8tzDblW"
+}

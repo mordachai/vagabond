@@ -1,0 +1,91 @@
+{
+  "name": "Draken",
+  "type": "ancestry",
+  "img": "systems/vagabond/assets/ui/compendiums/draken.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Resembling humanoid dragons, Draken are relatives of the terrifying dragons of legend. Their scales come in a variety of brilliant colors, their maws house fanged teeth that often serve as a serrated clamp, and their fingers resemble the talonlike claws of dragons.</span></p>",
+    "size": "medium",
+    "ancestryType": "Cryptid",
+    "traits": [
+      {
+        "name": "Breath Attack",
+        "description": "You can attack with an Endure or Will Save to make a 15’ Cone of draconic breath that deals 2d6!"
+      },
+      {
+        "name": "Scale",
+        "description": "You have a +1 bonus to Armor Rating."
+      },
+      {
+        "name": "Draconic Resilience",
+        "description": "You take half damage from a source of your choice from either Acid, Cold, Fire, or Shock."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "name": "Scale",
+      "origin": "Compendium.vagabond.ancestries.Item.LtZtoLKTbT5X3HZJ",
+      "img": "icons/svg/aura.svg",
+      "_id": "1Ismbz8nwoNAFkNj",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.armorBonus",
+            "value": 1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "1.1.5",
+        "createdTime": 1765106300065,
+        "modifiedTime": 1765107364534,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!LtZtoLKTbT5X3HZJ.1Ismbz8nwoNAFkNj"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966621821,
+    "modifiedTime": 1769604690050,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "LtZtoLKTbT5X3HZJ",
+  "sort": 0,
+  "_key": "!items!LtZtoLKTbT5X3HZJ"
+}

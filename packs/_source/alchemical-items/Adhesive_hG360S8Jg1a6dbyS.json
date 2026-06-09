@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Adhesive",
+  "type": "equipment",
+  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A sticky substance used to adhere materials together. The adhesive can be used on an unsecured Object weighing 10 pounds or less to bond it to anything weighing 10 pounds or more, securing it.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "hG360S8Jg1a6dbyS",
+  "sort": 0,
+  "_key": "!items!hG360S8Jg1a6dbyS"
+}

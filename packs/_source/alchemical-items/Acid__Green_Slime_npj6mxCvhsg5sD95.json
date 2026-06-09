@@ -1,0 +1,57 @@
+{
+  "folder": null,
+  "name": "Acid, Green Slime",
+  "type": "equipment",
+  "img": "icons/consumables/potions/bottle-conical-fumes-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Contains a green slime (p. 173).<br /><br />@UUID[Compendium.vagabond.bestiary.Actor.9rpGK7YO9OfbXJoh]{Green Slime}</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 5,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "acid",
+    "damageAmount": "d6",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "acid",
+    "lore": "",
+    "itemFx": {
+      "animType": "melee"
+    }
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1773715371513,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "npj6mxCvhsg5sD95",
+  "sort": 0,
+  "_key": "!items!npj6mxCvhsg5sD95"
+}

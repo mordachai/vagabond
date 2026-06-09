@@ -1,0 +1,64 @@
+{
+  "name": "Staff",
+  "type": "equipment",
+  "img": "icons/weapons/staves/staff-simple.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 10,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Finesse"
+    ],
+    "weaponSkill": "finesse",
+    "range": "close",
+    "grip": "V",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d6",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Quarterstaff*",
+      "enabled": true,
+      "hitOffsetX": -100,
+      "hitDuration": 1000
+    },
+    "damageTypeOneHand": "blunt",
+    "damageTypeTwoHands": "blunt"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1774106973523,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "ufjKBfCKT1kTA5Kq",
+  "sort": 4000000,
+  "_key": "!items!ufjKBfCKT1kTA5Kq"
+}

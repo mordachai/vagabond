@@ -1,0 +1,54 @@
+{
+  "name": "Decanter of Endless Water",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A flask that provides an endless supply of water in a manner of the wielder's choice. This can be fresh or salt water, and a command word must be spoken to detail the rate of flow:</span></p><ul><li><span class=\"fontstyle2\">Fountain:</span><span class=\"fontstyle0\"> Medium-sized fountain at 5 gallons per Round.</span></li><li><span class=\"fontstyle2\">Geyser:</span><span class=\"fontstyle0\"> Line out to Near of 30 gallons per Round. Wielder must pass an Endure Save against being Shoved or be knocked Prone.</span></li><li><span class=\"fontstyle2\">Stream:</span><span class=\"fontstyle0\"> Trickle of 1 gallon per Round.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Vase"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "gGdqsNuaILx7eGU7",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3000000,
+  "_key": "!items!gGdqsNuaILx7eGU7"
+}

@@ -1,0 +1,62 @@
+{
+  "folder": "o9iJqhb7zjYleADh",
+  "name": "Utility - Aqua Lung",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "system": {
+    "description": "<p>Wearer can breathe water.</p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 5000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "gridPosition": 0,
+    "containerId": null,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTypeOneHand": "-",
+    "damageTwoHands": "d8",
+    "damageTypeTwoHands": "-",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "alchemicalType": "concoction",
+    "lore": "Magical quirks other than Combat and Mobility."
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1769766913362,
+    "modifiedTime": 1769766913362,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Jizg8x5ynRWaLwUn",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 0,
+  "_key": "!items!Jizg8x5ynRWaLwUn"
+}

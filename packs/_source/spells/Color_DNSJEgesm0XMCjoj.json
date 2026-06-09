@@ -1,0 +1,58 @@
+{
+  "name": "Color",
+  "type": "spell",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-large-red.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">For the duration, Targeted Beings are Blinded and Objects are changed in color.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "genericlight",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "blinded",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "blinded",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773713795857,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "DNSJEgesm0XMCjoj",
+  "sort": 900000,
+  "_key": "!items!DNSJEgesm0XMCjoj"
+}

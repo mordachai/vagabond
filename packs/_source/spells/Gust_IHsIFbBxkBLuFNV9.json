@@ -1,0 +1,36 @@
+{
+  "name": "Gust",
+  "type": "spell",
+  "img": "icons/magic/air/wind-swirl-gray-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is blasted with a wind shear in the following ways:</span></p><p><span class=\"fontstyle2\"><strong>Feather:</strong> </span><span class=\"fontstyle0\">If Cast on a falling Target, this blast can slow the descent of a falling Medium or smaller Target to a safe Speed for the duration.</span></p><p><span class=\"fontstyle2\"><strong>Target:</strong> </span><span class=\"fontstyle0\">This can push an Item that occupies 1 or less Slots, or a Being with Level or HD 1 or lower. You can increase this number by spending additional Mana on the Cast, increasing it by 1 per Mana spent to do so.</span></p><p><span class=\"fontstyle2\"><strong>Distance:</strong> </span><span class=\"fontstyle0\">This pushes the Target 5', and you can increase the distance pushed by spending Mana, increasing the distance by 5' per Mana spent to do so.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "wind",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "IHsIFbBxkBLuFNV9",
+  "sort": 1600000,
+  "_key": "!items!IHsIFbBxkBLuFNV9"
+}

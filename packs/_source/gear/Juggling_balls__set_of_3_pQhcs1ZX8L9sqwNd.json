@@ -1,0 +1,58 @@
+{
+  "name": "Juggling balls, set of 3",
+  "type": "equipment",
+  "img": "icons/commodities/materials/glass-orb-blue-gold.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 2,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Games & Toys",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.IIH7DQTOSDjzFbvw",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.0",
+    "createdTime": 1765501732606,
+    "modifiedTime": 1765501732606,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "pQhcs1ZX8L9sqwNd",
+  "folder": "I2iJr4lRwrtOAYDq",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!pQhcs1ZX8L9sqwNd"
+}

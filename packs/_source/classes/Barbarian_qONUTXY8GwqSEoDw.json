@@ -1,0 +1,248 @@
+{
+  "name": "Barbarian",
+  "type": "class",
+  "img": "icons/weapons/axes/axe-crooked-crystal-pink.webp",
+  "system": {
+    "description": "<p><strong>Hatred outlives the hateful.</strong></p><p><em>– Brian Tinsman, Rancor flavor text (Magic the Gathering)</em></p><p>Primal warriors that fight with the power of unbridled anger. The legends speak of their kills almost as their own unique deeds, using the barbarian's name as a past-tense verb.</p><h3>Iconic Barbarians</h3><ul><li><strong>Brock Samson</strong>, <em>The Venture Bros</em></li><li><strong>Conan</strong>, <em>Conan the Barbarian series</em></li><li><strong>Guts</strong>, <em>Berserk</em></li><li><strong>Logen Ninefingers</strong>, <em>First Law Trilogy</em></li></ul><h3>Playing Barbarian</h3><p>The barbarian is a medium-high defense bruiser. Stick to an Enemy's face, and hit them very hard.</p><p><strong>Action:</strong> Attack (Melee)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Gladiator or Warrior<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> Melee<br /><strong>Skills:</strong> Brawl and 3 from either Detect, Influence, Leadership, Mysticism, or Survival</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Rage, Wrath</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Aggressor</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Fearmonger</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Mindless Rancor</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Bloodthirsty</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Rip and Tear</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Rage",
+        "description": "<p><span class=\"fontstyle0\">While Berserk and wearing Light Armor or no Armor, you reduce damage you take by 1 per damage die, and your attack damage dice are one size larger and can explode.</span></p><p><span class=\"fontstyle0\">Further, you can go Berserk after you take damage or as part of making an attack. You remain Berserk this way for 1 minute, unless you end it (no Action) or go Unconscious.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 1,
+        "name": "Wrath",
+        "description": "<p><span class=\"fontstyle0\">You gain the Interceptor Perk (p. 69), and can make its attack against an Enemy that makes a Ranged Attack, Casts, or that damages you or an Ally.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.i8ipAygu2JALmYKI"
+        ],
+        "perkAmount": 1
+      },
+      {
+        "level": 2,
+        "name": "Aggressor",
+        "description": "<p><span class=\"fontstyle0\">You have a 10 foot bonus to Speed during the first Round of Combat, and having 3 or more Fatigue doesn't prevent you from taking the Rush Action.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 4,
+        "name": "Fearmonger",
+        "description": "<p><span class=\"fontstyle0\">When you kill an Enemy, every Near Enemy with HD lower than your Level becomes Frightened until the end of your next Turn.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 6,
+        "name": "Mindless Rancor",
+        "description": "<p><span class=\"fontstyle0\">You can't be Charmed, Confused, or compelled to act against your will.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 8,
+        "name": "Bloodthirsty",
+        "description": "<p><span class=\"fontstyle0\">Your attacks against Beings that are missing any HP are Favored, and you can sense them within Far as if by Blindsight.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 10,
+        "name": "Rip and Tear",
+        "description": "<p><span class=\"fontstyle0\">While Berserk, you reduce damage you take by 2 per damage die, rather than 1, and you gain a +1 bonus to each die of damage you deal.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "guaranteed": [
+        "melee",
+        "brawl"
+      ],
+      "choices": [
+        {
+          "count": 1,
+          "pool": [],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [],
+    "keyStat": "might",
+    "keyStats": [
+      "might"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.pXpaYfCavubGOicv",
+      "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
+    ]
+  },
+  "effects": [
+    {
+      "name": "Rage feature",
+      "origin": "Compendium.vagabond.classes.Item.qONUTXY8GwqSEoDw",
+      "img": "icons/svg/aura.svg",
+      "_id": "o5rDbDlKLwbeuceG",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.meleeDamageDieSizeBonus",
+            "value": "(@statuses.berserk) ? 2 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.rangedDamageDieSizeBonus",
+            "value": "(@statuses.berserk) ? 2 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.brawlDamageDieSizeBonus",
+            "value": "(@statuses.berserk) ? 2 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.finesseDamageDieSizeBonus",
+            "value": "(@statuses.berserk) ? 2 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.bonuses.globalExplode",
+            "value": "(@statuses.berserk) ? 1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.incomingDamageReductionPerDie",
+            "value": "(@statuses.berserk) ? 1 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "4.3.1",
+        "createdTime": 1774181587458,
+        "modifiedTime": 1774181765635,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!qONUTXY8GwqSEoDw.o5rDbDlKLwbeuceG"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1766750421157,
+    "modifiedTime": 1773095462939,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "qONUTXY8GwqSEoDw",
+  "sort": 1600000,
+  "_key": "!items!qONUTXY8GwqSEoDw"
+}

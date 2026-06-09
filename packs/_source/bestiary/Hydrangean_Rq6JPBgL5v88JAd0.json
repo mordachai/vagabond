@@ -1,0 +1,207 @@
+{
+  "name": "Hydrangean",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 9,
+      "max": 9
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 2,
+    "threatLevel": 2,
+    "size": "medium",
+    "beingType": "Primordials",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 2,
+    "morale": 8,
+    "appearing": "d6",
+    "speed": 5,
+    "senses": "",
+    "armor": 1,
+    "armorDescription": "as Leather",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "slashing",
+      "poison",
+      "fire"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Plant) Sharp-toothed carnivorous plants, with multiple serpentine petioles atop a digestive pitcher.",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "1xBite per head (Multi-Headed)"
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack, Near",
+        "recharge": "",
+        "flatDamage": "2",
+        "rollDamage": "1d4",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": ""
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Multi-Headed",
+        "description": "It starts with 3 Heads. Targetting an area that could behead it causes a -3 penalty to the Check, but severs it if at least 2 damage is dealt in a single damage instance."
+      },
+      {
+        "name": "Hydra Regrowth",
+        "description": "Regains 4 HP at the start of its Turns. If it is missing one of its heads when this happens, two Heads sprout. This Ability doesn't work if it took damage from fire since its last Turn."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Hydrangean",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "CFWpUA4g8bejv3HV",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.3",
+    "createdTime": 1765458651305,
+    "modifiedTime": 1770070510379,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "Rq6JPBgL5v88JAd0",
+  "sort": 0,
+  "_key": "!actors!Rq6JPBgL5v88JAd0"
+}

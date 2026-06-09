@@ -1,0 +1,35 @@
+{
+  "name": "Freeze",
+  "type": "spell",
+  "img": "icons/magic/water/barrier-ice-crystal-wall-faceted-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Any freestanding water in the Area is frozen. If the Target is a Being, its Speed is reduced by 10'. Alternatively, you can create an Object made of ice that can fit within the Area, and is of a shape of your choice (such as an icicle dagger or a block of ice). If needed, the Object has HD: 1 (4 HP) and is Weak: Fire. Any of these effects last for the duration.</span></p>",
+    "damageType": "cold",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "noRollRequired": true,
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "toYD8Nm61vMhBbZ7",
+  "sort": 5000000,
+  "_key": "!items!toYD8Nm61vMhBbZ7"
+}

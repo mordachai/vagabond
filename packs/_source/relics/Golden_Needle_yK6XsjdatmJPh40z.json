@@ -1,0 +1,55 @@
+{
+  "name": "Golden Needle",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">If the tip of the needle is pressed into a petrified Being, the needle melts into the stone and the curse of petrification ends. The needle is irretrievable after use.</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Sewing Needle (Consumable)",
+    "isConsumable": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087754612,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "yK6XsjdatmJPh40z",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 4200000,
+  "_key": "!items!yK6XsjdatmJPh40z"
+}

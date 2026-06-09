@@ -1,0 +1,225 @@
+{
+  "name": "Purple Worm",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 67,
+      "max": 67
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 15,
+    "threatLevel": 5.5,
+    "size": "colossal",
+    "beingType": "Cryptid",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 15,
+    "morale": 10,
+    "appearing": "d2",
+    "speed": 20,
+    "senses": "Blindsight, Seismicsense 60'",
+    "armor": 3,
+    "armorDescription": "as (+1) Chain",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Wyrm) Titanic worms with vicious teeth and a deadly stinger.",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "1xBite and 1xSting",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack, Cleave",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "9",
+        "rollDamage": "2d8",
+        "damageType": "-",
+        "extraInfo": "or half to all Targets Close to its mouth.",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Sting",
+        "note": "Melee Attack, Near its tail",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "4",
+        "rollDamage": "1d8",
+        "damageType": "-",
+        "extraInfo": "and pass [Endure] or become Sickened (+1 Fatigue for Cd12).",
+        "causedStatuses": [
+          {
+            "statusId": "sickened",
+            "saveType": "any",
+            "duration": "d12",
+            "tickDamageEnabled": true,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Sand Swimmer",
+        "description": "Can Move through sand and earth using its Speed."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Purple Worm",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 5,
+    "height": 5,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 5
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1774028209930,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "bI1V6pqJkiiIGEYJ",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 4900000,
+  "_key": "!actors!bI1V6pqJkiiIGEYJ"
+}

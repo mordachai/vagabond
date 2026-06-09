@@ -1,0 +1,69 @@
+{
+  "name": "Handaxe (Thrown)",
+  "type": "equipment",
+  "img": "icons/weapons/axes/axe-battle-worn-black.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 40,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Thrown"
+    ],
+    "weaponSkill": "ranged",
+    "range": "near",
+    "grip": "1H",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d4",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "gridPosition": 0,
+    "containerId": null,
+    "canExplode": false,
+    "explodeValues": "",
+    "damageTypeOneHand": "slashing",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/jb2a_patreon/Library/Generic/Weapon_Attacks/Ranged/HandAxe01_01_Regular_White_30ft_1600x400.webm"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1766842952874,
+    "modifiedTime": 1773713174486,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "GzVV4JLillR4cQwR",
+  "sort": 0,
+  "_key": "!items!GzVV4JLillR4cQwR"
+}

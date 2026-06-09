@@ -1,0 +1,47 @@
+{
+  "name": "Erupt",
+  "type": "spell",
+  "img": "icons/magic/earth/lava-explosion-orange.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Magma coats the nearest surface to the Target for the duration (minimum 5-foot square), causing it to be Difficult Terrain that deals d6 first time a Being enters the Area on a Turn and when it ends its Turn in the Area.</span></p>",
+    "damageType": "fire",
+    "duration": "Until your next turn",
+    "crit": "Targets Burning (Cd4 while in the Area).",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "lava",
+    "locked": true,
+    "critCausedStatuses": [
+      {
+        "statusId": "burning",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "d4",
+        "tickDamageEnabled": true,
+        "damageOnTick": "",
+        "damageType": "fire"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714054109,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "tDbOfV4nMk1JeTCG",
+  "sort": 4900000,
+  "_key": "!items!tDbOfV4nMk1JeTCG"
+}

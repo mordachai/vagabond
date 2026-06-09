@@ -1,0 +1,36 @@
+{
+  "name": "Dispel",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You suspend a magic effect for the duration, treating it as an unwilling Target (p. 90).</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "The effect is completely dispelled if it is not a Relic's Power.",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "defense",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "7iglZS7HDksMctFu",
+  "sort": 500000,
+  "_key": "!items!7iglZS7HDksMctFu"
+}

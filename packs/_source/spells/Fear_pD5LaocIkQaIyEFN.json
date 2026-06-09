@@ -1,0 +1,57 @@
+{
+  "name": "Fear",
+  "type": "spell",
+  "img": "icons/magic/control/fear-fright-monster-grin-purple-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Frightened of another visible Target you choose for the duration, ending early if you Cast this Spell again.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "fxSchool": "shadow",
+    "locked": true,
+    "critCausedStatuses": [
+      {
+        "statusId": "frightened",
+        "requiresDamage": false,
+        "saveType": "will",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "causedStatuses": [
+      {
+        "statusId": "frightened",
+        "requiresDamage": false,
+        "saveType": "will",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714134572,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "pD5LaocIkQaIyEFN",
+  "sort": 4500000,
+  "_key": "!items!pD5LaocIkQaIyEFN"
+}

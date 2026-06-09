@@ -1,0 +1,92 @@
+{
+  "name": "Marksmanship",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The damage dice for your Ranged Weapon attacks are one size larger.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 7
+        }
+      ],
+      "trainedSkills": [
+        "ranged"
+      ],
+      "spells": [],
+      "other": []
+    }
+  },
+  "effects": [
+    {
+      "name": "+Die Size",
+      "origin": "Compendium.vagabond.perks.Item.xfYrdHhVTh03lkvz",
+      "img": "icons/svg/aura.svg",
+      "_id": "w5ecV7F9erXuEZto",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.rangedDamageDieSizeBonus",
+            "value": 2,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "4.1.0",
+        "createdTime": 1770294443189,
+        "modifiedTime": 1772539836269,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!xfYrdHhVTh03lkvz.w5ecV7F9erXuEZto"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.1.1",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1766746832196,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "xfYrdHhVTh03lkvz",
+  "sort": 10000000,
+  "_key": "!items!xfYrdHhVTh03lkvz"
+}

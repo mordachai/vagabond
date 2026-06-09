@@ -1,0 +1,168 @@
+{
+  "name": "Dancer",
+  "type": "class",
+  "img": "icons/magic/life/heart-pink.webp",
+  "system": {
+    "description": "<p><strong>She moves abstract just like a shadow dancing on the edge, like a storm cloud passing overhead, hypnotizing me.</strong></p><p><em>– Dillinger Escape Plan, One of Us is the Killer</em></p><p>Practitioners of the alluring art of dance. They have a flair for enlivening their audience, drawing attention, and giving awe-inspiring shows.</p><h3>Iconic Dancers</h3><ul><li><strong>Apsalar</strong>, <em>Malazan Book of the Fallen</em></li><li><strong>Azura</strong>, <em>Fire Emblem Fates</em></li><li><strong>Sandilene fa Toren</strong>, <em>The Circle Opens</em></li></ul><h3>Playing Dancer</h3><p>The dancer is a low-defense support with a focus on action efficiency. Grant Actions through Step Up, as your main offenses will occur when you Crit on Reflex Saves.</p><p><strong>Action:</strong> Step Up<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Courtesan or Musician<br /><strong>Key Stat:</strong> Dexterity<br /><strong>Complexity:</strong> ★★☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Finesse and Performance, and 2 from either Brawl, Influence, or Sneak</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Fleet of Foot, Step Up</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Evasive</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Don't Stop Me Now</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Choreographer</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Flash of Beauty</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Double Time</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Fleet of Foot",
+        "description": "<p><span class=\"fontstyle0\">You gain the Treads Lightly Perk (p. 73), and the roll for you to Crit on Reflex Saves is reduced by an amount equal to (your Dancer Level divided by 4, round up).</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.uic2nm5LlKKwoFDQ"
+        ],
+        "perkAmount": 1
+      },
+      {
+        "level": 1,
+        "name": "Step Up",
+        "description": "<p><span class=\"fontstyle0\">Once per Turn, you can use your Action to perform an enlivening dance. Doing so allows you to roll a second d20 on Reflex Saves until the start of your next Turn and use the higher result, and it gives one Ally of your choice that sees you a second Action this Turn.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 2,
+        "name": "Evasive",
+        "description": "<p><span class=\"fontstyle0\">While you aren't Incapacitated, you ignore Hinder on Reflex Saves and you ignore two of a Dodged attack's damage dice on a passed Save, rather than one.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 4,
+        "name": "Don't Stop Me Now",
+        "description": "<p><span class=\"fontstyle0\">Your Speed is not affected by Difficult Terrain and you have Favor on Saves against being Paralyzed, Restrained, or moved.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 6,
+        "name": "Choreographer",
+        "description": "<p><span class=\"fontstyle0\">When you use your Step Up Feature, the Ally gains Favor on the first Check they make with the Action you give them, and you both gain a 10 foot bonus to Speed for the Round.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 8,
+        "name": "Flash of Beauty",
+        "description": "<p><span class=\"fontstyle0\">When you Crit on a Save, you can take two Actions, rather than one.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 10,
+        "name": "Double Time",
+        "description": "<p><span class=\"fontstyle0\">You can Target two Allies with your Step Up Feature, rather than one.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "choices": [
+        {
+          "count": 2,
+          "pool": [],
+          "label": ""
+        }
+      ],
+      "guaranteed": [
+        "finesse",
+        "performance"
+      ]
+    },
+    "levelSpells": [],
+    "keyStat": "dexterity",
+    "keyStats": [
+      "dexterity"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.CgsVEQvhZaD9Dx9A",
+      "Compendium.vagabond.starting-packs.Item.2nNcbg2WCi5XPKUC"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1773095504042,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "8LqHA6iqYBgFmVfJ",
+  "sort": 500000,
+  "_key": "!items!8LqHA6iqYBgFmVfJ"
+}

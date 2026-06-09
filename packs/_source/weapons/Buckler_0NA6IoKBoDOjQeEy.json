@@ -1,0 +1,64 @@
+{
+  "name": "Buckler",
+  "type": "equipment",
+  "img": "icons/equipment/shield/buckler-wooden-boss-brown.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Finesse",
+      "Shield"
+    ],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "1",
+    "damageTwoHands": "1",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
+      "hitOffsetX": -100,
+      "hitDuration": 1000
+    },
+    "damageTypeOneHand": "blunt"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1773713104470,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "0NA6IoKBoDOjQeEy",
+  "sort": 200000,
+  "_key": "!items!0NA6IoKBoDOjQeEy"
+}

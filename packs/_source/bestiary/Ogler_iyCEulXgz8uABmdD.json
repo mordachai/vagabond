@@ -1,0 +1,374 @@
+{
+  "name": "Ogler",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 54,
+      "max": 54
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 12,
+    "threatLevel": 11.2,
+    "size": "large",
+    "beingType": "Outers",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 12,
+    "morale": 12,
+    "appearing": "1",
+    "speed": 0,
+    "senses": "Darksight, Telepathy (Far)",
+    "armor": 4,
+    "armorDescription": "as (+1) Plate",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "backline",
+    "description": "(Beyonder) Greedy, pompous creatures out-of-touch with reality by nature. They are always driven insane by arrogance and the insatiable desire to rule over all. They are known to claim the works of their subjects as their own, enforce overreaching taxes, and trick others into outrageous deals.",
+    "actions": [
+      {
+        "name": "Multi-Cast",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "3d6 x Eyebeam and 1x Bite",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Eyebeam",
+        "note": "Cast, Remote",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Roll d8 for each:",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "1 - Charm",
+        "note": "Will",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Charmed (Cd4, or until damaged)",
+        "causedStatuses": [
+          {
+            "statusId": "charmed",
+            "saveType": "any",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "2 - Sleep",
+        "note": "Will",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Unconscious (Cd6, or woken up)",
+        "causedStatuses": [
+          {
+            "statusId": "unconscious",
+            "saveType": "any",
+            "duration": "d6",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "3 - Kinesis",
+        "note": "Will",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Restrained (1 Round)",
+        "causedStatuses": [
+          {
+            "statusId": "restrained",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "4 - Petrify",
+        "note": "Will",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Transformed into a stone statue",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "5 - Death",
+        "note": "Near Only | Endure",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "14",
+        "rollDamage": "4d6",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "6 - Fear",
+        "note": "Will",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Frightened (Cd4)",
+        "causedStatuses": [
+          {
+            "statusId": "frightened",
+            "saveType": "any",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "7 - Slow",
+        "note": "Will",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Speed reduced to 10' for (Cd4)",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "8 - Paralysis",
+        "note": "Endure",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Paralyzed (Cd4)",
+        "causedStatuses": [
+          {
+            "statusId": "paralyzed",
+            "saveType": "any",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "5",
+        "rollDamage": "2d4",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Antimagical Cone",
+        "description": "Cast Checks in a Far Cone from its central eye always fail, and any magic effect in the Cone is\nsuspended while in the Cone."
+      },
+      {
+        "name": "Mind of Madness",
+        "description": "It can Cast while Berserk."
+      },
+      {
+        "name": "",
+        "description": ""
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 20
+    }
+  },
+  "prototypeToken": {
+    "name": "Ogler",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "7XRNmpvwuyjJWsiD",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.10.0",
+    "createdTime": 1765457210474,
+    "modifiedTime": 1779640018224,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "iyCEulXgz8uABmdD",
+  "sort": 2900000,
+  "_key": "!actors!iyCEulXgz8uABmdD"
+}

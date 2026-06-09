@@ -1,0 +1,35 @@
+{
+  "name": "Babble",
+  "type": "spell",
+  "img": "icons/magic/control/energy-stream-link-large-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">When the Check passes, and each time you Focus on the Cast for the duration, you can cause the Target to loudly and coherently repeat everything you mentally command them to. They are otherwise mute.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "fxSchool": "genericdark",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "utqWkcOdK7WVqv7N",
+  "sort": 5200000,
+  "_key": "!items!utqWkcOdK7WVqv7N"
+}

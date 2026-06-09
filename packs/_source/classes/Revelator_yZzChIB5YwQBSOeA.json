@@ -1,0 +1,238 @@
+{
+  "name": "Revelator",
+  "type": "class",
+  "img": "icons/skills/melee/strike-weapon-polearm-ice-blue.webp",
+  "system": {
+    "description": "<p><strong>For he who comes in our time of need is not of mortal breed, he is the Destroyer, the right hand of our Creator and the one who brings fear where there is no hope.</strong></p>\n<p><em>– Corrax Tablet 3:13, Doom Eternal</em></p>\n<p>Oathsworn knights that hold an honorable vow that becomes its own sacred power. Revelators are warriors of radiance and justice.</p>\n\n<h3>Iconic Revelators</h3>\n<ul>\n<li><strong>Luke Skywalker</strong>, <em>Star Wars</em></li>\n<li><strong>Michael Carpenter</strong>, <em>Dresden Files</em></li>\n<li><strong>Wonder Woman</strong>, <em>DC Comics</em></li>\n</ul>\n\n<h3>Playing Revelator</h3>\n<p>Revelators are high defense frontline strikers. Stay in the frontline for melee attacks, and smite the transgressors.</p>\n<p><strong>Action:</strong> Attack/Cast<br />\n<strong>Move:</strong> Frontline<br />\n<strong>Starting Pack:</strong> Knight or Warrior<br />\n<strong>Key Stat:</strong> Might, Presence<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> Melee<br />\n<strong>Skills:</strong> Leadership, and 3 from either Brawl, Detect, Influence, or Mysticism</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td>\n  <td><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Righteous, Selfless</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">2</span></p></td>\n  <td><p><span class=\"fontstyle2\">2</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Lay on Hands</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td>\n  <td><p><span class=\"fontstyle2\">2</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">6</span></p></td>\n  <td><p><span class=\"fontstyle2\">2</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Paragon's Aura</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td>\n  <td><p><span class=\"fontstyle2\">3</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">10</span></p></td>\n  <td><p><span class=\"fontstyle2\">3</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Divine Resolve</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td>\n  <td><p><span class=\"fontstyle2\">3</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">14</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Holy Diver</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">18</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Sacrosanct</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td>\n  <td><p><span class=\"fontstyle2\">5</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": true,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Righteous",
+        "description": "<p><span class=\"fontstyle0\">You gain the Gish Perk (p. 68) and can Cast Spells using Leadership.</span></p><p></p><p><span class=\"fontstyle2\"><strong>Spells:</strong> </span><span class=\"fontstyle0\">You learn 2 Spells, one of which must always be Exalt. You learn 1 other Spell every 3 Revelator Levels hereafter.</span></p><p><span class=\"fontstyle2\"><strong>Mana:</strong> </span><span class=\"fontstyle0\">Your Maximum Mana is equal to (2× your Revelator Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Presence + half your Revelator Level, round up). You regain spent Mana when you Rest.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [
+          "Compendium.vagabond.spells.Item.lSVkxtOolrInid6w"
+        ],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X"
+        ],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 1,
+        "name": "Selfless",
+        "description": "<p><span class=\"fontstyle0\">Once per Turn, when an Ally you can see takes damage, you can choose to take the damage instead. This can't be reduced in any way.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 2,
+        "name": "Lay on Hands",
+        "description": "<p><span class=\"fontstyle0\">You can Touch a Being to restore (d6 + your Level) HP by using your Action or skipping your Move. You can do so twice, and regain spent uses after you Rest.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 4,
+        "name": "Paragon's Aura",
+        "description": "<p><span class=\"fontstyle0\">It doesn’t cost you Mana to Cast a Spell as a 10’ Aura, and you can Focus on a Spell as an Aura and one as Imbue at the same time.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Divine Resolve",
+        "description": "<p><span class=\"fontstyle0\">You can't be Blinded, Paralyzed, or Sickened. Further, when you restore a Being’s HP with your Lay on Hands Feature, they are cured of these Statuses as well.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 8,
+        "name": "Holy Diver",
+        "description": "<p><span class=\"fontstyle0\">If you take damage for an Ally with your Selfless Feature, your next attack before the end of your next Turn has Favor and adds your Presence to the damage.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Sacrosanct",
+        "description": "<p><span class=\"fontstyle0\">You have a +2 bonus to all Saves.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      }
+    ],
+    "manaSkill": "leadership",
+    "castingStat": "presence",
+    "manaMultiplier": 2,
+    "skillGrant": {
+      "guaranteed": [
+        "melee",
+        "leadership"
+      ],
+      "choices": [
+        {
+          "count": 3,
+          "pool": [
+            "brawl",
+            "detect",
+            "influence",
+            "mysticism"
+          ],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [
+      {
+        "spells": 2,
+        "level": 1
+      },
+      {
+        "spells": 2,
+        "level": 2
+      },
+      {
+        "spells": 2,
+        "level": 3
+      },
+      {
+        "spells": 3,
+        "level": 4
+      },
+      {
+        "spells": 0,
+        "level": 5
+      },
+      {
+        "spells": 3,
+        "level": 6
+      },
+      {
+        "spells": 4,
+        "level": 7
+      },
+      {
+        "spells": 4,
+        "level": 8
+      },
+      {
+        "spells": 4,
+        "level": 9
+      },
+      {
+        "spells": 5,
+        "level": 10
+      }
+    ],
+    "keyStats": [
+      "might",
+      "presence"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.KoynpKyutYoL8KOX",
+      "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.3.2",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1778243965563,
+    "lastModifiedBy": "kfnQlbpJhBoW5amP"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "yZzChIB5YwQBSOeA",
+  "sort": 1700000,
+  "_key": "!items!yZzChIB5YwQBSOeA"
+}

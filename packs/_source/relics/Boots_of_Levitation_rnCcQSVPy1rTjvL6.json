@@ -1,0 +1,54 @@
+{
+  "name": "Boots of Levitation",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Levitation:</span><span class=\"fontstyle0\"> They can Fly up or down, but not laterally, using their Speed.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 500,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Boots"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "rnCcQSVPy1rTjvL6",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3800000,
+  "_key": "!items!rnCcQSVPy1rTjvL6"
+}

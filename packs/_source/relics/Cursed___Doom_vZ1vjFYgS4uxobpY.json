@@ -1,0 +1,67 @@
+{
+  "name": "Cursed - Doom",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+  "system": {
+    "description": "<p>Wearer only regains 1 Hit Point per die used for healing rolls Targeting it.</p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "If Bound, the Being is permanently Bound until the Curse is removed.",
+    "gridPosition": 0,
+    "containerId": null,
+    "damageTypeOneHand": "-",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": ""
+  },
+  "effects": [],
+  "folder": "o9iJqhb7zjYleADh",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "vagabond",
+      "uuid": "Item.UcwakQfOhAWFQwRL",
+      "coreVersion": "13.351",
+      "systemId": "vagabond",
+      "systemVersion": "1.3.2"
+    },
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1765570895706,
+    "modifiedTime": 1769766913317,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "vZ1vjFYgS4uxobpY",
+  "sort": 7000000,
+  "_key": "!items!vZ1vjFYgS4uxobpY"
+}

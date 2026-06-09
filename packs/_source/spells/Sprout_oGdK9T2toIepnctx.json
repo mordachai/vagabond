@@ -1,0 +1,47 @@
+{
+  "name": "Sprout",
+  "type": "spell",
+  "img": "icons/magic/nature/vines-thorned-entwined-glow-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You create growing plants on the Target, causing Difficult Terrain out to Close from it. Alternatively, you can cause up to a 5-foot square patch of plants or fungus to magically grow to optimal harvesting and foraging.</span></p>",
+    "damageType": "blunt",
+    "duration": "Until your next turn",
+    "crit": "The Target is Restrained.",
+    "favorite": false,
+    "noRollRequired": false,
+    "fxSchool": "nature",
+    "locked": true,
+    "critCausedStatuses": [
+      {
+        "statusId": "restrained",
+        "requiresDamage": true,
+        "saveType": "reflex",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773715056920,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "oGdK9T2toIepnctx",
+  "sort": 4400000,
+  "_key": "!items!oGdK9T2toIepnctx"
+}

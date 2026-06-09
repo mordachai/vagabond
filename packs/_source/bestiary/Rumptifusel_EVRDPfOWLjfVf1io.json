@@ -1,0 +1,229 @@
+{
+  "name": "Rumptifusel",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 13,
+      "max": 13
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 3,
+    "threatLevel": 1.7,
+    "size": "medium",
+    "beingType": "Cryptid",
+    "speedTypes": [
+      "climb"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 3,
+    "morale": 3,
+    "appearing": "d4",
+    "speed": 15,
+    "senses": "Darksight",
+    "armor": 1,
+    "armorDescription": "as Leather",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "poison"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "Vicious, opportunistic hunter covered in mink-like fur. It resembles a rug, bedroll, or blanket, but its underside contains hundreds of tiny, sucker-like mouths.",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2xDrain, or 1xCloak and 1xDrain",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Drain",
+        "note": "Melee Attack, Restrained Target",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "2",
+        "rollDamage": "1d4",
+        "damageType": "-",
+        "extraInfo": "and this Being is healed for the damage dealt",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Cloak",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Restrained",
+        "causedStatuses": [
+          {
+            "statusId": "restrained",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Cloaking",
+        "description": "While it has a Target Restrained, any damage dealt to it is halved and also dealt to the Target."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Rumptifusel",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1774028855233,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "EVRDPfOWLjfVf1io",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 1600000,
+  "_key": "!actors!EVRDPfOWLjfVf1io"
+}

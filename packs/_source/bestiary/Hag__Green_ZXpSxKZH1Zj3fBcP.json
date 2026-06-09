@@ -1,0 +1,229 @@
+{
+  "name": "Hag, Green",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 40,
+      "max": 40
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 9,
+    "threatLevel": 4,
+    "size": "medium",
+    "beingType": "Fae",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 9,
+    "morale": 4,
+    "appearing": "1",
+    "speed": 30,
+    "senses": "Allsight, Darksight",
+    "armor": 3,
+    "armorDescription": "as (+1) Chain",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "coldIron"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Shapechanger) Ugly humanoid fae known to blur the lines between undeath and the fairy courts. Known to pull itself and its victims into invisibility to brutalize them.",
+    "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "2xClaw",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack",
+        "recharge": "",
+        "flatDamage": "4",
+        "rollDamage": "1d8",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "and Restrained if it's this Being's second Claw to hit it this Turn",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Shapeshift",
+        "note": "Cast, Self (Focus)",
+        "recharge": "",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "castClose",
+        "extraInfo": "Takes on the appearance of a Medium Humanlike.",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Amphibious",
+        "description": "It can breathe air and water."
+      },
+      {
+        "name": "Fade Out",
+        "description": "When it Moves, it turns itself and anything it is carrying Invisible for the duration (Focus). If it has a Being Restrained, it turns them Invisible for the duration as well."
+      },
+      {
+        "name": "Magic Ward II",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+      },
+      {
+        "name": "Terror I",
+        "description": "Enemies that can see it for the first time and at the start of their Turns must pass [Will] or be Frightened (Cd4)."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Hag, Green",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "KpWVcGQZm5hzong1",
+  "flags": {},
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.1.1",
+    "createdTime": 1765548618166,
+    "modifiedTime": 1774213789827,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "ZXpSxKZH1Zj3fBcP",
+  "sort": 1000000,
+  "_key": "!actors!ZXpSxKZH1Zj3fBcP"
+}

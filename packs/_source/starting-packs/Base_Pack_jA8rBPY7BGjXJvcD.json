@@ -1,0 +1,56 @@
+{
+  "name": "Base Pack",
+  "type": "starterPack",
+  "img": "icons/containers/bags/pack-simple-leather-fur-tan.webp",
+  "system": {
+    "description": "",
+    "items": [
+      {
+        "uuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.Y8H21qyxnJjwpulj",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.BhUNyj2nflyVUPIo",
+        "quantity": 5
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.sbHg7jCRQY8lIzY7",
+        "quantity": 2
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.4DcbA7RsHfBOPJIa",
+        "quantity": 1
+      }
+    ],
+    "currency": {
+      "gold": 0,
+      "silver": 285,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.8.1",
+    "createdTime": 1765640522934,
+    "modifiedTime": 1766953796866,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "jA8rBPY7BGjXJvcD",
+  "sort": 1600000,
+  "_key": "!items!jA8rBPY7BGjXJvcD"
+}

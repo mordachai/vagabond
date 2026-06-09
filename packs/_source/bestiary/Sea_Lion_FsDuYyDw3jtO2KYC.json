@@ -1,0 +1,225 @@
+{
+  "name": "Sea Lion",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 27,
+      "max": 27
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 6,
+    "threatLevel": 4.1,
+    "size": "large",
+    "beingType": "Cryptid",
+    "speedTypes": [
+      "swim"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 6,
+    "morale": 11,
+    "appearing": "d4",
+    "speed": 10,
+    "senses": "",
+    "armor": 2,
+    "armorDescription": "as Chain",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [
+      "shock",
+      "poison"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "A lion with the hind quarters of a shark or similar fish, and the ferocity of both.",
+    "actions": [
+      {
+        "name": "Multi-Attack",
+        "note": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "extraInfo": "2xClaws and 1xBite",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Bite",
+        "note": "Melee Attack",
+        "attackType": "melee",
+        "flatDamage": "7",
+        "rollDamage": "2d6",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack",
+        "attackType": "melee",
+        "flatDamage": "3",
+        "rollDamage": "1d6",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Amphibious",
+        "description": "It can breathe air and water."
+      },
+      {
+        "name": "Pack Hunter",
+        "description": "Targets within 5 feet of one of this Being's Allies are Vulnerable to its attacks."
+      },
+      {
+        "name": "Pounce",
+        "description": "If it moves at least 20' immediately before hitting with an attack on the same Turn, the Target is also knocked Prone."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "swim": 40
+    }
+  },
+  "prototypeToken": {
+    "name": "Sea Lion",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.3",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1769984412829,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "FsDuYyDw3jtO2KYC",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 0,
+  "_key": "!actors!FsDuYyDw3jtO2KYC"
+}

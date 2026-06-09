@@ -1,0 +1,54 @@
+{
+  "name": "Necklace of Adaptation",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Necklace of heavy chain which grants the wearer the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Eternal Breath:</span><span class=\"fontstyle0\"> They don't need to breathe.</span></li><li><span class=\"fontstyle2\">Extremes Innured:</span><span class=\"fontstyle0\"> They are not affected by extreme pressure or vacuums.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 10000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Necklace"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "YRhd9XRvWzfT2S80",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 2600000,
+  "_key": "!items!YRhd9XRvWzfT2S80"
+}

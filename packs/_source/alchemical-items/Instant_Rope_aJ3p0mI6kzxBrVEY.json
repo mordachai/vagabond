@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Instant Rope",
+  "type": "equipment",
+  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">When poured, the viscous gray liquid in this flask instantly forms into a 50-foot-long rope for 1 minute before crumbling to dust.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "aJ3p0mI6kzxBrVEY",
+  "sort": 0,
+  "_key": "!items!aJ3p0mI6kzxBrVEY"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Bag of Holding",
+  "type": "container",
+  "img": "icons/containers/bags/sack-leather-blue.webp",
+  "system": {
+    "description": "<h3><span class=\"fontstyle0\">RELIC BAG</span></h3><p><span class=\"fontstyle0\"><br />A bag that contains its own pocket dimension, granting it the following Power:</span></p><ul><li><span class=\"fontstyle2\"><strong>Holding V:</strong></span><span class=\"fontstyle0\"> Occupies 1 Inventory Slot, but can hold 5 Slots of Items without counting against the carrier's Inventory Slots.</span></li></ul>",
+    "slots": 1,
+    "capacity": 5,
+    "gridPosition": 0,
+    "items": [],
+    "baseCost": {
+      "gold": 1000,
+      "silver": 0,
+      "copper": 0
+    },
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.8.0",
+    "createdTime": 1766160276273,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "CPUX2TmKp1yuwuRS",
+  "sort": 2100000,
+  "_key": "!items!CPUX2TmKp1yuwuRS"
+}

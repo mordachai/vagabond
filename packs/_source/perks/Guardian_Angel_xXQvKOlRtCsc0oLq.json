@@ -1,0 +1,48 @@
+{
+  "name": "Guardian Angel",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Once per Round, if one of your Allies is Targeted by an Enemy, you can spend 1 Luck to make an attack against that Enemy. If you hit, your Ally has Favor on any Save forced by that Enemy this Turn.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [],
+      "spells": [],
+      "other": [
+        "Trained: Melee or Ranged"
+      ],
+      "trainedSkillOrGroups": [
+        [
+          "melee",
+          "ranged"
+        ]
+      ]
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1769570058244,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "xXQvKOlRtCsc0oLq",
+  "sort": 9900000,
+  "_key": "!items!xXQvKOlRtCsc0oLq"
+}

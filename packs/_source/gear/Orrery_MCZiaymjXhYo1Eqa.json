@@ -1,0 +1,58 @@
+{
+  "name": "Orrery",
+  "type": "equipment",
+  "img": "icons/skills/trades/academics-astronomy-navigation-purple.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 3,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Astronomy & Navigation",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.4vr4yp0AxTxriY0u",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.0",
+    "createdTime": 1765501419369,
+    "modifiedTime": 1765501419369,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "MCZiaymjXhYo1Eqa",
+  "folder": "DVq8BWzKcj8jEMtd",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!MCZiaymjXhYo1Eqa"
+}

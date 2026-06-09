@@ -1,0 +1,55 @@
+{
+  "name": "Cloak of Invisibility",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A cloak of shimmers that reflects light anomalously. The Bound wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Invisibility I:</span><span class=\"fontstyle0\"> They use their Action or skip their Move to become Invisible until after they take an Action.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 5000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Light Armor (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087678948,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "4akHHfN32E5u4rFY",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 200000,
+  "_key": "!items!4akHHfN32E5u4rFY"
+}

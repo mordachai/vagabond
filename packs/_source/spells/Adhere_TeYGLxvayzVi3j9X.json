@@ -1,0 +1,45 @@
+{
+  "name": "Adhere",
+  "type": "spell",
+  "img": "icons/creatures/slimes/slime-movment-dripping-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is covered in sticky slime for the duration, causing the Area out to Close around it to be Difficult Terrain. Targeted Beings are considered Vulnerable for the purpose of ending the Restrained Status.</span></p><p><span class=\"fontstyle0\">Targeted Objects are secured to whatever they are in contact with or the next thing it contacts in the duration. A Being with Might or HD equal to or lower than your Level can't move the Object. You can increase your effective Level for the casting by spending additional Mana, increasing it by 1 per Mana spent to do so.</span></p>",
+    "damageType": "acid",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "causedStatuses": [
+      {
+        "statusId": "restrained",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773713429584,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "TeYGLxvayzVi3j9X",
+  "sort": 2300000,
+  "_key": "!items!TeYGLxvayzVi3j9X"
+}

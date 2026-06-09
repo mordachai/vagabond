@@ -1,0 +1,204 @@
+{
+  "name": "Zombie",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 9,
+      "max": 9
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 2,
+    "threatLevel": 0.9,
+    "size": "medium",
+    "beingType": "Undead",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 2,
+    "morale": 12,
+    "appearing": "3d8",
+    "speed": 20,
+    "senses": "Darksight",
+    "armor": 0,
+    "armorDescription": "as Unarmored",
+    "locked": true,
+    "immunities": [
+      "poison"
+    ],
+    "weaknesses": [
+      "silver"
+    ],
+    "statusImmunities": [
+      "berserk",
+      "charmed",
+      "confused",
+      "fatigued",
+      "frightened",
+      "sickened"
+    ],
+    "zone": "frontline",
+    "description": "",
+    "actions": [
+      {
+        "name": "Bite",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "3",
+        "rollDamage": "1d6",
+        "damageType": "-",
+        "extraInfo": ""
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Nightwalker",
+        "description": "Can’t Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
+      },
+      {
+        "name": "Zombie",
+        "description": "It can't be reduced below 1 HP unless damaged by a Crit, damage it is Weak to, or while in Sunlight."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Zombie",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "cu3l1QO2DfhzONlT",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.1",
+    "createdTime": 1765459650128,
+    "modifiedTime": 1770077753883,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "wNK06vFyHkFkvgLO",
+  "sort": 1800000,
+  "_key": "!actors!wNK06vFyHkFkvgLO"
+}

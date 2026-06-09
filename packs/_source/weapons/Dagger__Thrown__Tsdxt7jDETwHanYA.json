@@ -1,0 +1,120 @@
+{
+  "name": "Dagger (Thrown)",
+  "type": "equipment",
+  "img": "icons/weapons/daggers/dagger-curved-guard-black.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 10,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Finesse",
+      "Keen",
+      "Thrown"
+    ],
+    "weaponSkill": "ranged",
+    "range": "near",
+    "grip": "1H",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d4",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "gridPosition": 0,
+    "containerId": null,
+    "canExplode": false,
+    "explodeValues": "",
+    "damageTypeOneHand": "piercing",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "itemFx": {
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Dagger01_01_Regular_White_15ft_1000x400.webm",
+      "enabled": true
+    }
+  },
+  "effects": [
+    {
+      "name": "Keen Property",
+      "origin": "Compendium.vagabond.weapons.Item.HwX2SFNKg7DPXSma",
+      "img": "icons/svg/aura.svg",
+      "_id": "lBkyb2yQOgfSPHVU",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critNumber",
+            "value": -1,
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "1.8.1",
+        "lastModifiedBy": "13p65OEadZSZVLRk",
+        "modifiedTime": 1774105640631,
+        "createdTime": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Tsdxt7jDETwHanYA.lBkyb2yQOgfSPHVU"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1766842709371,
+    "modifiedTime": 1774105641922,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "Tsdxt7jDETwHanYA",
+  "sort": 4200000,
+  "_key": "!items!Tsdxt7jDETwHanYA"
+}

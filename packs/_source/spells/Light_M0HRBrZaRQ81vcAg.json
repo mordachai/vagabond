@@ -1,0 +1,47 @@
+{
+  "name": "Light",
+  "type": "spell",
+  "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target sheds Light out to Near for the duration. You can choose to do so by creating a floating mote of light that follows the Target.</span></p>",
+    "damageType": "fire",
+    "duration": "Until your next turn",
+    "crit": "Beings of your choice within the Light when you Cast the Spell are Blinded (Cd4).",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "radiant",
+    "locked": true,
+    "critCausedStatuses": [
+      {
+        "statusId": "blinded",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "d4",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714861843,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "M0HRBrZaRQ81vcAg",
+  "sort": 2200000,
+  "_key": "!items!M0HRBrZaRQ81vcAg"
+}

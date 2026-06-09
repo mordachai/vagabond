@@ -1,0 +1,295 @@
+{
+  "name": "Fighter",
+  "type": "class",
+  "img": "icons/skills/melee/weapons-crossed-swords-purple.webp",
+  "system": {
+    "description": "<p><strong>Man takes up the sword in order to shield the small wound in his heart sustained in a far-off time beyond remembrance.</strong></p><p><em>– Kentaro Miura, Berserk</em></p><p>Students of the art of violence. A fighter is defined by their skill with weapons, and large variety of martial techniques.</p><h3>Iconic Fighters</h3><ul><li><strong>Beowulf</strong>, <em>English mythology</em></li><li><strong>Gilgamesh</strong>, <em>Mesopotamian legend</em></li><li><strong>Sir Lancelot</strong>, <em>Arthurian legend</em></li></ul><h3>Playing Fighter</h3><p>The fighter is a medium defense striker. In combat, get within effective distance for offense and focus on the Attack Action.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Flexible<br /><strong>Starting Pack:</strong> Gladiator, Knight, Warrior, or Watchman<br /><strong>Key Stat:</strong> Might or Awareness<br /><strong>Complexity:</strong> ★☆☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> Melee, Ranged<br /><strong>Skills:</strong> Brawl or Finesse, and 3 from either Brawl, Detect, Finesse, Leadership, or Sneak</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Fighting Style, Valor</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Momentum</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Valor (-2 to Crit)</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Muster for Battle</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Valor (-3 to Crit)</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Harrying</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Fighting Style",
+        "description": "<p><span class=\"fontstyle0\">You gain the Situational Awareness Perk (p. 72) and another Perk with the Melee or Ranged Training Prerequisite (p. 64). You can ignore Stat prerequisites for this Perk.</span></p><p></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.1MMfNdmGHvhCqzQc"
+        ],
+        "perkAmount": 2,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 1,
+        "name": "Valor",
+        "description": "<p><span class=\"fontstyle0\">The roll required for you to Crit on Attack Checks, and Saves to Dodge or Block Attacks is reduced by 1, and is reduced by 1 more when you reach 4th and 8th Levels in this Class.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 2,
+        "name": "Momentum",
+        "description": "<p><span class=\"fontstyle0\">If you pass a Save against an attack, the next attack you make before the end of your next Turn is Favored.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 4,
+        "name": "Valor",
+        "description": "<p><span class=\"fontstyle0\">The roll required for you to Crit on Attack Checks, and Saves to Dodge or Block Attacks is reduced by 2 total.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Muster for Battle",
+        "description": "<p><span class=\"fontstyle0\">You have two Actions on your first Turn of Combat.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 8,
+        "name": "Valor",
+        "description": "<p><span class=\"fontstyle0\">The roll required for you to Crit on Attack Checks, and Saves to Dodge or Block Attacks is reduced by 3 total.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Harrying",
+        "description": "<p><span class=\"fontstyle0\">You can attack twice with the Attack Action, rather than just once.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "guaranteed": [
+        "melee",
+        "ranged"
+      ],
+      "choices": [
+        {
+          "count": 1,
+          "pool": [],
+          "label": ""
+        },
+        {
+          "count": 2,
+          "pool": [],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [],
+    "keyStats": [
+      "might",
+      "awareness"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.pXpaYfCavubGOicv",
+      "Compendium.vagabond.starting-packs.Item.KoynpKyutYoL8KOX",
+      "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh",
+      "Compendium.vagabond.starting-packs.Item.X4shfsU5ixmg1J4O"
+    ]
+  },
+  "effects": [
+    {
+      "name": "Valor (lvl. 1|4|8)",
+      "origin": "Compendium.vagabond.classes.Item.TiQ8qydxxhedOk09",
+      "img": "icons/svg/aura.svg",
+      "_id": "VrKr0X6CxXHUAwZr",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "value": -1,
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.attackCritBonus",
+            "value": "(@lvl >= 4) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.attackCritBonus",
+            "value": "(@lvl >= 8) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.reflexCritBonus",
+            "value": -1,
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.reflexCritBonus",
+            "value": "(@lvl >= 4) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.reflexCritBonus",
+            "value": "(@lvl >= 8) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.endureCritBonus",
+            "value": -1,
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.endureCritBonus",
+            "value": "(@lvl >= 4) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.endureCritBonus",
+            "value": "(@lvl >= 8) ? -1 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "4.3.1",
+        "createdTime": 1774177450221,
+        "modifiedTime": 1774181503531,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!TiQ8qydxxhedOk09.VrKr0X6CxXHUAwZr"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.3.2",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1778244968081,
+    "lastModifiedBy": "kfnQlbpJhBoW5amP"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "TiQ8qydxxhedOk09",
+  "sort": 900000,
+  "_key": "!items!TiQ8qydxxhedOk09"
+}

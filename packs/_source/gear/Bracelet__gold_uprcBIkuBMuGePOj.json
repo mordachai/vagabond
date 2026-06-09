@@ -1,0 +1,58 @@
+{
+  "name": "Bracelet, gold",
+  "type": "equipment",
+  "img": "icons/equipment/wrist/bracelet-embossed-steel.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Gems, Jewelry, & Smithing",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.RoNlzuavUs7t2Pmb",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.0",
+    "createdTime": 1765501728435,
+    "modifiedTime": 1765501728435,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "uprcBIkuBMuGePOj",
+  "folder": "8mt9dlPTtpk7pxkN",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!uprcBIkuBMuGePOj"
+}

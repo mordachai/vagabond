@@ -1,0 +1,59 @@
+{
+  "name": "Wine - Common, cask of",
+  "type": "equipment",
+  "img": "icons/containers/barrels/barrel-oak-banded-tan.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Liquor & Spirits",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "isBeverage": true
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.sj9EXJtb8FUmq8uS",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.7.0",
+    "createdTime": 1765502288108,
+    "modifiedTime": 1771788167921,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "aAipOdtIV4YBTXf4",
+  "folder": "KlLsMy7yqvvnIJRq",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!aAipOdtIV4YBTXf4"
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Amplify",
+  "type": "spell",
+  "img": "icons/magic/sonic/explosion-shock-sound-wave.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Any sound from the Target is amplified tenfold for the duration. During this time, Targets can't surprise others and all Checks to find them based on the sounds they make are Favored.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is continual.",
+    "favorite": false,
+    "fxSchool": "arcane",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "EJErE9ajMczEHl41",
+  "sort": 1100000,
+  "_key": "!items!EJErE9ajMczEHl41"
+}

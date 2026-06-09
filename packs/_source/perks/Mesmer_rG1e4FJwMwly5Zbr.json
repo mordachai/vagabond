@@ -1,0 +1,37 @@
+{
+  "name": "Mesmer",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">If you pass a Cast Check by 10 or more to cause a Target to be Charmed or Frightened, you can also cause it to act in one of the following ways in a manner of your choice on its next Turn: • Move up to half its Speed. • Attack a Target (it can attack itself ). • Drop or pick up an Item.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [],
+      "spells": [
+        "Compendium.vagabond.spells.Item.lS7PlTGD7VFNLKhD"
+      ],
+      "other": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769600764888,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "rG1e4FJwMwly5Zbr",
+  "sort": 8700000,
+  "_key": "!items!rG1e4FJwMwly5Zbr"
+}

@@ -1,0 +1,259 @@
+{
+  "name": "Phoenix",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 90,
+      "max": 90,
+      "bonus": 0
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 20,
+    "threatLevel": 10.5,
+    "size": "giant",
+    "beingType": "Outers",
+    "speedTypes": [
+      "fly 150"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 20,
+    "morale": 10,
+    "appearing": "1",
+    "speed": 50,
+    "senses": "Allsight",
+    "armor": 5,
+    "armorDescription": "as (+3) Chain",
+    "locked": true,
+    "immunities": [
+      "fire",
+      "physical"
+    ],
+    "weaknesses": [],
+    "statusImmunities": [
+      "charmed",
+      "sickened",
+      "confused",
+      "paralyzed"
+    ],
+    "zone": "backline",
+    "description": "(Divine)",
+    "actions": [
+      {
+        "name": "Resurrect",
+        "note": "Cast, the corpse of an Ally it is Touching",
+        "recharge": "1/Day",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "castClose",
+        "extraInfo": "Revived at Full HP with 0 Fatigue"
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": "2xTalon and 1xBeak"
+      },
+      {
+        "name": "Talon",
+        "note": "Melee Attack",
+        "recharge": "",
+        "flatDamage": "7",
+        "rollDamage": "2d6",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": ""
+      },
+      {
+        "name": "Beak",
+        "note": "Melee Attack",
+        "recharge": "",
+        "flatDamage": "14",
+        "rollDamage": "4d6",
+        "damageType": "-",
+        "attackType": "melee",
+        "extraInfo": ""
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Fiery Revival",
+        "description": "(1/Day): If it dies, a ball of fire erupts out from it as a Near Aura. All within must pass a [Reflex] Save or take 55 (d10x10) and be Burning (Cd6). This fire is divine, and ignores Immune to Fire. This Being is than revived in 1 Round at full HP. It will always try to flee until this Ability refreshes."
+      },
+      {
+        "name": "Illuminator",
+        "description": "Sheds Sunlight in Near."
+      },
+      {
+        "name": "Living Fire",
+        "description": "Close Beings are Burning (2d6)"
+      },
+      {
+        "name": "Magic Ward II",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+      },
+      {
+        "name": "Phoenix Down",
+        "description": "[Item] Extremely magical Material. Can Use to revive a dead Being whose corpse the down is placed on at full HP. This does not work on Undead."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "climb": 0,
+      "cling": 0,
+      "fly": 0,
+      "phase": 0,
+      "swim": 0
+    },
+    "universalWeaponDamageBonus": 0,
+    "universalWeaponDamageDice": "",
+    "universalSpellDamageBonus": 0,
+    "universalSpellDamageDice": "",
+    "universalAlchemicalDamageBonus": 0,
+    "universalAlchemicalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Phoenix",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 4,
+    "height": 4,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 4
+  },
+  "items": [],
+  "effects": [],
+  "folder": "7XRNmpvwuyjJWsiD",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.3",
+    "createdTime": 1770077784110,
+    "modifiedTime": 1770078912561,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "rb5dVb8peFW4RUIT",
+  "sort": 400000,
+  "_key": "!actors!rb5dVb8peFW4RUIT"
+}

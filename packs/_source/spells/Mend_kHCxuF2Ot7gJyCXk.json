@@ -1,0 +1,36 @@
+{
+  "name": "Mend",
+  "type": "spell",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange-purple.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Targeted non-Relic Objects in the Area are repaired on your Turns for the duration, if you can provide 5s of Material per d8 HP or 1 Slot of Items repaired. This Spell can reassemble a broken Item if the pieces of it are held together during the Casting. This Spell also functions as a Life Spell, but only for Artificials.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "defense",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "kHCxuF2Ot7gJyCXk",
+  "sort": 3700000,
+  "_key": "!items!kHCxuF2Ot7gJyCXk"
+}

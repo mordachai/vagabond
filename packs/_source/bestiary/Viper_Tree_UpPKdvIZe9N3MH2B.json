@@ -1,0 +1,211 @@
+{
+  "name": "Viper Tree",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 40,
+      "max": 40
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 9,
+    "threatLevel": 3.2,
+    "size": "large",
+    "beingType": "Hellspawn",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 9,
+    "morale": null,
+    "appearing": "2d10",
+    "speed": 0,
+    "senses": "",
+    "armor": 2,
+    "armorDescription": "Bark",
+    "locked": true,
+    "immunities": [
+      "acid",
+      "cold",
+      "poison"
+    ],
+    "weaknesses": [
+      "fire"
+    ],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Plant) In the twisted chaos of Hell, viper trees thrive. Easily mistaken for beech trees.",
+    "actions": [
+      {
+        "name": "Bite",
+        "note": "Melee Attack, Near",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "7",
+        "rollDamage": "2d6",
+        "damageType": "-",
+        "extraInfo": "and pass [Endure] with a -3 penalty or be Sickened (Cd4, Paralyzed).",
+        "causedStatuses": [
+          {
+            "statusId": "sickened",
+            "saveType": "endure",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          },
+          {
+            "statusId": "paralyzed",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Viper Tree",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "7XRNmpvwuyjJWsiD",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.4.1",
+    "createdTime": 1765457210474,
+    "modifiedTime": 1778273323428,
+    "lastModifiedBy": "kfnQlbpJhBoW5amP"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "UpPKdvIZe9N3MH2B",
+  "sort": 2300000,
+  "_key": "!actors!UpPKdvIZe9N3MH2B"
+}

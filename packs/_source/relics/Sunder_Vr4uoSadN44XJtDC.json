@@ -1,0 +1,55 @@
+{
+  "name": "Sunder",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Warhammer that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Bonus:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Giants Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to giants.</span></li><li><span class=\"fontstyle2\">Earth Shaker:</span><span class=\"fontstyle0\"> (1/Day) Strike the earth to cause all Near foes to be Dazed (d4 Rounds).</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Sense Valuables:</span><span class=\"fontstyle0\"> Senses gold and gems within Near.</span></li><li><span class=\"fontstyle2\">Thrown Ace:</span><span class=\"fontstyle0\"> Deals an extra damage die with thrown attacks.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 13000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Relic Warhammer (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087622039,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Vr4uoSadN44XJtDC",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 2500000,
+  "_key": "!items!Vr4uoSadN44XJtDC"
+}

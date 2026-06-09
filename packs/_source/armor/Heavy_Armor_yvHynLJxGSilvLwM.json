@@ -1,0 +1,54 @@
+{
+  "name": "Heavy Armor",
+  "type": "equipment",
+  "img": "icons/equipment/chest/breastplate-cuirass-steel-grey.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Plate, splint.</span> </p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+    "equipmentType": "armor",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 3,
+    "metal": "common",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "heavy",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.6.1",
+    "createdTime": 1764967009530,
+    "modifiedTime": 1766989441454,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "yvHynLJxGSilvLwM",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 0,
+  "_key": "!items!yvHynLJxGSilvLwM"
+}

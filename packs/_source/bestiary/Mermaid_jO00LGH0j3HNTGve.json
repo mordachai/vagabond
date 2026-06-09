@@ -1,0 +1,245 @@
+{
+  "name": "Mermaid",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 13,
+      "max": 13
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 3,
+    "threatLevel": 2,
+    "size": "medium",
+    "beingType": "Fae",
+    "speedTypes": [
+      "swim"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 3,
+    "morale": 2,
+    "appearing": "1",
+    "speed": 10,
+    "senses": "",
+    "armor": 2,
+    "armorDescription": "as (+1) Leather",
+    "locked": true,
+    "immunities": [
+      "shock",
+      "cold"
+    ],
+    "weaknesses": [
+      "coldIron"
+    ],
+    "statusImmunities": [],
+    "zone": "backline",
+    "description": "Half-human half-piscine fae who are venerated by all creatures of the sea. Their enrapturing beauty captivates all, notably the horrors of the sea that serve mermaids without question.",
+    "actions": [
+      {
+        "name": "Call Terror",
+        "note": "Cast",
+        "recharge": "1/Day",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "extraInfo": "Terror-Bound Being arrives in Cd4.",
+        "damageType": null
+      },
+      {
+        "name": "Enchanting Song",
+        "note": "Cast (Focus)",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "extraInfo": "Enchanting Song",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Trident",
+        "note": "Melee Attack",
+        "attackType": "melee",
+        "flatDamage": "3",
+        "rollDamage": "1d6",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Storm Bringer",
+        "note": "Cast",
+        "recharge": "1/Day",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "extraInfo": "A storm stirs out to 1 mile from it, and lasts for Cd4 hours.",
+        "damageType": null
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Amphibious",
+        "description": "Breathes air and water."
+      },
+      {
+        "name": "Magic Ward I",
+        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+      },
+      {
+        "name": "Enchanting Song",
+        "description": "Enemies that can hear it for the first time and at the start of their Turns must pass [Will] or be Charmed (Cd4). While Charmed this way, they can only Move directly toward this Being."
+      },
+      {
+        "name": "Immortal of the Sea",
+        "description": "It can’t be reduced below 1 HP while it is even partially submerged in a body of water."
+      },
+      {
+        "name": "Terror-Bound",
+        "description": "It is bound to a terror of the sea, such as a beisht kione dhoo, kraken, or sea serpent."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "swim": 40
+    }
+  },
+  "prototypeToken": {
+    "name": "Mermaid",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": "KpWVcGQZm5hzong1",
+  "flags": {},
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.1.1",
+    "createdTime": 1765548622474,
+    "modifiedTime": 1774213680072,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "jO00LGH0j3HNTGve",
+  "sort": 400000,
+  "_key": "!actors!jO00LGH0j3HNTGve"
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Harmonic Resonance",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You can use a Musical Instrument as a Trinket. When you do, you can Cast with a delivery of Aura or Cone if you otherwise couldn't, and you spend 1 less Mana on Aura and Cone delivery. This Casting still creates sound.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [
+        "performance"
+      ],
+      "spells": [
+        ""
+      ],
+      "other": [],
+      "hasAnySpell": true
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1769600461952,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "1YfGySrk0K59Bcso",
+  "sort": 600000,
+  "_key": "!items!1YfGySrk0K59Bcso"
+}

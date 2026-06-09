@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Gravebane",
+  "type": "equipment",
+  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">This thick white liquid evaporates almost instantly upon contact with air, creating a thin, nearly invisible smoke. The smoke is nearly odorless and has no effect on most Beings. Undead, however, are repulsed by it. Once used, the smoke fills the area out to Near for 1 minute, or until disbursed by strong wind. Undead are Dazed while in the smoke, ignoring Immunities.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "OJtUcHP9OyShTz9C",
+  "sort": 0,
+  "_key": "!items!OJtUcHP9OyShTz9C"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Resistance - Bravery",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "system": {
+    "description": "<p>Grants Favor on Saves against the Frightened Status.</p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 150,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "Grants Favor on situational Saves.",
+    "gridPosition": 0,
+    "containerId": null,
+    "damageTypeOneHand": "-",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": ""
+  },
+  "effects": [],
+  "folder": "o9iJqhb7zjYleADh",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "vagabond",
+      "uuid": "Item.fGw6H1yhOK4kyk7t",
+      "coreVersion": "13.351",
+      "systemId": "vagabond",
+      "systemVersion": "1.3.2"
+    },
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1765570895706,
+    "modifiedTime": 1769766913317,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "8dCrNesunpcg6jWo",
+  "sort": 1500000,
+  "_key": "!items!8dCrNesunpcg6jWo"
+}

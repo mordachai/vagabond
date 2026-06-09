@@ -1,0 +1,54 @@
+{
+  "folder": null,
+  "name": "Sunrod",
+  "type": "equipment",
+  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">This gold-tipped, iron rod glows brightly when struck. When you do, it sheds Light out to Near for a Shift, and the Light it sheds within Close is Sunlight.</span></p>",
+    "equipmentType": "alchemical",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "torch",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966535937,
+    "modifiedTime": 1764966535937,
+    "lastModifiedBy": "vJkLjvlErdx6ZHoC"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "JscNch4YlpZ99r5W",
+  "sort": 0,
+  "_key": "!items!JscNch4YlpZ99r5W"
+}

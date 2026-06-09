@@ -1,0 +1,59 @@
+{
+  "name": "Ale/Cider - Gallon",
+  "type": "equipment",
+  "img": "icons/consumables/drinks/alcohol-jug-spirits-brown.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 20,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Liquor & Spirits",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "isBeverage": true
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.qijYzWTggza54hkJ",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.7.0",
+    "createdTime": 1765502288108,
+    "modifiedTime": 1771788211647,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "NGxITQ6QhZCaP2ng",
+  "folder": "KlLsMy7yqvvnIJRq",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!NGxITQ6QhZCaP2ng"
+}

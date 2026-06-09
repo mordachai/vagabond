@@ -1,0 +1,35 @@
+{
+  "name": "Terraform",
+  "type": "spell",
+  "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You manipulate the loose earth or stone around the Target in the following ways:</span></p><p><span class=\"fontstyle2\"><strong>Area:</strong> </span><span class=\"fontstyle0\">You can manipulate terrain in the Area, either causing it to be Difficult Terrain or a Structure that can fit within the area of effect of the Cast for the duration. This magic can't move any terrain that supports an Object.</span></p><p><span class=\"fontstyle2\"><strong>Being or Object:</strong> </span><span class=\"fontstyle0\">Close earth or stone is Difficult Terrain for the duration.</span></p>",
+    "damageType": "blunt",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "earth",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "esyFdjFw1BqejR8X",
+  "sort": 3300000,
+  "_key": "!items!esyFdjFw1BqejR8X"
+}

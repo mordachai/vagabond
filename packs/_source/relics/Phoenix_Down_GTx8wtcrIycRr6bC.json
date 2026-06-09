@@ -1,0 +1,55 @@
+{
+  "name": "Phoenix Down",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a recently deceased Being to return them to life at half HP. The Phoenix Down is consumed in this process.</span></p><p><span class=\"fontstyle2\"><strong>Material:</strong></span><span class=\"fontstyle0\"> 50g worth of phoenix's feathers</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 100,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Furs (Consumable)",
+    "isConsumable": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087785778,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "GTx8wtcrIycRr6bC",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 1100000,
+  "_key": "!items!GTx8wtcrIycRr6bC"
+}

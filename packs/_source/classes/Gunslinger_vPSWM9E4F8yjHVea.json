@@ -1,0 +1,173 @@
+{
+  "name": "Gunslinger",
+  "type": "class",
+  "img": "icons/weapons/guns/gun-pistol-flintlock-white.webp",
+  "system": {
+    "description": "<p><strong>This, is my BOOMSTICK!</strong></p><p><em>– Ash, Army of Darkness</em></p><p>Attitude and tenacity are as core to the gunslinger as ammo. They stare down challenges through iron sights, fortified by their inner grit.</p><h3>Iconic Gunslingers</h3><ul><li><strong>Arthur Morgan</strong>, <em>Red Dead Redemption 2</em></li><li><strong>Django</strong>, <em>Django Unchained</em></li><li><strong>Roland Deschain</strong>, <em>Dark Tower</em></li></ul><h3>Playing Gunslinger</h3><p>The gunslinger is a low defense, high crit striker. In combat, stay as far back as possible and keep the enemy under constant fire.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Bounty Hunter or Tinker<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> Ranged<br /><strong>Skills:</strong> Detect, and 3 from either Brawl, Finesse, Influence, Sneak, or Survival</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Quick Draw, Deadeye</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Skeet Shooter</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Grit</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Devastator</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Bad Medicine</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">High Noon</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "level": 1,
+        "name": "Quick Draw",
+        "description": "<p><span class=\"fontstyle0\">You gain the Marksmanship Perk and, when Combat occurs, you can make one Ranged attack before the first Turn, which is Hindered if it is made with a 2H Weapon.</span></p><p></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.xfYrdHhVTh03lkvz"
+        ],
+        "perkAmount": 1
+      },
+      {
+        "level": 1,
+        "name": "Deadeye",
+        "description": "<p><span class=\"fontstyle0\">After you pass a Ranged Check, you Crit on subsequent Ranged attacks on a d20 roll 1 lower, but no lower than 17. This resets to 0 at the end of your Turn if you didn't pass a Ranged Check since your last Turn.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 2,
+        "name": "Skeet Shooter",
+        "description": "<p><span class=\"fontstyle0\">Once per Round, you can make a Ranged attack on an Off-Turn to Target a projectile from an attack you can see. If you pass, reduce the damage of the triggering attack by the damage you would deal with your attack. The projectile falls out of the air if reduced to 0.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 4,
+        "name": "Grit",
+        "description": "<p><span class=\"fontstyle0\">When you Crit on a Ranged attack, the damage dice can explode.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 6,
+        "name": "Devastator",
+        "description": "<p><span class=\"fontstyle0\">When you reduce an Enemy to 0 HP, the roll on the d20 to Crit as per your Deadeye Feature is immediately set to 17.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 7,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 8,
+        "name": "Bad Medicine",
+        "description": "<p><span class=\"fontstyle0\">You deal an extra die of damage when you Crit with a Ranged Check.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1
+      },
+      {
+        "level": 10,
+        "name": "High Noon",
+        "description": "<p><span class=\"fontstyle0\">Once per Turn, if you Crit on a Ranged Check, you can make one additional attack.</span></p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "guaranteed": [
+        "ranged",
+        "detect"
+      ],
+      "choices": [
+        {
+          "count": 2,
+          "pool": [
+            "brawl",
+            "finesse",
+            "influence",
+            "sneak",
+            "survival"
+          ],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [],
+    "keyStats": [
+      "awareness"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.j0veMJ1duvnOwNOa",
+      "Compendium.vagabond.starting-packs.Item.PnfmuSTuRLW0gjln"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1773096093748,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "vPSWM9E4F8yjHVea",
+  "sort": 1500000,
+  "_key": "!items!vPSWM9E4F8yjHVea"
+}

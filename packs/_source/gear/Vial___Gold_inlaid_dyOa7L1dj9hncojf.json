@@ -1,0 +1,58 @@
+{
+  "name": "Vial - Gold-inlaid",
+  "type": "equipment",
+  "img": "icons/consumables/potions/potion-bottle-corked-stopper-ornate-yellow.webp",
+  "system": {
+    "description": "<p><strong>Capacity:</strong> 4 ounces</p>",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Containers & Packs",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.NvNQIwHJqiSXpndO",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.0",
+    "createdTime": 1765500912329,
+    "modifiedTime": 1765500912329,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "dyOa7L1dj9hncojf",
+  "folder": "a2YDphO1S4SW4bI0",
+  "sort": 1700000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!dyOa7L1dj9hncojf"
+}

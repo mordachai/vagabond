@@ -1,0 +1,65 @@
+{
+  "name": "Garotte wire",
+  "type": "equipment",
+  "img": "icons/commodities/tech/wire-spool-thin.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 10,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Entangle",
+      "Finesse"
+    ],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "2H",
+    "damageOneHand": "-",
+    "damageTwoHands": "-",
+    "equipmentState": "twoHands",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/TrailAttack02_01_01_Regular_BlueYellow_800x600.webm",
+      "hitOffsetX": -100,
+      "hitDuration": 1000,
+      "enabled": true
+    },
+    "damageTypeOneHand": "slashing",
+    "damageTypeTwoHands": "slashing"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1773713082893,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "Cp5RCsNIFtDUk5sl",
+  "sort": 800000,
+  "_key": "!items!Cp5RCsNIFtDUk5sl"
+}

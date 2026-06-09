@@ -1,0 +1,171 @@
+{
+  "name": "Vanguard",
+  "type": "class",
+  "img": "icons/equipment/shield/heater-crystal-blue.webp",
+  "system": {
+    "description": "<p><strong>Move, bitch. Get out the way.</strong></p>\n<p><em>– Ludacris, Move Bitch</em></p>\n<p>Terrifying sentinels of heavy metal armor that use shields to devastate Enemies. Vanguards are mobile bastions of fortitude and might.</p>\n\n<h3>Iconic Vanguards</h3>\n<ul>\n<li><strong>Groot</strong>, <em>Guardians of the Galaxy</em></li>\n<li><strong>Havel</strong>, <em>Dark Souls series</em></li>\n<li><strong>Juggernaut</strong>, <em>X-Men</em></li>\n<li><strong>Reinhardt</strong>, <em>Overwatch</em></li>\n</ul>\n\n<h3>Playing Vanguard</h3>\n<p>The vanguard is a high defense tank, trading off raw damage output for massive control and defense. This class grants you the ability to more actively tank by focusing on defending through the Rush action and shoving.</p>\n<p><strong>Action:</strong> Shove (Attack)<br />\n<strong>Move:</strong> Frontline<br />\n<strong>Starting Pack:</strong> Sentinel<br />\n<strong>Key Stat:</strong> Might<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> Melee<br />\n<strong>Skills:</strong> Brawl and 3 from either Detect, Leadership, Medicine, or Survival</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Stalwart, Guard</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Rampant Charge</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Wall (Large)</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Unstoppable</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Wall (Huge)</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Indestructible</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "isSpellcaster": false,
+    "levelFeatures": [
+      {
+        "name": "Stalwart",
+        "description": "<p><span class=\"fontstyle0\">You gain the Protector Perk (p. 71) and, when you take the Hold Action, you can use the held Action or Move as late as the end of your next Turn.</span></p><p></p><p></p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.aHBvA8INtAilA7zH"
+        ],
+        "requiredSpells": []
+      },
+      {
+        "name": "Guard",
+        "description": "<p><span class=\"fontstyle0\">Once per Round, you can try to Shove a Close Target (no Action) when they become Close to you, or if you successfully Block their Attack.</span></p>",
+        "level": 1,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Rampant Charge",
+        "description": "<p><span class=\"fontstyle0\">You can push Targets you Shove ahead of you while you Move during the same Turn, shoving it Prone when you stop or push it into an occupied space. If you push it into an occupied space, it deals your weapon's damage to the Target and whatever occupied the space.</span></p>",
+        "level": 2,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 3,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Wall (Large)",
+        "description": "<p><span class=\"fontstyle0\">You are considered Large for Shoves.</span></p>",
+        "level": 4,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 5,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Unstoppable",
+        "description": "<p><span class=\"fontstyle0\">If you use Rampant Charge and push a Being into another Being, you can make another shove attempt to push the additional Being ahead of you as well.</span></p>",
+        "level": 6,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 7,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Wall (Huge)",
+        "description": "<p><span class=\"fontstyle0\">You are considered Huge for Shoves.</span></p>",
+        "level": 8,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 9,
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "perkAmount": 1,
+        "requiredSpells": [],
+        "allowedPerks": []
+      },
+      {
+        "name": "Indestructible",
+        "description": "<p><span class=\"fontstyle0\">While you aren't Incapacitated and have an Armor Rating of 1 or more, you are Immune to Physical damage.</span></p>",
+        "level": 10,
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "perkAmount": 0,
+        "requiredSpells": [],
+        "allowedPerks": []
+      }
+    ],
+    "manaSkill": null,
+    "castingStat": null,
+    "manaMultiplier": 0,
+    "skillGrant": {
+      "guaranteed": [
+        "melee",
+        "brawl"
+      ],
+      "choices": [
+        {
+          "count": 3,
+          "pool": [
+            "detect",
+            "leadership",
+            "medicine",
+            "survival"
+          ],
+          "label": ""
+        }
+      ]
+    },
+    "levelSpells": [],
+    "keyStats": [
+      "might"
+    ],
+    "suggestedStartingPacks": [
+      "Compendium.vagabond.starting-packs.Item.KcqqBXunMOsfq9TP"
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.2.3",
+    "createdTime": 1764966636933,
+    "modifiedTime": 1773096906662,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "8xsWpW29EzAAk100",
+  "sort": 600000,
+  "_key": "!items!8xsWpW29EzAAk100"
+}

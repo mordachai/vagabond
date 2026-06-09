@@ -1,0 +1,36 @@
+{
+  "name": "Animate",
+  "type": "spell",
+  "img": "icons/magic/movement/pinwheel-turning-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">You animate an Item that occupies no more than 1 Slot in the Area or carried by the Target. For the duration, the Item gains a Speed of 30' (Fly), and uses the Object Armor &amp; HP rules (p. 12) for its Stats. It obeys your commands, which you can issue when you Focus on this Spell. If it is a Weapon, it can make Attacks using your Cast Skill.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "genericlight",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "tpmMtwrz5IZ4ZkHp",
+  "sort": 5100000,
+  "_key": "!items!tpmMtwrz5IZ4ZkHp"
+}

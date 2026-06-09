@@ -1,0 +1,35 @@
+{
+  "name": "Rust",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-beam-blood-small-red-teal.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Non-Relic metal Objects within the Area rust for the duration. Each Turn when you Focus on this Spell, roll a d6 for each Item. On a roll of 1, the Item breaks. If the Item that breaks is larger than Medium, this creates a 1-foot square hole that is 1-foot deep in it.</span></p>",
+    "damageType": "acid",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "gGlJubpqoZ0WMQbG",
+  "sort": 3500000,
+  "_key": "!items!gGlJubpqoZ0WMQbG"
+}

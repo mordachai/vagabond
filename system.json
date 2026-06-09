@@ -75,7 +75,7 @@
         "name": "ancestries",
         "label": "Ancestries",
         "system": "vagabond",
-        "path": "packs/ancestries.db",
+        "path": "packs/ancestries",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -88,7 +88,7 @@
         "name": "classes",
         "label": "Classes",
         "system": "vagabond",
-        "path": "packs/classes.db",
+        "path": "packs/classes",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -101,7 +101,7 @@
         "name": "perks",
         "label": "Perks",
         "system": "vagabond",
-        "path": "packs/perks.db",
+        "path": "packs/perks",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -114,7 +114,7 @@
         "name": "starting-packs",
         "label": "Starting Packs",
         "system": "vagabond",
-        "path": "packs/starting-packs.db",
+        "path": "packs/starting-packs",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -127,7 +127,7 @@
         "name": "creation-notes",
         "label": "Creation Notes",
         "system": "vagabond",
-        "path": "packs/creation-notes.db",
+        "path": "packs/creation-notes",
         "type": "JournalEntry",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -140,7 +140,7 @@
         "name": "alchemical-items",
         "label": "Alchemical items",
         "system": "vagabond",
-        "path": "packs/items/alchemical-items.db",
+        "path": "packs/items/alchemical-items",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -153,7 +153,7 @@
         "name": "armor",
         "label": "Armor",
         "system": "vagabond",
-        "path": "packs/items/armor.db",
+        "path": "packs/items/armor",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -166,7 +166,7 @@
         "name": "gear",
         "label": "Gear",
         "system": "vagabond",
-        "path": "packs/items/gear.db",
+        "path": "packs/items/gear",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -180,7 +180,7 @@
         "name": "weapons",
         "label": "Weapons",
         "system": "vagabond",
-        "path": "packs/items/weapons.db",
+        "path": "packs/items/weapons",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -193,7 +193,7 @@
         "name": "relics",
         "label": "Relics",
         "system": "vagabond",
-        "path": "packs/items/relics.db",
+        "path": "packs/items/relics",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -206,7 +206,7 @@
         "name": "spells",
         "label": "Spells",
         "system": "vagabond",
-        "path": "packs/items/spells.db",
+        "path": "packs/items/spells",
         "type": "Item",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -219,7 +219,7 @@
         "name": "bestiary",
         "label": "Bestiary",
         "system": "vagabond",
-        "path": "packs/characters/bestiary.db",
+        "path": "packs/characters/bestiary",
         "type": "Actor",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -232,7 +232,7 @@
         "name": "humanlike",
         "label": "Humanlike",
         "system": "vagabond",
-        "path": "packs/characters/humanlike.db",
+        "path": "packs/characters/humanlike",
         "type": "Actor",
         "ownership": {
           "PLAYER": "OBSERVER",
@@ -245,7 +245,7 @@
         "name": "active-effects",
         "label": "Active Effects",
         "system": "vagabond",
-        "path": "packs/characters/active-effect.db",
+        "path": "packs/characters/active-effects",
         "type": "ActiveEffect",
         "ownership": {
           "PLAYER": "OBSERVER",

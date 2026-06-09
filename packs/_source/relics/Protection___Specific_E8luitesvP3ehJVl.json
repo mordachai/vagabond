@@ -1,0 +1,67 @@
+{
+  "name": "Protection - Specific",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "system": {
+    "description": "<p>Applies to a Being subtype, such as giants (not all Cryptids).</p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 2000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "Wearer can't be Hindered on Saves against the Being Type.",
+    "gridPosition": 0,
+    "containerId": null,
+    "damageTypeOneHand": "-",
+    "damageTypeTwoHands": "-",
+    "isConsumable": false,
+    "linkedConsumable": ""
+  },
+  "effects": [],
+  "folder": "o9iJqhb7zjYleADh",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "vagabond",
+      "uuid": "Item.lSKcdz3rHhE90l8i",
+      "coreVersion": "13.351",
+      "systemId": "vagabond",
+      "systemVersion": "1.3.2"
+    },
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1765570895706,
+    "modifiedTime": 1769766913317,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "E8luitesvP3ehJVl",
+  "sort": 2200000,
+  "_key": "!items!E8luitesvP3ehJVl"
+}

@@ -1,0 +1,95 @@
+{
+  "name": "Dwarf",
+  "type": "ancestry",
+  "img": "systems/vagabond/assets/ui/compendiums/dwarf.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Dwarves are built from sterner stuff, with some myths saying dwarves aren’t born, they’re forged. These myths speak of gods sculpting the dwarves shortly after the formation of mountains, granting them iron wills, silver tongues, and golden hearts. They are an industrious people who hail from some of the most extreme environments. If dwarves discover rare ore, they don’t look for a nearby river and suitable land for farming; they’ll found the town right on the biggest vein they can find and figure the rest out later.</span></p>",
+    "size": "medium",
+    "ancestryType": "Humanlike",
+    "traits": [
+      {
+        "name": "Darksight",
+        "description": "You are not Blinded by Dark."
+      },
+      {
+        "name": "Sturdy",
+        "description": "You have a +1 bonus on Saves against being Frightened, Sickened, or Shoved."
+      },
+      {
+        "name": "Tough",
+        "description": "You have a bonus to your max HP equal to your Level."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "name": "Tough (Dwarf Trait)",
+      "origin": "Compendium.vagabond.ancestries.Item.HfWZFJE9Ifn25UYs",
+      "img": "icons/svg/aura.svg",
+      "_id": "EQkcwQOr5DknrngZ",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.hpPerLevel",
+            "value": 1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "2.0.0",
+        "createdTime": 1766979054545,
+        "modifiedTime": 1766979548038,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!HfWZFJE9Ifn25UYs.EQkcwQOr5DknrngZ"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764966621821,
+    "modifiedTime": 1765016457205,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "HfWZFJE9Ifn25UYs",
+  "sort": 0,
+  "_key": "!items!HfWZFJE9Ifn25UYs"
+}

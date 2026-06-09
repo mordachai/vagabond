@@ -1,0 +1,36 @@
+{
+  "name": "Knock",
+  "type": "spell",
+  "img": "icons/sundries/misc/lock-open-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Opens barred, locked, or stuck chests, doors, and gates that you can sense. It does so with an audible knock that can be heard out to 300 feet. This affects secret and magic locks and doors, but you must be aware of them to affect them.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "noRollRequired": true,
+    "fxSchool": "blunt",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "8SNiWbOUiwPKrYkg",
+  "sort": 600000,
+  "_key": "!items!8SNiWbOUiwPKrYkg"
+}

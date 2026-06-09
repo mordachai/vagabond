@@ -1,0 +1,48 @@
+{
+  "name": "Advancement",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Increase one of your Stats by 1, but no higher than 7. You can take this Perk multiple times</span></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [],
+      "spells": [],
+      "statOrGroups": [],
+      "trainedSkillOrGroups": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    },
+    "choiceConfig": {
+      "type": "stat",
+      "selected": "",
+      "targetField": "system.stats.{choice}.bonus",
+      "effectMode": 2,
+      "effectValue": "1"
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.1.1",
+    "createdTime": 1770306150959,
+    "modifiedTime": 1770316006079,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "6lfwEoF90Jgoqhg8",
+  "sort": 0,
+  "_key": "!items!6lfwEoF90Jgoqhg8"
+}

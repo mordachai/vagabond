@@ -1,0 +1,55 @@
+{
+  "name": "Alchemist's Beaker",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A beaker with three separate layers, each with the following Power:</span></p><ul><li><span class=\"fontstyle2\">Prima Materia:</span><span class=\"fontstyle0\"> When the Ritual to Bond with it is performed, the Being can provide up to three alchemical items and assign them to a layer. The beaker can be used to provide a use of that alchemical item, which replenishes automatically after 1 Day.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 3000,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Beaker (Bound)",
+    "requiresBound": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087443134,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Pd9UF2J8nYMuZUzB",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 1900000,
+  "_key": "!items!Pd9UF2J8nYMuZUzB"
+}

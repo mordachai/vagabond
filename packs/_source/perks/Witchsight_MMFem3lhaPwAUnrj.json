@@ -1,0 +1,48 @@
+{
+  "name": "Witchsight",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">While you Focus on this Ability, you make Checks against illusions with Favor and you can see Invisible Beings if you aren’t otherwise Blinded.</span><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 4
+        }
+      ],
+      "trainedSkills": [],
+      "spells": [],
+      "other": [
+        "Trained: Arcana or Mysticism"
+      ],
+      "trainedSkillOrGroups": [
+        [
+          "arcana",
+          "mysticism"
+        ]
+      ]
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769603104824,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "MMFem3lhaPwAUnrj",
+  "sort": 4000000,
+  "_key": "!items!MMFem3lhaPwAUnrj"
+}

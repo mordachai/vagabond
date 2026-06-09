@@ -1,0 +1,35 @@
+{
+  "name": "Truth",
+  "type": "spell",
+  "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target can’t lie for the duration.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "The Target is compelled to answer any questions when asked.",
+    "favorite": false,
+    "fxSchool": "psychic",
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "FyLP7OY1vyxxvxA0",
+  "sort": 1200000,
+  "_key": "!items!FyLP7OY1vyxxvxA0"
+}

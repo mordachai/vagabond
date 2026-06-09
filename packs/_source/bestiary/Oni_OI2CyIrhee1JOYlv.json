@@ -1,0 +1,297 @@
+{
+  "name": "Oni",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 36,
+      "max": 36
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 8,
+    "threatLevel": 7.9,
+    "size": "large",
+    "beingType": "Hellspawn",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 8,
+    "morale": 11,
+    "appearing": "1",
+    "speed": 30,
+    "senses": "Darksight",
+    "armor": 2,
+    "armorDescription": "as Chain",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "backline",
+    "description": "",
+    "actions": [
+      {
+        "name": "Cone of Cold",
+        "note": "Cast, 60' Cone | Endure",
+        "recharge": "1/Day",
+        "attackType": "castRanged",
+        "flatDamage": "36",
+        "rollDamage": "8d8",
+        "damageType": "cold",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Charm Person",
+        "note": "Cast, a Remote Humanlike | Will",
+        "recharge": "1/Day",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Charmed (Focus)",
+        "causedStatuses": [
+          {
+            "statusId": "charmed",
+            "saveType": "will",
+            "duration": "focusing",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Darkness",
+        "note": "Cast, 20' Sphere",
+        "recharge": "",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "The Area becomes magical darkness, and snuffs out any light sources.",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Sleep",
+        "note": "Cast, 20' Sphere | Endure",
+        "recharge": "1/Day",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Unconscious (Cd4, or woken up)",
+        "causedStatuses": [
+          {
+            "statusId": "unconscious",
+            "saveType": "endure",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Gaseous Form",
+        "note": "Cast, Touch | Endure",
+        "recharge": "1/Day",
+        "attackType": "castClose",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Turns into an incorporeal cloud of gas for the duration.",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2xClaw",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "6",
+        "rollDamage": "1d8+2",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Invisibility",
+        "note": "Cast, Touch | Will",
+        "recharge": "",
+        "attackType": "castClose",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Turns Invisible for the duration. (Focus)",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Regenerate II",
+        "description": "Regains 9 (2d8) HP on its Turns."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Oni",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "7XRNmpvwuyjJWsiD",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.4.1",
+    "createdTime": 1765457210474,
+    "modifiedTime": 1778273259982,
+    "lastModifiedBy": "kfnQlbpJhBoW5amP"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "OI2CyIrhee1JOYlv",
+  "sort": 1900000,
+  "_key": "!actors!OI2CyIrhee1JOYlv"
+}

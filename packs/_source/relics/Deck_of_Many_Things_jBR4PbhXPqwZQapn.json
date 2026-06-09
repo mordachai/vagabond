@@ -1,0 +1,54 @@
+{
+  "name": "Deck of Many Things",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Deck of 22 cards in a box. Each card depicts an esoteric image and is decorated with filigree of magical glyphs. A Being can draw up to 4 cards from the deck, and is affected by the magic effects of the card. Afterward, those cards return to the deck.</span></p><p><span class=\"fontstyle0\">You can use a deck of Tarot cards to represent the Deck, using only the Major Arcana to represent it. Those cards are indicated in parenthesis.</span></p><ul><li><span class=\"fontstyle2\">Balance (Justice):</span><span class=\"fontstyle0\"> Any three Relics of their choice with a bonus increase the bonus by 1.</span></li><li><span class=\"fontstyle2\">Comet (The World):</span><span class=\"fontstyle0\"> By themselves, they must defeat the next Enemy they encounter to gain a Level.</span></li><li><span class=\"fontstyle2\">Donjon (The Empress):</span><span class=\"fontstyle0\"> They drop their inventory, forget how to Cast any Spells, and are teleported to a prison. The deck then disappears and no cards can be drawn.</span></li><li><span class=\"fontstyle2\">Fates (The Lovers):</span><span class=\"fontstyle0\"> They can choose to avoid one situation or the outcome of a situation at one point in the future.</span></li><li><span class=\"fontstyle2\">Flames (The Devil):</span><span class=\"fontstyle0\"> A powerful Hellspawn takes a dedicated interest in them. It is now their Enemy, and will seek to ruin their life.</span></li><li><span class=\"fontstyle2\">Fool (The Fool):</span><span class=\"fontstyle0\"> They lose 1 Level and draw another card. The Fool disappears forever.</span></li><li><span class=\"fontstyle2\">Gem (The Wheel of Fortune):</span><span class=\"fontstyle0\"> (d66) gems worth 100g each and (d66) pieces of jewelry worth 200g each appear around them.</span></li><li><span class=\"fontstyle2\">Idiot (Temperance):</span><span class=\"fontstyle0\"> Their Reason decreases by d6. If reduced to 0, they die. They can draw another card.</span></li><li><span class=\"fontstyle2\">Jester (The Hierophant):</span><span class=\"fontstyle0\"> They gain 1 Level or draw two cards. The Jester disappears from the deck forever.</span></li><li><span class=\"fontstyle2\">Key (The High Priestess):</span><span class=\"fontstyle0\"> A Fabled Relic of their choice that isn't the Deck of Many Things appears in their hand.</span></li><li><span class=\"fontstyle2\">Knight (Strength):</span><span class=\"fontstyle0\"> You gain the service of an Ally champion, which obeys your commands as a companion.</span></li><li><span class=\"fontstyle2\">Medusa (The Magician):</span><span class=\"fontstyle0\"> They are cursed, causing a -2 penalty to all Saves.</span></li><li><span class=\"fontstyle2\">Moon (The Moon):</span><span class=\"fontstyle0\"> They gain three wishes, which must be made within 10 minutes.</span></li><li><span class=\"fontstyle2\">Rogue (The Hanged Man):</span><span class=\"fontstyle0\"> A friend to them now permanently hates them. This hatred is only revealed at the worst possible time.</span></li><li><span class=\"fontstyle2\">Ruin (The Tower):</span><span class=\"fontstyle0\"> They lose all of their land, possessions, and wealth.</span></li><li><span class=\"fontstyle2\">Skull (Death):</span><span class=\"fontstyle0\"> A grim reaper appears and attacks them. If any other Being attempts to help them, another grim reaper appears and attacks that Being </span>@UUID[Compendium.world.special.Actor.r8vxaZFzJzbTKJmf]{Grim Reaper}</li><li><span class=\"fontstyle2\">Star (The Star):</span><span class=\"fontstyle0\"> A Stat of their choice increases by 1.</span></li><li><span class=\"fontstyle2\">Sun (The Sun):</span><span class=\"fontstyle0\"> They gain 1 Level and one Relic of their choice that isn't a Fabled Relic.</span></li><li><span class=\"fontstyle2\">Talons (Judgement):</span><span class=\"fontstyle0\"> Any Relics owned by them disappear instantly and permanently.</span></li><li><span class=\"fontstyle2\">Throne (The Emperor):</span><span class=\"fontstyle0\"> Their Presence increases to 7 and they become the owner of a keep.</span></li><li><span class=\"fontstyle2\">Vizier (The Hermit):</span><span class=\"fontstyle0\"> They can ask one question of their choice either now or in the future, and are given the most true and thorough answer to that question by the GM.</span></li><li><span class=\"fontstyle2\">Void (The Chariot):</span><span class=\"fontstyle0\"> Their soul is ripped from their body, leaving behind a husk. The soul is trapped in a prison of the GM's choice, and may be saved by questing for it. The deck of many things then disappears and no other cards may be drawn from it.</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Fabled Tarot Card Deck"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "jBR4PbhXPqwZQapn",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3200000,
+  "_key": "!items!jBR4PbhXPqwZQapn"
+}

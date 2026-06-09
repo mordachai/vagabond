@@ -1,0 +1,63 @@
+{
+  "name": "Shotgun, sawed-off",
+  "type": "equipment",
+  "img": "icons/weapons/guns/gun-green.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 60,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Brutal",
+      "near",
+      "Ranged"
+    ],
+    "weaponSkill": "ranged",
+    "range": "near",
+    "grip": "1H",
+    "damageOneHand": "d8",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bullet_01_Regular_Orange_05ft_600x400.webm",
+      "hitDuration": 1000
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.1.0",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1772481251536,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "W4AhHQ6wvtD1Mrqe",
+  "sort": 2600000,
+  "_key": "!items!W4AhHQ6wvtD1Mrqe"
+}

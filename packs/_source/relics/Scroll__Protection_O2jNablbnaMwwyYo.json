@@ -1,0 +1,55 @@
+{
+  "name": "Scroll, Protection",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">A Protection Scroll can be read to create an Aura out to 10' from the reader for 1 Hour that moves with them. Doing so causes the Scroll to vaporize. Those in the Aura have Favor on Saves forced by Beings designated by the scroll's name: Protection from Evil: Hellspawn, Undead Protection from Good: Divines, Fae</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 10,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Eccentric Parchment (Consumable)",
+    "isConsumable": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087872939,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "O2jNablbnaMwwyYo",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 1700000,
+  "_key": "!items!O2jNablbnaMwwyYo"
+}

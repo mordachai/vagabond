@@ -1,0 +1,65 @@
+{
+  "name": "Poleblade",
+  "type": "equipment",
+  "img": "icons/weapons/polearms/glaive-hooked-steel.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 90,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Cleave",
+      "Long"
+    ],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "2H",
+    "damageOneHand": "d8",
+    "damageTwoHands": "d8",
+    "equipmentState": "twoHands",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Halberd01*",
+      "hitOffsetX": -100,
+      "hitDuration": 1000,
+      "enabled": true
+    },
+    "damageTypeOneHand": "slashing",
+    "damageTypeTwoHands": "slashing"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967045011,
+    "modifiedTime": 1773713062607,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "mU85pKLCB76Tn12q",
+  "sort": 3400000,
+  "_key": "!items!mU85pKLCB76Tn12q"
+}

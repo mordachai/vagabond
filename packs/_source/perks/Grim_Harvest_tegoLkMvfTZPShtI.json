@@ -1,0 +1,38 @@
+{
+  "name": "Grim Harvest",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">When one of your Spells kills an Enemy that is not an Artificial or Undead, you regain HP equal to the damage of the Spell.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [],
+      "spells": [
+        "Compendium.vagabond.spells.Item.GaL1pCOL67Vf586b"
+      ],
+      "other": [],
+      "hasAnySpell": false
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1765021523595,
+    "modifiedTime": 1769566404437,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "tegoLkMvfTZPShtI",
+  "sort": 9100000,
+  "_key": "!items!tegoLkMvfTZPShtI"
+}

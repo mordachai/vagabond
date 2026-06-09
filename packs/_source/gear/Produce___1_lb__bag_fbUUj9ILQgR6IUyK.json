@@ -1,0 +1,59 @@
+{
+  "name": "Produce - 1 lb. bag",
+  "type": "equipment",
+  "img": "icons/containers/bags/sack-open-grain-tan.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 1,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Cooking & Food",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "isSupply": true
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.QRG0WiJ6pfdxVI6c",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.7.0",
+    "createdTime": 1765501419369,
+    "modifiedTime": 1771788067105,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "fbUUj9ILQgR6IUyK",
+  "folder": "LWA8sFw703LrSG08",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!fbUUj9ILQgR6IUyK"
+}

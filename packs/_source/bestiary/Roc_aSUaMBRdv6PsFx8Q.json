@@ -1,0 +1,214 @@
+{
+  "name": "Roc",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 162,
+      "max": 162
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 36,
+    "threatLevel": 11.4,
+    "size": "colossal",
+    "beingType": "Cryptid",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 36,
+    "morale": 10,
+    "appearing": "1",
+    "speed": 20,
+    "senses": "Allsight, Darksight",
+    "armor": 4,
+    "armorDescription": "as (+1) Plate",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Beast) Birds of legend, rocs are known to prey on elephants, and have the power to sink ships.",
+    "actions": [
+      {
+        "name": "Multi-Attack",
+        "note": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "extraInfo": "2xClaw and 1xBeak",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Beak",
+        "note": "Melee Attack",
+        "attackType": "melee",
+        "flatDamage": "28",
+        "rollDamage": "8d6",
+        "extraInfo": "",
+        "recharge": "",
+        "damageType": null
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack, Near",
+        "attackType": "melee",
+        "flatDamage": "10",
+        "rollDamage": "3d6",
+        "extraInfo": "and Restrained if it’s this Being's second Claw attack to hit it this Turn.",
+        "recharge": "",
+        "damageType": null
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Dive Bomb",
+        "description": "If it flies at least 20' toward a Target before making an attack, the attack deals double damage."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 160
+    }
+  },
+  "prototypeToken": {
+    "name": "Roc",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 5,
+    "height": 5,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 5
+  },
+  "items": [],
+  "effects": [],
+  "folder": "FcQ0D8W4MjdX1qID",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.3",
+    "createdTime": 1765454176267,
+    "modifiedTime": 1769984381815,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "aSUaMBRdv6PsFx8Q",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 0,
+  "_key": "!actors!aSUaMBRdv6PsFx8Q"
+}

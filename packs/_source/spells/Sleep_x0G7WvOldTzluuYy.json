@@ -1,0 +1,46 @@
+{
+  "name": "Sleep",
+  "type": "spell",
+  "img": "icons/magic/control/hypnosis-mesmerism-swirl.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">If the Targets have a cumulative HD total equal to (1 + your Level) or lower, they are knocked Unconscious for the duration, ending early if they take damage or are shaken awake. You can spend Mana to increase your effective Level for the Casting by 1 per Mana spent to do.</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "",
+    "favorite": false,
+    "fxSchool": "psychic",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "unconscious",
+        "requiresDamage": false,
+        "saveType": "none",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714998175,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "x0G7WvOldTzluuYy",
+  "sort": 5600000,
+  "_key": "!items!x0G7WvOldTzluuYy"
+}

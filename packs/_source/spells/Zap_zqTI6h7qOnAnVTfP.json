@@ -1,0 +1,57 @@
+{
+  "name": "Zap",
+  "type": "spell",
+  "img": "icons/magic/lightning/bolt-strike-streak-yellow.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target is Dazed for the duration if it can be damaged by shocks.</span></p>",
+    "damageType": "shock",
+    "duration": "Until your next turn",
+    "crit": "The Target is Paralyzed, rather than Dazed, for the duration.",
+    "favorite": false,
+    "fxSchool": "shock",
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "dazed",
+        "requiresDamage": true,
+        "saveType": "endure",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "paralyzed",
+        "requiresDamage": true,
+        "saveType": "endure",
+        "duration": "focusing",
+        "tickDamageEnabled": false,
+        "damageOnTick": "",
+        "damageType": "-"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773715184285,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "zqTI6h7qOnAnVTfP",
+  "sort": 5900000,
+  "_key": "!items!zqTI6h7qOnAnVTfP"
+}

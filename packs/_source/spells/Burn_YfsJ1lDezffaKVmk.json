@@ -1,0 +1,56 @@
+{
+  "name": "Burn",
+  "type": "spell",
+  "img": "icons/magic/fire/explosion-flame-lightning-strike.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">If the Target isn't immune to Fire, they are Burning (Cd4, or until it is doused). This Burning Status does not require Focus.</span></p>",
+    "damageType": "fire",
+    "duration": "Until your next turn",
+    "crit": "The Cd4 instead starts at a Cd6.",
+    "favorite": false,
+    "locked": true,
+    "causedStatuses": [
+      {
+        "statusId": "burning",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "d4",
+        "tickDamageEnabled": true,
+        "damageOnTick": "",
+        "damageType": "fire"
+      }
+    ],
+    "critCausedStatuses": [
+      {
+        "statusId": "burning",
+        "requiresDamage": true,
+        "saveType": "none",
+        "duration": "d6",
+        "tickDamageEnabled": true,
+        "damageOnTick": "",
+        "damageType": "fire"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1773714215800,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "YfsJ1lDezffaKVmk",
+  "sort": 2700000,
+  "_key": "!items!YfsJ1lDezffaKVmk"
+}

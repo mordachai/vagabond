@@ -1,0 +1,54 @@
+{
+  "name": "Skyhowel",
+  "type": "equipment",
+  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Chain Whip that crackles with arcs of lightning as it swings. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+1) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +1 damage.</span></li><li><span class=\"fontstyle2\">Shocktongue:</span><span class=\"fontstyle0\"> Its damage is Shock.</span></li><li><span class=\"fontstyle2\">Crack the Sky:</span><span class=\"fontstyle0\"> (1/Day) Strike the air, causing all Near foes who aren't Immune to Shock to become Dazed (d4 Rounds).</span></li></ul>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1600,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Chain Whip"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.0.0",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1766160276298,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "2AYiSZpv9zgjnxOy",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 100000,
+  "_key": "!items!2AYiSZpv9zgjnxOy"
+}

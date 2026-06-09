@@ -1,0 +1,58 @@
+{
+  "name": "Materials (1g)",
+  "type": "equipment",
+  "img": "icons/commodities/materials/powder-red-green-yellow.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "gear",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "Alchemy & Medicine",
+    "alchemicalType": "concoction",
+    "lore": ""
+  },
+  "effects": [],
+  "flags": {
+    "core": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.zUVShiYHKItpNC5Z",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.0",
+    "createdTime": 1765500895738,
+    "modifiedTime": 1765633031215,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "Dc1DdU5530PBjfrG",
+  "folder": "8BC7GVobqqAjnv8a",
+  "sort": 1200000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_key": "!items!Dc1DdU5530PBjfrG"
+}

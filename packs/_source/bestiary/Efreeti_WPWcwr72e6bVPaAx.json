@@ -1,0 +1,266 @@
+{
+  "name": "Efreeti",
+  "type": "npc",
+  "img": "systems/vagabond/assets/ui/default-npc.svg",
+  "system": {
+    "health": {
+      "value": 45,
+      "max": 45
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 10,
+    "threatLevel": 5.7,
+    "size": "large",
+    "beingType": "Primordials",
+    "speedTypes": [
+      "fly"
+    ],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 10,
+    "morale": 11,
+    "appearing": "1",
+    "speed": 80,
+    "senses": "Darksight",
+    "armor": 3,
+    "armorDescription": "as Plate",
+    "locked": true,
+    "immunities": [
+      "fire"
+    ],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "frontline",
+    "description": "(Djinn)",
+    "actions": [
+      {
+        "name": "Wall of Fire",
+        "note": "Cast, 60' Line | Reflex",
+        "recharge": "3/Day",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Burning (d6, while in the flames). It takes this damage the first time it enters the flames while it isn't Burning as well. (Focus)",
+        "causedStatuses": [
+          {
+            "statusId": "burning",
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": true,
+            "damageType": "fire",
+            "damageOnTick": "1d6",
+            "requiresDamage": true
+          }
+        ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Conjure Object",
+        "note": "Cast, Remote | Reflex",
+        "recharge": "3/Day",
+        "attackType": "castRanged",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "An Object no larger than 10'x10' is created. Objects made this way composed of metal or stone disappear after one day.",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2xFist",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Fist",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "9",
+        "rollDamage": "2d8",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Invisibility",
+        "note": "Cast, Touch | Will",
+        "recharge": "",
+        "attackType": "castClose",
+        "flatDamage": "0",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Turns Invisible for the duration. (Focus)",
+        "causedStatuses": [
+          {
+            "statusId": "invisible",
+            "saveType": "any",
+            "duration": "focusing",
+            "tickDamageEnabled": false,
+            "requiresDamage": true,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": []
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Regenerate II",
+        "description": "Regains 9 (2d8) HP on each of its Turns."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 80
+    }
+  },
+  "prototypeToken": {
+    "name": "Efreeti",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "systems/vagabond/assets/ui/default-npc.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 2
+  },
+  "items": [],
+  "effects": [],
+  "folder": "CFWpUA4g8bejv3HV",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "4.3.1",
+    "createdTime": 1765458651305,
+    "modifiedTime": 1774008351265,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "WPWcwr72e6bVPaAx",
+  "sort": 0,
+  "_key": "!actors!WPWcwr72e6bVPaAx"
+}

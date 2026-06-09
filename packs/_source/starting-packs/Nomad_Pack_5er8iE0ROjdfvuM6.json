@@ -1,0 +1,72 @@
+{
+  "name": "Nomad Pack",
+  "type": "starterPack",
+  "img": "icons/magic/death/skull-weapon-staff-glow-pink.webp",
+  "system": {
+    "description": "",
+    "items": [
+      {
+        "uuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.YHXzL4H8Dhajk2hg",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.BhUNyj2nflyVUPIo",
+        "quantity": 5
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.sbHg7jCRQY8lIzY7",
+        "quantity": 2
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.jd6n1Zfo1tAWCCNe",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.ufjKBfCKT1kTA5Kq",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.HwX2SFNKg7DPXSma",
+        "quantity": 2
+      },
+      {
+        "uuid": "Compendium.vagabond.weapons.Item.wFqNBkEUehnQcGOJ",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.8sGl5EOVFo2QcGKD",
+        "quantity": 1
+      }
+    ],
+    "currency": {
+      "gold": 1,
+      "silver": 75,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "1.3.4",
+    "createdTime": 1765640510531,
+    "modifiedTime": 1765640522942,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "5er8iE0ROjdfvuM6",
+  "sort": 2500000,
+  "_key": "!items!5er8iE0ROjdfvuM6"
+}

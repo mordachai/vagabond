@@ -1,0 +1,213 @@
+{
+  "name": "Assassin",
+  "type": "npc",
+  "img": "modules/too-many-tokens-dnd/Assassin/Assassin (1).webp",
+  "system": {
+    "health": {
+      "value": 4,
+      "max": 10,
+      "bonus": 0
+    },
+    "power": {
+      "value": 5,
+      "max": 5
+    },
+    "fatigue": 0,
+    "biography": "",
+    "cr": 1,
+    "threatLevel": 2.3,
+    "size": "medium",
+    "beingType": "Humanlike",
+    "speedTypes": [],
+    "stats": {
+      "might": {
+        "value": 8
+      },
+      "dexterity": {
+        "value": 8
+      },
+      "awareness": {
+        "value": 8
+      },
+      "reason": {
+        "value": 8
+      },
+      "presence": {
+        "value": 8
+      },
+      "luck": {
+        "value": 8
+      }
+    },
+    "hd": 1,
+    "morale": 7,
+    "appearing": "",
+    "speed": 35,
+    "senses": "",
+    "armor": 1,
+    "armorDescription": "as Leather",
+    "locked": true,
+    "immunities": [],
+    "weaknesses": [],
+    "statusImmunities": [],
+    "zone": "midline",
+    "description": "",
+    "actions": [
+      {
+        "name": "Flurry",
+        "note": "Multi-Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "Two Daggers"
+      },
+      {
+        "name": "Dagger",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "2",
+        "rollDamage": "d4",
+        "damageType": "-",
+        "extraInfo": ""
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Sneak Attack",
+        "description": "Once per Turn, it deals 2 (d4) additional damage with an attack against a Vulnerable Target. This attack ignores Armor and can explode."
+      }
+    ],
+    "universalDamageBonus": 0,
+    "universalDamageDice": "",
+    "speedValues": {
+      "climb": 0,
+      "cling": 0,
+      "fly": 0,
+      "phase": 0,
+      "swim": 0
+    },
+    "universalWeaponDamageBonus": 0,
+    "universalWeaponDamageDice": "",
+    "universalSpellDamageBonus": 0,
+    "universalSpellDamageDice": "",
+    "universalAlchemicalDamageBonus": 0,
+    "universalAlchemicalDamageDice": ""
+  },
+  "prototypeToken": {
+    "name": "Assassin",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "modules/too-many-tokens-dnd/Assassin/*",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": true,
+    "appendNumber": false,
+    "prependAdjective": false,
+    "depth": 1
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.9.0",
+    "createdTime": 1770084583115,
+    "modifiedTime": 1770084583115,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "_id": "pztZ1992w2ZhIHII",
+  "sort": 0,
+  "_key": "!actors!pztZ1992w2ZhIHII"
+}

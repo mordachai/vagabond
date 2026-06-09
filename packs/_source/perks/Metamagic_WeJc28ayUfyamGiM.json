@@ -1,0 +1,93 @@
+{
+  "name": "Metamagic",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Maximum Mana you can spend on a Spell increases by 1. You can take this Perk multiple times.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "prerequisites": {
+      "stats": [],
+      "trainedSkills": [],
+      "spells": [],
+      "other": [
+        "Resource: Maximum Mana 7+"
+      ],
+      "resources": [
+        {
+          "resourceType": "maxMana",
+          "minimum": 7
+        }
+      ]
+    }
+  },
+  "effects": [
+    {
+      "name": "+ Mana Casting",
+      "origin": "Compendium.world.perks.Item.s4u1snuhI24ZtUHQ",
+      "img": "icons/svg/aura.svg",
+      "_id": "i56MfG6Q5llVChZi",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.mana.castingMaxBonus",
+            "value": 1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "1.8.1",
+        "lastModifiedBy": "13p65OEadZSZVLRk",
+        "modifiedTime": 1766861296167,
+        "createdTime": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!WeJc28ayUfyamGiM.i56MfG6Q5llVChZi"
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.0",
+    "createdTime": 1764966653728,
+    "modifiedTime": 1769600783306,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "WeJc28ayUfyamGiM",
+  "sort": 6200000,
+  "_key": "!items!WeJc28ayUfyamGiM"
+}
