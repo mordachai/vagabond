@@ -55,7 +55,26 @@ jobs:
           mv "$tmp" system.json
           echo "Pinned download to: $DOWNLOAD"
 
-      # 4. Create the Zip file (Only if tag doesn't exist)
+      # 4. Build packs from source JSON files
+      # ------------------------------------------------------------------
+      # packs/*  (LevelDB binaries) are .gitignored; _source/ is the truth.
+      # We install deps and compile _source/ → LevelDB before zipping.
+      # ------------------------------------------------------------------
+      - name: Setup Node
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        if: steps.check_tag.outputs.exists == 'false'
+        run: npm install
+
+      - name: Build packs from source
+        if: steps.check_tag.outputs.exists == 'false'
+        run: node src/packs.mjs pack
+
+      # 5. Create the Zip file (Only if tag doesn't exist)
       # ------------------------------------------------------------------
       # UPDATED: Zips only the folders shown in your image, ignoring dev files
       # Renamed to system.zip — includes the patched system.json above
@@ -63,7 +82,7 @@ jobs:
       - name: Zip Files
         if: steps.check_tag.outputs.exists == 'false'
         run: |
-          zip -r system.zip system.json assets css lang module templates packs
+          zip -r system.zip system.json assets css lang module templates packs --exclude 'packs/_source/*' --exclude 'packs/.gitattributes'
 
       # 4. Create Release
       - name: Create Release
