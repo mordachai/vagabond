@@ -398,6 +398,46 @@ export class RollHandler {
   }
 
   /**
+   * NPC # Appearing roll (NPC mode only). Posts a GM-only styled chat card with
+   * dice visuals, a quantity range indicator, and a draggable actor anchor so
+   * the GM can drop the NPC straight onto the canvas.
+   * @param {Event} [event]
+   */
+  async rollAppearing(event) {
+    if (!this.npcMode) return;
+    event?.preventDefault();
+
+    const formula = this.actor.system.appearing;
+    if (!formula) return;
+
+    let roll;
+    try {
+      roll = new Roll(formula, this.actor.getRollData());
+      await roll.evaluate();
+    } catch (e) {
+      return; // plain text like "A dozen" — not rollable, silent no-op
+    }
+
+    const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
+    const card = new VagabondChatCard();
+    card
+      .setActor(this.actor)
+      .setTitle(game.i18n.localize('VAGABOND.Actor.NPC.FIELDS.appearing.label'))
+      .setSubtitle(formula)
+      .addRoll(roll, null); // null difficulty → no "vs / outcome" banner
+
+    card.data.standardTags = [{ label: formula, icon: 'fas fa-dice' }];
+
+    // Draggable actor anchor so the GM can drop NPC tokens directly onto the canvas.
+    const anchor = this.actor.toAnchor({ name: this.actor.name });
+    anchor.classList.add('vbd-actor-pill');
+    card.data.description = anchor.outerHTML;
+
+    card.data.whisper = game.users.filter(u => u.isGM).map(u => u.id);
+    await card.send();
+  }
+
+  /**
    * NPC morale roll (NPC mode only)
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element

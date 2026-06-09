@@ -9,7 +9,7 @@
  *           --out <dbParentDir>  (CLI appends packName to locate/create the DB)
  */
 import { execSync } from 'child_process';
-import { readFileSync, mkdirSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,6 +20,22 @@ const action = process.argv[2];
 if (!['pack', 'unpack'].includes(action)) {
   console.error('Usage: node src/packs.mjs [pack|unpack]');
   process.exit(1);
+}
+
+// LevelDB requires exclusive access — fail early if Foundry has any pack locked.
+if (action === 'pack') {
+  for (const pack of systemJson.packs) {
+    const lockPath = resolve(rootDir, pack.path, 'LOCK');
+    if (!existsSync(lockPath)) continue;
+    try {
+      const pids = execSync(`fuser "${lockPath}" 2>/dev/null`).toString().trim();
+      if (pids) {
+        console.error(`\nError: "${pack.name}" pack is locked by PID ${pids}.`);
+        console.error('Stop Foundry before running pack.\n');
+        process.exit(1);
+      }
+    } catch { /* fuser exits non-zero when no process holds the lock — that's fine */ }
+  }
 }
 
 for (const pack of systemJson.packs) {

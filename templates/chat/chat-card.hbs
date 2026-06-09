@@ -9,8 +9,10 @@
         
         {{!-- A. HEADER (Icon + Title + Tags) --}}
         <header class="card-header">
-            <div class="header-icon {{#if iconBackground}}has-background{{/if}}" {{#if iconBackground}}style="background-color: {{iconBackground}};"{{/if}}>
-                <img src="{{icon}}" alt="{{title}}">
+            <div class="header-icon {{#if iconBackground}}has-background{{/if}}"
+                 {{#if actorUuid}}data-actor-uuid="{{actorUuid}}" data-actor-id="{{actorId}}"{{/if}}
+                 {{#if iconBackground}}style="background-color: {{iconBackground}};"{{/if}}>
+                <img src="{{icon}}" alt="{{title}}" {{#if actorUuid}}draggable="true" class="vbd-actor-portrait-drag"{{/if}}>
             </div>
             <div class="header-info">
                 <h3 class="header-title">{{title}}</h3>
@@ -103,11 +105,13 @@
                 {{/if}} --}}
 
                 {{!-- RESULT BANNER --}}
-                <div class="roll-result-banner {{#if (or (eq outcome 'success') (eq outcome 'HIT') (eq outcome 'PASS'))}}result-hit{{else}}result-miss{{/if}}">
+                <div class="roll-result-banner {{#if difficulty}}{{#if (or (eq outcome 'success') (eq outcome 'HIT') (eq outcome 'PASS'))}}result-hit{{else}}result-miss{{/if}}{{else}}result-plain{{/if}}">
                     <span class="roll-value">{{rollTotal}}</span>
+                    {{#if difficulty}}
                     <span class="roll-vs">{{localize "VAGABOND.UI.Labels.Vs"}}</span>
                     <span class="roll-target">{{difficulty}}</span>
                     <span class="roll-outcome-text">{{outcome}}</span>
+                    {{/if}}
                 </div>
             </div>
 

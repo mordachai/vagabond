@@ -1,13 +1,14 @@
 .content-link {
     background: $c-faint;
-    border: 2px solid $c-dark;
+    border: 2px solid $c-yellow;
     border-radius: 4px;
     color: $c-dark-bluey;
     margin: -1px 0;
     padding: 1px 4px 0;
     white-space: nowrap;
-    word-break: break-all;
+     word-break: break-all;
 }
+
 
 .inline-roll {
     display: inline-flex;
@@ -24,7 +25,7 @@
     font-size: 0.95em;
     cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease;
-    text-decoration: none;
+    text-decoration: none; 
 
     &:hover {
         border-color: $c-black;

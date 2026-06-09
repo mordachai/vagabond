@@ -1611,6 +1611,66 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     cursor: default;
 }
 
+/* --------------------------------------------------------- */
+/* Portrait drag cursor                                      */
+/* --------------------------------------------------------- */
+.header-icon[data-actor-uuid] img.vbd-actor-portrait-drag {
+    cursor: grab;
+    &:active { cursor: grabbing; }
+}
+
+/* --------------------------------------------------------- */
+/* Actor drag pill (appearing card, and any card with actor) */
+/* Needs top-level scope — chat renders outside .vagabond    */
+/* --------------------------------------------------------- */
+.vbd-actor-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: $c-yellow;
+    border: 2px solid $c-dark-bluey;
+    border-radius: 10px;
+    color: $c-dark-bluey;
+    margin: 0 1px;
+    padding: 1px 6px 1px 4px;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: grab;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    text-decoration: none;
+
+    &:hover {
+        border-color: $c-black;
+        text-decoration: none;
+        color: $c-black;
+    }
+
+    &:active { cursor: grabbing; }
+
+    i {
+        font-size: 0.9em;
+        opacity: 0.8;
+        color: $c-dark-bluey;
+    }
+}
+
+/* --------------------------------------------------------- */
+/* result-plain: roll banner with no hit/miss context        */
+/* Used for informational rolls (e.g. # Appearing)          */
+/* --------------------------------------------------------- */
+.roll-result-banner.result-plain {
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 4px;
+    min-width: unset;
+    padding: 2px 16px 2px 8px;
+
+    .roll-value {
+        color: #fff;
+    }
+}
+
+
 /* Animations */
 @keyframes popIn {
     from { transform: scale(0); opacity: 0; }
