@@ -257,14 +257,13 @@ export default class VagabondNPC extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Brutal Extra Crit Dice", hint: "Adds extra damage dice to Brutal crits beyond the base 1. ADD mode." }
     );
-    schema.reflexCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Reflex Save Crit Bonus" }
-    );
-    schema.endureCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Endure Save Crit Bonus" }
-    );
+    // Per-save crit threshold bonuses (dynamic from homebrew saves config).
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      schema[`${save.key}CritBonus`] = new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: `${save.label} Save Crit Bonus` }
+      );
+    }
 
     // Locked/unlocked mode toggle
     schema.locked = new fields.BooleanField({
@@ -443,8 +442,9 @@ export default class VagabondNPC extends VagabondActorBase {
     // Reset weapon property bonus fields
     this.cleaveTargets = [];
     this.brutalDice = [];
-    this.reflexCritBonus = [];
-    this.endureCritBonus = [];
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      this[`${save.key}CritBonus`] = [];
+    }
 
     // Reset dice bonuses
     this.universalDamageDice = [];
@@ -542,8 +542,10 @@ export default class VagabondNPC extends VagabondActorBase {
     // Weapon property derived totals
     this.cleaveMaxTargets = 2 + this._evaluateFormulaField(this.cleaveTargets, rollData);
     this.brutalMaxDice = 1 + this._evaluateFormulaField(this.brutalDice, rollData);
-    this.reflexCritBonus = this._evaluateFormulaField(this.reflexCritBonus, rollData);
-    this.endureCritBonus = this._evaluateFormulaField(this.endureCritBonus, rollData);
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      const k = `${save.key}CritBonus`;
+      this[k] = this._evaluateFormulaField(this[k], rollData);
+    }
 
     // Fatigue bonus
     this.fatigueBonus = this._evaluateFormulaField(this.fatigueBonus, rollData);

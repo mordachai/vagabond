@@ -1765,7 +1765,7 @@ const FLUKE_REROLL_ENTRY = {
       }
       const weaponSkillKey = rerollData.weaponSkillKey;
       const weaponSkill = actor.system.skills?.[weaponSkillKey];
-      const critType = ['melee', 'ranged', 'brawl', 'finesse'].includes(weaponSkillKey) ? weaponSkillKey : null;
+      const critType = VagabondRollBuilder.isWeaponSkillKey(weaponSkillKey) ? weaponSkillKey : null;
       const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
       const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
 

@@ -151,12 +151,14 @@
  * - Result: All weapon attacks deal +2 damage (spells unaffected)
  *
  * **Example 2: "Empowered Magic" Perk**
- * - Attribute Key: spellDamageDieSize
- * - Change Mode: Upgrade (4) or Override (5)
- * - Effect Value: 8
- * - Result: All spell damage uses d8 instead of d6
+ * - Attribute Key: spellDamageDieSizeBonus
+ * - Change Mode: Add (2)
+ * - Effect Value: 2
+ * - Result: All spell damage steps up one die size (each +2 = one size larger)
  *   - Before: Fireball 3d6 fire
  *   - After: Fireball 3d8 fire
+ *   - NOTE: Target the *Bonus field, NOT system.spellDamageDieSize — the latter is
+ *     a derived value recomputed in prepareDerivedData() and your change is discarded.
  *
  * **Example 3: "Alchemical Expertise" Perk**
  * - Attribute Key: universalAlchemicalDamageDice
@@ -192,7 +194,8 @@ export class VagabondActiveEffect extends ActiveEffect {
     const choices = {
       // ===== BASE ACTOR VARIABLES =====
       'system.health.value': 'Health: Current HP',
-      'system.health.max': 'Health: Max HP',
+      // NOTE: system.health.max is intentionally NOT listed — it is derived in
+      // prepareDerivedData(). Use system.health.bonus for a flat Max HP bonus.
       'system.health.bonus': 'Health: Flat HP Bonus (Applied to Max)',
       'system.power.value': 'Power: Current',
       'system.power.max': 'Power: Max',
@@ -233,15 +236,14 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.incomingDamageReductionPerDie': 'Incoming Damage Reduction Per Die (Berserk)',
 
       // -- Universal Crit Bonuses (stack on top of per-type bonuses) --
-      'system.attackCritBonus': 'Crit: All Weapon Attacks (melee/ranged/brawl/finesse)',
+      'system.attackCritBonus': 'Crit: All Weapon Attacks (every weapon skill)',
       'system.castCritBonus': 'Crit: All Spell Casts',
-      // -- Specific Crit Bonuses (Lower is better, e.g. -1 for 19-20) --
-      'system.meleeCritBonus': 'Crit: Melee Threshold Bonus (-1 for 19-20)',
-      'system.rangedCritBonus': 'Crit: Ranged Threshold Bonus (-1 for 19-20)',
-      'system.brawlCritBonus': 'Crit: Brawl Threshold Bonus (-1 for 19-20)',
-      'system.finesseCritBonus': 'Crit: Finesse Threshold Bonus (-1 for 19-20)',
-      'system.reflexCritBonus': 'Crit: Reflex Save Threshold Bonus (-1 for 19-20)',
-      'system.endureCritBonus': 'Crit: Endure Save Threshold Bonus (-1 for 19-20)',
+      // -- Specific Crit Bonuses, per weapon skill (dynamic from homebrew; lower is better, e.g. -1 for 19-20) --
+      ...Object.fromEntries(
+        (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).map(s => [
+          `system.${s.key}CritBonus`, `Crit: ${s.label} Threshold Bonus (-1 for 19-20)`,
+        ])
+      ),
 
       'system.bonusLuck': 'Bonus Luck',
       'system.currentLuck': 'Current Luck Pool',
@@ -264,8 +266,19 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // -- Universal Bonuses --
       'system.universalCheckBonus': 'Universal: All d20 Rolls (Check Bonus)',
+      'system.universalDifficultyBonus': 'Universal: All Skill/Save Difficulty (negative = easier)',
       'system.universalDamageBonus': 'Universal: All Damage Rolls (Flat Bonus)',
       'system.universalDamageDice': 'Universal: All Damage Rolls (Dice Bonus)',
+
+      // -- Per-Die Flat Bonuses (scale with dice count, including explosions) --
+      'system.bonusPerDamageDie': 'Per-Die Bonus: All Damage Rolls',
+      'system.weaponBonusPerDamageDie': 'Per-Die Bonus: Weapon Damage',
+      'system.spellBonusPerDamageDie': 'Per-Die Bonus: Spell Damage',
+      'system.alchemicalBonusPerDamageDie': 'Per-Die Bonus: Alchemical Damage',
+      'system.bonusPerDamageDieDoubleVsBeingTypes': 'Per-Die Bonus: Double vs Being Type (ADD type name)',
+
+      // -- Save vs Status Bonus (ADD "statusId:saveKey:value") --
+      'system.saveVsStatusBonuses': 'Save vs Status Bonus (ADD "frightened:will:2")',
 
       // -- Separated Universal Damage Bonuses --
       'system.universalWeaponDamageBonus': 'Universal: Weapon Damage (Flat Bonus)',
@@ -275,11 +288,12 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.universalAlchemicalDamageBonus': 'Universal: Alchemical Damage (Flat Bonus)',
       'system.universalAlchemicalDamageDice': 'Universal: Alchemical Damage (Dice Bonus)',
       
-      // -- Specific Die Size Bonuses --
-      'system.meleeDamageDieSizeBonus': 'Melee: Damage Die Size Bonus (+2 for d8)',
-      'system.rangedDamageDieSizeBonus': 'Ranged: Damage Die Size Bonus (+2 for d8)',
-      'system.brawlDamageDieSizeBonus': 'Brawl: Damage Die Size Bonus (+2 for d8)',
-      'system.finesseDamageDieSizeBonus': 'Finesse: Damage Die Size Bonus (+2 for d8)',
+      // -- Specific Die Size Bonuses, per weapon skill (dynamic from homebrew; +2 = next die size) --
+      ...Object.fromEntries(
+        (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).map(s => [
+          `system.${s.key}DamageDieSizeBonus`, `${s.label}: Damage Die Size Bonus (+2 for d8)`,
+        ])
+      ),
       'system.spellDamageDieSizeBonus': 'Spell: Damage Die Size Bonus (Adds to d6)',
 
       // -- Weapon Property Bonuses --
@@ -299,8 +313,9 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // ===== SAVES (dynamic from homebrew config) =====
       ...Object.fromEntries(
-        (CONFIG.VAGABOND.homebrew?.saves ?? []).map(s => [
-          `system.saves.${s.key}.bonus`, `Save: ${s.label} Bonus`,
+        (CONFIG.VAGABOND.homebrew?.saves ?? []).flatMap(s => [
+          [`system.saves.${s.key}.bonus`, `Save: ${s.label} Bonus`],
+          [`system.${s.key}CritBonus`, `Crit: ${s.label} Save Threshold Bonus (-1 for 19-20)`],
         ])
       ),
 

@@ -122,12 +122,14 @@ Use these in AE formulas on class items to apply bonuses only while a status is 
 @finesseDamageDieSizeBonus
 ```
 
+> The per-weapon-skill die-size keys (`@<skillKey>DamageDieSizeBonus`) are generated dynamically from the homebrew config — any custom weapon skill gets its own automatically. `@spellDamageDieSizeBonus` is the separate spell key.
+
 ### Crit Bonuses
 
 Negative values lower the crit threshold (e.g. `-1` = crit on 19-20). Universal bonuses stack on top of per-type bonuses.
 
 ```txt
-@attackCritBonus                 → All weapon attacks (melee/ranged/brawl/finesse)
+@attackCritBonus                 → All weapon attacks (every weapon skill)
 @castCritBonus                   → All spell casts
 @meleeCritBonus                  → Melee only
 @rangedCritBonus                 → Ranged only
@@ -135,7 +137,10 @@ Negative values lower the crit threshold (e.g. `-1` = crit on 19-20). Universal 
 @finesseCritBonus                → Finesse only
 @reflexCritBonus                 → Reflex save
 @endureCritBonus                 → Endure save
+@willCritBonus                   → Will save
 ```
+
+> Both the per-weapon-skill keys (`@<skillKey>CritBonus`, for any skill flagged a weapon skill) and the per-save keys (`@<saveKey>CritBonus`) are generated dynamically from the homebrew config. Defaults shown above; custom weapon skills / saves get their own key automatically. `@attackCritBonus` applies to every weapon skill; `@castCritBonus` to all casts.
 
 ### NPCs Only
 
@@ -437,6 +442,8 @@ system.finesseDamageDieSizeBonus
 system.spellDamageDieSizeBonus         → Adds to the base spell die (config default d6)
 ```
 
+> The per-weapon-skill keys (`system.<skillKey>DamageDieSizeBonus`) are generated dynamically from the homebrew config — custom weapon skills get their own automatically.
+
 ### Crit Threshold Bonus Keys
 
 Negative values lower the threshold (e.g. `-1` = crit on 19–20). Universal keys stack on top of per-type keys.
@@ -450,7 +457,10 @@ system.brawlCritBonus            → Brawl only
 system.finesseCritBonus          → Finesse only
 system.reflexCritBonus           → Reflex save crit
 system.endureCritBonus           → Endure save crit
+system.willCritBonus             → Will save crit
 ```
+
+> Per-weapon-skill keys (`system.<skillKey>CritBonus`) and per-save keys (`system.<saveKey>CritBonus`) are both generated dynamically from the homebrew config — custom weapon skills and saves get their own automatically.
 
 ### Weapon Property Bonuses
 

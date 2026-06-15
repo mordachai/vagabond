@@ -211,33 +211,44 @@ export class VagabondRollBuilder {
   }
 
   /**
-   * Calculate the final critical hit threshold based on base value and applicable bonuses
-   * @param {Object} rollData - The roll data containing critNumber and type-specific bonuses
-   * @param {string|null} type - The type of roll ('spell', 'melee', 'ranged', 'brawl', 'finesse')
+   * Whether a crit-type key is a weapon skill (config-driven, homebrew-aware).
+   * Weapon skills are the ones flagged `isWeaponSkill` in the homebrew skills config
+   * (defaults: melee, ranged, brawl, finesse). Used to decide both whether a roll
+   * can crit at all and whether the universal `attackCritBonus` applies.
+   * @param {string} key - The skill/roll key
+   * @returns {boolean}
+   */
+  static isWeaponSkillKey(key) {
+    if (!key) return false;
+    return !!(CONFIG.VAGABOND?.homebrew?.skills ?? []).find(s => s.key === key && s.isWeaponSkill);
+  }
+
+  /**
+   * Calculate the final critical hit threshold based on base value and applicable bonuses.
+   *
+   * The `type` is fully dynamic / homebrew-aware:
+   * - `'spell'` → adds `castCritBonus`.
+   * - a weapon skill (any key flagged `isWeaponSkill`) → adds `<type>CritBonus` plus the
+   *   universal `attackCritBonus`.
+   * - any other key (a save: reflex/endure/will or homebrew-configured) → adds `<type>CritBonus`.
+   *
+   * @param {Object} rollData - The roll data containing critNumber and per-type bonuses
+   * @param {string|null} type - The type of roll ('spell', a weapon skill key, or a save key)
    * @returns {number} The final critical hit threshold (e.g., 19 for crit on 19-20)
    */
   static calculateCritThreshold(rollData, type = null) {
     let critThreshold = rollData.critNumber || 20;
+    if (!type) return Math.clamp(critThreshold, 1, 20);
 
-    // Apply specific bonus if type provided
     if (type === 'spell') {
       critThreshold += (rollData.castCritBonus || 0);
-    } else if (type === 'melee') {
-      critThreshold += (rollData.meleeCritBonus || 0);
-      critThreshold += (rollData.attackCritBonus || 0);
-    } else if (type === 'ranged') {
-      critThreshold += (rollData.rangedCritBonus || 0);
-      critThreshold += (rollData.attackCritBonus || 0);
-    } else if (type === 'brawl') {
-      critThreshold += (rollData.brawlCritBonus || 0);
-      critThreshold += (rollData.attackCritBonus || 0);
-    } else if (type === 'finesse') {
-      critThreshold += (rollData.finesseCritBonus || 0);
-      critThreshold += (rollData.attackCritBonus || 0);
-    } else if (type === 'reflex') {
-      critThreshold += (rollData.reflexCritBonus || 0);
-    } else if (type === 'endure') {
-      critThreshold += (rollData.endureCritBonus || 0);
+    } else {
+      // Per-type crit bonus — works for any weapon skill OR save key
+      critThreshold += (rollData[`${type}CritBonus`] || 0);
+      // Universal weapon-attack crit bonus applies to every weapon skill
+      if (this.isWeaponSkillKey(type)) {
+        critThreshold += (rollData.attackCritBonus || 0);
+      }
     }
 
     // Ensure it doesn't go below 1 or above 20

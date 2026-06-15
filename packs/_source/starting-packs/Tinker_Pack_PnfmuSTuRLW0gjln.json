@@ -6,6 +6,26 @@
   "system": {
     "description": "",
     "items": [
+{
+        "uuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.Y8H21qyxnJjwpulj",
+        "quantity": 1
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.BhUNyj2nflyVUPIo",
+        "quantity": 5
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.sbHg7jCRQY8lIzY7",
+        "quantity": 2
+      },
+      {
+        "uuid": "Compendium.vagabond.gear.Item.4DcbA7RsHfBOPJIa",
+        "quantity": 1
+      },     
       {
         "uuid": "Compendium.vagabond.gear.Item.UfSh0X0489Uby1ev",
         "quantity": 1

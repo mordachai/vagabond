@@ -175,11 +175,10 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@bonuses.spellManaCostReduction', label: 'Spell Mana Cost Reduction' },
       { value: '@bonuses.deliveryManaCostReduction', label: 'Delivery Mana Cost Reduction' },
 
-      // Damage Die Size Bonuses
-      { value: '@meleeDamageDieSizeBonus', label: 'Melee Damage Die Size Bonus' },
-      { value: '@rangedDamageDieSizeBonus', label: 'Ranged Damage Die Size Bonus' },
-      { value: '@brawlDamageDieSizeBonus', label: 'Brawl Damage Die Size Bonus' },
-      { value: '@finesseDamageDieSizeBonus', label: 'Finesse Damage Die Size Bonus' },
+      // Damage Die Size Bonuses (per weapon skill, dynamic from homebrew skills config)
+      ...(CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).map(s => ({
+        value: `@${s.key}DamageDieSizeBonus`, label: `${s.label} Damage Die Size Bonus`
+      })),
       { value: '@spellDamageDieSizeBonus', label: 'Spell Damage Die Size Bonus' },
 
       // Status Conditions (for conditional class AEs)
@@ -196,13 +195,14 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       // Crit Bonuses (universal)
       { value: '@attackCritBonus', label: 'Attack Crit Bonus (All Weapon Types)' },
       { value: '@castCritBonus', label: 'Cast Crit Bonus (Spells)' },
-      // Crit Bonuses (per type)
-      { value: '@meleeCritBonus', label: 'Melee Crit Bonus' },
-      { value: '@rangedCritBonus', label: 'Ranged Crit Bonus' },
-      { value: '@brawlCritBonus', label: 'Brawl Crit Bonus' },
-      { value: '@finesseCritBonus', label: 'Finesse Crit Bonus' },
-      { value: '@reflexCritBonus', label: 'Reflex Save Crit Bonus' },
-      { value: '@endureCritBonus', label: 'Endure Save Crit Bonus' },
+      // Crit Bonuses (per weapon skill, dynamic from homebrew skills config)
+      ...(CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).map(s => ({
+        value: `@${s.key}CritBonus`, label: `${s.label} Crit Bonus`
+      })),
+      // Per-save crit bonuses (dynamic from homebrew saves config)
+      ...(CONFIG.VAGABOND.homebrew?.saves ?? []).map(s => ({
+        value: `@${s.key}CritBonus`, label: `${s.label} Save Crit Bonus`
+      })),
 
       // Stats (6 Core Stats) - Base Values
       { value: '@might.value', label: 'Might (Base Value)' },

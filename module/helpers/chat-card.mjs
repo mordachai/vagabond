@@ -565,11 +565,11 @@ export class VagabondChatCard {
     // For weapon skills, pass the key for per-weapon crit bonuses
     // For saves, pass the save key ('reflex', 'endure', 'will') so save crit bonuses apply
     // For spell cast rerolls, pass 'spell' so castCritBonus applies
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const critType = (type === 'cast') ? 'spell'
-      : (type === 'skill' && ['melee', 'ranged', 'brawl', 'finesse'].includes(key)) ? key
+      : (type === 'skill' && VagabondRollBuilder.isWeaponSkillKey(key)) ? key
       : (type === 'save') ? key
       : null;
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
     const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
 

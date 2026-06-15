@@ -106,7 +106,7 @@ export class RollHandler {
 
       // Compute crit for post-hook (mirrors _checkRoll logic)
       const _critType = (rollType === 'save') ? rollKey
-        : (rollType === 'skill' && ['melee', 'ranged', 'brawl', 'finesse'].includes(rollKey)) ? rollKey
+        : (rollType === 'skill' && VagabondRollBuilder.isWeaponSkillKey(rollKey)) ? rollKey
         : null;
       const _critNumber = VagabondRollBuilder.calculateCritThreshold(this.actor.getRollData(), _critType);
       const _isCritical = VagabondChatCard.isRollCritical(roll, _critNumber);

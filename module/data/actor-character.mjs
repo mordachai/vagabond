@@ -279,22 +279,15 @@ export default class VagabondCharacter extends VagabondActorBase {
     );
 
     // --- Specific Damage Die Size Bonuses ---
-    schema.meleeDamageDieSizeBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Melee Damage Die Size Bonus" }
-    );
-    schema.rangedDamageDieSizeBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Ranged Damage Die Size Bonus" }
-    );
-    schema.brawlDamageDieSizeBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Brawl Damage Die Size Bonus" }
-    );
-    schema.finesseDamageDieSizeBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Finesse Damage Die Size Bonus" }
-    );
+    // Per-weapon-skill damage die size bonuses (dynamic from homebrew skills flagged
+    // isWeaponSkill; defaults: melee, ranged, brawl, finesse). Generates
+    // <skillKey>DamageDieSizeBonus. Read by weapon damage rolls via the item's weaponSkill.
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      schema[`${skill.key}DamageDieSizeBonus`] = new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: `${skill.label} Damage Die Size Bonus` }
+      );
+    }
 
     // Spell Damage Die Size Bonus - allows increasing spell damage from d6 to d8/d10/d12
     schema.spellDamageDieSizeBonus = new fields.ArrayField(
@@ -325,31 +318,24 @@ export default class VagabondCharacter extends VagabondActorBase {
     });
 
     // --- Specific Critical Hit Threshold Bonuses ---
-    // These REDUCE the critNumber (e.g. -1 means crit on 19)
-    schema.meleeCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Melee Crit Bonus" }
-    );
-    schema.rangedCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Ranged Crit Bonus" }
-    );
-    schema.brawlCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Brawl Crit Bonus" }
-    );
-    schema.finesseCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Finesse Crit Bonus" }
-    );
-    schema.reflexCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Reflex Save Crit Bonus" }
-    );
-    schema.endureCritBonus = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Endure Save Crit Bonus" }
-    );
+    // These REDUCE the critNumber (e.g. -1 means crit on 19).
+    // Per-weapon-skill crit bonuses (dynamic from homebrew skills flagged isWeaponSkill;
+    // defaults: melee, ranged, brawl, finesse). Generates <skillKey>CritBonus.
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      schema[`${skill.key}CritBonus`] = new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: `${skill.label} Crit Bonus` }
+      );
+    }
+    // Per-save crit threshold bonuses (dynamic from homebrew saves config).
+    // Generates <saveKey>CritBonus for each configured save (e.g. reflexCritBonus,
+    // endureCritBonus, willCritBonus).
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      schema[`${save.key}CritBonus`] = new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: `${save.label} Save Crit Bonus` }
+      );
+    }
     schema.attackCritBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
       { initial: [], label: "Attack Crit Bonus (All Weapon Types)" }
@@ -636,22 +622,21 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.spellBonusPerDamageDie = [];
     this.alchemicalBonusPerDamageDie = [];
 
-    // Reset specific die size bonuses
-    this.meleeDamageDieSizeBonus = [];
-    this.rangedDamageDieSizeBonus = [];
-    this.brawlDamageDieSizeBonus = [];
-    this.finesseDamageDieSizeBonus = [];
+    // Reset specific die size bonuses (per-weapon-skill, dynamic)
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      this[`${skill.key}DamageDieSizeBonus`] = [];
+    }
 
     // Reset spell damage die size bonus (evaluated in derived data)
     this.spellDamageDieSizeBonus = [];
 
-    // Reset specific crit bonuses
-    this.meleeCritBonus = [];
-    this.rangedCritBonus = [];
-    this.brawlCritBonus = [];
-    this.finesseCritBonus = [];
-    this.reflexCritBonus = [];
-    this.endureCritBonus = [];
+    // Reset specific crit bonuses (per-weapon-skill + per-save, both dynamic)
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      this[`${skill.key}CritBonus`] = [];
+    }
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      this[`${save.key}CritBonus`] = [];
+    }
     this.attackCritBonus = [];
     this.castCritBonus = [];
     this.incomingDamageReductionPerDie = [];
@@ -798,19 +783,21 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonuses.globalExplode = this._evaluateFormulaField(this.bonuses.globalExplode, rollData) > 0;
     
     // Evaluate specific die size bonuses
-    this.meleeDamageDieSizeBonus = this._evaluateFormulaField(this.meleeDamageDieSizeBonus, rollData);
-    this.rangedDamageDieSizeBonus = this._evaluateFormulaField(this.rangedDamageDieSizeBonus, rollData);
-    this.brawlDamageDieSizeBonus = this._evaluateFormulaField(this.brawlDamageDieSizeBonus, rollData);
-    this.finesseDamageDieSizeBonus = this._evaluateFormulaField(this.finesseDamageDieSizeBonus, rollData);
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      const k = `${skill.key}DamageDieSizeBonus`;
+      this[k] = this._evaluateFormulaField(this[k], rollData);
+    }
     this.spellDamageDieSizeBonus = this._evaluateFormulaField(this.spellDamageDieSizeBonus, rollData);
 
-    // Evaluate specific crit bonuses
-    this.meleeCritBonus = this._evaluateFormulaField(this.meleeCritBonus, rollData);
-    this.rangedCritBonus = this._evaluateFormulaField(this.rangedCritBonus, rollData);
-    this.brawlCritBonus = this._evaluateFormulaField(this.brawlCritBonus, rollData);
-    this.finesseCritBonus = this._evaluateFormulaField(this.finesseCritBonus, rollData);
-    this.reflexCritBonus = this._evaluateFormulaField(this.reflexCritBonus, rollData);
-    this.endureCritBonus = this._evaluateFormulaField(this.endureCritBonus, rollData);
+    // Evaluate specific crit bonuses (per-weapon-skill + per-save, both dynamic)
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      const k = `${skill.key}CritBonus`;
+      this[k] = this._evaluateFormulaField(this[k], rollData);
+    }
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      const k = `${save.key}CritBonus`;
+      this[k] = this._evaluateFormulaField(this[k], rollData);
+    }
     this.attackCritBonus = this._evaluateFormulaField(this.attackCritBonus, rollData);
     this.castCritBonus = this._evaluateFormulaField(this.castCritBonus, rollData);
     this.incomingDamageReductionPerDie = this._evaluateFormulaField(this.incomingDamageReductionPerDie, rollData);
@@ -1078,18 +1065,18 @@ export default class VagabondCharacter extends VagabondActorBase {
     data.universalDamageDice = this.universalDamageDice || '';
 
     // Add specific bonuses for formula usage
-    data.meleeDamageDieSizeBonus = this.meleeDamageDieSizeBonus || 0;
-    data.rangedDamageDieSizeBonus = this.rangedDamageDieSizeBonus || 0;
-    data.brawlDamageDieSizeBonus = this.brawlDamageDieSizeBonus || 0;
-    data.finesseDamageDieSizeBonus = this.finesseDamageDieSizeBonus || 0;
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      data[`${skill.key}DamageDieSizeBonus`] = this[`${skill.key}DamageDieSizeBonus`] || 0;
+    }
     data.spellDamageDieSizeBonus = this.spellDamageDieSizeBonus || 0;
 
-    data.meleeCritBonus = this.meleeCritBonus || 0;
-    data.rangedCritBonus = this.rangedCritBonus || 0;
-    data.brawlCritBonus = this.brawlCritBonus || 0;
-    data.finesseCritBonus = this.finesseCritBonus || 0;
-    data.reflexCritBonus = this.reflexCritBonus || 0;
-    data.endureCritBonus = this.endureCritBonus || 0;
+    // Per-weapon-skill + per-save crit bonuses (both dynamic, expose as @<key>CritBonus)
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      data[`${skill.key}CritBonus`] = this[`${skill.key}CritBonus`] || 0;
+    }
+    for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
+      data[`${save.key}CritBonus`] = this[`${save.key}CritBonus`] || 0;
+    }
     data.attackCritBonus = this.attackCritBonus || 0;
     data.castCritBonus = this.castCritBonus || 0;
     data.incomingDamageReductionPerDie = this.incomingDamageReductionPerDie || 0;

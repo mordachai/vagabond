@@ -1,48 +1,98 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.17.3",
+  "version": "5.17.4",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
       "name": "Gus",
       "discord": "gus4294",
-      "url": "https://github.com/mordachai"      
+      "url": "https://github.com/mordachai",
+      "flags": {}
     },
     {
       "name": "KeyInk",
       "discord": "keyink",
-      "url": "https://bsky.app/profile/keylligraphyink.bsky.social"
+      "url": "https://bsky.app/profile/keylligraphyink.bsky.social",
+      "flags": {}
     }
   ],
   "documentTypes": {
     "Actor": {
-        "character": {
-            "htmlFields": ["spells"]
-        },
-        "npc": {
-            "htmlFields": ["biography"]
-        },
-        "party": {
-            "htmlFields": ["biography", "sharedNotes"]
-        },
-        "construct": {}
+      "character": {
+        "htmlFields": [
+          "spells"
+        ]
+      },
+      "npc": {
+        "htmlFields": [
+          "biography"
+        ]
+      },
+      "party": {
+        "htmlFields": [
+          "biography",
+          "sharedNotes"
+        ]
+      },
+      "construct": {}
     },
     "Item": {
-      "equipment": {"htmlFields": ["description"]},
-      "spell": {"htmlFields": ["description"]},
-      "ancestry": {"htmlFields": ["description"]},
-      "class": {"htmlFields": ["description"]},
-      "perk": {"htmlFields": ["description"]},
-      "starterPack": {"htmlFields": ["description"]},
-      "container": {"htmlFields": ["description"]},
-      "vehiclePart": {"htmlFields": ["description"]}
+      "equipment": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "spell": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "ancestry": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "class": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "perk": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "starterPack": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "container": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "vehiclePart": {
+        "htmlFields": [
+          "description"
+        ]
+      }
     }
   },
   "flags": {
     "hotReload": {
-      "extensions": ["css", "html", "hbs", "json"],
-      "paths": ["css", "lang", "templates"]
+      "extensions": [
+        "css",
+        "html",
+        "hbs",
+        "json"
+      ],
+      "paths": [
+        "css",
+        "lang",
+        "templates"
+      ]
     }
   },
   "url": "https://github.com/mordachai/vagabond",
@@ -54,269 +104,277 @@
     {
       "type": "setup",
       "url": "systems/vagabond/assets/splash.png",
-      "thumbnail": "systems/vagabond/assets/splash.png"
+      "thumbnail": "systems/vagabond/assets/splash.png",
+      "loop": false,
+      "flags": {}
     }
   ],
   "compatibility": {
     "minimum": "13",
     "verified": "14"
   },
-  "esmodules": ["module/vagabond.mjs"],
-  "styles": ["css/vagabond.css"],
+  "esmodules": [
+    "module/vagabond.mjs"
+  ],
+  "styles": [
+    {
+      "src": "css/vagabond.css"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     }
   ],
   "packs": [
     {
-        "name": "ancestries",
-        "label": "Ancestries",
-        "system": "vagabond",
-        "path": "packs/ancestries",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "ancestries",
+      "label": "Ancestries",
+      "system": "vagabond",
+      "path": "packs/ancestries",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "classes",
-        "label": "Classes",
-        "system": "vagabond",
-        "path": "packs/classes",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "classes",
+      "label": "Classes",
+      "system": "vagabond",
+      "path": "packs/classes",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "perks",
-        "label": "Perks",
-        "system": "vagabond",
-        "path": "packs/perks",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "perks",
+      "label": "Perks",
+      "system": "vagabond",
+      "path": "packs/perks",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "starting-packs",
-        "label": "Starting Packs",
-        "system": "vagabond",
-        "path": "packs/starting-packs",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
-    },
-        {
-        "name": "creation-notes",
-        "label": "Creation Notes",
-        "system": "vagabond",
-        "path": "packs/creation-notes",
-        "type": "JournalEntry",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "starting-packs",
+      "label": "Starting Packs",
+      "system": "vagabond",
+      "path": "packs/starting-packs",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "alchemical-items",
-        "label": "Alchemical items",
-        "system": "vagabond",
-        "path": "packs/items/alchemical-items",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "creation-notes",
+      "label": "Creation Notes",
+      "system": "vagabond",
+      "path": "packs/creation-notes",
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "armor",
-        "label": "Armor",
-        "system": "vagabond",
-        "path": "packs/items/armor",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "alchemical-items",
+      "label": "Alchemical items",
+      "system": "vagabond",
+      "path": "packs/items/alchemical-items",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "gear",
-        "label": "Gear",
-        "system": "vagabond",
-        "path": "packs/items/gear",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
-    },
-
-    {
-        "name": "weapons",
-        "label": "Weapons",
-        "system": "vagabond",
-        "path": "packs/items/weapons",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "armor",
+      "label": "Armor",
+      "system": "vagabond",
+      "path": "packs/items/armor",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "relics",
-        "label": "Relics",
-        "system": "vagabond",
-        "path": "packs/items/relics",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "gear",
+      "label": "Gear",
+      "system": "vagabond",
+      "path": "packs/items/gear",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "spells",
-        "label": "Spells",
-        "system": "vagabond",
-        "path": "packs/items/spells",
-        "type": "Item",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "weapons",
+      "label": "Weapons",
+      "system": "vagabond",
+      "path": "packs/items/weapons",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "bestiary",
-        "label": "Bestiary",
-        "system": "vagabond",
-        "path": "packs/characters/bestiary",
-        "type": "Actor",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "relics",
+      "label": "Relics",
+      "system": "vagabond",
+      "path": "packs/items/relics",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "humanlike",
-        "label": "Humanlike",
-        "system": "vagabond",
-        "path": "packs/characters/humanlike",
-        "type": "Actor",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "spells",
+      "label": "Spells",
+      "system": "vagabond",
+      "path": "packs/items/spells",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     },
     {
-        "name": "active-effects",
-        "label": "Active Effects",
-        "system": "vagabond",
-        "path": "packs/characters/active-effects",
-        "type": "ActiveEffect",
-        "ownership": {
-          "PLAYER": "OBSERVER",
-          "ASSISTANT": "OWNER"
-        },
-        "private": false,
-        "flags": {}
+      "name": "bestiary",
+      "label": "Bestiary",
+      "system": "vagabond",
+      "path": "packs/characters/bestiary",
+      "type": "Actor",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "humanlike",
+      "label": "Humanlike",
+      "system": "vagabond",
+      "path": "packs/characters/humanlike",
+      "type": "Actor",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
+    },
+    {
+      "name": "active-effects",
+      "label": "Active Effects",
+      "system": "vagabond",
+      "path": "packs/characters/active-effects",
+      "type": "ActiveEffect",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     }
   ],
   "packFolders": [
-      {
-          "name": "Vagabond",
+    {
+      "name": "Vagabond",
+      "sorting": "m",
+      "color": "#08718c",
+      "packs": [],
+      "folders": [
+        {
+          "name": "Character creation",
           "sorting": "m",
-          "color": "#08718c",
+          "color": "#000000",
           "packs": [
+            "ancestries",
+            "classes",
+            "perks",
+            "starting-packs",
+            "creation-notes"
           ],
-          "folders": [
-              {
-                  "name": "Character creation",
-                  "sorting": "m",
-                  "color": "#000000",
-                  "packs": [
-                      "ancestries",
-                      "classes",
-                      "perks",
-                      "starting-packs",
-                      "creation-notes"
-                  ]
-              },
-              {
-                  "name": "Items",
-                  "sorting": "m",
-                  "color": "#000000",
-                  "packs": [
-                      "alchemical-items",
-                      "armor",
-                      "gear",
-                      "relics",
-                      "spells",
-                      "weapons"
-                  ]
-              },
-              {
-                  "name": "Characters",
-                  "sorting": "m",
-                  "color": "#000000",
-                  "packs": [
-                      "bestiary",
-                      "humanlike"
-                  ]
-              },
-              {
-                  "name": "Active Effects",
-                  "sorting": "m",
-                  "color": "#000000",
-                  "packs": [
-                      "active-effects"
-                  ]
-              }
-          ]
-      }
+          "folders": []
+        },
+        {
+          "name": "Items",
+          "sorting": "m",
+          "color": "#000000",
+          "packs": [
+            "alchemical-items",
+            "armor",
+            "gear",
+            "relics",
+            "spells",
+            "weapons"
+          ],
+          "folders": []
+        },
+        {
+          "name": "Characters",
+          "sorting": "m",
+          "color": "#000000",
+          "packs": [
+            "bestiary",
+            "humanlike"
+          ],
+          "folders": []
+        },
+        {
+          "name": "Active Effects",
+          "sorting": "m",
+          "color": "#000000",
+          "packs": [
+            "active-effects"
+          ],
+          "folders": []
+        }
+      ]
+    }
   ],
-  "socket": false,
   "manifest": "https://github.com/mordachai/vagabond/releases/latest/download/system.json",
-  "download": "https://github.com/mordachai/vagabond/releases/latest/download/system.zip",
+  "download": "https://github.com/mordachai/vagabond/releases/download/v5.17.3/system.zip",
   "background": "systems/vagabond/assets/splash.png",
   "grid": {
-    "type": 1,
     "distance": 5,
-    "units": "ft",
-    "diagonals": 0
+    "units": "ft"
   },
   "primaryTokenAttribute": "health"
 }
