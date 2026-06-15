@@ -320,6 +320,261 @@ Grants a bonus to saves against specific conditions. Each entry is a string in t
 
 ---
 
+## Active Effects
+
+This is the full list of **Attribute Keys** an Active Effect can target. These are the keys surfaced by the autocomplete dropdown in the AE config (`VagabondActiveEffect.getAttributeChoices()`). All keys require the `system.` prefix.
+
+Most bonus keys are `ArrayField(StringField)` — use **Add** mode and a number or `@`-formula as the value; multiple effects stack (each entry is summed). A handful are plain number/string/boolean fields where **Override**/**Upgrade** modes make more sense; those are noted.
+
+### Core Resources
+
+```txt
+system.health.value              → Current HP
+system.health.max                → Max HP (derived; bonus normally added via health.bonus)
+system.health.bonus              → Flat bonus added to Max HP
+system.power.value               → Current Power
+system.power.max                 → Max Power
+system.fatigue                   → Current fatigue value
+system.fatigueBonus              → Bonus to maximum fatigue
+```
+
+### Character Attributes & Spellcasting
+
+```txt
+system.attributes.level.value    → Character level
+system.attributes.xp             → Experience points
+system.attributes.size           → Size category (string)
+system.attributes.beingType      → Being type (string)
+system.attributes.isSpellcaster  → Force spellcaster on/off (boolean override)
+system.attributes.manaMultiplier → Mana-per-level multiplier
+system.attributes.castingStat    → Casting stat key (e.g. "reason")
+system.attributes.manaSkill      → Mana skill key (e.g. "arcana")
+```
+
+### Currency & Inventory
+
+```txt
+system.currency.gold             → Gold
+system.currency.silver           → Silver
+system.currency.copper           → Copper
+system.inventory.bonusSlots      → Extra inventory slots
+system.inventory.boundsBonus     → Extra bound-item slots (base 3)
+```
+
+### Mana & Focus
+
+```txt
+system.mana.current              → Current mana
+system.mana.bonus                → Flat add to Max Mana
+system.mana.castingMaxBonus      → Flat add to Casting Max
+system.focus.maxBonus            → Bonus to max sustained-spell focus (base 5)
+```
+
+### Stats, Saves, Skills
+
+These are generated dynamically from the homebrew config, so the exact keys depend on the configured stats/skills/saves.
+
+```txt
+system.stats.<stat>.value        → Base stat value
+system.stats.<stat>.bonus        → Bonus to stat total (clamped 0–12)
+system.saves.<save>.bonus        → Bonus to that save (lowers its difficulty)
+system.skills.<skill>.trained    → Trained flag (boolean)
+system.skills.<skill>.bonus      → Bonus to that skill (lowers its difficulty)
+```
+
+### Luck & Misc Pools
+
+```txt
+system.currentLuck               → Current luck pool
+system.bonusLuck                 → Bonus to max luck
+system.studiedDice               → Studied-die pool
+system.critNumber                → Global crit threshold (default 20)
+system.favorHinder               → Favor/Hinder state (string: none/favor/hinder)
+```
+
+### Universal Bonus Keys
+
+```txt
+system.universalCheckBonus       → Flat bonus to every d20 roll
+system.universalDifficultyBonus  → Added to all skill/save difficulties (negative = easier)
+system.universalDamageBonus      → Flat bonus to all damage
+system.universalDamageDice       → Extra dice on all damage (string, e.g. "1d4")
+```
+
+### Per-Type Universal Damage
+
+```txt
+system.universalWeaponDamageBonus      → Flat bonus to weapon damage
+system.universalWeaponDamageDice       → Extra dice on weapon damage
+system.universalSpellDamageBonus       → Flat bonus to spell damage
+system.universalSpellDamageDice        → Extra dice on spell damage
+system.universalAlchemicalDamageBonus  → Flat bonus to alchemical damage
+system.universalAlchemicalDamageDice   → Extra dice on alchemical damage
+```
+
+### Per-Die Flat Bonuses
+
+Added once per damage die rolled (including exploded dice), so they scale with dice count.
+
+```txt
+system.bonusPerDamageDie               → Per-die bonus on all damage
+system.weaponBonusPerDamageDie         → Per-die bonus on weapon damage
+system.spellBonusPerDamageDie          → Per-die bonus on spell damage
+system.alchemicalBonusPerDamageDie     → Per-die bonus on alchemical damage
+system.bonusPerDamageDieDoubleVsBeingTypes
+        → ADD a being-type name (e.g. "Undead"); doubles the per-die bonus vs that target type
+```
+
+### Damage Die Size Bonus Keys
+
+Increase the die size of damage (each +2 steps up one die, d6→d8→d10…).
+
+```txt
+system.meleeDamageDieSizeBonus
+system.rangedDamageDieSizeBonus
+system.brawlDamageDieSizeBonus
+system.finesseDamageDieSizeBonus
+system.spellDamageDieSizeBonus         → Adds to the base spell die (config default d6)
+```
+
+### Crit Threshold Bonus Keys
+
+Negative values lower the threshold (e.g. `-1` = crit on 19–20). Universal keys stack on top of per-type keys.
+
+```txt
+system.attackCritBonus           → All weapon attacks
+system.castCritBonus             → All spell casts
+system.meleeCritBonus            → Melee only
+system.rangedCritBonus           → Ranged only
+system.brawlCritBonus            → Brawl only
+system.finesseCritBonus          → Finesse only
+system.reflexCritBonus           → Reflex save crit
+system.endureCritBonus           → Endure save crit
+```
+
+### Weapon Property Bonuses
+
+```txt
+system.cleaveTargets             → Extra Cleave targets beyond the base 2
+system.brutalDice                → Extra Brutal crit dice beyond the base 1
+system.incomingDamageReductionPerDie → Reduce incoming damage by N per incoming die (Berserk)
+```
+
+### Armor & Speed
+
+```txt
+system.armorBonus                → Flat bonus to armor value (character)
+system.speed.bonus               → Flat bonus to speed (character)
+```
+
+### Mana Cost Reductions
+
+```txt
+system.bonuses.hpPerLevel              → Bonus HP granted per level (× level)
+system.bonuses.spellManaCostReduction  → Reduce total spell mana cost
+system.bonuses.deliveryManaCostReduction → Reduce the delivery portion of spell mana cost
+```
+
+### Exploding Dice (Global)
+
+```txt
+system.bonuses.globalExplode         → Enable exploding dice on all rolls (Add > 0 = on)
+system.bonuses.globalExplodeValues   → Override which faces explode (Override; "max" = die's top face)
+```
+
+### Save vs Status Bonus Key
+
+```txt
+system.saveVsStatusBonuses
+        → ADD an entry "statusId:saveKey:value" (saveKey may be "any"; value supports @-formulas)
+```
+
+### Damage & Status Resistances
+
+These are string arrays — use **Add** mode and supply the relevant ID as the value.
+
+```txt
+system.immunities                → Add a damage-type ID for immunity
+system.weaknesses                → Add a damage-type ID for weakness
+system.statusImmunities          → Add a status ID for immunity (character + NPC)
+system.statusResistances         → Add a status ID; save vs it is rolled with Favor (character only)
+```
+
+### Status-Automation Modifiers
+
+Normally driven by status conditions, but targetable directly by AEs.
+
+```txt
+system.incomingHealingModifier               → Flat modifier to healing received (e.g. -1 blocks)
+system.incomingAttacksModifier               → none/favor/hinder for attacks against this actor
+system.outgoingSavesModifier                 → none/favor/hinder applied to enemy saves vs this actor
+system.autoFailAllRolls                      → Auto-fail every roll (boolean)
+system.autoFailStats                         → ADD a stat key whose rolls auto-fail
+system.defenderStatusModifiers.attackersAreBlinded   → Attackers treated as Blinded (boolean)
+system.defenderStatusModifiers.closeAttacksAutoCrit  → Close attacks auto-crit (boolean)
+```
+
+### NPC-Only Keys
+
+```txt
+system.cr                        → Challenge Rating
+system.threatLevel               → Threat Level
+system.hd                        → Hit Dice (drives Max HP)
+system.morale                    → Morale
+system.appearing                 → Number appearing
+system.speed                     → Speed (flat NumberField; NPCs)
+system.speedValues.climb         → Climb speed
+system.speedValues.cling         → Cling speed
+system.speedValues.fly           → Fly speed
+system.speedValues.phase         → Phase speed
+system.speedValues.swim          → Swim speed
+system.senses                    → Senses (string)
+system.armor                     → Armor value
+system.armorBonus                → Global flat armor bonus
+system.armorDescription          → Armor description (string)
+system.zone                      → Combat zone (frontline/midline/backline)
+```
+
+### Item / Global Bonuses
+
+```txt
+system.canExplode                → Item can explode (direct, on item)
+system.explodeValues             → Item explode values (direct, on item)
+system.bonuses.globalExplode     → Enable exploding dice on all items
+system.bonuses.globalExplodeValues → Explode-values override for all items
+```
+
+### Derived — Do Not Target
+
+Active Effects apply **between** `prepareBaseData()` and `prepareDerivedData()`. The keys below are recomputed (overwritten) in `prepareDerivedData()`, so an AE pointed at them is silently discarded. Target the matching **bonus input** instead — that is what the derivation reads.
+
+This is why you add to `system.health.bonus`, never `system.health.max`.
+
+| Derived key (don't target) | Why | Use instead |
+| --- | --- | --- |
+| `system.health.max` | derived = base × level + bonus | `system.health.bonus` |
+| `system.mana.max` | recomputed = multiplier × level + bonus | `system.mana.bonus` |
+| `system.mana.castingMax` | recomputed | `system.mana.castingMaxBonus` |
+| `system.focus.max` / `system.focus.current` | recomputed (`5 + bonus` / sustained count) | `system.focus.maxBonus` |
+| `system.speed.base` / `.crawl` / `.travel` | speed object reassigned each prep | `system.speed.bonus` |
+| `system.spellDamageDieSize` | recomputed = base die + bonus | `system.spellDamageDieSizeBonus` |
+| `system.stats.<stat>.total` | derived = value + bonus | `system.stats.<stat>.bonus` |
+| `system.saves.<save>.difficulty` | derived from stats + bonus | `system.saves.<save>.bonus` / `system.universalDifficultyBonus` |
+| `system.skills.<skill>.difficulty` | derived from stat + training + bonus | `system.skills.<skill>.bonus` |
+| `system.inventory.maxSlots` / `availableSlots` / `occupiedSlots` | derived | `system.inventory.bonusSlots` |
+| `system.inventory.maxBounds` | derived = 3 + bonus | `system.inventory.boundsBonus` |
+| `system.fatigueMax` | derived = config + bonus | `system.fatigueBonus` |
+| `system.maxLuck` | derived from luck stat | `system.bonusLuck` |
+| `system.armor` (character) | derived = equipped armor + bonus | `system.armorBonus` |
+| `system.cleaveMaxTargets` / `system.brutalMaxDice` | derived = base + bonus | `system.cleaveTargets` / `system.brutalDice` |
+| `system.attributes.xpRequired` / `xpProgress` / `canLevelUp` | derived display values | — (not editable) |
+| `system.xp` (NPC) | derived = CR² × 100 | — |
+| `system.threatLevelFormatted` (NPC) | derived display string | `system.threatLevel` |
+
+> **Caution — current-resource keys.** `system.health.value`, `system.power.value` / `power.max`, `system.mana.current`, `system.fatigue`, `system.currentLuck` are *stored* (not derived), so an AE can target them — but doing so pins the live value and fights manual changes. Only do this for effects that intentionally lock a resource.
+
+---
+
 ## Tips
 
 1. **Use `.total` for stats** — `.total` includes bonuses, `.value` is base only
