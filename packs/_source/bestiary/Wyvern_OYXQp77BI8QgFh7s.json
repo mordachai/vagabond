@@ -7,39 +7,14 @@
       "value": 64,
       "max": 64
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 14,
     "threatLevel": 5.8,
     "size": "huge",
     "beingType": "Cryptid",
     "speedTypes": [
       "fly"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 14,
     "morale": 10,
     "appearing": "1",

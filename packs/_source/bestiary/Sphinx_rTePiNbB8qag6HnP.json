@@ -8,39 +8,14 @@
       "max": 54,
       "bonus": 0
     },
-    "power": {
-      "value": 10,
-      "max": 10
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 5,
     "threatLevel": 5.7,
     "size": "large",
     "beingType": "Outers",
     "speedTypes": [
       "fly"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 12,
     "morale": 10,
     "appearing": "1",

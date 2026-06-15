@@ -7,37 +7,12 @@
       "value": 40,
       "max": 40
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 9,
     "threatLevel": 3.2,
     "size": "large",
     "beingType": "Hellspawn",
     "speedTypes": [],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 9,
     "morale": null,
     "appearing": "2d10",

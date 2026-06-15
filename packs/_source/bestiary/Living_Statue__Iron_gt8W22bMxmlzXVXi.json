@@ -7,37 +7,12 @@
       "value": 18,
       "max": 18
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 4,
     "threatLevel": 2.7,
     "size": "medium",
     "beingType": "Artificials",
     "speedTypes": [],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 4,
     "morale": 11,
     "appearing": "d4",

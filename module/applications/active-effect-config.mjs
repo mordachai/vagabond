@@ -258,7 +258,6 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@lvl', label: 'Level (Shorthand)' },
 
       // NPC Only
-      { value: '@cr', label: 'Challenge Rating (NPC)' },
       { value: '@hd', label: 'Hit Dice (NPC)' },
       { value: '@threatLevel', label: 'Threat Level (NPC)' },
 

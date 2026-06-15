@@ -7,13 +7,8 @@
       "value": 45,
       "max": 45
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 10,
     "threatLevel": 4.3,
     "size": "large",
     "beingType": "Beasts",
@@ -21,26 +16,6 @@
       "cling",
       "fly"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 10,
     "morale": 10,
     "appearing": "1",

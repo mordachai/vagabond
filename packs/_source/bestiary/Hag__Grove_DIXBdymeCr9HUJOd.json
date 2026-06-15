@@ -7,39 +7,14 @@
       "value": 36,
       "max": 36
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 8,
     "threatLevel": 9.7,
     "size": "medium",
     "beingType": "Fae",
     "speedTypes": [
       "cling"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 8,
     "morale": 10,
     "appearing": "1",

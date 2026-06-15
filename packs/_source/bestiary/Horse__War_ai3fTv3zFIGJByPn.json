@@ -7,37 +7,12 @@
       "value": 13,
       "max": 13
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 3,
     "threatLevel": 2,
     "size": "large",
     "beingType": "Beasts",
     "speedTypes": [],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 3,
     "morale": 9,
     "appearing": "1",

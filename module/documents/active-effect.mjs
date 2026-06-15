@@ -21,7 +21,7 @@
  * - **@attributes.level.value** - Character level
  * - **@stats.[stat].value** - Base stat values (might, dexterity, etc.)
  * - **@stats.[stat].total** - Stat totals (after bonuses)
- * - **@cr** - NPC Challenge Rating (NPCs only)
+ * - **@threatLevel** - NPC Threat Level (NPCs only)
  * - Any other field in getRollData()
  *
  * ## Supported Math Functions
@@ -197,8 +197,6 @@ export class VagabondActiveEffect extends ActiveEffect {
       // NOTE: system.health.max is intentionally NOT listed — it is derived in
       // prepareDerivedData(). Use system.health.bonus for a flat Max HP bonus.
       'system.health.bonus': 'Health: Flat HP Bonus (Applied to Max)',
-      'system.power.value': 'Power: Current',
-      'system.power.max': 'Power: Max',
       'system.fatigue': 'Fatigue: Current Value',
       'system.fatigueBonus': 'Fatigue: Max Bonus',
 
@@ -334,7 +332,6 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.statusResistances': 'Status Resistances — save with Favor (Array, Character only)',
 
       // ===== NPC-SPECIFIC VARIABLES =====
-      'system.cr': 'NPC: Challenge Rating',
       'system.threatLevel': 'NPC: Threat Level',
       'system.hd': 'NPC: Hit Dice (HP)',
       'system.morale': 'NPC: Morale',

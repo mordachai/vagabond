@@ -7,39 +7,14 @@
       "value": 2,
       "max": 2
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 2,
     "threatLevel": 0.1,
     "size": "small",
     "beingType": "Beasts",
     "speedTypes": [
       "climb"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 2,
     "morale": 7,
     "appearing": "2d4",

@@ -7,39 +7,14 @@
       "value": 27,
       "max": 27
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 6,
     "threatLevel": 5.6,
     "size": "large",
     "beingType": "Hellspawn",
     "speedTypes": [
       "fly"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 6,
     "morale": 7,
     "appearing": "1",

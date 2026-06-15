@@ -7,39 +7,14 @@
       "value": 162,
       "max": 162
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 36,
     "threatLevel": 24.7,
     "size": "colossal",
     "beingType": "Cryptid",
     "speedTypes": [
       "swim"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 36,
     "morale": 9,
     "appearing": "Unique",

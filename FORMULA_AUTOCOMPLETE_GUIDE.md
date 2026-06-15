@@ -145,7 +145,6 @@ Negative values lower the crit threshold (e.g. `-1` = crit on 19-20). Universal 
 ### NPCs Only
 
 ```txt
-@cr                              → Challenge Rating
 @hd                              → Hit Dice
 @threatLevel                     → Threat Level
 ```
@@ -337,8 +336,6 @@ Most bonus keys are `ArrayField(StringField)` — use **Add** mode and a number 
 system.health.value              → Current HP
 system.health.max                → Max HP (derived; bonus normally added via health.bonus)
 system.health.bonus              → Flat bonus added to Max HP
-system.power.value               → Current Power
-system.power.max                 → Max Power
 system.fatigue                   → Current fatigue value
 system.fatigueBonus              → Bonus to maximum fatigue
 ```
@@ -527,7 +524,6 @@ system.defenderStatusModifiers.closeAttacksAutoCrit  → Close attacks auto-crit
 ### NPC-Only Keys
 
 ```txt
-system.cr                        → Challenge Rating
 system.threatLevel               → Threat Level
 system.hd                        → Hit Dice (drives Max HP)
 system.morale                    → Morale
@@ -581,7 +577,7 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 | `system.xp` (NPC) | derived = CR² × 100 | — |
 | `system.threatLevelFormatted` (NPC) | derived display string | `system.threatLevel` |
 
-> **Caution — current-resource keys.** `system.health.value`, `system.power.value` / `power.max`, `system.mana.current`, `system.fatigue`, `system.currentLuck` are *stored* (not derived), so an AE can target them — but doing so pins the live value and fights manual changes. Only do this for effects that intentionally lock a resource.
+> **Caution — current-resource keys.** `system.health.value`, `system.mana.current`, `system.fatigue`, `system.currentLuck` are *stored* (not derived), so an AE can target them — but doing so pins the live value and fights manual changes. Only do this for effects that intentionally lock a resource.
 
 ---
 

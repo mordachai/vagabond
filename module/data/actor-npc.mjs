@@ -12,12 +12,6 @@ export default class VagabondNPC extends VagabondActorBase {
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
 
-    schema.cr = new fields.NumberField({
-      ...requiredInteger,
-      initial: 1,
-      min: 0,
-    });
-
     //TL - Threat Level
     schema.threatLevel = new fields.NumberField({
       required: true,
@@ -43,21 +37,6 @@ export default class VagabondNPC extends VagabondActorBase {
     schema.speedTypes = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [] }
-    );
-
-    // NPC stats (simplified compared to characters)
-    schema.stats = new fields.SchemaField(
-      Object.keys(CONFIG.VAGABOND.stats).reduce((obj, stat) => {
-        obj[stat] = new fields.SchemaField({
-          value: new fields.NumberField({
-            ...requiredInteger,
-            initial: 8,
-            min: 1,
-            max: 12,
-          }),
-        });
-        return obj;
-      }, {})
     );
 
     // NPC-specific fields
@@ -158,7 +137,7 @@ export default class VagabondNPC extends VagabondActorBase {
       {
         initial: [],
         label: "Universal Damage Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @threatLevel)"
       }
     );
 
@@ -175,7 +154,7 @@ export default class VagabondNPC extends VagabondActorBase {
       {
         initial: [],
         label: "Universal Weapon Damage Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @threatLevel)"
       }
     );
 
@@ -191,7 +170,7 @@ export default class VagabondNPC extends VagabondActorBase {
       {
         initial: [],
         label: "Universal Spell Damage Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @threatLevel)"
       }
     );
 
@@ -207,7 +186,7 @@ export default class VagabondNPC extends VagabondActorBase {
       {
         initial: [],
         label: "Universal Alchemical Damage Bonus",
-        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @cr)"
+        hint: "Can be a number (e.g., 1, 5) or formula (e.g., @threatLevel)"
       }
     );
 
@@ -465,7 +444,7 @@ export default class VagabondNPC extends VagabondActorBase {
 
   /**
    * Evaluate a formula field that can contain either a simple number, a Roll formula, or an array of formulas.
-   * @param {string|number|Array<string>} formula - The formula(s) to evaluate (e.g., "1", "@cr", or ["1", "@cr"])
+   * @param {string|number|Array<string>} formula - The formula(s) to evaluate (e.g., "1", "@threatLevel", or ["1", "@threatLevel"])
    * @param {object} rollData - The roll data context (from getRollData())
    * @returns {number} The evaluated result (sum of all formulas), or 0 if invalid
    * @private
@@ -489,7 +468,7 @@ export default class VagabondNPC extends VagabondActorBase {
 
   /**
    * Evaluate a single formula string or number.
-   * @param {string|number} formula - The formula to evaluate (e.g., "1", "@cr")
+   * @param {string|number} formula - The formula to evaluate (e.g., "1", "@threatLevel")
    * @param {object} rollData - The roll data context (from getRollData())
    * @returns {number} The evaluated result, or 0 if invalid
    * @private
@@ -560,7 +539,6 @@ export default class VagabondNPC extends VagabondActorBase {
     // Evaluate formula bonus fields first
     // NPCs have simpler roll data (CR, stats, etc.)
     const rollData = {
-      cr: this.cr || 0,
       hd: this.hd || 0,
       threatLevel: this.threatLevel || 0
     };
@@ -581,16 +559,8 @@ export default class VagabondNPC extends VagabondActorBase {
     // Clamp current fatigue to fatigueMax
     if (this.fatigue > this.fatigueMax) this.fatigue = this.fatigueMax;
 
-    this.xp = this.cr * this.cr * 100;
-
     // --- Format Threat Level to 2 decimal places (e.g., 1.60) ---
     this.threatLevelFormatted = (this.threatLevel || 0).toFixed(2);
-
-    // Loop through stats and add labels
-    for (const key in this.stats) {
-      this.stats[key].label =
-        game.i18n.localize(CONFIG.VAGABOND.stats[key]) ?? key;
-    }
 
     // Calculate HP max based on HD and size
     // If size is small: HD * 1, otherwise: HD * 4.5 (rounded down)

@@ -7,39 +7,14 @@
       "value": 40,
       "max": 40
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 9,
     "threatLevel": 7,
     "size": "large",
     "beingType": "Cryptid",
     "speedTypes": [
       "fly"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 9,
     "morale": 9,
     "appearing": "d2",

@@ -8,37 +8,12 @@
       "max": 1,
       "bonus": 0
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 1,
     "threatLevel": 2,
     "size": "small",
     "beingType": "Fae",
     "speedTypes": [],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 1,
     "morale": 7,
     "appearing": "2d6+1",

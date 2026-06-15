@@ -7,37 +7,12 @@
       "value": 36,
       "max": 36
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 8,
     "threatLevel": 5.3,
     "size": "huge",
     "beingType": "Primordials",
     "speedTypes": [],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 8,
     "morale": 9,
     "appearing": "d8",

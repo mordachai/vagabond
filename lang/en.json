@@ -582,10 +582,6 @@
           "health": {
             "value": {"label": "Health"},
             "max": {"label": "Maximum Health"}
-          },
-          "power": {
-            "value": {"label": "Power"},
-            "max": {"label": "Maximum Power"}
           }
         }
       },
@@ -769,7 +765,6 @@
       },
       "NPC": {
         "FIELDS": {
-          "cr": {"label": "CR"},
           "name": {"label": "NPC Name"},
           "threatLevel":{"label":"Threat Level", "abbv": "TL"},
           "size": {"label": "Size"},

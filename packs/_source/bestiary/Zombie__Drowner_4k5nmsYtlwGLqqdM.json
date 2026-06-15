@@ -7,39 +7,14 @@
       "value": 9,
       "max": 9
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 2,
     "threatLevel": 0.9,
     "size": "medium",
     "beingType": "Undead",
     "speedTypes": [
       "swim"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 2,
     "morale": 12,
     "appearing": "3d8",

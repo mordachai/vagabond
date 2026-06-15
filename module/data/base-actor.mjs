@@ -23,10 +23,6 @@ export default class VagabondActorBase extends foundry.abstract
         }
       ),
     });
-    schema.power = new fields.SchemaField({
-      value: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),
-      max: new fields.NumberField({ ...requiredInteger, initial: 5 }),
-    });
     schema.fatigue = new fields.NumberField({
       ...requiredInteger,
       initial: 0,

@@ -8,37 +8,12 @@
       "max": 27,
       "bonus": 0
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 6,
     "threatLevel": 2.8,
     "size": "medium",
     "beingType": "Undead",
     "speedTypes": [],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 6,
     "morale": 12,
     "appearing": "2d4",

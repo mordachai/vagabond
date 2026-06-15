@@ -7,39 +7,14 @@
       "value": 18,
       "max": 18
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 4,
     "threatLevel": 6.2,
     "size": "huge",
     "beingType": "Cryptid",
     "speedTypes": [
       "cling"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 4,
     "morale": 10,
     "appearing": "1",

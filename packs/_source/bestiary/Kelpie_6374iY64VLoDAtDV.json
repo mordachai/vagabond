@@ -7,39 +7,14 @@
       "value": 22,
       "max": 22
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 5,
     "threatLevel": 2.4,
     "size": "medium",
     "beingType": "Primordials",
     "speedTypes": [
       "swim"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 5,
     "morale": 4,
     "appearing": "d4",

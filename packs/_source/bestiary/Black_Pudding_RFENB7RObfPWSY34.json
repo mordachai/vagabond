@@ -7,39 +7,14 @@
       "value": 45,
       "max": 45
     },
-    "power": {
-      "value": 5,
-      "max": 5
-    },
     "fatigue": 0,
     "biography": "",
-    "cr": 10,
     "threatLevel": 8.2,
     "size": "large",
     "beingType": "Primordials",
     "speedTypes": [
       "cling"
     ],
-    "stats": {
-      "might": {
-        "value": 8
-      },
-      "dexterity": {
-        "value": 8
-      },
-      "awareness": {
-        "value": 8
-      },
-      "reason": {
-        "value": 8
-      },
-      "presence": {
-        "value": 8
-      },
-      "luck": {
-        "value": 8
-      }
-    },
     "hd": 10,
     "morale": 12,
     "appearing": "1",

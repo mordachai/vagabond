@@ -166,7 +166,7 @@ await game.vagabond.clocks.tick('rations', 6);  // restock
 4. Value path `system.health.value`, max path `system.health.max`, tick "Resize segments to match max path".
 5. Save. Damage/heal now drives the bar in realtime, GM-only.
 
-> Token drop binds to the token's delta-applied actor, so `system.*` is correct for unlinked tokens too. Any path works — `system.power.value` for mana, `system.fatigue`, etc.
+> Token drop binds to the token's delta-applied actor, so `system.*` is correct for unlinked tokens too. Any path works — `system.mana.current`, `system.fatigue`, etc.
 
 ### Manual macro way (legacy / scripting reference)
 
