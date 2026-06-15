@@ -314,7 +314,12 @@ export class GearStepManager extends BaseStepManager {
     const state = this.getCurrentState();
     const startingPackGear = await this._getStartingPackGear(state);
 
-    for (const uuid of selectedGear) {
+    // Count copies per uuid (duplicates = individual inventory entries),
+    // preserving first-seen order.
+    const counts = new Map();
+    for (const uuid of selectedGear) counts.set(uuid, (counts.get(uuid) || 0) + 1);
+
+    for (const [uuid, qty] of counts) {
       try {
         const item = await fromUuid(uuid);
         if (item) {
@@ -335,7 +340,7 @@ export class GearStepManager extends BaseStepManager {
             name: item.name,
             img: item.img,
             type: item.type,
-            qty: 1, // Default quantity
+            qty: qty,
             slots: sys.baseSlots || 0,
             costDisplay: costDisplay.trim(),
             fromStartingPack: fromStartingPack,
@@ -396,11 +401,8 @@ export class GearStepManager extends BaseStepManager {
     const state = this.getCurrentState();
     const currentGear = state.gear || [];
 
-    // Check if already selected
-    if (currentGear.includes(uuid)) {
-      ui.notifications.warn('Gear already selected');
-      return;
-    }
+    // Note: duplicates are allowed — each entry is an individual inventory item
+    // (slots tracked per-entry, not via quantity).
 
     try {
       // Validate the gear exists
@@ -452,13 +454,16 @@ export class GearStepManager extends BaseStepManager {
       const currentCost = state.gearCostSpent || 0;
       const newCost = Math.max(0, currentCost - itemCost); // Ensure non-negative
 
-      const newGear = currentGear.filter(gearUuid => gearUuid !== uuid);
+      // Remove only ONE copy (each entry is an individual inventory item)
+      const newGear = [...currentGear];
+      const idx = newGear.lastIndexOf(uuid);
+      if (idx !== -1) newGear.splice(idx, 1);
 
       this.updateState('gear', newGear);
       this.updateState('gearCostSpent', newCost);
 
-      // Clear preview if removing the previewed item
-      if (state.previewUuid === uuid) {
+      // Clear preview if no copies of the previewed item remain
+      if (state.previewUuid === uuid && !newGear.includes(uuid)) {
         this.updateState('previewUuid', null);
       }
 

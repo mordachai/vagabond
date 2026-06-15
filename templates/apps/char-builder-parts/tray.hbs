@@ -137,7 +137,7 @@
                         <div class="tray-item-compact gear-item {{#if item.fromStartingPack}}from-pack{{/if}}" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <div class="tray-info">
-                                <span class="tray-name">{{item.name}}{{#if item.qty}} x{{item.qty}}{{/if}}</span>
+                                <span class="tray-name">{{item.name}}{{#if (gt item.qty 1)}} x{{item.qty}}{{/if}}</span>
                                 <span class="tray-meta">{{item.slots}} slots • {{item.costDisplay}}</span>
                             </div>
                             {{#if item.canDelete}}
