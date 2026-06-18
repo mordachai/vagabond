@@ -126,7 +126,7 @@
       "choices": [
         {
           "count": 2,
-          "pool": [],
+          "pool": [ "brawl", "influence", "sneak"],
           "label": ""
         }
       ],

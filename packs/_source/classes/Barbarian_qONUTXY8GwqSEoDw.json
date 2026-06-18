@@ -129,8 +129,8 @@
       ],
       "choices": [
         {
-          "count": 1,
-          "pool": [],
+          "count": 3,
+          "pool": ["detect","influence","leadership","mysticism","survival"],
           "label": ""
         }
       ]

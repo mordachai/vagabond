@@ -152,12 +152,21 @@
       "choices": [
         {
           "count": 1,
-          "pool": [],
+          "pool": [
+            "brawl",
+            "finesse"
+          ],
           "label": ""
         },
         {
-          "count": 2,
-          "pool": [],
+          "count": 3,
+          "pool": [
+            "brawl",
+            "detect",
+            "finesse",
+            "leadership",
+            "sneak"
+          ],
           "label": ""
         }
       ]
