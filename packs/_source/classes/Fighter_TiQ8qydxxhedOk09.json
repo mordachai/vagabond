@@ -16,7 +16,36 @@
         "allowedPerks": [
           "Compendium.vagabond.perks.Item.1MMfNdmGHvhCqzQc"
         ],
-        "perkAmount": 2,
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 1,
+        "name": "Fighting Style (Melee/Ranged Perk)",
+        "description": "<p><span class=\"fontstyle0\">Choose another Perk with the Melee or Ranged Training Prerequisite (p. 64). You can ignore Stat prerequisites for this Perk.</span></p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.vIYaWIYHSvdSpDFT",
+          "Compendium.vagabond.perks.Item.D0iPKxmjcKY8yfvw",
+          "Compendium.vagabond.perks.Item.QmFXCXawpxHMFHty",
+          "Compendium.vagabond.perks.Item.ValeBbspVEfTTmvQ",
+          "Compendium.vagabond.perks.Item.i8ipAygu2JALmYKI",
+          "Compendium.vagabond.perks.Item.xfYrdHhVTh03lkvz",
+          "Compendium.vagabond.perks.Item.Isg2EmtLYZelbcTH",
+          "Compendium.vagabond.perks.Item.aHBvA8INtAilA7zH",
+          "Compendium.vagabond.perks.Item.t2kiBSjqMvPZ6Vbd",
+          "Compendium.vagabond.perks.Item.LP1K8ZSBIEuu3AgF",
+          "Compendium.vagabond.perks.Item.hJjjazBCtdV7YIc5",
+          "Compendium.vagabond.perks.Item.AcF9FfxPP5jFaQSG",
+          "Compendium.vagabond.perks.Item.9ChcXEGqz39efjBH",
+          "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X",
+          "Compendium.vagabond.perks.Item.xXQvKOlRtCsc0oLq",
+          "Compendium.vagabond.perks.Item.lo6rixhWIVJkR80Z"
+        ],
+        "perkAmount": 1,
         "spellAmount": 0,
         "skillChoices": []
       },
