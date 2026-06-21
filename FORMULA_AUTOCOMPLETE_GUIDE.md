@@ -562,7 +562,7 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 | `system.mana.max` | recomputed = multiplier × level + bonus | `system.mana.bonus` |
 | `system.mana.castingMax` | recomputed | `system.mana.castingMaxBonus` |
 | `system.focus.max` / `system.focus.current` | recomputed (`5 + bonus` / sustained count) | `system.focus.maxBonus` |
-| `system.speed.base` / `.crawl` / `.travel` | speed object reassigned each prep | `system.speed.bonus` |
+| `system.speed.base` / `.raw` / `.crawl` / `.travel` | speed object reassigned each prep | `system.speed.bonus` |
 | `system.spellDamageDieSize` | recomputed = base die + bonus | `system.spellDamageDieSizeBonus` |
 | `system.stats.<stat>.total` | derived = value + bonus | `system.stats.<stat>.bonus` |
 | `system.saves.<save>.difficulty` | derived from stats + bonus | `system.saves.<save>.bonus` / `system.universalDifficultyBonus` |
@@ -578,6 +578,10 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 | `system.threatLevelFormatted` (NPC) | derived display string | `system.threatLevel` |
 
 > **Caution — current-resource keys.** `system.health.value`, `system.mana.current`, `system.fatigue`, `system.currentLuck` are *stored* (not derived), so an AE can target them — but doing so pins the live value and fights manual changes. Only do this for effects that intentionally lock a resource.
+
+<!-- -->
+
+> **Reading speed from a module/macro (character).** On a *prepared* actor the derived `system.speed` object exposes: `base` (total = formula + AE bonus), `raw` (formula only, no bonus), `bonus` (AE bonus only), `crawl`, `travel`. These exist only after `prepareDerivedData()` — `actor.system._source.speed` holds just `bonus`. Use the live document (`token.actor`, `game.actors.get(id)`), not `_source`.
 
 ---
 

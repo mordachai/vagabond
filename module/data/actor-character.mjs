@@ -1109,7 +1109,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     // 2. Evaluate base speed from homebrew derivation formula
     const speedFormula = CONFIG.VAGABOND?.homebrew?.derivations?.speed
       ?? '25 + floor(max(0, @dexterity.total - 2) / 2) * 5';
-    const baseSpeed = Math.max(0, this._evaluateSingleFormula(speedFormula, rollData) + speedBonus);
+    const rawSpeed  = Math.max(0, this._evaluateSingleFormula(speedFormula, rollData));
+    const baseSpeed = Math.max(0, rawSpeed + speedBonus);
 
     // 3. Evaluate crawl/travel formulas — @speed.base is available via augmented rollData
     const speedRollData = { ...rollData, speed: { base: baseSpeed } };
@@ -1118,6 +1119,7 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     this.speed = {
       base:   baseSpeed,
+      raw:    rawSpeed,
       crawl:  Math.max(0, this._evaluateSingleFormula(crawlFormula,  speedRollData)),
       travel: Math.max(0, this._evaluateSingleFormula(travelFormula, speedRollData)),
       bonus:  speedBonus,
