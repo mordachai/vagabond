@@ -30,6 +30,7 @@ import * as models from './data/_module.mjs';
 // Import UI classes
 import { ProgressClockOverlay } from './ui/progress-clock-overlay.mjs';
 import { CountdownDiceOverlay } from './ui/countdown-dice-overlay.mjs';
+import { TokenStatusPanel } from './ui/token-status-panel.mjs';
 // Import application classes
 import { ProgressClockConfig } from './applications/progress-clock-config.mjs';
 import { ProgressClockDeleteDialog } from './applications/progress-clock-delete-dialog.mjs';
@@ -51,6 +52,7 @@ import { OngoingPanel } from './applications/ongoing-panel.mjs';
 import { VagabondCharacterHud } from './applications/character-hud.mjs';
 import { VagabondNPCHud } from './applications/npc-hud.mjs';
 import { HudDisplayConfig } from './applications/hud-display-config.mjs';
+import { StatusEffectsSettings } from './applications/status-effects-settings.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
@@ -286,7 +288,7 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.statusRingEffects.name',
     hint: 'VAGABOND.Settings.statusRingEffects.hint',
     scope: 'world',
-    config: true,
+    config: false, // surfaced in the Status Effects settings menu
     type: Boolean,
     default: true,
     requiresReload: true,
@@ -372,7 +374,7 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.statusEffectsMode.name',
     hint: 'VAGABOND.Settings.statusEffectsMode.hint',
     scope: 'world',
-    config: true,
+    config: false, // surfaced in the Status Effects settings menu
     type: String,
     choices: {
       'vagabond': 'VAGABOND.Settings.statusEffectsMode.vagabond',
@@ -380,6 +382,38 @@ function registerGameSettings() {
     },
     default: 'vagabond',
     requiresReload: true
+  });
+
+  // Setting 7b: Token Status Display (GM, world-scoped)
+  game.settings.register('vagabond', 'tokenStatusDisplay', {
+    name: 'VAGABOND.Settings.tokenStatusDisplay.name',
+    hint: 'VAGABOND.Settings.tokenStatusDisplay.hint',
+    scope: 'world',
+    config: false, // surfaced in the Status Effects settings menu
+    type: String,
+    choices: {
+      'none': 'VAGABOND.Settings.tokenStatusDisplay.none',
+      'tokens': 'VAGABOND.Settings.tokenStatusDisplay.tokens',
+      'left': 'VAGABOND.Settings.tokenStatusDisplay.left',
+      'right': 'VAGABOND.Settings.tokenStatusDisplay.right'
+    },
+    default: 'tokens',
+    requiresReload: false,
+    onChange: () => {
+      _applyTokenEffectVisibility();
+      TokenStatusPanel.instance?.refresh();
+    }
+  });
+
+  // Status Effects settings menu — groups the three world settings above
+  // (conditions mode, ring effects, display location) into one GM dialog.
+  game.settings.registerMenu('vagabond', 'statusEffectsSettingsMenu', {
+    name: 'VAGABOND.StatusSettings.MenuName',
+    label: 'VAGABOND.StatusSettings.MenuLabel',
+    hint: 'VAGABOND.StatusSettings.MenuHint',
+    icon: 'fas fa-bolt',
+    type: StatusEffectsSettings,
+    restricted: true,
   });
 
   // Setting 8: Hide Initiative Roll
@@ -1212,6 +1246,11 @@ Hooks.once('ready', () => {
   // Store in global for easy access
   globalThis.vagabond.ui.countdownDiceOverlay = diceOverlay;
 
+  // Token status display panel (alt to native PIXI token icons)
+  TokenStatusPanel.instance ??= new TokenStatusPanel();
+  TokenStatusPanel.instance.initialize();
+  globalThis.vagabond.ui.tokenStatusPanel = TokenStatusPanel.instance;
+
   // Verify Combat system registration — warn only if something failed
   const hasCustomActions = 'activate' in foundry.applications.sidebar.tabs.CombatTracker.DEFAULT_OPTIONS.actions;
   if (CONFIG.Combat.documentClass?.name !== "VagabondCombat" ||
@@ -1236,6 +1275,34 @@ Hooks.on('canvasReady', async () => {
     await diceOverlay.draw();
   }
 });
+
+/* -------------------------------------------- */
+/*  Token Status Display                        */
+/* -------------------------------------------- */
+
+/**
+ * Hide/show native PIXI status icons on every token based on `tokenStatusDisplay`.
+ * Only `tokens` mode keeps the native badges; `none`/`left`/`right` hide them.
+ */
+function _applyTokenEffectVisibility() {
+  const show = game.settings.get('vagabond', 'tokenStatusDisplay') === 'tokens';
+  for (const t of canvas?.tokens?.placeables ?? []) {
+    if (t.effects) t.effects.renderable = show;
+  }
+}
+
+// Re-apply on every token (re)draw — Foundry recreates the effects container.
+Hooks.on('drawToken', (token) => {
+  if (token.effects) {
+    token.effects.renderable = game.settings.get('vagabond', 'tokenStatusDisplay') === 'tokens';
+  }
+});
+Hooks.on('refreshToken', (token) => {
+  if (token.effects) {
+    token.effects.renderable = game.settings.get('vagabond', 'tokenStatusDisplay') === 'tokens';
+  }
+});
+Hooks.on('canvasReady', () => _applyTokenEffectVisibility());
 
 /**
  * Add scene controls for Vagabond tools

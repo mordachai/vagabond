@@ -22,6 +22,9 @@
 /* Countdown dice - imported at top level because overlay and config are outside sheets */
 @import 'components/countdown-dice';
 
+/* Token status panel - imported at top level because the overlay renders outside sheets */
+@import 'components/token-status-panel';
+
 /* Inventory mini-sheet - imported at top level because it renders outside sheets */
 @import 'components/inventory-mini-sheet';
 

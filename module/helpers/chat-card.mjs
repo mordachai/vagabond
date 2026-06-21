@@ -1189,7 +1189,6 @@ export class VagabondChatCard {
   static _buildItemStatsHTML(item) {
     const sys = item.system;
     const equipType = sys.equipmentType;
-    let html = '<div class="item-stats-grid">';
 
     // Universal stats
     const stats = [];
@@ -1232,12 +1231,23 @@ export class VagabondChatCard {
     if (sys.slots) stats.push({ label: 'Slots', value: sys.slots });
     if (sys.quantity && sys.quantity > 1) stats.push({ label: 'Quantity', value: sys.quantity });
 
-    // Build HTML
-    stats.forEach(stat => {
-      html += `<div class="stat-row"><span class="stat-label">${stat.label}:</span> <span class="stat-value">${stat.value}</span></div>`;
-    });
+    // Drop blank/placeholder rows ('-', empty, 0) so empty items don't show stub labels
+    const isBlankStat = v => {
+      if (v === undefined || v === null) return true;
+      const s = String(v).trim();
+      return s === '' || s === '-';
+    };
+    const visibleStats = stats.filter(stat => !isBlankStat(stat.value));
 
-    html += '</div>';
+    // No stats → render nothing (avoids an empty stats box)
+    let html = '';
+    if (visibleStats.length > 0) {
+      html += '<div class="item-stats-grid">';
+      visibleStats.forEach(stat => {
+        html += `<div class="stat-row"><span class="stat-label">${stat.label}:</span> <span class="stat-value">${stat.value}</span></div>`;
+      });
+      html += '</div>';
+    }
 
     // Add properties for weapons
     if (equipType === 'weapon' && sys.properties && sys.properties.length > 0) {

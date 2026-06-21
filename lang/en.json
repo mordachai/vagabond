@@ -410,8 +410,16 @@
       "statusEffectsMode": {
         "name": "Status Conditions Mode",
         "hint": "Choose which status conditions appear in the token HUD menu. Vagabond mode shows all 17 system-specific conditions from the rulebook. Foundry mode shows all default conditions. Requires world reload to apply.",
-        "vagabond": "Vagabond Conditions (17 Custom)",
+        "vagabond": "Vagabond Conditions",
         "foundry": "Foundry Default Conditions"
+      },
+      "tokenStatusDisplay": {
+        "name": "Token Status Display",
+        "hint": "Where active status conditions are shown for the selected token. Sheets and HUDs always show them regardless of this setting.",
+        "none": "Do not display",
+        "tokens": "Display on tokens",
+        "left": "Display bottom-left",
+        "right": "Display top-right"
       },
       "encounterSettings": {
         "name": "Encounter Settings",
@@ -1522,6 +1530,17 @@
         "DetectRoll": "Roll Detect Skill",
         "InitiativeRoll": "Roll Initiative"
       }
+    },
+    "StatusSettings": {
+      "Title": "Status Effects",
+      "MenuName": "Status Effects",
+      "MenuLabel": "Configure Status Effects",
+      "MenuHint": "Status conditions mode, where active conditions display, and animated token-ring effects.",
+      "Intro": "Configure how status conditions behave and display at your table. Conditions mode and ring effects require a world reload.",
+      "SectionConditions": "Conditions Set",
+      "SectionDisplay": "Display",
+      "SectionEffects": "Token Effects",
+      "Save": "Save Changes"
     },
     "SpellSettings": {
       "Title": "Spell Settings",

@@ -1,0 +1,42 @@
+/* Token status panel — fixed screen-corner column of the selected token's
+ * status conditions. Shown when world setting `tokenStatusDisplay` is left/right.
+ * No header, no background per design. */
+#vagabond-token-status-panel {
+  position: fixed;
+  display: flex;
+  gap: 4px;
+  z-index: 100;
+  pointer-events: none;
+  // Cap a column at 7 icons (7*40 + 6*4 gap); overflow wraps to a new column.
+  max-height: 304px;
+  transition: opacity 0.6s ease;
+
+  // Idle: icons dim out but stay hoverable (icons keep pointer-events:auto).
+  &.faded { opacity: 0.4; }
+
+  .vtsp-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border: none;
+    background: none;
+    pointer-events: auto;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+  }
+
+  // Bottom-left corner, icons stacking upward. New columns grow rightward.
+  &.left {
+    left: 8px;
+    bottom: 130px;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+  }
+
+  // Top-right corner, icons stacking downward. New columns grow leftward.
+  &.right {
+    right: 8px;
+    top: 130px;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+  }
+}

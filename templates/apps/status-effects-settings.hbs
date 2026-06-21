@@ -1,0 +1,55 @@
+<div class="flexcol standard-form">
+  <section class="scrollable">
+    <p class="notes">{{localize 'VAGABOND.StatusSettings.Intro'}}</p>
+
+    {{!-- ── Conditions set ──────────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.StatusSettings.SectionConditions'}}</legend>
+
+      <div class="form-group">
+        <label for="statusEffectsMode">{{localize 'VAGABOND.Settings.statusEffectsMode.name'}}</label>
+        <select name="statusEffectsMode" id="statusEffectsMode">
+          {{#each statusEffectsModes}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.Settings.statusEffectsMode.hint'}}</p>
+      </div>
+    </fieldset>
+
+    {{!-- ── Display ─────────────────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.StatusSettings.SectionDisplay'}}</legend>
+
+      <div class="form-group">
+        <label for="tokenStatusDisplay">{{localize 'VAGABOND.Settings.tokenStatusDisplay.name'}}</label>
+        <select name="tokenStatusDisplay" id="tokenStatusDisplay">
+          {{#each tokenStatusDisplays}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.Settings.tokenStatusDisplay.hint'}}</p>
+      </div>
+    </fieldset>
+
+    {{!-- ── Effects ─────────────────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.StatusSettings.SectionEffects'}}</legend>
+
+      <div class="form-group">
+        <label for="statusRingEffects">
+          <input type="checkbox" name="statusRingEffects" id="statusRingEffects" {{checked statusRingEffects}}>
+          {{localize 'VAGABOND.Settings.statusRingEffects.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.statusRingEffects.hint'}}</p>
+      </div>
+    </fieldset>
+  </section>
+
+  <footer class="form-footer flexrow">
+    <button type="submit" class="dialog-button default">
+      <i class="fas fa-save"></i>
+      {{localize 'VAGABOND.StatusSettings.Save'}}
+    </button>
+  </footer>
+</div>
