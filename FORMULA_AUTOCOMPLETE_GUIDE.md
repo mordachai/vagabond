@@ -581,7 +581,16 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 
 <!-- -->
 
-> **Reading speed from a module/macro (character).** On a *prepared* actor the derived `system.speed` object exposes: `base` (total = formula + AE bonus), `raw` (formula only, no bonus), `bonus` (AE bonus only), `crawl`, `travel`. These exist only after `prepareDerivedData()` — `actor.system._source.speed` holds just `bonus`. Use the live document (`token.actor`, `game.actors.get(id)`), not `_source`.
+> **Reading derived values from a module/macro (general rule).** Every derived value in the table above is available two ways on a *prepared* actor:
+>
+> 1. **Direct read** — `actor.system.<field>` (e.g. `actor.system.speed.base`, `actor.system.health.max`, `actor.system.armor`).
+> 2. **Formula access** — `@<field>` inside any bonus `ArrayField`, AE value, or `Roll` (e.g. `@speed.base`, `@health.max`, `@armor`). They ride along because `getRollData()` spreads the whole `system` object.
+>
+> Speed is **not** special — character speed is the object `{ base, raw, bonus, crawl, travel }` (`base` = formula + AE bonus, `raw` = formula only, `bonus` = AE bonus only); NPC speed is a plain number. All of these exist **only after `prepareDerivedData()`**. `actor.system._source.*` holds the stored (pre-derivation) values — use the live document (`token.actor`, `game.actors.get(id)`), never `_source`.
+>
+> **Timing caveat:** bonus formulas are themselves evaluated *during* `prepareDerivedData()`. A bonus formula that references a value derived *later* in the same prep pass (e.g. a stat bonus referencing `@armor`) sees a stale/zero value. Cross-references between derived values are only reliable from code/Rolls that run *after* prep completes.
+>
+> **Stable module API.** Prefer `game.vagabond.api.readActor(ref)` over reaching into `system.*` directly. `ref` may be an `Actor`, `Token`/`TokenDocument`, actor uuid, or actor id. It returns a freshly-built, normalized, mutate-safe snapshot — `{ id, uuid, name, type, level, health:{value,max}, fatigue:{value,max}, armor, speed:{base,…}, statuses:[…], mana?, focus?, luck?, stats?, saves?, skills? }` — and insulates your module from internal-layout changes between system versions (e.g. it normalizes the character-object vs NPC-number speed difference for you). Returns `null` if the actor can't be resolved.
 
 ---
 

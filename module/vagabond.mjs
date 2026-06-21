@@ -1129,6 +1129,9 @@ Hooks.once('ready', function () {
       VagabondDamageHelper,
       StatusHelper,
       VagabondRollBuilder,
+      // Stable read-only derived snapshot for modules/macros:
+      // game.vagabond.api.readActor(actorOrTokenOrUuidOrId)
+      readActor: VagabondActor.read,
     },
     socket: {
       emit: emitSocket,

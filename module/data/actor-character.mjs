@@ -1045,7 +1045,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     data.lvl = this.attributes.level.value;
 
     // Expose active status conditions so formulas can reference them
-    // e.g. (@statuses.berserk) ? 2 : 0
+    // e.g. (@statuses.berserk) ? 2 : 0. Needed here (not just the actor-level
+    // override) because prepareDerivedData() evaluates bonus formulas via the
+    // DataModel's getRollData() directly. The actor override re-injects this so
+    // NPCs and external callers get it too.
     data.statuses = {};
     if (this.parent?.statuses) {
       for (const statusId of this.parent.statuses) {

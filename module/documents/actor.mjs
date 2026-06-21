@@ -212,10 +212,64 @@ export class VagabondActor extends Actor {
    * but have slightly different data preparation needs.
    */
   getRollData() {
-    const data = { ...super.getRollData(), ...(this.system.getRollData?.() ?? null) };
+    // super.getRollData() returns the LIVE this.system reference. Spread + deepClone it
+    // so formulas, Rolls, and external modules cannot mutate actor data through the
+    // returned object. This also makes every derived value (speed, health.max, armor,
+    // mana, focus, …) available as `@<field>` — they ride along on the system spread.
+    const data = foundry.utils.deepClone({ ...super.getRollData() });
+    Object.assign(data, this.system.getRollData?.() ?? null);
+
+    // Expose active status conditions to formulas on EVERY actor type: @statuses.<id>
+    // (e.g. `(@statuses.berserk) ? 2 : 0`). Centralized here so NPCs get it too.
+    data.statuses ??= {};
+    if (this.statuses) for (const id of this.statuses) data.statuses[id] = 1;
+
     // Expose progress clocks for formulas/AE: @clocks.<handle>.value, .pct, .max, etc.
     const PC = globalThis.vagabond?.documents?.ProgressClock;
     if (PC) data.clocks = PC.rollDataMap();
     return data;
+  }
+
+  /**
+   * Stable, read-only snapshot of an actor's commonly-needed derived values, intended
+   * for external modules and macros. Decouples callers from the internal `system.*`
+   * layout (which can change between versions) and normalizes per-type differences
+   * (e.g. character speed is an object, NPC speed is a plain number). Returns freshly
+   * built objects — safe to mutate without touching actor data.
+   *
+   * @param {Actor|TokenDocument|Token|string} ref  Actor, Token(Document), uuid, or actor id.
+   * @returns {object|null}  Snapshot, or null if the actor cannot be resolved.
+   */
+  static read(ref) {
+    let actor = null;
+    if (ref instanceof Actor) actor = ref;
+    else if (ref?.actor instanceof Actor) actor = ref.actor;          // Token / TokenDocument
+    else if (typeof ref === 'string') {
+      actor = game.actors?.get(ref) ?? null;
+      if (!actor) { const d = fromUuidSync(ref); actor = (d?.actor ?? (d instanceof Actor ? d : null)); }
+    }
+    if (!actor) return null;
+
+    const s = actor.system ?? {};
+    const snap = {
+      id: actor.id,
+      uuid: actor.uuid,
+      name: actor.name,
+      type: actor.type,
+      level: s.attributes?.level?.value ?? null,
+      health: { value: s.health?.value ?? null, max: s.health?.max ?? null },
+      fatigue: { value: s.fatigue ?? null, max: s.fatigueMax ?? null },
+      armor: typeof s.armor === 'number' ? s.armor : null,
+      // Character speed is { base, raw, bonus, crawl, travel }; NPC speed is a number.
+      speed: typeof s.speed === 'number' ? { base: s.speed } : (s.speed ? { ...s.speed } : null),
+      statuses: Array.from(actor.statuses ?? []),
+    };
+    if (s.mana)  snap.mana  = { current: s.mana.current ?? null, max: s.mana.max ?? null, castingMax: s.mana.castingMax ?? null };
+    if (s.focus) snap.focus = { current: s.focus.current ?? null, max: s.focus.max ?? null };
+    if (s.maxLuck != null || s.currentLuck != null) snap.luck = { current: s.currentLuck ?? null, max: s.maxLuck ?? null };
+    if (s.stats)  snap.stats  = Object.fromEntries(Object.entries(s.stats).map(([k, v]) => [k, v?.total ?? null]));
+    if (s.saves)  snap.saves  = Object.fromEntries(Object.entries(s.saves).map(([k, v]) => [k, v?.difficulty ?? null]));
+    if (s.skills) snap.skills = Object.fromEntries(Object.entries(s.skills).map(([k, v]) => [k, v?.difficulty ?? null]));
+    return snap;
   }
 }
