@@ -155,10 +155,12 @@ export class TokenStatusPanel {
       img.src = s.icon;
       img.alt = s.name;
       img.title = s.name;
-      img.dataset.tooltip = s.name;
       frag.appendChild(img);
     }
     this.container.replaceChildren(frag);
+
+    // Setup context menus for status icons
+    this._setupStatusIconListeners();
 
     // Show now, fade out after the idle delay.
     this.container.classList.remove('faded');
@@ -192,5 +194,58 @@ export class TokenStatusPanel {
     const rect = sidebar?.getBoundingClientRect();
     const offset = rect && rect.width > 0 ? Math.max(gap, window.innerWidth - rect.left + gap) : gap;
     this.container.style.right = `${offset}px`;
+  }
+
+  /**
+   * Setup status icon context menu listeners
+   * @private
+   */
+  _setupStatusIconListeners() {
+    if (!this.container) return;
+
+    const icons = this.container.querySelectorAll('.vtsp-icon');
+    const actor = this._getSourceActor();
+    if (!actor) return;
+
+    icons.forEach(icon => {
+      icon.addEventListener('contextmenu', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Match icon to effect by title
+        const statusName = icon.title;
+        const effect = Array.from(actor.effects).find(e => (e.name || e.label) === statusName);
+        if (!effect) return;
+
+        const { ContextMenuHelper } = globalThis.vagabond.utils;
+        const { VagabondChatCard } = globalThis.vagabond.utils;
+
+        const menuItems = [
+          {
+            label: 'Send to Chat',
+            icon: 'fas fa-comment',
+            enabled: true,
+            action: async () => {
+              await VagabondChatCard.statusEffect(actor, effect);
+            }
+          },
+          {
+            label: 'Remove Status',
+            icon: 'fas fa-times',
+            enabled: true,
+            action: async () => {
+              await effect.delete();
+            }
+          }
+        ];
+
+        ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: menuItems,
+          onClose: () => {},
+          className: 'status-context-menu'
+        });
+      });
+    });
   }
 }

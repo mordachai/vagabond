@@ -2587,20 +2587,36 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 /* Token status panel - imported at top level because the overlay renders outside sheets */
+#token-hud .palette.status-effects img.effect-control {
+  border-radius: 2px;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color 0.12s ease;
+}
+#token-hud .palette.status-effects img.effect-control:hover {
+  outline-color: rgba(222, 214, 86, 0.45);
+}
+#token-hud .palette.status-effects img.effect-control.active {
+  outline-color: #ded656;
+}
+#token-hud .palette.status-effects img.effect-control.active:hover {
+  outline-color: #fffad0;
+}
+
 /* Token status panel — fixed screen-corner column of the selected token's
  * status conditions. Shown when world setting `tokenStatusDisplay` is left/right.
  * No header, no background per design. */
 #vagabond-token-status-panel {
   position: fixed;
   display: flex;
-  gap: 4px;
+  gap: 8px;
   z-index: 100;
   pointer-events: none;
-  max-height: 304px;
+  max-height: 260px;
   transition: opacity 0.6s ease;
 }
 #vagabond-token-status-panel.faded {
-  opacity: 0.4;
+  opacity: 0.6;
 }
 #vagabond-token-status-panel .vtsp-icon {
   width: 40px;
@@ -2609,6 +2625,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: none;
   background: none;
   pointer-events: auto;
+  border-radius: 4px;
+  outline: 1px solid #fffad0;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
 }
 #vagabond-token-status-panel.left {
@@ -2619,7 +2637,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 #vagabond-token-status-panel.right {
   right: 8px;
-  top: 130px;
+  top: 150px;
   flex-direction: column;
   flex-wrap: wrap-reverse;
 }
