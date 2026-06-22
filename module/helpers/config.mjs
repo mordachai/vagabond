@@ -248,7 +248,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'focusing',
     name: 'VAGABOND.StatusConditions.Focusing',
-    img: 'icons/svg/aura.svg',
+    img: '/icons/magic/lightning/projectile-tendrils-teal.webp',
     statuses: ['focusing'],
     description: 'Currently sustaining one or more spells through Focus.'
   },
@@ -257,28 +257,28 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'berserk',
     name: 'VAGABOND.StatusConditions.Berserk',
-    img: 'icons/svg/terror.svg',
+    img: '/icons/magic/perception/eye-ringed-glow-angry-large-red.webp',
     statuses: ['berserk'],
     description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. Class-specific bonuses (e.g. Barbarian Valor) are applied via the class item\'s Active Effects using @statuses.berserk formulas.'
   },
   {
     id: 'burning',
     name: 'VAGABOND.StatusConditions.Burning',
-    img: 'icons/svg/fire.svg',
+    img: '/icons/magic/fire/flame-burning-creature-skeleton.webp',
     statuses: ['burning'],
     description: 'Takes damage at the start of its turn. Can be ended by an appropriate action. [MANUAL TRACKING]'
   },
   {
     id: 'charmed',
     name: 'VAGABOND.StatusConditions.Charmed',
-    img: 'icons/svg/heal.svg',
+    img: '/icons/magic/life/heart-cross-strong-flame-purple-orange.webp',
     statuses: ['charmed'],
     description: 'Can\'t willingly make an Attack Action targeting the one who Charmed it. [MANUAL TRACKING]'
   },
   {
     id: 'suffocating',
     name: 'VAGABOND.StatusConditions.Suffocating',
-    img: 'icons/svg/stoned.svg',
+    img: '/icons/magic/death/skeleton-skull-soul-blue.webp',
     statuses: ['suffocating'],
     description: 'After not breathing for 1 minute, each round: Heroes roll d8 (if ≥ Might, gain 1 Fatigue), Enemies gain 1 Fatigue. [MANUAL TRACKING]'
   },
@@ -287,7 +287,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'dazed',
     name: 'VAGABOND.StatusConditions.Dazed',
-    img: 'icons/svg/sleep.svg',
+    img: '/icons/magic/air/wind-vortex-swirl-blue-purple.webp',
     statuses: ['dazed'],
     description: 'Can\'t Focus or Move unless it uses an Action to do so. Speed reduced to 0. [AUTOMATED: Speed = 0. MANUAL: Action restrictions]',
     changes: [
@@ -301,7 +301,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'fatigued',
     name: 'VAGABOND.StatusConditions.Fatigued',
-    img: 'icons/svg/degen.svg',
+    img: '/icons/skills/wounds/injury-pain-body-orange.webp',
     statuses: ['fatigued'],
     description: 'Each Fatigue occupies an Item Slot. At 3+ Fatigue, can\'t Rush. At 5 Fatigue, dies. [AUTOMATED: Use Fatigue tracker (skull icons) on character sheet. Slot reduction is automatic.]'
     // NOTE: Fatigued is managed via system.fatigue value, not Active Effects
@@ -309,7 +309,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'prone',
     name: 'VAGABOND.StatusConditions.Prone',
-    img: 'icons/svg/falling.svg',
+    img: '/icons/magic/movement/chevrons-down-yellow.webp',
     statuses: ['prone'],
     description: 'Speed = 0. Costs 10\' Speed to stand. Can crawl (2:1 ratio). Can\'t Rush. Vulnerable (attacks/saves Hindered, incoming attacks Favored). [AUTOMATED: Speed = 0, Vulnerable. MANUAL: Stand cost, crawl ratio]',
     changes: [
@@ -340,7 +340,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'frightened',
     name: 'VAGABOND.StatusConditions.Frightened',
-    img: 'icons/svg/hazard.svg',
+    img: '/icons/magic/control/fear-fright-monster-grin-purple-blue.webp',
     statuses: ['frightened'],
     description: '-2 penalty to all damage dealt. [FULLY AUTOMATED]',
     changes: [
@@ -354,7 +354,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'sickened',
     name: 'VAGABOND.StatusConditions.Sickened',
-    img: 'icons/svg/poison.svg',
+    img: '/icons/magic/acid/dissolve-pool-bubbles.webp',
     statuses: ['sickened'],
     description: '-2 penalty to any healing received. [FULLY AUTOMATED]',
     changes: [
@@ -368,7 +368,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'confused',
     name: 'VAGABOND.StatusConditions.Confused',
-    img: 'icons/svg/daze.svg',
+    img: '/icons/magic/symbols/question-stone-yellow.webp',
     statuses: ['confused'],
     description: 'Checks and Saves have Hinder. Saves against its Actions have Favor. [FULLY AUTOMATED]',
     changes: [
@@ -387,7 +387,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'vulnerable',
     name: 'VAGABOND.StatusConditions.Vulnerable',
-    img: 'icons/svg/downgrade.svg',
+    img: '/icons/magic/movement/abstract-ribbons-red-orange.webp',
     statuses: ['vulnerable'],
     description: 'Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor. [FULLY AUTOMATED]',
     changes: [
@@ -411,7 +411,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'blinded',
     name: 'VAGABOND.StatusConditions.Blinded',
-    img: 'icons/svg/blind.svg',
+    img: '/icons/creatures/eyes/humanoid-single-blind.webp',
     statuses: ['blinded'],
     description: 'Can\'t see. Vulnerable. [FULLY AUTOMATED]',
     changes: [
@@ -436,7 +436,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'invisible',
     name: 'VAGABOND.StatusConditions.Invisible',
-    img: 'icons/svg/invisible.svg',
+    img: '/icons/magic/control/silhouette-hold-change-blue.webp',
     statuses: ['invisible'],
     description: 'Can\'t be seen. Attackers act as Blinded (attacks Hindered). [FULLY AUTOMATED]',
     changes: [
@@ -450,7 +450,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'restrained',
     name: 'VAGABOND.StatusConditions.Restrained',
-    img: 'icons/svg/teleport.svg',
+    img: '/icons/magic/control/debuff-chains-shackles-movement-blue.webp',
     statuses: ['restrained'],
     description: 'Vulnerable + Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -480,7 +480,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'grappling',
     name: 'VAGABOND.StatusConditions.Grappling',
-    img: 'icons/svg/net.svg',
+    img: '/icons/skills/melee/hand-grip-staff-blue.webp',
     statuses: ['grappling'],
     description: 'Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED — speed penalty applied at grapple time]'
     // No static changes — speed penalty is computed dynamically in handleGrapple based on current speed and size comparison
@@ -488,7 +488,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'incapacitated',
     name: 'VAGABOND.StatusConditions.Incapacitated',
-    img: 'icons/svg/unconscious.svg',
+    img: '/icons/skills/wounds/injury-eyes-blood-red-pink.webp',
     statuses: ['incapacitated'],
     description: 'Can\'t Focus, use Actions, or Move. Automatically fails Might and Dexterity checks. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -530,7 +530,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'paralyzed',
     name: 'VAGABOND.StatusConditions.Paralyzed',
-    img: 'icons/svg/paralysis.svg',
+    img: '/icons/magic/control/debuff-energy-hold-green.webp',
     statuses: ['paralyzed'],
     description: 'Incapacitated + Speed = 0. [FULLY AUTOMATED]',
     changes: [
@@ -570,7 +570,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'unconscious',
     name: 'VAGABOND.StatusConditions.Unconscious',
-    img: 'icons/svg/sleep.svg',
+    img: '/icons/magic/nature/moon-crescent.webp',
     statuses: ['unconscious'],
     description: 'Blinded + Incapacitated + Prone. Close Attacks (range: close) always Crit. [FULLY AUTOMATED]',
     changes: [
@@ -616,7 +616,7 @@ VAGABOND.statusEffectDefinitions = [
   {
     id: 'dead',
     name: 'VAGABOND.StatusConditions.Dead',
-    img: 'icons/svg/skull.svg',
+    img: '/icons/magic/death/grave-tombstone-glow-teal.webp',
     statuses: ['dead'],
     description: 'Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks). [FULLY AUTOMATED]',
     changes: [
