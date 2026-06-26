@@ -25,7 +25,10 @@ export function registerSocket() {
   game.socket.on(SOCKET, ({ action, payload }) => {
     const entry = _handlers[action];
     if (!entry) return;
-    if (entry.gmOnly && !game.user.isGM) return;
+    // Only the single active GM executes gmOnly actions. Using game.user.isGM
+    // here would make EVERY connected GM run the handler, double-applying the
+    // action (e.g. two countdown dice, over-granted luck) when multiple GMs are online.
+    if (entry.gmOnly && game.user !== game.users.activeGM) return;
     entry.handler(payload);
   });
 }

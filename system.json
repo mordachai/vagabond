@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.21.0",
+  "version": "5.21.1",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -376,5 +376,6 @@
     "distance": 5,
     "units": "ft"
   },
+  "socket": true,
   "primaryTokenAttribute": "health"
 }
