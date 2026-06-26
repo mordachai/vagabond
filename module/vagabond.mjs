@@ -56,6 +56,7 @@ import { StatusEffectsSettings } from './applications/status-effects-settings.mj
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
+import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
@@ -658,7 +659,17 @@ function registerGameSettings() {
     type: Object,
     default: {},
     requiresReload: false,
-    onChange: () => VagabondSpellSequencer.warmConfigFiles(),
+    onChange: () => { VagabondSpellSequencer.warmConfigFiles(); VagabondFXResolver.resolveAllConfigured(); },
+  });
+
+  // Setting 21d: Resolved wildcard FX file cache (hidden) — GM pre-expands wildcard
+  // file paths so player clients never need FILES_BROWSE permission.
+  game.settings.register('vagabond', 'fxResolvedCache', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    requiresReload: false,
   });
 
   // Setting 21b: Sequencer FX Config menu button
@@ -1118,6 +1129,9 @@ Hooks.once('ready', function () {
     await actor.update({ 'system.currentLuck': newLuck });
   });
 
+  // Sequencer FX wildcard resolution (GM resolves, players request via socket).
+  VagabondFXResolver.registerSocket();
+
   // Public API for external modules
   game.vagabond = {
     version: game.system.version,
@@ -1147,6 +1161,9 @@ Hooks.once('ready', function () {
     loadJB2ADefaults();
   }
   VagabondSpellSequencer.warmConfigFiles();
+  // GM pre-expands every configured wildcard FX path into the shared world-setting cache
+  // so player clients can play those animations without FILES_BROWSE permission.
+  VagabondFXResolver.resolveAllConfigured();
 });
 
 // Register Dice So Nice colorsets when Dice So Nice is ready

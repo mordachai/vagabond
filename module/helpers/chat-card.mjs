@@ -1,5 +1,6 @@
 import { VagabondTextParser } from './text-parser.mjs';
 import { VagabondDiceAppearance } from './dice-appearance.mjs';
+import { VagabondChatHelper } from './chat-helper.mjs';
 
 /**
  * Universal chat card builder for Vagabond system
@@ -679,7 +680,7 @@ export class VagabondChatCard {
     return ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: actor }),
       content: html,
-      rollMode: game.settings.get('core', 'rollMode'),
+      rollMode: VagabondChatHelper.getRollMode(),
     });
   }
 

@@ -4,6 +4,8 @@
  * Animation config lives on each item (system.itemFx.*) rather than a global dialog.
  */
 
+import { VagabondFXResolver } from './fx-file-resolver.mjs';
+
 export class VagabondItemSequencer {
 
   /**
@@ -97,14 +99,14 @@ export class VagabondItemSequencer {
    * @param {Token[]} targetTokens - Array of targeted Token objects
    * @param {boolean} isHit - Whether the attack landed
    */
-  static play(item, casterToken, targetTokens, isHit) {
+  static async play(item, casterToken, targetTokens, isHit) {
     if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
     if (!casterToken) return;
 
     const fx = item.system?.itemFx;
     if (!fx?.enabled) return;
 
-    const file     = this._resolveFile(isHit ? fx.hitFile  : fx.missFile);
+    let file       = this._resolveFile(isHit ? fx.hitFile  : fx.missFile);
     const scale    = isHit ? (fx.hitScale    ?? 1.0) : (fx.missScale    ?? 1.0);
     const offsetX  = isHit ? (fx.hitOffsetX  ?? 0)   : 0;
     const duration = isHit ? (fx.hitDuration ?? 800) : (fx.missDuration ?? 600);
@@ -120,6 +122,8 @@ export class VagabondItemSequencer {
       }
     }
 
+    // Pre-expand any wildcard file paths so player clients never browse the filesystem.
+    file = await VagabondFXResolver.resolve(file);
     if (!file || (Array.isArray(file) && !file.length)) return;
 
     const animType = this._resolveAnimType(item);

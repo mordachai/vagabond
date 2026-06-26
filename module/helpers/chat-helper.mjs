@@ -3,6 +3,19 @@
  */
 export class VagabondChatHelper {
   /**
+   * Version-safe roll/message mode read.
+   * v14 deprecates `core.rollMode` in favor of `core.messageMode`
+   * (removed in v16). v13 only has `core.rollMode`.
+   * @returns {string} The current roll/message mode
+   */
+  static getRollMode() {
+    if (game.settings.settings.has('core.messageMode')) {
+      return game.settings.get('core', 'messageMode');
+    }
+    return game.settings.get('core', 'rollMode');
+  }
+
+  /**
    * Post a roll to chat
    * @param {VagabondActor} actor - The actor making the roll
    * @param {Roll} roll - The Roll object to post
@@ -13,7 +26,7 @@ export class VagabondChatHelper {
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor: flavor,
-      rollMode: game.settings.get('core', 'rollMode'),
+      rollMode: VagabondChatHelper.getRollMode(),
     });
   }
 

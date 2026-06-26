@@ -135,7 +135,10 @@
   .vh-npc-meta {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
     gap: 4px;
+    line-height: 2;
   }
   .vh-badge {
     font-family: $font-title;
@@ -143,11 +146,11 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
     color: $c-white;
-    padding: 1px 6px;
+    padding: 0px 6px;
     text-shadow: var(--vh-outline-1);
     //border: 1px solid $c-dark-yellow;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.40);
     &--zone { color: $c-yellow; }
 
     // # Appearing: icon + (possibly) a clickable inline-roll. Keep the roll

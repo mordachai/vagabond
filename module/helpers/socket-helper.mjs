@@ -23,8 +23,10 @@ const _handlers = {};
  */
 export function registerSocket() {
   game.socket.on(SOCKET, ({ action, payload }) => {
-    if (!game.user.isGM) return;
-    _handlers[action]?.(payload);
+    const entry = _handlers[action];
+    if (!entry) return;
+    if (entry.gmOnly && !game.user.isGM) return;
+    entry.handler(payload);
   });
 }
 
@@ -38,10 +40,13 @@ export function emitSocket(action, payload) {
 }
 
 /**
- * Register a handler for a socket action (executed on GM client only).
+ * Register a handler for a socket action.
+ * Default `gmOnly: true` keeps the original GM-executes-everything behaviour; pass
+ * `{ gmOnly: false }` for actions that every client must receive (e.g. broadcast replies).
  * @param {string} action
  * @param {function} handler  async (payload) => void
+ * @param {{ gmOnly?: boolean }} [opts]
  */
-export function registerSocketAction(action, handler) {
-  _handlers[action] = handler;
+export function registerSocketAction(action, handler, { gmOnly = true } = {}) {
+  _handlers[action] = { handler, gmOnly };
 }

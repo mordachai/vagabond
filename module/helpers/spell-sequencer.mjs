@@ -4,6 +4,7 @@
  * This file never needs editing when adding new animations — edit sequencer-config.mjs instead.
  */
 import { SPELL_FX, getJB2ADefaults } from './sequencer-config.mjs';
+import { VagabondFXResolver } from './fx-file-resolver.mjs';
 
 // Video metadata cache — keyed by file path. Populated in play() before building the sequence.
 const _metaCache = new Map();
@@ -283,9 +284,10 @@ export class VagabondSpellSequencer {
    * @param {Token} casterToken
    * @private
    */
-  static _addCastAnim(seq, school, casterToken) {
-    const cfg = this._getConfig().castAnims?.[school];
+  static _addCastAnim(seq, school, casterToken, fileMap) {
+    let cfg = this._getConfig().castAnims?.[school];
     if (!cfg?.file) return;
+    cfg = { ...cfg, file: fileMap?.get(cfg.file) ?? cfg.file };
     let fx = seq.effect()
       .file(cfg.file)
       .atLocation(casterToken)
@@ -330,11 +332,12 @@ export class VagabondSpellSequencer {
    * @param {Token[]} targetTokens
    * @private
    */
-  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens) {
+  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap) {
     const schoolAnims = this._getConfig().areaAnims?.[school];
     if (!schoolAnims) return;
-    const cfg = schoolAnims[deliveryType];
+    let cfg = schoolAnims[deliveryType];
     if (!cfg?.file) return;
+    cfg = { ...cfg, file: fileMap?.get(cfg.file) ?? cfg.file };
 
     // ── Beam-mode patterns: fixed Y-scale, X scales with distance ────────────
     if (cfg.scaleMode === 'chain') {
@@ -507,7 +510,7 @@ export class VagabondSpellSequencer {
    * @param {boolean} [options.deliveryEnabled=true] - Whether to play the area anim and delivery
    *   sound. Pass false on a failed spell roll; cast anim and cast sound always play regardless.
    */
-  static play(spellItem, deliveryType, increaseCount, casterToken, targetTokens, options = {}) {
+  static async play(spellItem, deliveryType, increaseCount, casterToken, targetTokens, options = {}) {
     if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
     if (!casterToken) return;
 
@@ -520,6 +523,9 @@ export class VagabondSpellSequencer {
       const castCfg = cfg.castAnims?.[school];
       const areaCfg = cfg.areaAnims?.[school]?.[deliveryType];
       const vol     = castCfg?.volume ?? 0.6;
+
+      // Pre-expand any wildcard file paths so player clients never browse the filesystem.
+      const fileMap = await VagabondFXResolver.resolveMap([castCfg?.file, areaCfg?.file]);
 
       const seq = new Sequence();
 
@@ -539,11 +545,11 @@ export class VagabondSpellSequencer {
       }
 
       // Cast animation (always plays; blocks next section via .waitUntilFinished(-200)).
-      this._addCastAnim(seq, school, casterToken);
+      this._addCastAnim(seq, school, casterToken, fileMap);
 
       // Area animation (only on success).
       if (deliveryType && deliveryEnabled) {
-        this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens);
+        this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap);
       }
 
       seq.play();

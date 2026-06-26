@@ -3778,7 +3778,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud--npc .vh-npc-meta {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
   gap: 4px;
+  line-height: 2;
 }
 .vbd-hud--npc .vh-badge {
   font-family: "Germania", serif;
@@ -3786,10 +3789,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--vagabond-c-white);
-  padding: 1px 6px;
+  padding: 0px 6px;
   text-shadow: var(--vh-outline-1);
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.4);
 }
 .vbd-hud--npc .vh-badge--zone {
   color: var(--vagabond-c-chat-yellow);

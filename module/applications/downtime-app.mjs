@@ -1,4 +1,5 @@
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 
 const { api } = foundry.applications;
 
@@ -242,7 +243,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
       speaker: ChatMessage.getSpeaker({ actor: this.#actor }),
       rolls: [lootRoll],
       style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-      rollMode: game.settings.get('core', 'rollMode')
+      rollMode: VagabondChatHelper.getRollMode()
     });
   }
 
@@ -292,7 +293,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
       speaker: ChatMessage.getSpeaker({ actor: this.#actor }),
       rolls: [tableRoll, qtyRoll],
       style: CONST.CHAT_MESSAGE_STYLES.OTHER,
-      rollMode: game.settings.get('core', 'rollMode')
+      rollMode: VagabondChatHelper.getRollMode()
     });
   }
 

@@ -2,6 +2,7 @@ import { TargetHelper } from '../../helpers/target-helper.mjs';
 import { VagabondTextParser } from '../../helpers/text-parser.mjs';
 import { VagabondItemSequencer } from '../../helpers/item-sequencer.mjs';
 import { VagabondDiceAppearance } from '../../helpers/dice-appearance.mjs';
+import { VagabondChatHelper } from '../../helpers/chat-helper.mjs';
 
 /**
  * Handler for roll-related functionality.
@@ -144,7 +145,7 @@ export class RollHandler {
       await roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
+        rollMode: VagabondChatHelper.getRollMode(),
       });
 
       // Reset check bonus to 0 after any roll
