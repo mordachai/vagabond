@@ -1,0 +1,74 @@
+{{! NPC action macro config — buffered edit (data-field). Params: action=action }}
+<div class='npc-macro-config'>
+  <div class='action-edit-subheader'>
+    {{localize "VAGABOND.Item.Macro.Section"}}
+    <i class='fas fa-circle-question macro-help'
+      data-tooltip='{{localize "VAGABOND.Item.Macro.Notes"}}' data-tooltip-direction='UP'></i>
+  </div>
+
+  {{! ----- Always macro ----- }}
+  <div class='npc-macro-slot' data-macro-slot='macro'>
+    <div class='npc-macro-header'>
+      <label class='npc-macro-toggle npc-macro-name'>
+        <input type='checkbox' data-field='macro.enabled' {{#if action.macro.enabled}}checked{{/if}}>
+        <span>{{localize "VAGABOND.Item.Macro.Simple"}}</span>
+      </label>
+      <label class='npc-macro-toggle npc-macro-runasgm' title='{{localize "VAGABOND.Item.Macro.RunAsGMHint"}}'>
+        <input type='checkbox' data-field='macro.runAsGM' {{#if action.macro.runAsGM}}checked{{/if}}>
+        <span>{{localize "VAGABOND.Item.Macro.RunAsGM"}}</span>
+      </label>
+    </div>
+    <div class='action-edit-row'>
+      <label>{{localize "VAGABOND.Item.Macro.LinkedMacro"}}:</label>
+      <select data-field='macro.uuid' class='npc-field-input'>
+        <option value=''>—</option>
+        {{#each @root.availableMacros as |m|}}
+          <option value='{{m.uuid}}' {{#if (eq ../action.macro.uuid m.uuid)}}selected{{/if}}>{{m.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class='action-edit-row macro-label-row'>
+      <label>{{localize "VAGABOND.Item.Macro.ButtonLabel"}}:</label>
+      <input type='text' data-field='macro.label' value='{{action.macro.label}}'
+        placeholder='{{localize "VAGABOND.Item.Macro.ButtonLabelHint"}}' class='npc-text-input macro-label-input'>
+    </div>
+    <div class='action-edit-row macro-script-row'>
+      <label>{{localize "VAGABOND.Item.Macro.InlineCommand"}}:</label>
+      <textarea data-field='macro.command' rows='4' class='macro-command-input'
+        placeholder='{{localize "VAGABOND.Item.Macro.InlineHint"}}'>{{action.macro.command}}</textarea>
+    </div>
+  </div>
+
+  {{! ----- On Success macro ----- }}
+  <div class='npc-macro-slot' data-macro-slot='hitMacro'>
+    <div class='npc-macro-header'>
+      <label class='npc-macro-toggle npc-macro-name'>
+        <input type='checkbox' data-field='hitMacro.enabled' {{#if action.hitMacro.enabled}}checked{{/if}}>
+        <span>{{localize "VAGABOND.Item.Macro.OnHit"}}</span>
+      </label>
+      <label class='npc-macro-toggle npc-macro-runasgm' title='{{localize "VAGABOND.Item.Macro.RunAsGMHint"}}'>
+        <input type='checkbox' data-field='hitMacro.runAsGM' {{#if action.hitMacro.runAsGM}}checked{{/if}}>
+        <span>{{localize "VAGABOND.Item.Macro.RunAsGM"}}</span>
+      </label>
+    </div>
+    <div class='action-edit-row'>
+      <label>{{localize "VAGABOND.Item.Macro.LinkedMacro"}}:</label>
+      <select data-field='hitMacro.uuid' class='npc-field-input'>
+        <option value=''>—</option>
+        {{#each @root.availableMacros as |m|}}
+          <option value='{{m.uuid}}' {{#if (eq ../action.hitMacro.uuid m.uuid)}}selected{{/if}}>{{m.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class='action-edit-row macro-label-row'>
+      <label>{{localize "VAGABOND.Item.Macro.ButtonLabel"}}:</label>
+      <input type='text' data-field='hitMacro.label' value='{{action.hitMacro.label}}'
+        placeholder='{{localize "VAGABOND.Item.Macro.ButtonLabelHint"}}' class='npc-text-input macro-label-input'>
+    </div>
+    <div class='action-edit-row macro-script-row'>
+      <label>{{localize "VAGABOND.Item.Macro.InlineCommand"}}:</label>
+      <textarea data-field='hitMacro.command' rows='4' class='macro-command-input'
+        placeholder='{{localize "VAGABOND.Item.Macro.InlineHint"}}'>{{action.hitMacro.command}}</textarea>
+    </div>
+  </div>
+</div>

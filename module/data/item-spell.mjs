@@ -117,6 +117,19 @@ export default class VagabondSpell extends VagabondItemBase {
       { required: true, initial: [] }
     );
 
+    // ===== EXECUTABLE MACROS =====
+    // `macro` (simple — always shown) and `hitMacro` (shown only on a successful
+    // cast card). Each references a Macro by UUID (preferred) or an inline script.
+    const macroSchema = () => new fields.SchemaField({
+      enabled:  new fields.BooleanField({ initial: false }),
+      uuid:     new fields.StringField({ blank: true, initial: '' }),
+      command:  new fields.StringField({ blank: true, initial: '' }),
+      label:    new fields.StringField({ blank: true, initial: '' }),
+      runAsGM:  new fields.BooleanField({ initial: false }),
+    });
+    schema.macro = macroSchema();
+    schema.hitMacro = macroSchema();
+
     return schema;
   }
 

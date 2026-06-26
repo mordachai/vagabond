@@ -1,6 +1,7 @@
 import { VagabondTextParser } from './text-parser.mjs';
 import { VagabondDiceAppearance } from './dice-appearance.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
+import { buildMacroButtonHTML } from './item-macro.mjs';
 
 /**
  * Universal chat card builder for Vagabond system
@@ -485,6 +486,10 @@ export class VagabondChatCard {
            card.addFooterAction(btn);
       }
 
+      // Executable macro buttons (simple always; hit macro only on a hit/success)
+      const isHitForMacro = rollData?.isHit ?? rollData?.isSuccess ?? false;
+      VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro).forEach(b => card.addFooterAction(b));
+
       // Add defend options if requested (independent of damage)
       if (hasDefenses) {
         const { VagabondDamageHelper } = await import('./damage-helper.mjs');
@@ -500,6 +505,44 @@ export class VagabondChatCard {
       }
 
       return await card.send();
+  }
+
+  /**
+   * Build chat-card buttons for an item's executable macros.
+   * `macro` (simple) always renders when enabled; `hitMacro` only when the
+   * action hit/succeeded. Each button carries the data the click handler
+   * (in vagabond.mjs) needs to resolve and execute the macro.
+   * @param {Item|null} item     The source item/spell (must be a real document)
+   * @param {Actor} actor        The acting actor
+   * @param {boolean} isHit      Whether the action hit/succeeded
+   * @returns {string[]}         Array of button HTML strings
+   * @private
+   */
+  static _buildMacroButtons(item, actor, isHit) {
+    if (!item?.uuid) return [];
+    const fb = game.i18n.localize('VAGABOND.Item.Macro.RunDefault');
+    const buttons = [];
+    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb }));
+    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb }));
+    return buttons.filter(Boolean);
+  }
+
+  /**
+   * Build macro buttons for an NPC action (no item — references actor + action index).
+   * NPCs have no attack roll, so both slots render on the action/use card.
+   * @param {Actor} actor
+   * @param {object} action     the action data object
+   * @param {number} actionIndex
+   * @returns {string[]}
+   * @private
+   */
+  static _buildNpcMacroButtons(actor, action, actionIndex) {
+    if (!actor?.id || !action) return [];
+    const fb = game.i18n.localize('VAGABOND.Item.Macro.RunDefault');
+    return [
+      buildMacroButtonHTML({ cfg: action.macro, slot: 'macro', actorUuid: actor.uuid, actionIndex, fallbackLabel: fb }),
+      buildMacroButtonHTML({ cfg: action.hitMacro, slot: 'hitMacro', actorUuid: actor.uuid, actionIndex, fallbackLabel: fb }),
+    ].filter(Boolean);
   }
 
   /* -------------------------------------------- */
@@ -998,6 +1041,9 @@ export class VagabondChatCard {
           attackType, targetsAtRollTime, actor.id, null, actionIndex, reminderStatusSaveTypes
         ));
     }
+
+    // 8b. Executable macro buttons for this NPC action
+    this._buildNpcMacroButtons(actor, action, actionIndex).forEach(b => footerActions.push(b));
 
     // 9. Create the initial action card — damage-only buttons, no saves or defending.
     // Saves and defending options are shown on the damage card posted by postNPCActionDamage.

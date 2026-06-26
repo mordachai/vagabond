@@ -118,6 +118,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       toggleBlockedStatus: this._onToggleBlockedStatus,
       toggleResistedStatus: this._onToggleResistedStatus,
       applyCoating: this._onApplyCoating,
+      clearItemMacro: this._onClearItemMacro,
     },
     form: {
       submitOnChange: false,
@@ -290,6 +291,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         if (context.sequencerAvailable && this.item.system.locked && this.item.system.itemFx?.enabled) {
           context.itemFxValidation = await VagabondItemSheet._checkFxFiles(this.item.system.itemFx);
         }
+        context.macroNames = VagabondItemSheet._resolveMacroNames(this.item);
         break;
 
       case 'spellDetails':
@@ -305,6 +307,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             }
           )
         };
+        context.macroNames = VagabondItemSheet._resolveMacroNames(this.item);
         break;
 
       case 'ancestryDetails':
@@ -1135,6 +1138,15 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       });
     });
 
+    // <code-mirror> (embedded macro scripts) does not bubble a normal change event:
+    // its #onBlur dispatches `change` on the FORM with target=the element. So we
+    // handle it at the form level, filtered to code-mirror, and save by name.
+    this.element.addEventListener('change', (e) => {
+      const t = e.target;
+      if (!t || t.tagName !== 'CODE-MIRROR' || !t.name) return;
+      this.document.update({ [t.name]: t.value }, { render: false }).catch(() => {});
+    });
+
   }
 
   /**************
@@ -1371,7 +1383,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * and action-based pools (Class Grants) by preserving existing data.
    * @override
    */
-  async _processFormData(event, form, formData) {
+  // NOT async: Foundry's base _prepareSubmitData calls this synchronously and does
+  // NOT await it. Returning a Promise makes validate() receive a Promise instead of
+  // a plain object → "must be constructed with a DataModel or Object". Keep sync.
+  _processFormData(event, form, formData) {
     // 1. Capture prose-mirror values for top-level fields (description, etc.)
     // Array fields are handled by _collectArrayFromDOM below.
     form.querySelectorAll('prose-mirror[name]').forEach(pm => {
@@ -2511,7 +2526,55 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         return this._onDropItem(event, data);
       case 'Folder':
         return this._onDropFolder(event, data);
+      case 'Macro':
+        return this._onDropMacro(event, data);
     }
+  }
+
+  /**
+   * Link a dropped Macro to one of the item's macro slots.
+   * Slot is read from the drop zone's data-macro-slot ('macro' | 'hitMacro');
+   * defaults to 'macro'. Also enables the slot and defaults its button label
+   * to the macro name when blank.
+   */
+  async _onDropMacro(event, data) {
+    if (!this.item.isOwner) return false;
+    if (!['equipment', 'spell'].includes(this.item.type)) return false;
+
+    const macro = await fromUuid(data.uuid);
+    if (!macro) return ui.notifications.warn('Could not resolve dropped macro.');
+
+    const dropZone = event.target.closest('[data-macro-slot]');
+    const slot = dropZone?.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro';
+
+    const update = {
+      [`system.${slot}.uuid`]: macro.uuid,
+      [`system.${slot}.enabled`]: true,
+    };
+    if (!this.item.system[slot]?.label) update[`system.${slot}.label`] = macro.name;
+
+    await this.item.update(update);
+  }
+
+  /**
+   * Clear a linked macro UUID from a slot (button next to the drop zone).
+   */
+  static async _onClearItemMacro(event, target) {
+    const slot = target.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro';
+    await this.item.update({ [`system.${slot}.uuid`]: '' });
+  }
+
+  /**
+   * Resolve linked Macro UUIDs to display names for the item sheet template.
+   * @param {Item} item
+   * @returns {{macro: string, hitMacro: string}}
+   */
+  static _resolveMacroNames(item) {
+    const nameFor = (uuid) => uuid ? (fromUuidSync(uuid)?.name ?? uuid) : '';
+    return {
+      macro: nameFor(item.system.macro?.uuid),
+      hitMacro: nameFor(item.system.hitMacro?.uuid),
+    };
   }
 
   async _onDropActiveEffect(event, data) {

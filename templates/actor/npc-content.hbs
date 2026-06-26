@@ -184,6 +184,12 @@
                       {{#if action.extraInfo}}
                         <span class='action-extra-info'>{{{lookup (lookup @root.enrichedActions index) 'extraInfoFormatted'}}}</span>
                       {{/if}}
+                    {{#if (and action.macro.enabled (or action.macro.uuid action.macro.command))}}
+                      <span class='action-macro-indicator' title='{{localize "VAGABOND.Item.Macro.Simple"}}: {{#if action.macro.label}}{{action.macro.label}}{{else}}{{localize "VAGABOND.Item.Macro.RunDefault"}}{{/if}}{{#if action.macro.runAsGM}} ({{localize "VAGABOND.Item.Macro.RunAsGM"}}){{/if}}'><i class='fas fa-scroll'></i></span>
+                    {{/if}}
+                    {{#if (and action.hitMacro.enabled (or action.hitMacro.uuid action.hitMacro.command))}}
+                      <span class='action-macro-indicator' title='{{localize "VAGABOND.Item.Macro.OnHit"}}: {{#if action.hitMacro.label}}{{action.hitMacro.label}}{{else}}{{localize "VAGABOND.Item.Macro.RunDefault"}}{{/if}}{{#if action.hitMacro.runAsGM}} ({{localize "VAGABOND.Item.Macro.RunAsGM"}}){{/if}}'><i class='fas fa-scroll'></i></span>
+                    {{/if}}
                   </div>
                 </div>
               {{/if}}
@@ -417,6 +423,7 @@
                       </button>
                     </div>
                   </div>
+                  {{> "systems/vagabond/templates/actor/parts/npc-macro-config.hbs" action=action}}
                   {{/if}}
                 </div>
               </div>

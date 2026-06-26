@@ -58,6 +58,7 @@ import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
+import { runMacroFromButton, executeItemMacro } from './helpers/item-macro.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
@@ -755,6 +756,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/bonus-stats-selector.hbs',
     // Item partials
     'systems/vagabond/templates/item/parts/grants-config.hbs',
+    'systems/vagabond/templates/item/parts/macro-config.hbs',
+    'systems/vagabond/templates/actor/parts/npc-macro-config.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     // Party sheet partials
@@ -1127,6 +1130,15 @@ Hooks.once('ready', function () {
     const maxLuck = actor.system.maxLuck ?? 0;
     const newLuck = Math.min(maxLuck, currentLuck + amount);
     await actor.update({ 'system.currentLuck': newLuck });
+  });
+
+  // Item/spell/NPC-action macro relay — player clicks a runAsGM button, GM executes.
+  registerSocketAction('runItemMacro', async (payload) => {
+    try {
+      await executeItemMacro(payload);
+    } catch (err) {
+      console.error('VAGABOND | GM-relayed macro execution failed:', err);
+    }
   });
 
   // Sequencer FX wildcard resolution (GM resolves, players request via socket).
@@ -2688,6 +2700,37 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleGrapple(button);
       });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 11b. Item/Spell Macro Button Handler
+  // Runs a macro linked on the source item/spell. The macro receives
+  // { actor, item, token, targets, speaker } as scope variables.
+  // ---------------------------------------------------------
+  const macroButtons = html.querySelectorAll('.vagabond-macro-button');
+  macroButtons.forEach(button => {
+    button.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+      try {
+        const snapshot = message?.flags?.vagabond?.targetsAtRollTime;
+        const targetTokenIds = Array.isArray(snapshot) ? snapshot.map(t => t.tokenId).filter(Boolean) : [];
+        const sceneId = (Array.isArray(snapshot) && snapshot[0]?.sceneId) || canvas.scene?.id || null;
+        const actionIndexRaw = button.dataset.actionIndex;
+
+        await runMacroFromButton({
+          itemUuid: button.dataset.itemUuid || null,
+          actorUuid: button.dataset.actorUuid || null,
+          actionIndex: actionIndexRaw != null ? parseInt(actionIndexRaw) : null,
+          slot: button.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro',
+          runAsGM: button.dataset.runAsGm === 'true',
+          targetTokenIds,
+          sceneId,
+        });
+      } catch (err) {
+        console.error('VAGABOND | Item macro execution failed:', err);
+        ui.notifications.error('Macro execution failed — see console (F12).');
+      }
     });
   });
 

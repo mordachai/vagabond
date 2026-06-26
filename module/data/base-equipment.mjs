@@ -365,6 +365,22 @@ export default class VagabondEquipment extends VagabondItemBase {
       soundVolume:    new fields.NumberField({ initial: 0.6, min: 0, max: 1 }),
     });
 
+    // ===== EXECUTABLE MACROS =====
+    // Two slots: `macro` (simple — button always shows on the card) and
+    // `hitMacro` (button only shows on a hit/success card). Each can reference
+    // a Macro document by UUID (preferred) or hold an inline script `command`.
+    const macroSchema = () => new fields.SchemaField({
+      enabled:  new fields.BooleanField({ initial: false }),
+      uuid:     new fields.StringField({ blank: true, initial: '' }),
+      command:  new fields.StringField({ blank: true, initial: '' }),
+      label:    new fields.StringField({ blank: true, initial: '' }),
+      // When true, a non-GM clicking the button relays execution to the GM
+      // client (via the system socket) so it runs with GM permissions.
+      runAsGM:  new fields.BooleanField({ initial: false }),
+    });
+    schema.macro = macroSchema();
+    schema.hitMacro = macroSchema();
+
     return schema;
   }
 

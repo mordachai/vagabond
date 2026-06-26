@@ -317,6 +317,8 @@
           </div>
         </div>
       </div>
+
+      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
     </div>
   {{else}}
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
@@ -1248,6 +1250,8 @@
           </details>
         {{/if}}
       {{/if}}
+
+      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
     </div>
   {{/if}}
 </section>

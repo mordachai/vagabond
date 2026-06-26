@@ -847,6 +847,23 @@
         "Description": "Description",
         "Effects": "Effects"
       },
+      "Macro": {
+        "Section": "Macros",
+        "Simple": "Always",
+        "OnHit": "On Success",
+        "LinkedMacro": "Linked Macro",
+        "DropHint": "Drag a macro here",
+        "ButtonLabel": "Button Label",
+        "ButtonLabelHint": "Defaults to the macro name",
+        "InlineCommand": "Embedded Script",
+        "InlineHint": "Optional. Runs if no macro is linked. Scope: actor, item, token, targets, speaker.",
+        "Inline": "Embedded Script",
+        "Clear": "Unlink macro",
+        "RunDefault": "Run Macro",
+        "RunAsGM": "Allow Players",
+        "RunAsGMHint": "When players click this button, the GM client executes the macro with GM permissions. Use for macros that mutate the world (e.g. transforming a token).",
+        "Notes": "Adds a button to this item's chat card. The macro runs with actor, item, token, targets, and speaker in scope. The On Success button only appears when the attack/cast hits."
+      },
       "base": {
         "FIELDS": {
           "description": {"label": "Description"}

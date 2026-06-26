@@ -30,8 +30,9 @@
   }
 }
 
-// Locked view content
-.equipment-locked-view {
+// Locked view content (equipment + spell share the same .equipment-locked-content markup)
+.equipment-locked-view,
+.spell-locked-view {
   .equipment-locked-content {
     padding: 10px;
   }
@@ -48,10 +49,10 @@
 
     .section-header {
       font-family: $font-title;
-      font-size: 1.1em;
+      font-size: 0.95em;
       font-weight: bold;
-      margin: 0 0 12px 0;
-      padding-bottom: 5px;
+      margin: 0 0 8px 0;
+      padding-bottom: 4px;
       border-bottom: 1px solid $c-lite;
     }
   }

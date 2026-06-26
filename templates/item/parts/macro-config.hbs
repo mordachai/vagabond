@@ -1,0 +1,106 @@
+{{! Reusable macro config block — used by spell-details and equipment-details.
+    Renders two slots: `macro` (simple, always shown on card) and
+    `hitMacro` (shown only on a hit/success card). Self-contained: branches on
+    system.locked so it can be included in both the locked and edit views.
+    Params: system=system macroNames=macroNames }}
+
+{{#if system.locked}}
+  {{! ===== LOCKED VIEW ===== }}
+  {{#if (or (and system.macro.enabled (or system.macro.uuid system.macro.command))
+            (and system.hitMacro.enabled (or system.hitMacro.uuid system.hitMacro.command)))}}
+    <div class='locked-section'>
+      <h3 class='section-header'>{{localize "VAGABOND.Item.Macro.Section"}}</h3>
+      {{#if (and system.macro.enabled (or system.macro.uuid system.macro.command))}}
+        <div class='locked-stat'>
+          <span class='stat-label'><i class='fas fa-scroll'></i> {{localize "VAGABOND.Item.Macro.Simple"}}:</span>
+          <span class='stat-value'>{{#if macroNames.macro}}{{macroNames.macro}}{{else if system.macro.label}}{{system.macro.label}}{{else}}{{localize "VAGABOND.Item.Macro.Inline"}}{{/if}}</span>
+        </div>
+      {{/if}}
+      {{#if (and system.hitMacro.enabled (or system.hitMacro.uuid system.hitMacro.command))}}
+        <div class='locked-stat'>
+          <span class='stat-label'><i class='fas fa-scroll'></i> {{localize "VAGABOND.Item.Macro.OnHit"}}:</span>
+          <span class='stat-value'>{{#if macroNames.hitMacro}}{{macroNames.hitMacro}}{{else if system.hitMacro.label}}{{system.hitMacro.label}}{{else}}{{localize "VAGABOND.Item.Macro.Inline"}}{{/if}}</span>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+{{else}}
+  {{! ===== EDIT VIEW ===== }}
+  <div class="item-section-box macro-section-box">
+    <div class="item-section-label">
+      {{localize "VAGABOND.Item.Macro.Section"}}
+      <i class='fas fa-circle-question macro-help'
+        data-tooltip='{{localize "VAGABOND.Item.Macro.Notes"}}' data-tooltip-direction='UP'></i>
+    </div>
+
+    {{! ----- Always macro slot ----- }}
+    <div class="macro-slot" data-macro-slot="macro">
+      <div class="macro-slot-header">
+        <label class='checkbox-label macro-slot-toggle'>
+          <input type='checkbox' name='system.macro.enabled' {{#if system.macro.enabled}}checked{{/if}} data-dtype='Boolean'>
+          <span>{{localize "VAGABOND.Item.Macro.Simple"}}</span>
+        </label>
+        <label class='checkbox-label macro-runasgm' title='{{localize "VAGABOND.Item.Macro.RunAsGMHint"}}'>
+          <input type='checkbox' name='system.macro.runAsGM' {{#if system.macro.runAsGM}}checked{{/if}} data-dtype='Boolean'>
+          <span>{{localize "VAGABOND.Item.Macro.RunAsGM"}}</span>
+        </label>
+      </div>
+      <div class='form-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Macro.LinkedMacro"}}</label>
+        <div class='vagabond-macro-drop' data-macro-slot="macro">
+          {{#if system.macro.uuid}}
+            <span class='macro-link'><i class='fas fa-scroll'></i> {{macroNames.macro}}</span>
+            <button type='button' class='macro-clear' data-action='clearItemMacro' data-macro-slot="macro"
+              title='{{localize "VAGABOND.Item.Macro.Clear"}}'><i class='fas fa-times'></i></button>
+          {{else}}
+            <span class='macro-drop-hint'><i class='fas fa-scroll'></i> {{localize "VAGABOND.Item.Macro.DropHint"}}</span>
+          {{/if}}
+        </div>
+      </div>
+      <div class='form-group macro-label-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Macro.ButtonLabel"}}</label>
+        <input type='text' class='macro-label-input' name='system.macro.label' value='{{system.macro.label}}'
+          placeholder='{{localize "VAGABOND.Item.Macro.ButtonLabelHint"}}'>
+      </div>
+      <div class='form-group macro-script-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Macro.InlineCommand"}}</label>
+        <code-mirror name='system.macro.command' language='javascript' class='macro-command-input'>{{system.macro.command}}</code-mirror>
+      </div>
+    </div>
+
+    {{! ----- On-success macro slot ----- }}
+    <div class="macro-slot" data-macro-slot="hitMacro">
+      <div class="macro-slot-header">
+        <label class='checkbox-label macro-slot-toggle'>
+          <input type='checkbox' name='system.hitMacro.enabled' {{#if system.hitMacro.enabled}}checked{{/if}} data-dtype='Boolean'>
+          <span>{{localize "VAGABOND.Item.Macro.OnHit"}}</span>
+        </label>
+        <label class='checkbox-label macro-runasgm' title='{{localize "VAGABOND.Item.Macro.RunAsGMHint"}}'>
+          <input type='checkbox' name='system.hitMacro.runAsGM' {{#if system.hitMacro.runAsGM}}checked{{/if}} data-dtype='Boolean'>
+          <span>{{localize "VAGABOND.Item.Macro.RunAsGM"}}</span>
+        </label>
+      </div>
+      <div class='form-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Macro.LinkedMacro"}}</label>
+        <div class='vagabond-macro-drop' data-macro-slot="hitMacro">
+          {{#if system.hitMacro.uuid}}
+            <span class='macro-link'><i class='fas fa-scroll'></i> {{macroNames.hitMacro}}</span>
+            <button type='button' class='macro-clear' data-action='clearItemMacro' data-macro-slot="hitMacro"
+              title='{{localize "VAGABOND.Item.Macro.Clear"}}'><i class='fas fa-times'></i></button>
+          {{else}}
+            <span class='macro-drop-hint'><i class='fas fa-scroll'></i> {{localize "VAGABOND.Item.Macro.DropHint"}}</span>
+          {{/if}}
+        </div>
+      </div>
+      <div class='form-group macro-label-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Macro.ButtonLabel"}}</label>
+        <input type='text' class='macro-label-input' name='system.hitMacro.label' value='{{system.hitMacro.label}}'
+          placeholder='{{localize "VAGABOND.Item.Macro.ButtonLabelHint"}}'>
+      </div>
+      <div class='form-group macro-script-group'>
+        <label class='resource-label'>{{localize "VAGABOND.Item.Macro.InlineCommand"}}</label>
+        <code-mirror name='system.hitMacro.command' language='javascript' class='macro-command-input'>{{system.hitMacro.command}}</code-mirror>
+      </div>
+    </div>
+  </div>
+{{/if}}

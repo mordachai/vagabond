@@ -49,6 +49,8 @@
           </div>
         </div>
       {{/if}}
+
+      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
     </div>
   {{else}}
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
@@ -272,6 +274,8 @@
         </div>
       </details>
       </div>{{! /item-section-box Status & Effects }}
+
+      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
     </div>
   {{/if}}
 </section>

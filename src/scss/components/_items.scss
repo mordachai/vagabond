@@ -273,6 +273,7 @@
   // When closed — keep a thin visible box so the label sits on something
   &:not([open]) {
     padding-bottom: 6px;
+    height: 25px;
   }
 }
 
@@ -302,6 +303,22 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: $c-text-1;
+  }
+}
+
+// Locked-view section headers (equipment + spell). The dedicated
+// _equipment-locked partial is disabled in vagabond.scss, so the <h3>
+// otherwise inherits only .vagabond h1..h6 (font, no size) and renders at the
+// UA default. This rule (0,2,0) beats `.vagabond h3` and sizes all of them.
+.equipment-locked-view,
+.spell-locked-view {
+  .section-header {
+    font-family: $font-title;
+    font-size: 1.0rem;
+    font-weight: bold;
+    margin: 8px 0px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid $c-text-1;
   }
 }
 
@@ -1111,7 +1128,7 @@
   display: inline-block;
   width: 16px;
   transition: transform 0.2s ease;
-  color: rgba(0, 0, 0, 0.5);
+  color: $c-text-1;
   font-size: 0.85em;
 }
 
@@ -1565,4 +1582,269 @@
     font-size: 12px;
     flex-shrink: 0;
   }
+}
+
+/* ===== Executable Macro Config (item/spell sheets) ===== */
+.macro-section-box {
+  /* (?) help icon sitting next to the "Macros" legend */
+  .macro-help {
+    font-size: 0.95em;
+    cursor: help;
+    opacity: 0.65;
+    &:hover { opacity: 1; }
+  }
+}
+
+
+/* Each slot is its own panel, accent-coloured to match its chat-card button:
+   Always = teal, On Success = purple. */
+.macro-slot {
+  margin: 12px 0;
+  padding: 10px 12px 12px;
+  border: 1px solid $c-faint;
+  border-left-width: 4px;
+  border-radius: 5px;
+  background: var(--vagabond-c-surface);
+
+  &[data-macro-slot="macro"]    { border-left-color: #1f5e63; }
+  &[data-macro-slot="hitMacro"] { border-left-color: #6b4ba0; }
+
+  /* Enable toggle on the left, Allow Players on the right of the same row */
+  .macro-slot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $c-faint;
+
+    .macro-slot-toggle span {
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .macro-runasgm {
+      opacity: 0.85;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+  }
+
+  &[data-macro-slot="macro"]    .macro-slot-toggle span { color: #1f7e85; }
+  &[data-macro-slot="hitMacro"] .macro-slot-toggle span { color: #8a68c9; }
+
+  /* extra breathing room between the linked-macro drop zone and the label field */
+  .macro-label-group { margin-top: 10px; }
+
+  /* checkboxes are near-invisible in dark mode — add a ring via box-shadow so the
+     native control keeps its size/alignment (a real border offsets the checkmark). */
+  input[type='checkbox'] {
+    border-radius: 3px;
+    background: var(--vagabond-c-input-bg);
+  }
+}
+
+.vagabond-macro-drop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 1px dashed rgba(120, 90, 170, 0.6);
+  border-radius: 4px;
+  background: rgba(120, 90, 170, 0.08);
+
+  .macro-link {
+    font-weight: bold;
+    i { margin-right: 4px; color: #6b4ba0; }
+  }
+
+  .macro-drop-hint {
+    opacity: 0.6;
+    font-style: italic;
+    i { margin-right: 4px; }
+  }
+
+  .macro-clear {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    line-height: 1;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    background: rgba(180, 40, 40, 0.15);
+    &:hover { background: rgba(180, 40, 40, 0.35); }
+  }
+}
+
+/* Button-label text field — boxed look, theme-aware (light + dark). */
+.macro-label-input {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid $c-faint;
+  border-radius: 4px;
+  background: var(--vagabond-c-input-bg);
+  color: $c-text-1;
+  font-size: 12px;
+
+  &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+  &:focus {
+    outline: none;
+    border-color: #8a68c9;
+    background: var(--vagabond-c-input-bg);
+  }
+}
+
+/* Embedded script — native <code-mirror>: line numbers + syntax highlight come
+   for free from the element; we only box it and force a mono font + min height.
+   The host element does not cascade into the internal .cm-editor, so the inner
+   selectors are set explicitly. */
+.macro-command-input {
+  display: block;
+  width: 100%;
+  border: 1px solid $c-faint;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .cm-editor {
+    min-height: 130px;
+    max-height: 360px;
+    border-radius: 4px;
+  }
+
+  .cm-scroller {
+    overflow: auto;
+    font-family: var(--font-mono, 'Courier New', monospace);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* plain textarea (NPC slots use this — code-mirror is risky inside accordions) */
+  &textarea {
+    min-height: 120px;
+    padding: 6px 8px;
+    overflow: auto;
+    resize: vertical;
+    background: var(--vagabond-c-input-bg);
+    color: $c-text-1;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 1.5;
+
+    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+  }
+}
+
+/* ===== NPC action macro config (mirrors the item/spell macro treatment) ===== */
+.npc-macro-config {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid $c-faint;
+
+  /* Section title — match the item-sheet section-label size/weight */
+  .action-edit-subheader {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font-title;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $c-text-1;
+    margin-bottom: 8px;
+
+    .macro-help {
+      font-size: 0.95em;
+      cursor: help;
+      opacity: 0.65;
+      &:hover { opacity: 1; }
+    }
+  }
+
+  /* Each slot = its own accent panel: Always = teal, On Success = purple */
+  .npc-macro-slot {
+    margin: 10px 0;
+    padding: 8px 10px 10px;
+    border: 1px solid $c-faint;
+    border-left-width: 4px;
+    border-radius: 5px;
+    background: var(--vagabond-c-surface);
+
+    &[data-macro-slot="macro"]    { border-left-color: #1f5e63; }
+    &[data-macro-slot="hitMacro"] { border-left-color: #6b4ba0; }
+  }
+
+  /* Enable toggle left, Allow Players right, on one row */
+  .npc-macro-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $c-faint;
+  }
+
+  .npc-macro-name span {
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .npc-macro-slot[data-macro-slot="macro"]    .npc-macro-name span { color: #1f7e85; }
+  .npc-macro-slot[data-macro-slot="hitMacro"] .npc-macro-name span { color: #8a68c9; }
+
+  .npc-macro-runasgm {
+    opacity: 0.85;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .npc-macro-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  /* Button-label field — boxed, theme-aware (same as item version) */
+  .macro-label-input {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: var(--vagabond-c-input-bg);
+    color: $c-text-1;
+    font-size: 12px;
+
+    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+    &:focus { outline: none; border-color: #8a68c9; }
+  }
+
+  /* checkbox ring so they're visible in dark mode (box-shadow = no misalignment) */
+  input[type='checkbox'] {
+    border-radius: 3px;
+    background: var(--vagabond-c-input-bg);
+    box-shadow: 0 0 0 1px $c-faint;
+  }
+
+  /* override .npc-content textarea { font-family: $font-title } — script must be
+     plain mono, not the bold display font */
+  textarea.macro-command-input {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: normal;
+    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+  }
+}
+
+.action-macro-indicator {
+  margin-left: 5px;
+  i.fa-scroll { color: #6b4ba0; font-size: 0.9em; opacity: 0.85; }
 }

@@ -858,6 +858,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         /* Apply Direct (Full Width) */
         button.vagabond-apply-direct-button,
         button.vagabond-grapple-button,
+        button.vagabond-macro-button,
         button.vagabond-npc-damage-button,
         button.vagabond-item-damage-button,
         button.vagabond-damage-button,
@@ -899,6 +900,22 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             i {
                 color: var(--c-yellow-text) !important;
                 flex-shrink: 0;
+            }
+        }
+
+        /* Macro buttons — utility accent (not damage/save). On Success = purple,
+           Always = teal so the two slots read as distinct at a glance. */
+        button.vagabond-macro-button {
+            background-image: none !important;
+            background: linear-gradient(180deg, #4a2f6e, #311e4a) !important;
+            i { color: #d7b8ff !important; }
+            i.vagabond-macro-gm { color: #ffd27f !important; font-size: 0.85em; opacity: 0.9; }
+            &:hover { filter: brightness(1.3); }
+
+            /* Always slot — teal */
+            &[data-macro-slot="macro"] {
+                background: linear-gradient(180deg, #1f5e63, #123a3e) !important;
+                i { color: #b8f0ff !important; }
             }
         }
 

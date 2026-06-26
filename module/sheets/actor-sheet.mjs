@@ -459,6 +459,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const availableWeapons = await this._loadAvailableWeapons();
         partContext.availableWeapons = availableWeapons;
         partContext.weaponDisplayNames = Object.fromEntries(availableWeapons.map(w => [w.uuid, w.name]));
+
+        // World macros for the NPC action macro selector
+        partContext.availableMacros = (game.macros?.contents ?? [])
+          .map(m => ({ uuid: m.uuid, name: m.name }))
+          .sort((a, b) => a.name.localeCompare(b.name));
         break;
     }
 

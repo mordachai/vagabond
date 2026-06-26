@@ -379,6 +379,22 @@ export default class VagabondNPC extends VagabondActorBase {
           }),
           { required: true, initial: [] }
         ),
+        // Executable macros — `macro` (always shown) and `hitMacro` (on the
+        // damage/use card). NPCs have no attack roll, so both appear on use.
+        macro: new fields.SchemaField({
+          enabled:  new fields.BooleanField({ initial: false }),
+          uuid:     new fields.StringField({ blank: true, initial: '' }),
+          command:  new fields.StringField({ blank: true, initial: '' }),
+          label:    new fields.StringField({ blank: true, initial: '' }),
+          runAsGM:  new fields.BooleanField({ initial: false }),
+        }),
+        hitMacro: new fields.SchemaField({
+          enabled:  new fields.BooleanField({ initial: false }),
+          uuid:     new fields.StringField({ blank: true, initial: '' }),
+          command:  new fields.StringField({ blank: true, initial: '' }),
+          label:    new fields.StringField({ blank: true, initial: '' }),
+          runAsGM:  new fields.BooleanField({ initial: false }),
+        }),
       }),
       { required: true, initial: [] }
     );
