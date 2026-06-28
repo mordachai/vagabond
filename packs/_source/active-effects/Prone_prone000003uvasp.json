@@ -1,7 +1,7 @@
 {
   "name": "Prone",
   "_id": "prone000003uvasp",
-  "img": "icons/svg/falling.svg",
+  "img": "icons/magic/movement/chevrons-down-yellow.webp",
   "type": "base",
   "system": {
     "changes": [

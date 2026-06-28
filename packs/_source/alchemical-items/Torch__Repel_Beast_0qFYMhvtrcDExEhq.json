@@ -38,7 +38,7 @@
       "uuid": "",
       "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff4d4d\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 6}}, durationMin: 60 });",
       "label": "Ignite",
-      "runAsGM": false
+      "runAsGM": true
     },
     "isConsumable": true
   },

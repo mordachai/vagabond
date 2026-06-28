@@ -9340,17 +9340,17 @@ ol#combat-tracker.directory-list {
 .vbd-choice-dialog .vbd-choice {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 18px 20px 8px;
+  gap: 10px;
+  padding: 12px 14px 6px;
 }
 .vbd-choice-dialog .vbd-choice-prompt {
   text-align: center;
   font-family: "Germania", serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: bold;
   letter-spacing: 0.5px;
   color: var(--vagabond-c-white);
-  padding: 8px 18px;
+  padding: 10px 14px;
   border-radius: 2px;
   background: url("../assets/images/sheets/titleBG.webp");
   background-repeat: no-repeat;
@@ -9361,14 +9361,14 @@ ol#combat-tracker.directory-list {
 }
 .vbd-choice-dialog .vbd-choice-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 8px;
 }
 .vbd-choice-dialog .vbd-choice-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 3px;
 }
 .vbd-choice-dialog .vbd-choice-card {
   width: 100%;
@@ -9377,8 +9377,8 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 4px;
+  gap: 5px;
+  padding: 2px;
   background: none;
   border: none;
   cursor: pointer;
@@ -9388,13 +9388,13 @@ ol#combat-tracker.directory-list {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 80px;
+  width: 48px;
+  height: 60px;
   background: url("../assets/images/sheets/statBG.webp") no-repeat center/100% 100%;
   filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.6));
 }
 .vbd-choice-dialog .vbd-choice-card .vbd-choice-icon i {
-  font-size: 2rem;
+  font-size: 1.6rem;
   line-height: 1;
   color: var(--vagabond-c-chat-yellow);
   text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
@@ -9402,13 +9402,13 @@ ol#combat-tracker.directory-list {
 }
 .vbd-choice-dialog .vbd-choice-card .vbd-choice-label {
   width: 100%;
-  padding: 6px 4px;
+  padding: 8px 3px;
   text-align: center;
   text-transform: uppercase;
   font-family: "Eskapade", serif;
   font-weight: bold;
   font-size: 0.95rem;
-  line-height: 1.15;
+  line-height: 1.1;
   color: #fff;
   background: url("../assets/ui/chat/apply-direct-bg.webp") no-repeat center/100% 100%;
   border-radius: 2px;
@@ -9436,7 +9436,7 @@ ol#combat-tracker.directory-list {
 }
 .vbd-choice-dialog .vbd-choice-sub {
   font-family: "Manofa", serif;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--vagabond-c-tan);
   text-align: center;
 }
@@ -9444,11 +9444,11 @@ ol#combat-tracker.directory-list {
 .vbd-choice-dialog footer.form-footer {
   justify-content: center;
   gap: 8px;
-  padding: 8px 20px 18px;
+  padding: 6px 16px 12px;
 }
 .vbd-choice-dialog .dialog-buttons button,
 .vbd-choice-dialog footer.form-footer button {
-  flex: 0 1 240px;
+  flex: 0 1 200px;
   background: url("../assets/ui/chat/yellow-button.webp") no-repeat center/100% 100%;
   border: none;
   color: #0b1a23;
@@ -9456,7 +9456,7 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 10px 16px;
+  padding: 7px 12px;
   border-radius: 2px;
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
   cursor: pointer;

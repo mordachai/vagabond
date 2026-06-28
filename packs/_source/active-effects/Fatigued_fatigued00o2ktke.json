@@ -1,7 +1,7 @@
 {
   "name": "Fatigued",
   "_id": "fatigued00o2ktke",
-  "img": "icons/svg/degen.svg",
+  "img": "icons/skills/wounds/injury-pain-body-orange.webp",
   "type": "base",
   "system": {
     "changes": []

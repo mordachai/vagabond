@@ -2781,6 +2781,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
         await runMacroFromButton({
           itemUuid: button.dataset.itemUuid || null,
+          itemName: button.dataset.itemName || null,
           actorUuid: button.dataset.actorUuid || null,
           actionIndex: actionIndexRaw != null ? parseInt(actionIndexRaw) : null,
           slot: button.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro',

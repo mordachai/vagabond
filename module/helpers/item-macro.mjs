@@ -80,7 +80,12 @@ export async function executeItemMacro(d) {
   const token = actor?.getActiveTokens?.(true)?.[0] ?? null;
   const targets = _resolveTargets(d);
   const isCritical = d.isCritical ?? false;
-  const scope = { actor, item, token, targets, isCritical, speaker: ChatMessage.getSpeaker({ actor }) };
+  // Name captured on the button so it survives the source item being consumed
+  // (light sources etc.). When the real item is gone, expose a minimal stub so
+  // stored inline commands that read `item.name` still resolve.
+  const itemName = item?.name ?? d.itemName ?? null;
+  const scopeItem = item ?? (itemName ? { name: itemName } : null);
+  const scope = { actor, item: scopeItem, token, targets, isCritical, itemName, speaker: ChatMessage.getSpeaker({ actor }) };
 
   if (cfg.uuid) {
     const macro = await fromUuid(cfg.uuid);
@@ -116,6 +121,7 @@ export async function runMacroFromButton(d) {
     }
     emitSocket('runItemMacro', {
       itemUuid: d.itemUuid ?? null,
+      itemName: d.itemName ?? null,
       actorUuid: d.actorUuid ?? null,
       actionIndex: d.actionIndex ?? null,
       slot: d.slot,
@@ -141,7 +147,7 @@ export async function runMacroFromButton(d) {
  * @param {boolean} [opts.isCritical]  carried on the button so the macro scope exposes `isCritical`
  * @returns {string} button HTML, or '' when the slot is empty/disabled
  */
-export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, actionIndex, fallbackLabel, isCritical = false }) {
+export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName, actionIndex, fallbackLabel, isCritical = false }) {
   if (!cfg?.enabled) return '';
   if (!cfg.uuid && !cfg.command) return '';
   const label = cfg.label || fallbackLabel;
@@ -149,11 +155,13 @@ export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, actionInd
   // Embed the inline command (base64) so the button still works if the source
   // item is consumed/deleted before it is clicked (e.g. last torch in a stack).
   const cmdB64 = cfg.command ? btoa(unescape(encodeURIComponent(cfg.command))) : '';
+  const safeName = itemName ? (foundry.utils.escapeHTML?.(itemName) ?? itemName) : '';
   const attrs = [
     `data-action="executeItemMacro"`,
     `data-macro-slot="${slot}"`,
     actorUuid ? `data-actor-uuid="${actorUuid}"` : '',
     itemUuid ? `data-item-uuid="${itemUuid}"` : '',
+    safeName ? `data-item-name="${safeName}"` : '',
     (actionIndex != null) ? `data-action-index="${actionIndex}"` : '',
     cfg.runAsGM ? `data-run-as-gm="true"` : '',
     isCritical ? `data-is-critical="true"` : '',

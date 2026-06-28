@@ -523,8 +523,8 @@ export class VagabondChatCard {
     if (!item?.uuid) return [];
     const fb = game.i18n.localize('VAGABOND.Item.Macro.RunDefault');
     const buttons = [];
-    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb, isCritical: isCrit }));
-    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb, isCritical: isCrit }));
+    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, itemName: item.name, fallbackLabel: fb, isCritical: isCrit }));
+    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, itemName: item.name, fallbackLabel: fb, isCritical: isCrit }));
     return buttons.filter(Boolean);
   }
 

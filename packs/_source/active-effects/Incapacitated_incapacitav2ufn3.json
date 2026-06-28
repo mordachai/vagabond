@@ -1,7 +1,7 @@
 {
   "name": "Incapacitated",
   "_id": "incapacitav2ufn3",
-  "img": "icons/svg/unconscious.svg",
+  "img": "icons/skills/wounds/injury-eyes-blood-red-pink.webp",
   "type": "base",
   "system": {
     "changes": [

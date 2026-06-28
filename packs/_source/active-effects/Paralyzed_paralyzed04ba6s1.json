@@ -1,7 +1,7 @@
 {
   "name": "Paralyzed",
   "_id": "paralyzed04ba6s1",
-  "img": "icons/svg/paralysis.svg",
+  "img": "icons/magic/control/debuff-energy-hold-green.webp",
   "type": "base",
   "system": {
     "changes": [

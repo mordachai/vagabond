@@ -28,19 +28,19 @@
   .vbd-choice {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 18px 20px 8px;
+    gap: 10px;
+    padding: 12px 14px 6px;
   }
 
 
   .vbd-choice-prompt {
     text-align: center;
     font-family: $font-title;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: bold;
     letter-spacing: 0.5px;
     color: $c-white;
-    padding: 8px 18px;
+    padding: 10px 14px;
     border-radius: 2px;
     background: url('../assets/images/sheets/titleBG.webp');
     background-repeat: no-repeat;
@@ -54,8 +54,8 @@
 
   .vbd-choice-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 8px;
   }
 
   // One grid cell = the card (button) with its hint sitting below it.
@@ -63,7 +63,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 3px;
   }
 
   // ---- choice card (clickable, no panel chrome) ----
@@ -74,8 +74,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 4px;
+    gap: 5px;
+    padding: 2px;
     background: none;
     border: none;
     cursor: pointer;
@@ -86,13 +86,13 @@
       flex: 0 0 auto;
       align-items: center;
       justify-content: center;
-      width: 64px;
-      height: 80px;
+      width: 48px;
+      height: 60px;
       background: url('../assets/images/sheets/statBG.webp') no-repeat center / 100% 100%;
       filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.6));
 
       i {
-        font-size: 2rem;
+        font-size: 1.6rem;
         line-height: 1;
         color: $c-yellow;
         text-shadow:
@@ -105,13 +105,13 @@
     // Label = the chat "Apply Direct" banner button.
     .vbd-choice-label {
       width: 100%;
-      padding: 6px 4px;
+      padding: 8px 3px;
       text-align: center;
       text-transform: uppercase;
       font-family: $font-primary;
       font-weight: bold;
       font-size: 0.95rem;
-      line-height: 1.15;
+      line-height: 1.1;
       color: #fff;
       background: url('../assets/ui/chat/apply-direct-bg.webp') no-repeat center / 100% 100%;
       border-radius: 2px;
@@ -135,7 +135,7 @@
   // Hint, below its card.
   .vbd-choice-sub {
     font-family: $font-secondary;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: $c-tan;
     text-align: center;
   }
@@ -145,10 +145,10 @@
   footer.form-footer {
     justify-content: center;
     gap: 8px;
-    padding: 8px 20px 18px;
+    padding: 6px 16px 12px;
 
     button {
-      flex: 0 1 240px;
+      flex: 0 1 200px;
       background: url('../assets/ui/chat/yellow-button.webp') no-repeat center / 100% 100%;
       border: none;
       color: #0b1a23;
@@ -156,7 +156,7 @@
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 10px 16px;
+      padding: 7px 12px;
       border-radius: 2px;
       box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
       cursor: pointer;

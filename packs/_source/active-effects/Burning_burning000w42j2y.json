@@ -1,7 +1,7 @@
 {
   "name": "Burning",
   "_id": "burning000w42j2y",
-  "img": "icons/svg/fire.svg",
+  "img": "icons/magic/fire/flame-burning-creature-skeleton.webp",
   "type": "base",
   "system": {
     "changes": []

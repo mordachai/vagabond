@@ -158,7 +158,7 @@ export class LightSource {
       { action: 'lit',      icon: 'fas fa-fire',      top: 'No Clock', hint: 'Lit only' },
       { action: 'realtime', icon: 'fas fa-stopwatch', top: 'Realtime', hint: `${durationMin} min` },
       { action: 'hour',     icon: 'fas fa-clock',     top: '1 Hour',   hint: '6 scenes' },
-      { action: 'quarter',  icon: 'fas fa-moon',      top: '1 Shift',  hint: '¼ Day' },
+      { action: 'quarter',  icon: 'fas fa-moon-stars',top: '1 Shift',  hint: '¼ Day' },
     ];
     const cards = opts.map((o) => `
       <div class="vbd-choice-item">
@@ -170,12 +170,13 @@ export class LightSource {
       </div>`).join('');
     const content = `
       <div class="vbd-choice">
-        <div class="vbd-choice-prompt">How should this light burn down?</div>
+        <div class="vbd-choice-prompt">Make a Progress Clock?</div>
         <div class="vbd-choice-grid">${cards}</div>
       </div>`;
 
     return new Promise((resolve) => {
-      let picked = null;
+      let settled = false;
+      const finish = (val) => { if (settled) return; settled = true; resolve(val); };
       const dlg = new DialogV2({
         window: { title: `Ignite: ${name}`, icon: 'fas fa-fire' },
         classes: ['vagabond', 'vbd-choice-dialog'],
@@ -185,21 +186,24 @@ export class LightSource {
           action: 'cancel',
           label: 'Cancel',
           icon: 'fas fa-xmark',
-          callback: () => { picked = 'cancel'; },
+          callback: () => finish('cancel'),
         }],
         rejectClose: false,
-        render: (_event, dialog) => {
-          const root = dialog.element ?? dialog;
-          for (const btn of root.querySelectorAll('.vbd-choice-card')) {
-            btn.addEventListener('click', () => {
-              picked = btn.dataset.mode;
-              dialog.close();
-            });
-          }
-        },
-        close: () => resolve(picked ?? 'cancel'),
       });
-      dlg.render({ force: true });
+      // The `close` option callback is NOT invoked for a hand-built DialogV2
+      // (only `.wait()` wires it), so resolve from the click handlers instead and
+      // patch close() to settle as cancel when dismissed via X / Esc.
+      const origClose = dlg.close.bind(dlg);
+      dlg.close = (...args) => { finish('cancel'); return origClose(...args); };
+
+      // Wire the card buttons after the DOM exists (the `render` option is also
+      // not reliably invoked for a hand-built DialogV2). `dlg.element` is set
+      // once render() resolves.
+      Promise.resolve(dlg.render({ force: true })).then(() => {
+        for (const btn of dlg.element?.querySelectorAll('.vbd-choice-card') ?? []) {
+          btn.addEventListener('click', () => { finish(btn.dataset.mode); dlg.close(); });
+        }
+      });
     });
   }
 
