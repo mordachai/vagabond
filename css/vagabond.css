@@ -2674,6 +2674,90 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   line-height: 1;
 }
 
+.vg-perm-matrix {
+  display: grid;
+  grid-template-columns: minmax(90px, 1.6fr) 1fr 1fr 1fr;
+  align-items: center;
+  row-gap: 2px;
+  column-gap: 2px;
+}
+.vg-perm-matrix .vg-perm-h {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.85;
+  margin-bottom: 2px;
+  line-height: 2;
+}
+.vg-perm-matrix .vg-perm-col {
+  text-align: center;
+}
+.vg-perm-matrix .vg-perm-name {
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-text-primary);
+  padding: 0px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vg-perm-matrix .vg-perm-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.vg-perm-matrix .vg-perm-cell:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.vg-perm-matrix .vg-perm-cell input[type=radio] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-sizing: border-box !important;
+  flex: 0 0 auto !important;
+  place-self: center !important;
+  width: 13px !important;
+  height: 13px !important;
+  min-width: 13px !important;
+  min-height: 13px !important;
+  aspect-ratio: 1/1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1.5px solid var(--vagabond-c-text-primary) !important;
+  border-radius: 50% !important;
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.vg-perm-matrix .vg-perm-cell input[type=radio]::before, .vg-perm-matrix .vg-perm-cell input[type=radio]::after {
+  content: none !important;
+  display: none !important;
+}
+.vg-perm-matrix .vg-perm-cell input[type=radio]:hover {
+  border-color: var(--vagabond-c-chat-yellow) !important;
+}
+.vg-perm-matrix .vg-perm-cell input[type=radio]:checked {
+  border-color: var(--vagabond-c-chat-yellow) !important;
+  box-shadow: inset 0 0 0 3px var(--vagabond-c-chat-yellow) !important;
+}
+.vg-perm-matrix .vg-perm-default {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+.vg-perm-matrix span.vg-perm-default {
+  font-weight: bold;
+  color: var(--vagabond-c-chat-yellow);
+}
+
 /* Countdown dice - imported at top level because overlay and config are outside sheets */
 .countdown-dice-trigger {
   cursor: pointer;
@@ -2889,6 +2973,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-color: var(--vagabond-c-chat-yellow);
   color: var(--vagabond-c-chat-yellow);
   box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.countdown-dice-config-form .cd-perms-section {
+  border: 1px solid var(--vagabond-c-text-primary);
+  border-radius: 4px;
+}
+.countdown-dice-config-form .cd-perms-section legend {
+  font-weight: bold;
+  padding: 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-size: 0.8rem;
 }
 .countdown-dice-config-form .form-footer {
   margin-top: 20px;

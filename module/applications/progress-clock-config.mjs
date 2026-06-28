@@ -108,19 +108,8 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       });
     });
 
-    // Sync individual permissions when default permission changes
-    const defaultPermissionSelect = this.element.querySelector('select[name="ownership.default"]');
-    if (defaultPermissionSelect) {
-      defaultPermissionSelect.addEventListener('change', (event) => {
-        const newDefaultLevel = event.target.value;
-
-        // Update all individual player permission dropdowns to match
-        const individualSelects = this.element.querySelectorAll('select[name^="ownership.users."]');
-        individualSelects.forEach(select => {
-          select.value = newDefaultLevel;
-        });
-      });
-    }
+    // Permission matrix: changing a Default radio sets every player row to match
+    this._wirePermissionMatrix();
 
     // Linked Value: show/hide mode-specific fields without a re-render
     const sourceMode = this.element.querySelector('select[name="source.mode"]');
@@ -162,6 +151,23 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         if (refLabel) refLabel.textContent = placeholder;
       });
     }
+  }
+
+  /**
+   * Wire the player-permission matrix: a Default-row radio change cascades its
+   * level to every per-player row. Shared markup is templates/shared/permission-matrix.hbs.
+   */
+  _wirePermissionMatrix() {
+    const defaultRadios = this.element.querySelectorAll('input[name="ownership.default"]');
+    defaultRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return;
+        const level = radio.value;
+        this.element
+          .querySelectorAll(`input[name^="ownership.users."][value="${level}"]`)
+          .forEach(input => { input.checked = true; });
+      });
+    });
   }
 
   async _prepareContext(options) {

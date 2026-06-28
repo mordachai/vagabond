@@ -781,6 +781,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/apps/npc-hud.hbs',
     // Spell cast dialog
     'systems/vagabond/templates/apps/spell-cast-dialog.hbs',
+    // Shared partials
+    'systems/vagabond/templates/shared/permission-matrix.hbs',
   ];
 
   // Load standard partials

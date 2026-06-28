@@ -1,0 +1,25 @@
+{{! Reusable player-permission matrix: rows = Default + each player, columns = NONE / OBSERVER / OWNER (radios) }}
+{{! Expects context.ownership = { defaultLevel:Number, users:[{ user, level, name, isGM }] } }}
+{{! All cells are DIRECT grid children (no row wrappers) so columns always align. }}
+<div class="vg-perm-matrix">
+  {{! Header row }}
+  <span class="vg-perm-name vg-perm-h"></span>
+  <span class="vg-perm-col vg-perm-h">{{localize "OWNERSHIP.NONE"}}</span>
+  <span class="vg-perm-col vg-perm-h">{{localize "OWNERSHIP.OBSERVER"}}</span>
+  <span class="vg-perm-col vg-perm-h">{{localize "OWNERSHIP.OWNER"}}</span>
+
+  {{! Default row — drives every player radio when changed }}
+  <span class="vg-perm-name vg-perm-default">{{localize "VAGABOND.ProgressClock.PlayerPermissions"}}</span>
+  <label class="vg-perm-cell vg-perm-default"><input type="radio" name="ownership.default" value="0" {{#if (eq ownership.defaultLevel 0)}}checked{{/if}}></label>
+  <label class="vg-perm-cell vg-perm-default"><input type="radio" name="ownership.default" value="2" {{#if (eq ownership.defaultLevel 2)}}checked{{/if}}></label>
+  <label class="vg-perm-cell vg-perm-default"><input type="radio" name="ownership.default" value="3" {{#if (eq ownership.defaultLevel 3)}}checked{{/if}}></label>
+
+  {{#each ownership.users}}
+  {{#unless this.isGM}}
+  <span class="vg-perm-name">{{this.name}}</span>
+  <label class="vg-perm-cell"><input type="radio" name="ownership.users.{{this.user.id}}" value="0" {{#if (eq this.level 0)}}checked{{/if}}></label>
+  <label class="vg-perm-cell"><input type="radio" name="ownership.users.{{this.user.id}}" value="2" {{#if (eq this.level 2)}}checked{{/if}}></label>
+  <label class="vg-perm-cell"><input type="radio" name="ownership.users.{{this.user.id}}" value="3" {{#if (eq this.level 3)}}checked{{/if}}></label>
+  {{/unless}}
+  {{/each}}
+</div>

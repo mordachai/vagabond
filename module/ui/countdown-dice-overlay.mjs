@@ -392,9 +392,9 @@ export class CountdownDiceOverlay {
       }
 
       if (isDragging) {
-        // Save new position
+        // Save new position (OWNER only — position lives on the shared journal flag)
         const sceneId = canvas.scene?.id;
-        if (sceneId) {
+        if (sceneId && dice.testUserPermission(game.user, 'OWNER')) {
           const order = dice.flags.vagabond.countdownDice.positions?.[sceneId]?.order || 0;
 
           await dice.update({
@@ -418,11 +418,11 @@ export class CountdownDiceOverlay {
             clickCount = 0;
           }, 300);
         } else if (clickCount === 2) {
-          // Double click: configure
+          // Double click: configure (OWNER only — config writes the journal)
           clearTimeout(clickTimeout);
           clickCount = 0;
           const dice = game.journal.get(diceId);
-          if (dice) new CountdownDiceConfig(dice).render(true);
+          if (dice && dice.testUserPermission(game.user, 'OWNER')) new CountdownDiceConfig(dice).render(true);
         }
       }
 
@@ -441,7 +441,8 @@ export class CountdownDiceOverlay {
     container.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       const dice = game.journal.get(diceId);
-      if (dice) this._showContextMenu(e, dice);
+      // Context menu (fade/configure/delete) all write the journal → OWNER only
+      if (dice && dice.testUserPermission(game.user, 'OWNER')) this._showContextMenu(e, dice);
     });
 
     // Store cleanup function on container for later removal if needed
@@ -458,6 +459,10 @@ export class CountdownDiceOverlay {
    * @param {JournalEntry} dice - The dice journal entry
    */
   async _onRollDice(dice) {
+    // Only OWNERs may roll — rolling mutates/deletes the JournalEntry, which
+    // Foundry permits only at OWNER level. Observers are view-only.
+    if (!dice.testUserPermission(game.user, 'OWNER')) return;
+
     const flags = dice.flags.vagabond.countdownDice;
     const diceType = flags.diceType;
 

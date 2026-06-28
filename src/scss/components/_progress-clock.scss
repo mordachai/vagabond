@@ -391,3 +391,94 @@
     }
   }
 }
+
+// ---- Shared player-permission matrix (clock + countdown-dice configs) ----
+// One real grid. Every cell is a direct child (no row wrappers / display:contents)
+// so the 4 columns line up on every row. Col 1 = name, cols 2-4 = radio columns.
+.vg-perm-matrix {
+  display: grid;
+  grid-template-columns: minmax(90px, 1.6fr) 1fr 1fr 1fr;
+  align-items: center;
+  row-gap: 2px;
+  column-gap: 2px;
+
+  // Column header cells
+  .vg-perm-h {
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: $c-text-1;
+    opacity: 0.85;
+    margin-bottom: 2px;
+    line-height: 2;
+  }
+  .vg-perm-col { text-align: center; }
+
+  // Player / row label (col 1)
+  .vg-perm-name {
+    font-family: $font-primary;
+    color: $c-text-1;
+    padding: 0px 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Radio cell — whole cell clickable, radio centred in its column
+  .vg-perm-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+
+    &:hover { background: rgba(255, 255, 255, 0.06); }
+
+    // Custom small radio — !important to beat Foundry's native radio styling,
+    // which otherwise stretches width, re-adds a chunky background and injects
+    // a ::before glyph. Border uses $c-text-1 for contrast (light + dark).
+    input[type="radio"] {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      box-sizing: border-box !important;
+      flex: 0 0 auto !important;
+      place-self: center !important;
+      width: 13px !important;
+      height: 13px !important;
+      min-width: 13px !important;
+      min-height: 13px !important;
+      aspect-ratio: 1 / 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 1.5px solid $c-text-1 !important;
+      border-radius: 50% !important;
+      background: none !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+      // Kill any theme-injected check glyph/background
+      &::before, &::after { content: none !important; display: none !important; }
+
+      &:hover { border-color: $c-yellow !important; }
+      &:checked {
+        border-color: $c-yellow !important;
+        box-shadow: inset 0 0 0 3px $c-yellow !important;
+      }
+    }
+  }
+
+  // Default row: highlighted label + separator under the whole row
+  .vg-perm-default {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  span.vg-perm-default { font-weight: bold; color: $c-yellow; }
+}

@@ -84,6 +84,18 @@ export class CountdownDiceConfig extends api.HandlebarsApplicationMixin(
         if (sizeInput) sizeInput.value = btn.dataset.size;
       });
     });
+
+    // Permission matrix: Default-row radio cascades to every player row
+    const defaultRadios = this.element.querySelectorAll('input[name="ownership.default"]');
+    defaultRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return;
+        const level = radio.value;
+        this.element
+          .querySelectorAll(`input[name^="ownership.users."][value="${level}"]`)
+          .forEach(input => { input.checked = true; });
+      });
+    });
   }
 
   /**
@@ -130,6 +142,21 @@ export class CountdownDiceConfig extends api.HandlebarsApplicationMixin(
       { key: 'L', label: game.i18n.localize('VAGABOND.UI.Labels.LargeSize') }
     ].map(s => ({ ...s, selected: context.size === s.key }));
 
+    // Permission matrix context (shared partial). New dice default everyone to NONE;
+    // edits read the journal's current ownership.
+    const defaultLevel = this.#diceJournal
+      ? (this.#diceJournal.ownership.default ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE)
+      : CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE;
+    context.ownership = {
+      defaultLevel,
+      users: game.users.map(user => ({
+        user,
+        level: this.#diceJournal ? (this.#diceJournal.ownership[user.id] ?? defaultLevel) : defaultLevel,
+        name: user.name,
+        isGM: user.isGM
+      }))
+    };
+
     return context;
   }
 
@@ -142,24 +169,34 @@ export class CountdownDiceConfig extends api.HandlebarsApplicationMixin(
       event.preventDefault();
       event.stopPropagation();
 
-      // Get form data
+      // Get form data — FormDataExtended yields flat dot-notation keys; expand it
       const formData = new foundry.applications.ux.FormDataExtended(event.target);
-      const data = formData.object;
+      const data = foundry.utils.expandObject(formData.object);
+
+      // Build ownership from the permission matrix (radios → NONE/OBSERVER/OWNER)
+      const defaultLevel = parseInt(data.ownership?.default) || 0;
+      const ownership = { default: defaultLevel };
+      for (const player of game.users.filter(u => !u.isGM)) {
+        ownership[player.id] = defaultLevel;
+      }
+      if (data.ownership?.users) {
+        for (const [userId, level] of Object.entries(data.ownership.users)) {
+          ownership[userId] = parseInt(level) || 0;
+        }
+      }
 
       if (this.#diceJournal) {
         // Edit existing dice
         await this.#diceJournal.update({
           name: data.name,
+          ownership,
           'flags.vagabond.countdownDice.name': data.name,
           'flags.vagabond.countdownDice.diceType': data.diceType,
           'flags.vagabond.countdownDice.size': data.size,
         });
       } else {
-        // Create new dice
-        const ownership = {
-          default: 0, // NONE for everyone
-          [game.user.id]: 3, // OWNER for creator
-        };
+        // New dice: creator is always OWNER so they can roll/manage it
+        ownership[game.user.id] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
 
         await CountdownDice.create({
           name: data.name,

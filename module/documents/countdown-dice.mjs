@@ -118,11 +118,10 @@ export class CountdownDice {
       return allDice;
     }
 
-    // Regular users only see dice they own
-    return allDice.filter(dice => {
-      const ownership = dice.ownership[game.user.id];
-      return ownership === 3; // OWNER permission
-    });
+    // Players see any die they have at least OBSERVER on (OWNER adds rolling).
+    // Foundry only replicates the JournalEntry to clients with >= LIMITED, so
+    // this naturally shows "everyone" or "just some players" per the perm matrix.
+    return allDice.filter(dice => dice.testUserPermission(game.user, 'OBSERVER'));
   }
 
   /**

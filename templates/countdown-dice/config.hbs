@@ -39,6 +39,12 @@
     </div>
   </div>
 
+  {{! Permissions — who can see / roll this die }}
+  <fieldset class="form-group cd-perms-section">
+    <legend>{{localize "VAGABOND.ProgressClock.TabPermissions"}}</legend>
+    {{> "systems/vagabond/templates/shared/permission-matrix.hbs"}}
+  </fieldset>
+
   <footer class="form-footer">
     <button type="button" data-action="cancel">
       <i class="fas fa-times"></i> {{localize 'Cancel'}}

@@ -135,41 +135,7 @@
 
   {{! ===================== PERMISSIONS TAB ===================== }}
   <section class="pc-tab" data-tab="permissions">
-
-    {{! Default Player Permissions }}
-    <div class="form-group">
-      <label class="resource-label">{{localize "VAGABOND.ProgressClock.PlayerPermissions"}}</label>
-      <select name="ownership.default" data-dtype="Number">
-        <option value="0" {{#if (eq ownership.defaultLevel 0)}}selected{{/if}}>
-          {{localize "OWNERSHIP.NONE"}} - {{localize "VAGABOND.ProgressClock.PermissionNoneDesc"}}
-        </option>
-        <option value="2" {{#if (eq ownership.defaultLevel 2)}}selected{{/if}}>
-          {{localize "OWNERSHIP.OBSERVER"}} - {{localize "VAGABOND.ProgressClock.PermissionObserverDesc"}}
-        </option>
-        <option value="3" {{#if (eq ownership.defaultLevel 3)}}selected{{/if}}>
-          {{localize "OWNERSHIP.OWNER"}} - {{localize "VAGABOND.ProgressClock.PermissionOwnerDesc"}}
-        </option>
-      </select>
-    </div>
-
-    {{! Individual Player Permissions }}
-    {{#if ownership.users}}
-    <div class="form-group pc-individual-perms">
-      <label class="resource-label">{{localize "VAGABOND.ProgressClock.IndividualPermissions"}}</label>
-      {{#each ownership.users}}
-      {{#unless this.isGM}}
-      <div class="ownership-row">
-        <span class="ownership-label">{{this.name}}</span>
-        <select name="ownership.users.{{this.user.id}}" data-dtype="Number">
-          <option value="0" {{#if (eq this.level 0)}}selected{{/if}}>{{localize "OWNERSHIP.NONE"}}</option>
-          <option value="2" {{#if (eq this.level 2)}}selected{{/if}}>{{localize "OWNERSHIP.OBSERVER"}}</option>
-          <option value="3" {{#if (eq this.level 3)}}selected{{/if}}>{{localize "OWNERSHIP.OWNER"}}</option>
-        </select>
-      </div>
-      {{/unless}}
-      {{/each}}
-    </div>
-    {{/if}}
+    {{> "systems/vagabond/templates/shared/permission-matrix.hbs"}}
   </section>
 
   {{! Save Button — always visible }}
