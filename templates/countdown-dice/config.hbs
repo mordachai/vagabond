@@ -1,7 +1,8 @@
 <form class="countdown-dice-config-form">
-  <div class="form-row">
+  {{! Name (wide) + Size letter buttons (narrow) — same row }}
+  <div class="form-group form-row cd-name-size-row">
     <div class="form-field">
-      <label for="dice-name">{{localize 'VAGABOND.CountdownDice.Name'}}</label>
+      <label for="dice-name" class="resource-label">{{localize 'VAGABOND.CountdownDice.Name'}}</label>
       <input
         type="text"
         id="dice-name"
@@ -11,27 +12,30 @@
         placeholder="{{localize 'VAGABOND.CountdownDice.Name'}}"
       />
     </div>
+
+    <div class="form-field">
+      <label class="resource-label">{{localize 'VAGABOND.CountdownDice.Size'}}</label>
+      <input type="hidden" name="size" value="{{size}}" />
+      <div class="cd-size-row">
+        {{#each sizeCards}}
+        <button type="button" class="cd-size-btn {{#if this.selected}}is-selected{{/if}}"
+                data-size="{{this.key}}" data-tooltip="{{this.label}}">{{this.key}}</button>
+        {{/each}}
+      </div>
+    </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-field">
-      <label for="dice-type">{{localize 'VAGABOND.CountdownDice.DiceType'}}</label>
-      <select id="dice-type" name="diceType">
-        {{#each diceTypes as |type|}}
-          <option value="{{type}}" {{#if (eq type ../diceType)}}selected{{/if}}>
-            {{type}}
-          </option>
-        {{/each}}
-      </select>
-    </div>
-
-    <div class="form-field">
-      <label for="dice-size">{{localize 'VAGABOND.CountdownDice.Size'}}</label>
-      <select id="dice-size" name="size">
-        <option value="S" {{#if (eq size "S")}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.SmallSize"}}</option>
-        <option value="M" {{#if (eq size "M")}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.MediumSize"}}</option>
-        <option value="L" {{#if (eq size "L")}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.LargeSize"}}</option>
-      </select>
+  {{! Dice Type — image buttons, no labels }}
+  <div class="form-group">
+    <label class="resource-label">{{localize 'VAGABOND.CountdownDice.DiceType'}}</label>
+    <input type="hidden" name="diceType" value="{{diceType}}" />
+    <div class="cd-card-row">
+      {{#each diceCards}}
+      <button type="button" class="cd-card {{#if this.selected}}is-selected{{/if}}"
+              data-dice="{{this.type}}" data-tooltip="{{this.type}}">
+        <img class="cd-card-img" src="{{this.img}}" alt="{{this.type}}" />
+      </button>
+      {{/each}}
     </div>
   </div>
 

@@ -138,9 +138,222 @@
     min-width: 100px;
   }
 
+  // ---- Tabs ----
+  .pc-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+
+    .pc-tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 6px 8px;
+      font-family: $font-primary;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: $c-text-1;
+      outline: none;
+      box-shadow: none;
+      cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease;
+
+      &:hover { color: $c-white; }
+      &.active { color: $c-yellow; border-bottom-color: $c-yellow; }
+    }
+  }
+
+  .pc-tab { display: none; &.active { display: block; } }
+
+  // Roomier spacing between rows
+  .pc-tab .form-group { margin-bottom: 14px; }
+
+  // Size (narrow) + Scene (wide) share a row at a 1:3 ratio
+  .pc-size-scene-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    align-items: end;
+  }
+
+  // ---- ? help bubble (Foundry native tooltip via data-tooltip) ----
+  .pc-help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    margin-left: 4px;
+    border-radius: 50%;
+    background: $c-yellow;
+    color: $c-dark;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: help;
+    vertical-align: middle;
+  }
+
+  // ---- Image-card pickers (type+segments, size) ----
+  .pc-card-row {
+    display: grid;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .pc-type-row { grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)); }
+
+  // Size = three S / M / L letter buttons filling the field width
+  .pc-size-row {
+    display: flex;
+    gap: 6px;
+
+    .pc-size-btn {
+      flex: 1;
+      padding: 6px 0;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      font-family: $font-primary;
+      font-weight: bold;
+      font-size: 1rem;
+      color: $c-text-1;
+      line-height: normal;
+      cursor: pointer;
+      transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+
+      &:hover { border-color: $c-yellow; filter: brightness(1.15); }
+      &.is-selected {
+        border-color: $c-yellow;
+        color: $c-yellow;
+        box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+      }
+    }
+  }
+
+  .pc-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 2px;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    height: auto;          // circumvent Foundry's fixed button height…
+    line-height: normal;   // …and its forced button line-height
+    transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+
+    .pc-card-icon {
+      position: relative;   // anchor the centred number / input overlay
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      i { color: $c-tan; }
+    }
+
+    // Real clock / tracker art
+    .pc-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    // Segment count, centred over the clock art
+    .pc-card-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: $font-primary;
+      font-weight: bold;
+      font-size: 1rem;
+      color: $c-white;
+      text-shadow: 1px 1px 0 $c-black, -1px 1px 0 $c-black, -1px -1px 0 $c-black, 1px -1px 0 $c-black;
+      pointer-events: none;
+    }
+
+    // Tracker start-value input, centred over the tracker art
+    .pc-tracker-input {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      padding: 0;
+      text-align: center;
+      font-family: $font-primary;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: $c-white;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      &:focus { border-color: $c-yellow; background: rgba(0, 0, 0, 0.35); }
+      // strip number spinners
+      &::-webkit-outer-spin-button, &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+      -moz-appearance: textfield;
+    }
+
+    .pc-card-label {
+      font-family: $font-primary;
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: $c-text-1;
+    }
+    .pc-card-sub {
+      font-family: $font-secondary;
+      font-size: 0.7rem;
+      color: $c-tan;
+    }
+
+    &:hover {
+      border-color: $c-yellow;
+      filter: brightness(1.15);
+      .pc-card-icon i { color: $c-yellow; }
+    }
+
+    &.is-selected {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+      .pc-card-icon i { color: $c-yellow; }
+    }
+  }
+
+  // ---- Footer save button (chat yellow button language) ----
+  .pc-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+
+    button {
+      flex: 0 1 220px;
+      background: url('../assets/ui/chat/yellow-button.webp') no-repeat center / 100% 100%;
+      border: none;
+      color: $c-dark;
+      font-family: $font-primary;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      &:hover { filter: brightness(1.1); }
+    }
+  }
+
+  .pc-individual-perms { margin-top: 10px; }
+
   // Linked Value (generic data binding) section
   .pc-source-section {
-    border: 1px solid var(--color-border-light-tertiary, rgba(0, 0, 0, 0.3));
+    border: 1px solid $c-text-1;
     border-radius: 4px;
     padding: 8px 10px;
     margin-top: 8px;

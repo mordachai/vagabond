@@ -71,16 +71,42 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
       });
     }
 
-    // Type selector: hide the segments field for trackers (no segmented pie)
-    const kindSelect = this.element.querySelector('select[name="kind"]');
-    const segmentsField = this.element.querySelector('.pc-segments-field');
-    if (kindSelect && segmentsField) {
-      const syncKind = () => {
-        segmentsField.style.display = kindSelect.value === 'tracker' ? 'none' : '';
-      };
-      kindSelect.addEventListener('change', syncKind);
-      syncKind();
-    }
+    // Tab switching (General / Permissions)
+    const tabBtns = this.element.querySelectorAll('.pc-tab-btn');
+    const tabSections = this.element.querySelectorAll('.pc-tab');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+        tabSections.forEach(s => s.classList.toggle('active', s.dataset.tab === tab));
+        // Re-fit the window to the now-visible tab's content
+        this.setPosition({ height: 'auto' });
+      });
+    });
+
+    // Type + Segments card row: clicking a card sets the hidden kind/segments inputs.
+    const kindInput = this.element.querySelector('input[name="kind"]');
+    const segmentsInput = this.element.querySelector('input[name="segments"]');
+    const typeCards = this.element.querySelectorAll('.pc-type-row .pc-card');
+    typeCards.forEach(card => {
+      card.addEventListener('click', () => {
+        typeCards.forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        if (kindInput) kindInput.value = card.dataset.kind;
+        if (segmentsInput && card.dataset.kind === 'clock') segmentsInput.value = card.dataset.segments;
+      });
+    });
+
+    // Size card row: clicking a card sets the hidden size input.
+    const sizeInput = this.element.querySelector('input[name="size"]');
+    const sizeCards = this.element.querySelectorAll('.pc-size-row .pc-size-btn');
+    sizeCards.forEach(card => {
+      card.addEventListener('click', () => {
+        sizeCards.forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        if (sizeInput) sizeInput.value = card.dataset.size;
+      });
+    });
 
     // Sync individual permissions when default permission changes
     const defaultPermissionSelect = this.element.querySelector('select[name="ownership.default"]');
@@ -152,6 +178,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         segments: 4,
         size: 'M',
         customSize: '',
+        filled: 0,
         defaultPosition: defaultPosition,
         sceneId: ''
       };
@@ -167,6 +194,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         segments: data.segments,
         size: data.size,
         customSize: typeof data.size === 'number' ? data.size : '',
+        filled: data.filled ?? 0,
         defaultPosition: data.defaultPosition,
         sceneId: data.sceneId ?? ''
       };
@@ -194,8 +222,30 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
 
     context.segmentOptions = [4, 6, 8, 10, 12];
     context.sizeOptions = CONFIG.VAGABOND.clockSizes;
-    context.positionOptions = CONFIG.VAGABOND.clockPositions;
     context.sceneOptions = game.scenes.map(s => ({ id: s.id, name: s.name }));
+
+    // Clock cards: real (empty) clock art per segment count, number overlaid in
+    // the centre. Merges the old Type + Segments pickers.
+    context.clockCards = context.segmentOptions.map(n => ({
+      segments: n,
+      img: ProgressClock.getSVGPath(n, n),
+      selected: !context.isTracker && context.clock.segments === n
+    }));
+    // Config card uses the decorated tracker art (overlay keeps the plain one).
+    context.trackerImg = 'systems/vagabond/assets/ui/clocks/tracker-ui.svg';
+
+    // Size cards (S / M / L) — icon dot scales with the rendered pixel size.
+    const sizes = CONFIG.VAGABOND.clockSizes;
+    const sizeMeta = [
+      { key: 'S', label: game.i18n.localize('VAGABOND.ProgressClock.SizeSmall'), dot: '0.9rem' },
+      { key: 'M', label: game.i18n.localize('VAGABOND.ProgressClock.SizeMedium'), dot: '1.4rem' },
+      { key: 'L', label: game.i18n.localize('VAGABOND.ProgressClock.SizeLarge'), dot: '2rem' }
+    ];
+    context.sizeCards = sizeMeta.map(s => ({
+      ...s,
+      px: sizes[s.key],
+      selected: context.clock.size === s.key
+    }));
 
     // Ownership configuration
     if (!this.#clockJournal) {
@@ -247,11 +297,12 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
 
       const expandedData = foundry.utils.expandObject(formObject);
 
-      // Determine final size value
-      let finalSize = expandedData.size;
-      if (finalSize === 'custom' && expandedData.customSize) {
-        finalSize = parseInt(expandedData.customSize);
-      }
+      // Size is one of S / M / L (card picker). Default Position is no longer in
+      // this dialog — it comes from the world setting.
+      const finalSize = expandedData.size || 'M';
+      const defaultPosition = this.#clockJournal?.flags?.vagabond?.progressClock?.defaultPosition
+        ?? game.settings.get('vagabond', 'defaultClockPosition')
+        ?? 'top-right';
 
       // Build ownership object
       const defaultLevel = parseInt(expandedData.ownership.default);
@@ -279,6 +330,11 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
 
       const kind = expandedData.kind === 'tracker' ? 'tracker' : 'clock';
 
+      // Tracker start value comes from the in-card number input (negatives allowed).
+      // For clocks, leave filled undefined so create() defaults to "full".
+      const parsedFilled = parseInt(expandedData.filled);
+      const trackerFilled = kind === 'tracker' && Number.isFinite(parsedFilled) ? parsedFilled : 0;
+
       // Generic data binding (source → clock). Build a complete source object.
       const rawSource = expandedData.source || {};
       const source = {
@@ -300,8 +356,9 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           handle: (expandedData.handle || '').trim() || undefined,
           kind: kind,
           segments: parseInt(expandedData.segments),
+          filled: kind === 'tracker' ? trackerFilled : undefined,
           size: finalSize,
-          defaultPosition: expandedData.defaultPosition,
+          defaultPosition: defaultPosition,
           sceneId: expandedData.sceneId || null,
           ownership: ownership,
           source: source
@@ -310,9 +367,10 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
         // Update the journal
         const newSegments = parseInt(expandedData.segments);
         const currentFilled = this.#clockJournal.flags.vagabond.progressClock.filled ?? 0;
-        // Trackers are unbounded (negatives allowed); clocks clamp to [0, segments]
+        // Trackers are unbounded (negatives allowed) and take the value typed in
+        // the card; clocks clamp the current fill to [0, segments].
         const newFilled = kind === 'tracker'
-          ? currentFilled
+          ? (Number.isFinite(parsedFilled) ? parsedFilled : currentFilled)
           : Math.clamp(currentFilled, 0, newSegments);
         await this.#clockJournal.update({
           name: expandedData.name,
@@ -322,7 +380,7 @@ export class ProgressClockConfig extends api.HandlebarsApplicationMixin(
           "flags.vagabond.progressClock.segments": newSegments,
           "flags.vagabond.progressClock.filled": newFilled,
           "flags.vagabond.progressClock.size": finalSize,
-          "flags.vagabond.progressClock.defaultPosition": expandedData.defaultPosition,
+          "flags.vagabond.progressClock.defaultPosition": defaultPosition,
           "flags.vagabond.progressClock.sceneId": expandedData.sceneId || null,
           "flags.vagabond.progressClock.source": source
         });

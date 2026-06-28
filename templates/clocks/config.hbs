@@ -1,109 +1,143 @@
 {{! Progress Clock Configuration Dialog Template }}
 <div class="progress-clock-config-wrapper">
 <form class="vagabond progress-clock-config-form">
-  {{! Clock Name }}
-  <div class="form-group">
-    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Name"}}</label>
-    <input type="text" name="name" value="{{clock.name}}" placeholder="{{localize 'VAGABOND.UI.Labels.ClockName'}}" required />
-  </div>
 
-  {{! Reference Handle - stable key for macros / formulas (@clocks.<handle>.value) }}
-  <div class="form-group">
-    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Handle"}}</label>
-    <input type="text" name="handle" value="{{clock.handle}}" placeholder="{{localize 'VAGABOND.ProgressClock.HandlePlaceholder'}}" />
-    <p class="hint">{{localize "VAGABOND.ProgressClock.HandleHint"}}</p>
-  </div>
+  {{! Tab navigation }}
+  <nav class="pc-tabs">
+    <button type="button" class="pc-tab-btn active" data-tab="general">
+      <i class="fas fa-sliders"></i> {{localize "VAGABOND.ProgressClock.TabGeneral"}}
+    </button>
+    <button type="button" class="pc-tab-btn" data-tab="permissions">
+      <i class="fas fa-user-shield"></i> {{localize "VAGABOND.ProgressClock.TabPermissions"}}
+    </button>
+  </nav>
 
-  {{! Type - Clock (segmented pie) or Tracker (free counter) }}
-  <div class="form-group">
-    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Type"}}</label>
-    <select name="kind" data-dtype="String">
-      <option value="clock" {{#unless isTracker}}selected{{/unless}}>
-        {{localize "VAGABOND.ProgressClock.TypeClock"}}
-      </option>
-      <option value="tracker" {{#if isTracker}}selected{{/if}}>
-        {{localize "VAGABOND.ProgressClock.TypeTracker"}}
-      </option>
-    </select>
-  </div>
+  {{! ===================== GENERAL TAB ===================== }}
+  <section class="pc-tab active" data-tab="general">
 
-  {{! Segments and Size - Same Row }}
-  <div class="form-group form-row">
-    <div class="form-field pc-segments-field">
-      <label class="resource-label">{{localize "VAGABOND.ProgressClock.Segments"}}</label>
-      <select name="segments" data-dtype="Number">
-        {{#each segmentOptions}}
-        <option value="{{this}}" {{#if (eq this ../clock.segments)}}selected{{/if}}>
-          {{this}} {{localize "VAGABOND.ProgressClock.SegmentsLabel"}}
-        </option>
-        {{/each}}
-      </select>
-    </div>
-
-    <div class="form-field">
-      <label class="resource-label">{{localize "VAGABOND.ProgressClock.Size"}}</label>
-      <div class="size-controls">
-        <select name="size" data-dtype="String">
-          <option value="S" {{#if (eq clock.size "S")}}selected{{/if}}>
-            {{localize "VAGABOND.ProgressClock.SizeSmall"}} ({{lookup sizeOptions "S"}}px)
-          </option>
-          <option value="M" {{#if (eq clock.size "M")}}selected{{/if}}>
-            {{localize "VAGABOND.ProgressClock.SizeMedium"}} ({{lookup sizeOptions "M"}}px)
-          </option>
-          <option value="L" {{#if (eq clock.size "L")}}selected{{/if}}>
-            {{localize "VAGABOND.ProgressClock.SizeLarge"}} ({{lookup sizeOptions "L"}}px)
-          </option>
-          <option value="custom" {{#if clock.customSize}}selected{{/if}}>
-            {{localize "VAGABOND.ProgressClock.SizeCustom"}}
-          </option>
-        </select>
-        <input
-          type="number"
-          name="customSize"
-          value="{{clock.customSize}}"
-          placeholder="{{localize 'VAGABOND.ProgressClock.CustomSizePlaceholder'}}"
-          min="50"
-          max="500"
-          data-dtype="Number"
-        />
+    {{! Name + Clock ID (handle) — two columns }}
+    <div class="form-group form-row">
+      <div class="form-field">
+        <label class="resource-label">{{localize "VAGABOND.ProgressClock.Name"}}</label>
+        <input type="text" name="name" value="{{clock.name}}" placeholder="{{localize 'VAGABOND.UI.Labels.ClockName'}}" required />
+      </div>
+      <div class="form-field">
+        <label class="resource-label">
+          {{localize "VAGABOND.ProgressClock.Handle"}}
+          <span class="pc-help" data-tooltip="{{localize 'VAGABOND.ProgressClock.HandleHint'}}">?</span>
+        </label>
+        <input type="text" name="handle" value="{{clock.handle}}" placeholder="{{localize 'VAGABOND.ProgressClock.Handle'}}" />
       </div>
     </div>
-  </div>
 
-  {{! Scene attachment - global or a single scene }}
-  <div class="form-group">
-    <label class="resource-label">{{localize "VAGABOND.ProgressClock.Scene"}}</label>
-    <select name="sceneId" data-dtype="String">
-      <option value="" {{#unless clock.sceneId}}selected{{/unless}}>
-        {{localize "VAGABOND.ProgressClock.SceneGlobal"}}
-      </option>
-      {{#each sceneOptions}}
-      <option value="{{this.id}}" {{#if (eq this.id ../clock.sceneId)}}selected{{/if}}>{{this.name}}</option>
-      {{/each}}
-    </select>
-  </div>
-
-  {{! Default Position and Player Permissions - Same Row }}
-  <div class="form-group form-row">
-    <div class="form-field">
-      <label class="resource-label">{{localize "VAGABOND.ProgressClock.DefaultPosition"}}</label>
-      <select name="defaultPosition" data-dtype="String">
-        <option value="top-right" {{#if (eq clock.defaultPosition "top-right")}}selected{{/if}}>
-          {{localize "VAGABOND.ProgressClock.Position.TopRight"}}
-        </option>
-        <option value="top-left" {{#if (eq clock.defaultPosition "top-left")}}selected{{/if}}>
-          {{localize "VAGABOND.ProgressClock.Position.TopLeft"}}
-        </option>
-        <option value="bottom-right" {{#if (eq clock.defaultPosition "bottom-right")}}selected{{/if}}>
-          {{localize "VAGABOND.ProgressClock.Position.BottomRight"}}
-        </option>
-        <option value="bottom-left" {{#if (eq clock.defaultPosition "bottom-left")}}selected{{/if}}>
-          {{localize "VAGABOND.ProgressClock.Position.BottomLeft"}}
-        </option>
-      </select>
+    {{! Type + Segments merged — clock-pie cards (4/6/8/10/12) + a Tracker card }}
+    <div class="form-group">
+      <label class="resource-label">{{localize "VAGABOND.ProgressClock.Type"}}</label>
+      <input type="hidden" name="kind" value="{{clock.kind}}" />
+      <input type="hidden" name="segments" value="{{clock.segments}}" />
+      <div class="pc-card-row pc-type-row">
+        {{#each clockCards}}
+        <button type="button" class="pc-card pc-clock-card {{#if this.selected}}is-selected{{/if}}"
+                data-kind="clock" data-segments="{{this.segments}}">
+          <span class="pc-card-icon">
+            <img class="pc-card-img" src="{{this.img}}" alt="" />
+            <span class="pc-card-num">{{this.segments}}</span>
+          </span>
+          <span class="pc-card-label">{{this.segments}} seg.</span>
+        </button>
+        {{/each}}
+        <button type="button" class="pc-card pc-tracker-card {{#if isTracker}}is-selected{{/if}}"
+                data-kind="tracker">
+          <span class="pc-card-icon">
+            <img class="pc-card-img" src="{{trackerImg}}" alt="" />
+            <input type="number" name="filled" class="pc-tracker-input" value="{{clock.filled}}" step="1" />
+          </span>
+          <span class="pc-card-label">{{localize "VAGABOND.ProgressClock.TypeTracker"}}</span>
+        </button>
+      </div>
     </div>
 
-    <div class="form-field">
+    {{! Size + Scene — same row (Size narrow, Scene wide) }}
+    <div class="form-group form-row pc-size-scene-row">
+      <div class="form-field">
+        <label class="resource-label">{{localize "VAGABOND.ProgressClock.Size"}}</label>
+        <input type="hidden" name="size" value="{{clock.size}}" />
+        <div class="pc-size-row">
+          {{#each sizeCards}}
+          <button type="button" class="pc-size-btn {{#if this.selected}}is-selected{{/if}}"
+                  data-size="{{this.key}}" data-tooltip="{{this.label}} ({{this.px}}px)">{{this.key}}</button>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="resource-label">{{localize "VAGABOND.ProgressClock.Scene"}}</label>
+        <select name="sceneId" data-dtype="String">
+          <option value="" {{#unless clock.sceneId}}selected{{/unless}}>
+            {{localize "VAGABOND.ProgressClock.SceneGlobal"}}
+          </option>
+          {{#each sceneOptions}}
+          <option value="{{this.id}}" {{#if (eq this.id ../clock.sceneId)}}selected{{/if}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+
+    {{! Linked Value — generic data binding (source → clock), full width }}
+    <fieldset class="form-group pc-source-section">
+      <legend>
+        {{localize "VAGABOND.ProgressClock.LinkedValue"}}
+        <span class="pc-help" data-tooltip="{{localize 'VAGABOND.ProgressClock.LinkedValueHint'}}">?</span>
+      </legend>
+      <div class="form-group">
+        <label class="resource-label">{{localize "VAGABOND.ProgressClock.UpdateFrom"}}</label>
+        <select name="source.mode" data-dtype="String" class="pc-source-mode">
+          <option value="manual" {{#if (eq clock.source.mode "manual")}}selected{{/if}}>{{localize "VAGABOND.ProgressClock.SourceManual"}}</option>
+          <option value="path" {{#if (eq clock.source.mode "path")}}selected{{/if}}>{{localize "VAGABOND.ProgressClock.SourcePath"}}</option>
+          <option value="expr" {{#if (eq clock.source.mode "expr")}}selected{{/if}}>{{localize "VAGABOND.ProgressClock.SourceExpr"}}</option>
+        </select>
+      </div>
+
+      {{! Path mode }}
+      <div class="pc-source-path" {{#unless sourceIsPath}}style="display:none"{{/unless}}>
+        <div class="form-group">
+          <label class="resource-label">{{localize "VAGABOND.ProgressClock.LinkedDocument"}}</label>
+          <div class="pc-source-drop" title="Drag a token, actor or item here">
+            <input type="hidden" name="source.ref" value="{{clock.source.ref}}" />
+            <span class="pc-source-refname">{{#if clock.source.refName}}{{clock.source.refName}}{{else}}Drag a token / actor / item here…{{/if}}</span>
+            <button type="button" class="pc-source-clear" title="Clear"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+        <div class="form-group form-row">
+          <div class="form-field">
+            <label class="resource-label">{{localize "VAGABOND.ProgressClock.ValuePath"}}</label>
+            <input type="text" name="source.valuePath" value="{{clock.source.valuePath}}" placeholder="system.health.value" />
+          </div>
+          <div class="form-field">
+            <label class="resource-label">{{localize "VAGABOND.ProgressClock.MaxPath"}}</label>
+            <input type="text" name="source.maxPath" value="{{clock.source.maxPath}}" placeholder="system.health.max" />
+          </div>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" name="source.syncMax" {{#if clock.source.syncMax}}checked{{/if}} /> {{localize "VAGABOND.ProgressClock.SyncMax"}}
+        </label>
+      </div>
+
+      {{! Formula mode }}
+      <div class="pc-source-expr" {{#unless sourceIsExpr}}style="display:none"{{/unless}}>
+        <div class="form-group">
+          <label class="resource-label">{{localize "VAGABOND.ProgressClock.Formula"}}</label>
+          <input type="text" name="source.expr" value="{{clock.source.expr}}" placeholder="@clocks.ritual.value * 2" />
+        </div>
+      </div>
+    </fieldset>
+  </section>
+
+  {{! ===================== PERMISSIONS TAB ===================== }}
+  <section class="pc-tab" data-tab="permissions">
+
+    {{! Default Player Permissions }}
+    <div class="form-group">
       <label class="resource-label">{{localize "VAGABOND.ProgressClock.PlayerPermissions"}}</label>
       <select name="ownership.default" data-dtype="Number">
         <option value="0" {{#if (eq ownership.defaultLevel 0)}}selected{{/if}}>
@@ -117,86 +151,32 @@
         </option>
       </select>
     </div>
-  </div>
 
-  {{! Individual Player Permissions - Collapsible }}
-  {{#if ownership.users}}
-  <details class="form-group individual-permissions">
-    <summary class="resource-label">{{localize "VAGABOND.ProgressClock.IndividualPermissions"}}</summary>
-    {{#each ownership.users}}
-    {{#unless this.isGM}}
-    <div class="ownership-row">
-      <span class="ownership-label">{{this.name}}</span>
-      <select name="ownership.users.{{this.user.id}}" data-dtype="Number">
-        <option value="0" {{#if (eq this.level 0)}}selected{{/if}}>
-          {{localize "OWNERSHIP.NONE"}}
-        </option>
-        <option value="2" {{#if (eq this.level 2)}}selected{{/if}}>
-          {{localize "OWNERSHIP.OBSERVER"}}
-        </option>
-        <option value="3" {{#if (eq this.level 3)}}selected{{/if}}>
-          {{localize "OWNERSHIP.OWNER"}}
-        </option>
-      </select>
-    </div>
-    {{/unless}}
-    {{/each}}
-  </details>
-  {{/if}}
-
-  {{! Linked Value - generic data binding (source → clock) }}
-  <fieldset class="form-group pc-source-section">
-    <legend>Linked Value</legend>
-    <div class="form-group">
-      <label class="resource-label">Update from</label>
-      <select name="source.mode" data-dtype="String" class="pc-source-mode">
-        <option value="manual" {{#if (eq clock.source.mode "manual")}}selected{{/if}}>Manual (no link)</option>
-        <option value="path" {{#if (eq clock.source.mode "path")}}selected{{/if}}>Linked document field</option>
-        <option value="expr" {{#if (eq clock.source.mode "expr")}}selected{{/if}}>Formula</option>
-      </select>
-      <p class="hint">Manual: set by hand / macros. Linked: mirror a field of a document. Formula: compute from @clocks.</p>
-    </div>
-
-    {{! Path mode }}
-    <div class="pc-source-path" {{#unless sourceIsPath}}style="display:none"{{/unless}}>
-      <div class="form-group">
-        <label class="resource-label">Linked document</label>
-        <div class="pc-source-drop" title="Drag a token, actor or item here">
-          <input type="hidden" name="source.ref" value="{{clock.source.ref}}" />
-          <span class="pc-source-refname">{{#if clock.source.refName}}{{clock.source.refName}}{{else}}Drag a token / actor / item here…{{/if}}</span>
-          <button type="button" class="pc-source-clear" title="Clear"><i class="fas fa-times"></i></button>
-        </div>
+    {{! Individual Player Permissions }}
+    {{#if ownership.users}}
+    <div class="form-group pc-individual-perms">
+      <label class="resource-label">{{localize "VAGABOND.ProgressClock.IndividualPermissions"}}</label>
+      {{#each ownership.users}}
+      {{#unless this.isGM}}
+      <div class="ownership-row">
+        <span class="ownership-label">{{this.name}}</span>
+        <select name="ownership.users.{{this.user.id}}" data-dtype="Number">
+          <option value="0" {{#if (eq this.level 0)}}selected{{/if}}>{{localize "OWNERSHIP.NONE"}}</option>
+          <option value="2" {{#if (eq this.level 2)}}selected{{/if}}>{{localize "OWNERSHIP.OBSERVER"}}</option>
+          <option value="3" {{#if (eq this.level 3)}}selected{{/if}}>{{localize "OWNERSHIP.OWNER"}}</option>
+        </select>
       </div>
-      <div class="form-group form-row">
-        <div class="form-field">
-          <label class="resource-label">Value path</label>
-          <input type="text" name="source.valuePath" value="{{clock.source.valuePath}}" placeholder="system.health.value" />
-        </div>
-        <div class="form-field">
-          <label class="resource-label">Max path (optional)</label>
-          <input type="text" name="source.maxPath" value="{{clock.source.maxPath}}" placeholder="system.health.max" />
-        </div>
-      </div>
-      <label class="checkbox">
-        <input type="checkbox" name="source.syncMax" {{#if clock.source.syncMax}}checked{{/if}} /> Resize segments to match max path
-      </label>
+      {{/unless}}
+      {{/each}}
     </div>
+    {{/if}}
+  </section>
 
-    {{! Formula mode }}
-    <div class="pc-source-expr" {{#unless sourceIsExpr}}style="display:none"{{/unless}}>
-      <div class="form-group">
-        <label class="resource-label">Formula</label>
-        <input type="text" name="source.expr" value="{{clock.source.expr}}" placeholder="@clocks.ritual.value * 2" />
-        <p class="hint">Evaluated as a roll formula; may reference @clocks.&lt;handle&gt;.value.</p>
-      </div>
-    </div>
-  </fieldset>
-
-  {{! Save Button }}
-  <div class="form-group">
+  {{! Save Button — always visible }}
+  <footer class="pc-footer">
     <button type="submit">
       <i class="fas fa-save"></i> {{localize "VAGABOND.ProgressClock.Save"}}
     </button>
-  </div>
+  </footer>
 </form>
 </div>

@@ -62,6 +62,28 @@ export class CountdownDiceConfig extends api.HandlebarsApplicationMixin(
     if (form) {
       form.addEventListener('submit', this._onFormSubmit.bind(this));
     }
+
+    // Dice-type image buttons → hidden diceType input
+    const diceInput = this.element.querySelector('input[name="diceType"]');
+    const diceCards = this.element.querySelectorAll('.cd-card');
+    diceCards.forEach(card => {
+      card.addEventListener('click', () => {
+        diceCards.forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        if (diceInput) diceInput.value = card.dataset.dice;
+      });
+    });
+
+    // Size letter buttons → hidden size input
+    const sizeInput = this.element.querySelector('input[name="size"]');
+    const sizeBtns = this.element.querySelectorAll('.cd-size-btn');
+    sizeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sizeBtns.forEach(b => b.classList.remove('is-selected'));
+        btn.classList.add('is-selected');
+        if (sizeInput) sizeInput.value = btn.dataset.size;
+      });
+    });
   }
 
   /**
@@ -95,6 +117,18 @@ export class CountdownDiceConfig extends api.HandlebarsApplicationMixin(
       context.size = 'M';
       context.isEdit = false;
     }
+
+    // Dice-type image buttons (no labels) + S/M/L letter buttons
+    context.diceCards = diceTypes.map(type => ({
+      type,
+      img: CountdownDice.getDiceImagePath(type),
+      selected: type === context.diceType
+    }));
+    context.sizeCards = [
+      { key: 'S', label: game.i18n.localize('VAGABOND.UI.Labels.SmallSize') },
+      { key: 'M', label: game.i18n.localize('VAGABOND.UI.Labels.MediumSize') },
+      { key: 'L', label: game.i18n.localize('VAGABOND.UI.Labels.LargeSize') }
+    ].map(s => ({ ...s, selected: context.size === s.key }));
 
     return context;
   }

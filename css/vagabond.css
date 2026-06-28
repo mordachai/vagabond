@@ -2427,8 +2427,221 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex: 0 0 auto;
   min-width: 100px;
 }
+.progress-clock-config-form .pc-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+.progress-clock-config-form .pc-tabs .pc-tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 6px 8px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--vagabond-c-text-primary);
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.progress-clock-config-form .pc-tabs .pc-tab-btn:hover {
+  color: var(--vagabond-c-white);
+}
+.progress-clock-config-form .pc-tabs .pc-tab-btn.active {
+  color: var(--vagabond-c-chat-yellow);
+  border-bottom-color: var(--vagabond-c-chat-yellow);
+}
+.progress-clock-config-form .pc-tab {
+  display: none;
+}
+.progress-clock-config-form .pc-tab.active {
+  display: block;
+}
+.progress-clock-config-form .pc-tab .form-group {
+  margin-bottom: 14px;
+}
+.progress-clock-config-form .pc-size-scene-row {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: end;
+}
+.progress-clock-config-form .pc-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-dark);
+  font-size: 0.7rem;
+  font-weight: bold;
+  cursor: help;
+  vertical-align: middle;
+}
+.progress-clock-config-form .pc-card-row {
+  display: grid;
+  gap: 6px;
+  margin-top: 4px;
+}
+.progress-clock-config-form .pc-type-row {
+  grid-template-columns: repeat(auto-fit, minmax(58px, 1fr));
+}
+.progress-clock-config-form .pc-size-row {
+  display: flex;
+  gap: 6px;
+}
+.progress-clock-config-form .pc-size-row .pc-size-btn {
+  flex: 1;
+  padding: 6px 0;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-primary);
+  line-height: normal;
+  cursor: pointer;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.progress-clock-config-form .pc-size-row .pc-size-btn:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  filter: brightness(1.15);
+}
+.progress-clock-config-form .pc-size-row .pc-size-btn.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.progress-clock-config-form .pc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 2px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  height: auto;
+  line-height: normal;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.progress-clock-config-form .pc-card .pc-card-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+}
+.progress-clock-config-form .pc-card .pc-card-icon i {
+  color: var(--vagabond-c-tan);
+}
+.progress-clock-config-form .pc-card .pc-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.progress-clock-config-form .pc-card .pc-card-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+  pointer-events: none;
+}
+.progress-clock-config-form .pc-card .pc-tracker-input {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  padding: 0;
+  text-align: center;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: var(--vagabond-c-white);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  -moz-appearance: textfield;
+}
+.progress-clock-config-form .pc-card .pc-tracker-input:focus {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: rgba(0, 0, 0, 0.35);
+}
+.progress-clock-config-form .pc-card .pc-tracker-input::-webkit-outer-spin-button, .progress-clock-config-form .pc-card .pc-tracker-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.progress-clock-config-form .pc-card .pc-card-label {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-text-primary);
+}
+.progress-clock-config-form .pc-card .pc-card-sub {
+  font-family: "Manofa", serif;
+  font-size: 0.7rem;
+  color: var(--vagabond-c-tan);
+}
+.progress-clock-config-form .pc-card:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  filter: brightness(1.15);
+}
+.progress-clock-config-form .pc-card:hover .pc-card-icon i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.progress-clock-config-form .pc-card.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.progress-clock-config-form .pc-card.is-selected .pc-card-icon i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.progress-clock-config-form .pc-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+}
+.progress-clock-config-form .pc-footer button {
+  flex: 0 1 220px;
+  background: url("../assets/ui/chat/yellow-button.webp") no-repeat center/100% 100%;
+  border: none;
+  color: var(--vagabond-c-dark);
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.progress-clock-config-form .pc-footer button:hover {
+  filter: brightness(1.1);
+}
+.progress-clock-config-form .pc-individual-perms {
+  margin-top: 10px;
+}
 .progress-clock-config-form .pc-source-section {
-  border: 1px solid var(--color-border-light-tertiary, rgba(0, 0, 0, 0.3));
+  border: 1px solid var(--vagabond-c-text-primary);
   border-radius: 4px;
   padding: 8px 10px;
   margin-top: 8px;
@@ -2593,6 +2806,89 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .countdown-dice-config-form .form-row .form-field {
   flex: 1;
+}
+.countdown-dice-config-form .form-group {
+  margin-bottom: 14px;
+}
+.countdown-dice-config-form .cd-name-size-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 12px;
+  align-items: end;
+}
+.countdown-dice-config-form input[name=name] {
+  width: 100%;
+  padding: 5px 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  color: var(--vagabond-c-text-primary);
+}
+.countdown-dice-config-form input[name=name]:focus {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: rgba(0, 0, 0, 0.4);
+  outline: none;
+}
+.countdown-dice-config-form .cd-card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(54px, 1fr));
+  gap: 6px;
+  margin-top: 4px;
+}
+.countdown-dice-config-form .cd-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  height: auto;
+  line-height: normal;
+  cursor: pointer;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.countdown-dice-config-form .cd-card .cd-card-img {
+  width: 50px;
+  height: 40px;
+  object-fit: cover;
+  display: block;
+}
+.countdown-dice-config-form .cd-card:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  filter: brightness(1.15);
+}
+.countdown-dice-config-form .cd-card.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.countdown-dice-config-form .cd-size-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.countdown-dice-config-form .cd-size-row .cd-size-btn {
+  flex: 1;
+  padding: 6px 0;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-primary);
+  line-height: normal;
+  cursor: pointer;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.countdown-dice-config-form .cd-size-row .cd-size-btn:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  filter: brightness(1.15);
+}
+.countdown-dice-config-form .cd-size-row .cd-size-btn.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
 .countdown-dice-config-form .form-footer {
   margin-top: 20px;
