@@ -1,0 +1,107 @@
+{
+  "vagabond": {
+    "system": "vagabond",
+    "topology": "standard",
+    "quantity": "quantity",
+    "sources": {
+      "Candle, Basic": {
+        "name": "Candle, Basic",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 1, "dim": 5, "angle": 360, "color": "#ff9329", "alpha": 0.5, "animation": { "type": "torch", "speed": 2, "intensity": 2 } }]
+      },
+      "Candle, Calming": {
+        "name": "Candle, Calming",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 1, "dim": 5, "angle": 360, "color": "#a3f2b5", "alpha": 0.5, "animation": { "type": "torch", "speed": 1, "intensity": 1 } }]
+      },
+      "Candle, Insectbane": {
+        "name": "Candle, Insectbane",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 1, "dim": 5, "angle": 360, "color": "#d4a3f2", "alpha": 0.5, "animation": { "type": "torch", "speed": 2, "intensity": 2 } }]
+      },
+      "Candle, Restful": {
+        "name": "Candle, Restful",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 1, "dim": 5, "angle": 360, "color": "#a3f2b5", "alpha": 0.5, "animation": { "type": "torch", "speed": 1, "intensity": 1 } }]
+      },
+      "Lamp": {
+        "name": "Lamp",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 2, "dim": 5, "angle": 360, "color": "#ff9329", "alpha": 0.5, "animation": { "type": "torch", "speed": 1, "intensity": 2 } }]
+      },
+      "Sunrod": {
+        "name": "Sunrod",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 360, "color": "#ffeed4", "alpha": 0.5, "animation": { "type": "none" } }]
+      },
+      "Torch, Frigidflame": {
+        "name": "Torch, Frigidflame",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 360, "color": "#d4e5ff", "alpha": 0.5, "animation": { "type": "torch", "speed": 4, "intensity": 4 } }]
+      },
+      "Torch, Repel Beast": {
+        "name": "Torch, Repel Beast",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 360, "color": "#ff4d4d", "alpha": 0.5, "animation": { "type": "torch", "speed": 5, "intensity": 6 } }]
+      },
+      "Torch, Sentry": {
+        "name": "Torch, Sentry",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 360, "color": "#4d94ff", "alpha": 0.5, "animation": { "type": "torch", "speed": 3, "intensity": 3 } }]
+      },
+      "Torch, Tindertwig": {
+        "name": "Torch, Tindertwig",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 360, "color": "#ff9329", "alpha": 0.5, "animation": { "type": "torch", "speed": 5, "intensity": 5 } }]
+      },
+      "Lantern, bullseye": {
+        "name": "Lantern, bullseye",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 60, "color": "#ffc480", "alpha": 0.5, "animation": { "type": "torch", "speed": 2, "intensity": 2 } }]
+      },
+      "Lantern, hooded": {
+        "name": "Lantern, hooded",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 180, "color": "#ffc480", "alpha": 0.5, "animation": { "type": "torch", "speed": 2, "intensity": 2 } }]
+      },
+      "Torch": {
+        "name": "Torch",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 25, "dim": 30, "angle": 360, "color": "#ff9329", "alpha": 0.5, "animation": { "type": "torch", "speed": 5, "intensity": 5 } }]
+      },
+      "Candle": {
+        "name": "Candle",
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [{ "bright": 1, "dim": 5, "angle": 360, "color": "#ff9329", "alpha": 0.5, "animation": { "type": "torch", "speed": 2, "intensity": 2 } }]
+      }
+    }
+  }
+}

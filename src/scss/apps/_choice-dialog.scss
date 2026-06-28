@@ -1,0 +1,166 @@
+// =============================================================
+//  Choice-card dialog — reusable DialogV2 styling.
+//  Reuses the sheet + chat-card visual language: the NPC title bar
+//  for the prompt, the octagon stat-box for each card icon, the
+//  chat "Apply Direct" banner for card labels, and the chat yellow
+//  save-button for the footer (Cancel).
+//
+//  Opt in with `vbd-choice-dialog` on the DialogV2, markup:
+//    <div class="vbd-choice">
+//      <div class="vbd-choice-prompt">Question?</div>
+//      <div class="vbd-choice-grid">
+//        <div class="vbd-choice-item">
+//          <button class="vbd-choice-card" data-...>
+//            <span class="vbd-choice-icon"><i class="fas fa-..."></i></span>
+//            <span class="vbd-choice-label">Title</span>
+//          </button>
+//          <span class="vbd-choice-sub">hint</span>
+//        </div> …
+//      </div>
+//    </div>
+//
+//  Grid auto-fits → any number of cards.
+// =============================================================
+
+.vbd-choice-dialog {
+  .window-content { padding: 0; }
+
+  .vbd-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px 20px 8px;
+  }
+
+
+  .vbd-choice-prompt {
+    text-align: center;
+    font-family: $font-title;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: $c-white;
+    padding: 8px 18px;
+    border-radius: 2px;
+    background: url('../assets/images/sheets/titleBG.webp');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.6));
+    text-shadow:
+      2px 2px 0 $c-black, -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black, 2px -2px 0 $c-black;
+  }
+
+  .vbd-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+    gap: 12px;
+  }
+
+  // One grid cell = the card (button) with its hint sitting below it.
+  .vbd-choice-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  // ---- choice card (clickable, no panel chrome) ----
+  .vbd-choice-card {
+    width: 100%;
+    height: auto;
+    line-height: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    // Icon hugs the sheet's octagon stat-box (same 0.8 ratio as the sheet).
+    .vbd-choice-icon {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 80px;
+      background: url('../assets/images/sheets/statBG.webp') no-repeat center / 100% 100%;
+      filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.6));
+
+      i {
+        font-size: 2rem;
+        line-height: 1;
+        color: $c-yellow;
+        text-shadow:
+          1px 1px 0 $c-black, -1px 1px 0 $c-black,
+          -1px -1px 0 $c-black, 1px -1px 0 $c-black;
+        transition: transform 0.15s ease, color 0.15s ease;
+      }
+    }
+
+    // Label = the chat "Apply Direct" banner button.
+    .vbd-choice-label {
+      width: 100%;
+      padding: 6px 4px;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: $font-primary;
+      font-weight: bold;
+      font-size: 0.95rem;
+      line-height: 1.15;
+      color: #fff;
+      background: url('../assets/ui/chat/apply-direct-bg.webp') no-repeat center / 100% 100%;
+      border-radius: 2px;
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+      transition: filter 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    &:hover {
+      .vbd-choice-icon i { transform: scale(1.05); color: $c-white; }
+      .vbd-choice-label { filter: brightness(1.5); }
+    }
+    &:active .vbd-choice-icon i { transform: scale(1.02); }
+    &:focus-visible { outline: none; .vbd-choice-label { box-shadow: 0 0 0 2px $c-yellow; } }
+
+    // Selected/current card (add `is-selected`).
+    &.is-selected .vbd-choice-label {
+      box-shadow: 0 0 12px -1px $c-yellow, 0 0 0 1px $c-yellow;
+    }
+  }
+
+  // Hint, below its card.
+  .vbd-choice-sub {
+    font-family: $font-secondary;
+    font-size: 0.9rem;
+    color: $c-tan;
+    text-align: center;
+  }
+
+  // ---- footer Cancel = chat yellow save-button (DialogV2 = footer.form-footer) ----
+  .dialog-buttons,
+  footer.form-footer {
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 20px 18px;
+
+    button {
+      flex: 0 1 240px;
+      background: url('../assets/ui/chat/yellow-button.webp') no-repeat center / 100% 100%;
+      border: none;
+      color: #0b1a23;
+      font-family: $font-primary;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 16px;
+      border-radius: 2px;
+      box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      &:hover { filter: brightness(1.1); color: $c-dark; }
+    }
+  }
+}

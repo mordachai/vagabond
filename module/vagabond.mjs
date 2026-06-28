@@ -59,6 +59,7 @@ import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
 import { runMacroFromButton, executeItemMacro } from './helpers/item-macro.mjs';
+import { LightSource } from './helpers/light-source.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
@@ -1141,6 +1142,29 @@ Hooks.once('ready', function () {
     }
   });
 
+  // Light source relays — non-owners route privileged token/clock writes to the GM.
+  registerSocketAction('lightApply', async ({ tokenUuid, light }) => {
+    const tdoc = await fromUuid(tokenUuid);
+    if (!tdoc) return;
+    const update = { light };
+    if (tdoc.getFlag('vagabond', 'prevLight') === undefined) {
+      update['flags.vagabond.prevLight'] = foundry.utils.deepClone(tdoc.light?.toObject?.() ?? tdoc.light ?? {});
+    }
+    await tdoc.update(update);
+  });
+  registerSocketAction('lightDouse', async ({ tokenUuid }) => {
+    const tdoc = await fromUuid(tokenUuid);
+    if (!tdoc || tdoc.getFlag('vagabond', 'prevLight') === undefined) return;
+    await tdoc.update({ light: tdoc.getFlag('vagabond', 'prevLight') });
+    await tdoc.unsetFlag('vagabond', 'prevLight');
+  });
+  registerSocketAction('lightSpawnClock', async (meta) => {
+    await LightSource._createClockGM(meta);
+  });
+  registerSocketAction('lightDeleteClock', async ({ id }) => {
+    await game.journal.get(id)?.delete();
+  });
+
   // Sequencer FX wildcard resolution (GM resolves, players request via socket).
   VagabondFXResolver.registerSocket();
 
@@ -1150,6 +1174,9 @@ Hooks.once('ready', function () {
     // Progress clock cross-reference API: game.vagabond.clocks.value('doom'),
     // .set/.tick/.fill/.empty/.reset (GM only), .read(), .get(), .getAll()
     clocks: ProgressClock,
+    // Light-source automation: game.vagabond.lightSource.use({...}) (item macros),
+    // .douse(token) (hotbar "Douse Light" macro).
+    lightSource: LightSource,
     api: {
       VagabondChatCard,
       VagabondDamageHelper,
@@ -1176,7 +1203,12 @@ Hooks.once('ready', function () {
   // GM pre-expands every configured wildcard FX path into the shared world-setting cache
   // so player clients can play those animations without FILES_BROWSE permission.
   VagabondFXResolver.resolveAllConfigured();
+  // Light-source realtime burn-down driver (GM-only writes; refresh-safe).
+  LightSource.startDriver();
 });
+
+// Recompute realtime light timers on scene load (catches elapsed time during reloads).
+Hooks.on('canvasReady', () => LightSource.tickRealtime());
 
 // Register Dice So Nice colorsets when Dice So Nice is ready
 Hooks.once('diceSoNiceReady', (dice3d) => {
@@ -1504,6 +1536,14 @@ Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
     }
   }
 
+  // Light source: a manual burn-down clock that reaches 0 has burned out — delete
+  // it (the deleteJournalEntry hook then restores the token's previous light).
+  const ls = journal.flags?.vagabond?.lightSource;
+  if (ls?.mode === 'clock' && game.user === game.users.activeGM) {
+    const filled = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock.filled');
+    if (filled === 0) { await journal.delete(); return; }
+  }
+
   // Handle countdown dice
   if (journal.flags?.vagabond?.countdownDice?.type === 'countdownDice') {
     if (diceOverlay) {
@@ -1534,6 +1574,22 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
   }
   if (diceOverlay) {
     diceOverlay.removeDice(journal.id);
+  }
+
+  // Light source: a deleted burn-down clock douses its token (restore prevLight).
+  if (game.user === game.users.activeGM) {
+    const lsFlags = journal.flags?.vagabond?.lightSource;
+    if (lsFlags?.tokenUuid) {
+      try {
+        const tdoc = await fromUuid(lsFlags.tokenUuid);
+        if (tdoc && tdoc.getFlag('vagabond', 'prevLight') !== undefined) {
+          await tdoc.update({ light: tdoc.getFlag('vagabond', 'prevLight') });
+          await tdoc.unsetFlag('vagabond', 'prevLight');
+        }
+      } catch (err) {
+        console.warn('Vagabond | Could not douse token light on clock delete:', err);
+      }
+    }
   }
 
   // Auto-remove linked status when its countdown die expires (GM only)
@@ -2706,7 +2762,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   // ---------------------------------------------------------
   // 11b. Item/Spell Macro Button Handler
   // Runs a macro linked on the source item/spell. The macro receives
-  // { actor, item, token, targets, speaker } as scope variables.
+  // { actor, item, token, targets, speaker, isCritical } as scope variables.
   // ---------------------------------------------------------
   const macroButtons = html.querySelectorAll('.vagabond-macro-button');
   macroButtons.forEach(button => {
@@ -2718,12 +2774,19 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
         const sceneId = (Array.isArray(snapshot) && snapshot[0]?.sceneId) || canvas.scene?.id || null;
         const actionIndexRaw = button.dataset.actionIndex;
 
+        // Embedded inline command (base64) — fallback so the button still works
+        // after the source item is consumed/deleted.
+        const cmdB64 = button.dataset.commandB64;
+        const command = cmdB64 ? decodeURIComponent(escape(atob(cmdB64))) : null;
+
         await runMacroFromButton({
           itemUuid: button.dataset.itemUuid || null,
           actorUuid: button.dataset.actorUuid || null,
           actionIndex: actionIndexRaw != null ? parseInt(actionIndexRaw) : null,
           slot: button.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro',
+          command,
           runAsGM: button.dataset.runAsGm === 'true',
+          isCritical: button.dataset.isCritical === 'true',
           targetTokenIds,
           sceneId,
         });

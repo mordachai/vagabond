@@ -9,7 +9,14 @@
     "crit": "Duration is 1 minute (no Focus required).",
     "favorite": false,
     "fxSchool": "genericdark",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "const SIZES = [\"small\", \"medium\", \"large\", \"huge\", \"giant\", \"colossal\"];\nconst MODES = CONST.ACTIVE_EFFECT_CHANGE_TYPES ?? CONST.ACTIVE_EFFECT_MODES;\nconst tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  if (t.actor.effects.some(e => e.name === \"Shrink\")) continue;\n  const cur = t.actor.system.size || \"medium\";\n  const smaller = SIZES[Math.max(0, SIZES.indexOf(cur) - 1)];\n  const changes = [\n    { key: \"system.size\", mode: MODES.OVERRIDE, value: smaller, priority: 20 },\n    { key: \"system.spellDamageDieSizeBonus\", mode: MODES.ADD, value: \"-2\", priority: 20 },\n  ];\n  for (const k of Object.keys(CONFIG.VAGABOND.weaponSkills)) {\n    changes.push({ key: `system.${k}DamageDieSizeBonus`, mode: MODES.ADD, value: \"-2\", priority: 20 });\n  }\n  await t.actor.createEmbeddedDocuments(\"ActiveEffect\", [{\n    name: \"Shrink\",\n    img: \"icons/magic/control/energy-stream-link-blue.webp\",\n    changes,\n  }]);\n}\n\n//ui.notifications.info(`Shrink applied to ${tgts.length} target(s).`);",
+      "label": "Shrink",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

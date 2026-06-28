@@ -684,15 +684,6 @@
   }
   .vh-inv-eq { color: $c-white; font-size: calc(0.75rem * var(--vh-font-scale)); flex: 0 0 auto; }
   .vh-inv:not(.is-equipped) .vh-inv-img { opacity: 0.55; }
-  .vh-inv-use,
-  .vh-spell-use {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex: 1;
-    min-width: 0;
-    cursor: pointer;
-  }
   .vh-spell-fav { color: $c-yellow; font-size: calc(0.7rem * var(--vh-font-scale)); flex: 0 0 auto; }
   .vh-spell-dmg { flex: 0 0 auto; }
   .vh-inv-menu {
@@ -707,8 +698,86 @@
     cursor: pointer;
     &:hover { color: $c-yellow; background: rgba(0, 0, 0, 0.3); }
   }
-  .vh-spell-use:hover .vh-spell-name,
-  .vh-inv-use:hover .vh-inv-name { color: $c-yellow;}
+
+  // Inline-accordion rows (spells + inventory): image = use/cast, name = expand.
+  .vh-spell.accordion-item,
+  .vh-inv.accordion-item {
+    border-bottom: none;
+    .vh-row-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      &:hover { background: rgba(0, 0, 0, 0.3); }
+    }
+    // Image = use/cast trigger; highlight on hover (border + brighter).
+    .vh-spell-img,
+    .vh-inv-img {
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.12s ease, filter 0.12s ease;
+      &:hover {
+        border-color: $c-yellow;
+        filter: brightness(1.25);
+        opacity: 1;
+      }
+    }
+    // The name span doubles as the accordion header (single-click expands).
+    .accordion-header {
+      flex: 1;
+      min-width: 0;
+      padding: 0;
+      gap: 4px;
+    }
+    .vh-spell-name:hover,
+    .vh-inv-name:hover { color: $c-yellow; }
+  }
+
+  // Shared detail body — same markup as the char-sheet mini-sheet
+  // (helpers/item-sections.mjs). Description biggest; stats in two columns.
+  .vh-item-detail {
+    // Inset the detail content from the row edges.
+    padding: 0 8px;
+    .mini-sheet-description {
+      margin-bottom: 6px;
+      p { margin: 0 0 4px; }
+    }
+    .mini-sheet-damage-base {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .mini-sheet-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px 12px;
+      margin-bottom: 4px;
+    }
+    // Gear/relic/alchemical: few stats (Quantity / Cost / Slots) — even 3-column
+    // distribution, each cell stretches to fill, content right-aligned.
+    .mini-sheet-stats--inline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px 14px;
+      .stat-row { justify-content: flex-end; gap: 4px; }
+    }
+    .stat-row { display: flex; justify-content: space-between; gap: 6px; min-width: 0; }
+    .stat-name { color: $c-tan; }
+    .stat-value { font-family: $font-title; color: $c-stat; text-transform: capitalize; }
+    .mini-sheet-properties { margin-top: 4px; }
+    .mini-sheet-label {
+      font-family: $font-title;
+      color: $c-yellow;
+      font-size: calc(0.95rem * var(--vh-font-scale));
+      margin-bottom: 2px;
+    }
+    .mini-sheet-damage-base-value,
+    .mini-sheet-crit { color: $c-lite; }
+    .property-row { display: flex; gap: 4px; }
+    .property-name { color: $c-tan; flex: 0 0 auto; }
+    .property-description { color: $c-lite; }
+  }
 
   // accordions (features / traits / perks)
   .accordion-item {
@@ -732,7 +801,7 @@
       font-family: $font-text;
       font-size: calc(1rem * var(--vh-font-scale));
       color: $c-lite;
-      padding: 2px 4px 8px 12px;
+      padding: 2px 16px 8px 14px;
       p { margin: 0 0 4px; }
     }
   }

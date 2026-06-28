@@ -1293,6 +1293,7 @@
       "Favorited": "Favorited",
       "Menu": {
         "Use":           "Use",
+        "Cast":          "Cast",
         "Open":          "Open",
         "SendToChat":    "Send to Chat",
         "Read":          "Read",

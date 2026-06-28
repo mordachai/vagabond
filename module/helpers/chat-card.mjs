@@ -488,7 +488,7 @@ export class VagabondChatCard {
 
       // Executable macro buttons (simple always; hit macro only on a hit/success)
       const isHitForMacro = rollData?.isHit ?? rollData?.isSuccess ?? false;
-      VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro).forEach(b => card.addFooterAction(b));
+      VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro, rollData?.isCritical ?? false).forEach(b => card.addFooterAction(b));
 
       // Add defend options if requested (independent of damage)
       if (hasDefenses) {
@@ -515,15 +515,16 @@ export class VagabondChatCard {
    * @param {Item|null} item     The source item/spell (must be a real document)
    * @param {Actor} actor        The acting actor
    * @param {boolean} isHit      Whether the action hit/succeeded
+   * @param {boolean} isCrit     Whether the action was a critical (threaded into macro scope as `isCritical`)
    * @returns {string[]}         Array of button HTML strings
    * @private
    */
-  static _buildMacroButtons(item, actor, isHit) {
+  static _buildMacroButtons(item, actor, isHit, isCrit = false) {
     if (!item?.uuid) return [];
     const fb = game.i18n.localize('VAGABOND.Item.Macro.RunDefault');
     const buttons = [];
-    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb }));
-    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb }));
+    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb, isCritical: isCrit }));
+    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, fallbackLabel: fb, isCritical: isCrit }));
     return buttons.filter(Boolean);
   }
 

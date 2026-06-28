@@ -8,7 +8,7 @@
     "duration": "Until your next turn",
     "crit": "Beings of your choice within the Light when you Cast the Spell are Blinded (Cd4).",
     "favorite": false,
-    "noRollRequired": true,
+    "noRollRequired": false,
     "fxSchool": "radiant",
     "locked": true,
     "critCausedStatuses": [

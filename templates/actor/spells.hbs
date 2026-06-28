@@ -67,8 +67,8 @@
           data-document-id='{{spell._id}}'
           data-document-class='Item'
         >
-          <div class='item-name spell-col-name'>
-            <div class='item-image clickable' data-action='viewDoc'>
+          <div class='item-name spell-col-name spell-peek' data-spell-id='{{spell._id}}'>
+            <div class='item-image clickable'>
               <img
                 src='{{spell.img}}'
                 data-tooltip='{{spell.name}}'
@@ -76,7 +76,7 @@
                 height='40'
               />
             </div>
-            <div data-action='viewDoc'>{{spell.name}}</div>
+            <div>{{spell.name}}</div>
           </div>
           <div class='item-damage item-prop spell-col-damage'>
             {{#unless (eq spell.system.damageType '-')}}

@@ -32,7 +32,14 @@
         "damageOnTick": "",
         "damageType": "-"
       }
-    ]
+    ],
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"blinded\", { active: true });\n}\n\n//ui.notifications.info(`Color applied to ${tgts.length} target(s).`);",
+      "label": "Color",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

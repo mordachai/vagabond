@@ -1,7 +1,7 @@
 {
   "name": "Bottle, glass",
   "type": "equipment",
-  "img": "icons/consumables/potions/potion-bottle-labeled-medicine-capped-red-black.webp",
+  "img": "icons/weapons/misc/bottle-broken.webp",
   "system": {
     "description": "",
     "equipmentType": "weapon",

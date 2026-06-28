@@ -31,7 +31,14 @@
     "gearCategory": "Books & Magic",
     "alchemicalType": "concoction",
     "lore": "",
-    "isConsumable": true
+    "isConsumable": true,
+    "macro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 1, \"dim\": 5, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 2, \"intensity\": 2}}, durationMin: 60 });",
+      "label": "Ignite",
+      "runAsGM": false
+    }
   },
   "effects": [],
   "flags": {

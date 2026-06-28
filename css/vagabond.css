@@ -2731,6 +2731,22 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-style: normal;
   font-weight: 700;
 }
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-damage-base {
+  margin-top: 4px;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-damage-base .mini-sheet-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: "Manofa", serif;
+  margin-right: 4px;
+}
+.inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-damage-base .mini-sheet-damage-base-value {
+  font-weight: 400;
+  text-transform: capitalize;
+  font-family: "Eskapade", serif;
+}
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-close {
   position: absolute;
   top: -8px;
@@ -2799,6 +2815,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 6px;
+}
+.inventory-mini-sheet .mini-sheet-properties .mini-sheet-crit {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: "Eskapade", serif;
 }
 .inventory-mini-sheet .mini-sheet-properties .property-list {
   display: flex;
@@ -3620,15 +3642,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-inv:not(.is-equipped) .vh-inv-img {
   opacity: 0.55;
 }
-.vbd-hud .vh-inv-use,
-.vbd-hud .vh-spell-use {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
-}
 .vbd-hud .vh-spell-fav {
   color: var(--vagabond-c-chat-yellow);
   font-size: calc(0.7rem * var(--vh-font-scale));
@@ -3652,9 +3665,117 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-chat-yellow);
   background: rgba(0, 0, 0, 0.3);
 }
-.vbd-hud .vh-spell-use:hover .vh-spell-name,
-.vbd-hud .vh-inv-use:hover .vh-inv-name {
+.vbd-hud .vh-spell.accordion-item,
+.vbd-hud .vh-inv.accordion-item {
+  border-bottom: none;
+}
+.vbd-hud .vh-spell.accordion-item .vh-row-head,
+.vbd-hud .vh-inv.accordion-item .vh-row-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+.vbd-hud .vh-spell.accordion-item .vh-row-head:hover,
+.vbd-hud .vh-inv.accordion-item .vh-row-head:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+.vbd-hud .vh-spell.accordion-item .vh-spell-img,
+.vbd-hud .vh-spell.accordion-item .vh-inv-img,
+.vbd-hud .vh-inv.accordion-item .vh-spell-img,
+.vbd-hud .vh-inv.accordion-item .vh-inv-img {
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border-color 0.12s ease, filter 0.12s ease;
+}
+.vbd-hud .vh-spell.accordion-item .vh-spell-img:hover,
+.vbd-hud .vh-spell.accordion-item .vh-inv-img:hover,
+.vbd-hud .vh-inv.accordion-item .vh-spell-img:hover,
+.vbd-hud .vh-inv.accordion-item .vh-inv-img:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  filter: brightness(1.25);
+  opacity: 1;
+}
+.vbd-hud .vh-spell.accordion-item .accordion-header,
+.vbd-hud .vh-inv.accordion-item .accordion-header {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  gap: 4px;
+}
+.vbd-hud .vh-spell.accordion-item .vh-spell-name:hover,
+.vbd-hud .vh-spell.accordion-item .vh-inv-name:hover,
+.vbd-hud .vh-inv.accordion-item .vh-spell-name:hover,
+.vbd-hud .vh-inv.accordion-item .vh-inv-name:hover {
   color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-item-detail {
+  padding: 0 8px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-description {
+  margin-bottom: 6px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-description p {
+  margin: 0 0 4px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-damage-base {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px 12px;
+  margin-bottom: 4px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-stats--inline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px 14px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-stats--inline .stat-row {
+  justify-content: flex-end;
+  gap: 4px;
+}
+.vbd-hud .vh-item-detail .stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+.vbd-hud .vh-item-detail .stat-name {
+  color: var(--vagabond-c-tan);
+}
+.vbd-hud .vh-item-detail .stat-value {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-stat);
+  text-transform: capitalize;
+}
+.vbd-hud .vh-item-detail .mini-sheet-properties {
+  margin-top: 4px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-label {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: calc(0.95rem * var(--vh-font-scale));
+  margin-bottom: 2px;
+}
+.vbd-hud .vh-item-detail .mini-sheet-damage-base-value,
+.vbd-hud .vh-item-detail .mini-sheet-crit {
+  color: var(--vagabond-c-lite);
+}
+.vbd-hud .vh-item-detail .property-row {
+  display: flex;
+  gap: 4px;
+}
+.vbd-hud .vh-item-detail .property-name {
+  color: var(--vagabond-c-tan);
+  flex: 0 0 auto;
+}
+.vbd-hud .vh-item-detail .property-description {
+  color: var(--vagabond-c-lite);
 }
 .vbd-hud .accordion-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -3692,7 +3813,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: "Paradigm", serif;
   font-size: calc(1rem * var(--vh-font-scale));
   color: var(--vagabond-c-lite);
-  padding: 2px 4px 8px 12px;
+  padding: 2px 16px 8px 14px;
 }
 .vbd-hud .accordion-item .vh-acc-body p {
   margin: 0 0 4px;
@@ -9211,6 +9332,139 @@ ol#combat-tracker.directory-list {
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-weight: bold;
+}
+
+.vbd-choice-dialog .window-content {
+  padding: 0;
+}
+.vbd-choice-dialog .vbd-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px 8px;
+}
+.vbd-choice-dialog .vbd-choice-prompt {
+  text-align: center;
+  font-family: "Germania", serif;
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: var(--vagabond-c-white);
+  padding: 8px 18px;
+  border-radius: 2px;
+  background: url("../assets/images/sheets/titleBG.webp");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.6));
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
+}
+.vbd-choice-dialog .vbd-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 12px;
+}
+.vbd-choice-dialog .vbd-choice-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.vbd-choice-dialog .vbd-choice-card {
+  width: 100%;
+  height: auto;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.vbd-choice-dialog .vbd-choice-card .vbd-choice-icon {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 80px;
+  background: url("../assets/images/sheets/statBG.webp") no-repeat center/100% 100%;
+  filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.6));
+}
+.vbd-choice-dialog .vbd-choice-card .vbd-choice-icon i {
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.vbd-choice-dialog .vbd-choice-card .vbd-choice-label {
+  width: 100%;
+  padding: 6px 4px;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.95rem;
+  line-height: 1.15;
+  color: #fff;
+  background: url("../assets/ui/chat/apply-direct-bg.webp") no-repeat center/100% 100%;
+  border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+}
+.vbd-choice-dialog .vbd-choice-card:hover .vbd-choice-icon i {
+  transform: scale(1.05);
+  color: var(--vagabond-c-white);
+}
+.vbd-choice-dialog .vbd-choice-card:hover .vbd-choice-label {
+  filter: brightness(1.5);
+}
+.vbd-choice-dialog .vbd-choice-card:active .vbd-choice-icon i {
+  transform: scale(1.02);
+}
+.vbd-choice-dialog .vbd-choice-card:focus-visible {
+  outline: none;
+}
+.vbd-choice-dialog .vbd-choice-card:focus-visible .vbd-choice-label {
+  box-shadow: 0 0 0 2px var(--vagabond-c-chat-yellow);
+}
+.vbd-choice-dialog .vbd-choice-card.is-selected .vbd-choice-label {
+  box-shadow: 0 0 12px -1px var(--vagabond-c-chat-yellow), 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vbd-choice-dialog .vbd-choice-sub {
+  font-family: "Manofa", serif;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-tan);
+  text-align: center;
+}
+.vbd-choice-dialog .dialog-buttons,
+.vbd-choice-dialog footer.form-footer {
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 20px 18px;
+}
+.vbd-choice-dialog .dialog-buttons button,
+.vbd-choice-dialog footer.form-footer button {
+  flex: 0 1 240px;
+  background: url("../assets/ui/chat/yellow-button.webp") no-repeat center/100% 100%;
+  border: none;
+  color: #0b1a23;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 16px;
+  border-radius: 2px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.vbd-choice-dialog .dialog-buttons button:hover,
+.vbd-choice-dialog footer.form-footer button:hover {
+  filter: brightness(1.1);
+  color: var(--vagabond-c-dark);
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
@@ -18433,7 +18687,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   height: 100%;
   object-fit: cover;
   border: none;
-  transform: rotate(-45deg) scale(1.4);
+  transform: scale(1.4);
 }
 .vagabond .favorited-spells-grid .spell-name-container {
   width: 100%;
@@ -18444,7 +18698,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-family: "Germania", serif;
   font-size: 0.95rem;
   line-height: 1.1;
-  color: var(--vagabond-c-lite);
+  color: var(--vagabond-c-text-primary);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
   white-space: nowrap;
   overflow: hidden;

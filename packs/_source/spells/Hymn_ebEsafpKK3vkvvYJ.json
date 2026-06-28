@@ -10,7 +10,14 @@
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "genericlight",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "const STATUSES = [\"berserk\",\"charmed\",\"confused\",\"frightened\"];\nconst tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  for (const s of STATUSES) {\n    if (t.actor.statuses.has(s)) await t.actor.toggleStatusEffect(s, { active: false });\n  }\n}\n\n//ui.notifications.info(`Hymn: cleared statuses on ${tgts.length} target(s).`);",
+      "label": "Hymn",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

@@ -180,21 +180,25 @@ export class VagabondActor extends Actor {
         const finalKey = parts[parts.length - 1];
         const currentValue = target[finalKey] ?? 0;
 
-        // Apply the change based on mode
+        // Apply the change based on mode.
+        // v14: change.mode is a string (CONST.ACTIVE_EFFECT_CHANGE_TYPES);
+        // v13 fallback: CONST.ACTIVE_EFFECT_MODES (numeric). Accessing the v14
+        // constant first avoids the deprecation warning on v14.
+        const MODES = CONST.ACTIVE_EFFECT_CHANGE_TYPES ?? CONST.ACTIVE_EFFECT_MODES;
         switch (mode) {
-          case CONST.ACTIVE_EFFECT_MODES.ADD:
+          case MODES.ADD:
             target[finalKey] = currentValue + Number(value);
             break;
-          case CONST.ACTIVE_EFFECT_MODES.MULTIPLY:
+          case MODES.MULTIPLY:
             target[finalKey] = currentValue * Number(value);
             break;
-          case CONST.ACTIVE_EFFECT_MODES.OVERRIDE:
+          case MODES.OVERRIDE:
             target[finalKey] = Number(value);
             break;
-          case CONST.ACTIVE_EFFECT_MODES.DOWNGRADE:
+          case MODES.DOWNGRADE:
             target[finalKey] = Math.min(currentValue, Number(value));
             break;
-          case CONST.ACTIVE_EFFECT_MODES.UPGRADE:
+          case MODES.UPGRADE:
             target[finalKey] = Math.max(currentValue, Number(value));
             break;
         }

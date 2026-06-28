@@ -4,7 +4,7 @@
  * A "macro slot" lives on item.system.macro / .hitMacro, spell.system.macro / .hitMacro,
  * or actor.system.actions[n].macro / .hitMacro. Each slot can reference a Macro
  * document by UUID (preferred) or hold an inline script `command`. A chat-card
- * button runs the slot with { actor, item, token, targets, speaker } in scope.
+ * button runs the slot with { actor, item, token, targets, speaker, isCritical } in scope.
  *
  * runAsGM: when set, a non-GM clicking the button relays execution to the GM
  * client via the system socket (see vagabond.mjs 'runItemMacro' handler), so the
@@ -38,6 +38,9 @@ async function _resolveSlot(d) {
     const action = (d.actionIndex != null) ? actor?.system?.actions?.[d.actionIndex] : null;
     cfg = action?.[d.slot] ?? null;
   }
+  // Fallback: the source was consumed/deleted but the button carried its inline
+  // command — run that so the button still works (light sources etc.).
+  if (!cfg && d.command) cfg = { enabled: true, command: d.command };
   return { cfg, item, actor };
 }
 
@@ -64,7 +67,7 @@ function _resolveTargets(d) {
 
 /**
  * Resolve and execute a macro slot locally on this client.
- * @param {object} d  descriptor: { itemUuid?, actorId?, actionIndex?, slot, targetTokenIds?, sceneId? }
+ * @param {object} d  descriptor: { itemUuid?, actorId?, actionIndex?, slot, targetTokenIds?, sceneId?, isCritical? }
  * @returns {Promise<*>}
  */
 export async function executeItemMacro(d) {
@@ -76,7 +79,8 @@ export async function executeItemMacro(d) {
 
   const token = actor?.getActiveTokens?.(true)?.[0] ?? null;
   const targets = _resolveTargets(d);
-  const scope = { actor, item, token, targets, speaker: ChatMessage.getSpeaker({ actor }) };
+  const isCritical = d.isCritical ?? false;
+  const scope = { actor, item, token, targets, isCritical, speaker: ChatMessage.getSpeaker({ actor }) };
 
   if (cfg.uuid) {
     const macro = await fromUuid(cfg.uuid);
@@ -115,8 +119,10 @@ export async function runMacroFromButton(d) {
       actorUuid: d.actorUuid ?? null,
       actionIndex: d.actionIndex ?? null,
       slot: d.slot,
+      command: d.command ?? null,
       targetTokenIds: d.targetTokenIds ?? [],
       sceneId: d.sceneId ?? null,
+      isCritical: d.isCritical ?? false,
     });
     return;
   }
@@ -132,13 +138,17 @@ export async function runMacroFromButton(d) {
  * @param {string} [opts.itemUuid]
  * @param {number} [opts.actionIndex]
  * @param {string} opts.fallbackLabel
+ * @param {boolean} [opts.isCritical]  carried on the button so the macro scope exposes `isCritical`
  * @returns {string} button HTML, or '' when the slot is empty/disabled
  */
-export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, actionIndex, fallbackLabel }) {
+export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, actionIndex, fallbackLabel, isCritical = false }) {
   if (!cfg?.enabled) return '';
   if (!cfg.uuid && !cfg.command) return '';
   const label = cfg.label || fallbackLabel;
   const safe = foundry.utils.escapeHTML?.(label) ?? label;
+  // Embed the inline command (base64) so the button still works if the source
+  // item is consumed/deleted before it is clicked (e.g. last torch in a stack).
+  const cmdB64 = cfg.command ? btoa(unescape(encodeURIComponent(cfg.command))) : '';
   const attrs = [
     `data-action="executeItemMacro"`,
     `data-macro-slot="${slot}"`,
@@ -146,6 +156,8 @@ export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, actionInd
     itemUuid ? `data-item-uuid="${itemUuid}"` : '',
     (actionIndex != null) ? `data-action-index="${actionIndex}"` : '',
     cfg.runAsGM ? `data-run-as-gm="true"` : '',
+    isCritical ? `data-is-critical="true"` : '',
+    cmdB64 ? `data-command-b64="${cmdB64}"` : '',
   ].filter(Boolean).join(' ');
   return `<button class="vagabond-macro-button" ${attrs}>
             <i class="fa-solid fa-scroll"></i> ${safe}${cfg.runAsGM ? ' <i class="fa-solid fa-user-shield vagabond-macro-gm" title="Runs as GM"></i>' : ''}

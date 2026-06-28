@@ -29,7 +29,15 @@
     "immunities": [],
     "gearCategory": "",
     "alchemicalType": "torch",
-    "lore": ""
+    "lore": "",
+    "macro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 1, \"dim\": 2, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: null });",
+      "label": "Ignite",
+      "runAsGM": false
+    },
+    "isConsumable": true
   },
   "effects": [],
   "flags": {},

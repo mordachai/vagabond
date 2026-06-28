@@ -1,7 +1,7 @@
 {
   "name": "Blinded",
   "_id": "blinded000q40div",
-  "img": "icons/svg/blind.svg",
+  "img": "icons/creatures/eyes/humanoid-single-blind.webp",
   "type": "base",
   "system": {
     "changes": [

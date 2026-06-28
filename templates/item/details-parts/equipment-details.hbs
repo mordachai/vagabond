@@ -288,6 +288,12 @@
                 <span class='stat-label'>Cost:</span>
                 <span class='stat-value'>{{system.costDisplay}}</span>
               </div>
+              {{#if system.isConsumable}}
+                <div class='locked-stat'>
+                  <span class='stat-label'>Consumable:</span>
+                  <span class='stat-value'>{{localize "VAGABOND.Terms.Yes"}}</span>
+                </div>
+              {{/if}}
               {{#if system.requiresBound}}
                 <div class='locked-stat bound-toggle-row'>
                   <span class='stat-label'>{{localize "VAGABOND.Item.Equipment.FIELDS.bound.label"}}:</span>

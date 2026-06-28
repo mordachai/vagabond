@@ -32,7 +32,15 @@
     "lore": "",
     "itemFx": {
       "animType": "melee"
-    }
+    },
+    "macro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 1, \"dim\": 5, \"angle\": 360, \"color\": \"#a3f2b5\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 1, \"intensity\": 1}}, durationMin: 60 });",
+      "label": "Ignite",
+      "runAsGM": false
+    },
+    "isConsumable": true
   },
   "effects": [],
   "flags": {},

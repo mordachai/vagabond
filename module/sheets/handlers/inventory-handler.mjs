@@ -1,3 +1,5 @@
+import * as ItemSections from '../../helpers/item-sections.mjs';
+
 /**
  * Handler for inventory-related functionality in the character sheet.
  * Manages inventory grid preparation, item enrichment, context menus, and mini-sheets.
@@ -511,19 +513,19 @@ export class InventoryHandler {
   _buildMiniSheetContent(item) {
     const { EquipmentHelper } = globalThis.vagabond.utils;
 
-    const isWeapon = EquipmentHelper.isWeapon(item);
-    const isArmor = EquipmentHelper.isArmor(item);
+    const isSpell = item.type === 'spell';
     const isRelic = EquipmentHelper.isRelic(item);
-    const isGear = EquipmentHelper.isGear(item) || EquipmentHelper.isAlchemical(item);
 
-    // Header: Image (100x100) + Type above Name + Lore (if relic) + Close button
+    // Header: Image (100x100) + Type above Name + Lore (if relic) + Close button.
+    // Header chrome stays here; the body sections are shared (item-sections.mjs).
     let html = `
       <div class="mini-sheet-header">
         <img src="${item.img}" alt="${item.name}" class="mini-sheet-image" />
         <div class="mini-sheet-title">
-          <span class="mini-sheet-type">${this._formatItemType(item)}</span>
+          <span class="mini-sheet-type">${ItemSections.formatItemType(item)}</span>
           <h3>${item.name}</h3>
           ${isRelic && item.system.lore ? `<div class="mini-sheet-lore">${item.system.lore}</div>` : ''}
+          ${isSpell ? ItemSections.buildSpellDamageBase(item) : ''}
         </div>
         <button class="mini-sheet-close" type="button" aria-label="Close">
           <i class="fas fa-times"></i>
@@ -531,191 +533,10 @@ export class InventoryHandler {
       </div>
     `;
 
-    // Description (full width, no label)
-    if (item.system.description) {
-      html += `<div class="mini-sheet-description">${item.system.description}</div>`;
-    }
-
-    // Stats (two columns)
-    if (isWeapon) {
-      html += this._buildWeaponStats(item);
-    } else if (isArmor) {
-      html += this._buildArmorStats(item);
-    } else if (isGear || isRelic) {
-      html += this._buildGearStats(item);
-    }
-
-    // Properties with descriptions (full width at bottom)
-    if (isWeapon && item.system.properties && item.system.properties.length > 0) {
-      html += this._buildWeaponProperties(item);
-    }
+    // Description + stat grid + weapon properties (shared with HUD accordion)
+    html += ItemSections.buildItemDetailSections(item);
 
     return html;
-  }
-
-  /**
-   * Build weapon stats HTML (two-column grid)
-   * @param {VagabondItem} item - The weapon item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildWeaponStats(item) {
-    const damageType = item.system.currentDamageType || item.system.damageType || '';
-    return `
-      <div class="mini-sheet-stats">
-        <div class="stat-row">
-          <span class="stat-name">Damage</span>
-          <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${damageType}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Range</span>
-          <span class="stat-value">${item.system.rangeDisplay || item.system.range || '—'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Grip</span>
-          <span class="stat-value">${item.system.gripDisplay || item.system.grip || '—'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Weapon Skill</span>
-          <span class="stat-value">${item.system.weaponSkill || '—'}</span>
-        </div>
-        ${item.system.metal && item.system.metal !== 'common' ? `
-        <div class="stat-row">
-          <span class="stat-name">Metal</span>
-          <span class="stat-value">${item.system.metal}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Cost</span>
-          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
-        </div>
-        ${item.system.requiresBound ? `
-        <div class="stat-row">
-          <span class="stat-name">Bound</span>
-          <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Slots</span>
-          <span class="stat-value">${item.system.slots || 1}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Build armor stats HTML (two-column grid)
-   * @param {VagabondItem} item - The armor item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildArmorStats(item) {
-    return `
-      <div class="mini-sheet-stats">
-        <div class="stat-row">
-          <span class="stat-name">Armor Rating</span>
-          <span class="stat-value">${item.system.finalRating || item.system.rating || '—'}</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Type</span>
-          <span class="stat-value">${item.system.armorType || '—'}</span>
-        </div>
-        ${item.system.metal && item.system.metal !== 'common' ? `
-        <div class="stat-row">
-          <span class="stat-name">Metal</span>
-          <span class="stat-value">${item.system.metal}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Cost</span>
-          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
-        </div>
-        ${item.system.requiresBound ? `
-        <div class="stat-row">
-          <span class="stat-name">Bound</span>
-          <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Slots</span>
-          <span class="stat-value">${item.system.slots || 1}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Build gear stats HTML (two-column grid)
-   * @param {VagabondItem} item - The gear item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildGearStats(item) {
-    return `
-      <div class="mini-sheet-stats">
-        ${item.system.quantity ? `
-        <div class="stat-row">
-          <span class="stat-name">Quantity</span>
-          <span class="stat-value">${item.system.quantity}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Cost</span>
-          <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
-        </div>
-        ${item.system.requiresBound ? `
-        <div class="stat-row">
-          <span class="stat-name">Bound</span>
-          <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
-        </div>
-        ` : ''}
-        <div class="stat-row">
-          <span class="stat-name">Slots</span>
-          <span class="stat-value">${item.system.slots || 1}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Build weapon properties with descriptions
-   * @param {VagabondItem} item - The weapon item
-   * @returns {string} HTML
-   * @private
-   */
-  _buildWeaponProperties(item) {
-    const config = CONFIG.VAGABOND;
-
-    return `
-      <div class="mini-sheet-properties">
-        <div class="mini-sheet-label">Properties</div>
-        <div class="property-list">
-          ${item.system.properties.map(prop => {
-            const descriptionKey = config.weaponPropertyHints?.[prop] || '';
-            const description = descriptionKey ? game.i18n.localize(descriptionKey) : '';
-            return `
-              <div class="property-row">
-                <span class="property-name">${prop}:</span>
-                <span class="property-description">${description}</span>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Format item type for display
-   * @param {VagabondItem} item - The item
-   * @returns {string} Formatted type
-   * @private
-   */
-  _formatItemType(item) {
-    if (item.type === 'equipment') {
-      return item.system.equipmentType.charAt(0).toUpperCase() + item.system.equipmentType.slice(1);
-    }
-    return item.type.charAt(0).toUpperCase() + item.type.slice(1);
   }
 
   /**

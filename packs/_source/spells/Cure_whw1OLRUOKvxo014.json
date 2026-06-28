@@ -10,7 +10,14 @@
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "healing",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "const STATUSES = [\"blinded\",\"sickened\"];\nconst tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  for (const s of STATUSES) {\n    if (t.actor.statuses.has(s)) await t.actor.toggleStatusEffect(s, { active: false });\n  }\n}\n\n//ui.notifications.info(`Cure: cleared statuses on ${tgts.length} target(s).`);",
+      "label": "Cure",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

@@ -5,6 +5,7 @@ import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
+import * as ItemSections from '../helpers/item-sections.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -113,6 +114,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       useItem: this._onUseItem,
+      useItemRow: this._onUseItemRow,
+      castSpellRow: this._onCastSpell,
+      toggleItemDetail: this._onToggleAccordion,
       castSpell: this._onCastSpell,
       // Delegated resource clicks (reuse VagabondActorSheet statics)
       toggleFavorHinder: this._onToggleFavorHinder,
@@ -395,7 +399,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // Panels
     context.weapons = weapons;
-    context.spells = spells;
+    context.spells = spells.map(s => this._spellRow(s));
     context.favoritedSpells = spells.filter(s => s.system.favorite);
     context.perks = perks;
 
@@ -480,6 +484,23 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /** Flatten an equipment item into an inventory-row render object. */
+  /**
+   * Build a spell panel row. The inline-accordion detail body is the SAME source
+   * as the character-sheet mini-sheet (helpers/item-sections.mjs): spell Damage
+   * Base line + description + Critical.
+   * @param {VagabondItem} item
+   */
+  _spellRow(item) {
+    return {
+      _id: item.id,
+      name: item.name,
+      img: item.img,
+      favorite: !!item.system.favorite,
+      damageType: item.system.damageType ?? '-',
+      detailHtml: ItemSections.buildSpellDamageBase(item) + ItemSections.buildItemDetailSections(item),
+    };
+  }
+
   _invRow(item) {
     const isWeapon = item.system.equipmentType === 'weapon';
     const equipped = isWeapon
@@ -495,6 +516,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       // stays at '-' for them, so prefer `currentDamageType`/`currentDamage`.
       damageType: isWeapon ? (item.system?.currentDamageType ?? '-') : (item.system?.damageType ?? '-'),
       damage: item.system?.currentDamage ?? item.system?.damageAmount ?? '',
+      // Inline-accordion detail body — shared with the char-sheet mini-sheet.
+      detailHtml: ItemSections.buildItemDetailSections(item),
     };
     if (isWeapon) {
       const cfg = CONFIG.VAGABOND;
@@ -564,11 +587,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       VagabondActorSheet._onModifyMana.call(this, e, manaEl);
     }, { signal });
 
-    // Make panel rows (inventory + spells) draggable onto the slots. The inner
-    // <img> is set non-draggable so grabbing it drags the whole row, not the image.
-    for (const el of this.element.querySelectorAll('.vh-inv-use, .vh-spell-use')) {
+    // Drag a row by its name onto the slots. The name span carries the id and is
+    // the accordion toggle (single-click expands); the image triggers use/cast.
+    for (const el of this.element.querySelectorAll('.vh-inv-name, .vh-spell-name')) {
       el.setAttribute('draggable', 'true');
-      el.querySelector('img')?.setAttribute('draggable', 'false');
       el.addEventListener('dragstart', (e) => {
         const id = el.dataset.itemId || el.dataset.spellId;
         const item = id && this.actor.items.get(id);
@@ -815,6 +837,18 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static _onRoll(event, target) { return this._rollHandler.roll(event, target); }
   static _onRollWeapon(event, target) { return this._rollHandler.rollWeapon(event, target); }
   static _onUseItem(event, target) { return this._rollHandler.useItem(event, target); }
+  /**
+   * Click an inventory row image → use it. Weapons attack (rollWeapon); everything
+   * else routes through useItem. Mirrors the filled-slot behavior minus the menu.
+   */
+  static _onUseItemRow(event, target) {
+    const id = target?.dataset?.itemId ?? target?.closest('[data-item-id]')?.dataset.itemId;
+    const item = id && this.actor.items.get(id);
+    if (!item) return;
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    if (EquipmentHelper.isWeapon(item)) return this._rollHandler.rollWeapon(event, target);
+    return this._rollHandler.useItem(event, target);
+  }
   static _onCastSpell(event, target) { return this._spellHandler.castSpell(event, target); }
 
   /* --- delegated resource clicks (reuse sheet statics verbatim) --- */
@@ -907,7 +941,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const L = (k) => game.i18n.localize(k);
     const items = [];
 
-    if (type !== 'spell') {
+    if (type === 'spell') {
+      items.push({
+        label: L('VAGABOND.Hud.Menu.Cast'),
+        icon: 'fas fa-wand-sparkles',
+        action: () => this._spellHandler.castSpell(event, { dataset: { spellId: item.id } }),
+      });
+    } else {
       items.push({
         label: L('VAGABOND.Hud.Menu.Use'),
         icon: 'fas fa-hand-sparkles',

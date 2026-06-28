@@ -21,7 +21,14 @@
         "damageOnTick": "",
         "damageType": "-"
       }
-    ]
+    ],
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"charmed\", { active: true });\n}\n\n//ui.notifications.info(`Control applied to ${tgts.length} target(s).`);",
+      "label": "Control",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

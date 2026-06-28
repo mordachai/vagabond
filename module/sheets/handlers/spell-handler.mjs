@@ -823,6 +823,21 @@ export class SpellHandler {
    * Called during sheet render
    */
   setupListeners() {
+    // Spell name (magic tab): single-click → mini-sheet, double-click → open sheet.
+    // Mirrors the inventory grid item pattern; reuses the inventory mini-sheet.
+    for (const el of this.sheet.element.querySelectorAll('.spell-peek[data-spell-id]')) {
+      const spellId = el.dataset.spellId;
+      el.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.sheet.inventoryHandler?.showInventoryMiniSheet(event, spellId);
+      });
+      el.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        this.sheet.inventoryHandler?.hideInventoryMiniSheet();
+        this.actor.items.get(spellId)?.sheet.render(true);
+      });
+    }
+
     // Query for both spell rows (in spells tab) and favorited spells (in sliding panel)
     const spellRows = this.sheet.element.querySelectorAll('.spell-row[data-spell-id], .favorited-spell[data-spell-id]');
 

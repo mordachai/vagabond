@@ -69,6 +69,27 @@
           font-weight: 700;
         }
       }
+
+      // Damage Base (for spells, below name): label styled like the type tag,
+      // value rendered un-bold.
+      .mini-sheet-damage-base {
+        margin-top: 4px;
+
+        .mini-sheet-label {
+          font-size: 10px;
+          text-transform: uppercase;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          font-family: $font-secondary;
+          margin-right: 4px;
+        }
+
+        .mini-sheet-damage-base-value {
+          font-weight: 400;
+          text-transform: capitalize;
+          font-family: $font-primary;
+        }
+      }
     }
 
     // Close button (top-right)
@@ -153,6 +174,14 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 6px;
+    }
+
+    // Critical value (spells): same look as the description block.
+    .mini-sheet-crit {
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 400;
+      font-family: $font-primary;
     }
 
     .property-list {
