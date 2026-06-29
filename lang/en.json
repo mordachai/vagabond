@@ -1371,6 +1371,7 @@
       "NoDelivery": "Select a delivery type.",
       "TogglePreview": "Toggle template preview",
       "Damage": "Damage",
+      "Dice": "Dice",
       "Focus": "Focus",
       "Fx": "FX"
     },
@@ -1466,6 +1467,8 @@
         "CanExplode": "Can Explode",
         "ExplodeOn": "Explode On (comma-separated)",
         "NoRollRequired": "No Roll Required",
+        "UsesDiceScaling": "Uses Dice Scaling",
+        "DiceScaleLabel": "Dice Scaling Label",
         "ManaMultiplier": "Mana Multiplier",
         "ManaSkill": "Mana Skill",
         "Mana": "Mana",

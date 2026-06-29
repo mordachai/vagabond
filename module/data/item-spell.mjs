@@ -70,6 +70,26 @@ export default class VagabondSpell extends VagabondItemBase {
       hint: "Bypass the casting check roll for this spell (always succeeds, no criticals)"
     });
 
+    // Dice Scaling - lets the cast dice control work on damage-less spells.
+    // The dice are a deterministic "count" resource (each die costs mana like
+    // extra damage dice), exposed to macros as scope.spellDamageDice — no damage
+    // is rolled. Additive: does NOT affect spells that have a real damage type.
+    schema.usesDiceScaling = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Uses Dice Scaling",
+      hint: "Allow the cast dice control on a damage-less spell (damage type '-'). Dice become a counted resource for macros (scope.spellDamageDice); each die past the first costs 1 mana. No damage is rolled."
+    });
+
+    // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
+    schema.diceScaleLabel = new fields.StringField({
+      required: false,
+      blank: true,
+      initial: '',
+      label: "Dice Scaling Label",
+      hint: "Label for the dice node when Uses Dice Scaling is on (defaults to 'Dice')."
+    });
+
     // Locked - toggle between read-only and editable views
     schema.locked = new fields.BooleanField({
       required: true,

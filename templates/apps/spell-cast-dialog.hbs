@@ -54,7 +54,7 @@
             text-anchor="middle"
             data-action="vscOpenDelivery"
             x="180" y="258">{{deliveryLabel}}</text>
-      <text class="vsc-edge-label right {{#if hasDamage}}clickable{{/if}}"
+      <text class="vsc-edge-label right {{#if diceClickable}}clickable{{/if}}"
             text-anchor="middle"
             data-action="vscBumpDice"
             transform="rotate(60 253 138)" x="253" y="141">{{damageTypeLabel}}</text>
@@ -81,7 +81,7 @@
       </g>
 
       {{!-- Bottom-right node — Damage dice (square = d6) --}}
-      <g class="vsc-node br {{#if hasDamage}}clickable{{else}}inactive{{/if}}"
+      <g class="vsc-node br {{#if diceClickable}}clickable{{else}}inactive{{/if}}"
          data-action="vscBumpDice">
         <rect x="249" y="213" width="34" height="34" rx="3"/>
         <text class="vsc-num" x="266" y="237" text-anchor="middle">{{dice}}</text>

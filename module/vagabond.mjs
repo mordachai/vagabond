@@ -2781,6 +2781,14 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
         const cmdB64 = button.dataset.commandB64;
         const command = cmdB64 ? decodeURIComponent(escape(atob(cmdB64))) : null;
 
+        // Per-cast extra scope data (e.g. spell damageDice / manaSpent)
+        const scopeB64 = button.dataset.extraScopeB64;
+        let extraScope = null;
+        if (scopeB64) {
+          try { extraScope = JSON.parse(decodeURIComponent(escape(atob(scopeB64)))); }
+          catch (e) { console.warn('VAGABOND | Bad macro extra-scope payload:', e); }
+        }
+
         await runMacroFromButton({
           itemUuid: button.dataset.itemUuid || null,
           itemName: button.dataset.itemName || null,
@@ -2790,6 +2798,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
           command,
           runAsGM: button.dataset.runAsGm === 'true',
           isCritical: button.dataset.isCritical === 'true',
+          extraScope,
           targetTokenIds,
           sceneId,
         });

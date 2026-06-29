@@ -121,6 +121,33 @@
           <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
         </div>
 
+        {{! Uses Dice Scaling Checkbox }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.usesDiceScaling'
+              {{#if system.usesDiceScaling}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>{{localize "VAGABOND.UI.Labels.UsesDiceScaling"}}</span>
+          </label>
+          <p class='notes'>Allows the cast dice control on a damage-less spell (damage type "-"). The dice become a counted resource for macros (<code>scope.spellDamageDice</code>); each die past the first costs 1 mana. No damage is rolled.</p>
+        </div>
+
+        {{! Dice Scaling Label (only relevant when scaling is on) }}
+        {{#if system.usesDiceScaling}}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.DiceScaleLabel"}}</label>
+          <input
+            type='text'
+            name='system.diceScaleLabel'
+            value='{{system.diceScaleLabel}}'
+            placeholder='Dice'
+          />
+        </div>
+        {{/if}}
+
         {{! FX School (Sequencer) }}
         <div class='form-group'>
           <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FxSchool.Label"}}</label>

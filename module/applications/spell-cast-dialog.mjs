@@ -170,9 +170,14 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       ? game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[state.deliveryType])
       : game.i18n.localize('VAGABOND.UI.Labels.Delivery');
 
-    const damageTypeLabel = dmgType === '-'
-      ? game.i18n.localize('VAGABOND.SpellCast.Damage')
-      : game.i18n.localize(CONFIG.VAGABOND.damageTypes[dmgType] ?? dmgType);
+    const usesDiceScaling = !!spell.system.usesDiceScaling;
+    // Dice node is interactive when there's a real damage type OR dice scaling.
+    const diceClickable = dmgType !== '-' || usesDiceScaling;
+    const damageTypeLabel = dmgType !== '-'
+      ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[dmgType] ?? dmgType)
+      : (usesDiceScaling
+          ? (spell.system.diceScaleLabel || game.i18n.localize('VAGABOND.SpellCast.Dice'))
+          : game.i18n.localize('VAGABOND.SpellCast.Damage'));
 
     const range = this._computeRangeDisplay(state.deliveryType, state.deliveryIncrease);
     const rangeInactive = this._isRangeInactive(state.deliveryType);
@@ -204,6 +209,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       runesInner: distributeRunes(phrases.inner),
       dice: state.damageDice,
       hasDamage: dmgType !== '-',
+      diceClickable,
       deliveryType: state.deliveryType,
       deliveryLabel,
       deliveryCost: costs.deliveryBaseCost + costs.deliveryIncreaseCost,
@@ -623,7 +629,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   }
 
   _bumpDice(delta) {
-    if (this.#spell.system.damageType === '-') return;
+    if (this.#spell.system.damageType === '-' && !this.#spell.system.usesDiceScaling) return;
     const next = Math.max(0, this.#state.damageDice + delta);
     this.#state.damageDice = next;
     if (next === 0) this.#state.useFx = true;
@@ -718,7 +724,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
    */
   static calculateCosts(spell, actor, state) {
     const hasDamage = spell.system.damageType !== '-' && state.damageDice >= 1;
-    const damageCost = hasDamage && state.damageDice > 1 ? state.damageDice - 1 : 0;
+    // Dice-scaling spells (no damage type) charge the same per-die mana as damage
+    // dice so the dice are a real resource; the first die is free.
+    const diceActive = hasDamage || (spell.system.usesDiceScaling && state.damageDice >= 1);
+    const damageCost = diceActive && state.damageDice > 1 ? state.damageDice - 1 : 0;
     const fxCost = state.useFx && hasDamage ? 1 : 0;
 
     let deliveryBaseCost = state.deliveryType

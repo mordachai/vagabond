@@ -77,7 +77,9 @@ export class SpellHandler {
 
     // Damage cost: 0 for 1d6, +1 per extra die, 0 dice = no damage cost
     const hasDamage = spell.system.damageType !== '-' && state.damageDice >= 1;
-    const damageCost = hasDamage && state.damageDice > 1 ? state.damageDice - 1 : 0;
+    // Dice-scaling spells (no damage type) charge per-die mana like damage dice.
+    const diceActive = hasDamage || (spell.system.usesDiceScaling && state.damageDice >= 1);
+    const damageCost = diceActive && state.damageDice > 1 ? state.damageDice - 1 : 0;
 
     // Fx cost: +1 mana ONLY when using both damage AND effects
     // 0 dice = effect-only cast, Fx is free (no combo surcharge)
@@ -619,7 +621,8 @@ export class SpellHandler {
       isCritical,
       targetsAtRollTime,
       _spellExtraMetadata,
-      _spellExtraTags
+      _spellExtraTags,
+      manaOverrideDelta
     );
 
     // ── Sequencer FX ──────────────────────────────────────────────────────────
@@ -663,7 +666,8 @@ export class SpellHandler {
     isCritical,
     targetsAtRollTime = [],
     extraMetadata = [],
-    extraTags = []
+    extraTags = [],
+    manaOverrideDelta = 0
   ) {
     // Import damage helper
     const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
@@ -704,6 +708,7 @@ export class SpellHandler {
       spellState: state,
       costs,
       deliveryText,
+      manaOverrideDelta,
     };
 
     // Use universal chat card

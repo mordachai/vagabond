@@ -1129,7 +1129,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         else value = e.target.value;
         try {
           // Allow a render for fields whose changes affect calculated display values.
-          const needsRender = name === 'name' || name === 'system.metal';
+          const needsRender = name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling';
           const options = needsRender ? {} : { render: false };
           await this.document.update({ [name]: value }, options);
         } catch (err) {

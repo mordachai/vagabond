@@ -318,6 +318,7 @@ export class VagabondChatCard {
     rerollData = null,
     actionIndex = null,
     weaknessPreRolled = false,
+    macroExtraScope = null,
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -488,7 +489,7 @@ export class VagabondChatCard {
 
       // Executable macro buttons (simple always; hit macro only on a hit/success)
       const isHitForMacro = rollData?.isHit ?? rollData?.isSuccess ?? false;
-      VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro, rollData?.isCritical ?? false).forEach(b => card.addFooterAction(b));
+      VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro, rollData?.isCritical ?? false, macroExtraScope).forEach(b => card.addFooterAction(b));
 
       // Add defend options if requested (independent of damage)
       if (hasDefenses) {
@@ -519,12 +520,12 @@ export class VagabondChatCard {
    * @returns {string[]}         Array of button HTML strings
    * @private
    */
-  static _buildMacroButtons(item, actor, isHit, isCrit = false) {
+  static _buildMacroButtons(item, actor, isHit, isCrit = false, extraScope = null) {
     if (!item?.uuid) return [];
     const fb = game.i18n.localize('VAGABOND.Item.Macro.RunDefault');
     const buttons = [];
-    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, itemName: item.name, fallbackLabel: fb, isCritical: isCrit }));
-    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, itemName: item.name, fallbackLabel: fb, isCritical: isCrit }));
+    buttons.push(buildMacroButtonHTML({ cfg: item.system?.macro, slot: 'macro', actorUuid: actor?.uuid, itemUuid: item.uuid, itemName: item.name, fallbackLabel: fb, isCritical: isCrit, extraScope }));
+    if (isHit) buttons.push(buildMacroButtonHTML({ cfg: item.system?.hitMacro, slot: 'hitMacro', actorUuid: actor?.uuid, itemUuid: item.uuid, itemName: item.name, fallbackLabel: fb, isCritical: isCrit, extraScope }));
     return buttons.filter(Boolean);
   }
 
@@ -846,15 +847,15 @@ export class VagabondChatCard {
   }
 
   static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = [], extraMetadata = [], extraTags = []) {
-      const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState } = spellCastResult;
+      const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState, manaOverrideDelta = 0 } = spellCastResult;
 
       const tags = [];
       
       // 1. Skill Tag
       tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
       
-      // 2. Damage Tag
-      if (spellState.damageDice && spellState.damageDice > 0) {
+      // 2. Damage Tag (suppressed for dice-scaling spells — dice aren't damage)
+      if (spellState.damageDice && spellState.damageDice > 0 && !spell.system.usesDiceScaling) {
           const dType = spell.system.damageType;
           // Determine die size: spell override > actor default (6)
           const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
@@ -893,7 +894,7 @@ export class VagabondChatCard {
       // Calculate spell damage formula for manual damage button
       // This must include the increased damage dice from mana expenditure
       let spellDamageFormula = null;
-      if (spellState.damageDice && spellState.damageDice > 0) {
+      if (spellState.damageDice && spellState.damageDice > 0 && !spell.system.usesDiceScaling) {
           const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
           spellDamageFormula = `${spellState.damageDice}d${dieSize}`;
       }
@@ -928,6 +929,12 @@ export class VagabondChatCard {
             manaSkillKey: manaSkillKey || null,
             formula: roll?.formula || null,
             difficulty: difficulty
+          },
+          // Expose this cast's chosen dice + total mana to spell macros (scope.spellDamageDice / scope.manaSpent)
+          macroExtraScope: {
+            spellDamageDice: spellState.damageDice ?? 0,
+            manaSpent: costs?.totalCost ?? 0,
+            manaOverrideDelta: manaOverrideDelta ?? 0,
           }
       });
       // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)

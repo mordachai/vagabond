@@ -85,7 +85,11 @@ export async function executeItemMacro(d) {
   // stored inline commands that read `item.name` still resolve.
   const itemName = item?.name ?? d.itemName ?? null;
   const scopeItem = item ?? (itemName ? { name: itemName } : null);
-  const scope = { actor, item: scopeItem, token, targets, isCritical, itemName, speaker: ChatMessage.getSpeaker({ actor }) };
+  // extraScope: arbitrary per-cast data threaded from the chat-card button
+  // (e.g. a spell's chosen damageDice / manaSpent). Spread last so callers
+  // cannot clobber the core scope keys.
+  const extraScope = (d.extraScope && typeof d.extraScope === 'object') ? d.extraScope : {};
+  const scope = { actor, item: scopeItem, token, targets, isCritical, itemName, speaker: ChatMessage.getSpeaker({ actor }), ...extraScope };
 
   if (cfg.uuid) {
     const macro = await fromUuid(cfg.uuid);
@@ -129,6 +133,7 @@ export async function runMacroFromButton(d) {
       targetTokenIds: d.targetTokenIds ?? [],
       sceneId: d.sceneId ?? null,
       isCritical: d.isCritical ?? false,
+      extraScope: d.extraScope ?? null,
     });
     return;
   }
@@ -147,7 +152,7 @@ export async function runMacroFromButton(d) {
  * @param {boolean} [opts.isCritical]  carried on the button so the macro scope exposes `isCritical`
  * @returns {string} button HTML, or '' when the slot is empty/disabled
  */
-export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName, actionIndex, fallbackLabel, isCritical = false }) {
+export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName, actionIndex, fallbackLabel, isCritical = false, extraScope = null }) {
   if (!cfg?.enabled) return '';
   if (!cfg.uuid && !cfg.command) return '';
   const label = cfg.label || fallbackLabel;
@@ -155,6 +160,11 @@ export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName,
   // Embed the inline command (base64) so the button still works if the source
   // item is consumed/deleted before it is clicked (e.g. last torch in a stack).
   const cmdB64 = cfg.command ? btoa(unescape(encodeURIComponent(cfg.command))) : '';
+  // Per-cast scope data (e.g. spell damageDice / manaSpent) — base64 JSON so it
+  // survives in a data attribute and is exposed to the macro scope on click.
+  const scopeB64 = (extraScope && Object.keys(extraScope).length)
+    ? btoa(unescape(encodeURIComponent(JSON.stringify(extraScope))))
+    : '';
   const safeName = itemName ? (foundry.utils.escapeHTML?.(itemName) ?? itemName) : '';
   const attrs = [
     `data-action="executeItemMacro"`,
@@ -166,6 +176,7 @@ export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName,
     cfg.runAsGM ? `data-run-as-gm="true"` : '',
     isCritical ? `data-is-critical="true"` : '',
     cmdB64 ? `data-command-b64="${cmdB64}"` : '',
+    scopeB64 ? `data-extra-scope-b64="${scopeB64}"` : '',
   ].filter(Boolean).join(' ');
   return `<button class="vagabond-macro-button" ${attrs}>
             <i class="fa-solid fa-scroll"></i> ${safe}${cfg.runAsGM ? ' <i class="fa-solid fa-user-shield vagabond-macro-gm" title="Runs as GM"></i>' : ''}

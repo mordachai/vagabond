@@ -1,0 +1,44 @@
+{
+  "name": "Tempo -",
+  "type": "spell",
+  "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">The Target's Speed decreases by 5 feet for the duration. The Caster can decrease this amount by a further 5 feet for every 1 additional Mana spent on the Cast (each cast die = -5 feet).</span></p>",
+    "damageType": "-",
+    "duration": "Until your next turn",
+    "crit": "Duration is 1 minute (no Focus required).",
+    "favorite": false,
+    "fxSchool": "arcane",
+    "usesDiceScaling": true,
+    "diceScaleLabel": "Speed",
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "const amount  = -((Number(scope.spellDamageDice ?? 1) || 1) * 5);\nconst targets = scope.targets ?? [];\nif (!targets.length) return ui.notifications.warn(\"Tempo: no target.\");\nconst duration = scope.isCritical ? { seconds: 60 } : {};\nfor (const t of targets) {\n  const a = t.actor ?? t; if (!a) continue;\n  const npc = typeof a.system.speed !== \"object\";\n  await a.createEmbeddedDocuments(\"ActiveEffect\", [{\n    name: `Tempo (${amount} ft)`,\n    img: \"icons/magic/time/clock-stopwatch-white-blue.webp\",\n    duration,\n    changes: [{ key: npc ? \"system.speed\" : \"system.speed.bonus\", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(amount) }],\n    flags: { vagabond: { tempo: true } },\n  }]);\n}\nui.notifications.info(`Tempo: ${amount} ft on ${targets.length} target(s).`);",
+      "label": "Tempo -",
+      "runAsGM": true
+    },
+    "locked": true
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": "Compendium.vagabond.spells.Item.sAkNbpjb2X6CsJ4Y",
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "4.0.0",
+    "createdTime": 1764967057795,
+    "modifiedTime": 1772800138847,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "vVHD6kTqq2V277RU",
+  "sort": 4600001,
+  "_key": "!items!vVHD6kTqq2V277RU"
+}
