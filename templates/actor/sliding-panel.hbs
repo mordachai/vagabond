@@ -277,6 +277,7 @@
     <section class='skills-container grid-skills grid-skills-2col'>
       {{! Left column: Skills (1-column layout) }}
       <section class='skills-section grid-span-1'>
+        <div class='skills-section-scrollable'>
         <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
         <div class='skills-list'>
           {{#each regularSkills as |skill key|}}
@@ -349,6 +350,7 @@
             {{/each}}
           </div>
         </div>
+        </div>{{! close .skills-section-scrollable }}
       </section>
 
       {{! Right column: Saves, Attacks }}

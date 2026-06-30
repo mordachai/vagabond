@@ -17,9 +17,27 @@
   font-family: $font-primary;
   flex: 1;
   min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .skills-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+
+  .skills-section-scrollable {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    // Box extended left/right so the .left-col title banner bleed
+    // (margin-left:-25px; width:115%) isn't clipped by overflow-x:hidden.
+    margin-left: -25px;
+    padding-left: 25px;
+    padding-right: 8px;
+  }
+
   h4.left-col {
     background-image: $img-leftcolbg;
     background-repeat: no-repeat;
@@ -52,7 +70,7 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
-    line-height: 1.25rem;
+    line-height: 1.22rem;
 
     .skill-checkbox-label {
       display: flex;

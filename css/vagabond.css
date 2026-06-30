@@ -10786,6 +10786,22 @@ ol#combat-tracker.directory-list {
   font-family: "Eskapade", serif;
   flex: 1;
   min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+}
+.vagabond .skills-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.vagabond .skills-section .skills-section-scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-left: -25px;
+  padding-left: 25px;
+  padding-right: 8px;
 }
 .vagabond .skills-section h4.left-col {
   background-image: var(--vagabond-img-leftcolbg);
@@ -10812,7 +10828,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  line-height: 1.25rem;
+  line-height: 1.22rem;
 }
 .vagabond .skills-list .skill .skill-checkbox-label {
   display: flex;
@@ -14979,7 +14995,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
-  padding: 25px 5px 25px 25px;
+  padding: 25px 5px 16px 25px;
   height: 100%;
   overflow-y: clip;
   overflow-x: visible;
