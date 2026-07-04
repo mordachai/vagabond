@@ -1,4 +1,5 @@
 import { VagabondMeasureTemplates } from './measure-templates.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 const { api } = foundry.applications;
 
@@ -125,6 +126,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       focusOn: (actor.system.focus?.spellIds ?? []).includes(spell.id),
       previewActive: false,
       manaOverrideDelta: 0,
+      imbueAssignments: {}, // weaponUuid -> true (multi-select, not one-per-target)
     };
   }
 
@@ -145,6 +147,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       vscToggleFocus:    SpellCastDialog._onToggleFocus,
       vscToggleFx:       SpellCastDialog._onToggleFx,
       vscModifyMana:     SpellCastDialog._onModifyMana,
+      vscPickImbueWeapon: SpellCastDialog._onPickImbueWeapon,
     },
   };
 
@@ -172,7 +175,16 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     const usesDiceScaling = !!spell.system.usesDiceScaling;
     // Dice node is interactive when there's a real damage type OR dice scaling.
-    const diceClickable = dmgType !== '-' || usesDiceScaling;
+    let diceClickable = dmgType !== '-' || usesDiceScaling;
+
+    // Imbue: triangle + delivery-cost/dice nodes give way to the weapon picker.
+    // In deferred-mana mode (default), dice/FX aren't chosen until delivery time,
+    // so they go inactive too; upfront mode still decides them at cast.
+    const imbueActive = state.deliveryType === 'imbue';
+    const imbueUpfront = game.settings.get('vagabond', 'imbueUpfrontMana');
+    const hideDiceFx = imbueActive && !imbueUpfront;
+    diceClickable = diceClickable && !hideDiceFx;
+    const imbueSplit = imbueActive ? this._imbueFlatWeaponSplit() : { left: [], right: [] };
     const damageTypeLabel = dmgType !== '-'
       ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[dmgType] ?? dmgType)
       : (usesDiceScaling
@@ -227,6 +239,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       manaMax: mana.max ?? 0,
       castingMax: mana.castingMax ?? 0,
       messages,
+      imbueActive,
+      imbueLeft: imbueSplit.left,
+      imbueRight: imbueSplit.right,
+      hideDiceFx,
     });
   }
 
@@ -284,6 +300,20 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
         type: 'info',
         blocking: false,
       });
+    }
+
+    // 3c. Imbue: warn (non-blocking) about targeted beings with no weapon to imbue —
+    // the weapon-picker panel omits them entirely, so surface it here.
+    if (state.deliveryType === 'imbue') {
+      for (const token of this._imbueTargetTokens()) {
+        const hasWeapon = token.actor?.items.some(i => EquipmentHelper.isWeapon(i) && EquipmentHelper.isEquipped(i));
+        if (hasWeapon) continue;
+        messages.push({
+          text: game.i18n.format('VAGABOND.SpellCast.ImbueNoWeaponSkip', { name: token.name }),
+          type: 'warning',
+          blocking: false,
+        });
+      }
     }
 
     // 4. Module-contributed messages.
@@ -645,6 +675,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   _bumpDice(delta) {
     if (this.#spell.system.damageType === '-' && !this.#spell.system.usesDiceScaling) return;
+    if (this.#state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) return;
     const next = Math.max(0, this.#state.damageDice + delta);
     this.#state.damageDice = next;
     if (next === 0) this.#state.useFx = true;
@@ -674,6 +705,54 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.render();
   }
 
+  /** Currently-targeted tokens eligible for Imbue, capped by the Range/Increase
+   *  node. Each token can still supply more than one weapon (imbuing two
+   *  weapons on the same dual-wielder is allowed, not an either/or choice) —
+   *  the cap just bounds how many beings' weapons are shown as candidates. */
+  _imbueTargetTokens() {
+    if (this.#state.deliveryType !== 'imbue') return [];
+    return Array.from(game.user.targets).slice(0, this._imbueSlotCap());
+  }
+
+  /** Max number of targeted beings whose weapons are offered as candidates. */
+  _imbueSlotCap() {
+    const base = CONFIG.VAGABOND.deliveryBaseRanges.imbue?.value ?? 0;
+    const inc = CONFIG.VAGABOND.deliveryIncrement.imbue ?? 0;
+    return base + inc * this.#state.deliveryIncrease;
+  }
+
+  /** Every equipped weapon across all currently-targeted tokens, each a
+   *  candidate the player can freely toggle on/off (no per-target exclusivity). */
+  _imbueCandidates() {
+    const assignments = this.#state.imbueAssignments;
+    const candidates = [];
+    for (const token of this._imbueTargetTokens()) {
+      const actor = token.actor;
+      if (!actor) continue;
+      const weapons = actor.items.filter(i => EquipmentHelper.isWeapon(i) && EquipmentHelper.isEquipped(i));
+      for (const w of weapons) {
+        candidates.push({
+          tokenId: token.id,
+          uuid: w.uuid,
+          img: w.img,
+          selected: !!assignments[w.uuid],
+          tooltip: `${token.name}: ${w.name}`,
+        });
+      }
+    }
+    return candidates;
+  }
+
+  /** Render-only split of `_imbueCandidates()` into two columns, simple
+   *  alternating spread — no grouping by target. */
+  _imbueFlatWeaponSplit() {
+    const candidates = this._imbueCandidates();
+    return {
+      left: candidates.filter((_, i) => i % 2 === 0),
+      right: candidates.filter((_, i) => i % 2 === 1),
+    };
+  }
+
   _isRangeInactive(deliveryType) {
     if (!deliveryType) return true;
     const inc = CONFIG.VAGABOND.deliveryIncrement[deliveryType] ?? 0;
@@ -697,6 +776,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const mana = this.#actor.system.mana;
     if (finalMana > mana.current) return `Not enough mana (need ${finalMana}, have ${mana.current}).`;
     if (finalMana > mana.castingMax) return `Exceeds casting max (${mana.castingMax}).`;
+    if (state.deliveryType === 'imbue') {
+      const hasAssignment = this._imbueCandidates().some(c => c.selected);
+      if (!hasAssignment) return game.i18n.localize('VAGABOND.SpellCast.NoImbueTarget');
+    }
     return '';
   }
 
@@ -830,12 +913,17 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       this.#state.previewActive = false;
     }
     // Hand off to handler
+    let imbueAssignments = null;
+    if (state.deliveryType === 'imbue') {
+      imbueAssignments = this._imbueCandidates().filter(c => c.selected).map(c => c.uuid);
+    }
     if (typeof this.#onCast === 'function') {
       await this.#onCast(event, {
         damageDice: state.damageDice,
         deliveryType: state.deliveryType,
         deliveryIncrease: state.deliveryIncrease,
         useFx: state.useFx,
+        imbueAssignments,
       }, state.manaOverrideDelta);
     }
     return this.close();
@@ -860,9 +948,19 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!key) return;
     this.#state.deliveryType = key;
     this.#state.deliveryIncrease = 0;
+    this.#state.imbueAssignments = {};
     this._emitChange();
     this.render();
     this._refreshPreview();
+  }
+
+  /** @this {SpellCastDialog} */
+  static async _onPickImbueWeapon(event, target) {
+    const weaponUuid = target.dataset.weaponUuid;
+    if (!weaponUuid) return;
+    if (this.#state.imbueAssignments[weaponUuid]) delete this.#state.imbueAssignments[weaponUuid];
+    else this.#state.imbueAssignments[weaponUuid] = true;
+    this.render();
   }
 
   /** @this {SpellCastDialog} */
@@ -885,6 +983,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   /** @this {SpellCastDialog} */
   static async _onToggleFx(event, target) {
+    if (this.#state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) return;
     this.#state.useFx = !this.#state.useFx;
     this._emitChange();
     this.render();

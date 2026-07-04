@@ -40,24 +40,30 @@
       {{!-- Inner ring boundary --}}
       <circle class="vsc-stroke static" cx="180" cy="180" r="124" fill="none"/>
 
+      {{#unless imbueActive}}
       {{!-- Triangle (main) --}}
       <polygon class="vsc-tri" points="180,80 94,230 266,230" fill="none"/>
       {{!-- Triangle (inner decorative) --}}
       <polygon class="vsc-tri inner" points="180,98 110,222 250,222" fill="none"/>
+      {{/unless}}
 
       {{!-- Edge labels (clickable — same actions as their paired vertex node) --}}
+      {{#unless imbueActive}}
       <text class="vsc-edge-label left {{#unless rangeInactive}}clickable{{/unless}}"
             text-anchor="middle"
             data-action="vscBumpRange"
             transform="rotate(-60 107 138)" x="107" y="141">{{localize "VAGABOND.SpellCast.Increase"}}</text>
+      {{/unless}}
       <text class="vsc-edge-label bottom clickable"
             text-anchor="middle"
             data-action="vscOpenDelivery"
             x="180" y="258">{{deliveryLabel}}</text>
+      {{#unless hideDiceFx}}
       <text class="vsc-edge-label right {{#if diceClickable}}clickable{{/if}}"
             text-anchor="middle"
             data-action="vscBumpDice"
             transform="rotate(60 253 138)" x="253" y="141">{{damageTypeLabel}}</text>
+      {{/unless}}
 
       {{!-- Center mana node --}}
       <g class="vsc-node center clickable {{#if manaOverrideActive}}override{{/if}}"
@@ -74,18 +80,22 @@
         <text class="vsc-sub" x="180" y="95" text-anchor="middle">{{rangeUnit}}</text>
       </g>
 
+      {{#unless imbueActive}}
       {{!-- Bottom-left node — Delivery cost (opens selector) --}}
       <g class="vsc-node bl clickable" data-action="vscOpenDelivery">
         <circle cx="94" cy="230" r="24"/>
         <text class="vsc-num" x="94" y="237" text-anchor="middle">{{deliveryCost}}</text>
       </g>
+      {{/unless}}
 
+      {{#unless hideDiceFx}}
       {{!-- Bottom-right node — Damage dice (square = d6) --}}
       <g class="vsc-node br {{#if diceClickable}}clickable{{else}}inactive{{/if}}"
          data-action="vscBumpDice">
         <rect x="249" y="213" width="34" height="34" rx="3"/>
         <text class="vsc-num" x="266" y="237" text-anchor="middle">{{dice}}</text>
       </g>
+      {{/unless}}
 
       {{!-- Focus side-toggle (top-left, outside circle) --}}
       <g class="vsc-side vsc-side-focus {{#if focusOn}}on{{else}}off{{/if}}"
@@ -97,7 +107,7 @@
       </g>
 
       {{!-- Fx side-toggle (top-right, outside circle) --}}
-      <g class="vsc-side vsc-side-fx {{#if fxOn}}on{{else}}off{{/if}}"
+      <g class="vsc-side vsc-side-fx {{#if hideDiceFx}}disabled{{else}}{{#if fxOn}}on{{else}}off{{/if}}{{/if}}"
          data-action="vscToggleFx">
         <title>{{localize "VAGABOND.SpellCast.Fx"}}</title>
         <circle cx="338" cy="40" r="18"/>
@@ -106,12 +116,16 @@
       </g>
     </svg>
 
-    {{!-- Template-preview eye toggle (absolutely positioned button over SVG) --}}
+    {{#unless imbueActive}}
+    {{!-- Template-preview eye toggle (absolutely positioned button over SVG).
+          Imbue has no area/template to preview, so it hides in favor of the
+          weapon-picker panel which occupies this same vertical gap. --}}
     <button type="button" class="vsc-eye {{#if previewOn}}on{{else}}off{{/if}}"
             data-action="vscToggleTemplate"
             title="{{localize 'VAGABOND.SpellCast.TogglePreview'}}">
       <i class="fa-solid {{#if previewOn}}fa-eye{{else}}fa-eye-closed{{/if}}"></i>
     </button>
+    {{/unless}}
 
     {{!-- Mana info — below the delivery title --}}
     <div class="vsc-mana-info">
@@ -121,6 +135,36 @@
             data-action="vscModifyMana"
             title="Left click to spend mana, right click to restore">{{manaCurrent}}/{{manaMax}}</span>
     </div>
+
+    {{#if imbueActive}}
+    {{!-- Imbue weapon picker — replaces the triangle while Imbue is the active
+          delivery. No portraits; each icon's target is named as a prefix in
+          its hover tooltip instead. Split into two flanking columns. --}}
+    <div class="vsc-imbue-panel">
+      {{#if imbueLeft.length}}
+        <div class="vsc-imbue-col">
+          {{#each imbueLeft as |w|}}
+          <button type="button" class="vsc-imbue-weapon {{#if w.selected}}is-selected{{/if}}"
+                  data-action="vscPickImbueWeapon" data-weapon-uuid="{{w.uuid}}"
+                  title="{{w.tooltip}}">
+            <img src="{{w.img}}" alt="" />
+          </button>
+          {{/each}}
+        </div>
+      {{/if}}
+      {{#if imbueRight.length}}
+        <div class="vsc-imbue-col">
+          {{#each imbueRight as |w|}}
+          <button type="button" class="vsc-imbue-weapon {{#if w.selected}}is-selected{{/if}}"
+                  data-action="vscPickImbueWeapon" data-weapon-uuid="{{w.uuid}}"
+                  title="{{w.tooltip}}">
+            <img src="{{w.img}}" alt="" />
+          </button>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+    {{/if}}
 
     {{!-- Delivery selector overlay --}}
     <div class="vsc-delivery-list hidden">

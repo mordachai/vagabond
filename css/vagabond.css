@@ -9203,6 +9203,10 @@ ol#combat-tracker.directory-list {
 .vsc-root.no-rings .vsc-mana-info {
   top: calc(89.1% - 4px);
 }
+.vsc-root.no-rings .vsc-imbue-panel {
+  top: calc(19.4% + 6px);
+  bottom: calc(18.5% + 6px);
+}
 .vsc-root:active {
   cursor: grabbing;
 }
@@ -9452,6 +9456,11 @@ ol#combat-tracker.directory-list {
 .vsc-root .vsc-circle .vsc-side:hover circle {
   filter: drop-shadow(0 0 5px rgba(var(--ac), 0.7));
 }
+.vsc-root .vsc-circle .vsc-side.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  cursor: default;
+}
 .vsc-root .vsc-eye {
   position: absolute;
   left: 50%;
@@ -9584,6 +9593,59 @@ ol#combat-tracker.directory-list {
 }
 .vsc-root .vsc-delivery-list .vsc-del-help:hover > i {
   opacity: 1;
+}
+.vsc-root .vsc-imbue-panel {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: calc(25% + 1px);
+  bottom: calc(25% + 6px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 4;
+}
+.vsc-root .vsc-imbue-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  overflow-y: auto;
+  max-height: 100%;
+  scrollbar-width: none;
+}
+.vsc-root .vsc-imbue-col::-webkit-scrollbar {
+  display: none;
+}
+.vsc-root .vsc-imbue-weapon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgb(var(--ac));
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3px;
+  cursor: pointer;
+  height: auto;
+  line-height: normal;
+  flex: 0 0 auto;
+  opacity: 0.45;
+  transition: opacity 0.15s, filter 0.15s, box-shadow 0.15s;
+}
+.vsc-root .vsc-imbue-weapon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+.vsc-root .vsc-imbue-weapon:hover {
+  opacity: 0.7;
+}
+.vsc-root .vsc-imbue-weapon.is-selected {
+  opacity: 1;
+  background: rgba(var(--ac), 0.25);
+  filter: brightness(1.15);
+  box-shadow: 0 0 8px -1px rgb(var(--ac)), inset 0 0 0 1px rgb(var(--ac));
 }
 .vsc-root .vsc-cast {
   display: flex !important;

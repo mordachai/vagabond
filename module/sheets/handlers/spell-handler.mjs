@@ -606,12 +606,29 @@ export class SpellHandler {
     // is spent — a cancelled weapon-picker aborts the whole cast at no cost.
     if (isSuccess && state.deliveryType.toUpperCase() === 'IMBUE') {
       const { VagabondImbueHelper } = await import('../../helpers/imbue-helper.mjs');
-      const targetCount = CONFIG.VAGABOND.deliveryBaseRanges.imbue.value
-        + CONFIG.VAGABOND.deliveryIncrement.imbue * state.deliveryIncrease;
-      const assignments = await VagabondImbueHelper.resolveTargetWeapons(
-        Array.from(game.user.targets),
-        targetCount
-      );
+      let assignments;
+      if (Array.isArray(state.imbueAssignments)) {
+        // Resolved in-dialog via the embedded weapon picker — re-fetch fresh
+        // docs by uuid (equip state could theoretically change between the
+        // dialog's Cast click and this running) instead of popping a dialog.
+        const { EquipmentHelper } = await import('../../helpers/equipment-helper.mjs');
+        assignments = [];
+        for (const weaponUuid of state.imbueAssignments) {
+          const weapon = await fromUuid(weaponUuid);
+          const targetActor = weapon?.parent;
+          if (!weapon || !targetActor) continue;
+          if (!(EquipmentHelper.isWeapon(weapon) && EquipmentHelper.isEquipped(weapon))) continue;
+          assignments.push({ targetActor, weapon });
+        }
+      } else {
+        // Dialog-off / legacy path — unchanged popup flow.
+        const targetCount = CONFIG.VAGABOND.deliveryBaseRanges.imbue.value
+          + CONFIG.VAGABOND.deliveryIncrement.imbue * state.deliveryIncrease;
+        assignments = await VagabondImbueHelper.resolveTargetWeapons(
+          Array.from(game.user.targets),
+          targetCount
+        );
+      }
       if (!assignments.length) return;
       const imbueUpfront = game.settings.get('vagabond', 'imbueUpfrontMana');
       for (const { weapon } of assignments) {

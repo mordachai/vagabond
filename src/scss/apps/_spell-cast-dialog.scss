@@ -73,6 +73,9 @@
     .vsc-delivery-list { top: calc(81.5% + 10px); }
     // mana info y≈277 → (277-56)/248 ≈ 89.1%
     .vsc-mana-info    { top: calc(89.1% - 4px); }
+    // Range/target-count node bottom y=104 → (104-56)/248 ≈ 19.4%; bottom
+    // "Delivery" label y=258 → (258-56)/248 ≈ 81.5% → bottom offset 18.5%.
+    .vsc-imbue-panel  { top: calc(19.4% + 6px); bottom: calc(18.5% + 6px); }
   }
   color: rgb(var(--ac));
   font-family: $font-text;
@@ -356,6 +359,11 @@
       &:hover circle {
         filter: drop-shadow(0 0 5px rgba(var(--ac), 0.7));
       }
+      &.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+        cursor: default;
+      }
     }
   }
 
@@ -510,6 +518,69 @@
       &:hover > i { opacity: 1; }
     }
   }
+
+  // ── Imbue weapon picker (replaces triangle while Imbue is active) ───
+  // No portraits — target identity lives in each icon's hover tooltip
+  // ("Target: Weapon"). Two columns flank the center mana node, occupying
+  // roughly the old triangle's footprint (top node bottom ≈ 28.9% down to
+  // the bottom "Delivery" label ≈ 71.7%) — the .vsc-eye toggle that
+  // normally lives in this gap hides itself for Imbue (see hbs).
+  .vsc-imbue-panel {
+    position: absolute;
+    // Old triangle base corners sat at x=94/266 of the 360 viewBox (≈26%/74%).
+    left: 25%;
+    right: 25%;
+    top: calc(25% + 1px);
+    bottom: calc(25% + 6px);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 4;
+  }
+
+  .vsc-imbue-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    overflow-y: auto;
+    max-height: 100%;
+    scrollbar-width: none; // Firefox — still scrollable, just no visible bar
+    &::-webkit-scrollbar { display: none; } // Chromium (Foundry's runtime)
+  }
+
+  .vsc-imbue-weapon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--ac));
+    background: rgba(0, 0, 0, 0.5);
+    padding: 3px;
+    cursor: pointer;
+    height: auto; // beat Foundry's global button metrics
+    line-height: normal;
+    flex: 0 0 auto;
+    opacity: 0.45;
+    transition: opacity 0.15s, filter 0.15s, box-shadow 0.15s;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    &:hover { opacity: 0.7; }
+
+    &.is-selected {
+      opacity: 1;
+      background: rgba(var(--ac), 0.25);
+      filter: brightness(1.15);
+      box-shadow: 0 0 8px -1px rgb(var(--ac)), inset 0 0 0 1px rgb(var(--ac));
+    }
+  }
+
 
   // ── Cast button (styling copied from chat .vagabond-apply-direct-button) ─
   // Standalone copy — do not consolidate with chat selectors.

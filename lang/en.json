@@ -1373,6 +1373,8 @@
       "Cast": "Cast !",
       "Increase": "Increase",
       "NoDelivery": "Select a delivery type.",
+      "NoImbueTarget": "Target a willing being with an equipped weapon.",
+      "ImbueNoWeaponSkip": "{name} has no equipped weapon and will be skipped.",
       "TogglePreview": "Toggle template preview",
       "Damage": "Damage",
       "Dice": "Dice",
