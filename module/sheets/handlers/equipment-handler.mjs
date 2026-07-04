@@ -73,8 +73,8 @@ export class EquipmentHandler {
       nextState = currentState === 'unequipped' ? 'oneHand' : 'unequipped';
     }
 
-    // Update the weapon's equipment state
-    await weapon.update({ 'system.equipmentState': nextState });
+    // Update the weapon's equipment state (hand-limit enforced for equip transitions)
+    await EquipmentHelper.equipWeaponWithHandLimit(this.actor, weapon.id, nextState);
   }
 
   /**
@@ -120,7 +120,7 @@ export class EquipmentHandler {
       newState = 'oneHand';
     }
 
-    await weapon.update({ 'system.equipmentState': newState });
+    await EquipmentHelper.equipWeaponWithHandLimit(this.actor, weapon.id, newState);
   }
 
   /**
@@ -181,8 +181,8 @@ export class EquipmentHandler {
     const isEquipped = EquipmentHelper.isEquipped(item);
 
     if (EquipmentHelper.isWeapon(item) && item.system.equipmentState !== undefined) {
-      const newState = isEquipped ? 'unequipped' : 'oneHand';
-      await item.update({ 'system.equipmentState': newState });
+      const newState = isEquipped ? 'unequipped' : (item.system.grip === '2H' ? 'twoHands' : 'oneHand');
+      await EquipmentHelper.equipWeaponWithHandLimit(this.actor, item.id, newState);
     }
     // For armor, update worn state
     else if (item.type === 'armor') {

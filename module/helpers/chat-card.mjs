@@ -817,6 +817,12 @@ export class VagabondChatCard {
           );
       }
 
+      // Imbue: weapon carries a pending spell — offer to deliver it on hit
+      if (attackResult.isHit && weapon.system.imbuedSpell?.active) {
+          const { VagabondImbueHelper } = await import('./imbue-helper.mjs');
+          footerActions.push(VagabondImbueHelper.createDeliveryButton(weapon, attackResult, targetsAtRollTime));
+      }
+
       const result = await this.createActionCard({
           actor,
           item: weapon,
@@ -910,18 +916,23 @@ export class VagabondChatCard {
         ? actor.getRollData().stats?.[manaSkill.stat]?.value || 0
         : 0;
 
+      // Imbue defers all damage/effect resolution to delivery-on-hit (a separate
+      // roll posted later by VagabondImbueHelper.deliverImbue) — the cast card
+      // itself has no target to damage or defend against yet.
+      const isImbue = spellState.deliveryType?.toUpperCase() === 'IMBUE';
+
       const result = await this.createActionCard({
           actor, item: spell, title: spell.name,
-          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
+          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isImbue ? false : isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
           tags: [...tags, ...extraTags],
           metadata: extraMetadata,
           damageRoll,
           damageType: spell.system.damageType,
           description: spell.system.formatDescription(spell.system.description),  // Format for countdown dice triggers
           crit: critText,  // Include crit text if critical
-          hasDefenses: true,
+          hasDefenses: !isImbue,
           attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
-          damageFormula: spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
+          damageFormula: isImbue ? null : spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
           targetsAtRollTime,
           rerollData: {
             type: 'cast',

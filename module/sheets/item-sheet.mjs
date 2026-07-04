@@ -118,6 +118,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       toggleBlockedStatus: this._onToggleBlockedStatus,
       toggleResistedStatus: this._onToggleResistedStatus,
       applyCoating: this._onApplyCoating,
+      clearImbue: this._onClearImbue,
       clearItemMacro: this._onClearItemMacro,
     },
     form: {
@@ -3315,5 +3316,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       },
       default: 'apply',
     }).render(true);
+  }
+
+  /**
+   * Clear an active Imbue payload from this weapon (manual cancel, GM or owner).
+   */
+  static async _onClearImbue(event, target) {
+    const payload = this.document.system.imbuedSpell;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.Status.Imbue.ClearTitle') },
+      content: `<p>${game.i18n.format('VAGABOND.Status.Imbue.ClearConfirm', { spellName: payload.spellName, weaponName: this.document.name })}</p>`,
+      rejectClose: false,
+      modal: true,
+    });
+    if (!confirmed) return;
+    const { VagabondImbueHelper } = await import('../helpers/imbue-helper.mjs');
+    await VagabondImbueHelper.clearImbue(this.document);
   }
 }

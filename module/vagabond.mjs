@@ -341,6 +341,18 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Imbue delivery: pay Damage/Effect mana upfront at cast (legacy) vs deferred
+  // to delivery-on-hit (RAW-correct default per GM ruling — see imbue-helper.mjs)
+  game.settings.register('vagabond', 'imbueUpfrontMana', {
+    name: 'VAGABOND.Settings.imbueUpfrontMana.name',
+    hint: 'VAGABOND.Settings.imbueUpfrontMana.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 4: Default clock position
   game.settings.register('vagabond', 'defaultClockPosition', {
     name: 'VAGABOND.Settings.defaultClockPosition.name',
@@ -1293,6 +1305,20 @@ Hooks.on('canvasReady', async () => {
   if (clockOverlay) {
     await clockOverlay.draw();
   }
+});
+
+/* -------------------------------------------- */
+/*  Imbue Delivery — Turn-Based Expiry          */
+/* -------------------------------------------- */
+
+// When combat turn order cycles back to a caster who imbued a spell without
+// Focusing it, the payload expires (Duration rule: "lasts until your next Turn").
+Hooks.on('updateCombat', (combat, changed) => {
+  if (!game.user.isGM) return;
+  if (changed.turn === undefined && changed.round === undefined) return;
+  import('./helpers/imbue-helper.mjs').then(({ VagabondImbueHelper }) => {
+    VagabondImbueHelper.checkTurnExpiry(combat);
+  });
 });
 
 /* -------------------------------------------- */
@@ -2757,6 +2783,97 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       button.disabled = true;
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleGrapple(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 11a. Imbue Delivery Button Handler (upfront-mode: single click, amount locked at cast)
+  // ---------------------------------------------------------
+  const imbueDeliverButtons = html.querySelectorAll('.vagabond-imbue-deliver-button');
+  imbueDeliverButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      button.disabled = true;
+      import('./helpers/imbue-helper.mjs').then(({ VagabondImbueHelper }) => {
+        VagabondImbueHelper.deliverImbue(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 11a2. Imbue Delivery Controls (deferred-payment mode) — inline dice
+  // stepper + Effect checkbox + live total, bounded by the caster's current
+  // Mana/casting max. Pure client-side DOM math until Confirm & Deliver.
+  // ---------------------------------------------------------
+  const imbueControls = html.querySelectorAll('.vagabond-imbue-delivery-controls');
+  imbueControls.forEach(container => {
+    const countEl = container.querySelector('.vagabond-imbue-dice-count');
+    const totalEl = container.querySelector('.vagabond-imbue-total-value');
+    const effectCheckbox = container.querySelector('.vagabond-imbue-effect-checkbox');
+    const minusBtn = container.querySelector('.vagabond-imbue-dice-minus');
+    const plusBtn = container.querySelector('.vagabond-imbue-dice-plus');
+    const confirmBtn = container.querySelector('.vagabond-imbue-confirm-button');
+
+    const computeCost = (dice, effect) => {
+      const diceCost = dice >= 1 ? Math.max(0, dice - 1) : 0;
+      const fxCost = dice >= 1 && effect ? 1 : 0;
+      return 1 + diceCost + fxCost;
+    };
+    const render = () => {
+      const dice = parseInt(container.dataset.dice || '0');
+      const effect = container.dataset.effect === 'true';
+      if (countEl) countEl.textContent = dice;
+      if (totalEl) totalEl.textContent = computeCost(dice, effect);
+    };
+    const getAvailableMana = async () => {
+      const sourceActor = await fromUuid(container.dataset.sourceActorUuid);
+      if (!sourceActor) return 0;
+      return Math.min(sourceActor.system.mana.current, sourceActor.system.mana.castingMax);
+    };
+
+    minusBtn?.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const dice = Math.max(0, parseInt(container.dataset.dice || '0') - 1);
+      container.dataset.dice = dice;
+      render();
+    });
+
+    plusBtn?.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+      const dice = parseInt(container.dataset.dice || '0') + 1;
+      const effect = container.dataset.effect === 'true';
+      const cost = computeCost(dice, effect);
+      const available = await getAvailableMana();
+      if (cost > available) {
+        ui.notifications.warn(game.i18n.localize('VAGABOND.Status.Imbue.NotEnoughMana'));
+        return;
+      }
+      container.dataset.dice = dice;
+      render();
+    });
+
+    effectCheckbox?.addEventListener('change', async () => {
+      const dice = parseInt(container.dataset.dice || '0');
+      const wantEffect = effectCheckbox.checked;
+      const cost = computeCost(dice, wantEffect);
+      const available = await getAvailableMana();
+      if (wantEffect && cost > available) {
+        effectCheckbox.checked = false;
+        ui.notifications.warn(game.i18n.localize('VAGABOND.Status.Imbue.NotEnoughMana'));
+        return;
+      }
+      container.dataset.effect = wantEffect;
+      render();
+    });
+
+    confirmBtn?.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      confirmBtn.disabled = true;
+      const damageDice = parseInt(container.dataset.dice || '0');
+      const useFx = container.dataset.effect === 'true';
+      import('./helpers/imbue-helper.mjs').then(({ VagabondImbueHelper }) => {
+        VagabondImbueHelper.deliverImbue(container, { damageDice, useFx });
       });
     });
   });

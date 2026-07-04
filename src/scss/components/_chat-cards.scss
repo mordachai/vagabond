@@ -858,6 +858,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         /* Apply Direct (Full Width) */
         button.vagabond-apply-direct-button,
         button.vagabond-grapple-button,
+        button.vagabond-imbue-deliver-button,
         button.vagabond-macro-button,
         button.vagabond-npc-damage-button,
         button.vagabond-item-damage-button,
@@ -916,6 +917,96 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             &[data-macro-slot="macro"] {
                 background: linear-gradient(180deg, #1f5e63, #123a3e) !important;
                 i { color: #b8f0ff !important; }
+            }
+        }
+
+        /* Imbue Delivery Controls (deferred-payment mode) — inline dice stepper +
+           Effect checkbox + live total, replacing the plain deliver button. */
+        .vagabond-imbue-delivery-controls {
+            width: 100%;
+            background: linear-gradient(180deg, #3a2a52, #241735);
+            border-radius: 2px;
+            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            color: #fff;
+            font-family: var(--font-primary);
+
+            .vagabond-imbue-controls-label {
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 11px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                margin-bottom: 4px;
+                i { color: var(--c-yellow-text); }
+            }
+
+            .vagabond-imbue-stepper {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin-bottom: 4px;
+
+                button {
+                    height: auto; line-height: normal;
+                    width: 22px; height: 22px;
+                    border-radius: 2px;
+                    border: none;
+                    background: rgba(255, 255, 255, 0.15);
+                    color: #fff;
+                    cursor: pointer;
+                    font-weight: bold;
+                    &:hover { background: rgba(255, 255, 255, 0.3); }
+                }
+
+                .vagabond-imbue-dice-count {
+                    min-width: 1.5em;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .vagabond-imbue-effect-toggle {
+                    margin-left: auto;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 11px;
+                    cursor: pointer;
+                }
+            }
+
+            .vagabond-imbue-total {
+                font-size: 11px;
+                opacity: 0.85;
+                margin-bottom: 4px;
+            }
+
+            button.vagabond-imbue-confirm-button {
+                width: 100%;
+                height: auto; line-height: normal;
+                background: transparent;
+                background-image: url('../assets/ui/chat/apply-direct-bg.webp');
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                background-position: center center;
+                color: #fff;
+                padding: 6px;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-family: var(--font-primary);
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                border-radius: 2px;
+                border: none;
+                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+                &:hover { filter: brightness(1.6); }
+                &:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
+                i { color: var(--c-yellow-text); }
             }
         }
 

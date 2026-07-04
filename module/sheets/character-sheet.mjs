@@ -73,6 +73,12 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
 
     // Manual binding for createDoc action (workaround for action inheritance issue)
     this._bindCreateDocActions(signal);
+
+    // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    EquipmentHelper.sanitizeHandLimit(this.actor).catch((err) =>
+      console.error('Vagabond | Hand-limit sanitize failed:', err)
+    );
   }
 
   /**

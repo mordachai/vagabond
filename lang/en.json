@@ -397,6 +397,10 @@
         "name": "Auto-Apply Save Damage",
         "hint": "When enabled, damage is automatically applied to HP after save rolls. When disabled, damage amounts are shown in chat but must be applied manually."
       },
+      "imbueUpfrontMana": {
+        "name": "Imbue Delivery Upfront Mana Cost",
+        "hint": "Check this box if you want casters to pay the full Damage/Effect mana cost upfront when Imbuing a weapon, same as every other delivery type. Unchecked (default): only the Delivery cost is paid when Imbuing — Damage and Effect mana is paid later, when the imbued weapon lands its hit."
+      },
       "defaultClockPosition": {
         "name": "Default Clock Position",
         "hint": "Default corner position for new progress clocks."
@@ -1799,6 +1803,32 @@
         "Consumed": "{sourceName} coating consumed",
         "SelectWeapon": "Select Weapon",
         "NoWeapons": "No equipped weapons found"
+      },
+      "Imbue": {
+        "SelectWeapon": "Select Weapon",
+        "SelectWeaponHint": "Choose which weapon to imbue for each target.",
+        "ConfirmSelection": "Imbue Weapon",
+        "DeferredHint": "You will spend the mana after the attack hits.",
+        "DeferredCost": "Delivering this Imbue will cost {cost} Mana more when it hits.",
+        "NoWeapons": "{actor} has no equipped weapons to imbue",
+        "NoActor": "No valid target actor",
+        "Applied": "{spellName} imbued onto {weaponName}",
+        "Cancelled": "Imbue cancelled",
+        "DeliverButton": "Deliver {spellName}",
+        "AlreadyResolved": "This Imbue has already been resolved.",
+        "OnlyCasterOrGM": "Only {caster} or a GM can deliver this Imbue.",
+        "NoMana": "{caster} does not have enough Mana to deliver this Imbue.",
+        "SpellGone": "The imbued spell no longer exists — the Imbue fizzles.",
+        "ExceedsCastingMax": "That would exceed {caster}'s per-cast Mana max ({max}).",
+        "NotEnoughMana": "Not enough Mana available for that.",
+        "IncludeEffect": "Include Effect",
+        "TotalMana": "Total",
+        "ConfirmDeliver": "Confirm & Deliver",
+        "Delivered": "Delivered",
+        "ClearTitle": "Clear Imbue",
+        "ClearConfirm": "Clear the imbued spell ({spellName}) from {weaponName}?",
+        "ClearButton": "Clear Imbue",
+        "Faded": "{spellName} faded from {weaponName} (turn expired)"
       },
       "Applied": "{actor} is now {status}.",
       "Immune": "{actor} is immune to {status}.",

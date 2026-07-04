@@ -227,8 +227,8 @@ export class InventoryHandler {
       enabled: true,
       action: async () => {
         if (isWeapon && item.system.equipmentState !== undefined) {
-          const newState = isEquipped ? 'unequipped' : 'oneHand';
-          await item.update({ 'system.equipmentState': newState });
+          const newState = isEquipped ? 'unequipped' : (item.system.grip === '2H' ? 'twoHands' : 'oneHand');
+          await EquipmentHelper.equipWeaponWithHandLimit(this.actor, item.id, newState);
         }
         // For armor, update worn state
         else if (item.type === 'armor') {

@@ -322,6 +322,38 @@
   }
 }
 
+// Imbue badge — shows an active pending-spell payload on a weapon (editable + locked views)
+.imbue-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(120, 80, 200, 0.15);
+  border: 1px solid rgba(120, 80, 200, 0.5);
+  font-size: 0.85em;
+
+  i.fa-wand-sparkles {
+    color: rgb(180, 140, 255);
+  }
+
+  button {
+    height: auto;
+    line-height: normal;
+    padding: 0 2px;
+    margin-left: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $c-text-1;
+
+    &:hover {
+      color: $c-red;
+    }
+  }
+}
+
 // Equipment Details — consolidated cost/slots/metal/calculated row layout
 .equip-cost-slots-row {
   display: flex;

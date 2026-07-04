@@ -346,6 +346,27 @@ export default class VagabondEquipment extends VagabondItemBase {
       ),
     });
 
+    // Imbue delivery payload: spell attached at cast time, delivered on this weapon's next hit (weapon only — UI gated)
+    schema.imbuedSpell = new fields.SchemaField({
+      active:             new fields.BooleanField({ required: true, initial: false }),
+      sourceActorUuid:    new fields.StringField({ required: false, blank: true, initial: '' }),
+      sourceActorName:    new fields.StringField({ required: false, blank: true, initial: '' }),
+      spellUuid:          new fields.StringField({ required: false, blank: true, initial: '' }),
+      spellName:          new fields.StringField({ required: false, blank: true, initial: '' }),
+      spellImg:           new fields.StringField({ required: false, blank: true, initial: '' }),
+      damageDice:         new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      deferredMana:       new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      // true when cast while imbueUpfrontMana was off — Damage/Effect mana AND
+      // the dice/effect choice itself defer to delivery-on-hit (see imbue-helper.mjs)
+      deferredPayment:    new fields.BooleanField({ required: true, initial: false }),
+      manaSkillKey:       new fields.StringField({ required: false, blank: true, initial: '' }),
+      castCombatId:       new fields.StringField({ required: false, blank: true, initial: '' }),
+      castCombatRound:    new fields.NumberField({ required: false, integer: true, initial: null, nullable: true }),
+      castCombatTurn:     new fields.NumberField({ required: false, integer: true, initial: null, nullable: true }),
+      casterCombatantId:  new fields.StringField({ required: false, blank: true, initial: '' }),
+      focusSpellId:       new fields.StringField({ required: false, blank: true, initial: '' }),
+    });
+
     // ===== SEQUENCER FX FIELDS =====
 
     // Per-item animation config (requires Sequencer module)

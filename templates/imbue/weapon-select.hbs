@@ -1,0 +1,35 @@
+{{! Imbue Weapon Selection Dialog }}
+<div class="iws-wrapper">
+  <p class="iws-hint">{{localize "VAGABOND.Status.Imbue.SelectWeaponHint"}}</p>
+
+  <div class="iws-columns">
+    {{#each columns}}
+    <div class="iws-column" data-col-index="{{this.index}}">
+      <div class="iws-target-header">
+        <img class="iws-token-img" src="{{this.tokenImg}}" alt="{{this.actorName}}" />
+        <span class="iws-target-name">{{this.actorName}}</span>
+      </div>
+      <div class="iws-weapon-list">
+        <input type="hidden" name="weapon_{{this.index}}" value="{{#if this.weapons.[0]}}{{this.weapons.[0].id}}{{/if}}" />
+        {{#each this.weapons}}
+        <button type="button" class="iws-card {{#if this.selected}}is-selected{{/if}}" data-weapon-id="{{this.id}}">
+          <span class="iws-card-icon">
+            <img class="iws-card-img" src="{{this.img}}" alt="" />
+          </span>
+          <span class="iws-card-label">{{this.name}}</span>
+        </button>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <footer class="iws-footer">
+    <button type="button" class="iws-cancel">
+      <i class="fas fa-times"></i> {{localize "Cancel"}}
+    </button>
+    <button type="button" class="iws-confirm">
+      <i class="fas fa-wand-sparkles"></i> {{localize "VAGABOND.Status.Imbue.ConfirmSelection"}}
+    </button>
+  </footer>
+</div>

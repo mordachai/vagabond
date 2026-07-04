@@ -125,6 +125,120 @@ export class EquipmentHelper {
     return this.isWeapon(item) && item.system.equipmentState === 'twoHands';
   }
 
+  /**
+   * Equip a weapon to a hand-occupying state (oneHand/twoHands), enforcing the
+   * hand limit: max 2x one-handed OR 1x two-handed weapon equipped at once.
+   * Auto-unequips whatever conflicts to make room (2H bumps all 1H; a 3rd 1H
+   * bumps the oldest of the two already equipped, tracked via a per-item
+   * `flags.vagabond.equippedAt` timestamp). No-op checks when unequipping.
+   * @param {Actor} actor
+   * @param {string} weaponId
+   * @param {'unequipped'|'oneHand'|'twoHands'} newState
+   */
+  static async equipWeaponWithHandLimit(actor, weaponId, newState) {
+    const weapon = actor.items.get(weaponId);
+    if (!weapon) return;
+
+    const updates = [];
+
+    if (newState === 'oneHand' || newState === 'twoHands') {
+      const others = actor.items.filter(
+        (i) => this.isWeapon(i) && i.id !== weaponId && i.system.equipmentState !== 'unequipped'
+      );
+
+      let conflicts;
+      if (newState === 'twoHands') {
+        conflicts = others;
+      } else {
+        const twoHanders = others.filter((i) => i.system.equipmentState === 'twoHands');
+        const oneHanders = others.filter((i) => i.system.equipmentState === 'oneHand');
+        conflicts = [...twoHanders];
+        if (oneHanders.length >= 2) {
+          const oldest = oneHanders.sort(
+            (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
+          )[0];
+          conflicts.push(oldest);
+        }
+      }
+
+      for (const c of conflicts) {
+        updates.push({ _id: c.id, 'system.equipmentState': 'unequipped' });
+      }
+
+      if (conflicts.length) {
+        const names = conflicts.map((c) => c.name).join(', ');
+        ui.notifications.info(`Unequipped ${names} to make room (hand limit).`);
+      }
+    }
+
+    updates.push({
+      _id: weaponId,
+      'system.equipmentState': newState,
+      ...(newState !== 'unequipped' ? { 'flags.vagabond.equippedAt': Date.now() } : {}),
+    });
+
+    await actor.updateEmbeddedDocuments('Item', updates);
+  }
+
+  /**
+   * Self-healing pass: correct an actor's weapons back into a legal hand-limit
+   * state (max 2x oneHand OR 1x twoHands) if they somehow ended up violating
+   * it — legacy data from before this rule existed, compendium import, a
+   * macro writing `system.equipmentState` directly, etc. No-op (no writes)
+   * when already compliant, so it's safe to call on every sheet/HUD render.
+   * @param {Actor} actor
+   */
+  static async sanitizeHandLimit(actor) {
+    if (!actor?.isOwner) return;
+
+    const weapons = actor.items.filter(
+      (i) => this.isWeapon(i) && i.system.equipmentState !== 'unequipped'
+    );
+
+    // Normalize grip/state mismatches first (e.g. a strict-2H weapon stuck at
+    // 'oneHand' from before equip actions became grip-aware) — evaluate hand
+    // conflicts against the CORRECTED state, not the possibly-stale one.
+    const fixUpdates = [];
+    const effectiveState = new Map();
+    for (const w of weapons) {
+      const grip = w.system.grip;
+      let state = w.system.equipmentState;
+      if (grip === '2H' && state !== 'twoHands') state = 'twoHands';
+      else if ((grip === '1H' || grip === 'F') && state !== 'oneHand') state = 'oneHand';
+      if (state !== w.system.equipmentState) {
+        fixUpdates.push({ _id: w.id, 'system.equipmentState': state });
+      }
+      effectiveState.set(w.id, state);
+    }
+
+    const twoHanders = weapons.filter((i) => effectiveState.get(i.id) === 'twoHands');
+    const oneHanders = weapons.filter((i) => effectiveState.get(i.id) === 'oneHand');
+
+    const newestFirst = (a, b) =>
+      (b.getFlag('vagabond', 'equippedAt') || 0) - (a.getFlag('vagabond', 'equippedAt') || 0);
+
+    let bump = [];
+    if (twoHanders.length && (twoHanders.length > 1 || oneHanders.length)) {
+      const keep = [...twoHanders].sort(newestFirst)[0];
+      bump = weapons.filter((w) => w.id !== keep.id);
+    } else if (oneHanders.length > 2) {
+      bump = [...oneHanders].sort(newestFirst).slice(2);
+    }
+
+    const bumpIds = new Set(bump.map((w) => w.id));
+    const updates = [
+      ...fixUpdates.filter((u) => !bumpIds.has(u._id)),
+      ...bump.map((w) => ({ _id: w.id, 'system.equipmentState': 'unequipped' })),
+    ];
+
+    if (!updates.length) return;
+
+    await actor.updateEmbeddedDocuments('Item', updates);
+    if (bump.length) {
+      ui.notifications.info(`Hand-limit cleanup: unequipped ${bump.map((w) => w.name).join(', ')}.`);
+    }
+  }
+
   // ===========================
   // Visual Enrichment Methods
   // ===========================

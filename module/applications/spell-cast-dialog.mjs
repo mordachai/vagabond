@@ -271,6 +271,21 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const areaError = this._areaRequirementMessage(state);
     if (areaError) messages.push(areaError);
 
+    // 3b. Imbue: surface the mana implications of the delivery timing.
+    if (state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) {
+      messages.push({
+        text: game.i18n.localize('VAGABOND.Status.Imbue.DeferredHint'),
+        type: 'info',
+        blocking: false,
+      });
+    } else if (costs.deferredMana > 0) {
+      messages.push({
+        text: game.i18n.format('VAGABOND.Status.Imbue.DeferredCost', { cost: costs.deferredMana }),
+        type: 'info',
+        blocking: false,
+      });
+    }
+
     // 4. Module-contributed messages.
     try {
       Hooks.callAll('vagabond.spellCastMessages', this, messages, {
@@ -743,11 +758,29 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       : 0;
     const deliveryIncreaseCost = state.deliveryIncrease * incPerStep;
 
-    let totalCost = damageCost + fxCost + deliveryBaseCost + deliveryIncreaseCost;
-    const spellReduce = actor.system.bonuses?.spellManaCostReduction || 0;
-    totalCost = Math.max(0, totalCost - spellReduce);
+    // Imbue defers casting (Damage/Effect) mana to delivery-on-hit — the Attack
+    // Check is the Cast Check, so the spell isn't cast (and its mana isn't owed)
+    // until then. Only the Delivery/targeting cost is paid at Imbue time, unless
+    // the table prefers the simpler legacy upfront model via the world setting.
+    const isImbue = state.deliveryType === 'imbue';
+    const imbueUpfront = isImbue && game.settings.get('vagabond', 'imbueUpfrontMana');
+    const IMBUE_TRIGGER_FEE = 1; // flat "spend 1 Mana to do so when the attack hits" cost
 
-    return { damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, totalCost };
+    const spellReduce = actor.system.bonuses?.spellManaCostReduction || 0;
+
+    const upfrontRaw = deliveryBaseCost + deliveryIncreaseCost + (!isImbue || imbueUpfront ? damageCost + fxCost : 0);
+    const upfrontReduction = Math.min(upfrontRaw, spellReduce);
+    const totalCost = upfrontRaw - upfrontReduction;
+
+    // Deferred (non-upfront) mode has no fixed deferredMana figure — the caster
+    // chooses Damage dice + Effect live at delivery time (see imbue-helper.mjs
+    // deliverImbue), so there is nothing to pre-compute or pre-charge here.
+    let deferredMana = 0;
+    if (isImbue && imbueUpfront) {
+      deferredMana = IMBUE_TRIGGER_FEE;
+    }
+
+    return { damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, totalCost, deferredMana };
   }
 
   // ── Action handlers ──────────────────────────────────────────────────────

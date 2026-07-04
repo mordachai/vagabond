@@ -26,10 +26,13 @@ const { api } = foundry.applications;
  * `.actor` and `.element`, which is all those handlers touch, so it can act
  * as the "sheet" they expect and add zero new roll/cast/resource logic.
  *
- * Quick slots are DERIVED, not manually assigned: the item slots show the
- * actor's favorited spells (priority) then equipped non-weapon items, and the
- * weapon circles show equipped weapons. Dropping an item onto the HUD equips
- * (or favorites) it, which makes it appear in the relevant slot.
+ * Item quick-slots are a persisted per-actor layout (auto-filled once from
+ * favorited spells + equipped non-weapon items, then user-owned thereafter).
+ * Weapon circles are NOT persisted — they're a live mirror of whichever
+ * weapons are actually equipped (`system.equipmentState`), always in sync
+ * with the character sheet's "Equipped" panel in both directions. Dropping an
+ * item onto the HUD equips (or favorites) it, which makes it appear in the
+ * relevant slot/circle.
  *
  * One instance per actor (keyed by actor id).
  */
@@ -420,19 +423,31 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       }));
 
     // ----- Persistent quick slots (per-user, keyed by actor) -----
-    // Slots are an explicit id→slot map, NOT re-derived each render — so a
+    // Item slots are an explicit id→slot map, NOT re-derived each render — so a
     // removed item leaves its slot empty instead of being back-filled. The map
     // is auto-populated ONCE, on the first ever render for this actor; after
     // that only drag-drop (assign) and "Remove from HUD" (clear) change it.
     let slots = this._getSlots();
-    if (!slots) slots = this._autoFillSlots(spells, usableEquipped, weapons);
+    if (!slots) slots = this._autoFillSlots(spells, usableEquipped);
 
     context.itemSlots = this._padIds(slots.items, VagabondCharacterHud.ITEM_SLOTS)
       .map((id) => {
         const item = id ? actor.items.get(id) : null;
         return this._slotEntry(item, item?.type === 'spell' ? 'spell' : 'item');
       });
-    context.weaponSlots = this._padIds(slots.weapons, VagabondCharacterHud.WEAPON_SLOTS)
+
+    // Weapon circles are NOT a persisted slot pick — they're a live mirror of
+    // whichever weapons are actually equipped (`system.equipmentState`), the
+    // exact same field the character sheet's "Equipped" panel reads. Dropping
+    // a weapon onto the HUD equips it (see `_assignDrop`); equipping/unequipping
+    // from either the sheet or the HUD is instantly reflected in both, and the
+    // 2-circle cap is naturally enforced by the hand-limit rule (max 2x oneHand
+    // or 1x twoHands can ever be equipped at once).
+    const equippedWeaponIds = weapons
+      .filter((w) => VagabondCharacterHud._isWeaponEquipped(w))
+      .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0))
+      .map((w) => w.id);
+    context.weaponSlots = this._padIds(equippedWeaponIds, VagabondCharacterHud.WEAPON_SLOTS)
       .map((id) => {
         const item = id ? actor.items.get(id) : null;
         return this._slotEntry(item, 'weapon');
@@ -440,13 +455,14 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /**
-   * First-ever-render slot population. Item slots: favorited spells first, then
-   * equipped alchemicals → relics → gear. Weapon circles: equipped weapons.
-   * The result is persisted immediately so the slots never auto-fill again —
-   * thereafter the user owns the layout (drag to add, "Remove from HUD" to
-   * clear). Returns the in-memory map for the current render.
+   * First-ever-render slot population for item slots: favorited spells first,
+   * then equipped alchemicals → relics → gear. The result is persisted
+   * immediately so the slots never auto-fill again — thereafter the user owns
+   * the layout (drag to add, "Remove from HUD" to clear). Returns the
+   * in-memory map for the current render. Weapon circles are NOT part of this
+   * (see `_categorizeItems` — they're always live-derived from equip state).
    */
-  _autoFillSlots(spells, usableEquipped, weapons) {
+  _autoFillSlots(spells, usableEquipped) {
     const TYPE_ORDER = { alchemical: 0, relic: 1, gear: 2 };
     const favSpells = spells.filter(s => s.system.favorite);
     const orderedEquip = usableEquipped.slice().sort(
@@ -454,12 +470,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     );
     const itemIds = [...favSpells, ...orderedEquip]
       .slice(0, VagabondCharacterHud.ITEM_SLOTS).map(i => i.id);
-    const weaponIds = weapons.filter(w => VagabondCharacterHud._isWeaponEquipped(w))
-      .slice(0, VagabondCharacterHud.WEAPON_SLOTS).map(i => i.id);
-    const slots = {
-      items: this._padIds(itemIds, VagabondCharacterHud.ITEM_SLOTS),
-      weapons: this._padIds(weaponIds, VagabondCharacterHud.WEAPON_SLOTS),
-    };
+    const slots = { items: this._padIds(itemIds, VagabondCharacterHud.ITEM_SLOTS) };
     // Fire-and-forget: setFlag triggers no hook the HUD listens to (no loop).
     this._saveSlots(slots);
     return slots;
@@ -543,6 +554,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // Register reactivity FIRST so a later DOM-wiring error can never leave the
     // HUD without live hooks (was the cause of slots not auto-updating).
     this._registerHooks();
+
+    // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    EquipmentHelper.sanitizeHandLimit(this.actor).catch((err) =>
+      console.error('Vagabond | Hand-limit sanitize failed:', err)
+    );
 
     // Per-user accessibility prefs (dark bg / blur / font scale).
     applyHudDisplayPrefs(this.element);
@@ -913,7 +930,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     if (event.type === 'contextmenu' || event.button === 2) {
       event.preventDefault();
-      return this._openSlotMenu(event, item, type);
+      // Weapons have no "HUD slot" concept anymore — the circles mirror actual
+      // equip state, so the way to remove one is "Unequip", not "Remove from HUD".
+      return this._openSlotMenu(event, item, type, { includeRemove: type !== 'weapon' });
     }
     if (type === 'spell') return this._spellHandler.castSpell(event, { dataset: { spellId: id } });
     if (type === 'weapon') return this._rollHandler.rollWeapon(event, target);
@@ -930,8 +949,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /**
-   * Slot context menu. Spells: Send to Chat, Remove from HUD. Weapons/items:
-   * Use, Send to Chat, Unequip, Remove from HUD.
+   * Slot context menu. Spells: Send to Chat, Remove from HUD. Items: Use, Send
+   * to Chat, Unequip, Remove from HUD. Weapons: Use, Send to Chat, Unequip —
+   * NO "Remove from HUD" (there's no separate slot state to remove from; the
+   * circles mirror actual equip state, so unequipping IS the removal).
    * @param {Event} event
    * @param {Item} item
    * @param {'spell'|'weapon'|'item'} type
@@ -1082,13 +1103,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     return this.actor.getFlag('vagabond', 'hudSlots') ?? null;
   }
 
-  /** Normalized slot map (never null; both arrays padded to their counts). */
+  /** Normalized slot map (never null; item array padded to its count). Weapon
+   *  circles have no persisted slot map — see `_categorizeItems`. */
   _readSlots() {
     const raw = this._getSlots();
-    return {
-      items: this._padIds(raw?.items, VagabondCharacterHud.ITEM_SLOTS),
-      weapons: this._padIds(raw?.weapons, VagabondCharacterHud.WEAPON_SLOTS),
-    };
+    return { items: this._padIds(raw?.items, VagabondCharacterHud.ITEM_SLOTS) };
   }
 
   async _saveSlots(slots) {
@@ -1102,13 +1121,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   async _clearSlot(itemId) {
     const slots = this._readSlots();
     slots.items = slots.items.map(id => (id === itemId ? null : id));
-    slots.weapons = slots.weapons.map(id => (id === itemId ? null : id));
     await this._saveSlots(slots);
     this.render();
   }
 
   /* -------------------------------------------- */
-  /*  Drop → equip / favorite                     */
+  /*  Drop → item-slot assignment (layout only)   */
   /* -------------------------------------------- */
 
   async _onHudDrop(event, body) {
@@ -1130,57 +1148,38 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /**
-   * Assign a dropped item into a quick slot — replace, never displace. Weapons
-   * go to the weapon circles; spells / gear / relic / alchemical go to the item
-   * slots. If the drop landed on a specific same-kind slot, that slot is used;
-   * otherwise the first empty slot, else the last slot. The item is first
-   * removed from any slot it already occupied (move, not duplicate). Slot
-   * membership is independent of equipped/favorite state — dropping does not
-   * change game state, only the launcher layout.
+   * Assign a dropped item into the persisted item-slot map: replace, never
+   * displace — if the drop landed on a specific empty/filled slot that slot
+   * is used, otherwise the first empty slot, else the last slot. The item is
+   * first removed from any item slot it already occupied (move, not
+   * duplicate). Purely a launcher-layout change — does NOT equip, favorite,
+   * or otherwise touch game state (equip/unequip is done from the Inventory
+   * tab; see `EquipmentHelper.equipWeaponWithHandLimit` via
+   * `inventory-handler.mjs`'s Equip/Unequip context menu, shared by sheet and
+   * HUD). Weapons have no slot to assign to (the circles are a live mirror of
+   * actual equip state — see `_categorizeItems`), so dropping one is a no-op.
    * @param {Item} item
    * @param {HTMLElement|null} slotEl  The slot element under the cursor, if any.
    */
   async _assignDrop(item, slotEl) {
     const isWeapon = item.type === 'equipment' && item.system.equipmentType === 'weapon';
-    const kind = isWeapon ? 'weapons' : 'items';
-    const max = isWeapon ? VagabondCharacterHud.WEAPON_SLOTS : VagabondCharacterHud.ITEM_SLOTS;
+    if (isWeapon) return;
 
-    // A slotted item should be ready to use: equip / favorite it if it isn't.
-    await this._ensureEquippedOrFavorite(item);
-
+    const max = VagabondCharacterHud.ITEM_SLOTS;
     const slots = this._readSlots();
     slots.items = slots.items.map(id => (id === item.id ? null : id));
-    slots.weapons = slots.weapons.map(id => (id === item.id ? null : id));
 
     let idx = -1;
     if (slotEl) {
-      const sameKind = isWeapon ? slotEl.classList.contains('vh-pc-weapon') : slotEl.classList.contains('vh-slot');
+      const sameKind = slotEl.classList.contains('vh-slot');
       const n = Number(slotEl.dataset.slotIndex);
       if (sameKind && Number.isInteger(n) && n >= 0 && n < max) idx = n;
     }
-    if (idx < 0) idx = slots[kind].findIndex(id => id == null);
+    if (idx < 0) idx = slots.items.findIndex(id => id == null);
     if (idx < 0) idx = max - 1; // all full, no target → replace the last slot
 
-    slots[kind][idx] = item.id;
+    slots.items[idx] = item.id;
     await this._saveSlots(slots);
     this.render();
-  }
-
-  /**
-   * Make a slotted item ready to use: favorite spells, equip weapons (grip-
-   * aware, 2H → twoHands else oneHand), equip other equipment. No-op when the
-   * item is already in the right state so a 2H weapon is never downgraded.
-   * @param {Item} item
-   */
-  async _ensureEquippedOrFavorite(item) {
-    if (item.type === 'spell') {
-      if (!item.system.favorite) await item.update({ 'system.favorite': true });
-    } else if (item.type === 'equipment' && item.system.equipmentType === 'weapon') {
-      if (!VagabondCharacterHud._isWeaponEquipped(item)) {
-        await item.update({ 'system.equipmentState': item.system.grip === '2H' ? 'twoHands' : 'oneHand' });
-      }
-    } else if (item.system?.equipped !== undefined && !item.system.equipped) {
-      await item.update({ 'system.equipped': true });
-    }
   }
 }

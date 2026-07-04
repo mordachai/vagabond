@@ -35,6 +35,16 @@
       {{#if (eq system.equipmentType 'weapon')}}
         <div class='locked-section'>
           <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.WeaponStats"}}</h3>
+          {{#if system.imbuedSpell.active}}
+            <div class="imbue-badge" data-tooltip="{{system.imbuedSpell.spellName}} (from {{system.imbuedSpell.sourceActorName}})">
+              <i class="fa-solid fa-wand-sparkles"></i> {{system.imbuedSpell.spellName}}
+              {{#if @root.owner}}
+                <button type="button" data-action="clearImbue" data-tooltip="{{localize 'VAGABOND.Status.Imbue.ClearButton'}}">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              {{/if}}
+            </div>
+          {{/if}}
           <div class='locked-stats-grid'>
             <div class='locked-stat'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.SkillColon"}}</span>
@@ -349,6 +359,14 @@
       {{#if (eq system.equipmentType 'weapon')}}
         <div class="item-section-box">
           <div class="item-section-label">{{localize "VAGABOND.UI.Sections.WeaponConfig"}}</div>
+        {{#if system.imbuedSpell.active}}
+          <div class="imbue-badge" data-tooltip="{{system.imbuedSpell.spellName}} (from {{system.imbuedSpell.sourceActorName}})">
+            <i class="fa-solid fa-wand-sparkles"></i> {{system.imbuedSpell.spellName}}
+            <button type="button" data-action="clearImbue" data-tooltip="{{localize 'VAGABOND.Status.Imbue.ClearButton'}}">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        {{/if}}
         {{! Weapon Skill and Damage Row }}
         <div class='form-group'>
           <div class='grid grid-3col gap-8'>

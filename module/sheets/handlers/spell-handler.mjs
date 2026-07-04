@@ -602,6 +602,30 @@ export class SpellHandler {
       _spellExtraTags = _spellPostCtx.extraTags;
     }
 
+    // Imbue: attach the spell to willing targets' equipped weapons before any mana
+    // is spent — a cancelled weapon-picker aborts the whole cast at no cost.
+    if (isSuccess && state.deliveryType.toUpperCase() === 'IMBUE') {
+      const { VagabondImbueHelper } = await import('../../helpers/imbue-helper.mjs');
+      const targetCount = CONFIG.VAGABOND.deliveryBaseRanges.imbue.value
+        + CONFIG.VAGABOND.deliveryIncrement.imbue * state.deliveryIncrease;
+      const assignments = await VagabondImbueHelper.resolveTargetWeapons(
+        Array.from(game.user.targets),
+        targetCount
+      );
+      if (!assignments.length) return;
+      const imbueUpfront = game.settings.get('vagabond', 'imbueUpfrontMana');
+      for (const { weapon } of assignments) {
+        await VagabondImbueHelper.imbueWeapon(weapon, {
+          sourceActor: this.actor,
+          spell,
+          damageDice: imbueUpfront ? state.damageDice : 0,
+          deferredMana: imbueUpfront ? costs.deferredMana : 0,
+          deferredPayment: !imbueUpfront,
+          manaSkillKey: manaSkill,
+        });
+      }
+    }
+
     // Deduct mana on success (whether from successful roll or bypass)
     if (isSuccess) {
       const newMana = this.actor.system.mana.current - costs.totalCost;

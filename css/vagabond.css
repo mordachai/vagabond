@@ -1488,12 +1488,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Apply Direct (Full Width) */
   /* Macro buttons — utility accent (not damage/save). On Success = purple,
      Always = teal so the two slots read as distinct at a glance. */
+  /* Imbue Delivery Controls (deferred-payment mode) — inline dice stepper +
+     Effect checkbox + live total, replacing the plain deliver button. */
   /* Save Buttons Row */
   /* Apply Save Damage Button Container (in save result cards) */
   /* Defend Options Accordion */
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button,
@@ -1530,6 +1533,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:hover,
@@ -1544,6 +1548,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:disabled,
@@ -1560,6 +1565,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button i,
@@ -1594,6 +1600,101 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button[data-macro-slot=macro] i {
   color: #b8f0ff !important;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls {
+  width: 100%;
+  background: linear-gradient(180deg, #3a2a52, #241735);
+  border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  color: #fff;
+  font-family: var(--font-primary);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-controls-label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-controls-label i {
+  color: var(--c-yellow-text);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper button {
+  height: auto;
+  line-height: normal;
+  width: 22px;
+  height: 22px;
+  border-radius: 2px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper .vagabond-imbue-dice-count {
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper .vagabond-imbue-effect-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-total {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button {
+  width: 100%;
+  height: auto;
+  line-height: normal;
+  background: transparent;
+  background-image: url("../assets/ui/chat/apply-direct-bg.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #fff;
+  padding: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 2px;
+  border: none;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button:hover {
+  filter: brightness(1.6);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button i {
+  color: var(--c-yellow-text);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row {
   display: flex;
@@ -9858,6 +9959,153 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-dark);
 }
 
+.imbue-weapon-select .iws-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 4px;
+}
+.imbue-weapon-select .iws-hint {
+  text-align: center;
+  color: var(--vagabond-c-text-primary);
+  font-size: 0.85rem;
+  margin: 0 0 10px;
+}
+.imbue-weapon-select .iws-columns {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+}
+.imbue-weapon-select .iws-column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 200px;
+  flex: 0 0 200px;
+}
+.imbue-weapon-select .iws-target-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+.imbue-weapon-select .iws-token-img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  flex: 0 0 auto;
+}
+.imbue-weapon-select .iws-target-name {
+  font-family: "Manofa", serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--vagabond-c-title2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.imbue-weapon-select .iws-weapon-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.imbue-weapon-select .iws-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  height: auto;
+  line-height: normal;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.imbue-weapon-select .iws-card .iws-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+}
+.imbue-weapon-select .iws-card .iws-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.imbue-weapon-select .iws-card .iws-card-label {
+  font-family: "Paradigm", serif;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-title2);
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.imbue-weapon-select .iws-card:hover {
+  border-color: var(--vagabond-c-title2);
+  filter: brightness(1.15);
+}
+.imbue-weapon-select .iws-card.is-selected {
+  border-color: var(--vagabond-c-dark-bluey);
+  background-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.imbue-weapon-select .iws-card.is-selected .iws-card-label {
+  color: var(--vagabond-c-dark);
+}
+.imbue-weapon-select .iws-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+}
+.imbue-weapon-select .iws-footer button {
+  flex: 0 1 180px;
+  border: none;
+  color: var(--vagabond-c-dark);
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  height: auto;
+  line-height: normal;
+}
+.imbue-weapon-select .iws-footer .iws-confirm {
+  background: url("../assets/ui/chat/yellow-button.webp") no-repeat center/100% 100%;
+}
+.imbue-weapon-select .iws-footer .iws-confirm:hover {
+  filter: brightness(1.1);
+}
+.imbue-weapon-select .iws-footer .iws-cancel {
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--vagabond-c-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.imbue-weapon-select .iws-footer .iws-cancel:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-chat-yellow);
+}
+
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .inventory-context-menu,
@@ -11580,6 +11828,33 @@ ol#combat-tracker.directory-list {
   margin: 8px 0px;
   padding-bottom: 4px;
   border-bottom: 1px solid var(--vagabond-c-text-primary);
+}
+.vagabond .imbue-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(120, 80, 200, 0.15);
+  border: 1px solid rgba(120, 80, 200, 0.5);
+  font-size: 0.85em;
+}
+.vagabond .imbue-badge i.fa-wand-sparkles {
+  color: rgb(180, 140, 255);
+}
+.vagabond .imbue-badge button {
+  height: auto;
+  line-height: normal;
+  padding: 0 2px;
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .imbue-badge button:hover {
+  color: var(--vagabond-c-red);
 }
 .vagabond .equip-cost-slots-row {
   display: flex;
