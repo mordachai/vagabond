@@ -487,11 +487,11 @@ export class ProgressClockOverlay {
     }
 
     const data = clock.flags.vagabond.progressClock;
-    // Trackers are unbounded (negatives allowed); clocks clamp to [0, segments]
+    // Trackers are unbounded (negatives allowed); clocks wrap around [0, segments]
     const filled = data.kind === 'tracker'
       ? data.filled + delta
-      : Math.clamp(data.filled + delta, 0, data.segments);
-    if (filled === data.filled) return; // already at bound
+      : (data.filled + delta + (data.segments + 1)) % (data.segments + 1);
+    if (filled === data.filled) return; // no-op (segments === 0)
 
     await clock.update({ 'flags.vagabond.progressClock.filled': filled });
   }
