@@ -14,15 +14,12 @@ export class VagabondImbueHelper {
       spellUuid: '',
       spellName: '',
       spellImg: '',
+      damageTypeKey: '',
+      dieSize: 0,
       damageDice: 0,
       deferredMana: 0,
       deferredPayment: false,
       manaSkillKey: '',
-      castCombatId: '',
-      castCombatRound: null,
-      castCombatTurn: null,
-      casterCombatantId: '',
-      focusSpellId: '',
     };
   }
 
@@ -67,16 +64,6 @@ export class VagabondImbueHelper {
    * @param {{sourceActor: Actor, spell: Item, damageDice: number, deferredMana: number, deferredPayment: boolean, manaSkillKey: string}} opts
    */
   static async imbueWeapon(weapon, { sourceActor, spell, damageDice, deferredMana, deferredPayment, manaSkillKey }) {
-    const combatFields = game.combat
-      ? {
-          castCombatId: game.combat.id,
-          castCombatRound: game.combat.round,
-          castCombatTurn: game.combat.turn,
-          casterCombatantId:
-            game.combat.combatants.find((c) => c.actor?.uuid === sourceActor.uuid)?.id ?? '',
-        }
-      : {};
-
     await weapon.update({
       'system.imbuedSpell': {
         ...this._emptyPayload(),
@@ -86,12 +73,12 @@ export class VagabondImbueHelper {
         spellUuid: spell.uuid,
         spellName: spell.name,
         spellImg: spell.img,
+        damageTypeKey: (spell.system.damageType || 'physical').toLowerCase(),
+        dieSize: (spell.system.damageDieSize || 6) + (sourceActor.system.spellDamageDieSizeBonus || 0),
         damageDice: damageDice || 0,
         deferredMana: deferredMana || 0,
         deferredPayment: !!deferredPayment,
         manaSkillKey: manaSkillKey || '',
-        focusSpellId: spell.id,
-        ...combatFields,
       },
     });
   }
@@ -120,6 +107,17 @@ export class VagabondImbueHelper {
   }
 
   /**
+   * Font Awesome die-face icon for a given die size (matches the spell's
+   * effective damage die, e.g. `1d8` → fa-dice-d8). Falls back to d6.
+   * @param {number} size
+   * @returns {string}
+   */
+  static _dieIconClass(size) {
+    const map = { 4: 'fa-dice-d4', 6: 'fa-dice-d6', 8: 'fa-dice-d8', 10: 'fa-dice-d10', 12: 'fa-dice-d12', 20: 'fa-dice-d20' };
+    return `fa-solid ${map[size] || 'fa-dice-d6'}`;
+  }
+
+  /**
    * Build the "Deliver Imbued Spell" chat-card control for a hit that just landed
    * with an imbued weapon. Upfront-mode payloads (deferredPayment=false) render a
    * simple one-click button; deferred-mode payloads render an inline stepper so
@@ -132,9 +130,16 @@ export class VagabondImbueHelper {
   static createDeliveryButton(weapon, attackResult, targetsAtRollTime = []) {
     const payload = weapon.system.imbuedSpell;
     const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
+    const sectionTitle = game.i18n.localize('VAGABOND.Status.Imbue.SectionTitle');
+    const headerHtml = `<div class="imbue-header-container">
+          <div class="imbue-header-arrow"><span>${sectionTitle}</span></div>
+        </div>`;
 
     if (payload.deferredPayment) {
-      return `<div class="vagabond-imbue-delivery-controls"
+      const castLabel = game.i18n.format('VAGABOND.Status.Imbue.CastButton', { spellName: payload.spellName });
+      const damageIconClass = CONFIG.VAGABOND?.damageTypeIcons?.[payload.damageTypeKey] || 'fas fa-burst';
+      const dieIconClass = this._dieIconClass(payload.dieSize);
+      return `<div class="vagabond-imbue-section vagabond-imbue-delivery-controls"
           data-actor-id="${weapon.parent?.id ?? ''}"
           data-item-id="${weapon.id}"
           data-attack-critical="${!!attackResult.isCritical}"
@@ -142,28 +147,44 @@ export class VagabondImbueHelper {
           data-source-actor-uuid="${payload.sourceActorUuid}"
           data-dice="0"
           data-effect="false">
-          <div class="vagabond-imbue-controls-label"><i class="fa-solid fa-wand-sparkles"></i> ${game.i18n.format('VAGABOND.Status.Imbue.DeliverButton', { spellName: payload.spellName })}</div>
-          <div class="vagabond-imbue-stepper">
-            <button type="button" class="vagabond-imbue-dice-minus">&minus;</button>
-            <span class="vagabond-imbue-dice-count">0</span>
-            <button type="button" class="vagabond-imbue-dice-plus">+</button>
-            <label class="vagabond-imbue-effect-toggle">
+          ${headerHtml}
+          <div class="imbue-nodes-row">
+            <div class="imbue-node imbue-node-damage vagabond-imbue-dice-control" title="${game.i18n.localize('VAGABOND.Status.Imbue.DiceStepHint')}">
+              <div class="imbue-node-row">
+                <i class="${damageIconClass} imbue-node-icon"></i>
+                <span class="vagabond-imbue-dice-count imbue-node-value">0</span>
+                <!-- <i class="${dieIconClass} imbue-die-icon"></i> -->
+              </div>
+              <span class="imbue-node-label">${game.i18n.localize('VAGABOND.UI.Sections.Damage')}</span>
+            </div>
+            <div class="imbue-node imbue-node-mana">
+              <div class="imbue-node-row">
+                <i class="fa-solid fa-star-christmas imbue-node-icon"></i>
+                <span class="vagabond-imbue-total-value">${this._computeDeliveryCost(0, false)}</span>
+              </div>
+            </div>
+            <label class="imbue-node imbue-node-effect">
               <input type="checkbox" class="vagabond-imbue-effect-checkbox" />
-              ${game.i18n.localize('VAGABOND.Status.Imbue.IncludeEffect')}
+              <div class="imbue-node-row">
+                <i class="fas fa-burst imbue-node-icon"></i>
+              </div>
+              <span class="imbue-node-label">${game.i18n.localize('VAGABOND.Status.Imbue.EffectLabel')}</span>
             </label>
           </div>
-          <div class="vagabond-imbue-total">${game.i18n.localize('VAGABOND.Status.Imbue.TotalMana')}: <span class="vagabond-imbue-total-value">1</span></div>
-          <button type="button" class="vagabond-imbue-confirm-button"><i class="fa-solid fa-wand-sparkles"></i> ${game.i18n.localize('VAGABOND.Status.Imbue.ConfirmDeliver')}</button>
+          <button type="button" class="vagabond-imbue-confirm-button"><i class="fas fa-wand-magic-sparkles"></i> ${castLabel}</button>
         </div>`;
     }
 
-    return `<button class="vagabond-imbue-deliver-button"
-        data-actor-id="${weapon.parent?.id ?? ''}"
-        data-item-id="${weapon.id}"
-        data-attack-critical="${!!attackResult.isCritical}"
-        data-targets="${targetsJson}">
-        <i class="fa-solid fa-wand-sparkles"></i> ${game.i18n.format('VAGABOND.Status.Imbue.DeliverButton', { spellName: payload.spellName })} (${payload.deferredMana || 1})
-      </button>`;
+    return `<div class="vagabond-imbue-section">
+        ${headerHtml}
+        <button class="vagabond-imbue-deliver-button"
+            data-actor-id="${weapon.parent?.id ?? ''}"
+            data-item-id="${weapon.id}"
+            data-attack-critical="${!!attackResult.isCritical}"
+            data-targets="${targetsJson}">
+            <i class="fa-solid fa-wand-sparkles"></i> ${game.i18n.format('VAGABOND.Status.Imbue.DeliverButton', { spellName: payload.spellName })} (${payload.deferredMana || 1})
+          </button>
+      </div>`;
   }
 
   /**
@@ -174,9 +195,9 @@ export class VagabondImbueHelper {
    */
   static _markDelivered(el, isControls) {
     if (isControls) {
-      el.innerHTML = `<i class="fa-solid fa-check"></i> ${game.i18n.localize('VAGABOND.Status.Imbue.Delivered')}`;
+      el.innerHTML = `<i class="fas fa-wand-magic-sparkles"></i> ${game.i18n.localize('VAGABOND.Status.Imbue.Delivered')}`;
     } else {
-      el.textContent = game.i18n.localize('VAGABOND.Status.Imbue.Delivered');
+      el.innerHTML = `<i class="fas fa-wand-magic-sparkles"></i> ${game.i18n.localize('VAGABOND.Status.Imbue.Delivered')}`;
       el.disabled = true;
     }
   }
@@ -319,38 +340,5 @@ export class VagabondImbueHelper {
 
     await this.clearImbue(weapon);
     this._markDelivered(el, isControls);
-  }
-
-  /**
-   * `updateCombat` hook body: clears non-focused imbue payloads once turn order
-   * cycles back to the caster's next turn.
-   * @param {Combat} combat
-   */
-  static async checkTurnExpiry(combat) {
-    const active = combat.combatant;
-    if (!active) return;
-
-    const actorSet = new Map();
-    for (const a of game.actors.contents) actorSet.set(a.uuid, a);
-    for (const c of combat.combatants) {
-      if (c.actor) actorSet.set(c.actor.uuid, c.actor);
-    }
-
-    for (const actor of actorSet.values()) {
-      const weapons = actor.items.filter(
-        (i) => EquipmentHelper.isWeapon(i) && i.system.imbuedSpell?.active
-      );
-      for (const weapon of weapons) {
-        const payload = weapon.system.imbuedSpell;
-        if (payload.castCombatId !== combat.id) continue;
-        if (payload.casterCombatantId !== active.id) continue;
-
-        const sourceActor = await fromUuid(payload.sourceActorUuid);
-        const isFocusing = sourceActor?.system?.focus?.spellIds?.includes(payload.focusSpellId);
-        if (isFocusing) continue;
-
-        await this.clearImbue(weapon);
-      }
-    }
   }
 }

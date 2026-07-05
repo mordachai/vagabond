@@ -319,6 +319,7 @@ export class VagabondChatCard {
     actionIndex = null,
     weaknessPreRolled = false,
     macroExtraScope = null,
+    imbueSection = null,
   }) {
       const card = new VagabondChatCard();
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
@@ -435,6 +436,9 @@ export class VagabondChatCard {
 
       // 3. Leading footer actions (e.g. Grapple button — appears above damage buttons)
       if (footerActions.length) footerActions.forEach(a => card.addFooterAction(a));
+
+      // Imbue delivery control — its own section, rendered above the damage section
+      if (imbueSection) card.data.imbueSection = imbueSection;
 
       // 4. Handle Damage & Buttons
       if (damageRoll) {
@@ -817,10 +821,21 @@ export class VagabondChatCard {
           );
       }
 
-      // Imbue: weapon carries a pending spell — offer to deliver it on hit
-      if (attackResult.isHit && weapon.system.imbuedSpell?.active) {
+      // Imbue: weapon carries a pending spell — offer to deliver it on hit.
+      // Rendered as its own section above the damage section (not a footer
+      // action) so it visually pairs with the roll while the weapon's own
+      // damage + Apply button stay grouped together below it.
+      let imbueSection = null;
+      if (weapon.system.imbuedSpell?.active) {
           const { VagabondImbueHelper } = await import('./imbue-helper.mjs');
-          footerActions.push(VagabondImbueHelper.createDeliveryButton(weapon, attackResult, targetsAtRollTime));
+          if (attackResult.isHit) {
+              imbueSection = VagabondImbueHelper.createDeliveryButton(weapon, attackResult, targetsAtRollTime);
+          } else {
+              // The attack attempt IS the spell's cast attempt — a miss fizzles
+              // it regardless of Duration/turn timing (no re-imbue needed to try
+              // again unless the payload is actually spent by a miss or a hit-delivery).
+              await VagabondImbueHelper.clearImbue(weapon);
+          }
       }
 
       const result = await this.createActionCard({
@@ -839,6 +854,7 @@ export class VagabondChatCard {
           attackType,  // ✅ FIX: Pass attackType for save hinder logic
           targetsAtRollTime,
           footerActions,
+          imbueSection,
           rerollData: {
             type: 'attack',
             itemId: weapon.id,

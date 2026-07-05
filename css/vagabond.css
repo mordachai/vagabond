@@ -783,6 +783,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
    * AUTO-FAIL BANNER (for Dead status, etc.)
    * ================================================== */
   /* DAMAGE SECTION */
+  /* IMBUED SPELL SECTION — sits above the Damage section so the weapon's
+     own damage + Apply button stay grouped together below it. */
   /* CRITICAL SECTION */
   /* PROPERTIES ACCORDION */
   /* FOOTER BUTTONS */
@@ -1274,6 +1276,169 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .content-body {
   padding-top: 10px;
 }
+.vagabond-chat-card-v2 .vagabond-imbue-section {
+  display: block;
+  margin-bottom: 10px;
+  /* Icon + number(s) share one line; label (if any) sits on the line below */
+  /* Damage node — left-click +1 die, right-click -1 die (see vagabond.mjs) */
+  /* Mana node — bigger number, orange 1px outline via text-shadow trick, no label */
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-header-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-header-arrow {
+  background-image: url("../assets/ui/chat/damage-title-bg.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  gap: 4px;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-header-arrow span {
+  color: white;
+  font-weight: 900;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 #000;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-header-arrow i {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 14px;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-header-arrow::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--vagabond-c-bluey);
+  border-radius: 1px;
+  max-width: 40px;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-nodes-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 0 12px;
+  margin-bottom: 8px;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 33%;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-icon {
+  font-size: 28px;
+  color: var(--vagabond-c-damage-orange);
+  text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-value {
+  font-family: var(--font-secondary);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-die-icon {
+  font-size: 16px;
+  opacity: 0.8;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-damage {
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-damage:hover .imbue-node-icon {
+  filter: brightness(1.3);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-mana .vagabond-imbue-total-value {
+  font-family: var(--font-secondary);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--c-dark-blue);
+  text-shadow: 1px 1px 0 var(--vagabond-c-damage-orange), -1px 1px 0 var(--vagabond-c-damage-orange), -1px -1px 0 var(--vagabond-c-damage-orange), 1px -1px 0 var(--vagabond-c-damage-orange);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-effect {
+  cursor: pointer;
+  user-select: none;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-effect input[type=checkbox] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-effect .imbue-node-icon {
+  color: #999;
+  opacity: 0.6;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-effect:has(input:checked) .imbue-node-icon {
+  color: var(--vagabond-c-damage-orange);
+  opacity: 1;
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-effect:has(input:checked) .imbue-node-label {
+  color: var(--vagabond-c-damage-orange);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-deliver-button,
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-confirm-button {
+  display: flex !important;
+  width: calc(100% - 32px) !important;
+  margin: 0 16px;
+  box-sizing: border-box;
+  height: auto;
+  line-height: normal;
+  background: transparent;
+  background-image: url("../assets/ui/chat/apply-direct-bg.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #fff;
+  padding: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 2px;
+  border: none;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-deliver-button:hover,
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-confirm-button:hover {
+  filter: brightness(1.6);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-deliver-button:disabled,
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-deliver-button i,
+.vagabond-chat-card-v2 .vagabond-imbue-section button.vagabond-imbue-confirm-button i {
+  color: var(--c-yellow-text);
+}
 .vagabond-chat-card-v2 .damage-section {
   margin-bottom: 10px;
   /* Add inside .vagabond-chat-card-v2 .damage-section */
@@ -1488,15 +1653,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Apply Direct (Full Width) */
   /* Macro buttons — utility accent (not damage/save). On Success = purple,
      Always = teal so the two slots read as distinct at a glance. */
-  /* Imbue Delivery Controls (deferred-payment mode) — inline dice stepper +
-     Effect checkbox + live total, replacing the plain deliver button. */
   /* Save Buttons Row */
   /* Apply Save Damage Button Container (in save result cards) */
   /* Defend Options Accordion */
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button,
-.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button,
@@ -1533,7 +1695,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:hover,
-.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:hover,
@@ -1548,7 +1709,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:disabled,
-.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button:disabled,
@@ -1565,7 +1725,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button i,
-.vagabond-chat-card-v2 .card-actions button.vagabond-imbue-deliver-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-item-damage-button i,
@@ -1600,101 +1759,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button[data-macro-slot=macro] i {
   color: #b8f0ff !important;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls {
-  width: 100%;
-  background: linear-gradient(180deg, #3a2a52, #241735);
-  border-radius: 2px;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-  padding: 6px 8px;
-  margin-bottom: 6px;
-  color: #fff;
-  font-family: var(--font-primary);
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-controls-label {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 11px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 4px;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-controls-label i {
-  color: var(--c-yellow-text);
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper button {
-  height: auto;
-  line-height: normal;
-  width: 22px;
-  height: 22px;
-  border-radius: 2px;
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper .vagabond-imbue-dice-count {
-  min-width: 1.5em;
-  text-align: center;
-  font-weight: bold;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-stepper .vagabond-imbue-effect-toggle {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  cursor: pointer;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls .vagabond-imbue-total {
-  font-size: 11px;
-  opacity: 0.85;
-  margin-bottom: 4px;
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button {
-  width: 100%;
-  height: auto;
-  line-height: normal;
-  background: transparent;
-  background-image: url("../assets/ui/chat/apply-direct-bg.webp");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-  color: #fff;
-  padding: 6px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-family: var(--font-primary);
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  border-radius: 2px;
-  border: none;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button:hover {
-  filter: brightness(1.6);
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  filter: grayscale(1);
-}
-.vagabond-chat-card-v2 .card-actions .vagabond-imbue-delivery-controls button.vagabond-imbue-confirm-button i {
-  color: var(--c-yellow-text);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row {
   display: flex;
@@ -9604,6 +9668,7 @@ ol#combat-tracker.directory-list {
   justify-content: space-between;
   align-items: flex-start;
   z-index: 4;
+  pointer-events: none;
 }
 .vsc-root .vsc-imbue-col {
   display: flex;
@@ -9613,6 +9678,7 @@ ol#combat-tracker.directory-list {
   overflow-y: auto;
   max-height: 100%;
   scrollbar-width: none;
+  pointer-events: auto;
 }
 .vsc-root .vsc-imbue-col::-webkit-scrollbar {
   display: none;

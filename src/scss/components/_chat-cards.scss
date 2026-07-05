@@ -626,6 +626,178 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     /* DAMAGE SECTION */
     .content-body { padding-top: 10px; }
 
+    /* IMBUED SPELL SECTION — sits above the Damage section so the weapon's
+       own damage + Apply button stay grouped together below it. */
+    .vagabond-imbue-section {
+        display: block;
+        margin-bottom: 10px;
+
+        .imbue-header-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .imbue-header-arrow {
+            background-image: url('../assets/ui/chat/damage-title-bg.webp');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 150px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 8px;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+
+            gap: 4px;
+
+            span {
+                color: white; font-weight: 900; font-size: 14px;
+                text-transform: uppercase; text-shadow: 1px 1px 0 #000;
+            }
+
+            i {
+                color: $c-yellow;
+                font-size: 14px;
+            }
+
+            &::after {
+                content: "";
+                flex: 1;
+                height: 2px;
+                background: var(--vagabond-c-bluey);
+                border-radius: 1px;
+                max-width: 40px;
+            }
+        }
+
+        .imbue-nodes-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-around;
+            gap: 8px;
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+
+        .imbue-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            width: 33%;
+        }
+
+        .imbue-node-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--c-dark-blue);
+        }
+
+        /* Icon + number(s) share one line; label (if any) sits on the line below */
+        .imbue-node-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 38px;
+        }
+
+        .imbue-node-icon {
+            font-size: 28px;
+            color: $c-damage;
+            text-shadow:
+                1px 1px 0 white, -1px 1px 0 white,
+                -1px -1px 0 white, 1px -1px 0 white;
+        }
+
+        .imbue-node-value {
+            font-family: var(--font-secondary);
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--c-dark-blue);
+        }
+
+        .imbue-die-icon {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* Damage node — left-click +1 die, right-click -1 die (see vagabond.mjs) */
+        .imbue-node-damage {
+            cursor: pointer;
+            user-select: none;
+
+            &:hover .imbue-node-icon { filter: brightness(1.3); }
+        }
+
+        /* Mana node — bigger number, orange 1px outline via text-shadow trick, no label */
+        .imbue-node-mana {
+            .vagabond-imbue-total-value {
+                font-family: var(--font-secondary);
+                font-size: 32px;
+                font-weight: 900;
+                color: var(--c-dark-blue);
+                text-shadow:
+                    1px 1px 0 $c-damage, -1px 1px 0 $c-damage,
+                    -1px -1px 0 $c-damage, 1px -1px 0 $c-damage;
+            }
+        }
+
+        .imbue-node-effect {
+            cursor: pointer;
+            user-select: none;
+
+            input[type="checkbox"] {
+                position: absolute;
+                width: 1px; height: 1px;
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .imbue-node-icon {
+                color: #999;
+                opacity: 0.6;
+            }
+
+            &:has(input:checked) {
+                .imbue-node-icon {
+                    color: $c-damage;
+                    opacity: 1;
+                }
+                .imbue-node-label { color: $c-damage; }
+            }
+        }
+
+        button.vagabond-imbue-deliver-button,
+        button.vagabond-imbue-confirm-button {
+            display: flex !important;
+            width: calc(100% - 32px) !important;
+            margin: 0 16px;
+            box-sizing: border-box;
+            height: auto; line-height: normal;
+            background: transparent;
+            background-image: url('../assets/ui/chat/apply-direct-bg.webp');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            color: #fff;
+            padding: 6px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-family: var(--font-primary);
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            border-radius: 2px;
+            border: none;
+            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            &:hover { filter: brightness(1.6); }
+            &:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
+            i { color: var(--c-yellow-text); }
+        }
+    }
+
     .damage-section {
         margin-bottom: 10px;
 
@@ -858,7 +1030,6 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         /* Apply Direct (Full Width) */
         button.vagabond-apply-direct-button,
         button.vagabond-grapple-button,
-        button.vagabond-imbue-deliver-button,
         button.vagabond-macro-button,
         button.vagabond-npc-damage-button,
         button.vagabond-item-damage-button,
@@ -917,96 +1088,6 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             &[data-macro-slot="macro"] {
                 background: linear-gradient(180deg, #1f5e63, #123a3e) !important;
                 i { color: #b8f0ff !important; }
-            }
-        }
-
-        /* Imbue Delivery Controls (deferred-payment mode) — inline dice stepper +
-           Effect checkbox + live total, replacing the plain deliver button. */
-        .vagabond-imbue-delivery-controls {
-            width: 100%;
-            background: linear-gradient(180deg, #3a2a52, #241735);
-            border-radius: 2px;
-            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-            padding: 6px 8px;
-            margin-bottom: 6px;
-            color: #fff;
-            font-family: var(--font-primary);
-
-            .vagabond-imbue-controls-label {
-                font-weight: bold;
-                text-transform: uppercase;
-                font-size: 11px;
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                margin-bottom: 4px;
-                i { color: var(--c-yellow-text); }
-            }
-
-            .vagabond-imbue-stepper {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                margin-bottom: 4px;
-
-                button {
-                    height: auto; line-height: normal;
-                    width: 22px; height: 22px;
-                    border-radius: 2px;
-                    border: none;
-                    background: rgba(255, 255, 255, 0.15);
-                    color: #fff;
-                    cursor: pointer;
-                    font-weight: bold;
-                    &:hover { background: rgba(255, 255, 255, 0.3); }
-                }
-
-                .vagabond-imbue-dice-count {
-                    min-width: 1.5em;
-                    text-align: center;
-                    font-weight: bold;
-                }
-
-                .vagabond-imbue-effect-toggle {
-                    margin-left: auto;
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    font-size: 11px;
-                    cursor: pointer;
-                }
-            }
-
-            .vagabond-imbue-total {
-                font-size: 11px;
-                opacity: 0.85;
-                margin-bottom: 4px;
-            }
-
-            button.vagabond-imbue-confirm-button {
-                width: 100%;
-                height: auto; line-height: normal;
-                background: transparent;
-                background-image: url('../assets/ui/chat/apply-direct-bg.webp');
-                background-size: 100% 100%;
-                background-repeat: no-repeat;
-                background-position: center center;
-                color: #fff;
-                padding: 6px;
-                text-transform: uppercase;
-                font-weight: bold;
-                font-family: var(--font-primary);
-                cursor: pointer;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 6px;
-                border-radius: 2px;
-                border: none;
-                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-                &:hover { filter: brightness(1.6); }
-                &:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
-                i { color: var(--c-yellow-text); }
             }
         }
 

@@ -354,17 +354,14 @@ export default class VagabondEquipment extends VagabondItemBase {
       spellUuid:          new fields.StringField({ required: false, blank: true, initial: '' }),
       spellName:          new fields.StringField({ required: false, blank: true, initial: '' }),
       spellImg:           new fields.StringField({ required: false, blank: true, initial: '' }),
+      damageTypeKey:      new fields.StringField({ required: false, blank: true, initial: '' }),
+      dieSize:            new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       damageDice:         new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       deferredMana:       new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
       // true when cast while imbueUpfrontMana was off — Damage/Effect mana AND
       // the dice/effect choice itself defer to delivery-on-hit (see imbue-helper.mjs)
       deferredPayment:    new fields.BooleanField({ required: true, initial: false }),
       manaSkillKey:       new fields.StringField({ required: false, blank: true, initial: '' }),
-      castCombatId:       new fields.StringField({ required: false, blank: true, initial: '' }),
-      castCombatRound:    new fields.NumberField({ required: false, integer: true, initial: null, nullable: true }),
-      castCombatTurn:     new fields.NumberField({ required: false, integer: true, initial: null, nullable: true }),
-      casterCombatantId:  new fields.StringField({ required: false, blank: true, initial: '' }),
-      focusSpellId:       new fields.StringField({ required: false, blank: true, initial: '' }),
     });
 
     // ===== SEQUENCER FX FIELDS =====

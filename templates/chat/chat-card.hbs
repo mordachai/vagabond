@@ -155,6 +155,11 @@
             </div>
             {{/if}}
 
+            {{!-- Imbued Spell Section (delivery config, sits above the weapon's own Damage section) --}}
+            {{#if imbueSection}}
+                {{{imbueSection}}}
+            {{/if}}
+
             {{!-- Damage Section --}}
             {{#if damage}}
                 {{> "systems/vagabond/templates/chat/damage-display.hbs"}}
