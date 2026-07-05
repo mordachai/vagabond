@@ -1447,8 +1447,8 @@ Hooks.on('getSceneControlButtons', (controls) => {
         name:    'hudAutoOpen',
         title:   game.i18n.localize('VAGABOND.Hud.AutoOpenToggle'),
         icon:    game.settings.get('vagabond', 'hudAutoOpenOnSelect')
-          ? 'fa-solid fa-circle-user'
-          : 'fa-regular fa-circle-user',
+          ? 'fa-solid fa-square-user'
+          : 'fa-regular fa-square-user',
         toggle:  true,
         active:  game.settings.get('vagabond', 'hudAutoOpenOnSelect'),
         onChange: (event, active) => {
@@ -1468,12 +1468,23 @@ Hooks.on('getSceneControlButtons', (controls) => {
     controls.tokens.tools.characterHudOpen = {
       name:    'characterHudOpen',
       title:   game.i18n.localize('VAGABOND.Hud.OpenSceneControl'),
-      icon:    'fa-solid fa-square-user',
+      icon:    'fa-solid fa-circle-user',
       button:  true,
       onClick: () => {
-        const actor = canvas.tokens?.controlled?.[0]?.actor
-          ?? VagabondCharacterHud.resolveActor();
-        Hooks.callAll('vagabond.openCharacterHud', actor);
+        // Nothing selected → close every open PC HUD instead of opening one.
+        const controlled = canvas.tokens?.controlled ?? [];
+        if (!controlled.length) { VagabondCharacterHud.closeAll(); return; }
+        // Open one HUD per selected PC token (control() already restricts
+        // selection to owned tokens, so no separate ownership check needed).
+        // Dedup by HUD instance key, not actor.id — unlinked duplicate actors
+        // (e.g. several summons off one base actor) share actor.id but are
+        // distinct tokens and must each get their own HUD.
+        const actors = [...new Map(
+          controlled.map(t => t.actor).filter(a => a?.type === 'character')
+            .map(a => [VagabondCharacterHud._keyFor(a), a])
+        ).values()];
+        if (!actors.length) actors.push(VagabondCharacterHud.resolveActor());
+        for (const actor of actors) Hooks.callAll('vagabond.openCharacterHud', actor);
       },
     };
 
@@ -1483,10 +1494,21 @@ Hooks.on('getSceneControlButtons', (controls) => {
       title:   game.i18n.localize('VAGABOND.Hud.OpenNPCSceneControl'),
       icon:    'fa-solid fa-dragon',
       button:  true,
+      visible: game.user.isGM,
       onClick: () => {
-        const actor = canvas.tokens?.controlled?.[0]?.actor
-          ?? VagabondNPCHud.resolveActor();
-        Hooks.callAll('vagabond.openNPCHud', actor);
+        // Nothing selected → close every open NPC HUD instead of opening one.
+        const controlled = canvas.tokens?.controlled ?? [];
+        if (!controlled.length) { VagabondNPCHud.closeAll(); return; }
+        // Open one HUD per selected NPC token (GM only, since this tool is hidden from players).
+        // Dedup by HUD instance key, not actor.id — unlinked duplicate monsters
+        // (e.g. 3 goblins off one base actor) share actor.id but are distinct
+        // tokens and must each get their own HUD.
+        const actors = [...new Map(
+          controlled.map(t => t.actor).filter(a => a?.type === 'npc')
+            .map(a => [VagabondNPCHud._keyFor(a), a])
+        ).values()];
+        if (!actors.length) actors.push(VagabondNPCHud.resolveActor());
+        for (const actor of actors) Hooks.callAll('vagabond.openNPCHud', actor);
       },
     };
   }

@@ -29,11 +29,18 @@ const { api } = foundry.applications;
  *    panel. Chat is posted from a bubble button in that panel's header, never
  *    from the chip itself.
  *
- * One instance per actor (keyed by actor id).
+ * One instance per token (keyed by token uuid for unlinked actors, else actor
+ * id) — so several unlinked copies of the same NPC (e.g. 3 identical goblins)
+ * each get their own independent HUD instead of collapsing into one.
  */
 export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
   /** @type {Map<string, VagabondNPCHud>} */
   static #instances = new Map();
+
+  /** Instance key for an actor: token uuid when unlinked, else actor id. */
+  static _keyFor(actor) {
+    return actor?.isToken ? actor.token.uuid : actor?.id;
+  }
 
   /** Re-apply per-user display prefs to every open NPC HUD (no reopen). */
   static refreshDisplayPrefs() {
@@ -42,8 +49,15 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     }
   }
 
-  /** Actor id of the single selection-driven (auto-opened) HUD, or null. */
-  static #autoOpenedActorId = null;
+  /** Close every open NPC HUD. */
+  static closeAll() {
+    for (const hud of [...VagabondNPCHud.#instances.values()]) {
+      if (hud.rendered) hud.close();
+    }
+  }
+
+  /** Instance key of the single selection-driven (auto-opened) HUD, or null. */
+  static #autoOpenedKey = null;
 
   /** Minimum ownership a user needs over a token for it to auto-open its HUD. */
   static AUTO_OPEN_MIN_OWNERSHIP = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
@@ -61,8 +75,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   /* -------------------------------------------- */
 
   constructor(actor, options = {}) {
-    super(foundry.utils.mergeObject({ id: `vbd-npc-hud-${actor.id}` }, options));
+    const key = VagabondNPCHud._keyFor(actor);
+    super(foundry.utils.mergeObject({ id: `vbd-npc-hud-${key.replace(/\W/g, '-')}` }, options));
     this.actor = actor;
+    this.key = key;
     /** Token placeable this HUD was opened for; drives the portrait image. */
     this.token = options.token ?? null;
     // Reuse the same handlers the NPC sheet uses. They only read .actor / .element.
@@ -133,14 +149,15 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     token ??= canvas.tokens?.controlled?.find(t => t.actor === actor)
       ?? actor.getActiveTokens(true)[0]
       ?? null;
-    let hud = this.#instances.get(actor.id);
+    const key = this._keyFor(actor);
+    let hud = this.#instances.get(key);
     if (!hud) {
       hud = new this(actor, { token });
-      this.#instances.set(actor.id, hud);
+      this.#instances.set(key, hud);
     } else if (token) {
       hud.token = token; // follow the newly-selected token of the same actor
     }
-    if (auto) this.#autoOpenedActorId = actor.id;
+    if (auto) this.#autoOpenedKey = key;
     hud.render({ force: true });
     return hud;
   }
@@ -152,7 +169,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NoActor'));
       return;
     }
-    const hud = this.#instances.get(actor.id);
+    const hud = this.#instances.get(this._keyFor(actor));
     if (hud?.rendered) hud.close();
     else this.open(actor);
   }
@@ -180,9 +197,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       && actor.testUserPermission(game.user, this.AUTO_OPEN_MIN_OWNERSHIP);
 
     if (!eligible) { this.#closeAuto(); return; }
-    if (actor.id === this.#autoOpenedActorId) {
-      // Same actor already showing — but a different token of it may be selected; follow it.
-      const hud = this.#instances.get(actor.id);
+    const key = this._keyFor(actor);
+    if (key === this.#autoOpenedKey) {
+      // Same instance already showing — but a different token of it may be selected; follow it.
+      const hud = this.#instances.get(key);
       if (hud?.rendered && token && hud.token !== token) {
         hud.token = token;
         hud.render();
@@ -196,10 +214,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
 
   /** Close the current selection-driven HUD, if any. */
   static #closeAuto() {
-    const id = this.#autoOpenedActorId;
-    if (!id) return;
-    this.#autoOpenedActorId = null;
-    const hud = this.#instances.get(id);
+    const key = this.#autoOpenedKey;
+    if (!key) return;
+    this.#autoOpenedKey = null;
+    const hud = this.#instances.get(key);
     if (hud?.rendered) hud.close();
   }
 
@@ -426,7 +444,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   /* -------------------------------------------- */
 
   _savedPosition() {
-    const stored = (game.user.getFlag('vagabond', 'npcHudPosition') ?? {})[this.actor.id];
+    const stored = (game.user.getFlag('vagabond', 'npcHudPosition') ?? {})[this.key];
     return (stored?.left != null && stored?.top != null)
       ? { left: stored.left, top: stored.top }
       : null;
@@ -453,7 +471,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   #savePosition = foundry.utils.debounce(async () => {
     if (!this.#pos) return;
     const all = foundry.utils.deepClone(game.user.getFlag('vagabond', 'npcHudPosition') ?? {});
-    all[this.actor.id] = { left: Math.round(this.#pos.left), top: Math.round(this.#pos.top) };
+    all[this.key] = { left: Math.round(this.#pos.left), top: Math.round(this.#pos.top) };
     await game.user.setFlag('vagabond', 'npcHudPosition', all);
   }, 250);
 
@@ -497,13 +515,15 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
 
   _registerHooks() {
     this._clearHooks();
+    // Reference equality, not id — unlinked duplicate tokens share the same
+    // actor.id but are distinct synthetic Actor instances per token.
     const mine = (doc) => {
       const a = doc?.actor ?? doc?.parent ?? doc;
-      return a?.id === this.actor.id || a?.parent?.id === this.actor.id;
+      return a === this.actor;
     };
     const redraw = (doc) => { if (!doc || mine(doc)) this._reDraw(); };
     this.#hookIds.push(
-      Hooks.on('updateActor', (a) => { if (a?.id === this.actor.id) this._reDraw(); }),
+      Hooks.on('updateActor', (a) => { if (a === this.actor) this._reDraw(); }),
       Hooks.on('createActiveEffect', redraw),
       Hooks.on('updateActiveEffect', redraw),
       Hooks.on('deleteActiveEffect', redraw),
@@ -526,10 +546,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     this.#ctrl = null;
     clearTimeout(this.#redrawTimer);
     this._clearHooks();
-    if (VagabondNPCHud.#autoOpenedActorId === this.actor.id) {
-      VagabondNPCHud.#autoOpenedActorId = null;
+    if (VagabondNPCHud.#autoOpenedKey === this.key) {
+      VagabondNPCHud.#autoOpenedKey = null;
     }
-    VagabondNPCHud.#instances.delete(this.actor.id);
+    VagabondNPCHud.#instances.delete(this.key);
     return super.close({ animate: false, ...options });
   }
 

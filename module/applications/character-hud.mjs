@@ -34,17 +34,24 @@ const { api } = foundry.applications;
  * item onto the HUD equips (or favorites) it, which makes it appear in the
  * relevant slot/circle.
  *
- * One instance per actor (keyed by actor id).
+ * One instance per token (keyed by token uuid for unlinked actors, else actor
+ * id) — so unlinked duplicate PC-type actors (e.g. summons sharing one base
+ * actor) each get their own independent HUD instead of collapsing into one.
  */
 export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
   /** @type {Map<string, VagabondCharacterHud>} */
   static #instances = new Map();
 
-  /** Actor id of the single selection-driven (auto-opened) HUD, or null. */
-  static #autoOpenedActorId = null;
+  /** Instance key for an actor: token uuid when unlinked, else actor id. */
+  static _keyFor(actor) {
+    return actor?.isToken ? actor.token.uuid : actor?.id;
+  }
 
-  /** Actor id of the pinned (always-on) main-character HUD, or null. */
-  static #pinnedActorId = null;
+  /** Instance key of the single selection-driven (auto-opened) HUD, or null. */
+  static #autoOpenedKey = null;
+
+  /** Instance key of the pinned (always-on) main-character HUD, or null. */
+  static #pinnedKey = null;
 
   /**
    * Minimum ownership a user needs over a token for it to auto-open its HUD.
@@ -69,6 +76,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     }
   }
 
+  /** Close every open PC HUD (including the pinned one). */
+  static closeAll() {
+    for (const hud of [...VagabondCharacterHud.#instances.values()]) {
+      if (hud.rendered) hud.close();
+    }
+  }
+
   #hookIds = [];
   #ctrl = null;
   #redrawTimer = null;
@@ -89,8 +103,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   /* -------------------------------------------- */
 
   constructor(actor, options = {}) {
-    super(foundry.utils.mergeObject({ id: `vbd-hud-${actor.id}` }, options));
+    const key = VagabondCharacterHud._keyFor(actor);
+    super(foundry.utils.mergeObject({ id: `vbd-hud-${key.replace(/\W/g, '-')}` }, options));
     this.actor = actor;
+    this.key = key;
     // Reuse the same handlers the sheet uses. They only read .actor / .element.
     this._rollHandler = new RollHandler(this, { npcMode: false });
     this._spellHandler = new SpellHandler(this);
@@ -178,12 +194,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NotCharacter'));
       return null;
     }
-    let hud = this.#instances.get(actor.id);
+    const key = this._keyFor(actor);
+    let hud = this.#instances.get(key);
     if (!hud) {
       hud = new this(actor);
-      this.#instances.set(actor.id, hud);
+      this.#instances.set(key, hud);
     }
-    if (auto) this.#autoOpenedActorId = actor.id;
+    if (auto) this.#autoOpenedKey = key;
 
     // Show the "drag to move" portrait hint only for the first 3 HUD opens,
     // then never again (per user) — it was annoying on every hover.
@@ -222,10 +239,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       && actor.testUserPermission(game.user, this.AUTO_OPEN_MIN_OWNERSHIP);
 
     if (!eligible) { this.#closeAuto(); return; }
+    const key = this._keyFor(actor);
     // The pinned (always-on) HUD is already open and must never be tagged as the
     // auto HUD — otherwise deselecting its token would close it.
-    if (actor.id === this.#pinnedActorId) { this.#closeAuto(); return; }
-    if (actor.id === this.#autoOpenedActorId) return; // already showing it
+    if (key === this.#pinnedKey) { this.#closeAuto(); return; }
+    if (key === this.#autoOpenedKey) return; // already showing it
 
     this.#closeAuto();                // drop the previous selection HUD
     this.open(actor, { auto: true }); // open the new one
@@ -241,25 +259,26 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const on = game.settings.get('vagabond', 'hudAlwaysOnForMainChar');
     const actor = game.user.character;
     const eligible = on && actor && actor.type === 'character';
+    const key = actor ? this._keyFor(actor) : null;
 
     // Tear down a stale pin (setting toggled off, or character reassigned).
-    if (this.#pinnedActorId && (!eligible || actor.id !== this.#pinnedActorId)) {
-      const prev = this.#instances.get(this.#pinnedActorId);
-      this.#pinnedActorId = null;
+    if (this.#pinnedKey && (!eligible || key !== this.#pinnedKey)) {
+      const prev = this.#instances.get(this.#pinnedKey);
+      this.#pinnedKey = null;
       if (prev?.rendered) prev.close();
     }
 
     if (!eligible) return;
-    this.#pinnedActorId = actor.id;
+    this.#pinnedKey = key;
     this.open(actor); // not { auto } — selection changes must not close it
   }
 
   /** Close the current selection-driven HUD, if any. */
   static #closeAuto() {
-    const id = this.#autoOpenedActorId;
-    if (!id) return;
-    this.#autoOpenedActorId = null;
-    const hud = this.#instances.get(id);
+    const key = this.#autoOpenedKey;
+    if (!key) return;
+    this.#autoOpenedKey = null;
+    const hud = this.#instances.get(key);
     if (hud?.rendered) hud.close();
   }
 
@@ -270,7 +289,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NoActor'));
       return;
     }
-    const hud = this.#instances.get(actor.id);
+    const hud = this.#instances.get(this._keyFor(actor));
     if (hud?.rendered) hud.close();
     else this.open(actor);
   }
@@ -710,7 +729,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   /** Saved per-user/per-actor position, or null. */
   _savedPosition() {
-    const stored = (game.user.getFlag('vagabond', 'hudPosition') ?? {})[this.actor.id];
+    const stored = (game.user.getFlag('vagabond', 'hudPosition') ?? {})[this.key];
     return (stored?.left != null && stored?.top != null)
       ? { left: stored.left, top: stored.top }
       : null;
@@ -742,7 +761,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   #savePosition = foundry.utils.debounce(async () => {
     if (!this.#pos) return;
     const all = foundry.utils.deepClone(game.user.getFlag('vagabond', 'hudPosition') ?? {});
-    all[this.actor.id] = { left: Math.round(this.#pos.left), top: Math.round(this.#pos.top) };
+    all[this.key] = { left: Math.round(this.#pos.left), top: Math.round(this.#pos.top) };
     await game.user.setFlag('vagabond', 'hudPosition', all);
   }, 250);
 
@@ -786,13 +805,15 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   _registerHooks() {
     this._clearHooks();
+    // Reference equality, not id — unlinked duplicate tokens share the same
+    // actor.id but are distinct synthetic Actor instances per token.
     const mine = (doc) => {
       const a = doc?.actor ?? doc?.parent ?? doc;
-      return a?.id === this.actor.id || a?.parent?.id === this.actor.id;
+      return a === this.actor;
     };
     const redraw = (doc) => { if (!doc || mine(doc)) this._reDraw(); };
     this.#hookIds.push(
-      Hooks.on('updateActor', (a) => { if (a?.id === this.actor.id) this._reDraw(); }),
+      Hooks.on('updateActor', (a) => { if (a === this.actor) this._reDraw(); }),
       Hooks.on('createItem', redraw),
       Hooks.on('updateItem', redraw),
       Hooks.on('deleteItem', redraw),
@@ -824,15 +845,15 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     clearTimeout(this.#redrawTimer);
     clearTimeout(this.#idleTimer);
     this._clearHooks();
-    if (VagabondCharacterHud.#autoOpenedActorId === this.actor.id) {
-      VagabondCharacterHud.#autoOpenedActorId = null;
+    if (VagabondCharacterHud.#autoOpenedKey === this.key) {
+      VagabondCharacterHud.#autoOpenedKey = null;
     }
     // Manual close of a pinned HUD honors the user's intent — drop the pin so it
     // does not immediately reopen (re-enable via the setting toggle / reload).
-    if (VagabondCharacterHud.#pinnedActorId === this.actor.id) {
-      VagabondCharacterHud.#pinnedActorId = null;
+    if (VagabondCharacterHud.#pinnedKey === this.key) {
+      VagabondCharacterHud.#pinnedKey = null;
     }
-    VagabondCharacterHud.#instances.delete(this.actor.id);
+    VagabondCharacterHud.#instances.delete(this.key);
     // Skip ApplicationV2's built-in close fade — the HUD should vanish instantly.
     return super.close({ animate: false, ...options });
   }
@@ -1136,7 +1157,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (data?.type !== 'Item') return;
     const item = await fromUuid(data.uuid);
     if (!item) return;
-    if (item.parent?.id !== this.actor.id) {
+    if (item.parent !== this.actor) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.SlotForeignItem'));
       return;
     }
