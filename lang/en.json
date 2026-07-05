@@ -1240,7 +1240,7 @@
       "LinkedValue": "Linked Value",
       "LinkedValueHint": "Manual: set by hand / macros. Linked: mirror a field of a document. Formula: compute from @clocks.",
       "UpdateFrom": "Update from",
-      "SourceManual": "Manual (no link)",
+      "SourceManual": "No link",
       "SourcePath": "Linked document field",
       "SourceExpr": "Formula",
       "LinkedDocument": "Linked document",

@@ -1138,6 +1138,10 @@ Hooks.once('ready', function () {
     await CountdownDice.create(data);
   });
 
+  registerSocketAction('createProgressClock', async (data) => {
+    await ProgressClock.create(data);
+  });
+
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;

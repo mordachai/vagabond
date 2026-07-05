@@ -41,6 +41,13 @@ export class CountdownDice {
    * @returns {Promise<JournalEntry>}
    */
   static async create(data = {}) {
+    // Non-GM lacks permission to create JournalEntry/Folder — relay to GM.
+    if (!game.user.isGM) {
+      const { emitSocket } = await import('../helpers/socket-helper.mjs');
+      emitSocket('createCountdownDie', data);
+      return null;
+    }
+
     const order = this.getNextOrder();
     const size = data.size || 'M';
     const sceneId = canvas.scene?.id;

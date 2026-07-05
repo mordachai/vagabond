@@ -37,6 +37,13 @@ export class ProgressClock {
    * @returns {Promise<JournalEntry>} The created clock journal
    */
   static async create(data = {}) {
+    // Non-GM lacks permission to create JournalEntry/Folder — relay to GM.
+    if (!game.user.isGM) {
+      const { emitSocket } = await import('../helpers/socket-helper.mjs');
+      emitSocket('createProgressClock', data);
+      return null;
+    }
+
     const defaultPosition = game.settings.get('vagabond', 'defaultClockPosition') || 'top-right';
     const folder = await this.getOrCreateFolder();
 
