@@ -11,12 +11,12 @@
           name='name'
           type='text'
           value='{{actor.name}}'
-          placeholder='Character Name'
+          placeholder='{{localize "VAGABOND.Actor.Character.NamePlaceholder"}}'
           class='character-name-input-large'
         />
         <div class='top-right-controls'>
           {{! XP Field with Level Up Indicator }}
-          <div class='xp-field-inline {{#if system.attributes.canLevelUp}}level-up-ready{{/if}}' data-tooltip='{{#if system.attributes.canLevelUp}}Click label to Level Up!{{else}}Click to award session XP{{/if}}'>
+          <div class='xp-field-inline {{#if system.attributes.canLevelUp}}level-up-ready{{/if}}' data-tooltip='{{#if system.attributes.canLevelUp}}{{localize "VAGABOND.UI.Tooltips.LevelUpReady"}}{{else}}{{localize "VAGABOND.UI.Tooltips.AwardXP"}}{{/if}}'>
             <label class='resource-label' data-action='levelUp'>
               {{#if system.attributes.canLevelUp}}
                 <i class='fas fa-chevron-double-up level-up-icon'></i>
@@ -37,12 +37,12 @@
       {{! Level, Ancestry, Class, Being Type, Size - Inside name-row grid }}
       <div class='character-info-combined-row'>
         {{#if (and (not system.details.constructed) (not system.details.builderDismissed))}}
-          <button type='button' class='btn-char-builder-icon pulse-glow' data-action='openCharBuilder' data-tooltip='Build Character'>
+          <button type='button' class='btn-char-builder-icon pulse-glow' data-action='openCharBuilder' data-tooltip='{{localize "VAGABOND.UI.Tooltips.BuildCharacter"}}'>
             <i class='fa-fw fas fa-scroll'></i>
           </button>
         {{/if}}
         <span>
-          Level
+          {{localize "VAGABOND.UI.Sections.Level"}}
           <input
             type='text'
             name='system.attributes.level.value'
@@ -51,19 +51,19 @@
             class='level-input'
           />,
           {{#if system.ancestryData}}
-            <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='Click to view, Right-click to remove'>{{system.ancestryData.name}}</span>
+            <span class='ancestry-name clickable-link' data-item-id='{{system.ancestryData.id}}' data-action='viewAncestry' data-tooltip='{{localize "VAGABOND.UI.Tooltips.ViewOrRemove"}}'>{{system.ancestryData.name}}</span>
           {{else}}
             <span>{{localize "VAGABOND.UI.Labels.UnknownAncestry"}}</span>
           {{/if}}
           {{#if system.classData}}
-            <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='Click to view, Right-click to remove'>{{system.classData.name}}</span>
+            <span class='class-name clickable-link' data-item-id='{{system.classData.id}}' data-action='viewClass' data-tooltip='{{localize "VAGABOND.UI.Tooltips.ViewOrRemove"}}'>{{system.classData.name}}</span>
           {{else}}
             <span>{{localize "VAGABOND.UI.Labels.NoClass"}}</span>
           {{/if}}
           {{#if system.ancestryData}}
-            ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} size)
+            ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} {{localize "VAGABOND.UI.Labels.SizeSuffix"}})
           {{else}}
-            (Unknown, {{localize "VAGABOND.Sizes.medium"}} size)
+            ({{localize "VAGABOND.UI.Labels.UnknownBeingType"}}, {{localize "VAGABOND.Sizes.medium"}} {{localize "VAGABOND.UI.Labels.SizeSuffix"}})
           {{/if}}
         </span>
       </div>
@@ -142,11 +142,11 @@
                               value='{{stat.value}}'
                               data-dtype='Number'
                               class='stat-score'
-                              data-tooltip='{{#if (ne stat.value stat.total)}}Base: {{stat.value}}, Total: {{stat.total}}{{else}}{{stat.total}}{{/if}}'
+                              data-tooltip='{{#if (ne stat.value stat.total)}}{{localize "VAGABOND.UI.Tooltips.BaseTotal" base=stat.value total=stat.total}}{{else}}{{stat.total}}{{/if}}'
                             />
                             <label
                               class='stat-label'
-                              data-label='{{localize (lookup @root.config.stats key)}} Check'
+                              data-label='{{localize (lookup @root.config.stats key)}} {{localize "VAGABOND.UI.Labels.Check"}}'
                               data-tooltip='{{localize (lookup @root.config.stats key)}}'
                             >{{localize (lookup @root.config.statAbbreviations key)}}</label>
                           </div>
@@ -167,7 +167,7 @@
                               class='luck-value'
                             />
                           </div>
-                          <label class='luck-label rollable' data-action='spendLuck' data-tooltip='Click to spend {{config.homebrew.terms.luckTerm}} | Shift+Click to add +1'>{{config.homebrew.terms.poolTerm}}</label>
+                          <label class='luck-label rollable' data-action='spendLuck' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendLuck" luckTerm=config.homebrew.terms.luckTerm}}'>{{config.homebrew.terms.poolTerm}}</label>
                         </div>
                         {{/if}}
                       </div>
@@ -179,7 +179,7 @@
                   <i
                     class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
                     data-index='{{index}}'
-                    data-tooltip='Fatigue Level {{box.level}}'
+                    data-tooltip='{{localize "VAGABOND.UI.Tooltips.FatigueLevel" level=box.level}}'
                   ></i>
                 {{/each}}
               </div>
@@ -221,8 +221,8 @@
           {{! Modifiers Group - Study + Check Mod + Favor/Hinder }}
           <div class='modifiers-group'>
             {{! Row 1: Study }}
-            <i class='fas fa-book-open modifiers-group-icon rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'></i>
-            <label class='modifiers-group-label rollable' data-action='spendStudiedDie' data-tooltip='Click to spend Studied Die | Shift+Click to add'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}:</label>
+            <i class='fas fa-book-open modifiers-group-icon rollable' data-action='spendStudiedDie' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendStudiedDie"}}'></i>
+            <label class='modifiers-group-label rollable' data-action='spendStudiedDie' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendStudiedDie"}}'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}:</label>
             <input
               type='number'
               name='system.studiedDice'
@@ -232,8 +232,8 @@
               min='0'
             />
             {{! Row 2: Check Modifier }}
-            <i class='fas fa-plus-minus modifiers-group-icon rollable' data-action='modifyCheckBonus' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'></i>
-            <label class='modifiers-group-label rollable' data-action='modifyCheckBonus' data-tooltip='Left click: +1 | Right click: -1 | Resets to 0 after any roll'>{{localize "VAGABOND.UI.Labels.CheckMod"}}:</label>
+            <i class='fas fa-plus-minus modifiers-group-icon rollable' data-action='modifyCheckBonus' data-tooltip='{{localize "VAGABOND.UI.Tooltips.CheckModHint"}}'></i>
+            <label class='modifiers-group-label rollable' data-action='modifyCheckBonus' data-tooltip='{{localize "VAGABOND.UI.Tooltips.CheckModHint"}}'>{{localize "VAGABOND.UI.Labels.CheckMod"}}:</label>
             <input
               type='text'
               name='system.universalCheckBonus'
@@ -299,7 +299,7 @@
                 data-key='{{key}}'
                 data-difficulty='{{skill.difficulty}}'
                 data-trained='{{skill.trained}}'
-                data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
+                data-label='{{skill.label}} ({{localize "VAGABOND.UI.Labels.Difficulty"}} {{skill.difficulty}})'
               >
                 {{skill.label}}
                 {{#if (eq @root.system.attributes.manaSkill key)}}
@@ -343,7 +343,7 @@
                   data-key='{{key}}'
                   data-difficulty='{{skill.difficulty}}'
                   data-trained='{{skill.trained}}'
-                  data-label='{{skill.label}} (Difficulty {{skill.difficulty}})'
+                  data-label='{{skill.label}} ({{localize "VAGABOND.UI.Labels.Difficulty"}} {{skill.difficulty}})'
                 >{{skill.label}}</label>
                 <span class='skill-difficulty'>{{skill.difficulty}}</span>
               </div>
@@ -368,7 +368,7 @@
                   data-type='save'
                   data-key='{{key}}'
                   data-difficulty='{{save.difficulty}}'
-                  data-label='{{save.label}} Save (Difficulty {{save.difficulty}})'
+                  data-label='{{save.label}} {{localize "VAGABOND.UI.Labels.Save"}} ({{localize "VAGABOND.UI.Labels.Difficulty"}} {{save.difficulty}})'
                   data-tooltip='{{save.description}}'
                 >{{save.label}}</label>
                 <span class='save-difficulty'>{{#if (eq key 'reflex')}}<i class='fas fa-running'></i> {{else if (eq key 'endure')}}<i class='fas fa-shield-alt'></i> {{else if (eq key 'will')}}<i class='fas fa-brain'></i> {{/if}}{{save.difficulty}}</span>
@@ -428,7 +428,7 @@
                   <div class='eq-grip'>×{{item.system.quantity}}</div>
                   <div class='eq-row2'>
                     {{#if item.system.requiresBound}}
-                      <span class='eq-bound {{#if item.system.bound}}is-bound{{/if}}'>{{#if item.system.bound}}Bound{{else}}Unbound{{/if}}</span>
+                      <span class='eq-bound {{#if item.system.bound}}is-bound{{/if}}'>{{#if item.system.bound}}{{localize "VAGABOND.Item.Equipment.FIELDS.bound.label"}}{{else}}{{localize "VAGABOND.UI.Labels.Unbound"}}{{/if}}</span>
                     {{/if}}
                     {{#if item.system.lore}}
                       {{#if item.system.requiresBound}}<span class='eq-separator'>//</span>{{/if}}
@@ -564,7 +564,7 @@
                              data-action='modifyDamage'
                              data-spell-id='{{spell._id}}'
                              data-damage-type='{{spell.system.damageType}}'
-                             title='Left click to increase damage (+1 mana per d6), Right click to decrease'>
+                             title='{{localize "VAGABOND.UI.Tooltips.ModifyDamageHint"}}'>
                           {{#unless (eq spell.system.damageType '-')}}
                              <div class="damage-display-group">
                                <span class="spell-damage-dice">{{#if (lookup @root.spellStates spell._id)}}{{lookup (lookup @root.spellStates spell._id) 'damageDice'}}{{else}}1{{/if}}</span>d{{spell.effectiveDamageDieSize}}
@@ -590,27 +590,27 @@
                             </div>
 
                             {{!-- Col 2: Delivery Cost --}}
-                            <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='Select a delivery type first'>0</div>
+                            <div class='spell-delivery-cost disabled' data-action='modifyDelivery' data-spell-id='{{spell._id}}' title='{{localize "VAGABOND.UI.Tooltips.SelectDeliveryFirst"}}'>0</div>
 
                             {{!-- Col 3: Range --}}
                             <div class='spell-range clickable'
                               data-action='toggleSpellPreview'
                               data-spell-id='{{spell._id}}'
-                              title='Draw template'>—
+                              title='{{localize "VAGABOND.UI.Tooltips.DrawTemplate"}}'>—
                             </div>
 
                             {{!-- Col 4: Focus Toggle --}}
                             <div class='spell-focus-icon {{#if (contains @root.focusedSpellIds spell._id)}}fx-active{{else}}fx-inactive{{/if}}'
                                  data-action="toggleSpellFocus"
                                  data-spell-id='{{spell._id}}'
-                                 title='{{#if (contains @root.focusedSpellIds spell._id)}}Focusing — click to release{{else}}Focus this spell{{/if}}'>
+                                 title='{{#if (contains @root.focusedSpellIds spell._id)}}{{localize "VAGABOND.UI.Tooltips.FocusToggleOff"}}{{else}}{{localize "VAGABOND.UI.Tooltips.FocusToggle"}}{{/if}}'>
                               <i class="fas fa-star-christmas"></i>
                             </div>
 
                             {{!-- Col 5: Effect Toggle --}}
-                            <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='Toggle spell effect (adds +1 mana when combined with damage)'>
+                            <div class='spell-fx-icon fx-inactive' data-action='toggleFx' data-spell-id='{{spell._id}}' title='{{localize "VAGABOND.UI.Tooltips.ToggleSpellFx"}}'>
                               {{#if (eq @root.config.fxIcon.type "txt")}}<span class="fx-text-label">{{@root.config.fxIcon.value}}</span>
-                              {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="Fx" style="border:none; vertical-align:middle; height: 1em;" />
+                              {{else if (eq @root.config.fxIcon.type "img")}}<img src="{{@root.config.fxIcon.value}}" alt="{{localize 'VAGABOND.SpellCast.Fx'}}" style="border:none; vertical-align:middle; height: 1em;" />
                               {{else}}<i class="{{@root.config.fxIcon.value}}"></i>{{/if}}
                             </div>
                         </div>

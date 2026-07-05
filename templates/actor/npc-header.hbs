@@ -39,7 +39,7 @@
         type='button'
         data-action='toggleDescription'
         class='npc-desc-toggle-button'
-        data-tooltip='Description'
+        data-tooltip='{{localize "VAGABOND.Item.Tabs.Description"}}'
       >
         <i class='fas fa-book-open'></i>
       </button>
@@ -213,7 +213,7 @@
                       class='npc-speed-type-input'
                       size='3'
                       placeholder='0'
-                      data-tooltip="Speed for {{localize (lookup ../config.speedTypes type)}} (0 = same as base speed)"
+                      data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.SpeedTypeHint' type=(localize (lookup ../config.speedTypes type))}}"
                     /><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span>
                     <i class='fas fa-times' data-action='removeSpeedType' data-type='{{type}}'></i>
                   {{/if}}
@@ -251,7 +251,7 @@
               value='{{system.armorDescription}}'
               data-dtype='String'
               class='npc-armor-desc-input'
-              placeholder='Armor desc.'
+              placeholder='{{localize "VAGABOND.Actor.NPC.ArmorDescPlaceholder"}}'
             />
           {{/if}}
         </div>
@@ -266,7 +266,7 @@
               <i
                 class='fas fa-skull fatigue-skull {{#if box.checked}}fatigue-active{{else}}fatigue-inactive{{/if}}'
                 data-index='{{index}}'
-                data-tooltip='Fatigue Level {{box.level}}'
+                data-tooltip='{{localize "VAGABOND.UI.Tooltips.FatigueLevel" level=box.level}}'
               ></i>
             {{/each}}
           </div>
@@ -293,7 +293,7 @@
         {{! Appearance (no background) }}
         {{#if (or (not system.locked) system.appearing)}}
           <div class='npc-app-field'>
-            <label class='npc-field-label'>App</label>
+            <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.AppAbbrev"}}</label>
             {{#if system.locked}}
               <button type='button' class='npc-app-roll-btn rollable' data-action='rollAppearing'
                       data-tooltip='{{localize "VAGABOND.Actor.NPC.FIELDS.appearing.label"}}'>
@@ -306,7 +306,7 @@
                 value='{{system.appearing}}'
                 data-dtype='String'
                 class='npc-text-input'
-                placeholder='dX'
+                placeholder='{{localize "VAGABOND.Actor.NPC.AppearingPlaceholder"}}'
               />
             {{/if}}
           </div>

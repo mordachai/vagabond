@@ -87,21 +87,21 @@
           </div>
           <div class='spell-col-favorite' data-action='toggleSpellFavorite' data-item-id='{{spell._id}}'>
             {{#if spell.system.favorite}}
-              <i class='clickable fas fa-star favorite-active' data-tooltip='Favorite (click to unfavorite)'></i>
+              <i class='clickable fas fa-star favorite-active' data-tooltip='{{localize "VAGABOND.UI.Tooltips.FavoriteOn"}}'></i>
             {{else}}
-              <i class='clickable far fa-star favorite-inactive' data-tooltip='Not Favorite (click to favorite)'></i>
+              <i class='clickable far fa-star favorite-inactive' data-tooltip='{{localize "VAGABOND.UI.Tooltips.FavoriteOff"}}'></i>
             {{/if}}
           </div>
           <div class='item-controls spell-col-controls'>
-            <i class='clickable fas fa-comment' data-action='useItem' data-item-id='{{spell._id}}' data-tooltip='Send spell to chat'></i>
+            <i class='clickable fas fa-comment' data-action='useItem' data-item-id='{{spell._id}}' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SendSpellToChat"}}'></i>
             {{#if @root.editable}}
-              <i class='clickable fas fa-trash' data-action='deleteDoc' data-document-class='Item' data-document-id='{{spell._id}}' data-tooltip='Delete spell'></i>
+              <i class='clickable fas fa-trash' data-action='deleteDoc' data-document-class='Item' data-document-id='{{spell._id}}' data-tooltip='{{localize "VAGABOND.UI.Tooltips.DeleteSpell"}}'></i>
             {{/if}}
           </div>
         </li>
       {{else}}
         <li class='no-spells'>
-          No spells yet. {{#if @root.editable}}Click the + button above to add a spell.{{/if}}
+          {{localize "VAGABOND.UI.Sections.spellsTabEmpty"}} {{#if @root.editable}}{{localize "VAGABOND.UI.Sections.spellsTabEmptyHint"}}{{/if}}
         </li>
       {{/each}}
     </ol>

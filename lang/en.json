@@ -615,7 +615,8 @@
           "mana.max": {"label": "Max Mana"},
           "mana.castingMax": {"label": "Mana/Cast"},
           "manaSkill": {"label": "Casting Skill:"}
-        }
+        },
+        "NamePlaceholder": "Character Name"
       },
       "Party": {
         "Tabs": {
@@ -794,6 +795,10 @@
           "statusImmunities": {"label": "Status Immunities:", "short": "Status Immunities"},
           "description": {"label": "Description"}
         },
+        "SensesPlaceholder": "Darksight, Blindsight...",
+        "ArmorDescPlaceholder": "Armor desc.",
+        "AppearingPlaceholder": "dX",
+        "AppAbbrev": "App",
         "Sections": {
           "Resistances": "Resistances",
           "Actions": "Actions",
@@ -815,12 +820,22 @@
           "Weapon": "Weapon",
           "NoWeapon": "No weapon",
           "WeaponFilter": "Filter weapons...",
-          "Add": "Add Action"
+          "Add": "Add Action",
+          "NamePlaceholder": "Action Name",
+          "NotePlaceholder": "Note",
+          "RechargePlaceholder": "1/Day or Cd6",
+          "ExtraInfoPlaceholder": "Extra information...",
+          "SaveTooltip": "Save Action",
+          "RemoveTooltip": "Remove Action"
         },
         "Ability": {
           "Name": "Name",
           "Description": "Description",
-          "Add": "Add Ability"
+          "Add": "Add Ability",
+          "NamePlaceholder": "Ability Name",
+          "DescriptionPlaceholder": "Description (dice like d6 or 2d8 will be clickable)",
+          "SaveTooltip": "Save Ability",
+          "RemoveTooltip": "Remove Ability"
         },
         "Messages": {
           "NoActions": "No actions defined",
@@ -830,7 +845,8 @@
         "Tooltips": {
           "ModifyHP": "Left-click: -1 HP | Right-click: +1 HP",
           "Unlock": "Unlock Sheet",
-          "Lock": "Click to lock for play"
+          "Lock": "Click to lock for play",
+          "SpeedTypeHint": "Speed for {type} (0 = same as base speed)"
         },
         "MoraleCheck": {
           "Title": "Morale Check",
@@ -1367,7 +1383,69 @@
     "Downtime": {
       "Title": "Downtime Activities",
       "ButtonLabel": "Downtime",
-      "OpenTooltip": "Open Downtime Activities"
+      "OpenTooltip": "Open Downtime Activities",
+      "Cancel": "Cancel",
+      "Done": "Done",
+      "Cost": {
+        "OneShift": "1 Shift",
+        "Free": "Free"
+      },
+      "Rest": {
+        "Title": "Rest",
+        "Description": "Recover HP, Mana, and Luck pool to max. If HP is at max, recover 1 Fatigue.",
+        "LodgingLabel": "Lodging Quality:"
+      },
+      "Lodging": {
+        "none": "No Lodging (Free)",
+        "horrible": "Horrible (1s)",
+        "poor": "Poor (2s)",
+        "modest": "Modest (10s)",
+        "comfortable": "Comfortable (20s)",
+        "luxury": "Luxury (40s)",
+        "opulent": "Opulent (1g)"
+      },
+      "Breather": {
+        "Title": "Breather",
+        "Description": "Take a short break to catch your breath and recover some vitality.",
+        "Effect": "Effect: Regain HP equal to your {stat} stat ({value}).",
+        "Button": "Take Breather"
+      },
+      "Craft": {
+        "Title": "Craft",
+        "Description": "Make items. Requires materials worth 50% of item value.",
+        "DifficultyLabel": "Craft Difficulty:",
+        "Button": "Craft Item"
+      },
+      "CraftDifficulty": {
+        "tier1": "18-17 (1s)",
+        "tier2": "16-15 (20s)",
+        "tier3": "14-13 (50s)",
+        "tier4": "12-11 (2g 50s)",
+        "tier5": "10-9 (5g)",
+        "tier6": "8-7 (7g 50s)",
+        "tier7": "6 (10g)"
+      },
+      "Forage": {
+        "Title": "Forage",
+        "Description": "Gather resources from the wilderness. Requires a Survival Check.",
+        "TargetLabel": "Target Resource:",
+        "Button": "Forage"
+      },
+      "ForageType": {
+        "food": "Food (d6 Rations)",
+        "mats": "Materials (d6 * 5s)"
+      },
+      "Hunt": {
+        "Title": "Hunt",
+        "Description": "Look for wild game. Requires a Survival Check. Find beasts for rations or materials.",
+        "Button": "Hunt Game"
+      },
+      "Study": {
+        "Title": "Study",
+        "Description": "Gain a Studied Die to gain Favor on a d20 roll tomorrow, or swap a Class Feature.",
+        "CurrentDice": "Current Studied Dice: {value}",
+        "Button": "Study"
+      }
     },
     "SpellCast": {
       "Cast": "Cast !",
@@ -1399,6 +1477,8 @@
         "traitsPlaceholder": "No traits yet. Traits are granted by your ancestry.",
         "Perks": "Perks",
         "perksPlaceholder": "No perks yet. Drag perks from the Items directory.",
+        "spellsTabEmpty": "No spells yet.",
+        "spellsTabEmptyHint": "You can drag and drop from the compendium.",
         "LevelFeatures": "Level Features",
         "Level": "Level",
         "WeaponStats": "Weapon Stats",
@@ -1514,7 +1594,12 @@
         "RestrictedPool": "Among these:",
         "Targets": "Targets",
         "Bounds": "Bounds:",
-        "BoundsLimitReached": "Cannot bind {name}: all bound slots are full ({current}/{max})."
+        "BoundsLimitReached": "Cannot bind {name}: all bound slots are full ({current}/{max}).",
+        "SizeSuffix": "size",
+        "UnknownBeingType": "Unknown",
+        "Difficulty": "Difficulty",
+        "Save": "Save",
+        "Unbound": "Unbound"
       },
       "Examples": {
         "PermanentEffect": "Example: Perk that gives +2 Might to all rolls",
@@ -1542,6 +1627,30 @@
       },
       "Chat": {
         "FlukeReroll": "Luck Reroll — Fluke"
+      },
+      "Tooltips": {
+        "LevelUpReady": "Click label to Level Up!",
+        "AwardXP": "Click to award session XP",
+        "BuildCharacter": "Build Character",
+        "ViewOrRemove": "Click to view, Right-click to remove",
+        "BaseTotal": "Base: {base}, Total: {total}",
+        "SpendLuck": "Click to spend {luckTerm} | Shift+Click to add +1",
+        "FatigueLevel": "Fatigue Level {level}",
+        "SpendStudiedDie": "Click to spend Studied Die | Shift+Click to add",
+        "CheckModHint": "Left click: +1 | Right click: -1 | Resets to 0 after any roll",
+        "ModifyDamageHint": "Left click to increase damage (+1 mana per d6), Right click to decrease",
+        "SelectDeliveryFirst": "Select a delivery type first",
+        "DrawTemplate": "Draw template",
+        "FocusToggle": "Focus this spell",
+        "FocusToggleOff": "Focusing — click to release",
+        "ToggleSpellFx": "Toggle spell effect (adds +1 mana when combined with damage)",
+        "FavoriteOn": "Favorite (click to unfavorite)",
+        "FavoriteOff": "Not Favorite (click to favorite)",
+        "SendSpellToChat": "Send spell to chat",
+        "DeleteSpell": "Delete spell"
+      },
+      "Warnings": {
+        "InventoryOverloaded": "Your Inventory is full, you can't take the Rush action. (+{amount} slots beyond capacity)"
       }
     },
     "Notifications": {

@@ -453,7 +453,7 @@ body[data-theme=dark] #sidebar {
   /* Target the individual tab header elements */
 }
 .vagabond nav.tabs [data-tab] {
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out, filter 0.2s ease-in-out, transform 0.2s ease-in-out;
   background-image: url("../assets/images/sheets/navTabBG.svg");
   background-repeat: no-repeat;
   background-position: center center;
@@ -474,7 +474,9 @@ body[data-theme=dark] #sidebar {
   cursor: pointer;
   font-weight: 700;
   opacity: 1;
-  text-shadow: 0 0 3px var(--vagabond-c-dark-bluey);
+  filter: brightness(1.05);
+  transform: scale(1.02);
+  text-shadow: none;
 }
 .vagabond nav.tabs [data-tab].active {
   opacity: 1;
@@ -484,6 +486,7 @@ body[data-theme=dark] #sidebar {
   background-size: 100% 100%;
   color: var(--vagabond-c-chat-yellow);
   text-shadow: 0 0 1px var(--vagabond-c-bluey);
+  transform: scale(1);
 }
 
 .rollable:hover, .rollable:focus {
@@ -3527,6 +3530,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-status-w: 18px;
   --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  --vh-outline-3: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
   --vh-wpn0-top: 0px;
   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;
@@ -19543,14 +19547,17 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-tan, #d4af37);
 }
 .vagabond .content-link {
-  background: var(--vagabond-c-faint);
-  border: 2px solid var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-c-chat-yellow);
+  border: 2px solid var(--vagabond-c-yellow-2);
   border-radius: 4px;
   color: var(--vagabond-c-dark-bluey);
   margin: -1px 0;
   padding: 1px 4px 0;
   white-space: nowrap;
   word-break: break-all;
+}
+.vagabond .content-link i {
+  color: var(--vagabond-c-dark-bluey);
 }
 .vagabond .inline-roll {
   display: inline-flex;

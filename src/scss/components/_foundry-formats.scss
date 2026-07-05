@@ -1,12 +1,14 @@
 .content-link {
-    background: $c-faint;
-    border: 2px solid $c-yellow;
+    background: $c-yellow;
+    border: 2px solid $c-yellow-2;
     border-radius: 4px;
     color: $c-dark-bluey;
     margin: -1px 0;
     padding: 1px 4px 0;
     white-space: nowrap;
-     word-break: break-all;
+    word-break: break-all;
+
+    i { color: $c-dark-bluey; }
 }
 
 

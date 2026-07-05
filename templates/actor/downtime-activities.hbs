@@ -3,119 +3,119 @@
     {{!-- Rest Activity --}}
     <div class="activity-card">
         <div class="activity-header">
-            <i class="fas fa-bed"></i> Rest
-            <span class="cost-badge">1 Shift</span>
+            <i class="fas fa-bed"></i> {{localize "VAGABOND.Downtime.Rest.Title"}}
+            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
         </div>
         <div class="activity-content">
-            <p>Recover HP, Mana, and Luck pool to max. If HP is at max, recover 1 Fatigue.</p>
+            <p>{{localize "VAGABOND.Downtime.Rest.Description"}}</p>
             <div class="input-group">
-                <label>Lodging Quality:</label>
+                <label>{{localize "VAGABOND.Downtime.Rest.LodgingLabel"}}</label>
                 <select name="lodgingType">
-                    <option value="none">No Lodging (Free)</option>
-                    <option value="horrible">Horrible (1s)</option>
-                    <option value="poor">Poor (2s)</option>
-                    <option value="modest">Modest (10s)</option>
-                    <option value="comfortable">Comfortable (20s)</option>
-                    <option value="luxury">Luxury (40s)</option>
-                    <option value="opulent">Opulent (1g)</option>
+                    <option value="none">{{localize "VAGABOND.Downtime.Lodging.none"}}</option>
+                    <option value="horrible">{{localize "VAGABOND.Downtime.Lodging.horrible"}}</option>
+                    <option value="poor">{{localize "VAGABOND.Downtime.Lodging.poor"}}</option>
+                    <option value="modest">{{localize "VAGABOND.Downtime.Lodging.modest"}}</option>
+                    <option value="comfortable">{{localize "VAGABOND.Downtime.Lodging.comfortable"}}</option>
+                    <option value="luxury">{{localize "VAGABOND.Downtime.Lodging.luxury"}}</option>
+                    <option value="opulent">{{localize "VAGABOND.Downtime.Lodging.opulent"}}</option>
                 </select>
             </div>
         </div>
         <button type="button" class="downtime-btn" data-action="processRest">
-            <i class="fas fa-bed"></i> Rest
+            <i class="fas fa-bed"></i> {{localize "VAGABOND.Downtime.Rest.Title"}}
         </button>
     </div>
 
     {{!-- Breather Activity --}}
     <div class="activity-card">
         <div class="activity-header">
-            <i class="fas fa-heart"></i> Breather
-            <span class="cost-badge">Free</span>
+            <i class="fas fa-heart"></i> {{localize "VAGABOND.Downtime.Breather.Title"}}
+            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.Free"}}</span>
         </div>
         <div class="activity-content">
-            <p>Take a short break to catch your breath and recover some vitality.</p>
-            <p><strong>Effect:</strong> Regain HP equal to your Might stat ({{actor.system.stats.might.value}}).</p>
+            <p>{{localize "VAGABOND.Downtime.Breather.Description"}}</p>
+            <p><strong>{{localize "VAGABOND.Downtime.Breather.Effect" stat=(localize (lookup config.stats "might")) value=actor.system.stats.might.value}}</strong></p>
         </div>
         <button type="button" class="downtime-btn" data-action="processBreather">
-            <i class="fas fa-heart"></i> Take Breather
+            <i class="fas fa-heart"></i> {{localize "VAGABOND.Downtime.Breather.Button"}}
         </button>
     </div>
 
     {{!-- Craft Activity --}}
     <div class="activity-card">
         <div class="activity-header">
-            <i class="fas fa-hammer"></i> Craft
-            <span class="cost-badge">1 Shift</span>
+            <i class="fas fa-hammer"></i> {{localize "VAGABOND.Downtime.Craft.Title"}}
+            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
         </div>
         <div class="activity-content">
-            <p>Make items. Requires materials worth 50% of item value.</p>
+            <p>{{localize "VAGABOND.Downtime.Craft.Description"}}</p>
             <div class="input-group">
-                <label>Craft Difficulty:</label>
+                <label>{{localize "VAGABOND.Downtime.Craft.DifficultyLabel"}}</label>
                 <select name="craftDiff">
-                    <option value="1">18-17 (1s)</option>
-                    <option value="20">16-15 (20s)</option>
-                    <option value="50">14-13 (50s)</option>
-                    <option value="250">12-11 (2g 50s)</option>
-                    <option value="500">10-9 (5g)</option>
-                    <option value="750">8-7 (7g 50s)</option>
-                    <option value="1000">6 (10g)</option>
+                    <option value="1">{{localize "VAGABOND.Downtime.CraftDifficulty.tier1"}}</option>
+                    <option value="20">{{localize "VAGABOND.Downtime.CraftDifficulty.tier2"}}</option>
+                    <option value="50">{{localize "VAGABOND.Downtime.CraftDifficulty.tier3"}}</option>
+                    <option value="250">{{localize "VAGABOND.Downtime.CraftDifficulty.tier4"}}</option>
+                    <option value="500">{{localize "VAGABOND.Downtime.CraftDifficulty.tier5"}}</option>
+                    <option value="750">{{localize "VAGABOND.Downtime.CraftDifficulty.tier6"}}</option>
+                    <option value="1000">{{localize "VAGABOND.Downtime.CraftDifficulty.tier7"}}</option>
                 </select>
             </div>
         </div>
         <button type="button" class="downtime-btn" data-action="processCraft">
-            <i class="fas fa-tools"></i> Craft Item
+            <i class="fas fa-tools"></i> {{localize "VAGABOND.Downtime.Craft.Button"}}
         </button>
     </div>
 
     {{!-- Forage Activity --}}
     <div class="activity-card">
         <div class="activity-header">
-            <i class="fas fa-leaf"></i> Forage
-            <span class="cost-badge">1 Shift</span>
+            <i class="fas fa-leaf"></i> {{localize "VAGABOND.Downtime.Forage.Title"}}
+            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
         </div>
         <div class="activity-content">
-            <p>Gather resources from the wilderness. Requires a Survival Check.</p>
+            <p>{{localize "VAGABOND.Downtime.Forage.Description"}}</p>
             <div class="input-group">
-                <label>Target Resource:</label>
+                <label>{{localize "VAGABOND.Downtime.Forage.TargetLabel"}}</label>
                 <select name="forageType">
-                    <option value="food">Food (d6 Rations)</option>
-                    <option value="mats">Materials (d6 * 5s)</option>
+                    <option value="food">{{localize "VAGABOND.Downtime.ForageType.food"}}</option>
+                    <option value="mats">{{localize "VAGABOND.Downtime.ForageType.mats"}}</option>
                 </select>
             </div>
         </div>
         <button type="button" class="downtime-btn" data-action="processForage">
-            <i class="fas fa-search"></i> Forage
+            <i class="fas fa-search"></i> {{localize "VAGABOND.Downtime.Forage.Button"}}
         </button>
     </div>
 
     {{!-- Hunt Activity --}}
     <div class="activity-card">
         <div class="activity-header">
-            <i class="fas fa-paw"></i> Hunt
-            <span class="cost-badge">1 Shift</span>
+            <i class="fas fa-paw"></i> {{localize "VAGABOND.Downtime.Hunt.Title"}}
+            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
         </div>
         <div class="activity-content">
-            <p>Look for wild game. Requires a Survival Check. Find beasts for rations or materials.</p>
+            <p>{{localize "VAGABOND.Downtime.Hunt.Description"}}</p>
         </div>
         <button type="button" class="downtime-btn" data-action="processHunt">
-            <i class="fas fa-bow-arrow"></i> Hunt Game
+            <i class="fas fa-bow-arrow"></i> {{localize "VAGABOND.Downtime.Hunt.Button"}}
         </button>
     </div>
 
     {{!-- Study Activity --}}
     <div class="activity-card">
         <div class="activity-header">
-            <i class="fas fa-book-open"></i> Study
-            <span class="cost-badge">1 Shift</span>
+            <i class="fas fa-book-open"></i> {{localize "VAGABOND.Downtime.Study.Title"}}
+            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
         </div>
         <div class="activity-content">
-            <p>Gain a <strong>Studied Die</strong> to gain Favor on a d20 roll tomorrow, or swap a Class Feature.</p>
+            <p>{{localize "VAGABOND.Downtime.Study.Description"}}</p>
             <div class="input-group" style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
-                <label>Current Studied Dice: {{studiedDice}}</label>
+                <label>{{localize "VAGABOND.Downtime.Study.CurrentDice" value=studiedDice}}</label>
             </div>
         </div>
         <button type="button" class="downtime-btn" data-action="processStudy">
-            <i class="fas fa-graduation-cap"></i> Study
+            <i class="fas fa-graduation-cap"></i> {{localize "VAGABOND.Downtime.Study.Button"}}
         </button>
     </div>
 </div>
@@ -123,10 +123,10 @@
 {{!-- Footer Buttons --}}
 <footer class="downtime-footer">
     <button type="button" class="downtime-footer-btn cancel-btn" data-action="cancelDowntime">
-        <i class="fas fa-times"></i> Cancel
+        <i class="fas fa-times"></i> {{localize "VAGABOND.Downtime.Cancel"}}
     </button>
     <button type="button" class="downtime-footer-btn done-btn" data-action="doneDowntime">
-        <i class="fas fa-check"></i> Done
+        <i class="fas fa-check"></i> {{localize "VAGABOND.Downtime.Done"}}
     </button>
 </footer>
 </div>

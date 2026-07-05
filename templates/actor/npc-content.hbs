@@ -15,7 +15,7 @@
             value='{{system.senses}}'
             data-dtype='String'
             class='npc-text-input'
-            placeholder='Darksight, Blindsight...'
+            placeholder='{{localize "VAGABOND.Actor.NPC.SensesPlaceholder"}}'
           />
         {{/if}}
       </div>
@@ -210,13 +210,13 @@
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Name"}}:</label>
                     <div class='action-name-with-remove'>
-                      <input type='text' data-field='name' value='{{action.name}}' placeholder='Action Name' class='npc-text-input' />
+                      <input type='text' data-field='name' value='{{action.name}}' placeholder='{{localize "VAGABOND.Actor.NPC.Action.NamePlaceholder"}}' class='npc-text-input' />
                       {{#unless action.name}}
-                        <button type='button' class='action-remove-btn' data-action='saveAction' data-index='{{index}}' title='Save Action'>
+                        <button type='button' class='action-remove-btn' data-action='saveAction' data-index='{{index}}' title='{{localize "VAGABOND.Actor.NPC.Action.SaveTooltip"}}'>
                           <i class='fas fa-check'></i>
                         </button>
                       {{/unless}}
-                      <button type='button' class='action-remove-btn' data-action='removeAction' data-action-index='{{index}}' title='Remove Action'>
+                      <button type='button' class='action-remove-btn' data-action='removeAction' data-action-index='{{index}}' title='{{localize "VAGABOND.Actor.NPC.Action.RemoveTooltip"}}'>
                         <i class='fas fa-trash'></i>
                       </button>
                     </div>
@@ -224,12 +224,12 @@
                   {{#if action.name}}
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.Note"}}:</label>
-                    <input type='text' data-field='note' value='{{action.note}}' placeholder='Note' class='npc-text-input' />
+                    <input type='text' data-field='note' value='{{action.note}}' placeholder='{{localize "VAGABOND.Actor.NPC.Action.NotePlaceholder"}}' class='npc-text-input' />
                   </div>
                   <div class='action-edit-row action-edit-row-split'>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.Recharge"}}:</label>
-                      <input type='text' data-field='recharge' value='{{action.recharge}}' placeholder='1/Day or Cd6' class='npc-text-input' />
+                      <input type='text' data-field='recharge' value='{{action.recharge}}' placeholder='{{localize "VAGABOND.Actor.NPC.Action.RechargePlaceholder"}}' class='npc-text-input' />
                     </div>
                     <div class='action-edit-col'>
                       <label>{{localize "VAGABOND.Actor.NPC.Action.AttackType"}}:</label>
@@ -293,7 +293,7 @@
                   </div>
                   <div class='action-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Action.ExtraInfo"}}:</label>
-                    <textarea data-field='extraInfo' rows='2' placeholder='Extra information...' class='npc-field-input'>{{action.extraInfo}}</textarea>
+                    <textarea data-field='extraInfo' rows='2' placeholder='{{localize "VAGABOND.Actor.NPC.Action.ExtraInfoPlaceholder"}}' class='npc-field-input'>{{action.extraInfo}}</textarea>
                   </div>
                   {{! On-Hit Status Effects }}
                   <div class='action-edit-row action-edit-row--full'>
@@ -471,13 +471,13 @@
                   <div class='ability-edit-row'>
                     <label>{{localize "VAGABOND.Actor.NPC.Ability.Name"}}</label>
                     <div class='ability-name-with-remove'>
-                      <input type='text' data-field='name' value='{{ability.name}}' placeholder='Ability Name' class='npc-text-input' />
+                      <input type='text' data-field='name' value='{{ability.name}}' placeholder='{{localize "VAGABOND.Actor.NPC.Ability.NamePlaceholder"}}' class='npc-text-input' />
                       {{#unless ability.name}}
-                        <button type='button' class='ability-remove-btn' data-action='saveAbility' data-index='{{index}}' title='Save Ability'>
+                        <button type='button' class='ability-remove-btn' data-action='saveAbility' data-index='{{index}}' title='{{localize "VAGABOND.Actor.NPC.Ability.SaveTooltip"}}'>
                           <i class='fas fa-check'></i>
                         </button>
                       {{/unless}}
-                      <button type='button' class='ability-remove-btn' data-action='removeAbility' data-ability-index='{{index}}' title='Remove Ability'>
+                      <button type='button' class='ability-remove-btn' data-action='removeAbility' data-ability-index='{{index}}' title='{{localize "VAGABOND.Actor.NPC.Ability.RemoveTooltip"}}'>
                         <i class='fas fa-trash'></i>
                       </button>
                     </div>
@@ -485,7 +485,7 @@
                   {{#if ability.name}}
                     <div class='ability-edit-row'>
                       <label>{{localize "VAGABOND.Actor.NPC.Ability.Description"}}</label>
-                      <textarea data-field='description' rows='3' placeholder='Description (dice like d6 or 2d8 will be clickable)' class='npc-text-input'>{{ability.description}}</textarea>
+                      <textarea data-field='description' rows='3' placeholder='{{localize "VAGABOND.Actor.NPC.Ability.DescriptionPlaceholder"}}' class='npc-text-input'>{{ability.description}}</textarea>
                     </div>
                   {{/if}}
                 </div>

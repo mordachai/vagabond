@@ -91,7 +91,7 @@
       {{#if isOverloaded}}
         <div class='inventory-overload-warning'>
           <i class='fas fa-exclamation-triangle'></i>
-          <span>Your Inventory is full, you can't take the Rush action. (+{{overloadAmount}} slots beyond capacity)</span>
+          <span>{{localize "VAGABOND.UI.Warnings.InventoryOverloaded" amount=overloadAmount}}</span>
         </div>
       {{/if}}
     </div>
