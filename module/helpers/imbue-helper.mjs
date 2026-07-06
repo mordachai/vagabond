@@ -59,27 +59,41 @@ export class VagabondImbueHelper {
   }
 
   /**
+   * Write `data` onto `weapon.system.imbuedSpell`, relaying through the GM
+   * socket when the current user doesn't own the weapon's parent actor
+   * (e.g. casting Imbue onto another player's equipped weapon).
+   * @param {Item} weapon
+   * @param {Object} data
+   */
+  static async _writeImbuePayload(weapon, data) {
+    if (weapon.isOwner || game.user.isGM) {
+      await weapon.update({ 'system.imbuedSpell': data });
+      return;
+    }
+    const { emitSocket } = await import('./socket-helper.mjs');
+    emitSocket('imbueUpdateWeapon', { weaponUuid: weapon.uuid, data });
+  }
+
+  /**
    * Write the imbue payload onto `weapon`.
    * @param {Item} weapon
    * @param {{sourceActor: Actor, spell: Item, damageDice: number, deferredMana: number, deferredPayment: boolean, manaSkillKey: string}} opts
    */
   static async imbueWeapon(weapon, { sourceActor, spell, damageDice, deferredMana, deferredPayment, manaSkillKey }) {
-    await weapon.update({
-      'system.imbuedSpell': {
-        ...this._emptyPayload(),
-        active: true,
-        sourceActorUuid: sourceActor.uuid,
-        sourceActorName: sourceActor.name,
-        spellUuid: spell.uuid,
-        spellName: spell.name,
-        spellImg: spell.img,
-        damageTypeKey: (spell.system.damageType || 'physical').toLowerCase(),
-        dieSize: (spell.system.damageDieSize || 6) + (sourceActor.system.spellDamageDieSizeBonus || 0),
-        damageDice: damageDice || 0,
-        deferredMana: deferredMana || 0,
-        deferredPayment: !!deferredPayment,
-        manaSkillKey: manaSkillKey || '',
-      },
+    await this._writeImbuePayload(weapon, {
+      ...this._emptyPayload(),
+      active: true,
+      sourceActorUuid: sourceActor.uuid,
+      sourceActorName: sourceActor.name,
+      spellUuid: spell.uuid,
+      spellName: spell.name,
+      spellImg: spell.img,
+      damageTypeKey: (spell.system.damageType || 'physical').toLowerCase(),
+      dieSize: (spell.system.damageDieSize || 6) + (sourceActor.system.spellDamageDieSizeBonus || 0),
+      damageDice: damageDice || 0,
+      deferredMana: deferredMana || 0,
+      deferredPayment: !!deferredPayment,
+      manaSkillKey: manaSkillKey || '',
     });
   }
 
@@ -88,7 +102,7 @@ export class VagabondImbueHelper {
    * @param {Item} weapon
    */
   static async clearImbue(weapon) {
-    await weapon.update({ 'system.imbuedSpell': this._emptyPayload() });
+    await this._writeImbuePayload(weapon, this._emptyPayload());
   }
 
   /**

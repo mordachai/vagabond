@@ -1128,6 +1128,14 @@ Hooks.once('ready', function () {
     await actor.update({ 'system.health.value': newHp });
   });
 
+  // Generic relay for cross-actor field writes (heal/recover/recharge targeting
+  // an actor the clicking user doesn't own, party-sheet HP/fatigue bars, etc).
+  registerSocketAction('updateActorField', async ({ actorUuid, field, value }) => {
+    const actor = await fromUuid(actorUuid);
+    if (!actor) return;
+    await actor.update({ [field]: value });
+  });
+
   registerSocketAction('applyStatus', async ({ actorUuid, statusId, active }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;
@@ -1149,6 +1157,14 @@ Hooks.once('ready', function () {
     const maxLuck = actor.system.maxLuck ?? 0;
     const newLuck = Math.min(maxLuck, currentLuck + amount);
     await actor.update({ 'system.currentLuck': newLuck });
+  });
+
+  // Imbue relay — caster writes/clears the imbue payload on a weapon they don't own
+  // (another player's equipped weapon, or the wielder's weapon at delivery time).
+  registerSocketAction('imbueUpdateWeapon', async ({ weaponUuid, data }) => {
+    const weapon = await fromUuid(weaponUuid);
+    if (!weapon) return;
+    await weapon.update({ 'system.imbuedSpell': data });
   });
 
   // Item/spell/NPC-action macro relay — player clicks a runAsGM button, GM executes.
@@ -2602,7 +2618,12 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
         if (!actor) { ui.notifications.warn('Target actor not found.'); return; }
         const currentHP = actor.system.health?.value ?? 0;
         const newHP = Math.max(0, currentHP - amount);
-        await actor.update({ 'system.health.value': newHP });
+        if (actor.isOwner || game.user.isGM) {
+          await actor.update({ 'system.health.value': newHP });
+        } else {
+          const { emitSocket } = await import('./helpers/socket-helper.mjs');
+          emitSocket('updateActorField', { actorUuid: actor.uuid, field: 'system.health.value', value: newHP });
+        }
         const { VagabondChatCard } = await import('./helpers/chat-card.mjs');
         await VagabondChatCard.applyResult(actor, {
           type: 'damage',

@@ -2293,11 +2293,17 @@ export class VagabondDamageHelper {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
-      // Check permissions
-      if (!targetActor.isOwner && !game.user.isGM) {
-        ui.notifications.warn(`You don't have permission to modify ${targetActor.name}.`);
-        continue;
-      }
+      // Route through the GM socket relay when the clicking user doesn't own
+      // the target (e.g. healing an ally's character) — direct update() would
+      // be silently dropped by the server for lack of permission.
+      const applyActorField = async (field, value) => {
+        if (targetActor.isOwner || game.user.isGM) {
+          await targetActor.update({ [field]: value });
+        } else {
+          const { emitSocket } = await import('./socket-helper.mjs');
+          emitSocket('updateActorField', { actorUuid: targetActor.uuid, field, value });
+        }
+      };
 
       // Apply the appropriate restorative effect
       if (damageType === 'healing') {
@@ -2310,7 +2316,7 @@ export class VagabondDamageHelper {
         const maxHP = targetActor.system.health?.max || 0;
         const newHP = Math.min(maxHP, currentHP + modifiedAmount);
         const actualHealing = newHP - currentHP;
-        await targetActor.update({ 'system.health.value': newHP });
+        await applyActorField('system.health.value', newHP);
 
 
         const { VagabondChatCard: VCCHeal } = await import('./chat-card.mjs');
@@ -2326,7 +2332,7 @@ export class VagabondDamageHelper {
         const currentFatigue = targetActor.system.fatigue || 0;
         const newFatigue = Math.max(0, currentFatigue - amount);
         const actualRecovery = currentFatigue - newFatigue;
-        await targetActor.update({ 'system.fatigue': newFatigue });
+        await applyActorField('system.fatigue', newFatigue);
 
         const { VagabondChatCard: VCCRecover } = await import('./chat-card.mjs');
         await VCCRecover.applyResult(targetActor, {
@@ -2341,7 +2347,7 @@ export class VagabondDamageHelper {
         const maxMana = targetActor.system.mana?.max || 0;
         const newMana = Math.min(maxMana, currentMana + amount);
         const actualRecharge = newMana - currentMana;
-        await targetActor.update({ 'system.mana.value': newMana });
+        await applyActorField('system.mana.value', newMana);
 
         const { VagabondChatCard: VCCRecharge } = await import('./chat-card.mjs');
         await VCCRecharge.applyResult(targetActor, {

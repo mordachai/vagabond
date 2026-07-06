@@ -19,6 +19,23 @@ export class VagabondPartySheet extends VagabondActorSheet {
     this._notesHookId = null;
   }
 
+  /**
+   * Write a single field on a party member's actor, relaying through the GM
+   * socket when the current user doesn't own that member (party sheet is
+   * visible to the whole party, but each PC is owned by a different player).
+   * @param {Actor} actor
+   * @param {string} field
+   * @param {*} value
+   */
+  async _updateMemberField(actor, field, value) {
+    if (actor.isOwner || game.user.isGM) {
+      await actor.update({ [field]: value });
+    } else {
+      const { emitSocket } = await import('../helpers/socket-helper.mjs');
+      emitSocket('updateActorField', { actorUuid: actor.uuid, field, value });
+    }
+  }
+
   /** @override */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
     classes: ['vagabond', 'actor', 'party'],
@@ -679,7 +696,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const actor = await fromUuid(uuid);
           if (!actor) return;
           const newVal = Math.max(0, actor.system.health.value - 1);
-          await actor.update({ 'system.health.value': newVal });
+          await this._updateMemberField(actor, 'system.health.value', newVal);
         }, { signal });
         bar.addEventListener('contextmenu', async (e) => {
           e.preventDefault();
@@ -689,7 +706,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const actor = await fromUuid(uuid);
           if (!actor) return;
           const newVal = Math.min(actor.system.health.max, actor.system.health.value + 1);
-          await actor.update({ 'system.health.value': newVal });
+          await this._updateMemberField(actor, 'system.health.value', newVal);
         }, { signal });
       });
 
@@ -704,7 +721,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const actor = await fromUuid(uuid);
           if (!actor) return;
           const newVal = Math.min(actor.system.fatigueMax ?? 5, (actor.system.fatigue ?? 0) + 1);
-          await actor.update({ 'system.fatigue': newVal });
+          await this._updateMemberField(actor, 'system.fatigue', newVal);
         }, { signal });
         bar.addEventListener('contextmenu', async (e) => {
           e.preventDefault();
@@ -714,7 +731,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const actor = await fromUuid(uuid);
           if (!actor) return;
           const newVal = Math.max(0, (actor.system.fatigue ?? 0) - 1);
-          await actor.update({ 'system.fatigue': newVal });
+          await this._updateMemberField(actor, 'system.fatigue', newVal);
         }, { signal });
       });
 
