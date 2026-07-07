@@ -1556,6 +1556,19 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             text-align: center;
             transition: color 0.2s ease, font-weight 0.2s ease;
         }
+
+        // Second line under the name (e.g. Imbue: weapon name, bearer below)
+        .target-sub {
+            font-size: 12px;
+            color: $c-darkgray;
+            opacity: 0.75;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+            margin-top: -4px; // tuck under the name (chip has 4px flex gap)
+        }
     }
 }
 

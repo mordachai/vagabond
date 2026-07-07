@@ -73,9 +73,9 @@
     .vsc-delivery-list { top: calc(81.5% + 10px); }
     // mana info y≈277 → (277-56)/248 ≈ 89.1%
     .vsc-mana-info    { top: calc(89.1% - 4px); }
-    // Range/target-count node bottom y=104 → (104-56)/248 ≈ 19.4%; bottom
-    // "Delivery" label y=258 → (258-56)/248 ≈ 81.5% → bottom offset 18.5%.
-    .vsc-imbue-panel  { top: calc(19.4% + 6px); bottom: calc(18.5% + 6px); }
+    // Imbue ring buttons position via viewBox-unit CSS vars — remap them to
+    // the cropped viewBox (56..304, span 248).
+    .vsc-imbue-ring   { --vb-min: 56; --vb-span: 248; }
   }
   color: rgb(var(--ac));
   font-family: $font-text;
@@ -521,53 +521,37 @@
 
   // ── Imbue weapon picker (replaces triangle while Imbue is active) ───
   // No portraits — target identity lives in each icon's hover tooltip
-  // ("Target: Weapon"). Two columns flank the center mana node, occupying
-  // roughly the old triangle's footprint (top node bottom ≈ 28.9% down to
-  // the bottom "Delivery" label ≈ 71.7%) — the .vsc-eye toggle that
-  // normally lives in this gap hides itself for Imbue (see hbs).
-  .vsc-imbue-panel {
+  // ("Target: Weapon"). Icons are distributed along the inner circle on two
+  // side arcs flanking the center mana node — the top Range node and the
+  // bottom "Delivery" edge-label (the ONLY re-opener for the delivery
+  // selector once Imbue is active) stay clear. Each button carries --ix/--iy
+  // in SVG viewBox units; --vb-min/--vb-span map them to % of the wrap
+  // (overridden in .no-rings for the cropped viewBox).
+  .vsc-imbue-ring {
     position: absolute;
-    // Old triangle base corners sat at x=94/266 of the 360 viewBox (≈26%/74%).
-    left: 25%;
-    right: 25%;
-    top: calc(25% + 1px);
-    bottom: calc(25% + 6px);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    inset: 0; // same box as the SVG → viewBox maps 1:1 to %
     z-index: 4;
-    // The panel's own box spans the full middle width (for flex layout) but
-    // only the two flanking columns have visible content — its empty center
-    // used to swallow clicks meant for the SVG below (mana node, and the
-    // "Delivery" edge-label — the ONLY re-opener for the delivery selector
-    // once Imbue is active, since the bl-node opener hides for Imbue). Let
-    // clicks pass through the panel itself; re-enable on the columns/buttons.
+    // Let clicks pass through the ring container itself (mana node, edge
+    // labels live below); re-enable on the buttons.
     pointer-events: none;
-  }
-
-  .vsc-imbue-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    overflow-y: auto;
-    max-height: 100%;
-    scrollbar-width: none; // Firefox — still scrollable, just no visible bar
-    &::-webkit-scrollbar { display: none; } // Chromium (Foundry's runtime)
-    pointer-events: auto;
+    --vb-min: 0;
+    --vb-span: 360;
   }
 
   .vsc-imbue-weapon {
-    width: 42px;
-    height: 42px;
+    position: absolute;
+    left: calc((var(--ix) - var(--vb-min)) / var(--vb-span) * 100%);
+    top: calc((var(--iy) - var(--vb-min)) / var(--vb-span) * 100%);
+    transform: translate(-50%, -50%);
+    width: var(--icon-size, 42px);
+    height: var(--icon-size, 42px); // beats Foundry's global button metrics
+    line-height: normal;
     border-radius: 50%;
     border: 1px solid rgb(var(--ac));
     background: rgba(0, 0, 0, 0.5);
     padding: 3px;
     cursor: pointer;
-    height: auto; // beat Foundry's global button metrics
-    line-height: normal;
-    flex: 0 0 auto;
+    pointer-events: auto;
     opacity: 0.45;
     transition: opacity 0.15s, filter 0.15s, box-shadow 0.15s;
 

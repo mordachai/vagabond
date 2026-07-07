@@ -136,9 +136,10 @@
           </div>
           <div class="targets-list">
             {{#each targetsAtRollTime}}
-            <div class="target-token" title="{{this.actorName}} (click to ping)" data-token-id="{{this.tokenId}}" data-scene-id="{{this.sceneId}}">
+            <div class="target-token" title="{{this.actorName}}{{#if this.subName}} - {{this.subName}}{{/if}} (click to ping)" data-token-id="{{this.tokenId}}" data-scene-id="{{this.sceneId}}">
               <img src="{{this.actorImg}}" alt="{{this.actorName}}">
               <span class="target-name">{{this.actorName}}</span>
+              {{#if this.subName}}<span class="target-sub">{{this.subName}}</span>{{/if}}
             </div>
             {{/each}}
           </div>

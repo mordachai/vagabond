@@ -166,6 +166,14 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const accent = ACCENT_RGB[dmgType] ?? ACCENT_RGB['-'];
     const phrases = RUNE_PHRASES[dmgType] ?? RUNE_PHRASES['-'];
 
+    // Imbue: the Target ("Increase") count is not player-bumped — it IS the
+    // number of selected weapons (book: Target = a weapon; first free, +2 mana
+    // each additional). Re-derive on every render so weapon clicks, target
+    // changes, and delivery re-picks all stay consistent before costing.
+    if (state.deliveryType === 'imbue') {
+      state.deliveryIncrease = Math.max(0, this._imbueCandidates().filter(c => c.selected).length - 1);
+    }
+
     const costs = SpellCastDialog.calculateCosts(spell, actor, state);
     const finalMana = Math.max(0, costs.totalCost + state.manaOverrideDelta);
 
@@ -184,7 +192,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const imbueUpfront = game.settings.get('vagabond', 'imbueUpfrontMana');
     const hideDiceFx = imbueActive && !imbueUpfront;
     diceClickable = diceClickable && !hideDiceFx;
-    const imbueSplit = imbueActive ? this._imbueFlatWeaponSplit() : { left: [], right: [] };
+    const imbueRing = imbueActive ? this._imbueRingLayout() : { weapons: [], iconSize: 42 };
     const damageTypeLabel = dmgType !== '-'
       ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[dmgType] ?? dmgType)
       : (usesDiceScaling
@@ -240,8 +248,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       castingMax: mana.castingMax ?? 0,
       messages,
       imbueActive,
-      imbueLeft: imbueSplit.left,
-      imbueRight: imbueSplit.right,
+      imbueWeapons: imbueRing.weapons,
+      imbueIconSize: imbueRing.iconSize,
       hideDiceFx,
     });
   }
@@ -705,20 +713,13 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.render();
   }
 
-  /** Currently-targeted tokens eligible for Imbue, capped by the Range/Increase
-   *  node. Each token can still supply more than one weapon (imbuing two
-   *  weapons on the same dual-wielder is allowed, not an either/or choice) —
-   *  the cap just bounds how many beings' weapons are shown as candidates. */
+  /** Currently-targeted tokens eligible for Imbue — all of them, uncapped.
+   *  The book's "Target" is a WEAPON, not a being: every equipped weapon of
+   *  every targeted willing being is a candidate; cost scales with how many
+   *  weapons get selected, not how many beings are pointed at. */
   _imbueTargetTokens() {
     if (this.#state.deliveryType !== 'imbue') return [];
-    return Array.from(game.user.targets).slice(0, this._imbueSlotCap());
-  }
-
-  /** Max number of targeted beings whose weapons are offered as candidates. */
-  _imbueSlotCap() {
-    const base = CONFIG.VAGABOND.deliveryBaseRanges.imbue?.value ?? 0;
-    const inc = CONFIG.VAGABOND.deliveryIncrement.imbue ?? 0;
-    return base + inc * this.#state.deliveryIncrease;
+    return Array.from(game.user.targets);
   }
 
   /** Every equipped weapon across all currently-targeted tokens, each a
@@ -743,18 +744,40 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     return candidates;
   }
 
-  /** Render-only split of `_imbueCandidates()` into two columns, simple
-   *  alternating spread — no grouping by target. */
-  _imbueFlatWeaponSplit() {
+  /** Render-only ring layout of `_imbueCandidates()`: icons sit on a circle
+   *  of radius 86 around the center mana node (viewBox units), split into two
+   *  side arcs so the top Range node and bottom delivery label stay clear.
+   *  Alternating left/right spread — no grouping by target. Icon size shrinks
+   *  past 6 candidates. */
+  _imbueRingLayout() {
     const candidates = this._imbueCandidates();
-    return {
-      left: candidates.filter((_, i) => i % 2 === 0),
-      right: candidates.filter((_, i) => i % 2 === 1),
+    const R = 86;
+    const ARC_SPAN_MAX = 100; // degrees per side arc
+    const left = candidates.filter((_, i) => i % 2 === 0);
+    const right = candidates.filter((_, i) => i % 2 === 1);
+
+    const place = (list, centerDeg) => {
+      const k = list.length;
+      const span = Math.min(ARC_SPAN_MAX, (k - 1) * 35);
+      list.forEach((c, i) => {
+        const deg = k === 1 ? centerDeg : centerDeg - span / 2 + (span * i) / (k - 1);
+        const rad = (deg * Math.PI) / 180;
+        c.x = Math.round((180 + R * Math.cos(rad)) * 10) / 10;
+        c.y = Math.round((180 + R * Math.sin(rad)) * 10) / 10;
+      });
     };
+    place(left, 180); // left arc, centered at 9 o'clock
+    place(right, 0);  // right arc, centered at 3 o'clock
+
+    const n = candidates.length;
+    const iconSize = n <= 6 ? 42 : Math.max(28, 42 - 3 * (n - 6));
+    return { weapons: candidates, iconSize };
   }
 
   _isRangeInactive(deliveryType) {
     if (!deliveryType) return true;
+    // Imbue's target count is driven by weapon selection, never bumped manually.
+    if (deliveryType === 'imbue') return true;
     const inc = CONFIG.VAGABOND.deliveryIncrement[deliveryType] ?? 0;
     const base = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
     return inc === 0 || !base || base.value == null;
@@ -762,6 +785,11 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   _computeRangeDisplay(deliveryType, deliveryIncrease) {
     if (!deliveryType) return { value: '—', unit: '' };
+    // Imbue: read-only counter of selected weapons — starts at 0.
+    if (deliveryType === 'imbue') {
+      const n = this._imbueCandidates().filter(c => c.selected).length;
+      return { value: String(n), unit: n === 1 ? 'target' : 'targets' };
+    }
     const base = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
     const inc = CONFIG.VAGABOND.deliveryIncrement[deliveryType] ?? 0;
     // Touch / Glyph (or any non-increasable, no-range delivery) — fixed limit of 1
@@ -960,6 +988,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!weaponUuid) return;
     if (this.#state.imbueAssignments[weaponUuid]) delete this.#state.imbueAssignments[weaponUuid];
     else this.#state.imbueAssignments[weaponUuid] = true;
+    // Re-derive before emitting so listeners see the fresh target count/cost
+    // (render would recompute it anyway, but _emitChange fires first).
+    this.#state.deliveryIncrease = Math.max(0, this._imbueCandidates().filter(c => c.selected).length - 1);
+    this._emitChange();
     this.render();
   }
 

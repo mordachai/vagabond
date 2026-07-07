@@ -139,30 +139,18 @@
     {{#if imbueActive}}
     {{!-- Imbue weapon picker — replaces the triangle while Imbue is the active
           delivery. No portraits; each icon's target is named as a prefix in
-          its hover tooltip instead. Split into two flanking columns. --}}
-    <div class="vsc-imbue-panel">
-      {{#if imbueLeft.length}}
-        <div class="vsc-imbue-col">
-          {{#each imbueLeft as |w|}}
-          <button type="button" class="vsc-imbue-weapon {{#if w.selected}}is-selected{{/if}}"
-                  data-action="vscPickImbueWeapon" data-weapon-uuid="{{w.uuid}}"
-                  title="{{w.tooltip}}">
-            <img src="{{w.img}}" alt="" />
-          </button>
-          {{/each}}
-        </div>
-      {{/if}}
-      {{#if imbueRight.length}}
-        <div class="vsc-imbue-col">
-          {{#each imbueRight as |w|}}
-          <button type="button" class="vsc-imbue-weapon {{#if w.selected}}is-selected{{/if}}"
-                  data-action="vscPickImbueWeapon" data-weapon-uuid="{{w.uuid}}"
-                  title="{{w.tooltip}}">
-            <img src="{{w.img}}" alt="" />
-          </button>
-          {{/each}}
-        </div>
-      {{/if}}
+          its hover tooltip instead. Icons are distributed along the inner
+          circle (two side arcs flanking the center mana node); --ix/--iy are
+          SVG viewBox units mapped to % in SCSS. --}}
+    <div class="vsc-imbue-ring" style="--icon-size: {{imbueIconSize}}px;">
+      {{#each imbueWeapons as |w|}}
+      <button type="button" class="vsc-imbue-weapon {{#if w.selected}}is-selected{{/if}}"
+              data-action="vscPickImbueWeapon" data-weapon-uuid="{{w.uuid}}"
+              title="{{w.tooltip}}"
+              style="--ix: {{w.x}}; --iy: {{w.y}};">
+        <img src="{{w.img}}" alt="" />
+      </button>
+      {{/each}}
     </div>
     {{/if}}
 

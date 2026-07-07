@@ -506,8 +506,9 @@ export class SpellHandler {
       return;
     }
 
-    // Capture targeted tokens at cast time
-    const targetsAtRollTime = Array.from(game.user.targets).map((token) => ({
+    // Capture targeted tokens at cast time. For Imbue this gets replaced
+    // below with the resolved WEAPONS (the book's actual targets).
+    let targetsAtRollTime = Array.from(game.user.targets).map((token) => ({
       tokenId: token.id,
       sceneId: token.scene.id,
       actorId: token.actor?.id,
@@ -630,6 +631,21 @@ export class SpellHandler {
         );
       }
       if (!assignments.length) return;
+      // The chat card's Targets section shows the imbued weapons, not the
+      // beings holding them: weapon portrait, weapon name, bearer name on a
+      // second line. Token id/scene are kept from the owner so click-to-ping
+      // still works.
+      targetsAtRollTime = assignments.map(({ targetActor, weapon }) => {
+        const tokenDoc = targetActor.token ?? targetActor.getActiveTokens(true)[0]?.document;
+        return {
+          tokenId: tokenDoc?.id ?? null,
+          sceneId: tokenDoc?.parent?.id ?? null,
+          actorId: targetActor.id,
+          actorName: weapon.name,
+          subName: tokenDoc?.name ?? targetActor.name,
+          actorImg: weapon.img,
+        };
+      });
       const imbueUpfront = game.settings.get('vagabond', 'imbueUpfrontMana');
       for (const { weapon } of assignments) {
         await VagabondImbueHelper.imbueWeapon(weapon, {

@@ -2192,6 +2192,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-align: center;
   transition: color 0.2s ease, font-weight 0.2s ease;
 }
+.chat-targets-section .target-token .target-sub {
+  font-size: 12px;
+  color: var(--vagabond-c-darkgray);
+  opacity: 0.75;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  margin-top: -4px;
+}
 
 /* Level Up Card Styling */
 .vagabond-chat-card-v2[data-card-type=level-up] .tag-level {
@@ -9271,9 +9282,9 @@ ol#combat-tracker.directory-list {
 .vsc-root.no-rings .vsc-mana-info {
   top: calc(89.1% - 4px);
 }
-.vsc-root.no-rings .vsc-imbue-panel {
-  top: calc(19.4% + 6px);
-  bottom: calc(18.5% + 6px);
+.vsc-root.no-rings .vsc-imbue-ring {
+  --vb-min: 56;
+  --vb-span: 248;
 }
 .vsc-root:active {
   cursor: grabbing;
@@ -9662,42 +9673,28 @@ ol#combat-tracker.directory-list {
 .vsc-root .vsc-delivery-list .vsc-del-help:hover > i {
   opacity: 1;
 }
-.vsc-root .vsc-imbue-panel {
+.vsc-root .vsc-imbue-ring {
   position: absolute;
-  left: 25%;
-  right: 25%;
-  top: calc(25% + 1px);
-  bottom: calc(25% + 6px);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  inset: 0;
   z-index: 4;
   pointer-events: none;
-}
-.vsc-root .vsc-imbue-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  overflow-y: auto;
-  max-height: 100%;
-  scrollbar-width: none;
-  pointer-events: auto;
-}
-.vsc-root .vsc-imbue-col::-webkit-scrollbar {
-  display: none;
+  --vb-min: 0;
+  --vb-span: 360;
 }
 .vsc-root .vsc-imbue-weapon {
-  width: 42px;
-  height: 42px;
+  position: absolute;
+  left: calc((var(--ix) - var(--vb-min)) / var(--vb-span) * 100%);
+  top: calc((var(--iy) - var(--vb-min)) / var(--vb-span) * 100%);
+  transform: translate(-50%, -50%);
+  width: var(--icon-size, 42px);
+  height: var(--icon-size, 42px);
+  line-height: normal;
   border-radius: 50%;
   border: 1px solid rgb(var(--ac));
   background: rgba(0, 0, 0, 0.5);
   padding: 3px;
   cursor: pointer;
-  height: auto;
-  line-height: normal;
-  flex: 0 0 auto;
+  pointer-events: auto;
   opacity: 0.45;
   transition: opacity 0.15s, filter 0.15s, box-shadow 0.15s;
 }
