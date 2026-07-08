@@ -1050,6 +1050,66 @@ VAGABOND.fxSchoolArt = {
 };
 
 /**
+ * Glyph delivery — placed-glyph emblem artwork. One emblem per FX school /
+ * damage type under `glyphArtBasePath` (`{key}.webp`). Resolution order in
+ * `VagabondGlyphHelper.artPathFor()`: spell `fxSchool` → damage type → default.
+ * `glyphArtAliases` maps keys whose art basename differs (or that have no
+ * dedicated emblem) onto an existing file.
+ * @type {string}
+ */
+VAGABOND.glyphArtBasePath = 'systems/vagabond/assets/ui/glyphs';
+
+/** @type {Object<string,string>} */
+VAGABOND.glyphArtAliases = {
+  genericlight: 'genericLight',
+  genericdark:  'genericDark',
+  magical:      'arcane',
+  physical:     'blunt',
+  piercing:     'blunt',
+  slashing:     'blunt',
+  recover:      'healing',
+  recharge:     'arcane',
+};
+
+/** Fallback glyph emblem basename when no school/type art matches. @type {string} */
+VAGABOND.glyphDefaultArt = 'genericLight';
+
+/**
+ * Emitted-light color per glyph emblem, keyed by art basename (post-alias).
+ * Drives the pulsating glow + ground halo in GlyphOverlay — the glyph should
+ * read as a light source of its element.
+ * @type {Object<string,string>}
+ */
+VAGABOND.glyphGlowColors = {
+  acid:         '#A8E62E',
+  arcane:       '#B57EDC',
+  blunt:        '#C9BCA4',
+  cold:         '#7EC8E3',
+  defense:      '#A8C0E0',
+  earth:        '#C08A4E',
+  fire:         '#FF8A3C',
+  genericDark:  '#8A79C9',
+  genericLight: '#F2E4AE',
+  healing:      '#7CE577',
+  lava:         '#FF5A2A',
+  nature:       '#4FBF5A',
+  necrotic:     '#9D4EDD',
+  poison:       '#59C135',
+  psychic:      '#FF6EC7',
+  radiant:      '#FFE066',
+  shadow:       '#5C4A9E',
+  shock:        '#3FE0FF',
+  wind:         '#C4F0E0',
+};
+
+/**
+ * "…where no other glyph is within Close." — minimum separation between two
+ * placed glyphs, in feet (Close range band = 5 ft).
+ * @type {number}
+ */
+VAGABOND.glyphCloseSeparationFeet = 5;
+
+/**
  * Hide the solid color fill (the core region highlight) on textured regions so
  * only the artwork shows. Live-testable: `vagabond.ui.regionTexture.setHideFill(false)`.
  * @type {boolean}

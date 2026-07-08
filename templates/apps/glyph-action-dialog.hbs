@@ -1,0 +1,30 @@
+{{! Glyph action dialog — single root element (ApplicationV2 part contract) }}
+<div class="glyph-dialog-wrapper">
+
+  {{! Spell portrait medallion on top }}
+  <div class="glyph-dialog-portrait">
+    <img src="{{spellImg}}" alt="{{spellName}}" />
+  </div>
+
+  <div class="glyph-dialog-title">
+    <strong>{{spellName}}</strong>
+    <span>{{casterLine}}</span>
+  </div>
+
+  {{! Glyph delivery rule text }}
+  <p class="glyph-dialog-rule">{{rule}}</p>
+
+  {{! Three icon cards — 50x50 button, name below (progress-clock card language) }}
+  <div class="glyph-dialog-actions">
+    {{#each buttons}}
+    <div class="glyph-action">
+      <button type="button" class="glyph-action-btn {{this.cls}}" data-action="{{this.action}}"
+              data-tooltip="{{this.label}}">
+        <i class="{{this.icon}}"></i>
+      </button>
+      <span class="glyph-action-label">{{this.label}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+</div>

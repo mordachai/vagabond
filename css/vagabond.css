@@ -2485,6 +2485,73 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #fff;
 }
 
+/* --------------------------------------------------------- */
+/* Glyph card: posted when a Glyph delivery is inscribed.     */
+/* Trigger fires the spell in the 5' cube; Dismiss removes it */
+/* --------------------------------------------------------- */
+.vagabond-glyph-card {
+  background: linear-gradient(135deg, #26222e 0%, #1a1720 100%);
+  border: 1px solid #4a4258;
+  border-radius: 6px;
+  padding: 8px;
+}
+.vagabond-glyph-card .glyph-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.vagabond-glyph-card .glyph-card-header img {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #4a4258;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.vagabond-glyph-card .glyph-card-header .glyph-card-title {
+  display: flex;
+  flex-direction: column;
+}
+.vagabond-glyph-card .glyph-card-header .glyph-card-title strong {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 14px;
+  text-shadow: 1px 1px 0 #000;
+}
+.vagabond-glyph-card .glyph-card-header .glyph-card-title span {
+  color: #aaa;
+  font-size: 11px;
+}
+.vagabond-glyph-card .glyph-card-buttons {
+  display: flex;
+  gap: 6px;
+}
+.vagabond-glyph-card .glyph-card-buttons button {
+  flex: 1;
+  height: auto;
+  line-height: normal;
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #4a4258;
+  background: rgba(0, 0, 0, 0.35);
+  color: #ddd;
+  cursor: pointer;
+}
+.vagabond-glyph-card .glyph-card-buttons button i {
+  margin-right: 4px;
+}
+.vagabond-glyph-card .glyph-card-buttons button:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 6px -1px var(--vagabond-c-chat-yellow);
+  color: #fff;
+}
+.vagabond-glyph-card .glyph-card-buttons .vagabond-glyph-trigger-button i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-glyph-card .glyph-card-buttons .vagabond-glyph-dismiss-button i {
+  color: #b06060;
+}
+
 /* Animations */
 @keyframes popIn {
   from {
@@ -10233,6 +10300,110 @@ ol#combat-tracker.directory-list {
 .imbue-weapon-select .iws-footer .iws-cancel:hover {
   border-color: var(--vagabond-c-chat-yellow);
   color: var(--vagabond-c-chat-yellow);
+}
+
+.glyph-action-dialog .glyph-dialog-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 10px 12px;
+}
+.glyph-action-dialog .glyph-dialog-portrait {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 10px -2px var(--vagabond-c-chat-yellow);
+  overflow: hidden;
+  margin-bottom: 6px;
+  flex: 0 0 auto;
+}
+.glyph-action-dialog .glyph-dialog-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  display: block;
+}
+.glyph-action-dialog .glyph-dialog-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.glyph-action-dialog .glyph-dialog-title strong {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-primary);
+}
+.glyph-action-dialog .glyph-dialog-title span {
+  font-family: "Manofa", serif;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-tan);
+}
+.glyph-action-dialog .glyph-dialog-rule {
+  margin: 0 0 10px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.14);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  font-family: "Manofa", serif;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--vagabond-c-tan);
+  text-align: center;
+}
+.glyph-action-dialog .glyph-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.glyph-action-dialog .glyph-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.glyph-action-dialog .glyph-action-btn {
+  width: 50px;
+  height: 50px;
+  line-height: normal;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.glyph-action-dialog .glyph-action-btn i {
+  font-size: 1.3rem;
+  color: var(--vagabond-c-tan);
+  transition: color 0.15s ease;
+}
+.glyph-action-dialog .glyph-action-btn:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+  filter: brightness(1.15);
+}
+.glyph-action-dialog .glyph-action-btn:hover i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.glyph-action-dialog .glyph-action-btn.is-dismiss:hover {
+  border-color: #b06060;
+  box-shadow: 0 0 8px -1px #b06060, inset 0 0 0 1px #b06060;
+}
+.glyph-action-dialog .glyph-action-btn.is-dismiss:hover i {
+  color: #b06060;
+}
+.glyph-action-dialog .glyph-action-label {
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-text-primary);
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */

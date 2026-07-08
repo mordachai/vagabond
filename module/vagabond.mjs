@@ -39,6 +39,7 @@ import { DowntimeApp } from './applications/downtime-app.mjs';
 import { HomebrewSettingsApp } from './applications/homebrew-settings-app.mjs';
 import { VagabondMeasureTemplates } from './applications/measure-templates.mjs';
 import { RegionTextureOverlay } from './ui/region-texture-overlay.mjs';
+import { GlyphOverlay } from './ui/glyph-overlay.mjs';
 import { SpellSettings } from './applications/spell-settings.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
@@ -1295,6 +1296,9 @@ Hooks.once('ready', () => {
 
   // Register spell-area region texture overlay (paints damage-type art on regions)
   RegionTextureOverlay.register();
+
+  // Register placed-glyph overlay (emblem render + click-to-trigger; Glyph delivery)
+  GlyphOverlay.register();
 });
 
 /**
@@ -2816,6 +2820,21 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       button.disabled = true;
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleGrapple(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 10d. Glyph chat-card buttons — Trigger fires the placed glyph's spell in
+  // its 5' cube; Dismiss removes it. Both resolve the Region by uuid and warn
+  // if the glyph is already gone (permission is checked inside the helper).
+  // ---------------------------------------------------------
+  html.querySelectorAll('.vagabond-glyph-trigger-button, .vagabond-glyph-dismiss-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const action = button.classList.contains('vagabond-glyph-trigger-button') ? 'trigger' : 'dismiss';
+      import('./helpers/glyph-helper.mjs').then(({ VagabondGlyphHelper }) => {
+        VagabondGlyphHelper.fromChatButton(button.dataset.regionUuid, action);
       });
     });
   });

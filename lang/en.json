@@ -334,6 +334,26 @@
         "hint": "No increase"
       }
     },
+    "Glyph": {
+      "DialogTitle": "Glyph",
+      "RegionName": "Glyph: {spell}",
+      "CardTitle": "Glyph: {spell}",
+      "DeliveryTitle": "{spell} (Glyph)",
+      "PlacedBy": "Inscribed by {caster}",
+      "PlacePrompt": "Click a square to inscribe the glyph — right-click or Esc to cancel.",
+      "AlreadyPlacing": "Already placing a glyph — finish or cancel it first.",
+      "TooClose": "Another glyph ({name}) is within Close — choose a different square.",
+      "TriggerButton": "Trigger",
+      "RepositionButton": "Reposition",
+      "DismissButton": "Dismiss",
+      "PromptBody": "<strong>{spell}</strong>, inscribed by {caster}. Trigger the spell in its 5' cube?",
+      "OnlyCasterOrGM": "Only {caster} (or the GM) can trigger this glyph.",
+      "AlreadyResolved": "This glyph has already been triggered or dismissed.",
+      "WrongScene": "The glyph is on a different scene.",
+      "SpellGone": "The glyph's spell no longer exists — the glyph fades away.",
+      "NoScene": "No active scene to place a glyph on.",
+      "CreateFailed": "Could not create the glyph on this scene."
+    },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
       "Character": "Vagabond Character Sheet",

@@ -1873,6 +1873,77 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 }
 
 
+/* --------------------------------------------------------- */
+/* Glyph card: posted when a Glyph delivery is inscribed.     */
+/* Trigger fires the spell in the 5' cube; Dismiss removes it */
+/* --------------------------------------------------------- */
+.vagabond-glyph-card {
+    background: linear-gradient(135deg, #26222e 0%, #1a1720 100%);
+    border: 1px solid #4a4258;
+    border-radius: 6px;
+    padding: 8px;
+
+    .glyph-card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+
+        img {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #4a4258;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .glyph-card-title {
+            display: flex;
+            flex-direction: column;
+
+            strong {
+                color: $c-yellow;
+                font-size: 14px;
+                text-shadow: 1px 1px 0 #000;
+            }
+
+            span {
+                color: #aaa;
+                font-size: 11px;
+            }
+        }
+    }
+
+    .glyph-card-buttons {
+        display: flex;
+        gap: 6px;
+
+        button {
+            flex: 1;
+            height: auto;
+            line-height: normal;
+            padding: 5px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: 1px solid #4a4258;
+            background: rgba(0, 0, 0, 0.35);
+            color: #ddd;
+            cursor: pointer;
+
+            i { margin-right: 4px; }
+
+            &:hover {
+                border-color: $c-yellow;
+                box-shadow: 0 0 6px -1px $c-yellow;
+                color: #fff;
+            }
+        }
+
+        .vagabond-glyph-trigger-button i { color: $c-yellow; }
+        .vagabond-glyph-dismiss-button i { color: #b06060; }
+    }
+}
+
 /* Animations */
 @keyframes popIn {
     from { transform: scale(0); opacity: 0; }

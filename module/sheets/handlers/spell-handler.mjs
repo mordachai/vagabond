@@ -659,6 +659,22 @@ export class SpellHandler {
       }
     }
 
+    // Glyph: click-to-place the glyph square before any mana is spent — a
+    // cancelled placement (right-click / Esc) aborts the whole cast at no cost.
+    // The placed Region carries the cast snapshot; triggering happens later
+    // via VagabondGlyphHelper (glyph click or chat-card button).
+    let placedGlyphRegion = null;
+    if (isSuccess && state.deliveryType.toUpperCase() === 'GLYPH') {
+      const { VagabondGlyphHelper } = await import('../../helpers/glyph-helper.mjs');
+      placedGlyphRegion = await VagabondGlyphHelper.placeFromCast({
+        actor: this.actor,
+        spell,
+        state,
+        manaSkillKey: manaSkill,
+      });
+      if (!placedGlyphRegion) return;
+    }
+
     // Deduct mana on success (whether from successful roll or bypass)
     if (isSuccess) {
       const newMana = this.actor.system.mana.current - costs.totalCost;
@@ -685,8 +701,17 @@ export class SpellHandler {
     // ── Sequencer FX ──────────────────────────────────────────────────────────
     // actor.token returns a TokenDocument; Sequencer needs the Token placeable (.object).
     const casterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
-    const liveTargets = Array.from(game.user.targets);
-    VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
+    if (placedGlyphRegion) {
+      // Glyph: aim the inscription FX at the placed square, not at whatever is
+      // targeted. A pseudo-token carries the square's center for the sequencer.
+      const { VagabondGlyphHelper } = await import('../../helpers/glyph-helper.mjs');
+      const center = VagabondGlyphHelper._regionCenter(placedGlyphRegion);
+      const pseudo = { center, x: center.x, y: center.y, document: { width: 1, height: 1 } };
+      VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken ?? pseudo, [pseudo], { deliveryEnabled: isSuccess });
+    } else {
+      const liveTargets = Array.from(game.user.targets);
+      VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
+    }
     // ── End Sequencer FX ──────────────────────────────────────────────────────
 
     // Reset spell state (keep deliveryType, reset useFx to default)
