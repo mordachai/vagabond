@@ -1874,73 +1874,52 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
 
 /* --------------------------------------------------------- */
-/* Glyph card: posted when a Glyph delivery is inscribed.     */
-/* Trigger fires the spell in the 5' cube; Dismiss removes it */
+/* Glyph Trigger/Dismiss buttons: footer row on the spell cast */
+/* card when delivery is Glyph. Trigger fires the spell in the */
+/* 5' cube; Dismiss removes it without casting.                */
 /* --------------------------------------------------------- */
-.vagabond-glyph-card {
-    background: linear-gradient(135deg, #26222e 0%, #1a1720 100%);
-    border: 1px solid #4a4258;
-    border-radius: 6px;
-    padding: 8px;
+.glyph-card-buttons {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    margin-top: 4px;
 
-    .glyph-card-header {
+    button {
+        flex: 1;
+        height: auto;
+        line-height: 1.2;
+        padding: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-family: var(--font-primary, inherit);
+        border: none;
+        cursor: pointer;
         display: flex;
+        justify-content: center;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
+        gap: 4px;
+        white-space: normal;
+        text-align: center;
+        border-radius: 2px;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 
-        img {
-            width: 36px;
-            height: 36px;
-            border: 1px solid #4a4258;
-            border-radius: 4px;
-            object-fit: cover;
-        }
-
-        .glyph-card-title {
-            display: flex;
-            flex-direction: column;
-
-            strong {
-                color: $c-yellow;
-                font-size: 14px;
-                text-shadow: 1px 1px 0 #000;
-            }
-
-            span {
-                color: #aaa;
-                font-size: 11px;
-            }
-        }
+        &:hover { filter: brightness(1.15); }
     }
 
-    .glyph-card-buttons {
-        display: flex;
-        gap: 6px;
+    /* Trigger: same art as the Roll Damage / Apply Damage buttons */
+    .vagabond-glyph-trigger-button {
+        background: transparent url('../assets/ui/chat/apply-direct-bg.webp') no-repeat center center;
+        background-size: 100% 100%;
+        color: #fff;
+        i { color: var(--c-yellow-text, #DED656); }
+    }
 
-        button {
-            flex: 1;
-            height: auto;
-            line-height: normal;
-            padding: 5px 8px;
-            font-size: 12px;
-            border-radius: 4px;
-            border: 1px solid #4a4258;
-            background: rgba(0, 0, 0, 0.35);
-            color: #ddd;
-            cursor: pointer;
-
-            i { margin-right: 4px; }
-
-            &:hover {
-                border-color: $c-yellow;
-                box-shadow: 0 0 6px -1px $c-yellow;
-                color: #fff;
-            }
-        }
-
-        .vagabond-glyph-trigger-button i { color: $c-yellow; }
-        .vagabond-glyph-dismiss-button i { color: #b06060; }
+    /* Dismiss: same art as the save buttons (e.g. Reflex) */
+    .vagabond-glyph-dismiss-button {
+        background: url('../assets/ui/chat/yellow-button.webp');
+        color: var(--c-dark-blue, #0b1a23);
+        i { color: #b03030; }
     }
 }
 

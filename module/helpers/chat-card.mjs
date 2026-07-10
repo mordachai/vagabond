@@ -868,7 +868,7 @@ export class VagabondChatCard {
       return result;
   }
 
-  static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = [], extraMetadata = [], extraTags = []) {
+  static async spellCast(actor, spell, spellCastResult, damageRoll = null, targetsAtRollTime = [], extraMetadata = [], extraTags = [], footerActions = []) {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState, manaOverrideDelta = 0 } = spellCastResult;
 
       const tags = [];
@@ -936,20 +936,25 @@ export class VagabondChatCard {
       // roll posted later by VagabondImbueHelper.deliverImbue) — the cast card
       // itself has no target to damage or defend against yet.
       const isImbue = spellState.deliveryType?.toUpperCase() === 'IMBUE';
+      // Glyph defers resolution to the Trigger button (VagabondGlyphHelper.trigger) —
+      // the cast card just confirms placement, so no damage/defend/roll-damage
+      // button here; footerActions carries the Trigger/Dismiss row instead.
+      const isGlyph = spellState.deliveryType?.toUpperCase() === 'GLYPH';
 
       const result = await this.createActionCard({
           actor, item: spell, title: spell.name,
-          rollData: { roll, difficulty, isSuccess, isCritical, isHit: isImbue ? false : isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
+          rollData: { roll, difficulty, isSuccess, isCritical, isHit: (isImbue || isGlyph) ? false : isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
           tags: [...tags, ...extraTags],
           metadata: extraMetadata,
           damageRoll,
           damageType: spell.system.damageType,
           description: spell.system.formatDescription(spell.system.description),  // Format for countdown dice triggers
           crit: critText,  // Include crit text if critical
-          hasDefenses: !isImbue,
+          hasDefenses: !isImbue && !isGlyph,
           attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
-          damageFormula: isImbue ? null : spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
+          damageFormula: (isImbue || isGlyph) ? null : spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
           targetsAtRollTime,
+          footerActions,
           rerollData: {
             type: 'cast',
             itemId: spell.id,

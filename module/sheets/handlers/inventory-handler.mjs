@@ -1,4 +1,5 @@
 import * as ItemSections from '../../helpers/item-sections.mjs';
+import { activateHandItem } from '../../helpers/hand-item-activation.mjs';
 
 /**
  * Handler for inventory-related functionality in the character sheet.
@@ -162,9 +163,6 @@ export class InventoryHandler {
 
     const isEquipped = EquipmentHelper.isEquipped(item);
     const isWeapon = EquipmentHelper.isWeapon(item);
-    const isAlchemical = EquipmentHelper.isAlchemical(item);
-    const hasAlchemicalDamage =
-      isAlchemical && item.system.damageType && item.system.damageType !== '-';
     const isArmor = EquipmentHelper.isArmor(item);
     const isGear = EquipmentHelper.isGear(item);
 
@@ -172,14 +170,16 @@ export class InventoryHandler {
     let showUseOption = false;
 
     if (isWeapon) {
-      // Weapons can only be "used" (attacked with) if equipped
-      showUseOption = isEquipped;
+      // Use auto-equips if needed, so it's always available
+      showUseOption = true;
     } else if (isArmor) {
       // Armor cannot be "used"
       showUseOption = false;
     } else if (isGear) {
-      // Gear can only be "used" if it's consumable
-      showUseOption = item.system.isConsumable === true;
+      // Gear can be "used" if it's consumable, or if it occupies hands
+      // (e.g. a torch — Use auto-equips it, so it must be reachable even
+      // before the item is ever equipped)
+      showUseOption = item.system.isConsumable === true || (item.system.handsRequired ?? 0) > 0;
     } else {
       // Alchemicals, relics, and other items can be used
       showUseOption = true;
@@ -195,17 +195,9 @@ export class InventoryHandler {
         icon: 'fas fa-hand-sparkles',
         enabled: true,
         action: async () => {
-          // For weapons or alchemicals with damage, use rollWeapon
-          if (isWeapon || hasAlchemicalDamage) {
-            const { VagabondActorSheet } = globalThis.vagabond.applications;
-            await VagabondActorSheet._onRollWeapon.call(this.sheet, event, {
-              dataset: { itemId },
-            });
-          } else {
-            // For everything else, use useItem (which delegates to item.roll())
-            const { VagabondActorSheet } = globalThis.vagabond.applications;
-            await VagabondActorSheet._onUseItem.call(this.sheet, event, { dataset: { itemId } });
-          }
+          // Equips the item first if it occupies hands and isn't already
+          // equipped (weapons, torches, etc.), then performs its action.
+          await activateHandItem({ actor: this.actor, item, event, rollHandler: this.sheet.rollHandler });
         },
       });
     }
@@ -226,18 +218,8 @@ export class InventoryHandler {
       icon: `fas fa-${isEquipped ? 'times' : 'check'}`,
       enabled: true,
       action: async () => {
-        if (isWeapon && item.system.equipmentState !== undefined) {
-          const newState = isEquipped ? 'unequipped' : (item.system.grip === '2H' ? 'twoHands' : 'oneHand');
-          await EquipmentHelper.equipWeaponWithHandLimit(this.actor, item.id, newState);
-        }
-        // For armor, update worn state
-        else if (item.type === 'armor') {
-          await item.update({ 'system.worn': !isEquipped });
-        }
-        // For other items (gear, etc), update equipped
-        else if (item.system.equipped !== undefined) {
-          await item.update({ 'system.equipped': !isEquipped });
-        }
+        const newState = isEquipped ? 'unequipped' : EquipmentHelper.defaultEquipState(item);
+        await EquipmentHelper.equipWithHandLimit(this.actor, item.id, newState);
       },
     });
 

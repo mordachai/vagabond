@@ -392,6 +392,19 @@
           </div>
         </div>
 
+        {{! Trinket (weapons occupy hands via grip; only the trinket flag applies) }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.isTrinket'
+              {{#if system.isTrinket}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>{{localize 'VAGABOND.Item.Equipment.FIELDS.isTrinket.label'}}</span>
+          </label>
+        </div>
+
         {{! Weapon Damage Fields }}
         <div class='form-group'>
           <label class='resource-label'>Damage</label>
@@ -793,6 +806,31 @@
               placeholder='e.g., Alchemy & Medicine'
             />
           </div>
+
+          {{! Hands Required + Trinket }}
+          <div class='form-group'>
+            <div class='grid grid-2col gap-8'>
+              <div class='hands-required-field'>
+                <label class='resource-label'>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.label'}}</label>
+                <select name='system.handsRequired' data-dtype='Number'>
+                  <option value='0' {{#if (eq system.handsRequired 0)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands0'}}</option>
+                  <option value='1' {{#if (eq system.handsRequired 1)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1'}}</option>
+                  <option value='2' {{#if (eq system.handsRequired 2)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2'}}</option>
+                </select>
+              </div>
+              <div class='trinket-field'>
+                <label class='checkbox-label'>
+                  <input
+                    type='checkbox'
+                    name='system.isTrinket'
+                    {{#if system.isTrinket}}checked{{/if}}
+                    data-dtype='Boolean'
+                  />
+                  <span>{{localize 'VAGABOND.Item.Equipment.FIELDS.isTrinket.label'}}</span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>{{! /item-section-box Gear }}
       {{/if}}
 
@@ -911,6 +949,31 @@
               </div>
             </div>
           </div>
+
+          {{! Hands Required + Trinket }}
+          <div class='form-group'>
+            <div class='grid grid-2col gap-8'>
+              <div class='hands-required-field'>
+                <label class='resource-label'>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.label'}}</label>
+                <select name='system.handsRequired' data-dtype='Number'>
+                  <option value='0' {{#if (eq system.handsRequired 0)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands0'}}</option>
+                  <option value='1' {{#if (eq system.handsRequired 1)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1'}}</option>
+                  <option value='2' {{#if (eq system.handsRequired 2)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2'}}</option>
+                </select>
+              </div>
+              <div class='trinket-field'>
+                <label class='checkbox-label'>
+                  <input
+                    type='checkbox'
+                    name='system.isTrinket'
+                    {{#if system.isTrinket}}checked{{/if}}
+                    data-dtype='Boolean'
+                  />
+                  <span>{{localize 'VAGABOND.Item.Equipment.FIELDS.isTrinket.label'}}</span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>{{! /item-section-box Alchemical }}
       {{/if}}
 
@@ -992,6 +1055,31 @@
               />
               <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
             </label>
+          </div>
+
+          {{! Hands Required + Trinket }}
+          <div class='form-group'>
+            <div class='grid grid-2col gap-8'>
+              <div class='hands-required-field'>
+                <label class='resource-label'>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.label'}}</label>
+                <select name='system.handsRequired' data-dtype='Number'>
+                  <option value='0' {{#if (eq system.handsRequired 0)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands0'}}</option>
+                  <option value='1' {{#if (eq system.handsRequired 1)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1'}}</option>
+                  <option value='2' {{#if (eq system.handsRequired 2)}}selected{{/if}}>{{localize 'VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2'}}</option>
+                </select>
+              </div>
+              <div class='trinket-field'>
+                <label class='checkbox-label'>
+                  <input
+                    type='checkbox'
+                    name='system.isTrinket'
+                    {{#if system.isTrinket}}checked{{/if}}
+                    data-dtype='Boolean'
+                  />
+                  <span>{{localize 'VAGABOND.Item.Equipment.FIELDS.isTrinket.label'}}</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>{{! /item-section-box Relic }}
       {{/if}}

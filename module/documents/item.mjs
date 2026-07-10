@@ -63,8 +63,10 @@ export class VagabondItem extends Item {
       if (item.type === 'equipment' || item.type === 'spell') {
         const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
         await VagabondChatCard.itemUse(this.actor, item, targetsAtRollTime);
-        // Handle consumption after successful use (equipment only)
-        if (item.type === 'equipment') {
+        // Handle consumption after successful use (equipment only). Light-source
+        // items are exempt — they are consumed on burn-out (clock expiry) by the
+        // deleteJournalEntry hook, never on Use/Ignite.
+        if (item.type === 'equipment' && !game.vagabond?.lightSource?.isLightItem?.(item)) {
           await this.handleConsumption();
         }
       } else if (item.type === 'container') {
@@ -127,8 +129,9 @@ export class VagabondItem extends Item {
         await VagabondChatHelper.postRoll(this.actor, roll, label);
       }
 
-      // Handle consumption after successful use
-      if (item.type === 'equipment') {
+      // Handle consumption after successful use (light sources consume on
+      // burn-out instead — see the non-formula branch above)
+      if (item.type === 'equipment' && !game.vagabond?.lightSource?.isLightItem?.(item)) {
         await this.handleConsumption();
       }
       return roll;
@@ -482,6 +485,28 @@ export class VagabondItem extends Item {
       if (newGrip === "2H") {
         foundry.utils.setProperty(changed, "system.equipmentState", "twoHands");
       }
+    }
+
+    // If handsRequired changes on an EQUIPPED non-weapon, re-derive its state
+    // (worn ⇄ oneHand ⇄ twoHands). Hand-limit overflow from this direct write
+    // is healed by sanitizeHandLimit on the next sheet/HUD render.
+    if (this.type === 'equipment' && this.system.equipmentType !== 'weapon'
+        && foundry.utils.hasProperty(changed, 'system.handsRequired')) {
+      const cur = foundry.utils.getProperty(changed, 'system.equipmentState') ?? this.system.equipmentState;
+      if (cur && cur !== 'unequipped') {
+        const hr = foundry.utils.getProperty(changed, 'system.handsRequired');
+        foundry.utils.setProperty(changed, 'system.equipmentState',
+          hr === 2 ? 'twoHands' : hr === 1 ? 'oneHand' : 'worn');
+      }
+    }
+
+    // Keep the stored `equipped` boolean in lockstep with equipmentState (it
+    // is a derived mirror at runtime; syncing the SOURCE prevents migrateData
+    // from re-converting a deliberately-unequipped legacy item back to 'worn'
+    // on the next reload).
+    if (this.type === 'equipment' && foundry.utils.hasProperty(changed, 'system.equipmentState')) {
+      const st = foundry.utils.getProperty(changed, 'system.equipmentState');
+      foundry.utils.setProperty(changed, 'system.equipped', st !== 'unequipped');
     }
   }
 

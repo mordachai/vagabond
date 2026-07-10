@@ -38,7 +38,8 @@
       "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60 });",
       "label": "Ignite",
       "runAsGM": true
-    }
+    },
+    "handsRequired": 1
   },
   "effects": [],
   "flags": {

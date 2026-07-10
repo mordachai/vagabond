@@ -40,7 +40,8 @@
       "label": "Ignite",
       "runAsGM": true
     },
-    "isConsumable": true
+    "isConsumable": true,
+    "handsRequired": 1
   },
   "effects": [],
   "flags": {},

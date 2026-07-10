@@ -71,19 +71,32 @@ export class EquipmentHelper {
    * @returns {boolean} True if the item is equipped
    */
   static isEquipped(item) {
-    if (this.isWeapon(item)) {
-      return item.system.equipmentState !== 'unequipped';
-    }
-    if (this.isArmor(item)) {
-      return item.system.equipped === true;
-    }
-    if (this.isGear(item) || this.isAlchemical(item) || this.isRelic(item)) {
-      return item.system.worn === true;
-    }
-    if (this.isContainer(item)) {
-      return false; // Containers are not "equipped" in the traditional sense
-    }
-    return false;
+    // equipmentState is the single stored equip truth for ALL equipment
+    // ('worn' = equipped without occupying hands). Containers have no
+    // equipmentState and remain unequippable.
+    if (item?.type !== 'equipment') return false;
+    return item.system.equipmentState !== 'unequipped';
+  }
+
+  /**
+   * Hands occupied by an item's CURRENT equipmentState (worn/unequipped = 0).
+   * @param {Object} item
+   * @returns {number} 0, 1 or 2
+   */
+  static handsFor(item) {
+    return { oneHand: 1, twoHands: 2 }[item?.system?.equipmentState] ?? 0;
+  }
+
+  /**
+   * The state an item should enter when equipped. Weapons derive it from
+   * `grip`; non-weapons from `handsRequired` (0 = 'worn').
+   * @param {Object} item
+   * @returns {'oneHand'|'twoHands'|'worn'}
+   */
+  static defaultEquipState(item) {
+    if (this.isWeapon(item)) return item.system.grip === '2H' ? 'twoHands' : 'oneHand';
+    const hr = item?.system?.handsRequired ?? 0;
+    return hr === 2 ? 'twoHands' : hr === 1 ? 'oneHand' : 'worn';
   }
 
   /**
@@ -126,103 +139,127 @@ export class EquipmentHelper {
   }
 
   /**
-   * Equip a weapon to a hand-occupying state (oneHand/twoHands), enforcing the
-   * hand limit: max 2x one-handed OR 1x two-handed weapon equipped at once.
-   * Auto-unequips whatever conflicts to make room (2H bumps all 1H; a 3rd 1H
-   * bumps the oldest of the two already equipped, tracked via a per-item
-   * `flags.vagabond.equippedAt` timestamp). No-op checks when unequipping.
+   * Equip ANY equipment item to a state, enforcing the shared 2-hand pool
+   * across weapons and hand-occupying non-weapons (handsRequired > 0).
+   * 'worn' occupies no hands and never conflicts. When the pool overflows,
+   * other holders are bumped oldest-first (per-item
+   * `flags.vagabond.equippedAt` timestamp, no category priority) until the
+   * new item fits. Reproduces the old weapon-only semantics exactly (a 2H
+   * bumps everything held; a 3rd 1H bumps the oldest 1H).
    * @param {Actor} actor
-   * @param {string} weaponId
-   * @param {'unequipped'|'oneHand'|'twoHands'} newState
+   * @param {string} itemId
+   * @param {'unequipped'|'oneHand'|'twoHands'|'worn'} newState
    */
-  static async equipWeaponWithHandLimit(actor, weaponId, newState) {
-    const weapon = actor.items.get(weaponId);
-    if (!weapon) return;
+  static async equipWithHandLimit(actor, itemId, newState) {
+    const item = actor.items.get(itemId);
+    if (!item || item.type !== 'equipment') return;
 
+    const HANDS = { oneHand: 1, twoHands: 2 };
+    const need = HANDS[newState] ?? 0;
     const updates = [];
 
-    if (newState === 'oneHand' || newState === 'twoHands') {
-      const others = actor.items.filter(
-        (i) => this.isWeapon(i) && i.id !== weaponId && i.system.equipmentState !== 'unequipped'
+    if (need > 0) {
+      const holders = actor.items.filter(
+        (i) => i.type === 'equipment' && i.id !== itemId && (HANDS[i.system.equipmentState] ?? 0) > 0
       );
+      let over = holders.reduce((n, i) => n + HANDS[i.system.equipmentState], 0) + need - 2;
 
-      let conflicts;
-      if (newState === 'twoHands') {
-        conflicts = others;
-      } else {
-        const twoHanders = others.filter((i) => i.system.equipmentState === 'twoHands');
-        const oneHanders = others.filter((i) => i.system.equipmentState === 'oneHand');
-        conflicts = [...twoHanders];
-        if (oneHanders.length >= 2) {
-          const oldest = oneHanders.sort(
-            (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
-          )[0];
-          conflicts.push(oldest);
+      if (over > 0) {
+        const oldestFirst = [...holders].sort(
+          (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
+        );
+        const conflicts = [];
+        for (const h of oldestFirst) {
+          if (over <= 0) break;
+          conflicts.push(h);
+          over -= HANDS[h.system.equipmentState];
         }
-      }
-
-      for (const c of conflicts) {
-        updates.push({ _id: c.id, 'system.equipmentState': 'unequipped' });
-      }
-
-      if (conflicts.length) {
-        const names = conflicts.map((c) => c.name).join(', ');
-        ui.notifications.info(`Unequipped ${names} to make room (hand limit).`);
+        for (const c of conflicts) {
+          updates.push({ _id: c.id, 'system.equipmentState': 'unequipped' });
+        }
+        if (conflicts.length) {
+          const names = conflicts.map((c) => c.name).join(', ');
+          ui.notifications.info(`Unequipped ${names} to make room (hand limit).`);
+        }
       }
     }
 
     updates.push({
-      _id: weaponId,
+      _id: itemId,
       'system.equipmentState': newState,
-      ...(newState !== 'unequipped' ? { 'flags.vagabond.equippedAt': Date.now() } : {}),
+      ...(need > 0 ? { 'flags.vagabond.equippedAt': Date.now() } : {}),
     });
 
     await actor.updateEmbeddedDocuments('Item', updates);
   }
 
   /**
-   * Self-healing pass: correct an actor's weapons back into a legal hand-limit
-   * state (max 2x oneHand OR 1x twoHands) if they somehow ended up violating
-   * it — legacy data from before this rule existed, compendium import, a
-   * macro writing `system.equipmentState` directly, etc. No-op (no writes)
-   * when already compliant, so it's safe to call on every sheet/HUD render.
+   * @deprecated Thin alias kept for legacy call sites — use equipWithHandLimit.
+   * @param {Actor} actor
+   * @param {string} weaponId
+   * @param {'unequipped'|'oneHand'|'twoHands'} newState
+   */
+  static async equipWeaponWithHandLimit(actor, weaponId, newState) {
+    return this.equipWithHandLimit(actor, weaponId, newState);
+  }
+
+  /**
+   * Self-healing pass: correct an actor's equipment back into a legal
+   * hand-limit state (max 2 hands total across ALL hand-occupying items) if
+   * it somehow ended up violating it — legacy data, compendium import, a
+   * macro writing `system.equipmentState` directly, etc. First normalizes
+   * each equipped item's state to what its config demands (weapon grip /
+   * non-weapon handsRequired), then bumps hand-holders oldest-first until
+   * the pool fits ('worn' items never bump or get bumped). Keeps the newest
+   * holders that fit — a newer 1H item may displace an older 2H one, per the
+   * unified no-category-priority rule. No-op (no writes) when already
+   * compliant, so it's safe to call on every sheet/HUD render.
    * @param {Actor} actor
    */
   static async sanitizeHandLimit(actor) {
     if (!actor?.isOwner) return;
 
-    const weapons = actor.items.filter(
-      (i) => this.isWeapon(i) && i.system.equipmentState !== 'unequipped'
+    const HANDS = { oneHand: 1, twoHands: 2 };
+    const equipped = actor.items.filter(
+      (i) => i.type === 'equipment' && i.system.equipmentState !== 'unequipped'
     );
 
-    // Normalize grip/state mismatches first (e.g. a strict-2H weapon stuck at
-    // 'oneHand' from before equip actions became grip-aware) — evaluate hand
-    // conflicts against the CORRECTED state, not the possibly-stale one.
+    // 1) Normalize state to what the item's config demands (e.g. a strict-2H
+    // weapon stuck at 'oneHand' from before equip actions became grip-aware,
+    // or a handsRequired item stuck at 'worn') — evaluate hand conflicts
+    // against the CORRECTED state, not the possibly-stale one.
     const fixUpdates = [];
     const effectiveState = new Map();
-    for (const w of weapons) {
-      const grip = w.system.grip;
-      let state = w.system.equipmentState;
-      if (grip === '2H' && state !== 'twoHands') state = 'twoHands';
-      else if ((grip === '1H' || grip === 'F') && state !== 'oneHand') state = 'oneHand';
-      if (state !== w.system.equipmentState) {
-        fixUpdates.push({ _id: w.id, 'system.equipmentState': state });
+    for (const it of equipped) {
+      let state = it.system.equipmentState;
+      if (this.isWeapon(it)) {
+        const grip = it.system.grip;
+        if (grip === '2H' && state !== 'twoHands') state = 'twoHands';
+        else if ((grip === '1H' || grip === 'F') && state !== 'oneHand') state = 'oneHand';
+        else if (grip === 'V' && state === 'worn') state = 'oneHand'; // 'worn' illegal for weapons
+      } else {
+        const hr = it.system.handsRequired ?? 0;
+        state = hr === 2 ? 'twoHands' : hr === 1 ? 'oneHand' : 'worn';
       }
-      effectiveState.set(w.id, state);
+      if (state !== it.system.equipmentState) {
+        fixUpdates.push({ _id: it.id, 'system.equipmentState': state });
+      }
+      effectiveState.set(it.id, state);
     }
 
-    const twoHanders = weapons.filter((i) => effectiveState.get(i.id) === 'twoHands');
-    const oneHanders = weapons.filter((i) => effectiveState.get(i.id) === 'oneHand');
-
+    // 2) Bump hand-holders oldest-first until total ≤ 2 (keep newest that fit)
     const newestFirst = (a, b) =>
       (b.getFlag('vagabond', 'equippedAt') || 0) - (a.getFlag('vagabond', 'equippedAt') || 0);
+    const holders = equipped
+      .filter((i) => (HANDS[effectiveState.get(i.id)] ?? 0) > 0)
+      .sort(newestFirst);
 
-    let bump = [];
-    if (twoHanders.length && (twoHanders.length > 1 || oneHanders.length)) {
-      const keep = [...twoHanders].sort(newestFirst)[0];
-      bump = weapons.filter((w) => w.id !== keep.id);
-    } else if (oneHanders.length > 2) {
-      bump = [...oneHanders].sort(newestFirst).slice(2);
+    let total = 0;
+    const bump = [];
+    for (const it of holders) {
+      const h = HANDS[effectiveState.get(it.id)];
+      if (total + h > 2) bump.push(it);
+      else total += h;
     }
 
     const bumpIds = new Set(bump.map((w) => w.id));
@@ -293,19 +330,12 @@ export class EquipmentHelper {
    * @returns {string} Display text for equipment state
    */
   static getEquipmentStateText(item) {
-    if (this.isWeapon(item)) {
-      const state = item.system.equipmentState;
-      if (state === 'unequipped') return 'Unequipped';
-      if (state === 'oneHand') return 'One Hand';
-      if (state === 'twoHands') return 'Two Hands';
-      return 'Unknown';
-    }
-    if (this.isArmor(item)) {
-      return item.system.equipped ? 'Equipped' : 'Unequipped';
-    }
-    if (this.isGear(item) || this.isAlchemical(item) || this.isRelic(item)) {
-      return item.system.worn ? 'Worn' : 'Not Worn';
-    }
-    return 'N/A';
+    if (item?.type !== 'equipment') return 'N/A';
+    const state = item.system.equipmentState;
+    if (state === 'unequipped') return 'Unequipped';
+    if (state === 'oneHand') return 'One Hand';
+    if (state === 'twoHands') return 'Two Hands';
+    if (state === 'worn') return this.isArmor(item) ? 'Equipped' : 'Worn';
+    return 'Unknown';
   }
 }

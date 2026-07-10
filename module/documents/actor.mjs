@@ -74,11 +74,10 @@ export class VagabondActor extends Actor {
         const parentItem = effect.parent;
         if (!parentItem) return false; // No parent, can't check equipped state
 
-        // Use system.equipped (boolean) — reliable for ALL equipment types:
-        //   Weapons:      computed in _prepareWeaponData() from equipmentState
-        //   Armor/gear/relics: a direct BooleanField toggled by the user
-        // Do NOT use equipmentState directly — it stays 'unequipped' for armor/gear
-        // even when the item is equipped, which would incorrectly block the effect.
+        // Use system.equipped (boolean) — a derived mirror of equipmentState
+        // computed in VagabondEquipment.prepareDerivedData() for ALL equipment
+        // ('worn' counts as equipped; items are fully prepared before
+        // applyActiveEffects runs, so the mirror is always current here).
         const equipped = parentItem.system?.equipped;
         if (equipped === undefined || equipped === null) return true; // No equipped field → assume applies
         return equipped === true;

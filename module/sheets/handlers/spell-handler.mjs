@@ -413,6 +413,30 @@ export class SpellHandler {
   // ===========================
 
   /**
+   * Trinket casting requirement (world setting `trinketCastRequirement`).
+   * Passes if any equipped item is flagged isTrinket ('worn' counts — the
+   * derived `equipped` mirror covers all states), OR the actor has the Gish
+   * flag `system.weaponAsTrinket` and any weapon equipped.
+   * @returns {'ok'|'warn'|'block'}
+   * @private
+   */
+  _trinketGateStatus() {
+    if (this.actor.type !== 'character') return 'ok';
+    const mode = game.settings.get('vagabond', 'trinketCastRequirement');
+    if (mode === 'off') return 'ok';
+
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    const hasTrinket = this.actor.items.some(
+      (i) => i.type === 'equipment' && i.system.isTrinket && i.system.equipped
+    );
+    const gish = this.actor.system.weaponAsTrinket === true
+      && this.actor.items.some((i) => EquipmentHelper.isWeapon(i) && i.system.equipped);
+
+    if (hasTrinket || gish) return 'ok';
+    return mode === 'block' ? 'block' : 'warn';
+  }
+
+  /**
    * Open the spell cast dialog. The dialog mutates a local state copy and
    * calls back into _executeCast on confirm. Replaces the old direct-cast flow.
    * @param {Event} event - The triggering event
@@ -425,6 +449,13 @@ export class SpellHandler {
 
     if (!spell || spell.type !== 'spell') {
       ui.notifications.error('Spell not found!');
+      return;
+    }
+
+    // Trinket gate (block only — don't even open the dialog; warn mode is
+    // handled once in _executeCast so it never fires twice per cast)
+    if (this._trinketGateStatus() === 'block') {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.SpellCast.TrinketGateBlocked'));
       return;
     }
 
@@ -473,6 +504,17 @@ export class SpellHandler {
     if (!spell || spell.type !== 'spell') {
       ui.notifications.error('Spell not found!');
       return;
+    }
+
+    // Trinket gate — authoritative choke point: covers sheet, HUD (same
+    // handler class), dialog confirm and the direct (no-dialog) path.
+    const trinketGate = this._trinketGateStatus();
+    if (trinketGate === 'block') {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.SpellCast.TrinketGateBlocked'));
+      return;
+    }
+    if (trinketGate === 'warn') {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.SpellCast.TrinketGateWarned'));
     }
 
     // Use the dialog-provided state for this cast
@@ -695,7 +737,8 @@ export class SpellHandler {
       targetsAtRollTime,
       _spellExtraMetadata,
       _spellExtraTags,
-      manaOverrideDelta
+      manaOverrideDelta,
+      placedGlyphRegion
     );
 
     // ── Sequencer FX ──────────────────────────────────────────────────────────
@@ -749,10 +792,18 @@ export class SpellHandler {
     targetsAtRollTime = [],
     extraMetadata = [],
     extraTags = [],
-    manaOverrideDelta = 0
+    manaOverrideDelta = 0,
+    placedGlyphRegion = null
   ) {
     // Import damage helper
     const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
+
+    // Glyph: Trigger/Dismiss row replaces the roll-damage button in the footer.
+    let footerActions = [];
+    if (placedGlyphRegion) {
+      const { VagabondGlyphHelper } = await import('../../helpers/glyph-helper.mjs');
+      footerActions = [VagabondGlyphHelper.buildTriggerDismissButtons(placedGlyphRegion.uuid)];
+    }
 
     // Build delivery text with total area (e.g., "Cone 20'")
     const deliveryName = game.i18n.localize(CONFIG.VAGABOND.deliveryTypes[state.deliveryType]);
@@ -802,7 +853,8 @@ export class SpellHandler {
       damageRoll,
       targetsAtRollTime,
       extraMetadata,
-      extraTags
+      extraTags,
+      footerActions
     );
   }
 

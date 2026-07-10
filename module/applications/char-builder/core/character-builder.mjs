@@ -926,8 +926,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               itemData.system.equipmentState = 'oneHand';
             }
           } else if (itemData.system.equipmentType === 'armor') {
-            // Auto-equip armor
-            itemData.system.equipped = true;
+            // Auto-equip armor ('worn' = equipped, occupies no hands)
+            itemData.system.equipmentState = 'worn';
           }
         }
 
@@ -1028,8 +1028,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                         itemData.system.equipmentState = 'oneHand';
                       }
                     } else if (itemData.system.equipmentType === 'armor') {
-                      // Auto-equip armor
-                      itemData.system.equipped = true;
+                      // Auto-equip armor ('worn' = equipped, occupies no hands)
+                      itemData.system.equipmentState = 'worn';
                     }
                   }
 

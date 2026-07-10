@@ -189,6 +189,9 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       { value: '@statuses.prone', label: 'Status: Prone' },
       { value: '@statuses.dazed', label: 'Status: Dazed' },
 
+      // Gish (AE change key: system.weaponAsTrinket, value true/1)
+      { value: '@weaponAsTrinket', label: 'Weapon Counts as Trinket (Gish — 1 if active)' },
+
       // Incoming Damage Reduction
       { value: '@incomingDamageReductionPerDie', label: 'Incoming Damage Reduction Per Die' },
 

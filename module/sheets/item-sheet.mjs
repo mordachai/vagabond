@@ -2874,7 +2874,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             itemData.system.equipmentState = 'twoHands';
           }
         } else if (itemData.system.equipmentType === 'armor') {
-          itemData.system.worn = true; // Use 'worn' field for armor, not 'equipmentState'
+          itemData.system.equipmentState = 'worn'; // equipped, occupies no hands
         }
       }
 

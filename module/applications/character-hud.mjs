@@ -5,6 +5,7 @@ import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
+import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
@@ -366,11 +367,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     return context;
   }
 
-  /** Equipped state predicates (mirror the sheet's fields). */
-  static _isWeaponEquipped(item) {
-    return (item.system.equipmentState || 'unequipped') !== 'unequipped';
-  }
-
   /** Split actor items + build the derived quick slots. */
   _categorizeItems(context) {
     const actor = this.actor;
@@ -455,21 +451,22 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         return this._slotEntry(item, item?.type === 'spell' ? 'spell' : 'item');
       });
 
-    // Weapon circles are NOT a persisted slot pick — they're a live mirror of
-    // whichever weapons are actually equipped (`system.equipmentState`), the
-    // exact same field the character sheet's "Equipped" panel reads. Dropping
-    // a weapon onto the HUD equips it (see `_assignDrop`); equipping/unequipping
-    // from either the sheet or the HUD is instantly reflected in both, and the
-    // 2-circle cap is naturally enforced by the hand-limit rule (max 2x oneHand
-    // or 1x twoHands can ever be equipped at once).
-    const equippedWeaponIds = weapons
-      .filter((w) => VagabondCharacterHud._isWeaponEquipped(w))
+    // Hand circles are NOT a persisted slot pick — they're a live mirror of
+    // whatever equipment currently occupies hands (`system.equipmentState`
+    // oneHand/twoHands: weapons AND hand-occupying non-weapons like torches or
+    // wands), the exact same field the character sheet's "Equipped" panel
+    // reads. Equipping/unequipping from either the sheet or the HUD is
+    // instantly reflected in both, and the 2-circle cap is naturally enforced
+    // by the unified hand-limit rule (max 2 hands total).
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    const handItemIds = actor.items
+      .filter((i) => i.type === 'equipment' && ['oneHand', 'twoHands'].includes(i.system.equipmentState))
       .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0))
-      .map((w) => w.id);
-    context.weaponSlots = this._padIds(equippedWeaponIds, VagabondCharacterHud.WEAPON_SLOTS)
+      .map((i) => i.id);
+    context.weaponSlots = this._padIds(handItemIds, VagabondCharacterHud.WEAPON_SLOTS)
       .map((id) => {
         const item = id ? actor.items.get(id) : null;
-        return this._slotEntry(item, 'weapon');
+        return this._slotEntry(item, item && !EquipmentHelper.isWeapon(item) ? 'item' : 'weapon');
       });
   }
 
@@ -508,6 +505,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (type === 'weapon') {
       const { EquipmentHelper } = globalThis.vagabond.utils;
       entry.versatile = EquipmentHelper.isVersatileWeapon(item);
+    }
+    // Any 2-hand holder (weapon or torch-style item) marks its circle as 2H
+    if (item.type === 'equipment') {
       entry.twoHanded = item.system.equipmentState === 'twoHands';
     }
     return entry;
@@ -533,9 +533,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   _invRow(item) {
     const isWeapon = item.system.equipmentType === 'weapon';
-    const equipped = isWeapon
-      ? VagabondCharacterHud._isWeaponEquipped(item)
-      : (item.system?.equipped ?? item.system?.worn ?? false);
+    const equipped = item.system.equipped; // derived mirror of equipmentState
     const row = {
       _id: item.id,
       name: item.name,
@@ -873,8 +871,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   /* -------------------------------------------- */
 
   static _onRoll(event, target) { return this._rollHandler.roll(event, target); }
-  static _onRollWeapon(event, target) { return this._rollHandler.rollWeapon(event, target); }
-  static _onUseItem(event, target) { return this._rollHandler.useItem(event, target); }
+  static _onRollWeapon(event, target) {
+    const id = target?.dataset?.itemId ?? target?.closest('[data-item-id]')?.dataset.itemId;
+    const item = id && this.actor.items.get(id);
+    if (!item) return;
+    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler });
+  }
+  static _onUseItem(event, target) { return this._onRollWeapon(event, target); }
   /**
    * Click an inventory row image → use it. Weapons attack (rollWeapon); everything
    * else routes through useItem. Mirrors the filled-slot behavior minus the menu.
@@ -883,9 +886,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const id = target?.dataset?.itemId ?? target?.closest('[data-item-id]')?.dataset.itemId;
     const item = id && this.actor.items.get(id);
     if (!item) return;
-    const { EquipmentHelper } = globalThis.vagabond.utils;
-    if (EquipmentHelper.isWeapon(item)) return this._rollHandler.rollWeapon(event, target);
-    return this._rollHandler.useItem(event, target);
+    // Equips the item first if it occupies hands and isn't already equipped
+    // (weapons, torches, etc.), then performs its action (attack / ignite
+    // toggle / use) — same unified behavior as the hand circles and slots.
+    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler });
   }
   static _onCastSpell(event, target) { return this._spellHandler.castSpell(event, target); }
 
@@ -951,13 +955,19 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     if (event.type === 'contextmenu' || event.button === 2) {
       event.preventDefault();
-      // Weapons have no "HUD slot" concept anymore — the circles mirror actual
-      // equip state, so the way to remove one is "Unequip", not "Remove from HUD".
-      return this._openSlotMenu(event, item, type, { includeRemove: type !== 'weapon' });
+      // Hand circles have no "HUD slot" concept — they mirror actual equip
+      // state, so the way to remove one is "Unequip", not "Remove from HUD"
+      // (a hand-circle item isn't in the slot map; clearing it would corrupt
+      // the launcher slots).
+      const inHandCircle = !!target.closest('.vh-pc-weapon');
+      return this._openSlotMenu(event, item, type, { includeRemove: !inHandCircle && type !== 'weapon' });
     }
     if (type === 'spell') return this._spellHandler.castSpell(event, { dataset: { spellId: id } });
-    if (type === 'weapon') return this._rollHandler.rollWeapon(event, target);
-    return this._rollHandler.useItem(event, target);
+
+    // Equips the item first if it occupies hands and isn't already equipped
+    // (weapons, torches, etc. — from either a hand circle or a launcher
+    // slot), then performs its action (attack / ignite-toggle / use).
+    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler });
   }
 
   /**
@@ -993,9 +1003,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       items.push({
         label: L('VAGABOND.Hud.Menu.Use'),
         icon: 'fas fa-hand-sparkles',
-        action: () => (type === 'weapon')
-          ? this._rollHandler.rollWeapon(event, { dataset: { itemId: item.id } })
-          : this._rollHandler.useItem(event, { dataset: { itemId: item.id } }),
+        action: () => activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler }),
       });
     }
 
@@ -1028,9 +1036,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         label: L('VAGABOND.Hud.Menu.Unequip'),
         icon: 'fas fa-times',
         action: async () => {
-          await ((type === 'weapon')
-            ? item.update({ 'system.equipmentState': 'unequipped' })
-            : item.update({ 'system.equipped': false }));
+          await item.update({ 'system.equipmentState': 'unequipped' });
           this.render();
         },
       });

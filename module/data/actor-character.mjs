@@ -521,6 +521,13 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Auto-Fail All Rolls"
     });
 
+    // Gish support: equipped weapons satisfy the trinket casting requirement
+    // (set via Active Effect, e.g. by the Gish perk)
+    schema.weaponAsTrinket = new fields.BooleanField({
+      initial: false,
+      label: "Weapon Counts as Trinket"
+    });
+
     // Defender status modifiers (affects attackers targeting this actor)
     schema.defenderStatusModifiers = new fields.SchemaField({
       // Invisible: attackers are treated as Blinded
@@ -663,6 +670,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.outgoingSavesModifier = 'none';
     this.autoFailStats = [];
     this.autoFailAllRolls = false;
+    this.weaponAsTrinket = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
     // Don't reset statusEffectData - it contains persistent state like charmerUuid

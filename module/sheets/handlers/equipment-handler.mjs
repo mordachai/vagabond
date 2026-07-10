@@ -153,10 +153,8 @@ export class EquipmentHandler {
       return;
     }
 
-    const currentState = armor.system.equipped || false;
-    const newState = !currentState;
-
-    await armor.update({ 'system.equipped': newState });
+    const newState = EquipmentHelper.isEquipped(armor) ? 'unequipped' : 'worn';
+    await EquipmentHelper.equipWithHandLimit(this.actor, armor.id, newState);
   }
 
   /**
@@ -179,18 +177,7 @@ export class EquipmentHandler {
     const { EquipmentHelper } = globalThis.vagabond.utils;
 
     const isEquipped = EquipmentHelper.isEquipped(item);
-
-    if (EquipmentHelper.isWeapon(item) && item.system.equipmentState !== undefined) {
-      const newState = isEquipped ? 'unequipped' : (item.system.grip === '2H' ? 'twoHands' : 'oneHand');
-      await EquipmentHelper.equipWeaponWithHandLimit(this.actor, item.id, newState);
-    }
-    // For armor, update worn state
-    else if (item.type === 'armor') {
-      await item.update({ 'system.worn': !isEquipped });
-    }
-    // For other items (gear, etc), update equipped
-    else if (item.system.equipped !== undefined) {
-      await item.update({ 'system.equipped': !isEquipped });
-    }
+    const newState = isEquipped ? 'unequipped' : EquipmentHelper.defaultEquipState(item);
+    await EquipmentHelper.equipWithHandLimit(this.actor, item.id, newState);
   }
 }

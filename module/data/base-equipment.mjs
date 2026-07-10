@@ -32,8 +32,26 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== UNIVERSAL FIELDS (ALL EQUIPMENT) =====
 
-    // Equipped status
+    // Equipped status — derived mirror of `equipmentState` at runtime (see
+    // prepareDerivedData); kept in the schema and synced on every update so
+    // legacy `equipped`-based reads and migrateData stay consistent
     schema.equipped = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
+    // Hands needed to hold/use this item while equipped. Non-weapons only —
+    // weapons derive hand usage from `grip` and ignore this field.
+    schema.handsRequired = new fields.NumberField({
+      required: true,
+      nullable: false,
+      integer: true,
+      initial: 0,
+      choices: [0, 1, 2]
+    });
+
+    // Trinket — satisfies the spellcasting trinket requirement while equipped
+    schema.isTrinket = new fields.BooleanField({
       required: true,
       initial: false
     });
@@ -187,12 +205,15 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: '-',
     });
 
-    // Equipment state for weapons (unequipped, oneHand, twoHands)
+    // Equipment state — single stored equip truth for ALL equipment.
+    // Weapons: unequipped/oneHand/twoHands (from grip). Non-weapons:
+    // unequipped, 'worn' (equipped, no hands) or oneHand/twoHands per
+    // `handsRequired`.
     schema.equipmentState = new fields.StringField({
       required: false,
       blank: true,
       initial: 'unequipped',
-      choices: ['unequipped', 'oneHand', 'twoHands']
+      choices: ['unequipped', 'oneHand', 'twoHands', 'worn']
     });
 
     // ===== ARMOR-SPECIFIC FIELDS =====
@@ -428,10 +449,22 @@ export default class VagabondEquipment extends VagabondItemBase {
       if (!Array.isArray(coating.causedStatuses)) coating.causedStatuses = Object.values(coating.causedStatuses);
       coating.causedStatuses = coating.causedStatuses.filter(e => e != null);
     }
+    // Equip unification: non-weapons historically stored equip state in the
+    // `equipped` boolean; `equipmentState` is now the single source of truth.
+    // (VagabondItem._preUpdate keeps source `equipped` in lockstep afterwards,
+    // so this only fires once per legacy item.)
+    if (source.equipmentType && source.equipmentType !== 'weapon'
+        && source.equipped === true
+        && (!source.equipmentState || source.equipmentState === 'unequipped')) {
+      source.equipmentState = 'worn'; // legacy items predate handsRequired (always 0)
+    }
     return super.migrateData(source);
   }
 
   prepareDerivedData() {
+    // Universal derived equip mirror — equipmentState is the stored truth
+    this.equipped = this.equipmentState !== 'unequipped';
+
     // Relics don't use metal - skip metal calculations
     const isRelic = this.equipmentType === 'relic';
 
@@ -496,9 +529,6 @@ export default class VagabondEquipment extends VagabondItemBase {
   }
 
   _prepareWeaponData() {
-    // Determine if weapon is equipped (any state other than unequipped)
-    this.equipped = this.equipmentState !== 'unequipped';
-
     // Determine current damage and damage type based on equipment state
     let baseDamage;
     let baseDamageType;

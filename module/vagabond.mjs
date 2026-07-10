@@ -342,6 +342,42 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Trinket casting requirement: casting a spell requires an equipped trinket
+  // (system.isTrinket item, or any equipped weapon when the actor has the Gish
+  // flag system.weaponAsTrinket). Gate lives in SpellHandler._trinketGateStatus.
+  game.settings.register('vagabond', 'trinketCastRequirement', {
+    name: 'VAGABOND.Settings.trinketCastRequirement.name',
+    hint: 'VAGABOND.Settings.trinketCastRequirement.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      off: 'VAGABOND.Settings.trinketCastRequirement.off',
+      warn: 'VAGABOND.Settings.trinketCastRequirement.warn',
+      block: 'VAGABOND.Settings.trinketCastRequirement.block',
+    },
+    default: 'block',
+    requiresReload: false,
+  });
+
+  // Light-source hand coupling: how lighting a hand-held light source (torch,
+  // candle — handsRequired > 0) interacts with the 2-hand equipment limit.
+  // Consumed by LightSource.use()/douse() in helpers/light-source.mjs.
+  game.settings.register('vagabond', 'lightSourceHandMode', {
+    name: 'VAGABOND.Settings.lightSourceHandMode.name',
+    hint: 'VAGABOND.Settings.lightSourceHandMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      independent: 'VAGABOND.Settings.lightSourceHandMode.independent',
+      autoEquip: 'VAGABOND.Settings.lightSourceHandMode.autoEquip',
+      requireFreeHand: 'VAGABOND.Settings.lightSourceHandMode.requireFreeHand',
+    },
+    default: 'requireFreeHand',
+    requiresReload: false,
+  });
+
   // Imbue delivery: pay Damage/Effect mana upfront at cast (legacy) vs deferred
   // to delivery-on-hit (RAW-correct default per GM ruling — see imbue-helper.mjs)
   game.settings.register('vagabond', 'imbueUpfrontMana', {
@@ -1597,11 +1633,12 @@ Hooks.on('updateJournalEntry', async (journal, changes, options, userId) => {
   }
 
   // Light source: a manual burn-down clock that reaches 0 has burned out — delete
-  // it (the deleteJournalEntry hook then restores the token's previous light).
+  // it (the deleteJournalEntry hook then restores the token's previous light and,
+  // because this is a true burn-out, consumes the item).
   const ls = journal.flags?.vagabond?.lightSource;
   if (ls?.mode === 'clock' && game.user === game.users.activeGM) {
     const filled = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock.filled');
-    if (filled === 0) { await journal.delete(); return; }
+    if (filled === 0) { await journal.delete({ vagabondLightExpired: true }); return; }
   }
 
   // Handle countdown dice
@@ -1636,7 +1673,8 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
     diceOverlay.removeDice(journal.id);
   }
 
-  // Light source: a deleted burn-down clock douses its token (restore prevLight).
+  // Light source: a deleted burn-down clock douses its token (restore prevLight)
+  // and, when hand coupling is on, unequips the lit item.
   if (game.user === game.users.activeGM) {
     const lsFlags = journal.flags?.vagabond?.lightSource;
     if (lsFlags?.tokenUuid) {
@@ -1645,6 +1683,20 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
         if (tdoc && tdoc.getFlag('vagabond', 'prevLight') !== undefined) {
           await tdoc.update({ light: tdoc.getFlag('vagabond', 'prevLight') });
           await tdoc.unsetFlag('vagabond', 'prevLight');
+        }
+        if (lsFlags.itemUuid) {
+          await LightSource._unequipLitItem(lsFlags.itemUuid);
+          // Prune the token's litItems bookkeeping
+          if (tdoc) {
+            const lit = (tdoc.getFlag('vagabond', 'litItems') ?? []).filter((u) => u !== lsFlags.itemUuid);
+            if (lit.length) await tdoc.setFlag('vagabond', 'litItems', lit);
+            else if (tdoc.getFlag('vagabond', 'litItems') !== undefined) await tdoc.unsetFlag('vagabond', 'litItems');
+          }
+          // True burn-out (clock expired — NOT a douse): consume the item.
+          // Light items are never consumed on Use/Ignite anymore.
+          if (options?.vagabondLightExpired) {
+            await LightSource._consumeLitItem(lsFlags.itemUuid);
+          }
         }
       } catch (err) {
         console.warn('Vagabond | Could not douse token light on clock delete:', err);

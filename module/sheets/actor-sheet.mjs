@@ -8,6 +8,7 @@ import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -320,7 +321,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       context.hasEquippedItems =
         (context.weapons && context.weapons.some(i => i.system.equipped)) ||
         (context.gear && context.gear.some(i => i.system.equipped)) ||
-        (context.armor && context.armor.some(i => i.system.worn));
+        (context.armor && context.armor.some(i => i.system.equipped));
 
       context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
       context.useSpellDialog = game.settings.get('vagabond', 'useSpellCastDialog');
@@ -771,11 +772,30 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   static async _onRollWeapon(event, target) {
-    return this.rollHandler?.rollWeapon(event, target);
+    return this._activateItemAction(event, target);
   }
 
   static async _onUseItem(event, target) {
-    return this.rollHandler?.useItem(event, target);
+    return this._activateItemAction(event, target);
+  }
+
+  /**
+   * Shared `rollWeapon`/`useItem` action target: resolves the item, then
+   * equips it first if it occupies hands and isn't already equipped
+   * (weapons, torches, etc.), then performs its action (attack / ignite
+   * toggle / use) — same unified behavior as the HUD. All current bindings
+   * (sliding-panel Equipped rows, spell send-to-chat) target already-equipped
+   * items or non-equipment items, so the equip step is a safe no-op there.
+   */
+  static async _activateItemAction(event, target) {
+    const element = target || event.currentTarget;
+    const itemId = element?.dataset?.itemId || element?.closest?.('[data-item-id]')?.dataset.itemId;
+    const item = itemId && this.actor.items.get(itemId);
+    if (!item) {
+      ui.notifications.error('Item not found!');
+      return;
+    }
+    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler });
   }
 
   static async _onRollMorale(event, target) {
@@ -1906,13 +1926,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           icon: 'fas fa-times',
           enabled: true,
           action: async () => {
-            if (isWeapon && item.system.equipmentState !== undefined) {
-              await item.update({ 'system.equipmentState': 'unequipped' });
-            } else if (isArmor) {
-              await item.update({ 'system.worn': false });
-            } else if (item.system.equipped !== undefined) {
-              await item.update({ 'system.equipped': false });
-            }
+            await item.update({ 'system.equipmentState': 'unequipped' });
           },
         });
 

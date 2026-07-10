@@ -212,7 +212,8 @@ export class VagabondGlyphHelper {
 
   /**
    * Full cast-time placement flow: pick a square, create the glyph Region with
-   * the cast snapshot, post the "Glyph placed" chat card.
+   * the cast snapshot. The caller posts the spell cast chat card (with the
+   * Trigger/Dismiss footer built from `buildTriggerDismissButtons`).
    * Returns the created RegionDocument, or null if the player cancelled
    * (callers must then abort the cast at no mana cost).
    * @param {{actor: Actor, spell: Item, state: object, manaSkillKey: string}} opts
@@ -244,7 +245,6 @@ export class VagabondGlyphHelper {
     const region = await this._createGlyphRegion(spot, payload);
     if (!region) return null;
 
-    await this._postPlacedCard(actor, region, payload);
     return region;
   }
 
@@ -292,34 +292,23 @@ export class VagabondGlyphHelper {
   }
 
   /**
-   * Post the "Glyph placed" chat card with Trigger / Dismiss controls.
-   * @private
+   * Trigger / Dismiss button row, dropped into the spell cast card's footer
+   * (via `createActionCard`'s `footerActions`) instead of a separate raw card —
+   * keeps the caster/item art integrated instead of a bare "Roll Damage" button.
+   * @param {string} regionUuid
+   * @returns {string} HTML
    */
-  static async _postPlacedCard(actor, region, payload) {
+  static buildTriggerDismissButtons(regionUuid) {
     const trigger = game.i18n.localize('VAGABOND.Glyph.TriggerButton');
     const dismiss = game.i18n.localize('VAGABOND.Glyph.DismissButton');
-    const placed = game.i18n.format('VAGABOND.Glyph.PlacedBy', { caster: payload.casterName });
-    const content = `<div class="vagabond-glyph-card" data-region-uuid="${region.uuid}">
-      <div class="glyph-card-header">
-        <img src="${payload.spellImg}" alt="" />
-        <div class="glyph-card-title">
-          <strong>${game.i18n.format('VAGABOND.Glyph.CardTitle', { spell: payload.spellName })}</strong>
-          <span>${placed}</span>
-        </div>
-      </div>
-      <div class="glyph-card-buttons">
-        <button type="button" class="vagabond-glyph-trigger-button" data-region-uuid="${region.uuid}">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> ${trigger}
-        </button>
-        <button type="button" class="vagabond-glyph-dismiss-button" data-region-uuid="${region.uuid}">
-          <i class="fa-solid fa-xmark"></i> ${dismiss}
-        </button>
-      </div>
+    return `<div class="glyph-card-buttons">
+      <button type="button" class="vagabond-glyph-trigger-button" data-region-uuid="${regionUuid}">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> ${trigger}
+      </button>
+      <button type="button" class="vagabond-glyph-dismiss-button" data-region-uuid="${regionUuid}">
+        <i class="fa-solid fa-xmark"></i> ${dismiss}
+      </button>
     </div>`;
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor }),
-      content,
-    });
   }
 
   /* -------------------------------------------- */
@@ -426,7 +415,10 @@ export class VagabondGlyphHelper {
       item: spell,
       title: game.i18n.format('VAGABOND.Glyph.DeliveryTitle', { spell: spell.name }),
       subtitle: sourceActor.name,
-      rollData: { isCritical: false, isHit: true, manaSkill },
+      // isHit: false — damage is already rolled above (or intentionally absent
+      // for an effect-only glyph); Trigger IS the roll, never a second "Roll
+      // Damage" button prompting a further click.
+      rollData: { isCritical: false, isHit: false, manaSkill },
       damageRoll,
       damageType: spell.system.damageType,
       description: spell.system.formatDescription(spell.system.description),
