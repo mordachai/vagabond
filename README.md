@@ -17,13 +17,15 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ### **New feature:** Glyph and Imbue Deliveries and new Light system
 
-Two new spell delivery types plus a full light-source system:
+[![Magic Casting HUD](https://img.youtube.com/vi/4S1gI0uUMe4/0.jpg)](https://youtu.be/4S1gI0uUMe4)
 
 - **Imbue:** cast a spell onto a weapon, using the attack roll as the check.
 - **Glyph:** place a glyph on the map that triggers whenever you want.
 - **Light Sources:** torches, candles, lanterns and the like now apply real token light when used, with a burn-down timer: real time like Shadowdark, hourly (6 segments), or per Shift (4 segments) shown as a Progress Clock.
 - **Hand limits:** equipped weapons now respect grip — a Two-Handed weapon, or a Versatile one used in 2H grip, fills both hands and prevents equipping anything else.
 - **Trinket gate:** casting now requires an equipped trinket or a weapon, if you have the Gish Perk
+
+---
 
 ### **New feature:** Characters and NPCs HUD
 
