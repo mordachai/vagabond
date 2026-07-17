@@ -15,7 +15,7 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
-### **New feature:** Glyph and Imbue Deliveries and new Light system
+### **New feature:** Glyph and Imbue Deliveries and new Light system [YouTube video below](https://youtu.be/4S1gI0uUMe4)
 
 [![Magic Casting HUD](https://img.youtube.com/vi/4S1gI0uUMe4/0.jpg)](https://youtu.be/4S1gI0uUMe4)
 
@@ -101,7 +101,7 @@ Spellcasters now have a **Focus** track visible in the Spells panel. The Mana ic
 ### **New feature:** Full Homebrew:
 Always wanted a system to call it yours? now you have it. With the new homebrew panel you have the freedom to edit almost everything in the system from names to formulas, dice rolls and limits. And after that export and import other homebrews to play in your tables.
 
-<img width="1581" height="856" alt="image" src="https://github.com/user-attachments/assets/9a551711-ccec-44cf-93b2-6d508a980f13" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/9a551711-ccec-44cf-93b2-6d508a980f13" />
 
 Remember that when you change a key you effectively break the use of that particular element in the system, so if ypu want to change more than labels go for it, but go full: create new items, classes, perks, ancestries and so on, after you have set your system. Save it, name it, share it!
 
@@ -122,17 +122,17 @@ From simple rides to complex airships, it allows the creation of multiple parts 
 ### **New feature:** Level Up menu
 Click on the XP label at the top right of the character sheet to open the level up menu
 
-<img width="921" height="640" alt="image" src="https://github.com/user-attachments/assets/8d1c25e1-886a-4d0a-9900-d6dba9f5901c" />
+<img width="921" alt="image" src="https://github.com/user-attachments/assets/8d1c25e1-886a-4d0a-9900-d6dba9f5901c" />
 
 ---
 
 ### **New Character Sheets** Styles: Light and Dark Themes
 
-<img width="879" height="905" alt="image" src="https://github.com/user-attachments/assets/28b14f20-b3ee-4559-802a-1f0ee47a084e" />
+<img width="879" alt="image" src="https://github.com/user-attachments/assets/28b14f20-b3ee-4559-802a-1f0ee47a084e" />
 
-<img width="1327" height="909" alt="image" src="https://github.com/user-attachments/assets/acd67bde-f160-4657-8ee5-b9df30f20d30" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/acd67bde-f160-4657-8ee5-b9df30f20d30" />
 
-<img width="1350" height="820" alt="image" src="https://github.com/user-attachments/assets/7c354cfc-f2a3-4616-be9c-828b795d836b" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/7c354cfc-f2a3-4616-be9c-828b795d836b" />
 
 Click on the right margin of the top sheet to open it! 
 
@@ -147,7 +147,7 @@ It does not affect Foundry appearance, only in game dialogs and theme.
 ### Combat Encounters
 Dedicated combat encounters with per factions separation: Heroes, NPCs, Neutrals and Secrets (set these in Token >> Appearance >> Token Disposition), with settings to add custom initiative for going in order or through "popcorn initiative" where the table decides the order at will.
 
-<img width="308" height="730" alt="image" src="https://github.com/user-attachments/assets/965d02e5-13bd-456b-b2ec-33f154b5d356" />
+<img width="308" alt="image" src="https://github.com/user-attachments/assets/965d02e5-13bd-456b-b2ec-33f154b5d356" />
 
 ---
 
@@ -158,10 +158,10 @@ Track tension and time directly on the canvas without needing external modules.
 - **Countdown Dice:** Create the countdice and never forget to roll when the time comes!
 
 
-<img width="911" height="626" alt="image" src="https://github.com/user-attachments/assets/58152fab-6d5d-4c08-a13a-e44756384f86" />
+<img width="911" alt="image" src="https://github.com/user-attachments/assets/58152fab-6d5d-4c08-a13a-e44756384f86" />
 
 
-<img width="975" height="257" alt="image" src="https://github.com/user-attachments/assets/3dbbc78c-059c-4852-a4b1-faae85d29e38" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/3dbbc78c-059c-4852-a4b1-faae85d29e38" />
 
 
 
@@ -169,7 +169,7 @@ Track tension and time directly on the canvas without needing external modules.
 
 ### Downtime Manager
 
-<img width="714" height="814" alt="image" src="https://github.com/user-attachments/assets/76a9b148-125a-43bc-9fc7-eec68fc4b3eb" />
+<img width="714" alt="image" src="https://github.com/user-attachments/assets/76a9b148-125a-43bc-9fc7-eec68fc4b3eb" />
 
 - **Resting**: Calculates lodging costs automatically based on quality (Squalid to Aristocratic) and updates HP, Mana, and Luck.
 - **Hunting & Foraging**: Built-in loot tables for hunting game or foraging for supplies, automatically rolling for yield.
@@ -181,7 +181,7 @@ Track tension and time directly on the canvas without needing external modules.
 
 Easy and fast to use character builder, with option to generate full random character with the press of a button or randomize only some steps:
 
-<img width="1112" height="863" alt="image" src="https://github.com/user-attachments/assets/08d9dc73-8da5-48ad-8cac-d6a5f7f165dc" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/08d9dc73-8da5-48ad-8cac-d6a5f7f165dc" />
 
 ---
 
@@ -200,7 +200,7 @@ Magic in Vagabond is flexible and unique. The system includes a dynamic **Mana C
 ### Got the book? You're in for a treat!
 Inside the book you will find the one word password to unlock all content for your Foundry table. No need to purchase a premium module:
 
-<img width="1862" height="879" alt="image" src="https://github.com/user-attachments/assets/f5b9a0bb-7913-4993-97a9-a333f265cde7" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/f5b9a0bb-7913-4993-97a9-a333f265cde7" />
 
 - 7 Ancestries and their Traits
 - 18 Classes with all Features
@@ -214,7 +214,7 @@ Inside the book you will find the one word password to unlock all content for yo
 
 Go to Foundry >> Game Systems >> Install System and look for "vagabond" and click the Install button 
 
-<img width="1710" height="268" alt="image" src="https://github.com/user-attachments/assets/3d4b4ea5-7c10-4aeb-980d-e1defa2f5e81" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/3d4b4ea5-7c10-4aeb-980d-e1defa2f5e81" />
 
 
 **- OR -**
@@ -240,7 +240,7 @@ https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module
 
 ### Too Many Tokens Integration
 
-<img width="1527" height="932" alt="image" src="https://github.com/user-attachments/assets/131fd4ec-5f9f-41b5-9c77-a838de80dd2f" />
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/131fd4ec-5f9f-41b5-9c77-a838de80dd2f" />
 
 Want some tokens and doesn't have a problem with Ai images? Install this module too:
 
