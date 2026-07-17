@@ -1,0 +1,2045 @@
+{
+  "VAGABOND": {
+    "Terms": {
+      "None": "Nenhum",
+      "Yes": "sim",
+      "No": "não",
+      "KeyStat":"Atributo-Chave"
+    },
+    "Stat": {
+      "Might": { "long": "Vigor", "abbr": "VIG" },
+      "Dexterity": { "long": "Destreza", "abbr": "DES" },
+      "Awareness": { "long": "Percepção", "abbr": "PER" },
+      "Reason": { "long": "Raciocínio", "abbr": "RAC" },
+      "Presence": { "long": "Presença", "abbr": "PRE" },
+      "Luck": { "long": "Sorte", "abbr": "SOR" }
+    },
+    "Skills": {
+      "Arcana": "Arcanismo",
+      "Brawl": "Briga",
+      "Craft": "Ofício",
+      "Detect": "Detectar",
+      "Finesse": "Sutileza",
+      "Influence": "Influência",
+      "Leadership": "Liderança",
+      "Medicine": "Medicina",
+      "Mysticism": "Misticismo",
+      "Performance": "Atuação",
+      "Sneak": "Furtividade",
+      "Survival": "Sobrevivência",
+      "Melee": "Corpo a Corpo",
+      "Ranged": "À Distância"
+    },
+    "SkillsHints": {
+      "Arcana": "Aplicação e conhecimento de magia.",
+      "Brawl": "Exercer força física. Usado para Agarrões, Empurrões e ataques com Armas de Briga.",
+      "Craft": "Sua habilidade de avaliar e fabricar Itens.",
+      "Detect": "Perceber outros reflexivamente.",
+      "Finesse": "Coordenação e disfarce de suas ações. Também usado para roubo, e ao atacar com Armas de Sutileza.",
+      "Influence": "Habilidade social de coerção, engano ou negociação.",
+      "Leadership": "Motivação social e diplomacia.",
+      "Medicine": "Educação em cura não-mágica.",
+      "Mysticism": "Compreensão do sobrenatural.",
+      "Performance": "Talento cultural e habilidade de inspirar admiração.",
+      "Sneak": "Ocultar sua localização.",
+      "Survival": "Rastreamento e conhecimento de bestas, plantas e outros aspectos da natureza.",
+      "Melee": "Atacar com Armas Corpo a Corpo.",
+      "Ranged": "Atacar com Armas à Distância."
+    },
+    "WeaponSkillsHints": {
+      "Melee": "Atacar com Armas Corpo a Corpo.",
+      "Ranged": "Atacar com Armas à Distância.",
+      "Brawl": "Exercer força física. Usado para Agarrões, Empurrões e ataques com Armas de Briga.",
+      "Finesse": "Coordenação e disfarce de suas ações. Também usado para roubo, e ao atacar com Armas de Sutileza."
+    },
+    "WeaponSkills": {
+      "Melee": "Corpo a Corpo",
+      "Ranged": "À Distância",
+      "Brawl": "Briga",
+      "Finesse": "Sutileza"
+    },
+    "Hints": {
+      "HP": "Pontos de Vida máximos igual a Vigor × Nível.",
+      "LuckPool": "Total de pontos de Sorte. Gaste para ganhar Vantagem, rerrolar dados, ou usar Blindagem de Roteiro.",
+      "Inventory": "Capacidade de carga igual a 8 + espaços de Vigor.",
+      "Speed": "Distância de movimento em pés em solo firme.",
+      "MaxMana": "Pontos de mana máximos igual ao Multiplicador de Mana × Atributo-Chave.",
+      "ManaPerCast": "A mana máxima permitida por conjuração única."
+    },
+    "Saves": {
+      "savesTitle": "Resistências",
+      "savesPlaceholder": "Reflexo, Resistência ou Vontade",
+      "NPCNoSaves": "NPCs não rolam resistências - eles só têm armadura, imunidades e fraquezas.",
+      "Reflex": {
+        "name": "Reflexo",
+        "description": "Evitar dano físico, como explosões, armadilhas rápidas, escapar de agarrões, e sopro de dragão."
+      },
+      "Endure": {
+        "name": "Resistência",
+        "description": "Suportar dano físico, como venenos, calor extremo, contenções e petrificação."
+      },
+      "Will": {
+        "name": "Vontade",
+        "description": "Resistir a dano mental, como encantos, terrores medonhos, escravização psíquica e sua determinação."
+      }
+    },
+    "Roll": {
+      "Favored": "Vantagem (+1d6)",
+      "Hindered": "Desvantagem (-1d6)",
+      "SaveRoll": "Rolagem de Resistência"
+    },
+    "Damage": {
+      "Total": "Dano Total",
+      "Final": "Dano Final"
+    },
+    "DefendMechanics": {
+      "DefendingTitle": "Opções de defesa",
+      "BlockTitle": "Bloquear (Resistência)",
+      "DodgeTitle": "Esquivar (Reflexo)",
+      "CritTitle": "Crítico",
+      "BlockDescription": "Role Resistência. Sucesso ignora um dado de dano mais alto. Desvantagem se ataque à Distância.",
+      "DodgeDescription": "Role Reflexo. Sucesso ignora um dado de dano mais alto. Desvantagem se Armadura Pesada.",
+      "CritDescription": "Você não é afetado pelo que causou a Resistência, e pode usar uma Ação.",
+      "CritToggleHint": "Clique para alternar: Dano Extra ou Ganhar Ponto de Sorte"
+    },
+    "AttackTypes": {
+      "Melee": "Corpo a Corpo",
+      "Ranged": "À Distância",
+      "CastClose": "Conjurar Próximo",
+      "CastRanged": "Conjurar à Distância"
+    },
+    "SpeedTypes": {
+      "Climb": "Escalar",
+      "Cling": "Agarrar-se",
+      "Fly": "Voar",
+      "Phase": "Atravessar",
+      "Swim": "Nadar",
+      "Hints": {
+        "Climb": "Move-se em Velocidade total ao escalar. Seres sem isso ficam Vulneráveis ao escalar.",
+        "Cling": "Como Escalar, mas também pode se Mover em tetos.",
+        "Fly": "Pode se Mover pelo ar em Velocidade total.",
+        "Phase": "Pode se Mover em espaço ocupado, mas é forçado ao espaço aberto mais próximo e sofre 5 de dano se terminar seu Turno em espaço ocupado.",
+        "Swim": "Move-se em Velocidade total ao nadar. Seres sem isso ficam Vulneráveis em líquido mais fundo que metade de sua altura."
+      },
+      "Label": "Tipos de Velocidade"
+    },
+    "Sizes": {
+      "small": "Pequeno",
+      "medium": "Médio",
+      "large": "Grande",
+      "huge": "Enorme",
+      "giant": "Gigante",
+      "colossal": "Colossal"
+    },
+    "Ring": {
+      "Effects": {
+        "Focusing": "Concentrando (Arco Elétrico)",
+        "Burning": "Queimando (Chamas)",
+        "Sickened": "Enjoado (Bolhas Verdes)",
+        "Charmed": "Enfeitiçado (Corações Rosa)"
+      }
+    },
+    "BeingTypes": {
+      "Humanlike": "Humanoide",
+      "Fae": "Fada",
+      "Cryptid": "Criptídeo",
+      "Artificials": "Artificiais",
+      "Beasts": "Bestas",
+      "Outers": "Externos",
+      "Primordials": "Primordiais",
+      "Undead": "Morto-Vivo",
+      "Hellspawn": "Infernal"
+    },
+    "ResourceTypes": {
+      "MaxMana": "Mana Máxima",
+      "ManaPerCast": "Mana por Conjuração",
+      "Wealth": "Riqueza (em prata)",
+      "InventorySlots": "Espaços de Inventário",
+      "Speed": "Velocidade",
+      "MaxHP": "PV Máximo",
+      "CurrentLuck": "Reserva de Sorte"
+    },
+    "DamageTypes": {
+      "None": "-",
+      "Acid": "Ácido",
+      "Fire": "Fogo",
+      "Shock": "Choque",
+      "Poison": "Veneno",
+      "Cold": "Frio",
+      "Blunt": "Concussão",
+      "Physical": "Físico",
+      "Necrotic": "Necrótico",
+      "Psychic": "Psíquico",
+      "Magical": "Mágico",
+      "Healing": "Cura",
+      "Recover": "Recuperar",
+      "Recharge": "Recarregar",
+      "Slashing": "Corte",
+      "Piercing": "Perfuração"
+    },
+    "MaterialWeaknesses": {
+      "ColdIron": "Ferro Frio",
+      "Silver": "Prata"
+    },
+    "FxSchool": {
+      "Auto":     "Auto (do tipo de dano)",
+      "Fire":     "Fogo",
+      "Cold":     "Frio",
+      "Shock":    "Choque",
+      "Acid":     "Ácido",
+      "Poison":   "Veneno",
+      "Blunt":    "Concussão",
+      "Lava":     "Lava",
+      "Wind":     "Vento",
+      "Nature":   "Natureza",
+      "Healing":  "Cura",
+      "Necrotic": "Necrótico",
+      "Psychic":  "Psíquico",
+      "Arcane":   "Arcano",
+      "Shadow":   "Sombra",
+      "Radiant":  "Radiante",
+      "Earth":    "Terra",
+      "Defense":  "Defesa",
+      "GenericLight": "Luz (Genérico)",
+      "GenericDark":  "Trevas (Genérico)"
+    },
+    "StatusConditions": {
+      "Berserk": "Furioso",
+      "Blinded": "Cego",
+      "Burning": "Queimando",
+      "Charmed": "Enfeitiçado",
+      "Confused": "Confuso",
+      "Dazed": "Atordoado",
+      "Dead": "Morto",
+      "Fatigued": "Fatigado",
+      "Focusing": "Concentrando",
+      "Frightened": "Amedrontado",
+      "Incapacitated": "Incapacitado",
+      "Invisible": "Invisível",
+      "Paralyzed": "Paralisado",
+      "Prone": "Caído",
+      "Restrained": "Contido",
+      "Grappling": "Agarrando",
+      "Sickened": "Enjoado",
+      "Suffocating": "Sufocando",
+      "Unconscious": "Inconsciente",
+      "Vulnerable": "Vulnerável"
+    },
+    "StatusConditionDescriptions": {
+      "Frightened": "-2 de penalidade ao dano causado [AUTOMATIZADO]",
+      "Dazed": "Não pode Concentrar-se ou Mover-se a menos que use uma Ação. Velocidade = 0 [PARCIAL - Velocidade automatizada]",
+      "Dead": "Igual a Incapacitado, mas falha automaticamente TODAS as rolagens (atributos, perícias, resistências, ataques) [TOTALMENTE AUTOMATIZADO]",
+      "Fatigued": "Cada Fadiga ocupa um Espaço de Item. Em 3+: não pode Correr. Em 5: morre [PARCIAL - Espaços automatizados]",
+      "Prone": "Custa 10' de Velocidade para levantar. Só rastejo (proporção 2:1), não pode Correr, Vulnerável [PARCIAL - Velocidade automatizada]",
+      "Confused": "Testes/Resistências com Desvantagem. Resistências contra suas Ações com Vantagem [AUTOMATIZADO]",
+      "Sickened": "-2 de penalidade à cura recebida [AUTOMATIZADO]",
+      "Vulnerable": "Seus ataques e suas Resistências contra ataques têm Desvantagem. Ataques direcionados a ele e Resistências contra seus ataques têm Vantagem [AUTOMATIZADO]",
+      "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
+      "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
+      "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
+      "Incapacitated": "Não pode Concentrar-se/Agir/Mover-se. Falha automática em Vigor/Destreza. Vulnerável. Velocidade = 0 [AUTOMATIZADO]",
+      "Paralyzed": "Incapacitado + Velocidade = 0 [AUTOMATIZADO]",
+      "Unconscious": "Cego + Incapacitado + Caído. Ataques Próximos são críticos automáticos [AUTOMATIZADO]",
+      "Invisible": "Não pode ser visto. Atacantes agem como Cegos [AUTOMATIZADO]",
+      "Berserk": "Não pode usar a Ação de Conjurar ou Concentrar-se, não pode ficar Amedrontado, e não faz Testes de Moral [PARCIAL - Rastreamento manual]",
+      "Burning": "Sofre dano no início do turno [FUTURO - Requer ganchos do rastreador de combate]",
+      "Charmed": "Não pode atacar voluntariamente quem o enfeitiçou [FUTURO - Requer validação de alvo]",
+      "Suffocating": "Após 1 minuto: Heróis rolam d8 vs Vigor para fadiga. Inimigos ganham 1 fadiga [FUTURO - Requer rastreador de combate]"
+    },
+    "StatusModifiers": {
+      "IncomingHealingModifier": "Modificador de Cura Recebida",
+      "IncomingAttacksModifier": "Modificador de Ataques Recebidos",
+      "OutgoingSavesModifier": "Modificador de Resistências Realizadas",
+      "AutoFailStats": "Atributos com Falha Automática",
+      "DefenderStatusModifiers": "Modificadores de Status do Defensor",
+      "AttackersAreBlinded": "Atacantes Estão Cegos",
+      "CloseAttacksAutoCrit": "Ataques Próximos São Críticos Automáticos"
+    },
+    "Grapple": {
+      "Button": "Agarrar",
+      "SpeedPenaltyLabel": "Agarrando — Velocidade Reduzida à Metade",
+      "AppliedRestrained": "agora está Contido (Agarrado).",
+      "AppliedGrappling": "agora está Agarrando.",
+      "AlreadyRestrained": "já está Contido.",
+      "NoTargets": "Nenhum token selecionado como alvo. Por favor, selecione ao menos um token como alvo."
+    },
+    "CombatZones": {
+      "Frontline": "Linha de Frente",
+      "Midline": "Linha do Meio",
+      "Backline": "Linha de Trás"
+    },
+    "Currency": {
+      "Gold": {
+        "long": "Ouro",
+        "abbr": "o"
+      },
+      "Silver": {
+        "long": "Prata",
+        "abbr": "p"
+      },
+      "Copper": {
+        "long": "Cobre",
+        "abbr": "c"
+      }
+    },
+    "Wealth": {
+      "Gold": "Ouro",
+      "Silver": "Prata",
+      "Copper": "Cobre"
+    },
+    "DeliveryTypes": {
+      "Aura": {
+        "label": "Aura",
+        "description":"Raio de 10' a partir de você, afetando Alvos de sua escolha dentro dela.",
+        "hint": "+1 por +5 pés adicionais ao raio"
+      },
+      "Cone": {
+        "label": "Cone",
+        "description":"Área de Cone de 15' à sua frente.",
+        "hint": "+2 por 5 pés adicionais de comprimento"
+      },
+      "Cube": {
+        "label": "Cubo",
+        "description":"Área de cubo de 5' que você possa ver.",
+        "hint": "+1 por cubo de 5 pés adicional"
+      },
+      "Imbue": {
+        "label": "Imbuir",
+        "description":"Mira em uma Arma equipada por um Ser disposto dentro de Longe, que pode então entregar a Magia como se fosse por Toque se você gastar 1 Mana para isso quando o ataque acertar. O Teste de Ataque é usado como Teste de Conjuração.",
+        "hint": "+2 por Alvo adicional"
+      },
+      "Glyph": {
+        "label": "Glifo",
+        "description":"Cria um glifo de 5' quadrado em um Alvo que você possa ver, onde nenhum outro glifo esteja dentro de Perto. A Magia é Conjurada em um cubo de 5' a partir do glifo quando você escolher, então o glifo desaparece.",
+        "hint": "Sem aumento"
+      },
+      "Line": {
+        "label": "Linha",
+        "description":"Área de 5' de largura, 30' de comprimento, 10' de altura. Expandir a largura em 5' ou a altura em até 10' dobra o Custo.",
+        "hint": "+1 por 10 pés de comprimento extra"
+      },
+      "Remote": {
+        "label": "Remoto",
+        "description":"Uma ambiência ou raio em um Alvo.",
+        "hint": "+1 por Alvo adicional"
+      },
+      "Sphere": {
+        "label": "Esfera",
+        "description":"Esfera de raio de 5' à vista.",
+        "hint": "+1 por 5 pés adicionais ao raio"
+      },
+      "Touch": {
+        "label": "Toque",
+        "description":" Um Alvo Próximo, ou você mesmo"
+      }
+    },
+    "Glyph": {
+      "DialogTitle": "Glifo",
+      "RegionName": "Glifo: {spell}",
+      "CardTitle": "Glifo: {spell}",
+      "DeliveryTitle": "{spell} (Glifo)",
+      "PlacedBy": "Inscrito por {caster}",
+      "PlacePrompt": "Clique em um quadrado para inscrever o glifo — clique com o botão direito ou Esc para cancelar.",
+      "AlreadyPlacing": "Já está posicionando um glifo — finalize ou cancele-o primeiro.",
+      "TooClose": "Outro glifo ({name}) está dentro de Perto — escolha um quadrado diferente.",
+      "TriggerButton": "Acionar",
+      "RepositionButton": "Reposicionar",
+      "DismissButton": "Dispensar",
+      "PromptBody": "<strong>{spell}</strong>, inscrito por {caster}. Acionar a magia em seu cubo de 5'?",
+      "OnlyCasterOrGM": "Somente {caster} (ou o Mestre) pode acionar este glifo.",
+      "AlreadyResolved": "Este glifo já foi acionado ou dispensado.",
+      "WrongScene": "O glifo está em outra cena.",
+      "SpellGone": "A magia do glifo não existe mais — o glifo se desfaz.",
+      "NoScene": "Nenhuma cena ativa para posicionar um glifo.",
+      "CreateFailed": "Não foi possível criar o glifo nesta cena."
+    },
+    "SheetLabels": {
+      "Actor": "Ficha de Ator Vagabond",
+      "Character": "Ficha de Personagem Vagabond",
+      "NPC": "Ficha de NPC Vagabond",
+      "Party": "Ficha de Grupo Vagabond",
+      "Construct": "Ficha de Construto Vagabond",
+      "Item": "Ficha de Item Vagabond"
+    },
+    "Settings": {
+      "spellCastDialogBlur": {
+        "name": "Desfoque do Diálogo de Conjuração",
+        "hint": "Raio de desfoque de fundo (em pixels) atrás do diálogo de conjuração de magia. 0 desativa o efeito."
+      },
+      "useSpellCastDialog": {
+        "name": "Usar Diálogo de Conjuração",
+        "hint": "Quando ativado, magias favoritas aparecem em uma grade compacta e clicar na imagem de uma magia abre o diálogo de conjuração. Quando desativado, a lista tradicional é mostrada e clicar conjura diretamente."
+      },
+      "hideCastRings": {
+        "name": "Ocultar Anéis do Diálogo de Conjuração",
+        "hint": "Oculta o anel rúnico externo, o divisor do meio e o anel rúnico interno no diálogo de conjuração. O diálogo é renderizado menor neste modo."
+      },
+      "regionHighlightMode": {
+        "name": "Estilo de Desenho da Área de Magia",
+        "hint": "Como as regiões de área de magia são desenhadas no cenário. Forma Verdadeira desenha a forma geométrica exata (mais bonito). Espaços de Grade Cobertos destaca cada célula de grade que a forma toca.",
+        "shapes": "Forma Verdadeira",
+        "coverage": "Espaços de Grade Cobertos"
+      },
+      "regionUseTextures": {
+        "name": "Arte da Área de Magia",
+        "hint": "Pinta arte contínua sobre regiões de área de magia com base no tipo de dano da magia (ex: fogo, frio). Quando desativado, áreas usam um preenchimento de cor simples."
+      },
+      "regionBorderMode": {
+        "name": "Contorno da Área de Magia",
+        "hint": "Como o contorno ao redor de uma área de magia é desenhado para você: sua cor de jogador, oculto, ou padrão do Foundry."
+      },
+      "regionTextureAlpha": {
+        "name": "Opacidade da Arte da Área de Magia",
+        "hint": "O quão opaca a arte da área de magia aparece para você (0 = invisível, 1 = sólido)."
+      },
+      "spellCastDialogDarkness": {
+        "name": "Escuridão do Diálogo de Conjuração",
+        "hint": "Opacidade do fundo cinza escuro (0–100%) atrás do diálogo de conjuração de magia. 0 desativa o efeito."
+      },
+      "statusRingEffects": {
+        "name": "Efeitos de Anel de Token para Status",
+        "hint": "Anima efeitos de token para certos status de condição. Requer recarregar."
+      },
+      "rollDamageWithCheck": {
+        "name": "Rolar Dano Junto com o Teste",
+        "hint": "Rola o dano junto com os testes de ataque/magia em vez de esperar confirmação. Quando desativado, um botão de dano manual aparecerá no chat."
+      },
+      "alwaysRollDamage": {
+        "name": "Sempre Rolar Dano",
+        "hint": "Ao rolar dano junto com testes, rola dano mesmo em erros (para mostrar a intensidade do erro). Só se aplica quando 'Rolar Dano Junto com o Teste' está ativado."
+      },
+      "npcUseFlatDamage": {
+        "name": "NPC: Usar Dano Fixo",
+        "hint": "Quando ativado, ações de NPC usam dano fixo em vez de rolar dados. Quando 'Rolar Dano Junto com o Teste' também está ativo, o dano de NPC é resolvido automaticamente sem necessidade de botão — esta configuração determina se usa o valor fixo ou rola a fórmula."
+      },
+      "autoApplySaveDamage": {
+        "name": "Aplicar Dano de Resistência Automaticamente",
+        "hint": "Quando ativado, o dano é aplicado automaticamente aos PV após rolagens de resistência. Quando desativado, os valores de dano são mostrados no chat mas devem ser aplicados manualmente."
+      },
+      "trinketCastRequirement": {
+        "name": "Requisito de Bugiganga para Conjurar",
+        "hint": "Se conjurar uma magia requer um item de Bugiganga equipado (ou qualquer arma equipada, para personagens com o efeito Arma-como-Bugiganga, ex: Gish). Desligado: sem verificação. Avisar: notifica mas permite. Bloquear: impede a conjuração.",
+        "off": "Desligado",
+        "warn": "Apenas Avisar",
+        "block": "Bloquear Conjuração"
+      },
+      "lightSourceHandMode": {
+        "name": "Fontes de Luz Ocupam Mãos",
+        "hint": "Como acender uma fonte de luz portátil (tocha, vela) interage com o limite de 2 mãos de equipamento. Independente: sem interação. Auto-Equipar: acender a equipa em uma mão, deslocando o item mais antigo se necessário. Requer Mão Livre: acender falha a menos que haja mãos suficientes livres.",
+        "independent": "Independente",
+        "autoEquip": "Auto-Equipar na Mão",
+        "requireFreeHand": "Requer Mão Livre"
+      },
+      "imbueUpfrontMana": {
+        "name": "Custo de Mana Antecipado para Entrega por Imbuir",
+        "hint": "Marque esta caixa se quiser que conjuradores paguem o custo total de Mana de Dano/Efeito antecipadamente ao Imbuir uma arma, igual a todos os outros tipos de entrega. Desmarcado (padrão): apenas o custo de Entrega é pago ao Imbuir — a Mana de Dano e Efeito é paga depois, quando a arma imbuída acerta seu golpe."
+      },
+      "defaultClockPosition": {
+        "name": "Posição Padrão do Relógio",
+        "hint": "Posição de canto padrão para novos relógios de progresso."
+      },
+      "chatCardIconStyle": {
+        "name": "Estilo de Ícone do Card de Chat",
+        "hint": "Escolha qual ícone aparece no card de chat",
+        "item": "Sempre Ícone do Item (Padrão)",
+        "smart": "Rosto do Ator para Ataques/Magias, Ícone do Item para Equipamentos"
+      },
+      "statusEffectsMode": {
+        "name": "Modo de Condições de Status",
+        "hint": "Escolha quais condições de status aparecem no menu do HUD de token. O modo Vagabond mostra todas as 17 condições específicas do sistema do livro de regras. O modo Foundry mostra todas as condições padrão. Requer recarregar o mundo para aplicar.",
+        "vagabond": "Condições Vagabond",
+        "foundry": "Condições Padrão do Foundry"
+      },
+      "tokenStatusDisplay": {
+        "name": "Exibição de Status no Token",
+        "hint": "Onde as condições de status ativas são mostradas para o token selecionado. Fichas e HUDs sempre as mostram independentemente desta configuração.",
+        "none": "Não exibir",
+        "tokens": "Exibir nos tokens",
+        "left": "Exibir no canto inferior esquerdo",
+        "right": "Exibir no canto superior direito"
+      },
+      "encounterSettings": {
+        "name": "Configurações de Encontro",
+        "label": "Configurar Encontro",
+        "hint": "Configura opções de exibição e mecânicas de encontros de combate."
+      },
+      "compendiumSettings": {
+        "name": "Compêndios do Criador de Personagem",
+        "label": "Gerenciar Compêndios",
+        "hint": "Escolha quais compêndios de Item estão disponíveis no Criador de Personagem."
+      },
+      "hideInitiativeRoll": {
+        "name": "Ocultar Rolagem de Iniciativa",
+        "hint": "Oculta o botão de iniciativa no rastreador de combate. O sistema Vagabond usa iniciativa por ordem livre e tipicamente não requer rolagens de iniciativa tradicionais."
+      },
+      "useActivationPoints": {
+        "name": "Usar Pontos de Ativação",
+        "hint": "Exibe contadores de ativação abaixo dos botões de jogar. Quando desativado, combatentes têm uma ativação por padrão (como atualmente implementado)."
+      },
+      "defaultActivationPoints": {
+        "name": "Pontos de Ativação Padrão",
+        "hint": "O número inicial de pontos de ativação para cada combatente quando o combate começa. A maioria das mesas usa 1, mas você pode querer 2 ou mais para rastrear múltiplas ações como Movimento e Ataque, ou Movimento e Conjuração."
+      },
+      "initiativeFormula": {
+        "name": "Fórmula de Iniciativa (Personagens Jogadores)",
+        "hint": "Fórmula personalizada para rolar iniciativa de PJs. Só usada quando rolagens de iniciativa estão ativadas. Use @ para referenciar dados do ator (ex: @dexterity.value, @awareness.value)."
+      },
+      "npcInitiativeFormula": {
+        "name": "Fórmula de Iniciativa (NPCs)",
+        "hint": "Fórmula personalizada para rolar iniciativa de NPCs. Só usada quando rolagens de iniciativa estão ativadas. Use @ para referenciar dados do ator (ex: @speed)."
+      },
+      "homebrewSettings": {
+        "name": "Configuração Homebrew",
+        "label": "Configurar Homebrew",
+        "hint": "Personalize atributos, perícias, resistências, dados, progressão, derivações, tipos de dano e mais."
+      },
+      "useAnimations": {
+        "name": "Usar Animações de Magia",
+        "hint": "Chave mestra para efeitos visuais de magia. Quando desativado, nenhuma animação toca independentemente de outras configurações. Requer os módulos Sequencer e JB2A instalados."
+      },
+      "useSequencerFX": {
+        "name": "Efeitos Visuais de Magia (meu dispositivo)",
+        "hint": "Ativa animações do Sequencer neste dispositivo. Desative para melhor desempenho em hardware mais fraco. A configuração de nível de mundo 'Usar Animações de Magia' também deve estar ativada."
+      },
+      "sequencerFxConfig": {
+        "name": "Animações de FX de Magia",
+        "label": "Configurar Animações",
+        "hint": "Define caminhos de arquivo de animação do Sequencer para cada escola de FX e tipo de entrega."
+      },
+      "dsnDamageAppearance": {
+        "name": "Aparência dos Dados de Dano (DSN)",
+        "label": "Configurar Dados de Dano",
+        "hint": "Personalize cores, texturas e materiais do Dice So Nice por tipo de dano."
+      },
+      "useItemAnimations": {
+        "name": "Usar Animações de Item",
+        "hint": "Chave mestra para efeitos visuais de armas, alquímicos e relíquias. Quando desativado, nenhuma animação de item toca. Arquivos de animação são configurados por item na aba Detalhes de cada item. Requer o módulo Sequencer."
+      },
+      "revealNpcRecharge": {
+        "name": "Revelar Recarga de Ação de NPC",
+        "hint": "Quando ativado, resultados de contagem de recarga são postados publicamente. Quando desativado, só são visíveis ao Mestre."
+      },
+      "regionTextureAlphaUseGM": {
+        "name": "Usar Opacidade de Área de Magia do Mestre",
+        "hint": "Quando ativado, a arte da área de magia usa a opacidade que o Mestre definiu para a mesa. Desative para usar sua própria opacidade abaixo."
+      },
+      "hudDisplayConfig": {
+        "name": "Exibição do HUD",
+        "label": "Configurar Exibição do HUD",
+        "hint": "Ajusta a aparência dos HUDs flutuantes em sua tela: fundo escuro, desfoque e tamanho de texto. Estas configurações afetam apenas sua visualização.",
+        "title": "Configurações de Exibição do HUD",
+        "intro": "Ajuste os HUDs flutuantes para sua própria tela. Estas configurações são salvas por jogador — elas só mudam como os HUDs aparecem para você.",
+        "sectionAlwaysOn": "Sempre na Tela",
+        "alwaysOn": "Manter o HUD do meu personagem sempre na tela",
+        "alwaysOnHint": "Fixa o HUD do Personagem na tela durante toda a sessão para que nunca feche quando você mudar a seleção de token. Aplica-se ao seu personagem designado:",
+        "alwaysOnNoChar": "Você não tem nenhum personagem designado. Defina um Personagem Selecionado em sua Configuração de Usuário para usar esta opção.",
+        "idleFade": "Esmaecer opacidade do HUD",
+        "idleFadeHint": "Esmaece quando o mouse sai, opacidade total ao passar o mouse. Defina abaixo a duração da opacidade total após o mouse sair.",
+        "idleDelay": "Atraso para esmaecer",
+        "idleOpacity": "Opacidade esmaecida",
+        "sectionBackground": "Fundo",
+        "sectionText": "Tamanho do Texto",
+        "darkBg": "Fundo escuro atrás do HUD",
+        "darkBgHint": "Adiciona um painel escuro atrás do HUD para facilitar a leitura do texto sobre o cenário.",
+        "blur": "Desfocar o fundo atrás do HUD",
+        "blurHint": "Desfoca o que estiver atrás do HUD. Fica melhor combinado com o fundo escuro.",
+        "fontScale": "Tamanho do texto do HUD",
+        "fontScaleHint": "Escala o texto do HUD de 80% a 160%. O retrato e o layout permanecem do mesmo tamanho.",
+        "reset": "Restaurar Padrão",
+        "save": "Salvar"
+      }
+    },
+    "SequencerFX": {
+      "Title": "Configuração de FX de Magia",
+      "Saved": "Configuração de FX de Magia salva.",
+      "Reset": "Configuração de FX de Magia restaurada ao padrão.",
+      "NoFile": "Nenhum caminho de arquivo definido — insira um caminho primeiro.",
+      "NoToken": "Nenhum token no cenário para pré-visualizar.",
+      "Unavailable": "O módulo Sequencer não está ativo.",
+      "Imported": "Configuração de FX de Magia importada com sucesso.",
+      "ImportInvalid": "Arquivo de configuração de FX de Magia inválido — faltando castAnims ou areaAnims.",
+      "ImportFailed": "Falha na importação",
+      "JB2ALoaded": "Padrões de animação JB2A carregados com sucesso.",
+      "JB2AUnavailable": "O módulo JB2A não está instalado ou ativo.",
+      "JB2ALoadFailed": "Falha ao carregar padrões JB2A — verifique o console do navegador para detalhes."
+    },
+    "DsnDamage": {
+      "Title": "Aparência dos Dados de Dano",
+      "Hint": "Cada tipo de dano pode usar uma combinação personalizada de cor/textura/material ou um conjunto de cores padrão do Dice So Nice. A pré-visualização rola 2d6 com as configurações atuais (não salvas).",
+      "NoDsn": "Dice So Nice não está ativo. Instale ou ative o módulo para ver estes efeitos.",
+      "Type": "Tipo de Dano",
+      "Mode": "Modo",
+      "Custom": "Personalizado",
+      "PickStock": "— conjunto de cores padrão —",
+      "Colors": "Cores (Frente / Fundo / Contorno / Borda)",
+      "Foreground": "Frente (cor do número/face)",
+      "Background": "Fundo (cor do corpo do dado)",
+      "Outline": "Contorno",
+      "Edge": "Borda",
+      "Texture": "Textura",
+      "Material": "Material",
+      "Preview": "Pré-visualizar rolagem",
+      "ResetType": "Restaurar este tipo ao padrão",
+      "ResetAll": "Restaurar Tudo ao Padrão",
+      "ResetAllTitle": "Restaurar Todos os Dados de Dano?",
+      "ResetAllConfirm": "Limpar todas as configurações personalizadas de dados de dano e reverter aos padrões do sistema?",
+      "ResetDone": "Aparência dos dados de dano restaurada ao padrão.",
+      "Saved": "Aparência dos dados de dano salva.",
+      "Cancel": "Cancelar",
+      "Save": "Salvar"
+    },
+    "HomebrewSettings": {
+      "Title": "Configuração Homebrew",
+      "Saved": "Configuração Homebrew salva.",
+      "RequiresReload": "Mudanças nesta aba requerem recarregar o mundo para ter efeito.",
+      "ResetTab": "Restaurar Aba ao Padrão",
+      "Save": "Salvar",
+      "ReloadTitle": "Recarregar Mundo?",
+      "ReloadBody": "Algumas mudanças (atributos, perícias, resistências, limite de atributo, ou nível máximo) requerem recarregar o mundo para ter efeito. Recarregar agora?",
+      "UnsavedTitle": "Mudanças Não Salvas",
+      "UnsavedBody": "Você tem mudanças não salvas. Fechar sem salvar?",
+      "Tabs": {
+        "Stats": "Atributos",
+        "Skills": "Perícias & Resistências",
+        "Dice": "Dados",
+        "Magic": "Magia",
+        "Leveling": "Progressão",
+        "Derivations": "Derivações",
+        "DamageTypes": "Tipos de Dano",
+        "StatCap": "Limite de Atributo",
+        "Advanced": "Avançado",
+        "Terms": "Termos",
+        "Library": "Biblioteca"
+      }
+    },
+    "Actor": {
+      "Tabs": {
+        "Biography": "Biografia",
+        "Features": "Características",
+        "Inventory": "Inventário",
+        "Spells": "Magias",
+        "Magic": "Magia",
+        "Effects": "Efeitos"
+      },
+      "base": {
+        "FIELDS": {
+          "biography": {"label": "Biografia"},
+          "health": {
+            "value": {"label": "Vida"},
+            "max": {"label": "Vida Máxima"}
+          }
+        }
+      },
+      "Character": {
+        "FIELDS": {
+          "attributes.level.value": {"label": "Nível"},
+          "attributes.xp": {"label": "XP"},
+          "attributes.size": {"label": "Tamanho"},
+          "attributes.beingType": {"label": "Tipo de Ser"},
+          "combat.hitPoints.current": {"label": "PV Atual"},
+          "combat.hitPoints.max": {"label": "PV Máximo"},
+          "combat.fatigue": {"label": "Fadiga"},
+          "combat.speed.base": {"label": "Velocidade"},
+          "combat.speed.crawl": {"label": "Velocidade de Rastejo"},
+          "combat.speed.travel": {"label": "Velocidade de Viagem"},
+          "combat.currentLuck": {"label": "Sorte Atual"},
+          "combat.armor": {"label": "Classe de Armadura"},
+          "mana.current": {"label": "Mana"},
+          "mana.max": {"label": "Mana Máxima"},
+          "mana.castingMax": {"label": "Mana/Conjuração"},
+          "manaSkill": {"label": "Perícia de Conjuração:"}
+        },
+        "NamePlaceholder": "Nome do Personagem"
+      },
+      "Party": {
+        "Tabs": {
+          "Party": "Grupo",
+          "Notes": "Notas",
+          "Vehicle": "Veículo",
+          "Effects": "Efeitos"
+        },
+        "Notes": {
+          "SharedNotes": "Notas Compartilhadas",
+          "GmNotes": "Notas do Mestre",
+          "PersonalNotes": "Minhas Notas",
+          "Unavailable": "Notas indisponíveis."
+        },
+        "FIELDS": {
+          "members": {"label": "Membros do Grupo"},
+          "type":    {"label": "Tipo de Grupo"},
+          "speed":   {"label": "Velocidade"},
+          "crawl":   {"label": "Velocidade de Rastejo"},
+          "travel":  {"label": "Velocidade de Viagem"}
+        },
+        "NamePlaceholder": "Nome do grupo...",
+        "TypePlaceholder": "ex: Aventureiros, Mercenários, Tripulação...",
+        "Vehicle": {
+          "NamePlaceholder": "Nome do veículo...",
+          "TypePlaceholder": "ex: Aeronave, Carroça...",
+          "Speed": "Velocidade",
+          "Crawl": "Velocidade de rastejo",
+          "Travel": "Velocidade de viagem",
+          "Parts": "Partes do Construto",
+          "AddPart": "Adicionar Parte",
+          "NewPart": "Nova Parte",
+          "EditPart": "Editar parte",
+          "DeletePart": "Excluir Parte",
+          "DeletePartConfirm": "Excluir {name}? Isto não pode ser desfeito.",
+          "NoParts": "Ainda sem partes de construto.",
+          "NoPartsHint": "Clique em 'Adicionar Parte' para criar uma parte de construto.",
+          "HPCurrent": "PV Atual",
+          "HPMax": "PV Máximo",
+          "Armor": "Armadura",
+          "AttackMod": "Modificador de Ataque",
+          "Damage": "Dano",
+          "Crew": "Tripulação",
+          "AddCrew": "Adicionar membro da tripulação",
+          "RemoveCrew": "Remover da tripulação",
+          "NoCrew": "Nenhuma tripulação designada.",
+          "NoCrewAvailable": "Nenhum personagem disponível para designar.",
+          "Attack": "Shift +: Vantagem / Ctrl +: Desvantagem",
+          "AttackSkill": "Selecione a perícia a rolar",
+          "Difficulty": "Dificuldade",
+          "RollDamage": "Rolar dano",
+          "Cargo": "Carga",
+          "OpenCargo": "Abrir contêiner",
+          "AddCargo": "Adicionar Contêiner",
+          "NewContainer": "Novo Contêiner",
+          "CargoHint": "Adicione itens de Contêiner aqui para armazenar e organizar a carga do seu veículo.",
+          "DeleteCargo": "Excluir Contêiner",
+          "DeleteCargoConfirm": "Excluir \"{name}\"? Todos os itens armazenados dentro deste contêiner também serão excluídos. Isto não pode ser desfeito."
+        },
+        "Card": {
+          "OpenSheet": "Abrir ficha de personagem",
+          "PanToToken": "Centralizar no token",
+          "LevelAbbr": "Nv.",
+          "Player": "Jogador",
+          "XP": "XP",
+          "Fatigue": "Fadiga",
+          "Mana": "Mana",
+          "ManaCast": "Mana/Conjuração",
+          "Armor": "Classe de Armadura",
+          "Slots": "Espaços de Inventário",
+          "Luck": "Pontos de Sorte",
+          "Speed": "Velocidade",
+          "StudiedDice": "Dados de Estudo",
+          "Equipped": "Equipado",
+          "Spells": "Magias",
+          "Rations": "Rações",
+          "Beverages": "Água/Bebidas",
+          "NoMembers": "Ainda sem membros no grupo.",
+          "NoMembersHint": "Arraste atores para esta aba ou use o botão + para adicionar membros.",
+          "AddMember": "Adicionar Membro",
+          "Remove": "Remover do Grupo",
+          "RemoveConfirm": "Remover {name} do grupo?",
+          "AlreadyMember": "Esse ator já é membro do grupo.",
+          "NoAvailable": "Nenhum personagem disponível para adicionar.",
+          "PickCharacter": "Personagem",
+          "PickMember": "Membro do Grupo",
+          "Add": "Adicionar",
+          "Wealth": "Riqueza",
+          "TotalWealth": "Riqueza Total do Grupo",
+          "AssignStatusEffects": "Atribuir Efeitos de Status",
+          "RemoveAllStatuses": "Remover Todos os Status",
+          "IsImmune": "{name} é imune a {status}."
+        },
+        "CompactView": {
+          "Open": "Abrir Visualização Compacta",
+          "OpenSheet": "Abrir Ficha do Grupo",
+          "Remove": "Remover Visualizador"
+        },
+        "TokenHUD": {
+          "GatherTooltip": "Reunir Grupo — ocultar todos os tokens dos membros",
+          "ReleaseTooltip": "Liberar Grupo — mostrar e espalhar tokens dos membros",
+          "NoMembers": "Este grupo não tem membros.",
+          "NoTokens": "Nenhum token de membro do grupo encontrado nesta cena.",
+          "UnlinkedWarning": "Nota: {names} usam tokens não vinculados. Seu estado atual será salvo e restaurado, mas quaisquer mudanças feitas enquanto reunidos serão perdidas.",
+          "GatherDone": "{count} membro(s) do grupo reunidos.",
+          "ReleaseDone": "Membros do grupo liberados."
+        },
+        "NpcCard": {
+          "HD": "DV",
+          "Actions": "Ações",
+          "Abilities": "Habilidades",
+          "Immune": "Imune",
+          "Weak": "Fraco",
+          "StatusImmune": "Imune a Status"
+        }
+      },
+      "Construct": {
+        "Tabs": {
+          "Construct": "Construto"
+        },
+        "FIELDS": {
+          "type": {"label": "Tipo de Construto"},
+          "speed": {"label": "Velocidade"},
+          "crawl": {"label": "Velocidade de Rastejo"},
+          "travel": {"label": "Velocidade de Viagem"}
+        },
+        "NamePlaceholder": "Nome do construto...",
+        "TypePlaceholder": "ex: Galeão, Mecha, Fortaleza...",
+        "Parts": "Partes",
+        "AddPart": "Adicionar Parte",
+        "NewPart": "Nova Parte",
+        "EditPart": "Editar parte",
+        "DeletePart": "Excluir Parte",
+        "DeletePartConfirm": "Excluir {name}? Isto não pode ser desfeito.",
+        "NoParts": "Ainda sem partes.",
+        "NoPartsHint": "Clique em 'Adicionar Parte' para criar uma parte de construto.",
+        "HPCurrent": "PV Atual",
+        "HPMax": "PV Máximo",
+        "Armor": "Armadura",
+        "AttackMod": "Modificador de Ataque",
+        "Damage": "Dano",
+        "Crew": "Tripulação",
+        "AddCrew": "Adicionar membro da tripulação",
+        "RemoveCrew": "Remover da tripulação",
+        "NoCrew": "Nenhuma tripulação designada.",
+        "NoCrewAvailable": "Nenhum personagem ou NPC disponível para designar.",
+        "PickCrew": "Membro da Tripulação",
+        "Attack": "Shift +: Vantagem / Ctrl +: Desvantagem",
+        "AttackSkill": "Selecione a perícia a rolar",
+        "Difficulty": "Dificuldade",
+        "RollDamage": "Rolar dano",
+        "Hold": "Porão",
+        "AddHold": "Adicionar Contêiner",
+        "NewContainer": "Novo Contêiner",
+        "HoldHint": "Adicione itens de Contêiner aqui para armazenar e organizar o porão do construto.",
+        "OpenHold": "Abrir contêiner",
+        "DeleteHold": "Remover Contêiner",
+        "DeleteHoldConfirm": "Excluir \"{name}\"? Todos os itens armazenados dentro também serão excluídos. Isto não pode ser desfeito."
+      },
+      "NPC": {
+        "FIELDS": {
+          "name": {"label": "Nome do NPC"},
+          "threatLevel":{"label":"Nível de Ameaça", "abbv": "NA"},
+          "size": {"label": "Tamanho"},
+          "beingType": {"label": "Tipo de Ser"},
+          "morale": {"label": "Moral:"},
+          "speed": {"label": "Velocidade:"},
+          "hd": {"label": "DV:"},
+          "hp": {"label": "PV:"},
+          "zone": {"label": "Zona:"},
+          "appearing": {"label": "# Aparecendo:"},
+          "senses": {"label": "Sentidos:", "short": "Sentidos"},
+          "armor": {"label": "Armadura:"},
+          "immunities": {"label": "Imune:", "short": "Imune"},
+          "weaknesses": {"label": "Fraco:", "short": "Fraco"},
+          "statusImmunities": {"label": "Imunidades de Status:", "short": "Imunidades de Status"},
+          "description": {"label": "Descrição"}
+        },
+        "SensesPlaceholder": "Visão no Escuro, Visão Cega...",
+        "ArmorDescPlaceholder": "Desc. da armadura.",
+        "AppearingPlaceholder": "dX",
+        "AppAbbrev": "Apr",
+        "Sections": {
+          "Resistances": "Resistências",
+          "Actions": "Ações",
+          "Abilities": "Habilidades",
+          "Effects": "Efeitos"
+        },
+        "Action": {
+          "Name": "Nome",
+          "Description": "Descrição",
+          "Type": "Tipo",
+          "Range": "Alcance",
+          "AttackType": "Tipo de Ataque",
+          "Note": "Notas (antes da recarga)",
+          "Recharge": "Recarga",
+          "FlatDamage": "Dano Fixo",
+          "RollDamage": "Rolar Dano",
+          "DamageType": "Tipo de Dano",
+          "ExtraInfo": "Informação Extra (após o dano)",
+          "Weapon": "Arma",
+          "NoWeapon": "Sem arma",
+          "WeaponFilter": "Filtrar armas...",
+          "Add": "Adicionar Ação",
+          "NamePlaceholder": "Nome da Ação",
+          "NotePlaceholder": "Nota",
+          "RechargePlaceholder": "1/Dia ou Rd6",
+          "ExtraInfoPlaceholder": "Informação extra...",
+          "SaveTooltip": "Salvar Ação",
+          "RemoveTooltip": "Remover Ação"
+        },
+        "Ability": {
+          "Name": "Nome",
+          "Description": "Descrição",
+          "Add": "Adicionar Habilidade",
+          "NamePlaceholder": "Nome da Habilidade",
+          "DescriptionPlaceholder": "Descrição (dados como d6 ou 2d8 serão clicáveis)",
+          "SaveTooltip": "Salvar Habilidade",
+          "RemoveTooltip": "Remover Habilidade"
+        },
+        "Messages": {
+          "NoActions": "Nenhuma ação definida",
+          "UnlockToEdit": "Clique para desbloquear e editar",
+          "LockForPlay": "Clique para bloquear para jogar"
+        },
+        "Tooltips": {
+          "ModifyHP": "Clique esquerdo: -1 PV | Clique direito: +1 PV",
+          "Unlock": "Desbloquear Ficha",
+          "Lock": "Clique para bloquear para jogar",
+          "SpeedTypeHint": "Velocidade para {type} (0 = igual à velocidade base)"
+        },
+        "MoraleCheck": {
+          "Title": "Teste de Moral",
+          "tooltip": "Testar Moral (2d6 vs Moral)\n\nQuando rolar:\n• Seu Líder é derrotado.\n• Está sozinho e com metade dos PV ou menos.\n• Metade ou mais estão derrotados.",
+          "Target": "Alvo de Moral",
+          "Roll": "Resultado da Rolagem",
+          "Passed": "A moral se mantém! O NPC continua lutando.",
+          "Failed": "A moral se quebra! O NPC recua.",
+          "NoMorale": "Este NPC não tem um valor de Moral definido."
+        },
+        "xp": {"label": "XP"}
+      }
+    },
+    "Item": {
+      "Tabs": {
+        "Attributes": "Atributos",
+        "Details": "Detalhes",
+        "Description": "Descrição",
+        "Effects": "Efeitos"
+      },
+      "Macro": {
+        "Section": "Macros",
+        "Simple": "Sempre",
+        "OnHit": "Ao Acertar",
+        "LinkedMacro": "Macro Vinculada",
+        "DropHint": "Arraste uma macro aqui",
+        "ButtonLabel": "Rótulo do Botão",
+        "ButtonLabelHint": "Usa o nome da macro por padrão",
+        "InlineCommand": "Script Embutido",
+        "InlineHint": "Opcional. Roda se nenhuma macro estiver vinculada. Escopo: actor, item, token, targets, speaker.",
+        "Inline": "Script Embutido",
+        "Clear": "Desvincular macro",
+        "RunDefault": "Rodar Macro",
+        "RunAsGM": "Permitir Jogadores",
+        "RunAsGMHint": "Quando jogadores clicam neste botão, o cliente do Mestre executa a macro com permissões de Mestre. Use para macros que alteram o mundo (ex: transformar um token).",
+        "Notes": "Adiciona um botão ao card de chat deste item. A macro roda com actor, item, token, targets e speaker no escopo. O botão Ao Acertar só aparece quando o ataque/conjuração acerta."
+      },
+      "base": {
+        "FIELDS": {
+          "description": {"label": "Descrição"}
+        }
+      },
+      "Gear": {
+        "FIELDS": {
+          "quantity": {"label": "Quantidade"},
+          "type": {"label": "Tipo"},
+          "cost": {"label": "Custo"},
+          "slots": {"label": "Espaços"}
+        }
+      },
+      "Weapon": {
+        "FIELDS": {
+          "damageOneHand": {"label": "Dano (1M)"},
+          "damageTwoHands": {"label": "Dano (2M)"},
+          "properties": {"label": "Propriedades da Arma"},
+          "weaponSkill": {"label": "Perícia de Arma"},
+          "range": {"label": "Alcance"},
+          "grip": {"label": "Empunhadura"},
+          "metal": {"label": "Metal"},
+          "baseCost": {"label": "Custo Base"},
+          "baseSlots": {"label": "Espaços Base"},
+          "cost": {"label": "Custo"},
+          "slots": {"label": "Espaços"}
+        }
+      },
+      "Armor": {
+        "FIELDS": {
+
+          "armorType": {"label": "Tipo de Armadura"},
+          "metal": {"label": "Metal"},
+          "baseCost": {"label": "Custo Base"},
+          "rating": {"label": "Classe de Armadura"},
+          "might": {"label": "Requisito de Vigor"}
+        }
+      },
+      "Spell": {
+        "FIELDS": {
+          "description": {"label": "Descrição do Efeito"},
+          "damageType": {"label": "Base de Dano"},
+          "delivery": {
+            "label": "Entrega",
+            "type": {"label": "Tipo de Entrega"},
+            "cost": {"label": "Custo de Mana"},
+            "increase": {
+              "label": "Aumentar Efeito",
+              "hint": "Como gastar Mana adicional melhora esta magia"
+            }
+          },
+          "duration": {
+            "label": "Duração",
+            "hint": "ex: Instantâneo, 1 Rodada, Contínuo"
+          },
+          "crit": {
+            "label": "Crítico",
+            "hint": "Efeito em um sucesso crítico"
+          }
+        },
+        "AddSpell": "Adicionar Magia",
+        "FxSchool": {
+          "Label": "Escola de FX"
+        }
+      },
+      "Ancestry": {
+        "FIELDS": {
+          "size": {"label": "Tamanho"},
+          "ancestryType": {"label": "Tipo"},
+          "traits": {"label": "Traços"}
+        }
+      },
+      "Perk": {
+        "FIELDS": {
+          "description": {"label": "Descrição"},
+          "prerequisites": {
+            "label": "Pré-requisitos",
+            "stats": {"label": "Pré-requisitos de Atributo"},
+            "trainedSkills": {"label": "Pré-requisitos de Perícia Treinada"},
+            "spells": {"label": "Pré-requisitos de Magia"},
+            "resources": {"label": "Pré-requisitos de Recurso"}
+          },
+          "choiceConfig": {
+            "label": "Configuração de Escolha",
+            "type": {
+              "label": "Tipo de Escolha",
+              "hint": "Que tipo de escolha este talento exige do jogador?"
+            },
+            "selected": {
+              "label": "Escolha Selecionada",
+              "hint": "A escolha feita pelo jogador (preenchida automaticamente)"
+            },
+            "targetField": {
+              "label": "Campo Alvo",
+              "hint": "Qual campo do sistema modificar. Use {choice} como marcador para o valor selecionado."
+            },
+            "effectMode": {
+              "label": "Modo de Efeito",
+              "hint": "Como o valor do efeito é aplicado (Somar, Sobrescrever, etc.)"
+            },
+            "effectValue": {
+              "label": "Valor do Efeito",
+              "hint": "O valor a aplicar (pode ser uma fórmula como @attributes.level.value)"
+            }
+          }
+        },
+        "ChoiceType": {
+          "Label": "Tipo de Escolha",
+          "Hint": "Que tipo de escolha este talento exige?",
+          "None": "Nenhuma Escolha Necessária",
+          "Skill": "Treinamento de Perícia",
+          "WeaponSkill": "Treinamento de Perícia de Arma",
+          "Stat": "Aumento de Atributo",
+          "Spell": "Seleção de Magia"
+        },
+        "ChoiceSelected": {
+          "Label": "Escolha Selecionada",
+          "Hint": "A seleção do jogador (preenchida automaticamente)"
+        },
+        "ChoiceTargetField": {
+          "Label": "Campo Alvo",
+          "Hint": "Campo a modificar (use {choice} como marcador)"
+        },
+        "ChoiceEffectMode": {
+          "Label": "Modo de Efeito",
+          "Hint": "Como aplicar o valor"
+        },
+        "ChoiceEffectValue": {
+          "Label": "Valor do Efeito",
+          "Hint": "Valor ou fórmula a aplicar"
+        },
+        "AddStatPrerequisite": "Adicionar Pré-requisito de Atributo",
+        "AddTrainedSkillPrerequisite": "Adicionar Perícia Treinada",
+        "AddSpellPrerequisite": "Adicionar Pré-requisito de Magia",
+        "AddResourcePrerequisite": "Adicionar Pré-requisito de Recurso",
+        "RemovePrerequisite": "Remover Pré-requisito",
+        "SelectSpell": "-- Selecione uma Magia --",
+        "SelectResource": "-- Selecione um Recurso --",
+        "HasAnySpell": "Tem Qualquer Magia",
+        "SpellNamePlaceholder": "Digite o nome da magia...",
+        "OtherPrerequisitePlaceholder": "Digite o pré-requisito...",
+        "AddPrerequisiteLabel": "Adicionar Pré-requisito:",
+        "SelectPrerequisiteType": "-- Selecione o Tipo --",
+        "PrereqTypeStat": "Atributo (ex: DES 4+)",
+        "PrereqTypeStatOrGroup": "Atributo OU Grupo (ex: VIG 4+ ou DES 4+)",
+        "PrereqTypeTrainedSkill": "Perícia Treinada (ex: Corpo a Corpo)",
+        "PrereqTypeTrainedSkillOrGroup": "Perícia Treinada OU Grupo (ex: Corpo a Corpo ou À Distância)",
+        "PrereqTypeSpell": "Magia (magia específica / Qualquer)",
+        "PrereqTypeSpellOrGroup": "Magia OU Grupo (ex: Queimar ou Irromper)",
+        "PrereqTypeResource": "Recurso (ex: Mana Máxima 7+)",
+        "PrereqTypeResourceOrGroup": "Recurso OU Grupo (ex: Mana Máxima 7+ ou Riqueza 500p+)"
+      },
+      "StarterPack": {
+        "FIELDS": {
+          "description": {"label": "Descrição"},
+          "items": {"label": "Itens"},
+          "ItemUUID": "UUID do Item",
+          "Quantity": "Quantidade"
+        },
+        "Currency": "Moeda Inicial",
+        "CurrencyTotal": "Moeda Total",
+        "Wealth": "Moeda Inicial",
+        "WealthTotal": "Moeda Total",
+        "PackContents": "Conteúdo do Pacote",
+        "DropItemsHere": "Arraste e solte itens aqui para adicioná-los ao pacote",
+        "NoItems": "Ainda sem itens neste pacote. Arraste itens aqui para adicionar.",
+        "RemoveItem": "Remover item do pacote"
+      },
+      "Equipment": {
+        "FIELDS": {
+          "requiresBound": {"label": "Requer Vinculação"},
+          "bound": {"label": "Vinculado"},
+          "handsRequired": {
+            "label": "Mãos Necessárias",
+            "hands0": "Nenhuma (vestido/carregado)",
+            "hands1": "Uma Mão",
+            "hands2": "Duas Mãos"
+          },
+          "isTrinket": {"label": "Bugiganga (permite conjurar magias enquanto equipado)"}
+        },
+        "IsSupply": "Conta como ração (rastreado na ficha do grupo)",
+        "IsBeverage": "Conta como água/bebida (rastreado na ficha do grupo)",
+        "LinkedConsumableNone": "Nenhum consumível vinculado",
+        "LinkedConsumableHint": "Quando este item é usado, ele consome o item vinculado em vez dele"
+      },
+      "Relic": {
+        "FIELDS": {
+          "lore": {"label": "Lenda"},
+          "description": {"label": "Descrição"},
+          "baseCost": {"label": "Valor"}
+        }
+      },
+      "Alchemical": {
+        "FIELDS": {
+          "alchemicalType": {"label": "Tipo"},
+          "damageType": {"label": "Tipo de Dano"},
+          "damageAmount": {"label": "Dano"},
+          "description": {"label": "Descrição"},
+          "baseCost": {"label": "Custo"}
+        },
+        "Types": {
+          "Acid": "Ácido",
+          "Concoction": "Poção Alquímica",
+          "Explosive": "Explosivo",
+          "Oil": "Óleo",
+          "Poison": "Veneno",
+          "Potion": "Poção",
+          "Torch": "Tocha"
+        },
+        "TypeHints": {
+          "Acid": "Substâncias corrosivas.",
+          "Concoction": "Substâncias gerais.",
+          "Explosive": "Bombas e combustíveis.",
+          "Oil": "Cobre uma Arma, até 5 munições, um quadrado de 5 pés, ou um Ser de tamanho Pequeno a Grande. A cobertura dura um Turno, ou até que outro óleo seja aplicado.",
+          "Poison": "Afeta um Alvo submetido a ele das formas indicadas. Uma arma untada com ele permanece untada até acertar um Ataque ou até um Turno (o que vier primeiro).",
+          "Potion": "Poções alquímicas que causam efeitos mágicos quando consumidas.",
+          "Torch": "Fornece Luz Próxima por 1 hora."
+        }
+      },
+      "VehiclePart": {
+        "Stats": "Estatísticas da Parte",
+        "HP": "Pontos de Vida",
+        "HPCurrent": "PV Atual",
+        "HPMax": "PV Máximo",
+        "Armor": "Armadura",
+        "AttackModifier": "Modificador de Ataque",
+        "DamageFormula": "Fórmula de Dano",
+        "DamageType": "Tipo de Dano",
+        "CrewNote": "A designação de tripulação é gerenciada pela aba Veículo da ficha do Grupo."
+      },
+      "Delete": "Excluir Item"
+    },
+    "Effect": {
+      "Source": "Origem",
+      "Toggle": "Alternar Efeito",
+      "Temporary": "Efeitos Temporários",
+      "Passive": "Efeitos Passivos",
+      "Inactive": "Efeitos Inativos",
+      "Duration": "Duração",
+      "ApplicationMode": {
+        "Label": "Modo de Aplicação",
+        "Permanent": "Permanente (Sempre Ativo)",
+        "PermanentHint": "Este efeito está sempre ativo. Use para talentos, bônus permanentes, ou bônus de armadura equipada que não requerem uso ativo do item.",
+        "WhenEquipped": "Quando Equipado",
+        "WhenEquippedHint": "Este efeito só se aplica enquanto o item está equipado (armas, armaduras, acessórios). O efeito desliga quando desequipado.",
+        "OnUse": "Apenas ao Usar",
+        "OnUseHint": "Este efeito só se aplica ao fazer rolagens COM este item específico. Use para propriedades de arma (Afiada, Brutal), modificadores de magia, ou bônus específicos de item."
+      }
+    },
+    "Weapon": {
+    "Range": {
+      "Close": "Próximo",
+      "CloseAbbr": "P",
+      "Near": "Perto",
+      "NearAbbr": "R",
+      "Far": "Longe",
+      "FarAbbr": "L"
+    },
+    "Grip": {
+      "1H": "1M (Uma Mão)",
+      "2H": "2M (Duas Mãos)",
+      "F": "P (Punho)",
+      "V": "V (Versátil)"
+    },
+    "GripDescriptions": {
+      "1H": "Uma Mão: Requer uma mão.",
+      "2H": "Duas Mãos: Requer duas mãos.",
+      "F": "Punho: Suas mãos ficam livres enquanto a usa.",
+      "V": "Versátil: Conta como 1M, mas seu dado de dano é um tamanho maior se usada com 2M."
+    },
+    "Property": {
+      "ViewPropertiesLabel": "Ver Propriedades",
+      "Brawl": "Briga",
+      "Brutal": "Brutal",
+      "Cleave": "Fendente",
+      "Entangle": "Enredar",
+      "Finesse": "Sutileza",
+      "Keen": "Afiada",
+      "Long": "Longa",
+      "Near": "Perto",
+      "Ranged": "À Distância",
+      "Shield": "Escudo",
+      "Thrown": "Arremessável"
+    },
+    "PropertyHints": {
+      "Brawl": "Arma desarmada usável com a perícia Briga.",
+      "Brutal": "Críticos causam 1 dado de dano extra.",
+      "Cleave": "Pode causar metade do dano a dois Alvos.",
+      "Entangle": "Ao acertar, o alvo fica Enredado até o fim do próximo turno dele.",
+      "Finesse": "Pode usar Destreza em vez de Vigor para rolagens de ataque.",
+      "Keen": "Acerto crítico em 19-20 em vez de apenas 20.",
+      "Long": "Alcance estendido, pode atacar de 10 pés de distância.",
+      "Near": "Arma à distância com alcance Perto.",
+      "Ranged": "Arma à distância, usa a perícia À Distância.",
+      "Shield": "Ignora a Desvantagem de Bloquear Ataques à Distância. Pode Empurrar (jogo manual).",
+      "Thrown": "Pode ser arremessada como ataque à distância."
+    }
+    },
+    "Armor": {
+      "Label": "Armadura",
+      "Type": {
+        "Light": "Leve",
+        "Medium": "Média",
+        "Heavy": "Pesada"
+      }
+    },
+    "Metal": {
+      "Common": "Comum",
+      "Adamant": "Adamante",
+      "ColdIron": "Ferro Frio",
+      "Silver": "Prata",
+      "Mythral": "Mitral",
+      "Orichalcum": "Oricalco"
+    },
+    "MetalDescriptions": {
+      "Common": "",
+      "Adamant": "Ocupa +1 Espaço. +1 à Armadura (se Armadura) ou dano da Arma.",
+      "ColdIron": "Fraqueza situacional (Fadas).",
+      "Silver": "Abençoa armas contra os amaldiçoados.",
+      "Mythral": "Ocupa 1 Espaço a menos (mín. 1).",
+      "Orichalcum": "Armadura reduz dano de Conjuração."
+    },
+    "EquipmentTypes": {
+      "weapon": "Arma",
+      "armor": "Armadura",
+      "gear": "Equipamento",
+      "alchemical": "Alquímico",
+      "relic": "Relíquia",
+      "container": "Contêiner"
+    },
+    "FavorHinder": {
+      "label": "Vantagem/Desvantagem",
+      "States": {
+        "none": "Vnt/Dsv",
+        "favor": "Vantagem",
+        "hinder": "Desvantagem"
+      },
+      "Tooltips": {
+        "none": "Clique para alternar Vantagem/Desvantagem. Atualmente nenhum modificador aplicado.",
+        "favor": "Vantagem: +1d6 em todas as rolagens de d20. Clique para mudar para Desvantagem.",
+        "hinder": "Desvantagem: -1d6 em todas as rolagens de d20. Clique para mudar para Nenhum."
+      }
+    },
+    "ProgressClock": {
+      "Name": "Relógio de Progresso",
+      "Type": "Tipo",
+      "TypeClock": "Relógio (segmentado)",
+      "TypeTracker": "Contador",
+      "Segments": "Segmentos",
+      "SegmentsLabel": "segmentos",
+      "Size": "Tamanho",
+      "SizeSmall": "Pequeno",
+      "SizeMedium": "Médio",
+      "SizeLarge": "Grande",
+      "SizeCustom": "Personalizado",
+      "CustomSizePlaceholder": "Pixels",
+      "DefaultPosition": "Posição Padrão",
+      "Handle": "ID do Relógio",
+      "HandleHint": "Use em macros e fórmulas (@clocks.<id>.value). Vazio = automático a partir do nome.",
+      "Position": {
+        "TopRight": "Superior Direito",
+        "TopLeft": "Superior Esquerdo",
+        "BottomRight": "Inferior Direito",
+        "BottomLeft": "Inferior Esquerdo"
+      },
+      "Scene": "Cena",
+      "SceneGlobal": "Global (todas as cenas)",
+      "Hide": "Ocultar",
+      "HiddenHint": "Relógio oculto. Arraste-o da barra lateral de Diário para a cena para trazê-lo de volta.",
+      "PlayerPermissions": "Permissões de Jogador",
+      "PermissionNoneDesc": "Oculto dos jogadores",
+      "PermissionObserverDesc": "Jogadores podem apenas ver",
+      "PermissionOwnerDesc": "Jogadores podem interagir",
+      "IndividualPermissions": "Permissões Individuais de Jogador (Opcional)",
+      "TabGeneral": "Geral",
+      "TabPermissions": "Permissões",
+      "LinkedValue": "Valor Vinculado",
+      "LinkedValueHint": "Manual: definido à mão / macros. Vinculado: espelha um campo de um documento. Fórmula: calcula a partir de @clocks.",
+      "UpdateFrom": "Atualizar de",
+      "SourceManual": "Sem vínculo",
+      "SourcePath": "Campo de documento vinculado",
+      "SourceExpr": "Fórmula",
+      "LinkedDocument": "Documento vinculado",
+      "ValuePath": "Caminho do valor",
+      "MaxPath": "Caminho do máximo (opcional)",
+      "SyncMax": "Redimensionar segmentos para corresponder ao caminho do máximo",
+      "Formula": "Fórmula",
+      "Save": "Salvar Mudanças",
+      "Delete": "Excluir",
+      "Create": "Criar Relógio",
+      "ConfigDialog": {
+        "Title": "Configurar Relógio de Progresso"
+      },
+      "DeleteDialog": {
+        "Title": "Excluir Relógio de Progresso",
+        "Instructions": "Selecione um relógio para excluir:",
+        "ConfirmTitle": "Confirmar Exclusão",
+        "ConfirmMessage": "Tem certeza que deseja excluir '{name}'?",
+        "DeleteTooltip": "Excluir este relógio",
+        "NotFound": "Relógio não encontrado"
+      },
+      "NoClocksExist": "Ainda não existem relógios de progresso.",
+      "NoPermission": "Você não tem permissão para modificar este relógio.",
+      "SceneControls": {
+        "Layer": "Relógios de Progresso",
+        "Create": "Criar Relógio de Progresso",
+        "DeleteTool": "Excluir Relógio de Progresso"
+      }
+    },
+    "OngoingPanel": {
+      "Title":        "Efeitos Contínuos",
+      "SceneControl": "Alternar Painel de Efeitos Contínuos",
+      "Empty":        "Nenhum ator na cena",
+      "PanToToken":    "Centralizar no token",
+      "StatusHint":    "Clique esq.: postar no chat · Clique dir.: remover",
+      "OpenSheet":    "Abrir Ficha",
+      "RollDie":      "Clique esq.: rolar · Clique dir.: remover",
+      "HPHint":       "Clique esq. −1 · Clique dir. +1",
+      "FatigueHint":  "Clique esq. +1 · Clique dir. −1",
+      "Groups": {
+        "Heroes":  "Heróis",
+        "Enemies": "Inimigos"
+      }
+    },
+    "Hud": {
+      "SceneControl":    "Alternar HUD do Personagem",
+      "AutoOpenToggle":  "Auto-abrir HUD ao selecionar token",
+      "OpenSceneControl": "Abrir HUD do token selecionado",
+      "OpenNPCSceneControl": "Abrir HUD do NPC selecionado",
+      "NotNPC":          "O HUD de NPC só suporta atores do tipo NPC.",
+      "OpenSheet":       "Abrir ficha completa de personagem",
+      "PortraitTooltip": "Arraste para mover · Clique duplo para abrir a ficha",
+      "Become":          "Tornar-se o HUD",
+      "BecomeTooltip":   "Fechar esta ficha e abrir o HUD flutuante",
+      "NoActor":         "Nenhum personagem designado e nenhum token selecionado.",
+      "NotCharacter":    "O HUD de Personagem só suporta personagens de jogador.",
+      "HPHint":          "Clique esq. −1 · Clique dir. +1",
+      "FatigueHint":     "Clique esq. +1 · Clique dir. −1",
+      "LuckTooltip":     "Clique para gastar · Shift+Clique para adicionar",
+      "StudiedTooltip":  "Clique para gastar um Dado de Estudo · Shift+Clique para adicionar",
+      "CheckModTooltip": "Clique esq. +1 · Clique dir. −1 · Reseta após a rolagem",
+      "ManaTooltip":     "Clique esq. para gastar mana · Clique dir. para restaurar",
+      "SlotForeignItem": "Esse item não pertence a este personagem.",
+      "SlotNotWeapon":   "Apenas armas podem ir em um espaço de arma.",
+      "NoTokenToPing":   "Este personagem não tem token na cena atual.",
+      "Equipped": "Equipado",
+      "Favorited": "Favoritado",
+      "Menu": {
+        "Use":           "Usar",
+        "Cast":          "Conjurar",
+        "Open":          "Abrir",
+        "SendToChat":    "Enviar ao Chat",
+        "Read":          "Ler",
+        "RollDamage":    "Rolar Dano",
+        "Unequip":       "Desequipar",
+        "UseOneHand":    "Usar com Uma Mão",
+        "UseTwoHands":   "Usar com Duas Mãos",
+        "RemoveFromHud": "Remover do HUD",
+        "Ping":          "Sinalizar Personagem",
+        "Close":         "Fechar HUD",
+        "ClosePanel":    "Fechar Painel",
+        "Actions":       "Ações",
+        "Downtime":      "Tempo Livre",
+        "XP":            "XP"
+      },
+      "InvGroups": {
+        "weapon":     "Armas",
+        "armor":      "Armaduras",
+        "gear":       "Equipamentos",
+        "relic":      "Relíquias",
+        "alchemical": "Alquímicos"
+      },
+      "FH": {
+        "favor":  "Vantagem",
+        "hinder": "Desvantagem",
+        "none":   "Vnt/Dsv"
+      },
+      "Empty": {
+        "Features":  "Nenhuma característica, traço ou talento.",
+        "Spells":    "Nenhuma magia conhecida.",
+        "Inventory": "O inventário está vazio."
+      }
+    },
+    "CountdownDice": {
+      "Name": "Nome do Dado",
+      "DefaultName": "Contagem",
+      "DiceType": "Tipo de Dado",
+      "Size": "Tamanho",
+      "Create": "Criar Dado de Contagem",
+      "Configure": "Configurar",
+      "Delete": "Excluir Dado de Contagem",
+      "DeleteConfirm": "Tem certeza que deseja excluir este dado de contagem?",
+      "Fade": "Alternar Esmaecimento",
+      "SceneControls": {
+        "Create": "Criar Dado de Contagem"
+      },
+      "Chat": {
+        "Continues": "A contagem continua",
+        "Reduced": "Contagem reduzida!",
+        "Ended": "Contagem encerrada!",
+        "CurrentState": "Resultados"
+      }
+    },
+    "Downtime": {
+      "Title": "Atividades de Tempo Livre",
+      "ButtonLabel": "Tempo Livre",
+      "OpenTooltip": "Abrir Atividades de Tempo Livre",
+      "Cancel": "Cancelar",
+      "Done": "Concluído",
+      "Cost": {
+        "OneShift": "1 Turno",
+        "Free": "Grátis"
+      },
+      "Rest": {
+        "Title": "Descansar",
+        "Description": "Recupera PV, Mana e a reserva de Sorte ao máximo. Se PV está no máximo, recupera 1 Fadiga.",
+        "LodgingLabel": "Qualidade da Hospedagem:"
+      },
+      "Lodging": {
+        "none": "Sem Hospedagem (Grátis)",
+        "horrible": "Horrível (1p)",
+        "poor": "Pobre (2p)",
+        "modest": "Modesta (10p)",
+        "comfortable": "Confortável (20p)",
+        "luxury": "Luxuosa (40p)",
+        "opulent": "Opulenta (1o)"
+      },
+      "Breather": {
+        "Title": "Recuperar Fôlego",
+        "Description": "Faça uma pausa curta para recuperar o fôlego e alguma vitalidade.",
+        "Effect": "Efeito: Recupera PV igual ao seu atributo {stat} ({value}).",
+        "Button": "Recuperar Fôlego"
+      },
+      "Craft": {
+        "Title": "Fabricar",
+        "Description": "Fabrique itens. Requer materiais no valor de 50% do valor do item.",
+        "DifficultyLabel": "Dificuldade de Fabricação:",
+        "Button": "Fabricar Item"
+      },
+      "CraftDifficulty": {
+        "tier1": "18-17 (1p)",
+        "tier2": "16-15 (20p)",
+        "tier3": "14-13 (50p)",
+        "tier4": "12-11 (2o 50p)",
+        "tier5": "10-9 (5o)",
+        "tier6": "8-7 (7o 50p)",
+        "tier7": "6 (10o)"
+      },
+      "Forage": {
+        "Title": "Forragear",
+        "Description": "Reúna recursos na natureza. Requer um Teste de Sobrevivência.",
+        "TargetLabel": "Recurso Alvo:",
+        "Button": "Forragear"
+      },
+      "ForageType": {
+        "food": "Comida (d6 Rações)",
+        "mats": "Materiais (d6 * 5p)"
+      },
+      "Hunt": {
+        "Title": "Caçar",
+        "Description": "Procure por caça selvagem. Requer um Teste de Sobrevivência. Encontre bestas para rações ou materiais.",
+        "Button": "Caçar Presa"
+      },
+      "Study": {
+        "Title": "Estudar",
+        "Description": "Ganhe um Dado de Estudo para obter Favor em uma rolagem de d20 amanhã, ou trocar uma Característica de Classe.",
+        "CurrentDice": "Dados de Estudo Atuais: {value}",
+        "Button": "Estudar"
+      }
+    },
+    "SpellCast": {
+      "Cast": "Conjurar !",
+      "Increase": "Aumentar",
+      "TrinketGateBlocked": "Você precisa de uma Bugiganga equipada para conjurar magias.",
+      "TrinketGateWarned": "Conjurando sem uma Bugiganga equipada.",
+      "NoDelivery": "Selecione um tipo de entrega.",
+      "NoImbueTarget": "Mire em um ser disposto com uma arma equipada.",
+      "ImbueNoWeaponSkip": "{name} não tem arma equipada e será ignorado.",
+      "TogglePreview": "Alternar pré-visualização do modelo",
+      "Damage": "Dano",
+      "Dice": "Dados",
+      "Focus": "Concentração",
+      "Fx": "FX"
+    },
+    "UI": {
+      "Sections": {
+        "Stats": "Atributos",
+        "Magic": "Magia",
+        "Spells": "Magias",
+        "spellsPlaceholder": "Nenhuma magia carregada. Favorite suas magias na aba Magias.",
+        "Inventory": "Inventário",
+        "Skills": "Perícias",
+        "Saves": "Resistências",
+        "Attacks": "Ataques",
+        "Equipped": "Equipado",
+        "equippedPlaceholder": "Nenhum item equipado ainda. Clique com o botão direito nos itens do Inventário para equipar.",
+        "Features": "Características",
+        "featuresPlaceholder": "Ainda sem características. Características são concedidas pela sua classe ao subir de nível.",
+        "Traits": "Traços",
+        "traitsPlaceholder": "Ainda sem traços. Traços são concedidos pela sua ancestralidade.",
+        "Perks": "Talentos",
+        "perksPlaceholder": "Ainda sem talentos. Arraste talentos do diretório de Itens.",
+        "spellsTabEmpty": "Ainda sem magias.",
+        "spellsTabEmptyHint": "Você pode arrastar e soltar do compêndio.",
+        "LevelFeatures": "Características de Nível",
+        "Level": "Nível",
+        "WeaponStats": "Estatísticas da Arma",
+        "WeaponConfig": "Configuração da Arma",
+        "WeaponEffects": "Efeitos da Arma",
+        "ArmorStats": "Estatísticas da Armadura",
+        "ArmorConfig": "Configuração da Armadura",
+        "ArmorEffects": "Efeitos da Armadura",
+        "Alchemical": "Alquímico",
+        "Relic": "Relíquia",
+        "Healing": "Cura",
+        "Damage": "Dano",
+        "Recovery": "Recuperação",
+        "Recharge": "Recarga",
+        "Details": "Detalhes",
+        "Name": "Nome",
+        "Favorite": "Favorito",
+        "Wealth": "Riqueza",
+        "Speed": "Velocidade",
+        "Crawl": "Rastejo",
+        "Travel": "Viagem",
+        "LuckPool": "Reserva de Sorte",
+        "luckTerm": "Sorte",
+        "poolTerm": "Reserva",
+        "StudiedDie": "Dados de Estudo",
+        "SkillTraining": "Perícias Treinadas",
+        "SuggestedStartingPacks":"Pacotes Sugeridos"
+      },
+      "Labels": {
+        "UnknownAncestry": "Ancestralidade Desconhecida",
+        "NoClass": "Sem Classe",
+        "CheckMod": "Mod. de Teste",
+        "DifficultyMod": "Mod. de Dificuldade",
+        "Check": "Teste",
+        "Damage": "Dano",
+        "Delivery": "Entrega",
+        "Overloaded": "Sobrecarregado!",
+        "EquipmentType": "Tipo de Equipamento",
+        "Weapon": "Arma",
+        "Armor": "Armadura",
+        "Gear": "Equipamento",
+        "Alchemical": "Alquímico",
+        "Relic": "Relíquia",
+        "Container": "Contêiner",
+        "Close": "Próximo",
+        "Near": "Perto",
+        "Far": "Longe",
+        "Slots": "Espaços",
+        "Capacity": "Capacidade",
+        "Cost": "Custo",
+        "Gold": "Ouro",
+        "Silver": "Prata",
+        "Copper": "Cobre",
+        "Properties": "Propriedades",
+        "AncestryDetails": "Detalhes da Ancestralidade",
+        "SpellDetails": "Detalhes da Magia",
+        "WeaponSkills": "Perícias de Arma",
+        "WeaponDetails": "Detalhes da Arma",
+        "ArmorDetails": "Detalhes da Armadura",
+        "AlchemicalDetails": "Detalhes do Alquímico",
+        "RelicDetails": "Detalhes da Relíquia",
+        "GearDetails": "Detalhes do Equipamento",
+        "Traits": "Traços",
+        "Features": "Características",
+        "Skill": "Perícia",
+        "Range": "Alcance",
+        "Grip": "Empunhadura",
+        "DamageOneHand": "Dano (1M)",
+        "DamageTwoHand": "Dano (2M)",
+        "DamageBase": "Base de Dano",
+        "ExplodingDice": "Dados Explosivos",
+        "CanExplode": "Pode Explodir",
+        "ExplodeOn": "Explode Em (separado por vírgulas)",
+        "NoRollRequired": "Nenhuma Rolagem Necessária",
+        "UsesDiceScaling": "Usa Escala de Dados",
+        "DiceScaleLabel": "Rótulo da Escala de Dados",
+        "ManaMultiplier": "Multiplicador de Mana",
+        "ManaSkill": "Perícia de Mana",
+        "Mana": "Mana",
+        "CastingStat": "Atributo de Conjuração",
+        "SelectSkill": "-- Selecione a Perícia --",
+        "SelectStat": "-- Selecione o Atributo --",
+        "SlotsSpaceOccupied": "Espaços (Espaço Ocupado)",
+        "CapacityItemsItHolds": "Capacidade (Itens que Comporta)",
+        "CurrentCapacity": "Capacidade Atual",
+        "Vs": "vs",
+        "ClockName": "Nome do Relógio",
+        "SmallSize": "Pequeno (50px)",
+        "MediumSize": "Médio (75px)",
+        "LargeSize": "Grande (100px)",
+        "ParentItem": "Item Pai:",
+        "SuggestedMode": "Modo Sugerido:",
+        "ApplicationModeGuide": "Guia do Modo de Aplicação",
+        "ZoneColon": "Zona:",
+        "QuantityPrefix": "x",
+        "SkillColon": "Perícia:",
+        "RangeColon": "Alcance:",
+        "GripColon": "Empunhadura:",
+        "DamageOneHandColon": "Dano (1M):",
+        "DamageTwoHandColon": "Dano (2M):",
+        "CanExplodeColon": "Pode Explodir:",
+        "GuaranteedSkills": "Perícias Treinadas:",
+        "StatBonusPoints": "Pontos de Bônus de Atributo",
+        "SpellAmount": "Quantidade de Magias",
+        "PerkAmount": "Quantidade de Talentos",
+        "SpellPool": "Reserva de Magias",
+        "PerkPool": "Reserva de Talentos",
+        "ExtraTraining": "Treinamento Extra",
+        "SkillChoices": "Escolhas Agrupadas:",
+        "Label": "Rótulo",
+        "Group": "Escolher do Grupo",
+        "Count": "Selecionar:",
+        "RestrictedPool": "Entre estes:",
+        "Targets": "Alvos",
+        "Bounds": "Vínculos:",
+        "BoundsLimitReached": "Não é possível vincular {name}: todos os espaços vinculados estão cheios ({current}/{max}).",
+        "SizeSuffix": "tamanho",
+        "UnknownBeingType": "Desconhecido",
+        "Difficulty": "Dificuldade",
+        "Save": "Resistência",
+        "Unbound": "Desvinculado"
+      },
+      "Examples": {
+        "PermanentEffect": "Exemplo: Talento que dá +2 de Vigor a todas as rolagens",
+        "EquippedEffect": "Exemplo: Armadura que dá +1 de CA enquanto vestida",
+        "OnUseEffect": "Exemplo: Adaga Afiada (crítico em 19-20, mas apenas em ataques com adaga)"
+      },
+      "Units": {
+        "Feet": "'",
+        "Miles": "mi",
+        "GridUnits": "em unidades de grade"
+      },
+      "Buttons": {
+        "AddSkill": "Adicionar Perícia",
+        "AddChoiceGroup":"Adicionar Grupo",
+        "UpdateGroup":"Salvar/Atualizar",
+        "AddStat": "Adicionar Atributo-Chave"
+      },
+      "Hints": {
+        "EmptyForAny": "Deixe vazio para QUALQUER perícia",
+        "ExtraTrainingHint": "Escolhas de treinamento de perícia irrestritas (qualquer perícia)",
+        "StatBonusHint": "Cada ponto concede +1 a qualquer atributo abaixo do limite",
+        "AmountHint": "Quantos o jogador escolhe da reserva",
+        "LabelPlaceholder": "ex: Ascendência",
+        "DropStarterPack": "Solte o pacote inicial aqui"
+      },
+      "Chat": {
+        "FlukeReroll": "Rerrolagem de Sorte — Golpe de Sorte"
+      },
+      "Tooltips": {
+        "LevelUpReady": "Clique no rótulo para Subir de Nível!",
+        "AwardXP": "Clique para conceder XP de sessão",
+        "BuildCharacter": "Criar Personagem",
+        "ViewOrRemove": "Clique para ver, clique com o botão direito para remover",
+        "BaseTotal": "Base: {base}, Total: {total}",
+        "SpendLuck": "Clique para gastar {luckTerm} | Shift+Clique para adicionar +1",
+        "FatigueLevel": "Nível de Fadiga {level}",
+        "SpendStudiedDie": "Clique para gastar Dado de Estudo | Shift+Clique para adicionar",
+        "CheckModHint": "Clique esquerdo: +1 | Clique direito: -1 | Reseta para 0 após qualquer rolagem",
+        "ModifyDamageHint": "Clique esquerdo para aumentar dano (+1 mana por d6), clique direito para diminuir",
+        "SelectDeliveryFirst": "Selecione um tipo de entrega primeiro",
+        "DrawTemplate": "Desenhar modelo",
+        "FocusToggle": "Concentrar-se nesta magia",
+        "FocusToggleOff": "Concentrando — clique para liberar",
+        "ToggleSpellFx": "Alternar efeito visual da magia (adiciona +1 mana quando combinado com dano)",
+        "FavoriteOn": "Favorito (clique para desfavoritar)",
+        "FavoriteOff": "Não Favorito (clique para favoritar)",
+        "SendSpellToChat": "Enviar magia ao chat",
+        "DeleteSpell": "Excluir magia"
+      },
+      "Warnings": {
+        "InventoryOverloaded": "Seu Inventário está cheio, você não pode usar a ação Correr. (+{amount} espaços além da capacidade)"
+      }
+    },
+    "Notifications": {
+      "NoLuckRemaining": "Nenhuma Sorte restante para gastar!",
+      "LuckAlreadyMax": "Sorte já está no máximo!"
+    },
+    "Combat": {
+      "NoActivationsLeft": "Este combatente não tem mais ativações neste turno.",
+      "NoActivationsRemaining": "Nenhum combatente tem ativações restantes neste turno.",
+      "NoPreviousTurn": "Não há turno anterior para voltar.",
+      "Factions": {
+        "Friendly": "Amigável",
+        "Neutral": "Neutro",
+        "Hostile": "Hostis",
+        "Secret": "Secreto"
+      },
+      "Context": {
+        "AddActivation": "Adicionar Ativação",
+        "RemoveActivation": "Remover Ativação",
+        "UndoUse": "Desfazer Uso"
+      },
+      "Actions": {
+        "ToggleVis": "Alternar Visibilidade",
+        "ToggleDead": "Alternar Derrotado",
+        "PingCombatant": "Sinalizar Combatente",
+        "DetectRoll": "Rolar Perícia de Detecção",
+        "InitiativeRoll": "Rolar Iniciativa"
+      }
+    },
+    "StatusSettings": {
+      "Title": "Efeitos de Status",
+      "MenuName": "Efeitos de Status",
+      "MenuLabel": "Configurar Efeitos de Status",
+      "MenuHint": "Modo de condições de status, onde condições ativas são exibidas, e efeitos animados de anel de token.",
+      "Intro": "Configure como as condições de status se comportam e são exibidas na sua mesa. O modo de condições e os efeitos de anel requerem recarregar o mundo.",
+      "SectionConditions": "Conjunto de Condições",
+      "SectionDisplay": "Exibição",
+      "SectionEffects": "Efeitos de Token",
+      "Save": "Salvar Mudanças"
+    },
+    "SpellSettings": {
+      "Title": "Configurações de Magia",
+      "MenuName": "Configurações de Magia",
+      "MenuLabel": "Configurar Magias",
+      "MenuHint": "Diálogo de conjuração de magia, formas de área de magia, e aparência de arte de área.",
+      "Description": "Suas preferências pessoais de diálogo de conjuração e exibição de área de magia. Mestres também veem as seções de área de magia globais abaixo.",
+      "Save": "Salvar Mudanças",
+      "Cancel": "Cancelar",
+      "SaveSuccess": "Configurações de magia salvas.",
+      "Section": {
+        "CastDialog": "Diálogo de Conjuração",
+        "YourDisplay": "Sua Exibição de Área",
+        "AreaShapes": "Formas de Área de Magia",
+        "Artwork": "Arte da Área",
+        "PlayerDefaults": "Padrões de Jogador"
+      },
+      "PlayerDefaults": {
+        "Description": "Estes são os padrões de mesa que cada jogador recebe a menos que mude seu próprio contorno/opacidade nas configurações principais. Use o botão para redefinir todos os jogadores de volta a estes."
+      },
+      "DefaultBorder": {
+        "name": "Contorno de Área Padrão",
+        "hint": "O contorno que os jogadores veem por padrão para áreas de magia."
+      },
+      "DefaultAlpha": {
+        "name": "Opacidade de Área Padrão",
+        "hint": "A opacidade de arte que os jogadores veem por padrão (0 = invisível, 1 = sólido)."
+      },
+      "ForceButton": "Aplicar Padrões a Todos os Jogadores",
+      "ForceHint": "Salva estas configurações e redefine o contorno/opacidade pessoal de cada jogador para que usem os padrões acima.",
+      "ForceTitle": "Aplicar a Todos os Jogadores",
+      "ForceConfirm": "Redefinir o contorno e opacidade de área de magia de todos os jogadores para os padrões da mesa? Jogadores podem mudá-los novamente depois.",
+      "ForceApplied": "Padrões de exibição de área de magia aplicados a todos os jogadores.",
+      "BorderMode": {
+        "name": "Contorno de Área",
+        "hint": "Como o contorno ao redor de uma área de magia é desenhado.",
+        "inherit": "Usar Padrão do Mestre",
+        "player": "Cor do Jogador",
+        "hide": "Oculto",
+        "default": "Padrão do Foundry"
+      },
+      "HideFill": {
+        "name": "Ocultar Preenchimento de Cor",
+        "hint": "Oculta o preenchimento de cor sólida em áreas texturizadas para que apenas a arte apareça."
+      },
+      "BlendMode": {
+        "name": "Modo de Mesclagem da Arte",
+        "hint": "Como a arte se mescla com o mapa abaixo dela (NORMAL, ADD, SCREEN, MULTIPLY, OVERLAY)."
+      },
+      "Alpha": {
+        "name": "Opacidade da Arte",
+        "hint": "Opacidade da arte de área (0 = invisível, 1 = sólido)."
+      },
+      "Animate": {
+        "name": "Animar Arte",
+        "hint": "Gira áreas de círculo/retângulo (aura, esfera, cubo); rola áreas de cone/linha ao longo de sua mira."
+      },
+      "SpinSpeed": {
+        "name": "Velocidade de Rotação",
+        "hint": "Velocidade de rotação para áreas giratórias. 0 para a rotação."
+      },
+      "ScrollSpeed": {
+        "name": "Velocidade de Rolagem",
+        "hint": "Velocidade de fluxo de textura para áreas de cone/linha. Negativo inverte a direção; 0 para."
+      }
+    },
+    "EncounterSettings": {
+      "Title": "Configurações de Encontro",
+      "Description": "Configure como encontros de combate são exibidos e gerenciados.",
+      "GeneralSettings": "Configurações Gerais",
+      "Factions": {
+        "Title": "Títulos de Facção",
+        "Friendly": "Amigável: ",
+        "Neutral": "Neutro: ",
+        "Hostile": "Hostil: ",
+        "Secret": "Secreto: "
+      },
+      "HideInitiativeRoll": {
+        "Name": "Ocultar Rolagem de Iniciativa",
+        "Hint": "Oculta o botão de iniciativa no rastreador de combate. Vagabond usa iniciativa por ordem livre e tipicamente não requer rolagens de iniciativa tradicionais."
+      },
+      "UseActivationPoints": {
+        "Name": "Usar Pontos de Ativação",
+        "Hint": "Exibe contadores de ativação abaixo dos botões de jogar para cada combatente. Quando desativado, combatentes têm uma ativação por padrão."
+      },
+      "DefaultActivationPoints": {
+        "Name": "Pontos de Ativação Padrão",
+        "Hint": "O número inicial de pontos de ativação para cada combatente quando o combate começa. A maioria das mesas usa 1, mas você pode querer 2 ou mais para rastrear múltiplas ações como Movimento e Ataque, ou Movimento e Conjuração."
+      },
+      "InitiativeFormula": {
+        "Name": "Fórmula de Iniciativa (Personagens Jogadores)",
+        "Hint": "Fórmula personalizada para rolar iniciativa de PJs. Só usada quando rolagens de iniciativa estão ativadas (não ocultas). Use @ para referenciar dados do ator (ex: @dexterity.value, @awareness.value)."
+      },
+      "NPCInitiativeFormula": {
+        "Name": "Fórmula de Iniciativa (NPCs)",
+        "Hint": "Fórmula personalizada para rolar iniciativa de NPCs. Só usada quando rolagens de iniciativa estão ativadas (não ocultas). Use @ para referenciar dados do ator (ex: @speed). Use ceil() para arredondar para cima."
+      },
+      "Save": "Salvar Configurações",
+      "Cancel": "Cancelar",
+      "SaveSuccess": "Configurações de encontro salvas com sucesso!"
+    },
+    "DiceSoNice": {
+      "Category": "Vagabond",
+      "Favor": "Dados de Vantagem",
+      "Hinder": "Dados de Desvantagem"
+    },
+    "CharBuilder": {
+      "Title": "Criador de Personagem",
+      "Steps": {
+        "Ancestry": "Ancestralidade",
+        "Class": "Classe",
+        "Stats": "Atributos",
+        "Spells": "Magias",
+        "Perks": "Talentos",
+        "Startingpacks": "Pacotes Iniciais",
+        "Gear": "Equipamento"
+      },
+      "Traits":"Traços",
+      "ClassFeatures": "Características",
+      "DerivedStats": "Estatísticas do Personagem",
+      "ProposedChoices": "Escolhas Propostas",
+      "OriginReferences": "Referências de Origem",
+      "AssignStats": "Arraste e solte os valores nos Atributos abaixo para atribuir:",
+      "ClassDetails": "Detalhes",
+      "Levels": "Características por Nível",
+      "Instructions": {
+        "Ancestry": "Escolha sua Ancestralidade. Ela concede Traços compartilhados por todos os membros dessa Ancestralidade, como seu Tipo e Tamanho. ",
+        "Class": "Selecione uma Classe. Elas concedem Treinamento e Características, e fornecem um guia de como o Herói melhor atua em Combate.",
+        "Stats": "Selecione um conjunto de Atributos na lista à esquerda para começar a atribuir valores acima.",
+        "Spells": "Se sua classe ou ancestralidade permitir, escolha suas magias iniciais. Magias podem criar efeitos devastadores e milagrosos.",
+        "Perks": "Verifique seus talentos iniciais. Talentos são marcas de conquista e sinais de arcos na jornada de vida de alguém.",
+        "StartingPacks": "Você pode escolher qualquer pacote que preferir, mas há Pacotes Iniciais recomendados na seção de Jogo da sua classe",
+        "Gear": "Você pode gastar sua prata restante em equipamento, armas e suprimentos adicionais."
+      },
+      "Buttons": {
+        "Random": "Escolha Aleatória",
+        "Previous": "Anterior",
+        "Next": "Próximo",
+        "Close": "Fechar",
+        "Finish": "Finalizar",
+        "Reset": "Redefinir",
+        "AddToTray": "Adicionar ao Personagem",
+        "ClearTray": "Limpar",
+        "RemovePack": "Remover Pacote Inicial"
+      },
+      "ShowAll": "Mostrar Tudo",
+      "IgnorePrerequisites": "Ignorar pré-requisitos",
+      "IgnorePrereqStats": "Atributos",
+      "IgnorePrereqSkills": "Perícias",
+      "IgnorePrereqSpells": "Magias",
+      "IgnorePrereqResources": "Recursos",
+      "PrerequisitesNotMet": "Você não possui os pré-requisitos",
+      "PrerequisitesMet": "Pré-requisitos Atendidos",
+      "TrayTitle": "Suas Seleções",
+      "TrayInstructions": "Arraste itens da lista ou clique em 'Adicionar ao Personagem' para reunir suas escolhas.",
+      "TrayEmpty": "Sua área está vazia. Selecione itens da lista e solte-os aqui.",
+      "PackContents": "Conteúdo do Pacote",
+      "Budget": "Orçamento Inicial",
+      "Confirmation": {
+        "CloseTitle": "Abandonar a Criação do Personagem?",
+        "CloseContent": "Tem certeza que deseja fechar o criador? Todo o progresso não salvo será perdido."
+      },
+      "FinishMessage": "Seu Vagabond está pronto! Lembre-se de verificar novamente suas Características e Traços em sua nova ficha para garantir que você adicionou manualmente todos os Talentos e Magias prometidos.",
+      "Warnings": {
+        "NeedAncestry": "Selecione uma Ancestralidade antes de continuar.",
+        "NeedClass": "Escolha uma Classe e atribua suas perícias iniciais antes de continuar.",
+        "NeedStats": "Atribua todos os seus Atributos antes de continuar.",
+        "NeedPerks": "Complete a etapa de Talentos antes de continuar.",
+        "NeedPreviousStep": "Complete a etapa anterior antes de continuar."
+      }
+    },
+    "LevelUp": {
+      "Title": "Subir de Nível!",
+      "DialogTitle": "Subir de Nível",
+      "NewLevel": "Novo Nível: {level}",
+      "MaxHP": "PV Máximo:",
+      "MaxMana": "Mana Máxima:",
+      "ManaPerCast": "Mana por Conjuração:",
+      "SpellAmount": "Quantidade de Magias:",
+      "NewFeatures": "Novas Características",
+      "HintLevelUp": "O nível ainda não foi aplicado. Clique no botão de subir de nível para registrar as mudanças antes de aplicar e finalizar.",
+      "NotificationLevelUp": "{name} agora é nível {level}! PV aumentou em {hpChange}.",
+      "NotificationMana": " Mana aumentou em {manaChange}.",
+      "NotificationSpells": " Ganhou {spellCount} magia{plural}.",
+      "NotificationFeatures": " Ganhou {featureCount} nova(s) característica{plural}.",
+      "ErrorLevelUpFailed": "Falha ao subir de nível: {error}",
+      "ErrorConsoleMessage": "Vagabond | Falha ao subir de nível:"
+    },
+    "Status": {
+      "StatusesEffectsTitle": "Configuração de Status & Efeitos",
+      "DamageImmunities": "Imunidades a Dano",
+      "OnHitEffects": "Efeitos ao Acertar",
+      "CritOnHitEffects": "Efeitos ao Acertar Crítico",
+      "PassiveOnHitEffects": "Efeitos Passivos ao Acertar",
+      "PassiveOnHitEffectsHint": "Estes status disparam a cada acerto enquanto este item está equipado, independentemente de qual arma ou magia foi usada.",
+      "AddPassiveEffect": "Adicionar Efeito Passivo",
+      "StatusProtections": "Proteções de Status",
+      "Blocks": "Bloqueia",
+      "Resists": "Resiste (resistência com Vantagem)",
+      "SelectStatus": "— Selecione o Status —",
+      "AddEffect": "Adicionar Efeito",
+      "AddCritEffect": "Adicionar Efeito Crítico",
+      "RequiresDamageShort": "Se Acertar",
+      "RequiresDamageHint": "O status só se aplica se o dano não for totalmente bloqueado",
+      "Save": {
+        "None": "Sem Resistência",
+        "Any": "Qualquer Resistência",
+        "Diff": "Dificuldade",
+        "Label": "Resistência"
+      },
+      "Duration": {
+        "Permanent": "Permanente",
+        "Focusing": "Concentrando"
+      },
+      "CausesDamage": "Dano",
+      "CausesDamageHint": "O resultado do dado é causado como dano a cada tique. Deixe a fórmula em branco para usar o resultado do dado.",
+      "TickFormula": "Sobrescrever Fórmula",
+      "FatigueOnTick": "Fadiga por tique (0 = nenhuma) — atualmente não usado, restaurar com a característica fatigueOnTick",
+      "Coating": {
+        "Apply": "Aplicar Cobertura à Arma",
+        "Applied": "Cobertura de {sourceName} aplicada a {weaponName}",
+        "Consumed": "Cobertura de {sourceName} consumida",
+        "SelectWeapon": "Selecionar Arma",
+        "NoWeapons": "Nenhuma arma equipada encontrada"
+      },
+      "Imbue": {
+        "SelectWeapon": "Selecionar Arma",
+        "SelectWeaponHint": "Escolha qual arma imbuir para cada alvo.",
+        "ConfirmSelection": "Imbuir Arma",
+        "DeferredHint": "Você gastará a mana após o ataque acertar.",
+        "DeferredCost": "Entregar esta Imbuição custará {cost} Mana a mais quando acertar.",
+        "NoWeapons": "{actor} não tem armas equipadas para imbuir",
+        "NoActor": "Nenhum ator alvo válido",
+        "Applied": "{spellName} imbuída em {weaponName}",
+        "Cancelled": "Imbuição cancelada",
+        "DeliverButton": "Entregar {spellName}",
+        "AlreadyResolved": "Esta Imbuição já foi resolvida.",
+        "OnlyCasterOrGM": "Somente {caster} ou um Mestre pode entregar esta Imbuição.",
+        "NoMana": "{caster} não tem Mana suficiente para entregar esta Imbuição.",
+        "SpellGone": "A magia imbuída não existe mais — a Imbuição se dissipa.",
+        "ExceedsCastingMax": "Isso excederia o máximo de Mana por conjuração de {caster} ({max}).",
+        "NotEnoughMana": "Mana insuficiente disponível para isso.",
+        "IncludeEffect": "Incluir Efeito",
+        "TotalMana": "Total",
+        "ConfirmDeliver": "Confirmar & Entregar",
+        "SectionTitle": "Magia Imbuída",
+        "EffectLabel": "Efeito",
+        "CastButton": "Conjurar {spellName}",
+        "DiceStepHint": "Clique esquerdo para adicionar um dado de Dano, clique direito para remover um",
+        "Delivered": "Magia Conjurada",
+        "ClearTitle": "Limpar Imbuição",
+        "ClearConfirm": "Limpar a magia imbuída ({spellName}) de {weaponName}?",
+        "ClearButton": "Limpar Imbuição",
+        "Faded": "{spellName} se dissipou de {weaponName} (turno expirado)"
+      },
+      "Applied": "{actor} agora está {status}.",
+      "Immune": "{actor} é imune a {status}.",
+      "Resisted": "{actor} resistiu a {status} ({saveType}: {total} vs {difficulty}).",
+      "AlreadyActive": "{actor} já possui {status}.",
+      "RequiresDamage": "{status} não foi aplicado a {actor} (nenhum dano passou).",
+      "OngoingDamage": "Dano Contínuo",
+      "ApplyTickDamage": "Aplicar {amount} de dano a {actor}",
+      "TickDamageTitle": "Dano Contínuo",
+      "TickDamage": "{actor} sofre {damage} de dano {damageType} de {status}.",
+      "CountdownExpired": "O status {status} de {actor} terminou."
+    },
+    "Favor": "Vantagem"
+  },
+  "TYPES": {
+    "Actor": {
+      "character": "Personagem",
+      "npc": "NPC",
+      "party": "Grupo",
+      "construct": "Construto"
+    },
+    "Item": {
+      "gear": "- Remover",
+      "weapon": "Arma",
+      "armor": "Armadura",
+      "feature": "Característica",
+      "spell": "Magia",
+      "ancestry": "Ancestralidade",
+      "class": "Classe",
+      "perk": "Talento",
+      "equipment": "Equipamento",
+      "starterPack": "Pacote Inicial",
+      "container": "Contêiner",
+      "vehiclePart": "Parte de Construto"
+    },
+    "CountdownDice": {
+      "SceneControls": {
+        "Create": "Criar Dado de Contagem"
+      },
+      "Create": "Criar Dado de Contagem",
+      "Name": "Nome do Dado",
+      "DiceType": "Tipo de Dado",
+      "Size": "Tamanho",
+      "Fade": "Esmaecer",
+      "Configure": "Configurar",
+      "Delete": "Excluir",
+      "DeleteConfirm": "Excluir este dado de contagem?",
+      "Chat": {
+        "Continues": "A contagem continua",
+        "Reduced": "Contagem reduzida!",
+        "Ended": "Contagem encerrada!",
+        "CurrentState": "Estado Atual"
+      }
+    }
+  }
+
+}
