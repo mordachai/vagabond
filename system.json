@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.30.1",
+  "version": "5.30.2",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -283,7 +283,7 @@
       "path": "packs/characters/bestiary",
       "type": "Actor",
       "ownership": {
-        "PLAYER": "OBSERVER",
+        "PLAYER": "NONE",
         "ASSISTANT": "OWNER"
       },
       "private": false,
@@ -296,7 +296,7 @@
       "path": "packs/characters/humanlike",
       "type": "Actor",
       "ownership": {
-        "PLAYER": "OBSERVER",
+        "PLAYER": "NONE",
         "ASSISTANT": "OWNER"
       },
       "private": false,
@@ -373,7 +373,7 @@
     }
   ],
   "manifest": "https://github.com/mordachai/vagabond/releases/latest/download/system.json",
-  "download": "https://github.com/mordachai/vagabond/releases/download/v5.30.1/system.zip",
+  "download": "https://github.com/mordachai/vagabond/releases/download/v5.30.2/system.zip",
   "background": "systems/vagabond/assets/splash.png",
   "grid": {
     "distance": 5,

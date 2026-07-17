@@ -34,11 +34,12 @@
     "macro": {
       "enabled": true,
       "uuid": "",
-      "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 60, \"color\": \"#ffc480\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 2, \"intensity\": 2}}, durationMin: 60 });",
+      "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 60, \"color\": \"#ffc480\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 2, \"intensity\": 2}}, durationMin: 60, clockOptions: ['lit','realtime','quarter'] });",
       "label": "Ignite",
       "runAsGM": true
     },
-    "isConsumable": true
+    "isConsumable": true,
+    "handsRequired": 1
   },
   "effects": [],
   "flags": {

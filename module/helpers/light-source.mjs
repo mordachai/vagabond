@@ -72,8 +72,10 @@ export class LightSource {
    * @param {Token|TokenDocument} [o.token]
    * @param {object} o.light                  Foundry token light config (partial OK)
    * @param {number|null} [o.durationMin=60]  Realtime burn minutes; `null` = manual-only
+   * @param {string[]} [o.clockOptions]  Allowed burn-down modes offered in the
+   *   dialog (subset of `lit`/`realtime`/`hour`/`quarter`). Defaults to all four.
    */
-  static async use({ actor, item, token, light, durationMin = 60 } = {}) {
+  static async use({ actor, item, token, light, durationMin = 60, clockOptions } = {}) {
     const tdoc = this._resolveTokenDoc(token, actor);
     if (!tdoc) return ui.notifications.warn('Vagabond | No token on the canvas to light.');
     if (!light) return ui.notifications.warn('Vagabond | This item has no light configuration.');
@@ -109,7 +111,7 @@ export class LightSource {
       return;
     }
 
-    const choice = await this._promptMode(item?.name ?? 'Light Source', durationMin);
+    const choice = await this._promptMode(item?.name ?? 'Light Source', durationMin, clockOptions);
     if (!choice || choice === 'cancel') return;
 
     if (needsHands) await this._occupyHands(ownerActor, item, hr, tdoc);
@@ -269,14 +271,17 @@ export class LightSource {
    * Cancel sits alone in the footer. Resolves to the action string (or 'cancel').
    * Cards are custom HTML wired after render; Cancel is the lone footer button.
    */
-  static _promptMode(name, durationMin) {
+  static _promptMode(name, durationMin, clockOptions) {
     const { DialogV2 } = foundry.applications.api;
-    const opts = [
+    const allOpts = [
       { action: 'lit',      icon: 'fas fa-fire',      top: 'No Clock', hint: 'Lit only' },
       { action: 'realtime', icon: 'fas fa-stopwatch', top: 'Realtime', hint: `${durationMin} min` },
       { action: 'hour',     icon: 'fas fa-clock',     top: '1 Hour',   hint: '6 scenes' },
       { action: 'quarter',  icon: 'fas fa-moon-stars',top: '1 Shift',  hint: '¼ Day' },
     ];
+    const opts = clockOptions?.length
+      ? allOpts.filter((o) => clockOptions.includes(o.action))
+      : allOpts;
     const cards = opts.map((o) => `
       <div class="vbd-choice-item">
         <button type="button" class="vbd-choice-card" data-mode="${o.action}">

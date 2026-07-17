@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.30.2
+- **Bestiary/Humanlike privacy:** players can no longer view the Bestiary or Humanlike compendiums.
+- **Fix: Light source clock options:** removed duration 1 Shift option from torches and candles. Laterns have it.
+- **Fix: Equipped item panel:** clicking on items in equipped section of character sheet uses the items
+
 ## v5.30.1
 - **Fixes:** some terms were hardcoded on sheets, chat and menus.
 

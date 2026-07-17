@@ -388,7 +388,7 @@
             {{! 1. Equipped Weapons }}
             {{#each weapons as |weapon|}}
               {{#if weapon.system.equipped}}
-                <div class='equipped-item' data-item-id='{{weapon._id}}'>
+                <div class='equipped-item' data-action='rollWeapon' data-item-id='{{weapon._id}}'>
                   <div class='eq-icon-frame'><img class='eq-icon' src='{{weapon.img}}' alt='' /></div>
                   <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{weapon._id}}' title='{{weapon.name}}'>{{weapon.name}}</label>
                   <div class='eq-qty'></div>
@@ -422,7 +422,7 @@
             {{! 2. Equipped Relics }}
             {{#each gear as |item|}}
               {{#if (and item.system.equipped (eq item.system.equipmentType 'relic'))}}
-                <div class='equipped-item' data-item-id='{{item._id}}'>
+                <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                   <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                   <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
                   <div class='eq-grip'>×{{item.system.quantity}}</div>
@@ -444,7 +444,7 @@
               {{#if (and item.system.equipped (eq item.system.equipmentType 'alchemical'))}}
                 {{#unless (eq item.system.damageType '-')}}
                   {{! Alchemicals with damage }}
-                  <div class='equipped-item' data-item-id='{{item._id}}'>
+                  <div class='equipped-item' data-action='rollWeapon' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                     <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
                     <div class='eq-qty'></div>
@@ -461,7 +461,7 @@
                   </div>
                 {{else}}
                   {{! Alchemicals without damage }}
-                  <div class='equipped-item' data-item-id='{{item._id}}'>
+                  <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                     <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
                     <div class='eq-grip'>×{{item.system.quantity}}</div>
@@ -481,7 +481,7 @@
             {{#each gear as |item|}}
               {{#if item.system.equipped}}
                 {{#unless (or (eq item.system.equipmentType 'relic') (eq item.system.equipmentType 'alchemical'))}}
-                  <div class='equipped-item' data-item-id='{{item._id}}'>
+                  <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                     <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
                     <div class='eq-grip'>×{{item.system.quantity}}</div>

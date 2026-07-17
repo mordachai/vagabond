@@ -11479,6 +11479,7 @@ ol#combat-tracker.directory-list {
   align-self: center;
   overflow: hidden;
   transform: translateY(30%) rotate(45deg);
+  cursor: pointer;
 }
 .vagabond .right-column .equipped-item .eq-icon-frame .eq-icon {
   width: 100%;
@@ -20180,3 +20181,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */
