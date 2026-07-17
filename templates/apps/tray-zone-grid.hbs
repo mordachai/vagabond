@@ -38,7 +38,7 @@
                         <div class="tray-item-compact" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <span class="tray-name">{{item.name}}</span>
-                            <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                            <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="tray-item-compact" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <span class="tray-name">{{item.name}}</span>
-                            <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                            <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -76,7 +76,7 @@
                                 <span class="tray-meta">{{item.slots}} slots • {{item.costDisplay}}</span>
                             </div>
                             {{#if item.canDelete}}
-                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </button>
                             {{/if}}

@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.30.0",
+  "version": "5.30.1",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -373,7 +373,7 @@
     }
   ],
   "manifest": "https://github.com/mordachai/vagabond/releases/latest/download/system.json",
-  "download": "https://github.com/mordachai/vagabond/releases/download/v5.30.0/system.zip",
+  "download": "https://github.com/mordachai/vagabond/releases/download/v5.30.1/system.zip",
   "background": "systems/vagabond/assets/splash.png",
   "grid": {
     "distance": 5,

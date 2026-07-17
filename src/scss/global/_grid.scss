@@ -3,10 +3,13 @@
 .grid-skills-2col {
   display: grid;
   grid-column: span 2 / span 2;
-  grid-template-columns: 36% 1fr;
+  // minmax(0,1fr): long localized content (saves labels, spell names) must
+  // compress the column instead of widening the grid past the panel edge
+  grid-template-columns: 36% minmax(0, 1fr);
   gap: 15px;
   margin: 10px 0;
   padding: 0;
+  min-width: 0;
 }
 
 // Grid.

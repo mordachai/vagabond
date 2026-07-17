@@ -222,7 +222,7 @@ export class TokenStatusPanel {
 
         const menuItems = [
           {
-            label: 'Send to Chat',
+            label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
             icon: 'fas fa-comment',
             enabled: true,
             action: async () => {
@@ -230,7 +230,7 @@ export class TokenStatusPanel {
             }
           },
           {
-            label: 'Remove Status',
+            label: game.i18n.localize('VAGABOND.ContextMenu.RemoveStatus'),
             icon: 'fas fa-times',
             enabled: true,
             action: async () => {

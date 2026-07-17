@@ -17,7 +17,7 @@ import {
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { VAGABOND } from './helpers/config.mjs';
-import { loadHomebrewConfig, applyTermOverrides } from './helpers/homebrew-config.mjs';
+import { loadHomebrewConfig, applyRuntimeHomebrewOverrides, applyTermOverrides } from './helpers/homebrew-config.mjs';
 import { loadJB2ADefaults } from './helpers/sequencer-config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
@@ -1137,8 +1137,11 @@ Handlebars.registerHelper('json', function(context) {
 /*  i18nInit Hook                               */
 /* -------------------------------------------- */
 
-// Apply custom term overrides after translations are loaded.
+// Re-apply homebrew overrides now that translations are loaded (init ran before i18nInit,
+// so any label/hint/description that fell back to hardcoded English gets localized here),
+// then apply custom term overrides on top.
 Hooks.once('i18nInit', function () {
+  applyRuntimeHomebrewOverrides(CONFIG.VAGABOND.homebrew);
   applyTermOverrides(CONFIG.VAGABOND.homebrew);
 });
 

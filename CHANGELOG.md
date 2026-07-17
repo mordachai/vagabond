@@ -1,5 +1,7 @@
 # Changelog
 
+## v5.30.1
+- **Fixes:** some terms were hardcoded on sheets, chat and menus.
 
 ## v5.30.0
 - **Brazilian Portuguese Translation:** full `pt-BR` localization added, selectable in Foundry's Language setting.

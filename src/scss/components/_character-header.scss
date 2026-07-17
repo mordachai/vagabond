@@ -17,6 +17,7 @@
   margin: 0 -13px 0 -25px !important;
   padding: 16px 16px 12px 20px;
   filter: drop-shadow(2px 2px 2px $c-inset-1);
+  min-width: 0;
 
   input {
     color: $c-title-1;
@@ -764,7 +765,8 @@
     margin-left: -15px;
     width: auto;
     height: 55px;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    min-width: 0;
     background-image: url('../assets/images/sheets/speedBg.webp');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -774,11 +776,15 @@
 
     .speed-group-label {
       grid-column: 1;
-      font-size: 14px;
+      font-size: 12px;
       font-family: $font-title;
       font-weight: 600;
       text-align: right;
       line-height: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
     }
 
     .speed-group-cell {
@@ -797,11 +803,15 @@
     .speed-group-speed-label {
       grid-column: 4;
       grid-row: 2;
-      font-size: 16px;
+      font-size: 13px;
       font-family: $font-title;
       font-weight: 600;
       text-align: left;
       line-height: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
     }
 
     .speed-group-input {
@@ -855,14 +865,15 @@
 .modifiers-group {
   position: relative;
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto minmax(0, auto) auto auto;
   grid-template-rows: 22px 22px;
   align-items: center;
   align-content: center;
   width: 220px;
+  min-width: 0;
   gap: 0 4px;
   height: 55px;
-  flex-shrink: 0;
+  flex-shrink: 1;
   background-image: url('../assets/images/sheets/favorHinderBG.webp');
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -881,13 +892,17 @@
   }
 
   .modifiers-group-label {
-    font-size: 13px;
+    font-size: 12px;
     font-family: $font-title;
     font-weight: 600;
     text-align: right;
     line-height: 1;
     cursor: pointer;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .modifiers-group-input {
@@ -1178,6 +1193,15 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  // Long localized labels must compress, never widen the fixed-width panel:
+  // without min-width:0 this flex item grows to its children's min-content
+  // width and every width:100% section overflows the paper edge together.
+  min-width: 0;
+  max-width: 100%;
+
+  > .sheet-header {
+    min-width: 0;
+  }
 }
 
 .panel-section {
@@ -1318,7 +1342,7 @@
     -1px 1px 0 $c-black,
     -1px -1px 0 $c-black,
     1px -1px 0 $c-black;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 1;
     white-space: nowrap;
   }

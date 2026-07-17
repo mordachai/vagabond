@@ -15,10 +15,10 @@
       <i class="{{icon}}"></i>
       <span class="tab-label">{{label}}</span>
       {{#if requiresReload}}
-      <i class="fa-solid fa-rotate reload-badge" title="Requires World Reload"></i>
+      <i class="fa-solid fa-rotate reload-badge" title="{{localize 'VAGABOND.HomebrewSettings.RequiresWorldReloadTooltip'}}"></i>
       {{/if}}
       {{#if hasErrors}}
-      <i class="fa-solid fa-triangle-exclamation hb-error-badge" title="This tab has broken settings"></i>
+      <i class="fa-solid fa-triangle-exclamation hb-error-badge" title="{{localize 'VAGABOND.HomebrewSettings.HasBrokenSettingsTooltip'}}"></i>
       {{/if}}
     </button>
     {{/each}}
@@ -32,10 +32,10 @@
       type="button"
       class="hb-reset-all-btn"
       data-action="resetAll"
-      title="Reset all tabs to factory defaults"
+      title="{{localize 'VAGABOND.HomebrewSettings.ResetAllTooltip'}}"
     >
       <i class="fa-solid fa-arrow-rotate-left"></i>
-      Reset All to Defaults
+      {{localize "VAGABOND.HomebrewSettings.ResetAllToDefaults"}}
     </button>
   </nav>
 
@@ -49,21 +49,21 @@
       <div class="tab-stats">
 
         <fieldset class="hb-fieldset">
-          <legend>Stats</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.StatsLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Define the core stats used in your game. Each stat needs a unique key (used internally), a display label, and a 3-letter abbreviation. Requires world reload.
+            {{localize "VAGABOND.HomebrewSettings.Fields.StatsHint"}}
           </p>
           <p class="hb-hint hb-hint--warning" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-triangle-exclamation fa-xs"></i>
-            Renaming or removing stat <strong>keys</strong> will not update existing documents (classes, perks, characters) that reference the old keys. Those will silently retain stale values until manually corrected.
+            {{{localize "VAGABOND.HomebrewSettings.Fields.StatsKeyWarning"}}}
           </p>
           <table class="hb-stat-table">
             <thead>
               <tr>
-                <th>Key</th>
-                <th>Label</th>
-                <th>Abbreviation</th>
+                <th>{{localize "VAGABOND.UI.Labels.Key"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Label"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Abbreviation"}}</th>
                 <th></th>
               </tr>
             </thead>
@@ -77,8 +77,8 @@
                     data-stat-index="{{@index}}"
                     data-stat-field="key"
                     value="{{key}}"
-                    placeholder="statKey"
-                    title="{{#if hasError}}Duplicate key — each stat must have a unique key{{/if}}"
+                    placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.StatKeyPlaceholder'}}"
+                    title="{{#if hasError}}{{localize 'VAGABOND.HomebrewSettings.Fields.DuplicateKeyTooltip'}}{{/if}}"
                   >
                 </td>
                 <td>
@@ -88,7 +88,7 @@
                     data-stat-index="{{@index}}"
                     data-stat-field="label"
                     value="{{label}}"
-                    placeholder="Stat Name"
+                    placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.StatNamePlaceholder'}}"
                   >
                 </td>
                 <td>
@@ -98,7 +98,7 @@
                     data-stat-index="{{@index}}"
                     data-stat-field="abbreviation"
                     value="{{abbreviation}}"
-                    placeholder="ABR"
+                    placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.AbbrPlaceholder'}}"
                   >
                 </td>
                 <td>
@@ -107,7 +107,7 @@
                     class="hb-stat-remove-btn"
                     data-action="removeStat"
                     data-index="{{@index}}"
-                    title="Remove"
+                    title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}"
                   ><i class="fa-solid fa-xmark"></i></button>
                 </td>
               </tr>
@@ -115,7 +115,7 @@
             </tbody>
           </table>
           <button type="button" class="hb-add-btn" data-action="addStat">
-            <i class="fa-solid fa-plus"></i> Add Stat
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddStat"}}
           </button>
         </fieldset>
 
@@ -128,36 +128,36 @@
 
         {{!-- Skills --}}
         <fieldset class="hb-fieldset">
-          <legend>Skills</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.SkillsLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Each skill needs a unique key, label, hint, associated stat, and trained multiplier. Requires world reload.
+            {{localize "VAGABOND.HomebrewSettings.Fields.SkillsHint"}}
           </p>
           <p class="hb-hint hb-hint--warning" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-triangle-exclamation fa-xs"></i>
-            Renaming or removing skill <strong>keys</strong> will not update existing documents (perks, classes) that reference the old keys. Those will silently retain stale values until manually corrected.
+            {{{localize "VAGABOND.HomebrewSettings.Fields.SkillsKeyWarning"}}}
           </p>
           <table class="hb-skills-table">
             <thead>
               <tr>
-                <th>Key</th>
-                <th>Label</th>
-                <th>Stat</th>
-                <th>Mult</th>
-                <th title="Weapon Skill">WS</th>
-                <th title="Show in regular skills list">SK</th>
+                <th>{{localize "VAGABOND.UI.Labels.Key"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Label"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Stat"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Mult"}}</th>
+                <th title="{{localize 'VAGABOND.HomebrewSettings.Fields.WeaponSkillTooltip'}}">{{localize "VAGABOND.HomebrewSettings.Fields.WeaponSkillAbbr"}}</th>
+                <th title="{{localize 'VAGABOND.HomebrewSettings.Fields.ShowInSkillsListTooltip'}}">{{localize "VAGABOND.HomebrewSettings.Fields.ShowInSkillsListAbbr"}}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {{#each skillRows}}
               <tr class="{{#if hasError}}hb-row-error{{/if}}">
-                <td><input type="text" class="hb-sk-key" data-skill-index="{{index}}" data-skill-field="key" value="{{key}}" placeholder="key"></td>
-                <td><input type="text" class="hb-sk-label" data-skill-index="{{index}}" data-skill-field="label" value="{{label}}" placeholder="Label"></td>
+                <td><input type="text" class="hb-sk-key" data-skill-index="{{index}}" data-skill-field="key" value="{{key}}" placeholder="{{localize 'VAGABOND.UI.Labels.Key'}}"></td>
+                <td><input type="text" class="hb-sk-label" data-skill-index="{{index}}" data-skill-field="label" value="{{label}}" placeholder="{{localize 'VAGABOND.UI.Labels.Label'}}"></td>
                 <td>
                   <select class="hb-sk-stat{{#if hasError}} hb-input-error{{/if}}" data-skill-index="{{index}}" data-skill-field="stat">
                     {{#if hasError}}
-                    <option value="{{stat}}" selected disabled>⚠ {{stat}} (missing)</option>
+                    <option value="{{stat}}" selected disabled>⚠ {{stat}} {{localize "VAGABOND.HomebrewSettings.Fields.MissingTag"}}</option>
                     {{/if}}
                     {{#each statOptions}}
                     <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
@@ -168,52 +168,52 @@
                 <td><input type="checkbox" data-skill-index="{{index}}" data-skill-field="isWeaponSkill" {{#if isWeaponSkill}}checked{{/if}}></td>
                 <td><input type="checkbox" data-skill-index="{{index}}" data-skill-field="showInSkillsList" {{#if showInSkillsList}}checked{{/if}}></td>
                 <td>
-                  <button type="button" class="hb-sk-remove-btn" data-action="removeSkill" data-index="{{index}}" title="Remove">
+                  <button type="button" class="hb-sk-remove-btn" data-action="removeSkill" data-index="{{index}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </td>
               </tr>
               <tr class="hb-subrow">
                 <td colspan="7">
-                  <input type="text" class="hb-subrow-input" data-skill-index="{{index}}" data-skill-field="hint" value="{{hint}}" placeholder="Tooltip hint (e.g. Exerting physical force…)">
+                  <input type="text" class="hb-subrow-input" data-skill-index="{{index}}" data-skill-field="hint" value="{{hint}}" placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.SkillHintPlaceholder'}}">
                 </td>
               </tr>
               {{/each}}
             </tbody>
           </table>
           <button type="button" class="hb-add-btn" data-action="addSkill">
-            <i class="fa-solid fa-plus"></i> Add Skill
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddSkill"}}
           </button>
         </fieldset>
 
         {{!-- Saves --}}
         <fieldset class="hb-fieldset">
-          <legend>Saves</legend>
+          <legend>{{localize "VAGABOND.Saves.savesTitle"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Each save needs a key, label, two stats (summed for difficulty), and a base value. Formula: <code>base − stat1 − stat2 − bonus</code>. Requires world reload.
+            {{localize "VAGABOND.HomebrewSettings.Fields.SavesHint"}}
           </p>
           <table class="hb-saves-table">
             <thead>
               <tr>
-                <th>Key</th>
-                <th>Label</th>
-                <th>Stat 1</th>
-                <th>Stat 2</th>
-                <th>Base</th>
-                <th>Check Die</th>
+                <th>{{localize "VAGABOND.UI.Labels.Key"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Label"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Stat1"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Stat2"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Base"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.CheckDie"}}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {{#each saveRows}}
               <tr class="{{#if hasError}}hb-row-error{{/if}}">
-                <td><input type="text" class="hb-sv-key" data-save-index="{{index}}" data-save-field="key" value="{{key}}" placeholder="key"></td>
-                <td><input type="text" class="hb-sv-label" data-save-index="{{index}}" data-save-field="label" value="{{label}}" placeholder="Label"></td>
+                <td><input type="text" class="hb-sv-key" data-save-index="{{index}}" data-save-field="key" value="{{key}}" placeholder="{{localize 'VAGABOND.UI.Labels.Key'}}"></td>
+                <td><input type="text" class="hb-sv-label" data-save-index="{{index}}" data-save-field="label" value="{{label}}" placeholder="{{localize 'VAGABOND.UI.Labels.Label'}}"></td>
                 <td>
                   <select class="hb-sv-stat{{#if stat1Missing}} hb-input-error{{/if}}" data-save-index="{{index}}" data-save-field="stat1">
                     {{#if stat1Missing}}
-                    <option value="{{stat1}}" selected disabled>⚠ {{stat1}} (missing)</option>
+                    <option value="{{stat1}}" selected disabled>⚠ {{stat1}} {{localize "VAGABOND.HomebrewSettings.Fields.MissingTag"}}</option>
                     {{/if}}
                     {{#each stat1Options}}
                     <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
@@ -223,7 +223,7 @@
                 <td>
                   <select class="hb-sv-stat{{#if stat2Missing}} hb-input-error{{/if}}" data-save-index="{{index}}" data-save-field="stat2">
                     {{#if stat2Missing}}
-                    <option value="{{stat2}}" selected disabled>⚠ {{stat2}} (missing)</option>
+                    <option value="{{stat2}}" selected disabled>⚠ {{stat2}} {{localize "VAGABOND.HomebrewSettings.Fields.MissingTag"}}</option>
                     {{/if}}
                     {{#each stat2Options}}
                     <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
@@ -233,21 +233,21 @@
                 <td><input type="number" class="hb-sv-base" data-save-index="{{index}}" data-save-field="baseValue" value="{{baseValue}}" min="1" max="40" step="1"></td>
                 <td><input type="text" class="hb-sv-die" data-save-index="{{index}}" data-save-field="checkDie" value="{{checkDie}}" placeholder="1d20"></td>
                 <td>
-                  <button type="button" class="hb-sv-remove-btn" data-action="removeSave" data-index="{{index}}" title="Remove">
+                  <button type="button" class="hb-sv-remove-btn" data-action="removeSave" data-index="{{index}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </td>
               </tr>
               <tr class="hb-subrow">
                 <td colspan="7">
-                  <input type="text" class="hb-subrow-input" data-save-index="{{index}}" data-save-field="description" value="{{description}}" placeholder="Tooltip description (e.g. Evade physical harm…)">
+                  <input type="text" class="hb-subrow-input" data-save-index="{{index}}" data-save-field="description" value="{{description}}" placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.SaveDescPlaceholder'}}">
                 </td>
               </tr>
               {{/each}}
             </tbody>
           </table>
           <button type="button" class="hb-add-btn" data-action="addSave">
-            <i class="fa-solid fa-plus"></i> Add Save
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddSave"}}
           </button>
         </fieldset>
 
@@ -259,41 +259,41 @@
       <div class="tab-dice">
 
         <fieldset class="hb-fieldset">
-          <legend>Check Dice</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.CheckDiceLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-baseCheck">Base Check</label>
+            <label for="hb-baseCheck">{{localize "VAGABOND.HomebrewSettings.Fields.BaseCheck"}}</label>
             <input id="hb-baseCheck" type="text" data-field="dice.baseCheck" value="{{config.dice.baseCheck}}" placeholder="1d20">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Die used for skill checks, attacks, and saves.</p>
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.BaseCheckHint"}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-favorBonus">Favor Bonus</label>
+            <label for="hb-favorBonus">{{localize "VAGABOND.HomebrewSettings.Fields.FavorBonus"}}</label>
             <input id="hb-favorBonus" type="text" data-field="dice.favorBonus" value="{{config.dice.favorBonus}}" placeholder="1d6[favored]">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Extra die added to favored rolls.</p>
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.FavorBonusHint"}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-hinderPenalty">Hinder Penalty</label>
+            <label for="hb-hinderPenalty">{{localize "VAGABOND.HomebrewSettings.Fields.HinderPenalty"}}</label>
             <input id="hb-hinderPenalty" type="text" data-field="dice.hinderPenalty" value="{{config.dice.hinderPenalty}}" placeholder="1d6[hindered]">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Die subtracted from hindered rolls.</p>
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.HinderPenaltyHint"}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Skill Difficulty</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.SkillDifficultyLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-skillDiffBase">Difficulty Base</label>
+            <label for="hb-skillDiffBase">{{localize "VAGABOND.HomebrewSettings.Fields.DifficultyBase"}}</label>
             <input id="hb-skillDiffBase" type="number" data-field="dice.skillDifficultyBase" value="{{config.dice.skillDifficultyBase}}" min="1" max="99" step="1">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> The <code>@base</code> variable in the formula below. Default: 20.</p>
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> {{{localize "VAGABOND.HomebrewSettings.Fields.DifficultyBaseHint"}}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-skillFormula">Difficulty Formula</label>
+            <label for="hb-skillFormula">{{localize "VAGABOND.HomebrewSettings.Fields.DifficultyFormula"}}</label>
             <input id="hb-skillFormula" type="text" data-field="dice.skillFormula" value="{{config.dice.skillFormula}}" placeholder="@base - @stat * @mult - @bonus">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Variables: <code>@base</code> (above), <code>@stat</code> (stat total), <code>@mult</code> (trained/untrained multiplier from Advanced tab), <code>@bonus</code> (skill bonus). Supports <code>floor()</code>, <code>ceil()</code>, <code>max()</code>, <code>min()</code>.</p>
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> {{{localize "VAGABOND.HomebrewSettings.Fields.DifficultyFormulaHint"}}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Check Probability</legend>
-          <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> Frequency distribution of possible roll results (Bell Curve).</p>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.CheckProbabilityLegend"}}</legend>
+          <p class="hb-hint" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.CheckProbabilityHint"}}</p>
           <div class="hb-dice-chart" id="hb-dice-chart"></div>
         </fieldset>
 
@@ -305,43 +305,43 @@
       <div class="tab-magic">
 
         <fieldset class="hb-fieldset">
-          <legend>Spell Damage</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.SpellDamageLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-spellDmg">Base Damage Die</label>
+            <label for="hb-spellDmg">{{localize "VAGABOND.HomebrewSettings.Fields.BaseDamageDie"}}</label>
             <input id="hb-spellDmg" type="text" data-field="dice.spellBaseDamage" value="{{config.dice.spellBaseDamage}}" placeholder="d6">
-            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> Default spell damage die (e.g. d6, d8). Actor bonuses stack on top. Changes take effect on save — no reload needed.</p>
+            <p class="hb-hint"><i class="fa-solid fa-circle-info fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.BaseDamageDieHint"}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Delivery Types</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.DeliveryTypesLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Configure how spells are delivered. <strong>Base Cost</strong> is mana spent to cast; <strong>+Cost</strong> is extra mana per size/count increase; <strong>Range</strong> is the starting area in feet (or targets for Imbue/Remote); <strong>Increment</strong> is the step size per increase. Changes take effect on save — no reload needed.
+            {{{localize "VAGABOND.HomebrewSettings.Fields.DeliveryTypesHint"}}}
           </p>
           <table class="hb-magic-dt-table">
             <thead>
               <tr>
-                <th>Key</th>
-                <th>Label</th>
-                <th style="text-align:center" title="Mana cost to cast">Base Cost</th>
-                <th style="text-align:center" title="Starting range in feet (or targets)">Range</th>
-                <th style="text-align:center" title="Step size per increase">Increment</th>
-                <th style="text-align:center" title="Mana cost per size increase">+Cost</th>
+                <th>{{localize "VAGABOND.UI.Labels.Key"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Label"}}</th>
+                <th style="text-align:center" title="{{localize 'VAGABOND.HomebrewSettings.Fields.BaseCostTooltip'}}">{{localize "VAGABOND.Item.Weapon.FIELDS.baseCost.label"}}</th>
+                <th style="text-align:center" title="{{localize 'VAGABOND.HomebrewSettings.Fields.RangeTooltip'}}">{{localize "VAGABOND.UI.Labels.Range"}}</th>
+                <th style="text-align:center" title="{{localize 'VAGABOND.HomebrewSettings.Fields.IncrementTooltip'}}">{{localize "VAGABOND.HomebrewSettings.Fields.IncrementLabel"}}</th>
+                <th style="text-align:center" title="{{localize 'VAGABOND.HomebrewSettings.Fields.IncreaseCostTooltip'}}">{{localize "VAGABOND.HomebrewSettings.Fields.IncreaseCostAbbr"}}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {{#each deliveryTypeRows}}
               <tr>
-                <td><input type="text" class="hb-mdt-key" data-mdt-index="{{index}}" data-mdt-field="key" value="{{key}}" placeholder="key"></td>
-                <td><input type="text" class="hb-mdt-label" data-mdt-index="{{index}}" data-mdt-field="label" value="{{label}}" placeholder="Label"></td>
+                <td><input type="text" class="hb-mdt-key" data-mdt-index="{{index}}" data-mdt-field="key" value="{{key}}" placeholder="{{localize 'VAGABOND.UI.Labels.Key'}}"></td>
+                <td><input type="text" class="hb-mdt-label" data-mdt-index="{{index}}" data-mdt-field="label" value="{{label}}" placeholder="{{localize 'VAGABOND.UI.Labels.Label'}}"></td>
                 <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="baseCost" value="{{baseCost}}" min="0" max="20" step="1"></td>
                 <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="baseRange" value="{{baseRange}}" min="0" max="9999" step="1"></td>
                 <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="increment" value="{{increment}}" min="0" max="999" step="1"></td>
                 <td><input type="number" class="hb-mdt-num" data-mdt-index="{{index}}" data-mdt-field="increaseCost" value="{{increaseCost}}" min="0" max="20" step="1"></td>
                 <td>
-                  <button type="button" class="hb-mdt-remove-btn" data-action="removeDeliveryType" data-index="{{index}}" title="Remove">
+                  <button type="button" class="hb-mdt-remove-btn" data-action="removeDeliveryType" data-index="{{index}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </td>
@@ -350,7 +350,7 @@
             </tbody>
           </table>
           <button type="button" class="hb-add-btn" data-action="addDeliveryType">
-            <i class="fa-solid fa-plus"></i> Add Delivery Type
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddDeliveryType"}}
           </button>
         </fieldset>
 
@@ -363,9 +363,9 @@
 
         {{!-- Max Level --}}
         <fieldset class="hb-fieldset">
-          <legend>General</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.GeneralLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-maxLevel">Max Level</label>
+            <label for="hb-maxLevel">{{localize "VAGABOND.HomebrewSettings.Fields.MaxLevel"}}</label>
             <input
               id="hb-maxLevel"
               type="number"
@@ -375,22 +375,22 @@
               max="30"
               step="1"
             >
-            <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> Requires world reload to take effect.</p>
+            <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.RequiresReloadHint"}}</p>
           </div>
         </fieldset>
 
         {{!-- XP Per Level Table --}}
         <fieldset class="hb-fieldset">
-          <legend>XP Per Level Table</legend>
-          <p class="hb-hint">XP required to reach each level. Edit the values directly.</p>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.XpTableLegend"}}</legend>
+          <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.XpTableHint"}}</p>
           <table class="hb-xp-table">
             <thead>
-              <tr><th>Reach Level</th><th>XP Required</th></tr>
+              <tr><th>{{localize "VAGABOND.HomebrewSettings.Fields.ReachLevel"}}</th><th>{{localize "VAGABOND.HomebrewSettings.Fields.XpRequired"}}</th></tr>
             </thead>
             <tbody>
               {{#each config.leveling.xpTable}}
               <tr>
-                <td class="level-label">Level {{level}}</td>
+                <td class="level-label">{{localize "VAGABOND.HomebrewSettings.Fields.LevelLabel" level=level}}</td>
                 <td>
                   <input
                     type="number"
@@ -408,8 +408,8 @@
 
         {{!-- XP Questionnaire --}}
         <fieldset class="hb-fieldset">
-          <legend>XP Questionnaire</legend>
-          <p class="hb-hint">Questions asked at the end of a session. Each can award a different XP amount.</p>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.XpQuestionnaireLegend"}}</legend>
+          <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.XpQuestionnaireHint"}}</p>
           <div class="hb-questions-list">
             {{#each config.leveling.xpQuestions}}
             <div class="hb-question-row">
@@ -420,9 +420,9 @@
                 data-q-index="{{@index}}"
                 data-q-field="question"
                 value="{{question}}"
-                placeholder="Question text..."
+                placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.QuestionPlaceholder'}}"
               >
-              <label class="q-xp-label">XP</label>
+              <label class="q-xp-label">{{localize "VAGABOND.HomebrewSettings.Fields.XpAbbr"}}</label>
               <input
                 type="number"
                 class="q-xp"
@@ -438,13 +438,13 @@
                 class="q-remove-btn"
                 data-action="removeXpQuestion"
                 data-index="{{@index}}"
-                title="Remove question"
+                title="{{localize 'VAGABOND.HomebrewSettings.Fields.RemoveQuestionTooltip'}}"
               ><i class="fa-solid fa-xmark"></i></button>
             </div>
             {{/each}}
           </div>
           <button type="button" class="hb-add-btn" data-action="addXpQuestion">
-            <i class="fa-solid fa-plus"></i> Add Question
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddQuestion"}}
           </button>
         </fieldset>
 
@@ -457,13 +457,13 @@
 
         <p class="hb-hint" style="margin-bottom: 0.75rem;">
           <i class="fa-solid fa-circle-info fa-xs"></i>
-          Formulas use roll data keys: <code>@might.total</code>, <code>@dexterity.total</code>, <code>@attributes.level.value</code>, etc. Changes take effect on save — no reload needed.
+          {{{localize "VAGABOND.HomebrewSettings.Fields.DerivationsHint"}}}
         </p>
 
         <fieldset class="hb-fieldset">
-          <legend>Health &amp; Inventory</legend>
+          <legend>{{{localize "VAGABOND.HomebrewSettings.Fields.HealthInventoryLegend"}}}</legend>
           <div class="hb-form-group">
-            <label for="hb-deriv-hp" class="{{#if derivErrors.hp}}hb-label-error{{/if}}">Max Health</label>
+            <label for="hb-deriv-hp" class="{{#if derivErrors.hp}}hb-label-error{{/if}}">{{localize "VAGABOND.HomebrewSettings.Fields.MaxHealth"}}</label>
             <input
               id="hb-deriv-hp"
               type="text"
@@ -472,10 +472,10 @@
               value="{{config.derivations.hp}}"
               placeholder="@might.total"
             >
-            <p class="hb-hint">Formula result × level = base max health. Default: <code>@might.total</code></p>
+            <p class="hb-hint">{{{localize "VAGABOND.HomebrewSettings.Fields.MaxHealthHint"}}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-deriv-inv" class="{{#if derivErrors.inventory}}hb-label-error{{/if}}">Inventory Slots</label>
+            <label for="hb-deriv-inv" class="{{#if derivErrors.inventory}}hb-label-error{{/if}}">{{localize "VAGABOND.UI.Sections.Inventory"}}</label>
             <input
               id="hb-deriv-inv"
               type="text"
@@ -484,14 +484,14 @@
               value="{{config.derivations.inventory}}"
               placeholder="8 + @might.total"
             >
-            <p class="hb-hint">Total base inventory slots. Default: <code>8 + @might.total</code></p>
+            <p class="hb-hint">{{{localize "VAGABOND.HomebrewSettings.Fields.InventorySlotsHint"}}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Speed</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.SpeedLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-deriv-speed" class="{{#if derivErrors.speed}}hb-label-error{{/if}}">Speed</label>
+            <label for="hb-deriv-speed" class="{{#if derivErrors.speed}}hb-label-error{{/if}}">{{localize "VAGABOND.UI.Sections.Speed"}}</label>
             <input
               id="hb-deriv-speed"
               type="text"
@@ -500,10 +500,10 @@
               value="{{config.derivations.speed}}"
               placeholder="25 + floor(max(0, @dexterity.total - 2) / 2) * 5"
             >
-            <p class="hb-hint">Base movement speed. Default scales with Dexterity.</p>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.SpeedHint"}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-deriv-crawl" class="{{#if derivErrors.crawl}}hb-label-error{{/if}}">Crawl Speed</label>
+            <label for="hb-deriv-crawl" class="{{#if derivErrors.crawl}}hb-label-error{{/if}}">{{localize "VAGABOND.HomebrewSettings.Fields.CrawlSpeed"}}</label>
             <input
               id="hb-deriv-crawl"
               type="text"
@@ -512,10 +512,10 @@
               value="{{config.derivations.crawl}}"
               placeholder="@speed.base * 3"
             >
-            <p class="hb-hint">May reference <code>@speed.base</code> (computed first). Default: <code>@speed.base * 3</code></p>
+            <p class="hb-hint">{{{localize "VAGABOND.HomebrewSettings.Fields.CrawlSpeedHint"}}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-deriv-travel" class="{{#if derivErrors.travel}}hb-label-error{{/if}}">Travel Speed</label>
+            <label for="hb-deriv-travel" class="{{#if derivErrors.travel}}hb-label-error{{/if}}">{{localize "VAGABOND.HomebrewSettings.Fields.TravelSpeed"}}</label>
             <input
               id="hb-deriv-travel"
               type="text"
@@ -524,14 +524,14 @@
               value="{{config.derivations.travel}}"
               placeholder="floor(@speed.base / 5)"
             >
-            <p class="hb-hint">May reference <code>@speed.base</code>. Default: <code>floor(@speed.base / 5)</code></p>
+            <p class="hb-hint">{{{localize "VAGABOND.HomebrewSettings.Fields.TravelSpeedHint"}}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Fatigue</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.FatigueLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-deriv-fatigue-pc">PC Max Fatigue</label>
+            <label for="hb-deriv-fatigue-pc">{{localize "VAGABOND.HomebrewSettings.Fields.PCMaxFatigue"}}</label>
             <input
               id="hb-deriv-fatigue-pc"
               type="number"
@@ -542,10 +542,10 @@
               max="20"
               step="1"
             >
-            <p class="hb-hint">Maximum fatigue for player characters. Each fatigue costs one inventory slot.</p>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.PCMaxFatigueHint"}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-deriv-fatigue-npc">NPC Max Fatigue</label>
+            <label for="hb-deriv-fatigue-npc">{{localize "VAGABOND.HomebrewSettings.Fields.NPCMaxFatigue"}}</label>
             <input
               id="hb-deriv-fatigue-npc"
               type="number"
@@ -556,51 +556,51 @@
               max="20"
               step="1"
             >
-            <p class="hb-hint">Maximum fatigue for NPCs.</p>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.NPCMaxFatigueHint"}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Stats Display</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.StatsDisplayLegend"}}</legend>
           <div class="hb-form-group">
-            <label>Layout</label>
+            <label>{{localize "VAGABOND.HomebrewSettings.Fields.Layout"}}</label>
             <label class="hb-radio-option">
               <input type="radio" name="statsLayout" value="progression"
                 data-field="derivations.statsLayout"
                 {{#if (eq config.derivations.statsLayout "progression")}}checked{{/if}}>
-              <span>Progression</span>
-              <small class="hb-radio-hint">Top row is indented, forming a cascade</small>
+              <span>{{localize "VAGABOND.HomebrewSettings.Fields.Progression"}}</span>
+              <small class="hb-radio-hint">{{localize "VAGABOND.HomebrewSettings.Fields.ProgressionHint"}}</small>
             </label>
             <label class="hb-radio-option">
               <input type="radio" name="statsLayout" value="centered"
                 data-field="derivations.statsLayout"
                 {{#if (eq config.derivations.statsLayout "centered")}}checked{{/if}}>
-              <span>Centered</span>
-              <small class="hb-radio-hint">Both rows evenly centered, no offset</small>
+              <span>{{localize "VAGABOND.HomebrewSettings.Fields.Centered"}}</span>
+              <small class="hb-radio-hint">{{localize "VAGABOND.HomebrewSettings.Fields.CenteredHint"}}</small>
             </label>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Luck Pool</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.LuckPoolLegend"}}</legend>
           <div class="hb-form-group">
-            <label for="hb-deriv-luck" class="{{#if derivErrors.luckStat}}hb-label-error{{/if}}">Luck Pool Stat</label>
+            <label for="hb-deriv-luck" class="{{#if derivErrors.luckStat}}hb-label-error{{/if}}">{{localize "VAGABOND.HomebrewSettings.Fields.LuckPoolStat"}}</label>
             <select id="hb-deriv-luck" class="hb-deriv-select{{#if derivErrors.luckStat}} hb-input-error{{/if}}" data-field="derivations.luckStat">
               {{#each luckStatOptions}}
               <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
               {{/each}}
             </select>
-            <p class="hb-hint">Stat that sets the size of the Luck pool. <em>None</em> hides the pool from the character sheet.</p>
+            <p class="hb-hint">{{{localize "VAGABOND.HomebrewSettings.Fields.LuckPoolStatHint"}}}</p>
           </div>
           <div class="hb-form-group" style="margin-top: 0.5rem;">
-            <label for="hb-term-luckTerm">First Word</label>
+            <label for="hb-term-luckTerm">{{localize "VAGABOND.HomebrewSettings.Fields.FirstWord"}}</label>
             <input id="hb-term-luckTerm" type="text" data-term-key="luckTerm" value="{{config.terms.luckTerm}}" placeholder="Luck">
-            <p class="hb-hint">Top label on the pool widget (e.g. "Luck", "Fate", "Fortune").</p>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.FirstWordHint"}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-term-poolTerm">Second Word</label>
+            <label for="hb-term-poolTerm">{{localize "VAGABOND.HomebrewSettings.Fields.SecondWord"}}</label>
             <input id="hb-term-poolTerm" type="text" data-term-key="poolTerm" value="{{config.terms.poolTerm}}" placeholder="Pool">
-            <p class="hb-hint">Bottom label on the pool widget (e.g. "Pool", "Points", "Tokens"). Together they form <em>"{{config.terms.luckTerm}} {{config.terms.poolTerm}}"</em>.</p>
+            <p class="hb-hint">{{{localize "VAGABOND.HomebrewSettings.Fields.SecondWordHint" luck=config.terms.luckTerm pool=config.terms.poolTerm}}}</p>
           </div>
         </fieldset>
 
@@ -612,19 +612,18 @@
       <div class="tab-damage-types">
 
         <fieldset class="hb-fieldset">
-          <legend>Damage Types</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.DamageTypesLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Add, remove, or rename damage types. Changes take effect on save — no reload needed.
-            Icon classes use <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" rel="noopener">Font Awesome Free</a> — e.g. <code>fa-solid fa-fire</code>.
+            {{{localize "VAGABOND.HomebrewSettings.Fields.DamageTypesHint"}}}
           </p>
           <table class="hb-dt-table">
             <thead>
               <tr>
                 <th class="hb-dt-th-icon"></th>
-                <th>Key</th>
-                <th>Label</th>
-                <th>FA Icon Class</th>
+                <th>{{localize "VAGABOND.UI.Labels.Key"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Label"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.FaIconClass"}}</th>
                 <th></th>
               </tr>
             </thead>
@@ -641,7 +640,7 @@
                     data-dt-index="{{@index}}"
                     data-dt-field="key"
                     value="{{key}}"
-                    placeholder="key"
+                    placeholder="{{localize 'VAGABOND.UI.Labels.Key'}}"
                   >
                 </td>
                 <td>
@@ -651,7 +650,7 @@
                     data-dt-index="{{@index}}"
                     data-dt-field="label"
                     value="{{label}}"
-                    placeholder="Label"
+                    placeholder="{{localize 'VAGABOND.UI.Labels.Label'}}"
                   >
                 </td>
                 <td>
@@ -661,7 +660,7 @@
                     data-dt-index="{{@index}}"
                     data-dt-field="icon"
                     value="{{icon}}"
-                    placeholder="fa-solid fa-star"
+                    placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.IconPlaceholder'}}"
                   >
                 </td>
                 <td>
@@ -670,7 +669,7 @@
                     class="hb-dt-remove-btn"
                     data-action="removeDamageType"
                     data-index="{{@index}}"
-                    title="Remove"
+                    title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}"
                   ><i class="fa-solid fa-xmark"></i></button>
                 </td>
               </tr>
@@ -678,7 +677,7 @@
             </tbody>
           </table>
           <button type="button" class="hb-add-btn" data-action="addDamageType">
-            <i class="fa-solid fa-plus"></i> Add Damage Type
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddDamageType"}}
           </button>
         </fieldset>
 
@@ -690,13 +689,13 @@
       <div class="tab-stat-cap">
 
         <fieldset class="hb-fieldset">
-          <legend>Stat Cap</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.StatCapLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Maximum stat value reachable through level-up increases. The skill difficulty formula is <code>20 − (stat × 2)</code> for trained skills; at cap 7 that gives difficulty 6, the minimum meaningful result on a d20 roll-over. Requires world reload.
+            {{{localize "VAGABOND.HomebrewSettings.Fields.StatCapHint"}}}
           </p>
           <div class="hb-form-group">
-            <label for="hb-statCap">Stat Cap</label>
+            <label for="hb-statCap">{{localize "VAGABOND.HomebrewSettings.Fields.StatCapLegend"}}</label>
             <input
               id="hb-statCap"
               type="number"
@@ -706,20 +705,20 @@
               max="20"
               step="1"
             >
-            <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> Requires world reload to take effect.</p>
+            <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.RequiresReloadHint"}}</p>
           </div>
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Character Builder Stat Arrays</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.StatArraysLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Each row is one array offered in the character builder. Values are assigned to stats left-to-right in the order defined in the Stats tab. The row number is what a random roll selects (row 1 = roll 1, etc.).
+            {{localize "VAGABOND.HomebrewSettings.Fields.StatArraysHint"}}
           </p>
           <table class="hb-sa-table">
             <thead>
               <tr>
-                <th class="hb-sa-roll-col">#</th>
+                <th class="hb-sa-roll-col">{{localize "VAGABOND.HomebrewSettings.Fields.RollAbbr"}}</th>
                 {{#each config.stats}}
                 <th title="{{label}}">{{abbreviation}}</th>
                 {{/each}}
@@ -734,7 +733,7 @@
                 <td><input type="number" class="hb-sa-value" data-array-index="{{@../index}}" data-value-index="{{@index}}" value="{{this}}" min="1" max="20" step="1"></td>
                 {{/each}}
                 <td>
-                  <button type="button" class="hb-sa-remove-btn" data-action="removeStatArray" data-index="{{index}}" title="Remove this array">
+                  <button type="button" class="hb-sa-remove-btn" data-action="removeStatArray" data-index="{{index}}" title="{{localize 'VAGABOND.HomebrewSettings.Fields.RemoveArrayTooltip'}}">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </td>
@@ -743,7 +742,7 @@
             </tbody>
           </table>
           <button type="button" class="hb-add-btn" data-action="addStatArray" style="margin-top: 0.4rem;">
-            <i class="fa-solid fa-plus"></i> Add Array
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.AddArray"}}
           </button>
         </fieldset>
 
@@ -755,13 +754,13 @@
       <div class="tab-advanced">
 
         <fieldset class="hb-fieldset">
-          <legend>Skill Multipliers</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.SkillMultipliersLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Difficulty formula: <code>base − (stat × mult) − bonus</code>. The base value is set in the Dice tab. Changes take effect on save — no reload needed.
+            {{{localize "VAGABOND.HomebrewSettings.Fields.SkillMultipliersHint"}}}
           </p>
           <div class="hb-form-group">
-            <label for="hb-mult-trained">Trained</label>
+            <label for="hb-mult-trained">{{localize "VAGABOND.HomebrewSettings.Fields.Trained"}}</label>
             <input
               id="hb-mult-trained"
               type="number"
@@ -771,10 +770,10 @@
               max="10"
               step="0.5"
             >
-            <p class="hb-hint">Multiplier applied when a skill is trained. Default: 2</p>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.TrainedHint"}}</p>
           </div>
           <div class="hb-form-group">
-            <label for="hb-mult-untrained">Untrained</label>
+            <label for="hb-mult-untrained">{{localize "VAGABOND.HomebrewSettings.Fields.Untrained"}}</label>
             <input
               id="hb-mult-untrained"
               type="number"
@@ -784,7 +783,7 @@
               max="10"
               step="0.5"
             >
-            <p class="hb-hint">Multiplier applied when a skill is untrained. Default: 1</p>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.UntrainedHint"}}</p>
           </div>
         </fieldset>
 
@@ -796,14 +795,14 @@
       <div class="tab-terms">
 
         <fieldset class="hb-fieldset">
-          <legend>General</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.GeneralLegend"}}</legend>
           <table class="hb-terms-table">
             <thead>
-              <tr><th>Field</th><th>Label</th><th class="hb-terms-default-col">Default</th></tr>
+              <tr><th>{{localize "VAGABOND.HomebrewSettings.Fields.Field"}}</th><th>{{localize "VAGABOND.UI.Labels.Label"}}</th><th class="hb-terms-default-col">{{localize "VAGABOND.HomebrewSettings.Fields.Default"}}</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Inventory (tab &amp; section)</td>
+                <td>{{{localize "VAGABOND.HomebrewSettings.Fields.InventoryTermRow"}}}</td>
                 <td><input type="text" data-term-key="inventory" value="{{config.terms.inventory}}" placeholder="Inventory" /></td>
                 <td class="hb-hint">Inventory</td>
               </tr>
@@ -812,39 +811,39 @@
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Spellcasting</legend>
+          <legend>{{localize "VAGABOND.Actor.Tabs.Magic"}}</legend>
           <table class="hb-terms-table">
             <thead>
-              <tr><th>Field</th><th>Label</th><th class="hb-terms-default-col">Default</th></tr>
+              <tr><th>{{localize "VAGABOND.HomebrewSettings.Fields.Field"}}</th><th>{{localize "VAGABOND.UI.Labels.Label"}}</th><th class="hb-terms-default-col">{{localize "VAGABOND.HomebrewSettings.Fields.Default"}}</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Magic (tab name)</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.MagicTermRow"}}</td>
                 <td><input type="text" data-term-key="magic" value="{{config.terms.magic}}" placeholder="Magic" /></td>
                 <td class="hb-hint">Magic</td>
               </tr>
               <tr>
-                <td>Spells (tab &amp; section)</td>
+                <td>{{{localize "VAGABOND.HomebrewSettings.Fields.SpellsTermRow"}}}</td>
                 <td><input type="text" data-term-key="spells" value="{{config.terms.spells}}" placeholder="Spells" /></td>
                 <td class="hb-hint">Spells</td>
               </tr>
               <tr>
-                <td>Mana (current value)</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.ManaTermRow"}}</td>
                 <td><input type="text" data-term-key="mana" value="{{config.terms.mana}}" placeholder="Mana" /></td>
                 <td class="hb-hint">Mana</td>
               </tr>
               <tr>
-                <td>Max Mana</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.MaxManaTermRow"}}</td>
                 <td><input type="text" data-term-key="maxMana" value="{{config.terms.maxMana}}" placeholder="Max Mana" /></td>
                 <td class="hb-hint">Max Mana</td>
               </tr>
               <tr>
-                <td>Mana / Cast</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.ManaPerCastTermRow"}}</td>
                 <td><input type="text" data-term-key="manaPerCast" value="{{config.terms.manaPerCast}}" placeholder="Mana/Cast" /></td>
                 <td class="hb-hint">Mana/Cast</td>
               </tr>
               <tr>
-                <td>Casting Skill</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.CastingSkillTermRow"}}</td>
                 <td><input type="text" data-term-key="castingSkill" value="{{config.terms.castingSkill}}" placeholder="Mana Skill" /></td>
                 <td class="hb-hint">Mana Skill</td>
               </tr>
@@ -853,29 +852,29 @@
         </fieldset>
 
         <fieldset class="hb-fieldset">
-          <legend>Currency</legend>
+          <legend>{{localize "VAGABOND.UI.Sections.Wealth"}}</legend>
           <table class="hb-terms-table">
             <thead>
-              <tr><th>Field</th><th>Label</th><th class="hb-terms-default-col">Default</th></tr>
+              <tr><th>{{localize "VAGABOND.HomebrewSettings.Fields.Field"}}</th><th>{{localize "VAGABOND.UI.Labels.Label"}}</th><th class="hb-terms-default-col">{{localize "VAGABOND.HomebrewSettings.Fields.Default"}}</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Wealth (section)</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.WealthTermRow"}}</td>
                 <td><input type="text" data-term-key="wealth" value="{{config.terms.wealth}}" placeholder="Wealth" /></td>
                 <td class="hb-hint">Wealth</td>
               </tr>
               <tr>
-                <td>Gold</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.GoldTermRow"}}</td>
                 <td><input type="text" data-term-key="gold" value="{{config.terms.gold}}" placeholder="Gold" /></td>
                 <td class="hb-hint">Gold</td>
               </tr>
               <tr>
-                <td>Silver</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.SilverTermRow"}}</td>
                 <td><input type="text" data-term-key="silver" value="{{config.terms.silver}}" placeholder="Silver" /></td>
                 <td class="hb-hint">Silver</td>
               </tr>
               <tr>
-                <td>Copper</td>
+                <td>{{localize "VAGABOND.HomebrewSettings.Fields.CopperTermRow"}}</td>
                 <td><input type="text" data-term-key="copper" value="{{config.terms.copper}}" placeholder="Copper" /></td>
                 <td class="hb-hint">Copper</td>
               </tr>
@@ -892,15 +891,15 @@
 
         {{!-- Library list --}}
         <fieldset class="hb-fieldset">
-          <legend>Homebrew Library</legend>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.LibraryLegend"}}</legend>
           <p class="hb-hint" style="margin-bottom: 0.75rem;">
             <i class="fa-solid fa-circle-info fa-xs"></i>
-            Save named configurations for quick switching. Activating a library entry applies it immediately.
+            {{localize "VAGABOND.HomebrewSettings.Fields.LibraryHint"}}
           </p>
           <p class="hb-lib-path">
             <i class="fa-solid fa-folder fa-xs"></i>
             <code>{{library.filePath}}</code>
-            <span class="hb-lib-path-note">(inside your Foundry data folder)</span>
+            <span class="hb-lib-path-note">{{localize "VAGABOND.HomebrewSettings.Fields.LibraryPathNote"}}</span>
           </p>
 
           {{#if library.hasEntries}}
@@ -908,8 +907,8 @@
             <thead>
               <tr>
                 <th></th>
-                <th>Name</th>
-                <th>Saved</th>
+                <th>{{localize "VAGABOND.UI.Labels.Name"}}</th>
+                <th>{{localize "VAGABOND.HomebrewSettings.Fields.Saved"}}</th>
                 <th></th>
               </tr>
             </thead>
@@ -918,28 +917,28 @@
               <tr class="hb-library-row {{#if isActive}}hb-library-row--active{{/if}}">
                 <td class="hb-lib-status-cell">
                   {{#if isActive}}
-                  <i class="fa-solid fa-circle-check hb-active-icon" title="{{#if isModified}}Active (modified since activation){{else}}Active{{/if}}"></i>
+                  <i class="fa-solid fa-circle-check hb-active-icon" title="{{#if isModified}}{{localize 'VAGABOND.HomebrewSettings.Fields.ActiveModifiedTooltip'}}{{else}}{{localize 'VAGABOND.HomebrewSettings.Fields.ActiveTooltip'}}{{/if}}"></i>
                   {{/if}}
                 </td>
                 <td class="hb-lib-name-cell">
                   {{name}}
-                  {{#if isModified}}<span class="hb-modified-badge">modified</span>{{/if}}
+                  {{#if isModified}}<span class="hb-modified-badge">{{localize "VAGABOND.HomebrewSettings.Fields.ModifiedBadge"}}</span>{{/if}}
                 </td>
                 <td class="hb-lib-date-cell">{{savedAtDisplay}}</td>
                 <td class="hb-lib-actions-cell">
                   {{#if isModified}}
-                  <button type="button" class="hb-lib-update-btn" data-action="updateHomebrew" title="Save current changes back to this entry">
+                  <button type="button" class="hb-lib-update-btn" data-action="updateHomebrew" title="{{localize 'VAGABOND.HomebrewSettings.Fields.UpdateEntryTooltip'}}">
                     <i class="fa-solid fa-floppy-disk"></i>
                   </button>
                   {{else}}
-                  <button type="button" class="hb-lib-activate-btn{{#if isActive}} hb-lib-activate-btn--active{{/if}}" data-action="activateHomebrew" data-id="{{id}}" title="{{#if isActive}}Already active{{else}}Load and apply this homebrew{{/if}}" {{#if isActive}}disabled{{/if}}>
+                  <button type="button" class="hb-lib-activate-btn{{#if isActive}} hb-lib-activate-btn--active{{/if}}" data-action="activateHomebrew" data-id="{{id}}" title="{{#if isActive}}{{localize 'VAGABOND.HomebrewSettings.Fields.AlreadyActiveTooltip'}}{{else}}{{localize 'VAGABOND.HomebrewSettings.Fields.LoadApplyTooltip'}}{{/if}}" {{#if isActive}}disabled{{/if}}>
                     <i class="fa-solid fa-play"></i>
                   </button>
                   {{/if}}
-                  <button type="button" class="hb-lib-export-btn" data-action="exportConfig" data-id="{{id}}" title="Export as JSON">
+                  <button type="button" class="hb-lib-export-btn" data-action="exportConfig" data-id="{{id}}" title="{{localize 'VAGABOND.HomebrewSettings.Fields.ExportTooltip'}}">
                     <i class="fa-solid fa-file-arrow-down"></i>
                   </button>
-                  <button type="button" class="hb-lib-delete-btn" data-action="deleteHomebrew" data-id="{{id}}" title="Remove from library">
+                  <button type="button" class="hb-lib-delete-btn" data-action="deleteHomebrew" data-id="{{id}}" title="{{localize 'VAGABOND.HomebrewSettings.Fields.RemoveFromLibraryTooltip'}}">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </td>
@@ -948,7 +947,7 @@
             </tbody>
           </table>
           {{else}}
-          <p class="hb-hint hb-lib-empty">No saved homebrews yet. Use the button below to save the current configuration.</p>
+          <p class="hb-hint hb-lib-empty">{{localize "VAGABOND.HomebrewSettings.Fields.NoSavedHomebrews"}}</p>
           {{/if}}
 
           {{#if library.showSaveForm}}
@@ -958,30 +957,30 @@
               id="hb-lib-name-input"
               class="hb-lib-name-input"
               value="{{library.importedName}}"
-              placeholder="Configuration name…"
+              placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.ConfigNamePlaceholder'}}"
               autofocus
             >
             <button type="button" class="hb-lib-save-confirm-btn" data-action="saveToLibrary">
-              <i class="fa-solid fa-floppy-disk"></i> Save
+              <i class="fa-solid fa-floppy-disk"></i> {{localize "VAGABOND.HomebrewSettings.Save"}}
             </button>
             <button type="button" class="hb-lib-cancel-btn" data-action="toggleSaveForm">
-              Cancel
+              {{localize "VAGABOND.HomebrewSettings.Fields.Cancel"}}
             </button>
           </div>
           {{else}}
           <button type="button" class="hb-add-btn hb-lib-add-btn" data-action="toggleSaveForm">
-            <i class="fa-solid fa-plus"></i> Save Current Config to Library…
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.HomebrewSettings.Fields.SaveCurrentToLibrary"}}
           </button>
           {{/if}}
         </fieldset>
 
         {{!-- Import --}}
         <fieldset class="hb-fieldset">
-          <legend>Import</legend>
-          <p class="hb-hint" style="margin-bottom: 0.5rem;">Load a <code>.json</code> file exported from another world. The config will be merged into the current session — review each tab then save.</p>
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.ImportLegend"}}</legend>
+          <p class="hb-hint" style="margin-bottom: 0.5rem;">{{{localize "VAGABOND.HomebrewSettings.Fields.ImportHint"}}}</p>
           <button type="button" class="hb-share-btn" data-action="importConfig">
             <i class="fa-solid fa-file-arrow-up"></i>
-            Import Homebrew…
+            {{localize "VAGABOND.HomebrewSettings.Fields.ImportHomebrew"}}
           </button>
         </fieldset>
 
@@ -992,9 +991,9 @@
 
     <footer class="form-footer homebrew-footer">
       {{#if hasAnyErrors}}
-      <span class="hb-broken-notice" title="Some settings reference stats or skills that no longer exist.">
+      <span class="hb-broken-notice" title="{{localize 'VAGABOND.HomebrewSettings.Fields.BrokenSettingsTooltip'}}">
         <i class="fa-solid fa-triangle-exclamation"></i>
-        There are broken settings — check highlighted tabs.
+        {{localize "VAGABOND.HomebrewSettings.Fields.BrokenSettingsNotice"}}
       </span>
       {{/if}}
       <button type="button" class="reset-btn" data-action="resetDefaults" data-tab="{{activeTab}}">
@@ -1007,7 +1006,7 @@
       </button>
       <button type="button" data-action="saveAndClose">
         <i class="fa-solid fa-floppy-disk"></i>
-        Save &amp; Close
+        {{localize "VAGABOND.HomebrewSettings.Fields.SaveAndClose"}}
       </button>
       <button type="button" data-action="close">
         {{localize "Cancel"}}

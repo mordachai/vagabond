@@ -198,7 +198,7 @@
                 data-level='{{group.level}}'
                 data-tooltip='Add Feature to Level {{group.level}}'
               >
-                <i class='fas fa-plus'></i> Add Feature
+                <i class='fas fa-plus'></i> {{localize "VAGABOND.UI.Labels.AddFeature"}}
               </button>
             {{/if}}
           </div>
@@ -207,10 +207,10 @@
           {{#if @root.system.isSpellcaster}}
             <div class='level-traits-display'>
               <div class='trait-badge-inline'>
-                <strong>Mana:</strong> <span>{{group.maxMana}}</span>
+                <strong>{{localize "VAGABOND.UI.Labels.Mana"}}:</strong> <span>{{group.maxMana}}</span>
               </div>
               <div class='trait-badge-inline'>
-                <strong>Spells:</strong>
+                <strong>{{localize "VAGABOND.UI.Sections.Spells"}}:</strong>
                 {{#if @root.editable}}
                   <input
                     type='number'
@@ -240,7 +240,7 @@
                           type='text'
                           name='system.levelFeatures.{{feature.index}}.name'
                           value='{{feature.name}}'
-                          placeholder='Feature Name'
+                          placeholder='{{localize "VAGABOND.UI.Labels.FeatureNamePlaceholder"}}'
                           data-dtype='String'
                           class='flex-1 feature-title'
                         />
@@ -248,7 +248,7 @@
                           class='item-control'
                           data-action='removeLevelFeature'
                           data-feature-index='{{feature.index}}'
-                          data-tooltip='Remove Feature'
+                          data-tooltip='{{localize "VAGABOND.UI.Labels.RemoveFeatureTooltip"}}'
                         >
                           <i class='fas fa-trash'></i>
                         </a>

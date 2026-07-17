@@ -51,7 +51,7 @@
   // Trigger Row (Grid)
   .spell-trigger {
     display: grid;
-    grid-template-columns: 20px 3fr 1fr 0.5fr;
+    grid-template-columns: 20px minmax(0, 3fr) 1fr 0.5fr;
     gap: 4px;
     align-items: flex-end;
     width: 100%;
@@ -317,7 +317,7 @@
   overflow-x: hidden;
   padding-right: 2px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px 3px;
   padding: 6px 3px;
 

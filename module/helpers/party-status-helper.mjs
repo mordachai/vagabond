@@ -176,7 +176,7 @@ export class PartyStatusHelper {
     <h3>${actor.name}</h3>
   </header>
   <div class="card-content">
-    <p><strong>${actor.name}</strong> is immune to <strong>${label}</strong>.</p>
+    <p>${game.i18n.format('VAGABOND.Status.Immune', { actor: `<strong>${actor.name}</strong>`, status: `<strong>${label}</strong>` })}</p>
   </div>
 </div>`;
   }

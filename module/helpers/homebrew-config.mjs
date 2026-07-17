@@ -182,13 +182,106 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
   },
 };
 
+/** PascalCase a homebrew key to match lang-file leaf keys (e.g. 'mysticism' -> 'Mysticism'). */
+function toPascal(key) {
+  return key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+/** Localize game.i18n path; returns null if the key has no translation (Foundry echoes the key back). */
+function tryLocalize(path) {
+  const localized = game.i18n.localize(path);
+  return localized && localized !== path ? localized : null;
+}
+
+/** Canonical i18n key for each customizable term — used to localize untouched
+ *  defaults and to recognize "term equals the localized default" as not-custom. */
+const TERM_I18N = {
+  inventory:    'VAGABOND.Actor.Tabs.Inventory',
+  magic:        'VAGABOND.Actor.Tabs.Magic',
+  mana:         'VAGABOND.Actor.Character.FIELDS.mana.current.label',
+  maxMana:      'VAGABOND.Actor.Character.FIELDS.mana.max.label',
+  manaPerCast:  'VAGABOND.Actor.Character.FIELDS.mana.castingMax.label',
+  castingSkill: 'VAGABOND.UI.Labels.ManaSkill',
+  spells:       'VAGABOND.Actor.Tabs.Spells',
+  luckTerm:     'VAGABOND.UI.Sections.luckTerm',
+  poolTerm:     'VAGABOND.UI.Sections.poolTerm',
+  wealth:       'VAGABOND.UI.Sections.Wealth',
+  gold:         'VAGABOND.Wealth.Gold',
+  silver:       'VAGABOND.Wealth.Silver',
+  copper:       'VAGABOND.Wealth.Copper',
+};
+
+/** Localized default for a term (lang-file text), falling back to the hardcoded English default. */
+function localizedTermDefault(key) {
+  return tryLocalize(TERM_I18N[key]) ?? VAGABOND_HOMEBREW_DEFAULTS.terms[key];
+}
+
+/** A term counts as GM-customized only if it differs from BOTH the English
+ *  hardcoded default and the current language's localized default. */
+function isCustomTerm(terms, key) {
+  const v = terms?.[key];
+  return !!v && v !== VAGABOND_HOMEBREW_DEFAULTS.terms[key] && v !== localizedTermDefault(key);
+}
+
+/**
+ * Mutates label/hint/description fields on homebrew arrays in place, replacing them with the
+ * client's localized text whenever the field still equals its hardcoded-English default — i.e.
+ * the GM never customized it. Fields the GM DID edit are left untouched (their literal text wins).
+ * This lets the untouched-by-default homebrew config still respect the active language.
+ */
+function localizeUntouchedDefaults(config) {
+  const D = VAGABOND_HOMEBREW_DEFAULTS;
+
+  for (const s of config.stats) {
+    const def = D.stats.find(d => d.key === s.key);
+    if (!def) continue;
+    if (s.label === def.label) s.label = tryLocalize(`VAGABOND.Stat.${toPascal(s.key)}.long`) ?? s.label;
+    if (s.abbreviation === def.abbreviation) s.abbreviation = tryLocalize(`VAGABOND.Stat.${toPascal(s.key)}.abbr`) ?? s.abbreviation;
+  }
+
+  for (const s of config.skills) {
+    const def = D.skills.find(d => d.key === s.key);
+    if (!def) continue;
+    if (s.label === def.label) s.label = tryLocalize(`VAGABOND.Skills.${toPascal(s.key)}`) ?? s.label;
+    if (s.hint === def.hint) s.hint = tryLocalize(`VAGABOND.SkillsHints.${toPascal(s.key)}`) ?? s.hint;
+  }
+
+  for (const s of config.saves) {
+    const def = D.saves.find(d => d.key === s.key);
+    if (!def) continue;
+    if (s.label === def.label) s.label = tryLocalize(`VAGABOND.Saves.${toPascal(s.key)}.name`) ?? s.label;
+    if (s.description === def.description) s.description = tryLocalize(`VAGABOND.Saves.${toPascal(s.key)}.description`) ?? s.description;
+  }
+
+  for (const dt of config.damageTypes) {
+    const def = D.damageTypes.find(d => d.key === dt.key);
+    if (!def) continue;
+    if (dt.label === def.label) {
+      const pascal = dt.key === '-' ? 'None' : toPascal(dt.key);
+      dt.label = tryLocalize(`VAGABOND.DamageTypes.${pascal}`) ?? dt.label;
+    }
+  }
+
+  for (const dl of (config.magic?.deliveryTypes ?? [])) {
+    const def = D.magic.deliveryTypes.find(d => d.key === dl.key);
+    if (!def) continue;
+    if (dl.label === def.label) dl.label = tryLocalize(`VAGABOND.DeliveryTypes.${toPascal(dl.key)}.label`) ?? dl.label;
+  }
+
+  // Terms (read directly from CONFIG by templates, e.g. luck-pool widget labels)
+  for (const key of Object.keys(TERM_I18N)) {
+    if (config.terms?.[key] === D.terms[key]) config.terms[key] = localizedTermDefault(key);
+  }
+}
+
 /**
  * Apply all runtime-safe homebrew overrides to CONFIG.VAGABOND.
- * Called during init (from loadHomebrewConfig) and after the settings app saves
- * to make runtime-only changes take effect immediately without a world reload.
+ * Called during init (from loadHomebrewConfig) and again on i18nInit (after translations are
+ * loaded, so untouched defaults can be localized) and after the settings app saves.
  * @param {object} config - Fully-merged homebrew config object
  */
 export function applyRuntimeHomebrewOverrides(config) {
+  localizeUntouchedDefaults(config);
   CONFIG.VAGABOND.homebrew = config;
 
   // --- Stats (requires reload to affect schema, but always update CONFIG for runtime access) ---
@@ -255,6 +348,10 @@ export function applyTermOverrides(config) {
   const terms = config?.terms;
   if (!terms || !game?.i18n?.translations) return;
 
+  // isCustomTerm(): a term equal to the English hardcoded default OR the current
+  // language's localized default was never customized by the GM — skip it so the
+  // lang-file text isn't clobbered (and compound strings don't mix languages).
+
   // Traverse nested translations and set a value by dot-path.
   const set = (path, value) => {
     const parts = path.split('.');
@@ -266,59 +363,61 @@ export function applyTermOverrides(config) {
     cur[parts[parts.length - 1]] = value;
   };
 
-  if (terms.inventory) {
+  if (isCustomTerm(terms, 'inventory')) {
     set('VAGABOND.Actor.Tabs.Inventory',          terms.inventory);
     set('VAGABOND.UI.Sections.Inventory',         terms.inventory);
     set('VAGABOND.ResourceTypes.InventorySlots',  `${terms.inventory} Slots`);
     set('VAGABOND.Actor.Party.Card.Slots',        `${terms.inventory} Slots`);
   }
-  if (terms.magic) {
+  if (isCustomTerm(terms, 'magic')) {
     set('VAGABOND.Actor.Tabs.Magic',    terms.magic);
     set('VAGABOND.UI.Sections.Magic',   terms.magic);
   }
-  if (terms.mana) {
+  if (isCustomTerm(terms, 'mana')) {
     set('VAGABOND.Actor.Character.FIELDS.mana.current.label', terms.mana);
     set('VAGABOND.Actor.Party.Card.Mana',                     terms.mana);
   }
-  if (terms.maxMana) {
+  if (isCustomTerm(terms, 'maxMana')) {
     set('VAGABOND.Actor.Character.FIELDS.mana.max.label', terms.maxMana);
     set('VAGABOND.ResourceTypes.MaxMana',                 terms.maxMana);
   }
-  if (terms.manaPerCast) {
+  if (isCustomTerm(terms, 'manaPerCast')) {
     set('VAGABOND.Actor.Character.FIELDS.mana.castingMax.label', terms.manaPerCast);
     set('VAGABOND.ResourceTypes.ManaPerCast',                    terms.manaPerCast);
     set('VAGABOND.Actor.Party.Card.ManaCast',                    terms.manaPerCast);
   }
-  if (terms.castingSkill) {
+  if (isCustomTerm(terms, 'castingSkill')) {
     set('VAGABOND.UI.Labels.ManaSkill',                           terms.castingSkill);
     set('VAGABOND.Actor.Character.FIELDS.manaSkill.label',        `${terms.castingSkill}:`);
   }
-  if (terms.spells) {
+  if (isCustomTerm(terms, 'spells')) {
     set('VAGABOND.Actor.Tabs.Spells',         terms.spells);
     set('VAGABOND.UI.Sections.Spells',        terms.spells);
     set('VAGABOND.Actor.Party.Card.Spells',   terms.spells);
   }
-  if (terms.wealth) {
+  if (isCustomTerm(terms, 'wealth')) {
     set('VAGABOND.UI.Sections.Wealth',              terms.wealth);
     set('VAGABOND.ResourceTypes.Wealth',            `${terms.wealth} (in silver)`);
     set('VAGABOND.Actor.Party.Card.Wealth',         terms.wealth);
     set('VAGABOND.Actor.Party.Card.TotalWealth',    `Party Total ${terms.wealth}`);
   }
-  if (terms.gold) {
+  if (isCustomTerm(terms, 'gold')) {
     set('VAGABOND.Wealth.Gold',          terms.gold);
     set('VAGABOND.Currency.Gold.long',   terms.gold);
   }
-  if (terms.silver) {
+  if (isCustomTerm(terms, 'silver')) {
     set('VAGABOND.Wealth.Silver',          terms.silver);
     set('VAGABOND.Currency.Silver.long',   terms.silver);
   }
-  if (terms.copper) {
+  if (isCustomTerm(terms, 'copper')) {
     set('VAGABOND.Wealth.Copper',          terms.copper);
     set('VAGABOND.Currency.Copper.long',   terms.copper);
   }
-  const luckTerm = terms.luckTerm || 'Luck';
-  const poolTerm = terms.poolTerm || 'Pool';
-  if (terms.luckTerm || terms.poolTerm) {
+  const luckCustom = isCustomTerm(terms, 'luckTerm');
+  const poolCustom = isCustomTerm(terms, 'poolTerm');
+  if (luckCustom || poolCustom) {
+    const luckTerm = luckCustom ? terms.luckTerm : localizedTermDefault('luckTerm');
+    const poolTerm = poolCustom ? terms.poolTerm : localizedTermDefault('poolTerm');
     set('VAGABOND.UI.Sections.luckTerm',    luckTerm);
     set('VAGABOND.UI.Sections.poolTerm',    poolTerm);
     set('VAGABOND.UI.Sections.LuckPool',    `${luckTerm} ${poolTerm}`);

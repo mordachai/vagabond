@@ -78,11 +78,10 @@
 
           {{#if system.properties.length}}
             <div class='locked-properties'>
-              <span class='stat-label'>Properties:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Properties"}}:</span>
               <div class='property-tags-locked'>
                 {{#each system.properties as |property|}}
-                  <span data-tooltip='{{lookup ../config.weaponPropertyHints key}}'>{{localize label}}</span>                    {{property}}
-                  </span>
+                  <span data-tooltip='{{lookup ../config.weaponPropertyHints property}}'>{{localize (lookup ../config.weaponProperties property)}}</span>
                 {{/each}}
               </div>
             </div>
@@ -96,15 +95,15 @@
           <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.ArmorStats"}}</h3>
           <div class='locked-stats-grid'>
             <div class='locked-stat'>
-              <span class='stat-label'>Type:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</span>
               <span class='stat-value'>{{system.armorTypeDisplay}}</span>
             </div>
             <div class='locked-stat'>
-              <span class='stat-label'>Rating:</span>
+              <span class='stat-label'>{{localize "VAGABOND.Item.Armor.FIELDS.rating.label"}}:</span>
               <span class='stat-value'>{{system.finalRating}}</span>
             </div>
             <div class='locked-stat'>
-              <span class='stat-label'>Might Req:</span>
+              <span class='stat-label'>{{localize "VAGABOND.Item.Armor.FIELDS.might.label"}}:</span>
               <span class='stat-value'>{{system.might}}</span>
             </div>
           </div>
@@ -139,7 +138,7 @@
         {{#if system.gearCategory}}
           <div class='locked-section'>
             <div class='locked-stat'>
-              <span class='stat-label'>Category:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Category"}}:</span>
               <span class='stat-value'>{{system.gearCategory}}</span>
             </div>
           </div>
@@ -152,23 +151,23 @@
           <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Alchemical"}}</h3>
           <div class='locked-stats-grid'>
             <div class='locked-stat'>
-              <span class='stat-label'>Type:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</span>
               <span class='stat-value'>{{localize (concat "VAGABOND.Item.Alchemical.Types." (capitalize system.alchemicalType))}}</span>
             </div>
             {{#unless (eq system.damageType '-')}}
               <div class='locked-stat'>
-                <span class='stat-label'>Damage:</span>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Damage"}}:</span>
                 <span class='stat-value'>{{system.damageAmount}} {{localize (concat "VAGABOND.DamageTypes." (capitalize system.damageType))}}</span>
               </div>
               {{#if system.canExplode}}
                 <div class='locked-stat'>
-                  <span class='stat-label'>Can Explode:</span>
+                  <span class='stat-label'>{{localize "VAGABOND.UI.Labels.CanExplode"}}:</span>
                   <span class='stat-value'>{{system.explodeValues}}</span>
                 </div>
               {{/if}}
             {{/unless}}
             <div class='locked-stat'>
-              <span class='stat-label'>Cost:</span>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Cost"}}:</span>
               <span class='stat-value'>{{system.costDisplay}}</span>
             </div>
           </div>
@@ -204,9 +203,9 @@
                 {{#each system.causedStatuses as |entry|}}
                   <li class='locked-effect-entry'>
                     <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
-                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{entry.saveType}} save</span>{{/unless}}
+                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
                     {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
-                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}die roll{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} tick</span>{{/if}}
+                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} {{localize "VAGABOND.UI.Labels.Tick"}}</span>{{/if}}
                   </li>
                 {{/each}}
               </ul>
@@ -217,9 +216,9 @@
                 {{#each system.critCausedStatuses as |entry|}}
                   <li class='locked-effect-entry'>
                     <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
-                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{entry.saveType}} save</span>{{/unless}}
+                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
                     {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
-                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}die roll{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} tick</span>{{/if}}
+                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} {{localize "VAGABOND.UI.Labels.Tick"}}</span>{{/if}}
                   </li>
                 {{/each}}
               </ul>
@@ -236,9 +235,9 @@
             {{#each system.passiveCausedStatuses as |entry|}}
               <li class='locked-effect-entry'>
                 <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
-                {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{entry.saveType}} save</span>{{/unless}}
+                {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
                 {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
-                {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}die roll{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} tick</span>{{/if}}
+                {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} {{localize "VAGABOND.UI.Labels.Tick"}}</span>{{/if}}
               </li>
             {{/each}}
           </ul>
@@ -253,18 +252,18 @@
               <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}{{localize "VAGABOND.UI.Sections.Healing"}}{{else}}{{localize "VAGABOND.UI.Sections.Damage"}}{{/if}}</h3>
               <div class='locked-stats-grid'>
                 <div class='locked-stat'>
-                  <span class='stat-label'>Type:</span>
+                  <span class='stat-label'>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</span>
                   <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
                 </div>
                 {{#if system.damageAmount}}
                   <div class='locked-stat'>
-                    <span class='stat-label'>Amount:</span>
+                    <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Amount"}}:</span>
                     <span class='stat-value'>{{system.damageAmount}}</span>
                   </div>
                 {{/if}}
                 {{#if system.canExplode}}
                   <div class='locked-stat'>
-                    <span class='stat-label'>Can Explode:</span>
+                    <span class='stat-label'>{{localize "VAGABOND.UI.Labels.CanExplode"}}:</span>
                     <span class='stat-value'>{{system.explodeValues}}</span>
                   </div>
                 {{/if}}
@@ -280,28 +279,28 @@
             <div class='locked-stats-grid'>
               {{#unless (eq system.metal 'none')}}
                 <div class='locked-stat'>
-                  <span class='stat-label'>Metal:</span>
+                  <span class='stat-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.metal.label"}}:</span>
                   <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
                 </div>
               {{/unless}}
               <div class='locked-stat'>
-                <span class='stat-label'>Slots:</span>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Slots"}}:</span>
                 <span class='stat-value'>{{system.slots}}</span>
               </div>
               {{#if (gt system.quantity 1)}}
                 <div class='locked-stat'>
-                  <span class='stat-label'>Quantity:</span>
+                  <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Quantity"}}:</span>
                   <span class='stat-value'>{{system.quantity}}</span>
                 </div>
               {{/if}}
               <div class='locked-stat'>
-                <span class='stat-label'>Cost:</span>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Cost"}}:</span>
                 <span class='stat-value'>{{system.costDisplay}}</span>
               </div>
               {{#if system.isConsumable}}
                 <div class='locked-stat'>
-                  <span class='stat-label'>Consumable:</span>
-                  <span class='stat-value'>{{localize "VAGABOND.Terms.Yes"}}</span>
+                  <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Consumable"}}:</span>
+                  <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
                 </div>
               {{/if}}
               {{#if system.requiresBound}}
@@ -316,15 +315,15 @@
               {{/if}}
               {{#if (and sequencerAvailable system.itemFx.enabled (or (eq system.equipmentType 'weapon') (eq system.equipmentType 'alchemical') (eq system.equipmentType 'relic')))}}
                 <div class='locked-stat locked-stat--row'>
-                  <span class='stat-label'>Anim:</span>
+                  <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Anim"}}:</span>
                   <span class='stat-value item-fx-locked-icons'>
                     {{#if (or system.itemFx.hitFile system.itemFx.missFile)}}
                       <i class='fas fa-film {{#if itemFxValidation.animInvalid}}fx-icon-invalid{{/if}}'
-                         data-tooltip='{{#if itemFxValidation.animInvalid}}File not found{{else}}Animation configured{{/if}}'></i>
+                         data-tooltip='{{#if itemFxValidation.animInvalid}}{{localize "VAGABOND.ItemFx.FileNotFound"}}{{else}}{{localize "VAGABOND.ItemFx.AnimConfigured"}}{{/if}}'></i>
                     {{/if}}
                     {{#if (or system.itemFx.hitSound system.itemFx.missSound)}}
                       <i class='fas fa-music {{#if itemFxValidation.soundInvalid}}fx-icon-invalid{{/if}}'
-                         data-tooltip='{{#if itemFxValidation.soundInvalid}}File not found{{else}}Sound configured{{/if}}'></i>
+                         data-tooltip='{{#if itemFxValidation.soundInvalid}}{{localize "VAGABOND.ItemFx.FileNotFound"}}{{else}}{{localize "VAGABOND.ItemFx.SoundConfigured"}}{{/if}}'></i>
                     {{/if}}
                   </span>
                 </div>
@@ -371,20 +370,20 @@
         <div class='form-group'>
           <div class='grid grid-3col gap-8'>
             <div class='weapon-skill-field'>
-              <label class='resource-label'>Skill</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Skill"}}</label>
               {{> "systems/vagabond/templates/shared/weapon-skill-select.hbs"
                   name="system.weaponSkill"
                   selected=system.weaponSkill
                   config=config}}
             </div>
             <div class='weapon-range-field'>
-              <label class='resource-label'>Range</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Range"}}</label>
               <select name="system.range" data-dtype="String">
                   {{selectOptions config.weaponRanges selected=system.range localize=true blank="-"}}
               </select>
             </div>
             <div class='weapon-grip-field'>
-              <label class='resource-label'>Grip</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Grip"}}</label>
               <select name="system.grip" data-dtype="String" data-action="update-grip">
                   {{selectOptions config.grip selected=system.grip localize=true}}
               </select>
@@ -407,10 +406,10 @@
 
         {{! Weapon Damage Fields }}
         <div class='form-group'>
-          <label class='resource-label'>Damage</label>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
           <div class='grid grid-2col gap-8'>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hand-fist'></i> One Hand - Amount</label>
+              <label class='resource-label'><i class='fas fa-hand-fist'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}} - {{localize "VAGABOND.UI.Labels.Amount"}}</label>
               <input
                 type='text'
                 name='system.damageOneHand'
@@ -420,7 +419,7 @@
               />
             </div>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hand-fist'></i> One Hand - Type</label>
+              <label class='resource-label'><i class='fas fa-hand-fist'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}} - {{localize "VAGABOND.UI.Labels.TypeLabel"}}</label>
               {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
                   name="system.damageTypeOneHand"
                   selected=system.damageTypeOneHand
@@ -430,7 +429,7 @@
           </div>
           <div class='grid grid-2col gap-8'>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hands'></i> Two Hands - Amount</label>
+              <label class='resource-label'><i class='fas fa-hands'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2"}} - {{localize "VAGABOND.UI.Labels.Amount"}}</label>
               <input
                 type='text'
                 name='system.damageTwoHands'
@@ -441,7 +440,7 @@
               />
             </div>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hands'></i> Two Hands - Type</label>
+              <label class='resource-label'><i class='fas fa-hands'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2"}} - {{localize "VAGABOND.UI.Labels.TypeLabel"}}</label>
               {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
                 {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
                     name="system.damageTypeTwoHands"
@@ -459,7 +458,7 @@
 
         {{! Exploding Dice Configuration }}
         <div class='form-group'>
-          <label class='resource-label'>Exploding Dice</label>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
           <div class='grid grid-2col gap-8'>
             <div class='explode-checkbox-field'>
               <label class='checkbox-label'>
@@ -469,11 +468,11 @@
                   {{#if system.canExplode}}checked{{/if}}
                   data-dtype='Boolean'
                 />
-                <span>Can Explode</span>
+                <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
               </label>
             </div>
             <div class='explode-values-field'>
-              <label class='resource-label'>Explode On (comma-separated)</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
               <input
                 type='text'
                 name='system.explodeValues'
@@ -493,7 +492,7 @@
           <details class='property-dropdown' data-details-id='property-dropdown'>
             <summary class='property-dropdown-toggle'>
               <i class='fas fa-chevron-down'></i>
-              <span>Select Properties</span>
+              <span>{{localize "VAGABOND.UI.Labels.SelectProperties"}}</span>
             </summary>
             <div class='property-checkboxes'>
               
@@ -515,7 +514,7 @@
             <div class='property-tags'>
               {{#each system.properties as |property index|}}
                 <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
-                  {{property}}
+                  {{localize (lookup config.weaponProperties property)}}
                   <i class='fas fa-times' data-action='removeWeaponProperty' data-property='{{property}}'></i>
                 </span>
               {{/each}}
@@ -749,7 +748,7 @@
           <div class='form-group'>
             <div class='grid grid-1col'>
               <div class='armor-type-field'>
-                <label class='resource-label'>Armor Type</label>
+                <label class='resource-label'>{{localize "VAGABOND.Item.Armor.FIELDS.armorType.label"}}</label>
                 <select name='system.armorType' data-dtype='String'>
                     {{selectOptions config.armorTypeDescriptions selected=system.armorType}}
                 </select>
@@ -759,14 +758,14 @@
 
           {{! Calculated Armor Properties }}
           <div class='form-group'>
-            <label class='resource-label'>Armor Properties</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Properties"}}</label>
             <div class='calculated-properties'>
               <div class='calculated-item'>
-                <span class='calc-label'>Rating:</span>
+                <span class='calc-label'>{{localize "VAGABOND.Item.Armor.FIELDS.rating.label"}}:</span>
                 <span class='calc-value'>{{system.finalRating}}</span>
               </div>
               <div class='calculated-item'>
-                <span class='calc-label'>Might Requirement:</span>
+                <span class='calc-label'>{{localize "VAGABOND.Item.Armor.FIELDS.might.label"}}:</span>
                 <span class='calc-value'>{{system.might}}</span>
               </div>
             </div>
@@ -794,16 +793,16 @@
       {{! ===== GEAR-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'gear')}}
         <div class="item-section-box">
-          <div class="item-section-label">Gear</div>
+          <div class="item-section-label">{{localize "VAGABOND.UI.Labels.Gear"}}</div>
           {{! Gear Category }}
           <div class='form-group'>
-            <label class='resource-label'>Gear Category</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.GearCategory"}}</label>
             <input
               type='text'
               name='system.gearCategory'
               value='{{system.gearCategory}}'
               data-dtype='String'
-              placeholder='e.g., Alchemy & Medicine'
+              placeholder='{{localize "VAGABOND.UI.Labels.GearCategoryPlaceholder"}}'
             />
           </div>
 
@@ -837,7 +836,7 @@
       {{! ===== ALCHEMICAL-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'alchemical')}}
         <div class="item-section-box">
-          <div class="item-section-label">Alchemical</div>
+          <div class="item-section-label">{{localize "VAGABOND.UI.Labels.Alchemical"}}</div>
           {{! Alchemical Type }}
           <div class='form-group'>
             <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.alchemicalType.label'}}</label>
@@ -858,7 +857,7 @@
 
           {{! Damage Type and Amount }}
           <div class='form-group'>
-            <label class='resource-label'>Damage</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
             <div class='grid grid-2col gap-8'>
               <div class='damage-type-field'>
                 <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.damageType.label'}}</label>
@@ -883,7 +882,7 @@
 
           {{! Exploding Dice Configuration }}
           <div class='form-group'>
-            <label class='resource-label'>Exploding Dice</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
             <div class='grid grid-2col gap-8'>
               <div class='explode-checkbox-field'>
                 <label class='checkbox-label'>
@@ -893,11 +892,11 @@
                     {{#if system.canExplode}}checked{{/if}}
                     data-dtype='Boolean'
                   />
-                  <span>Can Explode</span>
+                  <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
                 </label>
               </div>
               <div class='explode-values-field'>
-                <label class='resource-label'>Explode On (comma-separated)</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
                 <input
                   type='text'
                   name='system.explodeValues'
@@ -915,7 +914,7 @@
             <label class='resource-label'>{{localize 'VAGABOND.Item.Alchemical.FIELDS.baseCost.label'}}</label>
             <div class='grid grid-3col gap-8'>
               <div class='cost-field'>
-                <label class='resource-label'>Gold</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Gold"}}</label>
                 <input
                   type='number'
                   name='system.baseCost.gold'
@@ -926,7 +925,7 @@
                 />
               </div>
               <div class='cost-field'>
-                <label class='resource-label'>Silver</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Silver"}}</label>
                 <input
                   type='number'
                   name='system.baseCost.silver'
@@ -937,7 +936,7 @@
                 />
               </div>
               <div class='cost-field'>
-                <label class='resource-label'>Copper</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Copper"}}</label>
                 <input
                   type='number'
                   name='system.baseCost.copper'
@@ -980,7 +979,7 @@
       {{! ===== RELIC-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'relic')}}
         <div class="item-section-box">
-          <div class="item-section-label">Relic</div>
+          <div class="item-section-label">{{localize "VAGABOND.UI.Labels.Relic"}}</div>
           {{! Lore }}
           <div class='form-group'>
             <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.lore.label'}}</label>
@@ -989,7 +988,7 @@
               name='system.lore'
               value='{{system.lore}}'
               data-dtype='String'
-              placeholder='Enter the relic lore and history...'
+              placeholder='{{localize "VAGABOND.UI.Labels.RelicLorePlaceholder"}}'
             />
           </div>
 
@@ -998,7 +997,7 @@
             <label class='resource-label'>{{localize 'VAGABOND.Item.Relic.FIELDS.baseCost.label'}}</label>
             <div class='grid grid-3col gap-8'>
               <div class='cost-field'>
-                <label class='resource-label'>Gold</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Gold"}}</label>
                 <input
                   type='number'
                   name='system.baseCost.gold'
@@ -1008,7 +1007,7 @@
                 />
               </div>
               <div class='cost-field'>
-                <label class='resource-label'>Silver</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Silver"}}</label>
                 <input
                   type='number'
                   name='system.baseCost.silver'
@@ -1018,7 +1017,7 @@
                 />
               </div>
               <div class='cost-field'>
-                <label class='resource-label'>Copper</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Copper"}}</label>
                 <input
                   type='number'
                   name='system.baseCost.copper'
@@ -1034,11 +1033,11 @@
           <div class='form-group'>
             <div class='grid grid-2col gap-8'>
               <div class='slots-field'>
-                <label class='resource-label'>Base Slots</label>
+                <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.baseSlots.label"}}</label>
                 <input type='number' name='system.baseSlots' value='{{system.baseSlots}}' data-dtype='Number'/>
               </div>
               <div class='quantity-field'>
-                <label class='resource-label'>Quantity</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Quantity"}}</label>
                 <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number'/>
               </div>
             </div>
@@ -1089,10 +1088,10 @@
       {{! Damage Type and Amount Row (Universal) - only for armor and gear (weapons/alchemicals/relics have their own) }}
       {{#if (or (eq system.equipmentType 'armor') (eq system.equipmentType 'gear'))}}
         <div class='form-group'>
-          <label class='resource-label'>Damage / Healing</label>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Sections.Damage"}} / {{localize "VAGABOND.UI.Sections.Healing"}}</label>
         <div class='grid grid-2col gap-8'>
           <div class='damage-type-field'>
-            <label class='resource-label'>Type</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.TypeLabel"}}</label>
             {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
                 name="system.damageType"
                 selected=system.damageType
@@ -1100,7 +1099,7 @@
                 config=config}}
           </div>
           <div class='damage-amount-field'>
-            <label class='resource-label'>Amount</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Amount"}}</label>
             <input
               type='text'
               name='system.damageAmount'
@@ -1113,7 +1112,7 @@
 
         {{! Exploding Dice Configuration }}
         <div class='form-group'>
-          <label class='resource-label'>Exploding Dice</label>
+          <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}</label>
           <div class='grid grid-2col gap-8'>
             <div class='explode-checkbox-field'>
               <label class='checkbox-label'>
@@ -1123,11 +1122,11 @@
                   {{#if system.canExplode}}checked{{/if}}
                   data-dtype='Boolean'
                 />
-                <span>Can Explode</span>
+                <span>{{localize "VAGABOND.UI.Labels.CanExplode"}}</span>
               </label>
             </div>
             <div class='explode-values-field'>
-              <label class='resource-label'>Explode On (comma-separated)</label>
+              <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ExplodeOn"}}</label>
               <input
                 type='text'
                 name='system.explodeValues'
@@ -1145,40 +1144,40 @@
       {{! ===== EQUIPMENT DETAILS (cost, slots, metal, calculated — non-relic, non-alchemical) ===== }}
       {{#unless (or (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
         <div class="item-section-box">
-          <div class="item-section-label">Equipment Details</div>
+          <div class="item-section-label">{{localize "VAGABOND.UI.Sections.Details"}}</div>
           {{! Cost & Slots row }}
           <div class='form-group'>
-            <label class='resource-label'>Cost &amp; Slots</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Cost"}} &amp; {{localize "VAGABOND.UI.Labels.Slots"}}</label>
             <div class='equip-cost-slots-row'>
               <div class='currency-field'>
-                <label class='resource-label'>Gold</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Gold"}}</label>
                 <input type='number' name='system.baseCost.gold' value='{{system.baseCost.gold}}' min='0' data-dtype='Number'/>
               </div>
               <div class='currency-field'>
-                <label class='resource-label'>Silver</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Silver"}}</label>
                 <input type='number' name='system.baseCost.silver' value='{{system.baseCost.silver}}' min='0' data-dtype='Number'/>
               </div>
               <div class='currency-field'>
-                <label class='resource-label'>Copper</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Copper"}}</label>
                 <input type='number' name='system.baseCost.copper' value='{{system.baseCost.copper}}' min='0' data-dtype='Number'/>
               </div>
               <div class='slots-field'>
-                <label class='resource-label'>Slots</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Slots"}}</label>
                 <input type='number' name='system.baseSlots' value='{{system.baseSlots}}' data-dtype='Number'/>
               </div>
               <div class='quantity-field'>
-                <label class='resource-label'>Qty</label>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Quantity"}}</label>
                 <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number'/>
               </div>
             </div>
           </div>
           {{! Metal + Calculated row }}
           <div class='form-group'>
-            <label class='resource-label'>Metal</label>
+            <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.metal.label"}}</label>
             <div class='equip-metal-calc-row'>
               <div class='metal-field'>
                 <select name='system.metal' data-dtype='String'>
-                  <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}}>None</option>
+                  <option value="none" {{#if (eq system.metal 'none')}}selected{{/if}}>{{localize "VAGABOND.Terms.None"}}</option>
                   {{#each config.metalTypes as |label key|}}
                     <option value="{{key}}" {{#if (eq ../system.metal key)}}selected{{/if}} title="{{localize (lookup (lookup ../config.metalData key) 'effect')}}">
                       {{localize label}}
@@ -1188,11 +1187,11 @@
               </div>
               <div class='calculated-properties'>
                 <div class='calculated-item'>
-                  <span class='calc-label'>Final Slots:</span>
+                  <span class='calc-label'>{{localize "VAGABOND.UI.Labels.FinalSlots"}}:</span>
                   <span class='calc-value'>{{system.slots}}</span>
                 </div>
                 <div class='calculated-item'>
-                  <span class='calc-label'>Final Cost:</span>
+                  <span class='calc-label'>{{localize "VAGABOND.UI.Labels.FinalCost"}}:</span>
                   <span class='calc-value'>{{system.costDisplay}}</span>
                 </div>
               </div>
@@ -1220,7 +1219,7 @@
 
       {{! Consumable Configuration }}
       <div class="item-section-box">
-        <div class="item-section-label">Consumable Configuration</div>
+        <div class="item-section-label">{{localize "VAGABOND.UI.Sections.ConsumableConfig"}}</div>
         <div class='consumable-grid'>
           <label class='checkbox-label'>
             <input type='checkbox' name='system.isSupply' {{#if system.isSupply}}checked{{/if}} data-dtype='Boolean'/>
@@ -1228,7 +1227,7 @@
           </label>
           <label class='checkbox-label'>
             <input type='checkbox' name='system.isConsumable' {{#if system.isConsumable}}checked{{/if}} data-dtype='Boolean'/>
-            <span>Consumable (reduces quantity on use)</span>
+            <span>{{localize 'VAGABOND.Item.Equipment.IsConsumable'}}</span>
           </label>
           <label class='checkbox-label'>
             <input type='checkbox' name='system.isBeverage' {{#if system.isBeverage}}checked{{/if}} data-dtype='Boolean'/>
@@ -1239,7 +1238,7 @@
               <option value=''>{{localize "VAGABOND.Item.Equipment.LinkedConsumableNone"}}</option>
               {{#each actorConsumableItems as |consumable|}}
                 <option value='{{consumable.id}}' {{#if (eq ../system.linkedConsumable consumable.id)}}selected{{/if}}>
-                  {{consumable.name}} ({{consumable.system.quantity}} remaining)
+                  {{consumable.name}} ({{consumable.system.quantity}} {{localize "VAGABOND.UI.Labels.Remaining"}})
                 </option>
               {{/each}}
             </select>
@@ -1285,78 +1284,78 @@
           <details class='item-fx-details' data-details-id='item-fx-section'>
             <summary class='item-fx-summary'>
               <i class='fas fa-chevron-down'></i>
-              <span>Item FX <small>(Sequencer)</small></span>
-              {{#if system.itemFx.enabled}}<span class='item-fx-active-badge'>ON</span>{{/if}}
+              <span>{{localize "VAGABOND.ItemFx.Title"}} <small>(Sequencer)</small></span>
+              {{#if system.itemFx.enabled}}<span class='item-fx-active-badge'>{{localize "VAGABOND.ItemFx.On"}}</span>{{/if}}
             </summary>
             <div class='item-fx-section'>
               <div class='form-group'>
                 <label class='checkbox-label'>
                   <input type='checkbox' name='system.itemFx.enabled' {{#if system.itemFx.enabled}}checked{{/if}} data-dtype='Boolean'>
-                  <span>Enable Animation</span>
+                  <span>{{localize "VAGABOND.ItemFx.Enable"}}</span>
                 </label>
               </div>
 
               {{! Animation type selector — only for non-weapons (weapons auto-derive from weapon skill) }}
               {{#unless isWeapon}}
                 <div class='form-group'>
-                  <label class='resource-label'>Animation Type</label>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.AnimType"}}</label>
                   <select name='system.itemFx.animType' data-dtype='String'>
-                    <option value='melee' {{#if (eq system.itemFx.animType 'melee')}}selected{{/if}}>Melee — impact at target</option>
-                    <option value='ranged' {{#if (eq system.itemFx.animType 'ranged')}}selected{{/if}}>Ranged — beam to target</option>
+                    <option value='melee' {{#if (eq system.itemFx.animType 'melee')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeMelee"}}</option>
+                    <option value='ranged' {{#if (eq system.itemFx.animType 'ranged')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeRanged"}}</option>
                   </select>
                 </div>
               {{/unless}}
 
               <fieldset class='item-fx-group'>
-                <legend>Hit Animation</legend>
+                <legend>{{localize "VAGABOND.ItemFx.HitAnimation"}}</legend>
                 <div class='item-fx-file-row'>
                   <input type='text' name='system.itemFx.hitFile' value='{{system.itemFx.hitFile}}' placeholder='path/Weapon* or anim01.webm | anim02.webm' data-dtype='String'>
-                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxFile' data-field='system.itemFx.hitFile' data-tooltip='Browse video file'>
+                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxFile' data-field='system.itemFx.hitFile' data-tooltip='{{localize "VAGABOND.ItemFx.BrowseVideo"}}'>
                     <i class='fas fa-film'></i>
                   </button>
                 </div>
                 <div class='item-fx-scale-row'>
-                  <label class='resource-label'>Scale</label>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.Scale"}}</label>
                   <input type='number' name='system.itemFx.hitScale' value='{{system.itemFx.hitScale}}' min='0.1' step='0.1' data-dtype='Number'>
-                  <label class='resource-label'>Offset X</label>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.OffsetX"}}</label>
                   <input type='number' name='system.itemFx.hitOffsetX' value='{{system.itemFx.hitOffsetX}}' step='10' data-dtype='Number'>
-                  <label class='resource-label'>Duration (ms)</label>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.DurationMs"}}</label>
                   <input type='number' name='system.itemFx.hitDuration' value='{{system.itemFx.hitDuration}}' min='100' step='50' data-dtype='Number'>
                 </div>
                 <div class='item-fx-file-row'>
                   <input type='text' name='system.itemFx.hitSound' value='{{system.itemFx.hitSound}}' placeholder='path/to/hit.ogg (optional)' data-dtype='String'>
-                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxSound' data-field='system.itemFx.hitSound' data-tooltip='Browse audio file'>
+                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxSound' data-field='system.itemFx.hitSound' data-tooltip='{{localize "VAGABOND.ItemFx.BrowseAudio"}}'>
                     <i class='fas fa-music'></i>
                   </button>
                 </div>
               </fieldset>
 
               <fieldset class='item-fx-group'>
-                <legend>Miss Animation <span class='item-fx-hint'>(optional — plays on attacker)</span></legend>
+                <legend>{{localize "VAGABOND.ItemFx.MissAnimation"}} <span class='item-fx-hint'>{{localize "VAGABOND.ItemFx.MissHint"}}</span></legend>
                 <div class='item-fx-file-row'>
                   <input type='text' name='system.itemFx.missFile' value='{{system.itemFx.missFile}}' placeholder='path/Miss* or miss01.webm | miss02.webm  (optional)' data-dtype='String'>
-                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxFile' data-field='system.itemFx.missFile' data-tooltip='Browse video file'>
+                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxFile' data-field='system.itemFx.missFile' data-tooltip='{{localize "VAGABOND.ItemFx.BrowseVideo"}}'>
                     <i class='fas fa-film'></i>
                   </button>
                 </div>
                 <div class='item-fx-scale-row'>
-                  <label class='resource-label'>Scale</label>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.Scale"}}</label>
                   <input type='number' name='system.itemFx.missScale' value='{{system.itemFx.missScale}}' min='0.1' step='0.1' data-dtype='Number'>
-                  <label class='resource-label'>Duration (ms)</label>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.DurationMs"}}</label>
                   <input type='number' name='system.itemFx.missDuration' value='{{system.itemFx.missDuration}}' min='100' step='50' data-dtype='Number'>
                 </div>
                 <div class='item-fx-file-row'>
                   <input type='text' name='system.itemFx.missSound' value='{{system.itemFx.missSound}}' placeholder='path/to/miss.ogg (optional)' data-dtype='String'>
-                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxSound' data-field='system.itemFx.missSound' data-tooltip='Browse audio file'>
+                  <button type='button' class='item-fx-browse-btn' data-action='browseItemFxSound' data-field='system.itemFx.missSound' data-tooltip='{{localize "VAGABOND.ItemFx.BrowseAudio"}}'>
                     <i class='fas fa-music'></i>
                   </button>
                 </div>
               </fieldset>
 
               <div class='item-fx-scale-row'>
-                <label class='resource-label'>Sound Volume</label>
+                <label class='resource-label'>{{localize "VAGABOND.ItemFx.SoundVolume"}}</label>
                 <input type='number' name='system.itemFx.soundVolume' value='{{system.itemFx.soundVolume}}' min='0' max='1' step='0.05' data-dtype='Number'>
-                <span class='item-fx-hint'>0 – 1 (applies to both sounds)</span>
+                <span class='item-fx-hint'>{{localize "VAGABOND.ItemFx.VolumeHint"}}</span>
               </div>
             </div>
           </details>

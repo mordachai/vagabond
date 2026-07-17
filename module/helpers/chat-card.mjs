@@ -1280,31 +1280,37 @@ export class VagabondChatCard {
     // Universal stats
     const stats = [];
 
+    const i18n = k => game.i18n.localize(k);
+
     // Type-specific stats
     if (equipType === 'weapon') {
-      if (sys.currentDamage) stats.push({ label: 'Damage', value: `${sys.currentDamage} ${this._getDamageTypeLabel(sys.currentDamageType)}` });
-      if (sys.rangeDisplay) stats.push({ label: 'Range', value: sys.rangeDisplay });
-      if (sys.gripDisplay) stats.push({ label: 'Grip', value: sys.gripDisplay });
-      if (sys.weaponSkill) stats.push({ label: 'Weapon Skill', value: sys.weaponSkill });
+      if (sys.currentDamage) stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${sys.currentDamage} ${this._getDamageTypeLabel(sys.currentDamageType)}` });
+      if (sys.rangeDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.Range'), value: sys.rangeDisplay });
+      if (sys.gripDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.Grip'), value: sys.gripDisplay });
+      if (sys.weaponSkill) {
+        const skillKey = CONFIG.VAGABOND?.weaponSkills?.[sys.weaponSkill];
+        stats.push({ label: i18n('VAGABOND.UI.Labels.Skill'), value: skillKey ? i18n(skillKey) : sys.weaponSkill });
+      }
     } else if (equipType === 'armor') {
-      if (sys.armorTypeDisplay) stats.push({ label: 'Type', value: sys.armorTypeDisplay });
-      if (sys.finalRating) stats.push({ label: 'Rating', value: sys.finalRating });
-      if (sys.might) stats.push({ label: 'Might Req', value: sys.might });
+      if (sys.armorTypeDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.TypeLabel'), value: sys.armorTypeDisplay });
+      if (sys.finalRating) stats.push({ label: i18n('VAGABOND.Item.Armor.FIELDS.rating.label'), value: sys.finalRating });
+      if (sys.might) stats.push({ label: i18n('VAGABOND.Item.Armor.FIELDS.might.label'), value: sys.might });
       if (sys.immunities && sys.immunities.length > 0) {
-        stats.push({ label: 'Immunities', value: sys.immunities.join(', ') });
+        const labels = sys.immunities.map(id => this._getDamageTypeLabel(id));
+        stats.push({ label: i18n('VAGABOND.Status.DamageImmunities'), value: labels.join(', ') });
       }
     } else if (equipType === 'alchemical') {
       if (sys.alchemicalType) {
-        const type = sys.alchemicalType.charAt(0).toUpperCase() + sys.alchemicalType.slice(1);
-        stats.push({ label: 'Type', value: type });
+        const typeKey = CONFIG.VAGABOND?.alchemicalTypes?.[sys.alchemicalType];
+        stats.push({ label: i18n('VAGABOND.UI.Labels.TypeLabel'), value: typeKey ? i18n(typeKey) : sys.alchemicalType });
       }
       if (sys.damageAmount && sys.damageType !== '-') {
-        stats.push({ label: 'Damage', value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
+        stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
       }
     } else if (equipType === 'gear') {
-      if (sys.gearCategory) stats.push({ label: 'Category', value: sys.gearCategory });
+      if (sys.gearCategory) stats.push({ label: i18n('VAGABOND.UI.Labels.Category'), value: sys.gearCategory });
       if (sys.damageAmount && sys.damageType !== '-') {
-        stats.push({ label: 'Effect', value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
+        stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
       }
     } else if (equipType === 'relic') {
       // Relic lore is now handled in metadata, not stats
@@ -1312,11 +1318,11 @@ export class VagabondChatCard {
 
     // Universal equipment stats
     if (sys.metalDisplay && sys.metal !== 'none' && sys.metal !== 'common') {
-      stats.push({ label: 'Metal', value: sys.metalDisplay });
+      stats.push({ label: i18n('VAGABOND.Item.Weapon.FIELDS.metal.label'), value: sys.metalDisplay });
     }
-    if (sys.costDisplay) stats.push({ label: 'Cost', value: sys.costDisplay });
-    if (sys.slots) stats.push({ label: 'Slots', value: sys.slots });
-    if (sys.quantity && sys.quantity > 1) stats.push({ label: 'Quantity', value: sys.quantity });
+    if (sys.costDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.Cost'), value: sys.costDisplay });
+    if (sys.slots) stats.push({ label: i18n('VAGABOND.UI.Labels.Slots'), value: sys.slots });
+    if (sys.quantity && sys.quantity > 1) stats.push({ label: i18n('VAGABOND.UI.Labels.Quantity'), value: sys.quantity });
 
     // Drop blank/placeholder rows ('-', empty, 0) so empty items don't show stub labels
     const isBlankStat = v => {
@@ -1338,9 +1344,14 @@ export class VagabondChatCard {
 
     // Add properties for weapons
     if (equipType === 'weapon' && sys.properties && sys.properties.length > 0) {
+      const configKeys = Object.keys(CONFIG.VAGABOND?.weaponProperties ?? {});
       html += '<div class="item-properties">';
-      html += '<strong>Properties:</strong> ';
-      html += sys.properties.map(prop => `<span class="property-tag">${prop}</span>`).join(', ');
+      html += `<strong>${i18n('VAGABOND.UI.Labels.Properties')}:</strong> `;
+      html += sys.properties.map(prop => {
+        const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
+        const label = i18n(CONFIG.VAGABOND?.weaponProperties?.[realKey] ?? `VAGABOND.Weapon.Property.${realKey}`);
+        return `<span class="property-tag">${label}</span>`;
+      }).join(', ');
       html += '</div>';
     }
 
@@ -1894,14 +1905,21 @@ export class VagabondChatCard {
     // Get the status ID from the effect
     const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
 
-    // First check if effect has a description field
-    if (effect.description) {
-      fullDescription = effect.description;
-    } else if (statusId) {
-      // Try to find description in CONFIG.statusEffects (Foundry's format)
-      const statusDef = CONFIG.statusEffects?.find(s => s.id === statusId);
-      if (statusDef?.description) {
-        fullDescription = statusDef.description;
+    // Prefer the localized StatusConditionDescriptions entry. The ActiveEffect's own
+    // `description` field is populated (English, from CONFIG.statusEffects) whenever
+    // Foundry creates the status via toggleStatusEffect, so it must NOT be checked first.
+    if (statusId) {
+      const pascalId = statusId.charAt(0).toUpperCase() + statusId.slice(1);
+      const localizedKey = `VAGABOND.StatusConditionDescriptions.${pascalId}`;
+      const localized = game.i18n.localize(localizedKey);
+      if (localized !== localizedKey) fullDescription = localized;
+    }
+    if (!fullDescription) {
+      if (effect.description) {
+        fullDescription = effect.description;
+      } else if (statusId) {
+        const statusDef = CONFIG.statusEffects?.find(s => s.id === statusId);
+        if (statusDef?.description) fullDescription = statusDef.description;
       }
     }
 

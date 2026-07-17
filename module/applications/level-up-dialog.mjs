@@ -253,11 +253,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   _prepareTabData() {
     const visible = this.visibleTabs;
     const tabDefs = [
-      { id: 'questionnaire', label: 'XP', icon: 'fas fa-star' },
-      { id: 'stats', label: 'Stats', icon: 'fas fa-chart-bar' },
-      { id: 'perks', label: 'Perks', icon: 'fas fa-gem' },
-      { id: 'spells', label: 'Spells', icon: 'fas fa-hat-wizard' },
-      { id: 'summary', label: 'Summary', icon: 'fas fa-scroll' },
+      { id: 'questionnaire', label: game.i18n.localize('VAGABOND.LevelUp.TabXP'), icon: 'fas fa-star' },
+      { id: 'stats', label: game.i18n.localize('VAGABOND.LevelUp.TabStats'), icon: 'fas fa-chart-bar' },
+      { id: 'perks', label: game.i18n.localize('VAGABOND.LevelUp.TabPerks'), icon: 'fas fa-gem' },
+      { id: 'spells', label: game.i18n.localize('VAGABOND.UI.Sections.Spells'), icon: 'fas fa-hat-wizard' },
+      { id: 'summary', label: game.i18n.localize('VAGABOND.LevelUp.TabSummary'), icon: 'fas fa-scroll' },
     ];
     return tabDefs
       .filter(t => visible.includes(t.id))
@@ -473,6 +473,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       stats: statEntries,
       selectedStat: selected,
       hasSelection: !!selected,
+      statCap: CONFIG.VAGABOND.homebrew?.statCap ?? 7,
       derived: {
         hp: hpCurrent,
         hpPreview,

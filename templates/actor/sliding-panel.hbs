@@ -61,7 +61,7 @@
             <span>{{localize "VAGABOND.UI.Labels.NoClass"}}</span>
           {{/if}}
           {{#if system.ancestryData}}
-            ({{system.ancestryData.beingType}}, {{localize (lookup config.sizes system.ancestryData.size)}} {{localize "VAGABOND.UI.Labels.SizeSuffix"}})
+            ({{localize (lookup config.beingTypes system.ancestryData.beingType)}}, {{localize (lookup config.sizes system.ancestryData.size)}} {{localize "VAGABOND.UI.Labels.SizeSuffix"}})
           {{else}}
             ({{localize "VAGABOND.UI.Labels.UnknownBeingType"}}, {{localize "VAGABOND.Sizes.medium"}} {{localize "VAGABOND.UI.Labels.SizeSuffix"}})
           {{/if}}
@@ -142,7 +142,7 @@
                               value='{{stat.value}}'
                               data-dtype='Number'
                               class='stat-score'
-                              data-tooltip='{{#if (ne stat.value stat.total)}}{{localize "VAGABOND.UI.Tooltips.BaseTotal" base=stat.value total=stat.total}}{{else}}{{stat.total}}{{/if}}'
+                              data-tooltip='{{#if (and stat.value (ne stat.value stat.total))}}{{localize "VAGABOND.UI.Tooltips.BaseTotal" base=stat.value total=stat.total}}{{else}}{{stat.total}}{{/if}}'
                             />
                             <label
                               class='stat-label'
@@ -250,11 +250,11 @@
               data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
             >
               {{#if (eq system.favorHinder "favor")}}
-                <img src='systems/vagabond/assets/ui/dice/favor-mark.webp' alt='Favored' class='favor-hinder-marker' />
+                <img src='systems/vagabond/assets/ui/dice/favor-mark.webp' alt='{{localize "VAGABOND.FavorHinder.States.favor"}}' class='favor-hinder-marker' />
               {{else if (eq system.favorHinder "hinder")}}
-                <img src='systems/vagabond/assets/ui/dice/hinder-mark.webp' alt='Hindered' class='favor-hinder-marker' />
+                <img src='systems/vagabond/assets/ui/dice/hinder-mark.webp' alt='{{localize "VAGABOND.FavorHinder.States.hinder"}}' class='favor-hinder-marker' />
               {{else}}
-                <img src='systems/vagabond/assets/ui/dice/neutral-mark.webp' alt='Neutral' class='favor-hinder-marker' />
+                <img src='systems/vagabond/assets/ui/dice/neutral-mark.webp' alt='{{localize "VAGABOND.FavorHinder.States.none"}}' class='favor-hinder-marker' />
               {{/if}}
             </button>
             <label class='modifiers-group-favor-label'>
@@ -303,7 +303,7 @@
               >
                 {{skill.label}}
                 {{#if (eq @root.system.attributes.manaSkill key)}}
-                  <i class='fa-duotone fa-regular fa-wand-magic-sparkles mana-skill-icon' title='Mana Skill'></i>
+                  <i class='fa-duotone fa-regular fa-wand-magic-sparkles mana-skill-icon' title='{{localize "VAGABOND.UI.Tooltips.ManaSkillIcon"}}'></i>
                 {{/if}}
               </label>
               <span class='skill-difficulty'>{{skill.difficulty}}</span>
@@ -519,7 +519,7 @@
                 <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
                 <div class="title-right-group">
                   <i class='fas fa-star-christmas mana-icon' title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
-                  <span class='mana-display'><span class="mana-current clickable mana-modifier" data-action='modifyMana' data-tooltip='Left click to spend mana, Right click to restore mana'>{{system.mana.current}}</span>/{{system.mana.max}}</span>
+                  <span class='mana-display'><span class="mana-current clickable mana-modifier" data-action='modifyMana' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendMana"}}'>{{system.mana.current}}</span>/{{system.mana.max}}</span>
                 </div>
               </div>
 

@@ -8,11 +8,11 @@
                 {{!-- Ancestry Info Grid --}}
                 <div class="ancestry-details-grid">
                     <div class="detail-item">
-                        <span class="label">Type:</span>
+                        <span class="label">{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</span>
                         <span class="value">{{selectedItem.ancestryType}}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="label">Size:</span>
+                        <span class="label">{{localize "VAGABOND.CharBuilder.SizeLabel"}}:</span>
                         <span class="value">{{capitalize selectedItem.size}}</span>
                     </div>
                 </div>
@@ -38,12 +38,12 @@
                 {{!-- 2-Column Grid for Class Info --}}
                 <div class="class-details-grid">
                     <div class="detail-item">
-                        <span class="label">Spellcaster:</span>
+                        <span class="label">{{localize "VAGABOND.CharBuilder.SpellcasterLabel"}}:</span>
                         <span class="value">{{localize (concat "VAGABOND.Terms." classPreviewData.isSpellcaster)}}</span>
                     </div>
                     {{#if (eq classPreviewData.isSpellcaster "Yes")}}
                         <div class="detail-item">
-                            <span class="label">Mana Skill:</span>
+                            <span class="label">{{localize "VAGABOND.CharBuilder.ManaSkillColon"}}</span>
                             <span class="value">{{classPreviewData.manaSkillLabel}}</span>
                         </div>
                     {{/if}}
@@ -54,17 +54,17 @@
                     <details class="level-accordion" {{#if this.isOpen}}open{{/if}}>
                         <summary class="level-header">
                             <i class="fas fa-chevron-right"></i>
-                            <span>Level {{this.level}}</span>
+                            <span>{{localize "VAGABOND.CharBuilder.LevelPrefix" level=this.level}}</span>
                         </summary>
                         <div class="level-content">
                             {{#if (eq @root.classPreviewData.isSpellcaster "Yes")}}
                                 <div class="level-traits">
                                     <div class="trait-badge">
-                                        <strong>Mana:</strong> <span>{{this.maxMana}}</span>
+                                        <strong>{{localize "VAGABOND.UI.Labels.Mana"}}:</strong> <span>{{this.maxMana}}</span>
                                     </div>
                                     {{#if this.spells}}
                                         <div class="trait-badge">
-                                            <strong>Spells:</strong> <span>{{this.spells}}</span>
+                                            <strong>{{localize "VAGABOND.UI.Sections.Spells"}}:</strong> <span>{{this.spells}}</span>
                                         </div>
                                     {{/if}}
                                 </div>
@@ -127,7 +127,7 @@
                         <details class="level-accordion" {{#if (eq this.level 1)}}open{{/if}}>
                             <summary class="level-header">
                                 <i class="fas fa-chevron-right"></i>
-                                <span>{{localize "VAGABOND.UI.Sections.Level"}} {{this.level}}</span>
+                                <span>{{localize "VAGABOND.CharBuilder.LevelPrefix" level=this.level}}</span>
                             </summary>
                             <div class="level-content">
                                 {{#if this.features.length}}
@@ -137,13 +137,13 @@
                                         </div>
                                     {{/each}}
                                 {{else}}
-                                    <p class="text-muted italic">No features at this level</p>
+                                    <p class="text-muted italic">{{localize "VAGABOND.CharBuilder.NoFeaturesAtLevel"}}</p>
                                 {{/if}}
                             </div>
                         </details>
                     {{/each}}
                 {{else}}
-                    <p class="text-muted italic">No class features defined</p>
+                    <p class="text-muted italic">{{localize "VAGABOND.CharBuilder.NoClassFeaturesDefined"}}</p>
                 {{/if}}
             </div>
         {{/if}}

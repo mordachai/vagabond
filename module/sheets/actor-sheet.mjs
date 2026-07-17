@@ -1893,7 +1893,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         // Use
         if (showUseOption) {
           menuItems.push({
-            label: 'Use',
+            label: game.i18n.localize('VAGABOND.ContextMenu.Use'),
             icon: 'fas fa-hand-sparkles',
             enabled: true,
             action: async () => {
@@ -1912,7 +1912,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         // Send to Chat
         menuItems.push({
-          label: 'Send to Chat',
+          label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
           icon: 'fas fa-comment',
           enabled: true,
           action: async () => {
@@ -1922,7 +1922,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         // Unequip
         menuItems.push({
-          label: 'Unequip',
+          label: game.i18n.localize('VAGABOND.ContextMenu.Unequip'),
           icon: 'fas fa-times',
           enabled: true,
           action: async () => {
@@ -1935,7 +1935,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           const isBound = item.system.bound === true;
           if (isBound) {
             menuItems.push({
-              label: 'Unbind',
+              label: game.i18n.localize('VAGABOND.ContextMenu.Unbind'),
               icon: 'fa-solid fa-diamond',
               enabled: true,
               action: async () => {
@@ -1968,7 +1968,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         const menuItems = [
           {
-            label: 'Send to Chat',
+            label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
             icon: 'fas fa-comment',
             enabled: true,
             action: async () => {
@@ -1976,7 +1976,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             },
           },
           {
-            label: 'Unfavorite',
+            label: game.i18n.localize('VAGABOND.ContextMenu.Unfavorite'),
             icon: 'fas fa-star',
             enabled: true,
             action: async () => {
@@ -2018,7 +2018,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
         const menuItems = [
           {
-            label: 'Send to Chat',
+            label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
             icon: 'fas fa-comment',
             enabled: true,
             action: async () => {
@@ -2026,7 +2026,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             }
           },
           {
-            label: 'Remove Status',
+            label: game.i18n.localize('VAGABOND.ContextMenu.RemoveStatus'),
             icon: 'fas fa-times',
             enabled: true,
             action: async () => {

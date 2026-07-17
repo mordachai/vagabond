@@ -1,8 +1,8 @@
 {{!-- LEFT COLUMN: Selection List (full height) --}}
 <aside class="selection-list-column">
     <div class="search-sticky">
-        <input type="text" class="search-input" placeholder="Search..." autocomplete="off">
-        <button type="button" class="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
+        <input type="text" class="search-input" placeholder="{{localize 'VAGABOND.CharBuilder.SearchPlaceholder'}}" autocomplete="off">
+        <button type="button" class="search-clear" title="{{localize 'VAGABOND.CharBuilder.ClearSearchTooltip'}}"><i class="fas fa-times"></i></button>
         {{#if (eq step 'perks')}}
         {{#if grants}}
         <div class="perk-grants-list">
@@ -54,7 +54,7 @@
             {{/each}}
         {{else if isGearStep}}
             <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
-                <span>Silver: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>
+                <span>{{localize "VAGABOND.CharBuilder.SilverBudget"}}: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>
             </div>
             {{#each options as |group|}}
             <details class="gear-accordion" {{#if group.isOpen}}open{{/if}}>

@@ -27,7 +27,7 @@
       <div class="member-name-row">
         <h3 class="member-name">{{name}}</h3>
         <span class="member-xp" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.XP'}}">
-          XP: {{xp.current}}/{{xp.required}}
+          {{localize "VAGABOND.Actor.Party.Card.XP"}}: {{xp.current}}/{{xp.required}}
         </span>
       </div>
 
@@ -35,7 +35,7 @@
       {{#if ancestry}}{{#if characterClass}}
       <p class="member-subtitle">
         <span>{{ancestry}}<span class="member-sep"> · </span>{{characterClass}}</span>
-        <span class="member-speed" data-tooltip="Crawl: {{speed.crawl}}' · Travel: {{speed.travel}}mi">Speed: {{speed.base}}'</span>
+        <span class="member-speed" data-tooltip="{{localize 'VAGABOND.UI.Sections.Crawl'}}: {{speed.crawl}}' · {{localize 'VAGABOND.UI.Sections.Travel'}}: {{speed.travel}}mi">{{localize "VAGABOND.Actor.Party.Card.Speed"}}: {{speed.base}}'</span>
       </p>
       {{/if}}{{/if}}
 

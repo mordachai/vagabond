@@ -10,7 +10,7 @@
     {{! Mana Info Row }}
     <div class='mana-info-row'>
       <div class='mana-field'>
-        <label class='resource-label clickable mana-modifier' data-mana-action='modify' data-tooltip='Left click to spend mana, Right click to restore mana'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.current.label"}}</label>
+        <label class='resource-label clickable mana-modifier' data-mana-action='modify' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendMana"}}'>{{localize "VAGABOND.Actor.Character.FIELDS.mana.current.label"}}</label>
         <input
           class='mana-value'
           type='text'
@@ -44,7 +44,7 @@
       {{!-- {{#if @root.editable}}
         <i
           class='fas fa-plus clickable'
-          data-tooltip='Create New Spell'
+          data-tooltip='{{localize "VAGABOND.UI.Labels.CreateNewSpellTooltip"}}'
           data-action='createDoc'
           data-document-class='Item'
           data-type='spell'
@@ -56,7 +56,7 @@
         <div class='item-name spell-col-name'>{{localize "VAGABOND.UI.Sections.Name"}}</div>
         <div class='item-damage spell-col-damage'>{{localize "VAGABOND.UI.Sections.Damage"}}</div>
         <div class='spell-col-favorite' data-tooltip='{{localize "VAGABOND.UI.Sections.Favorite"}}'>F</div>
-        <div class='item-controls spell-col-controls' data-tooltip='Actions'>
+        <div class='item-controls spell-col-controls' data-tooltip='{{localize "VAGABOND.UI.Labels.Actions"}}'>
           <i class='fas fa-cog'></i>
         </div>
       </li> --}}

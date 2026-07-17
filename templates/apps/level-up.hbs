@@ -9,9 +9,9 @@
 
     {{! GM Override Toggle }}
     {{#if isGM}}
-      <label class="gm-override-toggle" data-tooltip="Override even/odd level rules for stat & perk tabs">
+      <label class="gm-override-toggle" data-tooltip="{{localize 'VAGABOND.LevelUp.GmOverrideTooltip'}}">
         <input type="checkbox" {{#if gmOverride}}checked{{/if}} data-action="toggleGmOverride" />
-        <i class="fas fa-user-shield"></i> GM
+        <i class="fas fa-user-shield"></i> {{localize "VAGABOND.LevelUp.GM"}}
       </label>
     {{/if}}
   </nav>
@@ -25,8 +25,8 @@
         <div class="lu-xp-layout">
           {{! Left: Questions }}
           <div class="lu-xp-left">
-            <h3><i class="fas fa-star"></i> Session XP Questionnaire</h3>
-            <p class="lu-instruction">Check each question that applies to this session:</p>
+            <h3><i class="fas fa-star"></i> {{localize "VAGABOND.LevelUp.SessionXPQuestionnaire"}}</h3>
+            <p class="lu-instruction">{{localize "VAGABOND.LevelUp.Instruction"}}</p>
 
             <div class="lu-questions">
               {{#each questionnaire.questions}}
@@ -42,10 +42,10 @@
             <div class="lu-actions">
               {{#unless questionnaire.xpAwarded}}
                 <button type="button" class="lu-btn lu-btn-primary" data-action="awardXP" {{#unless questionnaire.xpGained}}disabled{{/unless}}>
-                  <i class="fas fa-star"></i> Award {{questionnaire.xpGained}} XP
+                  <i class="fas fa-star"></i> {{localize "VAGABOND.LevelUp.AwardXP" xp=questionnaire.xpGained}}
                 </button>
               {{else}}
-                <span class="lu-awarded-badge"><i class="fas fa-check"></i> XP Awarded</span>
+                <span class="lu-awarded-badge"><i class="fas fa-check"></i> {{localize "VAGABOND.LevelUp.XPAwarded"}}</span>
               {{/unless}}
             </div>
           </div>
@@ -54,14 +54,14 @@
           <div class="lu-xp-right">
             <div class="lu-stats-panel">
               <div class="lu-stats-panel-level">
-                <span class="lu-stats-label">Level</span>
+                <span class="lu-stats-label">{{localize "VAGABOND.UI.Sections.Level"}}</span>
                 <span class="lu-stats-big">{{questionnaire.currentLevel}}</span>
               </div>
 
               <div class="lu-stats-panel-divider"></div>
 
               <div class="lu-stats-panel-xp">
-                <span class="lu-stats-label">Experience</span>
+                <span class="lu-stats-label">{{localize "VAGABOND.LevelUp.Experience"}}</span>
                 <div class="lu-xp-numbers">
                   <span class="lu-xp-current {{#if questionnaire.canLevelUp}}lu-ready{{/if}}">{{questionnaire.projectedXP}}</span>
                   <span class="lu-xp-separator">/</span>
@@ -75,14 +75,14 @@
               <div class="lu-stats-panel-divider"></div>
 
               <div class="lu-stats-panel-next">
-                <span class="lu-stats-label">Next Level</span>
+                <span class="lu-stats-label">{{localize "VAGABOND.LevelUp.NextLevel"}}</span>
                 <span class="lu-stats-big lu-next-level">{{questionnaire.nextLevel}}</span>
               </div>
 
               {{#if questionnaire.xpGained}}
                 <div class="lu-stats-panel-divider"></div>
                 <div class="lu-stats-panel-gain">
-                  <span class="lu-stats-label">Session XP</span>
+                  <span class="lu-stats-label">{{localize "VAGABOND.LevelUp.SessionXP"}}</span>
                   <span class="lu-stats-gain">+{{questionnaire.xpGained}}</span>
                 </div>
               {{/if}}
@@ -95,7 +95,7 @@
     {{! ─── Summary ─── }}
     {{#if (eq activeTab 'summary')}}
       <section class="lu-tab lu-summary">
-        <h3><i class="fas fa-scroll"></i> Level {{newLevel}} Summary</h3>
+        <h3><i class="fas fa-scroll"></i> {{localize "VAGABOND.LevelUp.LevelSummary" level=newLevel}}</h3>
 
         {{#unless levelApplied}}
           <p class="lu-warning"><i class="fas fa-exclamation-triangle"></i>{{localize "VAGABOND.LevelUp.HintLevelUp"}}</p>
@@ -103,14 +103,14 @@
 
         {{#if summary.hasFeatures}}
           <div class="lu-features">
-            <h4>New Features</h4>
+            <h4>{{localize "VAGABOND.LevelUp.NewFeatures"}}</h4>
             {{#each summary.features}}
               <div class="lu-feature">
                 <strong>{{name}}</strong>
                 {{#if description}}<div class="lu-feature-desc">{{{description}}}</div>{{/if}}
-                {{#if statBonusPoints}}<span class="lu-feature-tag"><i class="fas fa-chart-bar"></i> +{{statBonusPoints}} stat point(s)</span>{{/if}}
-                {{#if perkAmount}}<span class="lu-feature-tag"><i class="fas fa-gem"></i> +{{perkAmount}} perk(s)</span>{{/if}}
-                {{#if extraTraining}}<span class="lu-feature-tag"><i class="fas fa-graduation-cap"></i> +{{extraTraining}} training(s)</span>{{/if}}
+                {{#if statBonusPoints}}<span class="lu-feature-tag"><i class="fas fa-chart-bar"></i> +{{statBonusPoints}} {{localize "VAGABOND.LevelUp.StatPointsSuffix"}}</span>{{/if}}
+                {{#if perkAmount}}<span class="lu-feature-tag"><i class="fas fa-gem"></i> +{{perkAmount}} {{localize "VAGABOND.LevelUp.PerksSuffix"}}</span>{{/if}}
+                {{#if extraTraining}}<span class="lu-feature-tag"><i class="fas fa-graduation-cap"></i> +{{extraTraining}} {{localize "VAGABOND.LevelUp.TrainingsSuffix"}}</span>{{/if}}
               </div>
             {{/each}}
           </div>
@@ -118,7 +118,7 @@
 
         {{#if summary.hasChecklist}}
           <div class="lu-checklist">
-            <h4>To Do</h4>
+            <h4>{{localize "VAGABOND.LevelUp.ToDo"}}</h4>
             {{#each summary.checklist}}
               <div class="lu-checklist-item {{#if done}}done{{/if}}">
                 <span class="lu-check-icon">
@@ -137,8 +137,8 @@
     {{! ─── Stat Increase ─── }}
     {{#if (eq activeTab 'stats')}}
       <section class="lu-tab lu-stats">
-        <h3><i class="fas fa-chart-bar"></i> Stat Increase</h3>
-        <p class="lu-instruction">Choose one stat to increase by +1 (max 7):</p>
+        <h3><i class="fas fa-chart-bar"></i> {{localize "VAGABOND.LevelUp.StatIncrease"}}</h3>
+        <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseStatInstruction" cap=statIncrease.statCap}}</p>
 
         <div class="lu-stat-grid">
           {{#each statIncrease.stats}}
@@ -150,14 +150,14 @@
               <span class="lu-stat-name">{{label}}</span>
               <span class="lu-stat-value">{{current}}</span>
               {{#if isSelected}}<span class="lu-stat-delta">+1</span>{{/if}}
-              {{#if isMaxed}}<span class="lu-stat-max">MAX</span>{{/if}}
+              {{#if isMaxed}}<span class="lu-stat-max">{{localize "VAGABOND.LevelUp.Max"}}</span>{{/if}}
             </button>
           {{/each}}
         </div>
 
         {{! Derived Stats Preview }}
         <div class="lu-derived-stats">
-          <h4>Character Stats</h4>
+          <h4>{{localize "VAGABOND.LevelUp.CharacterStats"}}</h4>
           <div class="lu-derived-grid lu-grid-3col">
             <div class="lu-derived-item {{#if statIncrease.derived.hpChanged}}lu-changed{{/if}}">
               <span class="lu-derived-label">HP</span>
@@ -166,35 +166,35 @@
             </div>
             {{#if statIncrease.derived.isSpellcaster}}
               <div class="lu-derived-item {{#if statIncrease.derived.manaChanged}}lu-changed{{/if}}">
-                <span class="lu-derived-label">Mana Max</span>
+                <span class="lu-derived-label">{{localize "VAGABOND.ResourceTypes.MaxMana"}}</span>
                 <span class="lu-derived-dots"></span>
                 <span class="lu-derived-value">{{#if statIncrease.derived.manaChanged}}<span class="lu-old-val">{{statIncrease.derived.manaMax}}</span> {{statIncrease.derived.manaMaxPreview}}{{else}}{{statIncrease.derived.manaMax}}{{/if}}</span>
               </div>
               <div class="lu-derived-item {{#if statIncrease.derived.manaCastChanged}}lu-changed{{/if}}">
-                <span class="lu-derived-label">Mana/Cast</span>
+                <span class="lu-derived-label">{{localize "VAGABOND.ResourceTypes.ManaPerCast"}}</span>
                 <span class="lu-derived-dots"></span>
                 <span class="lu-derived-value">{{#if statIncrease.derived.manaCastChanged}}<span class="lu-old-val">{{statIncrease.derived.manaCast}}</span> {{statIncrease.derived.manaCastPreview}}{{else}}{{statIncrease.derived.manaCast}}{{/if}}</span>
               </div>
             {{/if}}
             <div class="lu-derived-item {{#if statIncrease.derived.luckChanged}}lu-changed{{/if}}">
-              <span class="lu-derived-label">Luck Pool</span>
+              <span class="lu-derived-label">{{localize "VAGABOND.UI.Sections.LuckPool"}}</span>
               <span class="lu-derived-dots"></span>
               <span class="lu-derived-value">{{#if statIncrease.derived.luckChanged}}<span class="lu-old-val">{{statIncrease.derived.luckPool}}</span> {{statIncrease.derived.luckPreview}}{{else}}{{statIncrease.derived.luckPool}}{{/if}}</span>
             </div>
             <div class="lu-derived-item {{#if statIncrease.derived.inventoryChanged}}lu-changed{{/if}}">
-              <span class="lu-derived-label">Inventory</span>
+              <span class="lu-derived-label">{{localize "VAGABOND.UI.Sections.Inventory"}}</span>
               <span class="lu-derived-dots"></span>
               <span class="lu-derived-value">{{#if statIncrease.derived.inventoryChanged}}<span class="lu-old-val">{{statIncrease.derived.inventory}}</span> {{statIncrease.derived.inventoryPreview}}{{else}}{{statIncrease.derived.inventory}}{{/if}}</span>
             </div>
             <div class="lu-derived-item {{#if statIncrease.derived.speedChanged}}lu-changed{{/if}}">
-              <span class="lu-derived-label">Speed</span>
+              <span class="lu-derived-label">{{localize "VAGABOND.UI.Sections.Speed"}}</span>
               <span class="lu-derived-dots"></span>
               <span class="lu-derived-value">{{#if statIncrease.derived.speedChanged}}<span class="lu-old-val">{{statIncrease.derived.speed}}</span> {{statIncrease.derived.speedPreview}}{{else}}{{statIncrease.derived.speed}}{{/if}}</span>
             </div>
           </div>
 
           {{! Saves }}
-          <h4>Saves</h4>
+          <h4>{{localize "VAGABOND.Saves.savesTitle"}}</h4>
           <div class="lu-derived-grid lu-grid-3col">
             {{#each statIncrease.derived.saves}}
               <div class="lu-derived-item {{#if changed}}lu-changed{{/if}}">
@@ -206,7 +206,7 @@
           </div>
 
           {{! Skills }}
-          <h4>Skills</h4>
+          <h4>{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
           <div class="lu-derived-grid lu-grid-4col">
             {{#each statIncrease.derived.skills}}
               <div class="lu-derived-item {{#if trained}}lu-trained{{/if}} {{#if changed}}lu-changed{{/if}}">
@@ -222,7 +222,7 @@
           </div>
 
           {{! Weapon Skills }}
-          <h4>Weapon Skills</h4>
+          <h4>{{localize "VAGABOND.UI.Labels.WeaponSkills"}}</h4>
           <div class="lu-derived-grid lu-grid-4col">
             {{#each statIncrease.derived.weaponSkills}}
               <div class="lu-derived-item {{#if trained}}lu-trained{{/if}} {{#if changed}}lu-changed{{/if}}">
@@ -244,13 +244,13 @@
     {{#if (eq activeTab 'perks')}}
       <section class="lu-tab lu-perks">
         <div class="lu-perks-header">
-          <h3><i class="fas fa-gem"></i> Choose a Perk</h3>
+          <h3><i class="fas fa-gem"></i> {{localize "VAGABOND.LevelUp.ChooseAPerk"}}</h3>
           {{#if perks.hiddenCount}}
             <button type="button" class="lu-btn lu-btn-small" data-action="toggleShowAllPerks">
               {{#if perks.showAllPerks}}
-                <i class="fas fa-eye-slash"></i> Hide Unqualified ({{perks.hiddenCount}})
+                <i class="fas fa-eye-slash"></i> {{localize "VAGABOND.LevelUp.HideUnqualified" count=perks.hiddenCount}}
               {{else}}
-                <i class="fas fa-eye"></i> Show All ({{perks.hiddenCount}} hidden)
+                <i class="fas fa-eye"></i> {{localize "VAGABOND.LevelUp.ShowAll" count=perks.hiddenCount}}
               {{/if}}
             </button>
           {{/if}}
@@ -280,7 +280,7 @@
                    data-action="selectPerk" data-uuid="{{uuid}}">
                 <img src="{{img}}" alt="" class="lu-list-img" />
                 <span class="lu-list-name">{{name}}</span>
-                {{#if isOwned}}<span class="lu-badge taken">Taken{{#if ownedCount}} x{{ownedCount}}{{/if}}</span>{{/if}}
+                {{#if isOwned}}<span class="lu-badge taken">{{localize "VAGABOND.LevelUp.Taken"}}{{#if ownedCount}} x{{ownedCount}}{{/if}}</span>{{/if}}
                 {{#unless prerequisitesMet}}<span class="lu-badge prereq"><i class="fas fa-lock"></i></span>{{/unless}}
               </div>
             {{/each}}
@@ -295,7 +295,7 @@
               </div>
               {{#if perks.previewItem.hasPrereqs}}
                 <div class="lu-prereq-list">
-                  <strong>Prerequisites:</strong>
+                  <strong>{{localize "VAGABOND.Item.Perk.FIELDS.prerequisites.label"}}:</strong>
                   <ul>
                     {{#each perks.previewItem.allPrereqs}}
                       <li class="{{#if met}}prereq-met{{else}}prereq-unmet{{/if}}">
@@ -309,14 +309,14 @@
               <div class="lu-preview-body">{{{perks.previewItem.enrichedDescription}}}</div>
               {{#unless perks.hasChosen}}
                 <button type="button" class="lu-btn lu-btn-primary" data-action="addPerk" data-uuid="{{perks.previewItem.uuid}}">
-                  <i class="fas fa-plus"></i> Select Perk
+                  <i class="fas fa-plus"></i> {{localize "VAGABOND.LevelUp.SelectPerk"}}
                   {{#unless perks.previewItem.prerequisitesMet}}
-                    <span class="lu-btn-note">(prereqs not met)</span>
+                    <span class="lu-btn-note">{{localize "VAGABOND.LevelUp.PrereqsNotMet"}}</span>
                   {{/unless}}
                 </button>
               {{/unless}}
             {{else}}
-              <p class="lu-placeholder">Select a perk to preview</p>
+              <p class="lu-placeholder">{{localize "VAGABOND.LevelUp.SelectPerkPreview"}}</p>
             {{/if}}
           </div>
         </div>
@@ -326,8 +326,8 @@
     {{! ─── Spells ─── }}
     {{#if (eq activeTab 'spells')}}
       <section class="lu-tab lu-spells">
-        <h3><i class="fas fa-hat-wizard"></i> Learn New Spells</h3>
-        <p class="lu-instruction">Choose {{spells.maxNewSpells}} new spell(s) ({{spells.currentCount}}/{{spells.maxNewSpells}} selected):</p>
+        <h3><i class="fas fa-hat-wizard"></i> {{localize "VAGABOND.LevelUp.LearnNewSpells"}}</h3>
+        <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseSpellsInstruction" max=spells.maxNewSpells current=spells.currentCount}}</p>
 
         {{! Tray (chosen spells) }}
         {{#if spells.chosenSpells}}
@@ -354,8 +354,8 @@
                 <span class="lu-list-name">{{name}}</span>
                 {{#if baseDamage}}<span class="lu-spell-info">{{baseDamage}}</span>{{/if}}
                 {{#if damageType}}<span class="lu-spell-dmg"><i class="{{damageTypeIcon}}"></i></span>{{/if}}
-                {{#if isOwned}}<span class="lu-badge owned">Known</span>{{/if}}
-                {{#if isRequired}}<span class="lu-badge required">Required</span>{{/if}}
+                {{#if isOwned}}<span class="lu-badge owned">{{localize "VAGABOND.LevelUp.Known"}}</span>{{/if}}
+                {{#if isRequired}}<span class="lu-badge required">{{localize "VAGABOND.LevelUp.Required"}}</span>{{/if}}
               </div>
             {{/each}}
           </div>
@@ -368,36 +368,36 @@
                 <h4>{{spells.previewItem.name}}</h4>
               </div>
               <div class="lu-spell-details">
-                {{#if spells.previewItem.baseDamage}}<div class="lu-spell-detail"><strong>Base Damage:</strong> {{spells.previewItem.baseDamage}}</div>{{/if}}
+                {{#if spells.previewItem.baseDamage}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.DamageBase"}}:</strong> {{spells.previewItem.baseDamage}}</div>{{/if}}
                 {{#if spells.previewItem.damageType}}
                   <div class="lu-spell-detail">
-                    <strong>Damage Type:</strong>
+                    <strong>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</strong>
                     {{#if spells.previewItem.damageTypeIcon}}<i class="{{spells.previewItem.damageTypeIcon}}"></i>{{/if}}
                     {{spells.previewItem.damageType}}
                   </div>
                 {{/if}}
-                {{#if spells.previewItem.manaCost}}<div class="lu-spell-detail"><strong>Mana Cost:</strong> {{spells.previewItem.manaCost}}</div>{{/if}}
-                {{#if spells.previewItem.deliveryLabel}}<div class="lu-spell-detail"><strong>Delivery:</strong> {{spells.previewItem.deliveryLabel}}</div>{{/if}}
-                {{#if spells.previewItem.range}}<div class="lu-spell-detail"><strong>Range:</strong> {{spells.previewItem.range}}</div>{{/if}}
+                {{#if spells.previewItem.manaCost}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.Item.Spell.FIELDS.delivery.cost.label"}}:</strong> {{spells.previewItem.manaCost}}</div>{{/if}}
+                {{#if spells.previewItem.deliveryLabel}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.Delivery"}}:</strong> {{spells.previewItem.deliveryLabel}}</div>{{/if}}
+                {{#if spells.previewItem.range}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.Range"}}:</strong> {{spells.previewItem.range}}</div>{{/if}}
               </div>
               <div class="lu-preview-body">{{{spells.previewItem.enrichedDescription}}}</div>
               {{#if (or spells.previewItem.crit spells.previewItem.duration)}}
                 <div class="lu-spell-details lu-spell-details-bottom">
-                  {{#if spells.previewItem.crit}}<div class="lu-spell-detail"><strong>Crit:</strong> {{spells.previewItem.crit}}</div>{{/if}}
-                  {{#if spells.previewItem.duration}}<div class="lu-spell-detail"><strong>Duration:</strong> {{spells.previewItem.duration}}</div>{{/if}}
+                  {{#if spells.previewItem.crit}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.Critical"}}:</strong> {{spells.previewItem.crit}}</div>{{/if}}
+                  {{#if spells.previewItem.duration}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.Item.Spell.FIELDS.duration.label"}}:</strong> {{spells.previewItem.duration}}</div>{{/if}}
                 </div>
               {{/if}}
               {{#if spells.previewItem.isOwned}}
-                <span class="lu-owned-notice"><i class="fas fa-check"></i> Already Known</span>
+                <span class="lu-owned-notice"><i class="fas fa-check"></i> {{localize "VAGABOND.LevelUp.AlreadyKnown"}}</span>
               {{else if spells.previewItem.isChosen}}
-                <span class="lu-owned-notice"><i class="fas fa-check"></i> Selected</span>
+                <span class="lu-owned-notice"><i class="fas fa-check"></i> {{localize "VAGABOND.LevelUp.Selected"}}</span>
               {{else if spells.canAddMore}}
                 <button type="button" class="lu-btn lu-btn-primary" data-action="addSpell" data-uuid="{{spells.previewItem.uuid}}">
-                  <i class="fas fa-plus"></i> Learn Spell
+                  <i class="fas fa-plus"></i> {{localize "VAGABOND.LevelUp.LearnSpell"}}
                 </button>
               {{/if}}
             {{else}}
-              <p class="lu-placeholder">Select a spell to preview</p>
+              <p class="lu-placeholder">{{localize "VAGABOND.LevelUp.SelectSpellPreview"}}</p>
             {{/if}}
           </div>
         </div>
@@ -410,12 +410,12 @@
   <footer class="lu-footer">
     {{#if showLevelUpBtn}}
       <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="triggerLevelUp">
-        <i class="fas fa-arrow-up"></i> Level Up!
+        <i class="fas fa-arrow-up"></i> {{localize "VAGABOND.LevelUp.Title"}}
       </button>
     {{/if}}
     {{#if showApplyBtn}}
       <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="applyLevelUp" {{#unless allChecklistDone}}disabled{{/unless}}>
-        <i class="fas fa-check-double"></i> Apply All Changes &amp; Close
+        <i class="fas fa-check-double"></i> {{localize "VAGABOND.LevelUp.ApplyAllChanges"}}
       </button>
     {{/if}}
   </footer>

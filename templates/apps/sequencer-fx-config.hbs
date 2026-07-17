@@ -4,18 +4,18 @@
 <div class="sfx-status-bar">
   <span class="sfx-status-chip {{#if animationsEnabled}}sfx-chip-on{{else}}sfx-chip-off{{/if}}">
     <i class="fas {{#if animationsEnabled}}fa-circle-check{{else}}fa-circle-xmark{{/if}}"></i>
-    {{#if animationsEnabled}}Animations On{{else}}Animations Off{{/if}}
+    {{#if animationsEnabled}}{{localize "VAGABOND.SequencerFX.AnimationsOn"}}{{else}}{{localize "VAGABOND.SequencerFX.AnimationsOff"}}{{/if}}
   </span>
   <span class="sfx-status-chip {{#if sequencerAvailable}}sfx-chip-ok{{else}}sfx-chip-missing{{/if}}">
     <i class="fas {{#if sequencerAvailable}}fa-check{{else}}fa-triangle-exclamation{{/if}}"></i>
-    Sequencer: {{#if sequencerAvailable}}Active{{else}}Not installed{{/if}}
+    Sequencer: {{#if sequencerAvailable}}{{localize "VAGABOND.SequencerFX.SequencerActive"}}{{else}}{{localize "VAGABOND.SequencerFX.SequencerNotInstalled"}}{{/if}}
   </span>
   <span class="sfx-status-chip {{#if jb2aAvailable}}sfx-chip-ok{{else}}sfx-chip-missing{{/if}}">
     <i class="fas {{#if jb2aAvailable}}fa-check{{else}}fa-triangle-exclamation{{/if}}"></i>
-    JB2A: {{#if jb2aAvailable}}Active{{else}}Not installed{{/if}}
+    JB2A: {{#if jb2aAvailable}}{{localize "VAGABOND.SequencerFX.JB2AActive"}}{{else}}{{localize "VAGABOND.SequencerFX.JB2ANotInstalled"}}{{/if}}
   </span>
   {{#unless animationsEnabled}}
-  <span class="sfx-status-hint">Enable "Use Animations" in System Settings to activate spell FX.</span>
+  <span class="sfx-status-hint">{{localize "VAGABOND.SequencerFX.EnableAnimationsHint"}}</span>
   {{/unless}}
 </div>
 
@@ -36,7 +36,7 @@
       class="sfx-school-btn {{#if exportImportActive}}active{{/if}}"
       data-action="switchSchool"
       data-school="exportImport">
-      <i class="fas fa-file-export"></i> Export / Import
+      <i class="fas fa-file-export"></i> {{localize "VAGABOND.SequencerFX.ExportImport"}}
     </button>
   </nav>
 
@@ -48,43 +48,43 @@
 
         {{! Cast Animation }}
         <section class="sfx-section">
-          <h3>Cast Animation</h3>
+          <h3>{{localize "VAGABOND.SequencerFX.CastAnimation"}}</h3>
           <div class="sfx-cast-row">
             <div class="form-group sfx-file-group">
-              <label>Video</label>
+              <label>{{localize "VAGABOND.SequencerFX.Video"}}</label>
               <div class="sfx-file-input">
                 <input type="text" name="castAnims.{{key}}.file"
-                  value="{{castAnim.file}}" placeholder="path/to/cast.webm"/>
+                  value="{{castAnim.file}}" placeholder="{{localize 'VAGABOND.SequencerFX.CastVideoPlaceholder'}}"/>
                 <button type="button" class="sfx-browse-btn"
                   data-action="browseVideo"
                   data-field="castAnims.{{key}}.file"
-                  title="Browse"><i class="fas fa-film"></i></button>
+                  title="{{localize 'VAGABOND.SequencerFX.BrowseTooltip'}}"><i class="fas fa-film"></i></button>
                 <button type="button" class="sfx-preview-btn"
                   data-action="previewCast"
                   data-school="{{key}}"
-                  title="Preview in window"><i class="fas fa-play"></i></button>
+                  title="{{localize 'VAGABOND.SequencerFX.PreviewInWindowTooltip'}}"><i class="fas fa-play"></i></button>
               </div>
             </div>
             <div class="form-group sfx-file-group">
-              <label>Sound</label>
+              <label>{{localize "VAGABOND.SequencerFX.Sound"}}</label>
               <div class="sfx-file-input">
                 <input type="text" name="castAnims.{{key}}.sound"
-                  value="{{castAnim.sound}}" placeholder="path/to/cast.ogg"/>
+                  value="{{castAnim.sound}}" placeholder="{{localize 'VAGABOND.SequencerFX.CastSoundPlaceholder'}}"/>
                 <button type="button" class="sfx-browse-btn"
                   data-action="browseAudio" data-field="castAnims.{{key}}.sound"
-                  title="Browse"><i class="fas fa-music"></i></button>
+                  title="{{localize 'VAGABOND.SequencerFX.BrowseTooltip'}}"><i class="fas fa-music"></i></button>
                 <button type="button" class="sfx-preview-btn"
                   data-action="previewSound" data-field="castAnims.{{key}}.sound"
-                  title="Preview sound"><i class="fas fa-play"></i></button>
+                  title="{{localize 'VAGABOND.SequencerFX.PreviewSoundTooltip'}}"><i class="fas fa-play"></i></button>
               </div>
             </div>
             <div class="form-group sfx-num-group">
-              <label>Scale</label>
+              <label>{{localize "VAGABOND.SequencerFX.Scale"}}</label>
               <input type="number" name="castAnims.{{key}}.scale"
                 value="{{castAnim.scale}}" step="0.1" min="0.1" max="10"/>
             </div>
             <div class="form-group sfx-num-group">
-              <label>Volume</label>
+              <label>{{localize "VAGABOND.SequencerFX.Volume"}}</label>
               <input type="number" name="castAnims.{{key}}.volume"
                 value="{{castAnim.volume}}" step="0.05" min="0" max="1"/>
             </div>
@@ -93,7 +93,7 @@
 
         {{! Area Animations }}
         <section class="sfx-section">
-          <h3>Area Animations</h3>
+          <h3>{{localize "VAGABOND.SequencerFX.AreaAnimations"}}</h3>
           <div class="sfx-delivery-list">
             {{#each areaAnims}}
             <div class="sfx-delivery-block">
@@ -104,30 +104,30 @@
                 <div class="sfx-file-input sfx-delivery-video">
                   <input type="text"
                     name="areaAnims.{{../key}}.{{deliveryKey}}.file"
-                    value="{{file}}" placeholder="video…"/>
+                    value="{{file}}" placeholder="{{localize 'VAGABOND.SequencerFX.VideoPlaceholder'}}"/>
                   <button type="button" class="sfx-browse-btn"
                     data-action="browseVideo"
                     data-field="areaAnims.{{../key}}.{{deliveryKey}}.file"
-                    title="Browse video"><i class="fas fa-film"></i></button>
+                    title="{{localize 'VAGABOND.SequencerFX.BrowseVideoTooltip'}}"><i class="fas fa-film"></i></button>
                   <button type="button" class="sfx-preview-btn"
                     data-action="previewArea"
                     data-school="{{../key}}"
                     data-delivery="{{deliveryKey}}"
-                    title="Preview in window"><i class="fas fa-play"></i></button>
+                    title="{{localize 'VAGABOND.SequencerFX.PreviewInWindowTooltip'}}"><i class="fas fa-play"></i></button>
                 </div>
                 <div class="sfx-delivery-divider"></div>
                 <div class="sfx-file-input sfx-delivery-audio">
                   <input type="text"
                     name="areaAnims.{{../key}}.{{deliveryKey}}.sound"
-                    value="{{sound}}" placeholder="sound…"/>
+                    value="{{sound}}" placeholder="{{localize 'VAGABOND.SequencerFX.SoundPlaceholder'}}"/>
                   <button type="button" class="sfx-browse-btn"
                     data-action="browseAudio"
                     data-field="areaAnims.{{../key}}.{{deliveryKey}}.sound"
-                    title="Browse audio"><i class="fas fa-music"></i></button>
+                    title="{{localize 'VAGABOND.SequencerFX.BrowseAudioTooltip'}}"><i class="fas fa-music"></i></button>
                   <button type="button" class="sfx-preview-btn"
                     data-action="previewSound"
                     data-field="areaAnims.{{../key}}.{{deliveryKey}}.sound"
-                    title="Preview sound"><i class="fas fa-play"></i></button>
+                    title="{{localize 'VAGABOND.SequencerFX.PreviewSoundTooltip'}}"><i class="fas fa-play"></i></button>
                 </div>
               </div>
 
@@ -158,19 +158,19 @@
       <div class="sfx-panel-scroll">
 
         <section class="sfx-section">
-          <h3>Export Configuration</h3>
-          <p class="sfx-io-hint">Download the current animation configuration as a JSON file. The exported file includes all schools, delivery types, and sound paths.</p>
+          <h3>{{localize "VAGABOND.SequencerFX.ExportConfigLegend"}}</h3>
+          <p class="sfx-io-hint">{{localize "VAGABOND.SequencerFX.ExportConfigHint"}}</p>
           <button type="button" class="sfx-io-btn" data-action="exportConfig">
-            <i class="fas fa-download"></i> Download Config
+            <i class="fas fa-download"></i> {{localize "VAGABOND.SequencerFX.DownloadConfig"}}
           </button>
         </section>
 
         <section class="sfx-section">
-          <h3>Import Configuration</h3>
-          <p class="sfx-io-hint">Load a previously exported JSON config file. This will overwrite all current animation settings.</p>
+          <h3>{{localize "VAGABOND.SequencerFX.ImportConfigLegend"}}</h3>
+          <p class="sfx-io-hint">{{localize "VAGABOND.SequencerFX.ImportConfigHint"}}</p>
           <input type="file" id="sfx-import-file" accept=".json" style="display:none">
           <button type="button" class="sfx-io-btn" data-action="importConfig">
-            <i class="fas fa-upload"></i> Import Config
+            <i class="fas fa-upload"></i> {{localize "VAGABOND.SequencerFX.ImportConfigButton"}}
           </button>
         </section>
 
@@ -183,23 +183,23 @@
 
 <footer class="form-footer sfx-footer">
   <button type="button" class="sfx-reset-btn" data-action="resetDefaults"
-    title="Clear all stored paths — reverts to JB2A defaults if installed, otherwise empty">
-    <i class="fas fa-arrow-rotate-left"></i> Reset to Defaults
+    title="{{localize 'VAGABOND.SequencerFX.ResetToDefaultsTooltip'}}">
+    <i class="fas fa-arrow-rotate-left"></i> {{localize "VAGABOND.SequencerFX.ResetToDefaults"}}
   </button>
   {{#if jb2aAvailable}}
   <button type="button" class="sfx-jb2a-btn" data-action="loadJB2ADefaults"
-    title="Populate all animation paths with the bundled JB2A presets">
-    <i class="fas fa-wand-sparkles"></i> Load JB2A Defaults
+    title="{{localize 'VAGABOND.SequencerFX.LoadJB2ADefaultsTooltip'}}">
+    <i class="fas fa-wand-sparkles"></i> {{localize "VAGABOND.SequencerFX.LoadJB2ADefaults"}}
   </button>
   {{/if}}
   <button type="submit">
-    <i class="fas fa-save"></i> Save
+    <i class="fas fa-save"></i> {{localize "VAGABOND.HomebrewSettings.Save"}}
   </button>
   <button type="button" data-action="saveAndClose">
-    <i class="fas fa-save"></i> Save &amp; Close
+    <i class="fas fa-save"></i> {{localize "VAGABOND.HomebrewSettings.Fields.SaveAndClose"}}
   </button>
   <button type="button" data-action="close">
-    <i class="fas fa-times"></i> Cancel
+    <i class="fas fa-times"></i> {{localize "VAGABOND.HomebrewSettings.Fields.Cancel"}}
   </button>
 </footer>
 </div>{{! end sfx-wrapper }}

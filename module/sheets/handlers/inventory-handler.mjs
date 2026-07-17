@@ -191,7 +191,7 @@ export class InventoryHandler {
     // Use option
     if (showUseOption) {
       menuItems.push({
-        label: 'Use',
+        label: game.i18n.localize('VAGABOND.ContextMenu.Use'),
         icon: 'fas fa-hand-sparkles',
         enabled: true,
         action: async () => {
@@ -204,7 +204,7 @@ export class InventoryHandler {
 
     // Send to Chat
     menuItems.push({
-      label: 'Send to Chat',
+      label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
       icon: 'fas fa-comment',
       enabled: true,
       action: async () => {
@@ -214,7 +214,7 @@ export class InventoryHandler {
 
     // Equip/Unequip
     menuItems.push({
-      label: isEquipped ? 'Unequip' : 'Equip',
+      label: game.i18n.localize(isEquipped ? 'VAGABOND.ContextMenu.Unequip' : 'VAGABOND.ContextMenu.Equip'),
       icon: `fas fa-${isEquipped ? 'times' : 'check'}`,
       enabled: true,
       action: async () => {
@@ -227,7 +227,7 @@ export class InventoryHandler {
     if (item.system.requiresBound) {
       const isBound = item.system.bound === true;
       menuItems.push({
-        label: isBound ? 'Unbind' : 'Bind',
+        label: game.i18n.localize(isBound ? 'VAGABOND.ContextMenu.Unbind' : 'VAGABOND.ContextMenu.Bind'),
         icon: 'fa-solid fa-diamond',
         enabled: true,
         action: async () => {
@@ -251,7 +251,7 @@ export class InventoryHandler {
 
     // Edit
     menuItems.push({
-      label: 'Edit',
+      label: game.i18n.localize('VAGABOND.ContextMenu.Edit'),
       icon: 'fas fa-edit',
       enabled: true,
       action: () => {
@@ -261,13 +261,13 @@ export class InventoryHandler {
 
     // Delete
     menuItems.push({
-      label: 'Delete',
+      label: game.i18n.localize('VAGABOND.ContextMenu.Delete'),
       icon: 'fas fa-trash',
       enabled: true,
       action: async () => {
         const confirmed = await foundry.applications.api.DialogV2.confirm({
-          window: { title: `Delete ${item.name}?` },
-          content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+          window: { title: game.i18n.format('VAGABOND.ContextMenu.DeleteItemTitle', { name: item.name }) },
+          content: game.i18n.format('VAGABOND.ContextMenu.DeleteItemContent', { name: item.name }),
           rejectClose: false,
           modal: true,
         });
@@ -307,7 +307,7 @@ export class InventoryHandler {
     let sourceItem = null;
     let featureData = null;
     let canDelete = false;
-    let editLabel = 'Edit';
+    let editLabel = game.i18n.localize('VAGABOND.ContextMenu.Edit');
 
     // Handle perks (real items)
     if (typeof itemIdOrData === 'string') {
@@ -330,7 +330,7 @@ export class InventoryHandler {
         console.log('Trait not found at index:', itemIdOrData.index);
         return;
       }
-      editLabel = 'Edit Ancestry';
+      editLabel = game.i18n.localize('VAGABOND.ContextMenu.EditAncestry');
     }
     // Handle features (from class)
     else if (itemIdOrData.type === 'feature') {
@@ -344,13 +344,13 @@ export class InventoryHandler {
         console.log('Feature not found at index:', itemIdOrData.index);
         return;
       }
-      editLabel = 'Edit Class';
+      editLabel = game.i18n.localize('VAGABOND.ContextMenu.EditClass');
     }
 
     // Build menu items
     const menuItems = [
       {
-        label: 'Send to Chat',
+        label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
         icon: 'fas fa-comment',
         enabled: true,
         action: async () => {
@@ -385,13 +385,13 @@ export class InventoryHandler {
     // Add delete option for perks only
     if (canDelete) {
       menuItems.push({
-        label: 'Delete',
+        label: game.i18n.localize('VAGABOND.ContextMenu.Delete'),
         icon: 'fas fa-trash',
         enabled: true,
         action: async () => {
           const confirmed = await foundry.applications.api.DialogV2.confirm({
-            window: { title: `Delete ${item.name}?` },
-            content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+            window: { title: game.i18n.format('VAGABOND.ContextMenu.DeleteItemTitle', { name: item.name }) },
+            content: game.i18n.format('VAGABOND.ContextMenu.DeleteItemContent', { name: item.name }),
             rejectClose: false,
             modal: true,
           });

@@ -697,23 +697,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
               if (cost.silver > 0) costs.push(`${cost.silver}s`);
               if (cost.copper > 0) costs.push(`${cost.copper}c`);
               costDisplay = costs.length > 0 ? costs.join(' ') : '0c';
-              metalDisplay = sys.metal ? sys.metal.titleCase() : '—';
+              metalDisplay = (sys.metal && sys.metal !== 'none')
+                ? (game.i18n.localize(CONFIG.VAGABOND?.metalTypes?.[sys.metal]) || sys.metal)
+                : '—';
+
+              const equipTypeKey = CONFIG.VAGABOND?.equipmentTypes?.[sys.equipmentType];
+              typeName = equipTypeKey ? game.i18n.localize(equipTypeKey) : typeName;
 
               if (sys.equipmentType === 'weapon') {
                 damageDisplay = sys.grip === 'V'
                   ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
                   : (sys.currentDamage || '—');
-                typeName = 'Weapon';
               } else if (sys.equipmentType === 'armor') {
                 ratingDisplay = sys.rating || 0;
-                typeName = 'Armor';
               } else if (sys.equipmentType === 'alchemical') {
                 damageDisplay = sys.damageAmount || '—';
-                typeName = 'Alchemical';
-              } else if (sys.equipmentType === 'relic') {
-                typeName = 'Relic';
-              } else {
-                typeName = 'Gear';
               }
             } else {
               // For non-equipment items, check for baseSlots

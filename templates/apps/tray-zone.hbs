@@ -40,7 +40,7 @@
                         <div class="tray-item-card" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-item-img">
                             <div class="tray-item-name">{{item.name}}</div>
-                            <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove from tray">
+                            <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -62,7 +62,7 @@
                         <div class="tray-item-card" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-item-img">
                             <div class="tray-item-name">{{item.name}}</div>
-                            <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove from tray">
+                            <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -87,10 +87,10 @@
                             {{#if item.qty}}
                                 <div class="tray-item-qty">x{{item.qty}}</div>
                             {{/if}}
-                            <div class="tray-item-slots">Slots: {{item.slots}}</div>
-                            <div class="tray-item-cost">Cost: {{item.costDisplay}}</div>
+                            <div class="tray-item-slots">{{localize "VAGABOND.UI.Labels.Slots"}}: {{item.slots}}</div>
+                            <div class="tray-item-cost">{{localize "VAGABOND.UI.Labels.Cost"}}: {{item.costDisplay}}</div>
                             {{#if item.canDelete}}
-                                <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove from tray">
+                                <button type="button" class="btn-remove-from-tray" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </button>
                             {{/if}}

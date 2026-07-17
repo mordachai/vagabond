@@ -102,10 +102,10 @@
       <div class="pc-source-path" {{#unless sourceIsPath}}style="display:none"{{/unless}}>
         <div class="form-group">
           <label class="resource-label">{{localize "VAGABOND.ProgressClock.LinkedDocument"}}</label>
-          <div class="pc-source-drop" title="Drag a token, actor or item here">
+          <div class="pc-source-drop" title="{{localize 'VAGABOND.ProgressClock.DropTargetTooltip'}}">
             <input type="hidden" name="source.ref" value="{{clock.source.ref}}" />
-            <span class="pc-source-refname">{{#if clock.source.refName}}{{clock.source.refName}}{{else}}Drag a token / actor / item here…{{/if}}</span>
-            <button type="button" class="pc-source-clear" title="Clear"><i class="fas fa-times"></i></button>
+            <span class="pc-source-refname">{{#if clock.source.refName}}{{clock.source.refName}}{{else}}{{localize "VAGABOND.ProgressClock.DropTargetPlaceholder"}}{{/if}}</span>
+            <button type="button" class="pc-source-clear" title="{{localize 'VAGABOND.ProgressClock.ClearTooltip'}}"><i class="fas fa-times"></i></button>
           </div>
         </div>
         <div class="form-group form-row">

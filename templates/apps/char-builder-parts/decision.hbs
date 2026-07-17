@@ -5,7 +5,7 @@
         <div class="skill-decision skill-rows">
             <div class="guaranteed-skills skill-row">
                 <div class="skill-tags">
-                    <strong>Obligatory Training:</strong>
+                    <strong>{{localize "VAGABOND.CharBuilder.Decision.ObligatoryTraining"}}</strong>
                     {{#each classChoices.guaranteed}}
                         <span class="skill-tag locked">
                             <i class="fas fa-lock"></i>
@@ -16,17 +16,17 @@
             </div>
             {{#each classChoices.choices}}
                 <div class="pool-box skill-row {{#if this.isExtraTraining}}extra-training{{/if}}">
-                    <strong>{{#if this.isExtraTraining}}Extra Trained Skills: {{else}}Choose {{this.count}} skill(s){{/if}} {{#if this.selected}}<span class="skill-count {{#unless (eq this.selected this.count)}}incomplete{{/unless}}">({{this.selected}}/{{this.count}} selected)</span>{{/if}}:</strong>
+                    <strong>{{#if this.isExtraTraining}}{{localize "VAGABOND.CharBuilder.Decision.ExtraTrainedSkills"}} {{else}}{{localize "VAGABOND.CharBuilder.Decision.ChooseNSkills" count=this.count}}{{/if}} {{#if this.selected}}<span class="skill-count {{#unless (eq this.selected this.count)}}incomplete{{/unless}}">{{localize "VAGABOND.CharBuilder.Decision.SelectedCount" selected=this.selected count=this.count}}</span>{{/if}}:</strong>
                     {{#if this.isExtraTraining}}
                         <span class="extra-training-sources">
                             {{#each this.extraTrainingSources}}
-                                <strong>+{{this.amount}} from {{this.name}} ({{this.origin}} {{this.type}})</strong>
+                                <strong>{{localize "VAGABOND.CharBuilder.Decision.ExtraTrainingSource" amount=this.amount name=this.name origin=this.origin type=this.type}}</strong>
                             {{/each}}
                         </span>
                     {{/if}}
                     <div class="pool-options">
                         {{#each this.skills}}
-                            <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isGuaranteed}}Granted by class{{else if this.isDisabled}}Selected in another group{{/if}}">
+                            <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isGuaranteed}}{{localize 'VAGABOND.CharBuilder.Decision.GrantedByClass'}}{{else if this.isDisabled}}{{localize 'VAGABOND.CharBuilder.Decision.SelectedInAnotherGroup'}}{{/if}}">
                                 <input
                                     type="checkbox"
                                     value="{{this.key}}"
@@ -78,21 +78,21 @@
                             </div>
                             {{!-- Remove stat value button (appears on hover) --}}
                             {{#if this.value}}
-                            <button type="button" class="remove-stat-btn" data-action="unassignStat" data-stat="{{this.key}}" title="Remove {{this.value}} and return to pool">
+                            <button type="button" class="remove-stat-btn" data-action="unassignStat" data-stat="{{this.key}}" title="{{localize 'VAGABOND.CharBuilder.Decision.RemoveAndReturnToPool' value=this.value}}">
                                 <i class="fas fa-times"></i>
                             </button>
                             {{/if}}
                             {{!-- Perk bonus badge (green) - bottom right --}}
                             {{#if this.hasPerkBonus}}
-                            <div class="perk-bonus-badge" title="Bonus from Perk">+{{this.perkBonus}}</div>
+                            <div class="perk-bonus-badge" title="{{localize 'VAGABOND.CharBuilder.Decision.BonusFromPerk'}}">+{{this.perkBonus}}</div>
                             {{/if}}
                             {{!-- Ancestry/Class bonus button (interactive, top-left) --}}
                             {{#if this.hasBonus}}
-                            <button type="button" class="bonus-tag applied" data-action="removeStatBonus" data-stat="{{this.key}}" title="Click to remove bonus and reassign">
+                            <button type="button" class="bonus-tag applied" data-action="removeStatBonus" data-stat="{{this.key}}" title="{{localize 'VAGABOND.CharBuilder.Decision.ClickToRemoveBonus'}}">
                                 +{{this.bonusAmount}}
                             </button>
                             {{else if this.canApplyBonus}}
-                            <button type="button" class="bonus-tag clickable" data-action="applyStatBonus" data-stat="{{this.key}}" title="Click to apply +1 bonus to {{this.label}}">
+                            <button type="button" class="bonus-tag clickable" data-action="applyStatBonus" data-stat="{{this.key}}" title="{{localize 'VAGABOND.CharBuilder.Decision.ClickToApplyBonus' label=this.label}}">
                                 <i class="fas fa-plus"></i>
                             </button>
                             {{/if}}

@@ -151,11 +151,11 @@
                     <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.SpellDetails"}}</h3>
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.baseDamage}}
-                            <div><strong>Base Damage:</strong> {{selectedItem.displayStats.baseDamage}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.DamageBase"}}:</strong> {{selectedItem.displayStats.baseDamage}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.damageType}}
                             <div class="damage-type-row">
-                                <strong>Damage Type:</strong>
+                                <strong>{{localize "VAGABOND.CharBuilder.DamageTypeColon"}}</strong>
                                 {{#if selectedItem.displayStats.damageTypeIcon}}
                                     <i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>
                                 {{/if}}
@@ -163,25 +163,25 @@
                             </div>
                         {{/if}}
                         {{#if selectedItem.displayStats.crit}}
-                            <div><strong>Crit:</strong> {{selectedItem.displayStats.crit}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Critical"}}:</strong> {{selectedItem.displayStats.crit}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.deliveryLabel}}
-                            <div><strong>Delivery:</strong> {{selectedItem.displayStats.deliveryLabel}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Delivery"}}:</strong> {{selectedItem.displayStats.deliveryLabel}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.manaCost}}
-                            <div><strong>Mana Cost:</strong> {{selectedItem.displayStats.manaCost}}</div>
+                            <div><strong>{{localize "VAGABOND.Item.Spell.FIELDS.delivery.cost.label"}}:</strong> {{selectedItem.displayStats.manaCost}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.range}}
-                            <div><strong>Range:</strong> {{selectedItem.displayStats.range}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Range"}}:</strong> {{selectedItem.displayStats.range}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.duration}}
-                            <div><strong>Duration:</strong> {{selectedItem.displayStats.duration}}</div>
+                            <div><strong>{{localize "VAGABOND.Item.Spell.FIELDS.duration.label"}}:</strong> {{selectedItem.displayStats.duration}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.areaOfEffect}}
-                            <div><strong>Area of Effect:</strong> {{selectedItem.displayStats.areaOfEffect}}</div>
+                            <div><strong>{{localize "VAGABOND.CharBuilder.AreaOfEffect"}}:</strong> {{selectedItem.displayStats.areaOfEffect}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.condition}}
-                            <div><strong>Condition:</strong> {{selectedItem.displayStats.condition}}</div>
+                            <div><strong>{{localize "VAGABOND.CharBuilder.Condition"}}:</strong> {{selectedItem.displayStats.condition}}</div>
                         {{/if}}
                     </div>
                 </div>
@@ -200,7 +200,7 @@
                         </div>
                         {{#if startingPackItems.inventorySlots}}
                         <div>
-                            <strong>Inventory Slots:</strong> {{startingPackItems.inventorySlots.occupied}}/{{startingPackItems.inventorySlots.max}} (Free: {{startingPackItems.inventorySlots.free}})
+                            <strong>{{localize "VAGABOND.CharBuilder.InventorySlotsColon"}}</strong> {{startingPackItems.inventorySlots.occupied}}/{{startingPackItems.inventorySlots.max}} ({{localize "VAGABOND.CharBuilder.FreeColon"}} {{startingPackItems.inventorySlots.free}})
                         </div>
                         {{/if}}
                     </div>
@@ -213,7 +213,7 @@
                                     <span class="pack-item-qty">x{{item.qty}}</span>
                                 </div>
                                 <div class="pack-item-meta">
-                                    <span class="pack-item-slots">{{item.slots}} slots</span>
+                                    <span class="pack-item-slots">{{item.slots}} {{localize "VAGABOND.CharBuilder.SlotsSuffix"}}</span>
                                     <span class="pack-item-cost">{{item.costDisplay}}</span>
                                 </div>
                             </div>
@@ -238,31 +238,31 @@
                     <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.WeaponDetails"}}</h3>
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.weaponSkill}}
-                            <div><strong>Skill:</strong> {{selectedItem.displayStats.weaponSkill}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Skill"}}:</strong> {{selectedItem.displayStats.weaponSkill}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.range}}
-                            <div><strong>Range:</strong> {{selectedItem.displayStats.range}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Range"}}:</strong> {{selectedItem.displayStats.range}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.grip}}
-                            <div><strong>Grip:</strong> {{selectedItem.displayStats.grip}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Grip"}}:</strong> {{selectedItem.displayStats.grip}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.damage1h}}
-                            <div><strong>1H Damage:</strong> {{selectedItem.displayStats.damage1h}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.DamageOneHand"}}:</strong> {{selectedItem.displayStats.damage1h}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.damage2h}}
-                            <div><strong>2H Damage:</strong> {{selectedItem.displayStats.damage2h}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.DamageTwoHand"}}:</strong> {{selectedItem.displayStats.damage2h}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.damageType}}
                             <div class="damage-type-row">
-                                <strong>Damage Type:</strong>
+                                <strong>{{localize "VAGABOND.CharBuilder.DamageTypeColon"}}</strong>
                                 {{#if selectedItem.displayStats.damageTypeIcon}}
                                     <i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>
                                 {{/if}}
                                 {{selectedItem.displayStats.damageType}}
                             </div>
                         {{/if}}
-                        <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
-                        <div><strong>Cost:</strong>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
                             {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                             {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                             {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
@@ -291,16 +291,16 @@
                     {{/if}}
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.armorRating}}
-                            <div><strong>Armor Rating:</strong> {{selectedItem.displayStats.armorRating}}</div>
+                            <div><strong>{{localize "VAGABOND.Item.Armor.FIELDS.rating.label"}}:</strong> {{selectedItem.displayStats.armorRating}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.mightRequirement}}
-                            <div><strong>Might Requirement:</strong> {{selectedItem.displayStats.mightRequirement}}</div>
+                            <div><strong>{{localize "VAGABOND.Item.Armor.FIELDS.might.label"}}:</strong> {{selectedItem.displayStats.mightRequirement}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.armorType}}
-                            <div><strong>Type:</strong> {{selectedItem.displayStats.armorType}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</strong> {{selectedItem.displayStats.armorType}}</div>
                         {{/if}}
-                        <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
-                        <div><strong>Cost:</strong>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
                             {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                             {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                             {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
@@ -314,22 +314,22 @@
                     <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.AlchemicalDetails"}}</h3>
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.alchemicalType}}
-                            <div><strong>Type:</strong> {{selectedItem.displayStats.alchemicalType}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</strong> {{selectedItem.displayStats.alchemicalType}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.damage}}
-                            <div><strong>Damage:</strong> {{selectedItem.displayStats.damage}}</div>
+                            <div><strong>{{localize "VAGABOND.UI.Labels.Damage"}}:</strong> {{selectedItem.displayStats.damage}}</div>
                         {{/if}}
                         {{#if selectedItem.displayStats.damageType}}
                             <div class="damage-type-row">
-                                <strong>Damage Type:</strong>
+                                <strong>{{localize "VAGABOND.CharBuilder.DamageTypeColon"}}</strong>
                                 {{#if selectedItem.displayStats.damageTypeIcon}}
                                     <i class="{{selectedItem.displayStats.damageTypeIcon}}"></i>
                                 {{/if}}
                                 {{selectedItem.displayStats.damageType}}
                             </div>
                         {{/if}}
-                        <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
-                        <div><strong>Cost:</strong>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
                             {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                             {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                             {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
@@ -348,8 +348,8 @@
                         </div>
                     {{/if}}
                     <div class="preview-details-grid">
-                        <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
-                        <div><strong>Cost:</strong>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
                             {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                             {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                             {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
@@ -362,8 +362,8 @@
                 {{#if (eq selectedItem.displayStats.subType "gear")}}
                     <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.GearDetails"}}</h3>
                     <div class="preview-details-grid">
-                        <div><strong>Slots:</strong> {{selectedItem.displayStats.slots}}</div>
-                        <div><strong>Cost:</strong>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
+                        <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
                             {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
                             {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
                             {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}

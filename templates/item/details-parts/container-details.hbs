@@ -24,8 +24,8 @@
     {{! Container Configuration (only in unlocked mode) }}
     {{#unless system.locked}}
       <div class='form-group'>
-        <label class='resource-label'>Container Configuration</label>
-        <p class='field-hint'>Configure the container's capacity and cost. Items with 0 slots don't count toward capacity.</p>
+        <label class='resource-label'>{{localize "VAGABOND.UI.Sections.ContainerConfig"}}</label>
+        <p class='field-hint'>{{localize "VAGABOND.UI.Labels.ContainerConfigHint"}}</p>
       </div>
     {{/unless}}
 
@@ -33,10 +33,10 @@
     <div class="container-search-header">
         <div class="search-field">
             <i class="fas fa-search"></i>
-            <input type="text" class="container-search" placeholder="Search items..." spellcheck="false">
+            <input type="text" class="container-search" placeholder="{{localize 'VAGABOND.UI.Labels.SearchItemsPlaceholder'}}" spellcheck="false">
         </div>
         <div class="item-counter">
-            Items: <span id="visible-count">{{containerItems.length}}</span> / <span id="total-count">{{containerItems.length}}</span>
+            {{localize "VAGABOND.UI.Labels.Items"}}: <span id="visible-count">{{containerItems.length}}</span> / <span id="total-count">{{containerItems.length}}</span>
         </div>
     </div>
     {{! Container Items List }}
@@ -46,11 +46,11 @@
           <table class='container-items-table'>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Damage</th>
-                <th>Slots</th>
-                <th>Cost</th>
-                <th>Actions</th>
+                <th>{{localize "VAGABOND.UI.Labels.Name"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Damage"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Slots"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Cost"}}</th>
+                <th>{{localize "VAGABOND.UI.Labels.Actions"}}</th>
               </tr>
             </thead>
             <tbody>
@@ -73,7 +73,7 @@
                         class='equip-from-container'
                         data-action='equipFromContainer'
                         data-item-index='{{@index}}'
-                        title='Equip to character inventory'
+                        title='{{localize "VAGABOND.UI.Labels.EquipFromContainerTooltip"}}'
                       >
                         <i class='fas fa-hand-paper'></i>
                       </button>
@@ -83,7 +83,7 @@
                       class='delete-from-container'
                       data-action='deleteFromContainer'
                       data-item-index='{{@index}}'
-                      title='Delete item'
+                      title='{{localize "VAGABOND.UI.Labels.DeleteItemTooltip"}}'
                     >
                       <i class='fas fa-trash'></i>
                     </button>
@@ -95,8 +95,8 @@
         </div>
       {{else}}
         <div class='container-empty-state' data-drop-container='true'>
-          <p><i class='fas fa-inbox'></i> Empty container</p>
-          <p class='hint'>Drag items from compendiums or character inventory to add them</p>
+          <p><i class='fas fa-inbox'></i> {{localize "VAGABOND.UI.Labels.EmptyContainer"}}</p>
+          <p class='hint'>{{localize "VAGABOND.UI.Labels.DragItemsHint"}}</p>
         </div>
       {{/if}}
     </div>

@@ -9,7 +9,7 @@
             {{#if (eq step 'gear')}}
                 {{#if inventorySlots}}
                     <div class="pack-summary">
-                        <p><strong>Inventory Slots:</strong> {{inventorySlots.occupied}}/{{inventorySlots.max}} (Free: {{inventorySlots.free}})</p>
+                        <p><strong>{{localize "VAGABOND.CharBuilder.InventorySlotsColon"}}</strong> {{inventorySlots.occupied}}/{{inventorySlots.max}} ({{localize "VAGABOND.CharBuilder.FreeColon"}} {{inventorySlots.free}})</p>
                     </div>
                 {{/if}}
             {{/if}}
@@ -17,9 +17,9 @@
             {{#if (eq step 'perks')}}
                 {{#if perkLimit}}
                     <div class="pack-summary perk-limit-display">
-                        <p class="{{#unless (gte currentPerkCount perkLimit)}}incomplete{{/unless}}"><strong>Perks:</strong> {{currentPerkCount}}/{{perkLimit}}</p>
+                        <p class="{{#unless (gte currentPerkCount perkLimit)}}incomplete{{/unless}}"><strong>{{localize "VAGABOND.CharBuilder.PerksColon"}}</strong> {{currentPerkCount}}/{{perkLimit}}</p>
                         {{#if (gte currentPerkCount perkLimit)}}
-                            <p class="text-warning"><small>Maximum reached</small></p>
+                            <p class="text-warning"><small>{{localize "VAGABOND.CharBuilder.MaximumReached"}}</small></p>
                         {{/if}}
                     </div>
                 {{/if}}
@@ -28,12 +28,12 @@
             {{#if (eq step 'spells')}}
                 {{#if spellLimit}}
                     <div class="pack-summary spell-limit-display">
-                        <p class="{{#unless (gte currentSpellCount spellLimit)}}incomplete{{/unless}}"><strong>Spells:</strong> {{currentSpellCount}}/{{spellLimit}}</p>
+                        <p class="{{#unless (gte currentSpellCount spellLimit)}}incomplete{{/unless}}"><strong>{{localize "VAGABOND.CharBuilder.SpellsColon"}}</strong> {{currentSpellCount}}/{{spellLimit}}</p>
                         {{#if requiredSpellCount}}
-                            <p class="text-info"><small>{{requiredSpellCount}} required</small></p>
+                            <p class="text-info"><small>{{requiredSpellCount}} {{localize "VAGABOND.CharBuilder.SpellsRequiredSuffix"}}</small></p>
                         {{/if}}
                         {{#if (gte currentSpellCount spellLimit)}}
-                            <p class="text-warning"><small>Maximum reached</small></p>
+                            <p class="text-warning"><small>{{localize "VAGABOND.CharBuilder.MaximumReached"}}</small></p>
                         {{/if}}
                     </div>
                 {{/if}}
@@ -52,17 +52,17 @@
                         <div class="tray-item-compact {{#if item.isClassPerk}}from-class{{/if}}" data-uuid="{{item.uuid}}">
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <div class="tray-item-text">
-                                <span class="tray-name">{{item.name}}{{#if item.isClassPerk}} <i class="fas fa-star" title="From Class"></i>{{/if}}</span>
+                                <span class="tray-name">{{item.name}}{{#if item.isClassPerk}} <i class="fas fa-star" title="{{localize 'VAGABOND.CharBuilder.FromClass'}}"></i>{{/if}}</span>
                                 {{#if item.grantLabel}}
                                     <span class="tray-grant-label">{{item.grantLabel}}</span>
                                 {{/if}}
                             </div>
                             {{#if item.canDelete}}
-                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </button>
                             {{else}}
-                                <i class="fas fa-lock class-perk-lock" title="Granted by class"></i>
+                                <i class="fas fa-lock class-perk-lock" title="{{localize 'VAGABOND.CharBuilder.GrantedByClassTooltip'}}"></i>
                             {{/if}}
                         </div>
                     {{/each}}
@@ -77,7 +77,7 @@
                         <div class="tray-item-compact perk-slot empty">
                             <div class="empty-slot-placeholder">
                                 <i class="fas fa-plus-circle"></i>
-                                <span class="empty-slot-text">Empty</span>
+                                <span class="empty-slot-text">{{localize "VAGABOND.CharBuilder.EmptySlot"}}</span>
                             </div>
                         </div>
                     {{/each}}
@@ -86,7 +86,7 @@
                 {{#if requiredSpellCount}}
                     <div class="required-spells-notice">
                         <i class="fas fa-star"></i>
-                        <strong>{{requiredSpellCount}}</strong> {{#if (eq requiredSpellCount 1)}}spell{{else}}spells{{/if}} granted by your ancestry/class (cannot be removed)
+                        <strong>{{requiredSpellCount}}</strong> {{#if (eq requiredSpellCount 1)}}{{localize "VAGABOND.CharBuilder.GrantedSpellSingular"}}{{else}}{{localize "VAGABOND.CharBuilder.GrantedSpellPlural"}}{{/if}}
                     </div>
                 {{/if}}
 
@@ -99,9 +99,9 @@
                                 {{item.name}}
                             </span>
                             {{#if item.isRequired}}
-                                <i class="fas fa-lock required-lock" title="Required spell"></i>
+                                <i class="fas fa-lock required-lock" title="{{localize 'VAGABOND.CharBuilder.RequiredSpellTooltip'}}"></i>
                             {{else}}
-                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </button>
                             {{/if}}
@@ -121,7 +121,7 @@
                         <div class="tray-item-compact spell-slot empty">
                             <div class="empty-slot-placeholder">
                                 <i class="fas fa-plus-circle"></i>
-                                <span class="empty-slot-text">Empty</span>
+                                <span class="empty-slot-text">{{localize "VAGABOND.CharBuilder.EmptySlot"}}</span>
                             </div>
                         </div>
                     {{/each}}
@@ -138,10 +138,10 @@
                             <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
                             <div class="tray-info">
                                 <span class="tray-name">{{item.name}}{{#if (gt item.qty 1)}} x{{item.qty}}{{/if}}</span>
-                                <span class="tray-meta">{{item.slots}} slots • {{item.costDisplay}}</span>
+                                <span class="tray-meta">{{item.slots}} {{localize "VAGABOND.CharBuilder.SlotsSuffix"}} • {{item.costDisplay}}</span>
                             </div>
                             {{#if item.canDelete}}
-                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="Remove">
+                                <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </button>
                             {{/if}}

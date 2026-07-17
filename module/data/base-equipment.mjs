@@ -505,7 +505,11 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // Format properties as comma-separated string for display
     this.propertiesDisplay = this.properties.length > 0
-      ? this.properties.join(', ')
+      ? this.properties.map(prop => {
+          const configKeys = Object.keys(CONFIG.VAGABOND?.weaponProperties ?? {});
+          const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
+          return game.i18n.localize(CONFIG.VAGABOND?.weaponProperties?.[realKey] ?? `VAGABOND.Weapon.Property.${realKey}`);
+        }).join(', ')
       : '-';
 
     // Type-specific derived data
@@ -516,16 +520,9 @@ export default class VagabondEquipment extends VagabondItemBase {
     }
 
     // Format metal display
-    const metalDisplayMap = {
-      'none': '-',
-      'common': 'Common',
-      'adamant': 'Adamant',
-      'coldIron': 'Cold Iron',
-      'silver': 'Silver',
-      'mythral': 'Mythral',
-      'orichalcum': 'Orichalcum'
-    };
-    this.metalDisplay = metalDisplayMap[this.metal] || this.metal;
+    this.metalDisplay = this.metal === 'none'
+      ? '-'
+      : (game.i18n.localize(CONFIG.VAGABOND?.metalTypes?.[this.metal]) || this.metal);
   }
 
   _prepareWeaponData() {
@@ -557,27 +554,11 @@ export default class VagabondEquipment extends VagabondItemBase {
     }
 
     // Format range display with abbreviations and full names
-    const rangeAbbrMap = {
-      'close': 'C',
-      'near': 'N',
-      'far': 'F'
-    };
-    const rangeFullMap = {
-      'close': 'Close',
-      'near': 'Near',
-      'far': 'Far'
-    };
-    this.rangeAbbrev = rangeAbbrMap[this.range] || this.range;
-    this.rangeDisplay = rangeFullMap[this.range] || this.range;
+    this.rangeAbbrev = game.i18n.localize(CONFIG.VAGABOND?.rangeAbbreviations?.[this.range]) || this.range;
+    this.rangeDisplay = game.i18n.localize(CONFIG.VAGABOND?.weaponRanges?.[this.range]) || this.range;
 
     // Format grip display
-    const gripMap = {
-      '1H': '1H',
-      '2H': '2H',
-      'F': 'Fist',
-      'V': 'Versatile'
-    };
-    this.gripDisplay = gripMap[this.grip] || this.grip;
+    this.gripDisplay = game.i18n.localize(CONFIG.VAGABOND?.grip?.[this.grip]) || this.grip;
   }
 
   _prepareArmorData() {
@@ -604,26 +585,35 @@ export default class VagabondEquipment extends VagabondItemBase {
     }
 
     // Format armor type display
-    const typeMap = {
-      'light': 'Light',
-      'medium': 'Medium',
-      'heavy': 'Heavy'
-    };
-    this.armorTypeDisplay = typeMap[this.armorType] || this.armorType;
+    this.armorTypeDisplay = game.i18n.localize(CONFIG.VAGABOND?.armorTypes?.[this.armorType]) || this.armorType;
   }
 
   _getMetalData() {
-    const metals = {
-      'none': { multiplier: 1, effect: '-' },
-      'common': { multiplier: 1, effect: '-' },
-      'adamant': { multiplier: 50, effect: 'Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.' },
-      'coldIron': { multiplier: 20, effect: 'Situational weakness (Fae).' },
-      'silver': { multiplier: 10, effect: 'Blesses weapons against the accursed.' },
-      'mythral': { multiplier: 50, effect: 'Occupies 1 fewer Slot (min 1).' },
-      'orichalcum': { multiplier: 50, effect: 'Armor reduces Cast damage.' }
+    const multipliers = {
+      'none': 1,
+      'common': 1,
+      'adamant': 50,
+      'coldIron': 20,
+      'silver': 10,
+      'mythral': 50,
+      'orichalcum': 50
     };
+    const descriptionKeys = {
+      'none': null,
+      'common': 'VAGABOND.MetalDescriptions.Common',
+      'adamant': 'VAGABOND.MetalDescriptions.Adamant',
+      'coldIron': 'VAGABOND.MetalDescriptions.ColdIron',
+      'silver': 'VAGABOND.MetalDescriptions.Silver',
+      'mythral': 'VAGABOND.MetalDescriptions.Mythral',
+      'orichalcum': 'VAGABOND.MetalDescriptions.Orichalcum'
+    };
+    const key = descriptionKeys[this.metal];
+    const effect = key ? (game.i18n.localize(key) || '-') : '-';
 
-    return metals[this.metal] || metals.none;
+    return {
+      multiplier: multipliers[this.metal] ?? multipliers.none,
+      effect: effect || '-'
+    };
   }
 
   /**

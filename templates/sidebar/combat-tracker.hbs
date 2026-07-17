@@ -96,16 +96,16 @@
 
                 {{!-- Column 3: Player Stats --}}
                 <div class="col-3 flexcol stats-column">
-                    <div class="res-row hp flexrow" title="HP">
+                    <div class="res-row hp flexrow" title="{{localize 'VAGABOND.Item.VehiclePart.HP'}}">
                         <i class="fas fa-heart"></i>
                         <span class="val">{{turn.hp.value}}</span>
                     </div>
-                    <div class="res-row fatigue flexrow" title="Fatigue">
+                    <div class="res-row fatigue flexrow" title="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}}">
                         <i class="fas fa-skull"></i>
                         <span class="val">{{turn.fatigue}}</span>
                     </div>
                     {{#if turn.mana}}
-                    <div class="res-row mana flexrow {{#if turn.isFocusing}}is-focusing{{/if}}" title="Mana">
+                    <div class="res-row mana flexrow {{#if turn.isFocusing}}is-focusing{{/if}}" title="{{localize 'VAGABOND.UI.Labels.Mana'}}">
                         <i class="fas fa-star-christmas"></i>
                         <span class="val">{{turn.mana.current}}</span>
                     </div>

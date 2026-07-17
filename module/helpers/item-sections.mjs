@@ -20,9 +20,16 @@ import { EquipmentHelper } from './equipment-helper.mjs';
  * @returns {string}
  */
 export function formatItemType(item) {
+  const L = (k) => game.i18n.localize(k);
   if (item.type === 'equipment') {
-    return item.system.equipmentType.charAt(0).toUpperCase() + item.system.equipmentType.slice(1);
+    const key = item.system.equipmentType.charAt(0).toUpperCase() + item.system.equipmentType.slice(1);
+    const path = `VAGABOND.UI.Labels.${key}`;
+    const localized = L(path);
+    return localized !== path ? localized : key;
   }
+  const typeKey = `TYPES.Item.${item.type}`;
+  const localized = L(typeKey);
+  if (localized !== typeKey) return localized;
   return item.type.charAt(0).toUpperCase() + item.type.slice(1);
 }
 
@@ -64,10 +71,17 @@ export function buildSpellStats(item) {
   if (!item.system.crit) return '';
   return `
     <div class="mini-sheet-properties">
-      <div class="mini-sheet-label">Critical</div>
+      <div class="mini-sheet-label">${game.i18n.localize('VAGABOND.UI.Labels.Critical')}</div>
       <div class="mini-sheet-crit">${item.system.crit}</div>
     </div>
   `;
+}
+
+/** Localize a CONFIG map value (label or i18n key) with raw-key fallback. */
+function localizeConfigValue(map, key) {
+  if (!key) return '';
+  const entry = map?.[key];
+  return entry ? game.i18n.localize(entry) : key;
 }
 
 /**
@@ -76,43 +90,46 @@ export function buildSpellStats(item) {
  * @returns {string}
  */
 export function buildWeaponStats(item) {
-  const damageType = item.system.currentDamageType || item.system.damageType || '';
+  const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
+  const damageType = localizeConfigValue(CONFIG.VAGABOND.damageTypes, item.system.currentDamageType || item.system.damageType);
+  const weaponSkill = localizeConfigValue(CONFIG.VAGABOND.weaponSkills, item.system.weaponSkill);
+  const metal = localizeConfigValue(CONFIG.VAGABOND.metalTypes, item.system.metal);
   return `
     <div class="mini-sheet-stats">
       <div class="stat-row">
-        <span class="stat-name">Damage</span>
+        <span class="stat-name">${L('Damage')}</span>
         <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${damageType}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-name">Range</span>
+        <span class="stat-name">${L('Range')}</span>
         <span class="stat-value">${item.system.rangeDisplay || item.system.range || '—'}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-name">Grip</span>
+        <span class="stat-name">${L('Grip')}</span>
         <span class="stat-value">${item.system.gripDisplay || item.system.grip || '—'}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-name">Weapon Skill</span>
-        <span class="stat-value">${item.system.weaponSkill || '—'}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Weapon.FIELDS.weaponSkill.label')}</span>
+        <span class="stat-value">${weaponSkill || '—'}</span>
       </div>
       ${item.system.metal && item.system.metal !== 'common' ? `
       <div class="stat-row">
-        <span class="stat-name">Metal</span>
-        <span class="stat-value">${item.system.metal}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Weapon.FIELDS.metal.label')}</span>
+        <span class="stat-value">${metal}</span>
       </div>
       ` : ''}
       <div class="stat-row">
-        <span class="stat-name">Cost</span>
+        <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
       </div>
       ${item.system.requiresBound ? `
       <div class="stat-row">
-        <span class="stat-name">Bound</span>
-        <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Equipment.FIELDS.bound.label')}</span>
+        <span class="stat-value">${item.system.bound ? L('Yes') : L('No')}</span>
       </div>
       ` : ''}
       <div class="stat-row">
-        <span class="stat-name">Slots</span>
+        <span class="stat-name">${L('Slots')}</span>
         <span class="stat-value">${item.system.slots || 1}</span>
       </div>
     </div>
@@ -125,34 +142,37 @@ export function buildWeaponStats(item) {
  * @returns {string}
  */
 export function buildArmorStats(item) {
+  const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
+  const armorType = localizeConfigValue(CONFIG.VAGABOND.armorTypes, item.system.armorType);
+  const metal = localizeConfigValue(CONFIG.VAGABOND.metalTypes, item.system.metal);
   return `
     <div class="mini-sheet-stats">
       <div class="stat-row">
-        <span class="stat-name">Armor Rating</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Armor.FIELDS.rating.label')}</span>
         <span class="stat-value">${item.system.finalRating || item.system.rating || '—'}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-name">Type</span>
-        <span class="stat-value">${item.system.armorType || '—'}</span>
+        <span class="stat-name">${L('TypeLabel')}</span>
+        <span class="stat-value">${armorType || '—'}</span>
       </div>
       ${item.system.metal && item.system.metal !== 'common' ? `
       <div class="stat-row">
-        <span class="stat-name">Metal</span>
-        <span class="stat-value">${item.system.metal}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Armor.FIELDS.metal.label')}</span>
+        <span class="stat-value">${metal}</span>
       </div>
       ` : ''}
       <div class="stat-row">
-        <span class="stat-name">Cost</span>
+        <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
       </div>
       ${item.system.requiresBound ? `
       <div class="stat-row">
-        <span class="stat-name">Bound</span>
-        <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Equipment.FIELDS.bound.label')}</span>
+        <span class="stat-value">${item.system.bound ? L('Yes') : L('No')}</span>
       </div>
       ` : ''}
       <div class="stat-row">
-        <span class="stat-name">Slots</span>
+        <span class="stat-name">${L('Slots')}</span>
         <span class="stat-value">${item.system.slots || 1}</span>
       </div>
     </div>
@@ -165,26 +185,27 @@ export function buildArmorStats(item) {
  * @returns {string}
  */
 export function buildGearStats(item) {
+  const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
   return `
     <div class="mini-sheet-stats mini-sheet-stats--inline">
       ${item.system.quantity ? `
       <div class="stat-row">
-        <span class="stat-name">Quantity</span>
+        <span class="stat-name">${L('Quantity')}</span>
         <span class="stat-value">${item.system.quantity}</span>
       </div>
       ` : ''}
       <div class="stat-row">
-        <span class="stat-name">Cost</span>
+        <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
       </div>
       ${item.system.requiresBound ? `
       <div class="stat-row">
-        <span class="stat-name">Bound</span>
-        <span class="stat-value">${item.system.bound ? 'Yes' : 'No'}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Equipment.FIELDS.bound.label')}</span>
+        <span class="stat-value">${item.system.bound ? L('Yes') : L('No')}</span>
       </div>
       ` : ''}
       <div class="stat-row">
-        <span class="stat-name">Slots</span>
+        <span class="stat-name">${L('Slots')}</span>
         <span class="stat-value">${item.system.slots || 1}</span>
       </div>
     </div>
@@ -200,14 +221,15 @@ export function buildWeaponProperties(item) {
   const config = CONFIG.VAGABOND;
   return `
     <div class="mini-sheet-properties">
-      <div class="mini-sheet-label">Properties</div>
+      <div class="mini-sheet-label">${game.i18n.localize('VAGABOND.UI.Labels.Properties')}</div>
       <div class="property-list">
         ${item.system.properties.map(prop => {
           const descriptionKey = config.weaponPropertyHints?.[prop] || '';
           const description = descriptionKey ? game.i18n.localize(descriptionKey) : '';
+          const propLabel = localizeConfigValue(config.weaponProperties, prop);
           return `
             <div class="property-row">
-              <span class="property-name">${prop}:</span>
+              <span class="property-name">${propLabel}:</span>
               <span class="property-description">${description}</span>
             </div>
           `;

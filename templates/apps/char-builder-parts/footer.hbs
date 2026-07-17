@@ -1,24 +1,24 @@
 <footer class="builder-footer flexrow">
     <div class="footer-left flexrow">
-        <button type="button" class="btn-dismiss" data-action="dismissBuilder" data-tooltip="Dismiss builder and use normal character sheet">
-            <i class="fas fa-times-circle"></i> Dismiss
+        <button type="button" class="btn-dismiss" data-action="dismissBuilder" data-tooltip="{{localize 'VAGABOND.CharBuilder.Buttons.DismissBuilderTooltip'}}">
+            <i class="fas fa-times-circle"></i> {{localize "VAGABOND.CharBuilder.Buttons.DismissButton"}}
         </button>
         {{#if showFullRandomButton}}
             <button type="button" class="btn-full-random" data-action="randomizeFullCharacter">
-                <i class="fas fa-bolt"></i> Full Random Character
+                <i class="fas fa-bolt"></i> {{localize "VAGABOND.CharBuilder.Buttons.FullRandomCharacter"}}
             </button>
         {{/if}}
         {{#if showRandomButton}}
             <button type="button" class="btn-random" data-action="randomize">
-                <i class="fas fa-dice"></i> Random
+                <i class="fas fa-dice"></i> {{localize "VAGABOND.CharBuilder.Buttons.RandomShort"}}
             </button>
         {{/if}}
     </div>
     <div class="footer-nav flexrow">
-        <button type="button" class="btn-prev" data-action="prev">Previous</button>
+        <button type="button" class="btn-prev" data-action="prev">{{localize "VAGABOND.CharBuilder.Buttons.Previous"}}</button>
         {{#unless isLastStep}}
-            <button type="button" class="btn-next" data-action="next" {{#unless canAdvance}}disabled{{/unless}}>Next</button>
+            <button type="button" class="btn-next" data-action="next" {{#unless canAdvance}}disabled{{/unless}}>{{localize "VAGABOND.CharBuilder.Buttons.Next"}}</button>
         {{/unless}}
-        <button type="button" class="btn-finish" data-action="finish" {{#unless canFinish}}disabled{{/unless}}>Finish</button>
+        <button type="button" class="btn-finish" data-action="finish" {{#unless canFinish}}disabled{{/unless}}>{{localize "VAGABOND.CharBuilder.Buttons.Finish"}}</button>
     </div>
 </footer>

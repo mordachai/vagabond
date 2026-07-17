@@ -23,9 +23,9 @@
             {{#if item.system.prerequisites.stats.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addStatPrerequisite" title="Add stat"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</span>
+                    <span><a class="add-btn" data-action="addStatPrerequisite" title="{{localize 'VAGABOND.Item.Perk.AddStatTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.stats.label'}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllStats" title="Clear all stats"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllStats" title="{{localize 'VAGABOND.Item.Perk.ClearAllStatsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
@@ -39,7 +39,7 @@
                             <option value="presence" {{#if (eq stat.stat 'presence')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Presence.abbr'}}</option>
                             <option value="luck" {{#if (eq stat.stat 'luck')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Luck.abbr'}}</option>
                         </select>
-                        <input type="number" name="system.prerequisites.stats.{{index}}.value" value="{{stat.value}}" min="1" max="10" placeholder="Val">
+                        <input type="number" name="system.prerequisites.stats.{{index}}.value" value="{{stat.value}}" min="1" max="10" placeholder="{{localize 'VAGABOND.Item.Perk.ValPlaceholder'}}">
                         <a class="delete-btn" data-action="removeStatPrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{/each}}
@@ -51,18 +51,18 @@
             {{#if item.system.prerequisites.statOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addStatOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Stat OR Groups</span>
+                    <span><a class="add-btn" data-action="addStatOrGroup" title="{{localize 'VAGABOND.Item.Perk.AddNewOrGroupTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize "VAGABOND.Item.Perk.StatOrGroupsLabel"}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllStatOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllStatOrGroups" title="{{localize 'VAGABOND.Item.Perk.ClearAllOrGroupsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.statOrGroups as |group groupIndex|}}
                     <div class="prereq-or-group">
                         <div class="or-group-header">
-                            <span>OR Group {{add groupIndex 1}} ({{group.length}} stats)</span>
+                            <span>{{localize "VAGABOND.Item.Perk.OrGroupCountStats" n=(add groupIndex 1) count=group.length}}</span>
                             <a class="delete-btn" data-action="removeStatOrGroup"
-                               data-index="{{groupIndex}}" title="Remove this OR group">
+                               data-index="{{groupIndex}}" title="{{localize 'VAGABOND.Item.Perk.RemoveOrGroupTooltip'}}">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>
@@ -77,12 +77,12 @@
                                     <option value="presence" {{#if (eq stat.stat 'presence')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Presence.abbr'}}</option>
                                     <option value="luck" {{#if (eq stat.stat 'luck')}}selected{{/if}}>{{localize 'VAGABOND.Stat.Luck.abbr'}}</option>
                                 </select>
-                                <input type="number" name="system.prerequisites.statOrGroups.{{groupIndex}}.{{statIndex}}.value" value="{{stat.value}}" min="1" max="10" placeholder="Val" style="width: 60px;">
+                                <input type="number" name="system.prerequisites.statOrGroups.{{groupIndex}}.{{statIndex}}.value" value="{{stat.value}}" min="1" max="10" placeholder="{{localize 'VAGABOND.Item.Perk.ValPlaceholder'}}" style="width: 60px;">
                                 <a class="delete-btn"
                                    data-action="removeStatFromOrGroup"
                                    data-group="{{groupIndex}}"
                                    data-stat="{{statIndex}}"
-                                   title="Remove stat from OR group">
+                                   title="{{localize 'VAGABOND.Item.Perk.RemoveStatFromGroupTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </div>
@@ -90,8 +90,8 @@
                             <a class="add-btn-mini"
                                data-action="addStatToOrGroup"
                                data-index="{{groupIndex}}"
-                               title="Add stat to this OR group">
-                                <i class="fas fa-plus"></i> Add stat to group
+                               title="{{localize 'VAGABOND.Item.Perk.AddStatToGroupTooltip'}}">
+                                <i class="fas fa-plus"></i> {{localize "VAGABOND.Item.Perk.AddStatToGroupButton"}}
                             </a>
                         </div>
                     </div>
@@ -104,16 +104,16 @@
             {{#if item.system.prerequisites.trainedSkills.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addTrainedSkillPrerequisite" title="Add skill"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</span>
+                    <span><a class="add-btn" data-action="addTrainedSkillPrerequisite" title="{{localize 'VAGABOND.Item.Perk.AddSkillTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.trainedSkills.label'}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllTrainedSkills" title="Clear all skills"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllTrainedSkills" title="{{localize 'VAGABOND.Item.Perk.ClearAllSkillsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.trainedSkills as |skill index|}}
                     <div class="prereq-row">
                         <select name="system.prerequisites.trainedSkills.{{index}}">
-                            <optgroup label="Skills">
+                            <optgroup label="{{localize 'VAGABOND.Item.Perk.SkillsOptgroupLabel'}}">
                                 <option value="arcana" {{#if (eq skill 'arcana')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Arcana'}}</option>
                                 <option value="craft" {{#if (eq skill 'craft')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Craft'}}</option>
                                 <option value="medicine" {{#if (eq skill 'medicine')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Medicine'}}</option>
@@ -127,7 +127,7 @@
                                 <option value="leadership" {{#if (eq skill 'leadership')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Leadership'}}</option>
                                 <option value="performance" {{#if (eq skill 'performance')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Performance'}}</option>
                             </optgroup>
-                            <optgroup label="Weapon Skills">
+                            <optgroup label="{{localize 'VAGABOND.Item.Perk.WeaponSkillsOptgroupLabel'}}">
                                 <option value="melee" {{#if (eq skill 'melee')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
                                 <option value="ranged" {{#if (eq skill 'ranged')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
                             </optgroup>
@@ -143,18 +143,18 @@
             {{#if item.system.prerequisites.trainedSkillOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addTrainedSkillOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Trained Skill OR Groups</span>
+                    <span><a class="add-btn" data-action="addTrainedSkillOrGroup" title="{{localize 'VAGABOND.Item.Perk.AddNewOrGroupTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize "VAGABOND.Item.Perk.TrainedSkillOrGroupsLabel"}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllTrainedSkillOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllTrainedSkillOrGroups" title="{{localize 'VAGABOND.Item.Perk.ClearAllOrGroupsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.trainedSkillOrGroups as |group groupIndex|}}
                     <div class="prereq-or-group">
                         <div class="or-group-header">
-                            <span>OR Group {{add groupIndex 1}} ({{group.length}} skills)</span>
+                            <span>{{localize "VAGABOND.Item.Perk.OrGroupCountSkills" n=(add groupIndex 1) count=group.length}}</span>
                             <a class="delete-btn" data-action="removeTrainedSkillOrGroup"
-                               data-index="{{groupIndex}}" title="Remove this OR group">
+                               data-index="{{groupIndex}}" title="{{localize 'VAGABOND.Item.Perk.RemoveOrGroupTooltip'}}">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>
@@ -163,8 +163,8 @@
                             <div class="prereq-row">
                                 <select name="system.prerequisites.trainedSkillOrGroups.{{groupIndex}}.{{skillIndex}}">
                                     {{#select skill}}
-                                    <option value="">-- Select Skill --</option>
-                                    <optgroup label="Skills">
+                                    <option value="">{{localize "VAGABOND.Item.Perk.SelectSkillPlaceholder"}}</option>
+                                    <optgroup label="{{localize 'VAGABOND.Item.Perk.SkillsOptgroupLabel'}}">
                                         <option value="arcana">{{localize 'VAGABOND.Skills.Arcana'}}</option>
                                         <option value="craft">{{localize 'VAGABOND.Skills.Craft'}}</option>
                                         <option value="medicine">{{localize 'VAGABOND.Skills.Medicine'}}</option>
@@ -178,7 +178,7 @@
                                         <option value="leadership">{{localize 'VAGABOND.Skills.Leadership'}}</option>
                                         <option value="performance">{{localize 'VAGABOND.Skills.Performance'}}</option>
                                     </optgroup>
-                                    <optgroup label="Weapon Skills">
+                                    <optgroup label="{{localize 'VAGABOND.Item.Perk.WeaponSkillsOptgroupLabel'}}">
                                         <option value="melee">{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
                                         <option value="ranged">{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
                                     </optgroup>
@@ -188,7 +188,7 @@
                                    data-action="removeSkillFromOrGroup"
                                    data-group="{{groupIndex}}"
                                    data-skill="{{skillIndex}}"
-                                   title="Remove skill from OR group">
+                                   title="{{localize 'VAGABOND.Item.Perk.RemoveSkillFromGroupTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </div>
@@ -196,8 +196,8 @@
                             <a class="add-btn-mini"
                                data-action="addSkillToOrGroup"
                                data-index="{{groupIndex}}"
-                               title="Add skill to this OR group">
-                                <i class="fas fa-plus"></i> Add skill to group
+                               title="{{localize 'VAGABOND.Item.Perk.AddSkillToGroupTooltip'}}">
+                                <i class="fas fa-plus"></i> {{localize "VAGABOND.Item.Perk.AddSkillToGroupButton"}}
                             </a>
                         </div>
                     </div>
@@ -210,9 +210,9 @@
             {{#if item.system.prerequisites.spells.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addSpellPrerequisite" title="Add spell"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</span>
+                    <span><a class="add-btn" data-action="addSpellPrerequisite" title="{{localize 'VAGABOND.Item.Perk.AddSpellTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.spells.label'}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllSpells" title="Clear all spells"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllSpells" title="{{localize 'VAGABOND.Item.Perk.ClearAllSpellsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
@@ -248,18 +248,18 @@
             {{#if item.system.prerequisites.spellOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addSpellOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Spell OR Groups</span>
+                    <span><a class="add-btn" data-action="addSpellOrGroup" title="{{localize 'VAGABOND.Item.Perk.AddNewOrGroupTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize "VAGABOND.Item.Perk.SpellOrGroupsLabel"}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllSpellOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllSpellOrGroups" title="{{localize 'VAGABOND.Item.Perk.ClearAllOrGroupsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.spellOrGroups as |group groupIndex|}}
                     <div class="prereq-or-group">
                         <div class="or-group-header">
-                            <span>OR Group {{add groupIndex 1}} ({{group.length}} spells)</span>
+                            <span>{{localize "VAGABOND.Item.Perk.OrGroupCountSpells" n=(add groupIndex 1) count=group.length}}</span>
                             <a class="delete-btn" data-action="removeSpellOrGroup"
-                               data-index="{{groupIndex}}" title="Remove this OR group">
+                               data-index="{{groupIndex}}" title="{{localize 'VAGABOND.Item.Perk.RemoveOrGroupTooltip'}}">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>
@@ -278,7 +278,7 @@
                                    data-action="removeSpellFromOrGroup"
                                    data-group="{{groupIndex}}"
                                    data-spell="{{spellIndex}}"
-                                   title="Remove spell from OR group">
+                                   title="{{localize 'VAGABOND.Item.Perk.RemoveSpellFromGroupTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </div>
@@ -286,8 +286,8 @@
                             <a class="add-btn-mini"
                                data-action="addSpellToOrGroup"
                                data-index="{{groupIndex}}"
-                               title="Add spell to this OR group">
-                                <i class="fas fa-plus"></i> Add spell to group
+                               title="{{localize 'VAGABOND.Item.Perk.AddSpellToGroupTooltip'}}">
+                                <i class="fas fa-plus"></i> {{localize "VAGABOND.Item.Perk.AddSpellToGroupButton"}}
                             </a>
                         </div>
                     </div>
@@ -300,9 +300,9 @@
             {{#if item.system.prerequisites.resources.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addResourcePrerequisite" title="Add resource"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.resources.label'}}</span>
+                    <span><a class="add-btn" data-action="addResourcePrerequisite" title="{{localize 'VAGABOND.Item.Perk.AddResourceTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize 'VAGABOND.Item.Perk.FIELDS.prerequisites.resources.label'}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllResources" title="Clear all resources"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllResources" title="{{localize 'VAGABOND.Item.Perk.ClearAllResourcesTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
@@ -318,7 +318,7 @@
                             <option value="maxHP" {{#if (eq resource.resourceType 'maxHP')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.MaxHP'}}</option>
                             <option value="currentLuck" {{#if (eq resource.resourceType 'currentLuck')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}}</option>
                         </select>
-                        <input type="number" name="system.prerequisites.resources.{{index}}.minimum" value="{{resource.minimum}}" min="0" placeholder="Min" style="width: 60px;">
+                        <input type="number" name="system.prerequisites.resources.{{index}}.minimum" value="{{resource.minimum}}" min="0" placeholder="{{localize 'VAGABOND.Item.Perk.MinPlaceholder'}}" style="width: 60px;">
                         <a class="delete-btn" data-action="removeResourcePrerequisite" data-index="{{index}}"><i class="fas fa-trash"></i></a>
                     </div>
                     {{/each}}
@@ -330,18 +330,18 @@
             {{#if item.system.prerequisites.resourceOrGroups.length}}
             <div class="prereq-group prereq-section-card">
                 <div class="group-header">
-                    <span><a class="add-btn" data-action="addResourceOrGroup" title="Add new OR group"><i class="fas fa-plus-circle"></i></a> Resource OR Groups</span>
+                    <span><a class="add-btn" data-action="addResourceOrGroup" title="{{localize 'VAGABOND.Item.Perk.AddNewOrGroupTooltip'}}"><i class="fas fa-plus-circle"></i></a> {{localize "VAGABOND.Item.Perk.ResourceOrGroupsLabel"}}</span>
                     <div class="header-actions">
-                        <a class="clear-btn" data-action="clearAllResourceOrGroups" title="Clear all OR groups"><i class="fas fa-times-circle"></i></a>
+                        <a class="clear-btn" data-action="clearAllResourceOrGroups" title="{{localize 'VAGABOND.Item.Perk.ClearAllOrGroupsTooltip'}}"><i class="fas fa-times-circle"></i></a>
                     </div>
                 </div>
                 <div class="prereq-list">
                     {{#each item.system.prerequisites.resourceOrGroups as |group groupIndex|}}
                     <div class="prereq-or-group">
                         <div class="or-group-header">
-                            <span>OR Group {{add groupIndex 1}} ({{group.length}} resources)</span>
+                            <span>{{localize "VAGABOND.Item.Perk.OrGroupCountResources" n=(add groupIndex 1) count=group.length}}</span>
                             <a class="delete-btn" data-action="removeResourceOrGroup"
-                               data-index="{{groupIndex}}" title="Remove this OR group">
+                               data-index="{{groupIndex}}" title="{{localize 'VAGABOND.Item.Perk.RemoveOrGroupTooltip'}}">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>
@@ -358,12 +358,12 @@
                                     <option value="maxHP" {{#if (eq resource.resourceType 'maxHP')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.MaxHP'}}</option>
                                     <option value="currentLuck" {{#if (eq resource.resourceType 'currentLuck')}}selected{{/if}}>{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}}</option>
                                 </select>
-                                <input type="number" name="system.prerequisites.resourceOrGroups.{{groupIndex}}.{{resourceIndex}}.minimum" value="{{resource.minimum}}" min="0" placeholder="Min" style="width: 60px;">
+                                <input type="number" name="system.prerequisites.resourceOrGroups.{{groupIndex}}.{{resourceIndex}}.minimum" value="{{resource.minimum}}" min="0" placeholder="{{localize 'VAGABOND.Item.Perk.MinPlaceholder'}}" style="width: 60px;">
                                 <a class="delete-btn"
                                    data-action="removeResourceFromOrGroup"
                                    data-group="{{groupIndex}}"
                                    data-resource="{{resourceIndex}}"
-                                   title="Remove resource from OR group">
+                                   title="{{localize 'VAGABOND.Item.Perk.RemoveResourceFromGroupTooltip'}}">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </div>
@@ -371,8 +371,8 @@
                             <a class="add-btn-mini"
                                data-action="addResourceToOrGroup"
                                data-index="{{groupIndex}}"
-                               title="Add resource to this OR group">
-                                <i class="fas fa-plus"></i> Add resource to group
+                               title="{{localize 'VAGABOND.Item.Perk.AddResourceToGroupTooltip'}}">
+                                <i class="fas fa-plus"></i> {{localize "VAGABOND.Item.Perk.AddResourceToGroupButton"}}
                             </a>
                         </div>
                     </div>
@@ -389,12 +389,12 @@
     {{!-- 2. Choice Configuration Section --}}
     <div class="perk-choice-config-section">
         <label class="section-header">
-            <i class="fas fa-hand-pointer"></i> Choice Configuration
+            <i class="fas fa-hand-pointer"></i> {{localize 'VAGABOND.Item.Perk.ChoiceType.Label'}}
         </label>
 
         {{!-- Choice Type --}}
         <div class="form-group">
-            <label for="choice-type">Type</label>
+            <label for="choice-type">{{localize 'VAGABOND.UI.Labels.TypeLabel'}}</label>
             <select name="system.choiceConfig.type" id="choice-type">
                 <option value="none" {{#if (eq item.system.choiceConfig.type 'none')}}selected{{/if}}>
                     {{localize 'VAGABOND.Item.Perk.ChoiceType.None'}}
@@ -419,33 +419,33 @@
 
         {{!-- Selected Choice (Read-Only) --}}
         <div class="form-group">
-            <label for="choice-selected">Selected</label>
-            <input type="text" name="system.choiceConfig.selected" id="choice-selected" value="{{item.system.choiceConfig.selected}}" readonly placeholder="(Filled automatically)" style="background-color: #f5f5f5;">
+            <label for="choice-selected">{{localize 'VAGABOND.Item.Perk.ChoiceSelected.Label'}}</label>
+            <input type="text" name="system.choiceConfig.selected" id="choice-selected" value="{{item.system.choiceConfig.selected}}" readonly placeholder="{{localize 'VAGABOND.Item.Perk.ChoiceSelected.Hint'}}" style="background-color: #f5f5f5;">
         </div>
 
         {{!-- Target Field --}}
         <div class="form-group">
-            <label for="choice-target-field">Target Field</label>
+            <label for="choice-target-field">{{localize 'VAGABOND.Item.Perk.ChoiceTargetField.Label'}}</label>
             <input type="text" name="system.choiceConfig.targetField" id="choice-target-field" value="{{item.system.choiceConfig.targetField}}" placeholder="skills.{choice}.trained" style="font-family: monospace;">
-            <p class="hint" style="color: #c53030; font-weight: 600;">⚠️ DO NOT include "system." prefix! DataModels handle this automatically.</p>
-            <p class="hint">Example: <code>stats.{choice}.bonus</code> or <code>skills.{choice}.trained</code></p>
+            <p class="hint" style="color: #c53030; font-weight: 600;">{{localize "VAGABOND.Item.Perk.TargetFieldWarning"}}</p>
+            <p class="hint">{{{localize "VAGABOND.Item.Perk.TargetFieldExampleHint"}}}</p>
         </div>
 
         {{!-- Effect Mode and Value (Same Row) --}}
         <div class="grid grid-2col">
             <div class="form-group">
-                <label for="choice-effect-mode">Effect Mode</label>
+                <label for="choice-effect-mode">{{localize 'VAGABOND.Item.Perk.ChoiceEffectMode.Label'}}</label>
                 <select name="system.choiceConfig.effectMode" id="choice-effect-mode">
-                    <option value="0" {{#if (eq item.system.choiceConfig.effectMode 0)}}selected{{/if}}>0: Custom</option>
-                    <option value="1" {{#if (eq item.system.choiceConfig.effectMode 1)}}selected{{/if}}>1: Multiply</option>
-                    <option value="2" {{#if (eq item.system.choiceConfig.effectMode 2)}}selected{{/if}}>2: Add</option>
-                    <option value="3" {{#if (eq item.system.choiceConfig.effectMode 3)}}selected{{/if}}>3: Downgrade</option>
-                    <option value="4" {{#if (eq item.system.choiceConfig.effectMode 4)}}selected{{/if}}>4: Upgrade</option>
-                    <option value="5" {{#if (eq item.system.choiceConfig.effectMode 5)}}selected{{/if}}>5: Override</option>
+                    <option value="0" {{#if (eq item.system.choiceConfig.effectMode 0)}}selected{{/if}}>0: {{localize 'EFFECT.MODE_CUSTOM'}}</option>
+                    <option value="1" {{#if (eq item.system.choiceConfig.effectMode 1)}}selected{{/if}}>1: {{localize 'EFFECT.MODE_MULTIPLY'}}</option>
+                    <option value="2" {{#if (eq item.system.choiceConfig.effectMode 2)}}selected{{/if}}>2: {{localize 'EFFECT.MODE_ADD'}}</option>
+                    <option value="3" {{#if (eq item.system.choiceConfig.effectMode 3)}}selected{{/if}}>3: {{localize 'EFFECT.MODE_DOWNGRADE'}}</option>
+                    <option value="4" {{#if (eq item.system.choiceConfig.effectMode 4)}}selected{{/if}}>4: {{localize 'EFFECT.MODE_UPGRADE'}}</option>
+                    <option value="5" {{#if (eq item.system.choiceConfig.effectMode 5)}}selected{{/if}}>5: {{localize 'EFFECT.MODE_OVERRIDE'}}</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="choice-effect-value">Effect Value</label>
+                <label for="choice-effect-value">{{localize 'VAGABOND.Item.Perk.ChoiceEffectValue.Label'}}</label>
                 <input type="text" name="system.choiceConfig.effectValue" id="choice-effect-value" value="{{item.system.choiceConfig.effectValue}}" placeholder="1" style="font-family: monospace;">
             </div>
         </div>
@@ -453,78 +453,78 @@
         {{!-- Info Accordion --}}
         <div class="help-box">
             <details data-details-id="choice-info">
-                <summary><i class="fas fa-info-circle"></i> Info & Examples</summary>
+                <summary><i class="fas fa-info-circle"></i> {{localize "VAGABOND.Item.Perk.ChoiceHelp.Summary"}}</summary>
                 <div class="mode-help">
                     <div class="mode-example">
-                        <h4>How It Works</h4>
-                        <p>When a player adds this perk, a dialog appears asking them to choose from available options (skills, stats, etc.). The system then creates an Active Effect targeting the selected field.</p>
+                        <h4>{{localize "VAGABOND.Item.Perk.ChoiceHelp.HowItWorksTitle"}}</h4>
+                        <p>{{localize "VAGABOND.Item.Perk.ChoiceHelp.HowItWorksBody"}}</p>
                     </div>
 
                     <div class="mode-example">
-                        <h4>Target Field Examples</h4>
-                        <p class="hint" style="color: #c53030; font-weight: 600; margin-bottom: 0.5rem;">⚠️ DO NOT include "system." prefix!</p>
+                        <h4>{{localize "VAGABOND.Item.Perk.ChoiceHelp.TargetFieldExamplesTitle"}}</h4>
+                        <p class="hint" style="color: #c53030; font-weight: 600; margin-bottom: 0.5rem;">{{localize "VAGABOND.Item.Perk.ChoiceHelp.NoSystemPrefixWarning"}}</p>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
-                            <li><code>skills.{choice}.trained</code> - For skill training (includes melee, ranged, brawl, finesse)</li>
-                            <li><code>stats.{choice}.bonus</code> - For stat increase</li>
-                            <li><em>(Leave empty for spell selection)</em> - For granting free spells</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExSkillTraining"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExStatIncrease"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExSpellSelection"}}}</li>
                         </ul>
-                        <p class="hint">Use <code>{choice}</code> as placeholder - it gets replaced with player's selection</p>
+                        <p class="hint">{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ChoicePlaceholderHint"}}}</p>
                     </div>
 
                     <div class="mode-example">
-                        <h4>Effect Modes</h4>
+                        <h4>{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectModesTitle"}}</h4>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
-                            <li><strong>Add (2)</strong> - Add to existing value (use for numeric bonuses like <code>+1</code>)</li>
-                            <li><strong>Override (5)</strong> - Replace value entirely (use for <code>trained = true</code>)</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ModeAdd"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ModeOverride"}}}</li>
                         </ul>
                     </div>
 
                     <div class="mode-example">
-                        <h4>Effect Value Examples</h4>
+                        <h4>{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectValueExamplesTitle"}}</h4>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
-                            <li><code>true</code> - For boolean fields (trained)</li>
-                            <li><code>1</code> - Simple numeric bonus (+1)</li>
-                            <li><code>@attributes.level.value</code> - Bonus equal to character level</li>
-                            <li><code>floor(@attributes.level.value / 2)</code> - Half level, rounded down</li>
-                            <li><code>@stats.might.total</code> - Bonus equal to Might stat</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExBoolean"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExSimpleBonus"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExLevelBonus"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExHalfLevelBonus"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExMightBonus"}}}</li>
                         </ul>
                     </div>
 
                     <div class="mode-example">
-                        <h4>Complete Examples</h4>
-                        <p><strong>New Training (Choose Skill)</strong></p>
+                        <h4>{{localize "VAGABOND.Item.Perk.ChoiceHelp.CompleteExamplesTitle"}}</h4>
+                        <p>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExNewTrainingTitle"}}}</p>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
-                            <li>Type: <code>skill</code></li>
-                            <li>Target Field: <code>skills.{choice}.trained</code></li>
-                            <li>Effect Mode: <code>Override (5)</code></li>
-                            <li>Effect Value: <code>true</code></li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TypeLine" type="skill"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TargetFieldLine" field="skills.{choice}.trained"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectModeLine" mode="Override (5)"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectValueLine" value="true"}}}</li>
                         </ul>
 
-                        <p style="margin-top: 0.75rem;"><strong>Advancement (Choose Stat +1)</strong></p>
+                        <p style="margin-top: 0.75rem;">{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExAdvancementTitle"}}}</p>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
-                            <li>Type: <code>stat</code></li>
-                            <li>Target Field: <code>stats.{choice}.bonus</code></li>
-                            <li>Effect Mode: <code>Add (2)</code></li>
-                            <li>Effect Value: <code>1</code></li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TypeLine" type="stat"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TargetFieldLine" field="stats.{choice}.bonus"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectModeLine" mode="Add (2)"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectValueLine" value="1"}}}</li>
                         </ul>
 
-                        <p style="margin-top: 0.75rem;"><strong>Level-Scaling Stat Bonus</strong></p>
+                        <p style="margin-top: 0.75rem;">{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExLevelScalingTitle"}}}</p>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
-                            <li>Type: <code>stat</code></li>
-                            <li>Target Field: <code>stats.{choice}.bonus</code></li>
-                            <li>Effect Mode: <code>Add (2)</code></li>
-                            <li>Effect Value: <code>floor(@attributes.level.value / 2)</code></li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TypeLine" type="stat"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TargetFieldLine" field="stats.{choice}.bonus"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectModeLine" mode="Add (2)"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectValueLine" value="floor(@attributes.level.value / 2)"}}}</li>
                         </ul>
 
-                        <p style="margin-top: 0.75rem;"><strong>Learn New Spell (Grants Free Spell)</strong></p>
+                        <p style="margin-top: 0.75rem;">{{{localize "VAGABOND.Item.Perk.ChoiceHelp.ExLearnSpellTitle"}}}</p>
                         <ul style="margin: 0.25rem 0; padding-left: 1.5rem; font-size: 0.9em;">
-                            <li>Type: <code>spell</code></li>
-                            <li>Target Field: <em>(Leave empty)</em></li>
-                            <li>Effect Mode: <em>(Not used)</em></li>
-                            <li>Effect Value: <em>(Leave empty)</em></li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TypeLine" type="spell"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.TargetFieldEmpty"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectModeNotUsed"}}}</li>
+                            <li>{{{localize "VAGABOND.Item.Perk.ChoiceHelp.EffectValueEmpty"}}}</li>
                         </ul>
                         <p class="hint" style="font-size: 0.85em; margin-top: 0.25rem;">
-                            <strong>Note:</strong> For spell selection, the chosen spell is automatically added to the character when the perk is granted. No Active Effect configuration needed - the spell itself is the benefit!
+                            {{{localize "VAGABOND.Item.Perk.ChoiceHelp.SpellSelectionNote"}}}
                         </p>
                     </div>
                 </div>

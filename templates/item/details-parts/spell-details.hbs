@@ -45,7 +45,7 @@
         <div class='locked-section'>
           <div class='locked-stat'>
             <span class='stat-label'>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}:</span>
-            <span class='stat-value'>Yes</span>
+            <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
           </div>
         </div>
       {{/if}}
@@ -56,7 +56,7 @@
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
     <div class='spell-item-content'>
       <div class="item-section-box">
-        <div class="item-section-label">Spell Configuration</div>
+        <div class="item-section-label">{{localize "VAGABOND.UI.Labels.SpellDetails"}}</div>
         {{! Damage Base and Duration - Same Line }}
         <div class='flexrow gap-8'>
           <div class='form-group flex-1'>
@@ -118,7 +118,7 @@
             />
             <span>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}</span>
           </label>
-          <p class='notes'>When enabled, this spell bypasses the casting check and always succeeds (no criticals possible).</p>
+          <p class='notes'>{{localize "VAGABOND.UI.Labels.NoRollRequiredHint"}}</p>
         </div>
 
         {{! Uses Dice Scaling Checkbox }}
@@ -132,7 +132,7 @@
             />
             <span>{{localize "VAGABOND.UI.Labels.UsesDiceScaling"}}</span>
           </label>
-          <p class='notes'>Allows the cast dice control on a damage-less spell (damage type "-"). The dice become a counted resource for macros (<code>scope.spellDamageDice</code>); each die past the first costs 1 mana. No damage is rolled.</p>
+          <p class='notes'>{{localize "VAGABOND.UI.Labels.UsesDiceScalingHint"}}</p>
         </div>
 
         {{! Dice Scaling Label (only relevant when scaling is on) }}
@@ -143,7 +143,7 @@
             type='text'
             name='system.diceScaleLabel'
             value='{{system.diceScaleLabel}}'
-            placeholder='Dice'
+            placeholder='{{localize "VAGABOND.UI.Labels.DicePlaceholder"}}'
           />
         </div>
         {{/if}}

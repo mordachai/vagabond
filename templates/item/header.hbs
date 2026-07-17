@@ -18,7 +18,7 @@
     {{! Item Name and Lock (for equipment) }}
     <div class='item-name-row'>
       <div class='item-document-name'>
-        <input name='name' type='text' value='{{item.name}}' placeholder='Name' />
+        <input name='name' type='text' value='{{item.name}}' placeholder='{{localize "VAGABOND.UI.Labels.NamePlaceholder"}}' />
       </div>
       {{#if (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell'))}}
         <button
@@ -89,10 +89,10 @@
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Weapon.FIELDS.grip.label'}}</label>
           <select name='system.grip' data-dtype='String'>
-            <option value='1H' {{#if (eq system.grip '1H')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "1H"}}'>1H (One-Handed)</option>
-            <option value='2H' {{#if (eq system.grip '2H')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "2H"}}'>2H (Two-Handed)</option>
-            <option value='F' {{#if (eq system.grip 'F')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "F"}}'>F (Fist)</option>
-            <option value='V' {{#if (eq system.grip 'V')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "V"}}'>V (Versatile)</option>
+            <option value='1H' {{#if (eq system.grip '1H')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "1H"}}'>{{localize "VAGABOND.Weapon.Grip.1H"}}</option>
+            <option value='2H' {{#if (eq system.grip '2H')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "2H"}}'>{{localize "VAGABOND.Weapon.Grip.2H"}}</option>
+            <option value='F' {{#if (eq system.grip 'F')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "F"}}'>{{localize "VAGABOND.Weapon.Grip.F"}}</option>
+            <option value='V' {{#if (eq system.grip 'V')}}selected{{/if}} title='{{lookup config.weaponGripDescriptions "V"}}'>{{localize "VAGABOND.Weapon.Grip.V"}}</option>
           </select>
         </div>
       </div>

@@ -27,7 +27,7 @@
             type='button'
             class='item-control btn-sm'
             data-action='addTrait'
-            data-tooltip='Add New Trait'
+            data-tooltip='{{localize "VAGABOND.UI.Labels.AddNewTraitTooltip"}}'
           >
             <i class='fas fa-plus'></i> Add Trait
           </button>
@@ -47,7 +47,7 @@
                       type='text'
                       name='system.traits.{{index}}.name'
                       value='{{trait.name}}'
-                      placeholder='Trait Name'
+                      placeholder='{{localize "VAGABOND.UI.Labels.TraitNamePlaceholder"}}'
                       class='trait-title'
                     />
                   </div>
@@ -55,7 +55,7 @@
                     <a class='item-control'
                       data-action='removeTrait'
                       data-trait-index='{{index}}'
-                      data-tooltip='Remove Trait'
+                      data-tooltip='{{localize "VAGABOND.UI.Labels.RemoveTraitTooltip"}}'
                     >
                       <i class='fas fa-trash'></i>
                     </a>
@@ -74,7 +74,7 @@
                     name="system.traits.{{index}}.description"
                     class="trait-desc-textarea"
                     rows="3"
-                    placeholder="Trait description..."
+                    placeholder="{{localize 'VAGABOND.UI.Labels.TraitDescriptionPlaceholder'}}"
                   >{{trait.description}}</textarea>
                 {{else}}
                   {{#if enrichedTrait.enrichedDescription}}

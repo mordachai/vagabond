@@ -2,8 +2,7 @@
   {{!-- Header Section --}}
   <header class="settings-header">
     <p class="settings-description">
-      Control which Item compendiums are available in the Character Builder.
-      This determines what content (ancestries, classes, equipment, etc.) players can choose from during character creation.
+      {{localize "VAGABOND.CompendiumSettings.Description"}}
     </p>
   </header>
 
@@ -19,12 +18,12 @@
             {{checked useAllCompendiums}}
             data-action="toggleUseAll"
           />
-          <strong>Use All Available Compendiums</strong>
+          <strong>{{localize "VAGABOND.CompendiumSettings.UseAllAvailable"}}</strong>
         </label>
-        <span class="selected-count">{{selectedCount}} / {{totalCompendiums}} compendiums selected</span>
+        <span class="selected-count">{{localize "VAGABOND.CompendiumSettings.SelectedCount" selected=selectedCount total=totalCompendiums}}</span>
       </div>
       <div class="use-all-hint">
-        <small>When enabled, automatically includes all Item compendiums (current and future). Disable to manually select specific compendiums.</small>
+        <small>{{localize "VAGABOND.CompendiumSettings.UseAllHint"}}</small>
       </div>
     </div>
   </section>
@@ -32,20 +31,20 @@
   {{!-- Quick Selection Buttons --}}
   <section class="button-section">
     <div class="button-group">
-      <button type="button" data-action="selectAll" title="Select All Compendiums">
-        <i class="fas fa-check-square"></i> Select All
+      <button type="button" data-action="selectAll" title="{{localize 'VAGABOND.CompendiumSettings.SelectAllTooltip'}}">
+        <i class="fas fa-check-square"></i> {{localize "VAGABOND.CompendiumSettings.SelectAll"}}
       </button>
-      <button type="button" data-action="deselectAll" title="Deselect All Compendiums">
-        <i class="far fa-square"></i> Deselect All
+      <button type="button" data-action="deselectAll" title="{{localize 'VAGABOND.CompendiumSettings.DeselectAllTooltip'}}">
+        <i class="far fa-square"></i> {{localize "VAGABOND.CompendiumSettings.DeselectAll"}}
       </button>
-      <button type="button" data-action="selectSystem" title="Select System Compendiums Only">
-        <i class="fas fa-cube"></i> System
+      <button type="button" data-action="selectSystem" title="{{localize 'VAGABOND.CompendiumSettings.SelectSystemTooltip'}}">
+        <i class="fas fa-cube"></i> {{localize "VAGABOND.CompendiumSettings.System"}}
       </button>
-      <button type="button" data-action="selectWorld" title="Select World Compendiums Only">
-        <i class="fas fa-globe"></i> World
+      <button type="button" data-action="selectWorld" title="{{localize 'VAGABOND.CompendiumSettings.SelectWorldTooltip'}}">
+        <i class="fas fa-globe"></i> {{localize "VAGABOND.CompendiumSettings.World"}}
       </button>
-      <button type="button" data-action="selectModules" title="Select Module Compendiums Only">
-        <i class="fas fa-puzzle-piece"></i> Modules
+      <button type="button" data-action="selectModules" title="{{localize 'VAGABOND.CompendiumSettings.SelectModulesTooltip'}}">
+        <i class="fas fa-puzzle-piece"></i> {{localize "VAGABOND.CompendiumSettings.Modules"}}
       </button>
     </div>
   </section>
@@ -55,7 +54,7 @@
   <section class="compendium-section">
     <h4 class="section-header">
       <i class="fas fa-cube"></i>
-      <span> System Compendiums - </span>
+      <span> {{localize "VAGABOND.CompendiumSettings.SystemCompendiums"}} </span>
       <span class="count-badge">{{systemCount}}</span>
     </h4>
     <div class="compendium-grid">
@@ -71,7 +70,7 @@
         />
         <span class="compendium-info">
           <span class="compendium-title">{{title}}</span>
-          <span class="compendium-meta">{{size}} items</span>
+          <span class="compendium-meta">{{size}} {{localize "VAGABOND.CompendiumSettings.ItemsSuffix"}}</span>
         </span>
       </label>
       {{/each}}
@@ -83,7 +82,7 @@
   <section class="compendium-section">
     <h4 class="section-header">
       <i class="fas fa-globe"></i>
-      <span> World Compendiums - </span>
+      <span> {{localize "VAGABOND.CompendiumSettings.WorldCompendiums"}} </span>
       <span class="count-badge">{{worldCount}}</span>
     </h4>
     <div class="compendium-grid">
@@ -99,7 +98,7 @@
         />
         <span class="compendium-info">
           <span class="compendium-title">{{title}}</span>
-          <span class="compendium-meta">{{size}} items</span>
+          <span class="compendium-meta">{{size}} {{localize "VAGABOND.CompendiumSettings.ItemsSuffix"}}</span>
         </span>
       </label>
       {{/each}}
@@ -111,7 +110,7 @@
   <section class="compendium-section">
     <h4 class="section-header">
       <i class="fas fa-puzzle-piece"></i>
-      <span> Module Compendiums - </span>
+      <span> {{localize "VAGABOND.CompendiumSettings.ModuleCompendiums"}} </span>
       <span class="count-badge">{{moduleCount}}</span>
     </h4>
     <div class="compendium-grid">
@@ -127,7 +126,7 @@
         />
         <span class="compendium-info">
           <span class="compendium-title">{{title}}</span>
-          <span class="compendium-meta">{{size}} items · {{source}}</span>
+          <span class="compendium-meta">{{size}} {{localize "VAGABOND.CompendiumSettings.ItemsSuffix"}} · {{source}}</span>
         </span>
       </label>
       {{/each}}
@@ -138,7 +137,7 @@
   {{#unless compendiums.length}}
   <section class="no-compendiums">
     <i class="fas fa-exclamation-triangle"></i>
-    <p>No Item compendiums found in this world.</p>
+    <p>{{localize "VAGABOND.CompendiumSettings.NoCompendiumsFound"}}</p>
   </section>
   {{/unless}}
 
@@ -146,14 +145,14 @@
   <footer class="settings-footer">
     <div class="footer-info">
       <i class="fas fa-lightbulb"></i>
-      Changes take effect immediately. The character builder cache will be cleared automatically.
+      {{localize "VAGABOND.CompendiumSettings.ChangesImmediateHint"}}
     </div>
     <div class="footer-buttons">
       <button type="button" data-action="reset" class="reset-button">
-        <i class="fas fa-undo"></i> Reset to Default
+        <i class="fas fa-undo"></i> {{localize "VAGABOND.CompendiumSettings.ResetToDefault"}}
       </button>
       <button type="submit" class="save-button">
-        <i class="fas fa-save"></i> Save Settings
+        <i class="fas fa-save"></i> {{localize "VAGABOND.CompendiumSettings.SaveSettings"}}
       </button>
     </div>
   </footer>
