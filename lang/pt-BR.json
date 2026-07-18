@@ -67,15 +67,15 @@
       "ManaPerCast": "A mana máxima permitida por conjuração única."
     },
     "Saves": {
-      "savesTitle": "Resistências",
-      "savesPlaceholder": "Reflexo, Resistência ou Vontade",
-      "NPCNoSaves": "NPCs não rolam resistências - eles só têm armadura, imunidades e fraquezas.",
+      "savesTitle": "Salvaguardas",
+      "savesPlaceholder": "Reflexo, Resistir ou Vontade",
+      "NPCNoSaves": "NPCs não rolam salvaguardas - eles só têm armadura, imunidades e fraquezas.",
       "Reflex": {
         "name": "Reflexo",
         "description": "Evitar dano físico, como explosões, armadilhas rápidas, escapar de agarrões, e sopro de dragão."
       },
       "Endure": {
-        "name": "Resistência",
+        "name": "Resistir",
         "description": "Suportar dano físico, como venenos, calor extremo, contenções e petrificação."
       },
       "Will": {
@@ -95,12 +95,12 @@
     },
     "DefendMechanics": {
       "DefendingTitle": "Opções de defesa",
-      "BlockTitle": "Bloquear (Resistência)",
+      "BlockTitle": "Bloquear (Resistir)",
       "DodgeTitle": "Esquivar (Reflexo)",
       "CritTitle": "Crítico",
-      "BlockDescription": "Role Resistência. Sucesso ignora um dado de dano mais alto. Desvantagem se ataque à Distância.",
+      "BlockDescription": "Role Resistir. Sucesso ignora um dado de dano mais alto. Desvantagem se ataque à Distância.",
       "DodgeDescription": "Role Reflexo. Sucesso ignora um dado de dano mais alto. Desvantagem se Armadura Pesada.",
-      "CritDescription": "Você não é afetado pelo que causou a Resistência, e pode usar uma Ação.",
+      "CritDescription": "Você não é afetado pelo que causou a Salvaguarda, e pode usar uma Ação.",
       "CritToggleHint": "Clique para alternar: Dano Extra ou Ganhar Ponto de Sorte"
     },
     "AttackTypes": {
@@ -229,12 +229,12 @@
     "StatusConditionDescriptions": {
       "Frightened": "-2 de penalidade ao dano causado [AUTOMATIZADO]",
       "Dazed": "Não pode Concentrar-se ou Mover-se a menos que use uma Ação. Velocidade = 0 [PARCIAL - Velocidade automatizada]",
-      "Dead": "Igual a Incapacitado, mas falha automaticamente TODAS as rolagens (atributos, perícias, resistências, ataques) [TOTALMENTE AUTOMATIZADO]",
+      "Dead": "Igual a Incapacitado, mas falha automaticamente TODAS as rolagens (atributos, perícias, salvaguardas, ataques) [TOTALMENTE AUTOMATIZADO]",
       "Fatigued": "Cada Fadiga ocupa um Espaço no Inventário. Em 3+: não pode Correr. Em 5: morre [PARCIAL - Inventário automatizado]",
       "Prone": "Custa 10' de Velocidade para levantar. Só rastejo (proporção 2:1), não pode Correr, Vulnerável [PARCIAL - Velocidade automatizada]",
-      "Confused": "Testes/Resistências com Desvantagem. Resistências contra suas Ações com Vantagem [AUTOMATIZADO]",
+      "Confused": "Testes/Salvaguardas com Desvantagem. Salvaguardas contra suas Ações com Vantagem [AUTOMATIZADO]",
       "Sickened": "-2 de penalidade à cura recebida [AUTOMATIZADO]",
-      "Vulnerable": "Seus ataques e suas Resistências contra ataques têm Desvantagem. Ataques direcionados a ele e Resistências contra seus ataques têm Vantagem [AUTOMATIZADO]",
+      "Vulnerable": "Seus ataques e suas Salvaguardas contra ataques têm Desvantagem. Ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem [AUTOMATIZADO]",
       "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
       "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
       "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
@@ -250,7 +250,7 @@
     "StatusModifiers": {
       "IncomingHealingModifier": "Modificador de Cura Recebida",
       "IncomingAttacksModifier": "Modificador de Ataques Recebidos",
-      "OutgoingSavesModifier": "Modificador de Resistências Realizadas",
+      "OutgoingSavesModifier": "Modificador de Salvaguardas Realizadas",
       "AutoFailStats": "Atributos com Falha Automática",
       "DefenderStatusModifiers": "Modificadores de Status do Defensor",
       "AttackersAreBlinded": "Atacantes Estão Cegos",
@@ -414,8 +414,8 @@
         "hint": "Quando ativado, ações de NPC usam dano fixo em vez de rolar dados. Quando 'Rolar Dano Junto com o Teste' também está ativo, o dano de NPC é resolvido automaticamente sem necessidade de botão — esta configuração determina se usa o valor fixo ou rola a fórmula."
       },
       "autoApplySaveDamage": {
-        "name": "Aplicar Dano de Resistência Automaticamente",
-        "hint": "Quando ativado, o dano é aplicado automaticamente aos PV após rolagens de resistência. Quando desativado, os valores de dano são mostrados no chat mas devem ser aplicados manualmente."
+        "name": "Aplicar Dano de Salvaguarda Automaticamente",
+        "hint": "Quando ativado, o dano é aplicado automaticamente aos PV após rolagens de salvaguarda. Quando desativado, os valores de dano são mostrados no chat mas devem ser aplicados manualmente."
       },
       "trinketCastRequirement": {
         "name": "Requer Trinket para Conjurar",
@@ -492,7 +492,7 @@
       "homebrewSettings": {
         "name": "Configuração Homebrew",
         "label": "Configurar Homebrew",
-        "hint": "Personalize atributos, perícias, resistências, dados, progressão, derivações, tipos de dano e mais."
+        "hint": "Personalize atributos, perícias, salvaguardas, dados, progressão, derivações, tipos de dano e mais."
       },
       "useAnimations": {
         "name": "Usar Animações de Magia",
@@ -657,12 +657,12 @@
       "ResetTab": "Restaurar Aba ao Padrão",
       "Save": "Salvar",
       "ReloadTitle": "Recarregar Mundo?",
-      "ReloadBody": "Algumas mudanças (atributos, perícias, resistências, limite de atributo, ou nível máximo) requerem recarregar o mundo para ter efeito. Recarregar agora?",
+      "ReloadBody": "Algumas mudanças (atributos, perícias, salvaguardas, limite de atributo, ou nível máximo) requerem recarregar o mundo para ter efeito. Recarregar agora?",
       "UnsavedTitle": "Mudanças Não Salvas",
       "UnsavedBody": "Você tem mudanças não salvas. Fechar sem salvar?",
       "Tabs": {
         "Stats": "Atributos",
-        "Skills": "Perícias & Resistências",
+        "Skills": "Perícias & Salvaguardas",
         "Dice": "Dados",
         "Magic": "Magia",
         "Leveling": "Progressão",
@@ -699,17 +699,17 @@
         "MissingTag": "(ausente)",
         "SkillHintPlaceholder": "Dica de descrição (ex.: Exercer força física…)",
         "AddSkill": "Adicionar Perícia",
-        "SavesLegend": "Resistências",
-        "SavesHint": "Cada resistência precisa de uma chave, rótulo, dois atributos (somados para a dificuldade) e um valor base. Fórmula: <code>base − atributo1 − atributo2 − bônus</code>. Requer recarregar o mundo.",
+        "SavesLegend": "Salvaguardas",
+        "SavesHint": "Cada salvaguarda precisa de uma chave, rótulo, dois atributos (somados para a dificuldade) e um valor base. Fórmula: <code>base − atributo1 − atributo2 − bônus</code>. Requer recarregar o mundo.",
         "Stat1": "Atributo 1",
         "Stat2": "Atributo 2",
         "Base": "Base",
         "CheckDie": "Dado de Teste",
         "SaveDescPlaceholder": "Dica de descrição (ex.: Evitar dano físico…)",
-        "AddSave": "Adicionar Resistência",
+        "AddSave": "Adicionar Salvaguarda",
         "CheckDiceLegend": "Dados de Teste",
         "BaseCheck": "Teste Base",
-        "BaseCheckHint": "Dado usado para testes de perícia, ataques e resistências.",
+        "BaseCheckHint": "Dado usado para testes de perícia, ataques e salvaguardas.",
         "FavorBonus": "Bônus de Vantagem",
         "FavorBonusHint": "Dado extra adicionado a rolagens com vantagem.",
         "HinderPenalty": "Penalidade de Desvantagem",
@@ -1052,7 +1052,7 @@
         "AppearingPlaceholder": "dX",
         "AppAbbrev": "Apr",
         "Sections": {
-          "Resistances": "Resistências",
+          "Resistances": "Salvaguardas",
           "Actions": "Ações",
           "Abilities": "Habilidades",
           "Effects": "Efeitos"
@@ -1863,7 +1863,7 @@
         "spellsPlaceholder": "Nenhuma magia carregada. Favorite suas magias na aba Magias.",
         "Inventory": "Inventário",
         "Skills": "Perícias",
-        "Saves": "Resistências",
+        "Saves": "Salvaguardas",
         "Attacks": "Ataques",
         "Equipped": "Equipado",
         "equippedPlaceholder": "Nenhum item equipado ainda. Clique com o botão direito nos itens do Inventário para equipar.",
@@ -2409,17 +2409,17 @@
       "AddPassiveEffect": "Adicionar Efeito Passivo",
       "StatusProtections": "Proteções de Status",
       "Blocks": "Bloqueia",
-      "Resists": "Resiste (resistência com Vantagem)",
+      "Resists": "Resiste (salvaguarda com Vantagem)",
       "SelectStatus": "— Selecione o Status —",
       "AddEffect": "Adicionar Efeito",
       "AddCritEffect": "Adicionar Efeito Crítico",
       "RequiresDamageShort": "Se Acertar",
       "RequiresDamageHint": "O status só se aplica se o dano não for totalmente bloqueado",
       "Save": {
-        "None": "Sem Resistência",
-        "Any": "Qualquer Resistência",
+        "None": "Sem Salvaguarda",
+        "Any": "Qualquer Salvaguarda",
         "Diff": "Dificuldade",
-        "Label": "Resistência"
+        "Label": "Salvaguarda"
       },
       "Duration": {
         "Permanent": "Permanente",
