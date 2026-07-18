@@ -186,19 +186,6 @@
       "flags": {}
     },
     {
-      "name": "creation-notes",
-      "label": "Creation Notes",
-      "system": "vagabond",
-      "path": "packs/creation-notes",
-      "type": "JournalEntry",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "private": false,
-      "flags": {}
-    },
-    {
       "name": "alchemical-items",
       "label": "Alchemical items",
       "system": "vagabond",
@@ -331,8 +318,7 @@
             "ancestries",
             "classes",
             "perks",
-            "starting-packs",
-            "creation-notes"
+            "starting-packs"
           ],
           "folders": []
         },

@@ -601,7 +601,7 @@ export class VagabondChatCard {
       case 'save':
         entity = actor.system.saves?.[key];
         entityLabel = entity?.label || key;
-        title = `${entityLabel} Save`;
+        title = `${entityLabel} ${game.i18n.localize('VAGABOND.Roll.SaveRoll')}`;
         tags = [
           { label: entityLabel, cssClass: 'tag-skill' }
         ];
@@ -694,7 +694,7 @@ export class VagabondChatCard {
       case 'save':
         const save = actor.system.saves?.[keyOrLabel];
         const saveLabel = save?.label || keyOrLabel;
-        title = `${saveLabel} Save`;
+        title = `${saveLabel} ${game.i18n.localize('VAGABOND.Roll.SaveRoll')}`;
         tags = [{ label: saveLabel, cssClass: 'tag-skill' }];
         break;
 

@@ -51,7 +51,7 @@
       },
       {
         "name": "Zap",
-        "note": "Cast, Bolt (Focus) | Reflex",
+        "note": "Cast, Remote (Focus) | Reflex",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "7",

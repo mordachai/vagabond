@@ -40,7 +40,7 @@
     "actions": [
       {
         "name": "Hurl Fire",
-        "note": "Cast, Bolt | Reflex",
+        "note": "Cast, Remote | Reflex",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "3",

@@ -50,7 +50,7 @@
       },
       {
         "name": "Zap",
-        "note": "Cast, Bolt | Reflex",
+        "note": "Cast, Remote | Reflex",
         "recharge": "Cd4",
         "attackType": "castRanged",
         "flatDamage": "3",

@@ -2327,7 +2327,7 @@ const FORCE_CRIT_ENTRY = {
         case 'save':
           entity = actor.system.saves?.[key];
           entityLabel = entity?.label || key;
-          title = `${entityLabel} Save`;
+          title = `${entityLabel} ${game.i18n.localize('VAGABOND.Roll.SaveRoll')}`;
           tags = [{ label: entityLabel, cssClass: 'tag-skill' }];
           break;
         default:

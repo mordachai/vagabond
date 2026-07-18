@@ -135,7 +135,7 @@
       },
       {
         "name": "Ice Knife",
-        "note": "Cast, Bolt | Reflex | Focus",
+        "note": "Cast, Remote | Reflex | Focus",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "7",
@@ -147,7 +147,7 @@
       },
       {
         "name": "Zap",
-        "note": "Cast, Bolt | Reflex",
+        "note": "Cast, Remote | Reflex",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "7",

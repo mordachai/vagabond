@@ -86,7 +86,7 @@
     "Roll": {
       "Favored": "Vantagem (+1d6)",
       "Hindered": "Desvantagem (-1d6)",
-      "SaveRoll": "Rolagem de Resistência"
+      "SaveRoll": "Salvaguarda"
     },
     "Damage": {
       "Total": "Dano Total",
@@ -212,7 +212,7 @@
       "Dazed": "Atordoado",
       "Dead": "Morto",
       "Fatigued": "Fatigado",
-      "Focusing": "Concentrando",
+      "Focusing": "Concentrado",
       "Frightened": "Amedrontado",
       "Incapacitated": "Incapacitado",
       "Invisible": "Invisível",
@@ -1394,7 +1394,7 @@
       },
       "Relic": {
         "FIELDS": {
-          "lore": {"label": "Lenda"},
+          "lore": {"label": "Info"},
           "description": {"label": "Descrição"},
           "baseCost": {"label": "Valor"}
         }
@@ -1977,7 +1977,7 @@
         "Category": "Categoria",
         "GearCategory": "Categoria de Item",
         "GearCategoryPlaceholder": "ex.: Alquimia e Medicina",
-        "RelicLorePlaceholder": "Digite a história e lore da relíquia...",
+        "RelicLorePlaceholder": "Digite informações sobre a relíquia...",
         "SelectProperties": "Selecionar Propriedades",
         "Consumable": "Consumível",
         "Anim": "Anim",
@@ -2035,7 +2035,7 @@
         "SizeSuffix": "",
         "UnknownBeingType": "Desconhecido",
         "Difficulty": "Dificuldade",
-        "Save": "Resistência",
+        "Save": "Salvaguarda",
         "Unbound": "Desvinculado"
       },
       "Examples": {
@@ -2422,7 +2422,7 @@
       },
       "Duration": {
         "Permanent": "Permanente",
-        "Focusing": "Concentrando"
+        "Focusing": "Concentração"
       },
       "CausesDamage": "Dano",
       "CausesDamageHint": "O resultado do dado é causado como dano a cada tique. Deixe a fórmula em branco para usar o resultado do dado.",

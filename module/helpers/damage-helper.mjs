@@ -2040,7 +2040,7 @@ export class VagabondDamageHelper {
     const card = new VagabondChatCard()
       .setType('save-roll')
       .setActor(actor)
-      .setTitle(`${saveLabel} Save`)
+      .setTitle(`${game.i18n.localize('VAGABOND.Roll.SaveRoll')}: ${saveLabel}`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
       .setOutcome(isSuccess ? 'PASS' : 'FAIL', isCritical);
@@ -2112,7 +2112,7 @@ export class VagabondDamageHelper {
     const card = new VagabondChatCard()
       .setType('save-roll')
       .setActor(actor)
-      .setTitle(`${saveLabel} Save`)
+      .setTitle(`${saveLabel} ${game.i18n.localize('VAGABOND.Roll.SaveRoll')}`)
       .setSubtitle(actor.name)
       .addRoll(roll, difficulty)
       .setOutcome(isSuccess ? 'PASS' : 'FAIL', isCritical);

@@ -69,7 +69,7 @@
       },
       {
         "name": "Necrotic Blast",
-        "note": "Cast, Bolt",
+        "note": "Cast, Remote",
         "recharge": "",
         "flatDamage": "7",
         "rollDamage": "2d6",
