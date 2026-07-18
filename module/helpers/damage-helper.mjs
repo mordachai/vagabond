@@ -436,7 +436,7 @@ export class VagabondDamageHelper {
     return await VagabondChatCard.createActionCard({
       actor,
       item,
-      title: `${item?.name || 'Attack'} Damage`,
+      title: `${game.i18n.localize('VAGABOND.Roll.DamageRoll')}: ${item?.name || 'Attack'}`,
       damageRoll,
       damageType: damageTypeKey || damageType,
       hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
@@ -777,7 +777,7 @@ export class VagabondDamageHelper {
     await VagabondChatCard.createActionCard({
       actor: actor,
       item: item,
-      title: `${item.name} Damage`,
+      title: `${game.i18n.localize('VAGABOND.Roll.DamageRoll')}: ${item.name}`,
       subtitle: actor.name,
       damageRoll: rollObj,
       damageType: damageTypeKey,
@@ -909,7 +909,7 @@ export class VagabondDamageHelper {
       // This ensures NPC damage cards use the exact same template (.vagabond-chat-card-v2) as Players.
       await VagabondChatCard.createActionCard({
           actor: actor,
-          title: `${action.name} Damage`,
+          title: `${game.i18n.localize('VAGABOND.Roll.DamageRoll')}: ${action.name}`,
           subtitle: actor.name,
           damageRoll: rollObj,
           damageType: damageTypeKey || 'physical',

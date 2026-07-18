@@ -86,7 +86,8 @@
     "Roll": {
       "Favored": "Favored (+1d6)",
       "Hindered": "Hindered (-1d6)",
-      "SaveRoll": "Save Roll"
+      "SaveRoll": "Save Roll",
+      "DamageRoll": "Damage"
     },
     "Damage": {
       "Total": "Total Damage",

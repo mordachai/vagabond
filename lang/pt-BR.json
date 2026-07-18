@@ -86,7 +86,8 @@
     "Roll": {
       "Favored": "Vantagem (+1d6)",
       "Hindered": "Desvantagem (-1d6)",
-      "SaveRoll": "Salvaguarda"
+      "SaveRoll": "Salvaguarda",
+      "DamageRoll": "Dano"
     },
     "Damage": {
       "Total": "Dano Total",
@@ -135,7 +136,7 @@
       "Effects": {
         "Focusing": "Concentrando (Arco Elétrico)",
         "Burning": "Queimando (Chamas)",
-        "Sickened": "Enjoado (Bolhas Verdes)",
+        "Sickened": "Doente (Bolhas Verdes)",
         "Charmed": "Enfeitiçado (Corações Rosa)"
       }
     },
@@ -204,7 +205,7 @@
       "GenericDark":  "Trevas (Genérico)"
     },
     "StatusConditions": {
-      "Berserk": "Furioso",
+      "Berserk": "Berserk",
       "Blinded": "Cego",
       "Burning": "Queimando",
       "Charmed": "Enfeitiçado",
@@ -220,7 +221,7 @@
       "Prone": "Caído",
       "Restrained": "Imobilizado",
       "Grappling": "Agarrando",
-      "Sickened": "Enjoado",
+      "Sickened": "Doente",
       "Suffocating": "Sufocando",
       "Unconscious": "Inconsciente",
       "Vulnerable": "Vulnerável"
@@ -265,8 +266,8 @@
     },
     "CombatZones": {
       "Frontline": "Linha de Frente",
-      "Midline": "Linha do Meio",
-      "Backline": "Linha de Trás"
+      "Midline": "Meio",
+      "Backline": "Retaguarda"
     },
     "Currency": {
       "Gold": {
@@ -980,7 +981,7 @@
           "Actions": "Ações",
           "Abilities": "Habilidades",
           "Immune": "Imune",
-          "Weak": "Fraco",
+          "Weak": "Fraqueza",
           "StatusImmune": "Imune a Status"
         }
       },
@@ -1042,7 +1043,7 @@
           "senses": {"label": "Sentidos:", "short": "Sentidos"},
           "armor": {"label": "Armadura:"},
           "immunities": {"label": "Imune:", "short": "Imune"},
-          "weaknesses": {"label": "Fraco:", "short": "Fraco"},
+          "weaknesses": {"label": "Fraquezas:", "short": "Fraq:"},
           "statusImmunities": {"label": "Imunidades de Status:", "short": "Imunidades de Status"},
           "description": {"label": "Descrição"}
         },
