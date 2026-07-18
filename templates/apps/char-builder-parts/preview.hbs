@@ -263,10 +263,10 @@
                         {{/if}}
                         <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
-                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
-                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
-                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
-                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
+                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}{{localize 'VAGABOND.Currency.Gold.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}{{localize 'VAGABOND.Currency.Silver.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}{{localize 'VAGABOND.Currency.Copper.abbr'}}{{/if}}
+                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0{{localize 'VAGABOND.Currency.Silver.abbr'}}{{/unless}}
                         </div>
                     </div>
                     {{#if selectedItem.displayStats.propertiesWithHints}}
@@ -301,10 +301,10 @@
                         {{/if}}
                         <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
-                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
-                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
-                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
-                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
+                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}{{localize 'VAGABOND.Currency.Gold.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}{{localize 'VAGABOND.Currency.Silver.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}{{localize 'VAGABOND.Currency.Copper.abbr'}}{{/if}}
+                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0{{localize 'VAGABOND.Currency.Silver.abbr'}}{{/unless}}
                         </div>
                     </div>
                 {{/if}}
@@ -330,10 +330,10 @@
                         {{/if}}
                         <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
-                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
-                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
-                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
-                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
+                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}{{localize 'VAGABOND.Currency.Gold.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}{{localize 'VAGABOND.Currency.Silver.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}{{localize 'VAGABOND.Currency.Copper.abbr'}}{{/if}}
+                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0{{localize 'VAGABOND.Currency.Silver.abbr'}}{{/unless}}
                         </div>
                     </div>
                 {{/if}}
@@ -350,10 +350,10 @@
                     <div class="preview-details-grid">
                         <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
-                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
-                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
-                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
-                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
+                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}{{localize 'VAGABOND.Currency.Gold.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}{{localize 'VAGABOND.Currency.Silver.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}{{localize 'VAGABOND.Currency.Copper.abbr'}}{{/if}}
+                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0{{localize 'VAGABOND.Currency.Silver.abbr'}}{{/unless}}
                         </div>
                     </div>
                 {{/if}}
@@ -364,10 +364,10 @@
                     <div class="preview-details-grid">
                         <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>
-                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}g {{/if}}
-                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}s {{/if}}
-                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}c{{/if}}
-                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0s{{/unless}}
+                            {{#if selectedItem.displayStats.cost.gold}}{{selectedItem.displayStats.cost.gold}}{{localize 'VAGABOND.Currency.Gold.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.silver}}{{selectedItem.displayStats.cost.silver}}{{localize 'VAGABOND.Currency.Silver.abbr'}} {{/if}}
+                            {{#if selectedItem.displayStats.cost.copper}}{{selectedItem.displayStats.cost.copper}}{{localize 'VAGABOND.Currency.Copper.abbr'}}{{/if}}
+                            {{#unless (or selectedItem.displayStats.cost.gold selectedItem.displayStats.cost.silver selectedItem.displayStats.cost.copper)}}0{{localize 'VAGABOND.Currency.Silver.abbr'}}{{/unless}}
                         </div>
                     </div>
                 {{/if}}

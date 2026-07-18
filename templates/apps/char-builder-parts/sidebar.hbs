@@ -69,7 +69,7 @@
                             <div class="name">{{opt.name}}</div>
                             <div class="item-meta">
                                 <span class="item-slots"><i class="fas fa-box"></i> {{opt.system.baseSlots}}</span>
-                                <span class="item-cost"><i class="fas fa-coins"></i> {{#if opt.system.baseCost.gold}}{{opt.system.baseCost.gold}}g{{else}}{{opt.system.baseCost.silver}}s{{/if}}</span>
+                                <span class="item-cost"><i class="fas fa-coins"></i> {{#if opt.system.baseCost.gold}}{{opt.system.baseCost.gold}}{{localize 'VAGABOND.Currency.Gold.abbr'}}{{else}}{{opt.system.baseCost.silver}}{{localize 'VAGABOND.Currency.Silver.abbr'}}{{/if}}</span>
                             </div>
                         </div>
                     </li>

@@ -327,11 +327,12 @@ export class GearStepManager extends BaseStepManager {
           const baseCost = sys.baseCost || { gold: 0, silver: 0, copper: 0 };
 
           // Format cost display
+          const silverAbbr = game.i18n.localize('VAGABOND.Currency.Silver.abbr');
           let costDisplay = '';
-          if (baseCost.gold > 0) costDisplay += `${baseCost.gold}g `;
-          if (baseCost.silver > 0) costDisplay += `${baseCost.silver}s `;
-          if (baseCost.copper > 0) costDisplay += `${baseCost.copper}c`;
-          if (!costDisplay) costDisplay = '0s';
+          if (baseCost.gold > 0) costDisplay += `${baseCost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')} `;
+          if (baseCost.silver > 0) costDisplay += `${baseCost.silver}${silverAbbr} `;
+          if (baseCost.copper > 0) costDisplay += `${baseCost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`;
+          if (!costDisplay) costDisplay = `0${silverAbbr}`;
 
           const fromStartingPack = startingPackGear.includes(uuid);
 

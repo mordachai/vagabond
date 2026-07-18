@@ -71,9 +71,9 @@ export default class VagabondContainerData extends VagabondItemBase {
   prepareDerivedData() {
     // Format cost as a human-readable string
     const costs = [];
-    if (this.baseCost.gold > 0) costs.push(`${this.baseCost.gold}g`);
-    if (this.baseCost.silver > 0) costs.push(`${this.baseCost.silver}s`);
-    if (this.baseCost.copper > 0) costs.push(`${this.baseCost.copper}c`);
+    if (this.baseCost.gold > 0) costs.push(`${this.baseCost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
+    if (this.baseCost.silver > 0) costs.push(`${this.baseCost.silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`);
+    if (this.baseCost.copper > 0) costs.push(`${this.baseCost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`);
     this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
 
     // Calculate current slots used (0-slot items don't count toward capacity)

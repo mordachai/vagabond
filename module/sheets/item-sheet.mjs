@@ -583,7 +583,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                     ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
                     : '';
                   const grip = sys.grip ? (sys.grip === 'V' ? '1H/2H' : sys.grip) : '—';
-                  const costDisplay = sys.costDisplay || '0g';
+                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
                   const slots = sys.slots || 1;
 
                   stats = `${damageDisplay} ${damageType} • ${grip} • ${costDisplay} • ${slots} slot${slots !== 1 ? 's' : ''}`;
@@ -600,7 +600,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                   // Armor: armor rating, might requirement, cost
                   const rating = sys.rating || 0;
                   const might = sys.might || 0;
-                  const costDisplay = sys.costDisplay || '0g';
+                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
                   stats = `Armor: ${rating} • Might: ${might} • ${costDisplay}`;
                   description = sys.armorType ? `${sys.armorType.titleCase()} Armor` : 'Armor';
 
@@ -610,20 +610,20 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                   const damageType = sys.damageType && sys.damageType !== '-'
                     ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
                     : '';
-                  const costDisplay = sys.costDisplay || '0g';
+                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
                   stats = `${damage} ${damageType} • ${costDisplay}`;
                   description = sys.alchemicalType ? sys.alchemicalType.titleCase() : 'Alchemical';
 
                 } else if (sys.equipmentType === 'relic') {
                   // Relic: cost, slots
-                  const costDisplay = sys.costDisplay || '0g';
+                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
                   const slots = sys.baseSlots || 1;
                   stats = `${costDisplay} • Slots: ${slots}`;
                   description = 'Relic';
 
                 } else {
                   // Gear: cost, slots
-                  const costDisplay = sys.costDisplay || '0g';
+                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
                   const slots = sys.baseSlots || 1;
                   stats = `${costDisplay} • Slots: ${slots}`;
                   description = sys.gearType || 'Gear';
@@ -693,10 +693,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
               slotsDisplay = sys.baseSlots !== undefined ? sys.baseSlots : 0;
               const cost = sys.baseCost || {};
               const costs = [];
-              if (cost.gold > 0) costs.push(`${cost.gold}g`);
-              if (cost.silver > 0) costs.push(`${cost.silver}s`);
-              if (cost.copper > 0) costs.push(`${cost.copper}c`);
-              costDisplay = costs.length > 0 ? costs.join(' ') : '0c';
+              const copperAbbr = game.i18n.localize('VAGABOND.Currency.Copper.abbr');
+              if (cost.gold > 0) costs.push(`${cost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
+              if (cost.silver > 0) costs.push(`${cost.silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`);
+              if (cost.copper > 0) costs.push(`${cost.copper}${copperAbbr}`);
+              costDisplay = costs.length > 0 ? costs.join(' ') : `0${copperAbbr}`;
               metalDisplay = (sys.metal && sys.metal !== 'none')
                 ? (game.i18n.localize(CONFIG.VAGABOND?.metalTypes?.[sys.metal]) || sys.metal)
                 : '—';

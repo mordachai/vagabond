@@ -75,11 +75,12 @@ export default class VagabondStarterPack extends VagabondItemBase {
    * @returns {string} Formatted currency string
    */
   getCurrencyString() {
+    const copperAbbr = game.i18n.localize('VAGABOND.Currency.Copper.abbr');
     const parts = [];
-    if (this.currency.gold > 0) parts.push(`${this.currency.gold}g`);
-    if (this.currency.silver > 0) parts.push(`${this.currency.silver}s`);
-    if (this.currency.copper > 0) parts.push(`${this.currency.copper}c`);
-    return parts.join(' ') || '0c';
+    if (this.currency.gold > 0) parts.push(`${this.currency.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
+    if (this.currency.silver > 0) parts.push(`${this.currency.silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`);
+    if (this.currency.copper > 0) parts.push(`${this.currency.copper}${copperAbbr}`);
+    return parts.join(' ') || `0${copperAbbr}`;
   }
 
   /**

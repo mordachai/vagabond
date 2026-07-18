@@ -487,9 +487,9 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // Format cost as a human-readable string
     const costs = [];
-    if (this.cost.gold > 0) costs.push(`${this.cost.gold}g`);
-    if (this.cost.silver > 0) costs.push(`${this.cost.silver}s`);
-    if (this.cost.copper > 0) costs.push(`${this.cost.copper}c`);
+    if (this.cost.gold > 0) costs.push(`${this.cost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
+    if (this.cost.silver > 0) costs.push(`${this.cost.silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`);
+    if (this.cost.copper > 0) costs.push(`${this.cost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`);
     this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
 
     // Calculate final slots (with metal modifier for non-relics)

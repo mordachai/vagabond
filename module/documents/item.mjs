@@ -72,9 +72,9 @@ export class VagabondItem extends Item {
       } else if (item.type === 'container') {
         // Post container info to chat
         const costs = [];
-        if (this.system.baseCost.gold > 0) costs.push(`${this.system.baseCost.gold}g`);
-        if (this.system.baseCost.silver > 0) costs.push(`${this.system.baseCost.silver}s`);
-        if (this.system.baseCost.copper > 0) costs.push(`${this.system.baseCost.copper}c`);
+        if (this.system.baseCost.gold > 0) costs.push(`${this.system.baseCost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
+        if (this.system.baseCost.silver > 0) costs.push(`${this.system.baseCost.silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`);
+        if (this.system.baseCost.copper > 0) costs.push(`${this.system.baseCost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`);
         const costDisplay = costs.length > 0 ? costs.join(' ') : '—';
 
         const content = `

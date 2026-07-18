@@ -193,11 +193,12 @@ export class StartingPacksStepManager extends BaseStepManager {
             const gold = Math.floor(cost / 100);
             const silver = Math.floor((cost % 100) / 10);
             const copper = cost % 10;
+            const copperAbbr = game.i18n.localize('VAGABOND.Currency.Copper.abbr');
             let costDisplay = '';
-            if (gold > 0) costDisplay += `${gold}g `;
-            if (silver > 0) costDisplay += `${silver}s `;
-            if (copper > 0) costDisplay += `${copper}c`;
-            if (!costDisplay) costDisplay = '0c';
+            if (gold > 0) costDisplay += `${gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')} `;
+            if (silver > 0) costDisplay += `${silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')} `;
+            if (copper > 0) costDisplay += `${copper}${copperAbbr}`;
+            if (!costDisplay) costDisplay = `0${copperAbbr}`;
 
             itemDetails.push({
               uuid: packItemData.uuid,
@@ -220,7 +221,7 @@ export class StartingPacksStepManager extends BaseStepManager {
             type: 'unknown',
             qty: packItemData.quantity || 1,
             slots: 0,
-            costDisplay: '0c',
+            costDisplay: `0${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`,
             description: 'Item could not be loaded'
           });
         }

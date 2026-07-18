@@ -1100,7 +1100,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               silver: 0,
               copper: 0
             },
-            costDisplay: '0s',
+            costDisplay: `0${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`,
             qty: packItem.qty,
             fromStartingPack: true,
             canDelete: false
@@ -1393,11 +1393,12 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
    * Format cost for display (only show non-zero values)
    */
   _formatCost(cost = {}) {
+    const silverAbbr = game.i18n.localize('VAGABOND.Currency.Silver.abbr');
     const parts = [];
-    if (cost.gold > 0) parts.push(`${cost.gold}g`);
-    if (cost.silver > 0) parts.push(`${cost.silver}s`);
-    if (cost.copper > 0) parts.push(`${cost.copper}c`);
-    return parts.join(' ') || '0s';
+    if (cost.gold > 0) parts.push(`${cost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
+    if (cost.silver > 0) parts.push(`${cost.silver}${silverAbbr}`);
+    if (cost.copper > 0) parts.push(`${cost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`);
+    return parts.join(' ') || `0${silverAbbr}`;
   }
 
   /** @override */

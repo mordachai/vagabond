@@ -136,7 +136,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
       .setSubtitle(this.#actor.name)
       .setDescription(`
         <p><i class="fas fa-bed"></i> <strong>${this.#actor.name}</strong> takes a rest.</p>
-        <p><strong>Lodging:</strong> ${lodging.label} (${lodging.cost > 0 ? (lodging.cost >= 100 ? `${lodging.cost/100}g` : `${lodging.cost}s`) : 'Free'})</p>
+        <p><strong>Lodging:</strong> ${lodging.label} (${lodging.cost > 0 ? (lodging.cost >= 100 ? `${lodging.cost/100}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}` : `${lodging.cost}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`) : 'Free'})</p>
         <hr>
         <p><strong>Recovery:</strong></p>
         ${recoveryText}
@@ -184,9 +184,9 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
     // Format display value
     let displayValue = "";
     if (val >= 100) {
-      displayValue = `${val / 100}g`;
+      displayValue = `${val / 100}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
     } else {
-      displayValue = `${val}s`;
+      displayValue = `${val}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`;
     }
 
     // Create chat card

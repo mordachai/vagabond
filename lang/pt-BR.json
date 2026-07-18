@@ -218,7 +218,7 @@
       "Invisible": "Invisível",
       "Paralyzed": "Paralisado",
       "Prone": "Caído",
-      "Restrained": "Contido",
+      "Restrained": "Imobilizado",
       "Grappling": "Agarrando",
       "Sickened": "Enjoado",
       "Suffocating": "Sufocando",
@@ -310,7 +310,7 @@
       },
       "Glyph": {
         "label": "Glifo",
-        "description":"Cria um glifo de 5' quadrado em um Alvo que você possa ver, onde nenhum outro glifo esteja dentro de Perto. A Magia é Conjurada em um cubo de 5' a partir do glifo quando você escolher, então o glifo desaparece.",
+        "description":"Cria um glifo de 5' quadrado em um Alvo que você possa ver, onde nenhum outro glifo esteja dentro de Adjacente. A Magia é Conjurada em um cubo de 5' a partir do glifo quando você escolher, então o glifo desaparece.",
         "hint": "Sem aumento"
       },
       "Line": {
@@ -341,7 +341,7 @@
       "PlacedBy": "Inscrito por {caster}",
       "PlacePrompt": "Clique em um quadrado para inscrever o glifo — clique com o botão direito ou Esc para cancelar.",
       "AlreadyPlacing": "Já está posicionando um glifo — finalize ou cancele-o primeiro.",
-      "TooClose": "Outro glifo ({name}) está dentro de Perto — escolha um quadrado diferente.",
+      "TooClose": "Outro glifo ({name}) está dentro de Adjacente — escolha um grid diferente.",
       "TriggerButton": "Acionar",
       "RepositionButton": "Reposicionar",
       "DismissButton": "Dispensar",
@@ -1176,7 +1176,7 @@
       "Spell": {
         "FIELDS": {
           "description": {"label": "Descrição do Efeito"},
-          "damageType": {"label": "Base de Dano"},
+          "damageType": {"label": "Dano Base"},
           "delivery": {
             "label": "Entrega",
             "type": {"label": "Tipo de Entrega"},
@@ -1481,10 +1481,10 @@
     },
     "Weapon": {
     "Range": {
-      "Close": "Próximo",
-      "CloseAbbr": "P",
-      "Near": "Perto",
-      "NearAbbr": "R",
+      "Close": "Adjacente",
+      "CloseAbbr": "A",
+      "Near": "Próximo",
+      "NearAbbr": "P",
       "Far": "Longe",
       "FarAbbr": "L"
     },
@@ -1504,12 +1504,12 @@
       "ViewPropertiesLabel": "Ver Propriedades",
       "Brawl": "Briga",
       "Brutal": "Brutal",
-      "Cleave": "Fendente",
+      "Cleave": "Cutilar",
       "Entangle": "Enredar",
       "Finesse": "Sutileza",
       "Keen": "Afiada",
       "Long": "Longa",
-      "Near": "Perto",
+      "Near": "Próximo",
       "Ranged": "À Distância",
       "Shield": "Escudo",
       "Thrown": "Arremessável"
@@ -1928,8 +1928,8 @@
         "Alchemical": "Alquímico",
         "Relic": "Relíquia",
         "Container": "Contêiner",
-        "Close": "Próximo",
-        "Near": "Perto",
+        "Close": "Adjacente",
+        "Near": "Próximo",
         "Far": "Longe",
         "Slots": "Espaços",
         "Capacity": "Capacidade",
@@ -1953,7 +1953,7 @@
         "Grip": "Empunhadura",
         "DamageOneHand": "Dano (1M)",
         "DamageTwoHand": "Dano (2M)",
-        "DamageBase": "Base de Dano",
+        "DamageBase": "Dano Base",
         "ExplodingDice": "Dados Explosivos",
         "CanExplode": "Pode Explodir",
         "ExplodeOn": "Explode Em (separado por vírgulas)",
