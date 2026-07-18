@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.30.3
+- Fix: hardcoded currency abbreviations 
+- Fix: hardcoded chat card titles 
+- Removed the unused "Creation Notes" compendium pack.
+
 ## v5.30.2
 - **Bestiary/Humanlike privacy:** players can no longer view the Bestiary or Humanlike compendiums.
 - **Fix: Light source clock options:** removed duration 1 Shift option from torches and candles. Laterns have it.
