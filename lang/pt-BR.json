@@ -9,7 +9,7 @@
     "Stat": {
       "Might": { "long": "Força", "abbr": "FOR" },
       "Dexterity": { "long": "Destreza", "abbr": "DES" },
-      "Awareness": { "long": "Percepção", "abbr": "PER" },
+      "Awareness": { "long": "Consciência", "abbr": "CNC" },
       "Reason": { "long": "Raciocínio", "abbr": "RCN" },
       "Presence": { "long": "Presença", "abbr": "PRE" },
       "Luck": { "long": "Sorte", "abbr": "SOR" }
@@ -19,7 +19,7 @@
       "Brawl": "Briga",
       "Craft": "Ofício",
       "Detect": "Detectar",
-      "Finesse": "Sutileza",
+      "Finesse": "Finesse",
       "Influence": "Influência",
       "Leadership": "Liderança",
       "Medicine": "Medicina",
@@ -35,7 +35,7 @@
       "Brawl": "Exercer força física. Usado para Agarrões, Empurrões e ataques com Armas de Briga.",
       "Craft": "Sua habilidade de avaliar e fabricar Itens.",
       "Detect": "Perceber outros reflexivamente.",
-      "Finesse": "Coordenação e disfarce de suas ações. Também usado para roubo, e ao atacar com Armas de Sutileza.",
+      "Finesse": "Coordenação e disfarce de suas ações. Também usado para roubo, e ao atacar com Armas de Finesse.",
       "Influence": "Habilidade social de coerção, engano ou negociação.",
       "Leadership": "Motivação social e diplomacia.",
       "Medicine": "Educação em cura não-mágica.",
@@ -50,17 +50,17 @@
       "Melee": "Atacar com Armas Corpo a Corpo.",
       "Ranged": "Atacar com Armas à Distância.",
       "Brawl": "Exercer força física. Usado para Agarrões, Empurrões e ataques com Armas de Briga.",
-      "Finesse": "Coordenação e disfarce de suas ações. Também usado para roubo, e ao atacar com Armas de Sutileza."
+      "Finesse": "Coordenação e disfarce de suas ações. Também usado para roubo, e ao atacar com Armas de Finesse."
     },
     "WeaponSkills": {
       "Melee": "Corpo a Corpo",
       "Ranged": "À Distância",
       "Brawl": "Briga",
-      "Finesse": "Sutileza"
+      "Finesse": "Finesse"
     },
     "Hints": {
       "HP": "Pontos de Vida máximos igual a Força × Nível.",
-      "LuckPool": "Total de pontos de Sorte. Gaste para ganhar Vantagem, rerrolar dados, ou usar Blindagem de Roteiro.",
+      "LuckPool": "Total de pontos de Sorte. Gaste para ganhar Vantagem, rerrolar dados, ou usar <em>plot armor</em>.",
       "Inventory": "Capacidade de carga igual a 8 + espaços de Força.",
       "Speed": "Distância de movimento em pés em solo firme.",
       "MaxMana": "Pontos de mana máximos igual ao Multiplicador de Mana × Atributo-Chave.",
@@ -205,7 +205,7 @@
       "GenericDark":  "Trevas (Genérico)"
     },
     "StatusConditions": {
-      "Berserk": "Berserk",
+      "Berserk": "Furioso",
       "Blinded": "Cego",
       "Burning": "Queimando",
       "Charmed": "Enfeitiçado",
@@ -231,7 +231,7 @@
       "Dazed": "Não pode Concentrar-se ou Mover-se a menos que use uma Ação. Velocidade = 0 [PARCIAL - Velocidade automatizada]",
       "Dead": "Igual a Incapacitado, mas falha automaticamente TODAS as rolagens (atributos, perícias, salvaguardas, ataques) [TOTALMENTE AUTOMATIZADO]",
       "Fatigued": "Cada Fadiga ocupa um Espaço no Inventário. Em 3+: não pode Correr. Em 5: morre [PARCIAL - Inventário automatizado]",
-      "Prone": "Custa 10' de Velocidade para levantar. Só rastejo (proporção 2:1), não pode Correr, Vulnerável [PARCIAL - Velocidade automatizada]",
+      "Prone": "Custa 10' de Velocidade para levantar. Só rastejar (proporção 2:1), não pode Correr, Vulnerável [PARCIAL - Velocidade automatizada]",
       "Confused": "Testes/Salvaguardas com Desvantagem. Salvaguardas contra suas Ações com Vantagem [AUTOMATIZADO]",
       "Sickened": "-2 de penalidade à cura recebida [AUTOMATIZADO]",
       "Vulnerable": "Seus ataques e suas Salvaguardas contra ataques têm Desvantagem. Ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem [AUTOMATIZADO]",
@@ -754,7 +754,7 @@
         "InventorySlotsHint": "Total de espaços de inventário base. Padrão: <code>8 + @might.total</code>",
         "SpeedLegend": "Velocidade",
         "SpeedHint": "Velocidade de movimento base. Escala com Destreza por padrão.",
-        "CrawlSpeed": "Velocidade de Rastejo",
+        "CrawlSpeed": "Velocidade de Exploração",
         "CrawlSpeedHint": "Pode referenciar <code>@speed.base</code> (calculado primeiro). Padrão: <code>@speed.base * 3</code>",
         "TravelSpeed": "Velocidade de Viagem",
         "TravelSpeedHint": "Pode referenciar <code>@speed.base</code>. Padrão: <code>floor(@speed.base / 5)</code>",
@@ -859,7 +859,7 @@
           "combat.hitPoints.max": {"label": "PV Máximo"},
           "combat.fatigue": {"label": "Fadiga"},
           "combat.speed.base": {"label": "Velocidade"},
-          "combat.speed.crawl": {"label": "Velocidade de Crawl"},
+          "combat.speed.crawl": {"label": "Velocidade de Exploração"},
           "combat.speed.travel": {"label": "Velocidade de Viagem"},
           "combat.currentLuck": {"label": "Sorte Atual"},
           "combat.armor": {"label": "Classe de Armadura"},
@@ -887,7 +887,7 @@
           "members": {"label": "Membros do Grupo"},
           "type":    {"label": "Tipo de Grupo"},
           "speed":   {"label": "Velocidade"},
-          "crawl":   {"label": "Velocidade de Crawl"},
+          "Exploração":   {"label": "Velocidade de Exploração"},
           "travel":  {"label": "Velocidade de Viagem"}
         },
         "NamePlaceholder": "Nome do grupo...",
@@ -896,7 +896,7 @@
           "NamePlaceholder": "Nome do veículo...",
           "TypePlaceholder": "ex: Aeronave, Carroça...",
           "Speed": "Velocidade",
-          "Crawl": "Velocidade de rastejo",
+          "Crawl": "Velocidade de exploração",
           "Travel": "Velocidade de viagem",
           "Parts": "Partes do Construto",
           "AddPart": "Adicionar Parte",
@@ -992,7 +992,7 @@
         "FIELDS": {
           "type": {"label": "Tipo de Construto"},
           "speed": {"label": "Velocidade"},
-          "crawl": {"label": "Velocidade de Crawl"},
+          "crawl": {"label": "Velocidade de Exploração"},
           "travel": {"label": "Velocidade de Viagem"}
         },
         "NamePlaceholder": "Nome do construto...",
@@ -1273,7 +1273,7 @@
           "HowItWorksBody": "Quando um jogador adiciona esta vantagem, um diálogo aparece pedindo que escolha entre opções disponíveis (perícias, atributos, etc.). O sistema então cria um Efeito Ativo direcionando ao campo selecionado.",
           "TargetFieldExamplesTitle": "Exemplos de Campo Alvo",
           "NoSystemPrefixWarning": "⚠️ NÃO inclua o prefixo \"system.\"!",
-          "ExSkillTraining": "<code>skills.{choice}.trained</code> - Para treinamento de perícia (inclui corpo a corpo, à distância, briga, sutileza)",
+          "ExSkillTraining": "<code>skills.{choice}.trained</code> - Para treinamento de perícia (inclui corpo a corpo, à distância, briga, finesse)",
           "ExStatIncrease": "<code>stats.{choice}.bonus</code> - Para aumento de atributo",
           "ExSpellSelection": "<em>(Deixe vazio para seleção de magia)</em> - Para conceder magias gratuitas",
           "ChoicePlaceholderHint": "Use <code>{choice}</code> como placeholder - será substituído pela seleção do jogador",
@@ -1507,7 +1507,7 @@
       "Brutal": "Brutal",
       "Cleave": "Cutilar",
       "Entangle": "Enredar",
-      "Finesse": "Sutileza",
+      "Finesse": "Finesse",
       "Keen": "Afiada",
       "Long": "Longa",
       "Near": "Próximo",
@@ -1760,7 +1760,7 @@
       "Cancel": "Cancelar",
       "Done": "Concluído",
       "Cost": {
-        "OneShift": "1 Turno",
+        "OneShift": "1 Quarto de dia",
         "Free": "Grátis"
       },
       "Rest": {
@@ -1904,7 +1904,7 @@
         "Favorite": "Favorito",
         "Wealth": "Riqueza",
         "Speed": "Veloc",
-        "Crawl": "Crawl",
+        "Crawl": "Explor.",
         "Travel": "Viagem",
         "LuckPool": "Reserva de Sorte",
         "luckTerm": "Sorte",
@@ -1916,7 +1916,7 @@
       "Labels": {
         "UnknownAncestry": "Ancestralidade Desconhecida",
         "NoClass": "Sem Classe",
-        "CheckMod": "M. Check",
+        "CheckMod": "M. Teste",
         "DifficultyMod": "Mdf. Dificuldade",
         "Check": "Teste",
         "Damage": "Dano",
