@@ -5,6 +5,7 @@ import {
   RollHandler,
   EquipmentHandler,
 } from './handlers/_module.mjs';
+import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 
 /**
  * Character-specific actor sheet
@@ -73,6 +74,8 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
 
     // Manual binding for createDoc action (workaround for action inheritance issue)
     this._bindCreateDocActions(signal);
+
+    bindHudTooltips(this.element, signal);
 
     // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
     const { EquipmentHelper } = globalThis.vagabond.utils;

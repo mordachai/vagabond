@@ -6,6 +6,7 @@ import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
+import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
@@ -156,6 +157,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       toggleWeaponGrip: this._onToggleWeaponGrip,
       itemMenu: this._onItemMenu,
       spellMenu: this._onSpellMenu,
+      usePip: this._onUsePip,
     },
   };
 
@@ -361,6 +363,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // (only CONFIG.statusEffects conditions, not item-granted effects).
     context.statusEffects = VagabondActorSheet.prototype._prepareStatusEffects.call(this);
 
+    // --- Bounds counter (mirrors InventoryHandler.prepareInventoryGrid) ---
+    context.currentBounds = sys.inventory?.currentBounds || 0;
+    context.maxBounds = sys.inventory?.maxBounds || 3;
+    context.boundsPips = Array.from({ length: context.maxBounds }, (_, i) => ({
+      filled: i < context.currentBounds,
+    }));
+
     // --- Items, slots, panels ---
     this._categorizeItems(context);
 
@@ -552,9 +561,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       row.damageTypeLabel = game.i18n.localize(cfg.damageTypes?.[row.damageType] ?? '');
       row.range = item.system?.rangeAbbrev || '';      // C / N / F
       row.rangeLabel = item.system?.rangeDisplay || ''; // Close / Near / Far (tooltip)
-      row.properties = (item.system?.properties ?? [])
-        .map(k => game.i18n.localize(cfg.weaponProperties?.[k] ?? k))
-        .join(', ');
+      row.properties = item.system?.properties?.length ? item.system.propertiesDisplay : '';
     }
     return row;
   }
@@ -571,6 +578,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // Register reactivity FIRST so a later DOM-wiring error can never leave the
     // HUD without live hooks (was the cause of slots not auto-updating).
     this._registerHooks();
+
+    bindHudTooltips(this.element, signal);
 
     // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
     const { EquipmentHelper } = globalThis.vagabond.utils;
@@ -922,6 +931,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static _onToggleAccordion(event, target) {
     const item = target.closest('.accordion-item');
     if (item) AccordionHelper.toggle(item);
+  }
+
+  /** Spend/restore a multi-use item's charge pip (rendered inside the item-detail accordion body). */
+  static async _onUsePip(event, target) {
+    event.stopPropagation();
+    await ItemSections.onUsePipClick(target, null);
   }
 
   /** Open the actor sheet without closing the HUD. */

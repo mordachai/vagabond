@@ -15,6 +15,18 @@
 >
   <img src='{{item.img}}' alt='{{item.name}}' class='item-image' />
   <div class='item-name-display'>{{item.name}}</div>
+  {{#if usesPips.length}}
+    <div class='item-uses-pips'>
+      {{#each usesPips as |pip|}}
+        <i
+          class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}'
+          data-action='usePip'
+          data-item-uuid='{{../item.uuid}}'
+          data-pip-index='{{pip.index}}'
+        ></i>
+      {{/each}}
+    </div>
+  {{/if}}
   {{#if requiresBound}}
     <div class='bound-marker'>
       {{#if bound}}

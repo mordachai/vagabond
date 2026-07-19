@@ -381,6 +381,30 @@
   .linked-consumable-field {
     select { width: 100%; }
   }
+
+  .max-uses-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    grid-column: 1 / -1;
+
+    input[type='number'] { width: 50px; }
+
+    .uses-pips {
+      display: inline-flex;
+      gap: 3px;
+      margin-left: 4px;
+
+      .uses-pip {
+        font-size: 13px;
+        cursor: pointer;
+
+        &.filled { color: $c-yellow; }
+        &.empty { color: $c-text-2; opacity: 0.4; }
+        &:hover { transform: scale(1.2); }
+      }
+    }
+  }
 }
 
 .damage-immunity-body {

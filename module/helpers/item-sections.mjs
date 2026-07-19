@@ -180,6 +180,64 @@ export function buildArmorStats(item) {
 }
 
 /**
+ * Multi-use ("uses.max > 0") pip array for template `{{#each}}` consumption —
+ * mirrors the `focusPips`/`boundsPips` shape ({filled}) already used by
+ * actor-sheet.mjs, plus `index` for the click handler. Empty array when the
+ * item isn't multi-use (uses.max === 0).
+ * @param {VagabondItem} item
+ * @returns {{filled: boolean, index: number}[]}
+ */
+export function usesPipsArray(item) {
+  const max = item.system?.uses?.max ?? 0;
+  if (max <= 0) return [];
+  const value = item.system.uses.value ?? 0;
+  return Array.from({ length: max }, (_, i) => ({ filled: i < value, index: i }));
+}
+
+/**
+ * Raw HTML pip row for the mini-sheet/HUD detail body (built via string
+ * concatenation, not a template — see buildItemDetailSections). Pips carry
+ * `data-action="usePip"` + `data-item-uuid`/`data-pip-index` so both hosts
+ * (HUD: native AppV2 action delegation; mini-sheet: manual listener wired in
+ * inventory-handler.mjs) can spend/restore a charge on click.
+ * @param {VagabondItem} item
+ * @returns {string}
+ */
+export function buildUsesPipsRow(item) {
+  const pips = usesPipsArray(item);
+  if (!pips.length) return '';
+  const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
+  return `
+    <div class="stat-row uses-row">
+      <span class="stat-name">${L('Uses')}</span>
+      <span class="stat-value">
+        <span class="uses-pips" data-item-uuid="${item.uuid}">
+          ${pips.map(p => `<i class="fa-solid fa-circle uses-pip ${p.filled ? 'filled' : 'empty'}" data-action="usePip" data-item-uuid="${item.uuid}" data-pip-index="${p.index}"></i>`).join('')}
+        </span>
+      </span>
+    </div>
+  `;
+}
+
+/**
+ * Shared click handler for `data-action="usePip"` elements built by
+ * buildUsesPipsRow (HUD accordion, mini-sheet popup) or rendered directly in
+ * a template with `data-item-uuid`/`data-pip-index` (item sheet, sliding-panel,
+ * HUD quick-slots). `fallbackItem` covers hosts where the pip has no
+ * `data-item-uuid` because it's already scoped to a known document (the item
+ * sheet editing itself).
+ * @param {HTMLElement} target
+ * @param {VagabondItem|null} fallbackItem
+ * @returns {Promise<void>}
+ */
+export async function onUsePipClick(target, fallbackItem = null) {
+  const uuid = target.dataset.itemUuid;
+  const item = uuid ? fromUuidSync(uuid) : fallbackItem;
+  if (!item) return;
+  await item.constructor.setUsesFromPipClick(item, Number(target.dataset.pipIndex));
+}
+
+/**
  * Gear / relic / alchemical stat grid (two columns).
  * @param {VagabondItem} item
  * @returns {string}
@@ -194,6 +252,7 @@ export function buildGearStats(item) {
         <span class="stat-value">${item.system.quantity}</span>
       </div>
       ` : ''}
+      ${buildUsesPipsRow(item)}
       <div class="stat-row">
         <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>

@@ -7,7 +7,7 @@
   <div class="vh-panel {{#unless panelOpen}}vh-panel--closed{{/unless}}" data-state="{{#if panelOpen}}open{{else}}closed{{/if}}">
 
     {{!-- Close button floats onto the active tab's first header line (no extra row) --}}
-    <button type="button" class="vh-panel-close vh-panel-close--float" data-action="closePanel" data-tooltip="{{localize 'VAGABOND.Hud.Menu.ClosePanel'}}">
+    <button type="button" class="vh-panel-close vh-panel-close--float" data-action="closePanel" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.ClosePanel'}}">
       <i class="fas fa-xmark"></i>
     </button>
 
@@ -83,7 +83,7 @@
       <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Saves"}}</h4>
       <div class="vh-saves">
         {{#each saves}}
-          <div class="vh-save rollable" data-action="roll" data-roll="d20" data-type="save" data-key="{{key}}" data-difficulty="{{difficulty}}" data-label="{{label}} Save (Difficulty {{difficulty}})" data-tooltip="{{description}}">
+          <div class="vh-save rollable" data-action="roll" data-roll="d20" data-type="save" data-key="{{key}}" data-difficulty="{{difficulty}}" data-label="{{label}} Save (Difficulty {{difficulty}})" data-hud-tip="{{description}}">
             <div>
               <span class="vh-save-icon">{{#if (eq key 'reflex')}}<i class="fas fa-running"></i>{{else if (eq key 'endure')}}<i class="fas fa-shield-alt"></i>{{else if (eq key 'will')}}<i class="fas fa-brain"></i>{{/if}}</span>
               <span class="vh-save-name">{{label}}</span>
@@ -103,11 +103,11 @@
             {{!-- Inline accordion: click the image to CAST, click the name to expand details. --}}
             <div class="vh-spell accordion-item collapsed {{#if favorite}}is-fav{{/if}}" data-accordion-id="hud-spell-{{_id}}">
               <div class="vh-row-head">
-                <img class="vh-spell-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="castSpellRow" data-spell-id="{{_id}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Cast'}}" />
+                <img class="vh-spell-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="castSpellRow" data-spell-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Cast'}}" />
                 <span class="vh-spell-name accordion-header" data-action="toggleItemDetail" data-spell-id="{{_id}}" title="{{name}}">{{name}}</span>
                 {{#unless (eq damageType '-')}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-spell-dmg"></i>{{/unless}}
-                {{#if favorite}}<i class="fas fa-star vh-spell-fav" data-tooltip="{{localize 'VAGABOND.Hud.Favorited'}}"></i>{{/if}}
-                <button type="button" class="vh-inv-menu" data-action="spellMenu" data-spell-id="{{_id}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
+                {{#if favorite}}<i class="fas fa-star vh-spell-fav" data-hud-tip="{{localize 'VAGABOND.Hud.Favorited'}}"></i>{{/if}}
+                <button type="button" class="vh-inv-menu" data-action="spellMenu" data-spell-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
               </div>
               <div class="accordion-content collapsed"><div class="vh-acc-body vh-item-detail">{{{detailHtml}}}</div></div>
             </div>
@@ -120,6 +120,21 @@
 
     {{!-- Inventory (all carried items, grouped by type) --}}
     <div class="vh-panel-content {{#unless (eq activeTab 'inventory')}}hidden{{/unless}}" data-tab="inventory">
+      <div class="vh-inv-header">
+        <div class="vh-inv-header-title">{{localize "VAGABOND.UI.Sections.Inventory"}} {{system.inventory.occupiedSlots}}/{{system.inventory.maxSlots}}</div>
+        <div class="vh-inv-header-wealth">
+          <span class="vh-inv-wealth-label">{{localize "VAGABOND.UI.Sections.Wealth"}}:</span>
+          <span class="vh-inv-wealth-value">{{system.currency.gold}}<span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Gold.abbr"}}</span></span>
+          <span class="vh-inv-wealth-value">{{system.currency.silver}}<span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Silver.abbr"}}</span></span>
+          <span class="vh-inv-wealth-value">{{system.currency.copper}}<span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Copper.abbr"}}</span></span>
+        </div>
+        <div class="vh-inv-header-bounds">
+          <span class="vh-inv-bounds-label">{{localize "VAGABOND.UI.Labels.Bounds"}}</span>
+          {{#each boundsPips as |pip|}}
+            <i class="fa-solid fa-diamond bound-pip {{#if pip.filled}}filled{{else}}empty{{/if}}"></i>
+          {{/each}}
+        </div>
+      </div>
       {{#each inventoryGroups}}
         <h4 class="vh-section-title">{{label}}</h4>
         <div class="vh-inv-list">
@@ -127,11 +142,11 @@
             {{!-- Inline accordion: click the image to USE, click the name to expand details. --}}
             <div class="vh-inv accordion-item collapsed {{#if equipped}}is-equipped{{/if}}" data-accordion-id="hud-inv-{{_id}}">
               <div class="vh-row-head">
-                <img class="vh-inv-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="useItemRow" data-item-id="{{_id}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Use'}}" />
+                <img class="vh-inv-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="useItemRow" data-item-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Use'}}" />
                 <span class="vh-inv-name accordion-header" data-action="toggleItemDetail" data-item-id="{{_id}}" title="{{name}}">{{name}}</span>
-                {{#if isWeapon}}{{#unless (eq damageType '-')}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-inv-dmg" data-tooltip="{{damageTypeLabel}}"></i>{{/unless}}{{#if damage}}<span class="vh-inv-val">{{damage}}</span>{{/if}}{{#if range}}<span class="vh-inv-range" data-tooltip="{{rangeLabel}}">{{range}}</span>{{/if}}{{#if properties}}<span class="vh-inv-props" data-tooltip="{{properties}}">{{properties}}</span>{{/if}}{{/if}}
-                {{#if equipped}}<i class="fa-regular fa-check vh-inv-eq" data-tooltip="{{localize 'VAGABOND.Hud.Equipped'}}"></i>{{/if}}
-                <button type="button" class="vh-inv-menu" data-action="itemMenu" data-item-id="{{_id}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
+                {{#if isWeapon}}{{#unless (eq damageType '-')}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-inv-dmg" data-hud-tip="{{damageTypeLabel}}"></i>{{/unless}}{{#if damage}}<span class="vh-inv-val">{{damage}}</span>{{/if}}{{#if range}}<span class="vh-inv-range" data-hud-tip="{{rangeLabel}}">{{range}}</span>{{/if}}{{#if properties}}<span class="vh-inv-props" data-hud-tip="{{properties}}">{{properties}}</span>{{/if}}{{/if}}
+                {{#if equipped}}<i class="fa-regular fa-check vh-inv-eq" data-hud-tip="{{localize 'VAGABOND.Hud.Equipped'}}"></i>{{/if}}
+                <button type="button" class="vh-inv-menu" data-action="itemMenu" data-item-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
               </div>
               <div class="accordion-content collapsed"><div class="vh-acc-body vh-item-detail">{{{detailHtml}}}</div></div>
             </div>
@@ -154,11 +169,11 @@
         {{#each weaponSlots}}
           <div class="vh-pc-weapon {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}"{{/if}}>
             {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{else}}<i class="fas fa-swords vh-slot-empty"></i>{{/if}}
-            {{#if versatile}}<i class="vh-grip-badge fas {{#if twoHanded}}fa-hands{{else}}fa-hand-fist{{/if}} clickable" data-action="toggleWeaponGrip" data-item-id="{{id}}" data-tooltip="{{#if twoHanded}}{{localize 'VAGABOND.Hud.Menu.UseOneHand'}}{{else}}{{localize 'VAGABOND.Hud.Menu.UseTwoHands'}}{{/if}}"></i>{{/if}}
+            {{#if versatile}}<i class="vh-grip-badge fas {{#if twoHanded}}fa-hands{{else}}fa-hand-fist{{/if}} clickable" data-action="toggleWeaponGrip" data-item-id="{{id}}" data-hud-tip="{{#if twoHanded}}{{localize 'VAGABOND.Hud.Menu.UseOneHand'}}{{else}}{{localize 'VAGABOND.Hud.Menu.UseTwoHands'}}{{/if}}"></i>{{/if}}
           </div>
         {{/each}}
       </div>
-      <div class="vh-armor" data-tooltip="{{#if armorName}}{{armorName}}{{else}}{{localize 'VAGABOND.Armor.Label'}}{{/if}}">
+      <div class="vh-armor" data-hud-tip="{{#if armorName}}{{armorName}}{{else}}{{localize 'VAGABOND.Armor.Label'}}{{/if}}">
         <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
       </div>
     </div>
@@ -166,35 +181,35 @@
     {{!-- Ongoing status icons — floating vertical strip in the left gutter.
          Same .status-icon markup + menu as the sheet: left-click = chat,
          right-click = Send to Chat / Remove. --}}
-    <div class="vh-hud-statuses">{{~#each statusEffects as |effect|}}<div class="status-icon" data-effect-id="{{effect.id}}" data-effect-uuid="{{effect.uuid}}" data-tooltip="{{effect.name}}" data-action="statusClick"><img src="{{effect.icon}}" alt="{{effect.name}}" /></div>{{/each~}}</div>
+    <div class="vh-hud-statuses">{{~#each statusEffects as |effect|}}<div class="status-icon" data-effect-id="{{effect.id}}" data-effect-uuid="{{effect.uuid}}" data-hud-tip="{{effect.name}}" data-action="statusClick"><img src="{{effect.icon}}" alt="{{effect.name}}" /></div>{{/each~}}</div>
 
     {{!-- Main row: portrait | vitals | center --}}
     <div class="vh-main-grid">
 
       <div class="vh-drag">
-        <div class="vh-portrait"{{#if showPortraitTip}} data-tooltip="{{localize 'VAGABOND.Hud.PortraitTooltip'}}"{{/if}}>
+        <div class="vh-portrait"{{#if showPortraitTip}} data-hud-tip="{{localize 'VAGABOND.Hud.PortraitTooltip'}}"{{/if}}>
           <img src="{{img}}" alt="{{name}}" />
         </div>
       </div>
 
       <div class="vh-vitals">
-        <div class="vh-vital vh-vital--hp rollable" data-tooltip="{{localize 'VAGABOND.Hud.HPHint'}} | Max HP:{{hp.max}}"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
-        <div class="vh-vital vh-vital--fatigue rollable" data-tooltip="{{localize 'VAGABOND.Hud.FatigueHint'}}"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
-        <div class="vh-vital vh-vital--speed"><i class="fas fa-shoe-prints"></i><span>{{speed}}'</span></div>
+        <div class="vh-vital vh-vital--hp rollable" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxHP'}}: {{hp.max}} | <i class='fas fa-computer-mouse'></i>L: −1 &middot; <i class='fas fa-computer-mouse'></i>R: +1"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
+        <div class="vh-vital vh-vital--fatigue rollable" data-hud-tip-html="{{localize 'VAGABOND.Actor.Character.FIELDS.combat.fatigue.label'}} | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: −1"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
+        <div class="vh-vital vh-vital--speed" data-hud-tip="{{localize 'VAGABOND.ResourceTypes.Speed'}}"><i class="fas fa-shoe-prints"></i><span>{{speed}}'</span></div>
         {{#if hasLuckPool}}
-          <div class="vh-vital vh-vital--luck rollable" data-action="spendLuck" data-tooltip="{{localize 'VAGABOND.Hud.LuckTooltip'}}"><i class="fas fa-clover"></i><span>{{luck.value}}</span></div>
+          <div class="vh-vital vh-vital--luck rollable" data-action="spendLuck" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.SpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>L<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span> {{localize 'VAGABOND.Hud.AddHint'}}"><i class="fas fa-clover"></i><span>{{luck.value}}</span></div>
         {{/if}}
       </div>
 
       <div class="vh-center">
         <div class="vh-name">{{name}}</div>
-        <div class="vh-hp-bar" data-tooltip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
+        <div class="vh-hp-bar" data-hud-tip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
 
         <div class="vh-controls">
-          <span class="vh-ctl rollable" data-action="spendStudiedDie" data-tooltip="{{localize 'VAGABOND.Hud.StudiedTooltip'}}"><i class="fas fa-book-open"></i>{{studiedDice}}</span>
-          <span class="vh-ctl rollable" data-action="modifyCheckBonus" data-tooltip="{{localize 'VAGABOND.Hud.CheckModTooltip'}}"><i class="fas fa-plus-minus"></i>{{checkBonus}}</span>
+          <span class="vh-ctl rollable" data-action="spendStudiedDie" data-hud-tip-html="{{localize 'VAGABOND.Hud.StudiedTitle'}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.SpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>L<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span> {{localize 'VAGABOND.Hud.AddHint'}}"><i class="fas fa-book-open"></i>{{studiedDice}}</span>
+          <span class="vh-ctl rollable" data-action="modifyCheckBonus" data-hud-tip-html="{{localize 'VAGABOND.UI.Labels.CheckMod'}} ({{localize 'VAGABOND.Hud.ResetsAfterRoll'}}) | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: −1"><i class="fas fa-plus-minus"></i>{{checkBonus}}</span>
           <span class="vh-fh favor-hinder-toggle {{favorHinder}}" data-action="toggleFavorHinder"
-                data-tooltip="{{#if (eq favorHinder 'favor')}}{{localize 'VAGABOND.FavorHinder.Tooltips.favor'}}{{else if (eq favorHinder 'hinder')}}{{localize 'VAGABOND.FavorHinder.Tooltips.hinder'}}{{else}}{{localize 'VAGABOND.FavorHinder.Tooltips.none'}}{{/if}}">
+                data-hud-tip="{{#if (eq favorHinder 'favor')}}{{localize 'VAGABOND.FavorHinder.Tooltips.favor'}}{{else if (eq favorHinder 'hinder')}}{{localize 'VAGABOND.FavorHinder.Tooltips.hinder'}}{{else}}{{localize 'VAGABOND.FavorHinder.Tooltips.none'}}{{/if}}">
             {{#if (eq favorHinder 'favor')}}{{localize 'VAGABOND.Hud.FH.favor'}}{{else if (eq favorHinder 'hinder')}}{{localize 'VAGABOND.Hud.FH.hinder'}}{{else}}{{localize 'VAGABOND.Hud.FH.none'}}{{/if}}
           </span>
         </div>
@@ -206,7 +221,7 @@
             </div>
           {{/each}}
           {{#if hasMana}}
-            <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-tooltip="{{localize 'VAGABOND.Hud.ManaTooltip'}} | Max Mana: {{mana.max}} | Max per cast: {{mana.castingMax}}">
+            <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxMana'}}: {{mana.max}} | {{localize 'VAGABOND.ResourceTypes.ManaPerCast'}}: {{mana.castingMax}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.ManaSpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>R {{localize 'VAGABOND.Hud.ManaRestoreHint'}}">
               <i class="fas fa-star-christmas"></i><span>{{mana.current}}</span>
             </div>
           {{/if}}

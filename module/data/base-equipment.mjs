@@ -264,6 +264,15 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: ''
     });
 
+    // Multi-use tracking (e.g. a potion with 3 doses, a whetstone with 5 uses).
+    // max === 0 means "not multi-use" — consumption falls back to quantity
+    // (legacy single-use-per-stack behavior). See VagabondItem._chargesRemaining /
+    // _consumeCharge in module/documents/item.mjs.
+    schema.uses = new fields.SchemaField({
+      max:   new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      value: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+    });
+
     // ===== ALCHEMICAL-SPECIFIC FIELDS =====
 
     // Alchemical type

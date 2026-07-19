@@ -32,7 +32,8 @@
     "lore": "",
     "itemFx": {
       "animType": "melee"
-    }
+    },
+    "isConsumable": true
   },
   "effects": [],
   "flags": {},

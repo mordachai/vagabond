@@ -29,7 +29,8 @@
     "immunities": [],
     "gearCategory": "",
     "alchemicalType": "acid",
-    "lore": ""
+    "lore": "",
+    "isConsumable": true
   },
   "effects": [],
   "flags": {},

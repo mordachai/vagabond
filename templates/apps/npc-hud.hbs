@@ -10,11 +10,11 @@
       <div class="vh-panel-header">
         <h4 class="vh-section-title">{{detail.name}}</h4>
         {{#if (eq detail.type 'ability')}}
-          <button type="button" class="vh-panel-chat" data-action="clickAbilityName" data-index="{{detail.index}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.SendToChat'}}">
+          <button type="button" class="vh-panel-chat" data-action="clickAbilityName" data-index="{{detail.index}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.SendToChat'}}">
             <i class="fas fa-comment"></i>
           </button>
         {{/if}}
-        <button type="button" class="vh-panel-close" data-action="closeDetail" data-tooltip="{{localize 'VAGABOND.Hud.Menu.ClosePanel'}}">
+        <button type="button" class="vh-panel-close" data-action="closeDetail" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.ClosePanel'}}">
           <i class="fas fa-xmark"></i>
         </button>
       </div>
@@ -33,7 +33,7 @@
           <div class="vh-npc-onhit">
             <span class="vh-npc-onhit-label">{{localize "VAGABOND.Status.OnHitEffects"}}:</span>
             {{#each detail.statuses}}
-              <span class="vh-npc-status-chip" data-tooltip="{{label}}{{#if save}} ({{save}}){{/if}}">
+              <span class="vh-npc-status-chip" data-hud-tip="{{label}}{{#if save}} ({{save}}){{/if}}">
                 <img class="status-condition-icon" src="{{icon}}" alt="{{label}}" />{{label}}
               </span>
             {{/each}}
@@ -50,7 +50,7 @@
 
     {{!-- Floating cluster: armor shield (NPCs have no weapon circles) --}}
     <div class="vh-floating">
-      <div class="vh-armor" data-tooltip="{{system.armorDescription}}">
+      <div class="vh-armor" data-hud-tip="{{system.armorDescription}}">
         <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
       </div>
     </div>
@@ -58,7 +58,7 @@
     {{!-- Ongoing status icons — floating vertical strip in the left gutter.
          Same .status-icon markup + menu as the sheet: left-click = chat,
          right-click = Send to Chat / Remove. --}}
-    <div class="vh-hud-statuses">{{~#each statusEffects}}<div class="status-icon" data-effect-id="{{id}}" data-effect-uuid="{{uuid}}" data-tooltip="{{name}}" data-action="statusClick"><img src="{{icon}}" alt="{{name}}" /></div>{{/each~}}</div>
+    <div class="vh-hud-statuses">{{~#each statusEffects}}<div class="status-icon" data-effect-id="{{id}}" data-effect-uuid="{{uuid}}" data-hud-tip="{{name}}" data-action="statusClick"><img src="{{icon}}" alt="{{name}}" /></div>{{/each~}}</div>
 
     {{!-- Main row: portrait | vitals | center --}}
     <div class="vh-main-grid">
@@ -70,10 +70,10 @@
       </div>
 
       <div class="vh-vitals">
-        <div class="vh-vital vh-vital--hd" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.hd.label'}}"><i class="fas fa-dice-d6"></i><span>{{hd}}</span></div>
-        <div class="vh-vital vh-vital--hp rollable" data-tooltip="{{localize 'VAGABOND.Hud.HPHint'}} | Max HP:{{hp.max}}"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
-        <div class="vh-vital vh-vital--fatigue rollable" data-tooltip="{{localize 'VAGABOND.Hud.FatigueHint'}}"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
-        <div class="vh-vital vh-vital--morale rollable" data-action="rollMorale" data-tooltip="{{localize 'VAGABOND.Actor.NPC.MoraleCheck.tooltip'}}"><i class="fas fa-flag"></i><span>{{#if morale}}{{morale}}{{else}}–{{/if}}</span></div>
+        <div class="vh-vital vh-vital--hd" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.hd.label'}}"><i class="fas fa-dice-d6"></i><span>{{hd}}</span></div>
+        <div class="vh-vital vh-vital--hp rollable" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxHP'}}: {{hp.max}} | <i class='fas fa-computer-mouse'></i>L: −1 &middot; <i class='fas fa-computer-mouse'></i>R: +1"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
+        <div class="vh-vital vh-vital--fatigue rollable" data-hud-tip-html="{{localize 'VAGABOND.Actor.Character.FIELDS.combat.fatigue.label'}} | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: −1"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
+        <div class="vh-vital vh-vital--morale rollable" data-action="rollMorale" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.MoraleCheck.tooltip'}}"><i class="fas fa-flag"></i><span>{{#if morale}}{{morale}}{{else}}–{{/if}}</span></div>
       </div>
 
       <div class="vh-center">
@@ -85,17 +85,17 @@
             <button type="button"
                     class="vh-name-desc {{#if (and detail (eq detail.type 'description'))}}is-open{{/if}}"
                     data-action="openDetail" data-detail-type="description" data-index="0"
-                    data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.description.label'}}">
+                    data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.description.label'}}">
               <i class="fas fa-book-open"></i>
             </button>
           {{/if}}
         </div>
-        <div class="vh-hp-bar" data-tooltip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
+        <div class="vh-hp-bar" data-hud-tip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
 
         <div class="vh-controls vh-npc-speed">
-          <span class="vh-ctl" data-tooltip="{{localize 'VAGABOND.UI.Sections.Speed'}}"><i class="fas fa-shoe-prints"></i>{{speed}}'</span>
+          <span class="vh-ctl" data-hud-tip="{{localize 'VAGABOND.UI.Sections.Speed'}}"><i class="fas fa-shoe-prints"></i>{{speed}}'</span>
           {{#each speedTypes}}
-            <span class="vh-ctl" data-tooltip="{{label}}">   {{label}}{{#if value}} {{value}}'{{/if}}</span>
+            <span class="vh-ctl" data-hud-tip="{{label}}">   {{label}}{{#if value}} {{value}}'{{/if}}</span>
           {{/each}}
         </div>
 
@@ -103,7 +103,7 @@
           {{#if size}}<span class="vh-badge">{{size}}</span>{{/if}}
           {{#if beingType}}<span class="vh-badge">{{beingType}}</span>{{/if}}
           {{#if zone}}<span class="vh-badge vh-badge--zone">{{zone}}</span>{{/if}}
-          {{#if appearing}}<button type="button" class="vh-badge vh-badge--app" data-action="rollAppearing" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.appearing.label'}}"><i class="fas fa-users"></i>{{appearing}}</button>{{/if}}
+          {{#if appearing}}<button type="button" class="vh-badge vh-badge--app" data-action="rollAppearing" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.appearing.label'}}"><i class="fas fa-users"></i>{{appearing}}</button>{{/if}}
         </div>
       </div>
     </div>
@@ -112,9 +112,9 @@
     {{#if hasInfoStrip}}
       <div class="vh-npc-info">
         {{#if senses}}<fieldset class="vh-info-group vh-info-senses"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.senses.short'}}</legend><div class="vh-info-body">{{senses}}</div></fieldset>{{/if}}
-        {{#if immunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.short'}}</legend><div class="vh-info-body">{{#each immunities}}<i class="{{icon}} vh-info-immune" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
-        {{#if weaknesses.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.short'}}</legend><div class="vh-info-body">{{#each weaknesses}}<i class="{{icon}} vh-info-weak" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
-        {{#if statusImmunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.short'}}</legend><div class="vh-info-body">{{#each statusImmunities}}<img class="status-condition-icon vh-info-status" src="{{icon}}" data-tooltip="{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.label'}}: {{label}}" />{{/each}}</div></fieldset>{{/if}}
+        {{#if immunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.short'}}</legend><div class="vh-info-body">{{#each immunities}}<i class="{{icon}} vh-info-immune" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
+        {{#if weaknesses.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.short'}}</legend><div class="vh-info-body">{{#each weaknesses}}<i class="{{icon}} vh-info-weak" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
+        {{#if statusImmunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.short'}}</legend><div class="vh-info-body">{{#each statusImmunities}}<img class="status-condition-icon vh-info-status" src="{{icon}}" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.label'}}: {{label}}" />{{/each}}</div></fieldset>{{/if}}
       </div>
     {{/if}}
 
@@ -130,14 +130,14 @@
                       {{#unless hasDetail}}vh-chip--solo{{/unless}}
                       {{#if rechargeCountdownId}}is-recharging{{/if}}
                       {{#if (and @root.detail (and (eq @root.detail.type 'action') (eq @root.detail.index index)))}}is-open{{/if}}">
-            <div class="vh-chip-main" data-action="clickActionName" data-index="{{index}}" data-tooltip="{{name}}{{#if note}} [{{note}}]{{/if}}">
+            <div class="vh-chip-main" data-action="clickActionName" data-index="{{index}}" data-hud-tip="{{name}}{{#if note}} [{{note}}]{{/if}}">
               {{#if rechargeCountdownId}}
-                <i class="fas fa-hourglass-half vh-chip-recharge" data-action="rollRechargeCountdown" data-countdown-id="{{rechargeCountdownId}}" data-tooltip="{{localize 'VAGABOND.Actor.NPC.Action.Recharge'}}"></i>
+                <i class="fas fa-hourglass-half vh-chip-recharge" data-action="rollRechargeCountdown" data-countdown-id="{{rechargeCountdownId}}" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.Action.Recharge'}}"></i>
               {{/if}}
               <span class="vh-chip-name">{{name}}</span>
             </div>
             {{#if hasDetail}}
-              <button type="button" class="vh-chip-exp" data-action="openDetail" data-detail-type="action" data-index="{{index}}" data-tooltip="{{localize 'VAGABOND.Hud.Menu.Read'}}">
+              <button type="button" class="vh-chip-exp" data-action="openDetail" data-detail-type="action" data-index="{{index}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Read'}}">
                 <i class="fas fa-square-list"></i>
               </button>
             {{/if}}
@@ -152,7 +152,7 @@
       <div class="vh-npc-chips vh-npc-chips--abilities">
         {{#each abilities}}
           <div class="vh-chip vh-chip--ability {{#if (and @root.detail (and (eq @root.detail.type 'ability') (eq @root.detail.index index)))}}is-open{{/if}}"
-               data-action="openDetail" data-detail-type="ability" data-index="{{index}}" data-tooltip="{{name}}">
+               data-action="openDetail" data-detail-type="ability" data-index="{{index}}" data-hud-tip="{{name}}">
             <span class="vh-chip-name">{{name}}</span>
           </div>
         {{/each}}

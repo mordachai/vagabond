@@ -51,6 +51,7 @@ export class InventoryHandler {
         totalSlots: item.system.slots || item.system.baseSlots || 0,
         requiresBound: item.system.requiresBound || false,
         bound: item.system.bound || false,
+        usesPips: ItemSections.usesPipsArray(item),
       };
 
       // Add range abbreviation for weapons
@@ -452,20 +453,34 @@ export class InventoryHandler {
     miniSheet.style.top = `${y}px`;
 
     // Build content based on item type
-    const content = this._buildMiniSheetContent(item);
-    miniSheet.innerHTML = content;
+    miniSheet.innerHTML = this._buildMiniSheetContent(item);
 
     document.body.appendChild(miniSheet);
     this._currentMiniSheet = miniSheet;
 
-    // Add close button handler
-    const closeButton = miniSheet.querySelector('.mini-sheet-close');
-    if (closeButton) {
-      closeButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.hideInventoryMiniSheet();
-      });
-    }
+    const wireCloseButton = () => {
+      const closeButton = miniSheet.querySelector('.mini-sheet-close');
+      if (closeButton) {
+        closeButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.hideInventoryMiniSheet();
+        });
+      }
+    };
+    wireCloseButton();
+
+    // Not an ApplicationV2 — no delegated action system, so wire the
+    // multi-use pip clicks (see item-sections.mjs buildUsesPipsRow) manually.
+    // The whole panel is rebuilt in place after a click since `item.uses`
+    // changing doesn't otherwise touch this detached DOM node.
+    miniSheet.addEventListener('click', async (e) => {
+      const pip = e.target.closest('[data-action="usePip"]');
+      if (!pip) return;
+      e.stopPropagation();
+      await ItemSections.onUsePipClick(pip, item);
+      miniSheet.innerHTML = this._buildMiniSheetContent(item);
+      wireCloseButton();
+    });
 
     // Close on click outside
     setTimeout(() => {
@@ -531,8 +546,11 @@ export class InventoryHandler {
     inventoryCards.forEach(card => {
       const itemId = card.dataset.itemId;
 
-      // Single-click: Show mini-sheet
+      // Single-click: Show mini-sheet (unless the click landed on an
+      // interactive data-action element, e.g. a uses-pip — let the app's
+      // delegated action system handle those instead)
       card.addEventListener('click', (event) => {
+        if (event.target.closest('[data-action]')) return;
         event.preventDefault();
         this.showInventoryMiniSheet(event, itemId);
       });

@@ -1,6 +1,7 @@
 import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
 import { GrantsHandlers } from './item-sheet-grants.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
+import * as ItemSections from '../helpers/item-sections.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -118,6 +119,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       toggleBlockedStatus: this._onToggleBlockedStatus,
       toggleResistedStatus: this._onToggleResistedStatus,
       applyCoating: this._onApplyCoating,
+      usePip: this._onUsePip,
       clearImbue: this._onClearImbue,
       clearItemMacro: this._onClearItemMacro,
     },
@@ -282,9 +284,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             .map(i => ({
               id: i.id,
               name: i.name,
-              system: { quantity: i.system.quantity }
+              system: { remaining: this.item.constructor._chargesRemaining(i) }
             }));
         }
+        // Multi-use pips for the Consumable Configuration section
+        context.usesPips = ItemSections.usesPipsArray(this.item);
         // Sequencer FX availability for per-item animation config
         context.sequencerAvailable = !!game.modules.get('sequencer')?.active;
         context.isWeapon = this.item.system.equipmentType === 'weapon';
@@ -3289,6 +3293,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             const weapon = actor.items.get(weaponId);
             if (!weapon) return;
 
+            const ItemClass = this.document.constructor;
+            if (this.document.system.isConsumable && ItemClass._chargesRemaining(this.document) <= 0) {
+              ui.notifications.warn(`Cannot apply ${this.document.name}: no charges remaining.`);
+              return;
+            }
+
             const causedStatuses = foundry.utils.deepClone(
               this.document.system.causedStatuses ?? []
             );
@@ -3300,6 +3310,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                 causedStatuses,
               },
             });
+
+            // Applying a coating IS using the item — spend a charge same as any other use.
+            if (this.document.system.isConsumable) {
+              await ItemClass._consumeCharge(this.document);
+            }
 
             ui.notifications.info(
               game.i18n.format('VAGABOND.Status.Coating.Applied', {
@@ -3315,6 +3330,15 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       },
       default: 'apply',
     }).render(true);
+  }
+
+  /**
+   * Spend/restore a use pip on this item (or on the multi-use item targeted
+   * by `data-item-uuid`, when this pip row is rendered somewhere other than
+   * the item's own sheet — see item-sections.mjs buildUsesPipsRow).
+   */
+  static async _onUsePip(event, target) {
+    await ItemSections.onUsePipClick(target, this.document);
   }
 
   /**

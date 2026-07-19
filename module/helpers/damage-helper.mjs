@@ -2660,8 +2660,9 @@ export class VagabondDamageHelper {
     const getSize = a => SIZE_ORDER[a.type === 'npc' ? (a.system.size || 'medium') : (a.system.attributes?.size || 'medium')] ?? 1;
     const sourceSize = getSize(sourceActor);
 
-    // Find the Restrained status definition to clone its changes
+    // Find the status definitions to clone their name/icon/changes
     const restrainedDef = CONFIG.statusEffects.find(e => e.id === 'restrained');
+    const grapplingDef = CONFIG.statusEffects.find(e => e.id === 'grappling');
 
     const targetUuids = [];
     for (const token of targetedTokens) {
@@ -2681,7 +2682,7 @@ export class VagabondDamageHelper {
       // so we can attach metadata needed for bidirectional cleanup)
       await targetActor.createEmbeddedDocuments('ActiveEffect', [{
         name: game.i18n.localize(restrainedDef?.name ?? 'VAGABOND.StatusConditions.Restrained'),
-        img: restrainedDef?.img ?? 'icons/svg/teleport.svg',
+        img: restrainedDef?.img ?? 'icons/magic/control/debuff-chains-shackles-movement-blue.webp',
         statuses: ['restrained'],
         system: { changes: restrainedDef?.changes ?? [] },
         flags: { vagabond: { fromGrapple: true, grappleSourceUuid: sourceActor.uuid } }
@@ -2719,8 +2720,8 @@ export class VagabondDamageHelper {
 
     // Apply Grappling to source — stores target UUIDs for cleanup
     await sourceActor.createEmbeddedDocuments('ActiveEffect', [{
-      name: game.i18n.localize('VAGABOND.StatusConditions.Grappling'),
-      img: 'icons/svg/net.svg',
+      name: game.i18n.localize(grapplingDef?.name ?? 'VAGABOND.StatusConditions.Grappling'),
+      img: grapplingDef?.img ?? 'icons/skills/melee/hand-grip-staff-blue.webp',
       statuses: ['grappling'],
       changes: speedChanges,
       flags: { vagabond: { grappling: { targetUuids } } }

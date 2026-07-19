@@ -9,7 +9,7 @@
     "Stat": {
       "Might": { "long": "Força", "abbr": "FOR" },
       "Dexterity": { "long": "Destreza", "abbr": "DES" },
-      "Awareness": { "long": "Consciência", "abbr": "CNC" },
+      "Awareness": { "long": "Consciência", "abbr": "CNS" },
       "Reason": { "long": "Raciocínio", "abbr": "RCN" },
       "Presence": { "long": "Presença", "abbr": "PRE" },
       "Luck": { "long": "Sorte", "abbr": "SOR" }
@@ -146,18 +146,18 @@
       "Cryptid": "Criptídeo",
       "Artificials": "Artificiais",
       "Beasts": "Bestas",
-      "Outers": "Exteriores",
+      "Outers": "Forasteiros",
       "Primordials": "Primordiais",
       "Undead": "Morto-Vivo",
       "Hellspawn": "Infernal"
     },
     "ResourceTypes": {
-      "MaxMana": "Mana Máxima",
+      "MaxMana": "Mana Máx.",
       "ManaPerCast": "Mana por Conjuração",
       "Wealth": "Riqueza (em prata)",
       "InventorySlots": "Espaços de Inventário",
       "Speed": "Velocidade",
-      "MaxHP": "PV Máximo",
+      "MaxHP": "PV",
       "CurrentLuck": "Reserva de Sorte"
     },
     "DamageTypes": {
@@ -1389,9 +1389,11 @@
         },
         "IsSupply": "Conta como ração (rastreado na ficha do grupo)",
         "IsBeverage": "Conta como água/bebida (rastreado na ficha do grupo)",
-        "IsConsumable": "Consumível (reduz quantidade ao usar)",
+        "IsConsumable": "Consumível (reduz quantidade — ou usos, se Usos Máximos estiver definido — ao usar)",
         "LinkedConsumableNone": "Nenhum consumível vinculado",
-        "LinkedConsumableHint": "Quando este item é usado, ele consome o item vinculado em vez dele"
+        "LinkedConsumableHint": "Quando este item é usado, ele consome o item vinculado em vez dele",
+        "MaxUses": "Usos Máximos",
+        "MaxUsesHint": "0 = uso único (Consumível reduz a quantidade diretamente). Acima de 0, este item carrega esse número de usos/doses/cargas independentes — Consumível esgota esses em vez da quantidade, e nunca apaga o item automaticamente quando chega a 0."
       },
       "Relic": {
         "FIELDS": {
@@ -1421,8 +1423,8 @@
           "Acid": "Substâncias corrosivas.",
           "Concoction": "Substâncias gerais.",
           "Explosive": "Bombas e combustíveis.",
-          "Oil": "Cobre uma Arma, até 5 munições, um quadrado de 5 pés, ou um Ser de tamanho Pequeno a Grande. A cobertura dura um Turno, ou até que outro óleo seja aplicado.",
-          "Poison": "Afeta um Alvo submetido a ele das formas indicadas. Uma arma untada com ele permanece untada até acertar um Ataque ou até um Turno (o que vier primeiro).",
+          "Oil": "Cobre uma Arma, até 5 munições, um quadrado de 5 pés, ou um Ser de tamanho Pequeno a Grande. A cobertura dura um Quarto de Dia, ou até que outro óleo seja aplicado.",
+          "Poison": "Afeta um Alvo submetido a ele das formas indicadas. Uma arma untada com ele permanece untada até acertar um Ataque ou até um Quarto de Dia (o que vier primeiro).",
           "Potion": "Poções alquímicas que causam efeitos mágicos quando consumidas.",
           "Torch": "Fornece Luz Próxima por 1 hora."
         }
@@ -1513,7 +1515,7 @@
       "Near": "Próximo",
       "Ranged": "À Distância",
       "Shield": "Escudo",
-      "Thrown": "Arremessável"
+      "Thrown": "Arremesso"
     },
     "PropertyHints": {
       "Brawl": "Arma desarmada usável com a perícia Briga.",
@@ -1686,12 +1688,13 @@
       "BecomeTooltip":   "Fechar esta ficha e abrir o HUD flutuante",
       "NoActor":         "Nenhum personagem designado e nenhum token selecionado.",
       "NotCharacter":    "O HUD de Personagem só suporta personagens de jogador.",
-      "HPHint":          "Clique esq. −1 · Clique dir. +1",
-      "FatigueHint":     "Clique esq. +1 · Clique dir. −1",
-      "LuckTooltip":     "Clique para gastar · Shift+Clique para adicionar",
-      "StudiedTooltip":  "Clique para gastar um Dado de Estudo · Shift+Clique para adicionar",
-      "CheckModTooltip": "Clique esq. +1 · Clique dir. −1 · Reseta após a rolagem",
-      "ManaTooltip":     "Clique esq. para gastar mana · Clique dir. para restaurar",
+      "SpendHint":       "Gastar",
+      "AddHint":         "Adicionar",
+      "KeyShift":        "Shift",
+      "StudiedTitle":    "Dados de Estudo",
+      "ResetsAfterRoll": "Reseta após a rolagem",
+      "ManaSpendHint":   "Gastar mana",
+      "ManaRestoreHint": "Restaurar",
       "SlotForeignItem": "Esse item não pertence a este personagem.",
       "SlotNotWeapon":   "Apenas armas podem ir em um espaço de arma.",
       "NoTokenToPing":   "Este personagem não tem token na cena atual.",
@@ -1971,6 +1974,7 @@
         "SelectStat": "-- Selecione o Atributo --",
         "Critical": "Crítico",
         "Quantity": "Quantidade",
+        "Uses": "Usos",
         "TypeLabel": "Tipo",
         "Yes": "Sim",
         "No": "Não",

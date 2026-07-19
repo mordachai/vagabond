@@ -3428,6 +3428,25 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-transform: capitalize;
   font-family: "Eskapade", serif;
 }
+.inventory-mini-sheet .mini-sheet-stats .uses-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+.inventory-mini-sheet .mini-sheet-stats .uses-pips .uses-pip {
+  font-size: 12px;
+  cursor: pointer;
+}
+.inventory-mini-sheet .mini-sheet-stats .uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+.inventory-mini-sheet .mini-sheet-stats .uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-dark);
+  opacity: 0.35;
+}
+.inventory-mini-sheet .mini-sheet-stats .uses-pips .uses-pip:hover {
+  transform: scale(1.2);
+}
 .inventory-mini-sheet .mini-sheet-properties {
   padding-top: 12px;
   border-top: 1px solid var(--vagabond-c-dark);
@@ -4114,6 +4133,69 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-section-title:first-child {
   margin-top: 0;
 }
+.vbd-hud .vh-inv-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--vagabond-dark-yellow);
+  margin: 6px 0 4px;
+  padding: 0 0px 4px 0;
+  font-size: calc(0.8rem * var(--vh-font-scale));
+  color: var(--vagabond-c-tan);
+}
+.vbd-hud .vh-inv-header .vh-inv-header-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Germania", serif;
+  font-size: calc(1.1rem * var(--vh-font-scale));
+  color: var(--vagabond-c-chat-yellow);
+  white-space: nowrap;
+}
+.vbd-hud .vh-inv-header .vh-inv-header-wealth {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: calc(1.1rem * var(--vh-font-scale));
+  white-space: nowrap;
+}
+.vbd-hud .vh-inv-header .vh-inv-header-wealth .vh-inv-wealth-label {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-inv-header .vh-inv-header-wealth .vh-inv-wealth-value {
+  color: var(--vagabond-c-white);
+  margin-left: 4px;
+}
+.vbd-hud .vh-inv-header .vh-inv-header-wealth .vh-inv-wealth-value .vh-inv-wealth-abbr {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-inv-header .vh-inv-header-bounds {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.vbd-hud .vh-inv-header .vh-inv-header-bounds .vh-inv-bounds-label {
+  font-weight: bold;
+  color: var(--vagabond-c-white);
+}
+.vbd-hud .vh-inv-header .vh-inv-header-bounds .bound-pip {
+  font-size: calc(0.8rem * var(--vh-font-scale));
+}
+.vbd-hud .vh-inv-header .vh-inv-header-bounds .bound-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+.vbd-hud .vh-inv-header .vh-inv-header-bounds .bound-pip.empty {
+  color: var(--vagabond-c-dark-bluey);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.5;
+}
 .vbd-hud .vh-empty {
   color: var(--vagabond-c-muted);
   font-style: italic;
@@ -4377,6 +4459,24 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-stat);
   text-transform: capitalize;
 }
+.vbd-hud .vh-item-detail .uses-pips {
+  display: inline-flex;
+  gap: 2px;
+}
+.vbd-hud .vh-item-detail .uses-pips .uses-pip {
+  font-size: calc(0.65rem * var(--vh-font-scale));
+  cursor: pointer;
+}
+.vbd-hud .vh-item-detail .uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .vh-item-detail .uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-tan);
+  opacity: 0.4;
+}
+.vbd-hud .vh-item-detail .uses-pips .uses-pip:hover {
+  transform: scale(1.2);
+}
 .vbd-hud .vh-item-detail .mini-sheet-properties {
   margin-top: 4px;
 }
@@ -4441,6 +4541,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud .accordion-item .vh-acc-body p {
   margin: 0 0 4px;
+}
+
+.vh-key-badge {
+  display: inline-block;
+  padding: 0 4px;
+  margin: 0 1px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.85em;
+  line-height: 1.4;
+  vertical-align: 1px;
 }
 
 /* NPC HUD - layers on the shared `.vbd-hud` base; also renders outside sheets */
@@ -9772,7 +9883,7 @@ ol#combat-tracker.directory-list {
   justify-content: center;
   align-items: center;
   gap: 6px;
-  width: 45%;
+  width: 65%;
   margin: 12px auto 0;
   padding: 16px !important;
   background: transparent !important;
@@ -11514,6 +11625,25 @@ ol#combat-tracker.directory-list {
   font-family: "Manofa", serif;
   color: var(--vagabond-c-text-primary);
 }
+.vagabond .right-column .equipped-item .eq-uses-pips {
+  display: inline-flex;
+  gap: 2px;
+  justify-content: flex-end;
+}
+.vagabond .right-column .equipped-item .eq-uses-pips .uses-pip {
+  font-size: 8px;
+  cursor: pointer;
+}
+.vagabond .right-column .equipped-item .eq-uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .right-column .equipped-item .eq-uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.4;
+}
+.vagabond .right-column .equipped-item .eq-uses-pips .uses-pip:hover {
+  transform: scale(1.3);
+}
 .vagabond .right-column .equipped-item .eq-dmgtype {
   grid-column: 4;
   grid-row: 1;
@@ -12180,6 +12310,34 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .consumable-grid .linked-consumable-field select {
   width: 100%;
+}
+.vagabond .consumable-grid .max-uses-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  grid-column: 1/-1;
+}
+.vagabond .consumable-grid .max-uses-field input[type=number] {
+  width: 50px;
+}
+.vagabond .consumable-grid .max-uses-field .uses-pips {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 4px;
+}
+.vagabond .consumable-grid .max-uses-field .uses-pips .uses-pip {
+  font-size: 13px;
+  cursor: pointer;
+}
+.vagabond .consumable-grid .max-uses-field .uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .consumable-grid .max-uses-field .uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-text-secondary);
+  opacity: 0.4;
+}
+.vagabond .consumable-grid .max-uses-field .uses-pips .uses-pip:hover {
+  transform: scale(1.2);
 }
 .vagabond .damage-immunity-body {
   display: grid;
@@ -14183,6 +14341,32 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-dark-bluey);
   -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
   opacity: 0.6;
+}
+.vagabond .inventory-card .item-uses-pips {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+  z-index: 10;
+}
+.vagabond .inventory-card .item-uses-pips .uses-pip {
+  font-size: 6px;
+  cursor: pointer;
+}
+.vagabond .inventory-card .item-uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 0.5px var(--vagabond-c-dark-bluey);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
+.vagabond .inventory-card .item-uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-dark-bluey);
+  -webkit-text-stroke: 0.5px var(--vagabond-c-dark-bluey);
+  opacity: 0.6;
+}
+.vagabond .inventory-card .item-uses-pips .uses-pip:hover {
+  transform: scale(1.3);
 }
 .vagabond .inventory-overload-warning {
   margin-top: 8px;
@@ -20181,5 +20365,3 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
-
-/*# sourceMappingURL=vagabond.css.map */

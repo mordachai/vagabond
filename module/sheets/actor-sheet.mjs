@@ -9,6 +9,7 @@ import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
+import * as ItemSections from '../helpers/item-sections.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -49,6 +50,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       equipItem: this._onEquipItem,
       editItem: this._onEditItem,
       deleteItem: this._onDeleteItem,
+      usePip: this._onUsePip,
       // Spell actions - delegated to spellHandler
       castSpell: this._onCastSpell,
       toggleFx: this._onToggleFx,
@@ -626,6 +628,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     for (const item of this.actor.items) {
       switch (item.type) {
         case 'equipment':
+          // Transient render-only field for the sliding-panel equipped list (mirrors the
+          // inventory-card / mini-sheet / HUD pips — see item-sections.mjs usesPipsArray).
+          item.usesPips = ItemSections.usesPipsArray(item);
           if (item.system.equipmentType === 'weapon') weapons.push(item);
           else if (item.system.equipmentType === 'armor') armor.push(item);
           else gear.push(item);
@@ -787,7 +792,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * (sliding-panel Equipped rows, spell send-to-chat) target already-equipped
    * items or non-equipment items, so the equip step is a safe no-op there.
    */
-  static async _activateItemAction(event, target) {
+  async _activateItemAction(event, target) {
     const element = target || event.currentTarget;
     const itemId = element?.dataset?.itemId || element?.closest?.('[data-item-id]')?.dataset.itemId;
     const item = itemId && this.actor.items.get(itemId);
@@ -846,6 +851,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       await item.delete();
       ui.notifications.info(`Deleted ${item.name}`);
     }
+  }
+
+  /** Spend/restore a multi-use item's charge pip (inventory grid card, mini-sheet detail, HUD accordion). */
+  static async _onUsePip(event, target) {
+    const item = this.actor.items.get(target.closest('[data-item-id]')?.dataset.itemId);
+    await ItemSections.onUsePipClick(target, item ?? null);
   }
 
   // --- SPELL HANDLERS ---

@@ -116,7 +116,7 @@
                 </div>
               {{/if}}
               {{! Row 3: Hit Points }}
-              <div class='hp-display' data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.ModifyHP'}}">
+              <div class='hp-display' data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxHP'}}: {{system.health.max}} | <i class='fas fa-computer-mouse'></i>L: &minus;1 &middot; <i class='fas fa-computer-mouse'></i>R: +1">
                 <i class='fas fa-heart hp-icon'></i>
                 <input
                   type='text'
@@ -155,7 +155,7 @@
                         {{!-- LUCK POOL SECTION — hidden when luckStat is 'none' --}}
                         {{#if system.hasLuckPool}}
                         <div class='stat-item luck-item'>
-                          <div class="luck-label rollable" data-action='spendLuck'>{{config.homebrew.terms.luckTerm}}</div>
+                          <div class="luck-label rollable" data-action='spendLuck' data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.SpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>L<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span> {{localize 'VAGABOND.Hud.AddHint'}}">{{config.homebrew.terms.luckTerm}}</div>
                           <div class='luck-display'>
                             <input
                               type='number'
@@ -167,7 +167,7 @@
                               class='luck-value'
                             />
                           </div>
-                          <label class='luck-label rollable' data-action='spendLuck' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendLuck" luckTerm=config.homebrew.terms.luckTerm}}'>{{config.homebrew.terms.poolTerm}}</label>
+                          <label class='luck-label rollable' data-action='spendLuck' data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.CurrentLuck'}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.SpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>L<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span> {{localize 'VAGABOND.Hud.AddHint'}}">{{config.homebrew.terms.poolTerm}}</label>
                         </div>
                         {{/if}}
                       </div>
@@ -221,8 +221,8 @@
           {{! Modifiers Group - Study + Check Mod + Favor/Hinder }}
           <div class='modifiers-group'>
             {{! Row 1: Study }}
-            <i class='fas fa-book-open modifiers-group-icon rollable' data-action='spendStudiedDie' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendStudiedDie"}}'></i>
-            <label class='modifiers-group-label rollable' data-action='spendStudiedDie' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendStudiedDie"}}'>{{localize "VAGABOND.UI.Sections.StudiedDie"}}:</label>
+            <i class='fas fa-book-open modifiers-group-icon rollable' data-action='spendStudiedDie' data-hud-tip-html="{{localize 'VAGABOND.Hud.StudiedTitle'}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.SpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>L<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span> {{localize 'VAGABOND.Hud.AddHint'}}"></i>
+            <label class='modifiers-group-label rollable' data-action='spendStudiedDie' data-hud-tip-html="{{localize 'VAGABOND.Hud.StudiedTitle'}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.SpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>L<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span> {{localize 'VAGABOND.Hud.AddHint'}}">{{localize "VAGABOND.UI.Sections.StudiedDie"}}:</label>
             <input
               type='number'
               name='system.studiedDice'
@@ -232,8 +232,8 @@
               min='0'
             />
             {{! Row 2: Check Modifier }}
-            <i class='fas fa-plus-minus modifiers-group-icon rollable' data-action='modifyCheckBonus' data-tooltip='{{localize "VAGABOND.UI.Tooltips.CheckModHint"}}'></i>
-            <label class='modifiers-group-label rollable' data-action='modifyCheckBonus' data-tooltip='{{localize "VAGABOND.UI.Tooltips.CheckModHint"}}'>{{localize "VAGABOND.UI.Labels.CheckMod"}}:</label>
+            <i class='fas fa-plus-minus modifiers-group-icon rollable' data-action='modifyCheckBonus' data-hud-tip-html="{{localize 'VAGABOND.UI.Labels.CheckMod'}} ({{localize 'VAGABOND.Hud.ResetsAfterRoll'}}) | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: &minus;1"></i>
+            <label class='modifiers-group-label rollable' data-action='modifyCheckBonus' data-hud-tip-html="{{localize 'VAGABOND.UI.Labels.CheckMod'}} ({{localize 'VAGABOND.Hud.ResetsAfterRoll'}}) | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: &minus;1">{{localize "VAGABOND.UI.Labels.CheckMod"}}:</label>
             <input
               type='text'
               name='system.universalCheckBonus'
@@ -247,7 +247,7 @@
               type='button'
               class='modifiers-group-dice favor-hinder-toggle {{system.favorHinder}}'
               data-action='toggleFavorHinder'
-              data-tooltip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
+              data-hud-tip='{{#if (eq system.favorHinder "favor")}}{{localize "VAGABOND.FavorHinder.Tooltips.favor"}}{{else if (eq system.favorHinder "hinder")}}{{localize "VAGABOND.FavorHinder.Tooltips.hinder"}}{{else}}{{localize "VAGABOND.FavorHinder.Tooltips.none"}}{{/if}}'
             >
               {{#if (eq system.favorHinder "favor")}}
                 <img src='systems/vagabond/assets/ui/dice/favor-mark.webp' alt='{{localize "VAGABOND.FavorHinder.States.favor"}}' class='favor-hinder-marker' />
@@ -391,7 +391,15 @@
                 <div class='equipped-item' data-action='rollWeapon' data-item-id='{{weapon._id}}'>
                   <div class='eq-icon-frame'><img class='eq-icon' src='{{weapon.img}}' alt='' /></div>
                   <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{weapon._id}}' title='{{weapon.name}}'>{{weapon.name}}</label>
-                  <div class='eq-qty'></div>
+                  <div class='eq-qty'>
+                    {{#if weapon.usesPips.length}}
+                      <span class='eq-uses-pips'>
+                        {{#each weapon.usesPips as |pip|}}
+                          <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{weapon.uuid}}' data-pip-index='{{pip.index}}'></i>
+                        {{/each}}
+                      </span>
+                    {{/if}}
+                  </div>
                   <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'></i></div>
                   <div class='eq-damage'>{{weapon.system.currentDamage}}</div>
                   <div class='eq-grip'>
@@ -425,7 +433,17 @@
                 <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                   <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                   <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
-                  <div class='eq-grip'>×{{item.system.quantity}}</div>
+                  <div class='eq-grip'>
+                    {{#if item.usesPips.length}}
+                      <span class='eq-uses-pips'>
+                        {{#each item.usesPips as |pip|}}
+                          <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                        {{/each}}
+                      </span>
+                    {{else}}
+                      ×{{item.system.quantity}}
+                    {{/if}}
+                  </div>
                   <div class='eq-row2'>
                     {{#if item.system.requiresBound}}
                       <span class='eq-bound {{#if item.system.bound}}is-bound{{/if}}'>{{#if item.system.bound}}{{localize "VAGABOND.Item.Equipment.FIELDS.bound.label"}}{{else}}{{localize "VAGABOND.UI.Labels.Unbound"}}{{/if}}</span>
@@ -447,7 +465,15 @@
                   <div class='equipped-item' data-action='rollWeapon' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                     <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
-                    <div class='eq-qty'></div>
+                    <div class='eq-qty'>
+                      {{#if item.usesPips.length}}
+                        <span class='eq-uses-pips'>
+                          {{#each item.usesPips as |pip|}}
+                            <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                          {{/each}}
+                        </span>
+                      {{/if}}
+                    </div>
                     <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
                     <div class='eq-damage'>{{item.system.damageAmount}}</div>
                     <div class='eq-grip'>×{{item.system.quantity}}</div>
@@ -464,7 +490,17 @@
                   <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                     <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
-                    <div class='eq-grip'>×{{item.system.quantity}}</div>
+                    <div class='eq-grip'>
+                      {{#if item.usesPips.length}}
+                        <span class='eq-uses-pips'>
+                          {{#each item.usesPips as |pip|}}
+                            <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                          {{/each}}
+                        </span>
+                      {{else}}
+                        ×{{item.system.quantity}}
+                      {{/if}}
+                    </div>
                     <div class='eq-row2'>
                       {{#if item.system.canExplode}}
                         <span class='eq-explode'><i class='fas fa-burst'></i> ({{item.system.explodeValues}})</span>
@@ -484,7 +520,17 @@
                   <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                     <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
-                    <div class='eq-grip'>×{{item.system.quantity}}</div>
+                    <div class='eq-grip'>
+                      {{#if item.usesPips.length}}
+                        <span class='eq-uses-pips'>
+                          {{#each item.usesPips as |pip|}}
+                            <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                          {{/each}}
+                        </span>
+                      {{else}}
+                        ×{{item.system.quantity}}
+                      {{/if}}
+                    </div>
                   </div>
                 {{/unless}}
               {{/if}}
@@ -518,8 +564,8 @@
                 </div>
                 <h4>{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
                 <div class="title-right-group">
-                  <i class='fas fa-star-christmas mana-icon' title="{{localize "VAGABOND.Actor.Character.FIELDS.mana.castingMax.label"}}: {{system.mana.castingMax}}"></i>
-                  <span class='mana-display'><span class="mana-current clickable mana-modifier" data-action='modifyMana' data-tooltip='{{localize "VAGABOND.UI.Tooltips.SpendMana"}}'>{{system.mana.current}}</span>/{{system.mana.max}}</span>
+                  <i class='fas fa-star-christmas mana-icon'></i>
+                  <span class='mana-display'><span class="mana-current clickable mana-modifier" data-action='modifyMana' data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxMana'}}: {{system.mana.max}} | {{localize 'VAGABOND.ResourceTypes.ManaPerCast'}}: {{system.mana.castingMax}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.ManaSpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>R {{localize 'VAGABOND.Hud.ManaRestoreHint'}}">{{system.mana.current}}</span>/{{system.mana.max}}</span>
                 </div>
               </div>
 

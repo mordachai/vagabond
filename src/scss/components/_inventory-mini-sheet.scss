@@ -161,6 +161,20 @@
         font-family: $font-primary;
       }
     }
+
+    .uses-pips {
+      display: inline-flex;
+      gap: 3px;
+
+      .uses-pip {
+        font-size: 12px;
+        cursor: pointer;
+
+        &.filled { color: $c-yellow; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4)); }
+        &.empty { color: $c-dark; opacity: 0.35; }
+        &:hover { transform: scale(1.2); }
+      }
+    }
   }
 
   // Properties section (full width at bottom)

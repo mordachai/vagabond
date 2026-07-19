@@ -3,6 +3,7 @@ import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
+import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 
 const { api } = foundry.applications;
 
@@ -380,6 +381,8 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     const { signal } = this.#ctrl;
 
     this._registerHooks();
+
+    bindHudTooltips(this.element, signal);
 
     // Per-user accessibility prefs (dark bg / blur / font scale).
     applyHudDisplayPrefs(this.element);

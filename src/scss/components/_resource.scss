@@ -246,6 +246,21 @@
       color: $c-text-1;
     }
 
+    .eq-uses-pips {
+      display: inline-flex;
+      gap: 2px;
+      justify-content: flex-end;
+
+      .uses-pip {
+        font-size: 8px;
+        cursor: pointer;
+
+        &.filled { color: $c-yellow; }
+        &.empty { color: $c-text-1; opacity: 0.4; }
+        &:hover { transform: scale(1.3); }
+      }
+    }
+
     .eq-dmgtype {
       grid-column: 4;
       grid-row: 1;

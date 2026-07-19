@@ -148,13 +148,13 @@ export class VagabondItem extends Item {
     // If this item has a linked consumable, check if it's available
     if (this.system.linkedConsumable) {
       const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
-      if (!linkedItem || linkedItem.system.quantity <= 0) {
+      if (!linkedItem || VagabondItem._chargesRemaining(linkedItem) <= 0) {
         ui.notifications.warn(`Cannot use ${this.name}: linked consumable ${linkedItem?.name || 'not found'} is exhausted.`);
         return false;
       }
     }
-    // If this item is consumable and has no linked item, check its own quantity
-    else if (this.system.isConsumable && this.system.quantity <= 0) {
+    // If this item is consumable and has no linked item, check its own charges
+    else if (this.system.isConsumable && VagabondItem._chargesRemaining(this) <= 0) {
       ui.notifications.warn(`Cannot use ${this.name}: no charges remaining.`);
       return false;
     }
@@ -163,8 +163,57 @@ export class VagabondItem extends Item {
   }
 
   /**
-   * Handle consumption of this item or its linked consumable
-   * Reduces quantity by 1 and removes item if quantity reaches 0
+   * Remaining charges for consumption purposes: `uses.value` for multi-use
+   * items (`uses.max > 0`), otherwise `quantity` (legacy single-use-per-stack).
+   * @param {VagabondItem} item
+   * @returns {number}
+   */
+  static _chargesRemaining(item) {
+    return item.system.uses?.max > 0 ? item.system.uses.value : item.system.quantity;
+  }
+
+  /**
+   * Spend one charge on `item`: drains `uses.value` for multi-use items
+   * (never touches quantity — a depleted multi-use item just sits at 0
+   * charges until manually restocked), otherwise decrements `quantity` and
+   * deletes the item when it reaches 0 (legacy single-use behavior).
+   * @param {VagabondItem} item
+   * @returns {Promise<void>}
+   */
+  static async _consumeCharge(item) {
+    if (item.system.uses?.max > 0) {
+      const newValue = Math.max(0, item.system.uses.value - 1);
+      await item.update({ 'system.uses.value': newValue });
+    } else {
+      const newQuantity = item.system.quantity - 1;
+      if (newQuantity <= 0) {
+        await item.delete();
+      } else {
+        await item.update({ 'system.quantity': newQuantity });
+      }
+    }
+  }
+
+  /**
+   * Apply a pip click to a multi-use item's `uses.value`: clicking the pip at
+   * the current fill boundary decrements it (spend), clicking any other pip
+   * (filled or empty) sets the fill level to that pip (spend down to it, or
+   * restore up to it). No-op on non-multi-use items (`uses.max === 0`).
+   * @param {VagabondItem} item
+   * @param {number} index  0-based pip index that was clicked
+   * @returns {Promise<void>}
+   */
+  static async setUsesFromPipClick(item, index) {
+    const max = item.system.uses?.max ?? 0;
+    if (max <= 0) return;
+    const current = item.system.uses.value ?? 0;
+    const target = current === index + 1 ? index : index + 1;
+    const newValue = Math.min(max, Math.max(0, target));
+    await item.update({ 'system.uses.value': newValue });
+  }
+
+  /**
+   * Handle consumption of this item or its linked consumable.
    * @returns {Promise<void>}
    */
   async handleConsumption() {
@@ -173,27 +222,11 @@ export class VagabondItem extends Item {
     // If this item has a linked consumable, consume from that instead
     if (this.system.linkedConsumable) {
       const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
-      if (linkedItem) {
-        const newQuantity = linkedItem.system.quantity - 1;
-        if (newQuantity <= 0) {
-          // Remove the linked item
-          await linkedItem.delete();
-        } else {
-          // Reduce quantity
-          await linkedItem.update({ 'system.quantity': newQuantity });
-        }
-      }
+      if (linkedItem) await VagabondItem._consumeCharge(linkedItem);
     }
     // Otherwise, if this item is consumable, consume from itself
     else if (this.system.isConsumable) {
-      const newQuantity = this.system.quantity - 1;
-      if (newQuantity <= 0) {
-        // Remove this item
-        await this.delete();
-      } else {
-        // Reduce quantity
-        await this.update({ 'system.quantity': newQuantity });
-      }
+      await VagabondItem._consumeCharge(this);
     }
   }
 
@@ -507,6 +540,20 @@ export class VagabondItem extends Item {
     if (this.type === 'equipment' && foundry.utils.hasProperty(changed, 'system.equipmentState')) {
       const st = foundry.utils.getProperty(changed, 'system.equipmentState');
       foundry.utils.setProperty(changed, 'system.equipped', st !== 'unequipped');
+    }
+
+    // Multi-use tracking: when `uses.max` changes without an explicit `uses.value`
+    // in the same update, keep value in sync — a full item stays full when its max
+    // grows/shrinks, and value is clamped down if it would exceed the new max.
+    // A partially-spent item (value between 0 and old max) is left untouched.
+    if (this.type === 'equipment' && foundry.utils.hasProperty(changed, 'system.uses.max')
+        && !foundry.utils.hasProperty(changed, 'system.uses.value')) {
+      const newMax = foundry.utils.getProperty(changed, 'system.uses.max');
+      const curMax = this.system.uses?.max ?? 0;
+      const curValue = this.system.uses?.value ?? 0;
+      if (curValue === curMax || curValue > newMax) {
+        foundry.utils.setProperty(changed, 'system.uses.value', newMax);
+      }
     }
   }
 

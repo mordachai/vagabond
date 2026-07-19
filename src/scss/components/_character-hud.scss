@@ -564,6 +564,80 @@
     &:first-child { margin-top: 0; }
   }
 
+  .vh-inv-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid $c-dark-yellow;
+    margin: 6px 0 4px;
+    padding: 0 0px 4px 0; // right pad clears the floated close button so Bounds isn't hidden under it
+    font-size: calc(0.8rem * var(--vh-font-scale));
+    color: $c-tan;
+
+    .vh-inv-header-title {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: $font-title;
+      font-size: calc(1.1rem * var(--vh-font-scale));
+      color: $c-yellow;
+      white-space: nowrap;
+    }
+
+    .vh-inv-header-wealth {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      font-size: calc(1.1rem * var(--vh-font-scale));
+      white-space: nowrap;
+
+      .vh-inv-wealth-label {
+        color: $c-yellow;
+      }
+
+      .vh-inv-wealth-value {
+        color: $c-white;
+        margin-left: 4px;
+
+        .vh-inv-wealth-abbr {
+          color: $c-yellow;
+        }
+      }
+    }
+
+    .vh-inv-header-bounds {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+
+      .vh-inv-bounds-label {
+        font-weight: bold;
+        color: $c-white;
+      }
+
+      .bound-pip {
+        font-size: calc(0.8rem * var(--vh-font-scale));
+
+        &.filled {
+          color: $c-yellow;
+          -webkit-text-stroke: 1px $c-dark-bluey;
+          filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+        }
+
+        &.empty {
+          color: $c-dark-bluey;
+          -webkit-text-stroke: 1px $c-dark-bluey;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
   .vh-empty {
     color: $c-muted;
     font-style: italic;
@@ -767,6 +841,17 @@
     .stat-row { display: flex; justify-content: space-between; gap: 6px; min-width: 0; }
     .stat-name { color: $c-tan; }
     .stat-value { font-family: $font-title; color: $c-stat; text-transform: capitalize; }
+    .uses-pips {
+      display: inline-flex;
+      gap: 2px;
+      .uses-pip {
+        font-size: calc(0.65rem * var(--vh-font-scale));
+        cursor: pointer;
+        &.filled { color: $c-yellow; }
+        &.empty { color: $c-tan; opacity: 0.4; }
+        &:hover { transform: scale(1.2); }
+      }
+    }
     .mini-sheet-properties { margin-top: 4px; }
     .mini-sheet-label {
       font-family: $font-title;
@@ -807,4 +892,18 @@
       p { margin: 0 0 4px; }
     }
   }
+}
+
+// Keycap badge (Shift, Alt, ...) used inside HUD `data-hud-tip-html` tooltips.
+// Lives outside .vbd-hud — it renders inside Foundry's global #tooltip popover,
+// which is appended to <body>, not the HUD's own DOM tree.
+.vh-key-badge {
+  display: inline-block;
+  padding: 0 4px;
+  margin: 0 1px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.85em;
+  line-height: 1.4;
+  vertical-align: 1px;
 }
