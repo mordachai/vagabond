@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.32.0
+- **Multi-Use Consumables:** alchemicals and other consumables can now have Max Uses (charges/doses) instead of just Quantity — a 3-charge potion or an oil that coats up to 5 ammo. Pips UI to track/spend charges on item sheet, inventory grid, and HUD.
+- **HUD tooltips:** new hover-tooltip system for the Character HUD with left/right-click hints.
+- Fix: applying a coating (Oil/Poison) to a weapon now correctly consumes a charge from the source item.
+
 ## v5.31.3
 - Added 80 Trinket items to Gear compendium
 - Fixes os several translation inconsistencies
