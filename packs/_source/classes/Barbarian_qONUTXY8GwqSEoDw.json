@@ -130,7 +130,13 @@
       "choices": [
         {
           "count": 3,
-          "pool": ["detect","influence","leadership","mysticism","survival"],
+          "pool": [
+            "detect",
+            "influence",
+            "leadership",
+            "mysticism",
+            "survival"
+          ],
           "label": ""
         }
       ]

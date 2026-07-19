@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Trinkets",
+  "color": null,
+  "sorting": "a",
+  "_id": "DFmAaCCAWzB6VEM4",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.365",
+    "systemId": "vagabond",
+    "systemVersion": "5.30.4",
+    "lastModifiedBy": "13p65OEadZSZVLRk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "createdTime": 1784417209808,
+    "modifiedTime": 1784417209808
+  },
+  "_key": "!folders!DFmAaCCAWzB6VEM4"
+}

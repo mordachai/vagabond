@@ -6,7 +6,7 @@
   "system": {
     "description": "",
     "items": [
-{
+      {
         "uuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
         "quantity": 1
       },
@@ -25,7 +25,7 @@
       {
         "uuid": "Compendium.vagabond.gear.Item.4DcbA7RsHfBOPJIa",
         "quantity": 1
-      },     
+      },
       {
         "uuid": "Compendium.vagabond.gear.Item.UfSh0X0489Uby1ev",
         "quantity": 1

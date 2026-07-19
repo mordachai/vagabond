@@ -153,7 +153,13 @@
       "choices": [
         {
           "count": 3,
-          "pool": ["brawl","craft","detect","medicine","survival"],
+          "pool": [
+            "brawl",
+            "craft",
+            "detect",
+            "medicine",
+            "survival"
+          ],
           "label": ""
         }
       ]

@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "DFmAaCCAWzB6VEM4",
+  "name": "Occult",
+  "color": null,
+  "sorting": "a",
+  "_id": "gE8NleKdgnjP9tTV",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.365",
+    "systemId": "vagabond",
+    "systemVersion": "5.30.4",
+    "lastModifiedBy": "13p65OEadZSZVLRk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "createdTime": 1784418122874,
+    "modifiedTime": 1784418122874
+  },
+  "_key": "!folders!gE8NleKdgnjP9tTV"
+}
