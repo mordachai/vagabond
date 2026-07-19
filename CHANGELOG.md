@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.31.3
+- Added 80 Trinket items to Gear compendium
+- Fixes os several translation inconsistencies
+- Removed stale duplicate of Tempo Spell after division in two (Tempo + / Tempo -)
+
 ## v5.30.3
 - Fix: hardcoded currency abbreviations 
 - Fix: hardcoded chat card titles 
