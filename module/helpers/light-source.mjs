@@ -215,6 +215,37 @@ export class LightSource {
   }
 
   /* --------------------------------------------------------------------- */
+  /*  One-time data fix (GM only)                                          */
+  /* --------------------------------------------------------------------- */
+
+  /**
+   * Clear the stale `macro.runAsGM: true` flag baked into light-source items
+   * that were placed before v5.32.1 (compendium fix). That flag relayed the
+   * whole Ignite flow — burn-mode dialog included — to the GM client instead
+   * of running on the clicking player's own client. Runs once per world,
+   * gated by the hidden `lightSourceRunAsGMFixed` setting.
+   */
+  static async migrateRunAsGM() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'lightSourceRunAsGMFixed')) return;
+
+    const candidates = [
+      ...game.items,
+      ...game.actors.flatMap((a) => Array.from(a.items)),
+      ...game.scenes.flatMap((s) => s.tokens.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => Array.from(t.actor.items))),
+    ];
+
+    for (const item of candidates) {
+      if (this.isLightItem(item) && item.system?.macro?.runAsGM) {
+        await item.update({ 'system.macro.runAsGM': false });
+      }
+    }
+
+    await game.settings.set('vagabond', 'lightSourceRunAsGMFixed', true);
+  }
+
+  /* --------------------------------------------------------------------- */
   /*  Real-time driver (GM only)                                           */
   /* --------------------------------------------------------------------- */
 

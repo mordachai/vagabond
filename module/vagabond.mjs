@@ -723,6 +723,19 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21e: One-time migration guard (hidden) — see LightSource.migrateRunAsGM().
+  // Older compendium torches/candles/lamps/lanterns shipped with macro.runAsGM:true,
+  // which relayed the entire Ignite flow (including the burn-mode dialog) to the GM
+  // client instead of the clicking player. Fixed at the source in v5.32.1+; this
+  // patches any already-placed world/actor items that still carry the stale flag.
+  game.settings.register('vagabond', 'lightSourceRunAsGMFixed', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 21b: Sequencer FX Config menu button
   game.settings.registerMenu('vagabond', 'sequencerFxConfigMenu', {
     name: 'VAGABOND.Settings.sequencerFxConfig.name',
@@ -1279,6 +1292,8 @@ Hooks.once('ready', function () {
   VagabondFXResolver.resolveAllConfigured();
   // Light-source realtime burn-down driver (GM-only writes; refresh-safe).
   LightSource.startDriver();
+  // One-time fix for items placed before the runAsGM compendium fix.
+  LightSource.migrateRunAsGM();
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).
