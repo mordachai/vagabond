@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.32.1
+- Fixes for lights item use not working for players
+
 ## v5.32.0
 - **Multi-Use Consumables:** alchemicals and other consumables can now have Max Uses (charges/doses) instead of just Quantity — a 3-charge potion or an oil that coats up to 5 ammo. Pips UI to track/spend charges on item sheet, inventory grid, and HUD.
 - **HUD tooltips:** new hover-tooltip system for the Character HUD with left/right-click hints.
