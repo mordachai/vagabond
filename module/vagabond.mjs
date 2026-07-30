@@ -1199,6 +1199,11 @@ Hooks.once('ready', function () {
     await CountdownDice.create(data);
   });
 
+  registerSocketAction('deleteCountdownDie', async ({ id }) => {
+    const dice = game.journal.get(id);
+    if (dice) await dice.delete();
+  });
+
   registerSocketAction('createProgressClock', async (data) => {
     await ProgressClock.create(data);
   });
@@ -1233,17 +1238,26 @@ Hooks.once('ready', function () {
   registerSocketAction('lightApply', async ({ tokenUuid, light }) => {
     const tdoc = await fromUuid(tokenUuid);
     if (!tdoc) return;
-    const update = { light };
+    const wanted = LightSource._sightForLight(light);
+    const update = {
+      light,
+      sight: { enabled: true, range: Math.max(tdoc.sight?.range ?? 0, wanted.range) },
+    };
     if (tdoc.getFlag('vagabond', 'prevLight') === undefined) {
       update['flags.vagabond.prevLight'] = foundry.utils.deepClone(tdoc.light?.toObject?.() ?? tdoc.light ?? {});
+      update['flags.vagabond.prevSight'] = foundry.utils.deepClone(tdoc.sight?.toObject?.() ?? tdoc.sight ?? {});
     }
     await tdoc.update(update);
   });
   registerSocketAction('lightDouse', async ({ tokenUuid }) => {
     const tdoc = await fromUuid(tokenUuid);
     if (!tdoc || tdoc.getFlag('vagabond', 'prevLight') === undefined) return;
-    await tdoc.update({ light: tdoc.getFlag('vagabond', 'prevLight') });
+    await tdoc.update({
+      light: tdoc.getFlag('vagabond', 'prevLight'),
+      sight: tdoc.getFlag('vagabond', 'prevSight') ?? tdoc.sight,
+    });
     await tdoc.unsetFlag('vagabond', 'prevLight');
+    if (tdoc.getFlag('vagabond', 'prevSight') !== undefined) await tdoc.unsetFlag('vagabond', 'prevSight');
   });
   registerSocketAction('lightSpawnClock', async (meta) => {
     await LightSource._createClockGM(meta);

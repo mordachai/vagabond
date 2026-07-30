@@ -166,7 +166,13 @@ export class OngoingPanel extends api.HandlebarsApplicationMixin(api.Application
         const actor = await fromUuid(actorUuid);
         if (!actor) return;
         const statusId = el.dataset.statusId;
-        actor.toggleStatusEffect(statusId, { active: false });
+        const canModifyActor = actor.isOwner || game.user.isGM;
+        if (canModifyActor) {
+          actor.toggleStatusEffect(statusId, { active: false });
+        } else {
+          const { emitSocket } = await import('../helpers/socket-helper.mjs');
+          emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: false });
+        }
         // Also delete any countdown dice linked to this actor + status so the
         // on-screen overlay element disappears immediately.
         const linkedDice = game.journal.filter(j => {
@@ -175,7 +181,14 @@ export class OngoingPanel extends api.HandlebarsApplicationMixin(api.Application
             && cd.linkedActorUuid === actor.uuid
             && cd.linkedStatusId === statusId;
         });
-        for (const die of linkedDice) die.delete();
+        for (const die of linkedDice) {
+          if (die.isOwner || game.user.isGM) {
+            die.delete();
+          } else {
+            const { emitSocket } = await import('../helpers/socket-helper.mjs');
+            emitSocket('deleteCountdownDie', { id: die.id });
+          }
+        }
       }, { signal });
     }
 
@@ -189,7 +202,13 @@ export class OngoingPanel extends api.HandlebarsApplicationMixin(api.Application
       el.addEventListener('contextmenu', async (e) => {
         e.preventDefault();
         const dice = game.journal.get(dieId);
-        if (dice) await dice.delete();
+        if (!dice) return;
+        if (dice.isOwner || game.user.isGM) {
+          await dice.delete();
+        } else {
+          const { emitSocket } = await import('../helpers/socket-helper.mjs');
+          emitSocket('deleteCountdownDie', { id: dice.id });
+        }
       }, { signal });
     }
 

@@ -638,7 +638,12 @@ export class CountdownDiceOverlay {
         // Remove DOM element immediately before async delete
         const diceId = dice.id;
         this.removeDice(diceId);
-        await dice.delete();
+        if (dice.isOwner || game.user.isGM) {
+          await dice.delete();
+        } else {
+          const { emitSocket } = await import('../helpers/socket-helper.mjs');
+          emitSocket('deleteCountdownDie', { id: diceId });
+        }
       }
       menu.remove();
     });

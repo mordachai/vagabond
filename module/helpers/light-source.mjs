@@ -361,16 +361,38 @@ export class LightSource {
   }
 
   /**
-   * Apply a light to a token, snapshotting the current light to `prevLight`
-   * (only if none is saved yet, so relighting before dousing keeps the true
-   * "off" state). Relays to the GM when the user does not own the token.
+   * A lit token must be able to *see* its own light — Token Vision masks
+   * anything outside a token's sight range regardless of illumination, and
+   * the GM canvas (unrestricted) is the only one that ever showed the glow.
+   * Sight range is bumped to at least the light's own radius so the owning
+   * player perceives it too; existing sight is only ever widened, never
+   * shrunk.
+   * @param {object} light
+   * @returns {{enabled: true, range: number}}
+   */
+  static _sightForLight(light) {
+    return { enabled: true, range: Math.max(light?.bright ?? 0, light?.dim ?? 0) };
+  }
+
+  /**
+   * Apply a light to a token, snapshotting the current light+sight to
+   * `prevLight`/`prevSight` (only if none is saved yet, so relighting before
+   * dousing keeps the true "off" state). Relays to the GM when the user does
+   * not own the token.
    */
   static async _applyLight(tdoc, light) {
     if (tdoc.isOwner) {
-      const update = { light };
+      const wanted = this._sightForLight(light);
+      const update = {
+        light,
+        sight: { enabled: true, range: Math.max(tdoc.sight?.range ?? 0, wanted.range) },
+      };
       if (tdoc.getFlag('vagabond', 'prevLight') === undefined) {
         update['flags.vagabond.prevLight'] = foundry.utils.deepClone(
           tdoc.light?.toObject?.() ?? tdoc.light ?? {}
+        );
+        update['flags.vagabond.prevSight'] = foundry.utils.deepClone(
+          tdoc.sight?.toObject?.() ?? tdoc.sight ?? {}
         );
       }
       await tdoc.update(update);
@@ -380,12 +402,16 @@ export class LightSource {
     }
   }
 
-  /** Restore a token's `prevLight` and clear the flag. Relays to the GM if needed. No-op when unset. */
+  /** Restore a token's `prevLight`/`prevSight` and clear the flags. Relays to the GM if needed. No-op when unset. */
   static async _restoreLight(tdoc) {
     if (tdoc.getFlag('vagabond', 'prevLight') === undefined) return;
     if (tdoc.isOwner) {
-      await tdoc.update({ light: tdoc.getFlag('vagabond', 'prevLight') });
+      await tdoc.update({
+        light: tdoc.getFlag('vagabond', 'prevLight'),
+        sight: tdoc.getFlag('vagabond', 'prevSight') ?? tdoc.sight,
+      });
       await tdoc.unsetFlag('vagabond', 'prevLight');
+      if (tdoc.getFlag('vagabond', 'prevSight') !== undefined) await tdoc.unsetFlag('vagabond', 'prevSight');
     } else {
       const { emitSocket } = await import('./socket-helper.mjs');
       emitSocket('lightDouse', { tokenUuid: tdoc.uuid });

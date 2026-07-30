@@ -234,7 +234,13 @@ export class TokenStatusPanel {
             icon: 'fas fa-times',
             enabled: true,
             action: async () => {
-              await effect.delete();
+              if (actor.isOwner || game.user.isGM) {
+                await effect.delete();
+              } else {
+                const removeStatusId = effect.statuses?.first() || effect.flags?.core?.statusId;
+                const { emitSocket } = await import('../helpers/socket-helper.mjs');
+                emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: removeStatusId, active: false });
+              }
             }
           }
         ];

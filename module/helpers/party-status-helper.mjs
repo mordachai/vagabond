@@ -165,7 +165,12 @@ export class PartyStatusHelper {
       });
       return;
     }
-    await actor.toggleStatusEffect(def.id, { active: !isActive });
+    if (actor.isOwner || game.user.isGM) {
+      await actor.toggleStatusEffect(def.id, { active: !isActive });
+    } else {
+      const { emitSocket } = await import('./socket-helper.mjs');
+      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: def.id, active: !isActive });
+    }
   }
 
   static _immunityHtml(actor, def, label) {

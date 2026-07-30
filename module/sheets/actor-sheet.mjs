@@ -2041,7 +2041,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             icon: 'fas fa-times',
             enabled: true,
             action: async () => {
-              await effect.delete();
+              if (this.actor.isOwner || game.user.isGM) {
+                await effect.delete();
+              } else {
+                const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
+                const { emitSocket } = await import('../helpers/socket-helper.mjs');
+                emitSocket('applyStatus', { actorUuid: this.actor.uuid, statusId, active: false });
+              }
             }
           }
         ];
