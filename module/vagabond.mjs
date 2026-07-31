@@ -384,9 +384,27 @@ function registerGameSettings() {
     name: 'VAGABOND.Settings.imbueUpfrontMana.name',
     hint: 'VAGABOND.Settings.imbueUpfrontMana.hint',
     scope: 'world',
-    config: true,
+    config: false, // surfaced in the Spell Settings menu
     type: Boolean,
     default: false,
+    requiresReload: false,
+  });
+
+  // Mana on a failed cast: whether a caster still pays (in full or half) when
+  // the casting check fails. Imbue's weapon attack roll IS its cast check, so
+  // a miss follows the same rule — see VagabondImbueHelper.resolveMissedCast.
+  game.settings.register('vagabond', 'spellManaOnCastFail', {
+    name: 'VAGABOND.Settings.spellManaOnCastFail.name',
+    hint: 'VAGABOND.Settings.spellManaOnCastFail.hint',
+    scope: 'world',
+    config: false, // surfaced in the Spell Settings menu
+    type: String,
+    choices: {
+      successOnly: 'VAGABOND.Settings.spellManaOnCastFail.successOnly',
+      fullOnFail: 'VAGABOND.Settings.spellManaOnCastFail.fullOnFail',
+      halfOnFail: 'VAGABOND.Settings.spellManaOnCastFail.halfOnFail',
+    },
+    default: 'fullOnFail',
     requiresReload: false,
   });
 

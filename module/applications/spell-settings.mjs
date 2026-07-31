@@ -47,6 +47,7 @@ export class SpellSettings extends api.HandlebarsApplicationMixin(api.Applicatio
     const highlightMode = g('regionHighlightMode');
     const borderMode = g('regionBorderMode');
     const borderModeUser = g('regionBorderModeUser');
+    const manaOnCastFail = g('spellManaOnCastFail');
 
     return {
       isGM: game.user.isGM,
@@ -66,6 +67,14 @@ export class SpellSettings extends api.HandlebarsApplicationMixin(api.Applicatio
       ],
       regionTextureAlphaUseGM: g('regionTextureAlphaUseGM'),
       regionTextureAlphaUser: g('regionTextureAlphaUser'),
+
+      // ── World (GM only): Casting ─────────────────────────────────────────
+      imbueUpfrontMana: g('imbueUpfrontMana'),
+      manaOnCastFailModes: [
+        { value: 'successOnly', label: L('VAGABOND.Settings.spellManaOnCastFail.successOnly'), selected: manaOnCastFail === 'successOnly' },
+        { value: 'fullOnFail', label: L('VAGABOND.Settings.spellManaOnCastFail.fullOnFail'), selected: manaOnCastFail === 'fullOnFail' },
+        { value: 'halfOnFail', label: L('VAGABOND.Settings.spellManaOnCastFail.halfOnFail'), selected: manaOnCastFail === 'halfOnFail' }
+      ],
 
       // ── World (GM only): Spell area shapes ─────────────────────────────────
       highlightModes: [
@@ -123,6 +132,8 @@ export class SpellSettings extends api.HandlebarsApplicationMixin(api.Applicatio
   static async #applyWorld(data) {
     const set = (k, v) => game.settings.set('vagabond', k, v);
     const def = SpellSettings.#def;
+    await set('imbueUpfrontMana', !!data.imbueUpfrontMana);
+    await set('spellManaOnCastFail', data.spellManaOnCastFail || def('spellManaOnCastFail'));
     await set('regionHighlightMode', data.regionHighlightMode || def('regionHighlightMode'));
     await set('regionUseTextures', !!data.regionUseTextures);
     await set('regionBorderMode', data.regionBorderMode || def('regionBorderMode'));

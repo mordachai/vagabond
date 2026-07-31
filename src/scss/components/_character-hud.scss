@@ -14,10 +14,6 @@
   --vh-portrait-h: 100px;
   --vh-float-w: 84px; // right gutter reserved for weapon circles + shield
   --vh-status-w: 18px; // left gutter + floating status icon size
-  --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
-  --vh-outline-3: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
-
 
   // Independent placement for each floating piece (anchored to .vh-body, top/right).
   // Tune freely — each circle + the armor shield positions itself.

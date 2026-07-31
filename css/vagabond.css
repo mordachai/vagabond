@@ -95,6 +95,9 @@
   --vagabond-inventory-blend-hover: multiply;
   --vagabond-c-input-bg: rgba(255, 255, 255, 0.8);
   --vagabond-c-surface: rgba(255, 255, 255, 0.35);
+  --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  --vh-outline-3: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
 }
 
 .theme-dark,
@@ -3611,9 +3614,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-portrait-h: 100px;
   --vh-float-w: 84px;
   --vh-status-w: 18px;
-  --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
-  --vh-outline-3: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
   --vh-wpn0-top: 0px;
   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;
@@ -17500,6 +17500,14 @@ details[open] .vagabond .npc-immunity-toggle i {
   width: 100%;
   opacity: 0.9;
 }
+.vagabond input.party-type {
+  color: var(--vagabond-c-chat-yellow) !important;
+  text-shadow: var(--vh-outline-2);
+}
+.vagabond input.party-type:focus {
+  color: var(--vagabond-c-white) !important;
+  text-shadow: none;
+}
 .vagabond .party-speeds {
   position: relative;
   bottom: 0;
@@ -20365,3 +20373,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

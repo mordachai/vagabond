@@ -114,6 +114,16 @@
   opacity: 0.9;
 }
 
+input.party-type {
+  color: $c-yellow !important;
+  text-shadow: var(--vh-outline-2);
+
+  &:focus {
+    color: $c-white !important;
+    text-shadow: none;
+  }
+}
+
 .party-speeds {
     position: relative;
     bottom: 0;

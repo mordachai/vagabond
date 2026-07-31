@@ -306,7 +306,7 @@
       },
       "Imbue": {
         "label": "Imbuir",
-        "description":"Mira em uma Arma equipada por um Ser disposto dentro de Longe, que pode então entregar a Magia como se fosse por Toque se você gastar 1 Mana para isso quando o ataque acertar. O Teste de Ataque é usado como Teste de Conjuração.",
+        "description":"Tem como Alvo uma Arma equipada por um Ser disposto dentro de Longe, que pode então lançar a Magia como se fosse por Toque se você gastar 1 Mana para isso quando o ataque acertar. O Teste de Ataque é usado como Teste de Conjuração.",
         "hint": "+2 por Alvo adicional"
       },
       "Glyph": {
@@ -434,6 +434,13 @@
       "imbueUpfrontMana": {
         "name": "Custo de Mana Antecipado para Entrega por Imbuir",
         "hint": "Marque esta caixa se quiser que conjuradores paguem o custo total de Mana de Dano/Efeito antecipadamente ao Imbuir uma arma, igual a todos os outros tipos de entrega. Desmarcado (padrão): apenas o custo de Entrega é pago ao Imbuir — a Mana de Dano e Efeito é paga depois, quando a arma imbuída acerta seu golpe."
+      },
+      "spellManaOnCastFail": {
+        "name": "Mana em Conjuração Malsucedida",
+        "hint": "O que um conjurador paga quando uma checagem de conjuração falha. Para Imbuir, a rolagem de ataque da arma é a checagem de conjuração, então um erro segue esta mesma regra (cobrado do conjurador, não de quem empunha a arma).",
+        "successOnly": "Gastar mana apenas em Conjuração bem-sucedida",
+        "fullOnFail": "Gastar mana total em Conjuração malsucedida",
+        "halfOnFail": "Gastar metade da mana (arredondado para cima) em Conjuração malsucedida"
       },
       "defaultClockPosition": {
         "name": "Posição Padrão do Relógio",
@@ -963,9 +970,9 @@
           "IsImmune": "{name} é imune a {status}."
         },
         "CompactView": {
-          "Open": "Abrir Visualização Compacta",
-          "OpenSheet": "Abrir Ficha do Grupo",
-          "Remove": "Remover Visualizador"
+          "Open": "Visualização Compacta",
+          "OpenSheet": "Abrir Ficha Completa",
+          "Remove": "Fechar"
         },
         "TokenHUD": {
           "GatherTooltip": "Reunir Grupo — ocultar todos os tokens dos membros",
@@ -2147,6 +2154,7 @@
       "Section": {
         "CastDialog": "Diálogo de Conjuração",
         "YourDisplay": "Sua Exibição de Área",
+        "Casting": "Conjuração",
         "AreaShapes": "Formas de Área de Magia",
         "Artwork": "Arte da Área",
         "PlayerDefaults": "Padrões de Jogador"

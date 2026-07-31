@@ -106,6 +106,41 @@ export class VagabondImbueHelper {
   }
 
   /**
+   * Called when an imbued weapon's attack MISSES — that attack roll is the
+   * spell's cast check, so a miss is a failed cast. Charges the caster
+   * (`payload.sourceActorUuid`, never the wielder) per the spellManaOnCastFail
+   * world setting, then clears the imbue (a failed cast still uses it up).
+   * Deferred-payment imbues never had Damage/Effect dice chosen, so both
+   * fullOnFail and halfOnFail charge just the flat trigger fee.
+   * @param {Item} weapon
+   */
+  static async resolveMissedCast(weapon) {
+    const payload = weapon.system.imbuedSpell;
+    if (!payload?.active) return;
+
+    const failMode = game.settings.get('vagabond', 'spellManaOnCastFail');
+    if (failMode !== 'successOnly') {
+      const sourceActor = await fromUuid(payload.sourceActorUuid);
+      if (sourceActor) {
+        const IMBUE_TRIGGER_FEE = 1;
+        const newMana = Math.max(0, sourceActor.system.mana.current - IMBUE_TRIGGER_FEE);
+        if (sourceActor.isOwner || game.user.isGM) {
+          await sourceActor.update({ 'system.mana.current': newMana });
+        } else {
+          const { emitSocket } = await import('./socket-helper.mjs');
+          emitSocket('updateActorField', {
+            actorUuid: sourceActor.uuid,
+            field: 'system.mana.current',
+            value: newMana,
+          });
+        }
+      }
+    }
+
+    await this.clearImbue(weapon);
+  }
+
+  /**
    * Delivery-time cost for deferred-payment Imbues: flat trigger fee + per-die
    * cost (first die free) + a flat surcharge for including the Effect, only
    * if at least one Damage die is spent. Mirrors SpellCastDialog.calculateCosts().

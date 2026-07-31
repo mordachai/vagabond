@@ -717,13 +717,23 @@ export class SpellHandler {
       if (!placedGlyphRegion) return;
     }
 
-    // Deduct mana on success (whether from successful roll or bypass)
-    if (isSuccess) {
-      const newMana = this.actor.system.mana.current - costs.totalCost;
+    // Deduct mana. Success (or a bypass cast, which is always "success") always
+    // pays full cost; a failed casting check pays per the spellManaOnCastFail
+    // world setting (0 / full / half-round-up).
+    const failMode = game.settings.get('vagabond', 'spellManaOnCastFail');
+    let manaCost = costs.totalCost;
+    if (!isSuccess) {
+      manaCost = failMode === 'fullOnFail' ? costs.totalCost
+        : failMode === 'halfOnFail' ? Math.ceil(costs.totalCost / 2)
+        : 0; // successOnly
+    }
+    if (manaCost > 0) {
+      const newMana = this.actor.system.mana.current - manaCost;
       await this.actor.update({ 'system.mana.current': newMana });
     }
-    // Failed - no mana cost (chat card will show failure)
-    // Note: Bypass spells always succeed, so mana is always deducted
+    // Real amount charged (may differ from costs.totalCost on a partial-fail
+    // spend) — threaded into the chat card / macro scope below.
+    costs.manaSpent = manaCost;
 
     // Create chat message
     await this._createSpellChatCard(

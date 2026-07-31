@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.33.0
+- Translation fixes for pt-br language
+- Spell settings: Mana spending on failed Cast: Full, Half or None
+
 ## v5.32.1
 - Fixes for lights item use not working for players
 
@@ -10,7 +14,7 @@
 
 ## v5.31.3
 - Added 80 Trinket items to Gear compendium
-- Fixes os several translation inconsistencies
+- Fixes on several translation inconsistencies
 - Removed stale duplicate of Tempo Spell after division in two (Tempo + / Tempo -)
 
 ## v5.30.3

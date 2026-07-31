@@ -832,9 +832,9 @@ export class VagabondChatCard {
               imbueSection = VagabondImbueHelper.createDeliveryButton(weapon, attackResult, targetsAtRollTime);
           } else {
               // The attack attempt IS the spell's cast attempt — a miss fizzles
-              // it regardless of Duration/turn timing (no re-imbue needed to try
-              // again unless the payload is actually spent by a miss or a hit-delivery).
-              await VagabondImbueHelper.clearImbue(weapon);
+              // it (mana per spellManaOnCastFail, charged to the caster) and
+              // clears the imbue, same as a resolved hit-delivery.
+              await VagabondImbueHelper.resolveMissedCast(weapon);
           }
       }
 
@@ -906,9 +906,10 @@ export class VagabondChatCard {
           tags.push({ label: deliveryText, cssClass: 'tag-delivery' });
       }
 
-      // 4. Mana Cost Tag
+      // 4. Mana Cost Tag — actual amount charged (may be less than the spell's
+      // built cost on a partial-fail spend under spellManaOnCastFail)
       tags.push({
-          label: `${costs.totalCost}`,
+          label: `${costs.manaSpent ?? costs.totalCost}`,
           icon: 'fas fa-star-christmas',
           cssClass: 'tag-mana'
       });
@@ -965,7 +966,7 @@ export class VagabondChatCard {
           // Expose this cast's chosen dice + total mana to spell macros (scope.spellDamageDice / scope.manaSpent)
           macroExtraScope: {
             spellDamageDice: spellState.damageDice ?? 0,
-            manaSpent: costs?.totalCost ?? 0,
+            manaSpent: costs?.manaSpent ?? costs?.totalCost ?? 0,
             manaOverrideDelta: manaOverrideDelta ?? 0,
           }
       });

@@ -63,6 +63,27 @@
     </fieldset>
 
     {{#if isGM}}
+    {{!-- ── World (GM only): Casting ──────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.SpellSettings.Section.Casting'}}</legend>
+
+      <div class="form-group">
+        <label for="spellManaOnCastFail">{{localize 'VAGABOND.Settings.spellManaOnCastFail.name'}}</label>
+        <select name="spellManaOnCastFail" id="spellManaOnCastFail">
+          {{#each manaOnCastFailModes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        <p class="hint">{{localize 'VAGABOND.Settings.spellManaOnCastFail.hint'}}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="imbueUpfrontMana">
+          <input type="checkbox" name="imbueUpfrontMana" id="imbueUpfrontMana" {{checked imbueUpfrontMana}}>
+          {{localize 'VAGABOND.Settings.imbueUpfrontMana.name'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.imbueUpfrontMana.hint'}}</p>
+      </div>
+    </fieldset>
+
     {{!-- ── World (GM only): Spell area shapes ─────────────────────────────── --}}
     <fieldset>
       <legend>{{localize 'VAGABOND.SpellSettings.Section.AreaShapes'}}</legend>

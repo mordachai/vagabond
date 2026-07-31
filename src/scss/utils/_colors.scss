@@ -45,6 +45,11 @@
   --vagabond-inventory-blend-hover: multiply;
   --vagabond-c-input-bg: rgba(255, 255, 255, 0.8);
   --vagabond-c-surface: rgba(255, 255, 255, 0.35);
+
+  --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  --vh-outline-3: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
+
 }
 
 // Target both application and interface themes (Foundry v13)

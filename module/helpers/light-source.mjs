@@ -229,16 +229,24 @@ export class LightSource {
     if (game.user !== game.users.activeGM) return;
     if (game.settings.get('vagabond', 'lightSourceRunAsGMFixed')) return;
 
+    const safeItems = (doc) => {
+      try { return Array.from(doc?.items ?? []); } catch { return []; }
+    };
+
     const candidates = [
       ...game.items,
-      ...game.actors.flatMap((a) => Array.from(a.items)),
-      ...game.scenes.flatMap((s) => s.tokens.filter((t) => !t.actorLink && t.actor)
-        .flatMap((t) => Array.from(t.actor.items))),
+      ...game.actors.contents.flatMap(safeItems),
+      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => safeItems(t.actor))),
     ];
 
     for (const item of candidates) {
-      if (this.isLightItem(item) && item.system?.macro?.runAsGM) {
-        await item.update({ 'system.macro.runAsGM': false });
+      try {
+        if (this.isLightItem(item) && item.system?.macro?.runAsGM) {
+          await item.update({ 'system.macro.runAsGM': false });
+        }
+      } catch (err) {
+        console.warn(`vagabond | migrateRunAsGM: skipped item ${item?.uuid ?? '(unknown)'}`, err);
       }
     }
 
