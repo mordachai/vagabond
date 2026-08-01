@@ -43,6 +43,7 @@ import { GlyphOverlay } from './ui/glyph-overlay.mjs';
 import { SpellSettings } from './applications/spell-settings.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
+import { CombatCarousel } from './applications/combat-carousel.mjs';
 import { EncounterSettings } from './applications/encounter-settings.mjs';
 import { SequencerFxConfig } from './applications/sequencer-fx-config.mjs';
 import { DsnDamageAppearanceConfig } from './applications/dsn-damage-appearance-config.mjs';
@@ -614,6 +615,26 @@ function registerGameSettings() {
     requiresReload: false
   });
 
+  // Setting 12c: Combat Carousel portrait size
+  game.settings.register('vagabond', 'combatCarouselPortraitSize', {
+    name: 'VAGABOND.EncounterSettings.CarouselPortraitSize',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'medium',
+    requiresReload: false
+  });
+
+  // Setting 12d: Combat Carousel — reveal other factions' HP/Fatigue to players
+  game.settings.register('vagabond', 'combatCarouselRevealOtherFactionStats', {
+    name: 'VAGABOND.EncounterSettings.Carousel.RevealOtherFactionStats.Name',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false
+  });
+
   // Setting 13: Encounter Settings Button (Menu)
   game.settings.registerMenu('vagabond', 'encounterSettingsMenu', {
     name: 'VAGABOND.Settings.encounterSettings.name',
@@ -859,6 +880,8 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/apps/character-hud.hbs',
     // NPC HUD
     'systems/vagabond/templates/apps/npc-hud.hbs',
+    // Combat Carousel
+    'systems/vagabond/templates/apps/combat-carousel.hbs',
     // Spell cast dialog
     'systems/vagabond/templates/apps/spell-cast-dialog.hbs',
     // Shared partials
@@ -925,6 +948,7 @@ globalThis.vagabond = {
     OngoingPanel,
     VagabondCharacterHud,
     VagabondNPCHud,
+    CombatCarousel,
   },
   ui: {
     ProgressClockOverlay,
@@ -1226,6 +1250,15 @@ Hooks.once('ready', function () {
     await ProgressClock.create(data);
   });
 
+  // Combat Carousel — players may drag-reorder cards within their own (friendly)
+  // faction group; Combatant writes route through the GM since a player rarely
+  // owns every actor in that group.
+  registerSocketAction('reorderCombatants', async ({ combatId, updates }) => {
+    const combat = game.combats.get(combatId);
+    if (!combat) return;
+    await combat.updateEmbeddedDocuments('Combatant', updates);
+  });
+
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;
@@ -1515,7 +1548,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         title: game.i18n.localize('VAGABOND.ProgressClock.SceneControls.Create'),
         icon: 'fas fa-chart-pie',
         button: true,
-        onClick: async () => {
+        onChange: async () => {
           try {
             const { ProgressClockConfig } = globalThis.vagabond.applications;
             const dialog = new ProgressClockConfig(null);
@@ -1530,7 +1563,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         title: game.i18n.localize('VAGABOND.CountdownDice.SceneControls.Create'),
         icon: 'fas fa-dice-six',
         button: true,
-        onClick: async () => {
+        onChange: async () => {
           try {
             const { CountdownDiceConfig } = globalThis.vagabond.applications;
             const dialog = new CountdownDiceConfig(null);
@@ -1545,7 +1578,14 @@ Hooks.on('getSceneControlButtons', (controls) => {
         title:   game.i18n.localize('VAGABOND.OngoingPanel.SceneControl'),
         icon:    'fas fa-list-ul',
         button:  true,
-        onClick: () => Hooks.callAll('vagabond.toggleOngoingPanel'),
+        onChange: () => Hooks.callAll('vagabond.toggleOngoingPanel'),
+      },
+      combatCarousel: {
+        name:    'combatCarousel',
+        title:   game.i18n.localize('VAGABOND.Combat.Carousel.SceneControl'),
+        icon:    'fas fa-film',
+        button:  true,
+        onChange: () => Hooks.callAll('vagabond.toggleCombatCarousel'),
       },
       // Stateful toggle (default ON): when active, selecting a token auto-opens
       // its Character HUD and deselecting/switching closes it (follow-selection).
@@ -1576,7 +1616,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
       title:   game.i18n.localize('VAGABOND.Hud.OpenSceneControl'),
       icon:    'fa-solid fa-circle-user',
       button:  true,
-      onClick: () => {
+      onChange: () => {
         // Nothing selected → close every open PC HUD instead of opening one.
         const controlled = canvas.tokens?.controlled ?? [];
         if (!controlled.length) { VagabondCharacterHud.closeAll(); return; }
@@ -1601,7 +1641,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
       icon:    'fa-solid fa-dragon',
       button:  true,
       visible: game.user.isGM,
-      onClick: () => {
+      onChange: () => {
         // Nothing selected → close every open NPC HUD instead of opening one.
         const controlled = canvas.tokens?.controlled ?? [];
         if (!controlled.length) { VagabondNPCHud.closeAll(); return; }
@@ -1623,6 +1663,16 @@ Hooks.on('getSceneControlButtons', (controls) => {
 Hooks.on('vagabond.toggleOngoingPanel', () => {
   OngoingPanel.toggle();
 });
+
+Hooks.on('vagabond.toggleCombatCarousel', () => {
+  CombatCarousel.toggle();
+});
+
+// Auto show/hide: carousel appears the moment the viewed combat gets its
+// first combatant, disappears the moment it's emptied out — not manual-only.
+Hooks.on('createCombatant', (combatant) => CombatCarousel.syncAutoVisibility(combatant.parent ?? game.combat));
+Hooks.on('deleteCombatant', (combatant) => CombatCarousel.syncAutoVisibility(combatant.parent ?? game.combat));
+Hooks.on('deleteCombat', () => CombatCarousel.close());
 
 Hooks.on('vagabond.toggleCharacterHud', (actor = null) => {
   VagabondCharacterHud.toggle(actor);

@@ -50,6 +50,8 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
       factionHostileColor: game.settings.get('vagabond', 'factionHostileColor'),
       factionSecret: game.settings.get('vagabond', 'factionSecret'),
       factionSecretColor: game.settings.get('vagabond', 'factionSecretColor'),
+      combatCarouselPortraitSize: game.settings.get('vagabond', 'combatCarouselPortraitSize'),
+      combatCarouselRevealOtherFactionStats: game.settings.get('vagabond', 'combatCarouselRevealOtherFactionStats'),
     };
   }
 
@@ -79,6 +81,12 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
     await game.settings.set('vagabond', 'factionHostileColor', data.factionHostileColor || '#df7f7f');
     await game.settings.set('vagabond', 'factionSecretColor', data.factionSecretColor || '#bf7fdf');
 
+    // Combat Carousel
+    const validSizes = ['small', 'medium', 'large'];
+    await game.settings.set('vagabond', 'combatCarouselPortraitSize',
+      validSizes.includes(data.combatCarouselPortraitSize) ? data.combatCarouselPortraitSize : 'medium');
+    await game.settings.set('vagabond', 'combatCarouselRevealOtherFactionStats', !!data.combatCarouselRevealOtherFactionStats);
+
     // Update existing combatants in active combats with new activation point settings
     if (game.combats && game.combats.size > 0) {
       const newMax = !!data.useActivationPoints ? (parseInt(data.defaultActivationPoints) || 2) : 1;
@@ -104,5 +112,8 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
     if (ui.combat) {
       ui.combat.render();
     }
+
+    // Re-render the carousel overlay if it's open (picks up faction/size changes live)
+    globalThis.vagabond.applications.CombatCarousel.refresh();
   }
 }

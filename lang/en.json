@@ -2130,6 +2130,19 @@
         "PingCombatant": "Ping Combatant",
         "DetectRoll": "Roll Detect Skill",
         "InitiativeRoll": "Roll Initiative"
+      },
+      "Carousel": {
+        "SceneControl": "Toggle Combat Carousel",
+        "NoEncounter": "No Active Encounter",
+        "StartEncounter": "Start Encounter",
+        "EndEncounter": "End Encounter",
+        "ClearMoveHistory": "Clear Movement History",
+        "MoveHistoryCleared": "Movement history cleared for all combatants.",
+        "Config": "Configure Combat",
+        "PreviousRound": "Previous Round",
+        "PreviousTurn": "Previous Turn",
+        "NextTurn": "Next Turn",
+        "NextRound": "Next Round"
       }
     },
     "StatusSettings": {
@@ -2239,6 +2252,20 @@
       "NPCInitiativeFormula": {
         "Name": "Initiative Formula (NPCs)",
         "Hint": "Custom formula for rolling initiative for NPCs. Only used when initiative rolls are enabled (not hidden). Use @ to reference actor data (e.g., @speed). Use ceil() for rounding up."
+      },
+      "Carousel": {
+        "Title": "Combat Carousel",
+        "PortraitSize": {
+          "Name": "Portrait Size",
+          "Small": "Small (80px)",
+          "Medium": "Medium (100px)",
+          "Large": "Large (120px)",
+          "Hint": "Size of the combatant cards in the Combat Carousel overlay."
+        },
+        "RevealOtherFactionStats": {
+          "Name": "Reveal Other Factions' HP/Fatigue",
+          "Hint": "If enabled, players can see HP and Fatigue for combatants outside their own faction group. Default: hidden."
+        }
       },
       "Save": "Save Settings",
       "Cancel": "Cancel",

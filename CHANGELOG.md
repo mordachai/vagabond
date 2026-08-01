@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.34.0
+-Added Combat Carousel like tracker for encounters
+
 ## v5.33.0
 - Translation fixes for pt-br language
 - Spell settings: Mana spending on failed Cast: Full, Half or None

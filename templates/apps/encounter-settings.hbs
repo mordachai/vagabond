@@ -73,6 +73,24 @@
         </div>
       </div>
     </fieldset>
+
+    <fieldset>
+      <legend>{{localize 'VAGABOND.EncounterSettings.Carousel.Title'}}</legend>
+      <div class="form-group">
+        <label for="combatCarouselPortraitSize">{{localize 'VAGABOND.EncounterSettings.Carousel.PortraitSize.Name'}}</label>
+        <select name="combatCarouselPortraitSize" id="combatCarouselPortraitSize">
+          <option value="small" {{#if (eq combatCarouselPortraitSize "small")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.PortraitSize.Small'}}</option>
+          <option value="medium" {{#if (eq combatCarouselPortraitSize "medium")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.PortraitSize.Medium'}}</option>
+          <option value="large" {{#if (eq combatCarouselPortraitSize "large")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.PortraitSize.Large'}}</option>
+        </select>
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.Carousel.PortraitSize.Hint'}}</p>
+      </div>
+      <div class="form-group">
+        <label for="combatCarouselRevealOtherFactionStats">{{localize 'VAGABOND.EncounterSettings.Carousel.RevealOtherFactionStats.Name'}}</label>
+        <input type="checkbox" name="combatCarouselRevealOtherFactionStats" id="combatCarouselRevealOtherFactionStats" {{#if combatCarouselRevealOtherFactionStats}}checked{{/if}}>
+        <p class="hint">{{localize 'VAGABOND.EncounterSettings.Carousel.RevealOtherFactionStats.Hint'}}</p>
+      </div>
+    </fieldset>
   </section>
 
   <footer class="form-footer flexrow">

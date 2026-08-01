@@ -1,0 +1,135 @@
+<div class="vcc-part">
+
+    {{#if isGM}}
+    <div class="vcc-controls vcc-controls-left">
+        <div class="vcc-ctrl-btn vcc-round-num" title="{{localize 'COMBAT.Round'}}">{{round}}</div>
+        <button type="button" class="vcc-ctrl-btn" data-action="startStopEncounter"
+                aria-label="{{#if started}}{{localize 'VAGABOND.Combat.Carousel.EndEncounter'}}{{else}}{{localize 'VAGABOND.Combat.Carousel.StartEncounter'}}{{/if}}"
+                title="{{#if started}}{{localize 'VAGABOND.Combat.Carousel.EndEncounter'}}{{else}}{{localize 'VAGABOND.Combat.Carousel.StartEncounter'}}{{/if}}">
+            <i class="fas {{#if started}}fa-stop{{else}}fa-play{{/if}}"></i>
+        </button>
+        <button type="button" class="vcc-ctrl-btn" data-action="clearMoveHistory"
+                aria-label="{{localize 'VAGABOND.Combat.Carousel.ClearMoveHistory'}}"
+                title="{{localize 'VAGABOND.Combat.Carousel.ClearMoveHistory'}}">
+            <i class="fas fa-shoe-prints"></i>
+        </button>
+        <button type="button" class="vcc-ctrl-btn" data-action="openConfig"
+                aria-label="{{localize 'VAGABOND.Combat.Carousel.Config'}}"
+                title="{{localize 'VAGABOND.Combat.Carousel.Config'}}">
+            <i class="fas fa-gear"></i>
+        </button>
+    </div>
+    {{/if}}
+
+    <div class="vcc-strip">
+        {{#if hasCombat}}
+            {{#each factions as |faction key|}}
+                {{#if faction.turns.length}}
+                <div class="vcc-faction-group">
+                    <div class="vcc-faction-divider" data-faction="{{key}}" style="--faction-color: {{faction.color}};">
+                        <span class="vcc-faction-divider-label">{{localize faction.label}}</span>
+                    </div>
+                    <div class="vcc-cards">
+                        {{#each faction.turns as |turn|}}
+                        <div class="vcc-card {{#if turn.active}}is-active{{/if}} {{#if turn.isSpent}}is-spent{{/if}} {{#if turn.isFlipped}}is-flipped{{/if}} {{#if turn.isDefeated}}is-defeated{{/if}}"
+                             data-combatant-id="{{turn.id}}" data-faction="{{key}}" style="--faction-color: {{turn.factionColor}};">
+                            <div class="vcc-card-inner">
+
+                                <div class="vcc-card-face vcc-card-front">
+                                    <img class="vcc-portrait" src="{{turn.img}}" alt="{{turn.name}}" draggable="false"/>
+                                    {{#if turn.isDefeated}}
+                                    <img class="vcc-dead-skull" src="/icons/svg/skull.svg" alt="" draggable="false"/>
+                                    <img class="vcc-dead-bleed" src="/icons/skills/wounds/injury-triple-slash-bleed.webp" alt="" draggable="false"/>
+                                    {{/if}}
+                                    <div class="vcc-name-reveal">{{turn.name}}</div>
+                                    {{#if turn.effects.length}}
+                                    <div class="vcc-effects-col">
+                                        {{#each turn.effects}}
+                                        <img class="vcc-status-icon" src="{{this.icon}}" alt="{{this.name}}" title="{{this.name}}"
+                                             data-action="statusClick" data-effect-id="{{this.id}}" draggable="false"/>
+                                        {{/each}}
+                                    </div>
+                                    {{/if}}
+                                    {{#if turn.canSeeStats}}
+                                    <div class="vcc-bars">
+                                        <div class="vcc-bar vcc-bar-hp" title="{{localize 'VAGABOND.Item.VehiclePart.HP'}}">
+                                            <div class="vcc-bar-fill" style="width: {{turn.hpPercent}}%;"></div>
+                                        </div>
+                                        <div class="vcc-bar vcc-bar-fatigue" title="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}}">
+                                            <div class="vcc-bar-fill" style="width: {{turn.fatiguePercent}}%;"></div>
+                                        </div>
+                                    </div>
+                                    {{/if}}
+                                </div>
+
+                                <div class="vcc-card-face vcc-card-back">
+                                    <div class="vcc-back-stats">
+                                        {{#if turn.canSeeStats}}
+                                        <div class="vcc-back-stat vcc-back-hp" data-tooltip="HP">
+                                            <i class="fas fa-heart"></i>
+                                            <span>{{turn.back.hp.value}}/{{turn.back.hp.max}}</span>
+                                        </div>
+                                        <div class="vcc-back-stat vcc-back-fatigue" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}}">
+                                            <i class="fas fa-skull"></i>
+                                            <span>{{turn.back.fatigue.value}}/{{turn.back.fatigue.max}}</span>
+                                        </div>
+                                        {{/if}}
+                                        {{#if turn.back.hasMana}}
+                                        <div class="vcc-back-stat{{#unless turn.back.mana.isSpellcaster}} non-caster{{/unless}}{{#if turn.back.mana.isFocusing}} is-focusing{{/if}}" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Mana'}}">
+                                            <i class="fas fa-star-christmas"></i>
+                                            <span>{{turn.back.mana.current}}/{{turn.back.mana.max}}</span>
+                                        </div>
+                                        {{/if}}
+                                        <div class="vcc-back-row">
+                                            <div class="vcc-back-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Speed'}}">
+                                                <span class="vcc-back-speed-icon">S</span>
+                                                <span>{{turn.back.speed}}</span>
+                                            </div>
+                                            {{#if turn.back.hasLuck}}
+                                            <div class="vcc-back-stat vcc-back-luck" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Luck'}}">
+                                                <i class="fas fa-clover"></i>
+                                                <span>{{turn.back.luck}}</span>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/if}}
+            {{/each}}
+        {{else}}
+            <div class="vcc-no-encounter">{{localize 'VAGABOND.Combat.Carousel.NoEncounter'}}</div>
+        {{/if}}
+    </div>
+
+    {{#if isGM}}
+    <div class="vcc-controls vcc-controls-right">
+        <button type="button" class="vcc-ctrl-btn" data-action="previousRound"
+                aria-label="{{localize 'VAGABOND.Combat.Carousel.PreviousRound'}}"
+                title="{{localize 'VAGABOND.Combat.Carousel.PreviousRound'}}">
+            <i class="fas fa-backward-step"></i>
+        </button>
+        <button type="button" class="vcc-ctrl-btn" data-action="previousTurn"
+                aria-label="{{localize 'VAGABOND.Combat.Carousel.PreviousTurn'}}"
+                title="{{localize 'VAGABOND.Combat.Carousel.PreviousTurn'}}">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button type="button" class="vcc-ctrl-btn" data-action="nextTurn"
+                aria-label="{{localize 'VAGABOND.Combat.Carousel.NextTurn'}}"
+                title="{{localize 'VAGABOND.Combat.Carousel.NextTurn'}}">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <button type="button" class="vcc-ctrl-btn" data-action="nextRound"
+                aria-label="{{localize 'VAGABOND.Combat.Carousel.NextRound'}}"
+                title="{{localize 'VAGABOND.Combat.Carousel.NextRound'}}">
+            <i class="fas fa-forward-step"></i>
+        </button>
+    </div>
+    {{/if}}
+
+</div>

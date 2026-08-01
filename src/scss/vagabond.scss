@@ -37,6 +37,9 @@
 /* NPC HUD - layers on the shared `.vbd-hud` base; also renders outside sheets */
 @import 'components/npc-hud';
 
+/* Combat Carousel - floating overlay, companion to the sidebar tracker; renders outside sheets */
+@import 'components/combat-carousel';
+
 @import 'apps/character-builder';
 @import 'apps/combat-tracker';
 @import 'apps/encounter-settings';

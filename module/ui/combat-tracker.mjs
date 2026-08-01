@@ -4,6 +4,7 @@
  */
 import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { CombatTrackerHelper } from '../helpers/combat-tracker-helper.mjs';
 
 export class VagabondCombatTracker {
 
@@ -22,87 +23,17 @@ export class VagabondCombatTracker {
     context.hideInitiativeRoll = game.settings.get('vagabond', 'hideInitiativeRoll');
     context.useActivationPoints = game.settings.get('vagabond', 'useActivationPoints');
 
-    // Initialize Factions structure
-    context.factions = {
-      friendly: { 
-        label: game.settings.get('vagabond', 'factionFriendly') || "VAGABOND.Combat.Factions.Friendly", 
-        color: game.settings.get('vagabond', 'factionFriendlyColor') || "#7fbf7f",
-        turns: [], 
-        css: "friendly" 
-      },
-      neutral: { 
-        label: game.settings.get('vagabond', 'factionNeutral') || "VAGABOND.Combat.Factions.Neutral", 
-        color: game.settings.get('vagabond', 'factionNeutralColor') || "#dfdf7f",
-        turns: [], 
-        css: "neutral" 
-      },
-      hostile: { 
-        label: game.settings.get('vagabond', 'factionHostile') || "VAGABOND.Combat.Factions.Hostile", 
-        color: game.settings.get('vagabond', 'factionHostileColor') || "#df7f7f",
-        turns: [], 
-        css: "hostile" 
-      },
-      secret: { 
-        label: game.settings.get('vagabond', 'factionSecret') || "VAGABOND.Combat.Factions.Secret", 
-        color: game.settings.get('vagabond', 'factionSecretColor') || "#bf7fdf",
-        turns: [], 
-        css: "secret" 
-      }
-    };
-
     // If turns haven't been prepared, we can't do faction grouping
     if (!context.turns || !Array.isArray(context.turns)) {
+      context.factions = CombatTrackerHelper.bucketByFaction(CombatTrackerHelper.getFactionOrder(this.viewed), []);
       return;
     }
 
-    // Process each turn and assign to factions
-    for (let turn of context.turns) {
-      const combatant = this.viewed.combatants.get(turn.id);
-      if (!combatant) continue;
-
-      const actor = combatant.actor;
-      if (actor) {
-        turn.hp = {
-          value: actor.system.health?.value || 0,
-          max: actor.system.health?.max || 0
-        };
-        // Calculate HP percentage for health bar
-        turn.hpPercent = turn.hp.max > 0 ? Math.round((turn.hp.value / turn.hp.max) * 100) : 0;
-        turn.fatigue = actor.system.fatigue || 0;
-        if (actor.system.mana) {
-          turn.mana = { current: actor.system.mana.current || 0 };
-          turn.isFocusing = (actor.system.focus?.current ?? 0) > 0;
-        }
-
-        // Gather temporary active effects only
-        turn.effects = actor.effects
-          .filter(e => !e.disabled && !e.isSuppressed && e.isTemporary)
-          .map(e => ({
-            id: e.id,
-            name: e.name,
-            icon: e.img || 'icons/svg/aura.svg' // Use 'img' instead of deprecated 'icon'
-          }));
-      }
-
-      // Populate activation data
-      const activations = combatant.getFlag('vagabond', 'activations') || { value: 0, max: 1 };
-      turn.activations = activations;
-      turn.isSpent = activations.value <= 0;
-
-      // Assign faction class based on disposition
-      const disposition = combatant.token?.disposition;
-      let factionKey = 'neutral';
-      if (disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) factionKey = 'friendly';
-      else if (disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE) factionKey = 'hostile';
-      else if (disposition === CONST.TOKEN_DISPOSITIONS.SECRET) factionKey = 'secret';
-
-      turn.factionClass = factionKey;
-      const faction = context.factions[factionKey];
-      turn.factionColor = faction.color;
-      faction.turns.push(turn);
-    }
-
-    // No need to return anything - we modified context in place
+    // Faction bucketing + per-turn resource/effect/activation data, shared with
+    // the Combat Carousel overlay (module/helpers/combat-tracker-helper.mjs).
+    // Core already excludes turns the current user can't see (Combatant#visible)
+    // before this runs, so hidden NPCs never reach either UI for non-owners.
+    context.factions = CombatTrackerHelper.buildFactionTurns(this.viewed, { baseTurns: context.turns });
   }
 
   /**

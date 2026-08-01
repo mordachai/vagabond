@@ -1,0 +1,491 @@
+// =============================================================
+//  Combat Carousel — floating, frameless overlay showing initiative
+//  order as faction-grouped cards. Companion to the sidebar Combat
+//  Tracker (apps/_combat-tracker.scss), not a replacement.
+//  Top-level (un-nested) like NPC/Character HUD — renders outside sheets.
+// =============================================================
+
+// The template's own single root (Foundry's "one root element per part" rule)
+// is inert — the real app element (id="vagabond-combat-carousel") already
+// carries .vcc-root from DEFAULT_OPTIONS.classes. Rendering a second
+// position:fixed box inside it would escape the outer box's flow and collapse
+// it to an empty padding+border artifact.
+.vcc-part {
+  display: contents;
+}
+
+.vcc-root {
+  position: fixed;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 65;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: $font-title;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 6px 10px;
+  border: 2px solid $c-yellow;
+  border-radius: 1em;
+  corner-shape: scoop;
+  backdrop-filter: blur(2px);
+
+  // Portrait/card size presets (Encounter Settings > Combat Carousel > Portrait Size).
+  &.vcc-size-small  { --vcc-card-w: 80px;  --vcc-card-h: 108px; --vcc-icon-size: 20px; }
+  &.vcc-size-medium { --vcc-card-w: 100px; --vcc-card-h: 132px; --vcc-icon-size: 22px; }
+  &.vcc-size-large  { --vcc-card-w: 120px; --vcc-card-h: 156px; --vcc-icon-size: 24px; }
+}
+
+// ---------------------------------------------------------------------------
+// Control columns (left: turn/start-stop/history/config, right: round/turn nav)
+// ---------------------------------------------------------------------------
+
+.vcc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vcc-ctrl-btn {
+  width: 26px;
+  height: 26px;
+  min-width: 0;
+  padding: 0;
+  line-height: normal; // Foundry buttons force a fixed line-height — reset it
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: $c-white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: $font-title;
+  font-weight: bold;
+  font-size: 0.85em;
+  transition: background 0.12s, color 0.12s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: $c-yellow;
+  }
+
+  i {
+    font-size: 0.85em;
+  }
+}
+
+.vcc-round-num {
+  font-size: 1.2em;
+  cursor: default;
+  &:hover { background: transparent; color: $c-white; }
+}
+
+// ---------------------------------------------------------------------------
+// Strip of faction groups
+// ---------------------------------------------------------------------------
+
+.vcc-strip {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  max-width: 82vw;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 4px;
+  @include vagabond-scrollbar;
+}
+
+.vcc-no-encounter {
+  padding: 6px 16px;
+  color: $c-muted;
+  font-style: italic;
+  font-size: 0.85em;
+}
+
+.vcc-faction-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+// Divider — faction name rotated 90deg at the start of the group, no banner
+// shape. The faction color carries identity as a text outline, same as before.
+.vcc-faction-divider {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 1px;
+  cursor: grab;
+
+  &:active { cursor: grabbing; }
+
+  // Being picked up
+  &.is-dragging {
+    opacity: 0.4;
+  }
+
+  // Hovered while another group is being dragged over it — "space where it's going",
+  // tinted with the hovered group's own faction color.
+  &.is-drop-target {
+    outline: 2px dashed var(--faction-color, $c-yellow);
+    outline-offset: 2px;
+    filter: brightness(1.35);
+  }
+
+  .vcc-faction-divider-label {
+    writing-mode: sideways-lr;
+    color: $c-white;
+    font-family: $font-primary;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1.3em;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    text-shadow:
+      -1px -1px 0 var(--faction-color),
+       1px -1px 0 var(--faction-color),
+      -1px  1px 0 var(--faction-color),
+       1px  1px 0 var(--faction-color);
+  }
+}
+
+.vcc-cards {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+// ---------------------------------------------------------------------------
+// Card
+// ---------------------------------------------------------------------------
+
+.vcc-card {
+  position: relative;
+  width: var(--vcc-card-w, 100px);
+  height: var(--vcc-card-h, 132px);
+  perspective: 700px;
+  cursor: pointer;
+
+  &[draggable="true"]:active { cursor: grabbing; }
+}
+
+.vcc-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+
+.vcc-card.is-flipped .vcc-card-inner {
+  transform: rotateY(180deg);
+}
+
+.vcc-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: $c-dark;
+}
+
+.vcc-card.is-active .vcc-card-face {
+  border-color: $c-yellow;
+  box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+}
+
+.vcc-card.is-spent .vcc-card-front {
+  filter: grayscale(0.65) brightness(0.55);
+}
+
+.vcc-card.is-dragging {
+  opacity: 0.4;
+}
+
+// Insertion point — a vertical line in the gap before/after this card, not a
+// whole-card highlight, so the drop position (not just the target) is clear.
+.vcc-card.insert-before::before,
+.vcc-card.insert-after::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: $c-yellow;
+  box-shadow: 0 0 4px $c-yellow;
+  z-index: 5;
+}
+
+.vcc-card.insert-before::before {
+  left: -4px;
+}
+
+.vcc-card.insert-after::after {
+  right: -4px;
+}
+
+// Faction color accent strip along the top edge
+.vcc-card-front::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--faction-color, $c-tan);
+  z-index: 2;
+}
+
+.vcc-portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.2s;
+  // <img> is draggable by default in browsers (native "drag this image out"),
+  // which hijacks the mousedown before it can bubble up to `.vcc-card`'s own
+  // draggable=true — that's what was silently breaking card reorder. The
+  // draggable="false" attribute in the template is the real fix; this is belt
+  // and suspenders for engines that respect the CSS property more reliably.
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.vcc-dead-skull,
+.vcc-dead-bleed,
+.vcc-status-icon {
+  -webkit-user-drag: none;
+}
+
+// ---------------------------------------------------------------------------
+// Defeated — desaturated portrait + the same skull/bleed decoration the
+// system draws on defeated tokens on the canvas (see `_refreshDeadSkull` /
+// `_DEAD_SKULL_SRC` / `_DEAD_BLEED_SRC` in vagabond.mjs).
+// ---------------------------------------------------------------------------
+
+.vcc-card.is-defeated .vcc-portrait {
+  filter: grayscale(1) brightness(0.7);
+}
+
+.vcc-dead-skull,
+.vcc-dead-bleed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vcc-dead-skull {
+  width: 62%;
+  height: 62%;
+  transform: translate(-50%, -50%);
+  opacity: 0.85;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.85));
+}
+
+.vcc-dead-bleed {
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -46%);
+  // The source art is red marks on a black field with no alpha channel; the
+  // canvas version keys transparency off the red channel via a PIXI filter.
+  // `screen` is the closest CSS approximation over our dark card background:
+  // black contributes nothing, the red/orange bleed shows through.
+  mix-blend-mode: screen;
+}
+
+// Name — hidden until hover; GM sees any card's name, players only their own faction.
+.vcc-name-reveal {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 12px;
+  background: rgba(0, 0, 0, 0.78);
+  color: $c-white;
+  font-size: 1em;
+  text-align: center;
+  padding: 1px 2px;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 3;
+}
+
+.vcc-root.is-gm .vcc-card:hover .vcc-name-reveal {
+  opacity: 1;
+}
+
+.vcc-root:not(.is-gm) .vcc-card[data-faction="friendly"]:hover .vcc-name-reveal {
+  opacity: 1;
+}
+
+// ---------------------------------------------------------------------------
+// Active effect icons — vertical column, right edge of the portrait.
+// Left-click sends to chat (statusClick action); right-click opens the same
+// two-item menu the actor sheet / HUDs use (ContextMenuHelper, see
+// `_setupStatusIconListeners` in actor-sheet.mjs).
+// ---------------------------------------------------------------------------
+
+.vcc-effects-col {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  bottom: 16px; // stay clear of the HP/fatigue bars
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  overflow-y: auto;
+  z-index: 4;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.vcc-status-icon {
+  width: var(--vcc-icon-size, 14px);
+  height: var(--vcc-icon-size, 14px);
+  flex-shrink: 0;
+  object-fit: contain;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 1px;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+
+  &:hover {
+    border-color: $c-yellow;
+    transform: scale(1.15);
+  }
+}
+
+// Health + Fatigue — half the height of a normal resource bar.
+.vcc-bars {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px;
+  z-index: 2;
+}
+
+.vcc-bar {
+  height: 4px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.vcc-bar-fill {
+  height: 100%;
+  transition: width 0.2s;
+}
+
+// Same diagonal gradient recipe as the sidebar Combat Tracker's healthbar
+// (apps/_combat-tracker.scss .healthbar-bg): dark edge → color → bright edge.
+.vcc-bar-hp .vcc-bar-fill {
+  background: linear-gradient(102deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    $c-green 80%,
+    rgba(255, 255, 255, 0.95) 100%);
+}
+
+.vcc-bar-fatigue .vcc-bar-fill {
+  background: linear-gradient(102deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    $c-damage 80%,
+    rgba(255, 255, 255, 0.95) 100%);
+}
+
+// ---------------------------------------------------------------------------
+// Card back
+// ---------------------------------------------------------------------------
+
+.vcc-card-back {
+  transform: rotateY(180deg);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  border: 1px solid $c-white;
+  @include vagabond-scrollbar;
+}
+
+// Stat readout — mirrors the party sheet's compact view stats, same icons,
+// single column with bigger text/icons to fill the card back.
+.vcc-back-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.vcc-back-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.vcc-back-stat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-title;
+  font-weight: bold;
+  font-size: 1em;
+  color: $c-white;
+  white-space: nowrap;
+
+  i {
+    font-size: 1.1em;
+    color: $c-tan;
+    flex-shrink: 0;
+  }
+
+  &.vcc-back-hp,
+  &.vcc-back-fatigue {
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 1px 4px;
+    transition: background 0.12s;
+    &:hover { background: rgba(255, 255, 255, 0.14); }
+  }
+
+  &.vcc-back-hp i { color: #e74c3c; }
+  &.vcc-back-fatigue { opacity: 0.85; }
+  &.vcc-back-luck i { color: $c-yellow; }
+
+  &.non-caster { opacity: 0.3; }
+
+  &.is-focusing i {
+    color: #2ac4ff;
+    filter: drop-shadow(0 0 4px rgba(42, 196, 255, 0.7));
+  }
+}
+
+.vcc-back-speed-icon {
+  font-family: $font-title;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: $c-tan;
+  flex-shrink: 0;
+  line-height: 1;
+}
