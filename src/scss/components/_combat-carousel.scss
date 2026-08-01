@@ -21,21 +21,48 @@
   transform: translateX(-50%);
   z-index: 65;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   font-family: $font-title;
   user-select: none;
   background: rgba(0, 0, 0, 0.55);
   padding: 6px 10px;
   border: 2px solid $c-yellow;
-  border-radius: 1em;
+  border-radius: 0.8em;
   corner-shape: scoop;
   backdrop-filter: blur(2px);
+  transition: transform 0.25s ease, opacity 0.2s ease;
 
   // Portrait/card size presets (Encounter Settings > Combat Carousel > Portrait Size).
-  &.vcc-size-small  { --vcc-card-w: 80px;  --vcc-card-h: 108px; --vcc-icon-size: 20px; }
-  &.vcc-size-medium { --vcc-card-w: 100px; --vcc-card-h: 132px; --vcc-icon-size: 22px; }
-  &.vcc-size-large  { --vcc-card-w: 120px; --vcc-card-h: 156px; --vcc-icon-size: 24px; }
+  &.vcc-size-small  { --vcc-card-w: 90px;  --vcc-card-h: 120px; --vcc-icon-size: 20px; --vcc-back-icon-size: 13px; --vcc-back-font-size: 0.95em; --vcc-ctrl-btn-size: 22px; --vcc-ctrl-font-size: 0.75em; }
+  &.vcc-size-medium { --vcc-card-w: 100px; --vcc-card-h: 132px; --vcc-icon-size: 22px; --vcc-back-icon-size: 15px; --vcc-back-font-size: 1.05em; --vcc-ctrl-btn-size: 26px; --vcc-ctrl-font-size: 0.85em; }
+  &.vcc-size-large  { --vcc-card-w: 110px; --vcc-card-h: 144px; --vcc-icon-size: 24px; --vcc-back-icon-size: 17px; --vcc-back-font-size: 1.15em; --vcc-ctrl-btn-size: 30px; --vcc-ctrl-font-size: 0.95em; }
+
+  // Per-player display prefs (Configure Settings, client-scoped) — GM default
+  // seeds each player's own copy the first time it's read, see vagabond.mjs.
+  // Hover-out is delayed (transition-delay lives on the *target* state, so
+  // the base rule below delays going hidden/dim, while :hover resets its own
+  // delay to 0 so revealing on hover-in stays instant) — stops it flickering
+  // shut the moment the cursor grazes off the edge.
+  &.vcc-auto-hide {
+    transform: translateX(-50%) translateY(calc(-100% + 10px));
+    transition-delay: 0.5s;
+
+    &:hover, &:focus-within {
+      transform: translateX(-50%) translateY(0);
+      transition-delay: 0s;
+    }
+  }
+
+  &.vcc-dim-idle {
+    opacity: 0.5;
+    transition-delay: 0.5s;
+
+    &:hover, &:focus-within {
+      opacity: 1;
+      transition-delay: 0s;
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -49,8 +76,8 @@
 }
 
 .vcc-ctrl-btn {
-  width: 26px;
-  height: 26px;
+  width: var(--vcc-ctrl-btn-size, 26px);
+  height: var(--vcc-ctrl-btn-size, 26px);
   min-width: 0;
   padding: 0;
   line-height: normal; // Foundry buttons force a fixed line-height — reset it
@@ -64,8 +91,8 @@
   cursor: pointer;
   font-family: $font-title;
   font-weight: bold;
-  font-size: 0.85em;
-  transition: background 0.12s, color 0.12s;
+  font-size: var(--vcc-ctrl-font-size, 0.85em);
+  transition: background 0.12s, color 0.12s, width 0.15s, height 0.15s, font-size 0.15s;
 
   &:hover {
     background: rgba(255, 255, 255, 0.14);
@@ -87,15 +114,41 @@
 // Strip of faction groups
 // ---------------------------------------------------------------------------
 
+// Budget for the max-width fit calc below — worst case is every faction
+// (Friendly/Neutral/Hostile/Secret) present at once, each contributing a
+// rotated-label divider plus its own .vcc-strip gap before the next group.
+$vcc-max-factions: 4;
+$vcc-divider-w: 30px; // rotated label (1.4em) + its 4px 1px padding, rounded up
+
 .vcc-strip {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
-  max-width: 82vw;
+  max-width: min(
+    90vw,
+    calc(
+      11 * var(--vcc-card-w, 100px) + 10 * 10px
+      + #{$vcc-max-factions} * #{$vcc-divider-w}
+      + (#{$vcc-max-factions} - 1) * 14px
+    )
+  );
   overflow-x: auto;
-  overflow-y: visible;
-  padding: 4px;
+  overflow-y: hidden;
+  // transform: scale() doesn't change layout size, only paint, but scrollable
+  // overflow (scrollWidth/scrollHeight) DOES count transformed paint area per
+  // spec. The active card's scale overshoots downward (padding-bottom) and,
+  // when it's the first/last card, sideways too (padding-left/right) — pad
+  // the strip's own box by that overshoot so it never registers as real
+  // overflow and forces a scrollbar that wasn't otherwise needed.
+  padding: 4px calc(4px + var(--vcc-card-w, 100px) * 0.06) calc(4px + var(--vcc-card-h, 132px) * 0.12);
   @include vagabond-scrollbar;
+
+  // vagabond-scrollbar only sets `width` (for vertical bars) — a horizontal
+  // one falls back to the browser's default (thick) height. Match the same
+  // 6px thinness here.
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
 }
 
 .vcc-no-encounter {
@@ -107,13 +160,13 @@
 
 .vcc-faction-group {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 6px;
   flex-shrink: 0;
 }
 
 // Divider — faction name rotated 90deg at the start of the group, no banner
-// shape. The faction color carries identity as a text outline, same as before.
+// shape. The faction color carries identity as a text outline.
 .vcc-faction-divider {
   align-self: stretch;
   display: flex;
@@ -137,13 +190,17 @@
     filter: brightness(1.35);
   }
 
+  // On hover
+  &:hover {
+    font-weight: 600;
+  }
+
   .vcc-faction-divider-label {
     writing-mode: sideways-lr;
     color: $c-white;
     font-family: $font-primary;
-    font-weight: bold;
     text-transform: uppercase;
-    font-size: 1.3em;
+    font-size: 1.4em;
     letter-spacing: 0.04em;
     white-space: nowrap;
     text-shadow:
@@ -156,8 +213,8 @@
 
 .vcc-cards {
   display: flex;
-  align-items: flex-end;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 // ---------------------------------------------------------------------------
@@ -170,8 +227,29 @@
   height: var(--vcc-card-h, 132px);
   perspective: 700px;
   cursor: pointer;
+  border: 1px solid var(--faction-color);
+  border-radius: 4px;
+  transition: transform 0.25s ease;
+
+  // No overflow set here on purpose: .vcc-card-face already clips its own
+  // content (rounding, defeated overlay, etc.), and clipping at this outer
+  // level killed the drag insertion line — overflow-y:hidden with no
+  // overflow-x forces the "visible" x-axis to compute as auto/clipped too
+  // (per spec), and .insert-before/.insert-after's ::before/::after sit at
+  // left/right:-4px, outside this box, specifically so the line shows in
+  // the gap between cards. Clipped, all a dragged-over card could show was
+  // its own hover state — reading as "drop inside this card".
 
   &[draggable="true"]:active { cursor: grabbing; }
+}
+
+.vcc-card.is-active {
+  // Scale from the top edge, not center — center-origin growth pushes the
+  // card upward past .vcc-strip's clipped top (overflow-x:auto forces
+  // overflow-y to clip too, per spec, even though it's declared "visible").
+  transform-origin: top center;
+  transform: scale(1.12);
+  z-index: 2;
 }
 
 .vcc-card-inner {
@@ -192,13 +270,42 @@
   backface-visibility: hidden;
   border-radius: 4px;
   overflow: hidden;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   background: $c-dark;
 }
 
+// backface-visibility hides rendering but not hit-testing — hidden face still
+// eats clicks (e.g. status icons on the front while the back shows). Kill
+// pointer events on whichever face isn't showing.
+.vcc-card-back { pointer-events: none; }
+.vcc-card.is-flipped .vcc-card-front { pointer-events: none; }
+.vcc-card.is-flipped .vcc-card-back { pointer-events: auto; }
+
 .vcc-card.is-active .vcc-card-face {
-  border-color: $c-yellow;
-  box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+  border-color: var(--faction-color, $c-yellow);
+  box-shadow: 0 0 8px -1px var(--faction-color, $c-yellow);
+  border-width: 2px;
+
+  // Inset shadows paint on the background layer, behind child content — the
+  // portrait <img> (absolute, inset:0, opaque) sits on top and hides it.
+  // An overlay pseudo-element above the image is the only way to show it.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    box-shadow: inset 1px 1px 6px var(--faction-color, $c-yellow);
+  }
+}
+
+// Selected (canvas-controlled) by the viewing user — Foundry's own canvas
+// target-reticle color (CONFIG.Canvas.targeting.color default). Per-viewer,
+// client-side selection only — and the active-turn outline above always wins.
+$vcc-target-color: #ffe185;
+
+.vcc-card.is-selected-mine:not(.is-active) .vcc-card-face {
+  border: 2px solid $vcc-target-color;
 }
 
 .vcc-card.is-spent .vcc-card-front {
@@ -206,11 +313,28 @@
 }
 
 .vcc-card.is-dragging {
-  opacity: 0.4;
+  opacity: 0.25;
+}
+
+// preserve-3d + backface-visibility on the flip container can put each face
+// in its own compositing layer — the parent's opacity doesn't reliably reach
+// through to whichever face is actually showing. Fade both explicitly.
+.vcc-card.is-dragging .vcc-card-face {
+  opacity: 0.25;
 }
 
 // Insertion point — a vertical line in the gap before/after this card, not a
 // whole-card highlight, so the drop position (not just the target) is clear.
+// Flex items are their own stacking contexts — a pseudo-element's z-index
+// only wins against siblings *inside the same item*, not against a
+// neighboring card's whole box. .is-active raises its card to z-index:2, so
+// the marker card needs to outrank that at the card level too, or the
+// active card's scaled-up edge can paint over this line during drag.
+.vcc-card.insert-before,
+.vcc-card.insert-after {
+  z-index: 6;
+}
+
 .vcc-card.insert-before::before,
 .vcc-card.insert-after::after {
   content: '';
@@ -232,14 +356,14 @@
 }
 
 // Faction color accent strip along the top edge
-.vcc-card-front::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--faction-color, $c-tan);
-  z-index: 2;
-}
+// .vcc-card-front::before {
+//   content: '';
+//   position: absolute;
+//   top: 0; left: 0; right: 0;
+//   height: 3px;
+//   background: var(--faction-color, $c-tan);
+//   z-index: 2;
+// }
 
 .vcc-portrait {
   position: absolute;
@@ -329,6 +453,15 @@
   opacity: 1;
 }
 
+// Active turn's name stays visible, same reveal-permission rules as hover.
+.vcc-root.is-gm .vcc-card.is-active .vcc-name-reveal {
+  opacity: 1;
+}
+
+.vcc-root:not(.is-gm) .vcc-card.is-active[data-faction="friendly"] .vcc-name-reveal {
+  opacity: 1;
+}
+
 // ---------------------------------------------------------------------------
 // Active effect icons — vertical column, right edge of the portrait.
 // Left-click sends to chat (statusClick action); right-click opens the same
@@ -349,6 +482,63 @@
   z-index: 4;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
+}
+
+// ---------------------------------------------------------------------------
+// Target marker — top-left corner button. Idle = dim white crosshair "click
+// to target" affordance; once one or more users target the token, one
+// crosshair icon per targeting user replaces it, tinted their own
+// User#color, so who's targeting is visible at a glance without opening
+// the tooltip.
+// ---------------------------------------------------------------------------
+
+.vcc-target-marker {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+
+  &.has-target { opacity: 1; }
+}
+
+.vcc-card:hover .vcc-target-marker {
+  opacity: 1;
+}
+
+.vcc-target-dot {
+  width: 21px;
+  height: 21px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dot-color, $c-dark-bluey);
+  border: 1px solid $c-white;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+
+  i {
+    font-size: 15px;
+    line-height: 1;
+    text-align: center;
+    color: $c-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  & + .vcc-target-dot {
+    margin-left: -5px;
+  }
+}
+
+.vcc-target-dot-empty {
+  background: $c-dark-bluey;
 }
 
 .vcc-status-icon {
@@ -377,12 +567,12 @@
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding: 2px;
+  padding: 0px;
   z-index: 2;
 }
 
 .vcc-bar {
-  height: 4px;
+  height: 6px;
   background: rgba(0, 0, 0, 0.65);
   border-radius: 2px;
   overflow: hidden;
@@ -419,8 +609,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow-y: auto;
-  border: 1px solid $c-white;
+  overflow-y: hidden;
+  border: 1px solid var(--faction-color);
   @include vagabond-scrollbar;
 }
 
@@ -430,43 +620,42 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  width: 100%;
-}
-
-.vcc-back-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 3px;
   width: 100%;
 }
 
 .vcc-back-stat {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: baseline;
   gap: 6px;
-  font-family: $font-title;
-  font-weight: bold;
-  font-size: 1em;
+  font-family: $font-secondary;
+  font-size: var(--vcc-back-font-size, 0.85em);
   color: $c-white;
   white-space: nowrap;
 
   i {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     font-size: 1.1em;
     color: $c-tan;
     flex-shrink: 0;
+    width: var(--vcc-back-icon-size, 14px);
   }
 
   &.vcc-back-hp,
-  &.vcc-back-fatigue {
-    cursor: pointer;
-    border-radius: 3px;
-    padding: 1px 4px;
-    transition: background 0.12s;
-    &:hover { background: rgba(255, 255, 255, 0.14); }
+  &.vcc-back-fatigue,
+  &.vcc-back-mana,
+  &.vcc-back-luck {
+    i {
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 1px;
+      transition: background 0.12s;
+      &:hover { background: rgba(255, 255, 255, 0.14); }
+    }
   }
 
   &.vcc-back-hp i { color: #e74c3c; }
@@ -479,13 +668,4 @@
     color: #2ac4ff;
     filter: drop-shadow(0 0 4px rgba(42, 196, 255, 0.7));
   }
-}
-
-.vcc-back-speed-icon {
-  font-family: $font-title;
-  font-size: 1.3em;
-  font-weight: bold;
-  color: $c-tan;
-  flex-shrink: 0;
-  line-height: 1;
 }

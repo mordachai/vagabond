@@ -149,25 +149,151 @@ export class VagabondCombatTracker {
   }
 
   /**
-   * Wrapped activateListeners method
-   * @param {Function} wrapped - Original activateListeners method
-   * @param {jQuery} html - The rendered HTML
+   * Wrapped _onRender method. `CombatTracker` (foundry.applications.sidebar.tabs.CombatTracker)
+   * is pure ApplicationV2 in v14 — it has no `activateListeners(html)` hook
+   * (that's a v1 Application concept), so post-render wiring must happen here.
+   * Core's own `_attachFrameListeners` (bound once, delegated on the persistent
+   * `this.element`) already handles `.initiative-input` changes and the
+   * `data-action` buttons registered in `DEFAULT_OPTIONS.actions` — only the
+   * drag-reorder wiring below is Vagabond-specific.
+   * @param {Object} options - Render options
    */
-  static activateListeners(wrapped, html) {
-    wrapped.call(this, html);
+  static onRender(options) {
+    VagabondCombatTracker.attachDragHandlers(this);
+  }
 
-    // Manual Initiative Input Handler
-    html.on('change', '.initiative-input', async (event) => {
-      event.preventDefault();
-      const input = event.currentTarget;
-      const combatantId = input.dataset.combatantId;
-      const value = Number(input.value);
+  /**
+   * Drag-to-reorder: combatant rows within their faction group, and
+   * faction-header rows to reorder the groups themselves. Mirrors the Combat
+   * Carousel's card/pennant drag interaction (module/applications/combat-carousel.mjs)
+   * but for a vertical list — insert-before/after is decided by the cursor's
+   * Y position instead of X. Both write through the shared
+   * {@link CombatTrackerHelper.reorderWithinFaction}/{@link CombatTrackerHelper.reorderFactionGroups}.
+   *
+   * Delegated on the `#combat-tracker` list root (all HTML5 DnD events bubble)
+   * rather than per-row, so it needs no cleanup — `app.element` is the
+   * persistent outer frame, but the "tracker" part (this whole list, per the
+   * single-root-element rule) is a fresh subtree every render, so `list` is
+   * never stale.
+   * @param {CombatTracker} app
+   */
+  static attachDragHandlers(app) {
+    const list = app.element.querySelector('#combat-tracker');
+    if (!list) return;
 
-      if (this.viewed && combatantId && !isNaN(value)) {
-        await this.viewed.updateEmbeddedDocuments("Combatant", [{
-          _id: combatantId,
-          initiative: value
-        }]);
+    let dragId = null;
+    let dragFaction = null;
+
+    const clearRowMarkers = () => {
+      list.querySelectorAll('.combatant.insert-before, .combatant.insert-after')
+        .forEach(el => el.classList.remove('insert-before', 'insert-after'));
+    };
+    const clearHeaderMarkers = () => {
+      list.querySelectorAll('.faction-header.is-drop-target')
+        .forEach(el => el.classList.remove('is-drop-target'));
+    };
+
+    for (const row of list.querySelectorAll('.combatant')) {
+      row.draggable = game.user.isGM || row.dataset.faction === 'friendly';
+    }
+    for (const header of list.querySelectorAll('.faction-header')) {
+      header.draggable = game.user.isGM;
+    }
+
+    const sideFor = (event, el) => {
+      const rect = el.getBoundingClientRect();
+      return (event.clientY - rect.top) > rect.height / 2 ? 'after' : 'before';
+    };
+
+    list.addEventListener('dragstart', (event) => {
+      const row = event.target.closest('.combatant');
+      const header = event.target.closest('.faction-header');
+      if (row?.draggable) {
+        dragId = row.dataset.combatantId;
+        row.classList.add('is-dragging');
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', dragId);
+      } else if (header?.draggable) {
+        dragFaction = header.dataset.faction;
+        header.classList.add('is-dragging');
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', dragFaction);
+      }
+    });
+
+    list.addEventListener('dragend', () => {
+      dragId = null;
+      dragFaction = null;
+      list.querySelectorAll('.combatant.is-dragging, .faction-header.is-dragging')
+        .forEach(el => el.classList.remove('is-dragging'));
+      clearRowMarkers();
+      clearHeaderMarkers();
+    });
+
+    list.addEventListener('dragenter', (event) => {
+      const row = event.target.closest('.combatant');
+      const header = event.target.closest('.faction-header');
+      if (dragId && row && row.dataset.combatantId !== dragId) {
+        const dragRow = list.querySelector(`.combatant[data-combatant-id="${dragId}"]`);
+        if (dragRow?.dataset.faction !== row.dataset.faction) return;
+        event.preventDefault();
+        clearRowMarkers();
+        row.classList.add(sideFor(event, row) === 'after' ? 'insert-after' : 'insert-before');
+      } else if (dragFaction && header && header.dataset.faction !== dragFaction) {
+        event.preventDefault();
+        clearHeaderMarkers();
+        header.classList.add('is-drop-target');
+      }
+    });
+
+    list.addEventListener('dragover', (event) => {
+      const row = event.target.closest('.combatant');
+      const header = event.target.closest('.faction-header');
+      if (dragId && row && row.dataset.combatantId !== dragId) {
+        const dragRow = list.querySelector(`.combatant[data-combatant-id="${dragId}"]`);
+        if (dragRow?.dataset.faction !== row.dataset.faction) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        clearRowMarkers();
+        row.classList.add(sideFor(event, row) === 'after' ? 'insert-after' : 'insert-before');
+      } else if (dragFaction && header && header.dataset.faction !== dragFaction) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+      }
+    });
+
+    list.addEventListener('dragleave', (event) => {
+      const row = event.target.closest('.combatant');
+      const header = event.target.closest('.faction-header');
+      row?.classList.remove('insert-before', 'insert-after');
+      header?.classList.remove('is-drop-target');
+    });
+
+    list.addEventListener('drop', async (event) => {
+      const row = event.target.closest('.combatant');
+      const header = event.target.closest('.faction-header');
+
+      if (dragId && row) {
+        event.preventDefault();
+        const side = sideFor(event, row);
+        clearRowMarkers();
+        const draggedId = dragId;
+        dragId = null;
+        if (!app.viewed || draggedId === row.dataset.combatantId) return;
+        const dragRow = list.querySelector(`.combatant[data-combatant-id="${draggedId}"]`);
+        const factionKey = row.dataset.faction;
+        if (dragRow?.dataset.faction !== factionKey) return;
+        await CombatTrackerHelper.reorderWithinFaction(
+          app.viewed, factionKey, draggedId, row.dataset.combatantId, side === 'after'
+        );
+      } else if (dragFaction && header) {
+        event.preventDefault();
+        clearHeaderMarkers();
+        const draggedKey = dragFaction;
+        dragFaction = null;
+        const targetKey = header.dataset.faction;
+        if (!app.viewed || draggedKey === targetKey) return;
+        await CombatTrackerHelper.reorderFactionGroups(app.viewed, draggedKey, targetKey);
       }
     });
   }

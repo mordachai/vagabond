@@ -4998,31 +4998,60 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   transform: translateX(-50%);
   z-index: 65;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   font-family: "Germania", serif;
   user-select: none;
   background: rgba(0, 0, 0, 0.55);
   padding: 6px 10px;
   border: 2px solid var(--vagabond-c-chat-yellow);
-  border-radius: 1em;
+  border-radius: 0.8em;
   corner-shape: scoop;
   backdrop-filter: blur(2px);
+  transition: transform 0.25s ease, opacity 0.2s ease;
 }
 .vcc-root.vcc-size-small {
-  --vcc-card-w: 80px;
-  --vcc-card-h: 108px;
+  --vcc-card-w: 90px;
+  --vcc-card-h: 120px;
   --vcc-icon-size: 20px;
+  --vcc-back-icon-size: 13px;
+  --vcc-back-font-size: 0.95em;
+  --vcc-ctrl-btn-size: 22px;
+  --vcc-ctrl-font-size: 0.75em;
 }
 .vcc-root.vcc-size-medium {
   --vcc-card-w: 100px;
   --vcc-card-h: 132px;
   --vcc-icon-size: 22px;
+  --vcc-back-icon-size: 15px;
+  --vcc-back-font-size: 1.05em;
+  --vcc-ctrl-btn-size: 26px;
+  --vcc-ctrl-font-size: 0.85em;
 }
 .vcc-root.vcc-size-large {
-  --vcc-card-w: 120px;
-  --vcc-card-h: 156px;
+  --vcc-card-w: 110px;
+  --vcc-card-h: 144px;
   --vcc-icon-size: 24px;
+  --vcc-back-icon-size: 17px;
+  --vcc-back-font-size: 1.15em;
+  --vcc-ctrl-btn-size: 30px;
+  --vcc-ctrl-font-size: 0.95em;
+}
+.vcc-root.vcc-auto-hide {
+  transform: translateX(-50%) translateY(calc(-100% + 10px));
+  transition-delay: 0.5s;
+}
+.vcc-root.vcc-auto-hide:hover, .vcc-root.vcc-auto-hide:focus-within {
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 0s;
+}
+.vcc-root.vcc-dim-idle {
+  opacity: 0.5;
+  transition-delay: 0.5s;
+}
+.vcc-root.vcc-dim-idle:hover, .vcc-root.vcc-dim-idle:focus-within {
+  opacity: 1;
+  transition-delay: 0s;
 }
 
 .vcc-controls {
@@ -5032,8 +5061,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 .vcc-ctrl-btn {
-  width: 26px;
-  height: 26px;
+  width: var(--vcc-ctrl-btn-size, 26px);
+  height: var(--vcc-ctrl-btn-size, 26px);
   min-width: 0;
   padding: 0;
   line-height: normal;
@@ -5047,8 +5076,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   cursor: pointer;
   font-family: "Germania", serif;
   font-weight: bold;
-  font-size: 0.85em;
-  transition: background 0.12s, color 0.12s;
+  font-size: var(--vcc-ctrl-font-size, 0.85em);
+  transition: background 0.12s, color 0.12s, width 0.15s, height 0.15s, font-size 0.15s;
 }
 .vcc-ctrl-btn:hover {
   background: rgba(255, 255, 255, 0.14);
@@ -5069,12 +5098,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 .vcc-strip {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
-  max-width: 82vw;
+  max-width: min(90vw, 11 * var(--vcc-card-w, 100px) + 100px + 4 * 30px + (4 - 1) * 14px);
   overflow-x: auto;
-  overflow-y: visible;
-  padding: 4px;
+  overflow-y: hidden;
+  padding: 4px calc(4px + var(--vcc-card-w, 100px) * 0.06) calc(4px + var(--vcc-card-h, 132px) * 0.12);
   scrollbar-width: auto !important;
   scrollbar-color: auto !important;
 }
@@ -5090,6 +5119,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 4px;
   border: 1px solid var(--vagabond-c-black);
 }
+.vcc-strip::-webkit-scrollbar {
+  height: 6px;
+}
 
 .vcc-no-encounter {
   padding: 6px 16px;
@@ -5100,7 +5132,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 .vcc-faction-group {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 6px;
   flex-shrink: 0;
 }
@@ -5124,13 +5156,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   outline-offset: 2px;
   filter: brightness(1.35);
 }
+.vcc-faction-divider:hover {
+  font-weight: 600;
+}
 .vcc-faction-divider .vcc-faction-divider-label {
   writing-mode: sideways-lr;
   color: var(--vagabond-c-white);
   font-family: "Eskapade", serif;
-  font-weight: bold;
   text-transform: uppercase;
-  font-size: 1.3em;
+  font-size: 1.4em;
   letter-spacing: 0.04em;
   white-space: nowrap;
   text-shadow: -1px -1px 0 var(--faction-color), 1px -1px 0 var(--faction-color), -1px 1px 0 var(--faction-color), 1px 1px 0 var(--faction-color);
@@ -5138,8 +5172,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 .vcc-cards {
   display: flex;
-  align-items: flex-end;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .vcc-card {
@@ -5148,9 +5182,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   height: var(--vcc-card-h, 132px);
   perspective: 700px;
   cursor: pointer;
+  border: 1px solid var(--faction-color);
+  border-radius: 4px;
+  transition: transform 0.25s ease;
 }
 .vcc-card[draggable=true]:active {
   cursor: grabbing;
+}
+
+.vcc-card.is-active {
+  transform-origin: top center;
+  transform: scale(1.12);
+  z-index: 2;
 }
 
 .vcc-card-inner {
@@ -5171,13 +5214,38 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   backface-visibility: hidden;
   border-radius: 4px;
   overflow: hidden;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   background: var(--vagabond-c-dark);
 }
 
+.vcc-card-back {
+  pointer-events: none;
+}
+
+.vcc-card.is-flipped .vcc-card-front {
+  pointer-events: none;
+}
+
+.vcc-card.is-flipped .vcc-card-back {
+  pointer-events: auto;
+}
+
 .vcc-card.is-active .vcc-card-face {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+  border-color: var(--faction-color, var(--vagabond-c-chat-yellow));
+  box-shadow: 0 0 8px -1px var(--faction-color, var(--vagabond-c-chat-yellow));
+  border-width: 2px;
+}
+.vcc-card.is-active .vcc-card-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: inset 1px 1px 6px var(--faction-color, var(--vagabond-c-chat-yellow));
+}
+
+.vcc-card.is-selected-mine:not(.is-active) .vcc-card-face {
+  border: 2px solid #ffe185;
 }
 
 .vcc-card.is-spent .vcc-card-front {
@@ -5185,7 +5253,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 .vcc-card.is-dragging {
-  opacity: 0.4;
+  opacity: 0.25;
+}
+
+.vcc-card.is-dragging .vcc-card-face {
+  opacity: 0.25;
+}
+
+.vcc-card.insert-before,
+.vcc-card.insert-after {
+  z-index: 6;
 }
 
 .vcc-card.insert-before::before,
@@ -5206,17 +5283,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 .vcc-card.insert-after::after {
   right: -4px;
-}
-
-.vcc-card-front::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--faction-color, var(--vagabond-c-tan));
-  z-index: 2;
 }
 
 .vcc-portrait {
@@ -5292,6 +5358,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 1;
 }
 
+.vcc-root.is-gm .vcc-card.is-active .vcc-name-reveal {
+  opacity: 1;
+}
+
+.vcc-root:not(.is-gm) .vcc-card.is-active[data-faction=friendly] .vcc-name-reveal {
+  opacity: 1;
+}
+
 .vcc-effects-col {
   position: absolute;
   top: 4px;
@@ -5307,6 +5381,54 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vcc-effects-col::-webkit-scrollbar {
   display: none;
+}
+
+.vcc-target-marker {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+}
+.vcc-target-marker.has-target {
+  opacity: 1;
+}
+
+.vcc-card:hover .vcc-target-marker {
+  opacity: 1;
+}
+
+.vcc-target-dot {
+  width: 21px;
+  height: 21px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dot-color, var(--vagabond-c-dark-bluey));
+  border: 1px solid var(--vagabond-c-white);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+}
+.vcc-target-dot i {
+  font-size: 15px;
+  line-height: 1;
+  text-align: center;
+  color: var(--vagabond-c-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vcc-target-dot + .vcc-target-dot {
+  margin-left: -5px;
+}
+
+.vcc-target-dot-empty {
+  background: var(--vagabond-c-dark-bluey);
 }
 
 .vcc-status-icon {
@@ -5334,12 +5456,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding: 2px;
+  padding: 0px;
   z-index: 2;
 }
 
 .vcc-bar {
-  height: 4px;
+  height: 6px;
   background: rgba(0, 0, 0, 0.65);
   border-radius: 2px;
   overflow: hidden;
@@ -5364,8 +5486,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow-y: auto;
-  border: 1px solid var(--vagabond-c-white);
+  overflow-y: hidden;
+  border: 1px solid var(--faction-color);
   scrollbar-width: auto !important;
   scrollbar-color: auto !important;
 }
@@ -5386,42 +5508,37 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  width: 100%;
-}
-
-.vcc-back-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 3px;
   width: 100%;
 }
 
 .vcc-back-stat {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: baseline;
   gap: 6px;
-  font-family: "Germania", serif;
-  font-weight: bold;
-  font-size: 1em;
+  font-family: "Manofa", serif;
+  font-size: var(--vcc-back-font-size, 0.85em);
   color: var(--vagabond-c-white);
   white-space: nowrap;
 }
 .vcc-back-stat i {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.1em;
   color: var(--vagabond-c-tan);
   flex-shrink: 0;
+  width: var(--vcc-back-icon-size, 14px);
 }
-.vcc-back-stat.vcc-back-hp, .vcc-back-stat.vcc-back-fatigue {
+.vcc-back-stat.vcc-back-hp i, .vcc-back-stat.vcc-back-fatigue i, .vcc-back-stat.vcc-back-mana i, .vcc-back-stat.vcc-back-luck i {
   cursor: pointer;
   border-radius: 3px;
-  padding: 1px 4px;
+  padding: 1px;
   transition: background 0.12s;
 }
-.vcc-back-stat.vcc-back-hp:hover, .vcc-back-stat.vcc-back-fatigue:hover {
+.vcc-back-stat.vcc-back-hp i:hover, .vcc-back-stat.vcc-back-fatigue i:hover, .vcc-back-stat.vcc-back-mana i:hover, .vcc-back-stat.vcc-back-luck i:hover {
   background: rgba(255, 255, 255, 0.14);
 }
 .vcc-back-stat.vcc-back-hp i {
@@ -5439,15 +5556,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vcc-back-stat.is-focusing i {
   color: #2ac4ff;
   filter: drop-shadow(0 0 4px rgba(42, 196, 255, 0.7));
-}
-
-.vcc-back-speed-icon {
-  font-family: "Germania", serif;
-  font-size: 1.3em;
-  font-weight: bold;
-  color: var(--vagabond-c-tan);
-  flex-shrink: 0;
-  line-height: 1;
 }
 
 #vagabond-char-builder .window-content {
@@ -7288,6 +7396,20 @@ ol#combat-tracker.directory-list {
   margin-top: 20px;
   list-style: none;
 }
+#combat-tracker .faction-header[draggable=true] {
+  cursor: grab;
+}
+#combat-tracker .faction-header[draggable=true]:active {
+  cursor: grabbing;
+}
+#combat-tracker .faction-header.is-dragging {
+  opacity: 0.4;
+}
+#combat-tracker .faction-header.is-drop-target {
+  outline: 2px dashed var(--faction-color, var(--vagabond-c-chat-yellow));
+  outline-offset: -2px;
+  filter: brightness(1.35);
+}
 #combat-tracker .faction-header h4 {
   margin: 0;
   background-image: url("../assets/images/sheets/leftColBg.svg");
@@ -7303,6 +7425,7 @@ ol#combat-tracker.directory-list {
   text-shadow: 1px 1px 0 var(--faction-color), -1px 1px 0 var(--faction-color), -1px -1px 0 var(--faction-color), 1px -1px 0 var(--faction-color);
 }
 #combat-tracker .combatant {
+  position: relative;
   padding: 5px;
   border-bottom: 1px solid var(--sidebar-separator);
   border-left: 4px solid transparent;
@@ -7331,6 +7454,31 @@ ol#combat-tracker.directory-list {
   border: 1px solid #ffd700;
   background: rgba(255, 215, 0, 0.1);
   box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
+}
+#combat-tracker .combatant[draggable=true] {
+  cursor: grab;
+}
+#combat-tracker .combatant[draggable=true]:active {
+  cursor: grabbing;
+}
+#combat-tracker .combatant.is-dragging {
+  opacity: 0.35;
+}
+#combat-tracker .combatant.insert-before::before, #combat-tracker .combatant.insert-after::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 4px var(--vagabond-c-chat-yellow);
+  z-index: 5;
+}
+#combat-tracker .combatant.insert-before::before {
+  top: -1px;
+}
+#combat-tracker .combatant.insert-after::after {
+  bottom: -1px;
 }
 #combat-tracker .combatant .col-1 .row-1 {
   align-items: center;

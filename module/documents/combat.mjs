@@ -1,3 +1,5 @@
+import { CombatTrackerHelper } from '../helpers/combat-tracker-helper.mjs';
+
 /**
  * Extend the base Combat document to implement Popcorn Initiative.
  * @extends {Combat}
@@ -125,7 +127,7 @@ export class VagabondCombat extends Combat {
     }
 
     // Otherwise, find next combatant with activations
-    const nextCombatant = this._findNextAvailableCombatant(this.turn);
+    const nextCombatant = this._findNextAvailableCombatant(currentCombatant.id);
     if (!nextCombatant) {
       ui.notifications.warn(game.i18n.localize("VAGABOND.Combat.NoActivationsRemaining"));
       return this.update({ turn: null });
@@ -164,7 +166,8 @@ export class VagabondCombat extends Combat {
     // We don't need to restore anything for them
 
     // Find previous combatant
-    const prevCombatant = this._findPreviousCombatant(this.turn);
+    const currentCombatant = this.turns[this.turn];
+    const prevCombatant = currentCombatant ? this._findPreviousCombatant(currentCombatant.id) : null;
     if (!prevCombatant) {
       return this.update({ turn: null });
     }
@@ -181,26 +184,38 @@ export class VagabondCombat extends Combat {
   }
 
   /**
-   * Find the next combatant with activations available.
-   * @param {number|null} startIndex - Index to start searching from (exclusive)
+   * Combatants in the same faction-grouped visual order the Combat Carousel
+   * and sidebar Combat Tracker render (see CombatTrackerHelper), rather than
+   * the raw initiative-sorted `this.turns`. Turn advancement must follow what
+   * the GM/players actually see on screen: faction groups in their configured
+   * display order, cards within each group in initiative order.
+   * @returns {Combatant[]}
+   * @private
+   */
+  _getVisualOrder() {
+    const order = CombatTrackerHelper.getFactionOrder(this);
+    const buckets = Object.fromEntries(order.map(k => [k, []]));
+    for (const combatant of this.turns) {
+      const key = CombatTrackerHelper.factionKeyForCombatant(combatant);
+      (buckets[key] ?? buckets.neutral).push(combatant);
+    }
+    return order.flatMap(k => buckets[k]);
+  }
+
+  /**
+   * Find the next combatant with activations available, walking the visual
+   * (faction-grouped) turn order.
+   * @param {string|null} afterCombatantId - Combatant id to search after; null to start from the beginning.
    * @returns {Combatant|null}
    * @private
    */
-  _findNextAvailableCombatant(startIndex = -1) {
-    const startPos = startIndex === null || startIndex === undefined ? -1 : startIndex;
+  _findNextAvailableCombatant(afterCombatantId = null) {
+    const order = this._getVisualOrder();
+    if (!order.length) return null;
+    const startPos = afterCombatantId ? order.findIndex(c => c.id === afterCombatantId) : -1;
 
-    // Search from startIndex+1 to end
-    for (let i = startPos + 1; i < this.turns.length; i++) {
-      const combatant = this.turns[i];
-      const activations = combatant.getFlag('vagabond', 'activations.value') ?? 0;
-      if (activations > 0 && !combatant.defeated) {
-        return combatant;
-      }
-    }
-
-    // Wrap around: search from start to startIndex
-    for (let i = 0; i <= startPos; i++) {
-      const combatant = this.turns[i];
+    for (let i = 1; i <= order.length; i++) {
+      const combatant = order[(startPos + i) % order.length];
       const activations = combatant.getFlag('vagabond', 'activations.value') ?? 0;
       if (activations > 0 && !combatant.defeated) {
         return combatant;
@@ -211,23 +226,19 @@ export class VagabondCombat extends Combat {
   }
 
   /**
-   * Find the previous combatant (going backwards in turn order).
-   * @param {number} startIndex - Index to start searching from (exclusive)
+   * Find the previous combatant, walking backwards through the visual
+   * (faction-grouped) turn order.
+   * @param {string} beforeCombatantId - Combatant id to search before.
    * @returns {Combatant|null}
    * @private
    */
-  _findPreviousCombatant(startIndex) {
-    // Search backwards from startIndex-1 to start
-    for (let i = startIndex - 1; i >= 0; i--) {
-      const combatant = this.turns[i];
-      if (!combatant.defeated) {
-        return combatant;
-      }
-    }
+  _findPreviousCombatant(beforeCombatantId) {
+    const order = this._getVisualOrder();
+    const startPos = order.findIndex(c => c.id === beforeCombatantId);
+    if (startPos === -1) return null;
 
-    // Wrap around: search from end to startIndex
-    for (let i = this.turns.length - 1; i > startIndex; i--) {
-      const combatant = this.turns[i];
+    for (let i = 1; i <= order.length; i++) {
+      const combatant = order[(((startPos - i) % order.length) + order.length) % order.length];
       if (!combatant.defeated) {
         return combatant;
       }
@@ -237,14 +248,15 @@ export class VagabondCombat extends Combat {
   }
 
   /**
-   * Find the last combatant that was spent (for starting previousTurn when no active turn).
+   * Find the last combatant that was spent (for starting previousTurn when no active turn),
+   * walking the visual (faction-grouped) turn order.
    * @returns {Combatant|null}
    * @private
    */
   _findPreviousSpentCombatant() {
-    // Find last combatant with activations below max
-    for (let i = this.turns.length - 1; i >= 0; i--) {
-      const combatant = this.turns[i];
+    const order = this._getVisualOrder();
+    for (let i = order.length - 1; i >= 0; i--) {
+      const combatant = order[i];
       if (combatant.defeated) continue;
 
       const current = combatant.getFlag('vagabond', 'activations.value') ?? 0;

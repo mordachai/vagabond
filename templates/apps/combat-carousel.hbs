@@ -31,12 +31,21 @@
                     </div>
                     <div class="vcc-cards">
                         {{#each faction.turns as |turn|}}
-                        <div class="vcc-card {{#if turn.active}}is-active{{/if}} {{#if turn.isSpent}}is-spent{{/if}} {{#if turn.isFlipped}}is-flipped{{/if}} {{#if turn.isDefeated}}is-defeated{{/if}}"
+                        <div class="vcc-card {{#if turn.active}}is-active{{/if}} {{#if turn.isSpent}}is-spent{{/if}} {{#if turn.isFlipped}}is-flipped{{/if}} {{#if turn.isDefeated}}is-defeated{{/if}} {{#if turn.isSelectedByMe}}is-selected-mine{{/if}}"
                              data-combatant-id="{{turn.id}}" data-faction="{{key}}" style="--faction-color: {{turn.factionColor}};">
                             <div class="vcc-card-inner">
 
                                 <div class="vcc-card-face vcc-card-front">
                                     <img class="vcc-portrait" src="{{turn.img}}" alt="{{turn.name}}" draggable="false"/>
+                                    <div class="vcc-target-marker {{#if turn.targeters.length}}has-target{{/if}}" {{#if turn.targetTooltip}}data-tooltip="{{turn.targetTooltip}}"{{/if}}>
+                                        {{#if turn.targeters.length}}
+                                            {{#each turn.targeters}}
+                                            <span class="vcc-target-dot" style="--dot-color: {{this.color}};"><i class="fa-solid fa-crosshairs fa-fw"></i></span>
+                                            {{/each}}
+                                        {{else}}
+                                            <span class="vcc-target-dot vcc-target-dot-empty"></span>
+                                        {{/if}}
+                                    </div>
                                     {{#if turn.isDefeated}}
                                     <img class="vcc-dead-skull" src="/icons/svg/skull.svg" alt="" draggable="false"/>
                                     <img class="vcc-dead-bleed" src="/icons/skills/wounds/injury-triple-slash-bleed.webp" alt="" draggable="false"/>
@@ -75,23 +84,21 @@
                                         </div>
                                         {{/if}}
                                         {{#if turn.back.hasMana}}
-                                        <div class="vcc-back-stat{{#unless turn.back.mana.isSpellcaster}} non-caster{{/unless}}{{#if turn.back.mana.isFocusing}} is-focusing{{/if}}" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Mana'}}">
+                                        <div class="vcc-back-stat vcc-back-mana{{#unless turn.back.mana.isSpellcaster}} non-caster{{/unless}}{{#if turn.back.mana.isFocusing}} is-focusing{{/if}}" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Mana'}}">
                                             <i class="fas fa-star-christmas"></i>
                                             <span>{{turn.back.mana.current}}/{{turn.back.mana.max}}</span>
                                         </div>
                                         {{/if}}
-                                        <div class="vcc-back-row">
-                                            <div class="vcc-back-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Speed'}}">
-                                                <span class="vcc-back-speed-icon">S</span>
-                                                <span>{{turn.back.speed}}</span>
-                                            </div>
-                                            {{#if turn.back.hasLuck}}
-                                            <div class="vcc-back-stat vcc-back-luck" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Luck'}}">
-                                                <i class="fas fa-clover"></i>
-                                                <span>{{turn.back.luck}}</span>
-                                            </div>
-                                            {{/if}}
+                                        <div class="vcc-back-stat" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Speed'}}">
+                                            <i class="fas fa-shoe-prints"></i>
+                                            <span>{{turn.back.speed}}</span>
                                         </div>
+                                        {{#if turn.back.hasLuck}}
+                                        <div class="vcc-back-stat vcc-back-luck" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Luck'}}">
+                                            <i class="fas fa-clover"></i>
+                                            <span>{{turn.back.luck}}</span>
+                                        </div>
+                                        {{/if}}
                                     </div>
                                 </div>
 

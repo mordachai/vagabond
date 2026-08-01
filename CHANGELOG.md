@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.35.0
+- **Combat Carousel on/off setting:** new "Enable Combat Carousel" toggle in Encounter Settings (default on) — turn it off to use only the sidebar Combat Tracker.
+- **Combat Carousel: targeting & selection:** left-click a card to pan/select the token (configurable), Alt+Click to target it (Shift+Alt to add multiple), plus a dedicated target marker on each card.
+- **Combat Carousel: card back:** now also tracks Mana and Luck (in addition to HP/Fatigue), click/right-click to adjust.
+- **Combat Carousel: auto-hide & dim-when-idle:** the carousel can tuck off the top of the screen or fade when idle, revealing on hover — table default (GM) plus a per-player override.
+- **Sidebar Combat Tracker:** drag-to-reorder combatants within a faction and drag-to-reorder faction groups themselves — same interaction the Combat Carousel already had.
+- Fix: Next/Previous Turn now follows the faction-grouped order actually shown on screen instead of raw initiative order, so turn order stays correct after a drag reorder.
+- Fix: Character/NPC HUD window position is now saved once per user instead of per-actor, so it doesn't reset when switching between tokens.
+
 ## v5.34.0
 -Added Combat Carousel like tracker for encounters
 

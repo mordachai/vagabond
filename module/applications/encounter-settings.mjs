@@ -50,8 +50,13 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
       factionHostileColor: game.settings.get('vagabond', 'factionHostileColor'),
       factionSecret: game.settings.get('vagabond', 'factionSecret'),
       factionSecretColor: game.settings.get('vagabond', 'factionSecretColor'),
+      combatCarouselEnabled: game.settings.get('vagabond', 'combatCarouselEnabled'),
       combatCarouselPortraitSize: game.settings.get('vagabond', 'combatCarouselPortraitSize'),
       combatCarouselRevealOtherFactionStats: game.settings.get('vagabond', 'combatCarouselRevealOtherFactionStats'),
+      combatCarouselCardSelectBehavior: game.settings.get('vagabond', 'combatCarouselCardSelectBehavior'),
+      combatCarouselTargetOnAltClick: game.settings.get('vagabond', 'combatCarouselTargetOnAltClick'),
+      combatCarouselAutoHideDefault: game.settings.get('vagabond', 'combatCarouselAutoHideDefault'),
+      combatCarouselDimIdleDefault: game.settings.get('vagabond', 'combatCarouselDimIdleDefault'),
     };
   }
 
@@ -82,10 +87,17 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
     await game.settings.set('vagabond', 'factionSecretColor', data.factionSecretColor || '#bf7fdf');
 
     // Combat Carousel
+    await game.settings.set('vagabond', 'combatCarouselEnabled', !!data.combatCarouselEnabled);
     const validSizes = ['small', 'medium', 'large'];
     await game.settings.set('vagabond', 'combatCarouselPortraitSize',
       validSizes.includes(data.combatCarouselPortraitSize) ? data.combatCarouselPortraitSize : 'medium');
     await game.settings.set('vagabond', 'combatCarouselRevealOtherFactionStats', !!data.combatCarouselRevealOtherFactionStats);
+    const validSelectBehaviors = ['none', 'pan', 'select'];
+    await game.settings.set('vagabond', 'combatCarouselCardSelectBehavior',
+      validSelectBehaviors.includes(data.combatCarouselCardSelectBehavior) ? data.combatCarouselCardSelectBehavior : 'none');
+    await game.settings.set('vagabond', 'combatCarouselTargetOnAltClick', !!data.combatCarouselTargetOnAltClick);
+    await game.settings.set('vagabond', 'combatCarouselAutoHideDefault', !!data.combatCarouselAutoHideDefault);
+    await game.settings.set('vagabond', 'combatCarouselDimIdleDefault', !!data.combatCarouselDimIdleDefault);
 
     // Update existing combatants in active combats with new activation point settings
     if (game.combats && game.combats.size > 0) {

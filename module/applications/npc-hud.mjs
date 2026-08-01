@@ -446,8 +446,9 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   /*  Drag + position persistence (per user)      */
   /* -------------------------------------------- */
 
+  /** Saved per-user position, shared across all NPCs, or null. */
   _savedPosition() {
-    const stored = (game.user.getFlag('vagabond', 'npcHudPosition') ?? {})[this.key];
+    const stored = game.user.getFlag('vagabond', 'npcHudPosition');
     return (stored?.left != null && stored?.top != null)
       ? { left: stored.left, top: stored.top }
       : null;
@@ -473,9 +474,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
 
   #savePosition = foundry.utils.debounce(async () => {
     if (!this.#pos) return;
-    const all = foundry.utils.deepClone(game.user.getFlag('vagabond', 'npcHudPosition') ?? {});
-    all[this.key] = { left: Math.round(this.#pos.left), top: Math.round(this.#pos.top) };
-    await game.user.setFlag('vagabond', 'npcHudPosition', all);
+    await game.user.setFlag('vagabond', 'npcHudPosition', {
+      left: Math.round(this.#pos.left),
+      top: Math.round(this.#pos.top),
+    });
   }, 250);
 
   _onDragStart(event) {

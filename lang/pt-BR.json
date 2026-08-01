@@ -2129,6 +2129,21 @@
         "PingCombatant": "Sinalizar Combatente",
         "DetectRoll": "Rolar Perícia de Detecção",
         "InitiativeRoll": "Rolar Iniciativa"
+      },
+      "Carousel": {
+        "SceneControl": "Alternar Carrossel de Combate",
+        "NoEncounter": "Nenhum Encontro Ativo",
+        "StartEncounter": "Iniciar Encontro",
+        "EndEncounter": "Encerrar Encontro",
+        "ClearMoveHistory": "Limpar Histórico de Movimento",
+        "MoveHistoryCleared": "Histórico de movimento limpo para todos os combatentes.",
+        "Config": "Configurar Combate",
+        "PreviousRound": "Rodada Anterior",
+        "PreviousTurn": "Turno Anterior",
+        "NextTurn": "Próximo Turno",
+        "NextRound": "Próxima Rodada",
+        "TargetedBy": "Alvo de",
+        "GM": "Mestre"
       }
     },
     "StatusSettings": {
@@ -2238,6 +2253,54 @@
       "NPCInitiativeFormula": {
         "Name": "Fórmula de Iniciativa (NPCs)",
         "Hint": "Fórmula personalizada para rolar iniciativa de NPCs. Só usada quando rolagens de iniciativa estão ativadas (não ocultas). Use @ para referenciar dados do ator (ex: @speed). Use ceil() para arredondar para cima."
+      },
+      "Carousel": {
+        "Title": "Carrossel de Combate",
+        "Enabled": {
+          "Name": "Ativar Carrossel de Combate",
+          "Hint": "Exibe a sobreposição flutuante do Carrossel de Combate durante encontros. Desative para usar apenas o rastreador de combate na barra lateral. Padrão: ativado."
+        },
+        "CardSelectBehavior": {
+          "Name": "Ao Selecionar uma Carta",
+          "None": "Não Fazer Nada",
+          "Pan": "Centralizar na Selecionada",
+          "Select": "Selecionar Token",
+          "Hint": "O que o clique esquerdo em uma carta faz no mapa. Centralizar move a visão para o token. Selecionar controla o token (Shift+Clique para selecionar múltiplos)."
+        },
+        "TargetOnAltClick": {
+          "Name": "Alvo Selecionado",
+          "Hint": "Alt+Clique esquerdo em uma carta define aquele token como alvo. Shift+Alt+Clique para definir múltiplos alvos."
+        },
+        "PortraitSize": {
+          "Name": "Tamanho do Retrato",
+          "Small": "Pequeno (80px)",
+          "Medium": "Médio (100px)",
+          "Large": "Grande (120px)",
+          "Hint": "Tamanho das cartas de combatentes na sobreposição do Carrossel de Combate."
+        },
+        "RevealOtherFactionStats": {
+          "Name": "Revelar PV/Fadiga de Outras Facções",
+          "Hint": "Se ativado, jogadores podem ver PV e Fadiga de combatentes fora do seu próprio grupo de facção. Padrão: oculto."
+        },
+        "AutoHideDefault": {
+          "Name": "Ocultar Automaticamente por Padrão (Jogadores)",
+          "Hint": "Padrão para jogadores que não definiram sua própria preferência (menu de configurações VAGABOND). Quando ativado, o carrossel se recolhe no topo da tela e reaparece ao passar o mouse."
+        },
+        "DimIdleDefault": {
+          "Name": "Escurecer Quando Ocioso por Padrão (Jogadores)",
+          "Hint": "Padrão para jogadores que não definiram sua própria preferência (menu de configurações VAGABOND). Quando ativado, o carrossel fica semitransparente até que o mouse passe sobre ele."
+        },
+        "AutoHide": {
+          "Name": "Carrossel de Combate: Ocultar Automaticamente",
+          "Hint": "Recolhe o Carrossel de Combate no topo da tela, revelando-o ao passar o mouse. \"Usar Padrão da Mesa\" segue o que o Mestre definiu."
+        },
+        "DimIdle": {
+          "Name": "Carrossel de Combate: Escurecer Quando Ocioso",
+          "Hint": "Esmaece o Carrossel de Combate para opacidade parcial até que o mouse passe sobre ele. \"Usar Padrão da Mesa\" segue o que o Mestre definiu."
+        },
+        "Inherit": "Usar Padrão da Mesa",
+        "On": "Ativado",
+        "Off": "Desativado"
       },
       "Save": "Salvar Configurações",
       "Cancel": "Cancelar",

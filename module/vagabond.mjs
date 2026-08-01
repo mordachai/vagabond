@@ -625,10 +625,118 @@ function registerGameSettings() {
     requiresReload: false
   });
 
+  // Setting 12c-b: Combat Carousel — master on/off switch (default ON)
+  game.settings.register('vagabond', 'combatCarouselEnabled', {
+    name: 'VAGABOND.EncounterSettings.Carousel.Enabled.Name',
+    hint: 'VAGABOND.EncounterSettings.Carousel.Enabled.Hint',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+    onChange: (enabled) => { if (!enabled) CombatCarousel.close(); },
+  });
+
   // Setting 12d: Combat Carousel — reveal other factions' HP/Fatigue to players
   game.settings.register('vagabond', 'combatCarouselRevealOtherFactionStats', {
     name: 'VAGABOND.EncounterSettings.Carousel.RevealOtherFactionStats.Name',
     scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false
+  });
+
+  // Setting 12e: Combat Carousel — left-click card behavior
+  game.settings.register('vagabond', 'combatCarouselCardSelectBehavior', {
+    name: 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Name',
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'none',
+    requiresReload: false
+  });
+
+  // Setting 12f: Combat Carousel — Alt+Click card targets token
+  game.settings.register('vagabond', 'combatCarouselTargetOnAltClick', {
+    name: 'VAGABOND.EncounterSettings.Carousel.TargetOnAltClick.Name',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: true,
+    requiresReload: false
+  });
+
+  // Setting 12g/12h: Combat Carousel — table defaults (GM, Encounter Settings)
+  // for the two per-player display prefs below. Read LIVE every render (see
+  // CombatCarousel._resolveDisplayPref), not baked into a client default at
+  // registration time — a plain Boolean client default is fixed the moment
+  // this client's page loads, so a GM flipping the table default mid-session
+  // would never visibly move any client (including the GM's own) already open.
+  game.settings.register('vagabond', 'combatCarouselAutoHideDefault', {
+    name: 'VAGABOND.EncounterSettings.Carousel.AutoHideDefault.Name',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+    onChange: () => CombatCarousel.refresh(),
+  });
+
+  game.settings.register('vagabond', 'combatCarouselDimIdleDefault', {
+    name: 'VAGABOND.EncounterSettings.Carousel.DimIdleDefault.Name',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+    onChange: () => CombatCarousel.refresh(),
+  });
+
+  // Setting 12i: Combat Carousel — auto-hide off the top of the screen,
+  // revealing on hover. Per-player (client scope), surfaced directly in
+  // Foundry's own Configure Settings so every player controls their own copy.
+  // Tri-state: "inherit" (default) tracks the GM's table default live; "on"/
+  // "off" are an explicit per-player override once they've made a choice.
+  game.settings.register('vagabond', 'combatCarouselAutoHide', {
+    name: 'VAGABOND.EncounterSettings.Carousel.AutoHide.Name',
+    hint: 'VAGABOND.EncounterSettings.Carousel.AutoHide.Hint',
+    scope: 'client',
+    config: true,
+    type: String,
+    choices: {
+      inherit: 'VAGABOND.EncounterSettings.Carousel.Inherit',
+      on: 'VAGABOND.EncounterSettings.Carousel.On',
+      off: 'VAGABOND.EncounterSettings.Carousel.Off',
+    },
+    default: 'inherit',
+    requiresReload: false,
+    onChange: () => CombatCarousel.refresh(),
+  });
+
+  // Setting 12j: Combat Carousel — dim to partial opacity when idle, full
+  // opacity on hover. Same tri-state/GM-default relationship as above.
+  game.settings.register('vagabond', 'combatCarouselDimIdle', {
+    name: 'VAGABOND.EncounterSettings.Carousel.DimIdle.Name',
+    hint: 'VAGABOND.EncounterSettings.Carousel.DimIdle.Hint',
+    scope: 'client',
+    config: true,
+    type: String,
+    choices: {
+      inherit: 'VAGABOND.EncounterSettings.Carousel.Inherit',
+      on: 'VAGABOND.EncounterSettings.Carousel.On',
+      off: 'VAGABOND.EncounterSettings.Carousel.Off',
+    },
+    default: 'inherit',
+    requiresReload: false,
+    onChange: () => CombatCarousel.refresh(),
+  });
+
+  // Setting 12k: Combat Carousel — last known open/closed state (hidden,
+  // per-player), so a page refresh/restart restores it instead of always
+  // starting closed.
+  game.settings.register('vagabond', 'combatCarouselUserOpen', {
+    scope: 'client',
     config: false,
     type: Boolean,
     default: false,
@@ -1033,7 +1141,7 @@ Hooks.once('init', function () {
   // Store original methods we'll wrap
   const originalPrepareTrackerContext = CombatTracker.prototype._prepareTrackerContext;
   const originalGetEntryContextOptions = CombatTracker.prototype._getEntryContextOptions;
-  const originalActivateListeners = CombatTracker.prototype.activateListeners;
+  const originalCombatTrackerOnRender = CombatTracker.prototype._onRender;
 
   // Replace template
   CombatTracker.PARTS.tracker.template = "systems/vagabond/templates/sidebar/combat-tracker.hbs";
@@ -1055,10 +1163,11 @@ Hooks.once('init', function () {
     return VagabondCombatTracker.getEntryContextOptions.call(this, originalGetEntryContextOptions);
   };
 
-  // Wrap activateListeners
-  CombatTracker.prototype.activateListeners = function(html) {
-    const jQueryHtml = html instanceof HTMLElement ? $(html) : html;
-    return VagabondCombatTracker.activateListeners.call(this, originalActivateListeners, jQueryHtml);
+  // Wrap _onRender (NOT the legacy activateListeners(html) hook — CombatTracker
+  // is pure ApplicationV2 in v14 and never calls it).
+  CombatTracker.prototype._onRender = async function(context, options) {
+    await originalCombatTrackerOnRender.call(this, context, options);
+    VagabondCombatTracker.onRender.call(this, options);
   };
 
   // Note that you don't need to declare a DataModel
@@ -1250,9 +1359,9 @@ Hooks.once('ready', function () {
     await ProgressClock.create(data);
   });
 
-  // Combat Carousel — players may drag-reorder cards within their own (friendly)
-  // faction group; Combatant writes route through the GM since a player rarely
-  // owns every actor in that group.
+  // Combat Carousel / sidebar Combat Tracker — players may drag-reorder cards or
+  // rows within their own (friendly) faction group; Combatant writes route
+  // through the GM since a player rarely owns every actor in that group.
   registerSocketAction('reorderCombatants', async ({ combatId, updates }) => {
     const combat = game.combats.get(combatId);
     if (!combat) return;
@@ -1673,6 +1782,13 @@ Hooks.on('vagabond.toggleCombatCarousel', () => {
 Hooks.on('createCombatant', (combatant) => CombatCarousel.syncAutoVisibility(combatant.parent ?? game.combat));
 Hooks.on('deleteCombatant', (combatant) => CombatCarousel.syncAutoVisibility(combatant.parent ?? game.combat));
 Hooks.on('deleteCombat', () => CombatCarousel.close());
+
+// Restore whatever open/closed state this client last left the carousel in —
+// otherwise every refresh/restart silently drops back to closed until the
+// next create/deleteCombatant event happens to fire.
+Hooks.once('ready', () => {
+  if (game.settings.get('vagabond', 'combatCarouselEnabled') && game.settings.get('vagabond', 'combatCarouselUserOpen')) CombatCarousel.open();
+});
 
 Hooks.on('vagabond.toggleCharacterHud', (actor = null) => {
   VagabondCharacterHud.toggle(actor);

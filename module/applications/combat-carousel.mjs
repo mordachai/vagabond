@@ -64,10 +64,12 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     else CombatCarousel.open();
   }
 
-  /** Open (no-op if already open). */
+  /** Open (no-op if already open, or if disabled via world setting). */
   static open() {
     if (CombatCarousel.#isOpen) return;
+    if (!game.settings.get('vagabond', 'combatCarouselEnabled')) return;
     CombatCarousel.#isOpen = true;
+    game.settings.set('vagabond', 'combatCarouselUserOpen', true);
     if (!CombatCarousel.#instance) CombatCarousel.#instance = new CombatCarousel();
     CombatCarousel.#instance.render({ force: true });
   }
@@ -76,12 +78,28 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
   static close() {
     if (!CombatCarousel.#isOpen) return;
     CombatCarousel.#isOpen = false;
+    game.settings.set('vagabond', 'combatCarouselUserOpen', false);
     CombatCarousel.#instance?.close();
   }
 
   /** Re-render the open instance, if any (e.g. after a settings change). */
   static refresh() {
     if (CombatCarousel.#instance?.rendered) CombatCarousel.#instance.render();
+  }
+
+  /**
+   * Resolve a tri-state ("inherit"/"on"/"off") per-player display pref
+   * against its GM-set table default. "inherit" tracks the world default
+   * live — every render re-reads it, so a GM toggling it mid-session moves
+   * every client that hasn't made its own explicit choice.
+   * @param {string} clientKey  e.g. 'combatCarouselAutoHide'
+   * @param {string} worldDefaultKey  e.g. 'combatCarouselAutoHideDefault'
+   */
+  static _resolveDisplayPref(clientKey, worldDefaultKey) {
+    const v = game.settings.get('vagabond', clientKey);
+    if (v === 'on') return true;
+    if (v === 'off') return false;
+    return game.settings.get('vagabond', worldDefaultKey);
   }
 
   /**
@@ -129,6 +147,8 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
         // behind the reveal setting (default hidden).
         turn.canSeeStats = context.isGM || key === 'friendly' || combatant?.actor?.isOwner
           || context.revealOtherFactionStats;
+
+        this._buildTargetInfo(turn, combatant);
       }
     }
     context.factions = factions;
@@ -164,6 +184,32 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     };
   }
 
+  /**
+   * Live targeting + selection info for a turn's token.
+   * - `targeters`: a colored dot per user currently targeting it
+   *   ({@link Token#targeted}, a `Set<User>` synced across all clients) — drives the marker icon.
+   * - `isSelectedByMe`: whether the *viewing* user has this token under their
+   *   own canvas control ({@link Token#controlled}, per-client, not synced)
+   *   — drives the card border.
+   * @param {object} turn
+   * @param {Combatant} combatant
+   */
+  _buildTargetInfo(turn, combatant) {
+    const token = combatant?.token?.object;
+    const targeters = token
+      ? [...token.targeted].map(u => ({
+        id: u.id,
+        color: u.color,
+        name: u.character?.name ?? (u.isGM ? game.i18n.localize('VAGABOND.Combat.Carousel.GM') : u.name),
+      }))
+      : [];
+    turn.targeters = targeters;
+    turn.isSelectedByMe = !!token?.controlled;
+    turn.targetTooltip = targeters.length
+      ? `${game.i18n.localize('VAGABOND.Combat.Carousel.TargetedBy')}: ${targeters.map(t => t.name).join(', ')}`
+      : '';
+  }
+
   /* -------------------------------------------- */
   /*  Rendering / Interaction                      */
   /* -------------------------------------------- */
@@ -176,6 +222,8 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     this.element.classList.toggle('vcc-empty', !context.hasCombat);
     this.element.classList.remove('vcc-size-small', 'vcc-size-medium', 'vcc-size-large');
     this.element.classList.add(`vcc-size-${context.portraitSize}`);
+    this.element.classList.toggle('vcc-auto-hide', CombatCarousel._resolveDisplayPref('combatCarouselAutoHide', 'combatCarouselAutoHideDefault'));
+    this.element.classList.toggle('vcc-dim-idle', CombatCarousel._resolveDisplayPref('combatCarouselDimIdle', 'combatCarouselDimIdleDefault'));
 
     this.#ctrl?.abort();
     this.#ctrl = new AbortController();
@@ -213,24 +261,39 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
       if (this.#flipped.has(el.dataset.combatantId)) el.classList.add('is-flipped');
     }
 
-    // Right-click: flip a card. GM may flip any card; players may only flip
-    // their own faction's cards (or a combatant they own outright) — other
-    // factions' cards must not be flippable by players.
+    // Right-click: flip a card either direction. GM may flip any card;
+    // players may only flip their own faction's cards (or a combatant they
+    // own outright) — other factions' cards must not be flippable by players.
+    // The back face's own right-click targets (HP/Fatigue pips) stop
+    // propagation in their own handlers, so this only fires on open space.
     this.element.addEventListener('contextmenu', (event) => {
       const card = event.target.closest('.vcc-card');
       if (!card) return;
       event.preventDefault();
-      if (!this._canFlipCard(card)) return;
-      const id = card.dataset.combatantId;
-      if (this.#flipped.has(id)) { this.#flipped.delete(id); card.classList.remove('is-flipped'); }
-      else { this.#flipped.add(id); card.classList.add('is-flipped'); }
+      this._toggleFlip(card);
     }, { signal });
 
-    // Double-click: activate that combatant's turn.
+    // Double-click: activate that combatant's turn. Cancels any pending
+    // single-click action so select/pan/target doesn't fire in between.
     this.element.addEventListener('dblclick', (event) => {
       const card = event.target.closest('.vcc-card');
       if (!card) return;
+      clearTimeout(this._cardClickTimeout);
       this._activateTurn(card.dataset.combatantId);
+    }, { signal });
+
+    // Left-click: canvas select/pan (configurable), Alt+click: target token.
+    // Sub-widgets with their own click behavior (flip icon, status icon,
+    // back-face stat pips) stop propagation in their own handlers, so this
+    // only fires for the card's own surface. Deferred so the second click of
+    // a dblclick (event.detail === 2) can cancel it before it runs.
+    this.element.addEventListener('click', (event) => {
+      const card = event.target.closest('.vcc-card');
+      if (!card) return;
+      if (event.target.closest('[data-action]')) return;
+      clearTimeout(this._cardClickTimeout);
+      if (event.detail > 1) return;
+      this._cardClickTimeout = setTimeout(() => this._onCardClick(card, event), 250);
     }, { signal });
 
     // Hover-name reveal (GM: always via CSS; players: only their own faction — server-side
@@ -240,6 +303,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     this._attachPennantDragHandlers(signal);
     this._attachStatusIconHandlers(signal);
     this._attachBackStatHandlers(signal);
+    this._attachTargetMarkerHandlers(signal);
 
     this._registerHooks();
   }
@@ -249,12 +313,66 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
   /*  (left −1 / right +1 for HP, inverse for Fatigue).                       */
   /* -------------------------------------------- */
 
+  _toggleFlip(card) {
+    if (!this._canFlipCard(card)) return;
+    const id = card.dataset.combatantId;
+    if (this.#flipped.has(id)) { this.#flipped.delete(id); card.classList.remove('is-flipped'); }
+    else { this.#flipped.add(id); card.classList.add('is-flipped'); }
+  }
+
   /** GM may flip any card; players only their own faction's, or a combatant they own outright. */
   _canFlipCard(card) {
     if (game.user.isGM) return true;
     if (card.dataset.faction === 'friendly') return true;
     const combatant = game.combat?.combatants.get(card.dataset.combatantId);
     return !!combatant?.actor?.isOwner;
+  }
+
+  /**
+   * Left-click on a card: Alt held = target the token (gated by the
+   * `combatCarouselTargetOnAltClick` setting; Shift+Alt = add to targets
+   * instead of replacing them). Otherwise runs the configured
+   * `combatCarouselCardSelectBehavior` (none / pan / select; Shift = add to
+   * canvas selection instead of replacing it).
+   */
+  _onCardClick(card, event) {
+    const combatant = game.combat?.combatants.get(card.dataset.combatantId);
+    const token = combatant?.token?.object;
+    if (!token) return;
+
+    if (event.altKey) {
+      if (!game.settings.get('vagabond', 'combatCarouselTargetOnAltClick')) return;
+      const isTargeted = game.user.targets.has(token);
+      token.setTarget(!isTargeted, { releaseOthers: !event.shiftKey });
+      return;
+    }
+
+    const behavior = game.settings.get('vagabond', 'combatCarouselCardSelectBehavior');
+    if (behavior === 'pan') {
+      canvas.animatePan({ x: token.center.x, y: token.center.y });
+    } else if (behavior === 'select') {
+      token.control({ releaseOthers: !event.shiftKey });
+    }
+  }
+
+  /**
+   * Top-left target marker: click toggles the *viewing* user's own targeting
+   * of that card's token, additive (never releases other targets already
+   * held) — clicking several markers in a row builds a multi-target set,
+   * same idea as Shift+Alt+Click on the card itself.
+   */
+  _attachTargetMarkerHandlers(signal) {
+    for (const marker of this.element.querySelectorAll('.vcc-target-marker')) {
+      marker.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const card = marker.closest('.vcc-card');
+        const combatant = game.combat?.combatants.get(card?.dataset.combatantId);
+        const token = combatant?.token?.object;
+        if (!token) return;
+        const isMine = game.user.targets.has(token);
+        token.setTarget(!isMine, { releaseOthers: false });
+      }, { signal });
+    }
   }
 
   _actorForBackStat(el) {
@@ -265,12 +383,28 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
 
   _attachBackStatHandlers(signal) {
     for (const el of this.element.querySelectorAll('.vcc-back-hp')) {
-      el.addEventListener('click', (event) => { event.stopPropagation(); this._changeBackHp(el, -1); }, { signal });
-      el.addEventListener('contextmenu', (event) => { event.preventDefault(); event.stopPropagation(); this._changeBackHp(el, +1); }, { signal });
+      const icon = el.querySelector('i');
+      if (!icon) continue;
+      icon.addEventListener('click', (event) => { event.stopPropagation(); this._changeBackHp(el, -1); }, { signal });
+      icon.addEventListener('contextmenu', (event) => { event.preventDefault(); event.stopPropagation(); this._changeBackHp(el, +1); }, { signal });
     }
     for (const el of this.element.querySelectorAll('.vcc-back-fatigue')) {
-      el.addEventListener('click', (event) => { event.stopPropagation(); this._changeBackFatigue(el, +1); }, { signal });
-      el.addEventListener('contextmenu', (event) => { event.preventDefault(); event.stopPropagation(); this._changeBackFatigue(el, -1); }, { signal });
+      const icon = el.querySelector('i');
+      if (!icon) continue;
+      icon.addEventListener('click', (event) => { event.stopPropagation(); this._changeBackFatigue(el, +1); }, { signal });
+      icon.addEventListener('contextmenu', (event) => { event.preventDefault(); event.stopPropagation(); this._changeBackFatigue(el, -1); }, { signal });
+    }
+    for (const el of this.element.querySelectorAll('.vcc-back-mana')) {
+      const icon = el.querySelector('i');
+      if (!icon) continue;
+      icon.addEventListener('click', (event) => { event.stopPropagation(); this._changeBackMana(el, -1); }, { signal });
+      icon.addEventListener('contextmenu', (event) => { event.preventDefault(); event.stopPropagation(); this._changeBackMana(el, +1); }, { signal });
+    }
+    for (const el of this.element.querySelectorAll('.vcc-back-luck')) {
+      const icon = el.querySelector('i');
+      if (!icon) continue;
+      icon.addEventListener('click', (event) => { event.stopPropagation(); this._changeBackLuck(el, -1); }, { signal });
+      icon.addEventListener('contextmenu', (event) => { event.preventDefault(); event.stopPropagation(); this._changeBackLuck(el, +1); }, { signal });
     }
   }
 
@@ -286,6 +420,26 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     if (!actor || !(game.user.isGM || actor.isOwner)) return;
     const val = Math.clamp((actor.system.fatigue ?? 0) + delta, 0, actor.system.fatigueMax ?? 5);
     actor.update({ 'system.fatigue': val });
+  }
+
+  _changeBackMana(el, delta) {
+    const actor = this._actorForBackStat(el);
+    if (!actor || !(game.user.isGM || actor.isOwner) || !actor.system.mana) return;
+    const val = Math.clamp((actor.system.mana.current ?? 0) + delta, 0, actor.system.mana.max ?? 0);
+    actor.update({ 'system.mana.current': val });
+  }
+
+  async _changeBackLuck(el, delta) {
+    const actor = this._actorForBackStat(el);
+    if (!actor || !(game.user.isGM || actor.isOwner)) return;
+    const currentLuck = actor.system.currentLuck ?? 0;
+    const maxLuck = actor.system.maxLuck ?? 0;
+    const val = Math.clamp(currentLuck + delta, 0, maxLuck);
+    if (val === currentLuck) return;
+    await actor.update({ 'system.currentLuck': val });
+    // Same chat feedback as the actor sheet's luck pool click (_onSpendLuck).
+    if (delta > 0) await VagabondChatCard.luckGain(actor, val, maxLuck);
+    else await VagabondChatCard.luckSpend(actor, val, maxLuck);
   }
 
   /* -------------------------------------------- */
@@ -452,69 +606,14 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
   }
 
   /**
-   * Reorder `draggedId` to sit immediately before/after `targetId`, within the
-   * same faction group, WITHOUT disturbing the global interleave with other
-   * factions: the faction's members keep the same set of global turn-order
-   * slots, only the new relative order among themselves changes.
-   *
-   * This system defaults to popcorn/manual initiative (`hideInitiativeRoll`
-   * defaults true), so most combatants' `initiative` is commonly `null` —
-   * transplanting old values between faction-mates (the previous approach)
-   * is a no-op when those values are all null/tied. Instead, fresh distinct
-   * values are interpolated between whichever combatants (any faction) sit
-   * just outside this faction's occupied slot span, in the sort direction
-   * the world is currently using.
+   * Reorder `draggedId` to sit immediately before/after `targetId` within a
+   * faction group. Logic lives in {@link CombatTrackerHelper.reorderWithinFaction}
+   * — shared with the sidebar Combat Tracker's own drag UI.
    */
   async _reorderWithinFaction(factionKey, draggedId, targetId, insertAfter = false) {
     const combat = game.combat;
     if (!combat) return;
-    if (!game.user.isGM && factionKey !== 'friendly') return;
-
-    const factionIds = CombatTrackerHelper.buildFactionTurns(combat)[factionKey]?.turns.map(t => t.id) ?? [];
-    if (!factionIds.includes(draggedId) || !factionIds.includes(targetId)) return;
-
-    const newOrder = factionIds.filter(id => id !== draggedId);
-    let targetIndex = newOrder.indexOf(targetId);
-    if (insertAfter) targetIndex += 1;
-    newOrder.splice(targetIndex, 0, draggedId);
-
-    const allTurns = combat.turns; // already sorted in current display order
-    const slotIndices = allTurns
-      .map((c, i) => ({ id: c.id, i }))
-      .filter(t => factionIds.includes(t.id))
-      .map(t => t.i);
-
-    const before = allTurns[slotIndices[0] - 1];
-    const after = allTurns[slotIndices[slotIndices.length - 1] + 1];
-
-    const n = newOrder.length;
-    // Ascending (popcorn/manual, lowest goes first) vs descending (rolled, highest first).
-    const dir = game.settings.get('vagabond', 'hideInitiativeRoll') ? 1 : -1;
-
-    let lo = Number.isFinite(before?.initiative) ? before.initiative : null;
-    let hi = Number.isFinite(after?.initiative) ? after.initiative : null;
-
-    if (lo === null && hi === null) {
-      // No usable neighbor on either side (values null, or this faction spans
-      // the whole combat) — synthesize a safe range so results are still
-      // distinct and correctly ordered.
-      lo = dir === 1 ? 0 : n + 1;
-      hi = dir === 1 ? n + 1 : 0;
-    } else if (lo === null) {
-      lo = hi - dir * (n + 1);
-    } else if (hi === null) {
-      hi = lo + dir * (n + 1);
-    }
-
-    const step = (hi - lo) / (n + 1);
-    const updates = newOrder.map((id, i) => ({ _id: id, initiative: lo + step * (i + 1) }));
-
-    if (game.user.isGM) return combat.updateEmbeddedDocuments('Combatant', updates);
-
-    // Players reordering their own faction rarely own every combatant in it —
-    // relay the write through the GM client.
-    const { emitSocket } = await import('../helpers/socket-helper.mjs');
-    emitSocket('reorderCombatants', { combatId: combat.id, updates });
+    return CombatTrackerHelper.reorderWithinFaction(combat, factionKey, draggedId, targetId, insertAfter);
   }
 
   /* -------------------------------------------- */
@@ -574,12 +673,8 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
 
   async _reorderFactionGroups(draggedKey, targetKey) {
     const combat = game.combat;
-    if (!combat || !game.user.isGM) return;
-    const order = CombatTrackerHelper.getFactionOrder(combat);
-    const newOrder = order.filter(k => k !== draggedKey);
-    const targetIndex = newOrder.indexOf(targetKey);
-    newOrder.splice(targetIndex, 0, draggedKey);
-    return CombatTrackerHelper.setFactionOrder(combat, newOrder);
+    if (!combat) return;
+    return CombatTrackerHelper.reorderFactionGroups(combat, draggedKey, targetKey);
   }
 
   /* -------------------------------------------- */
@@ -644,6 +739,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
       'updateCombat', 'createCombat', 'deleteCombat',
       'updateCombatant', 'createCombatant', 'deleteCombatant',
       'updateActor', 'createActiveEffect', 'updateActiveEffect', 'deleteActiveEffect',
+      'targetToken', 'controlToken',
     ];
     for (const hook of hooks) {
       this.#hookIds.push({ hook, id: Hooks.on(hook, redraw) });

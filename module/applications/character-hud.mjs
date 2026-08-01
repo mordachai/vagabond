@@ -734,9 +734,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   /*  Drag + position persistence (per user)      */
   /* -------------------------------------------- */
 
-  /** Saved per-user/per-actor position, or null. */
+  /** Saved per-user position, shared across all characters, or null. */
   _savedPosition() {
-    const stored = (game.user.getFlag('vagabond', 'hudPosition') ?? {})[this.key];
+    const stored = game.user.getFlag('vagabond', 'hudPosition');
     return (stored?.left != null && stored?.top != null)
       ? { left: stored.left, top: stored.top }
       : null;
@@ -767,9 +767,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   #savePosition = foundry.utils.debounce(async () => {
     if (!this.#pos) return;
-    const all = foundry.utils.deepClone(game.user.getFlag('vagabond', 'hudPosition') ?? {});
-    all[this.key] = { left: Math.round(this.#pos.left), top: Math.round(this.#pos.top) };
-    await game.user.setFlag('vagabond', 'hudPosition', all);
+    await game.user.setFlag('vagabond', 'hudPosition', {
+      left: Math.round(this.#pos.left),
+      top: Math.round(this.#pos.top),
+    });
   }, 250);
 
   _onDragStart(event) {

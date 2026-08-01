@@ -2142,7 +2142,9 @@
         "PreviousRound": "Previous Round",
         "PreviousTurn": "Previous Turn",
         "NextTurn": "Next Turn",
-        "NextRound": "Next Round"
+        "NextRound": "Next Round",
+        "TargetedBy": "Targeted by",
+        "GM": "GM"
       }
     },
     "StatusSettings": {
@@ -2255,6 +2257,21 @@
       },
       "Carousel": {
         "Title": "Combat Carousel",
+        "Enabled": {
+          "Name": "Enable Combat Carousel",
+          "Hint": "Show the floating Combat Carousel overlay during encounters. Turn off to use only the sidebar Combat Tracker. Default: on."
+        },
+        "CardSelectBehavior": {
+          "Name": "When Card Is Selected",
+          "None": "Do Nothing",
+          "Pan": "Pan to Selected",
+          "Select": "Select Token",
+          "Hint": "What left-clicking a card does on the canvas. Pan centers the view on the token. Select controls the token (Shift+Click to select multiple)."
+        },
+        "TargetOnAltClick": {
+          "Name": "Target Selected",
+          "Hint": "Alt+Left Click a card to target that token. Shift+Alt+Left Click to target multiple."
+        },
         "PortraitSize": {
           "Name": "Portrait Size",
           "Small": "Small (80px)",
@@ -2265,7 +2282,26 @@
         "RevealOtherFactionStats": {
           "Name": "Reveal Other Factions' HP/Fatigue",
           "Hint": "If enabled, players can see HP and Fatigue for combatants outside their own faction group. Default: hidden."
-        }
+        },
+        "AutoHideDefault": {
+          "Name": "Auto-Hide By Default (Players)",
+          "Hint": "Default for players who haven't set their own preference (VAGABOND settings menu). When on, the carousel tucks itself off the top of the screen and reveals on hover."
+        },
+        "DimIdleDefault": {
+          "Name": "Dim When Idle By Default (Players)",
+          "Hint": "Default for players who haven't set their own preference (VAGABOND settings menu). When on, the carousel is semi-transparent until hovered."
+        },
+        "AutoHide": {
+          "Name": "Combat Carousel: Auto-Hide",
+          "Hint": "Tuck the Combat Carousel off the top of the screen, revealing it on hover. \"Use Table Default\" follows whatever the GM has set."
+        },
+        "DimIdle": {
+          "Name": "Combat Carousel: Dim When Idle",
+          "Hint": "Fade the Combat Carousel to partial opacity until hovered. \"Use Table Default\" follows whatever the GM has set."
+        },
+        "Inherit": "Use Table Default",
+        "On": "On",
+        "Off": "Off"
       },
       "Save": "Save Settings",
       "Cancel": "Cancel",

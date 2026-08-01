@@ -33,11 +33,11 @@
     <ol id="combat-tracker" class="combat-tracker directory-list">
         {{#each factions as |faction key|}}
             {{#if faction.turns.length}}
-            <li class="faction-header {{faction.css}}" style="--faction-color: {{faction.color}};">
+            <li class="faction-header {{faction.css}}" data-faction="{{key}}" style="--faction-color: {{faction.color}};">
                 <h4>{{localize faction.label}}</h4>
             </li>
             {{#each faction.turns as |turn|}}
-            <li class="combatant actor directory-item grid-4-col {{turn.factionClass}} {{#if turn.isSpent}}spent{{/if}} {{#if turn.active}}active{{/if}}" data-combatant-id="{{turn.id}}" style="--faction-color: {{turn.factionColor}};">
+            <li class="combatant actor directory-item grid-4-col {{turn.factionClass}} {{#if turn.isSpent}}spent{{/if}} {{#if turn.active}}active{{/if}}" data-combatant-id="{{turn.id}}" data-faction="{{key}}" style="--faction-color: {{turn.factionColor}};">
 
                 {{!-- Column 1: Identity & Controls --}}
                 <div class="col-1 flexcol">

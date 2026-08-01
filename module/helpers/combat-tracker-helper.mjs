@@ -192,4 +192,92 @@ export class CombatTrackerHelper {
 
     return this.bucketByFaction(order, turns);
   }
+
+  /**
+   * Reorder `draggedId` to sit immediately before/after `targetId`, within the
+   * same faction group, WITHOUT disturbing the global interleave with other
+   * factions: the faction's members keep the same set of global turn-order
+   * slots, only the new relative order among themselves changes.
+   *
+   * This system defaults to popcorn/manual initiative (`hideInitiativeRoll`
+   * defaults true), so most combatants' `initiative` is commonly `null` —
+   * transplanting old values between faction-mates (the previous approach)
+   * is a no-op when those values are all null/tied. Instead, fresh distinct
+   * values are interpolated between whichever combatants (any faction) sit
+   * just outside this faction's occupied slot span, in the sort direction
+   * the world is currently using.
+   *
+   * Shared by the Combat Carousel and the sidebar Combat Tracker drag UIs.
+   * @param {Combat} combat
+   * @param {string} factionKey
+   * @param {string} draggedId
+   * @param {string} targetId
+   * @param {boolean} [insertAfter=false]
+   */
+  static async reorderWithinFaction(combat, factionKey, draggedId, targetId, insertAfter = false) {
+    if (!combat) return;
+    if (!game.user.isGM && factionKey !== 'friendly') return;
+
+    const factionIds = this.buildFactionTurns(combat)[factionKey]?.turns.map(t => t.id) ?? [];
+    if (!factionIds.includes(draggedId) || !factionIds.includes(targetId)) return;
+
+    const newOrder = factionIds.filter(id => id !== draggedId);
+    let targetIndex = newOrder.indexOf(targetId);
+    if (insertAfter) targetIndex += 1;
+    newOrder.splice(targetIndex, 0, draggedId);
+
+    const allTurns = combat.turns; // already sorted in current display order
+    const slotIndices = allTurns
+      .map((c, i) => ({ id: c.id, i }))
+      .filter(t => factionIds.includes(t.id))
+      .map(t => t.i);
+
+    const before = allTurns[slotIndices[0] - 1];
+    const after = allTurns[slotIndices[slotIndices.length - 1] + 1];
+
+    const n = newOrder.length;
+    // Ascending (popcorn/manual, lowest goes first) vs descending (rolled, highest first).
+    const dir = game.settings.get('vagabond', 'hideInitiativeRoll') ? 1 : -1;
+
+    let lo = Number.isFinite(before?.initiative) ? before.initiative : null;
+    let hi = Number.isFinite(after?.initiative) ? after.initiative : null;
+
+    if (lo === null && hi === null) {
+      // No usable neighbor on either side (values null, or this faction spans
+      // the whole combat) — synthesize a safe range so results are still
+      // distinct and correctly ordered.
+      lo = dir === 1 ? 0 : n + 1;
+      hi = dir === 1 ? n + 1 : 0;
+    } else if (lo === null) {
+      lo = hi - dir * (n + 1);
+    } else if (hi === null) {
+      hi = lo + dir * (n + 1);
+    }
+
+    const step = (hi - lo) / (n + 1);
+    const updates = newOrder.map((id, i) => ({ _id: id, initiative: lo + step * (i + 1) }));
+
+    if (game.user.isGM) return combat.updateEmbeddedDocuments('Combatant', updates);
+
+    // Players reordering their own faction rarely own every combatant in it —
+    // relay the write through the GM client.
+    const { emitSocket } = await import('./socket-helper.mjs');
+    emitSocket('reorderCombatants', { combatId: combat.id, updates });
+  }
+
+  /**
+   * Reorder the faction display-group order itself (GM only). Shared by the
+   * Combat Carousel and the sidebar Combat Tracker drag UIs.
+   * @param {Combat} combat
+   * @param {string} draggedKey
+   * @param {string} targetKey
+   */
+  static async reorderFactionGroups(combat, draggedKey, targetKey) {
+    if (!combat || !game.user.isGM) return;
+    const order = this.getFactionOrder(combat);
+    const newOrder = order.filter(k => k !== draggedKey);
+    const targetIndex = newOrder.indexOf(targetKey);
+    newOrder.splice(targetIndex, 0, draggedKey);
+    return this.setFactionOrder(combat, newOrder);
+  }
 }

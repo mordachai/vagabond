@@ -13,6 +13,19 @@ ol#combat-tracker.directory-list {
     margin-top: 20px;
     list-style: none;
 
+    &[draggable="true"] { cursor: grab; }
+    &[draggable="true"]:active { cursor: grabbing; }
+
+    &.is-dragging {
+      opacity: 0.4;
+    }
+
+    &.is-drop-target {
+      outline: 2px dashed var(--faction-color, $c-yellow);
+      outline-offset: -2px;
+      filter: brightness(1.35);
+    }
+
     h4 {
         margin: 0;
         background-image: url('../assets/images/sheets/leftColBg.svg');
@@ -39,6 +52,7 @@ ol#combat-tracker.directory-list {
   }
 
   .combatant {
+    position: relative;
     padding: 5px;
     border-bottom: 1px solid var(--sidebar-separator);
     border-left: 4px solid transparent;
@@ -62,6 +76,30 @@ ol#combat-tracker.directory-list {
       background: rgba(255, 215, 0, 0.1);
       box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
     }
+
+    &[draggable="true"] { cursor: grab; }
+    &[draggable="true"]:active { cursor: grabbing; }
+
+    &.is-dragging {
+      opacity: 0.35;
+    }
+
+    // Insertion point — a horizontal line in the gap before/after this row
+    // (rows stack vertically here, unlike the carousel's side-by-side cards).
+    &.insert-before::before,
+    &.insert-after::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: $c-yellow;
+      box-shadow: 0 0 4px $c-yellow;
+      z-index: 5;
+    }
+
+    &.insert-before::before { top: -1px; }
+    &.insert-after::after { bottom: -1px; }
 
     .col-1 {
         .row-1 {
