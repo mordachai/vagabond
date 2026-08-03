@@ -85,6 +85,21 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     }
   }
 
+  /** Whether the current user has opted out of the Character HUD entirely (client-only). */
+  static isDisabledForUser() {
+    return !!game.settings.get('vagabond', 'hudDisabled');
+  }
+
+  /** Called by the `hudDisabled` setting's onChange. Tears down or restores HUDs live. */
+  static onDisabledSettingChange() {
+    if (VagabondCharacterHud.isDisabledForUser()) {
+      VagabondCharacterHud.closeAll();
+    } else {
+      VagabondCharacterHud.syncAlwaysOn();
+      VagabondCharacterHud.syncToSelection();
+    }
+  }
+
   #hookIds = [];
   #ctrl = null;
   #redrawTimer = null;
@@ -187,7 +202,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    * @param {boolean} [opts.auto]  Mark this as the selection-driven HUD so it
    *                               follows token selection (closed on deselect).
    */
-  static open(actor = null, { auto = false } = {}) {
+  static open(actor = null, { auto = false, silent = false } = {}) {
+    if (VagabondCharacterHud.isDisabledForUser()) {
+      if (!silent) ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.DisabledForUser'));
+      return null;
+    }
     actor ??= this.resolveActor();
     if (!actor) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NoActor'));
@@ -248,8 +267,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (key === this.#pinnedKey) { this.#closeAuto(); return; }
     if (key === this.#autoOpenedKey) return; // already showing it
 
-    this.#closeAuto();                // drop the previous selection HUD
-    this.open(actor, { auto: true }); // open the new one
+    this.#closeAuto();                                  // drop the previous selection HUD
+    this.open(actor, { auto: true, silent: true });      // open the new one
   }
 
   /**
@@ -273,7 +292,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     if (!eligible) return;
     this.#pinnedKey = key;
-    this.open(actor); // not { auto } — selection changes must not close it
+    this.open(actor, { silent: true }); // not { auto } — selection changes must not close it
   }
 
   /** Close the current selection-driven HUD, if any. */

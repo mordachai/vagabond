@@ -113,6 +113,17 @@ function registerGameSettings() {
     restricted: false,
   });
 
+  // Opt this user out of the Character HUD entirely (client-only — never touches
+  // other players' HUDs). Surfaced as the first field in the HUD Display config dialog.
+  game.settings.register('vagabond', 'hudDisabled', {
+    scope: 'client',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+    onChange: () => VagabondCharacterHud.onDisabledSettingChange(),
+  });
+
   // dialog (grid layout); when false, clicking casts directly (list layout)
   game.settings.register('vagabond', 'useSpellCastDialog', {
     name: 'VAGABOND.Settings.useSpellCastDialog.name',

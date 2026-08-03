@@ -46,6 +46,7 @@ export class HudDisplayConfig extends api.HandlebarsApplicationMixin(api.Applica
     return {
       prefs,
       fontScalePct: `${Math.round((Number(prefs.fontScale) || 1) * 100)}%`,
+      disabled: game.settings.get('vagabond', 'hudDisabled'),
       alwaysOn: game.settings.get('vagabond', 'hudAlwaysOnForMainChar'),
       hasMainChar: !!game.user.character,
       mainCharName: game.user.character?.name ?? '',
@@ -97,6 +98,7 @@ export class HudDisplayConfig extends api.HandlebarsApplicationMixin(api.Applica
       fontScale: Number(raw.fontScale) || 1,
     };
     await game.settings.set('vagabond', 'hudDisplayPrefs', prefs);
+    await game.settings.set('vagabond', 'hudDisabled', !!raw.disabled);
     await game.settings.set('vagabond', 'hudAlwaysOnForMainChar', !!raw.alwaysOn);
     await game.settings.set('vagabond', 'hudIdleFadePrefs', {
       enabled: !!raw.idleEnabled,

@@ -4265,6 +4265,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-skill:hover .vh-skill-name {
   color: var(--vagabond-c-chat-yellow);
 }
+.vbd-hud .vh-skill .vh-mana-skill-icon {
+  font-size: 0.85em;
+  color: var(--vagabond-c-text-primary);
+  margin-left: 4px;
+  opacity: 0.8;
+}
 .vbd-hud .vh-saves {
   display: flex;
   gap: 6px;
@@ -20986,3 +20992,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

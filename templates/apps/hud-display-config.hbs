@@ -2,6 +2,19 @@
   <section class="scrollable">
     <p class="notes">{{localize 'VAGABOND.Settings.hudDisplayConfig.intro'}}</p>
 
+    {{!-- ── Disable HUD ────────────────────────────────────────────────────── --}}
+    <fieldset>
+      <legend>{{localize 'VAGABOND.Settings.hudDisplayConfig.sectionDisable'}}</legend>
+
+      <div class="form-group">
+        <label for="disabled">
+          <input type="checkbox" name="disabled" id="disabled" {{checked disabled}}>
+          {{localize 'VAGABOND.Settings.hudDisplayConfig.disabled'}}
+        </label>
+        <p class="hint">{{localize 'VAGABOND.Settings.hudDisplayConfig.disabledHint'}}</p>
+      </div>
+    </fieldset>
+
     {{!-- ── Always on screen ───────────────────────────────────────────────── --}}
     <fieldset>
       <legend>{{localize 'VAGABOND.Settings.hudDisplayConfig.sectionAlwaysOn'}}</legend>
