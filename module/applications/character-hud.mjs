@@ -347,6 +347,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     }));
 
     // --- Skills / saves (same split the sheet uses) ---
+    context.manaSkill = sys.attributes?.manaSkill;
     if (sys.skills) {
       const allSkills = Object.entries(sys.skills);
       context.regularSkills = allSkills

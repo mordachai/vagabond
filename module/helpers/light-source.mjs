@@ -302,7 +302,7 @@ export class LightSource {
       const doc = fromUuidSync?.(ref);
       if (doc?.documentName === 'Token') return doc;
     }
-    return actor?.token ?? actor?.getActiveTokens?.(true)?.[0]?.document ?? null;
+    return actor?.token ?? actor?.getActiveTokens?.()?.[0]?.document ?? null;
   }
 
   /**

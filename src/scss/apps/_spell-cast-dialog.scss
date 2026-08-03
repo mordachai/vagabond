@@ -11,6 +11,10 @@
   // Baseline only — JS (_raiseToTop) raises this inline above the actor sheet's
   // floating window-manager z-index. No !important, so the inline value wins.
   z-index: 1100;
+  // Drag is Pointer Events-driven (see _attachDrag in spell-cast-dialog.mjs) —
+  // without this, touch browsers can claim a one-finger drag as a native page
+  // pan/scroll before our pointermove listener gets a chance to move the dialog.
+  touch-action: none;
 
   > .window-content {
     background: transparent;

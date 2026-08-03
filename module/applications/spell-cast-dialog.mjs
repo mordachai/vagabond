@@ -93,6 +93,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #onChange;          // live-sync callback fired after each state mutation
   #anchorEl;          // DOM element to dock beside (typically the actor sheet)
   #ctrl = null;
+  #dragCtrl = null;   // separate, longer-lived controller for _attachDrag — see _onRender
   #openedAt = performance.now();
   #pos = null;        // null = anchored/centered; once dragged, holds { left, top }
   #dragged = false;   // true once the user has manually dragged — suppresses re-anchoring
@@ -433,15 +434,20 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     return { left, top, width: w, height: h };
   }
 
-  /** Attach drag handlers to the dialog root. Drag starts on any non-action element. */
+  /** Attach drag handlers to the dialog root. Drag starts on any non-action element.
+   *  Pointer Events (not mouse-only) so touch/pen drag it too, with no separate
+   *  touch-to-mouse translation needed elsewhere. Pointer capture keeps move/up
+   *  routed to `el` even once the finger/cursor leaves its bounds, so a single
+   *  pair of listeners on `el` covers the whole gesture — no document-level
+   *  listeners, and nothing to lose track of if the pointer strays off-element. */
   _attachDrag(signal) {
     const el = this.element;
     if (!el) return;
     let startX, startY, startLeft, startTop, dragging = false;
 
-    el.addEventListener('mousedown', (ev) => {
+    el.addEventListener('pointerdown', (ev) => {
       if (ev.button !== 0) return;
-      // Skip if click originated on an actionable element
+      // Skip if the gesture originated on an actionable element
       if (ev.target.closest('[data-action], button, select, input, textarea, a')) return;
       const rect = el.getBoundingClientRect();
       startX = ev.clientX;
@@ -449,10 +455,11 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       startLeft = rect.left;
       startTop = rect.top;
       dragging = true;
+      el.setPointerCapture(ev.pointerId);
       ev.preventDefault();
     }, { signal });
 
-    document.addEventListener('mousemove', (ev) => {
+    el.addEventListener('pointermove', (ev) => {
       if (!dragging) return;
       this.#dragged = true; // suppress automatic re-anchoring once moved by hand
       this.#pos = {
@@ -462,7 +469,18 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       this.setPosition();
     }, { signal });
 
-    document.addEventListener('mouseup', () => { dragging = false; }, { signal });
+    el.addEventListener('pointerup', () => { dragging = false; }, { signal });
+    el.addEventListener('pointercancel', () => { dragging = false; }, { signal });
+
+    // Belt-and-suspenders: `touch-action: none` (CSS) is what's SUPPOSED to stop
+    // the browser from claiming a one-finger drag as a native page scroll, but
+    // preventDefault() on the pointer events above does NOT do that itself (only
+    // the Touch Events API does) — so if the CSS is missing, stale-cached, or
+    // simply not applied to the exact touched descendant, a touch browser can
+    // still hijack the gesture as a scroll a few px in and fire `pointercancel`,
+    // which looks exactly like "drag moves a little then stops." A real
+    // non-passive touchmove listener removes that whole dependency.
+    el.addEventListener('touchmove', (ev) => { if (dragging) ev.preventDefault(); }, { signal, passive: false });
   }
 
   _onRender(context, options) {
@@ -507,7 +525,15 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.#ctrl = new AbortController();
     const signal = this.#ctrl.signal;
 
-    this._attachDrag(signal);
+    // Bound once for the dialog's lifetime, on its own controller — el persists
+    // across re-renders (only the part's inner HTML is replaced), but #ctrl is
+    // recycled on every render. Rebinding drag on #ctrl's signal would reset
+    // the in-progress-drag closure state (and drop pointer capture) if a
+    // render happens mid-drag, e.g. from the targetToken-triggered #renderDebounce.
+    if (!this.#dragCtrl) {
+      this.#dragCtrl = new AbortController();
+      this._attachDrag(this.#dragCtrl.signal);
+    }
 
     // Stay above the actor sheet at all times. Any click outside the dialog
     // may have raised another window (notably the sheet, when the user opens
@@ -659,6 +685,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   async close(options = {}) {
     this.#ctrl?.abort();
+    this.#dragCtrl?.abort();
     this.#previewEl?.remove();
     this.#previewEl = null;
     if (this.#targetHookId != null) {

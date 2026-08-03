@@ -77,7 +77,7 @@ export async function executeItemMacro(d) {
     return;
   }
 
-  const token = actor?.getActiveTokens?.(true)?.[0] ?? null;
+  const token = actor?.getActiveTokens?.()?.[0] ?? null;
   const targets = _resolveTargets(d);
   const isCritical = d.isCritical ?? false;
   // Name captured on the button so it survives the source item being consumed

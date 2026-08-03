@@ -9970,6 +9970,7 @@ ol#combat-tracker.directory-list {
   border: none;
   overflow: visible;
   z-index: 1100;
+  touch-action: none;
 }
 .application.spell-cast-dialog > .window-content {
   background: transparent;
@@ -20985,5 +20986,3 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
-
-/*# sourceMappingURL=vagabond.css.map */

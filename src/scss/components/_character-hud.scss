@@ -695,6 +695,12 @@
     .vh-skill-name { color: $c-lite; font-size: calc(1.0rem * var(--vh-font-scale)); }
     .vh-skill-diff { font-family: $font-number; color: $c-stat; font-size: calc(1.2rem * var(--vh-font-scale)); }
     &:hover .vh-skill-name { color: $c-yellow; }
+    .vh-mana-skill-icon {
+      font-size: 0.85em;
+      color: $c-text-1;
+      margin-left: 4px;
+      opacity: 0.8;
+    }
   }
 
   .vh-saves { display: flex; gap: 6px; }

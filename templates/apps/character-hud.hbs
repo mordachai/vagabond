@@ -62,7 +62,7 @@
       <div class="vh-skill-grid">
         {{#each regularSkills}}
           <div class="vh-row vh-skill rollable" data-action="roll" data-roll="d20" data-type="skill" data-key="{{key}}" data-difficulty="{{difficulty}}" data-trained="{{trained}}" data-label="{{label}} (Difficulty {{difficulty}})">
-            <span class="vh-skill-name">{{label}}</span><span class="vh-skill-diff">{{difficulty}}</span>
+            <span class="vh-skill-name">{{label}}{{#if (eq @root.manaSkill key)}}<i class="fa-duotone fa-regular fa-wand-magic-sparkles vh-mana-skill-icon" title="{{localize 'VAGABOND.UI.Tooltips.ManaSkillIcon'}}"></i>{{/if}}</span><span class="vh-skill-diff">{{difficulty}}</span>
           </div>
         {{/each}}
       </div>
