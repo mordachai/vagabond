@@ -15,7 +15,21 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
-### **New feature:** Glyph and Imbue Deliveries and new Light system [YouTube video below](https://youtu.be/4S1gI0uUMe4)
+### **New feature:** Combat Carousel & Enhanced Encounters [YouTube video below](https://youtu.be/neHg99dUvrw)
+
+[![Combat Carousel](https://img.youtube.com/vi/neHg99dUvrw/0.jpg)](https://youtu.be/neHg99dUvrw)
+
+- **Drag drop turn order:** move factions and players around to set the turn order
+- **Combat carousel:** easy to use overlay on canvas, flip cards to check info, players can reorder their group at will
+
+#### Combat Carousel commands:
+- **[Left click]:** select token  or pan to token (depends on your setting)
+- **[Right click]:** flip card, icons are buttons to change values
+- **[Double click]:** activate card (if you dont want to start the encounter, using it just like a marker for the table)
+- **[Alt + Click]:** target token
+- **[Drag group / cards within group]:** change order (players are free to reorder themselves)
+
+### **New feature:** Glyph and Imbue Deliveries and new Light system [YouTube video below](https://youtu.be/4S1gI0uUMe)
 
 [![Magic Casting HUD](https://img.youtube.com/vi/4S1gI0uUMe4/0.jpg)](https://youtu.be/4S1gI0uUMe4)
 
