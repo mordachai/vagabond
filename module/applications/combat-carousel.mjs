@@ -329,9 +329,8 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
   }
 
   /**
-   * Left-click on a card: Alt held = target the token (gated by the
-   * `combatCarouselTargetOnAltClick` setting; Shift+Alt = add to targets
-   * instead of replacing them). Otherwise runs the configured
+   * Left-click on a card: Alt held = target the token (Shift+Alt = add to
+   * targets instead of replacing them). Otherwise runs the configured
    * `combatCarouselCardSelectBehavior` (none / pan / select / selectPan /
    * ping; Shift = add to canvas selection instead of replacing it).
    */
@@ -341,7 +340,6 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     if (!token) return;
 
     if (event.altKey) {
-      if (!game.settings.get('vagabond', 'combatCarouselTargetOnAltClick')) return;
       const isTargeted = game.user.targets.has(token);
       token.setTarget(!isTargeted, { releaseOthers: !event.shiftKey });
       return;
@@ -360,6 +358,14 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
         style: canvas.grid.type === 0 ? 'pulse' : 'alert',
         color: game.user.color
       });
+    } else if (behavior === 'activate') {
+      this._activateTurn(card.dataset.combatantId);
+    } else if (behavior === 'activateSelect') {
+      this._activateTurn(card.dataset.combatantId);
+      token.control({ releaseOthers: !event.shiftKey });
+    } else if (behavior === 'activatePan') {
+      this._activateTurn(card.dataset.combatantId);
+      canvas.animatePan({ x: token.center.x, y: token.center.y });
     }
   }
 

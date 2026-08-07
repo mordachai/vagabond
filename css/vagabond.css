@@ -4999,6 +4999,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 .vcc-root {
   position: fixed;
+  max-width: 61vw;
   top: 0px;
   left: 50%;
   transform: translateX(-50%);
@@ -7759,9 +7760,20 @@ ol#combat-tracker.directory-list {
 
 /* Encounter Settings Dialog (ApplicationV2) */
 #encounter-settings.encounter-settings-form .window-content {
-  overflow-y: auto !important;
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+}
+#encounter-settings.encounter-settings-form .standard-form {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 #encounter-settings.encounter-settings-form section.scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 1rem;
 }
 #encounter-settings.encounter-settings-form footer.form-footer {

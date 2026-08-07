@@ -84,22 +84,18 @@
         <p class="hint">{{localize 'VAGABOND.EncounterSettings.Carousel.Enabled.Hint'}}</p>
       </div>
       <div class="form-group">
-        <label for="combatCarouselCardSelectBehavior">{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Name'}}</label>
+        <label for="combatCarouselCardSelectBehavior">{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Name'}} (<i class='fas fa-computer-mouse'></i>L)</label>
         <select name="combatCarouselCardSelectBehavior" id="combatCarouselCardSelectBehavior">
           <option value="none" {{#if (eq combatCarouselCardSelectBehavior "none")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.None'}}</option>
           <option value="pan" {{#if (eq combatCarouselCardSelectBehavior "pan")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Pan'}}</option>
           <option value="select" {{#if (eq combatCarouselCardSelectBehavior "select")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Select'}}</option>
           <option value="selectPan" {{#if (eq combatCarouselCardSelectBehavior "selectPan")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.SelectPan'}}</option>
           <option value="ping" {{#if (eq combatCarouselCardSelectBehavior "ping")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Ping'}}</option>
+          <option value="activate" {{#if (eq combatCarouselCardSelectBehavior "activate")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Activate'}}</option>
+          <option value="activateSelect" {{#if (eq combatCarouselCardSelectBehavior "activateSelect")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.ActivateSelect'}}</option>
+          <option value="activatePan" {{#if (eq combatCarouselCardSelectBehavior "activatePan")}}selected{{/if}}>{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.ActivatePan'}}</option>
         </select>
         <p class="hint">{{localize 'VAGABOND.EncounterSettings.Carousel.CardSelectBehavior.Hint'}}</p>
-      </div>
-      <div class="form-group">
-        <label for="combatCarouselTargetOnAltClick">
-          <input type="checkbox" name="combatCarouselTargetOnAltClick" id="combatCarouselTargetOnAltClick" {{#if combatCarouselTargetOnAltClick}}checked{{/if}}>
-          {{localize 'VAGABOND.EncounterSettings.Carousel.TargetOnAltClick.Name'}}
-        </label>
-        <p class="hint">{{localize 'VAGABOND.EncounterSettings.Carousel.TargetOnAltClick.Hint'}}</p>
       </div>
       <div class="form-group">
         <label for="combatCarouselPortraitSize">{{localize 'VAGABOND.EncounterSettings.Carousel.PortraitSize.Name'}}</label>

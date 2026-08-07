@@ -2283,17 +2283,16 @@
           "Hint": "Exibe a sobreposição flutuante do Carrossel de Combate durante encontros. Desative para usar apenas o rastreador de combate na barra lateral. Padrão: ativado."
         },
         "CardSelectBehavior": {
-          "Name": "Ao Selecionar uma Carta",
+          "Name": "Ao Clicar",
           "None": "Não Fazer Nada",
           "Pan": "Centralizar",
-          "Select": "Selecionar Token",
+          "Select": "Selecionar token",
           "SelectPan": "Selecionar e Centralizar",
-          "Ping": "Sinalizar Token",
-          "Hint": "O que o clique esquerdo em uma carta faz no mapa. Centralizar move a visão para o token. Selecionar controla o token (Shift+Clique para selecionar múltiplos). Selecionar e Centralizar faz ambos. Sinalizar destaca a localização do token para todos os jogadores."
-        },
-        "TargetOnAltClick": {
-          "Name": "Alvo Selecionado",
-          "Hint": "Alt+Clique esquerdo em uma carta define aquele token como alvo. Shift+Alt+Clique para definir múltiplos alvos."
+          "Ping": "Sinalizar token",
+          "Activate": "Ativar Turno",
+          "ActivateSelect": "Ativar Turno + Selecionar token",
+          "ActivatePan": "Ativar Turno + Centralizar",
+          "Hint": "O que acontece quando você clica em um cartão de combatente."
         },
         "PortraitSize": {
           "Name": "Tamanho do Retrato",

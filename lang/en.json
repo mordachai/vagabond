@@ -2284,17 +2284,16 @@
           "Hint": "Show the floating Combat Carousel overlay during encounters. Turn off to use only the sidebar Combat Tracker. Default: on."
         },
         "CardSelectBehavior": {
-          "Name": "When Card Is Selected",
-          "None": "Do Nothing",
-          "Pan": "Pan to",
-          "Select": "Select Token",
-          "SelectPan": "Select and Pan to",
-          "Ping": "Ping Token",
-          "Hint": "What left-clicking a card does on the canvas. Pan centers the view on the token. Select controls the token (Shift+Click to select multiple). Select and Pan to does both. Ping flashes the token's location for all players."
-        },
-        "TargetOnAltClick": {
-          "Name": "Target Selected",
-          "Hint": "Alt+Left Click a card to target that token. Shift+Alt+Left Click to target multiple."
+          "Name": "On click",
+          "None": "Do nothing",
+          "Pan": "Pan to token",
+          "Select": "Select token",
+          "SelectPan": "Select + Pan to token",
+          "Ping": "Ping token",
+          "Activate": "Activate turn",
+          "ActivateSelect": "Activate turn + Select token",
+          "ActivatePan": "Activate turn + Pan to token",
+          "Hint": "Set what happens when clicking a card."
         },
         "PortraitSize": {
           "Name": "Portrait Size",

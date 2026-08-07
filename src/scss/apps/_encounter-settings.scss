@@ -3,10 +3,22 @@
 #encounter-settings.encounter-settings-form {
 
   .window-content {
-    overflow-y: auto !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .standard-form {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
   }
 
   section.scrollable {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     padding: 1rem;
   }
 

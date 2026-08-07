@@ -54,7 +54,6 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
       combatCarouselPortraitSize: game.settings.get('vagabond', 'combatCarouselPortraitSize'),
       combatCarouselRevealOtherFactionStats: game.settings.get('vagabond', 'combatCarouselRevealOtherFactionStats'),
       combatCarouselCardSelectBehavior: game.settings.get('vagabond', 'combatCarouselCardSelectBehavior'),
-      combatCarouselTargetOnAltClick: game.settings.get('vagabond', 'combatCarouselTargetOnAltClick'),
       combatCarouselAutoHideDefault: game.settings.get('vagabond', 'combatCarouselAutoHideDefault'),
       combatCarouselDimIdleDefault: game.settings.get('vagabond', 'combatCarouselDimIdleDefault'),
     };
@@ -92,10 +91,9 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
     await game.settings.set('vagabond', 'combatCarouselPortraitSize',
       validSizes.includes(data.combatCarouselPortraitSize) ? data.combatCarouselPortraitSize : 'medium');
     await game.settings.set('vagabond', 'combatCarouselRevealOtherFactionStats', !!data.combatCarouselRevealOtherFactionStats);
-    const validSelectBehaviors = ['none', 'pan', 'select', 'selectPan', 'ping'];
+    const validSelectBehaviors = ['none', 'pan', 'select', 'selectPan', 'ping', 'activate', 'activateSelect', 'activatePan'];
     await game.settings.set('vagabond', 'combatCarouselCardSelectBehavior',
       validSelectBehaviors.includes(data.combatCarouselCardSelectBehavior) ? data.combatCarouselCardSelectBehavior : 'none');
-    await game.settings.set('vagabond', 'combatCarouselTargetOnAltClick', !!data.combatCarouselTargetOnAltClick);
     await game.settings.set('vagabond', 'combatCarouselAutoHideDefault', !!data.combatCarouselAutoHideDefault);
     await game.settings.set('vagabond', 'combatCarouselDimIdleDefault', !!data.combatCarouselDimIdleDefault);
 

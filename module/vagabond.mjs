@@ -668,16 +668,6 @@ function registerGameSettings() {
     requiresReload: false
   });
 
-  // Setting 12f: Combat Carousel — Alt+Click card targets token
-  game.settings.register('vagabond', 'combatCarouselTargetOnAltClick', {
-    name: 'VAGABOND.EncounterSettings.Carousel.TargetOnAltClick.Name',
-    scope: 'world',
-    config: false,
-    type: Boolean,
-    default: true,
-    requiresReload: false
-  });
-
   // Setting 12g/12h: Combat Carousel — table defaults (GM, Encounter Settings)
   // for the two per-player display prefs below. Read LIVE every render (see
   // CombatCarousel._resolveDisplayPref), not baked into a client default at

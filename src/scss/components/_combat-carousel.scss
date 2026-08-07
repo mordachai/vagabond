@@ -16,8 +16,10 @@
 
 .vcc-root {
   position: fixed;
+  max-width: 61vw;
   top: 0px;
   left: 50%;
+
   transform: translateX(-50%);
   z-index: 65;
   display: flex;
