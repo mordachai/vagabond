@@ -684,6 +684,12 @@ function registerGameSettings() {
   // registration time — a plain Boolean client default is fixed the moment
   // this client's page loads, so a GM flipping the table default mid-session
   // would never visibly move any client (including the GM's own) already open.
+  // World-setting changes are broadcast to every connected client by Foundry
+  // core, so each onChange here also fires locally on every client (GM and
+  // players alike) — used to reset that SAME feature's per-client override
+  // back to "inherit" so nobody is left stuck on a stale explicit choice
+  // silently diverging from the new table default. Auto-hide and dim stay
+  // fully independent: changing one's default never touches the other's.
   game.settings.register('vagabond', 'combatCarouselAutoHideDefault', {
     name: 'VAGABOND.EncounterSettings.Carousel.AutoHideDefault.Name',
     scope: 'world',
@@ -691,7 +697,10 @@ function registerGameSettings() {
     type: Boolean,
     default: false,
     requiresReload: false,
-    onChange: () => CombatCarousel.refresh(),
+    onChange: () => {
+      game.settings.set('vagabond', 'combatCarouselAutoHide', 'inherit');
+      CombatCarousel.refresh();
+    },
   });
 
   game.settings.register('vagabond', 'combatCarouselDimIdleDefault', {
@@ -701,14 +710,19 @@ function registerGameSettings() {
     type: Boolean,
     default: false,
     requiresReload: false,
-    onChange: () => CombatCarousel.refresh(),
+    onChange: () => {
+      game.settings.set('vagabond', 'combatCarouselDimIdle', 'inherit');
+      CombatCarousel.refresh();
+    },
   });
 
   // Setting 12i: Combat Carousel — auto-hide off the top of the screen,
   // revealing on hover. Per-player (client scope), surfaced directly in
   // Foundry's own Configure Settings so every player controls their own copy.
   // Tri-state: "inherit" (default) tracks the GM's table default live; "on"/
-  // "off" are an explicit per-player override once they've made a choice.
+  // "off" are an explicit per-player override once they've made a choice —
+  // reset back to "inherit" automatically whenever the GM changes the table
+  // default (see combatCarouselAutoHideDefault's onChange above).
   game.settings.register('vagabond', 'combatCarouselAutoHide', {
     name: 'VAGABOND.EncounterSettings.Carousel.AutoHide.Name',
     hint: 'VAGABOND.EncounterSettings.Carousel.AutoHide.Hint',
@@ -958,6 +972,50 @@ function registerGameSettings() {
 }
 
 /* -------------------------------------------- */
+/*  Keybindings                                 */
+/* -------------------------------------------- */
+
+/**
+ * Register combat-navigation keybindings. Rebindable via Foundry's
+ * Configure Controls menu (Vagabond category). Default handlers call
+ * document methods directly — same navigation the Combat Carousel /
+ * sidebar tracker buttons use — so permission checks are Foundry's own.
+ */
+function registerKeybindings() {
+  game.keybindings.register('vagabond', 'combatPreviousTurn', {
+    name: 'VAGABOND.Keybindings.combatPreviousTurn.name',
+    hint: 'VAGABOND.Keybindings.combatPreviousTurn.hint',
+    editable: [{ key: 'ArrowLeft', modifiers: ['Control'] }],
+    onDown: () => { game.combat?.previousTurn(); return true; },
+    restricted: true,
+  });
+
+  game.keybindings.register('vagabond', 'combatNextTurn', {
+    name: 'VAGABOND.Keybindings.combatNextTurn.name',
+    hint: 'VAGABOND.Keybindings.combatNextTurn.hint',
+    editable: [{ key: 'ArrowRight', modifiers: ['Control'] }],
+    onDown: () => { game.combat?.nextTurn(); return true; },
+    restricted: true,
+  });
+
+  game.keybindings.register('vagabond', 'combatPreviousRound', {
+    name: 'VAGABOND.Keybindings.combatPreviousRound.name',
+    hint: 'VAGABOND.Keybindings.combatPreviousRound.hint',
+    editable: [{ key: 'ArrowLeft', modifiers: ['Control', 'Alt'] }],
+    onDown: () => { game.combat?.previousRound(); return true; },
+    restricted: true,
+  });
+
+  game.keybindings.register('vagabond', 'combatNextRound', {
+    name: 'VAGABOND.Keybindings.combatNextRound.name',
+    hint: 'VAGABOND.Keybindings.combatNextRound.hint',
+    editable: [{ key: 'ArrowRight', modifiers: ['Control', 'Alt'] }],
+    onDown: () => { game.combat?.nextRound(); return true; },
+    restricted: true,
+  });
+}
+
+/* -------------------------------------------- */
 /*  Template Preloading                         */
 /* -------------------------------------------- */
 
@@ -1088,6 +1146,9 @@ globalThis.vagabond = {
 Hooks.once('init', function () {
   // Register game settings first to avoid preparation errors
   registerGameSettings();
+
+  // Register combat-navigation keybindings (Configure Controls > Vagabond)
+  registerKeybindings();
 
   // Add custom constants for configuration.
   CONFIG.VAGABOND = VAGABOND;

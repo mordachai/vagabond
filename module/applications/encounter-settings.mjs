@@ -92,7 +92,7 @@ export class EncounterSettings extends api.HandlebarsApplicationMixin(api.Applic
     await game.settings.set('vagabond', 'combatCarouselPortraitSize',
       validSizes.includes(data.combatCarouselPortraitSize) ? data.combatCarouselPortraitSize : 'medium');
     await game.settings.set('vagabond', 'combatCarouselRevealOtherFactionStats', !!data.combatCarouselRevealOtherFactionStats);
-    const validSelectBehaviors = ['none', 'pan', 'select'];
+    const validSelectBehaviors = ['none', 'pan', 'select', 'selectPan', 'ping'];
     await game.settings.set('vagabond', 'combatCarouselCardSelectBehavior',
       validSelectBehaviors.includes(data.combatCarouselCardSelectBehavior) ? data.combatCarouselCardSelectBehavior : 'none');
     await game.settings.set('vagabond', 'combatCarouselTargetOnAltClick', !!data.combatCarouselTargetOnAltClick);

@@ -362,6 +362,24 @@
       "Construct": "Ficha de Construto Vagabond",
       "Item": "Ficha de Item Vagabond"
     },
+    "Keybindings": {
+      "combatPreviousTurn": {
+        "name": "Turno Anterior",
+        "hint": "Retorna o combate ativo para o turno anterior."
+      },
+      "combatNextTurn": {
+        "name": "Próximo Turno",
+        "hint": "Avança o combate ativo para o próximo turno."
+      },
+      "combatPreviousRound": {
+        "name": "Rodada Anterior",
+        "hint": "Retorna o combate ativo para a rodada anterior."
+      },
+      "combatNextRound": {
+        "name": "Próxima Rodada",
+        "hint": "Avança o combate ativo para a próxima rodada."
+      }
+    },
     "Settings": {
       "spellCastDialogBlur": {
         "name": "Desfoque do Diálogo de Conjuração",
@@ -2267,9 +2285,11 @@
         "CardSelectBehavior": {
           "Name": "Ao Selecionar uma Carta",
           "None": "Não Fazer Nada",
-          "Pan": "Centralizar na Selecionada",
+          "Pan": "Centralizar",
           "Select": "Selecionar Token",
-          "Hint": "O que o clique esquerdo em uma carta faz no mapa. Centralizar move a visão para o token. Selecionar controla o token (Shift+Clique para selecionar múltiplos)."
+          "SelectPan": "Selecionar e Centralizar",
+          "Ping": "Sinalizar Token",
+          "Hint": "O que o clique esquerdo em uma carta faz no mapa. Centralizar move a visão para o token. Selecionar controla o token (Shift+Clique para selecionar múltiplos). Selecionar e Centralizar faz ambos. Sinalizar destaca a localização do token para todos os jogadores."
         },
         "TargetOnAltClick": {
           "Name": "Alvo Selecionado",

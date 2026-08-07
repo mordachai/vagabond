@@ -332,8 +332,8 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
    * Left-click on a card: Alt held = target the token (gated by the
    * `combatCarouselTargetOnAltClick` setting; Shift+Alt = add to targets
    * instead of replacing them). Otherwise runs the configured
-   * `combatCarouselCardSelectBehavior` (none / pan / select; Shift = add to
-   * canvas selection instead of replacing it).
+   * `combatCarouselCardSelectBehavior` (none / pan / select / selectPan /
+   * ping; Shift = add to canvas selection instead of replacing it).
    */
   _onCardClick(card, event) {
     const combatant = game.combat?.combatants.get(card.dataset.combatantId);
@@ -352,6 +352,14 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
       canvas.animatePan({ x: token.center.x, y: token.center.y });
     } else if (behavior === 'select') {
       token.control({ releaseOthers: !event.shiftKey });
+    } else if (behavior === 'selectPan') {
+      token.control({ releaseOthers: !event.shiftKey });
+      canvas.animatePan({ x: token.center.x, y: token.center.y });
+    } else if (behavior === 'ping') {
+      canvas.ping(token.center, {
+        style: canvas.grid.type === 0 ? 'pulse' : 'alert',
+        color: game.user.color
+      });
     }
   }
 

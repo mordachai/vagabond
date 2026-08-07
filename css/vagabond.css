@@ -5045,7 +5045,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vcc-root.vcc-auto-hide {
   transform: translateX(-50%) translateY(calc(-100% + 10px));
-  transition-delay: 0.5s;
+  transition-delay: 2s;
 }
 .vcc-root.vcc-auto-hide:hover, .vcc-root.vcc-auto-hide:focus-within {
   transform: translateX(-50%) translateY(0);
@@ -5053,11 +5053,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vcc-root.vcc-dim-idle {
   opacity: 0.5;
-  transition-delay: 0.5s;
+  transition-delay: 3s;
 }
 .vcc-root.vcc-dim-idle:hover, .vcc-root.vcc-dim-idle:focus-within {
   opacity: 1;
-  transition-delay: 0s;
+  transition-delay: 0.5s;
 }
 
 .vcc-controls {

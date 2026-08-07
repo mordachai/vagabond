@@ -363,6 +363,24 @@
       "Construct": "Vagabond Construct Sheet",
       "Item": "Vagabond Item Sheet"
     },
+    "Keybindings": {
+      "combatPreviousTurn": {
+        "name": "Previous Turn",
+        "hint": "Rewind the active combat to the previous turn."
+      },
+      "combatNextTurn": {
+        "name": "Next Turn",
+        "hint": "Advance the active combat to the next turn."
+      },
+      "combatPreviousRound": {
+        "name": "Previous Round",
+        "hint": "Rewind the active combat to the previous round."
+      },
+      "combatNextRound": {
+        "name": "Next Round",
+        "hint": "Advance the active combat to the next round."
+      }
+    },
     "Settings": {
       "spellCastDialogBlur": {
         "name": "Spell Cast Dialog Blur",
@@ -2268,9 +2286,11 @@
         "CardSelectBehavior": {
           "Name": "When Card Is Selected",
           "None": "Do Nothing",
-          "Pan": "Pan to Selected",
+          "Pan": "Pan to",
           "Select": "Select Token",
-          "Hint": "What left-clicking a card does on the canvas. Pan centers the view on the token. Select controls the token (Shift+Click to select multiple)."
+          "SelectPan": "Select and Pan to",
+          "Ping": "Ping Token",
+          "Hint": "What left-clicking a card does on the canvas. Pan centers the view on the token. Select controls the token (Shift+Click to select multiple). Select and Pan to does both. Ping flashes the token's location for all players."
         },
         "TargetOnAltClick": {
           "Name": "Target Selected",
