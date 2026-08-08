@@ -5,9 +5,14 @@
  */
 import { SPELL_FX, getJB2ADefaults } from './sequencer-config.mjs';
 import { VagabondFXResolver } from './fx-file-resolver.mjs';
+import { emitSocket } from './socket-helper.mjs';
 
 // Video metadata cache — keyed by file path. Populated in play() before building the sequence.
 const _metaCache = new Map();
+
+// Per-wall volume multiplier for positional spell sounds — compounds with each wall crossed
+// between source and listener (see VagabondSpellSequencer._listenerAudibility).
+const SOUND_WALL_MUFFLE = 0.35;
 
 // Maps damage types (from CONFIG) to FX schools.
 // Unmapped types fall back to 'arcane'.
@@ -252,6 +257,114 @@ export class VagabondSpellSequencer {
       sx += c.x; sy += c.y;
     }
     return { x: sx / n, y: sy / n };
+  }
+
+  /**
+   * Calculate the average elevation of a set of tokens.
+   * Falls back to 0 for pseudo-tokens (e.g. glyph placement) that lack a document.elevation.
+   * @param {Token[]} tokens
+   * @returns {number}
+   * @private
+   */
+  static _elevationCentroid(tokens) {
+    const n = tokens?.length;
+    if (!n) return 0;
+    let sum = 0;
+    for (const t of tokens) sum += t?.document?.elevation ?? 0;
+    return sum / n;
+  }
+
+  /**
+   * Radius (ft) for positional spell-cast AmbientSounds. Flat constant for now —
+   * swap the body for a scene-size formula later if fixed reach proves too small/large.
+   * @returns {number}
+   * @private
+   */
+  static _fullSceneRadiusFt() {
+    return 45 * (game.system.grid?.distance ?? 5);
+  }
+
+  /**
+   * Broadcast a one-shot positional sound trigger to every client (including this one).
+   * Foundry's AmbientSound document/placeable is loop-only (sync() hardcodes
+   * `loop: true` and picks a non-zero start offset, meant for continuous ambience —
+   * unusable for a one-shot cast/impact sfx, see _renderLocalPositionalSound). Instead
+   * each client independently computes its own distance/wall-based volume from its own
+   * listener tokens and fires a plain one-shot AudioHelper.play — same trick used for
+   * the visual FX (locally rendered, not server-round-tripped) so audio timing matches.
+   * @param {{file: string, volume: number}} cfg
+   * @param {{x: number, y: number}} pos
+   * @param {number} elevationFt
+   * @param {number} radiusFt
+   * @private
+   */
+  static _spawnPositionalSound(cfg, pos, elevationFt, radiusFt) {
+    if (!cfg?.file) return;
+    const data = { file: cfg.file, volume: cfg.volume ?? 0.6, x: pos.x, y: pos.y, elevation: elevationFt, radius: radiusFt };
+    this._renderLocalPositionalSound(data);
+    emitSocket('spellSoundPlay', data);
+  }
+
+  /**
+   * Compute this client's own audibility of a point source from its own listener tokens:
+   * full volume within refFt (2 grid squares), then linear falloff from refFt down to 0
+   * at radiusFt (3D distance, elevation included), muffled per sound-blocking wall
+   * crossed (compounding, not silenced) between source and listener. Mirrors
+   * SoundsLayer#getListenerPositions() (own controlled tokens, or owned+visible tokens
+   * as a non-GM fallback).
+   * @param {{x: number, y: number}} pos
+   * @param {number} elevationFt
+   * @param {number} radiusFt
+   * @returns {{volume: number, walls: number}|null} Loudest listener's gain (pre item
+   *   volume) and wall-crossing count, or null if nothing is in range to hear it.
+   * @private
+   */
+  static _listenerAudibility(pos, elevationFt, radiusFt) {
+    if (!canvas.ready || !canvas.sounds || !radiusFt) return null;
+    const listeners = canvas.sounds.getListenerPositions();
+    if (!listeners.length) return null;
+    const ftPerPx = (game.system.grid?.distance ?? 5) / (canvas.dimensions?.size ?? canvas.grid?.size ?? 100);
+    // Near-field reference distance: full volume within 2 grid squares of the source.
+    const refFt = 2 * (game.system.grid?.distance ?? 5);
+    const falloffSpan = Math.max(1, radiusFt - refFt); // avoid divide-by-zero if radius <= refFt
+    let best = null;
+    for (const l of listeners) {
+      const distFt = Math.hypot((l.x - pos.x) * ftPerPx, (l.y - pos.y) * ftPerPx, (l.elevation ?? 0) - elevationFt);
+      if (distFt >= radiusFt) continue;
+      const gain = distFt <= refFt ? 1 : 1 - (distFt - refFt) / falloffSpan; // linear falloff past refFt
+      const walls = CONFIG.Canvas.polygonBackends.sound.testCollision(
+        { x: pos.x, y: pos.y }, { x: l.x, y: l.y }, { type: 'sound', mode: 'all' },
+      )?.length ?? 0;
+      const volume = gain * (SOUND_WALL_MUFFLE ** walls); // each wall compounds the muffle
+      if (!best || volume > best.volume) best = { volume, walls };
+    }
+    return best;
+  }
+
+  /**
+   * Play a one-shot positional sound on this client only, at whatever volume this
+   * client's own listener tokens can hear it at, low-pass filtered per wall crossed so
+   * it reads as "muffled through a wall" rather than just quieter. Called directly by
+   * the casting client and by every other client's 'spellSoundPlay' socket handler.
+   * @param {object} data - { file, volume, x, y, elevation, radius }
+   */
+  static async _renderLocalPositionalSound(data) {
+    try {
+      const heard = this._listenerAudibility({ x: data.x, y: data.y }, data.elevation, data.radius);
+      if (!heard) return;
+      const volume = heard.volume * (data.volume ?? 0.6);
+      if (volume <= 0.005) return; // inaudibly quiet, don't bother spinning up a Sound
+      const sound = await foundry.audio.AudioHelper.play({ src: data.file, volume, loop: false, channel: 'environment' });
+      if (sound && heard.walls > 0) {
+        const filter = sound.context.createBiquadFilter();
+        filter.type = 'lowpass';
+        // More walls = darker/duller. Floor at 300Hz so it never goes fully sub-bass mush.
+        filter.frequency.value = Math.max(300, 2200 / heard.walls);
+        sound.applyEffects([filter]);
+      }
+    } catch (err) {
+      console.warn('Vagabond | positional sound playback error (non-fatal):', err);
+    }
   }
 
   /**
@@ -522,26 +635,39 @@ export class VagabondSpellSequencer {
       const cfg     = this._getConfig();
       const castCfg = cfg.castAnims?.[school];
       const areaCfg = cfg.areaAnims?.[school]?.[deliveryType];
-      const vol     = castCfg?.volume ?? 0.6;
 
       // Pre-expand any wildcard file paths so player clients never browse the filesystem.
       const fileMap = await VagabondFXResolver.resolveMap([castCfg?.file, areaCfg?.file]);
 
       const seq = new Sequence();
+      const radiusFt = this._fullSceneRadiusFt();
 
-      // Cast sound: plays immediately via AudioHelper.
+      // Cast sound: positional, centered on the caster.
       if (castCfg?.sound) {
-        foundry.audio.AudioHelper.play({ src: castCfg.sound, volume: vol, loop: false });
+        this._spawnPositionalSound(
+          { file: castCfg.sound, volume: castCfg.volume ?? 0.45 },
+          this._center(casterToken),
+          casterToken.document?.elevation ?? 0,
+          radiusFt,
+        );
       }
 
-      // Delivery sound: fires after the cast animation finishes.
+      // Delivery sound: positional, centered on the target(s); fires after the
+      // cast animation finishes.
       if (deliveryType && deliveryEnabled && areaCfg?.sound) {
+        const targetPos = this._centroid(targetTokens) ?? this._center(casterToken);
+        const targetElevation = targetTokens?.length
+          ? this._elevationCentroid(targetTokens)
+          : (casterToken.document?.elevation ?? 0);
+        const fireAreaSound = () => this._spawnPositionalSound(
+          { file: areaCfg.sound, volume: areaCfg.volume ?? 0.6 },
+          targetPos,
+          targetElevation,
+          radiusFt,
+        );
         const castDelay = castCfg?.file ? Math.max(0, this._getDuration(castCfg) - 200) : 0;
-        if (castDelay > 0) {
-          setTimeout(() => foundry.audio.AudioHelper.play({ src: areaCfg.sound, volume: vol, loop: false }), castDelay);
-        } else {
-          foundry.audio.AudioHelper.play({ src: areaCfg.sound, volume: vol, loop: false });
-        }
+        if (castDelay > 0) setTimeout(fireAreaSound, castDelay);
+        else fireAreaSound();
       }
 
       // Cast animation (always plays; blocks next section via .waitUntilFinished(-200)).

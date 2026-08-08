@@ -1488,6 +1488,13 @@ Hooks.once('ready', function () {
     await game.journal.get(id)?.delete();
   });
 
+  // Positional spell-cast sound — broadcast (not GM-relayed) so every client computes
+  // its own distance/wall-based volume from its own listener tokens and plays a plain
+  // one-shot sound locally. Keeps audio timing in line with the locally-rendered FX.
+  registerSocketAction('spellSoundPlay', (data) => {
+    VagabondSpellSequencer._renderLocalPositionalSound(data);
+  }, { gmOnly: false });
+
   // Sequencer FX wildcard resolution (GM resolves, players request via socket).
   VagabondFXResolver.registerSocket();
 

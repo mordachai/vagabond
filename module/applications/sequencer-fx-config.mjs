@@ -77,16 +77,17 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
         key,
         label: game.i18n.localize(labelKey),
         active: key === this.#activeSchool,
-        castAnim: merged.castAnims?.[key] ?? { file: '', scale: 1.5, sound: '', volume: 0.6 },
+        castAnim: merged.castAnims?.[key] ?? { file: '', scale: 1.5, sound: '', volume: 0.45 },
         areaAnims: deliveryKeys.map(dk => {
           const dtLabel  = CONFIG.VAGABOND.deliveryTypes?.[dk] ?? dk;
-          const animCfg  = merged.areaAnims?.[key]?.[dk] ?? { file: '', scaleMode: 'fixed', sound: '' };
+          const animCfg  = merged.areaAnims?.[key]?.[dk] ?? { file: '', scaleMode: 'fixed', sound: '', volume: 0.6 };
           return {
             deliveryKey: dk,
             deliveryLabel: typeof dtLabel === 'string' && dtLabel.startsWith('VAGABOND.')
               ? game.i18n.localize(dtLabel)
               : dtLabel,
             ...animCfg,
+            volume: animCfg.volume ?? 0.6,
           };
         }),
       }));
@@ -166,8 +167,8 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     const fieldName = target.dataset.field;
     const file      = this.element.querySelector(`input[name="${fieldName}"]`)?.value;
     if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
-    const school = fieldName.split('.')[1];
-    const volume = parseFloat(this.element.querySelector(`input[name="castAnims.${school}.volume"]`)?.value) || 0.6;
+    const volumeField = fieldName.replace(/\.sound$/, '.volume');
+    const volume = parseFloat(this.element.querySelector(`input[name="${volumeField}"]`)?.value) || 0.6;
     foundry.audio.AudioHelper.play({ src: file, volume, loop: false });
   }
 
