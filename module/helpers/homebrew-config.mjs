@@ -19,10 +19,12 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     { key: 'arcana',      label: 'Arcana',      hint: 'Application and knowledge of magic.',                                                                                  stat: 'reason',    trainedMultiplier: 2 },
     { key: 'craft',       label: 'Craft',        hint: 'Your skill to appraise and make Items.',                                                                               stat: 'reason',    trainedMultiplier: 2 },
     { key: 'medicine',    label: 'Medicine',     hint: 'Education in non-magical healing.',                                                                                    stat: 'reason',    trainedMultiplier: 2 },
-    { key: 'brawl',       label: 'Brawl',        hint: 'Exerting physical force. Used for Grapples, Shoves, and attacks with Brawl Weapons.',                                 stat: 'might',     trainedMultiplier: 2, isWeaponSkill: true, showInSkillsList: true },
-    { key: 'finesse',     label: 'Finesse',      hint: 'Coordination and concealing your actions. Also used for thievery, and when attacking with Finesse Weapons.',           stat: 'dexterity', trainedMultiplier: 2, isWeaponSkill: true, showInSkillsList: true },
-    { key: 'melee',       label: 'Melee',        hint: 'Attacking with melee weapons.',                                                                                        stat: 'might',     trainedMultiplier: 2, isWeaponSkill: true },
-    { key: 'ranged',      label: 'Ranged',       hint: 'Attacking with ranged weapons.',                                                                                       stat: 'awareness', trainedMultiplier: 2, isWeaponSkill: true },
+    // attackType ('melee'|'ranged') on weapon skills drives the defense-hinder matrix
+    // for attacks made with that skill; absent = melee.
+    { key: 'brawl',       label: 'Brawl',        hint: 'Exerting physical force. Used for Grapples, Shoves, and attacks with Brawl Weapons.',                                 stat: 'might',     trainedMultiplier: 2, isWeaponSkill: true, showInSkillsList: true, attackType: 'melee' },
+    { key: 'finesse',     label: 'Finesse',      hint: 'Coordination and concealing your actions. Also used for thievery, and when attacking with Finesse Weapons.',           stat: 'dexterity', trainedMultiplier: 2, isWeaponSkill: true, showInSkillsList: true, attackType: 'melee' },
+    { key: 'melee',       label: 'Melee',        hint: 'Attacking with melee weapons.',                                                                                        stat: 'might',     trainedMultiplier: 2, isWeaponSkill: true, attackType: 'melee' },
+    { key: 'ranged',      label: 'Ranged',       hint: 'Attacking with ranged weapons.',                                                                                       stat: 'awareness', trainedMultiplier: 2, isWeaponSkill: true, attackType: 'ranged' },
     { key: 'sneak',       label: 'Sneak',        hint: 'Concealing your location.',                                                                                            stat: 'dexterity', trainedMultiplier: 2 },
     { key: 'detect',      label: 'Detect',       hint: 'Reflexively sensing others.',                                                                                          stat: 'awareness', trainedMultiplier: 2 },
     { key: 'mysticism',   label: 'Mysticism',    hint: 'Understanding of the supernatural.',                                                                                   stat: 'awareness', trainedMultiplier: 2 },
@@ -41,6 +43,7 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
       stat1: 'dexterity',
       stat2: 'awareness',
       baseValue: 20,
+      icon: 'fas fa-running',
     },
     {
       key: 'endure',
@@ -50,6 +53,7 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
       stat1: 'might',
       stat2: 'might',
       baseValue: 20,
+      icon: 'fas fa-shield-alt',
     },
     {
       key: 'will',
@@ -59,6 +63,7 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
       stat1: 'reason',
       stat2: 'presence',
       baseValue: 20,
+      icon: 'fas fa-brain',
     },
   ],
 
@@ -116,9 +121,11 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     { key: 'necrotic', label: 'Necrotic', icon: 'fa-solid fa-skull' },
     { key: 'psychic',  label: 'Psychic',  icon: 'fa-solid fa-brain' },
     { key: 'magical',  label: 'Magical',  icon: 'fa-solid fa-stars' },
-    { key: 'healing',  label: 'Healing',  icon: 'fa-solid fa-heart' },
-    { key: 'recover',  label: 'Recover',  icon: 'fa-solid fa-arrows-rotate' },
-    { key: 'recharge', label: 'Recharge', icon: 'fa-solid fa-hourglass-half' },
+    // restorative: which resource this type restores instead of dealing damage
+    // ('hp' | 'fatigue' | 'mana'); absent/empty = a normal harmful damage type
+    { key: 'healing',  label: 'Healing',  icon: 'fa-solid fa-heart',           restorative: 'hp' },
+    { key: 'recover',  label: 'Recover',  icon: 'fa-solid fa-arrows-rotate',   restorative: 'fatigue' },
+    { key: 'recharge', label: 'Recharge', icon: 'fa-solid fa-hourglass-half',  restorative: 'mana' },
   ],
 
   // --- Tab 7: Stat Cap & Stat Arrays (requires reload when changed) ---
@@ -292,6 +299,13 @@ export function applyRuntimeHomebrewOverrides(config) {
   CONFIG.VAGABOND.skills = Object.fromEntries(config.skills.map(s => [s.key, s.label]));
   CONFIG.VAGABOND.saves  = Object.fromEntries(config.saves.map(s => [s.key, s.label]));
 
+  // Save icons (runtime): legacy saved configs may lack the icon field → default per key,
+  // falling back to a generic shield for brand-new homebrew saves.
+  const defaultSaveIcons = { reflex: 'fas fa-running', endure: 'fas fa-shield-alt', will: 'fas fa-brain' };
+  CONFIG.VAGABOND.saveIcons = Object.fromEntries(config.saves.map(s =>
+    [s.key, s.icon || defaultSaveIcons[s.key] || 'fa-solid fa-shield']
+  ));
+
   // --- Weapon Skills dropdown = all skills + all saves (runtime, no reload needed) ---
   CONFIG.VAGABOND.weaponSkills = {
     ...CONFIG.VAGABOND.skills,
@@ -311,6 +325,16 @@ export function applyRuntimeHomebrewOverrides(config) {
     ...CONFIG.VAGABOND.damageTypes,
     ...CONFIG.VAGABOND.materialWeaknesses,
   };
+
+  // --- Restorative damage types (runtime): key → restored resource ('hp'|'fatigue'|'mana').
+  // Legacy saved configs may lack the `restorative` field on the default entries,
+  // so the classic triple always falls back to its canonical resource.
+  const restorativeFallback = { healing: 'hp', recover: 'fatigue', recharge: 'mana' };
+  CONFIG.VAGABOND.restorativeDamageTypes = {};
+  for (const dtEntry of dtList) {
+    const resource = dtEntry.restorative || restorativeFallback[dtEntry.key] || null;
+    if (resource) CONFIG.VAGABOND.restorativeDamageTypes[dtEntry.key] = resource;
+  }
 
   // --- Magic: Delivery Types (runtime) ---
   if (config.magic?.deliveryTypes?.length) {

@@ -1280,18 +1280,74 @@ VAGABOND.countdownDiceSizes = {
  * @type {Object}
  */
 VAGABOND.attackTypes = {
-  'melee': {
-    label: 'VAGABOND.AttackTypes.Melee',
-    saveModifier: 'none'  // For future: 'none', 'hinder', 'favor', '+2', '-1d6', etc.
+  'melee': { label: 'VAGABOND.AttackTypes.Melee' },
+  'ranged': { label: 'VAGABOND.AttackTypes.Ranged' },
+  'cast': { label: 'VAGABOND.AttackTypes.Cast' }
+};
+
+/**
+ * Defense rules registry — data-driven replacement for the hardcoded save-hinder matrix.
+ * Evaluated by VagabondDamageHelper._isSaveHindered for every defensive save roll.
+ *
+ * Entry shape:
+ *   id           - unique string for reference/debugging
+ *   save         - save key the rule applies to ('endure', 'reflex', ...), or '*' for all
+ *   vsAttackTypes- array of attack types the rule fires against, or '*' for all
+ *   effect       - tri-state vote the rule contributes ('hinder' today; 'favor' supported)
+ *   condition    - optional (actor, attackType) => boolean; rule fires only when true
+ *   negatedBy    - optional (actor, attackType) => boolean; rule is cancelled when true
+ *
+ * Function-valued entries live here (not in JSON homebrew) — same trade-off as
+ * critAlwaysOnProperties. Homebrew save RENAMES keep working because rules key on
+ * the stable save keys; a brand-new save key is unhindered until a rule is added.
+ */
+VAGABOND.defenseRules = [
+  {
+    // Block (Endure) is Hindered vs ranged and cast attacks; an equipped weapon
+    // with the Shield property negates the ranged hinder — never the cast hinder.
+    id: 'blockVsRangedAndCast',
+    save: 'endure',
+    vsAttackTypes: ['ranged', 'cast'],
+    effect: 'hinder',
+    negatedBy: (actor, attackType) => {
+      if (attackType !== 'ranged') return false;
+      // Late import avoided: helper is attached below in _hasEquippedShield-compatible form
+      return VAGABOND.defenseRuleHelpers.hasEquippedShield(actor);
+    },
   },
-  'ranged': {
-    label: 'VAGABOND.AttackTypes.Ranged',
-    saveModifier: 'hinderBlock'  // Hinders Block (Endure) saves
+  {
+    // Dodge (Reflex) is Hindered while wearing heavy armor, regardless of attack type.
+    id: 'dodgeInHeavyArmor',
+    save: 'reflex',
+    vsAttackTypes: '*',
+    effect: 'hinder',
+    condition: (actor) => VAGABOND.defenseRuleHelpers.equippedArmor(actor)?.system.armorType === 'heavy',
   },
-  'cast': {
-    label: 'VAGABOND.AttackTypes.Cast',
-    saveModifier: 'hinderBlock'  // Treated as ranged for saves
-  }
+];
+
+/**
+ * Shared predicates for defense rules (kept here so registry entries stay self-contained
+ * and damage-helper needs no special imports to evaluate them).
+ */
+VAGABOND.defenseRuleHelpers = {
+  /** First equipped armor item, if any. */
+  equippedArmor(actor) {
+    return actor.items?.find(i => {
+      const isArmor = i.type === 'armor' || (i.type === 'equipment' && i.system.equipmentType === 'armor');
+      return isArmor && i.system.equipped;
+    }) ?? null;
+  },
+  /** Whether any equipped weapon carries the Shield property. */
+  hasEquippedShield(actor) {
+    return !!actor.items?.some(i => {
+      const isWeapon = i.type === 'weapon' || (i.type === 'equipment' && i.system.equipmentType === 'weapon');
+      if (!isWeapon) return false;
+      const equipped = i.system.equipped === true
+        || i.system.equipmentState === 'oneHand'
+        || i.system.equipmentState === 'twoHands';
+      return equipped && i.system.properties?.includes('Shield');
+    });
+  },
 };
 
 /**
@@ -1333,21 +1389,22 @@ VAGABOND.defaultApplicationModes = {
 
 /**
  * Spell delivery types mapped to attack types
- * Determines if spell is melee or ranged for save Hinder purposes
- * Touch and Glyph spells are melee (do NOT hinder Block saves)
- * All other spells are ranged (DO hinder Block saves)
+ * Determines the attack type for save Hinder purposes:
+ * - Touch and Glyph spells are melee (do NOT hinder Block saves)
+ * - All other deliveries are 'cast' (DO hinder Block saves; a Shield never
+ *   negates the cast hinder — shields don't stop magic)
  * @type {Object}
  */
 VAGABOND.spellDeliveryAttackTypes = {
-  'touch': 'melee',    // Touch spells are melee
-  'glyph': 'melee',    // Glyph spells are melee
-  'aura': 'ranged',    // All others are ranged
-  'cone': 'ranged',
-  'cube': 'ranged',
-  'imbue': 'ranged',
-  'line': 'ranged',
-  'remote': 'ranged',
-  'sphere': 'ranged'
+  'touch': 'melee',
+  'glyph': 'melee',
+  'aura': 'cast',
+  'cone': 'cast',
+  'cube': 'cast',
+  'imbue': 'cast',
+  'line': 'cast',
+  'remote': 'cast',
+  'sphere': 'cast'
 };
 
 VAGABOND.favHindMarker = {

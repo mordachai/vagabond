@@ -240,7 +240,11 @@
               </tr>
               <tr class="hb-subrow">
                 <td colspan="7">
-                  <input type="text" class="hb-subrow-input" data-save-index="{{index}}" data-save-field="description" value="{{description}}" placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.SaveDescPlaceholder'}}">
+                  <div style="display: flex; gap: 6px; align-items: center;">
+                    <i class="{{icon}}" style="width: 18px; text-align: center;"></i>
+                    <input type="text" class="hb-subrow-input" style="flex: 0 0 170px;" data-save-index="{{index}}" data-save-field="icon" value="{{icon}}" placeholder="fa-solid fa-shield" title="Font Awesome icon classes (chat save buttons, sheets)">
+                    <input type="text" class="hb-subrow-input" style="flex: 1;" data-save-index="{{index}}" data-save-field="description" value="{{description}}" placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.SaveDescPlaceholder'}}">
+                  </div>
                 </td>
               </tr>
               {{/each}}
@@ -624,6 +628,7 @@
                 <th>{{localize "VAGABOND.UI.Labels.Key"}}</th>
                 <th>{{localize "VAGABOND.UI.Labels.Label"}}</th>
                 <th>{{localize "VAGABOND.HomebrewSettings.Fields.FaIconClass"}}</th>
+                <th title="Restorative types restore a resource instead of dealing damage">Restores</th>
                 <th></th>
               </tr>
             </thead>
@@ -662,6 +667,14 @@
                     value="{{icon}}"
                     placeholder="{{localize 'VAGABOND.HomebrewSettings.Fields.IconPlaceholder'}}"
                   >
+                </td>
+                <td>
+                  <select data-dt-index="{{@index}}" data-dt-field="restorative">
+                    <option value="" {{#unless restorative}}selected{{/unless}}>—</option>
+                    <option value="hp" {{#if (eq restorative 'hp')}}selected{{/if}}>HP</option>
+                    <option value="fatigue" {{#if (eq restorative 'fatigue')}}selected{{/if}}>Fatigue</option>
+                    <option value="mana" {{#if (eq restorative 'mana')}}selected{{/if}}>Mana</option>
+                  </select>
                 </td>
                 <td>
                   <button

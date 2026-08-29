@@ -1334,6 +1334,11 @@ Handlebars.registerHelper('clockValue', (ref, prop) => {
   return data[typeof prop === 'string' ? prop : 'value'];
 });
 
+// Save icon FA classes from the homebrew saves config: {{saveIcon "reflex"}}
+Handlebars.registerHelper('saveIcon', (key) =>
+  CONFIG.VAGABOND?.saveIcons?.[key] || 'fa-solid fa-shield'
+);
+
 Handlebars.registerHelper('gte', (a, b) => a >= b);
 
 Handlebars.registerHelper('and', function () {
@@ -2442,13 +2447,12 @@ const FLUKE_REROLL_ENTRY = {
 
       // Roll damage if hit
       const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+      const targetsAtRollTime = flags.targetsAtRollTime || [];
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         const statKey = weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(actor, isCritical, statKey);
+        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime);
       }
-
-      const targetsAtRollTime = flags.targetsAtRollTime || [];
       await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
 
     } else if (rerollData.type === 'cast') {
@@ -2859,29 +2863,10 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   // ---------------------------------------------------------
   // 6. Apply Restorative Effects Button Handlers
   // ---------------------------------------------------------
-  const healingButtons = html.querySelectorAll('.vagabond-apply-healing-button');
-  const recoverButtons = html.querySelectorAll('.vagabond-apply-recover-button');
-  const rechargeButtons = html.querySelectorAll('.vagabond-apply-recharge-button');
-
-  healingButtons.forEach(button => {
-    button.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.handleApplyRestorative(button);
-      });
-    });
-  });
-
-  recoverButtons.forEach(button => {
-    button.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.handleApplyRestorative(button);
-      });
-    });
-  });
-
-  rechargeButtons.forEach(button => {
+  const restorativeButtons = html.querySelectorAll(
+    '.vagabond-apply-healing-button, .vagabond-apply-recover-button, .vagabond-apply-recharge-button'
+  );
+  restorativeButtons.forEach(button => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {

@@ -129,6 +129,25 @@ export class VagabondRollBuilder {
   }
 
   /**
+   * Fold any number of favor/hinder votes into one tri-state.
+   * NET-COUNT semantics: the result is the sign of (favor votes − hinder votes).
+   * Only the direction is decided here — the roll still gets at most one
+   * favor/hinder die, never stacked dice. Order-independent by construction.
+   * Booleans are NOT accepted; callers convert explicitly
+   * (e.g. `isHindered ? 'hinder' : 'none'`) to keep the vocabulary canonical.
+   * @param {...('favor'|'hinder'|'none'|null|undefined)} votes
+   * @returns {'favor'|'hinder'|'none'}
+   */
+  static mergeFavorHinder(...votes) {
+    let net = 0;
+    for (const vote of votes) {
+      if (vote === 'favor') net++;
+      else if (vote === 'hinder') net--;
+    }
+    return net > 0 ? 'favor' : net < 0 ? 'hinder' : 'none';
+  }
+
+  /**
    * Calculate effective favor/hinder state from system state and keyboard modifiers
    * This is the standard cancellation logic used throughout the system
    * @param {string} systemState - Actor's system.favorHinder ('favor', 'hinder', 'none')
@@ -137,31 +156,12 @@ export class VagabondRollBuilder {
    * @returns {string} Effective favor/hinder state ('favor', 'hinder', 'none')
    */
   static calculateEffectiveFavorHinder(systemState, shiftKey = false, ctrlKey = false) {
-    // Determine modifier intent from keyboard
+    // Keyboard intent is pre-resolved (both keys cancel) before entering as one vote
     let modifierIntent = 'none';
-    if (shiftKey && !ctrlKey) {
-      modifierIntent = 'favor';
-    } else if (ctrlKey && !shiftKey) {
-      modifierIntent = 'hinder';
-    } else if (shiftKey && ctrlKey) {
-      // Both pressed - cancel out
-      modifierIntent = 'none';
-    }
+    if (shiftKey && !ctrlKey) modifierIntent = 'favor';
+    else if (ctrlKey && !shiftKey) modifierIntent = 'hinder';
 
-    // Calculate final effective state
-    if (systemState === modifierIntent) {
-      // Same direction - apply it
-      return systemState;
-    } else if (systemState === 'none') {
-      // No system state - use modifier
-      return modifierIntent;
-    } else if (modifierIntent === 'none') {
-      // No modifier - use system state
-      return systemState;
-    } else {
-      // Opposite directions - cancel out
-      return 'none';
-    }
+    return this.mergeFavorHinder(systemState, modifierIntent);
   }
 
   /**
@@ -172,19 +172,7 @@ export class VagabondRollBuilder {
    * @returns {string} Final favor/hinder state after applying conditional hinder
    */
   static applyConditionalHinder(effectiveFavorHinder, isConditionallyHindered) {
-    if (!isConditionallyHindered) {
-      return effectiveFavorHinder;
-    }
-
-    // Conditional hinder is present
-    if (effectiveFavorHinder === 'favor') {
-      // Favor + Conditional Hinder = cancel out to 'none'
-      return 'none';
-    } else {
-      // 'none' or 'hinder' + Conditional Hinder = 'hinder'
-      // (Multiple hinders don't stack, just apply once)
-      return 'hinder';
-    }
+    return this.mergeFavorHinder(effectiveFavorHinder, isConditionallyHindered ? 'hinder' : 'none');
   }
 
   /**

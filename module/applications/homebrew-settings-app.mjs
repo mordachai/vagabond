@@ -370,13 +370,20 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
   #setupDamageTypeListeners() {
     const el = this.element;
     el.querySelectorAll('[data-dt-index]').forEach(input => {
-      if (input.tagName !== 'INPUT') return;
-      input.addEventListener('input', (e) => {
+      if (input.tagName !== 'INPUT' && input.tagName !== 'SELECT') return;
+      const eventType = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventType, (e) => {
         const i = parseInt(input.dataset.dtIndex);
         const field = input.dataset.dtField;
         const entry = this.#config.damageTypes[i];
         if (!entry) return;
-        entry[field] = e.target.value;
+        if (field === 'restorative') {
+          // '' = normal harmful damage type → drop the flag entirely
+          if (e.target.value) entry.restorative = e.target.value;
+          else delete entry.restorative;
+        } else {
+          entry[field] = e.target.value;
+        }
         // Live-update icon preview when the icon class field changes
         if (field === 'icon') {
           const preview = el.querySelector(`[data-dt-icon-preview="${i}"]`);
@@ -735,7 +742,7 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
   /** Add a blank save entry. */
   static #onAddSave() {
     const firstStat = Object.keys(CONFIG.VAGABOND.stats)[0] ?? 'might';
-    this.#config.saves.push({ key: 'newSave', label: 'New Save', description: '', checkDie: '1d20', stat1: firstStat, stat2: firstStat, baseValue: 20 });
+    this.#config.saves.push({ key: 'newSave', label: 'New Save', description: '', checkDie: '1d20', stat1: firstStat, stat2: firstStat, baseValue: 20, icon: 'fa-solid fa-shield' });
     this.render();
   }
 

@@ -56,20 +56,14 @@
 
     </div>
 
-    {{! Saves row: Reflex · Endure · Will }}
+    {{! Saves row: one entry per configured save }}
     <div class="compact-saves-row">
-      <span class="compact-save" data-tooltip="{{saves.reflex.label}}">
-        <i class="fas fa-person-running save-icon"></i>
-        <span class="save-num">{{saves.reflex.difficulty}}</span>
+      {{#each savesList}}
+      <span class="compact-save" data-tooltip="{{label}}">
+        <i class="{{icon}} save-icon"></i>
+        <span class="save-num">{{difficulty}}</span>
       </span>
-      <span class="compact-save" data-tooltip="{{saves.endure.label}}">
-        <i class="fas fa-shield-halved save-icon"></i>
-        <span class="save-num">{{saves.endure.difficulty}}</span>
-      </span>
-      <span class="compact-save" data-tooltip="{{saves.will.label}}">
-        <i class="fas fa-brain save-icon"></i>
-        <span class="save-num">{{saves.will.difficulty}}</span>
-      </span>
+      {{/each}}
     </div>
 
   </div>

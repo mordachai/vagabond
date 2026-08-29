@@ -1,7 +1,6 @@
 import { TargetHelper } from '../../helpers/target-helper.mjs';
 import { VagabondTextParser } from '../../helpers/text-parser.mjs';
 import { VagabondItemSequencer } from '../../helpers/item-sequencer.mjs';
-import { VagabondDiceAppearance } from '../../helpers/dice-appearance.mjs';
 import { VagabondChatHelper } from '../../helpers/chat-helper.mjs';
 
 /**
@@ -215,32 +214,22 @@ export class RollHandler {
           return;
         }
 
-        // Otherwise, proceed with the Roll logic — apply universal alchemical bonuses
-        // matching what rollDamageFromButton does for the same item type.
+        // Otherwise, proceed with the Roll logic through the unified damage pipeline
+        // (alchemical bucket + legacy universals + per-die bonus + weakness pre-roll + explosion).
         const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
+        const { VagabondDamagePipeline } = await import('../../helpers/damage-pipeline.mjs');
 
-        let damageFormula = item.system.damageAmount;
-        const alcFlat = this.actor.system.universalAlchemicalDamageBonus || 0;
-        let alcDice = this.actor.system.universalAlchemicalDamageDice || '';
-        if (Array.isArray(alcDice)) alcDice = alcDice.filter(d => !!d).join(' + ');
-        const univFlat = this.actor.system.universalDamageBonus || 0;
-        let univDice = this.actor.system.universalDamageDice || '';
-        if (Array.isArray(univDice)) univDice = univDice.filter(d => !!d).join(' + ');
-        if (alcFlat !== 0) damageFormula += ` + ${alcFlat}`;
-        if (typeof alcDice === 'string' && alcDice.trim()) damageFormula += ` + ${alcDice}`;
-        if (univFlat !== 0) damageFormula += ` + ${univFlat}`;
-        if (typeof univDice === 'string' && univDice.trim()) damageFormula += ` + ${univDice}`;
-
-        const roll = new Roll(damageFormula, this.actor.getRollData());
-        VagabondDiceAppearance.applyDamageColorset(roll, item.system.damageType);
-        await roll.evaluate();
-
-        // Apply dice explosion if the item or actor has it enabled
-        const explodeValues = VagabondDamageHelper._getExplodeValues(item, this.actor);
-        if (explodeValues) await VagabondDamageHelper._manuallyExplodeDice(roll, explodeValues);
+        const roll = await VagabondDamagePipeline.rollDamage({
+          actor: this.actor,
+          item,
+          baseFormula: item.system.damageAmount,
+          sourceType: 'alchemical',
+          damageType: item.system.damageType,
+          targets: targetsAtRollTime,
+        });
 
         const damageTypeKey = item.system.damageType || 'physical';
-        const isRestorative = ['healing', 'recover', 'recharge'].includes(damageTypeKey);
+        const isRestorative = VagabondDamageHelper.isRestorativeDamageType(damageTypeKey);
 
         // Build description
         let description = '';
@@ -349,7 +338,7 @@ export class RollHandler {
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey);
+        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime);
       }
 
       await VagabondChatCard.weaponAttack(

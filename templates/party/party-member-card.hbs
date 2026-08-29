@@ -78,18 +78,12 @@
 
   {{! ── Div 3: Saves ───────────────────────────────────────── }}
   <div class="member-saves-row">
-    <div class="member-save" data-tooltip="{{saves.reflex.label}}">
-      <i class="fas fa-person-running save-icon"></i>
-      <span class="save-value">{{saves.reflex.difficulty}}</span>
+    {{#each savesList}}
+    <div class="member-save" data-tooltip="{{label}}">
+      <i class="{{icon}} save-icon"></i>
+      <span class="save-value">{{difficulty}}</span>
     </div>
-    <div class="member-save" data-tooltip="{{saves.endure.label}}">
-      <i class="fas fa-shield-halved save-icon"></i>
-      <span class="save-value">{{saves.endure.difficulty}}</span>
-    </div>
-    <div class="member-save" data-tooltip="{{saves.will.label}}">
-      <i class="fas fa-brain save-icon"></i>
-      <span class="save-value">{{saves.will.difficulty}}</span>
-    </div>
+    {{/each}}
   </div>
 
   {{! ── Div 4: Stats Grid (2 columns) ─────────────────────── }}

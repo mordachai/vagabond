@@ -178,18 +178,12 @@ export class StatusHelper {
   static async _rollStatusSave(actor, entry, favored) {
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
 
-    // Determine favor/hinder: start from actor's system state, apply resistance on top
+    // Determine favor/hinder: actor's system state + resistance as one net-count merge
     const systemState = actor.system.favorHinder || 'none';
-    let effectiveFavorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(systemState, false, false);
-    if (favored) {
-      // Resistance pushes toward favor (same cancellation rules as the rest of the system)
-      if (effectiveFavorHinder === 'hinder') {
-        effectiveFavorHinder = 'none';
-      } else if (effectiveFavorHinder === 'none') {
-        effectiveFavorHinder = 'favor';
-      }
-      // Already favored → stays favored
-    }
+    const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(
+      systemState,
+      favored ? 'favor' : 'none'
+    );
 
     let formula = VagabondRollBuilder.buildD20Formula(actor, effectiveFavorHinder);
     const statusSaveBonus = VagabondRollBuilder.getSaveVsStatusBonus(actor, entry.statusId, entry.saveType);

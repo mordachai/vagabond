@@ -1,6 +1,4 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
-import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
-import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -660,47 +658,25 @@ export class VagabondItem extends Item {
     const difficulty = difficultyOverride ?? (weaponSkill?.difficulty || 10);
 
     // Check target's incomingAttacksModifier (e.g., Vulnerable: incoming attacks Favored)
-    // Also check for Invisible (attackersAreBlinded: attackers act as Blinded = Hindered)
-    // Apply this BEFORE rolling to modify the favor/hinder state
+    // and Invisible (attackersAreBlinded → Hinder vote); merged net-count BEFORE rolling.
+    // Only the first target is consulted (multi-target attacks ignore targets 2..n).
+    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
     let effectiveFavorHinder = favorHinder;
     const targets = Array.from(game.user.targets);
     if (targets.length > 0) {
       const targetActor = targets[0].actor;
       if (targetActor) {
-        // Check incoming attacks modifier
         const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
-
-        // Apply target's modifier using same cancellation logic as saves
-        if (targetModifier === 'favor') {
-          if (effectiveFavorHinder === 'hinder') {
-            effectiveFavorHinder = 'none';
-          } else if (effectiveFavorHinder === 'none') {
-            effectiveFavorHinder = 'favor';
-          }
-        } else if (targetModifier === 'hinder') {
-          if (effectiveFavorHinder === 'favor') {
-            effectiveFavorHinder = 'none';
-          } else if (effectiveFavorHinder === 'none') {
-            effectiveFavorHinder = 'hinder';
-          }
-        }
-
-        // Check if target is Invisible (attackers are treated as Blinded)
         const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
-        if (attackersAreBlinded) {
-          // Apply Blinded effect (Hinder)
-          if (effectiveFavorHinder === 'favor') {
-            effectiveFavorHinder = 'none';
-          } else if (effectiveFavorHinder === 'none') {
-            effectiveFavorHinder = 'hinder';
-          }
-          // If already hindered, stays hindered (no double-hinder)
-        }
+        effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(
+          favorHinder,
+          targetModifier,
+          attackersAreBlinded ? 'hinder' : 'none'
+        );
       }
     }
 
     // Use centralized roll builder with modified roll data and effective favor/hinder
-    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
     const roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, effectiveFavorHinder);
 
     // Check if the attack succeeds
@@ -746,7 +722,7 @@ export class VagabondItem extends Item {
    * @param {string} statKey - The stat used for the attack (for crit bonus)
    * @returns {Promise<Roll>} The damage roll
    */
-  async rollDamage(actor, isCritical = false, statKey = null) {
+  async rollDamage(actor, isCritical = false, statKey = null, targetsAtRollTime = []) {
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
     const isWeapon = (this.type === 'weapon') ||
                     (this.type === 'equipment' && this.system.equipmentType === 'weapon');
@@ -755,72 +731,25 @@ export class VagabondItem extends Item {
       throw new Error('Not a weapon');
     }
 
-    let damageFormula = this.system.currentDamage;
+    const damageFormula = this.system.currentDamage;
 
     // No damage formula — weapon has no damage (e.g. Grapple, Net)
     if (!damageFormula?.trim()) return null;
 
-    // Apply specific die size bonus
     const weaponSkillKey = this.system.weaponSkill;
     const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
-    
-    if (dieSizeBonus !== 0 && damageFormula.includes('d')) {
-      // Logic: If formula is "2d6", and bonus is +2, it should become "2d8"
-      // We parse the formula (e.g. "2d6+1") and replace the dX part
-      damageFormula = damageFormula.replace(/(\d*)d(\d+)/, (match, count, size) => {
-        const newSize = parseInt(size) + dieSizeBonus;
-        return `${count}d${newSize}`;
-      });
-    }
 
-    // Add stat bonus on critical hit (positive or negative)
-    if (isCritical && statKey) {
-      const statValue = actor.system.stats[statKey]?.value || 0;
-      if (statValue !== 0) {  // ✅ FIX: Include negative stats too (they reduce damage)
-        damageFormula += ` + ${statValue}`;
-      }
-    }
-
-    // Always-on crit bonuses (e.g. Brutal) — fire regardless of Luck/benefit toggle
-    if (isCritical) {
-      const alwaysOnBonuses = VagabondDamageHelper._collectCritAlwaysOnBonuses(this, actor, damageFormula);
-      for (const bonus of alwaysOnBonuses) damageFormula += ` + ${bonus.formula}`;
-    }
-
-    // Add weapon-specific universal damage bonuses
-    const weaponFlatBonus = actor.system.universalWeaponDamageBonus || 0;
-    const weaponDiceBonus = actor.system.universalWeaponDamageDice || '';
-
-    if (weaponFlatBonus !== 0) {
-      damageFormula += ` + ${weaponFlatBonus}`;
-    }
-    if (weaponDiceBonus.trim() !== '') {
-      damageFormula += ` + ${weaponDiceBonus}`;
-    }
-
-    // Add legacy universal damage bonuses (backward compatibility)
-    const universalFlatBonus = actor.system.universalDamageBonus || 0;
-    const universalDiceBonus = actor.system.universalDamageDice || '';
-
-    if (universalFlatBonus !== 0) {
-      damageFormula += ` + ${universalFlatBonus}`;
-    }
-    if (universalDiceBonus.trim() !== '') {
-      damageFormula += ` + ${universalDiceBonus}`;
-    }
-
-    // Roll damage (without explosion modifiers in formula)
-    const roll = new Roll(damageFormula, actor.getRollData());
-    const weaponDamageType = this.system.currentDamageType || this.system.damageType;
-    VagabondDiceAppearance.applyDamageColorset(roll, weaponDamageType);
-    await roll.evaluate();
-
-    // Apply manual explosions if enabled
-    const explodeValues = VagabondDamageHelper._getExplodeValues(this, actor);
-    if (explodeValues) {
-      await VagabondDamageHelper._manuallyExplodeDice(roll, explodeValues);
-    }
-
-    return roll;
+    const { VagabondDamagePipeline } = await import('../helpers/damage-pipeline.mjs');
+    return VagabondDamagePipeline.rollDamage({
+      actor,
+      item: this,
+      baseFormula: damageFormula,
+      sourceType: 'weapon',
+      damageType: this.system.currentDamageType || this.system.damageType,
+      isCritical,
+      statKey,
+      dieSizeBonus,
+      targets: targetsAtRollTime,
+    });
   }
 }

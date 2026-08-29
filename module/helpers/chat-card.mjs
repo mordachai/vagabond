@@ -1,5 +1,4 @@
 import { VagabondTextParser } from './text-parser.mjs';
-import { VagabondDiceAppearance } from './dice-appearance.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 
@@ -427,11 +426,10 @@ export class VagabondChatCard {
       const statusSaveTypes = new Set(
         allPreviewEntries.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType)
       );
-      // 'any' save means the player can use any save — tint all three buttons
+      // 'any' save means the player can use any save — tint every configured save button
       if (statusSaveTypes.has('any')) {
-        statusSaveTypes.add('reflex');
-        statusSaveTypes.add('endure');
-        statusSaveTypes.add('will');
+        const { VagabondDamageHelper: VDHSaves } = await import('./damage-helper.mjs');
+        for (const save of VDHSaves.getConfiguredSaves()) statusSaveTypes.add(save.key);
       }
 
       // 3. Leading footer actions (e.g. Grapple button — appears above damage buttons)
@@ -453,11 +451,12 @@ export class VagabondChatCard {
 
           card.addDamage(damageRoll, dLabel, isCrit, key, critStatBonus);
 
-          const isHealing = damageType.toLowerCase() === 'healing';
+          // Restorative types (healing/recover/recharge) get an Apply button, never save buttons
+          const isRestorativeCard = VagabondDamageHelper.isRestorativeDamageType(damageType);
 
           const effectiveWeaknessPreRolled = weaknessPreRolled || (damageRoll?._weaknessPreRolled ?? false);
-          let btns = isHealing
-            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, dLabel, actor.id, item?.id, targetsAtRollTime, actionIndex)
+          let btns = isRestorativeCard
+            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, key, actor.id, item?.id, targetsAtRollTime, actionIndex)
             : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus, effectiveWeaknessPreRolled);
 
           card.addFooterAction(btns);
@@ -495,11 +494,10 @@ export class VagabondChatCard {
       const isHitForMacro = rollData?.isHit ?? rollData?.isSuccess ?? false;
       VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro, rollData?.isCritical ?? false, macroExtraScope).forEach(b => card.addFooterAction(b));
 
-      // Add defend options if requested (independent of damage)
+      // Add defend options if requested (independent of damage; never for restoratives)
       if (hasDefenses) {
         const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-        const isHealing = damageType?.toLowerCase() === 'healing';
-        if (!isHealing) {
+        if (!VagabondDamageHelper.isRestorativeDamageType(damageType)) {
           card.addFooterAction(VagabondDamageHelper.createDefendOptions());
         }
       }
@@ -733,14 +731,50 @@ export class VagabondChatCard {
     });
   }
 
+  /**
+   * Normalize an authored attack type to the runtime vocabulary
+   * ('melee' | 'ranged' | 'cast' | 'none'). NPC actions author
+   * 'castClose'/'castRanged', which map to melee/ranged.
+   * @param {string|null|undefined} raw
+   * @returns {string}
+   */
+  static normalizeAttackType(raw) {
+    if (raw === 'castClose') return 'melee';
+    if (raw === 'castRanged') return 'ranged';
+    return raw || 'melee';
+  }
+
+  /**
+   * Attack type for an attack made with a weapon skill, from the homebrew skill's
+   * `attackType` field ('ranged' hinders Block; anything else is melee).
+   * @param {string} weaponSkillKey
+   * @returns {'melee'|'ranged'}
+   */
+  static attackTypeForWeaponSkill(weaponSkillKey) {
+    const skill = CONFIG.VAGABOND?.homebrew?.skills?.find(s => s.key === weaponSkillKey);
+    if (skill) return skill.attackType === 'ranged' ? 'ranged' : 'melee';
+    // Pre-init / unknown-key fallback: the classic literal
+    return weaponSkillKey === 'ranged' ? 'ranged' : 'melee';
+  }
+
+  /**
+   * Attack type for a spell cast, by delivery (touch/glyph → melee, others → cast).
+   * @param {string|null|undefined} deliveryType
+   * @returns {'melee'|'cast'}
+   */
+  static attackTypeForSpellDelivery(deliveryType) {
+    return CONFIG.VAGABOND.spellDeliveryAttackTypes?.[deliveryType?.toLowerCase?.()] ?? 'cast';
+  }
+
   static async weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime = [], extraMetadata = [], extraTags = []) {
       const { weaponSkill, weaponSkillKey, isHit, isCritical } = attackResult;
 
-      // FIX: Auto-roll damage if settings allow or if it's a critical hit
-      // This ensures the orange damage section and save buttons appear immediately
+      // Auto-roll damage if settings allow — the orange damage section and save
+      // buttons then appear immediately. isCritical is a boolean and statKey the
+      // weapon skill's stat (crit stat bonus only applies on real crits).
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
       if (!damageRoll && VagabondDamageHelper.shouldRollDamage(isHit)) {
-          damageRoll = await weapon.rollDamage(actor, { isCritical });
+          damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime);
       }
 
       const tags = [];
@@ -791,8 +825,8 @@ export class VagabondChatCard {
           description = await foundry.applications.ux.TextEditor.enrichHTML(parsedDescription, { async: true });
       }
 
-      // Determine attack type from weapon skill (ranged vs melee)
-      const attackType = weaponSkillKey === 'ranged' ? 'ranged' : 'melee';
+      // Determine attack type from the homebrew weapon skill's attackType field
+      const attackType = VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey);
 
       // Compute die-size-adjusted formula for the manual "Roll Damage" button.
       // item.rollDamage() applies this when damage is auto-rolled, but when the
@@ -952,7 +986,7 @@ export class VagabondChatCard {
           description: spell.system.formatDescription(spell.system.description),  // Format for countdown dice triggers
           crit: critText,  // Include crit text if critical
           hasDefenses: !isImbue && !isGlyph,
-          attackType: 'cast',  // ✅ FIX: Spell attacks are 'cast' type
+          attackType: VagabondChatCard.attackTypeForSpellDelivery(spellState.deliveryType),  // touch → melee, others → cast
           damageFormula: (isImbue || isGlyph) ? null : spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
           targetsAtRollTime,
           footerActions,
@@ -1034,9 +1068,7 @@ export class VagabondChatCard {
     const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
     // Normalize attack type for the helpers
-    let attackType = action.attackType || 'melee';
-    if (attackType === 'castClose') attackType = 'melee';
-    else if (attackType === 'castRanged') attackType = 'ranged';
+    const attackType = VagabondChatCard.normalizeAttackType(action.attackType);
 
     // Pre-compute save types required by on-hit statuses (used in both branches below)
     const allActionStatuses = [...(action.causedStatuses ?? []), ...(action.critCausedStatuses ?? [])];
@@ -1044,9 +1076,7 @@ export class VagabondChatCard {
       allActionStatuses.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType)
     );
     if (reminderStatusSaveTypes.has('any')) {
-      reminderStatusSaveTypes.add('reflex');
-      reminderStatusSaveTypes.add('endure');
-      reminderStatusSaveTypes.add('will');
+      for (const save of VagabondDamageHelper.getConfiguredSaves()) reminderStatusSaveTypes.add(save.key);
     }
 
     const preferFlat     = game.settings.get('vagabond', 'npcUseFlatDamage');
@@ -1109,12 +1139,21 @@ export class VagabondChatCard {
         let finalDamage;
 
         if (preferFlat && action.flatDamage) {
+            // Flat damage - authored value stays pure, no bonus fields apply
             finalDamage = parseInt(action.flatDamage);
         } else if (action.rollDamage) {
-            damageRoll = new Roll(action.rollDamage, actor.getRollData());
-            VagabondDiceAppearance.applyDamageColorset(damageRoll, rawType);
-            await damageRoll.evaluate();
-            finalDamage = damageRoll.total;
+            // Rolled damage through the unified pipeline (same as the manual damage button)
+            const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
+            damageRoll = await VagabondDamagePipeline.rollDamage({
+                actor,
+                actionIndex,
+                baseFormula: action.rollDamage,
+                sourceType: 'npc',
+                damageType: rawType,
+                targets: targetsAtRollTime,
+                weaponLinked: !!action.weaponId,
+            });
+            finalDamage = damageRoll?.total ?? 0;
         } else {
             finalDamage = parseInt(action.flatDamage);
         }
@@ -1224,7 +1263,7 @@ export class VagabondChatCard {
       const damageTypeLabel = this._getDamageTypeLabel(damageType);
 
       // Determine if it's restorative (healing/recover/recharge) or harmful
-      const isRestorative = ['healing', 'recover', 'recharge'].includes(damageType);
+      const isRestorative = VagabondDamageHelper.isRestorativeDamageType(damageType);
       const attackType = isRestorative ? 'none' : 'melee'; // Default attack type for non-restorative items
 
       footerActions.push(

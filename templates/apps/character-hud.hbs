@@ -85,7 +85,7 @@
         {{#each saves}}
           <div class="vh-save rollable" data-action="roll" data-roll="d20" data-type="save" data-key="{{key}}" data-difficulty="{{difficulty}}" data-label="{{label}} Save (Difficulty {{difficulty}})" data-hud-tip="{{description}}">
             <div>
-              <span class="vh-save-icon">{{#if (eq key 'reflex')}}<i class="fas fa-running"></i>{{else if (eq key 'endure')}}<i class="fas fa-shield-alt"></i>{{else if (eq key 'will')}}<i class="fas fa-brain"></i>{{/if}}</span>
+              <span class="vh-save-icon"><i class="{{saveIcon key}}"></i></span>
               <span class="vh-save-name">{{label}}</span>
             </div>
             <span class="vh-save-diff">{{difficulty}}</span>

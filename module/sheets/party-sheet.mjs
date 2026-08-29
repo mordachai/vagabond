@@ -265,20 +265,13 @@ export class VagabondPartySheet extends VagabondActorSheet {
         total: sys.maxLuck ?? 0,
       },
       studiedDice: sys.studiedDice ?? 0,
-      saves: {
-        reflex: {
-          difficulty: sys.saves?.reflex?.difficulty ?? 20,
-          label: sys.saves?.reflex?.label ?? game.i18n.localize('VAGABOND.Saves.Reflex.name'),
-        },
-        endure: {
-          difficulty: sys.saves?.endure?.difficulty ?? 20,
-          label: sys.saves?.endure?.label ?? game.i18n.localize('VAGABOND.Saves.Endure.name'),
-        },
-        will: {
-          difficulty: sys.saves?.will?.difficulty ?? 20,
-          label: sys.saves?.will?.label ?? game.i18n.localize('VAGABOND.Saves.Will.name'),
-        },
-      },
+      // One entry per configured homebrew save, in config order (icons via saveIcons)
+      savesList: (CONFIG.VAGABOND.homebrew?.saves ?? []).map(s => ({
+        key: s.key,
+        difficulty: sys.saves?.[s.key]?.difficulty ?? 20,
+        label: sys.saves?.[s.key]?.label ?? CONFIG.VAGABOND.saves?.[s.key] ?? s.label,
+        icon: CONFIG.VAGABOND.saveIcons?.[s.key] ?? 'fa-solid fa-shield',
+      })),
       equippedItems,
       favoritedSpells,
       statuses,
