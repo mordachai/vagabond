@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.37.0
+- **Flanking:** automatic flanked/flanking detection — a target caught between two enemies is marked, with large-token adjacency handled correctly.
+- **GM Tools compendium:** the old "Dev Tools" / "Macro Scripts" pack is now **GM Tools**, with two GM macros:
+  - **Refresh World Data** — re-runs data preparation and re-renders every actor, item, token and open sheet without a page reload (for derived-data / homebrew-value changes).
+  - **Sync Items From Compendium** — re-pulls the current compendium version of every compendium-linked item on actors and scene tokens, preserving per-instance state (quantity, equip, grid slot…).
+- **Weapon crit properties:** Keen and Vicious reworked through the weapon-property effects registry; per-weapon "Crit Range Mod" field on the weapon sheet. Relic renames: *Ace - Entangle* → *Ace - Grapple*, *Ace - Brutal* → *Ace - Vicious*.
+- Internal: damage roll pipeline refactor — all weapon/spell/alchemical/NPC damage now flows through one path.
+
 ## v5.35.0
 - **Combat Carousel on/off setting:** new "Enable Combat Carousel" toggle in Encounter Settings (default on) — turn it off to use only the sidebar Combat Tracker.
 - **Combat Carousel: targeting & selection:** left-click a card to pan/select the token (configurable), Alt+Click to target it (Shift+Alt to add multiple), plus a dedicated target marker on each card.
